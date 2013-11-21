@@ -1,7 +1,7 @@
 
 name "gitlab"
-maintainer "CHANGE ME"
-homepage "CHANGEME.com"
+maintainer "Achilleas Pipinellis"
+homepage "http://gitlab.org"
 
 replaces        "gitlab"
 install_path    "/opt/gitlab"
@@ -12,7 +12,7 @@ build_iteration 1
 dependency "preparation"
 
 # gitlab dependencies/components
-# dependency "somedep"
+dependency "gitlab"
 
 # version manifest file
 dependency "version-manifest"
