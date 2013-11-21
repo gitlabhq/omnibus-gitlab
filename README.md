@@ -1,7 +1,7 @@
-# gitlab Omnibus project
+# GitLab Omnibus project
 
 This project creates full-stack platform-specific packages for
-`gitlab`!
+GitLab!
 
 ## Installation
 
