@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Perform necessary gitlab removal steps
+# after package is uninstalled.
+#
+
+echo "gitlab has been uninstalled!"
+
+exit 0
