@@ -5,13 +5,13 @@ homepage "http://gitlab.org"
 
 replaces        "gitlab"
 install_path    "/opt/gitlab"
-build_version   Omnibus::BuildVersion.new.semver
+build_version   6.3.0
 build_iteration 1
 
 # creates required build directories
 dependency "preparation"
 
-# gitlab dependencies/components
+# GitLab dependencies/components
 dependency "gitlab"
 
 # version manifest file
