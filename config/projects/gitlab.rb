@@ -1,6 +1,6 @@
 
 name "gitlab"
-maintainer "Achilleas Pipinellis"
+maintainer "GitLab.com"
 homepage "http://gitlab.org"
 
 replaces        "gitlab"
