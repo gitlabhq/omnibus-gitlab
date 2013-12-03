@@ -18,7 +18,7 @@
 
 name "gitlab"
 maintainer "GitLab.com"
-homepage "http://gitlab.org"
+homepage "http://www.gitlab.com/"
 
 replaces        "gitlab"
 install_path    "/opt/gitlab"
