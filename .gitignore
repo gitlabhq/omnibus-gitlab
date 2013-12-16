@@ -6,3 +6,7 @@ pkg/*
 bin/*
 files/**/cache/
 vendor/cookbooks
+.ruby-version
+.ruby-gemset
+.rvmrc
+.rbenv-version
