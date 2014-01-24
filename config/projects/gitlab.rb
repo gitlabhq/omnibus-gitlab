@@ -28,9 +28,6 @@ build_iteration 1
 # creates required build directories
 dependency "preparation"
 
-# GitLab dependencies/components
-dependency "gitlab"
-
 # version manifest file
 dependency "version-manifest"
 
