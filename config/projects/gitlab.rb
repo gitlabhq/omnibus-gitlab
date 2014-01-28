@@ -29,6 +29,7 @@ build_iteration 1
 dependency "preparation"
 
 dependency "gitlab-shell"
+dependency "gitlab-webui"
 
 # version manifest file
 dependency "version-manifest"
