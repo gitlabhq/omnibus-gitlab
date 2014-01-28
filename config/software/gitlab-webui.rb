@@ -25,7 +25,7 @@ dependency "libxslt"
 dependency "curl"
 dependency "rsync"
 dependency "libicu"
-dependency "postgres"
+dependency "postgresql"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
