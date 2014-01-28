@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-name "chef-server-cookbooks"
+name "gitlab-cookbooks"
 
 dependency "rsync"
 
-source :path => File.expand_path("files/chef-server-cookbooks", Omnibus.project_root)
+source :path => File.expand_path("files/gitlab-cookbooks", Omnibus.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
