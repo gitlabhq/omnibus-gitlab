@@ -22,7 +22,7 @@ homepage "http://www.gitlab.com/"
 
 replaces        "gitlab"
 install_path    "/opt/gitlab"
-build_version   '6.4.0'
+build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
 # creates required build directories
