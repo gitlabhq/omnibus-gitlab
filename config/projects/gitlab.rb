@@ -30,6 +30,9 @@ dependency "preparation"
 
 dependency "gitlab-shell"
 dependency "gitlab-webui"
+dependency "chef-gem"
+dependency "gitlab-ctl"
+dependency "gitlab-cookbooks"
 
 # version manifest file
 dependency "version-manifest"
