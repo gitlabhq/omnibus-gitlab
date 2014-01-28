@@ -29,8 +29,6 @@ dependency "postgresql"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
-relative_path "gitlab-webui"
-
 build do
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
   command "mkdir -p #{install_dir}/embedded/service/gitlab-webui"
