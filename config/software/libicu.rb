@@ -13,7 +13,7 @@ env = {
 }
 
 build do
-  command ["alias gmake=make; ./runConfigureICU",
+  command ["./runConfigureICU",
            "Linux/gcc",
            "--prefix=#{install_dir}/embedded",
 	   ].join(" "), :env => env
