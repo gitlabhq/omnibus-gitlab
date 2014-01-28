@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name "chef-server-webui"
-version "11.0.10"
+name "gitlab-webui"
+version "6-5-stable"
 
 dependency "ruby"
 dependency "bundler"
@@ -24,13 +24,15 @@ dependency "libxml2"
 dependency "libxslt"
 dependency "curl"
 dependency "rsync"
+dependency "libicu"
+dependency "postgres"
 
-source :git => "git://github.com/opscode/chef-server-webui.git"
+source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
-relative_path "chef-server-webui"
+relative_path "gitlab-webui"
 
 build do
-  bundle "install --without development test --path=#{install_dir}/embedded/service/gem"
-  command "mkdir -p #{install_dir}/embedded/service/chef-server-webui"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/chef-server-webui/"
+  bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-webui"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-webui/"
 end
