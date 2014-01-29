@@ -33,6 +33,7 @@ dependency "gitlab-webui"
 dependency "chef-gem"
 dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
+dependency "runit"
 
 # version manifest file
 dependency "version-manifest"
