@@ -35,112 +35,6 @@ default['chef_server']['user']['shell'] = "/bin/sh"
 default['chef_server']['user']['home'] = "/opt/chef-server/embedded"
 
 ####
-# RabbitMQ
-####
-default['chef_server']['rabbitmq']['enable'] = true
-default['chef_server']['rabbitmq']['ha'] = false
-default['chef_server']['rabbitmq']['dir'] = "/var/opt/chef-server/rabbitmq"
-default['chef_server']['rabbitmq']['data_dir'] = "/var/opt/chef-server/rabbitmq/db"
-default['chef_server']['rabbitmq']['log_directory'] = "/var/log/chef-server/rabbitmq"
-default['chef_server']['rabbitmq']['vhost'] = '/chef'
-default['chef_server']['rabbitmq']['user'] = 'chef'
-default['chef_server']['rabbitmq']['password'] = 'chefrocks'
-default['chef_server']['rabbitmq']['node_ip_address'] = '127.0.0.1'
-default['chef_server']['rabbitmq']['node_port'] = '8672'
-default['chef_server']['rabbitmq']['nodename'] = 'rabbit@localhost'
-default['chef_server']['rabbitmq']['vip'] = '127.0.0.1'
-default['chef_server']['rabbitmq']['consumer_id'] = 'hotsauce'
-
-####
-# Chef Solr
-####
-default['chef_server']['chef-solr']['enable'] = true
-default['chef_server']['chef-solr']['ha'] = false
-default['chef_server']['chef-solr']['dir'] = "/var/opt/chef-server/chef-solr"
-default['chef_server']['chef-solr']['data_dir'] = "/var/opt/chef-server/chef-solr/data"
-default['chef_server']['chef-solr']['log_directory'] = "/var/log/chef-server/chef-solr"
-# defaults for heap size and new generation size are computed in the chef-solr
-# recipe based on node memory
-default['chef_server']['chef-solr']['heap_size'] = nil
-default['chef_server']['chef-solr']['new_size'] = nil
-default['chef_server']['chef-solr']['java_opts'] = ""
-default['chef_server']['chef-solr']['ip_address'] = '127.0.0.1'
-default['chef_server']['chef-solr']['vip'] = '127.0.0.1'
-default['chef_server']['chef-solr']['port'] = 8983
-default['chef_server']['chef-solr']['ram_buffer_size'] = 200
-default['chef_server']['chef-solr']['merge_factor'] = 100
-default['chef_server']['chef-solr']['max_merge_docs'] = 2147483647
-default['chef_server']['chef-solr']['max_field_length'] = 100000
-default['chef_server']['chef-solr']['max_commit_docs'] = 1000
-default['chef_server']['chef-solr']['commit_interval'] = 60000 # in ms
-default['chef_server']['chef-solr']['poll_seconds'] = 20 # slave -> master poll interval in seconds, max of 60 (see solrconfig.xml.erb)
-
-####
-# Chef Expander
-####
-default['chef_server']['chef-expander']['enable'] = true
-default['chef_server']['chef-expander']['ha'] = false
-default['chef_server']['chef-expander']['dir'] = "/var/opt/chef-server/chef-expander"
-default['chef_server']['chef-expander']['log_directory'] = "/var/log/chef-server/chef-expander"
-default['chef_server']['chef-expander']['reindexer_log_directory'] = "/var/log/chef-server/chef-expander-reindexer"
-default['chef_server']['chef-expander']['consumer_id'] = "default"
-default['chef_server']['chef-expander']['nodes'] = 2
-
-####
-# Bookshelf
-####
-default['chef_server']['bookshelf']['enable'] = true
-default['chef_server']['bookshelf']['ha'] = false
-default['chef_server']['bookshelf']['dir'] = "/var/opt/chef-server/bookshelf"
-default['chef_server']['bookshelf']['data_dir'] = "/var/opt/chef-server/bookshelf/data"
-default['chef_server']['bookshelf']['log_directory'] = "/var/log/chef-server/bookshelf"
-default['chef_server']['bookshelf']['svlogd_size'] = 1000000
-default['chef_server']['bookshelf']['svlogd_num'] = 10
-default['chef_server']['bookshelf']['vip'] = node['fqdn']
-default['chef_server']['bookshelf']['url'] = "https://#{node['fqdn']}"
-# Default: set to Host: header. Override to hardcode a url, "http://..."
-default['chef_server']['bookshelf']['external_url'] = :host_header
-default['chef_server']['bookshelf']['listen'] = '127.0.0.1'
-default['chef_server']['bookshelf']['port'] = 4321
-default['chef_server']['bookshelf']['stream_download'] = true
-default['chef_server']['bookshelf']['access_key_id'] = "generated-by-default"
-default['chef_server']['bookshelf']['secret_access_key'] = "generated-by-default"
-
-####
-# Erlang Chef Server API
-####
-default['chef_server']['erchef']['enable'] = true
-default['chef_server']['erchef']['ha'] = false
-default['chef_server']['erchef']['dir'] = "/var/opt/chef-server/erchef"
-default['chef_server']['erchef']['log_directory'] = "/var/log/chef-server/erchef"
-default['chef_server']['erchef']['svlogd_size'] = 1000000
-default['chef_server']['erchef']['svlogd_num'] = 10
-default['chef_server']['erchef']['vip'] = '127.0.0.1'
-default['chef_server']['erchef']['listen'] = '127.0.0.1'
-default['chef_server']['erchef']['port'] = 8000
-default['chef_server']['erchef']['auth_skew'] = '900'
-default['chef_server']['erchef']['bulk_fetch_batch_size'] = '5'
-default['chef_server']['erchef']['max_cache_size'] = '10000'
-default['chef_server']['erchef']['cache_ttl'] = '3600'
-default['chef_server']['erchef']['db_pool_size'] = '20'
-default['chef_server']['erchef']['ibrowse_max_sessions'] = 256
-default['chef_server']['erchef']['ibrowse_max_pipeline_size'] = 1
-# Default: generate signed URLs based upon Host: header. Override with a url, "http:// ..."
-default['chef_server']['erchef']['base_resource_url'] = :host_header
-default['chef_server']['erchef']['s3_bucket'] = 'bookshelf'
-default['chef_server']['erchef']['s3_url_ttl'] = 900
-default['chef_server']['erchef']['s3_parallel_ops_timeout'] = 5000
-default['chef_server']['erchef']['s3_parallel_ops_fanout'] = 20
-default['chef_server']['erchef']['proxy_user'] = "pivotal"
-default['chef_server']['erchef']['validation_client_name'] = "chef-validator"
-default['chef_server']['erchef']['umask'] = "0022"
-default['chef_server']['erchef']['web_ui_client_name'] = "chef-webui"
-default['chef_server']['erchef']['root_metric_key'] = "chefAPI"
-default['chef_server']['erchef']['depsolver_worker_count'] = 5
-default['chef_server']['erchef']['depsolver_timeout'] = 5000
-default['chef_server']['erchef']['max_request_size'] = 1000000
-
-####
 # Chef Server WebUI
 ####
 default['chef_server']['chef-server-webui']['enable'] = true
@@ -162,22 +56,6 @@ default['chef_server']['chef-server-webui']['cookie_secret'] = "47b3b8d95dea455b
 default['chef_server']['chef-server-webui']['web_ui_client_name'] = "chef-webui"
 default['chef_server']['chef-server-webui']['web_ui_admin_user_name'] = "admin"
 default['chef_server']['chef-server-webui']['web_ui_admin_default_password'] = "p@ssw0rd1"
-
-####
-# Chef Pedant
-####
-default['chef_server']['chef-pedant']['dir'] = "/var/opt/chef-server/chef-pedant"
-default['chef_server']['chef-pedant']['log_directory'] = "/var/log/chef-server/chef-pedant"
-default['chef_server']['chef-pedant']['log_http_requests'] = true
-
-###
-# Estatsd
-###
-default['chef_server']['estatsd']['enable'] = true
-default['chef_server']['estatsd']['dir'] = "/var/opt/chef-server/estatsd"
-default['chef_server']['estatsd']['log_directory'] = "/var/log/chef-server/estatsd"
-default['chef_server']['estatsd']['vip'] = "127.0.0.1"
-default['chef_server']['estatsd']['port'] = 9466
 
 ###
 # Load Balancer
