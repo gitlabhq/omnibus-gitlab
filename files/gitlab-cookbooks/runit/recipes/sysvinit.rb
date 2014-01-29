@@ -18,7 +18,7 @@
 #
 
 # We assume you are sysvinit
-svdir_line = 'CS:123456:respawn:/opt/chef-server/embedded/bin/runsvdir-start'
+svdir_line = 'CS:123456:respawn:/opt/gitlab/embedded/bin/runsvdir-start'
 execute "echo '#{svdir_line}' >> /etc/inittab" do
   not_if "grep '#{svdir_line}' /etc/inittab"
   notifies :run, "execute[init q]", :immediately

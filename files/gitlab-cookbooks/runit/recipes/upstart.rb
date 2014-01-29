@@ -18,30 +18,30 @@
 #
 
 # Ensure the previous named iteration of the system job is nuked
-execute "initctl stop opscode-runsvdir" do
-  only_if "initctl status opscode-runsvdir | grep start"
+execute "initctl stop gitlab-runsvdir" do
+  only_if "initctl status gitlab-runsvdir | grep start"
   retries 30
 end
-file "/etc/init/opscode-runsvdir.conf" do
+file "/etc/init/gitlab-runsvdir.conf" do
   action :delete
 end
 
-cookbook_file "/etc/init/chef-server-runsvdir.conf" do
+cookbook_file "/etc/init/gitlab-runsvdir.conf" do
   owner "root"
   group "root"
   mode "0644"
-  source "chef-server-runsvdir.conf"
+  source "gitlab-runsvdir.conf"
 end
 
 # Keep on trying till the job is found :(
-execute "initctl status chef-server-runsvdir" do
+execute "initctl status gitlab-runsvdir" do
   retries 30
 end
 
 # If we are stop/waiting, start
 #
 # Why, upstart, aren't you idempotent? :(
-execute "initctl start chef-server-runsvdir" do
-  only_if "initctl status chef-server-runsvdir | grep stop"
+execute "initctl start gitlab-runsvdir" do
+  only_if "initctl status gitlab-runsvdir | grep stop"
   retries 30
 end
