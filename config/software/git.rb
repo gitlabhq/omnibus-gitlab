@@ -14,11 +14,6 @@ env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-  "NO_PERL" => "YesPlease",
-  "NO_EXPAT" => "YesPlease",
-  "NO_TCLTK" => "YesPlease",
-  "NO_GETTEXT" => "YesPlease",
-  "NO_PYTHON" => "YesPlease"
 }
 
 build do
@@ -27,6 +22,19 @@ build do
            "--with-curl=#{install_dir}/embedded",
            "--with-ssl=#{install_dir}/embedded",
            "--with-zlib=#{install_dir}/embedded"].join(" "), :env => env
+
+  # Ugly hack because ./configure does not pick these up from the env
+  block do
+    open(File.join(project_dir, "config.mak.autogen"), "a") do |file|
+      file.print <<-EOH
+NO_PERL=YesPlease
+NO_EXPAT=YesPlease
+NO_TCLTK=YesPlease
+NO_GETTEXT=YesPlease
+NO_PYTHON=YesPlease
+      EOH
+    end
+  end
 
   command "make -j #{max_build_jobs}", :env => env
   command "make install"
