@@ -151,7 +151,7 @@ end
 sql_user        = node['gitlab']['postgresql']['sql_user']
 sql_user_passwd = node['gitlab']['postgresql']['sql_password']
 
-execute "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"CREATE USER #{sql_user} WITH SUPERUSER ENCRYPTED PASSWORD '#{sql_user_passwd}'\"" do
+execute "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\"" do
   cwd chef_db_dir
   user pg_user
   notifies :run, "execute[grant #{db_name} privileges]", :immediately
