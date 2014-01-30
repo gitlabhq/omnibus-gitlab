@@ -26,28 +26,14 @@ directory "/etc/gitlab" do
   action :nothing
 end.run_action(:create)
 
-if File.exists?("/etc/gitlab/gitlab.json")
-  Chef::Log.warn("Please move to /etc/gitlab/gitlab.rb for configuration - /etc/gitlab/gitlab.json is deprecated.")
-else
-  GitLab[:node] = node
-  if File.exists?("/etc/gitlab/gitlab.rb")
-    GitLab.from_file("/etc/gitlab/gitlab.rb")
-  end
-  node.consume_attributes(GitLab.generate_config(node['fqdn']))
+GitLab[:node] = node
+if File.exists?("/etc/gitlab/gitlab.rb")
+  GitLab.from_file("/etc/gitlab/gitlab.rb")
 end
+node.consume_attributes(GitLab.generate_config(node['fqdn']))
 
 if File.exists?("/var/opt/gitlab/bootstrapped")
 	node.set['gitlab']['bootstrap']['enable'] = false
-end
-
-# Create the Chef User
-include_recipe "gitlab::users"
-
-directory "/etc/chef" do
-  owner "root"
-  group node['gitlab']['user']['username']
-  mode "0775"
-  action :create
 end
 
 directory "/var/opt/gitlab" do
@@ -63,15 +49,7 @@ include_recipe "runit"
 
 # Configure Services
 [
-  "rabbitmq",
   "postgresql",
-  "chef-solr",
-  "chef-expander",
-  "bookshelf",
-  "erchef",
-  "bootstrap",
-  "gitlab-webui",
-  "nginx"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
@@ -79,8 +57,6 @@ include_recipe "runit"
     include_recipe "gitlab::#{service}_disable"
   end
 end
-
-include_recipe "gitlab::chef-pedant"
 
 file "/etc/gitlab/gitlab-running.json" do
   owner node['gitlab']['user']['username']
