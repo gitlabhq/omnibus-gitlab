@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+default['gitlab']['bootstrap']['enable'] = true
+
 ###
 # PostgreSQL
 ###

@@ -24,6 +24,7 @@ require 'securerandom'
 module GitLab
   extend(Mixlib::Config)
 
+  bootstrap Mash.new
   postgresql Mash.new
   node nil
 
@@ -66,6 +67,7 @@ module GitLab
     def generate_hash
       results = { "gitlab" => {} }
       [
+        "bootstrap",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
