@@ -57,10 +57,3 @@ include_recipe "runit"
     include_recipe "gitlab::#{service}_disable"
   end
 end
-
-file "/etc/gitlab/gitlab-running.json" do
-  owner node['gitlab']['user']['username']
-  group "root"
-  mode "0600"
-  content Chef::JSONCompat.to_json_pretty({ "gitlab" => node['gitlab'].to_hash, "run_list" => node.run_list })
-end
