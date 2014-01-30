@@ -30,8 +30,8 @@ class PgHelper
 
   def database_exists?(db_name)
     psql_cmd(["-d 'template1'",
-              "-c 'select datname from pg_database' -x",
-              "| grep #{db_name}"])
+              "-c 'select datname from pg_database' -A",
+              "| grep -x #{db_name}"])
   end
 
   def sql_user_exists?
@@ -44,8 +44,8 @@ class PgHelper
 
   def user_exists?(db_user)
     psql_cmd(["-d 'template1'",
-              "-c 'select usename from pg_user' -x",
-              "|grep #{db_user}"])
+              "-c 'select usename from pg_user' -A",
+              "|grep -x #{db_user}"])
   end
 
   def psql_cmd(cmd_list)
