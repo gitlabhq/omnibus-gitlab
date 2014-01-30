@@ -140,26 +140,19 @@ pg_user = node['gitlab']['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
 db_name = "gitlabhq_production"
 
-execute "create #{db_name} database" do
-  command "#{bin_dir}/createdb -T template0 --port #{pg_port} -E UTF-8 #{db_name}"
-  user pg_user
-  not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
-  retries 30
-  # notifies :run, "execute[migrate_database]", :immediately
-end
-
 sql_user        = node['gitlab']['postgresql']['sql_user']
 sql_user_passwd = node['gitlab']['postgresql']['sql_password']
 
 execute "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\"" do
   cwd chef_db_dir
   user pg_user
-  notifies :run, "execute[grant #{db_name} privileges]", :immediately
   not_if { !pg_helper.is_running? || pg_helper.sql_user_exists? }
 end
 
-execute "grant #{db_name} privileges" do
-  command "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{sql_user}\""
+execute "create #{db_name} database" do
+  command "#{bin_dir}/createdb -T template0 --port #{pg_port} -E UTF-8 -O #{sql_user} #{db_name}"
   user pg_user
-  action :nothing
+  not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
+  retries 30
+  # notifies :run, "execute[migrate_database]", :immediately
 end
