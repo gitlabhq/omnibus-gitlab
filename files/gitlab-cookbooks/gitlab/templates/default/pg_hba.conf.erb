@@ -65,11 +65,11 @@
 # "local" is for Unix domain socket connections only
 local   all         all                               trust
 
-<% node['chef_server']['postgresql']['trust_auth_cidr_addresses'].each do |cidr| %>
+<% node['gitlab']['postgresql']['trust_auth_cidr_addresses'].each do |cidr| %>
 host    all         all         <%= cidr %>           trust
 <% end %>
 
-<% node['chef_server']['postgresql']['md5_auth_cidr_addresses'].each do |cidr| %>
+<% node['gitlab']['postgresql']['md5_auth_cidr_addresses'].each do |cidr| %>
 host    all         all         <%= cidr %>           md5
 <% end %>
 

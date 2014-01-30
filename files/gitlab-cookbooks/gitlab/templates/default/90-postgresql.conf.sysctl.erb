@@ -1,5 +1,5 @@
 #
-# chef server postgresql kernel shm tweaks
+# gitlab postgresql kernel shm tweaks
 #
-kernel.shmmax = <%= node['chef_server']['postgresql']['shmmax'] %>
-kernel.shmall = <%= node['chef_server']['postgresql']['shmall'] %>
+kernel.shmmax = <%= node['gitlab']['postgresql']['shmmax'] %>
+kernel.shmall = <%= node['gitlab']['postgresql']['shmall'] %>

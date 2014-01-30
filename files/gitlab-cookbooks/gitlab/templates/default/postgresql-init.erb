@@ -9,19 +9,19 @@ RETVAL=0
 
 case "$1" in
   stop|force-stop)
-    /opt/chef-server/embedded/bin/sv once postgresql
-    /opt/chef-server/embedded/bin/sv interrupt postgresql
+    /opt/gitlab/embedded/bin/sv once postgresql
+    /opt/gitlab/embedded/bin/sv interrupt postgresql
     RETVAL=$?
     ;;
   restart)
-    /opt/chef-server/embedded/bin/sv once postgresql
-    /opt/chef-server/embedded/bin/sv interrupt postgresql
+    /opt/gitlab/embedded/bin/sv once postgresql
+    /opt/gitlab/embedded/bin/sv interrupt postgresql
     sleep 5
-    /opt/chef-server/embedded/bin/sv start postgresql
+    /opt/gitlab/embedded/bin/sv start postgresql
     RETVAL=$?
     ;;
 	*)
-		/opt/chef-server/embedded/bin/sv $1 postgresql
+		/opt/gitlab/embedded/bin/sv $1 postgresql
     RETVAL=$?
 esac
 
