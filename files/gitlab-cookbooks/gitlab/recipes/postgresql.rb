@@ -138,7 +138,7 @@ pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
-db_name = "opscode_chef"
+db_name = "gitlabhq_production"
 
 execute "create #{db_name} database" do
   command "#{bin_dir}/createdb -T template0 --port #{pg_port} -E UTF-8 #{db_name}"
