@@ -1,0 +1,5 @@
+#
+# gitlab postgresql kernel shm tweaks
+#
+kernel.shmmax = <%= node['gitlab']['postgresql']['shmmax'] %>
+kernel.shmall = <%= node['gitlab']['postgresql']['shmall'] %>
