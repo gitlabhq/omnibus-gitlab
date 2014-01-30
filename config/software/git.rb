@@ -1,5 +1,5 @@
 name "git"
-version "1.0.0"
+version "1.8.5.3"
 
 dependency "zlib"
 dependency "openssl"
