@@ -145,14 +145,7 @@ execute "create #{db_name} database" do
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
   retries 30
-  notifies :run, "execute[migrate_database]", :immediately
-end
-
-execute "migrate_database" do
-  command "#{bin_dir}/psql #{db_name} --port #{pg_port} < priv/pgsql_schema.sql"
-  cwd chef_db_dir
-  user pg_user
-  action :nothing
+  # notifies :run, "execute[migrate_database]", :immediately
 end
 
 sql_user        = node['gitlab']['postgresql']['sql_user']
