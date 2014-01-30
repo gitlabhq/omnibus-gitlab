@@ -163,19 +163,3 @@ execute "grant #{db_name} privileges" do
   user pg_user
   action :nothing
 end
-
-sql_ro_user = node['gitlab']['postgresql']['sql_ro_user']
-sql_ro_user_passwd = node['gitlab']['postgresql']['sql_ro_password']
-
-execute "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"CREATE USER #{sql_ro_user} WITH SUPERUSER ENCRYPTED PASSWORD '#{sql_ro_user_passwd}'\"" do
-  cwd chef_db_dir
-  user pg_user
-  notifies :run, "execute[grant #{db_name}_ro privileges]", :immediately
-  not_if { !pg_helper.is_running? || pg_helper.sql_ro_user_exists? }
-end
-
-execute "grant #{db_name}_ro privileges" do
-  command "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{sql_ro_user}\""
-  user pg_user
-  action :nothing
-end
