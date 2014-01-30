@@ -17,40 +17,40 @@
 
 require 'openssl'
 
-ENV['PATH'] = "/opt/chef-server/bin:/opt/chef-server/embedded/bin:#{ENV['PATH']}"
+ENV['PATH'] = "/opt/gitlab/bin:/opt/gitlab/embedded/bin:#{ENV['PATH']}"
 
-directory "/etc/chef-server" do
+directory "/etc/gitlab" do
   owner "root"
   group "root"
   mode "0775"
   action :nothing
 end.run_action(:create)
 
-if File.exists?("/etc/chef-server/chef-server.json")
-  Chef::Log.warn("Please move to /etc/chef-server/chef-server.rb for configuration - /etc/chef-server/chef-server.json is deprecated.")
+if File.exists?("/etc/gitlab/gitlab.json")
+  Chef::Log.warn("Please move to /etc/gitlab/gitlab.rb for configuration - /etc/gitlab/gitlab.json is deprecated.")
 else
-  ChefServer[:node] = node
-  if File.exists?("/etc/chef-server/chef-server.rb")
-    ChefServer.from_file("/etc/chef-server/chef-server.rb")
+  GitLab[:node] = node
+  if File.exists?("/etc/gitlab/gitlab.rb")
+    GitLab.from_file("/etc/gitlab/gitlab.rb")
   end
-  node.consume_attributes(ChefServer.generate_config(node['fqdn']))
+  node.consume_attributes(GitLab.generate_config(node['fqdn']))
 end
 
-if File.exists?("/var/opt/chef-server/bootstrapped")
-	node.set['chef_server']['bootstrap']['enable'] = false
+if File.exists?("/var/opt/gitlab/bootstrapped")
+	node.set['gitlab']['bootstrap']['enable'] = false
 end
 
 # Create the Chef User
-include_recipe "chef-server::users"
+include_recipe "gitlab::users"
 
 directory "/etc/chef" do
   owner "root"
-  group node['chef_server']['user']['username']
+  group node['gitlab']['user']['username']
   mode "0775"
   action :create
 end
 
-directory "/var/opt/chef-server" do
+directory "/var/opt/gitlab" do
   owner "root"
   group "root"
   mode "0755"
@@ -70,21 +70,21 @@ include_recipe "runit"
   "bookshelf",
   "erchef",
   "bootstrap",
-  "chef-server-webui",
+  "gitlab-webui",
   "nginx"
 ].each do |service|
-  if node["chef_server"][service]["enable"]
-    include_recipe "chef-server::#{service}"
+  if node["gitlab"][service]["enable"]
+    include_recipe "gitlab::#{service}"
   else
-    include_recipe "chef-server::#{service}_disable"
+    include_recipe "gitlab::#{service}_disable"
   end
 end
 
-include_recipe "chef-server::chef-pedant"
+include_recipe "gitlab::chef-pedant"
 
-file "/etc/chef-server/chef-server-running.json" do
-  owner node['chef_server']['user']['username']
+file "/etc/gitlab/gitlab-running.json" do
+  owner node['gitlab']['user']['username']
   group "root"
   mode "0600"
-  content Chef::JSONCompat.to_json_pretty({ "chef_server" => node['chef_server'].to_hash, "run_list" => node.run_list })
+  content Chef::JSONCompat.to_json_pretty({ "gitlab" => node['gitlab'].to_hash, "run_list" => node.run_list })
 end
