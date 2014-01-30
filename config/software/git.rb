@@ -14,11 +14,11 @@ env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-  "NO_PERL" => "1",
-  "NO_EXPAT" => "1",
-  "NO_TCLTK" => "1",
-  "NO_GETTEXT" => "1",
-  "NO_PYTHON" => "1"
+  "NO_PERL" => "YesPlease",
+  "NO_EXPAT" => "YesPlease",
+  "NO_TCLTK" => "YesPlease",
+  "NO_GETTEXT" => "YesPlease",
+  "NO_PYTHON" => "YesPlease"
 }
 
 build do
