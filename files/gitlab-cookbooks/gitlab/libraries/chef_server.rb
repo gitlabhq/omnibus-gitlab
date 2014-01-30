@@ -24,13 +24,8 @@ require 'securerandom'
 module ChefServer
   extend(Mixlib::Config)
 
-  chef_server_webui Mash.new
-  lb Mash.new
   postgresql Mash.new
-  bootstrap Mash.new
-  nginx Mash.new
   node nil
-  notification_email nil
 
   class << self
 
@@ -58,9 +53,6 @@ module ChefServer
         File.open("/etc/chef-server/chef-server-secrets.json", "w") do |f|
           f.puts(
             Chef::JSONCompat.to_json_pretty({
-              'chef_server_webui' => {
-                'cookie_secret' => ChefServer['chef_server_webui']['cookie_secret'],
-              },
               'postgresql' => {
                 'sql_password' => ChefServer['postgresql']['sql_password'],
                 'sql_ro_password' => ChefServer['postgresql']['sql_ro_password']
@@ -75,16 +67,11 @@ module ChefServer
     def generate_hash
       results = { "chef_server" => {} }
       [
-        "chef_server_webui",
-        "lb",
-        "postgresql",
-        "nginx",
-        "bootstrap"
+        "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['chef_server'][rkey] = ChefServer[key]
       end
-      results['chef_server']['notification_email'] = ChefServer['notification_email']
 
       results
     end
