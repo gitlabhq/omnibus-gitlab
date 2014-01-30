@@ -86,7 +86,7 @@ else
   end
 end
 
-execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir}" do
+execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user node['gitlab']['postgresql']['username']
   not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
 end
@@ -148,7 +148,7 @@ execute "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_u
 end
 
 execute "create #{db_name} database" do
-  command "#{bin_dir}/createdb --port #{pg_port} -E UTF-8 -O #{sql_user} #{db_name}"
+  command "#{bin_dir}/createdb --port #{pg_port} -O #{sql_user} #{db_name}"
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
   retries 30
