@@ -27,6 +27,7 @@ build do
   block do
     open(File.join(project_dir, "config.mak.autogen"), "a") do |file|
       file.print <<-EOH
+# Added by Omnibus git software definition git.rb
 NO_PERL=YesPlease
 NO_EXPAT=YesPlease
 NO_TCLTK=YesPlease
