@@ -19,7 +19,6 @@ postgresql_dir = node['gitlab']['postgresql']['dir']
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
-chef_db_dir = Dir.glob("/opt/gitlab/embedded/service/erchef/lib/chef_db-*").first
 
 user node['gitlab']['postgresql']['username'] do
   system true
@@ -144,7 +143,6 @@ sql_user        = node['gitlab']['postgresql']['sql_user']
 sql_user_passwd = node['gitlab']['postgresql']['sql_password']
 
 execute "#{bin_dir}/psql --port #{pg_port} -d '#{db_name}' -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\"" do
-  cwd chef_db_dir
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.sql_user_exists? }
 end
