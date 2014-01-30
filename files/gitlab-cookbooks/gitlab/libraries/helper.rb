@@ -35,13 +35,13 @@ class PgHelper
   end
 
   def sql_user_exists?
-    user_exists?(node['chef_server']['postgresql']['sql_user'])
+    user_exists?(node['gitlab']['postgresql']['sql_user'])
   end
 
   def sql_ro_user_exists?
-    user_exists?(node['chef_server']['postgresql']['sql_ro_user'])
+    user_exists?(node['gitlab']['postgresql']['sql_ro_user'])
   end
-  
+
   def user_exists?(db_user)
     psql_cmd(["-d 'template1'",
               "-c 'select usename from pg_user' -x",
@@ -49,20 +49,20 @@ class PgHelper
   end
 
   def psql_cmd(cmd_list)
-    cmd = ["/opt/chef-server/embedded/bin/chpst",
+    cmd = ["/opt/gitlab/embedded/bin/chpst",
            "-u #{pg_user}",
-           "/opt/chef-server/embedded/bin/psql",
+           "/opt/gitlab/embedded/bin/psql",
            "--port #{pg_port}",
            cmd_list.join(" ")].join(" ")
     do_shell_out(cmd, 0)
   end
 
   def pg_user
-    node['chef_server']['postgresql']['username']
+    node['gitlab']['postgresql']['username']
   end
 
   def pg_port
-    node['chef_server']['postgresql']['port']
+    node['gitlab']['postgresql']['port']
   end
 
   def do_shell_out(cmd, expect_status)

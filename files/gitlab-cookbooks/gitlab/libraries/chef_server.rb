@@ -21,7 +21,7 @@ require 'chef/json_compat'
 require 'chef/mixin/deep_merge'
 require 'securerandom'
 
-module ChefServer
+module GitLab
   extend(Mixlib::Config)
 
   postgresql Mash.new
@@ -36,41 +36,40 @@ module ChefServer
 
     def generate_secrets(node_name)
       existing_secrets ||= Hash.new
-      if File.exists?("/etc/chef-server/chef-server-secrets.json")
-        existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/chef-server/chef-server-secrets.json"))
+      if File.exists?("/etc/gitlab/gitlab-secrets.json")
+        existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
       end
       existing_secrets.each do |k, v|
         v.each do |pk, p|
-          ChefServer[k][pk] = p
+          GitLab[k][pk] = p
         end
       end
 
-      ChefServer['chef_server_webui']['cookie_secret'] ||= generate_hex(50)
-      ChefServer['postgresql']['sql_password'] ||= generate_hex(50)
-      ChefServer['postgresql']['sql_ro_password'] ||= generate_hex(50)
+      GitLab['postgresql']['sql_password'] ||= generate_hex(50)
+      GitLab['postgresql']['sql_ro_password'] ||= generate_hex(50)
 
-      if File.directory?("/etc/chef-server")
-        File.open("/etc/chef-server/chef-server-secrets.json", "w") do |f|
+      if File.directory?("/etc/gitlab")
+        File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
           f.puts(
             Chef::JSONCompat.to_json_pretty({
               'postgresql' => {
-                'sql_password' => ChefServer['postgresql']['sql_password'],
-                'sql_ro_password' => ChefServer['postgresql']['sql_ro_password']
+                'sql_password' => GitLab['postgresql']['sql_password'],
+                'sql_ro_password' => GitLab['postgresql']['sql_ro_password']
               },
             })
           )
-          system("chmod 0600 /etc/chef-server/chef-server-secrets.json")
+          system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
         end
       end
     end
 
     def generate_hash
-      results = { "chef_server" => {} }
+      results = { "gitlab" => {} }
       [
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
-        results['chef_server'][rkey] = ChefServer[key]
+        results['gitlab'][rkey] = GitLab[key]
       end
 
       results
