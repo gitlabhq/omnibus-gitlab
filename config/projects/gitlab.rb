@@ -28,6 +28,7 @@ build_iteration 1
 # creates required build directories
 dependency "preparation"
 
+dependency "git"
 dependency "gitlab-shell"
 dependency "gitlab-webui"
 dependency "chef-gem"
