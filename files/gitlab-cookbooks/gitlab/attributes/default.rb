@@ -71,4 +71,3 @@ default['gitlab']['redis']['username'] = "gitlab-redis"
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['port'] = 6379
-default['gitlab']['redis']['listen_address'] = '127.0.0.1'
