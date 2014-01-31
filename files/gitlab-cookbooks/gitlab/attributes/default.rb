@@ -57,3 +57,8 @@ default['gitlab']['postgresql']['checkpoint_segments'] = 10
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
+
+###
+# Redis
+###
+default['gitlab']['redis']['enable'] = true
