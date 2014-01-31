@@ -26,6 +26,7 @@ module GitLab
 
   bootstrap Mash.new
   postgresql Mash.new
+  redis Mash.new
   node nil
 
   class << self
