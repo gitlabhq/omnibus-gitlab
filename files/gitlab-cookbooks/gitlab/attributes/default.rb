@@ -17,6 +17,17 @@
 
 default['gitlab']['bootstrap']['enable'] = true
 
+####
+# The Git User that services run as
+####
+# The username for the chef services user
+default['gitlab']['user']['username'] = "git"
+# The shell for the chef services user
+default['gitlab']['user']['shell'] = "/bin/sh"
+# The home directory for the chef services user
+default['gitlab']['user']['home'] = "/var/opt/gitlab"
+
+
 ###
 # PostgreSQL
 ###
