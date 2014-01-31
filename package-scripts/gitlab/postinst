@@ -12,6 +12,8 @@ function error_exit
   exit 1
 }
 
+ln -sf /opt/gitlab/bin/gitlab-ctl /usr/bin || error_exit "Could not symlink gitlab-ctl in /usr/bin"
+
 echo "Thank you for installing gitlab!"
 
 exit 0
