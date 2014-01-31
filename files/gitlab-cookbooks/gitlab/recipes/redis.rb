@@ -15,54 +15,54 @@
 # limitations under the License.
 #
 
-postgresql_dir = node['gitlab']['postgresql']['dir']
-postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
-postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
+redis_dir = node['gitlab']['redis']['dir']
+redis_data_dir = node['gitlab']['redis']['data_dir']
+redis_log_dir = node['gitlab']['redis']['log_directory']
 
-user node['gitlab']['postgresql']['username'] do
+user node['gitlab']['redis']['username'] do
   system true
-  shell node['gitlab']['postgresql']['shell']
-  home node['gitlab']['postgresql']['home']
+  shell node['gitlab']['redis']['shell']
+  home node['gitlab']['redis']['home']
 end
 
-directory postgresql_log_dir do
-  owner node['gitlab']['postgresql']['username']
+directory redis_log_dir do
+  owner node['gitlab']['redis']['username']
   recursive true
 end
 
-directory postgresql_dir do
-  owner node['gitlab']['postgresql']['username']
+directory redis_dir do
+  owner node['gitlab']['redis']['username']
   mode "0700"
 end
 
-directory postgresql_data_dir do
-  owner node['gitlab']['postgresql']['username']
+directory redis_data_dir do
+  owner node['gitlab']['redis']['username']
   mode "0700"
   recursive true
 end
 
-postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
+redis_config = File.join(redis_data_dir, "redis.conf")
 
-template postgresql_config do
-  source "postgresql.conf.erb"
-  owner node['gitlab']['postgresql']['username']
+template redis_config do
+  source "redis.conf.erb"
+  owner node['gitlab']['redis']['username']
   mode "0644"
-  variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  variables(node['gitlab']['redis'].to_hash)
+  notifies :restart, 'service[redis]' if OmnibusHelper.should_notify?("redis")
 end
 
-runit_service "postgresql" do
-  down node['gitlab']['postgresql']['ha']
+runit_service "redis" do
+  down node['gitlab']['redis']['ha']
   control(['t'])
   options({
-    :log_directory => postgresql_log_dir,
-    :svlogd_size => node['gitlab']['postgresql']['svlogd_size'],
-    :svlogd_num  => node['gitlab']['postgresql']['svlogd_num']
+    :log_directory => redis_log_dir,
+    :svlogd_size => node['gitlab']['redis']['svlogd_size'],
+    :svlogd_num  => node['gitlab']['redis']['svlogd_num']
   }.merge(params))
 end
 
 if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start postgresql" do
+  execute "/opt/gitlab/bin/gitlab-ctl start redis" do
     retries 20
   end
 end

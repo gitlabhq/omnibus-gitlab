@@ -62,3 +62,14 @@ default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
 # Redis
 ###
 default['gitlab']['redis']['enable'] = true
+default['gitlab']['redis']['ha'] = false
+default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
+default['gitlab']['redis']['data_dir'] = "/var/opt/gitlab/redis/data"
+default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
+default['gitlab']['redis']['svlogd_size'] = 1000000
+default['gitlab']['redis']['svlogd_num'] = 10
+default['gitlab']['redis']['username'] = "gitlab-psql"
+default['gitlab']['redis']['shell'] = "/bin/nologin"
+default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
+default['gitlab']['redis']['port'] = 6379
+default['gitlab']['redis']['listen_address'] = 'localhost'
