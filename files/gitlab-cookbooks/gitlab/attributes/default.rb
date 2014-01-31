@@ -64,7 +64,6 @@ default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
 default['gitlab']['redis']['enable'] = true
 default['gitlab']['redis']['ha'] = false
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
-default['gitlab']['redis']['data_dir'] = "/var/opt/gitlab/redis/data"
 default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
 default['gitlab']['redis']['svlogd_size'] = 1000000
 default['gitlab']['redis']['svlogd_num'] = 10

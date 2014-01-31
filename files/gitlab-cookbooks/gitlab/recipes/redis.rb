@@ -35,13 +35,7 @@ directory redis_dir do
   mode "0700"
 end
 
-directory redis_data_dir do
-  owner node['gitlab']['redis']['username']
-  mode "0700"
-  recursive true
-end
-
-redis_config = File.join(redis_data_dir, "redis.conf")
+redis_config = File.join(redis_dir, "redis.conf")
 
 template redis_config do
   source "redis.conf.erb"
