@@ -44,6 +44,8 @@ directory "/var/opt/gitlab" do
   action :create
 end
 
+include_recipe "gitlab::users"
+
 # Install our runit instance
 include_recipe "runit"
 

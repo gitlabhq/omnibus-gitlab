@@ -15,13 +15,13 @@
 # limitations under the License.
 #
 
-# Create a user for Chef services to run as
-user node['chef_server']['user']['username'] do
-  system true
-  shell node['chef_server']['user']['shell']
-  home node['chef_server']['user']['home']
-end
+gitlab_username = node['gitlab']['user']['username']
 
-group node['chef_server']['user']['username'] do
-  members [node['chef_server']['user']['username']]
+group gitlab_username
+
+# Create a user for Chef services to run as
+user gitlab_username do
+  shell node['gitlab']['user']['shell']
+  home node['gitlab']['user']['home']
+  gid gitlab_username
 end
