@@ -30,6 +30,7 @@ dependency "preparation"
 
 dependency "git"
 dependency "postgresql"
+dependency "redis"
 dependency "gitlab-shell"
 dependency "gitlab-webui"
 dependency "chef-gem"
