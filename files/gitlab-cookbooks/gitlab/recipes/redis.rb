@@ -16,7 +16,6 @@
 #
 
 redis_dir = node['gitlab']['redis']['dir']
-redis_data_dir = node['gitlab']['redis']['data_dir']
 redis_log_dir = node['gitlab']['redis']['log_directory']
 
 user node['gitlab']['redis']['username'] do
