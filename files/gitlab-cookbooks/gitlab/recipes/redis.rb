@@ -47,7 +47,6 @@ end
 
 runit_service "redis" do
   down node['gitlab']['redis']['ha']
-  control(['t'])
   options({
     :log_directory => redis_log_dir,
     :svlogd_size => node['gitlab']['redis']['svlogd_size'],
