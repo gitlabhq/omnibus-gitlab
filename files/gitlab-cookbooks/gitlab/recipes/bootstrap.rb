@@ -16,34 +16,6 @@
 #
 
 bootstrap_status_file = "/var/opt/chef-server/bootstrapped"
-erchef_dir = "/opt/chef-server/embedded/service/erchef"
-
-erchef_status_url = "http://#{node['chef_server']['erchef']['listen']}"
-erchef_status_url << ":#{node['chef_server']['erchef']['port']}/_status"
-
-execute "verify-system-status" do
-  command "curl -sf #{erchef_status_url}"
-  retries 20
-  not_if { File.exists?(bootstrap_status_file) }
-end
-
-execute "boostrap-chef-server" do
-  command "bin/bootstrap-chef-server"
-  cwd erchef_dir
-  not_if { File.exists?(bootstrap_status_file) }
-  environment({ 'CHEF_ADMIN_USER' => node['chef_server']['chef-server-webui']['web_ui_admin_user_name'],
-                 'CHEF_ADMIN_PASS' => node['chef_server']['chef-server-webui']['web_ui_admin_default_password'] })
-  notifies :restart, 'service[erchef]'
-end
-
-# servers need access to this key.
-chef_user = node['chef_server']['user']['username']
-file "/etc/chef-server/chef-webui.pem" do
-  owner "root"
-  group chef_user
-  mode "0640"
-  not_if { File.exists?(bootstrap_status_file) }
-end
 
 file bootstrap_status_file do
   owner "root"
