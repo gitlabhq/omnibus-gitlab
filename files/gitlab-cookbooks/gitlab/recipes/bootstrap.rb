@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-bootstrap_status_file = "/var/opt/chef-server/bootstrapped"
+bootstrap_status_file = "/var/opt/gitlab/bootstrapped"
 
 file bootstrap_status_file do
   owner "root"

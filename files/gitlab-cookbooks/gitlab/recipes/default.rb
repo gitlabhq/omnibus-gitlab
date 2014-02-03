@@ -53,6 +53,7 @@ include_recipe "runit"
 [
   "postgresql",
   "redis",
+  "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
