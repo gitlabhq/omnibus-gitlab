@@ -15,6 +15,6 @@
 # limitations under the License.
 #
 
-runit_service "postgresql" do
+runit_service "redis" do
   action :disable
 end
