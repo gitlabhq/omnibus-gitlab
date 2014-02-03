@@ -5,10 +5,10 @@ dependency "zlib"
 dependency "openssl"
 dependency "curl"
 
-source :url => "https://git-core.googlecode.com/files/git-1.8.5.3.tar.gz",
+source :url => "https://git-core.googlecode.com/files/git-#{version}.tar.gz",
        :md5 => "57b966065882f83ef5879620a1e329ca"
 
-relative_path 'git-1.8.5.3'
+relative_path "git-#{version}"
 
 env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
