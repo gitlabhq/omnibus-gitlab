@@ -1,8 +1,6 @@
 #
-# Cookbook Name:: runit
-# Recipe:: default
-#
-# Copyright 2008-2010, Opscode, Inc.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,22 +15,11 @@
 # limitations under the License.
 #
 
-cookbook_file "/etc/init/gitlab-runsvdir.conf" do
+bootstrap_status_file = "/var/opt/gitlab/bootstrapped"
+
+file bootstrap_status_file do
   owner "root"
   group "root"
-  mode "0644"
-  source "gitlab-runsvdir.conf"
-end
-
-# Keep on trying till the job is found :(
-execute "initctl status gitlab-runsvdir" do
-  retries 30
-end
-
-# If we are stop/waiting, start
-#
-# Why, upstart, aren't you idempotent? :(
-execute "initctl start gitlab-runsvdir" do
-  only_if "initctl status gitlab-runsvdir | grep stop"
-  retries 30
+  mode "0600"
+  content "All your bootstraps are belong to Chef"
 end
