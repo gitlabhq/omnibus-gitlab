@@ -17,15 +17,6 @@
 # limitations under the License.
 #
 
-# Ensure the previous named iteration of the system job is nuked
-execute "initctl stop gitlab-runsvdir" do
-  only_if "initctl status gitlab-runsvdir | grep start"
-  retries 30
-end
-file "/etc/init/gitlab-runsvdir.conf" do
-  action :delete
-end
-
 cookbook_file "/etc/init/gitlab-runsvdir.conf" do
   owner "root"
   group "root"
