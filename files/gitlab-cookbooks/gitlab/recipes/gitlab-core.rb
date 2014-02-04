@@ -51,14 +51,19 @@ link "/opt/gitlab/embedded/service/gitlab-core/.secret" do
   to secret_token_config
 end
 
-unicorn_listen = node['gitlab']['gitlab-core']['listen']
-unicorn_listen << ":#{node['gitlab']['gitlab-core']['port']}"
+unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']
+unicorn_listen_tcp << ":#{node['gitlab']['gitlab-core']['port']}"
+unicorn_listen_socket = node['gitlab']['gitlab-core']['unicorn_socket']
 
 unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
-  listen unicorn_listen => {
-    :backlog => node['gitlab']['gitlab-core']['backlog'],
-    :tcp_nodelay => node['gitlab']['gitlab-core']['tcp_nodelay']
-  }
+  listen(
+    unicorn_listen_tcp => {
+      :tcp_nopush => node['gitlab']['gitlab-core']['tcp_nopush']
+    },
+    unicorn_listen_socket => {
+      :backlog => node['gitlab']['gitlab-core']['backlog_socket'],
+    }
+  )
   worker_timeout node['gitlab']['gitlab-core']['worker_timeout']
   working_directory gitlab_core_working_dir
   worker_processes node['gitlab']['gitlab-core']['worker_processes']
