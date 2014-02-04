@@ -27,6 +27,11 @@ default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
 
+default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
+default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
+
+default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+
 
 ###
 # PostgreSQL
