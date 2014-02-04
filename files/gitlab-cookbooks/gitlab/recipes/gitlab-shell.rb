@@ -3,6 +3,7 @@ git_group = node['gitlab']['user']['group']
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 repositories_path = node['gitlab']['gitlab-core']['repositories_path']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
+log_directory = node['gitlab']['gitlab-shell']['log_directory']
 
 # Create directories because the git_user does not own its home directory
 directory repositories_path do
@@ -16,6 +17,10 @@ directory ssh_dir do
   mode "0700"
 end
 
+directory log_directory do
+  owner git_user
+end
+
 template File.join(gitlab_shell_dir, "config.yml") do
   source "gitlab-shell-config.yml.erb"
   owner git_user
@@ -26,7 +31,7 @@ template File.join(gitlab_shell_dir, "config.yml") do
     :repositories_path => repositories_path,
     :ssh_dir => ssh_dir,
     :redis_port => node['gitlab']['redis']['port'],
-    :log_directory => node['gitlab']['gitlab-shell']['log_directory']
+    :log_file => File.join(log_directory, "gitlab-shell.log")
   )
   notifies :run, "execute[bin/install]"
 end
