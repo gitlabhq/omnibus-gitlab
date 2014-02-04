@@ -67,6 +67,7 @@ unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
   worker_timeout node['gitlab']['gitlab-core']['worker_timeout']
   working_directory gitlab_core_working_dir
   worker_processes node['gitlab']['gitlab-core']['worker_processes']
+  preload_app true
   owner "root"
   group "root"
   mode "0644"
