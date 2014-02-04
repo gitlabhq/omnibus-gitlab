@@ -38,10 +38,6 @@ class PgHelper
     user_exists?(node['gitlab']['postgresql']['sql_user'])
   end
 
-  def sql_ro_user_exists?
-    user_exists?(node['gitlab']['postgresql']['sql_ro_user'])
-  end
-
   def user_exists?(db_user)
     psql_cmd(["-d 'template1'",
               "-c 'select usename from pg_user' -A",
