@@ -22,6 +22,7 @@ default['gitlab']['bootstrap']['enable'] = true
 ####
 # The username for the chef services user
 default['gitlab']['user']['username'] = "git"
+default['gitlab']['user']['group'] = "git"
 # The shell for the chef services user
 default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
