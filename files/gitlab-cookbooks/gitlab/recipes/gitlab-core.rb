@@ -37,41 +37,7 @@ end
 
 should_notify = OmnibusHelper.should_notify?("chef-server-webui")
 
-env_config = File.join(chef_server_webui_etc_dir, "#{node['chef_server']['chef-server-webui']['environment']}.rb")
-session_store_config = File.join(chef_server_webui_etc_dir, "session_store.rb")
 secret_token_config = File.join(chef_server_webui_etc_dir, "secret_token.rb")
-config_ru = File.join(chef_server_webui_etc_dir, "config.ru")
-
-erchef_url = "http://#{node['chef_server']['erchef']['listen']}"
-erchef_url << ":#{node['chef_server']['erchef']['port']}"
-
-template env_config do
-  source "chef-server-webui-config.rb.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables({
-    :chef_server_url => erchef_url
-  }.merge(node['chef_server']['chef-server-webui'].to_hash))
-  notifies :restart, 'service[chef-server-webui]' if should_notify
-end
-
-link "/opt/chef-server/embedded/service/chef-server-webui/config/environments/#{node['chef_server']['chef-server-webui']['environment']}.rb" do
-  to env_config
-end
-
-template session_store_config do
-  source "session_store.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['chef_server']['chef-server-webui'].to_hash)
-  notifies :restart, 'service[chef-server-webui]' if should_notify
-end
-
-link "/opt/chef-server/embedded/service/chef-server-webui/config/initializers/session_store.rb" do
-  to session_store_config
-end
 
 template secret_token_config do
   source "secret_token.erb"
@@ -84,24 +50,6 @@ end
 
 link "/opt/chef-server/embedded/service/chef-server-webui/config/initializers/secret_token.rb" do
   to secret_token_config
-end
-
-template config_ru do
-  source "chef-server-webui.ru.erb"
-  mode "0644"
-  owner "root"
-  group "root"
-  variables(node['chef_server']['chef-server-webui'].to_hash)
-  notifies :restart, 'service[chef-server-webui]' if should_notify
-end
-
-file "/opt/chef-server/embedded/service/chef-server-webui/config.ru" do
-  action :delete
-  not_if "test -h /opt/chef-server/embedded/service/chef-server-webui/config.ru"
-end
-
-link "/opt/chef-server/embedded/service/chef-server-webui/config.ru" do
-  to config_ru
 end
 
 unicorn_listen = node['chef_server']['chef-server-webui']['listen']
