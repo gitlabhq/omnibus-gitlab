@@ -37,10 +37,10 @@ end
 
 should_notify = OmnibusHelper.should_notify?("gitlab-core")
 
-secret_token_config = File.join(gitlab_core_etc_dir, "secret_token.rb")
+secret_token_config = File.join(gitlab_core_etc_dir, "secret")
 
 template secret_token_config do
-  source "secret_token.erb"
+  source "secret_token"
   owner "root"
   group "root"
   mode "0644"
@@ -48,7 +48,7 @@ template secret_token_config do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/gitlab/embedded/service/gitlab-core/config/initializers/secret_token.rb" do
+link "/opt/gitlab/embedded/service/gitlab-core/.secret" do
   to secret_token_config
 end
 
