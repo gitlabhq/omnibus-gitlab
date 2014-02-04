@@ -16,7 +16,7 @@
 #
 
 name "gitlab-core"
-version "6-5-stable"
+version "master"
 
 dependency "ruby"
 dependency "bundler"
