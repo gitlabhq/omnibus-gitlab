@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-name "gitlab-webui"
+name "gitlab-core"
 version "6-5-stable"
 
 dependency "ruby"
@@ -31,6 +31,6 @@ source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
 build do
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-webui"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-webui/"
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
 end
