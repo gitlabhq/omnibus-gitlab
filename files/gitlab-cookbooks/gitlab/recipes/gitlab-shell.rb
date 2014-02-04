@@ -29,7 +29,7 @@ template File.join(gitlab_shell_dir, "config.yml") do
     :user => git_user,
     :api_url => node['gitlab']['gitlab-core']['internal_api_url'],
     :repositories_path => repositories_path,
-    :ssh_dir => ssh_dir,
+    :authorized_keys => File.join(ssh_dir, "authorized_keys"),
     :redis_port => node['gitlab']['redis']['port'],
     :log_file => File.join(log_directory, "gitlab-shell.log")
   )
