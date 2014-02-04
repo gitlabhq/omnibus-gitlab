@@ -21,7 +21,7 @@ require 'chef/json_compat'
 require 'chef/mixin/deep_merge'
 require 'securerandom'
 
-module GitLab
+module Gitlab
   extend(Mixlib::Config)
 
   bootstrap Mash.new
@@ -43,18 +43,18 @@ module GitLab
       end
       existing_secrets.each do |k, v|
         v.each do |pk, p|
-          GitLab[k][pk] = p
+          Gitlab[k][pk] = p
         end
       end
 
-      GitLab['postgresql']['sql_password'] ||= generate_hex(50)
+      Gitlab['postgresql']['sql_password'] ||= generate_hex(50)
 
       if File.directory?("/etc/gitlab")
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
           f.puts(
             Chef::JSONCompat.to_json_pretty({
               'postgresql' => {
-                'sql_password' => GitLab['postgresql']['sql_password'],
+                'sql_password' => Gitlab['postgresql']['sql_password'],
               },
             })
           )
@@ -71,7 +71,7 @@ module GitLab
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
-        results['gitlab'][rkey] = GitLab[key]
+        results['gitlab'][rkey] = Gitlab[key]
       end
 
       results

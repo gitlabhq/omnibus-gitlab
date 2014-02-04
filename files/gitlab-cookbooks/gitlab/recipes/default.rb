@@ -26,11 +26,11 @@ directory "/etc/gitlab" do
   action :nothing
 end.run_action(:create)
 
-GitLab[:node] = node
+Gitlab[:node] = node
 if File.exists?("/etc/gitlab/gitlab.rb")
-  GitLab.from_file("/etc/gitlab/gitlab.rb")
+  Gitlab.from_file("/etc/gitlab/gitlab.rb")
 end
-node.consume_attributes(GitLab.generate_config(node['fqdn']))
+node.consume_attributes(Gitlab.generate_config(node['fqdn']))
 
 if File.exists?("/var/opt/gitlab/bootstrapped")
 	node.set['gitlab']['bootstrap']['enable'] = false
