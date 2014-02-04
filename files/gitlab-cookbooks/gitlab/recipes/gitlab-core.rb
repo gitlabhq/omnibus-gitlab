@@ -39,12 +39,11 @@ should_notify = OmnibusHelper.should_notify?("gitlab-core")
 
 secret_token_config = File.join(gitlab_core_etc_dir, "secret")
 
-template secret_token_config do
-  source "secret_token"
+file secret_token_config do
+  content node['gitlab']['gitlab-core']['secret_token']
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-core'].to_hash)
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
