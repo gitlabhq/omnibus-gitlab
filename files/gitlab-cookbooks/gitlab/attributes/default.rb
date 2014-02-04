@@ -15,7 +15,11 @@
 # limitations under the License.
 #
 
+####
+# omnibus options
+####
 default['gitlab']['bootstrap']['enable'] = true
+
 
 ####
 # The Git User that services run as
@@ -27,6 +31,7 @@ default['gitlab']['user']['group'] = "git"
 default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
+
 
 ####
 # GitLab core
@@ -53,6 +58,10 @@ default['gitlab']['gitlab-core']['web_ui_admin_default_password'] = "p@ssw0rd1"
 default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
 default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
 
+
+###
+# gitlab-shell
+###
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 
 
@@ -96,9 +105,10 @@ default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
 
-###
+
+####
 # Redis
-###
+####
 default['gitlab']['redis']['enable'] = true
 default['gitlab']['redis']['ha'] = false
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
