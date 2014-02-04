@@ -15,75 +15,75 @@
 # limitations under the License.
 #
 
-chef_server_webui_dir = node['chef_server']['chef-server-webui']['dir']
-chef_server_webui_etc_dir = File.join(chef_server_webui_dir, "etc")
-chef_server_webui_working_dir = File.join(chef_server_webui_dir, "working")
-chef_server_webui_tmp_dir = File.join(chef_server_webui_dir, "tmp")
-chef_server_webui_log_dir = node['chef_server']['chef-server-webui']['log_directory']
+gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
+gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
+gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
+gitlab_core_tmp_dir = File.join(gitlab_core_dir, "tmp")
+gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
 
 [
-  chef_server_webui_dir,
-  chef_server_webui_etc_dir,
-  chef_server_webui_working_dir,
-  chef_server_webui_tmp_dir,
-  chef_server_webui_log_dir
+  gitlab_core_dir,
+  gitlab_core_etc_dir,
+  gitlab_core_working_dir,
+  gitlab_core_tmp_dir,
+  gitlab_core_log_dir
 ].each do |dir_name|
   directory dir_name do
-    owner node['chef_server']['user']['username']
+    owner node['gitlab']['user']['username']
     mode '0700'
     recursive true
   end
 end
 
-should_notify = OmnibusHelper.should_notify?("chef-server-webui")
+should_notify = OmnibusHelper.should_notify?("gitlab-core")
 
-secret_token_config = File.join(chef_server_webui_etc_dir, "secret_token.rb")
+secret_token_config = File.join(gitlab_core_etc_dir, "secret_token.rb")
 
 template secret_token_config do
   source "secret_token.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['chef_server']['chef-server-webui'].to_hash)
-  notifies :restart, 'service[chef-server-webui]' if should_notify
+  variables(node['gitlab']['gitlab-core'].to_hash)
+  notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/chef-server/embedded/service/chef-server-webui/config/initializers/secret_token.rb" do
+link "/opt/gitlab/embedded/service/gitlab-core/config/initializers/secret_token.rb" do
   to secret_token_config
 end
 
-unicorn_listen = node['chef_server']['chef-server-webui']['listen']
-unicorn_listen << ":#{node['chef_server']['chef-server-webui']['port']}"
+unicorn_listen = node['gitlab']['gitlab-core']['listen']
+unicorn_listen << ":#{node['gitlab']['gitlab-core']['port']}"
 
-unicorn_config File.join(chef_server_webui_etc_dir, "unicorn.rb") do
+unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
   listen unicorn_listen => {
-    :backlog => node['chef_server']['chef-server-webui']['backlog'],
-    :tcp_nodelay => node['chef_server']['chef-server-webui']['tcp_nodelay']
+    :backlog => node['gitlab']['gitlab-core']['backlog'],
+    :tcp_nodelay => node['gitlab']['gitlab-core']['tcp_nodelay']
   }
-  worker_timeout node['chef_server']['chef-server-webui']['worker_timeout']
-  working_directory chef_server_webui_working_dir
-  worker_processes node['chef_server']['chef-server-webui']['worker_processes']
+  worker_timeout node['gitlab']['gitlab-core']['worker_timeout']
+  working_directory gitlab_core_working_dir
+  worker_processes node['gitlab']['gitlab-core']['worker_processes']
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, 'service[chef-server-webui]' if should_notify
+  notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/chef-server/embedded/service/chef-server-webui/tmp" do
-  to chef_server_webui_tmp_dir
+link "/opt/gitlab/embedded/service/gitlab-core/tmp" do
+  to gitlab_core_tmp_dir
 end
 
-execute "chown -R #{node['chef_server']['user']['username']} /opt/chef-server/embedded/service/chef-server-webui/public"
+execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-core/public"
 
-runit_service "chef-server-webui" do
-  down node['chef_server']['chef-server-webui']['ha']
+runit_service "gitlab-core" do
+  down node['gitlab']['gitlab-core']['ha']
   options({
-    :log_directory => chef_server_webui_log_dir
+    :log_directory => gitlab_core_log_dir
   }.merge(params))
 end
 
-if node['chef_server']['bootstrap']['enable']
-	execute "/opt/chef-server/bin/chef-server-ctl start chef-server-webui" do
+if node['gitlab']['bootstrap']['enable']
+	execute "/opt/gitlab/bin/gitlab-ctl start gitlab-core" do
 		retries 20
 	end
 end
