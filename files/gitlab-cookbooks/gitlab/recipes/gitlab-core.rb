@@ -73,6 +73,10 @@ link "/opt/gitlab/embedded/service/gitlab-core/tmp" do
   to gitlab_core_tmp_dir
 end
 
+link "/opt/gitlab/embedded/service/gitlab-core/log" do
+  to gitlab_core_log_dir
+end
+
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-core/public"
 
 runit_service "gitlab-core" do
