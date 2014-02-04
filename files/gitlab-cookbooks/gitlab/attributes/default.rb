@@ -28,29 +28,29 @@ default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
 
--####
--# GitLab core
--####
--default['gitlab']['gitlab-core']['enable'] = true
--default['gitlab']['gitlab-core']['ha'] = false
--default['gitlab']['gitlab-core']['dir'] = "/var/opt/gitlab/gitlab-core"
--default['gitlab']['gitlab-core']['log_directory'] = "/var/log/gitlab/gitlab-core"
--default['gitlab']['gitlab-core']['environment'] = 'production'
--default['gitlab']['gitlab-core']['listen'] = '127.0.0.1'
--default['gitlab']['gitlab-core']['vip'] = '127.0.0.1'
--default['gitlab']['gitlab-core']['port'] = 9462
--default['gitlab']['gitlab-core']['backlog'] = 1024
--default['gitlab']['gitlab-core']['tcp_nodelay'] = true
--default['gitlab']['gitlab-core']['worker_timeout'] = 3600
--default['gitlab']['gitlab-core']['umask'] = "0022"
--default['gitlab']['gitlab-core']['worker_processes'] = 2
--default['gitlab']['gitlab-core']['session_key'] = "_sandbox_session"
--default['gitlab']['gitlab-core']['cookie_domain'] = "all"
--default['gitlab']['gitlab-core']['cookie_secret'] = "47b3b8d95dea455baf32155e95d1e64e"
--default['gitlab']['gitlab-core']['web_ui_client_name'] = "chef-webui"
--default['gitlab']['gitlab-core']['web_ui_admin_user_name'] = "admin"
--default['gitlab']['gitlab-core']['web_ui_admin_default_password'] = "p@ssw0rd1"
--
+####
+# GitLab core
+####
+default['gitlab']['gitlab-core']['enable'] = true
+default['gitlab']['gitlab-core']['ha'] = false
+default['gitlab']['gitlab-core']['dir'] = "/var/opt/gitlab/gitlab-core"
+default['gitlab']['gitlab-core']['log_directory'] = "/var/log/gitlab/gitlab-core"
+default['gitlab']['gitlab-core']['environment'] = 'production'
+default['gitlab']['gitlab-core']['listen'] = '127.0.0.1'
+default['gitlab']['gitlab-core']['vip'] = '127.0.0.1'
+default['gitlab']['gitlab-core']['port'] = 9462
+default['gitlab']['gitlab-core']['backlog'] = 1024
+default['gitlab']['gitlab-core']['tcp_nodelay'] = true
+default['gitlab']['gitlab-core']['worker_timeout'] = 3600
+default['gitlab']['gitlab-core']['umask'] = "0022"
+default['gitlab']['gitlab-core']['worker_processes'] = 2
+default['gitlab']['gitlab-core']['session_key'] = "_sandbox_session"
+default['gitlab']['gitlab-core']['cookie_domain'] = "all"
+default['gitlab']['gitlab-core']['cookie_secret'] = "47b3b8d95dea455baf32155e95d1e64e"
+default['gitlab']['gitlab-core']['web_ui_client_name'] = "chef-webui"
+default['gitlab']['gitlab-core']['web_ui_admin_user_name'] = "admin"
+default['gitlab']['gitlab-core']['web_ui_admin_default_password'] = "p@ssw0rd1"
+
 default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
 default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
 
