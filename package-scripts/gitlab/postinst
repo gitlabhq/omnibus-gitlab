@@ -17,6 +17,6 @@ ln -sf /opt/gitlab/bin/gitlab-ctl /usr/bin || error_exit "Could not symlink gitl
 echo "Thank you for installing GitLab!"
 echo "You can configure GitLab for your system by running the following command:"
 echo
-echo "gitlab-ctl reconfigure"
+echo "sudo gitlab-ctl reconfigure"
 
 exit 0
