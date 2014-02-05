@@ -82,8 +82,8 @@ link "/opt/gitlab/embedded/service/gitlab-core/config/gitlab.yml" do
 end
 
 directory node['gitlab']['gitlab-core']['satellites_path'] do
-  owner git_user
-  group git_group
+  owner node['gitlab']['user']['username']
+  group node['gitlab']['user']['group']
   recursive true
 end
 
