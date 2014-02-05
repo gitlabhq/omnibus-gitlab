@@ -3,13 +3,31 @@
 This project creates full-stack platform-specific packages for
 GitLab!
 
-## Installation
+## Preparing a build environment on Ubuntu 12.04
 
-We'll assume you have Ruby 1.9+ and Bundler installed. First ensure all
-required gems are installed and ready to use:
+To create builds you will need a build user (`ubuntu:ubuntu` in our example).
+Preparing the build machine requires sudo access.
 
 ```shell
-$ bundle install --binstubs
+# Install dependencies
+sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential
+sudo gem install --no-ri --no-rdoc bundler
+
+# Create build directories for use by the build user
+sudo mkdir -p /opt/gitlab /var/cache/omnibus
+# We assume the build user and group is 'ubuntu'
+sudo chown ubuntu:ubuntu /opt/gitlab /var/cache/omnibus
+```
+
+Then, as the build user:
+
+```shell
+# Clone the omnibus repo
+git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
+
+# Install gem dependencies for omnibus-ruby
+cd omnibus-gitlab
+bundle install --path .bundle --binstubs
 ```
 
 ## Usage
