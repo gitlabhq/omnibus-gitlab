@@ -51,6 +51,21 @@ link "/opt/gitlab/embedded/service/gitlab-core/.secret" do
   to secret_token_config
 end
 
+database_yml = File.join(gitlab_core_etc_dir, "database.yml")
+
+template database_yml do
+  source "database.yml.postgresql.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['postgresql'].to_hash)
+  notifies :restart, 'service[gitlab-core]' if should_notify
+end
+
+link "/opt/gitlab/embedded/service/gitlab-core/config/database.yml" do
+  to database_yml
+end
+
 unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']
 unicorn_listen_tcp << ":#{node['gitlab']['gitlab-core']['port']}"
 unicorn_listen_socket = node['gitlab']['gitlab-core']['unicorn_socket']
