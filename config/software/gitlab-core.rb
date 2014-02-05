@@ -16,7 +16,7 @@
 #
 
 name "gitlab-core"
-version "master"
+version "omnibus"
 
 dependency "ruby"
 dependency "bundler"
