@@ -73,6 +73,7 @@ module Gitlab
       [
         "bootstrap",
         "redis",
+        "gitlab_core",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
