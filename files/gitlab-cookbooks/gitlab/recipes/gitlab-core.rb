@@ -62,8 +62,19 @@ template database_yml do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/gitlab/embedded/service/gitlab-core/config/database.yml" do
-  to database_yml
+gitlab_yml = File.join(gitlab_core_etc_dir, "gitlab.yml")
+
+template gitlab_yml do
+  source "gitlab.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['gitlab-core'].to_hash)
+  notifies :restart, 'service[gitlab-core]' if should_notify
+end
+
+link "/opt/gitlab/embedded/service/gitlab-core/config/gitlab.yml" do
+  to gitlab_yml
 end
 
 unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']

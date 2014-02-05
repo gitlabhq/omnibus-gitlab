@@ -15,9 +15,9 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: localhost
-    port: 80
-    https: false
+    host: <%= node['gitlab']['gitlab-core']['external_fqdn'] %>
+    port: <%= node['gitlab']['gitlab-core']['external_port'] %>
+    https: <%= node['gitlab']['gitlab-core']['external_https'] %>
 
     # Uncomment and customize the last line to run in a non-root path
     # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this. 
@@ -35,10 +35,10 @@ production: &base
 
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
-    email_from: gitlab@localhost
+    email_from: <%= node['gitlab']['gitlab-core']['notification_email'] %>
 
     # Email address of your support contact (default: same as email_from)
-    support_email: support@localhost
+    support_email: <%= node['gitlab']['gitlab-core']['support_email'] %>
 
     ## User settings
     default_projects_limit: 10
@@ -175,7 +175,7 @@ production: &base
   # GitLab Satellites
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
-    path: /home/git/gitlab-satellites/
+    path: <%= node['gitlab']['gitlab-core']['satellites_path'] %>
 
   ## Backup settings
   backup:
@@ -184,11 +184,11 @@ production: &base
 
   ## GitLab Shell settings
   gitlab_shell:
-    path: /home/git/gitlab-shell/
+    path: /opt/gitlab/embedded/service/gitlab-shell/
 
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: /home/git/repositories/
-    hooks_path: /home/git/gitlab-shell/hooks/
+    repos_path: <%= node['gitlab']['gitlab-core']['repositories_path'] %>
+    hooks_path: /opt/gitlab/embedded/service/gitlab-shell/hooks/
 
     # Git over HTTP
     upload_pack: true
@@ -201,7 +201,7 @@ production: &base
   # CAUTION!
   # Use the default values unless you really know what you are doing
   git:
-    bin_path: /usr/bin/git
+    bin_path: /opt/gitlab/embedded/bin/git
     # The next value is the maximum memory size grit can use
     # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits

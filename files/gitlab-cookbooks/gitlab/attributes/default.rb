@@ -51,7 +51,13 @@ default['gitlab']['gitlab-core']['umask'] = "0022"
 default['gitlab']['gitlab-core']['worker_processes'] = 2
 
 default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
+default['gitlab']['gitlab-core']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
 default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
+default['gitlab']['gitlab-core']['external_fqdn'] = node['fqdn']
+default['gitlab']['gitlab-core']['external_port'] = 80
+default['gitlab']['gitlab-core']['external_https'] = false
+default['gitlab']['gitlab-core']['notification_email'] = "gitlab@#{node['fqdn']}"
+default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
 
 
 ###
