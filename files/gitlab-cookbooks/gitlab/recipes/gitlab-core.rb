@@ -62,6 +62,10 @@ template database_yml do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
+link "/opt/gitlab/embedded/service/gitlab-core/config/database.yml" do
+  to database_yml
+end
+
 gitlab_yml = File.join(gitlab_core_etc_dir, "gitlab.yml")
 
 template gitlab_yml do
