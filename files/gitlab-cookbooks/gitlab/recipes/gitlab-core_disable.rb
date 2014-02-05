@@ -15,6 +15,6 @@
 # limitations under the License.
 #
 
-runit_service "chef-server-webui" do
+runit_service "gitlab-core" do
   action :disable
 end
