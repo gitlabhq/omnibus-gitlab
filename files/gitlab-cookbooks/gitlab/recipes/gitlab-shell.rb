@@ -9,16 +9,19 @@ log_directory = node['gitlab']['gitlab-shell']['log_directory']
 directory repositories_path do
   owner git_user
   group git_group
+  recursive true
 end
 
 directory ssh_dir do
   owner git_user
   group git_group
   mode "0700"
+  recursive true
 end
 
 directory log_directory do
   owner git_user
+  recursive true
 end
 
 template File.join(gitlab_shell_dir, "config.yml") do

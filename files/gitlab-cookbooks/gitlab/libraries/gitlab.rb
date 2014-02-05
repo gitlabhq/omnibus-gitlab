@@ -27,6 +27,7 @@ module Gitlab
   bootstrap Mash.new
   postgresql Mash.new
   redis Mash.new
+  gitlab_core Mash.new
   node nil
 
   class << self
@@ -48,6 +49,7 @@ module Gitlab
       end
 
       Gitlab['postgresql']['sql_password'] ||= generate_hex(50)
+      Gitlab['gitlab_core']['secret_token'] ||= generate_hex(64)
 
       if File.directory?("/etc/gitlab")
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
@@ -56,6 +58,9 @@ module Gitlab
               'postgresql' => {
                 'sql_password' => Gitlab['postgresql']['sql_password'],
               },
+              'gitlab_core' => {
+                'secret_token' => Gitlab['gitlab_core']['secret_token'],
+              }
             })
           )
           system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
@@ -68,6 +73,7 @@ module Gitlab
       [
         "bootstrap",
         "redis",
+        "gitlab_core",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')

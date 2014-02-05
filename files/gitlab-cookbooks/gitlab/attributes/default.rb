@@ -15,7 +15,11 @@
 # limitations under the License.
 #
 
+####
+# omnibus options
+####
 default['gitlab']['bootstrap']['enable'] = true
+
 
 ####
 # The Git User that services run as
@@ -28,9 +32,37 @@ default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
 
-default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
-default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
 
+####
+# GitLab core
+####
+default['gitlab']['gitlab-core']['enable'] = true
+default['gitlab']['gitlab-core']['ha'] = false
+default['gitlab']['gitlab-core']['dir'] = "/var/opt/gitlab/gitlab-core"
+default['gitlab']['gitlab-core']['log_directory'] = "/var/log/gitlab/gitlab-core"
+default['gitlab']['gitlab-core']['environment'] = 'production'
+default['gitlab']['gitlab-core']['listen'] = '127.0.0.1'
+default['gitlab']['gitlab-core']['port'] = 8080
+default['gitlab']['gitlab-core']['unicorn_socket'] = '/var/opt/gitlab/gitlab-core/tmp/sockets/gitlab.socket'
+default['gitlab']['gitlab-core']['tcp_nopush'] = true
+default['gitlab']['gitlab-core']['backlog_socket'] = 64
+default['gitlab']['gitlab-core']['worker_timeout'] = 30
+default['gitlab']['gitlab-core']['umask'] = "0022"
+default['gitlab']['gitlab-core']['worker_processes'] = 2
+
+default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
+default['gitlab']['gitlab-core']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
+default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
+default['gitlab']['gitlab-core']['external_fqdn'] = node['fqdn']
+default['gitlab']['gitlab-core']['external_port'] = 80
+default['gitlab']['gitlab-core']['external_https'] = false
+default['gitlab']['gitlab-core']['notification_email'] = "gitlab@#{node['fqdn']}"
+default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
+
+
+###
+# gitlab-shell
+###
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 
 
@@ -50,7 +82,6 @@ default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
 default['gitlab']['postgresql']['sql_password'] = "snakepliskin"
-default['gitlab']['postgresql']['vip'] = "127.0.0.1"
 default['gitlab']['postgresql']['port'] = 5432
 default['gitlab']['postgresql']['listen_address'] = 'localhost'
 default['gitlab']['postgresql']['max_connections'] = 200
@@ -75,9 +106,10 @@ default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
 
-###
+
+####
 # Redis
-###
+####
 default['gitlab']['redis']['enable'] = true
 default['gitlab']['redis']['ha'] = false
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"

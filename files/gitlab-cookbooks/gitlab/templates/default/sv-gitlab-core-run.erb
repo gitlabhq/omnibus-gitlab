@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd /opt/gitlab/embedded/service/gitlab-core
+
+exec 2>&1
+exec chpst -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /usr/bin/env HOME="<%= node['gitlab']['gitlab-core']['dir'] %>" /opt/gitlab/embedded/bin/bundle exec unicorn -E <%= node['gitlab']['gitlab-core']['environment'] %> -c <%= File.join(node['gitlab']['gitlab-core']['dir'], "etc", "unicorn.rb") %> /opt/gitlab/embedded/service/gitlab-core/config.ru
