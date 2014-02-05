@@ -74,12 +74,19 @@ unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/gitlab/embedded/service/gitlab-core/tmp" do
-  to gitlab_core_tmp_dir
-end
+# replace empty directories in the Git repo with symlinks to /var/opt/gitlab
+{
+  "/opt/gitlab/embedded/service/gitlab-core/tmp" => gitlab_core_tmp_dir,
+  "/opt/gitlab/embedded/service/gitlab-core/log" => gitlab_core_log_dir
+}.each do |link_dir, target_dir|
+  directory link_dir do
+    action :delete
+    recursive true
+  end
 
-link "/opt/gitlab/embedded/service/gitlab-core/log" do
-  to gitlab_core_log_dir
+  link link_dir do
+    to target_dir
+  end
 end
 
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-core/public"
