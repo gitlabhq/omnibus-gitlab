@@ -77,6 +77,13 @@ link "/opt/gitlab/embedded/service/gitlab-core/config/gitlab.yml" do
   to gitlab_yml
 end
 
+directory node['gitlab']['gitlab-core']['satellites_path'] do
+  owner git_user
+  group git_group
+  recursive true
+end
+
+
 unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']
 unicorn_listen_tcp << ":#{node['gitlab']['gitlab-core']['port']}"
 unicorn_listen_socket = node['gitlab']['gitlab-core']['unicorn_socket']
