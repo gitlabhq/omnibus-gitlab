@@ -16,10 +16,10 @@
 #
 
 if File.exists?("/etc/gitlab/gitlab.rb")
-	ChefServer[:node] = node
-	ChefServer.from_file("/etc/gitlab/gitlab.rb")
+	Gitlab[:node] = node
+	Gitlab.from_file("/etc/gitlab/gitlab.rb")
 end
-config = ChefServer.generate_config(node['fqdn'])
+config = Gitlab.generate_config(node['fqdn'])
 
 puts Chef::JSONCompat.to_json_pretty(config)
 return
