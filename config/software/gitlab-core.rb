@@ -35,7 +35,7 @@ build do
   # this assumption does not hold. The sed command below patches the GitLab
   # source code to include the Git revision of the code included in the omnibus
   # build.
-  command "sed -i 's/.*REVISION.*/REVISION = \"#{version_guid.split(':').last[0,10]}\"/' config/initializers/2_app.rb"
+  command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
 
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
 
