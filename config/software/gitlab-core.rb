@@ -36,8 +36,24 @@ build do
   # source code to include the Git revision of the code included in the omnibus
   # build.
   command "sed -i 's/.*REVISION.*/REVISION = \"#{version_guid.split(':').last[0,10]}\"/' config/initializers/2_app.rb"
+
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
+
+  # In order to precompile the assets, we need to get to a state where rake can
+  # load the Rails environment.
+  command "cp config/gitlab.yml.example config/gitlab.yml"
+  command "cp config/database.yml.postgresql config/database.yml"
+  # There is a bug in the acts-as-taggable-on gem that makes
+  # rake assets:precompile check for a database connection. We do not have a
+  # database at this point so that is a problem. This bug is fixed in
+  # acts-as-taggable-on 3.0.0 by
+  # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
+  command "git apply #{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff",
+    :cwd => "#{install_dir}/embedded/service/gem/ruby/1.9.1/gems/acts-as-taggable-on-2.4.1"
   rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
+  # Tear down now that the assets:precompile is done.
+  command "rm config/gitlab.yml config/database.yml"
+
   command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
   block do
