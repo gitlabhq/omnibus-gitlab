@@ -59,6 +59,8 @@ build do
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
+
+  # Create a wrapper for the rake tasks of the Rails app
   block do
     open("#{install_dir}/bin/gitlab-rake", "w") do |file|
       file.print <<-EOH
