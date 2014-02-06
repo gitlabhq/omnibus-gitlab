@@ -12,7 +12,10 @@ function error_exit
   exit 1
 }
 
-ln -sf /opt/gitlab/bin/gitlab-ctl /usr/bin || error_exit "Could not symlink gitlab-ctl in /usr/bin"
+for command in gitlab-ctl gitlab-rake
+do
+  ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
+done
 
 echo "Thank you for installing GitLab!"
 echo "You can configure GitLab for your system by running the following command:"
