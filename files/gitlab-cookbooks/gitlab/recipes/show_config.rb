@@ -15,9 +15,9 @@
 # limitations under the License.
 #
 
-if File.exists?("/etc/chef-server/chef-server.rb")
+if File.exists?("/etc/gitlab/gitlab.rb")
 	ChefServer[:node] = node
-	ChefServer.from_file("/etc/chef-server/chef-server.rb")
+	ChefServer.from_file("/etc/gitlab/gitlab.rb")
 end
 config = ChefServer.generate_config(node['fqdn'])
 
