@@ -37,6 +37,7 @@ build do
   # build.
   command "sed -i 's/.*REVISION.*/REVISION = \"#{version_guid.split(':').last[0,10]}\"/' config/initializers/2_app.rb"
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem"
+  rake "assets:precompile", "RAILS_ENV" => "production"
   command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
   block do
