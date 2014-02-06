@@ -19,6 +19,8 @@ gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
 gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
 gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
 gitlab_core_tmp_dir = File.join(gitlab_core_dir, "tmp")
+gitlab_core_sockets_dir = File.dirname(node['gitlab']['gitlab-core']['unicorn_socket'])
+gitlab_core_public_uploads_dir = node['gitlab']['gitlab-core']['uploads_directory']
 gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
 
 [
@@ -26,6 +28,8 @@ gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
   gitlab_core_etc_dir,
   gitlab_core_working_dir,
   gitlab_core_tmp_dir,
+  gitlab_core_sockets_dir,
+  gitlab_core_public_uploads_dir,
   gitlab_core_log_dir
 ].each do |dir_name|
   directory dir_name do
@@ -114,6 +118,7 @@ end
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
 {
   "/opt/gitlab/embedded/service/gitlab-core/tmp" => gitlab_core_tmp_dir,
+  "/opt/gitlab/embedded/service/gitlab-core/public/uploads" => gitlab_core_public_uploads_dir,
   "/opt/gitlab/embedded/service/gitlab-core/log" => gitlab_core_log_dir
 }.each do |link_dir, target_dir|
   directory link_dir do
