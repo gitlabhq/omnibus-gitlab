@@ -16,12 +16,21 @@
 #
 
 gitlab_username = node['gitlab']['user']['username']
+gitlab_home = node['gitlab']['user']['home']
 
 group gitlab_username
 
 # Create a user for Chef services to run as
 user gitlab_username do
   shell node['gitlab']['user']['shell']
-  home node['gitlab']['user']['home']
+  home gitlab_home
   gid gitlab_username
+end
+
+template File.join(gitlab_home, ".gitconfig") do
+  source "gitconfig.erb"
+  owner gitlab_username
+  group node['gitlab']['user']['group']
+  mode "0644"
+  variables(node['gitlab']['user'].to_hash)
 end
