@@ -48,7 +48,10 @@ build do
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
-  command "git apply #{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff",
+  patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+  # To make this idempotent, we apply the patch (in case this is a first run) or
+  # we revert and re-apply the patch (if this is a second or later run).
+  command "git apply #{patch} || (git apply -R #{patch} && git apply #{patch})",
     :cwd => "#{install_dir}/embedded/service/gem/ruby/1.9.1/gems/acts-as-taggable-on-2.4.1"
   rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
   # Tear down now that the assets:precompile is done.
