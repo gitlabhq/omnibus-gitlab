@@ -85,6 +85,21 @@ link "/opt/gitlab/embedded/service/gitlab-core/config/gitlab.yml" do
   to gitlab_yml
 end
 
+rack_attack = File.join(gitlab_core_etc_dir, "rack_attack.rb")
+
+template rack_attack do
+  source "rack_attack.rb.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['gitlab-core'].to_hash)
+  notifies :restart, 'service[gitlab-core]' if should_notify
+end
+
+link "/opt/gitlab/embedded/service/gitlab-core/config/initializers/rack_attack.rb" do
+  to rack_attack
+end
+
 directory node['gitlab']['gitlab-core']['satellites_path'] do
   owner node['gitlab']['user']['username']
   group node['gitlab']['user']['group']
