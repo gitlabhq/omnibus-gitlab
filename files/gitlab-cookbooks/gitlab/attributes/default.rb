@@ -58,6 +58,7 @@ default['gitlab']['gitlab-core']['external_port'] = 80
 default['gitlab']['gitlab-core']['external_https'] = false
 default['gitlab']['gitlab-core']['notification_email'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
+default['gitlab']['gitlab-core']['uploads_directory'] = "/var/opt/gitlab/uploads"
 
 
 ###
