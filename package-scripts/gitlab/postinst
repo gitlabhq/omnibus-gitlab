@@ -14,7 +14,7 @@ function error_exit
 
 for command in gitlab-ctl gitlab-rake
 do
-  ln -sf /opt/gitlab/bin/$command} /usr/bin || error_exit "Could not symlink $command in /usr/bin"
+  ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
 done
 
 echo "Thank you for installing GitLab!"
