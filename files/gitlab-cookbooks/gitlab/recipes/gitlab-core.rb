@@ -56,19 +56,14 @@ link "/opt/gitlab/embedded/service/gitlab-core/.secret" do
   to secret_token_config
 end
 
-database_yml = File.join(gitlab_core_etc_dir, "database.yml")
-
-template database_yml do
+template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
+  link_from "/opt/gitlab/embedded/service/gitlab-core/config/database.yml"
   source "database.yml.postgresql.erb"
   owner "root"
   group "root"
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
   notifies :restart, 'service[gitlab-core]' if should_notify
-end
-
-link "/opt/gitlab/embedded/service/gitlab-core/config/database.yml" do
-  to database_yml
 end
 
 gitlab_yml = File.join(gitlab_core_etc_dir, "gitlab.yml")
