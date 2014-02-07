@@ -63,6 +63,6 @@ build do
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
     :source => "bundle_exec_wrapper.erb",
-    :mode => "775",
+    :mode => 0755,
     :vars => {:command => 'rake "$@"'}
 end
