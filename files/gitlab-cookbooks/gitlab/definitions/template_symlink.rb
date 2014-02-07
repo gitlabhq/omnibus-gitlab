@@ -19,7 +19,7 @@ define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :gro
   template params[:name] do
     source params[:source]
     owner params[:owner]
-    group params:group]
+    group params[:group]
     mode params[:mode]
     variables params[:variables]
     notifies *params[:notifies] if params[:notifies]
