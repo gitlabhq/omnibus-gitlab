@@ -1,12 +1,12 @@
 #!/bin/bash
-export PATH=<%= @install_dir %>/bin:<%= @install_dir %>/embedded/bin:$PATH
+export PATH=<%= install_dir %>/bin:<%= install_dir %>/embedded/bin:$PATH
 
 # default to RAILS_ENV=production
 if [[ -z $RAILS_ENV ]]; then
   export RAILS_ENV=production
 fi
 
-gitlab_user=$(ls -lLd <%= @install_dir %>/embedded/service/gitlab-core/log | awk '{ print $3 }')
+gitlab_user=$(ls -lLd <%= install_dir %>/embedded/service/gitlab-core/log | awk '{ print $3 }')
 
-cd <%= @install_dir %>/embedded/service/gitlab-core
-exec <%= @install_dir %>/embedded/bin/chpst -u $gitlab_user -U $gitlab_user <%= @install_dir %>/embedded/bin/bundle exec <%= @command %>
+cd <%= install_dir %>/embedded/service/gitlab-core
+exec <%= install_dir %>/embedded/bin/chpst -u $gitlab_user -U $gitlab_user <%= install_dir %>/embedded/bin/bundle exec <%= command %>
