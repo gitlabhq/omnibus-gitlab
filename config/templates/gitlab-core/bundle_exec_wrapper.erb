@@ -9,4 +9,4 @@ fi
 gitlab_user=$(ls -lLd <%= @install_dir %>/embedded/service/gitlab-core/log | awk '{ print $3 }')
 
 cd <%= @install_dir %>/embedded/service/gitlab-core
-<%= @install_dir %>/embedded/bin/chpst -u $gitlab_user -U $gitlab_user <%= @install_dir %>/embedded/bin/bundle exec <%= @command %>
+exec <%= @install_dir %>/embedded/bin/chpst -u $gitlab_user -U $gitlab_user <%= @install_dir %>/embedded/bin/bundle exec <%= @command %>
