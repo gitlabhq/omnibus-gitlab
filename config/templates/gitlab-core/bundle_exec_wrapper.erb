@@ -1,0 +1,12 @@
+#!/bin/bash
+export PATH=/opt/gitlab/bin:/opt/gitlab/embedded/bin:$PATH
+
+# default to RAILS_ENV=production
+if [[ -z $RAILS_ENV ]]; then
+  export RAILS_ENV=production
+fi
+
+gitlab_user=$(ls -lLd /opt/gitlab/embedded/service/gitlab-core/log | awk '{ print $3 }')
+
+cd /opt/gitlab/embedded/service/gitlab-core
+/opt/gitlab/embedded/bin/chpst -u $gitlab_user -U $gitlab_user /opt/gitlab/embedded/bin/bundle exec <%= @command %>

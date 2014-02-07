@@ -61,21 +61,8 @@ build do
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
 
   # Create a wrapper for the rake tasks of the Rails app
-  block do
-    open("#{install_dir}/bin/gitlab-rake", "w") do |file|
-      file.print <<-EOH
-#!/bin/bash
-export PATH=/opt/gitlab/bin:/opt/gitlab/embedded/bin:$PATH
-
-# default to RAILS_ENV=production
-if [[ -z $RAILS_ENV ]]; then
-  export RAILS_ENV=production
-fi
-
-cd /opt/gitlab/embedded/service/gitlab-core
-/opt/gitlab/embedded/bin/chpst -u git -U git /opt/gitlab/embedded/bin/bundle exec rake "$@"
-EOH
-    end
-  end
-  command "chmod +x #{install_dir}/bin/gitlab-rake"
+  erb :dest => "#{install_dir}/bin/gitlab-rake",
+    :source => "bundle_exec_wrapper.erb",
+    :mode => "775",
+    :vars => {:command => 'rake "$@"'}
 end
