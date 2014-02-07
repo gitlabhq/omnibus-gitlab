@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+gitlab_core_source_dir = "/opt/gitlab/embedded/service/gitlab-core"
 gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
 gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
 gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
@@ -42,22 +43,17 @@ end
 
 should_notify = OmnibusHelper.should_notify?("gitlab-core")
 
-secret_token_config = File.join(gitlab_core_etc_dir, "secret")
-
-file secret_token_config do
-  content node['gitlab']['gitlab-core']['secret_token']
+template_symlink File.join(gitlab_core_etc_dir, "secret") do
+  link_from File.join(gitlab_core_source_dir, ".secret")
+  source "secret_token.erb"
   owner "root"
   group "root"
   mode "0644"
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/gitlab/embedded/service/gitlab-core/.secret" do
-  to secret_token_config
-end
-
 template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
-  link_from "/opt/gitlab/embedded/service/gitlab-core/config/database.yml"
+  link_from File.join(gitlab_core_source_dir, "config/database.yml")
   source "database.yml.postgresql.erb"
   owner "root"
   group "root"
@@ -66,9 +62,8 @@ template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-gitlab_yml = File.join(gitlab_core_etc_dir, "gitlab.yml")
-
-template gitlab_yml do
+template_symlink File.join(gitlab_core_etc_dir, "gitlab.yml") do
+  link_from File.join(gitlab_core_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"
   owner "root"
   group "root"
@@ -77,23 +72,14 @@ template gitlab_yml do
   notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
-link "/opt/gitlab/embedded/service/gitlab-core/config/gitlab.yml" do
-  to gitlab_yml
-end
-
-rack_attack = File.join(gitlab_core_etc_dir, "rack_attack.rb")
-
-template rack_attack do
+template_symlink File.join(gitlab_core_etc_dir, "rack_attack.rb") do
+  link_from File.join(gitlab_core_source_dir, "config/initializers/rack_attack.rb")
   source "rack_attack.rb.erb"
   owner "root"
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-core'].to_hash)
   notifies :restart, 'service[gitlab-core]' if should_notify
-end
-
-link "/opt/gitlab/embedded/service/gitlab-core/config/initializers/rack_attack.rb" do
-  to rack_attack
 end
 
 directory node['gitlab']['gitlab-core']['satellites_path'] do
