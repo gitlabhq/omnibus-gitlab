@@ -7,7 +7,7 @@ production:
   database: gitlabhq_production
   pool: 10
   username: <%= node['gitlab']['postgresql']['sql_user'] %>
-  password: <%= node['gitlab']['postgresql']['sql_password'] %>
+  password: "<%= node['gitlab']['postgresql']['sql_password'] %>"
   host: <%= node['gitlab']['postgresql']['listen_address'] %>
   port: <%= node['gitlab']['postgresql']['port'] %>
 # socket: /tmp/postgresql.sock
