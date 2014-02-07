@@ -1,5 +1,5 @@
 #
-## Copyright:: Copyright (c) 2013 GitLab.com
+## Copyright:: Copyright (c) 2013, 2014 GitLab.com
 ## License:: Apache License, Version 2.0
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
