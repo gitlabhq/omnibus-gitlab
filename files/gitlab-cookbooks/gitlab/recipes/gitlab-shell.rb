@@ -19,6 +19,7 @@
 git_user = node['gitlab']['user']['username']
 git_group = node['gitlab']['user']['group']
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
+gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 repositories_path = node['gitlab']['gitlab-core']['repositories_path']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
@@ -42,10 +43,15 @@ directory log_directory do
   recursive true
 end
 
-template File.join(gitlab_shell_dir, "config.yml") do
-  source "gitlab-shell-config.yml.erb"
+directory gitlab_shell_var_dir do
   owner git_user
-  group git_group
+  mode '0700'
+  recursive true
+end
+
+template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
+  link_from File.join(gitlab_shell_dir, "config.yml")
+  source "gitlab-shell-config.yml.erb"
   variables(
     :user => git_user,
     :api_url => node['gitlab']['gitlab-core']['internal_api_url'],
