@@ -64,5 +64,5 @@ build do
   erb :dest => "#{install_dir}/bin/gitlab-rake",
     :source => "bundle_exec_wrapper.erb",
     :mode => 0755,
-    :vars => {:command => 'rake "$@"'}
+    :vars => {:command => 'rake "$@"', :install_dir => install_dir}
 end
