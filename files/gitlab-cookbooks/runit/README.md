@@ -214,6 +214,7 @@ Author:: Adam Jacob <adam@opscode.com>
 Author:: Joshua Timberman <joshua@opscode.com>
 
 Copyright:: 2008-2011, Opscode, Inc
+Copyright:: 2014 GitLab.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

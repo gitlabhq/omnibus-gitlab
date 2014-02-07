@@ -1,6 +1,6 @@
 maintainer "GitLab.com"
 maintainer_email "support@gitlab.com"
-license "MIT"
+license "Apache 2.0"
 description "Install and configure GitLab from Omnibus"
 long_description "Install and configure GitLab from Omnibus"
 version "0.0.1"
