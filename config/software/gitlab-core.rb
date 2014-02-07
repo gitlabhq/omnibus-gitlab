@@ -65,4 +65,10 @@ build do
     :source => "bundle_exec_wrapper.erb",
     :mode => 0755,
     :vars => {:command => 'rake "$@"', :install_dir => install_dir}
+
+  # Create a wrapper for the rails command, useful for e.g. `rails console`
+  erb :dest => "#{install_dir}/bin/gitlab-rails",
+    :source => "bundle_exec_wrapper.erb",
+    :mode => 0755,
+    :vars => {:command => 'rails "$@"', :install_dir => install_dir}
 end
