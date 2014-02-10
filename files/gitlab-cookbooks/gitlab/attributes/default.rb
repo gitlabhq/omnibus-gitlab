@@ -44,14 +44,7 @@ default['gitlab']['gitlab-core']['ha'] = false
 default['gitlab']['gitlab-core']['dir'] = "/var/opt/gitlab/gitlab-core"
 default['gitlab']['gitlab-core']['log_directory'] = "/var/log/gitlab/gitlab-core"
 default['gitlab']['gitlab-core']['environment'] = 'production'
-default['gitlab']['gitlab-core']['listen'] = '127.0.0.1'
-default['gitlab']['gitlab-core']['port'] = 8080
-default['gitlab']['gitlab-core']['unicorn_socket'] = '/var/opt/gitlab/gitlab-core/tmp/sockets/gitlab.socket'
-default['gitlab']['gitlab-core']['tcp_nopush'] = true
-default['gitlab']['gitlab-core']['backlog_socket'] = 64
-default['gitlab']['gitlab-core']['worker_timeout'] = 30
 default['gitlab']['gitlab-core']['umask'] = "0022"
-default['gitlab']['gitlab-core']['worker_processes'] = 2
 
 default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
 default['gitlab']['gitlab-core']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
@@ -64,6 +57,20 @@ default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
 default['gitlab']['gitlab-core']['uploads_directory'] = "/var/opt/gitlab/uploads"
 default['gitlab']['gitlab-core']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-core']['rate_limit_period'] = 60
+
+
+####
+# Unicorn
+####
+default['gitlab']['unicorn']['enable'] = true
+default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
+default['gitlab']['unicorn']['worker_processes'] = 2
+default['gitlab']['unicorn']['listen'] = '127.0.0.1'
+default['gitlab']['unicorn']['port'] = 8080
+default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-core/tmp/sockets/gitlab.socket'
+default['gitlab']['unicorn']['tcp_nopush'] = true
+default['gitlab']['unicorn']['backlog_socket'] = 64
+default['gitlab']['unicorn']['worker_timeout'] = 30
 
 
 ###

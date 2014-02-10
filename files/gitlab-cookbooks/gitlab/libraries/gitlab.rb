@@ -29,6 +29,7 @@ module Gitlab
   postgresql Mash.new
   redis Mash.new
   gitlab_core Mash.new
+  unicorn Mash.new
   node nil
 
   class << self
@@ -75,6 +76,7 @@ module Gitlab
         "bootstrap",
         "redis",
         "gitlab_core",
+        "unicorn",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')

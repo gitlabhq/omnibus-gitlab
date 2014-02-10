@@ -47,6 +47,13 @@ end
 
 include_recipe "gitlab::users"
 include_recipe "gitlab::gitlab-shell"
+include_recipe "gitlab::gitlab-core"
+
+# Create a dummy unicorn service to receive notifications, in case the
+# gitlab::unicorn is not loaded below.
+service "unicorn" do
+  supports []
+end
 
 # Install our runit instance
 include_recipe "runit"
@@ -55,7 +62,7 @@ include_recipe "runit"
 [
   "postgresql",
   "redis",
-  "gitlab-core",
+  "unicorn",
   "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]

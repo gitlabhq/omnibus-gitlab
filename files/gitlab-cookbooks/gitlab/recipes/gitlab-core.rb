@@ -21,7 +21,6 @@ gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
 gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
 gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
 gitlab_core_tmp_dir = File.join(gitlab_core_dir, "tmp")
-gitlab_core_sockets_dir = File.dirname(node['gitlab']['gitlab-core']['unicorn_socket'])
 gitlab_core_public_uploads_dir = node['gitlab']['gitlab-core']['uploads_directory']
 gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
 
@@ -30,7 +29,6 @@ gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
   gitlab_core_etc_dir,
   gitlab_core_working_dir,
   gitlab_core_tmp_dir,
-  gitlab_core_sockets_dir,
   gitlab_core_public_uploads_dir,
   gitlab_core_log_dir
 ].each do |dir_name|
@@ -41,7 +39,7 @@ gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
   end
 end
 
-should_notify = OmnibusHelper.should_notify?("gitlab-core")
+should_notify_unicorn = OmnibusHelper.should_notify?("unicorn")
 
 template_symlink File.join(gitlab_core_etc_dir, "secret") do
   link_from File.join(gitlab_core_source_dir, ".secret")
@@ -49,7 +47,7 @@ template_symlink File.join(gitlab_core_etc_dir, "secret") do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, 'service[gitlab-core]' if should_notify
+  notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
 template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
@@ -59,7 +57,7 @@ template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
   group "root"
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[gitlab-core]' if should_notify
+  notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
 template_symlink File.join(gitlab_core_etc_dir, "gitlab.yml") do
@@ -69,7 +67,7 @@ template_symlink File.join(gitlab_core_etc_dir, "gitlab.yml") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-core'].to_hash)
-  notifies :restart, 'service[gitlab-core]' if should_notify
+  notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
 template_symlink File.join(gitlab_core_etc_dir, "rack_attack.rb") do
@@ -79,37 +77,13 @@ template_symlink File.join(gitlab_core_etc_dir, "rack_attack.rb") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-core'].to_hash)
-  notifies :restart, 'service[gitlab-core]' if should_notify
+  notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
 directory node['gitlab']['gitlab-core']['satellites_path'] do
   owner node['gitlab']['user']['username']
   group node['gitlab']['user']['group']
   recursive true
-end
-
-
-unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']
-unicorn_listen_tcp << ":#{node['gitlab']['gitlab-core']['port']}"
-unicorn_listen_socket = node['gitlab']['gitlab-core']['unicorn_socket']
-
-unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
-  listen(
-    unicorn_listen_tcp => {
-      :tcp_nopush => node['gitlab']['gitlab-core']['tcp_nopush']
-    },
-    unicorn_listen_socket => {
-      :backlog => node['gitlab']['gitlab-core']['backlog_socket'],
-    }
-  )
-  worker_timeout node['gitlab']['gitlab-core']['worker_timeout']
-  working_directory gitlab_core_working_dir
-  worker_processes node['gitlab']['gitlab-core']['worker_processes']
-  preload_app true
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, 'service[gitlab-core]' if should_notify
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
@@ -129,17 +103,3 @@ end
 end
 
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-core/public"
-
-runit_service "gitlab-core" do
-  down node['gitlab']['gitlab-core']['ha']
-  options({
-    :log_directory => gitlab_core_log_dir
-  }.merge(params))
-end
-
-if node['gitlab']['bootstrap']['enable']
-	execute "/opt/gitlab/bin/gitlab-ctl start gitlab-core" do
-		retries 20
-	end
-end
-
