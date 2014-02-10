@@ -35,8 +35,8 @@ unicorn_socket_dir = File.dirname(unicorn_listen_socket)
   end
 end
 
-unicorn_listen_tcp = node['gitlab']['gitlab-core']['listen']
-unicorn_listen_tcp << ":#{node['gitlab']['gitlab-core']['port']}"
+unicorn_listen_tcp = node['gitlab']['unicorn']['listen']
+unicorn_listen_tcp << ":#{node['gitlab']['unicorn']['port']}"
 
 unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
   listen(
