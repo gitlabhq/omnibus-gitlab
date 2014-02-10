@@ -47,6 +47,7 @@ end
 
 include_recipe "gitlab::users"
 include_recipe "gitlab::gitlab-shell"
+include_recipe "gitlab::gitlab-core"
 
 # Install our runit instance
 include_recipe "runit"
@@ -55,7 +56,7 @@ include_recipe "runit"
 [
   "postgresql",
   "redis",
-  "gitlab-core",
+  "unicorn",
   "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]

@@ -16,6 +16,6 @@
 # limitations under the License.
 #
 
-runit_service "gitlab-core" do
+runit_service "unicorn" do
   action :disable
 end
