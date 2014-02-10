@@ -62,6 +62,7 @@ default['gitlab']['gitlab-core']['rate_limit_period'] = 60
 ####
 # Unicorn
 ####
+default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = 2
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
