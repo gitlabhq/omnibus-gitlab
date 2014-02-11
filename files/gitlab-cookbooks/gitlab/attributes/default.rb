@@ -39,7 +39,6 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 ####
 # GitLab Rails app
 ####
-default['gitlab']['gitlab-rails']['ha'] = false
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
@@ -61,6 +60,7 @@ default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 # Unicorn
 ####
 default['gitlab']['unicorn']['enable'] = true
+default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = 2
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
