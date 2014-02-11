@@ -47,7 +47,7 @@ end
 
 include_recipe "gitlab::users"
 include_recipe "gitlab::gitlab-shell"
-include_recipe "gitlab::gitlab-core"
+include_recipe "gitlab::gitlab-rails"
 
 # Create a dummy unicorn service to receive notifications, in case the
 # gitlab::unicorn is not loaded below.

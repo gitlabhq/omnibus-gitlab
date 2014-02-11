@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /opt/gitlab/embedded/service/gitlab-core
+cd /opt/gitlab/embedded/service/gitlab-rails
 
 exec 2>&1
-exec chpst -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /usr/bin/env HOME="<%= node['gitlab']['gitlab-core']['dir'] %>" /opt/gitlab/embedded/bin/bundle exec unicorn -E <%= node['gitlab']['gitlab-core']['environment'] %> -c <%= File.join(node['gitlab']['gitlab-core']['dir'], "etc", "unicorn.rb") %> /opt/gitlab/embedded/service/gitlab-core/config.ru
+exec chpst -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /usr/bin/env HOME="<%= node['gitlab']['gitlab-rails']['dir'] %>" /opt/gitlab/embedded/bin/bundle exec unicorn -E <%= node['gitlab']['gitlab-rails']['environment'] %> -c <%= File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "unicorn.rb") %> /opt/gitlab/embedded/service/gitlab-rails/config.ru

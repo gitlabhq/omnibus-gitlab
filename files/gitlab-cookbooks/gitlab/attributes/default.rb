@@ -37,37 +37,35 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 
 ####
-# GitLab core
+# GitLab Rails app
 ####
-default['gitlab']['gitlab-core']['enable'] = true
-default['gitlab']['gitlab-core']['ha'] = false
-default['gitlab']['gitlab-core']['dir'] = "/var/opt/gitlab/gitlab-core"
-default['gitlab']['gitlab-core']['log_directory'] = "/var/log/gitlab/gitlab-core"
-default['gitlab']['gitlab-core']['environment'] = 'production'
-default['gitlab']['gitlab-core']['umask'] = "0022"
+default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
+default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
+default['gitlab']['gitlab-rails']['environment'] = 'production'
 
-default['gitlab']['gitlab-core']['repositories_path'] = "/var/opt/gitlab/repositories"
-default['gitlab']['gitlab-core']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
-default['gitlab']['gitlab-core']['internal_api_url'] = "http://localhost:8080"
-default['gitlab']['gitlab-core']['external_fqdn'] = node['fqdn']
-default['gitlab']['gitlab-core']['external_port'] = 80
-default['gitlab']['gitlab-core']['external_https'] = false
-default['gitlab']['gitlab-core']['notification_email'] = "gitlab@#{node['fqdn']}"
-default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
-default['gitlab']['gitlab-core']['uploads_directory'] = "/var/opt/gitlab/uploads"
-default['gitlab']['gitlab-core']['rate_limit_requests_per_period'] = 10
-default['gitlab']['gitlab-core']['rate_limit_period'] = 60
+default['gitlab']['gitlab-rails']['repositories_path'] = "/var/opt/gitlab/repositories"
+default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
+default['gitlab']['gitlab-rails']['internal_api_url'] = "http://localhost:8080"
+default['gitlab']['gitlab-rails']['external_fqdn'] = node['fqdn']
+default['gitlab']['gitlab-rails']['external_port'] = 80
+default['gitlab']['gitlab-rails']['external_https'] = false
+default['gitlab']['gitlab-rails']['notification_email'] = "gitlab@#{node['fqdn']}"
+default['gitlab']['gitlab-rails']['support_email'] = "support@example.com"
+default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/uploads"
+default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
+default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 
 
 ####
 # Unicorn
 ####
 default['gitlab']['unicorn']['enable'] = true
+default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = 2
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
-default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-core/tmp/sockets/gitlab.socket'
+default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/tmp/sockets/gitlab.socket'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 64
 default['gitlab']['unicorn']['worker_timeout'] = 30
