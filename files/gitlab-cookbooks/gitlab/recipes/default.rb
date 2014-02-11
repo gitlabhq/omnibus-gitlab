@@ -60,8 +60,8 @@ include_recipe "runit"
 
 # Configure Services
 [
-  "postgresql",
   "redis",
+  "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
   "bootstrap",
 ].each do |service|
@@ -71,3 +71,5 @@ include_recipe "runit"
     include_recipe "gitlab::#{service}_disable"
   end
 end
+
+include_recipe "gitlab::database_migrations"
