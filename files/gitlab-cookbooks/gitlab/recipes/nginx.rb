@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2014 GitLab.com
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +16,13 @@
 # limitations under the License.
 #
 
-nginx_dir = node['chef_server']['nginx']['dir']
+nginx_dir = node['gitlab']['nginx']['dir']
 nginx_etc_dir = File.join(nginx_dir, "etc")
 nginx_cache_dir = File.join(nginx_dir, "cache")
 nginx_cache_tmp_dir = File.join(nginx_dir, "cache-tmp")
 nginx_html_dir = File.join(nginx_dir, "html")
 nginx_ca_dir = File.join(nginx_dir, "ca")
-nginx_log_dir = node['chef_server']['nginx']['log_directory']
+nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 [
   nginx_dir,
@@ -33,22 +34,22 @@ nginx_log_dir = node['chef_server']['nginx']['log_directory']
   nginx_log_dir,
 ].each do |dir_name|
   directory dir_name do
-    owner node['chef_server']['user']['username']
+    owner node['gitlab']['user']['username']
     mode '0700'
     recursive true
   end
 end
 
-ssl_keyfile = File.join(nginx_ca_dir, "#{node['chef_server']['nginx']['server_name']}.key")
-ssl_crtfile = File.join(nginx_ca_dir, "#{node['chef_server']['nginx']['server_name']}.crt")
-ssl_signing_conf = File.join(nginx_ca_dir, "#{node['chef_server']['nginx']['server_name']}-ssl.conf")
+ssl_keyfile = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}.key")
+ssl_crtfile = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}.crt")
+ssl_signing_conf = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}-ssl.conf")
 
 unless File.exists?(ssl_keyfile) && File.exists?(ssl_crtfile) && File.exists?(ssl_signing_conf)
   file ssl_keyfile do
     owner "root"
     group "root"
     mode "0644"
-    content `/opt/chef-server/embedded/bin/openssl genrsa 2048`
+    content `/opt/gitlab/embedded/bin/openssl genrsa 2048`
     not_if { File.exists?(ssl_keyfile) }
   end
 
@@ -63,13 +64,13 @@ unless File.exists?(ssl_keyfile) && File.exists?(ssl_crtfile) && File.exists?(ss
   prompt = no
 
   [ req_distinguished_name ]
-  C                      = #{node['chef_server']['nginx']['ssl_country_name']}
-  ST                     = #{node['chef_server']['nginx']['ssl_state_name']}
-  L                      = #{node['chef_server']['nginx']['ssl_locality_name']}
-  O                      = #{node['chef_server']['nginx']['ssl_company_name']}
-  OU                     = #{node['chef_server']['nginx']['ssl_organizational_unit_name']}
-  CN                     = #{node['chef_server']['nginx']['server_name']}
-  emailAddress           = #{node['chef_server']['nginx']['ssl_email_address']}
+  C                      = #{node['gitlab']['nginx']['ssl_country_name']}
+  ST                     = #{node['gitlab']['nginx']['ssl_state_name']}
+  L                      = #{node['gitlab']['nginx']['ssl_locality_name']}
+  O                      = #{node['gitlab']['nginx']['ssl_company_name']}
+  OU                     = #{node['gitlab']['nginx']['ssl_organizational_unit_name']}
+  CN                     = #{node['gitlab']['nginx']['server_name']}
+  emailAddress           = #{node['gitlab']['nginx']['ssl_email_address']}
   EOH
   end
 
@@ -79,15 +80,15 @@ unless File.exists?(ssl_keyfile) && File.exists?(ssl_crtfile) && File.exists?(ss
       r.owner "root"
       r.group "root"
       r.mode "0644"
-      r.content `/opt/chef-server/embedded/bin/openssl req -config '#{ssl_signing_conf}' -new -x509 -nodes -sha1 -days 3650 -key #{ssl_keyfile}`
+      r.content `/opt/gitlab/embedded/bin/openssl req -config '#{ssl_signing_conf}' -new -x509 -nodes -sha1 -days 3650 -key #{ssl_keyfile}`
       r.not_if { File.exists?(ssl_crtfile) }
       r.run_action(:create)
     end
   end
 end
 
-node.default['chef_server']['nginx']['ssl_certificate'] ||= ssl_crtfile
-node.default['chef_server']['nginx']['ssl_certificate_key'] ||= ssl_keyfile
+node.default['gitlab']['nginx']['ssl_certificate'] ||= ssl_crtfile
+node.default['gitlab']['nginx']['ssl_certificate_key'] ||= ssl_keyfile
 
 remote_directory nginx_html_dir do
   source "html"
@@ -95,12 +96,12 @@ remote_directory nginx_html_dir do
   files_owner "root"
   files_group "root"
   files_mode "0644"
-  owner node['chef_server']['user']['username']
+  owner node['gitlab']['user']['username']
   mode "0700"
 end
 
 nginx_config = File.join(nginx_etc_dir, "nginx.conf")
-nginx_vars = node['chef_server']['nginx'].to_hash.merge({
+nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :chef_https_config => File.join(nginx_etc_dir, "chef_https_lb.conf"),
   :chef_http_config => File.join(nginx_etc_dir, "chef_http_lb.conf")
 })
@@ -140,14 +141,14 @@ template nginx_config do
 end
 
 runit_service "nginx" do
-  down node['chef_server']['nginx']['ha']
+  down node['gitlab']['nginx']['ha']
   options({
     :log_directory => nginx_log_dir
   }.merge(params))
 end
 
-if node['chef_server']['bootstrap']['enable']
-	execute "/opt/chef-server/bin/chef-server-ctl start nginx" do
+if node['gitlab']['bootstrap']['enable']
+	execute "/opt/gitlab/bin/gitlab-ctl start nginx" do
 		retries 20
 	end
 end

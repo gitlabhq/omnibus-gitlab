@@ -1,6 +1,6 @@
-user <%= node['chef_server']['user']['username'] %> <%= node['chef_server']['user']['username']%>;
+user <%= node['gitlab']['user']['username'] %> <%= node['gitlab']['user']['username']%>;
 worker_processes <%= @worker_processes %>;
-error_log /var/log/chef-server/nginx/error.log<%= node['chef_server']['lb']['debug'] ? " debug" : "" %>;
+error_log /var/log/gitlab/nginx/error.log<%= node['gitlab']['lb']['debug'] ? " debug" : "" %>;
 
 daemon off;
 
@@ -25,18 +25,18 @@ http {
   gzip_proxied <%= @gzip_proxied %>;
   gzip_types <%= @gzip_types.join(' ') %>;
 
-  include /opt/chef-server/embedded/conf/mime.types;
+  include /opt/gitlab/embedded/conf/mime.types;
 
-  <%- node['chef_server']['lb']['upstream'].each do |uname, servers| -%>
+  <%- node['gitlab']['lb']['upstream'].each do |uname, servers| -%>
   upstream <%= uname.gsub(/-/, '_') %> {
     <%- servers.each do |server| -%>
-    server <%= server %>:<%= node['chef_server'][uname]['port'] %>;
+    server <%= server %>:<%= node['gitlab'][uname]['port'] %>;
     <%- end -%>
   }
   <%- end -%>
 
   # external lb config for Chef API
-  <%- if node['chef_server']['lb']['enable'] -%>
+  <%- if node['gitlab']['lb']['enable'] -%>
   proxy_cache_path  <%= File.join(@dir, "cache") %> levels=1:2 keys_zone=webui-cache:50m max_size=<%= @cache_max_size %> inactive=600m;
   proxy_temp_path <%= File.join(@dir, "cache-tmp") %>;
 
@@ -51,7 +51,7 @@ http {
 
   server {
     listen <%= @non_ssl_port %>;
-    access_log /var/log/chef-server/nginx/rewrite-port-<%= @non_ssl_port %>.log;
+    access_log /var/log/gitlab/nginx/rewrite-port-<%= @non_ssl_port %>.log;
     return 301 https://$host:<%= @ssl_port %>$request_uri;
   }
   <%- end -%>
