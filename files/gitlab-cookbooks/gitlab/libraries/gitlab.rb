@@ -31,6 +31,7 @@ module Gitlab
   gitlab_rails Mash.new
   unicorn Mash.new
   sidekiq Mash.new
+  nginx Mash.new
   node nil
 
   class << self
@@ -79,6 +80,7 @@ module Gitlab
         "gitlab_rails",
         "unicorn",
         "sidekiq",
+        "nginx",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
