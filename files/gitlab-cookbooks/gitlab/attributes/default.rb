@@ -70,6 +70,13 @@ default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 64
 default['gitlab']['unicorn']['worker_timeout'] = 30
 
+####
+# Sidekiq
+####
+default['gitlab']['sidekiq']['enable'] = true
+default['gitlab']['sidekiq']['ha'] = false
+default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
+
 
 ###
 # gitlab-shell
