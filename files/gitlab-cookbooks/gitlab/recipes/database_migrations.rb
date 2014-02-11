@@ -19,3 +19,8 @@ execute "initialize database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   action :nothing
 end
+
+execute "migrate database" do
+  command "/opt/gitlab/bin/gitlab-rake db:migrate"
+  only_if node['gitlab']['gitlab-core']['automatic_migrations']
+end
