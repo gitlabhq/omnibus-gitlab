@@ -37,14 +37,12 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 
 ####
-# GitLab core
+# GitLab Rails app
 ####
-default['gitlab']['gitlab-rails']['enable'] = true
 default['gitlab']['gitlab-rails']['ha'] = false
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
-default['gitlab']['gitlab-rails']['umask'] = "0022"
 
 default['gitlab']['gitlab-rails']['repositories_path'] = "/var/opt/gitlab/repositories"
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
