@@ -18,19 +18,11 @@
 
 nginx_dir = node['gitlab']['nginx']['dir']
 nginx_etc_dir = File.join(nginx_dir, "etc")
-nginx_cache_dir = File.join(nginx_dir, "cache")
-nginx_cache_tmp_dir = File.join(nginx_dir, "cache-tmp")
-nginx_html_dir = File.join(nginx_dir, "html")
-nginx_ca_dir = File.join(nginx_dir, "ca")
 nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 [
   nginx_dir,
   nginx_etc_dir,
-  nginx_cache_dir,
-  nginx_cache_tmp_dir,
-  nginx_html_dir,
-  nginx_ca_dir,
   nginx_log_dir,
 ].each do |dir_name|
   directory dir_name do
@@ -40,95 +32,22 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
   end
 end
 
-ssl_keyfile = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}.key")
-ssl_crtfile = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}.crt")
-ssl_signing_conf = File.join(nginx_ca_dir, "#{node['gitlab']['nginx']['server_name']}-ssl.conf")
-
-unless File.exists?(ssl_keyfile) && File.exists?(ssl_crtfile) && File.exists?(ssl_signing_conf)
-  file ssl_keyfile do
-    owner "root"
-    group "root"
-    mode "0644"
-    content `/opt/gitlab/embedded/bin/openssl genrsa 2048`
-    not_if { File.exists?(ssl_keyfile) }
-  end
-
-  file ssl_signing_conf do
-    owner "root"
-    group "root"
-    mode "0644"
-    not_if { File.exists?(ssl_signing_conf) }
-    content <<-EOH
-  [ req ]
-  distinguished_name = req_distinguished_name
-  prompt = no
-
-  [ req_distinguished_name ]
-  C                      = #{node['gitlab']['nginx']['ssl_country_name']}
-  ST                     = #{node['gitlab']['nginx']['ssl_state_name']}
-  L                      = #{node['gitlab']['nginx']['ssl_locality_name']}
-  O                      = #{node['gitlab']['nginx']['ssl_company_name']}
-  OU                     = #{node['gitlab']['nginx']['ssl_organizational_unit_name']}
-  CN                     = #{node['gitlab']['nginx']['server_name']}
-  emailAddress           = #{node['gitlab']['nginx']['ssl_email_address']}
-  EOH
-  end
-
-  ruby_block "create crtfile" do
-    block do
-      r = Chef::Resource::File.new(ssl_crtfile, run_context)
-      r.owner "root"
-      r.group "root"
-      r.mode "0644"
-      r.content `/opt/gitlab/embedded/bin/openssl req -config '#{ssl_signing_conf}' -new -x509 -nodes -sha1 -days 3650 -key #{ssl_keyfile}`
-      r.not_if { File.exists?(ssl_crtfile) }
-      r.run_action(:create)
-    end
-  end
-end
-
-node.default['gitlab']['nginx']['ssl_certificate'] ||= ssl_crtfile
-node.default['gitlab']['nginx']['ssl_certificate_key'] ||= ssl_keyfile
-
-remote_directory nginx_html_dir do
-  source "html"
-  files_backup false
-  files_owner "root"
-  files_group "root"
-  files_mode "0644"
-  owner node['gitlab']['user']['username']
-  mode "0700"
-end
-
 nginx_config = File.join(nginx_etc_dir, "nginx.conf")
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
-  :chef_https_config => File.join(nginx_etc_dir, "chef_https_lb.conf"),
-  :chef_http_config => File.join(nginx_etc_dir, "chef_http_lb.conf")
+  :gitlab_http_config => File.join(nginx_etc_dir, "gitlab-http.conf"),
 })
 
-# We will always render an HTTP and HTTPS config for the Chef API but the HTTP
-# config file will only be active if the user set `nginx['enable_non_ssl']` to
-# true. Default behavior is to redirect all HTTP requests to HTTPS.
-["https", "http"].each do |server_proto|
-  config_key = "chef_#{server_proto}_config".to_sym
-  lb_config = nginx_vars[config_key]
-
-  server_port = (server_proto == 'https') ?
-                 nginx_vars['ssl_port'] :
-                 nginx_vars['non_ssl_port']
-
-  template lb_config do
-    source "nginx_chef_api_lb.conf.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-    variables(nginx_vars.merge({
-      :server_proto => server_proto,
-      :server_port => server_port
-    }))
-    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
-  end
-
+template gitlab_http_config do
+  source "nginx-gitlab-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(nginx_vars.merge(
+    {
+      :fqdn => node['gitlab']['gitlab-rails']['external_fqdn']
+    }
+  ))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
 end
 
 template nginx_config do
@@ -148,8 +67,7 @@ runit_service "nginx" do
 end
 
 if node['gitlab']['bootstrap']['enable']
-	execute "/opt/gitlab/bin/gitlab-ctl start nginx" do
-		retries 20
-	end
+  execute "/opt/gitlab/bin/gitlab-ctl start nginx" do
+    retries 20
+  end
 end
-

@@ -1,6 +1,6 @@
 user <%= node['gitlab']['user']['username'] %> <%= node['gitlab']['user']['username']%>;
 worker_processes <%= @worker_processes %>;
-error_log /var/log/gitlab/nginx/error.log<%= node['gitlab']['lb']['debug'] ? " debug" : "" %>;
+error_log /var/log/gitlab/nginx/error.log;
 
 daemon off;
 
@@ -9,10 +9,6 @@ events {
 }
 
 http {
-  log_format opscode '$remote_addr - $remote_user [$time_local]  '
-                    '"$request" $status "$request_time" $body_bytes_sent '
-                    '"$http_referer" "$http_user_agent" "$upstream_addr" "$upstream_status" "$upstream_response_time" "$http_x_chef_version" "$http_x_ops_sign" "$http_x_ops_userid" "$http_x_ops_timestamp" "$http_x_ops_content_hash" $request_length';
-
   sendfile <%= @sendfile %>;
   tcp_nopush <%= @tcp_nopush %>;
   tcp_nodelay <%= @tcp_nodelay %>;
@@ -27,37 +23,5 @@ http {
 
   include /opt/gitlab/embedded/conf/mime.types;
 
-  <%- node['gitlab']['lb']['upstream'].each do |uname, servers| -%>
-  upstream <%= uname.gsub(/-/, '_') %> {
-    <%- servers.each do |server| -%>
-    server <%= server %>:<%= node['gitlab'][uname]['port'] %>;
-    <%- end -%>
-  }
-  <%- end -%>
-
-  # external lb config for Chef API
-  <%- if node['gitlab']['lb']['enable'] -%>
-  proxy_cache_path  <%= File.join(@dir, "cache") %> levels=1:2 keys_zone=webui-cache:50m max_size=<%= @cache_max_size %> inactive=600m;
-  proxy_temp_path <%= File.join(@dir, "cache-tmp") %>;
-
-  # We support three options: serve nothing on non_ssl_port (80),
-  # redirect to https, or actually serve the API.
-  <%- if @non_ssl_port -%>
-  <%- if @enable_non_ssl -%>
-
-  # Chef HTTP API
-  include <%= @chef_http_config %>;
-  <%- else -%>
-
-  server {
-    listen <%= @non_ssl_port %>;
-    access_log /var/log/gitlab/nginx/rewrite-port-<%= @non_ssl_port %>.log;
-    return 301 https://$host:<%= @ssl_port %>$request_uri;
-  }
-  <%- end -%>
-  <%-  end -%>
-
-  # Chef HTTPS API
-  include <%= @chef_https_config %>;
-  <%- end -%>
+  include <%= @gitlab_http_config %>
 }
