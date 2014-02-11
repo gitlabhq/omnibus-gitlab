@@ -57,7 +57,6 @@ default['gitlab']['gitlab-core']['support_email'] = "support@example.com"
 default['gitlab']['gitlab-core']['uploads_directory'] = "/var/opt/gitlab/uploads"
 default['gitlab']['gitlab-core']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-core']['rate_limit_period'] = 60
-default['gitlab']['gitlab-core']['automatic_migrations'] = true
 
 
 ####

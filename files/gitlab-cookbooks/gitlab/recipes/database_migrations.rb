@@ -22,5 +22,4 @@ end
 
 execute "migrate database" do
   command "/opt/gitlab/bin/gitlab-rake db:migrate"
-  only_if node['gitlab']['gitlab-core']['automatic_migrations']
 end
