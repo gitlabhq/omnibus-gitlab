@@ -60,8 +60,8 @@ include_recipe "runit"
 
 # Configure Services
 [
-  "postgresql",
   "redis",
+  "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
   "bootstrap",
 ].each do |service|
