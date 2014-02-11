@@ -71,3 +71,5 @@ include_recipe "runit"
     include_recipe "gitlab::#{service}_disable"
   end
 end
+
+include_recipe "gitlab:database_migrations"
