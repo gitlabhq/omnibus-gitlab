@@ -16,21 +16,21 @@
 # limitations under the License.
 #
 
-gitlab_core_source_dir = "/opt/gitlab/embedded/service/gitlab-core"
-gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
-gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
-gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
-gitlab_core_tmp_dir = File.join(gitlab_core_dir, "tmp")
-gitlab_core_public_uploads_dir = node['gitlab']['gitlab-core']['uploads_directory']
-gitlab_core_log_dir = node['gitlab']['gitlab-core']['log_directory']
+gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
+gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
+gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
+gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
+gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
+gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
-  gitlab_core_dir,
-  gitlab_core_etc_dir,
-  gitlab_core_working_dir,
-  gitlab_core_tmp_dir,
-  gitlab_core_public_uploads_dir,
-  gitlab_core_log_dir
+  gitlab_rails_dir,
+  gitlab_rails_etc_dir,
+  gitlab_rails_working_dir,
+  gitlab_rails_tmp_dir,
+  gitlab_rails_public_uploads_dir,
+  gitlab_rails_log_dir
 ].each do |dir_name|
   directory dir_name do
     owner node['gitlab']['user']['username']
@@ -41,8 +41,8 @@ end
 
 should_notify_unicorn = OmnibusHelper.should_notify?("unicorn")
 
-template_symlink File.join(gitlab_core_etc_dir, "secret") do
-  link_from File.join(gitlab_core_source_dir, ".secret")
+template_symlink File.join(gitlab_rails_etc_dir, "secret") do
+  link_from File.join(gitlab_rails_source_dir, ".secret")
   source "secret_token.erb"
   owner "root"
   group "root"
@@ -50,8 +50,8 @@ template_symlink File.join(gitlab_core_etc_dir, "secret") do
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
-template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
-  link_from File.join(gitlab_core_source_dir, "config/database.yml")
+template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/database.yml")
   source "database.yml.postgresql.erb"
   owner "root"
   group "root"
@@ -60,27 +60,27 @@ template_symlink File.join(gitlab_core_etc_dir, "database.yml") do
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
-template_symlink File.join(gitlab_core_etc_dir, "gitlab.yml") do
-  link_from File.join(gitlab_core_source_dir, "config/gitlab.yml")
+template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-core'].to_hash)
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
-template_symlink File.join(gitlab_core_etc_dir, "rack_attack.rb") do
-  link_from File.join(gitlab_core_source_dir, "config/initializers/rack_attack.rb")
+template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
+  link_from File.join(gitlab_rails_source_dir, "config/initializers/rack_attack.rb")
   source "rack_attack.rb.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-core'].to_hash)
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
 end
 
-directory node['gitlab']['gitlab-core']['satellites_path'] do
+directory node['gitlab']['gitlab-rails']['satellites_path'] do
   owner node['gitlab']['user']['username']
   group node['gitlab']['user']['group']
   recursive true
@@ -88,13 +88,13 @@ end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
 {
-  "/opt/gitlab/embedded/service/gitlab-core/tmp" => gitlab_core_tmp_dir,
-  "/opt/gitlab/embedded/service/gitlab-core/public/uploads" => gitlab_core_public_uploads_dir,
-  "/opt/gitlab/embedded/service/gitlab-core/log" => gitlab_core_log_dir
+  "/opt/gitlab/embedded/service/gitlab-rails/tmp" => gitlab_rails_tmp_dir,
+  "/opt/gitlab/embedded/service/gitlab-rails/public/uploads" => gitlab_rails_public_uploads_dir,
+  "/opt/gitlab/embedded/service/gitlab-rails/log" => gitlab_rails_log_dir
 }.each do |link_dir, target_dir|
   link link_dir do
     to target_dir
   end
 end
 
-execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-core/public"
+execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"

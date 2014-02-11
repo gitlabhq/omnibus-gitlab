@@ -16,9 +16,9 @@
 # limitations under the License.
 #
 
-gitlab_core_dir = node['gitlab']['gitlab-core']['dir']
-gitlab_core_etc_dir = File.join(gitlab_core_dir, "etc")
-gitlab_core_working_dir = File.join(gitlab_core_dir, "working")
+gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
+gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 
 unicorn_listen_socket = node['gitlab']['unicorn']['socket']
 unicorn_log_dir = node['gitlab']['unicorn']['log_directory']
@@ -38,7 +38,7 @@ end
 unicorn_listen_tcp = node['gitlab']['unicorn']['listen']
 unicorn_listen_tcp << ":#{node['gitlab']['unicorn']['port']}"
 
-unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
+unicorn_config File.join(gitlab_rails_etc_dir, "unicorn.rb") do
   listen(
     unicorn_listen_tcp => {
       :tcp_nopush => node['gitlab']['unicorn']['tcp_nopush']
@@ -48,7 +48,7 @@ unicorn_config File.join(gitlab_core_etc_dir, "unicorn.rb") do
     }
   )
   worker_timeout node['gitlab']['unicorn']['worker_timeout']
-  working_directory gitlab_core_working_dir
+  working_directory gitlab_rails_working_dir
   worker_processes node['gitlab']['unicorn']['worker_processes']
   preload_app true
   owner "root"

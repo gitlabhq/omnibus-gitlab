@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-name "gitlab-core"
+name "gitlab-rails"
 version "master"
 
 dependency "ruby"
@@ -58,9 +58,9 @@ build do
   # Tear down now that the assets:precompile is done.
   command "rm config/gitlab.yml config/database.yml"
 
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   command "rm -rf log tmp public/uploads"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
