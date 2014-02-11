@@ -72,4 +72,4 @@ include_recipe "runit"
   end
 end
 
-include_recipe "gitlab:database_migrations"
+include_recipe "gitlab::database_migrations"

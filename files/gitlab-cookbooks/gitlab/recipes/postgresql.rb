@@ -153,5 +153,5 @@ execute "create #{db_name} database" do
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
   retries 30
-  notifies :run, "execute[gitlab::initialize database]", :immediately
+  notifies :run, "execute[initialize database]", :immediately
 end
