@@ -138,3 +138,25 @@ default['gitlab']['redis']['username'] = "gitlab-redis"
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['port'] = 6379
+
+
+####
+# Nginx
+####
+default['gitlab']['nginx']['enable'] = true
+default['gitlab']['nginx']['ha'] = false
+default['gitlab']['nginx']['dir'] = "/var/opt/gitlab/nginx"
+default['gitlab']['nginx']['log_directory'] = "/var/log/gitlab/nginx"
+default['gitlab']['nginx']['worker_processes'] = node['cpu']['total'].to_i
+default['gitlab']['nginx']['worker_connections'] = 10240
+default['gitlab']['nginx']['sendfile'] = 'on'
+default['gitlab']['nginx']['tcp_nopush'] = 'on'
+default['gitlab']['nginx']['tcp_nodelay'] = 'on'
+default['gitlab']['nginx']['gzip'] = "on"
+default['gitlab']['nginx']['gzip_http_version'] = "1.0"
+default['gitlab']['nginx']['gzip_comp_level'] = "2"
+default['gitlab']['nginx']['gzip_proxied'] = "any"
+default['gitlab']['nginx']['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+default['gitlab']['nginx']['keepalive_timeout'] = 65
+default['gitlab']['nginx']['client_max_body_size'] = '250m'
+default['gitlab']['nginx']['cache_max_size'] = '5000m'
