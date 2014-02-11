@@ -59,6 +59,7 @@ build do
   command "rm config/gitlab.yml config/database.yml"
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-core"
+  command "rm -rf log tmp public/uploads"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-core/"
 
   # Create a wrapper for the rake tasks of the Rails app

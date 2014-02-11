@@ -92,11 +92,6 @@ end
   "/opt/gitlab/embedded/service/gitlab-core/public/uploads" => gitlab_core_public_uploads_dir,
   "/opt/gitlab/embedded/service/gitlab-core/log" => gitlab_core_log_dir
 }.each do |link_dir, target_dir|
-  directory link_dir do
-    action :delete
-    recursive true
-  end
-
   link link_dir do
     to target_dir
   end
