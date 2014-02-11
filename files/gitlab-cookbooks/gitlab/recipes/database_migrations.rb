@@ -20,6 +20,9 @@ execute "initialize database" do
   action :nothing
 end
 
+user_group = "#{node['gitlab']['user']['username']}:#{node['gitlab']['user']['group']}"
+execute "chown #{user_group} /opt/gitlab/embedded/service/gitlab-core/db/schema.rb"
+
 execute "migrate database" do
   command "/opt/gitlab/bin/gitlab-rake db:migrate"
 end
