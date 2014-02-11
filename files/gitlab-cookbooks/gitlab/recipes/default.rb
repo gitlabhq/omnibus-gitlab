@@ -49,10 +49,15 @@ include_recipe "gitlab::users"
 include_recipe "gitlab::gitlab-shell"
 include_recipe "gitlab::gitlab-rails"
 
-# Create a dummy unicorn service to receive notifications, in case the
-# gitlab::unicorn is not loaded below.
-service "unicorn" do
-  supports []
+# Create dummy unicorn and sidekiq services to receive notifications, in case
+# the corresponding service recipe is not loaded below.
+[
+  "unicorn",
+  "sidekiq"
+].each do |dummy|
+  service dummy do
+    supports []
+  end
 end
 
 # Install our runit instance
@@ -63,6 +68,7 @@ include_recipe "runit"
   "redis",
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
+  "sidekiq",
   "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]

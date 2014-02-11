@@ -40,6 +40,7 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 end
 
 should_notify_unicorn = OmnibusHelper.should_notify?("unicorn")
+should_notify_sidekiq = OmnibusHelper.should_notify?("sidekiq")
 
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
@@ -48,6 +49,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   group "root"
   mode "0644"
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
+  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
@@ -58,6 +60,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
+  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
@@ -68,6 +71,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
+  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
@@ -78,6 +82,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
   notifies :restart, 'service[unicorn]' if should_notify_unicorn
+  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
