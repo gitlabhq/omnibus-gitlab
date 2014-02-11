@@ -37,7 +37,7 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :gitlab_http_config => File.join(nginx_etc_dir, "gitlab-http.conf"),
 })
 
-template gitlab_http_config do
+template nginx_vars[gitlab_http_config] do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
   group "root"

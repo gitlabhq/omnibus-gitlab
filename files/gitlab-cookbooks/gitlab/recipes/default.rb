@@ -69,7 +69,7 @@ include_recipe "runit"
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
   "sidekiq",
-  "nginx"
+  "nginx",
   "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]
