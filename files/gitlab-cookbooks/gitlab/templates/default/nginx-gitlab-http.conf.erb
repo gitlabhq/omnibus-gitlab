@@ -16,7 +16,7 @@
 # [2] https://github.com/agentzh/chunkin-nginx-module
 
 upstream gitlab {
-  server unix:/home/git/gitlab/tmp/sockets/gitlab.socket;
+  server unix:<%= @socket %>;
 }
 
 server {

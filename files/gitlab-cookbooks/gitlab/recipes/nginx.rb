@@ -44,7 +44,8 @@ template nginx_vars[gitlab_http_config] do
   mode "0644"
   variables(nginx_vars.merge(
     {
-      :fqdn => node['gitlab']['gitlab-rails']['external_fqdn']
+      :fqdn => node['gitlab']['gitlab-rails']['external_fqdn'],
+      :socket => node['gitlab']['unicorn']['socket']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
