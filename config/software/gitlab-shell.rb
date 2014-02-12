@@ -28,18 +28,10 @@ build do
   block do
     env_shebang = "#!/usr/bin/env ruby"
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
-      File.open(ruby_script, "r+") do |file|
-        script = file.read
-        file.rewind
-        file.truncate(0)
-        file.print <<-EOH
-#!/opt/gitlab/embedded/bin/ruby
-# Fix the PATH so that gitlab-shell can find git-upload-pack and friends.
-ENV['PATH'] = '/opt/gitlab/bin:/opt/gitlab/embedded/bin:' + ENV['PATH']
-
-        EOH
-        file.print script.gsub(/^#{env_shebang}\s*/, "")
-      end
+      script = File.read(ruby_script)
+      erb :dest => ruby_script,
+        :source => "ruby_script_wrapper.erb",
+        :mode => 0755
     end
   end
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
