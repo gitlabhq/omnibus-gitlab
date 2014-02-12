@@ -29,6 +29,7 @@ build do
     env_shebang = "#!/usr/bin/env ruby"
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       script = File.read(ruby_script)
+      next if script.start_with?("#!#{install_dir}") # Shebang looks good, skip this script
       erb :dest => ruby_script,
         :source => "ruby_script_wrapper.erb",
         :mode => 0755,
