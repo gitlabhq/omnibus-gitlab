@@ -31,7 +31,8 @@ build do
       script = File.read(ruby_script)
       erb :dest => ruby_script,
         :source => "ruby_script_wrapper.erb",
-        :mode => 0755
+        :mode => 0755,
+        :vars => {:script => script, :install_dir => install_dir}
     end
   end
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
