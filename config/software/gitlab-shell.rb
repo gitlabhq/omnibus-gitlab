@@ -26,7 +26,8 @@ source :git => "https://gitlab.com/gitlab-org/gitlab-shell.git"
 
 build do
   block do
-    `grep -r -l '#!/usr/bin/env ruby' #{project_dir}`.split("\n").each do |ruby_script|
+    env_shebang = "#!/usr/bin/env ruby"
+    `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       File.open(ruby_script, "r+") do |file|
         script = file.read
         file.rewind
@@ -37,7 +38,7 @@ build do
 ENV['PATH'] = '/opt/gitlab/bin:/opt/gitlab/embedded/bin:' + ENV['PATH']
 
         EOH
-        file.print script
+        file.print script.gsub(/^#{env_shebang}\s*/, "")
       end
     end
   end
