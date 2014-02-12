@@ -25,7 +25,23 @@ dependency "rsync"
 source :git => "https://gitlab.com/gitlab-org/gitlab-shell.git"
 
 build do
-  command "sed -i 's|^#!/usr/bin/env ruby|#!#{install_dir}/embedded/bin/ruby|' $(grep -r -l '#!/usr/bin/env ruby' .)"
+  block do
+    env_shebang = "#!/usr/bin/env ruby"
+    `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
+      File.open(ruby_script, "r+") do |file|
+        script = file.read
+        file.rewind
+        file.truncate(0)
+        file.print <<-EOH
+#!/opt/gitlab/embedded/bin/ruby
+# Fix the PATH so that gitlab-shell can find git-upload-pack and friends.
+ENV['PATH'] = '/opt/gitlab/bin:/opt/gitlab/embedded/bin:' + ENV['PATH']
+
+        EOH
+        file.print script.gsub(/^#{env_shebang}\s*/, "")
+      end
+    end
+  end
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-shell/"
 end
