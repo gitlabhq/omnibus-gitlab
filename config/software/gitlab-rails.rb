@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-version "master"
+version "56a5bc690d65199311009bb1e54f22379ae9ca0b"
 
 dependency "ruby"
 dependency "bundler"
