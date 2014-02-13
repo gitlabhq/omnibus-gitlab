@@ -14,7 +14,7 @@ You can make configuration changes by editing `/etc/gitlab/gitlab.rb` and
 sudo gitlab-ctl reconfigure
 ```
 
-To start/stop a component of GitLab, run e.g.
+To start/stop a component of GitLab run e.g.
 `sudo gitlab-ctl stop sidekiq`. To permanently disable e.g. Sidekiq, add
 `sidekiq['enable'] = false` to `/etc/gitlab/gitlab.rb`, and run
 `sudo gitlab-ctl reconfigure` for the change to take effect.
