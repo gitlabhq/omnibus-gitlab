@@ -3,6 +3,17 @@
 This project creates full-stack platform-specific packages for
 GitLab!
 
+## Installation
+
+### Ubuntu
+
+```
+sudo apt-get install openssh-server
+sudo apt-get install postfix # sendmail or exim is also OK
+sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
+sudo gitlab-ctl reconfigure
+```
+
 ## How to manage an Omnibus-installed GitLab
 
 ### Administrative commands
