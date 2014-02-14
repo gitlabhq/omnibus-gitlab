@@ -42,7 +42,7 @@ git checkout 6-6-stable
 git describe # Should start with 6.6.0.omnibus
 ```
 
-- Build a package with version timestamps disabled.
+- Build a package with timestamps disabled.
 
 ```shell
 OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project gitlab
