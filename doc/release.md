@@ -6,7 +6,8 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 
 - Pick a tag of GitLab to package (e.g. `v6.6.0`).
 - Create a release branch in omnibus-gitlab (e.g. `6-6-stable`).
-- Change [the gitlab-rails version in omnibus-gitlab] (e.g. `version "v6.6.0"`).
+- Change [the gitlab-rails version in omnibus-gitlab].
+  In our example that would be `version "v6.6.0"`.
 - Commit the new version to the release branch
 
 ```shell
