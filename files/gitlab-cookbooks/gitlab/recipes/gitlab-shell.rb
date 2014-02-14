@@ -40,7 +40,7 @@ end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
 # git_user is valid.
-execute "chcon -t user_home_t #{ssh_dir}" do
+execute "chcon -t ssh_home_t #{ssh_dir}" do
   only_if "id -Z"
 end
 
