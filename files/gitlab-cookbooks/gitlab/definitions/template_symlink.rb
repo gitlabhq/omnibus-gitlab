@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :group => nil, :mode => nil, :variables => nil, :notifies => nil do
+define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :group => nil, :mode => nil, :variables => nil, :notifies => nil, :notifies2 => nil do
   template params[:name] do
     source params[:source]
     owner params[:owner]
@@ -23,6 +23,7 @@ define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :gro
     mode params[:mode]
     variables params[:variables]
     notifies *params[:notifies] if params[:notifies]
+    notifies *params[:notifies2] if params[:notifies2]
   end
 
   link params[:link_from] do
