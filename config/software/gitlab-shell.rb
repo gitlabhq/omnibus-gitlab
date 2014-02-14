@@ -25,17 +25,16 @@ dependency "rsync"
 source :git => "https://gitlab.com/gitlab-org/gitlab-shell.git"
 
 build do
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-shell/"
   block do
     env_shebang = "#!/usr/bin/env ruby"
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       script = File.read(ruby_script)
-      next if script.start_with?("#!#{install_dir}") # Shebang looks good, skip this script
-      erb :dest => ruby_script,
+      erb :dest => ruby_script.sub(project_dir, "#{install_dir}/embedded/service/gitlab-shell"),
         :source => "ruby_script_wrapper.erb",
         :mode => 0755,
         :vars => {:script => script, :install_dir => install_dir}
     end
   end
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-shell/"
 end
