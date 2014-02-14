@@ -10,7 +10,6 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 - Commit the new version to the release branch
 
 ```shell
-# Example:
 git commit -m 'Pin GitLab to v6.6.0' config/software/gitlab-rails.rb
 ```
 
@@ -18,14 +17,12 @@ git commit -m 'Pin GitLab to v6.6.0' config/software/gitlab-rails.rb
   GitLab tag `v6.6.0` becomes omnibus-gitlab tag `6.6.0.omnibus`.
 
 ```shell
-# Example:
 git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
 ```
 
 - Push the branch and the tag to the main repository.
 
 ```shell
-# Example:
 git push origin 6-6-stable 6.6.0.omnibus
 ```
 
@@ -34,7 +31,6 @@ git push origin 6-6-stable 6.6.0.omnibus
 - Check out the release branch of omnibus-gitlab.
 
 ```shell
-# Example
 git fetch
 git checkout 6-6-stable
 ```
@@ -42,14 +38,12 @@ git checkout 6-6-stable
 - Check the version with `git describe`.
 
 ```shell
-# Example
 git describe # Should start with 6.6.0.omnibus
 ```
 
 - Build a package with version timestamps disabled.
 
 ```shell
-# Example
 OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project gitlab
 ```
 
