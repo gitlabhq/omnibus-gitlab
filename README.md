@@ -5,6 +5,9 @@ GitLab!
 
 ## Installation
 
+After the steps below your GitLab instance should reachable over HTTP,
+and have an admin user with username `root` and password `5iveL!fe`.
+
 ### Ubuntu
 
 ```
