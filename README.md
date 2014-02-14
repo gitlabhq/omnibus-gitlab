@@ -14,6 +14,17 @@ sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
 sudo gitlab-ctl reconfigure
 ```
 
+### Centos 6.5
+
+```
+sudo yum install openssh-server
+sudo yum install postfix # sendmail or exim is also OK
+sudo rpm -i gitlab-x.y.z.rpm
+sudo gitlab-ctl reconfigure
+# Open up the firewall for HTTP and SSH
+sudo lokkit -s http -s ssh
+```
+
 ## How to manage an Omnibus-installed GitLab
 
 ### Administrative commands
