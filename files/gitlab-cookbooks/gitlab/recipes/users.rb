@@ -17,21 +17,24 @@
 #
 
 gitlab_username = node['gitlab']['user']['username']
+gitlab_group = node['gitlab']['user']['group']
 gitlab_home = node['gitlab']['user']['home']
 
-group gitlab_username
+# Create the group for the GitLab user
+group gitlab_group
 
-# Create a user for Chef services to run as
+# Create the GitLab user
 user gitlab_username do
   shell node['gitlab']['user']['shell']
   home gitlab_home
-  gid gitlab_username
+  gid gitlab_group
 end
 
+# Configure Git settings for the GitLab user
 template File.join(gitlab_home, ".gitconfig") do
   source "gitconfig.erb"
   owner gitlab_username
-  group node['gitlab']['user']['group']
+  group gitlab_group
   mode "0644"
   variables(node['gitlab']['user'].to_hash)
 end
