@@ -101,4 +101,4 @@ Omnibus-gitlab uses four different directories.
 
 ## Building your own package
 
-See (doc/build.md).
+See [the separate build documentation](doc/build.md).
