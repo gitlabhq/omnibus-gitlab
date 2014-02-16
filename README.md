@@ -8,7 +8,7 @@ GitLab!
 After the steps below your GitLab instance should reachable over HTTP,
 and have an admin user with username `root` and password `5iveL!fe`.
 
-### Ubuntu
+### Ubuntu 12.04
 
 ```
 sudo apt-get install openssh-server
@@ -73,7 +73,6 @@ external_url "http://gitlab.example.com"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
 
 #### Invoking Rake tasks
 
