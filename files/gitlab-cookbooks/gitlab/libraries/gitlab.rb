@@ -21,11 +21,13 @@ require 'chef/mash'
 require 'chef/json_compat'
 require 'chef/mixin/deep_merge'
 require 'securerandom'
+require 'uri'
 
 module Gitlab
   extend(Mixlib::Config)
 
   bootstrap Mash.new
+  user Mash.new
   postgresql Mash.new
   redis Mash.new
   gitlab_rails Mash.new
@@ -33,6 +35,7 @@ module Gitlab
   sidekiq Mash.new
   nginx Mash.new
   node nil
+  external_url nil
 
   class << self
 
@@ -72,10 +75,39 @@ module Gitlab
       end
     end
 
+    def parse_external_url
+      return unless external_url
+
+      uri = URI(external_url.to_s)
+
+      unless uri.host
+        raise "External URL must include a FQDN"
+      end
+      Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
+      Gitlab['gitlab_rails']['external_fqdn'] = uri.host
+      Gitlab['gitlab_rails']['notification_email'] ||= "gitlab@#{uri.host}"
+
+      case uri.scheme
+      when "http"
+        Gitlab['gitlab_rails']['external_https'] = false
+      when "https"
+        Gitlab['gitlab_rails']['external_https'] = true
+      else
+        raise "Unsupported external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported external URL path: #{uri.path}"
+      end
+
+      Gitlab['gitlab_rails']['external_port'] = uri.port
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
         "bootstrap",
+        "user",
         "redis",
         "gitlab_rails",
         "unicorn",
@@ -92,6 +124,7 @@ module Gitlab
 
     def generate_config(node_name)
       generate_secrets(node_name)
+      parse_external_url
       generate_hash
     end
   end
