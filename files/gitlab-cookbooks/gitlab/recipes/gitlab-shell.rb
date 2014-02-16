@@ -46,6 +46,7 @@ end
 
 directory log_directory do
   owner git_user
+  mode "0700"
   recursive true
 end
 
