@@ -32,26 +32,60 @@ sudo lokkit -s http -s ssh
 
 ### Administrative commands
 
-You can make configuration changes by editing `/etc/gitlab/gitlab.rb` and
-`/etc/gitlab/gitlab-secrets.json`, followed by running
+#### Start/stop GitLab
 
+You can start, stop or restart GitLab and all of its components with the
+following commands.
+
+```shell
+# Start all GitLab components
+sudo gitlab-ctl start
+
+# Stop all GitLab components
+sudo gitlab-ctl stop
+
+# Restart all GitLab components
+sudo gitlab-ctl restart
 ```
-sudo gitlab-ctl reconfigure
+
+It is also possible to start, stop or restart individual components.
+
+```shell
+sudo gitlab-ctl restart unicorn
 ```
 
-To start/stop a component of GitLab run e.g.
-`sudo gitlab-ctl stop sidekiq`. To permanently disable e.g. Sidekiq, add
-`sidekiq['enable'] = false` to `/etc/gitlab/gitlab.rb`, and run
-`sudo gitlab-ctl reconfigure` for the change to take effect.
+#### Creating the gitlab.rb configuration file
 
-To invoke a GitLab rake task, use `gitlab-rake`. For example:
-
+```shell
+sudo mkdir -p /etc/gitlab
+sudo touch /etc/gitlab/gitlab.rb
+sudo chmod 600 /etc/gitlab/gitlab.rb
 ```
+
+#### Configuring the external URL for GitLab
+
+In order for GitLab to display correct repository clone links to your users
+it needs to know the URL under which it is reached by your users, e.g.
+`http://gitlab.example.com`. Add the following line to `/etc/gitlab/gitlab.rb`:
+
+```ruby
+external_url "http://gitlab.example.com"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+
+#### Invoking Rake tasks
+
+To invoke a GitLab Rake task, use `gitlab-rake`. For example:
+
+```shell
 sudo gitlab-rake gitlab:backup:create
 ```
 
-There is no need to change the user or the `RAILS_ENV` environment variable;
-this is taken care of by the `gitlab-rake` wrapper script.
+Contrary to with a traditional GitLab installation, there is no need to change
+the user or the `RAILS_ENV` environment variable; this is taken care of by the
+`gitlab-rake` wrapper script.
 
 ### Directory structure
 
