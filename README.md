@@ -30,9 +30,7 @@ sudo lokkit -s http -s ssh
 
 ## How to manage an Omnibus-installed GitLab
 
-### Administrative commands
-
-#### Start/stop GitLab
+### Start/stop GitLab
 
 You can start, stop or restart GitLab and all of its components with the
 following commands.
@@ -54,7 +52,7 @@ It is also possible to start, stop or restart individual components.
 sudo gitlab-ctl restart unicorn
 ```
 
-#### Creating the gitlab.rb configuration file
+### Creating the gitlab.rb configuration file
 
 ```shell
 sudo mkdir -p /etc/gitlab
@@ -62,7 +60,7 @@ sudo touch /etc/gitlab/gitlab.rb
 sudo chmod 600 /etc/gitlab/gitlab.rb
 ```
 
-#### Configuring the external URL for GitLab
+### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
 it needs to know the URL under which it is reached by your users, e.g.
@@ -74,7 +72,7 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-#### Invoking Rake tasks
+### Invoking Rake tasks
 
 To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 
