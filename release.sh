@@ -34,8 +34,7 @@ if [[ -z ${release_package} ]]; then
   error_exit 'could not find the release package'
 fi
 
-if !(aws s3 cp ${release_package} s3://#{RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}); then
+echo 'Starting upload'
+if !(aws s3 cp ${release_package} s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}); then
   error_exit 'release upload failed'
 fi
-
-echo "$0: package uploaded to https://${RELEASE_BUCKET}.s3.amazonaws.com/${release_package}"
