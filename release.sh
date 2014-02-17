@@ -9,13 +9,33 @@ function error_exit
   exit 1
 }
 
-git diff --quiet HEAD || error_exit 'uncommited changes'
-git describe --exact-match || error_exit 'HEAD is not tagged'
-bin/omnibus clean --purge ${PROJECT} || error_exit 'clean failed'
-touch build.txt
-OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT} || error_exit 'build failed'
+if !(git diff --quiet HEAD); then
+  error_exit 'uncommited changes'
+fi
+
+if !(git describe --exact-match); then
+  error_exit 'HEAD is not tagged'
+fi
+
+if !(bin/omnibus clean --purge ${PROJECT}); then
+  error_exit 'clean failed'
+fi
+
+if !(touch build.txt); then
+  error_exit 'failed to mark build start time'
+fi
+
+if !(OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT}); then
+  error_exit 'build failed'
+fi
+
 release_package=$(find pkg/ -mnewer build.txt -type f -not -name '*.json')
 if [[ -z ${release_package} ]]; then
-  error_exit 'Could not find the release package'
+  error_exit 'could not find the release package'
 fi
-aws s3 cp ${release_package} s3://#{RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
+
+if !(aws s3 cp ${release_package} s3://#{RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}); then
+  error_exit 'release upload failed'
+fi
+
+echo "$0: package uploaded to https://${RELEASE_BUCKET}.s3.amazonaws.com/${release_package}"
