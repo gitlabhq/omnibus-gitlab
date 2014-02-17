@@ -34,6 +34,11 @@ if [[ -z ${release_package} ]]; then
   error_exit 'could not find the release package'
 fi
 
+echo
+echo 'Package MD5:'
+md5sum ${release_package}
+
+echo
 echo 'Starting upload'
 if !(aws s3 cp ${release_package} s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}); then
   error_exit 'release upload failed'
