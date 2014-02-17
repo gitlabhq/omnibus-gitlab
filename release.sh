@@ -29,7 +29,7 @@ if !(OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT}); then
   error_exit 'build failed'
 fi
 
-release_package=$(find pkg/ -mnewer build.txt -type f -not -name '*.json')
+release_package=$(find pkg/ -newer build.txt -type f -not -name '*.json')
 if [[ -z ${release_package} ]]; then
   error_exit 'could not find the release package'
 fi
