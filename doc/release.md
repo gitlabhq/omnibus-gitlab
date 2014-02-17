@@ -50,6 +50,14 @@ git fetch
 git checkout 6-6-stable
 ```
 
+- Check the system time; the S3 upload will fail if it is off by too much
+
+```shell
+date
+```
+
+You can adjust the time with the `date` command if necessary.
+
 - Run the release script
 
 ```shell
