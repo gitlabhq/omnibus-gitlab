@@ -29,6 +29,20 @@ git push origin 6-6-stable 6.6.0.omnibus
 
 ## On the build machines
 
+- Install release dependencies
+
+```shell
+# Ubuntu
+sudo apt-get install python-pip
+
+# CentOS
+sudo yum install python-pip
+
+# Both
+sudo pip install awscli
+aws configure # enter AWS key and secret
+```
+
 - Check out the release branch of omnibus-gitlab.
 
 ```shell
@@ -36,16 +50,12 @@ git fetch
 git checkout 6-6-stable
 ```
 
-- Check the version with `git describe`.
+- Run the release script
 
 ```shell
-git describe # Should start with 6.6.0.omnibus
+./release.sh
 ```
 
-- Build a package with timestamps disabled.
-
-```shell
-OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project gitlab
-```
+This will `clean --purge` the build environment, build a package and upload it to S3.
 
 [the gitlab-rails version in omnibus-gitlab]: ../config/software/gitlab-rails.rb#L20
