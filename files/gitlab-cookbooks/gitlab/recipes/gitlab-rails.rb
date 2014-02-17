@@ -39,8 +39,9 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
   end
 end
 
-should_notify_unicorn = OmnibusHelper.should_notify?("unicorn")
-should_notify_sidekiq = OmnibusHelper.should_notify?("sidekiq")
+dependent_services = []
+dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
+dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
@@ -48,8 +49,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, 'service[unicorn]' if should_notify_unicorn
-  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
+  restarts dependent_services
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
@@ -59,8 +59,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   group "root"
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[unicorn]' if should_notify_unicorn
-  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
+  restarts dependent_services
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
@@ -70,8 +69,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  notifies :restart, 'service[unicorn]' if should_notify_unicorn
-  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
+  restarts dependent_services
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
@@ -81,8 +79,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  notifies :restart, 'service[unicorn]' if should_notify_unicorn
-  notifies :restart, 'service[sidekiq]' if should_notify_sidekiq
+  restarts dependent_services
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
