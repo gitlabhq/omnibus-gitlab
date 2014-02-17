@@ -10,3 +10,4 @@ vendor/cookbooks
 .ruby-gemset
 .rvmrc
 .rbenv-version
+build.txt
