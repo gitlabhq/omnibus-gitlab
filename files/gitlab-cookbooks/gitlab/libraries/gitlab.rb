@@ -84,14 +84,14 @@ module Gitlab
         raise "External URL must include a FQDN"
       end
       Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
-      Gitlab['gitlab_rails']['external_fqdn'] = uri.host
-      Gitlab['gitlab_rails']['notification_email'] ||= "gitlab@#{uri.host}"
+      Gitlab['gitlab_rails']['gitlab_host'] = uri.host
+      Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"
 
       case uri.scheme
       when "http"
-        Gitlab['gitlab_rails']['external_https'] = false
+        Gitlab['gitlab_rails']['gitlab_https'] = false
       when "https"
-        Gitlab['gitlab_rails']['external_https'] = true
+        Gitlab['gitlab_rails']['gitlab_https'] = true
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end
@@ -100,7 +100,7 @@ module Gitlab
         raise "Unsupported external URL path: #{uri.path}"
       end
 
-      Gitlab['gitlab_rails']['external_port'] = uri.port
+      Gitlab['gitlab_rails']['gitlab_port'] = uri.port
     end
 
     def generate_hash

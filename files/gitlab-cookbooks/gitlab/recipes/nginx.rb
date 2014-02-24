@@ -44,7 +44,7 @@ template nginx_vars[:gitlab_http_config] do
   mode "0644"
   variables(nginx_vars.merge(
     {
-      :fqdn => node['gitlab']['gitlab-rails']['external_fqdn'],
+      :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
       :socket => node['gitlab']['unicorn']['socket']
     }
   ))

@@ -15,9 +15,9 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: <%= node['gitlab']['gitlab-rails']['external_fqdn'] %>
-    port: <%= node['gitlab']['gitlab-rails']['external_port'] %>
-    https: <%= node['gitlab']['gitlab-rails']['external_https'] %>
+    host: <%= node['gitlab']['gitlab-rails']['gitlab_host'] %>
+    port: <%= node['gitlab']['gitlab-rails']['gitlab_port'] %>
+    https: <%= node['gitlab']['gitlab-rails']['gitlab_https'] %>
 
     # Uncomment and customize the last line to run in a non-root path
     # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this. 
@@ -35,10 +35,10 @@ production: &base
 
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
-    email_from: <%= node['gitlab']['gitlab-rails']['notification_email'] %>
+    email_from: <%= node['gitlab']['gitlab-rails']['gitlab_email_from'] %>
 
     # Email address of your support contact (default: same as email_from)
-    support_email: <%= node['gitlab']['gitlab-rails']['support_email'] %>
+    support_email: <%= node['gitlab']['gitlab-rails']['gitlab_support_email'] %>
 
     ## User settings
     default_projects_limit: 10
@@ -187,7 +187,7 @@ production: &base
     path: /opt/gitlab/embedded/service/gitlab-shell/
 
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: <%= node['gitlab']['gitlab-rails']['repositories_path'] %>
+    repos_path: <%= node['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] %>
     hooks_path: /opt/gitlab/embedded/service/gitlab-shell/hooks/
 
     # Git over HTTP
