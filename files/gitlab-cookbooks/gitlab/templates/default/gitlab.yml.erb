@@ -15,9 +15,9 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: <%= node['gitlab']['gitlab-rails']['gitlab_host'] %>
-    port: <%= node['gitlab']['gitlab-rails']['gitlab_port'] %>
-    https: <%= node['gitlab']['gitlab-rails']['gitlab_https'] %>
+    host: <%= @gitlab_host %>
+    port: <%= @gitlab_port %>
+    https: <%= @gitlab_https %>
 
     # Uncomment and customize the last line to run in a non-root path
     # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this. 
@@ -35,27 +35,27 @@ production: &base
 
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
-    email_from: <%= node['gitlab']['gitlab-rails']['gitlab_email_from'] %>
+    email_from: <%= @gitlab_email_from %>
 
     # Email address of your support contact (default: same as email_from)
-    support_email: <%= node['gitlab']['gitlab-rails']['gitlab_support_email'] %>
+    support_email: <%= @gitlab_support_email %>
 
     ## User settings
     default_projects_limit: 10
-    # default_can_create_group: false  # default: true
-    # username_changing_enabled: false # default: true - User can change her username/namespace
+    default_can_create_group: <%= @gitlab_default_can_create_group %>  # default: true
+    username_changing_enabled: <%= @username_changing_enabled %> # default: true - User can change her username/namespace
     ## Default theme
     ##   BASIC  = 1
     ##   MARS   = 2
     ##   MODERN = 3
     ##   GRAY   = 4
     ##   COLOR  = 5
-    # default_theme: 2 # default: 2
+    default_theme: <%= @gitlab_default_theme %> # default: 2
 
 
     ## Users management
     # default: false - Account passwords are not sent via the email if signup is enabled. 
-    # signup_enabled: true
+    signup_enabled: <%= @gitlab_signup_enabled %>
 
     # Restrict setting visibility levels for non-admin users.
     # The default is to allow all levels.
@@ -69,47 +69,51 @@ production: &base
 
     ## Default project features settings
     default_projects_features:
-      issues: true
-      merge_requests: true
-      wiki: true
-      wall: false
-      snippets: false
-      visibility_level: "private"  # can be "private" | "internal" | "public"
+      issues: <%= @gitlab_default_projects_features_issues %>
+      merge_requests: <%= @gitlab_default_projects_features_merge_requests %>
+      wiki: <%= @gitlab_default_projects_features_wiki %>
+      wall: <%= @gitlab_default_projects_features_wall %>
+      snippets: <%= @gitlab_default_projects_features_snippets %>
+      visibility_level: "<%= @gitlab_default_projects_features_visibility_level %>"  # can be "private" | "internal" | "public"
 
   ## External issues trackers
   issues_tracker:
-    # redmine:
-    #   title: "Redmine"
-    #   ## If not nil, link 'Issues' on project page will be replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   project_url: "http://redmine.sample/projects/:issues_tracker_id"
-    #
-    #   ## If not nil, links from /#\d/ entities from commit messages will replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   ##  :id                - Issue id (from commit messages)
-    #   issues_url: "http://redmine.sample/issues/:id"
-    #
-    #   ## If not nil, linkis to creating new issues will be replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-    # 
-    # jira:
-    #   title: "Atlassian Jira"
-    #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
-    #   issues_url: "http://jira.sample/browse/:id"
-    #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
+    <% if @issues_tracker_redmine %>
+    redmine:
+      title: "<%= @issues_tracker_redmine_title %>"
+      ## If not nil, link 'Issues' on project page will be replaced with this
+      ## Use placeholders:
+      ##  :project_id        - GitLab project identifier
+      ##  :issues_tracker_id - Project Name or Id in external issue tracker
+      project_url: "<%= @issues_tracker_redmine_project_url %>"
+
+      ## If not nil, links from /#\d/ entities from commit messages will replaced with this
+      ## Use placeholders:
+      ##  :project_id        - GitLab project identifier
+      ##  :issues_tracker_id - Project Name or Id in external issue tracker
+      ##  :id                - Issue id (from commit messages)
+      issues_url: "<%= @issues_tracker_redmine_issues_url %>"
+
+      ## If not nil, linkis to creating new issues will be replaced with this
+      ## Use placeholders:
+      ##  :project_id        - GitLab project identifier
+      ##  :issues_tracker_id - Project Name or Id in external issue tracker
+      new_issue_url: "<%= @issues_tracker_redmine_new_issue_url %>"
+    <% end %>
+
+    <% if @issues_tracker_jira %>
+    jira:
+      title: "<%= @issues_tracker_jira_title %>"
+      project_url: "<%= @issues_tracker_jira_project_url %>"
+      issues_url: "<%= @issues_tracker_jira_issues_url %>"
+      new_issue_url: "<%= @issues_tracker_jira_new_issue_url %>"
+    <% end %>
 
   ## Gravatar
   gravatar:
-    enabled: true                 # Use user avatar image from Gravatar.com (default: true)
-    # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
-    # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+    enabled: <%= @gravatar_enabled %>            # Use user avatar image from Gravatar.com (default: true)
+    plain_url: "<%= @gravatar_plain_url %>"     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+    ssl_url:   "<%= @gravatar_ssl_url %>"    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
 
   #
   # 2. Auth settings
@@ -119,14 +123,14 @@ production: &base
   # You can inspect a sample of the LDAP users with login access by running:
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
-    enabled: false
-    host: '_your_ldap_server'
-    base: '_the_base_where_you_search_for_users'
-    port: 636
-    uid: 'sAMAccountName'
-    method: 'ssl' # "tls" or "ssl" or "plain"
-    bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-    password: '_the_password_of_the_bind_user'
+    enabled: <%= @ldap_enabled %>
+    host: '<%= @ldap_host %>'
+    base: '<%= @ldap_base %>'
+    port: <%= @ldap_port %>
+    uid: '<%= @ldap_uid %>'
+    method: '<%= @ldap_method %>' # "tls" or "ssl" or "plain"
+    bind_dn: '<%= @ldap_bind_dn %>'
+    password: '<%= @ldap_password %>'
     # If allow_username_or_email_login is enabled, GitLab will ignore everything
     # after the first '@' in the LDAP username submitted by the user on login.
     #
@@ -136,7 +140,7 @@ production: &base
     #
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
-    allow_username_or_email_login: true
+    allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
 
   ## OmniAuth settings
   omniauth:
@@ -175,24 +179,24 @@ production: &base
   # GitLab Satellites
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
-    path: <%= node['gitlab']['gitlab-rails']['satellites_path'] %>
+    path: <%= @satellites_path %>
 
   ## Backup settings
   backup:
-    path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
+    path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     # keep_time: 604800   # default: 0 (forever) (in seconds)
 
   ## GitLab Shell settings
   gitlab_shell:
-    path: /opt/gitlab/embedded/service/gitlab-shell/
+    path: <%= @gitlab_shell_path %>
 
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: <%= node['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] %>
-    hooks_path: /opt/gitlab/embedded/service/gitlab-shell/hooks/
+    repos_path: <%= @gitlab_shell_repos_path %>
+    hooks_path: <%= @gitlab_shell_hooks_path %>
 
     # Git over HTTP
-    upload_pack: true
-    receive_pack: true
+    upload_pack: <%= @gitlab_shell_upload_pack %>
+    receive_pack: <%= @gitlab_shell_receive_pack %>
 
     # If you use non-standard ssh port you need to specify it
     # ssh_port: 22
@@ -201,13 +205,13 @@ production: &base
   # CAUTION!
   # Use the default values unless you really know what you are doing
   git:
-    bin_path: /opt/gitlab/embedded/bin/git
+    bin_path: <%= @git_bin_path %>
     # The next value is the maximum memory size grit can use
     # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits
-    max_size: 5242880 # 5.megabytes
+    max_size: <%= @git_max_size %> # 5.megabytes
     # Git timeout to read a commit, in seconds
-    timeout: 10
+    timeout: <%= @git_timeout %>
 
   #
   # 4. Extra customization
