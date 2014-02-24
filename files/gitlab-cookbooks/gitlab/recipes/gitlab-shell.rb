@@ -20,7 +20,7 @@ git_user = node['gitlab']['user']['username']
 git_group = node['gitlab']['user']['group']
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
-repositories_path = node['gitlab']['gitlab-rails']['repositories_path']
+repositories_path = node['gitlab']['gitlab-rails']['gitlab_shell_repos_path']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 
