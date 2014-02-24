@@ -51,7 +51,6 @@ default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
-default['gitlab']['gitlab-rails']['gitlab_user'] = "git"
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
 default['gitlab']['gitlab-rails']['support_email'] = "support@example.com"
