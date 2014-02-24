@@ -21,7 +21,7 @@
 case node["platform"]
 when "ubuntu"
   include_recipe "runit::upstart"
-when "redhat","centos","rhel","scientific"
+when "redhat", "centos", "rhel", "scientific", "oracle"
   if node['platform_version'] =~ /^6/
     include_recipe "runit::upstart"
   else
