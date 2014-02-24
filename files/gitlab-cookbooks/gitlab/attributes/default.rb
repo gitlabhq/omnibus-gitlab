@@ -55,6 +55,59 @@ default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/upload
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 
+default['gitlab']['gitlab-rails']['gitlab_host'] = "localhost"
+default['gitlab']['gitlab-rails']['gitlab_port'] = 80
+default['gitlab']['gitlab-rails']['gitlab_https'] = false
+default['gitlab']['gitlab-rails']['gitlab_user'] = "git"
+default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@localhost"
+default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
+default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = 10
+default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = true
+default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = true
+default['gitlab']['gitlab-rails']['gitlab_default_theme'] = 2
+default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = false
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = true
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = true
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = true
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = false
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = false
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = "private"
+default['gitlab']['gitlab-rails']['issues_tracker_redmine_title'] = "Redmine"
+default['gitlab']['gitlab-rails']['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
+default['gitlab']['gitlab-rails']['issues_tracker_redmine_issues_url'] = "http://redmine.sample/issues/:id"
+default['gitlab']['gitlab-rails']['issues_tracker_redmine_new_issue_url'] = "http://redmine.sample/projects/:issues_tracker_id/issues/new"
+default['gitlab']['gitlab-rails']['issues_tracker_jira_title'] = "Atlassian Jira"
+default['gitlab']['gitlab-rails']['issues_tracker_jira_project_url'] = "http://jira.sample/issues/?jql=project=:issues_tracker_id"
+default['gitlab']['gitlab-rails']['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
+default['gitlab']['gitlab-rails']['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
+default['gitlab']['gitlab-rails']['gravatar_enabled'] = true
+default['gitlab']['gitlab-rails']['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
+default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
+default['gitlab']['gitlab-rails']['ldap_enabled'] = false
+default['gitlab']['gitlab-rails']['ldap_host'] = "_your_ldap_server"
+default['gitlab']['gitlab-rails']['ldap_base'] = "_the_base_where_you_search_for_users"
+default['gitlab']['gitlab-rails']['ldap_port'] = 636
+default['gitlab']['gitlab-rails']['ldap_uid'] = "sAMAccountName"
+default['gitlab']['gitlab-rails']['ldap_method'] = "ssl"
+default['gitlab']['gitlab-rails']['ldap_bind_dn'] = "_the_full_dn_of_the_user_you_will_bind_with"
+default['gitlab']['gitlab-rails']['ldap_password'] = "_the_password_of_the_bind_user"
+default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = true
+default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
+default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = false
+default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = true
+default['gitlab']['gitlab-rails']['omniauth_providers'] =
+default['gitlab']['gitlab-rails']['satellites_path'] = "/home/git/gitlab-satellites/"
+default['gitlab']['gitlab-rails']['backup_path'] = "tmp/backups"
+default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/home/git/gitlab-shell/"
+default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/home/git/repositories/"
+default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/home/git/gitlab-shell/hooks/"
+default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = true
+default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
+default['gitlab']['gitlab-rails']['git_bin_path'] = "/usr/bin/git"
+default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
+default['gitlab']['gitlab-rails']['git_timeout'] = 10
+default['gitlab']['gitlab-rails']['extra'] =
+
 
 ####
 # Unicorn
