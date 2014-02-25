@@ -44,16 +44,16 @@ execute "chcon -t ssh_home_t #{ssh_dir}" do
   only_if "id -Z"
 end
 
-directory log_directory do
-  owner git_user
-  mode "0700"
-  recursive true
-end
-
-directory gitlab_shell_var_dir do
-  owner git_user
-  mode '0700'
-  recursive true
+[
+  log_directory,
+  gitlab_shell_var_dir,
+  node['gitlab']['gitlab-shell']['git_data_directory']
+].each do |dir|
+  directory dir do
+    owner git_user
+    mode "0700"
+    recursive true
+  end
 end
 
 template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
