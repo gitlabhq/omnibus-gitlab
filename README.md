@@ -104,7 +104,7 @@ By default, omnibus-gitlab stores Git repository data in `/var/opt/gitlab/git-da
 You can change this location by adding the following line to `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-git_data_dir "/mnt/nas/gitlab"
+git_data_dir "/mnt/nas/git-data"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
