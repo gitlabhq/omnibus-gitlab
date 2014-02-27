@@ -54,6 +54,10 @@ build do
   # Patch the gitlab backup script to correctly restore gitlab-shell hooks
   patch :source => "backup_restore_hooks.patch"
 
+  # The backup script in gitlab-rails 6-6-stable fails to overwrite existing
+  # Postgres data. This patch, taken from gitlab-rails master, fixes that.
+  patch :source => "pg_force_restore.patch"
+
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can

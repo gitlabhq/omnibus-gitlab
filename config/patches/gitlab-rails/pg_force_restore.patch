@@ -1,0 +1,13 @@
+diff --git a/lib/backup/database.rb b/lib/backup/database.rb
+index ebb4f28..6552f45 100644
+--- a/lib/backup/database.rb
++++ b/lib/backup/database.rb
+@@ -29,6 +29,8 @@ module Backup
+         print "Restoring MySQL database #{config['database']} ... "
+         system('mysql', *mysql_args, config['database'], in: db_file_name)
+       when "postgresql" then
++        puts "Destructively rebuilding database schema for RAILS_ENV #{Rails.env}"
++        Rake::Task["db:schema:load"].invoke
+         print "Restoring PostgreSQL database #{config['database']} ... "
+         pg_env
+         system('psql', config['database'], '-f', db_file_name)
