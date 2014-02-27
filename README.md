@@ -82,7 +82,31 @@ To create a backup of your repositories and GitLab metadata, run the following c
 sudo gitlab-rake gitlab:backup:create
 ```
 
-This will store a tar file in `/var/opt/gitlab/backups`.
+This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
+`1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
+
+### Restoring an application backup
+
+We will assume that you have installed GitLab from an omnibus package and run
+`sudo gitlab-ctl reconfigure` at least once.
+
+First make sure your backup tar file is in `/var/opt/gitlab/backups`.
+
+```shell
+sudo cp 1393513186_gitlab_backup.tar /var/opt/gitlab/backups/
+```
+
+Next, restore the backup by running the restore command. You need to specify the
+timestamp of the backup you are restoring.
+
+```shell
+# This command will overwrite the contents of your GitLab database!
+sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186
+```
+
+If there is a GitLab version mismatch between your backup tar file and the installed
+version of GitLab, the restore command will abort with an error. Install a package for
+the [required version](https://www.gitlab.com/downloads/archives/) and try again.
 
 ### Invoking Rake tasks
 
