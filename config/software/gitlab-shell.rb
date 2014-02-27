@@ -17,7 +17,7 @@
 #
 
 name "gitlab-shell"
-version "v1.8.0"
+version "79bceae69cb5750d6567b223597999bfa91cb3b9"
 
 dependency "ruby"
 dependency "rsync"
@@ -25,9 +25,6 @@ dependency "rsync"
 source :git => "https://gitlab.com/gitlab-org/gitlab-shell.git"
 
 build do
-  # patch gitlab-shell 1.8.0 to correctly create hooks during backup restore
-  patch :source => "create_hooks.patch"
-
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-shell/"
   block do
