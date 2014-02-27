@@ -51,6 +51,9 @@ build do
   # the GitLab backup script.
   patch :source => "backup_uploads_realpath.patch"
 
+  # Patch the gitlab backup script to correctly restore gitlab-shell hooks
+  patch :source => "backup_restore_hooks.patch"
+
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can
