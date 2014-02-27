@@ -44,7 +44,7 @@ default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rai
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = "http://localhost:8080"
-default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/uploads"
+default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 
@@ -86,10 +86,10 @@ default['gitlab']['gitlab-rails']['ldap_method'] = "ssl"
 default['gitlab']['gitlab-rails']['ldap_bind_dn'] = "_the_full_dn_of_the_user_you_will_bind_with"
 default['gitlab']['gitlab-rails']['ldap_password'] = "_the_password_of_the_bind_user"
 default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = true
-default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/gitlab-satellites"
+default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
 default['gitlab']['gitlab-rails']['backup_path'] = "tmp/backups"
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
-default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/repositories"
+default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
 default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = true
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
@@ -125,6 +125,7 @@ default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 # gitlab-shell
 ###
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+default['gitlab']['gitlab-shell']['git_data_directory'] = "/var/opt/gitlab/git-data"
 
 
 ###

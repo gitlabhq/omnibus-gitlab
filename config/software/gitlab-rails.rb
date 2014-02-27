@@ -43,6 +43,13 @@ build do
   # source code to include the Git revision of the code included in the omnibus
   # build.
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
+  patch :source => "backup_read_REVISION.patch"
+  command "git rev-parse HEAD > REVISION"
+
+  # The user uploads path is not (yet) configurable in gitlab-rails. As a
+  # workaround, omnibus-gitlab creates a symlink for public/uploads. This breaks
+  # the GitLab backup script.
+  patch :source => "backup_uploads_realpath.patch"
 
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem", :env => env
 
@@ -55,10 +62,10 @@ build do
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
-  patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+  aato_patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).
-  command "git apply #{patch} || (git apply -R #{patch} && git apply #{patch})",
+  command "git apply #{aato_patch} || (git apply -R #{aato_patch} && git apply #{aato_patch})",
     :cwd => "#{install_dir}/embedded/service/gem/ruby/1.9.1/gems/acts-as-taggable-on-2.4.1"
   rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
   # Tear down now that the assets:precompile is done.

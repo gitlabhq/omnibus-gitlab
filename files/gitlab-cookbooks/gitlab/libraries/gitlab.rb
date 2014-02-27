@@ -31,11 +31,13 @@ module Gitlab
   postgresql Mash.new
   redis Mash.new
   gitlab_rails Mash.new
+  gitlab_shell Mash.new
   unicorn Mash.new
   sidekiq Mash.new
   nginx Mash.new
   node nil
   external_url nil
+  git_data_dir nil
 
   class << self
 
@@ -103,6 +105,14 @@ module Gitlab
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port
     end
 
+    def parse_git_data_dir
+      return unless git_data_dir
+
+      Gitlab['gitlab_shell']['git_data_directory'] ||= git_data_dir
+      Gitlab['gitlab_rails']['gitlab_shell_repos_path'] ||= File.join(git_data_dir, "repositories")
+      Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -110,6 +120,7 @@ module Gitlab
         "user",
         "redis",
         "gitlab_rails",
+        "gitlab_shell",
         "unicorn",
         "sidekiq",
         "nginx",
@@ -125,6 +136,7 @@ module Gitlab
     def generate_config(node_name)
       generate_secrets(node_name)
       parse_external_url
+      parse_git_data_dir
       generate_hash
     end
   end
