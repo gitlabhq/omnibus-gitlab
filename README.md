@@ -74,12 +74,22 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Creating an application backup
+
+To create a backup of your repositories and GitLab metadata, run the following command.
+
+```shell
+sudo gitlab-rake gitlab:backup:create
+```
+
+This will store a tar file in `/var/opt/gitlab/backups`.
+
 ### Invoking Rake tasks
 
 To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 
 ```shell
-sudo gitlab-rake gitlab:backup:create
+sudo gitlab-rake gitlab:check
 ```
 
 Contrary to with a traditional GitLab installation, there is no need to change
