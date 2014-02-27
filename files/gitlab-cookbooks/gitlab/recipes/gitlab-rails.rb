@@ -30,6 +30,7 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   gitlab_rails_public_uploads_dir,
+  node['gitlab']['gitlab-rails']['backup_path'],
   gitlab_rails_log_dir
 ].each do |dir_name|
   directory dir_name do
