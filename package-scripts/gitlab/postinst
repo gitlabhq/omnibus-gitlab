@@ -22,7 +22,5 @@ echo "You can configure GitLab for your system by running the following command:
 echo
 echo "sudo gitlab-ctl reconfigure"
 echo
-echo WARNING: this is an unstable release. This installer should not be used in production.
-echo
 
 exit 0
