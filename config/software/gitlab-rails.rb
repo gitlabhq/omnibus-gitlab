@@ -43,8 +43,6 @@ build do
   # source code to include the Git revision of the code included in the omnibus
   # build.
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
-  patch :source => "backup_read_REVISION.patch"
-  command "git rev-parse HEAD > REVISION"
 
   # The user uploads path is not (yet) configurable in gitlab-rails. As a
   # workaround, omnibus-gitlab creates a symlink for public/uploads. This breaks
