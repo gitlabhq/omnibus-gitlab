@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-version "v6.6.2"
+version "v6.6.2-ee"
 
 dependency "ruby"
 dependency "bundler"
@@ -28,7 +28,7 @@ dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
+source :git => "git@gitlab.com:subscribers/gitlab-ee.git"
 
 env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
