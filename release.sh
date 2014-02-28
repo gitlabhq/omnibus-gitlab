@@ -39,9 +39,9 @@ if (git describe | grep -w ee); then
   if [[ $? -ne 0 ]]; then
     error_exit 'failed to generate release directory name'
   fi
-  remote_package_path="s3://${RELEASE_BUCKET}/${release_dir}/${release_package}"
+  remote_package_path="s3://${RELEASE_BUCKET}/${release_dir}/${release_package#pkg/}"
 else
-  remote_package_path="s3://${RELEASE_BUCKET}/${release_package}"
+  remote_package_path="s3://${RELEASE_BUCKET}/${release_package#pkg/}"
 fi
 
 echo
