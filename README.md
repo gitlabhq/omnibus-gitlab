@@ -1,9 +1,8 @@
 # GitLab Omnibus project
 
-This project creates full-stack platform-specific packages for
-GitLab. You can download omnibus-gitlab packages [here][downloads].
-For other installation options, see the
-[main project README][CE README].
+This project creates full-stack platform-specific [downloadable packages for GitLab][downloads].
+For other installation options please see the
+[GitLab project README][CE README].
 
 ## Installation
 
