@@ -29,6 +29,8 @@ sudo gitlab-ctl reconfigure
 sudo lokkit -s http -s ssh
 ```
 
+For update instructions, see [the update guide](doc/update.md).
+
 ## How to manage an Omnibus-installed GitLab
 
 ### Start/stop GitLab
