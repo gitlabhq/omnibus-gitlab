@@ -44,11 +44,6 @@ build do
   # build.
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
 
-  # The user uploads path is not (yet) configurable in gitlab-rails. As a
-  # workaround, omnibus-gitlab creates a symlink for public/uploads. This breaks
-  # the GitLab backup script.
-  patch :source => "backup_uploads_realpath.patch"
-
   bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can
