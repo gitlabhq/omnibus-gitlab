@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-version "v6.6.2"
+version "v6.6.4"
 
 dependency "ruby"
 dependency "bundler"
