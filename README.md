@@ -148,5 +148,11 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 See [the separate build documentation](doc/build.md).
 
+## Acknowledgments
+
+This omnibus installer project is based on the awesome work done by Chef in
+[omnibus-chef-server][omnibus-chef-server].
+
 [downloads]: https://www.gitlab.com/downloads
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
+[omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
