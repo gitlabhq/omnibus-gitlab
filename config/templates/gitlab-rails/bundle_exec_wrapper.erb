@@ -9,5 +9,7 @@ fi
 
 gitlab_user=$(ls -lLd <%= install_dir %>/embedded/service/gitlab-rails/log | awk '{ print $3 }')
 
+export HOME=$(eval echo ~${gitlab_user})
+
 cd <%= install_dir %>/embedded/service/gitlab-rails
 exec <%= install_dir %>/embedded/bin/chpst -u $gitlab_user -U $gitlab_user <%= install_dir %>/embedded/bin/bundle exec <%= command %>
