@@ -144,6 +144,30 @@ git_data_dir "/mnt/nas/git-data"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Setting up LDAP sign-in
+
+If you have an LDAP directory service such as Active Directory, you can configure
+GitLab so that your users can sign in with their LDAP credentials. Add the following
+to `/etc/gitlab/gitlab.rb`, edited for your server.
+
+```ruby
+# These settings are documented in more detail at
+# https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_host'] = 'hostname of LDAP server'
+gitlab_rails['ldap_port'] = 389
+gitlab_rails['ldap_uid'] = 'sAMAccountName'
+gitlab_rails['ldap_method'] = 'plain' # 'ssl' or 'plain'
+gitlab_rails['ldap_bind_dn'] = 'CN=query user,CN=Users,DC=mycorp,DC=com'
+gitlab_rails['ldap_password'] = 'query user password'
+gitlab_rails['ldap_allow_username_or_email_login'] = true
+gitlab_rails['ldap_base'] = 'DC=mycorp,DC=com'
+
+# GitLab Enterprise Edition only
+gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
+gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
