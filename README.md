@@ -168,6 +168,8 @@ gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
 gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
 ```
 
+Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
