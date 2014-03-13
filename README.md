@@ -98,7 +98,7 @@ crontab -e
 There, add the following line to schedule the backup for everyday at 2 AM:
 
 ```
-0 2 * * * gitlab-rake gitlab:backup:create
+0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create
 ```
 
 ### Restoring an application backup
