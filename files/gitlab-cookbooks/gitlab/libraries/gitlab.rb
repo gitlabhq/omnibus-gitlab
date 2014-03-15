@@ -94,6 +94,8 @@ module Gitlab
         Gitlab['gitlab_rails']['gitlab_https'] = false
       when "https"
         Gitlab['gitlab_rails']['gitlab_https'] = true
+        Gitlab['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end

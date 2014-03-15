@@ -208,6 +208,43 @@ sudo /opt/gitlab/bin/gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
+### Enable HTTPS
+
+By default, omnibus-gitlab runs does not use HTTPS.  If you want to enable HTTPS you can add the
+following line to `/etc/gitlab/gitlab.rb`.
+
+```ruby
+external_url "https://gitlab.example.com"
+```
+
+Redirect `HTTP` requests to `HTTPS`.
+
+```ruby
+external_url "https://gitlab.example.com"
+nginx['redirect_http_to_https'] = true
+```
+
+Change the default port and the ssl certificate locations.
+
+```ruby
+external_url "https://gitlab.example.com:2443"
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
+```
+
+Create the default ssl certifcate directory and add the files:
+
+```
+sudo mkdir -p /etc/gitlab/ssl && sudo chmod 700 /etc/gitlab/ssl
+sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/ 
+# run lokkit to open https on the firewall
+sudo lokkit -s https
+# if you are using a non standard https port
+sudo lokkit -p 2443:tcp
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
