@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2013 Robby Dyer
+# Copyright:: Copyright (c) 2014 GitLab.com
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-name "mysql"
+name "mysql-client"
 version "5.5.25a"
 
 dependencies [
@@ -44,7 +45,7 @@ if OHAI.platform =~ /centos/ and OHAI.platform_version =~ /^5/
     env.merge!( {
         "CC" => "gcc44",
         "CXX" => "g++44"
-    }) 
+    })
 end
 
 build do
