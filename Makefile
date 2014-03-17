@@ -25,7 +25,7 @@ remove_json:
 	find pkg/ -name '*.json' -delete
 
 move_ee_to_secret_dir:
-	if (git describe | grep -q -w ee); then \
+	if support/is_gitlab_ee.sh ; then \
 	  mv pkg ${SECRET_DIR} \
 	  && mkdir pkg \
 	  && mv ${SECRET_DIR} pkg/ \
