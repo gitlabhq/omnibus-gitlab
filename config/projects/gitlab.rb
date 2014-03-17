@@ -30,7 +30,6 @@ dependency "preparation"
 
 dependency "git"
 dependency "postgresql"
-dependency "mysql-client" if system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
 dependency "redis"
 dependency "nginx"
 dependency "gitlab-shell"

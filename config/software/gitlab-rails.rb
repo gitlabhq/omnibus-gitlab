@@ -19,6 +19,8 @@
 name "gitlab-rails"
 default_version "master"
 
+EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
+
 dependency "ruby"
 dependency "bundler"
 dependency "libxml2"
@@ -27,6 +29,7 @@ dependency "curl"
 dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
+dependency "mysql-client" if EE
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
