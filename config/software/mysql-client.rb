@@ -62,6 +62,6 @@ build do
             "-DCRYPTO_LIBRARY:FILEPATH=#{install_dir}/embedded/lib/libcrypto.so",
             ".",
            ].join(" "), :env => env
-  command "make -j #{max_build_jobs}", :env => env
-  command "make install", :env => env
+  command "make -j #{max_build_jobs}", :env => env, :cwd => "#{project_dir}/libmysql"
+  command "make -j #{max_build_jobs}", :env => env, :cwd => "#{project_dir}/client"
 end
