@@ -19,7 +19,6 @@ name "mysql-client"
 version "5.5.25a"
 
 dependencies [
-                "libevent",
                 "openssl",
                 "zlib",
                 "ncurses"
@@ -61,7 +60,6 @@ build do
             "-DZLIB_INCLUDE_DIR:PATH=#{install_dir}/embedded/include",
             "-DZLIB_LIBRARY:FILEPATH=#{install_dir}/embedded/lib/libz.so",
             "-DCRYPTO_LIBRARY:FILEPATH=#{install_dir}/embedded/lib/libcrypto.so",
-            "-DWITH_BUNDLED_LIBEVENT=off",
             "-DMYSQL_UNIX_ADDR=#{install_dir}/embedded/data/mysql.sock",
             ".",
            ].join(" "), :env => env
