@@ -30,6 +30,10 @@ bundle install --path .bundle --binstubs
 bin/omnibus build project gitlab
 ```
 
+## Debian 7.4
+
+the steps to build gitlab with omnibus on Debian 7.4 are equal to the ones to build on Ubuntu 12.04
+
 ## Centos 6.5
 
 ```shell
@@ -152,4 +156,3 @@ $ vagrant up PLATFORM
 
 The complete list of valid platform names can be viewed with the
 `vagrant status` command.
-
