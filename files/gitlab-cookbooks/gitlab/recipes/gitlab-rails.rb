@@ -53,13 +53,24 @@ template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   restarts dependent_services
 end
 
+database_attributes = node['gitlab']['gitlab-rails'].to_hash
+if node['gitlab']['postgresql']['enable']
+  database_attributes.merge!(
+    :db_adapter => "postgresql",
+    :db_username => node['gitlab']['postgresql']['sql_user'],
+    :db_password => node['gitlab']['postgresql']['sql_password'],
+    :db_host => node['gitlab']['postgresql']['listen_address'],
+    :db_port => node['gitlab']['postgresql']['port']
+  )
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/database.yml")
-  source "database.yml.postgresql.erb"
+  source "database.yml.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['postgresql'].to_hash)
+  variables database_attributes
   restarts dependent_services
 end
 
