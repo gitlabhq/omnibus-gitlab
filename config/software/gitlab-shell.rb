@@ -17,7 +17,7 @@
 #
 
 name "gitlab-shell"
-version "79bceae69cb5750d6567b223597999bfa91cb3b9"
+version "v1.8.5"
 
 dependency "ruby"
 dependency "rsync"
