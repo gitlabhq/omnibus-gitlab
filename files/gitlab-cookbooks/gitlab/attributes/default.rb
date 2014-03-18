@@ -108,6 +108,7 @@ default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = "password"
 default['gitlab']['gitlab-rails']['db_host'] = "localhost"
 default['gitlab']['gitlab-rails']['db_port'] = 6379
+default['gitlab']['gitlab-rails']['db_socket'] = nil
 
 ####
 # Unicorn
