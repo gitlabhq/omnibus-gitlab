@@ -90,6 +90,7 @@ default['gitlab']['gitlab-rails']['ldap_user_filter'] = ""
 default['gitlab']['gitlab-rails']['ldap_group_base'] = ""
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-rails']['backup_keep_time'] = 0
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
 default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
