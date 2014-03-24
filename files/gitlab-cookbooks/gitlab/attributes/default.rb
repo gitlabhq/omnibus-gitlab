@@ -99,7 +99,6 @@ default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
-default['gitlab']['gitlab-rails']['extra'] =
 
 
 ####
