@@ -125,7 +125,6 @@ production: &base
   ldap:
     enabled: <%= @ldap_enabled %>
     host: '<%= @ldap_host %>'
-    base: '<%= @ldap_base %>'
     port: <%= @ldap_port %>
     uid: '<%= @ldap_uid %>'
     method: '<%= @ldap_method %>' # "tls" or "ssl" or "plain"
@@ -141,6 +140,12 @@ production: &base
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
     allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
+
+    # Base where we can search for users
+    #
+    #   Ex. ou=People,dc=gitlab,dc=example
+    #
+    base: '<%= @ldap_base %>'
 
     # Filter LDAP users
     #
@@ -233,6 +238,10 @@ production: &base
   extra:
     ## Google analytics. Uncomment if you want it
     # google_analytics_id: '_your_tracking_id'
+
+    ## Piwik analytics.
+    # piwik_url: '_your_piwik_url'
+    # piwik_site_id: '_your_piwik_site_id'
 
     ## Text under sign-in page (Markdown enabled)
     # sign_in_text: |
