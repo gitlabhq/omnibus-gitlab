@@ -54,10 +54,10 @@ default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
 default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = 10
-default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = true
-default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = true
-default['gitlab']['gitlab-rails']['gitlab_default_theme'] = 2
-default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = false
+default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
+default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
+default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = true
@@ -75,8 +75,8 @@ default['gitlab']['gitlab-rails']['issues_tracker_jira_project_url'] = "http://j
 default['gitlab']['gitlab-rails']['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
 default['gitlab']['gitlab-rails']['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
 default['gitlab']['gitlab-rails']['gravatar_enabled'] = true
-default['gitlab']['gitlab-rails']['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
-default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
+default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
+default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_host'] = "_your_ldap_server"
 default['gitlab']['gitlab-rails']['ldap_base'] = "_the_base_where_you_search_for_users"
@@ -90,7 +90,7 @@ default['gitlab']['gitlab-rails']['ldap_user_filter'] = ""
 default['gitlab']['gitlab-rails']['ldap_group_base'] = ""
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
-default['gitlab']['gitlab-rails']['backup_keep_time'] = 0
+default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
 default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
@@ -99,7 +99,6 @@ default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
-default['gitlab']['gitlab-rails']['extra'] =
 
 
 ####
