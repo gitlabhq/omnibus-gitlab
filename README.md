@@ -185,6 +185,17 @@ gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
+### Starting a Rails console session
+
+For advanced users only. If you need access to a Rails production console for your
+GitLab installation you can start one with the following command:
+
+```shell
+sudo /opt/gitlab/bin/gitlab-rails console
+```
+
+This will only work after you have run `gitlab-ctl reconfigure` at least once.
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
