@@ -10,7 +10,6 @@ sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 
 # Create a database backup in case the upgrade fails
-# Note the backup timestamp in case you want to revert later
 sudo gitlab-rake gitlab:backup:create
 
 # Install the latest package
