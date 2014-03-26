@@ -47,7 +47,8 @@ sudo rpm -ivh gitlab-6.6.x-yyy.rpm
 
 # Prepare GitLab for receiving the backup restore
 
-# Workaround for a backup restore bug in GitLab 6.6
+# Due to a backup restore bug in GitLab 6.6, it is needed to drop the database
+# _before_ running `gitlab-ctl reconfigure`.
 sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
 
 sudo gitlab-ctl reconfigure
