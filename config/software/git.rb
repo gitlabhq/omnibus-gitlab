@@ -17,7 +17,7 @@
 #
 
 name "git"
-version "1.8.5.3"
+default_version "1.8.5.3"
 
 dependency "zlib"
 dependency "openssl"
