@@ -2,7 +2,9 @@
 
 ## Updating from GitLab 6.6.x to 6.7.x
 
-First, download the latest package from https://www.gitlab.com/downloads/ to your GitLab server.
+First, download the latest [CE](https://www.gitlab.com/downloads/) or
+[EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
+package to your GitLab server.
 
 ```shell
 # Stop unicorn and sidekiq so we can do database migrations
@@ -29,7 +31,9 @@ Done!
 
 ### Reverting to GitLab 6.6.x
 
-First download a GitLab 6.6.x package from https://www.gitlab.com/downloads/archives/ .
+First download a GitLab 6.6.x [CE](https://www.gitlab.com/downloads/archives/) or
+[EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
+package.
 
 ```
 # Stop GitLab
