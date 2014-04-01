@@ -45,7 +45,13 @@ template nginx_vars[:gitlab_http_config] do
   variables(nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :socket => node['gitlab']['unicorn']['socket']
+      :https => node['gitlab']['gitlab-rails']['gitlab_https'],
+      :socket => node['gitlab']['unicorn']['socket'],
+      :port => node['gitlab']['gitlab-rails']['gitlab_port'],
+      :redirect_http_to_https => node['gitlab']['nginx']['redirect_http_to_https'],
+      :redirect_http_to_https_port => node['gitlab']['nginx']['redirect_http_to_https_port'],
+      :ssl_certificate => node['gitlab']['nginx']['ssl_certificate'],
+      :ssl_certificate_key => node['gitlab']['nginx']['ssl_certificate_key']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

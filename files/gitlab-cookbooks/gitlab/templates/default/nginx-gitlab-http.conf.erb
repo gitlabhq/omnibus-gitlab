@@ -19,12 +19,29 @@ upstream gitlab {
   server unix:<%= @socket %>;
 }
 
+<% if @https && @redirect_http_to_https %>
 server {
-  listen *:80 default_server;         # e.g., listen 192.168.1.1:80; In most cases *:80 is a good idea
-  server_name <%= @fqdn %>;     # e.g., server_name source.example.com;
+  listen *:<%= @redirect_http_to_https_port %>;
+  server_name <%= @fqdn %>;
+  server_tokens off;
+  return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+}
+<% end %>
+
+server {
+  listen *:<%= @port %>;
+  server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
   root /opt/gitlab/embedded/service/gitlab-rails/public;
-  
+
+  <% if @https %>
+  ssl on;
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+  <% end %>
+
   # Increase this if you want to upload large attachments
   # Or if you want to accept large git objects over http
   client_max_body_size <%= @client_max_body_size %>;
@@ -56,4 +73,3 @@ server {
 
   error_page 502 /502.html;
 }
-
