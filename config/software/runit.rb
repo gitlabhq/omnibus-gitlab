@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
+# Copyright:: Copyright (c) 2014 GitLab.com
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -110,5 +111,6 @@ runsvdir -P #{install_path}/service 'log: ......................................
    "#{install_dir}/sv",
    "#{install_dir}/init"].each do |dir|
     command "mkdir -p #{dir}"
+    command "touch #{dir}/.gitkeep"
   end
 end
