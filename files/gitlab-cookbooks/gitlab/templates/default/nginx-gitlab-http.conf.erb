@@ -21,7 +21,7 @@ upstream gitlab {
 
 <% if @https && @redirect_http_to_https %>
 server {
-  listen *:<%= @redirect_http_to_https_port %>;
+  listen <%= @bind_address %>:<%= @redirect_http_to_https_port %>;
   server_name <%= @fqdn %>;
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
@@ -29,7 +29,7 @@ server {
 <% end %>
 
 server {
-  listen *:<%= @port %>;
+  listen <%= @bind_address %>:<%= @port %>;
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
   root /opt/gitlab/embedded/service/gitlab-rails/public;
