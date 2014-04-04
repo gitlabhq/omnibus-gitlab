@@ -48,7 +48,6 @@ template nginx_vars[:gitlab_http_config] do
       :https => node['gitlab']['gitlab-rails']['gitlab_https'],
       :socket => node['gitlab']['unicorn']['socket'],
       :port => node['gitlab']['gitlab-rails']['gitlab_port'],
-      :bind_address => node['gitlab']['gitlab-rails']['gitlab_addr'],
       :redirect_http_to_https => node['gitlab']['nginx']['redirect_http_to_https'],
       :redirect_http_to_https_port => node['gitlab']['nginx']['redirect_http_to_https_port'],
       :ssl_certificate => node['gitlab']['nginx']['ssl_certificate'],

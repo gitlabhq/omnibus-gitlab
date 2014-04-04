@@ -50,7 +50,6 @@ default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
-default['gitlab']['gitlab-rails']['gitlab_addr'] = '*'
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
@@ -211,3 +210,4 @@ default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+default['gitlab']['nginx']['listen_address'] = '*'
