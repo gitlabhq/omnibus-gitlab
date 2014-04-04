@@ -210,3 +210,4 @@ default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+default['gitlab']['nginx']['listen_address'] = '*'
