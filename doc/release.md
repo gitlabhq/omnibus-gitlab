@@ -29,6 +29,19 @@ git push origin 6-6-stable 6.6.0.omnibus
 
 ## On the build machines
 
+### One-time
+
+- Set up the `attach.sh` script
+
+```shell
+sudo su - omnibus-build
+cat > attach.sh <<EOF
+#!/bin/sh
+script -c 'screen -x || screen' /dev/null
+EOF
+chmod +x attach.sh
+```
+
 - Install release dependencies
 
 ```shell
@@ -43,11 +56,23 @@ sudo pip install awscli
 aws configure # enter AWS key and secret
 ```
 
-- Check out the release branch of omnibus-gitlab.
+- Set up a deploy key to fetch the GitLab EE source code.
+
+### Each build
+
+- Log in as the build user and start a screen session
 
 ```shell
+sudo su - omnibus-build
+./attach.sh
+```
+
+- Check out the release tag of omnibus-gitlab.
+
+```shell
+cd ~/omnibus-gitlab
 git fetch
-git checkout 6-6-stable
+git checkout 6.6.0.my-tag
 ```
 
 - Check the system time; the S3 upload will fail if it is off by too much
@@ -58,12 +83,19 @@ date
 
 You can adjust the time with the `date` command if necessary.
 
-- Run the release script
+- Start the release script
 
 ```shell
 ./release.sh
 ```
 
 This will `clean --purge` the build environment, build a package and upload it to S3.
+
+- Detach from screen: press Ctrl-a DD
+- Check in on the build after 30 minutes.
+- When the build is done, update the download page with the package URL's and MD5 hashes.
+
+See a previous [CE example](https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/141)
+and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92ca7c0a9940408ef414ef3c01).
 
 [the gitlab-rails version in omnibus-gitlab]: ../config/software/gitlab-rails.rb#L20
