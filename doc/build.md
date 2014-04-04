@@ -10,9 +10,10 @@ Preparing the build machine requires sudo access.
 sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential
 sudo gem install --no-ri --no-rdoc bundler
 
+# Create the build user
+sudo adduser --gecos 'Omnibus Build' --disabled-password omnibus-build
 # Create build directories for use by the build user
 sudo mkdir -p /opt/gitlab /var/cache/omnibus
-# We assume the build user and group is 'omnibus-build'
 sudo chown omnibus-build:omnibus-build /opt/gitlab /var/cache/omnibus
 ```
 
@@ -38,9 +39,10 @@ sudo yum groupinstall 'Development Tools'
 sudo yum install centos-release-SCL
 sudo yum install ruby193 ruby193-ruby-devel
 
+# Create the build user
+sudo adduser -c 'Omnibus Build' omnibus-build
 # Create build directories for use by the build user
 sudo mkdir -p /opt/gitlab /var/cache/omnibus
-# We assume the build user and group is 'omnibus-build'
 sudo chown omnibus-build:omnibus-build /opt/gitlab /var/cache/omnibus
 ```
 
