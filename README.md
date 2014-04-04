@@ -6,16 +6,14 @@ For other installation options please see the
 
 ## Installation
 
-After the steps below your GitLab instance should reachable over HTTP
-at the IP or hostname of your server, with an admin user with username
-`root` and password `5iveL!fe`.
+Please [download the package][downloads] and follow the steps below.
 
 ### Ubuntu 12.04
 
 ```
 sudo apt-get install openssh-server
 sudo apt-get install postfix # sendmail or exim is also OK
-sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
+sudo dpkg -i gitlab-x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb you downloaded
 sudo gitlab-ctl reconfigure
 ```
 
@@ -24,11 +22,15 @@ sudo gitlab-ctl reconfigure
 ```
 sudo yum install openssh-server
 sudo yum install postfix # sendmail or exim is also OK
-sudo rpm -i gitlab-x.y.z.rpm
+sudo rpm -i gitlab-x.y.z_omnibus-x.el6.x86_64.rpm # this is the .rpm you downloaded
 sudo gitlab-ctl reconfigure
-# Open up the firewall for HTTP and SSH
-sudo lokkit -s http -s ssh
+sudo lokkit -s http -s ssh # Open up the firewall for HTTP and SSH
 ```
+
+### After installation
+
+Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
+You can login as an admin user with username `root` and password `5iveL!fe`.
 
 ## Updating
 
