@@ -13,7 +13,7 @@ Please [download the package][downloads] and follow the steps below.
 ```
 sudo apt-get install openssh-server
 sudo apt-get install postfix # sendmail or exim is also OK
-sudo dpkg -i gitlab-x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb you downloaded
+sudo dpkg -i gitlab_x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb you downloaded
 sudo gitlab-ctl reconfigure
 ```
 
@@ -24,7 +24,7 @@ sudo yum install openssh-server
 sudo yum install postfix # sendmail or exim is also OK
 sudo rpm -i gitlab-x.y.z_omnibus-x.el6.x86_64.rpm # this is the .rpm you downloaded
 sudo gitlab-ctl reconfigure
-sudo lokkit -s http -s ssh # Open up the firewall for HTTP and SSH
+sudo lokkit -s http -s ssh # open up the firewall for HTTP and SSH requests
 ```
 
 ### After installation
@@ -36,9 +36,7 @@ You can login as an admin user with username `root` and password `5iveL!fe`.
 
 For update instructions, see [the update guide](doc/update.md).
 
-## How to manage an Omnibus-installed GitLab
-
-### Start/stop GitLab
+## Starting and stopping
 
 You can start, stop or restart GitLab and all of its components with the
 following commands.
@@ -60,6 +58,8 @@ It is also possible to start, stop or restart individual components.
 sudo gitlab-ctl restart unicorn
 ```
 
+## Configuration
+
 ### Creating the gitlab.rb configuration file
 
 ```shell
@@ -67,6 +67,9 @@ sudo mkdir -p /etc/gitlab
 sudo touch /etc/gitlab/gitlab.rb
 sudo chmod 600 /etc/gitlab/gitlab.rb
 ```
+
+Below several examples are given for settings in `/etc/gitlab/gitlab.rb`.
+Please restart each time you made a change.
 
 ### Configuring the external URL for GitLab
 
@@ -79,6 +82,83 @@ external_url "http://gitlab.example.com"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+
+### Storing Git data in an alternative directory
+
+By default, omnibus-gitlab stores Git repository data in `/var/opt/gitlab/git-data`.
+You can change this location by adding the following line to `/etc/gitlab/gitlab.rb`.
+
+```ruby
+git_data_dir "/mnt/nas/git-data"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+### Setting up LDAP sign-in
+
+If you have an LDAP directory service such as Active Directory, you can configure
+GitLab so that your users can sign in with their LDAP credentials. Add the following
+to `/etc/gitlab/gitlab.rb`, edited for your server.
+
+```ruby
+# These settings are documented in more detail at
+# https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_host'] = 'hostname of LDAP server'
+gitlab_rails['ldap_port'] = 389
+gitlab_rails['ldap_uid'] = 'sAMAccountName'
+gitlab_rails['ldap_method'] = 'plain' # 'ssl' or 'plain'
+gitlab_rails['ldap_bind_dn'] = 'CN=query user,CN=Users,DC=mycorp,DC=com'
+gitlab_rails['ldap_password'] = 'query user password'
+gitlab_rails['ldap_allow_username_or_email_login'] = true
+gitlab_rails['ldap_base'] = 'DC=mycorp,DC=com'
+
+# GitLab Enterprise Edition only
+gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
+gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
+```
+
+Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
+
+### Enable HTTPS
+
+By default, omnibus-gitlab runs does not use HTTPS.  If you want to enable HTTPS you can add the
+following line to `/etc/gitlab/gitlab.rb`.
+
+```ruby
+external_url "https://gitlab.example.com"
+```
+
+Redirect `HTTP` requests to `HTTPS`.
+
+```ruby
+external_url "https://gitlab.example.com"
+nginx['redirect_http_to_https'] = true
+```
+
+Change the default port and the ssl certificate locations.
+
+```ruby
+external_url "https://gitlab.example.com:2443"
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
+```
+
+Create the default ssl certifcate directory and add the files:
+
+```
+sudo mkdir -p /etc/gitlab/ssl && sudo chmod 700 /etc/gitlab/ssl
+sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/
+# run lokkit to open https on the firewall
+sudo lokkit -s https
+# if you are using a non standard https port
+sudo lokkit -p 2443:tcp
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+## Backups
 
 ### Creating an application backup
 
@@ -138,7 +218,7 @@ If there is a GitLab version mismatch between your backup tar file and the insta
 version of GitLab, the restore command will abort with an error. Install a package for
 the [required version](https://www.gitlab.com/downloads/archives/) and try again.
 
-### Invoking Rake tasks
+## Invoking Rake tasks
 
 To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 
@@ -150,7 +230,7 @@ Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
 `gitlab-rake` wrapper script.
 
-### Directory structure
+## Directory structure
 
 Omnibus-gitlab uses four different directories.
 
@@ -162,44 +242,7 @@ Omnibus-gitlab uses four different directories.
 - `/var/log/gitlab` contains all log data generated by components of
   omnibus-gitlab.
 
-### Storing Git data in an alternative directory
-
-By default, omnibus-gitlab stores Git repository data in `/var/opt/gitlab/git-data`.
-You can change this location by adding the following line to `/etc/gitlab/gitlab.rb`.
-
-```ruby
-git_data_dir "/mnt/nas/git-data"
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
-### Setting up LDAP sign-in
-
-If you have an LDAP directory service such as Active Directory, you can configure
-GitLab so that your users can sign in with their LDAP credentials. Add the following
-to `/etc/gitlab/gitlab.rb`, edited for your server.
-
-```ruby
-# These settings are documented in more detail at
-# https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
-gitlab_rails['ldap_enabled'] = true
-gitlab_rails['ldap_host'] = 'hostname of LDAP server'
-gitlab_rails['ldap_port'] = 389
-gitlab_rails['ldap_uid'] = 'sAMAccountName'
-gitlab_rails['ldap_method'] = 'plain' # 'ssl' or 'plain'
-gitlab_rails['ldap_bind_dn'] = 'CN=query user,CN=Users,DC=mycorp,DC=com'
-gitlab_rails['ldap_password'] = 'query user password'
-gitlab_rails['ldap_allow_username_or_email_login'] = true
-gitlab_rails['ldap_base'] = 'DC=mycorp,DC=com'
-
-# GitLab Enterprise Edition only
-gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
-gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
-```
-
-Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
-
-### Starting a Rails console session
+## Starting a Rails console session
 
 For advanced users only. If you need access to a Rails production console for your
 GitLab installation you can start one with the following command:
@@ -209,43 +252,6 @@ sudo /opt/gitlab/bin/gitlab-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
-
-### Enable HTTPS
-
-By default, omnibus-gitlab runs does not use HTTPS.  If you want to enable HTTPS you can add the
-following line to `/etc/gitlab/gitlab.rb`.
-
-```ruby
-external_url "https://gitlab.example.com"
-```
-
-Redirect `HTTP` requests to `HTTPS`.
-
-```ruby
-external_url "https://gitlab.example.com"
-nginx['redirect_http_to_https'] = true
-```
-
-Change the default port and the ssl certificate locations.
-
-```ruby
-external_url "https://gitlab.example.com:2443"
-nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
-nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
-```
-
-Create the default ssl certifcate directory and add the files:
-
-```
-sudo mkdir -p /etc/gitlab/ssl && sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/ 
-# run lokkit to open https on the firewall
-sudo lokkit -s https
-# if you are using a non standard https port
-sudo lokkit -p 2443:tcp
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Building your own package
 
