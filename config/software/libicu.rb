@@ -17,7 +17,7 @@
 #
 
 name "libicu"
-version "52.1"
+default_version "52.1"
 
 source :url => "http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-src.tgz",
        :md5 => "9e96ed4c1d99c0d14ac03c140f9f346c"
