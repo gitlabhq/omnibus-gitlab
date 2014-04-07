@@ -38,6 +38,12 @@ For update instructions, see [the update guide](doc/update.md).
 
 ## Starting and stopping
 
+After omnibus-gitlab is installed and configured, your server will have a Runit
+service directory (`runsvdir`) process running that gets started at boot via
+`/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource.  You
+should not have to deal with the `runsvdir` process directly; you can use the
+`gitlab-ctl` front-end instead.
+
 You can start, stop or restart GitLab and all of its components with the
 following commands.
 
