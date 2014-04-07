@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
+# Copyright:: Copyright (c) 2014 GitLab BV
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,7 @@
 #
 
 name "libyaml"
-default_version '0.1.6'
+version '0.1.6'
 
 source :url => "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz",
        :md5 => '5fe00cda18ca5daeb43762b80c38e06e'
