@@ -17,6 +17,16 @@ sudo dpkg -i gitlab_x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb yo
 sudo gitlab-ctl reconfigure
 ```
 
+### Debian 7.4
+```
+sudo apt-get install openssh-server
+sudo apt-get install exim4-daemon-light
+sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
+sudo gitlab-ctl reconfigure
+```
+
+during the exim installation you may follow http://alexatnet.com/references/server-setup-debian/send-only-mail-server-with-exim to ensure you get a secure mailserver
+
 ### CentOS 6.5
 
 ```
