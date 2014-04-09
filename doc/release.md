@@ -57,6 +57,12 @@ aws configure # enter AWS key and secret
 ```
 
 - Set up a deploy key to fetch the GitLab EE source code.
+- Put your email address in `~omnibus-build/.forward`.
+- Test email delivery:
+
+```shell
+echo "Subject: testing from $(uname -n)" | sendmail $(whoami)
+```
 
 ### Each build
 
