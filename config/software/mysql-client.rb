@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 name "mysql-client"
-default_version "5.5.25a"
+default_version "5.5.37"
 
 dependencies [
                 "openssl",
@@ -24,8 +24,8 @@ dependencies [
                 "ncurses"
              ]
 
-source  :url => "http://downloads.mysql.com/archives/mysql-5.5/mysql-5.5.25a.tar.gz",
-        :md5 => "0841fbc79872c5f467d8c8842f45257a"
+source  :url => "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.37.tar.gz",
+        :md5 => "bf1d80c66d4822ec6036300399a33c03"
 
 relative_path "mysql-#{version}"
 
