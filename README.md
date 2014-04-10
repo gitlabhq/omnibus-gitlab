@@ -39,6 +39,16 @@ sudo lokkit -s http -s ssh # open up the firewall for HTTP and SSH requests
 
 ### After installation
 
+Run `sudo gitlab-ctl status`; the output should look like this:
+
+```
+run: nginx: (pid 972) 7s; run: log: (pid 971) 7s
+run: postgresql: (pid 962) 7s; run: log: (pid 959) 7s
+run: redis: (pid 964) 7s; run: log: (pid 963) 7s
+run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
+run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
+```
+
 Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
 You can login as an admin user with username `root` and password `5iveL!fe`.
 
