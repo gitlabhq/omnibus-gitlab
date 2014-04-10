@@ -29,7 +29,6 @@ build_iteration 1
 dependency "preparation"
 
 dependency "git"
-dependency "postgresql"
 dependency "redis"
 dependency "nginx"
 dependency "gitlab-shell"
