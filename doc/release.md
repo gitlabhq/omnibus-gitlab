@@ -104,4 +104,4 @@ This will `clean --purge` the build environment, build a package and upload it t
 See a previous [CE example](https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/141)
 and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92ca7c0a9940408ef414ef3c01).
 
-[the gitlab-rails version in omnibus-gitlab]: ../config/software/gitlab-rails.rb#L20
+[the gitlab-rails version in omnibus-gitlab]: ../master/config/software/gitlab-rails.rb#L20
