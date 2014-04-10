@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 name "mysql-client"
-version "5.5.25a"
+default_version "5.5.25a"
 
 dependencies [
                 "openssl",
