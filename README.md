@@ -328,7 +328,7 @@ If you want to keep using an existing GitLab database you can skip this step.
 Next, we add the following settings to `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-# Disable the build-in Postgres
+# Disable the built-in Postgres
 postgresql['enable'] = false
 
 # Fill in the values for database.yml
