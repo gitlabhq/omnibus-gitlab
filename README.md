@@ -184,6 +184,35 @@ sudo lokkit -p 2443:tcp
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Changing gitlab.yml settings
+
+This is an advanced topic.  If you are already familiar with configuring GitLab
+and you want to change a `gitlab.yml` setting, you need to do so via
+`/etc/gitlab/gitlab.rb`. The translation works as follows.
+
+In `gitlab.yml`, you will find structure like this:
+
+```yaml
+production: &base
+  gitlab:
+    default_projects_limit: 10
+```
+
+In `gitlab.rb`, this translates to:
+
+```ruby
+gitlab_rails['gitlab_default_projects_limit'] = 10
+```
+
+What happens here is that we forget about `production: &base`, and join
+`gitlab:` with `default_projects_limit:` into `gitlab_default_projects_limit`.
+Note that not all `gitlab.yml` settings can be changed via `gitlab.rb` yet; see
+the [gitlab.yml ERB template][gitlab.yml.erb].  If you think an attribute is
+missing please create a merge request or an issue on the omnibus-gitlab issue
+tracker.
+
+Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
+
 ## Backups
 
 ### Creating an application backup
@@ -291,3 +320,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [downloads]: https://www.gitlab.com/downloads
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
+[gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
