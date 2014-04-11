@@ -19,6 +19,8 @@
 name "gitlab-rails"
 default_version "master"
 
+EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
+
 dependency "ruby"
 dependency "bundler"
 dependency "libxml2"
@@ -27,6 +29,7 @@ dependency "curl"
 dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
+dependency "mysql-client" if EE
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
@@ -44,7 +47,9 @@ build do
   # build.
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
 
-  bundle "install --without mysql development test --path=#{install_dir}/embedded/service/gem", :env => env
+  bundle_without = %w{development test}
+  bundle_without << "mysql" unless EE
+  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.

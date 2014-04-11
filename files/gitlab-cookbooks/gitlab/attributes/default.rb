@@ -100,6 +100,15 @@ default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/gi
 default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
 
+default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
+default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
+default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
+default['gitlab']['gitlab-rails']['db_pool'] = 10
+default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
+default['gitlab']['gitlab-rails']['db_password'] = "password"
+default['gitlab']['gitlab-rails']['db_host'] = "localhost"
+default['gitlab']['gitlab-rails']['db_port'] = 6379
+default['gitlab']['gitlab-rails']['db_socket'] = nil
 
 ####
 # Unicorn

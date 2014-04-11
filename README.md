@@ -308,6 +308,56 @@ sudo /opt/gitlab/bin/gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
+## Using omnibus-gitlab with a remote database server
+
+This is an advanced topic. If you do not want to use the built-in Postgres
+server of omnibus-gitlab or if you want to use MySQL (GitLab Enterprise Edition
+only) you can do so as follows.
+
+Important note: if you are connecting omnibus-gitlab to an existing GitLab
+database you should create a backup before attempting this procedure.
+
+### Create a user and database for GitLab
+
+First, set up your database server according to the [upstream GitLab
+instructions](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#5-database).
+If you want to keep using an existing GitLab database you can skip this step.
+
+### Configure omnibus-gitlab to connect to your remote database server
+
+Next, we add the following settings to `/etc/gitlab/gitlab.rb`.
+
+```ruby
+# Disable the built-in Postgres
+postgresql['enable'] = false
+
+# Fill in the values for database.yml
+gitlab_rails['db_adapter'] = 'mysql2'
+gitlab_rails['db_encoding'] = 'utf8'
+gitlab_rails['db_host'] = '127.0.0.1'
+gitlab_rails['db_port'] = '3306'
+gitlab_rails['db_username'] = 'git'
+gitlab_rails['db_password'] = 'password'
+```
+
+Parameters such as `db_adapter` correspond to `adapter` in `database.yml`; see
+the upstream GitLab examples for [Postgres][database.yml.postgresql] and
+[MySQL][database.yml.mysql].  We remind you that `/etc/gitlab/gitlab.rb` should
+have file permissions `0600` because it contains plaintext passwords.
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+### Seed the database (fresh installs only)
+
+Omnibus-gitlab will not automatically seed your external database. Run the
+following command to import the schema and create the first admin user:
+
+```shell
+sudo gitlab-rake gitlab:setup
+```
+
+This is a destructive command; do not run it on an existing database!
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
@@ -321,3 +371,5 @@ This omnibus installer project is based on the awesome work done by Chef in
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
 [gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
+[database.yml.postgresql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.postgresql
+[database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
