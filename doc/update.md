@@ -1,5 +1,11 @@
 # Updating GitLab via omnibus-gitlab
 
+## Upgrading from a non-Omnibus installation to an Omnibus installation
+
+Do this by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).
+Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
+You might have to upgrade your non-Omnibus installation before creating the backup to archive this.
+
 ## Updating from GitLab 6.6.x to 6.7.x
 
 First, download the latest [CE](https://www.gitlab.com/downloads/) or
