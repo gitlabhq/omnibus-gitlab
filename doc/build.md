@@ -6,6 +6,17 @@ Preparing the build machine requires sudo access.
 ## Ubuntu 12.04
 
 ```shell
+# Get the latest OS updates
+sudo apt-get update
+sudo apt-get upgrade
+
+# Set up the firewall to only allow inbound SSH traffic
+sudo ufw allow ssh
+sudo ufw enable
+
+# Check for SSH password logins; they should be disabled
+grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+
 # Install dependencies
 sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential
 sudo gem install --no-ri --no-rdoc bundler
@@ -38,6 +49,15 @@ the steps to build gitlab with omnibus on Debian 7.4 are equal to the ones to bu
 ## Centos 6.5
 
 ```shell
+# Update OS packages
+sudo yum update
+
+# Set up the firewall to only allow inbound SSH traffic
+sudo lokkit -s ssh
+
+# Check for SSH password logins; they should be disabled
+grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+
 sudo yum groupinstall 'Development Tools'
 # Install RedHat Software Collections to get Ruby 1.9.3
 sudo yum install centos-release-SCL
