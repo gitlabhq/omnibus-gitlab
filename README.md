@@ -186,9 +186,10 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Changing gitlab.yml settings
 
-This is an advanced topic.  If you are already familiar with configuring GitLab
-and you want to change a `gitlab.yml` setting, you need to do so via
-`/etc/gitlab/gitlab.rb`. The translation works as follows.
+Some of GitLab's features can be customized through
+[gitlab.yml][gitlab.yml.example]. If you want to change a `gitlab.yml` setting
+with omnibus-gitlab, you need to do so via `/etc/gitlab/gitlab.rb`. The
+translation works as follows.
 
 In `gitlab.yml`, you will find structure like this:
 
@@ -373,3 +374,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
 [database.yml.postgresql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.postgresql
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
+[gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
