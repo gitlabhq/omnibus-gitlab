@@ -1,3 +1,20 @@
+- MySQL client support (EE only)
+- Update to omnibus-ruby 3.0
+- Update omnibus-software (e.g. Postgres to 9.2.8)
+- Email notifications in release.sh
+- Rewrite parts of release.sh as a Makefile
+- HTTPS support (Chuck Schweizer)
+- Specify the Nginx bind address (Marco Wessel)
+- Debian 7 build instructions (Kay Strobach)
+
+6.7.3-ee.omnibus.1
+- Update gitlab-rails to v6.7.3-ee
+
+6.7.3-ee.omnibus
+
+6.7.4.omnibus
+- Update gitlab-rails to v6.7.4
+
 6.7.2-ee.omnibus.2
 - Update OpenSSL to 1.0.1g to address CVE-2014-0160
 
