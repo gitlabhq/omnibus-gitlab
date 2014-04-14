@@ -2,6 +2,10 @@
 
 ## Upgrading from a non-Omnibus installation to an Omnibus installation
 
+Please be advised that you lose your settings in files such as gitlab.yml, unicorn.rb and smtp_settings.rb.
+You will have to [configure those settings in /etc/gitlab/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
+SMTP is not supported in omnibus-gitlab at this time.
+
 Do this by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to archive this.
@@ -64,7 +68,7 @@ sudo gitlab-ctl start
 
 Done!
 
-## sReverting to GitLab 6.6.x
+## Reverting to GitLab 6.6.x
 
 First download a GitLab 6.6.x [CE](https://www.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
