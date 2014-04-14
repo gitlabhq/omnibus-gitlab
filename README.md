@@ -300,8 +300,9 @@ Omnibus-gitlab uses four different directories.
 
 ## Starting a Rails console session
 
-For advanced users only. If you need access to a Rails production console for your
-GitLab installation you can start one with the following command:
+If you need access to a Rails production console for your GitLab installation
+you can start one with the command below. Please be warned that it is very easy
+to inadvertently modify, corrupt or destroy data from the console.
 
 ```shell
 sudo /opt/gitlab/bin/gitlab-rails console
