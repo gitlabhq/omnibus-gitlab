@@ -308,9 +308,9 @@ sudo /opt/gitlab/bin/gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
-## Using omnibus-gitlab with a remote database server
+## Using a non-packaged database management server
 
-This is an advanced topic. If you do not want to use the built-in Postgres
+If you do not want to use the built-in Postgres
 server of omnibus-gitlab or if you want to use MySQL (GitLab Enterprise Edition
 only) you can do so as follows.
 
@@ -323,7 +323,7 @@ First, set up your database server according to the [upstream GitLab
 instructions](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#5-database).
 If you want to keep using an existing GitLab database you can skip this step.
 
-### Configure omnibus-gitlab to connect to your remote database server
+### Configure omnibus-gitlab to connect to it
 
 Next, we add the following settings to `/etc/gitlab/gitlab.rb`.
 
