@@ -2,11 +2,15 @@
 
 ## Upgrading from a non-Omnibus installation to an Omnibus installation
 
+Upgrading from non-Omnibus installations has not been tested by GitLab.com.
+
+If you are using a MySQL database you have to configure a [non-packaged MySQL database](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#using-a-non-packaged-database-management-server) or [convert to PostgreSQL](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md) before the backup.
+
 Please be advised that you lose your settings in files such as gitlab.yml, unicorn.rb and smtp_settings.rb.
 You will have to [configure those settings in /etc/gitlab/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
 SMTP is not supported in omnibus-gitlab at this time.
 
-Do this by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).
+Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to archive this.
 
