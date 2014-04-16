@@ -16,6 +16,14 @@
 # limitations under the License.
 #
 
+# The Gitlab module in this file is used to parse /etc/gitlab/gitlab.rb.
+#
+# Warning to the reader:
+# Because the Ruby DSL in /etc/gitlab/gitlab.rb does not accept hyphens in
+# section names, this module translates names like 'gitlab_rails' to the
+# correct 'gitlab-rails' in the `generate_hash` method. This module is the only
+# place in the cookbook where we write 'gitlab_rails'.
+
 require 'mixlib/config'
 require 'chef/mash'
 require 'chef/json_compat'
@@ -139,6 +147,7 @@ module Gitlab
       generate_secrets(node_name)
       parse_external_url
       parse_git_data_dir
+      # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
   end
