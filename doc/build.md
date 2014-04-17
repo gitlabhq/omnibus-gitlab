@@ -11,10 +11,11 @@ sudo apt-get update
 sudo apt-get upgrade
 
 # Set up the firewall to only allow inbound SSH traffic
+sudo apt-get install ufw # Needed for Debian 7
 sudo ufw allow ssh
 sudo ufw enable
 
-# Check for SSH password logins; they should be disabled
+# Check for SSH password logins, they should be disabled; The command below should return no results
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
 
 # Install dependencies
@@ -31,6 +32,9 @@ sudo chown omnibus-build:omnibus-build /opt/gitlab /var/cache/omnibus
 Then, as the build user (omnibus-build):
 
 ```shell
+# Login as omnibus-build user
+sudo su - omnibus-build
+
 # Clone the omnibus repo
 git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
 
