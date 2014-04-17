@@ -42,12 +42,17 @@ sudo yum install python-pip
 
 # Both
 sudo pip install awscli
-aws configure # enter AWS key and secret
 ```
 
 # Make sure sendmail is installed; for Debian 7
 ```shell
 sudo apt-get install sendmail-bin
+```
+
+As omnibus-build user:
+
+```shell
+sudo su - omnibus-build
 ```
 
 - Set up a deploy key to fetch the GitLab EE source code.
@@ -58,11 +63,16 @@ sudo apt-get install sendmail-bin
 echo "Subject: testing from $(uname -n)" | sendmail $(whoami)
 ```
 
+- Configure aws credentials
+
+```shell
+aws configure # enter AWS key and secret
+```
+
 - Set up the `attach.sh` script
 
 ```shell
 # For Debian 7 install screen first; sudo apt-get install screen
-sudo su - omnibus-build
 cat > attach.sh <<EOF
 #!/bin/sh
 script -c 'screen -x || screen' /dev/null
