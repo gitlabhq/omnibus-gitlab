@@ -31,17 +31,6 @@ git push origin 6-6-stable 6.6.0.omnibus
 
 ### One-time
 
-- Set up the `attach.sh` script
-
-```shell
-sudo su - omnibus-build
-cat > attach.sh <<EOF
-#!/bin/sh
-script -c 'screen -x || screen' /dev/null
-EOF
-chmod +x attach.sh
-```
-
 - Install release dependencies
 
 ```shell
@@ -56,12 +45,29 @@ sudo pip install awscli
 aws configure # enter AWS key and secret
 ```
 
+# Make sure sendmail is installed; for Debian 7
+```shell
+sudo apt-get install sendmail-bin
+```
+
 - Set up a deploy key to fetch the GitLab EE source code.
 - Put your email address in `~omnibus-build/.forward`.
 - Test email delivery:
 
 ```shell
 echo "Subject: testing from $(uname -n)" | sendmail $(whoami)
+```
+
+- Set up the `attach.sh` script
+
+```shell
+# For Debian 7 install screen first; sudo apt-get install screen
+sudo su - omnibus-build
+cat > attach.sh <<EOF
+#!/bin/sh
+script -c 'screen -x || screen' /dev/null
+EOF
+chmod +x attach.sh
 ```
 
 ### Each build
