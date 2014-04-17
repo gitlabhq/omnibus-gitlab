@@ -72,7 +72,8 @@ aws configure # enter AWS key and secret
 - Set up the `attach.sh` script
 
 ```shell
-# For Debian 7 install screen first; sudo apt-get install screen
+# Install screen first
+sudo apt-get install screen
 cat > attach.sh <<EOF
 #!/bin/sh
 script -c 'screen -x || screen' /dev/null

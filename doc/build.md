@@ -11,7 +11,7 @@ sudo apt-get update
 sudo apt-get upgrade
 
 # Set up the firewall to only allow inbound SSH traffic
-sudo apt-get install ufw # Needed for Debian 7
+sudo apt-get install ufw
 sudo ufw allow ssh
 sudo ufw enable
 
