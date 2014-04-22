@@ -10,7 +10,7 @@ Please make sure you are viewing the documentation for the version of
 omnibus-gitlab you are using. In most cases this should be the highest numbered
 stable branch (example shown below).
 
-![documentation version](/doc/images/omnibus-documentation-version.png)
+![documentation version](doc/images/omnibus-documentation-version.png)
 
 ## Installation
 
