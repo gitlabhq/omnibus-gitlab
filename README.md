@@ -4,6 +4,14 @@ This project creates full-stack platform-specific [downloadable packages for Git
 For other installation options please see the
 [GitLab project README][CE README].
 
+## Documentation version
+
+Please make sure you are viewing the documentation for the version of
+omnibus-gitlab you are using. In most cases this should be the highest numbered
+stable branch (example shown below).
+
+![documentation version](/doc/images/omnibus-documentation-version.png)
+
 ## Installation
 
 Please [download the package][downloads] and follow the steps below.
