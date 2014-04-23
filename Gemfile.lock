@@ -66,5 +66,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ohai
   omnibus (~> 3.0.0)
   omnibus-software!
