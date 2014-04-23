@@ -14,7 +14,7 @@ Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/g
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to archive this.
 
-## Updating from GitLab 6.6.x to 6.7.x
+## Updating from GitLab 6.6.x or higher to 6.8.x
 
 First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
