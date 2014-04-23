@@ -2,7 +2,7 @@ PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
-PLATFORM_DIR:=$(shell ohai platform | ruby -rjson -e 'puts JSON.parse(ARGF.read).first')
+PLATFORM_DIR:=$(shell bin/ohai platform | ruby -rjson -e 'puts JSON.parse(ARGF.read).first')
 
 build:
 	OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT}
