@@ -8,6 +8,7 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 - Create a release branch in omnibus-gitlab (e.g. `6-6-stable`).
 - Change [the gitlab-rails version in omnibus-gitlab].
   In our example that would be `version "v6.6.0"`.
+- Change [the source] to the repo you want to build from (CE / EE)
 - Commit the new version to the release branch
 
 ```shell
@@ -122,3 +123,4 @@ See a previous [CE example](https://gitlab.com/gitlab-com/www-gitlab-com/merge_r
 and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92ca7c0a9940408ef414ef3c01).
 
 [the gitlab-rails version in omnibus-gitlab]: ../master/config/software/gitlab-rails.rb#L20
+[the source]: ../master/config/software/gitlab-rails.rb#L34
