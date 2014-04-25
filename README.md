@@ -217,8 +217,7 @@ What happens here is that we forget about `production: &base`, and join
 `gitlab:` with `default_projects_limit:` into `gitlab_default_projects_limit`.
 Note that not all `gitlab.yml` settings can be changed via `gitlab.rb` yet; see
 the [gitlab.yml ERB template][gitlab.yml.erb].  If you think an attribute is
-missing please create a merge request or an issue on the omnibus-gitlab issue
-tracker.
+missing please create a merge request on the omnibus-gitlab repository.
 
 Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 
