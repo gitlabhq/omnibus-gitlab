@@ -17,16 +17,24 @@
 # limitations under the License.
 #
 
-# TODO: This needs RHEL support
-case node["platform"]
-when "ubuntu"
+case node["platform_family"]
+when "debian"
   include_recipe "runit::upstart"
-when "redhat", "centos", "rhel", "scientific", "oracle"
-  if node['platform_version'] =~ /^6/
+when "rhel"
+  case node["platform"]
+  when "amazon", "xenserver"
+    # TODO: platform_version check for old distro without upstart
     include_recipe "runit::upstart"
   else
-    include_recipe "runit::sysvinit"
+    if node['platform_version'] =~ /^5/
+      include_recipe "runit::sysvinit"
+    else # >= 6.0
+      include_recipe "runit::upstart"
+    end
   end
+when "fedora"
+  # TODO: platform_version check for old distro without upstart
+  include_recipe "runit::upstart"
 else
   include_recipe "runit::sysvinit"
 end
