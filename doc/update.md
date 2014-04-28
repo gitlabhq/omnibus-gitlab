@@ -1,5 +1,11 @@
 # Updating GitLab via omnibus-gitlab
 
+## Documentation version
+
+Please make sure you are viewing this file on the master branch.
+
+![documentation version](doc/images/omnibus-documentation-version-update-md.png)
+
 ## Upgrading from a non-Omnibus installation to an Omnibus installation
 
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
