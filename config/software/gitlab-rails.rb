@@ -31,7 +31,7 @@ dependency "libicu"
 dependency "postgresql"
 dependency "mysql-client" if EE
 
-source :git => "https://gitlab.com/subscribers/gitlab-ee.git"
+source :git => "git@gitlab.com:subscribers/gitlab-ee.git"
 
 env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
