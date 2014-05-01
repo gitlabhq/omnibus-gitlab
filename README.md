@@ -60,6 +60,16 @@ run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
 Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
 You can login as an admin user with username `root` and password `5iveL!fe`.
 
+### Common installation problems
+
+#### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
+
+This happens when Runit has not been installed succesfully during `gitlab-ctl
+reconfigure`. The most common cause for a failed Runit installation is
+installing omnibus-gitlab on an unsupported platform. Solution: double check on
+the download page whether you downloaded a package for the correct operating
+system.
+
 ## Updating
 
 For update instructions, see [the update guide](doc/update.md).
