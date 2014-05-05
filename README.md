@@ -231,6 +231,9 @@ missing please create a merge request on the omnibus-gitlab repository.
 
 Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 
+Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
+since it will be overwritten on the next `gitlab-ctl reconfigure` run.
+
 ## Backups
 
 ### Creating an application backup
