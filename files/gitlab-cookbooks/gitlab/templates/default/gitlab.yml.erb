@@ -212,7 +212,7 @@ production: &base
     receive_pack: <%= @gitlab_shell_receive_pack %>
 
     # If you use non-standard ssh port you need to specify it
-    # ssh_port: 22
+    ssh_port: <%= @gitlab_shell_ssh_port %>
 
   ## Git settings
   # CAUTION!

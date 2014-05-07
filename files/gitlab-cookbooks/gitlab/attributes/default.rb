@@ -96,6 +96,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
 default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = true
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
+default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = 22
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
