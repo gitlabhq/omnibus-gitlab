@@ -4,6 +4,7 @@
 - Add migration instructions coming from an existing GitLab installation (Goni Zahavy)
 - Add a gitlab.yml conversion support script
 - Correct default gravatar configuration (#112) (Julien Pivotto)
+- Update Ruby to 2.0.0p451
 
 6.8.1
 - Use gitlab-rails 6.8.1
