@@ -65,7 +65,13 @@ build do
   # we revert and re-apply the patch (if this is a second or later run).
   command "git apply #{aato_patch} || (git apply -R #{aato_patch} && git apply #{aato_patch})",
     :cwd => "#{install_dir}/embedded/service/gem/ruby/2.0.0/gems/acts-as-taggable-on-2.4.1"
-  rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
+
+  assets_precompile_env = {
+    "RAILS_ENV" => "production",
+    "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}"
+  }
+  bundle "exec rake assets:precompile", :env => assets_precompile_env
+
   # Tear down now that the assets:precompile is done.
   command "rm config/gitlab.yml config/database.yml"
 
