@@ -75,7 +75,7 @@ build do
   bundle "exec rake assets:precompile", :env => assets_precompile_env
 
   # Tear down now that the assets:precompile is done.
-  command "rm config/gitlab.yml config/database.yml"
+  command "rm config/gitlab.yml config/database.yml .secret"
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   command "rm -rf log tmp public/uploads"
