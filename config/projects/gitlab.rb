@@ -26,6 +26,7 @@ build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
 override :ruby, version: '2.0.0-p451'
+override :rubygems, version: '2.2.1'
 
 # creates required build directories
 dependency "preparation"
