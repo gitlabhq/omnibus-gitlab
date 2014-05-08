@@ -1,3 +1,12 @@
+6.9.0
+- Make SSH port in clone URLs configurable (Julien Pivotto)
+- Fix default Postgres port for non-packaged DBMS (Drew Blessing)
+- Add migration instructions coming from an existing GitLab installation (Goni Zahavy)
+
+6.8.1
+- Use gitlab-rails 6.8.1
+
+6.8.0
 - MySQL client support (EE only)
 - Update to omnibus-ruby 3.0
 - Update omnibus-software (e.g. Postgres to 9.2.8)
