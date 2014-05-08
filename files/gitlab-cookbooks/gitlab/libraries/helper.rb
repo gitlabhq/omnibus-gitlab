@@ -87,7 +87,7 @@ end
 module SingleQuoteHelper
 
   def single_quote(string)
-   "'#{string}'" if not string.nil?
+   "'#{string}'" unless string.nil?
   end
 
 end
