@@ -2,6 +2,7 @@
 - Make SSH port in clone URLs configurable (Julien Pivotto)
 - Fix default Postgres port for non-packaged DBMS (Drew Blessing)
 - Add migration instructions coming from an existing GitLab installation (Goni Zahavy)
+- Add a gitlab.yml conversion support script
 
 6.8.1
 - Use gitlab-rails 6.8.1
