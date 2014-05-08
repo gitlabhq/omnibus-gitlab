@@ -45,9 +45,13 @@ sudo yum install python-pip
 sudo pip install awscli
 ```
 
-# Make sure sendmail is installed; for Debian 7
+# Make sure mail is installed
 ```shell
-sudo apt-get install sendmail-bin
+# Ubuntu / Debian
+sudo apt-get install mailutils
+
+# Centos
+sudo yum install mail
 ```
 
 As omnibus-build user:
@@ -61,7 +65,7 @@ sudo su - omnibus-build
 - Test email delivery:
 
 ```shell
-echo "Subject: testing from $(uname -n)" | sendmail $(whoami)
+date | mail -s "testing from $(uname -n)" $(whoami)
 ```
 
 - Configure aws credentials

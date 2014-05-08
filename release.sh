@@ -15,7 +15,4 @@ fi
 
 # We assume that email to the current system user will somehow reach the right
 # human eyes
-sendmail $(whoami) <<EOF
-Subject: ${subject}
-$(tail ${build}.log)
-EOF
+tail ${build}.log | mail -s "${subject}" $(whoami)
