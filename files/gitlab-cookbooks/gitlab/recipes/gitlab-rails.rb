@@ -77,6 +77,7 @@ end
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"
+  helpers SingleQuoteHelper
   owner "root"
   group "root"
   mode "0644"

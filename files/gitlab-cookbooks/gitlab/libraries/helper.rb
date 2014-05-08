@@ -83,3 +83,11 @@ class OmnibusHelper
   end
 
 end
+
+module SingleQuoteHelper
+
+  def single_quote(string)
+   "'#{string}'" if not string.nil?
+  end
+
+end
