@@ -64,7 +64,7 @@ build do
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).
   command "git apply #{aato_patch} || (git apply -R #{aato_patch} && git apply #{aato_patch})",
-    :cwd => "#{install_dir}/embedded/service/gem/ruby/1.9.1/gems/acts-as-taggable-on-2.4.1"
+    :cwd => "#{install_dir}/embedded/service/gem/ruby/2.0.0/gems/acts-as-taggable-on-2.4.1"
   rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
   # Tear down now that the assets:precompile is done.
   command "rm config/gitlab.yml config/database.yml"
