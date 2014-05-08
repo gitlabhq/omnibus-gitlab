@@ -25,6 +25,8 @@ install_path    "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
+override :ruby, version: '2.0.0-p451'
+
 # creates required build directories
 dependency "preparation"
 

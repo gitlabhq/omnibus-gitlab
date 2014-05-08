@@ -31,6 +31,10 @@ version "1.9.3-p484" do
   source md5: '8ac0dee72fe12d75c8b2d0ef5d0c2968'
 end
 
+version "2.0.0-p451" do
+  source md5: '9227787a9636551f1749ee8394b5ffe5'
+end
+
 version "2.1.1" do
   source md5: 'e57fdbb8ed56e70c43f39c79da1654b2'
 end
