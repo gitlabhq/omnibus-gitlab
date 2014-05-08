@@ -55,22 +55,32 @@ build do
   # load the Rails environment.
   command "cp config/gitlab.yml.example config/gitlab.yml"
   command "cp config/database.yml.postgresql config/database.yml"
+
   # There is a bug in the acts-as-taggable-on gem that makes
   # rake assets:precompile check for a database connection. We do not have a
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
   aato_patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).
   command "git apply #{aato_patch} || (git apply -R #{aato_patch} && git apply #{aato_patch})",
-    :cwd => "#{install_dir}/embedded/service/gem/ruby/1.9.1/gems/acts-as-taggable-on-2.4.1"
-  rake "assets:precompile", :env => {"RAILS_ENV" => "production"}
+    :cwd => "#{install_dir}/embedded/service/gem/ruby/2.0.0/gems/acts-as-taggable-on-2.4.1"
+
+  assets_precompile_env = {
+    "RAILS_ENV" => "production",
+    "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}"
+  }
+  bundle "exec rake assets:precompile", :env => assets_precompile_env
+
   # Tear down now that the assets:precompile is done.
   command "rm config/gitlab.yml config/database.yml"
 
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
+  # Remove directories that will be created by `gitlab-ctl reconfigure`
   command "rm -rf log tmp public/uploads"
+
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
 
   # Create a wrapper for the rake tasks of the Rails app
