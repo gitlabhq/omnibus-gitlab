@@ -1,3 +1,11 @@
+6.8.2
+- Fix Git CRLF bug
+- Use gitlab-rails 6.8.2
+
+6.8.1
+- Use gitlab-rails 6.8.1
+
+6.8.0
 - MySQL client support (EE only)
 - Update to omnibus-ruby 3.0
 - Update omnibus-software (e.g. Postgres to 9.2.8)
