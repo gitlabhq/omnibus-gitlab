@@ -7,7 +7,7 @@ PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("pla
 build:
 	OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT}
 
-release: no_changes on_tag purge build move_to_platform_dir sync
+do_release: no_changes on_tag purge build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD

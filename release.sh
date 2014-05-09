@@ -4,7 +4,7 @@
 build="$(date '+%s')-$$"
 
 # Do the build and capture its output in a .log file
-make release 2>&1 | tee -a ${build}.log
+make do_release 2>&1 | tee -a ${build}.log
 
 # Check the exit status of `make`, not `tee`
 if [[ ${PIPESTATUS[0]} -eq 0 ]]; then
