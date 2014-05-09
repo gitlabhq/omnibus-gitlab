@@ -6,6 +6,7 @@
 - Correct default gravatar configuration (#112) (Julien Pivotto)
 - Update Ruby to 2.0.0p451
 - Fix name clash between release.sh and `make release`
+- Fix Git CRLF bug
 
 6.8.1
 - Use gitlab-rails 6.8.1
