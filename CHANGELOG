@@ -1,3 +1,7 @@
+6.8.1-ee.omnibus
+- Update gitlab-rails to v6.8.1-ee
+
+6.8.0-ee.omnibus
 - MySQL client support (EE only)
 - Update to omnibus-ruby 3.0
 - Update omnibus-software (e.g. Postgres to 9.2.8)
