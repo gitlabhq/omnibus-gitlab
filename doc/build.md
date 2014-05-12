@@ -19,7 +19,7 @@ sudo ufw enable
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
 
 # Install dependencies
-sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential
+sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential cmake
 sudo gem install --no-ri --no-rdoc bundler
 
 # Create the build user
