@@ -380,6 +380,70 @@ sudo gitlab-rake gitlab:setup
 
 This is a destructive command; do not run it on an existing database!
 
+## Using an existing Passenger/Nginx installation
+
+In some cases you may want to host GitLab using an existing Passenger/Nginx
+installation but still have the convenience of updating and installing using
+the omnibus packages.
+
+First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
+Nginx and Unicorn:
+
+```ruby
+# Disable the built-in nginx
+nginx['enable'] = false
+
+# Disable the built-in unicorn
+unicorn['enable'] = false
+```
+
+Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+Then, in your custom Passenger/Nginx installation, create the following site
+configuration file:
+
+```
+server {
+  listen *:80;
+  server_name git.yourdomain.com;
+  server_tokens off;
+  root /opt/gitlab/embedded/service/gitlab-rails/public;
+
+  client_max_body_size 250m;
+
+  access_log  /var/log/gitlab/nginx/gitlab_access.log;
+  error_log   /var/log/gitlab/nginx/gitlab_error.log;
+
+  # Ensure Passenger uses the bundled Ruby version
+  passenger_ruby /opt/gitlab/embedded/bin/ruby;
+
+  # Correct the $PATH variable to included packaged executables
+  passenger_set_cgi_param PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
+
+  # Make sure Passenger runs as the correct user and group to
+  # prevent permission issues
+  passenger_user git;
+  passenger_group git;
+
+  # Enable Passenger & keep at least one instance running at all times
+  passenger_enabled on;
+  passenger_min_instances 1;
+
+  error_page 502 /502.html;
+}
+```
+
+For a typical Passenger installation this file should probably
+be located at `/etc/nginx/sites-available/gitlab` and symlinked to
+`/etc/nginx/sites-enabled/gitlab`.
+
+Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
+(although this could be enabled) this file is mostly identical to the
+[bundled Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb).
+
+Don't forget to restart Nginx to load the new configuration (on Debian-based
+systems `sudo service nginx restart`).
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
