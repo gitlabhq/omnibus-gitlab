@@ -72,7 +72,7 @@ system.
 
 ## Updating
 
-For update instructions, see [the update guide](doc/update.md).
+Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
 
 ## Starting and stopping
 
@@ -391,10 +391,6 @@ after installing omnibus-gitlab: they will either conflict with or be
 overwritten by future updates. If you want to run a custom version of GitLab
 you can [build your own package](doc/build.md) or use [another installation
 method][CE README].
-
-## Upgrading
-
-Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
 
 ## Acknowledgments
 
