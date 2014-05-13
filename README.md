@@ -72,7 +72,7 @@ system.
 
 ## Updating
 
-For update instructions, see [the update guide](doc/update.md).
+Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
 
 ## Starting and stopping
 
