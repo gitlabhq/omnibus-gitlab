@@ -22,6 +22,7 @@ gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 repositories_path = node['gitlab']['gitlab-rails']['gitlab_shell_repos_path']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
+authorized_keys = File.join(ssh_dir, "authorized_keys")
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 
 # Create directories because the git_user does not own its home directory
@@ -36,6 +37,12 @@ directory ssh_dir do
   group git_group
   mode "0700"
   recursive true
+end
+
+file authorized_keys do
+  owner git_user
+  group git_group
+  mode "0600"
 end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
@@ -63,16 +70,8 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
     :user => git_user,
     :api_url => node['gitlab']['gitlab-rails']['internal_api_url'],
     :repositories_path => repositories_path,
-    :authorized_keys => File.join(ssh_dir, "authorized_keys"),
+    :authorized_keys => authorized_keys,
     :redis_port => node['gitlab']['redis']['port'],
     :log_file => File.join(log_directory, "gitlab-shell.log")
   )
-  notifies :run, "execute[bin/install]"
-end
-
-execute "bin/install" do
-  cwd gitlab_shell_dir
-  user git_user
-  group git_group
-  action :nothing
 end
