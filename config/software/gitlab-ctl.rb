@@ -61,4 +61,7 @@ done
   end
 
   command "chmod 755 #{install_dir}/bin/gitlab-ctl"
+
+  # additional omnibus-ctl commands
+  command "#{install_dir}/embedded/bin/rsync -a ./ #{install_dir}/embedded/service/omnibus-ctl/"
 end
