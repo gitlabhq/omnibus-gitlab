@@ -437,6 +437,13 @@ For a typical Passenger installation this file should probably
 be located at `/etc/nginx/sites-available/gitlab` and symlinked to
 `/etc/nginx/sites-enabled/gitlab`.
 
+To ensure that user uploads are accessible your Nginx user (usually `www-data`)
+should be added to the `git` group. This can be done using the following command:
+
+```shell
+sudo usermod -aG git www-data
+```
+
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) this file is mostly identical to the
 [bundled Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb).
