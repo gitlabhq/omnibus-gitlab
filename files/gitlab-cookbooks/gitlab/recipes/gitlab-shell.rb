@@ -29,6 +29,7 @@ log_directory = node['gitlab']['gitlab-shell']['log_directory']
 directory repositories_path do
   owner git_user
   group git_group
+  mode "2770"
   recursive true
 end
 

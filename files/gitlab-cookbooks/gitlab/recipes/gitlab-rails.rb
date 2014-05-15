@@ -98,7 +98,7 @@ end
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
   owner node['gitlab']['user']['username']
   group node['gitlab']['user']['group']
-  mode "0700"
+  mode "0750"
   recursive true
 end
 
