@@ -63,6 +63,10 @@ server {
   # if a file, which is not found in the root folder is requested,
   # then the proxy pass the request to the upsteam (gitlab unicorn)
   location @gitlab {
+    # If you use https make sure you disable gzip compression 
+    # to be safe against BREACH attack
+    <%= 'gzip off;' if @https %>
+
     proxy_read_timeout 300; # Some requests take more than 30 seconds.
     proxy_connect_timeout 300; # Some requests take more than 30 seconds.
     proxy_redirect     off;
@@ -73,6 +77,17 @@ server {
     proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
 
     proxy_pass http://gitlab;
+  }
+
+  # Enable gzip compression as per rails guide: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+  # WARNING: If you are using relative urls do remove the block below
+  # See config/application.rb under "Relative url support" for the list of
+  # other files that need to be changed for relative url support
+  location ~ ^/(assets)/  {
+    root /home/git/gitlab/public;
+    gzip_static on; # to serve pre-gzipped version
+    expires max;
+    add_header Cache-Control public;
   }
 
   error_page 502 /502.html;
