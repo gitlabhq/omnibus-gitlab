@@ -16,7 +16,6 @@ on_tag:
 	git describe --exact-match
 
 purge:
-	bin/omnibus clean --purge ${PROJECT}
 	mkdir -p pkg
 	(cd pkg && find . -delete)
 
