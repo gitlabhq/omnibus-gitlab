@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +32,7 @@ build do
            "--prefix=#{install_dir}/embedded",
            "--with-http_ssl_module",
            "--with-http_stub_status_module",
+           "--with-http_gzip_static_module",
            "--with-ipv6",
            "--with-debug",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
