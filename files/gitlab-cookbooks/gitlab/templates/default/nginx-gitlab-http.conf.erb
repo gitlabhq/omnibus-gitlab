@@ -42,8 +42,8 @@ server {
   ssl on;
   ssl_certificate <%= @ssl_certificate %>;
   ssl_certificate_key <%= @ssl_certificate_key %>;
-  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-  ssl_prefer_server_ciphers on;
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   <% end %>
 
   # Increase this if you want to upload large attachments
