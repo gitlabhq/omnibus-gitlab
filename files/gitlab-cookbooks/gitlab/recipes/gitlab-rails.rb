@@ -114,6 +114,17 @@ end
   end
 end
 
+# Make schema.rb writable for when we run `rake db:migrate`
+file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
+  owner node['gitlab']['user']['username']
+end
+
+# Only run `rake db:migrate` when the gitlab-rails version has changed
+remote_file File.join(gitlab_rails_dir, 'VERSION') do
+  source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
+  notifies :run, 'execute[migrate database]'
+end
+
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
 
 execute "clear the gitlab-rails cache" do
