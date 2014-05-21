@@ -10,6 +10,7 @@
 - Enable the 'sign_in_text' field in gitlab.yml (Mike Nestor)
 - Use more fancy SSL ciphers for Nginx
 - Use sane LDAP defaults
+- Clear the Rails cache after modifying gitlab.yml
 
 6.8.1
 - Use gitlab-rails 6.8.1
