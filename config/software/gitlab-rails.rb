@@ -83,7 +83,7 @@ build do
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
   # mysql-postgresql-converter.)
-  cp "db/schema.rb db/schema.rb.bundled"
+  command "cp db/schema.rb db/schema.rb.bundled"
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
