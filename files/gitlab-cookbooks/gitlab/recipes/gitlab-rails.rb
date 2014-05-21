@@ -83,6 +83,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
+  notifies :run, "execute[clear the gitlab-rails cache]"
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
@@ -114,3 +115,8 @@ end
 end
 
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
+
+execute "clear the gitlab-rails cache" do
+  command "/opt/gitlab/bin/gitlab-rake cache:clear"
+  action :nothing
+end
