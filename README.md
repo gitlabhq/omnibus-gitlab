@@ -70,6 +70,23 @@ installing omnibus-gitlab on an unsupported platform. Solution: double check on
 the download page whether you downloaded a package for the correct operating
 system.
 
+#### TCP ports for GitLab services are already taken
+
+By default, the services in omnibus-gitlab are using the following TCP ports:
+Redis (6379), PostgreSQL (5432) and Unicorn (8080) listen on 127.0.0.1. Nginx
+listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
+
+The ports for Redis, PostgreSQL and Unicorn can be overriden in
+`/etc/gitlab/gitlab.rb` as follows:
+
+```ruby
+redis['port'] = 1234
+postgresql['port'] = 2345
+unicorn['port'] = 3456
+```
+
+For Nginx port changes please see the section on enabling HTTPS below.
+
 ## Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
