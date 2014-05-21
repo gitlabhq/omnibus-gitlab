@@ -16,7 +16,7 @@ paths_to_be_protected = [
 ]
 
 unless Rails.env.test?
-  Rack::Attack.throttle('protected paths', limit: <%= node['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] %>, period: <%= node['gitlab']['gitlab-rails']['rate_limit_period'] %>.seconds) do |req|
+  Rack::Attack.throttle('protected paths', limit: <%= @rate_limit_requests_per_period %>, period: <%= @rate_limit_period %>.seconds) do |req|
     req.ip if paths_to_be_protected.include?(req.path) && req.post?
   end
 end
