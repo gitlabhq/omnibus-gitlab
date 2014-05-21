@@ -74,6 +74,15 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   restarts dependent_services
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/resque.yml")
+  source "resque.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  restarts dependent_services
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"

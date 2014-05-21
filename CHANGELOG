@@ -12,6 +12,7 @@
 - Use sane LDAP defaults
 - Clear the Rails cache after modifying gitlab.yml
 - Only run `rake db:migrate` when the gitlab-rails version has changed
+- Ability to change the Redis port
 
 6.8.1
 - Use gitlab-rails 6.8.1
