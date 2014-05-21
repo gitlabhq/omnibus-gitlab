@@ -119,12 +119,12 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_enabled %>
-    host: '<%= @ldap_host %>'
+    host: <%= single_quote(@ldap_host) %>
     port: <%= @ldap_port %>
-    uid: '<%= @ldap_uid %>'
-    method: '<%= @ldap_method %>' # "tls" or "ssl" or "plain"
-    bind_dn: '<%= @ldap_bind_dn %>'
-    password: '<%= @ldap_password %>'
+    uid: <%= single_quote(@ldap_uid) %>
+    method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
+    bind_dn: <%= single_quote(@ldap_bind_dn) %>
+    password: <%= single_quote(@ldap_password) %>
     # If allow_username_or_email_login is enabled, GitLab will ignore everything
     # after the first '@' in the LDAP username submitted by the user on login.
     #
@@ -140,20 +140,20 @@ production: &base
     #
     #   Ex. ou=People,dc=gitlab,dc=example
     #
-    base: '<%= @ldap_base %>'
+    base: <%= single_quote(@ldap_base) %>
 
     # Filter LDAP users
     #
     #   Format: RFC 4515
     #   Ex. (employeeType=developer)
     #
-    user_filter: '<%= @ldap_user_filter %>'
+    user_filter: <%= single_quote(@ldap_user_filter) %>
 
     # Base where we can search for groups
     #
     #   Ex. ou=Groups,dc=gitlab,dc=example
     #
-    group_base: '<%= @ldap_group_base %>'
+    group_base: <%= single_quote(@ldap_group_base) %>
 
   ## OmniAuth settings
   omniauth:
