@@ -16,6 +16,7 @@ on_tag:
 	git describe --exact-match
 
 purge:
+	rm -rf /var/cache/omnibus/src/gitlab-rails
 	mkdir -p pkg
 	(cd pkg && find . -delete)
 
