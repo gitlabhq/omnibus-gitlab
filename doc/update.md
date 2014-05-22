@@ -6,7 +6,7 @@ Please make sure you are viewing this file on the master branch.
 
 ![documentation version](doc/images/omnibus-documentation-version-update-md.png)
 
-## Updating from GitLab 6.6.x or higher to 6.8.x
+## Updating from GitLab 6.6.x or higher to 6.9.x
 
 First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
@@ -22,9 +22,9 @@ sudo gitlab-rake gitlab:backup:create
 
 # Install the latest package
 # Ubuntu:
-sudo dpkg -i gitlab_6.7.y-omnibus.xxx.deb
+sudo dpkg -i gitlab_6.9.y-omnibus.xxx.deb
 # CentOS:
-sudo rpm -Uvh gitlab-6.7.y_xxx.rpm
+sudo rpm -Uvh gitlab-6.9.y_xxx.rpm
 
 # Reconfigure GitLab (includes database migrations)
 sudo gitlab-ctl reconfigure
