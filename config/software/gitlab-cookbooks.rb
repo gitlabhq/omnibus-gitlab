@@ -20,6 +20,8 @@ name "gitlab-cookbooks"
 
 dependency "rsync"
 
+always_build true
+
 source :path => File.expand_path("files/gitlab-cookbooks", Omnibus.project_root)
 
 build do
