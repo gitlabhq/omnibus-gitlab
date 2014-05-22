@@ -44,6 +44,9 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
+redis_not_listening = OmnibusHelper.not_listening("redis")
+postgresql_not_listening = OmnibusHelper.not_listening("postgresql")
+
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
   source "secret_token.erb"
@@ -92,7 +95,9 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
-  notifies :run, 'execute[clear the gitlab-rails cache]'
+  unless redis_not_listening
+    notifies :run, 'execute[clear the gitlab-rails cache]'
+  end
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
@@ -131,8 +136,8 @@ end
 # Only run `rake db:migrate` when the gitlab-rails version has changed
 remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
-  notifies :run, 'execute[migrate database]'
-  notifies :run, 'execute[clear the gitlab-rails cache]'
+  notifies :run, 'execute[migrate database]' unless postgresql_not_listening
+  notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
 end
 
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
