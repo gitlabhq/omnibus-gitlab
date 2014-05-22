@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "f0a32c69494a1d4dda4c5ec8a7f3b94bc7ceed65" # 6.9.0
+default_version "1a72a2ef4ccb5ae9864647fc980ccebb2b420a33" # 6.9.0-ee
 
 EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
 
@@ -31,7 +31,7 @@ dependency "libicu"
 dependency "postgresql"
 dependency "mysql-client" if EE
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
+source :git => "git@gitlab.com:subscribers/gitlab-ee.git"
 
 env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
