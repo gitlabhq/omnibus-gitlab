@@ -87,6 +87,21 @@ unicorn['port'] = 3456
 
 For Nginx port changes please see the section on enabling HTTPS below.
 
+### Uninstalling omnibus-gitlab
+
+To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
+
+```
+# Stop gitlab and remove its supervision process
+sudo gitlab-ctl uninstall
+
+# Debian/Ubuntu
+sudo dpkg -r gitlab
+
+# Redhat/Centos
+sudo rpm -e gitlab
+```
+
 ## Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
