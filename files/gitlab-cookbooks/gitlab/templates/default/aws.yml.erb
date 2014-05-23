@@ -1,0 +1,21 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+production:
+  access_key_id: <%= @aws_access_key_id %>
+  secret_access_key: <%= @aws_secret_access_key %>
+  bucket: <%= @aws_bucket %>
+  region: <%= @aws_region %>
+
+development:
+  access_key_id: AKIA1111111111111UA
+  secret_access_key: secret
+  bucket: mygitlab.development.us
+  region: us-east-1
+
+test:
+  access_key_id: AKIA1111111111111UA
+  secret_access_key: secret
+  bucket: mygitlab.test.us
+  region: us-east-1

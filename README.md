@@ -426,6 +426,20 @@ redis['uid'] = 1236
 redis['gid'] = 1236
 ```
 
+## Storing user attachments on Amazon S3
+
+Instead of using local storage you can also store the user attachments for your
+GitLab instance on Amazon S3.
+
+```
+# /etc/gitlab/gitlab.rb
+gitlab_rails['aws_enable'] = true
+gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
+gitlab_rails['aws_secret_access_key'] = 'secret'
+gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
+gitlab_rails['aws_region'] = 'us-east-1'
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
