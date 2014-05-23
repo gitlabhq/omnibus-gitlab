@@ -24,13 +24,6 @@ gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
-# in gitlab.yml, use the main gitlab username if the admin did
-# not specifically set gitlab_user
-if node['gitlab']['gitlab-rails']['gitlab_user'] ==
-   node.default['gitlab']['gitlab-rails']['gitlab_user']
-  node.set['gitlab']['gitlab-rails']['gitlab_user'] = node['gitlab']['user']['username']
-end
-
 [
   gitlab_rails_dir,
   gitlab_rails_etc_dir,
