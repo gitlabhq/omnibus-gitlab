@@ -24,7 +24,7 @@ group redis_user do
   gid node['gitlab']['redis']['gid']
 end
 
-user do
+user redis_user do
   uid node['gitlab']['redis']['uid']
   gid redis_user
   system true
