@@ -76,10 +76,20 @@ class OmnibusHelper
     File.symlink?("/opt/gitlab/service/#{service_name}") && service_up?(service_name)
   end
 
+  def self.not_listening?(service_name)
+    File.exists?("/opt/gitlab/service/#{service_name}/down") && service_down?(service_name)
+  end
+
   def self.service_up?(service_name)
     o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
     o.run_command
     o.exitstatus == 0
+  end
+
+  def self.service_down?(service_name)
+    o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+    o.run_command
+    o.exitstatus == 3
   end
 
 end
