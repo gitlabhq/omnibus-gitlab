@@ -440,6 +440,23 @@ gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
 gitlab_rails['aws_region'] = 'us-east-1'
 ```
 
+## Sending application email via SMTP
+
+If you would rather send email via an SMTP server instead of via Sendmail, add
+the following configuration information to `/etc/gitlab/gitlab.rb` and run
+`gitlab-ctl reconfigure`.
+
+```
+gitlab_rails['smtp_enable'] = false
+gitlab_rails['smtp_address'] = "smtp.server"
+gitlab_rails['smtp_port'] = 456
+gitlab_rails['smtp_user_name'] = "smtp user"
+gitlab_rails['smtp_password'] = "smtp password"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).

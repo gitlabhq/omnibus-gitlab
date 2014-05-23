@@ -119,6 +119,15 @@ default['gitlab']['gitlab-rails']['db_host'] = "localhost"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 
+default['gitlab']['gitlab-rails']['smtp_enable'] = false
+default['gitlab']['gitlab-rails']['smtp_address'] = nil
+default['gitlab']['gitlab-rails']['smtp_port'] = nil
+default['gitlab']['gitlab-rails']['smtp_user_name'] = nil
+default['gitlab']['gitlab-rails']['smtp_password'] = nil
+default['gitlab']['gitlab-rails']['smtp_domain'] = nil
+default['gitlab']['gitlab-rails']['smtp_authentication'] = "login"
+default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
+
 ####
 # Unicorn
 ####
