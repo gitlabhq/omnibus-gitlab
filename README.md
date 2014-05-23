@@ -285,6 +285,8 @@ redis['gid'] = 1236
 Instead of using local storage you can also store the user attachments for your
 GitLab instance on Amazon S3.
 
+__This currently only works if you are packaging a forked version of GitLab.__
+
 ```
 # /etc/gitlab/gitlab.rb
 gitlab_rails['aws_enable'] = true
