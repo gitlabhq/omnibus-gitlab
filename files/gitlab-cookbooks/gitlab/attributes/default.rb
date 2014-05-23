@@ -106,6 +106,10 @@ default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = 22
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
+default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
+default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
+default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
+default['gitlab']['gitlab-rails']['extra_sign_in_text'] = nil
 
 default['gitlab']['gitlab-rails']['aws_enable'] = false
 default['gitlab']['gitlab-rails']['aws_access_key_id'] = nil

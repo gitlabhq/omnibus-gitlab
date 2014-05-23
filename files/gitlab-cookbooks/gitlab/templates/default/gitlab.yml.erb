@@ -245,11 +245,11 @@ production: &base
 
   extra:
     ## Google analytics. Uncomment if you want it
-    # google_analytics_id: '_your_tracking_id'
+    google_analytics_id: <%= single_quote(@extra_google_analytics_id) %>
 
     ## Piwik analytics.
-    # piwik_url: '_your_piwik_url'
-    # piwik_site_id: '_your_piwik_site_id'
+    piwik_url: <%= single_quote(@extra_piwik_url) %>
+    piwik_site_id: <%= single_quote(@extra_piwik_site_id) %>
 
     <% if @extra_sign_in_text %>
     ## Text under sign-in page (Markdown enabled)
