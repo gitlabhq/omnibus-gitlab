@@ -99,6 +99,20 @@ template_symlink File.join(gitlab_rails_etc_dir, "aws.yml") do
   end
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
+  link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
+  helpers SingleQuoteHelper
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['gitlab-rails'].to_hash)
+  restarts dependent_services
+
+  unless node['gitlab']['gitlab-rails']['smtp_enable']
+    action :delete
+  end
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"

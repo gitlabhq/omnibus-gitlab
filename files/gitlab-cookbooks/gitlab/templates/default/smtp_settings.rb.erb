@@ -1,0 +1,17 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+if Rails.env.production?
+  Gitlab::Application.config.action_mailer.delivery_method = :smtp
+
+  ActionMailer::Base.smtp_settings = {
+    address: <%= single_quote(@smtp_address) %>,
+    port: <%= @smtp_port %>,
+    user_name: <%= single_quote(@smtp_user_name) %>,
+    password: <%= single_quote(@smtp_password) %>,
+    domain: <%= single_quote(@smtp_domain) %>,
+    authentication: :<%= @smtp_authentication %>,
+    enable_starttls_auto: <%= @smtp_enable_starttls_auto %>
+  }
+end
