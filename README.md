@@ -171,6 +171,21 @@ git_data_dir "/mnt/nas/git-data"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Changing the name of the Git user / group
+
+By default, omnibus-gitlab uses the user name `git` for Git gitlab-shell login,
+ownership of the Git data itself, and SSH URL generation on the web interface.
+Similarly, `git` group is used for group ownership of the Git data.  You can
+change the user and group by adding the following lines to
+`/etc/gitlab/gitlab.rb`.
+
+```ruby
+user['username'] = "gitlab"
+user['group'] = "gitlab"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ### Setting up LDAP sign-in
 
 If you have an LDAP directory service such as Active Directory, you can configure

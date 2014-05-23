@@ -1,6 +1,7 @@
 7.0.0
 - Specify numeric user / group identifiers
 - Support AWS S3 attachment storage
+- Support changing the name of the "git" user / group (Michael Fenn)
 
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)
