@@ -86,6 +86,19 @@ template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   restarts dependent_services
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "aws.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/aws.yml")
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['gitlab-rails'].to_hash)
+  restarts dependent_services
+
+  unless node['gitlab']['gitlab-rails']['aws_enable']
+    action :delete
+  end
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"
