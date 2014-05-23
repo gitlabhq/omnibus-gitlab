@@ -434,10 +434,10 @@ GitLab instance on Amazon S3.
 ```
 # /etc/gitlab/gitlab.rb
 gitlab_rails['aws_enable'] = true
-gitlab_rails['aws_access_key_id'] = AKIA1111111111111UA
-gitlab_rails['aws_secret_access_key'] = secret
-gitlab_rails['aws_bucket'] = my_gitlab_bucket
-gitlab_rails['aws_region'] = us-east-1
+gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
+gitlab_rails['aws_secret_access_key'] = 'secret'
+gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
+gitlab_rails['aws_region'] = 'us-east-1'
 ```
 
 ## Building your own package
