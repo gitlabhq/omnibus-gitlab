@@ -28,6 +28,8 @@ default['gitlab']['bootstrap']['enable'] = true
 # The username for the chef services user
 default['gitlab']['user']['username'] = "git"
 default['gitlab']['user']['group'] = "git"
+default['gitlab']['user']['uid'] = nil
+default['gitlab']['user']['gid'] = nil
 # The shell for the chef services user
 default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
@@ -151,6 +153,8 @@ default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
 default['gitlab']['postgresql']['svlogd_size'] = 1000000
 default['gitlab']['postgresql']['svlogd_num'] = 10
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
+default['gitlab']['postgresql']['uid'] = nil
+default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
@@ -191,6 +195,8 @@ default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
 default['gitlab']['redis']['svlogd_size'] = 1000000
 default['gitlab']['redis']['svlogd_num'] = 10
 default['gitlab']['redis']['username'] = "gitlab-redis"
+default['gitlab']['redis']['uid'] = nil
+default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['port'] = 6379

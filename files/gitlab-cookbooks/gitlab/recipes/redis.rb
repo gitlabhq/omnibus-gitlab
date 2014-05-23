@@ -18,8 +18,15 @@
 
 redis_dir = node['gitlab']['redis']['dir']
 redis_log_dir = node['gitlab']['redis']['log_directory']
+redis_user = node['gitlab']['redis']['username']
 
-user node['gitlab']['redis']['username'] do
+group redis_user do
+  gid node['gitlab']['redis']['gid']
+end
+
+user do
+  uid node['gitlab']['redis']['uid']
+  gid redis_user
   system true
   shell node['gitlab']['redis']['shell']
   home node['gitlab']['redis']['home']

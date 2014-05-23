@@ -21,12 +21,15 @@ gitlab_group = node['gitlab']['user']['group']
 gitlab_home = node['gitlab']['user']['home']
 
 # Create the group for the GitLab user
-group gitlab_group
+group gitlab_group do
+  gid node['gitlab']['user']['gid']
+end
 
 # Create the GitLab user
 user gitlab_username do
   shell node['gitlab']['user']['shell']
   home gitlab_home
+  uid node['gitlab']['user']['uid']
   gid gitlab_group
 end
 
