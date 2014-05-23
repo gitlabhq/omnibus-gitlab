@@ -3,6 +3,7 @@
 - Support AWS S3 attachment storage
 - Send application email via SMTP
 - Support changing the name of the "git" user / group (Michael Fenn)
+- Configure omniauth in gitlab.yml
 
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)
