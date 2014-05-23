@@ -1,3 +1,6 @@
+7.0.0
+- Specify numeric user / group identifiers
+
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)
 - Fix default Postgres port for non-packaged DBMS (Drew Blessing)
