@@ -447,7 +447,7 @@ the following configuration information to `/etc/gitlab/gitlab.rb` and run
 `gitlab-ctl reconfigure`.
 
 ```
-gitlab_rails['smtp_enable'] = false
+gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.server"
 gitlab_rails['smtp_port'] = 456
 gitlab_rails['smtp_user_name'] = "smtp user"
