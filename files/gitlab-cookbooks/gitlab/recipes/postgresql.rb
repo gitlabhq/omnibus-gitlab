@@ -150,7 +150,8 @@ db_name = "gitlabhq_production"
 sql_user        = node['gitlab']['postgresql']['sql_user']
 sql_user_passwd = node['gitlab']['postgresql']['sql_password']
 
-execute "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\"" do
+execute "create #{sql_user} database user" do
+  command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\""
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.sql_user_exists? }
 end
