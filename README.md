@@ -266,6 +266,51 @@ Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
 since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
+### Specify numeric user and group identifiers
+
+Omnibus-gitlab creates users for GitLab, PostgreSQL and Redis. You can specify
+the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
+
+```ruby
+user['uid'] = 1234
+user['gid'] = 1234
+postgresql['uid'] = 1235
+postgresql['gid'] = 1235
+redis['uid'] = 1236
+redis['gid'] = 1236
+```
+
+### Storing user attachments on Amazon S3
+
+Instead of using local storage you can also store the user attachments for your
+GitLab instance on Amazon S3.
+
+```
+# /etc/gitlab/gitlab.rb
+gitlab_rails['aws_enable'] = true
+gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
+gitlab_rails['aws_secret_access_key'] = 'secret'
+gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
+gitlab_rails['aws_region'] = 'us-east-1'
+```
+
+### Sending application email via SMTP
+
+If you would rather send email via an SMTP server instead of via Sendmail, add
+the following configuration information to `/etc/gitlab/gitlab.rb` and run
+`gitlab-ctl reconfigure`.
+
+```
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.server"
+gitlab_rails['smtp_port'] = 456
+gitlab_rails['smtp_user_name'] = "smtp user"
+gitlab_rails['smtp_password'] = "smtp password"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ## Backups
 
 ### Creating an application backup
@@ -411,51 +456,6 @@ sudo gitlab-rake gitlab:setup
 ```
 
 This is a destructive command; do not run it on an existing database!
-
-## Specify numeric user and group identifiers
-
-Omnibus-gitlab creates users for GitLab, PostgreSQL and Redis. You can specify
-the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
-
-```ruby
-user['uid'] = 1234
-user['gid'] = 1234
-postgresql['uid'] = 1235
-postgresql['gid'] = 1235
-redis['uid'] = 1236
-redis['gid'] = 1236
-```
-
-## Storing user attachments on Amazon S3
-
-Instead of using local storage you can also store the user attachments for your
-GitLab instance on Amazon S3.
-
-```
-# /etc/gitlab/gitlab.rb
-gitlab_rails['aws_enable'] = true
-gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
-gitlab_rails['aws_secret_access_key'] = 'secret'
-gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
-gitlab_rails['aws_region'] = 'us-east-1'
-```
-
-## Sending application email via SMTP
-
-If you would rather send email via an SMTP server instead of via Sendmail, add
-the following configuration information to `/etc/gitlab/gitlab.rb` and run
-`gitlab-ctl reconfigure`.
-
-```
-gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "smtp.server"
-gitlab_rails['smtp_port'] = 456
-gitlab_rails['smtp_user_name'] = "smtp user"
-gitlab_rails['smtp_password'] = "smtp password"
-gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_enable_starttls_auto'] = true
-```
 
 ## Building your own package
 
