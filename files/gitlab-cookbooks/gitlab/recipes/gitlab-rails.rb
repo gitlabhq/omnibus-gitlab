@@ -44,8 +44,8 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
-redis_not_listening = OmnibusHelper.not_listening("redis")
-postgresql_not_listening = OmnibusHelper.not_listening("postgresql")
+redis_not_listening = OmnibusHelper.not_listening?("redis")
+postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
 
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
