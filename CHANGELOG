@@ -6,6 +6,7 @@
 - Configure omniauth in gitlab.yml
 - Expose more fields under 'extra' in gitlab.yml
 - Zero-downtime Unicorn restarts
+- Support changing the 'signin_enabled' option (Konstantinos Paliouras)
 
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)

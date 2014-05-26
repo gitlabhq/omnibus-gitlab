@@ -51,7 +51,7 @@ production: &base
     signup_enabled: <%= @gitlab_signup_enabled %>
     #
     # default: true - If set to false, standard login form won't be shown on the sign-in page
-    # signin_enabled: false
+    signin_enabled: <%= @gitlab_signin_enabled %>
 
 
     # Restrict setting visibility levels for non-admin users.
