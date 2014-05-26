@@ -21,12 +21,14 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 
 unicorn_listen_socket = node['gitlab']['unicorn']['socket']
+unicorn_pidfile = node['gitlab']['unicorn']['pidfile']
 unicorn_log_dir = node['gitlab']['unicorn']['log_directory']
 unicorn_socket_dir = File.dirname(unicorn_listen_socket)
 
 [
   unicorn_log_dir,
-  unicorn_socket_dir
+  unicorn_socket_dir,
+  File.dirname(unicorn_pidfile)
 ].each do |dir_name|
   directory dir_name do
     owner node['gitlab']['user']['username']
@@ -51,6 +53,19 @@ unicorn_config File.join(gitlab_rails_etc_dir, "unicorn.rb") do
   working_directory gitlab_rails_working_dir
   worker_processes node['gitlab']['unicorn']['worker_processes']
   preload_app true
+  stderr_path File.join(unicorn_log_dir, "unicorn_stderr.log")
+  stdout_path File.join(unicorn_log_dir, "unicorn_stdout.log")
+  pid unicorn_pidfile
+  before_fork <<-'EOS'
+    old_pid = "#{server.config[:pid]}.oldbin"
+    if old_pid != server.pid
+      begin
+        sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+        Process.kill(sig, File.read(old_pid).to_i)
+      rescue Errno::ENOENT, Errno::ESRCH
+      end
+    end
+  EOS
   owner "root"
   group "root"
   mode "0644"
@@ -59,6 +74,7 @@ end
 
 runit_service "unicorn" do
   down node['gitlab']['unicorn']['ha']
+  restart_command 2 # Restart Unicorn using SIGUSR2
   options({
     :log_directory => unicorn_log_dir
   }.merge(params))

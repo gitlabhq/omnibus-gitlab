@@ -5,6 +5,7 @@
 - Support changing the name of the "git" user / group (Michael Fenn)
 - Configure omniauth in gitlab.yml
 - Expose more fields under 'extra' in gitlab.yml
+- Zero-downtime Unicorn restarts
 
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)

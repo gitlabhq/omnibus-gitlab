@@ -146,6 +146,7 @@ default['gitlab']['unicorn']['worker_processes'] = 2
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/tmp/sockets/gitlab.socket'
+default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 64
 default['gitlab']['unicorn']['worker_timeout'] = 30
