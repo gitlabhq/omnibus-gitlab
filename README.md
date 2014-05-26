@@ -131,7 +131,13 @@ sudo gitlab-ctl restart
 It is also possible to start, stop or restart individual components.
 
 ```shell
-sudo gitlab-ctl restart unicorn
+sudo gitlab-ctl restart sidekiq
+```
+
+Unicorn supports zero-downtime reloads. These can be triggered as follows:
+
+```shell
+sudo gitlab-ctl hup unicorn
 ```
 
 ## Configuration
