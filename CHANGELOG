@@ -9,6 +9,9 @@
 - Support changing the 'signin_enabled' option (Konstantinos Paliouras)
 - Fix Nginx HTTP-to-HTTPS log configuration error (Konstantinos Paliouras)
 
+6.9.?
+- Fix Nginx HTTP-to-HTTPS log configuration error (Konstantinos Paliouras)
+
 6.9.0
 - Make SSH port in clone URLs configurable (Julien Pivotto)
 - Fix default Postgres port for non-packaged DBMS (Drew Blessing)
