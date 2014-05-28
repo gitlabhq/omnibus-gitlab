@@ -46,6 +46,12 @@ file authorized_keys do
   mode "0600"
 end
 
+# gitlab-shell 1.9.4 uses a lock file in the gitlab-shell root
+file File.join(gitlab_shell_dir, "authorized_keys.lock") do
+  owner git_user
+  group git_group
+end
+
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
 # git_user is valid.
 execute "chcon -t ssh_home_t #{ssh_dir}" do
