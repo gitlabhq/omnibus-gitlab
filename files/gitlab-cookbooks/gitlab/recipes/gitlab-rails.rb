@@ -71,6 +71,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   group "root"
   mode "0644"
   variables database_attributes
+  helpers SingleQuoteHelper
   restarts dependent_services
 end
 
