@@ -9,6 +9,7 @@
 - Support changing the 'signin_enabled' option (Konstantinos Paliouras)
 - Fix Nginx HTTP-to-HTTPS log configuration error (Konstantinos Paliouras)
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
+- Include Python and docutils for reStructuredText support
 
 6.9.?
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
