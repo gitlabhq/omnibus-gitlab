@@ -27,6 +27,7 @@ build_iteration 1
 
 override :ruby, version: '2.0.0-p451'
 override :rubygems, version: '2.2.1'
+override :postgresql, version: '9.3.4'
 
 # creates required build directories
 dependency "preparation"
