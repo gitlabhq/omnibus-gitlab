@@ -403,12 +403,6 @@ We remind you that `/etc/gitlab/gitlab.rb` should have file permissions `0600` b
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Using a non-packaged PostgreSQL database management server
-
-If you do do not want to use the packaged Postgres server you can configure an external one similar to configuring a MySQL server (shown above).
-Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
-Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
-
 ### Seed the database (fresh installs only)
 
 Omnibus-gitlab will not automatically seed your external database. Run the
@@ -419,6 +413,12 @@ sudo gitlab-rake gitlab:setup
 ```
 
 This is a destructive command; do not run it on an existing database!
+
+## Using a non-packaged PostgreSQL database management server
+
+If you do do not want to use the packaged Postgres server you can configure an external one similar to configuring a MySQL server (shown above).
+Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
+Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
 
 ## Building your own package
 
