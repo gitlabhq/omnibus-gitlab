@@ -29,6 +29,7 @@ dependency "curl"
 dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
+dependency "python-docutils"
 dependency "mysql-client" if EE
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
