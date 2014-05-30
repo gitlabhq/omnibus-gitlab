@@ -450,11 +450,9 @@ sudo /opt/gitlab/bin/gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
-## Using a non-packaged database management server
+## Using a MySQL database management server (Enterprise Edition only)
 
-If you do not want to use the built-in Postgres
-server of omnibus-gitlab or if you want to use MySQL (GitLab Enterprise Edition
-only) you can do so as follows.
+If you want to use MySQL and are using the **GitLab Enterprise Edition packages** please do the following:
 
 Important note: if you are connecting omnibus-gitlab to an existing GitLab
 database you should create a backup before attempting this procedure.
@@ -482,12 +480,16 @@ gitlab_rails['db_username'] = 'git'
 gitlab_rails['db_password'] = 'password'
 ```
 
-Parameters such as `db_adapter` correspond to `adapter` in `database.yml`; see
-the upstream GitLab examples for [Postgres][database.yml.postgresql] and
-[MySQL][database.yml.mysql].  We remind you that `/etc/gitlab/gitlab.rb` should
-have file permissions `0600` because it contains plaintext passwords.
+Parameters such as `db_adapter` correspond to `adapter` in `database.yml`; see the upstream GitLab for a [MySQL configuration example][database.yml.mysql].
+We remind you that `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains plaintext passwords.
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+## Using a non-packaged PostgreSQL database management server
+
+If you do do not want to use the packaged Postgres server you can configure an external one similar to configuring a MySQL server (shown above).
+Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
+Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
 
 ### Seed the database (fresh installs only)
 
