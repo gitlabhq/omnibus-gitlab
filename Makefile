@@ -40,7 +40,7 @@ move_ee_to_secret_dir:
 	  ; fi
 
 md5:
-	find pkg -type f -exec md5sum {} \;
+	find pkg -type f -exec md5sum {} \; -exec sha256sum {} \;
 
 s3_sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
