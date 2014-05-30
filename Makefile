@@ -27,13 +27,13 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-sync: remove_json move_ee_to_secret_dir md5 s3_sync
+sync: remove_json move_to_secret_dir md5 s3_sync
 
 remove_json:
 	find pkg/ -name '*.json' -delete
 
-move_ee_to_secret_dir:
-	if support/is_gitlab_ee.sh ; then \
+move_to_secret_dir:
+	if support/is_gitlab_ee.sh || support/is_gitlab_com.sh ; then \
 	  mv pkg ${SECRET_DIR} \
 	  && mkdir pkg \
 	  && mv ${SECRET_DIR} pkg/ \
