@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "aacd43d72dcb6d36834a055df52c283a6ce2ffa7" # 6.9.0.rc1
+default_version "504ca4789bb76dbe5ffbc9792bc4a96636fc7271"
 
 EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
 
@@ -32,7 +32,7 @@ dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
+source :git => "git@dev.gitlab.org:gitlab/gitlab-cloud.git"
 
 env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
