@@ -27,10 +27,7 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-sync: remove_json move_to_secret_dir md5 s3_sync
-
-remove_json:
-	find pkg/ -name '*.json' -delete
+sync: move_to_secret_dir md5 s3_sync
 
 move_to_secret_dir:
 	if support/is_gitlab_ee.sh || support/is_gitlab_com.sh ; then \
@@ -40,7 +37,7 @@ move_to_secret_dir:
 	  ; fi
 
 md5:
-	find pkg -type f -exec md5sum {} \; -exec sha256sum {} \;
+	find pkg -name '*.json' -exec cat {} \;
 
 s3_sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
