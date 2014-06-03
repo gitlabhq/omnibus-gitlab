@@ -11,7 +11,7 @@
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 - Include Python and docutils for reStructuredText support
 
-6.9.?
+6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 
 6.9.1
