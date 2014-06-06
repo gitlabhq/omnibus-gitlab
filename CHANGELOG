@@ -1,3 +1,8 @@
+# Omnibus-gitlab changelog
+
+The latest version of this file can be found at the master branch of the
+omnibus-gitlab repository.
+
 7.0.0
 - Specify numeric user / group identifiers
 - Support AWS S3 attachment storage
@@ -11,7 +16,7 @@
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 - Include Python and docutils for reStructuredText support
 
-6.9.?
+6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 
 6.9.1

@@ -101,7 +101,6 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
-  helpers SingleQuoteHelper
   owner "root"
   group "root"
   mode "0644"

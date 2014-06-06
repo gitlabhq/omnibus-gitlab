@@ -134,7 +134,7 @@ default['gitlab']['gitlab-rails']['smtp_port'] = nil
 default['gitlab']['gitlab-rails']['smtp_user_name'] = nil
 default['gitlab']['gitlab-rails']['smtp_password'] = nil
 default['gitlab']['gitlab-rails']['smtp_domain'] = nil
-default['gitlab']['gitlab-rails']['smtp_authentication'] = "login"
+default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 
 ####

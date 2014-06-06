@@ -62,6 +62,12 @@ You can login as an admin user with username `root` and password `5iveL!fe`.
 
 ### Common installation problems
 
+#### GitLab is unreachable in my browser
+
+Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
+`/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
+443 (HTTPS) might be closed on your GitLab server.
+
 #### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
 This happens when Runit has not been installed succesfully during `gitlab-ctl
