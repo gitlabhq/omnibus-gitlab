@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 - Include Python and docutils for reStructuredText support
 - Update Ruby to version 2.1.1
+- Update Git to version 2.0.0
 
 6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
