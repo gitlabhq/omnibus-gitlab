@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Fix Nginx HTTP-to-HTTPS log configuration error (Konstantinos Paliouras)
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
 - Include Python and docutils for reStructuredText support
+- Update Ruby to version 2.1.1
 
 6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
