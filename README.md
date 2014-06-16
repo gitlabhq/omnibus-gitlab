@@ -149,6 +149,8 @@ It is also possible to start, stop or restart individual components.
 sudo gitlab-ctl restart unicorn
 ```
 
+Note that you cannot use a Unicorn reload to update the Ruby runtime.
+
 ## Configuration
 
 ### Creating the gitlab.rb configuration file
