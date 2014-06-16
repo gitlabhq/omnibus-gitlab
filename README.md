@@ -139,6 +139,10 @@ sudo gitlab-ctl stop
 sudo gitlab-ctl restart
 ```
 
+Note that on a single-core server it may take up to a minute to restart Unicorn
+and Sidekiq. Your GitLab instance will give a 502 error until Unicorn is up
+again.
+
 It is also possible to start, stop or restart individual components.
 
 ```shell
