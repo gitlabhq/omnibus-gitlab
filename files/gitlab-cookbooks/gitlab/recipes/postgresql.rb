@@ -125,10 +125,9 @@ runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
   control(['t'])
   options({
-    :log_directory => postgresql_log_dir,
-    :svlogd_size => node['gitlab']['postgresql']['svlogd_size'],
-    :svlogd_num  => node['gitlab']['postgresql']['svlogd_num']
+    :log_directory => postgresql_log_dir
   }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['postgresql'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
