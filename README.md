@@ -155,6 +155,8 @@ Unicorn supports zero-downtime reloads. These can be triggered as follows:
 sudo gitlab-ctl hup unicorn
 ```
 
+Note that you cannot use a Unicorn reload to update the Ruby runtime.
+
 ## Configuration
 
 ### Creating the gitlab.rb configuration file
