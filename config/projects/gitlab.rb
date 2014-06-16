@@ -25,7 +25,7 @@ install_path    "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
-override :ruby, version: '2.0.0-p451'
+override :ruby, version: '2.1.1'
 override :rubygems, version: '2.2.1'
 override :postgresql, version: '9.3.4'
 
