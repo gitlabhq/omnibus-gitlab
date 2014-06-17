@@ -55,10 +55,9 @@ end
 runit_service "redis" do
   down node['gitlab']['redis']['ha']
   options({
-    :log_directory => redis_log_dir,
-    :svlogd_size => node['gitlab']['redis']['svlogd_size'],
-    :svlogd_num  => node['gitlab']['redis']['svlogd_num']
+    :log_directory => redis_log_dir
   }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['redis'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']

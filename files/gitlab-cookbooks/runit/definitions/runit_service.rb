@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-define :runit_service, :directory => nil, :only_if => false, :finish_script => false, :control => [], :run_restart => true, :active_directory => nil, :init_script_template => nil, :owner => "root", :group => "root", :template_name => nil, :start_command => "start", :stop_command => "stop", :restart_command => "restart", :status_command => "status", :options => Hash.new, :env => Hash.new, :action => :enable, :down => false do
+define :runit_service, :directory => nil, :only_if => false, :finish_script => false, :control => [], :run_restart => true, :active_directory => nil, :init_script_template => nil, :owner => "root", :group => "root", :template_name => nil, :start_command => "start", :stop_command => "stop", :restart_command => "restart", :status_command => "status", :options => Hash.new, :log_options => Hash.new, :env => Hash.new, :action => :enable, :down => false do
 
   include_recipe "runit"
 
@@ -75,6 +75,24 @@ define :runit_service, :directory => nil, :only_if => false, :finish_script => f
       if params[:options].respond_to?(:has_key?)
         variables :options => params[:options]
       end
+    end
+
+    template File.join(params[:options][:log_directory], "config") do
+      owner params[:owner]
+      group params[:group]
+      source "sv-#{params[:template_name]}-log-config.erb"
+      cookbook params[:cookbook] if params[:cookbook]
+      variables params[:log_options]
+      notifies :create, "ruby_block[reload #{params[:name]} svlogd configuration]"
+    end
+
+    ruby_block "reload #{params[:name]} svlogd configuration" do
+      block do
+        File.open(File.join(sv_dir_name, "log/supervise/control"), "w") do |control|
+          control.print "h"
+        end
+      end
+      action :nothing
     end
 
     if params[:down]

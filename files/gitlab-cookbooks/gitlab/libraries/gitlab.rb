@@ -43,6 +43,7 @@ module Gitlab
   unicorn Mash.new
   sidekiq Mash.new
   nginx Mash.new
+  logging Mash.new
   node nil
   external_url nil
   git_data_dir nil
@@ -134,6 +135,7 @@ module Gitlab
         "unicorn",
         "sidekiq",
         "nginx",
+        "logging",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')

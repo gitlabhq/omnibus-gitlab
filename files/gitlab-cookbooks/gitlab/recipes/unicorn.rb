@@ -78,6 +78,7 @@ runit_service "unicorn" do
   options({
     :log_directory => unicorn_log_dir
   }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['unicorn'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
