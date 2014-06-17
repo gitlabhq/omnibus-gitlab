@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Update Ruby to version 2.1.1
 - Update Git to version 2.0.0
 - Make Runit log rotation configurable
+- Change default Runit log rotation from 10x1MB to 30x24h
 
 6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
