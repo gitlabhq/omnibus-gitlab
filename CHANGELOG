@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Change default Runit log rotation from 10x1MB to 30x24h
 - Security: Restrict redis and postgresql log directory permissions to 0700
 - Add a 'gitlab-ctl deploy-page' command
+- Automatically create /etc/gitlab/gitlab.rb after the package is installed
 
 6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4
