@@ -134,7 +134,7 @@ default['gitlab']['gitlab-rails']['smtp_port'] = nil
 default['gitlab']['gitlab-rails']['smtp_user_name'] = nil
 default['gitlab']['gitlab-rails']['smtp_password'] = nil
 default['gitlab']['gitlab-rails']['smtp_domain'] = nil
-default['gitlab']['gitlab-rails']['smtp_authentication'] = "login"
+default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 
 ####
@@ -175,8 +175,6 @@ default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
-default['gitlab']['postgresql']['svlogd_size'] = 1000000
-default['gitlab']['postgresql']['svlogd_num'] = 10
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
@@ -217,8 +215,6 @@ default['gitlab']['redis']['enable'] = true
 default['gitlab']['redis']['ha'] = false
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
-default['gitlab']['redis']['svlogd_size'] = 1000000
-default['gitlab']['redis']['svlogd_num'] = 10
 default['gitlab']['redis']['username'] = "gitlab-redis"
 default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
@@ -254,3 +250,13 @@ default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqd
 default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4"
 default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['listen_address'] = '*'
+
+###
+# Logging
+###
+default['gitlab']['logging']['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
+default['gitlab']['logging']['svlogd_num'] = 30 # keep 30 rotated log files
+default['gitlab']['logging']['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 hours
+default['gitlab']['logging']['svlogd_filter'] = "gzip" # compress logs with gzip
+default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
+default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages

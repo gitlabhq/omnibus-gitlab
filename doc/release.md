@@ -101,7 +101,7 @@ sudo su - omnibus-build
 
 ```shell
 cd ~/omnibus-gitlab
-git fetch
+git fetch --all
 git checkout 6.6.0.my-tag
 ```
 

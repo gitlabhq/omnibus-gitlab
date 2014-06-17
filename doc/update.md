@@ -32,8 +32,8 @@ sudo rpm -Uvh gitlab-6.9.y_xxx.rpm
 # Reconfigure GitLab (includes database migrations)
 sudo gitlab-ctl reconfigure
 
-# Start unicorn and sidekiq
-sudo gitlab-ctl start
+# Restart all gitlab services
+sudo gitlab-ctl restart
 ```
 
 Done!

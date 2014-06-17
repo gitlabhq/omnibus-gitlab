@@ -29,6 +29,7 @@ runit_service "sidekiq" do
   options({
     :log_directory => sidekiq_log_dir
   }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['sidekiq'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
