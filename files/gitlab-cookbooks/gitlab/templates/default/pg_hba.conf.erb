@@ -67,7 +67,7 @@
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
 # "local" is for Unix domain socket connections only
-local   all         all                               trust
+local   all         all                               peer map=gitlab
 
 <% node['gitlab']['postgresql']['trust_auth_cidr_addresses'].each do |cidr| %>
 host    all         all         <%= cidr %>           trust
