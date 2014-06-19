@@ -159,22 +159,12 @@ Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ## Configuration
 
-### Creating the gitlab.rb configuration file
-
-```shell
-sudo mkdir -p /etc/gitlab
-sudo touch /etc/gitlab/gitlab.rb
-sudo chmod 600 /etc/gitlab/gitlab.rb
-```
-
-Below several examples are given for settings in `/etc/gitlab/gitlab.rb`.
-Please restart each time you made a change.
-
 ### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
 it needs to know the URL under which it is reached by your users, e.g.
-`http://gitlab.example.com`. Add the following line to `/etc/gitlab/gitlab.rb`:
+`http://gitlab.example.com`. Add or edit the following line in
+`/etc/gitlab/gitlab.rb`:
 
 ```ruby
 external_url "http://gitlab.example.com"
