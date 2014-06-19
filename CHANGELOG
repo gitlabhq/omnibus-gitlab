@@ -20,6 +20,15 @@ omnibus-gitlab repository.
 - Make Runit log rotation configurable
 - Change default Runit log rotation from 10x1MB to 30x24h
 - Security: Restrict redis and postgresql log directory permissions to 0700
+- Add a 'gitlab-ctl deploy-page' command
+- Automatically create /etc/gitlab/gitlab.rb after the package is installed
+- Security: Use sockets and peer authentication for Postgres
+
+6.9.4-ee.omnibus.1
+- Security: Use sockets and peer authentication for Postgres
+
+6.9.2.omnibus.2
+- Security: Use sockets and peer authentication for Postgres
 
 6.9.2
 - Create the authorized-keys.lock file for gitlab-shell 1.9.4

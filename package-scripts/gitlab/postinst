@@ -17,6 +17,16 @@ do
   ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
 done
 
+# Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
+if ! [ -e /etc/gitlab/gitlab.rb ] ; then
+  mkdir -p /etc/gitlab
+  cat > /etc/gitlab/gitlab.rb <<'EOF'
+# Change the external_url to the address your users will type in their browser
+external_url 'http://gitlab.example.com'
+EOF
+  chmod 600 /etc/gitlab/gitlab.rb
+fi
+
 echo "Thank you for installing GitLab!"
 echo "You can configure GitLab for your system by running the following command:"
 echo

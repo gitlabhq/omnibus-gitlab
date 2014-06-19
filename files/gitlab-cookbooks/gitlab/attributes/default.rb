@@ -123,8 +123,8 @@ default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
 default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
-default['gitlab']['gitlab-rails']['db_password'] = "password"
-default['gitlab']['gitlab-rails']['db_host'] = "localhost"
+default['gitlab']['gitlab-rails']['db_password'] = nil
+default['gitlab']['gitlab-rails']['db_host'] = nil
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 
@@ -182,12 +182,11 @@ default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
-default['gitlab']['postgresql']['sql_password'] = "snakepliskin"
 default['gitlab']['postgresql']['port'] = 5432
-default['gitlab']['postgresql']['listen_address'] = 'localhost'
+default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
-default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = [ ]
-default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = [ '127.0.0.1/32', '::1/128' ]
+default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
+default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['shmmax'] = kernel['machine'] =~ /x86_64/ ? 17179869184 : 4294967295
 default['gitlab']['postgresql']['shmall'] = kernel['machine'] =~ /x86_64/ ? 4194304 : 1048575
 
