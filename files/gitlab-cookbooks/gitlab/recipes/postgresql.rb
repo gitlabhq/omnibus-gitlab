@@ -115,6 +115,13 @@ template pg_hba_config do
   notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
 end
 
+template File.join(postgresql_data_dir, "pg_ident.conf") do
+  owner node['gitlab']['postgresql']['username']
+  mode "0644"
+  variables(node['gitlab']['postgresql'].to_hash)
+  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+end
+
 should_notify = OmnibusHelper.should_notify?("postgresql")
 
 runit_service "postgresql" do
@@ -143,10 +150,9 @@ bin_dir = "/opt/gitlab/embedded/bin"
 db_name = "gitlabhq_production"
 
 sql_user        = node['gitlab']['postgresql']['sql_user']
-sql_user_passwd = node['gitlab']['postgresql']['sql_password']
 
 execute "create #{sql_user} database user" do
-  command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user} WITH ENCRYPTED PASSWORD '#{sql_user_passwd}'\""
+  command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user}\""
   user pg_user
   not_if { !pg_helper.is_running? || pg_helper.sql_user_exists? }
 end

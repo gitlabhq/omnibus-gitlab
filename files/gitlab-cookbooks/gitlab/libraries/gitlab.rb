@@ -66,16 +66,12 @@ module Gitlab
         end
       end
 
-      Gitlab['postgresql']['sql_password'] ||= generate_hex(50)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
 
       if File.directory?("/etc/gitlab")
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
           f.puts(
             Chef::JSONCompat.to_json_pretty({
-              'postgresql' => {
-                'sql_password' => Gitlab['postgresql']['sql_password'],
-              },
               'gitlab_rails' => {
                 'secret_token' => Gitlab['gitlab_rails']['secret_token'],
               }
