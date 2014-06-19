@@ -30,8 +30,7 @@ production: &base
     # Email address used in the "From" field in mails sent by GitLab
     email_from: <%= @gitlab_email_from %>
 
-    # Email address of your support contact (default: same as email_from)
-    support_email: <%= @gitlab_support_email %>
+    # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
 
     ## User settings
     default_projects_limit: <%= @gitlab_default_projects_limit %>
@@ -69,7 +68,6 @@ production: &base
       issues: <%= @gitlab_default_projects_features_issues %>
       merge_requests: <%= @gitlab_default_projects_features_merge_requests %>
       wiki: <%= @gitlab_default_projects_features_wiki %>
-      wall: <%= @gitlab_default_projects_features_wall %>
       snippets: <%= @gitlab_default_projects_features_snippets %>
       visibility_level: "<%= @gitlab_default_projects_features_visibility_level %>"  # can be "private" | "internal" | "public"
 
