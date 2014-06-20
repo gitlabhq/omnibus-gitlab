@@ -244,12 +244,16 @@ production: &base
   # ==========================
 
   extra:
+    <% if @extra_google_analytics_id %>
     ## Google analytics. Uncomment if you want it
     google_analytics_id: <%= single_quote(@extra_google_analytics_id) %>
+    <% end %>
 
+    <% if @extra_piwik_url %>
     ## Piwik analytics.
     piwik_url: <%= single_quote(@extra_piwik_url) %>
     piwik_site_id: <%= single_quote(@extra_piwik_site_id) %>
+    <% end %>
 
     <% if @extra_sign_in_text %>
     ## Text under sign-in page (Markdown enabled)
