@@ -88,12 +88,7 @@ The ports for Redis, PostgreSQL and Unicorn can be overriden in
 ```ruby
 redis['port'] = 1234
 postgresql['port'] = 2345
-
-# due to a bug https://gitlab.com/gitlab-org/omnibus-gitlab/issues/141
-# you have to provide the port for gitlab shell as well,
-# so the 2 following lines have to point to the same port
 unicorn['port'] = 3456
-gitlab_rails['internal_api_url'] = 'http://localhost:3456'
 ```
 
 For Nginx port changes please see the section on enabling HTTPS below.
