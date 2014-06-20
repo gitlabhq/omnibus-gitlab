@@ -45,7 +45,7 @@ default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 
-default['gitlab']['gitlab-rails']['internal_api_url'] = "http://localhost:8080"
+default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
