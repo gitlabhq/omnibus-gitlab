@@ -74,7 +74,7 @@ sudo su - omnibus-build
 - Test email delivery:
 
 ```shell
-date | mail -s "testing from $(uname -n)" $(whoami)
+date | mail -s "testing from $(uname -n)" $(cat ~/.forward)
 ```
 
 - Configure aws credentials
