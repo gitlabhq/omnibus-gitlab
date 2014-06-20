@@ -54,7 +54,6 @@ default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
-default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
 default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = 10
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
