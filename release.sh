@@ -15,4 +15,4 @@ fi
 
 # We assume that email to the current system user will somehow reach the right
 # human eyes
-tail ${build}.log | sed 's/.*\r//' | mail -s "${subject}" $(whoami)
+tail ${build}.log | sed 's/.*\r//' | mail -s "${subject}" $(cat ~/.forward)
