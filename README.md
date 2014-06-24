@@ -384,6 +384,15 @@ There, add the following line to schedule the backup for everyday at 2 AM:
 0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create
 ```
 
+You may also want to set a limited lifetime for backups to prevent regular
+backups using all your disk space.  To do this add the following lines to
+`/etc/gitlab/gitlab.rb` and reconfigure:-
+
+```
+# limit backup lifetime to 4 days - 345600 seconds
+gitlab_rails['backup_keep_time'] = 345600
+```
+
 ### Restoring an application backup
 
 We will assume that you have installed GitLab from an omnibus package and run
