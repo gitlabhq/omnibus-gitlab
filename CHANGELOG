@@ -5,6 +5,10 @@ omnibus-gitlab repository.
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
+- Fix MySQL build for Ubuntu 14.04
+
+7.0.0-ee.omnibus.1
+- Fix MySQL build for Ubuntu 14.04
 
 7.0.0
 - Specify numeric user / group identifiers
