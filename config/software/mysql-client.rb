@@ -35,9 +35,14 @@ env = {
   "CXXFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CPPFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-  "LD_LIBRARY_PATH" => "#{install_dir}/embedded/lib",
   "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
 }
+
+unless OHAI.platform =~ /ubuntu/ && OHAI.platform_version =~ /^14.04/
+  # Perhaps we can drop LD_LIBRARY_PATH on all platforms? For now, all we know
+  # is that it breaks the build on Ubuntu 14.04.
+  env.merge!("LD_LIBRARY_PATH" => "#{install_dir}/embedded/lib")
+end
 
 # Force CentOS-5 to use gcc/g++ v4.4
 if OHAI.platform =~ /centos/ and OHAI.platform_version =~ /^5/
