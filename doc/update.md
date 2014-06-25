@@ -6,10 +6,9 @@ Please make sure you are viewing this file on the master branch.
 
 ![documentation version](doc/images/omnibus-documentation-version-update-md.png)
 
-## Updating from GitLab 6.6.x or higher to 6.9.x
+## Updating from GitLab 6.6.x and higher to the latest version
 
-The procedure can also be used to upgrade from a CE omnibus package to an EE
-omnibus package.
+The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
 
 First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
@@ -24,10 +23,10 @@ sudo gitlab-ctl stop sidekiq
 sudo gitlab-rake gitlab:backup:create
 
 # Install the latest package
-# Ubuntu:
-sudo dpkg -i gitlab_6.9.y-omnibus.xxx.deb
+# Ubuntu/Debian:
+sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 # CentOS:
-sudo rpm -Uvh gitlab-6.9.y_xxx.rpm
+sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
 
 # Reconfigure GitLab (includes database migrations)
 sudo gitlab-ctl reconfigure
