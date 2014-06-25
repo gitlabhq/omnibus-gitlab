@@ -403,8 +403,6 @@ timestamp of the backup you are restoring.
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 
-# DROP THE CURRENT DATABASE; workaround for a Postgres backup restore bug in GitLab 6.6
-sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
 # This command will overwrite the contents of your GitLab database!
 sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186
 
