@@ -20,6 +20,7 @@ name "gitlab"
 maintainer "GitLab.com"
 homepage "http://www.gitlab.com/"
 
+
 replaces        "gitlab"
 install_path    "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
@@ -35,6 +36,9 @@ dependency "git"
 dependency "redis"
 dependency "nginx"
 dependency "chef-gem"
+if system("#{Omnibus.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus.project_root}/support/is_gitlab_com.sh")
+  dependency "remote_syslog"
+end
 dependency "runit"
 dependency "gitlab-rails"
 dependency "gitlab-shell"
