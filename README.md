@@ -14,36 +14,7 @@ stable branch (example shown below).
 
 ## Installation
 
-Please [download the package][downloads] and follow the steps below.
-
-### Ubuntu 12.04
-
-```
-sudo apt-get install openssh-server
-sudo apt-get install postfix # sendmail or exim is also OK
-sudo dpkg -i gitlab_x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb you downloaded
-sudo gitlab-ctl reconfigure
-```
-
-### Debian 7.4
-```
-sudo apt-get install openssh-server
-sudo apt-get install exim4-daemon-light
-sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
-sudo gitlab-ctl reconfigure
-```
-
-during the exim installation you may follow http://alexatnet.com/references/server-setup-debian/send-only-mail-server-with-exim to ensure you get a secure mailserver
-
-### CentOS 6.5
-
-```
-sudo yum install openssh-server
-sudo yum install postfix # sendmail or exim is also OK
-sudo rpm -i gitlab-x.y.z_omnibus-x.el6.x86_64.rpm # this is the .rpm you downloaded
-sudo gitlab-ctl reconfigure
-sudo lokkit -s http -s ssh # open up the firewall for HTTP and SSH requests
-```
+Please follow the steps on the [downloads page][downloads].
 
 ### After installation
 
@@ -558,7 +529,7 @@ method][CE README].
 This omnibus installer project is based on the awesome work done by Chef in
 [omnibus-chef-server][omnibus-chef-server].
 
-[downloads]: https://www.gitlab.com/downloads
+[downloads]: https://about.gitlab.com/downloads/
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
 [gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
