@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec /opt/gitlab/embedded/bin/remote_syslog --no-detach --debug-level DEBUG -c <%= node['gitlab']['remote-syslog']['dir'] %>/remote_syslog.yml

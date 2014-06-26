@@ -70,6 +70,7 @@ include_recipe "runit"
   "unicorn",
   "sidekiq",
   "nginx",
+  "remote-syslog",
   "bootstrap",
 ].each do |service|
   if node["gitlab"][service]["enable"]

@@ -258,3 +258,14 @@ default['gitlab']['logging']['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 
 default['gitlab']['logging']['svlogd_filter'] = "gzip" # compress logs with gzip
 default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
 default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages
+
+###
+# Remote syslog
+###
+default['gitlab']['remote-syslog']['enable'] = false
+default['gitlab']['remote-syslog']['ha'] = false
+default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
+default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
+default['gitlab']['remote-syslog']['destination_host'] = "localhost"
+default['gitlab']['remote-syslog']['destination_port'] = 514
+default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}

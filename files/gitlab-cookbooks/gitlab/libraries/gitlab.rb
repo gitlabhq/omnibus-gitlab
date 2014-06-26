@@ -44,6 +44,7 @@ module Gitlab
   sidekiq Mash.new
   nginx Mash.new
   logging Mash.new
+  remote_syslog Mash.new
   node nil
   external_url nil
   git_data_dir nil
@@ -132,6 +133,7 @@ module Gitlab
         "sidekiq",
         "nginx",
         "logging",
+        "remote_syslog",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')

@@ -1,0 +1,7 @@
+files:
+<% @services.each do |service| %>
+- <%= File.join(node['gitlab'][service]['log_directory'], "*.log") %>
+<% end %>
+destination:
+  host: <%= @destination_host %>
+  port: <%= @destination_port %>
