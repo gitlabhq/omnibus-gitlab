@@ -20,7 +20,6 @@ name "gitlab"
 maintainer "GitLab.com"
 homepage "http://www.gitlab.com/"
 
-
 replaces        "gitlab"
 install_path    "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
