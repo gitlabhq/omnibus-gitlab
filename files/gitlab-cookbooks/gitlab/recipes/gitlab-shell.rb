@@ -70,12 +70,16 @@ end
   end
 end
 
+# If no internal_api_url is specified, default to the IP/port Unicorn listens on
+api_url = node['gitlab']['gitlab-rails']['internal_api_url']
+api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
+
 template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   link_from File.join(gitlab_shell_dir, "config.yml")
   source "gitlab-shell-config.yml.erb"
   variables(
     :user => git_user,
-    :api_url => node['gitlab']['gitlab-rails']['internal_api_url'],
+    :api_url => api_url,
     :repositories_path => repositories_path,
     :authorized_keys => authorized_keys,
     :redis_port => node['gitlab']['redis']['port'],

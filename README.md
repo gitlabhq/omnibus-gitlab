@@ -14,36 +14,7 @@ stable branch (example shown below).
 
 ## Installation
 
-Please [download the package][downloads] and follow the steps below.
-
-### Ubuntu 12.04
-
-```
-sudo apt-get install openssh-server
-sudo apt-get install postfix # sendmail or exim is also OK
-sudo dpkg -i gitlab_x.y.z-omnibus-x.ubuntu.12.04_amd64.deb # this is the .deb you downloaded
-sudo gitlab-ctl reconfigure
-```
-
-### Debian 7.4
-```
-sudo apt-get install openssh-server
-sudo apt-get install exim4-daemon-light
-sudo dpkg -i gitlab-x.y.z.deb # this is the .deb you downloaded
-sudo gitlab-ctl reconfigure
-```
-
-during the exim installation you may follow http://alexatnet.com/references/server-setup-debian/send-only-mail-server-with-exim to ensure you get a secure mailserver
-
-### CentOS 6.5
-
-```
-sudo yum install openssh-server
-sudo yum install postfix # sendmail or exim is also OK
-sudo rpm -i gitlab-x.y.z_omnibus-x.el6.x86_64.rpm # this is the .rpm you downloaded
-sudo gitlab-ctl reconfigure
-sudo lokkit -s http -s ssh # open up the firewall for HTTP and SSH requests
-```
+Please follow the steps on the [downloads page][downloads].
 
 ### After installation
 
@@ -88,12 +59,7 @@ The ports for Redis, PostgreSQL and Unicorn can be overriden in
 ```ruby
 redis['port'] = 1234
 postgresql['port'] = 2345
-
-# due to a bug https://gitlab.com/gitlab-org/omnibus-gitlab/issues/141
-# you have to provide the port for gitlab shell as well,
-# so the 2 following lines have to point to the same port
 unicorn['port'] = 3456
-gitlab_rails['internal_api_url'] = 'http://localhost:3456'
 ```
 
 For Nginx port changes please see the section on enabling HTTPS below.
@@ -408,8 +374,6 @@ timestamp of the backup you are restoring.
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 
-# DROP THE CURRENT DATABASE; workaround for a Postgres backup restore bug in GitLab 6.6
-sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
 # This command will overwrite the contents of your GitLab database!
 sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186
 
@@ -470,6 +434,29 @@ The Runit-managed services in omnibus-gitlab generate log data using
 about the files it generates.
 
 You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:
+
+### UDP log shipping (GitLab Enterprise Edition only)
+
+You can configure omnibus-gitlab to send syslog-ish log messages via UDP.
+
+```ruby
+logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
+logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
+```
+
+Example log messages:
+
+```
+<13>Jun 26 06:33:46 ubuntu1204-test production.log: Started GET "/root/my-project/import" for 127.0.0.1 at 2014-06-26 06:33:46 -0700
+<13>Jun 26 06:33:46 ubuntu1204-test production.log: Processing by ProjectsController#import as HTML
+<13>Jun 26 06:33:46 ubuntu1204-test production.log: Parameters: {"id"=>"root/my-project"}
+<13>Jun 26 06:33:46 ubuntu1204-test production.log: Completed 200 OK in 122ms (Views: 71.9ms | ActiveRecord: 12.2ms)
+<13>Jun 26 06:33:46 ubuntu1204-test gitlab_access.log: 172.16.228.1 - - [26/Jun/2014:06:33:46 -0700] "GET /root/my-project/import HTTP/1.1" 200 5775 "https://172.16.228.169/root/my-project/import" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"
+2014-06-26_13:33:46.49866 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7nbj0 Sidekiq::Extensions::DelayedMailer JID-bbfb118dd1db20f6c39f5b50 INFO: start
+
+2014-06-26_13:33:46.52608 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7muoc RepositoryImportWorker JID-57ee926c3655fcfa062338ae INFO: start
+
+```
 
 ```ruby
 # Below are the default values
@@ -565,7 +552,7 @@ method][CE README].
 This omnibus installer project is based on the awesome work done by Chef in
 [omnibus-chef-server][omnibus-chef-server].
 
-[downloads]: https://www.gitlab.com/downloads
+[downloads]: https://about.gitlab.com/downloads/
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
 [gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb

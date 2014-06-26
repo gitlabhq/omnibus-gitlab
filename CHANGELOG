@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.1.0
+- Build: explicitly use .forward for sending notifications
+- Fix MySQL build for Ubuntu 14.04
+- Built-in UDP log shipping (Enterprise Edition only)
+
+7.0.0-ee.omnibus.1
+- Fix MySQL build for Ubuntu 14.04
+
 7.0.0
 - Specify numeric user / group identifiers
 - Support AWS S3 attachment storage
@@ -24,6 +32,7 @@ omnibus-gitlab repository.
 - Automatically create /etc/gitlab/gitlab.rb after the package is installed
 - Security: Use sockets and peer authentication for Postgres
 - Avoid empty Piwik or Google Analytics settings
+- Respect custom Unicorn port setting in gitlab-shell
 
 6.9.4-ee.omnibus.1
 - Security: Use sockets and peer authentication for Postgres

@@ -45,7 +45,7 @@ default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 
-default['gitlab']['gitlab-rails']['internal_api_url'] = "http://localhost:8080"
+default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
@@ -54,7 +54,6 @@ default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
-default['gitlab']['gitlab-rails']['gitlab_support_email'] = "support@localhost"
 default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = 10
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
@@ -259,3 +258,16 @@ default['gitlab']['logging']['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 
 default['gitlab']['logging']['svlogd_filter'] = "gzip" # compress logs with gzip
 default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
 default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages
+default['gitlab']['logging']['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
+default['gitlab']['logging']['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
+
+###
+# Remote syslog
+###
+default['gitlab']['remote-syslog']['enable'] = false
+default['gitlab']['remote-syslog']['ha'] = false
+default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
+default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
+default['gitlab']['remote-syslog']['destination_host'] = "localhost"
+default['gitlab']['remote-syslog']['destination_port'] = 514
+default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
