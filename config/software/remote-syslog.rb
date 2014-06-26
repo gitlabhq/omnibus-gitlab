@@ -16,7 +16,7 @@
 ##
 #
 
-name "remote_syslog"
+name "remote-syslog"
 default_version "1.6.14"
 
 dependency "ruby"
