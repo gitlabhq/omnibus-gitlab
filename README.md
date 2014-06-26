@@ -1,8 +1,8 @@
-# GitLab Omnibus project
+# Omnibus GitLab
 
 This project creates full-stack platform-specific [downloadable packages for GitLab][downloads].
 For other installation options please see the
-[GitLab project README][CE README].
+[GitLab installation page][installation].
 
 ## Documentation version
 
@@ -566,3 +566,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
 [svlogd]: http://smarden.org/runit/svlogd.8.html
+[installation]: https://about.gitlab.com/installation/
