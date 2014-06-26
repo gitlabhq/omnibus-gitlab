@@ -121,6 +121,24 @@ module Gitlab
       Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
     end
 
+    def parse_udp_log_shipping
+      return unless logging['udp_log_shipping_host']
+
+      Gitlab['remote_syslog']['enable'] ||= true
+      Gitlab['remote_syslog']['destination_host'] ||= logging['udp_log_shipping_host']
+
+      if logging['udp_log_shipping_port']
+        Gitlab['remote_syslog']['destination_port'] ||= logging['udp_log_shipping_port']
+        Gitlab['logging']['svlogd_udp'] ||= "#{logging['udp_log_shipping_host']}:#{logging['udp_log_shipping_port']}"
+      else
+        Gitlab['logging']['svlogd_udp'] ||= logging['udp_log_shipping_host']
+      end
+
+      %w{redis nginx sidekiq unicorn postgresql remote-syslog}.each do |runit_sv|
+        Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
+      end
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -147,6 +165,7 @@ module Gitlab
       generate_secrets(node_name)
       parse_external_url
       parse_git_data_dir
+      parse_udp_log_shipping
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

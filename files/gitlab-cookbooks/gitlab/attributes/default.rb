@@ -258,6 +258,8 @@ default['gitlab']['logging']['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 
 default['gitlab']['logging']['svlogd_filter'] = "gzip" # compress logs with gzip
 default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
 default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages
+default['gitlab']['logging']['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
+default['gitlab']['logging']['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
 
 ###
 # Remote syslog
