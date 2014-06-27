@@ -165,6 +165,9 @@ remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
   notifies :run, 'execute[migrate database]' unless postgresql_not_listening
   notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
+  dependent_services.each do |sv|
+    notifies :restart, sv
+  end
 end
 
 execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
