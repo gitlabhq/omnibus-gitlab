@@ -435,6 +435,19 @@ about the files it generates.
 
 You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:
 
+```ruby
+# Below are the default values
+logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
+logging['svlogd_num'] = 30 # keep 30 rotated log files
+logging['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 hours
+logging['svlogd_filter'] = "gzip" # compress logs with gzip
+logging['svlogd_udp'] = nil # transmit log messages via UDP
+logging['svlogd_prefix'] = nil # custom prefix for log messages
+
+# Optionally, you can override the prefix for e.g. Nginx
+nginx['svlogd_prefix'] = "nginx"
+```
+
 ### UDP log shipping (GitLab Enterprise Edition only)
 
 You can configure omnibus-gitlab to send syslog-ish log messages via UDP.
@@ -456,19 +469,6 @@ Example log messages:
 
 2014-06-26_13:33:46.52608 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7muoc RepositoryImportWorker JID-57ee926c3655fcfa062338ae INFO: start
 
-```
-
-```ruby
-# Below are the default values
-logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
-logging['svlogd_num'] = 30 # keep 30 rotated log files
-logging['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 hours
-logging['svlogd_filter'] = "gzip" # compress logs with gzip
-logging['svlogd_udp'] = nil # transmit log messages via UDP
-logging['svlogd_prefix'] = nil # custom prefix for log messages
-
-# Optionally, you can override the prefix for e.g. Nginx
-nginx['svlogd_prefix'] = "nginx"
 ```
 
 ## Starting a Rails console session

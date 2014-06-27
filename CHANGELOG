@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 - Build: explicitly use .forward for sending notifications
 - Fix MySQL build for Ubuntu 14.04
 - Built-in UDP log shipping (Enterprise Edition only)
+- Trigger Unicorn/Sidekiq restart during version change
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04
