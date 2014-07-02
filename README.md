@@ -141,8 +141,12 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Storing Git data in an alternative directory
 
-By default, omnibus-gitlab stores Git repository data in `/var/opt/gitlab/git-data`.
-You can change this location by adding the following line to `/etc/gitlab/gitlab.rb`.
+By default, omnibus-gitlab stores Git repository data under
+`/var/opt/gitlab/git-data`: repositories are stored in
+`/var/opt/gitlab/git-data/repositories`, and satellites in
+`/var/opt/gitlab/git-data/gitlab-satellites`.  You can change the location of
+the `git-data` parent directory by adding the following line to
+`/etc/gitlab/gitlab.rb`.
 
 ```ruby
 git_data_dir "/mnt/nas/git-data"
