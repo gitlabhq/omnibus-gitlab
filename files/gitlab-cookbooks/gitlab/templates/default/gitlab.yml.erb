@@ -161,6 +161,8 @@ production: &base
     #
     group_base: <%= single_quote(@ldap_group_base) %>
 
+    admin_group: <%= single_quote(@ldap_admin_group) %>
+
 
   ## OmniAuth settings
   omniauth:
