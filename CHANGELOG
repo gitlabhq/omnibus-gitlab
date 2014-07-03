@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Built-in UDP log shipping (Enterprise Edition only)
 - Trigger Unicorn/Sidekiq restart during version change
 - Recursively set the SELinux type of ~git/.ssh
+- Add support for the LDAP admin_group attribute (GitLab EE)
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04
