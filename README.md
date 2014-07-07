@@ -389,8 +389,8 @@ backups using all your disk space.  To do this add the following lines to
 `/etc/gitlab/gitlab.rb` and reconfigure:-
 
 ```
-# limit backup lifetime to 4 days - 345600 seconds
-gitlab_rails['backup_keep_time'] = 345600
+# limit backup lifetime to 7 days - 604800 seconds
+gitlab_rails['backup_keep_time'] = 604800
 ```
 
 ### Restoring an application backup
