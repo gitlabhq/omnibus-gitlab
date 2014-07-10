@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Trigger Unicorn/Sidekiq restart during version change
 - Recursively set the SELinux type of ~git/.ssh
 - Add support for the LDAP admin_group attribute (GitLab EE)
+- Fix TLS issue in SMTP email configuration (provides new attribute tls)
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04
