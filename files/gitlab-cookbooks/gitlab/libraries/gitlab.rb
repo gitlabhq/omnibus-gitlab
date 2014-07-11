@@ -139,6 +139,13 @@ module Gitlab
       end
     end
 
+    def parse_redis_settings
+      # No need to check redis['host'] because that setting is not configurable.
+      if redis['port']
+        Gitlab['gitlab_rails']['redis_port'] ||= redis['port']
+      end
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -166,6 +173,7 @@ module Gitlab
       parse_external_url
       parse_git_data_dir
       parse_udp_log_shipping
+      parse_redis_settings
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
