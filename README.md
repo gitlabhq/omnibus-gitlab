@@ -548,6 +548,18 @@ If you do do not want to use the packaged Postgres server you can configure an e
 Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
 Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
 
+## Using a non-packaged Redis instance
+
+If you want to use your own Redis instance instead of the bundled Redis, you
+can use the `gitlab.rb` settings below. Run `gitlab-ctl reconfigure` for the
+settings to take effect.
+
+```ruby
+redis['enable'] = false
+gitlab_rails['redis_host'] = redis.example.com
+gitlab_rails['redis_port'] = 6380 # defaults to 6379
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).

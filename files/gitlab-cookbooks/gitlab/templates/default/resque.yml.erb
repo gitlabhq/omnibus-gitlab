@@ -1,1 +1,1 @@
-production: redis://localhost:<%= node['gitlab']['redis']['port'] %>
+production: redis://<%= @redis_host %>:<%= @redis_port %>
