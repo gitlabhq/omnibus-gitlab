@@ -64,6 +64,15 @@ unicorn['port'] = 3456
 
 For Nginx port changes please see the section on enabling HTTPS below.
 
+#### Reconfigure fails to create the git user
+
+This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
+Switch to another user.
+
+More importantly: do not give sudo rights to the git user or to any of the
+other users used by omnibus-gitlab. Bestowing unnecessary privileges on a
+system user weakens the security of your system.
+
 ### Uninstalling omnibus-gitlab
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
