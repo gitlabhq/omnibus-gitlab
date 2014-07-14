@@ -60,6 +60,7 @@ default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signin_enabled'] = nil
+default['gitlab']['gitlab-rails']['gitlab_restricted_visibility_levels'] = []
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = true

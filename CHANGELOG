@@ -3,6 +3,8 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+- Support changing the 'restricted_visibility_levels' option (Javier Palomo)
+
 7.1.0
 - Build: explicitly use .forward for sending notifications
 - Fix MySQL build for Ubuntu 14.04
