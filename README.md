@@ -395,6 +395,9 @@ nginx['enable'] = false
 
 # Disable the built-in unicorn
 unicorn['enable'] = false
+
+# Set the internal API URL
+gitlab_rails['internal_api_url'] = 'http://git.yourdomain.com'
 ```
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
