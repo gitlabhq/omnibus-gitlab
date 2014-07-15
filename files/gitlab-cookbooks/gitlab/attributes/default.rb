@@ -276,3 +276,8 @@ default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-sy
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
 default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+
+###
+# High Availability
+###
+default['gitlab']['high-availability']['mountpoint'] = nil

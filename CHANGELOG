@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Support external Redis instances (sponsored by O'Reilly Media)
 - Only reject SMTP attributes which are nil
 - Support changing the 'restricted_visibility_levels' option (Javier Palomo)
+- Only start omnibus-gitlab services after a given filesystem is mounted
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04

@@ -45,6 +45,7 @@ module Gitlab
   nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
+  high_availability
   node nil
   external_url nil
   git_data_dir nil
@@ -159,6 +160,7 @@ module Gitlab
         "nginx",
         "logging",
         "remote_syslog",
+        "high_availability",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')

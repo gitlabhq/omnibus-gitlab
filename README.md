@@ -569,6 +569,17 @@ gitlab_rails['redis_host'] = redis.example.com
 gitlab_rails['redis_port'] = 6380 # defaults to 6379
 ```
 
+## Only start omnibus-gitlab services after a given filesystem is mounted
+
+If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
+from starting before a given filesystem is mounted, add the following to
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+# wait for /var/opt/gitlab to be mounted
+high_availability['mountpoint'] = '/var/opt/gitlab'
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
