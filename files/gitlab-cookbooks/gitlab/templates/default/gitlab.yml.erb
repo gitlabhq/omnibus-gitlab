@@ -55,7 +55,7 @@ production: &base
 
     # Restrict setting visibility levels for non-admin users.
     # The default is to allow all levels.
-    restricted_visibility_levels: <%= @gitlab_restricted_visibility_levels %>
+    restricted_visibility_levels: <%= @gitlab_restricted_visibility_levels unless @gitlab_restricted_visibility_levels.nil? %>
 
     ## Automatic issue closing
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
