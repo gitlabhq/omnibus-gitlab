@@ -3,8 +3,6 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-- Support changing the 'restricted_visibility_levels' option (Javier Palomo)
-
 7.1.0
 - Build: explicitly use .forward for sending notifications
 - Fix MySQL build for Ubuntu 14.04
@@ -15,6 +13,7 @@ omnibus-gitlab repository.
 - Fix TLS issue in SMTP email configuration (provides new attribute tls) (Ricardo Langner)
 - Support external Redis instances (sponsored by O'Reilly Media)
 - Only reject SMTP attributes which are nil
+- Support changing the 'restricted_visibility_levels' option (Javier Palomo)
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04
