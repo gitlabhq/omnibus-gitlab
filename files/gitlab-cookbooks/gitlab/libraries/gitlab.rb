@@ -45,7 +45,7 @@ module Gitlab
   nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
-  high_availability
+  high_availability Mash.new
   node nil
   external_url nil
   git_data_dir nil
