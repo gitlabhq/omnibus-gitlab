@@ -1,3 +1,4 @@
 #!/bin/sh
 exec 2>&1
+<%= render("mount_point_check.erb") %>
 exec chpst -P -U <%= node['gitlab']['redis']['username'] %> -u <%= node['gitlab']['redis']['username'] %> /opt/gitlab/embedded/bin/redis-server <%= File.join(node['gitlab']['redis']['dir'], "redis.conf") %>
