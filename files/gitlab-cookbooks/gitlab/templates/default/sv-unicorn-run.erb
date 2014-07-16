@@ -64,6 +64,7 @@ function is_unicorn
 
 function start_unicorn_master
 {
+  <%= render("mount_point_check.erb") %>
   chpst -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /usr/bin/env HOME="<%= node['gitlab']['user']['home'] %>" /opt/gitlab/embedded/bin/bundle exec unicorn -D -E <%= node['gitlab']['gitlab-rails']['environment'] %> -c <%= File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "unicorn.rb") %> /opt/gitlab/embedded/service/gitlab-rails/config.ru
 }
 

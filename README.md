@@ -1,8 +1,8 @@
-# GitLab Omnibus project
+# Omnibus GitLab
 
 This project creates full-stack platform-specific [downloadable packages for GitLab][downloads].
 For other installation options please see the
-[GitLab project README][CE README].
+[GitLab installation page][installation].
 
 ## Documentation version
 
@@ -63,6 +63,15 @@ unicorn['port'] = 3456
 ```
 
 For Nginx port changes please see the section on enabling HTTPS below.
+
+#### Reconfigure fails to create the git user
+
+This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
+Switch to another user.
+
+More importantly: do not give sudo rights to the git user or to any of the
+other users used by omnibus-gitlab. Bestowing unnecessary privileges on a
+system user weakens the security of your system.
 
 ### Uninstalling omnibus-gitlab
 
@@ -141,8 +150,12 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Storing Git data in an alternative directory
 
-By default, omnibus-gitlab stores Git repository data in `/var/opt/gitlab/git-data`.
-You can change this location by adding the following line to `/etc/gitlab/gitlab.rb`.
+By default, omnibus-gitlab stores Git repository data under
+`/var/opt/gitlab/git-data`: repositories are stored in
+`/var/opt/gitlab/git-data/repositories`, and satellites in
+`/var/opt/gitlab/git-data/gitlab-satellites`.  You can change the location of
+the `git-data` parent directory by adding the following line to
+`/etc/gitlab/gitlab.rb`.
 
 ```ruby
 git_data_dir "/mnt/nas/git-data"
@@ -355,6 +368,15 @@ There, add the following line to schedule the backup for everyday at 2 AM:
 0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create
 ```
 
+You may also want to set a limited lifetime for backups to prevent regular
+backups using all your disk space.  To do this add the following lines to
+`/etc/gitlab/gitlab.rb` and reconfigure:-
+
+```
+# limit backup lifetime to 7 days - 604800 seconds
+gitlab_rails['backup_keep_time'] = 604800
+```
+
 ### Restoring an application backup
 
 We will assume that you have installed GitLab from an omnibus package and run
@@ -535,6 +557,29 @@ If you do do not want to use the packaged Postgres server you can configure an e
 Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
 Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
 
+## Using a non-packaged Redis instance
+
+If you want to use your own Redis instance instead of the bundled Redis, you
+can use the `gitlab.rb` settings below. Run `gitlab-ctl reconfigure` for the
+settings to take effect.
+
+```ruby
+redis['enable'] = false
+gitlab_rails['redis_host'] = redis.example.com
+gitlab_rails['redis_port'] = 6380 # defaults to 6379
+```
+
+## Only start omnibus-gitlab services after a given filesystem is mounted
+
+If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
+from starting before a given filesystem is mounted, add the following to
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+# wait for /var/opt/gitlab to be mounted
+high_availability['mountpoint'] = '/var/opt/gitlab'
+```
+
 ## Building your own package
 
 See [the separate build documentation](doc/build.md).
@@ -560,3 +605,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
 [svlogd]: http://smarden.org/runit/svlogd.8.html
+[installation]: https://about.gitlab.com/installation/

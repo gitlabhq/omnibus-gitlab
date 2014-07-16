@@ -27,7 +27,7 @@ auth_file: "<%= @authorized_keys %>"
 # Redis settings used for pushing commit notices to gitlab
 redis:
   bin: /opt/gitlab/embedded/bin/redis-cli
-  host: 127.0.0.1
+  host: <%= @redis_host %>
   port: <%= @redis_port %>
   # socket: /tmp/redis.socket # Only define this if you want to use sockets
   namespace: resque:gitlab

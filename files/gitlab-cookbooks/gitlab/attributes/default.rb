@@ -60,6 +60,7 @@ default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signin_enabled'] = nil
+default['gitlab']['gitlab-rails']['gitlab_restricted_visibility_levels'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = true
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = true
@@ -90,6 +91,7 @@ default['gitlab']['gitlab-rails']['ldap_password'] = nil
 default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = nil
 default['gitlab']['gitlab-rails']['ldap_user_filter'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
+default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
@@ -126,6 +128,9 @@ default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_host'] = nil
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
+
+default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
+default['gitlab']['gitlab-rails']['redis_port'] = 6379
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil
@@ -271,3 +276,8 @@ default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-sy
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
 default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+
+###
+# High Availability
+###
+default['gitlab']['high-availability']['mountpoint'] = nil

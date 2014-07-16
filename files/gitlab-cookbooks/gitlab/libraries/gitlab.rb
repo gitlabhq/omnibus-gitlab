@@ -45,6 +45,7 @@ module Gitlab
   nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
+  high_availability Mash.new
   node nil
   external_url nil
   git_data_dir nil
@@ -139,6 +140,13 @@ module Gitlab
       end
     end
 
+    def parse_redis_settings
+      # No need to check redis['host'] because that setting is not configurable.
+      if redis['port']
+        Gitlab['gitlab_rails']['redis_port'] ||= redis['port']
+      end
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -152,6 +160,7 @@ module Gitlab
         "nginx",
         "logging",
         "remote_syslog",
+        "high_availability",
         "postgresql"
       ].each do |key|
         rkey = key.gsub('_', '-')
@@ -166,6 +175,7 @@ module Gitlab
       parse_external_url
       parse_git_data_dir
       parse_udp_log_shipping
+      parse_redis_settings
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
