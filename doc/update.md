@@ -134,6 +134,12 @@ sudo service redis-server stop
 sudo update-rc.d redis-server disable
 ```
 
+If you are using a configuration management system to manage GitLab on your
+server, remember to also disable GitLab and its related services there. Also
+note that in the following steps, the existing home directory of the git user
+(`/home/git`) will be changed to `/var/opt/gitlab`.
+
+
 Next, create a `gitlab.rb` file for your new setup.
 
 ```
