@@ -31,8 +31,9 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
   gitlab_rails_tmp_dir,
   gitlab_rails_public_uploads_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
+  node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   gitlab_rails_log_dir
-].each do |dir_name|
+].compact.each do |dir_name|
   directory dir_name do
     owner node['gitlab']['user']['username']
     mode '0700'

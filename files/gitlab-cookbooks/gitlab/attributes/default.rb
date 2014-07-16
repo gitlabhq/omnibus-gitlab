@@ -67,6 +67,7 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = tru
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = false
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = false
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = "private"
+default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['issues_tracker_redmine'] = false
 default['gitlab']['gitlab-rails']['issues_tracker_redmine_title'] = "Redmine"
 default['gitlab']['gitlab-rails']['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
