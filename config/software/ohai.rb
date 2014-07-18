@@ -1,5 +1,4 @@
 #
-# Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
 # Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
@@ -16,13 +15,12 @@
 # limitations under the License.
 #
 
-name "chef-gem"
-default_version "11.12.2"
+name "ohai"
+default_version "7.0.4"
 
 dependency "ruby"
 dependency "rubygems"
-dependency "ohai"
 
 build do
-  gem "install chef -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}"
+  gem "install ohai -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}"
 end
