@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Support the repository_downloads_path setting in gitlab.yml
 - Use Ruby 2.1.2
 - Pin down chef-gem's ohai dependency to 7.0.4
+- Raise the default maximum Git output to 20 MB
 
 7.0.0-ee.omnibus.1
 - Fix MySQL build for Ubuntu 14.04
