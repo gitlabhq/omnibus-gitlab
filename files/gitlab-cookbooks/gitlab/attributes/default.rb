@@ -142,7 +142,7 @@ default['gitlab']['gitlab-rails']['smtp_password'] = nil
 default['gitlab']['gitlab-rails']['smtp_domain'] = nil
 default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
-default['gitlab']['gitlab-rails']['smtp_tls] = nil
+default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 
 ####
 # Unicorn
