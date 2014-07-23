@@ -48,7 +48,5 @@ build do
                  File.expand_path("embedded/ssl/certs/cacert.pem", install_dir))
   end
 
-  unless Ohai['platform'] == 'windows'
-    command "ln -sf #{install_dir}/embedded/ssl/certs/cacert.pem #{install_dir}/embedded/ssl/cert.pem"
-  end
+  command "ln -sf #{install_dir}/embedded/ssl/certs/cacert.pem #{install_dir}/embedded/ssl/cert.pem"
 end
