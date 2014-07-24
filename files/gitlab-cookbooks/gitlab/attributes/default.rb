@@ -67,6 +67,7 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = tru
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = false
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = false
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = "private"
+default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['issues_tracker_redmine'] = false
 default['gitlab']['gitlab-rails']['issues_tracker_redmine_title'] = "Redmine"
 default['gitlab']['gitlab-rails']['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
@@ -92,6 +93,7 @@ default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = nil
 default['gitlab']['gitlab-rails']['ldap_user_filter'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
+default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
@@ -106,7 +108,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = true
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
 default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = 22
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
-default['gitlab']['gitlab-rails']['git_max_size'] = 5242880
+default['gitlab']['gitlab-rails']['git_max_size'] = 20971520 # 20 MB
 default['gitlab']['gitlab-rails']['git_timeout'] = 10
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
@@ -140,6 +142,7 @@ default['gitlab']['gitlab-rails']['smtp_password'] = nil
 default['gitlab']['gitlab-rails']['smtp_domain'] = nil
 default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
+default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 
 ####
 # Unicorn
