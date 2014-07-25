@@ -282,6 +282,20 @@ external_url "https://gitlab.example.com:2443"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Adding ENV Vars to the Gitlab Runtime Environment
+
+If you need Gitlab to have access to certain environment variables, you can
+configure them in `/etc/gitlab/gitlab.rb`.  This is useful in situations where
+you need to use a proxy to access the internet and you will be wanting to
+clone externally hosted repositories directly into gitlab.  In `/etc/gitlab/gitlab.rb`
+supply a `gitlab_rails['env']` with a hash value. For example:
+
+```ruby
+gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ### Changing gitlab.yml settings
 
 Some of GitLab's features can be customized through
