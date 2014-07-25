@@ -164,12 +164,14 @@ env_vars.each do |key, value|
   end
 end
 
-deleted_env_vars = Dir.entries(gitlab_rails_env_dir) - env_vars.keys - %w{. ..}
-deleted_env_vars.each do |deleted_var|
-  file deleted_var do
-    action :delete
-    notifies :restart, "service[unicorn]"
-    notifies :restart, "service[sidekiq]"
+if File.directory?(gitlab_rails_env_dir)
+  deleted_env_vars = Dir.entries(gitlab_rails_env_dir) - env_vars.keys - %w{. ..}
+  deleted_env_vars.each do |deleted_var|
+    file deleted_var do
+      action :delete
+      notifies :restart, "service[unicorn]"
+      notifies :restart, "service[sidekiq]"
+    end
   end
 end
 
