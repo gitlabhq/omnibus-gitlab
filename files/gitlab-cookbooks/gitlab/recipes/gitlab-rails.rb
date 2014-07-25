@@ -148,7 +148,11 @@ directory node['gitlab']['gitlab-rails']['satellites_path'] do
   recursive true
 end
 
-env_vars = node['gitlab']['gitlab-rails']['env'] || {}
+env_vars = {
+  'HOME' => node['gitlab']['user']['home'],
+  'BUNDLE_GEMFILE' => File.join(gitlab_rails_source_dir, 'Gemfile')
+}.merge(node['gitlab']['gitlab-rails']['env'])
+
 env_vars.each do |key, value|
   file File.join(gitlab_rails_env_dir, key) do
     owner node['gitlab']['user']['username']
