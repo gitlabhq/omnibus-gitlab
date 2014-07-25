@@ -19,6 +19,7 @@
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
+gitlab_rails_env_dir = File.join(gitlab_rails_etc_dir, "env")
 gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
@@ -27,6 +28,7 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 [
   gitlab_rails_dir,
   gitlab_rails_etc_dir,
+  gitlab_rails_env_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   gitlab_rails_public_uploads_dir,
@@ -144,6 +146,27 @@ directory node['gitlab']['gitlab-rails']['satellites_path'] do
   group node['gitlab']['user']['group']
   mode "0750"
   recursive true
+end
+
+env_vars = node['gitlab']['gitlab-rails']['env'] || {}
+env_vars.each do |key, value|
+  file File.join(gitlab_rails_env_dir, key) do
+    owner node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    mode "0600"
+    content value
+    notifies :restart, "service[unicorn]"
+    notifies :restart, "service[sidekiq]"
+  end
+end
+
+deleted_env_vars = Dir.entries(gitlab_rails_env_dir) - env_vars.keys - %w{. ..}
+deleted_env_vars.each do |deleted_var|
+  file deleted_var do
+    action :delete
+    notifies :restart, "service[unicorn]"
+    notifies :restart, "service[sidekiq]"
+  end
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
