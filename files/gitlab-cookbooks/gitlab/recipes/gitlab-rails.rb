@@ -159,8 +159,9 @@ env_vars.each do |key, value|
     group node['gitlab']['user']['group']
     mode "0600"
     content value
-    notifies :restart, "service[unicorn]"
-    notifies :restart, "service[sidekiq]"
+    dependent_services.each do |svc|
+      notifies :restart, svc
+    end
   end
 end
 
@@ -169,8 +170,9 @@ if File.directory?(gitlab_rails_env_dir)
   deleted_env_vars.each do |deleted_var|
     file deleted_var do
       action :delete
-      notifies :restart, "service[unicorn]"
-      notifies :restart, "service[sidekiq]"
+      dependent_services.each do |svc|
+        notifies :restart, svc
+      end
     end
   end
 end
