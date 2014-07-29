@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.2.0
+- Pass environment variables to Unicorn and Sidekiq (Chris Portman)
+
 7.1.0
 - Build: explicitly use .forward for sending notifications
 - Fix MySQL build for Ubuntu 14.04

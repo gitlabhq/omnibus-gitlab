@@ -4,4 +4,4 @@ cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
 
 exec 2>&1
 <%= render("mount_point_check.erb") %>
-exec chpst -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /usr/bin/env BUNDLE_GEMFILE=/opt/gitlab/embedded/service/gitlab-rails/Gemfile HOME="<%= node['gitlab']['user']['home'] %>" /opt/gitlab/embedded/bin/bundle exec sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e <%= node['gitlab']['gitlab-rails']['environment'] %> -r /opt/gitlab/embedded/service/gitlab-rails
+exec chpst -e <%= node['gitlab']['gitlab-rails']['dir'] %>/etc/env -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /opt/gitlab/embedded/bin/bundle exec sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e <%= node['gitlab']['gitlab-rails']['environment'] %> -r /opt/gitlab/embedded/service/gitlab-rails

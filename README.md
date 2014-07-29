@@ -134,6 +134,30 @@ Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ## Configuration
 
+### Backup and restore omnibus-gitlab configuration
+
+All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
+configuration, just backup this directory.
+
+```shell
+# Example backup command for /etc/gitlab:
+# Create a time-stamped .tar file in the current directory.
+# The .tar file will be readable only to root.
+sudo sh -c 'umask 0077; tar -cf $(date "+etc-gitlab-%s.tar") -C / etc/gitlab'
+```
+
+You can extract the .tar file as follows.
+
+```shell
+# Rename the existing /etc/gitlab, if any
+sudo mv /etc/gitlab /etc/gitlab.$(date +%s)
+# Change the example timestamp below for your configuration backup
+sudo tar -xf etc-gitlab-1399948539.tar -C /
+```
+
+Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
+backup.
+
 ### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
@@ -254,6 +278,20 @@ as part of the external_url.
 
 ```ruby
 external_url "https://gitlab.example.com:2443"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+### Adding ENV Vars to the Gitlab Runtime Environment
+
+If you need Gitlab to have access to certain environment variables, you can
+configure them in `/etc/gitlab/gitlab.rb`.  This is useful in situations where
+you need to use a proxy to access the internet and you will be wanting to
+clone externally hosted repositories directly into gitlab.  In `/etc/gitlab/gitlab.rb`
+supply a `gitlab_rails['env']` with a hash value. For example:
+
+```ruby
+gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
