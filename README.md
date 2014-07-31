@@ -134,6 +134,30 @@ Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ## Configuration
 
+### Backup and restore omnibus-gitlab configuration
+
+All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
+configuration, just backup this directory.
+
+```shell
+# Example backup command for /etc/gitlab:
+# Create a time-stamped .tar file in the current directory.
+# The .tar file will be readable only to root.
+sudo sh -c 'umask 0077; tar -cf $(date "+etc-gitlab-%s.tar") -C / etc/gitlab'
+```
+
+You can extract the .tar file as follows.
+
+```shell
+# Rename the existing /etc/gitlab, if any
+sudo mv /etc/gitlab /etc/gitlab.$(date +%s)
+# Change the example timestamp below for your configuration backup
+sudo tar -xf etc-gitlab-1399948539.tar -C /
+```
+
+Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
+backup.
+
 ### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
@@ -206,37 +230,54 @@ Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
 ### Enable HTTPS
 
-By default, omnibus-gitlab runs does not use HTTPS.  If you want to enable HTTPS you can add the
-following line to `/etc/gitlab/gitlab.rb`.
+By default, omnibus-gitlab does not use HTTPS. If you want to enable
+HTTPS for gitlab.example.com, first place your key and certificate in
+`/etc/gitlab/ssl/gitlab.example.com.key` and
+`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively.
+
+```
+sudo mkdir -p /etc/gitlab/ssl
+sudo chmod 700 /etc/gitlab/ssl
+sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/
+```
+
+Next, add the following line to `/etc/gitlab/gitlab.rb` and run `sudo
+gitlab-ctl reconfigure`.
 
 ```ruby
 external_url "https://gitlab.example.com"
 ```
 
-Redirect `HTTP` requests to `HTTPS`.
+If you are using a firewall you may have to open port 443 to allow inbound
+HTTPS traffic.
+
+```
+# UFW example (Debian, Ubuntu)
+sudo ufw allow https
+
+# lokkit example (RedHat, CentOS)
+sudo lokkit -s https
+```
+
+#### Redirect `HTTP` requests to `HTTPS`.
+
+By default, when you specify an external_url starting with 'https', Nginx will
+no longer listen for unencrypted HTTP traffic on port 80. If you want to
+redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
+setting.
 
 ```ruby
 external_url "https://gitlab.example.com"
 nginx['redirect_http_to_https'] = true
 ```
 
-Change the default port and the ssl certificate locations.
+#### Change the default port and the ssl certificate locations.
+
+If you need to use an HTTPS port other than the default (443), just specify it
+as part of the external_url.
 
 ```ruby
 external_url "https://gitlab.example.com:2443"
-nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
-nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
-```
-
-Create the default ssl certifcate directory and add the files:
-
-```
-sudo mkdir -p /etc/gitlab/ssl && sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/
-# run lokkit to open https on the firewall
-sudo lokkit -s https
-# if you are using a non standard https port
-sudo lokkit -p 2443:tcp
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
