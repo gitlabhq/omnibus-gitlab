@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
 - Add openssl_verify_mode to SMTP email configuration (Dionysius Marquis)
+- Enable the 'ssh_host' field in gitlab.yml
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
