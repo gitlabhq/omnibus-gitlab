@@ -4,6 +4,12 @@ This project creates full-stack platform-specific [downloadable packages for Git
 For other installation options please see the
 [GitLab installation page][installation].
 
+## Canonical source
+
+The source of omnibus-gitlab is [hosted on
+GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab) and there are mirrors
+to make contributing as easy as possible.
+
 ## Documentation version
 
 Please make sure you are viewing the documentation for the version of
