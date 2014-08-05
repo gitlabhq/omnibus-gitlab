@@ -631,7 +631,7 @@ settings to take effect.
 
 ```ruby
 redis['enable'] = false
-gitlab_rails['redis_host'] = redis.example.com
+gitlab_rails['redis_host'] = 'redis.example.com'
 gitlab_rails['redis_port'] = 6380 # defaults to 6379
 ```
 
