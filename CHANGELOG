@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
 - Add openssl_verify_mode to SMTP email configuration (Dionysius Marquis)
 - Enable the 'ssh_host' field in gitlab.yml (Florent Baldino)
+- Create git's home directory if necessary
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
