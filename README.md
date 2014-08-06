@@ -45,6 +45,20 @@ Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
+#### Emails are not being delivered
+
+To test email delivery you can create a new GitLab account for an email that is
+not used in your GitLab instance yet.
+
+If necessary, you can modify the 'From' field of the emails sent by GitLab with
+the following setting in `/etc/gitlab/gitlab.rb`:
+
+```
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 #### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
 This happens when Runit has not been installed succesfully during `gitlab-ctl
@@ -379,6 +393,10 @@ gitlab_rails['smtp_password'] = "smtp password"
 gitlab_rails['smtp_domain'] = "example.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
+
+# If your SMTP server does not like the default 'From: gitlab@localhost' you
+# can change the 'From' with this setting.
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 ```
 
 ### Omniauth (Google, Twitter, GitHub login)
