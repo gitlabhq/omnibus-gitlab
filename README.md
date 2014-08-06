@@ -572,7 +572,7 @@ you can start one with the command below. Please be warned that it is very easy
 to inadvertently modify, corrupt or destroy data from the console.
 
 ```shell
-sudo /opt/gitlab/bin/gitlab-rails console
+sudo gitlab-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
