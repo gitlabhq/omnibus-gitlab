@@ -3,7 +3,7 @@
 To create builds you will need a build user (`omnibus-build:omnibus-build` in our example).
 Preparing the build machine requires sudo access.
 
-## Ubuntu 12.04
+## Ubuntu 12.04, 14.04
 
 ```shell
 # Get the latest OS updates
