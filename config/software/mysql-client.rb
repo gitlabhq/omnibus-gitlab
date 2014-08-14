@@ -36,12 +36,6 @@ env = {
   "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
 }
 
-unless Ohai['platform'] =~ /ubuntu/ && Ohai['platform_version'] =~ /^14.04/
-  # Perhaps we can drop LD_LIBRARY_PATH on all platforms? For now, all we know
-  # is that it breaks the build on Ubuntu 14.04.
-  env.merge!("LD_LIBRARY_PATH" => "#{install_dir}/embedded/lib")
-end
-
 # Force CentOS-5 to use gcc/g++ v4.4
 if Ohai['platform'] =~ /centos/ and Ohai['platform_version'] =~ /^5/
     env.merge!( {
