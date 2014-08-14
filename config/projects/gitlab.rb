@@ -35,7 +35,7 @@ dependency "git"
 dependency "redis"
 dependency "nginx"
 dependency "chef-gem"
-if system("#{Omnibus.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus.project_root}/support/is_gitlab_com.sh")
+if system("#{Config.project_root}/support/is_gitlab_ee.sh") || system("#{Config.project_root}/support/is_gitlab_com.sh")
   dependency "remote-syslog"
 end
 dependency "runit"

@@ -22,7 +22,7 @@ dependency "rsync"
 
 always_build true
 
-source :path => File.expand_path("files/gitlab-cookbooks", Omnibus.project_root)
+source :path => File.expand_path("files/gitlab-cookbooks", Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
