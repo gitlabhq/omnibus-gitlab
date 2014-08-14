@@ -48,7 +48,7 @@ server {
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   ssl_protocols  <%= @ssl_protocols %>;
   ssl_session_cache  <%= @ssl_session_cache %>;
-  ssl_timeout  <%= @ssl_timeout %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
   <% end %>
 
   # Increase this if you want to upload large attachments
