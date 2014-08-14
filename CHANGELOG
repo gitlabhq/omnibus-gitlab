@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Add openssl_verify_mode to SMTP email configuration (Dionysius Marquis)
 - Enable the 'ssh_host' field in gitlab.yml (Florent Baldino)
 - Create git's home directory if necessary
+- Update openssl to 1.0.1i
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
