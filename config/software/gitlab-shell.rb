@@ -25,7 +25,7 @@ source :git => "https://gitlab.com/gitlab-org/gitlab-shell.git"
 
 build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
-  sync ".", "#{install_dir}/embedded/service/gitlab-shell/", exclude: %{.git .gitignore}
+  sync project_dir, "#{install_dir}/embedded/service/gitlab-shell/", exclude: %{.git .gitignore}
   block do
     env_shebang = "#!/usr/bin/env ruby"
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|

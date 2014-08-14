@@ -24,5 +24,5 @@ source :path => File.expand_path("files/gitlab-cookbooks", Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
-  sync ".", "#{install_dir}/embedded/cookbooks/"
+  sync project_dir, "#{install_dir}/embedded/cookbooks/"
 end

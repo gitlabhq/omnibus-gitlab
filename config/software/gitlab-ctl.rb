@@ -64,5 +64,5 @@ done
   command "chmod 755 #{install_dir}/bin/gitlab-ctl"
 
   # additional omnibus-ctl commands
-  sync ".", "#{install_dir}/embedded/service/omnibus-ctl/"
+  sync project_dir, "#{install_dir}/embedded/service/omnibus-ctl/"
 end

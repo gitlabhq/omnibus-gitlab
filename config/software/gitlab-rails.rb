@@ -87,7 +87,7 @@ build do
   command "cp db/schema.rb db/schema.rb.bundled"
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync ".", "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w{.git .gitignore}
+  sync project_dir, "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w{.git .gitignore}
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
