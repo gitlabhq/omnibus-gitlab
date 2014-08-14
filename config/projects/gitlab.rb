@@ -21,7 +21,7 @@ maintainer "GitLab.com"
 homepage "http://www.gitlab.com/"
 
 replaces        "gitlab"
-install_path    "/opt/gitlab"
+install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
