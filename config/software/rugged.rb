@@ -24,5 +24,6 @@ dependency "rubygems"
 dependency "libgit2"
 
 build do
-  gem "install rugged --install-dir=#{install_dir}/embedded/service/gem/ruby/2.1.0 --no-rdoc --no-ri -v #{version} -- --use-system-libraries"
+  env = with_standard_compiler_flags(with_embedded_path)
+  gem "install rugged --install-dir=#{install_dir}/embedded/service/gem/ruby/2.1.0 --no-rdoc --no-ri -v #{version} -- --use-system-libraries", env: env
 end
