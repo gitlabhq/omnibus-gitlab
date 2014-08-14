@@ -18,13 +18,11 @@
 
 name "gitlab-cookbooks"
 
-dependency "rsync"
-
 always_build true
 
 source :path => File.expand_path("files/gitlab-cookbooks", Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/cookbooks/"
+  sync ".", "#{install_dir}/embedded/cookbooks/"
 end
