@@ -5,7 +5,7 @@ SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
 
 build:
-	OMNIBUS_APPEND_TIMESTAMP=0 bin/omnibus build project ${PROJECT}
+	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 

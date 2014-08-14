@@ -21,7 +21,7 @@ name "gitlab-ctl"
 dependency "rsync"
 dependency "omnibus-ctl"
 
-source :path => File.expand_path("files/gitlab-ctl-commands", Omnibus.project_root)
+source :path => File.expand_path("files/gitlab-ctl-commands", Config.project_root)
 
 build do
   block do

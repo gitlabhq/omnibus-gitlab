@@ -19,7 +19,7 @@
 name "gitlab-rails"
 default_version "70ed6ef2a6894042c9bbd92f273542bca2a2374f" # 7.0.0.rc1
 
-EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
+EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
@@ -62,7 +62,7 @@ build do
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
-  aato_patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+  aato_patch = "#{Config.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
 
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).

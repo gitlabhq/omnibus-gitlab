@@ -18,11 +18,9 @@
 name "mysql-client"
 default_version "5.5.37"
 
-dependencies [
-                "openssl",
-                "zlib",
-                "ncurses"
-             ]
+dependency "openssl"
+dependency "zlib"
+dependency "ncurses"
 
 source  :url => "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.37.tar.gz",
         :md5 => "bf1d80c66d4822ec6036300399a33c03"
@@ -38,14 +36,8 @@ env = {
   "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
 }
 
-unless OHAI.platform =~ /ubuntu/ && OHAI.platform_version =~ /^14.04/
-  # Perhaps we can drop LD_LIBRARY_PATH on all platforms? For now, all we know
-  # is that it breaks the build on Ubuntu 14.04.
-  env.merge!("LD_LIBRARY_PATH" => "#{install_dir}/embedded/lib")
-end
-
 # Force CentOS-5 to use gcc/g++ v4.4
-if OHAI.platform =~ /centos/ and OHAI.platform_version =~ /^5/
+if Ohai['platform'] =~ /centos/ and Ohai['platform_version'] =~ /^5/
     env.merge!( {
         "CC" => "gcc44",
         "CXX" => "g++44"
