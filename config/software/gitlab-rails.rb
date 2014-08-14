@@ -31,6 +31,7 @@ dependency "libicu"
 dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
+dependency "rugged"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
