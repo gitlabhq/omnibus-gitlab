@@ -24,13 +24,9 @@ source :url => "http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-src.
 
 relative_path 'icu/source'
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
-}
-
 build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
   command ["./runConfigureICU",
            "Linux/gcc",
            "--prefix=#{install_dir}/embedded",

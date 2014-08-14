@@ -24,5 +24,6 @@ dependency "pip"
 dependency "python"
 
 build do
-  command "#{install_dir}/embedded/bin/pip install docutils==#{version}"
+  env = with_standard_compiler_flags(with_embedded_path)
+  command "#{install_dir}/embedded/bin/pip install docutils==#{version}", env: env
 end

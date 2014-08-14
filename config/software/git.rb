@@ -28,13 +28,9 @@ source :url => "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.g
 
 relative_path "git-#{version}"
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-}
-
 build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
   command ["./configure",
            "--prefix=#{install_dir}/embedded",
            "--with-curl=#{install_dir}/embedded",

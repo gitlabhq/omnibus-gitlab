@@ -27,14 +27,11 @@ source  :url => "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.37.tar.g
 
 relative_path "mysql-#{version}"
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+env = with_standard_compiler_flags(with_embedded_path)
+env.merge!(
   "CXXFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CPPFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-  "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
-}
+)
 
 # Force CentOS-5 to use gcc/g++ v4.4
 if Ohai['platform'] =~ /centos/ and Ohai['platform_version'] =~ /^5/
