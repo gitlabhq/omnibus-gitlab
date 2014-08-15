@@ -188,6 +188,12 @@ end
   end
 end
 
+legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
+link legacy_sidekiq_log_file do
+  to File.join(node['gitlab']['sidekiq']['log_directory'], 'current')
+  not_if { File.exists?(legacy_sidekiq_log_file) }
+end
+
 # Make schema.rb writable for when we run `rake db:migrate`
 file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
   owner node['gitlab']['user']['username']
