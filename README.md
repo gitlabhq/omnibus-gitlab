@@ -437,6 +437,15 @@ unicorn['worker_processes'] = 3
 unicorn['worker_timeout'] = 60
 ```
 
+### Setting the NGINX listen address or addresses
+
+By default NGINX will accept incoming connections on all local IPv4 addresses.
+You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
+
+```ruby
+nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
+```
+
 ## Backups
 
 ### Creating an application backup

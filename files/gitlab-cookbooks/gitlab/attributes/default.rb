@@ -261,7 +261,7 @@ default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
 default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-default['gitlab']['nginx']['listen_address'] = '*'
+default['gitlab']['nginx']['listen_addresses'] = ['*']
 
 ###
 # Logging

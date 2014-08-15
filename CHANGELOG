@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Update openssl to 1.0.1i
 - Fix missing sidekiq.log in the GitLab admin interface
 - Defer more gitlab.yml defaults to upstream
+- Allow more than one NGINX listen address
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
