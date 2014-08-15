@@ -35,13 +35,9 @@ dependency "rugged"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-}
-
 build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
   # GitLab assumes it can extract the Git revision of the currently version
   # from the Git repo the code lives in at boot. Because of our rsync later on,
   # this assumption does not hold. The sed command below patches the GitLab

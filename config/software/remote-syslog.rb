@@ -23,5 +23,6 @@ dependency "ruby"
 dependency "rubygems"
 
 build do
-  gem "install remote_syslog -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}"
+  env = with_standard_compiler_flags(with_embedded_path)
+  gem "install remote_syslog -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}", env: env
 end
