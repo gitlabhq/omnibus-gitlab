@@ -35,7 +35,9 @@ server {
 <% end %>
 
 server {
-  listen <%= @listen_address %>:<%= @port %>;
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @port %>;
+<% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
   root /opt/gitlab/embedded/service/gitlab-rails/public;
@@ -46,6 +48,9 @@ server {
   ssl_certificate_key <%= @ssl_certificate_key %>;
   ssl_ciphers '<%= @ssl_ciphers %>';
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
   <% end %>
 
   # Increase this if you want to upload large attachments

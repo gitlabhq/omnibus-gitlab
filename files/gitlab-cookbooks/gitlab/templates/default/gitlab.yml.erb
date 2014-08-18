@@ -17,7 +17,7 @@ production: &base
     # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
     # (you'd obviously need to replace ssh.host_example.com with your own host).
     # Otherwise, ssh host will be set to the `host:` value above
-    # ssh_host: ssh.host_example.com
+    ssh_host: <%= @gitlab_ssh_host %>
 
     # WARNING: See config/application.rb under "Relative url support" for the list of
     # other files that need to be changed for relative url support
@@ -70,7 +70,7 @@ production: &base
       merge_requests: <%= @gitlab_default_projects_features_merge_requests %>
       wiki: <%= @gitlab_default_projects_features_wiki %>
       snippets: <%= @gitlab_default_projects_features_snippets %>
-      visibility_level: "<%= @gitlab_default_projects_features_visibility_level %>"  # can be "private" | "internal" | "public"
+      visibility_level: <%= single_quote(@gitlab_default_projects_features_visibility_level) %>  # can be "private" | "internal" | "public"
 
     ## Repository downloads directory
     # When a user clicks e.g. 'Download zip' on a project, a temporary zip file is created in the following directory.

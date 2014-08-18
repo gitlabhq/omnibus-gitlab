@@ -19,30 +19,26 @@
 name "gitlab-rails"
 default_version "090ac2b6f7195b9b50f919e25ab220d8f3637c0f" # 7.1.1-ee
 
-EE = system("#{Omnibus.project_root}/support/is_gitlab_ee.sh")
+EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
 dependency "libxml2"
 dependency "libxslt"
 dependency "curl"
-dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
+dependency "rugged"
 
 source :git => "git@dev.gitlab.org:gitlab/gitlab-cloud.git"
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-}
-
 build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
   # GitLab assumes it can extract the Git revision of the currently version
-  # from the Git repo the code lives in at boot. Because of our rsync later on,
+  # from the Git repo the code lives in at boot. Because of our sync later on,
   # this assumption does not hold. The sed command below patches the GitLab
   # source code to include the Git revision of the code included in the omnibus
   # build.
@@ -62,7 +58,7 @@ build do
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
-  aato_patch = "#{Omnibus.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+  aato_patch = "#{Config.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
 
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).
@@ -87,7 +83,7 @@ build do
   command "cp db/schema.rb db/schema.rb.bundled"
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
+  sync project_dir, "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w{.git .gitignore}
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",

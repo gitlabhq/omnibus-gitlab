@@ -16,13 +16,14 @@
 ##
 #
 
-name "remote-syslog"
-default_version "1.6.14"
+name "rugged"
+default_version "0.21.0"
 
 dependency "ruby"
 dependency "rubygems"
+dependency "libgit2"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  gem "install remote_syslog -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}", env: env
+  gem "install rugged --install-dir=#{install_dir}/embedded/service/gem/ruby/2.1.0 --no-rdoc --no-ri -v #{version} -- --use-system-libraries", env: env
 end

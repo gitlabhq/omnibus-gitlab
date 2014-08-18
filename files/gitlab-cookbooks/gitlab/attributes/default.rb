@@ -54,20 +54,21 @@ default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
-default['gitlab']['gitlab-rails']['gitlab_email_from'] = "gitlab@#{node['fqdn']}"
-default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = 10
+default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
+default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_signin_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_restricted_visibility_levels'] = nil
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = true
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = true
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = true
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = false
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = false
-default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = "private"
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = nil
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['issues_tracker_redmine'] = false
 default['gitlab']['gitlab-rails']['issues_tracker_redmine_title'] = "Redmine"
@@ -105,12 +106,12 @@ default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
 default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
-default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = true
-default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = true
-default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = 22
+default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = nil
+default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = nil
+default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = nil
 default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
-default['gitlab']['gitlab-rails']['git_max_size'] = 20971520 # 20 MB
-default['gitlab']['gitlab-rails']['git_timeout'] = 10
+default['gitlab']['gitlab-rails']['git_max_size'] = nil
+default['gitlab']['gitlab-rails']['git_timeout'] = nil
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
@@ -144,6 +145,7 @@ default['gitlab']['gitlab-rails']['smtp_domain'] = nil
 default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
+default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
 
 ####
 # Unicorn
@@ -256,7 +258,10 @@ default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
 default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4"
 default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
-default['gitlab']['nginx']['listen_address'] = '*'
+default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['listen_addresses'] = ['*']
 
 ###
 # Logging

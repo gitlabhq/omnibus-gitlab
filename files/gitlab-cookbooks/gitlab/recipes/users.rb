@@ -20,6 +20,10 @@ gitlab_username = node['gitlab']['user']['username']
 gitlab_group = node['gitlab']['user']['group']
 gitlab_home = node['gitlab']['user']['home']
 
+directory gitlab_home do
+  recursive true
+end
+
 # Create the group for the GitLab user
 group gitlab_group do
   gid node['gitlab']['user']['gid']

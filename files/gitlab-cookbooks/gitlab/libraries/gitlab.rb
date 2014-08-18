@@ -147,6 +147,15 @@ module Gitlab
       end
     end
 
+    def parse_nginx_listen_address
+      return unless nginx['listen_address']
+
+      # The user specified a custom NGINX listen address with the legacy
+      # listen_address option. We have to convert it to the new
+      # listen_addresses setting.
+      nginx['listen_addresses'] = [nginx['listen_address']]
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -176,6 +185,7 @@ module Gitlab
       parse_git_data_dir
       parse_udp_log_shipping
       parse_redis_settings
+      parse_nginx_listen_address
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
