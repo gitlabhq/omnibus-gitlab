@@ -18,6 +18,7 @@
 
 name "gitlab-ctl"
 
+dependency "rsync"
 dependency "omnibus-ctl"
 
 source :path => File.expand_path("files/gitlab-ctl-commands", Config.project_root)
@@ -64,5 +65,5 @@ done
   command "chmod 755 #{install_dir}/bin/gitlab-ctl"
 
   # additional omnibus-ctl commands
-  sync project_dir, "#{install_dir}/embedded/service/omnibus-ctl/"
+  command "#{install_dir}/embedded/bin/rsync -a ./ #{install_dir}/embedded/service/omnibus-ctl/"
 end
