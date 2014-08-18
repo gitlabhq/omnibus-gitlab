@@ -94,6 +94,43 @@ bundle install --path .bundle --binstubs
 bin/omnibus build project gitlab
 ```
 
+### Centos 7
+
+As an administrator (or root):
+
+```
+yum update
+
+# Firewall is OK by default??
+
+# Check for SSH password logins; they should be disabled
+grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+
+sudo yum groupinstall 'Development Tools'
+sudo yum install ruby ruby-devel cmake
+sudo gem install bundler --no-ri --no-rdoc
+
+# Create the build user
+sudo adduser -c 'Omnibus Build' omnibus-build
+# Create build directories for use by the build user
+sudo mkdir -p /opt/gitlab /var/cache/omnibus
+sudo chown omnibus-build:omnibus-build /opt/gitlab /var/cache/omnibus
+```
+
+As the build user (omnibus-build):
+
+```shell
+# Clone the omnibus repo
+git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
+
+# Install gem dependencies for omnibus-ruby
+cd omnibus-gitlab
+bundle install --path .bundle --binstubs
+
+# Do a build (and take a break from the computer)
+bin/omnibus build project gitlab
+```
+
 ## Usage
 
 ### Build
