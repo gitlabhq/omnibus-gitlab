@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Fix missing sidekiq.log in the GitLab admin interface
 - Defer more gitlab.yml defaults to upstream
 - Allow more than one NGINX listen address
+- Enable NGINX SSL session caching by default
+- Update omnibus-ruby to 3.2.1
+- Add rugged and libgit2 as dependencies at the omnibus level
+- Remove outdated Vagrantfile
 
 7.1.0
 - Build: explicitly use .forward for sending notifications
