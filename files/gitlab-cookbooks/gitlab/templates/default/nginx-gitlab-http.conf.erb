@@ -25,7 +25,9 @@ upstream gitlab {
 
 <% if @https && @redirect_http_to_https %>
 server {
-  listen <%= @listen_address %>:<%= @redirect_http_to_https_port %>;
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
+<% end %>
   server_name <%= @fqdn %>;
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
