@@ -33,8 +33,10 @@ when "rhel"
   else
     if node['platform_version'] =~ /^5/
       include_recipe "runit::sysvinit"
-    else # >= 6.0
+    elsif node['platform_version'] =~ /^6/
       include_recipe "runit::upstart"
+    elsif node['platform_version'] =~ /^7/
+      include_recipe "runit::systemd"
     end
   end
 when "fedora"

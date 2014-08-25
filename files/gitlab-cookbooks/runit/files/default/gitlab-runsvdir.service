@@ -1,0 +1,6 @@
+[Unit]
+Description=GitLab Runit supervision process
+
+[Service]
+ExecStart=/opt/gitlab/embedded/bin/runsvdir-start
+Restart=always
