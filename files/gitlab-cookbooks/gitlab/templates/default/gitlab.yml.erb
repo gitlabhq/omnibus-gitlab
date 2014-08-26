@@ -218,7 +218,7 @@ production: &base
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
     path: <%= @satellites_path %>
-    timeout: 30
+    timeout: <%= @satellites_timeout %>
 
   ## Backup settings
   backup:
