@@ -572,6 +572,10 @@ The correct operation of Git access via SSH depends on the labeling of
 `/var/opt/gitlab/.ssh`. If needed you can restore this labeling by running
 `sudo gitlab-ctl reconfigure`.
 
+Depending on your platform, `gitlab-ctl reconfigure` will install SELinux
+modules required to make GitLab work. These modules are listed in
+[files/gitlab-selinux/README.md](files/gitlab-selinux/README.md).
+
 ## Logs
 
 ### Tail logs in a console on the server
