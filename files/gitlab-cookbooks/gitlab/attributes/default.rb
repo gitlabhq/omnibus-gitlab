@@ -101,6 +101,7 @@ default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
+default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
