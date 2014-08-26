@@ -214,6 +214,30 @@ git_data_dir "/mnt/nas/git-data"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+If you already have existing Git repositories in `/var/opt/gitlab/git-data` you
+can move them to the new location as follows:
+
+```shell
+# Prevent users from writing to the repositories while you move them.
+sudo gitlab-ctl stop
+
+# Only move 'repositories'; 'gitlab-satellites' will be recreated
+# automatically. Note there is _no_ slash behind 'repositories', but there _is_ a
+# slash behind 'git-data'.
+sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
+
+# Fix permissions if necessary
+sudo gitlab-ctl reconfigure
+
+# Double-check directory layout in /mnt/nas/git-data. Expected output:
+# gitlab-satellites  repositories
+sudo ls /mnt/nas/git-data/
+
+# Done! Start GitLab and verify that you can browse through the repositories in
+# the web interface.
+sudo gitlab-ctl start
+```
+
 ### Changing the name of the Git user / group
 
 By default, omnibus-gitlab uses the user name `git` for Git gitlab-shell login,
@@ -547,6 +571,10 @@ use SELinux confinement features:
 The correct operation of Git access via SSH depends on the labeling of
 `/var/opt/gitlab/.ssh`. If needed you can restore this labeling by running
 `sudo gitlab-ctl reconfigure`.
+
+Depending on your platform, `gitlab-ctl reconfigure` will install SELinux
+modules required to make GitLab work. These modules are listed in
+[files/gitlab-selinux/README.md](files/gitlab-selinux/README.md).
 
 ## Logs
 
