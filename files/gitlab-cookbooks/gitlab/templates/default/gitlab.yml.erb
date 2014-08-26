@@ -133,6 +133,15 @@ production: &base
     method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
     bind_dn: <%= single_quote(@ldap_bind_dn) %>
     password: <%= single_quote(@ldap_password) %>
+
+    # This setting controls the amount of time between LDAP permission checks for each user.
+    # After this time has expired for a given user, their next interaction with GitLab (a click in the web UI, a git pull etc.) will be slower because the LDAP permission check is being performed.
+    # How much slower depends on your LDAP setup, but it is not uncommon for this check to add seconds of waiting time.
+    # The default value is to have a 'slow click' once every 3600 seconds, i.e. once per hour.
+    #
+    # Warning: if you set this value too low, every click in GitLab will be a 'slow click' for all of your LDAP users.
+    sync_time: <%= @ldap_sync_time %>
+
     # If allow_username_or_email_login is enabled, GitLab will ignore everything
     # after the first '@' in the LDAP username submitted by the user on login.
     #
