@@ -43,6 +43,7 @@ dependency "gitlab-rails"
 dependency "gitlab-shell"
 dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
+dependency "gitlab-selinux"
 
 # version manifest file
 dependency "version-manifest"
