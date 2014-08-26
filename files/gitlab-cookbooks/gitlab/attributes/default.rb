@@ -96,6 +96,7 @@ default['gitlab']['gitlab-rails']['ldap_user_filter'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
+default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
