@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 7.3.0
 - Add systemd support for Centos 7
+- Add a Centos 7 SELinux module for ssh-keygen permissions
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)

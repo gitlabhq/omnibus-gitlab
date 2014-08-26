@@ -1,0 +1,11 @@
+
+module gitlab-7.2.0-ssh-keygen 1.0;
+
+require {
+	type ssh_keygen_t;
+	type init_tmp_t;
+	class file open;
+}
+
+#============= ssh_keygen_t ==============
+allow ssh_keygen_t init_tmp_t:file open;
