@@ -101,7 +101,9 @@ As an administrator (or root):
 ```
 yum update
 
-# Firewall is OK by default??
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --list-all
 
 # Check for SSH password logins; they should be disabled
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
