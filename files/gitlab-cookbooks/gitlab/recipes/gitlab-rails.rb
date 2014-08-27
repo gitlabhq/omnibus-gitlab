@@ -26,7 +26,6 @@ gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_direct
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
-  gitlab_rails_dir,
   gitlab_rails_etc_dir,
   gitlab_rails_env_dir,
   gitlab_rails_working_dir,
@@ -41,6 +40,19 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
     mode '0700'
     recursive true
   end
+end
+
+directory gitlab_rails_dir do
+  owner node['gitlab']['user']['username']
+  mode '0755'
+  recursive true
+end
+
+directory File.join(gitlab_rails_dir, "sockets") do
+  owner node['gitlab']['user']['username']
+  group node['gitlab']['web_server']['username']
+  mode '0770'
+  recursive true
 end
 
 dependent_services = []
