@@ -233,6 +233,14 @@ default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['port'] = 6379
 
+####
+# Web server
+####
+# Username for the webserver user
+default['gitlab']['webserver']['username'] = 'gitlab-www'
+default['gitlab']['webserver']['group'] = 'gitlab-www'
+default['gitlab']['webserver']['uid'] = nil
+default['gitlab']['webserver']['gid'] = nil
 
 ####
 # Nginx
