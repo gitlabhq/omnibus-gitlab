@@ -2,7 +2,7 @@
 # erased! To change the contents below, edit /etc/gitlab/gitlab.rb
 # and run `sudo gitlab-ctl reconfigure`.
 
-user <%= node['gitlab']['user']['username'] %> <%= node['gitlab']['web_server']['username']%>;
+user <%= node['gitlab']['user']['username'] %> <%= node['gitlab']['webserver']['username']%>;
 worker_processes <%= @worker_processes %>;
 error_log /var/log/gitlab/nginx/error.log;
 pid /var/opt/gitlab/nginx/nginx.pid;
