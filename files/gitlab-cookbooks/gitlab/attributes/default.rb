@@ -237,10 +237,11 @@ default['gitlab']['redis']['port'] = 6379
 # Web server
 ####
 # Username for the webserver user
-default['gitlab']['webserver']['username'] = 'gitlab-www'
-default['gitlab']['webserver']['group'] = 'gitlab-www'
-default['gitlab']['webserver']['uid'] = nil
-default['gitlab']['webserver']['gid'] = nil
+default['gitlab']['web-server']['username'] = 'gitlab-www'
+default['gitlab']['web-server']['group'] = 'gitlab-www'
+default['gitlab']['web-server']['uid'] = nil
+default['gitlab']['web-server']['gid'] = nil
+default['gitlab']['web-server']['shell'] = "/bin/false"
 
 ####
 # Nginx

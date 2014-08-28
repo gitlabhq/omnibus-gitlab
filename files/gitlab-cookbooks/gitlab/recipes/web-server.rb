@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,18 +15,18 @@
 # limitations under the License.
 #
 
-webserver_username = node['gitlab']['webserver']['username']
-webserver_group = node['gitlab']['webserver']['group']
+webserver_username = node['gitlab']['web-server']['username']
+webserver_group = node['gitlab']['web-server']['group']
 
 # Create the group for the GitLab user
 group webserver_group do
-  gid node['gitlab']['webserver']['gid']
+  gid node['gitlab']['web-server']['gid']
 end
 
 # Create the webserver user
 user webserver_username do
-  shell node['gitlab']['user']['shell']
-  uid node['gitlab']['webserver']['uid']
+  shell node['gitlab']['web-server']['shell']
+  uid node['gitlab']['web-server']['uid']
   gid webserver_group
   supports manage_home: false
 end

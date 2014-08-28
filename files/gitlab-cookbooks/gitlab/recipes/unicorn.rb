@@ -38,7 +38,7 @@ end
 
 directory unicorn_socket_dir do
   owner node['gitlab']['user']['username']
-  group node['gitlab']['webserver']['username']
+  group node['gitlab']['web-server']['username']
   mode '0750'
   recursive true
 end
