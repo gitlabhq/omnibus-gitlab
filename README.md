@@ -483,6 +483,14 @@ sudo gitlab-rake gitlab:backup:create
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
 `1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
 
+If you want to store your GitLab backups in a different directory, add the
+following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
+reconfigure`:
+
+```ruby
+gitlab_rails['backup_path'] = '/mnt/backups'
+```
+
 ### Scheduling a backup
 
 To schedule a cron job that backs up your repositories and GitLab metadata, use the root user:
