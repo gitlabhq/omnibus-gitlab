@@ -27,7 +27,6 @@ unicorn_socket_dir = File.dirname(unicorn_listen_socket)
 
 [
   unicorn_log_dir,
-  unicorn_socket_dir,
   File.dirname(unicorn_pidfile)
 ].each do |dir_name|
   directory dir_name do
@@ -35,6 +34,13 @@ unicorn_socket_dir = File.dirname(unicorn_listen_socket)
     mode '0700'
     recursive true
   end
+end
+
+directory unicorn_socket_dir do
+  owner node['gitlab']['user']['username']
+  group node['gitlab']['webserver']['username']
+  mode '0750'
+  recursive true
 end
 
 unicorn_listen_tcp = node['gitlab']['unicorn']['listen']

@@ -47,13 +47,6 @@ directory gitlab_rails_dir do
   recursive true
 end
 
-directory File.join(gitlab_rails_dir, "sockets") do
-  owner node['gitlab']['user']['username']
-  group node['gitlab']['webserver']['username']
-  mode '0770'
-  recursive true
-end
-
 directory gitlab_rails_public_uploads_dir do
   owner node['gitlab']['user']['username']
   group node['gitlab']['webserver']['username']
