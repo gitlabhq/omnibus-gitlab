@@ -202,7 +202,7 @@ end
 # Only run `rake db:migrate` when the gitlab-rails version has changed
 remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
-  notifies :run, 'execute[migrate database]' unless postgresql_not_listening
+  notifies :run, 'bash[migrate database]' unless postgresql_not_listening
   notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
   dependent_services.each do |sv|
     notifies :restart, sv

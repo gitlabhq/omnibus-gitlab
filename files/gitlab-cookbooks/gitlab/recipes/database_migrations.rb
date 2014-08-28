@@ -20,7 +20,12 @@ execute "initialize database" do
   action :nothing
 end
 
-execute "migrate database" do
-  command "/opt/gitlab/bin/gitlab-rake db:migrate"
+bash "migrate database" do
+  code <<-EOH
+    log_file="/tmp/gitlab-db-migrate-$(date +%s)-$$"
+    umask 077
+    /opt/gitlab/bin/gitlab-rake db:migrate 2>& 1 | tee ${log_file}
+    exit ${PIPESTATUS[0]}
+  EOH
   action :nothing
 end
