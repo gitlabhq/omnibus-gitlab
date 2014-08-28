@@ -33,7 +33,7 @@ dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "rugged"
 
-source :git => "git@gitlab.com:subscribers/gitlab-ee.git"
+source :git => "git@dev.gitlab.org:gitlab/gitlab-ee.git"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
