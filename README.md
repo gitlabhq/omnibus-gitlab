@@ -357,6 +357,9 @@ usermod -aG gitlab-www www-data
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+Note: if you are using SELinux and your web server runs under a restricted
+SELinux profile you may have to [loosen the restrictions on your web
+server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
