@@ -350,7 +350,7 @@ To allow an external webserver access to GitLab, you will need to add the webser
 Let's say that webserver user is `www-data`. Adding the user to `gitlab-www` group can be done with:
 
 ```
-usermod -G gitlab-www www-data
+usermod -aG gitlab-www www-data
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
