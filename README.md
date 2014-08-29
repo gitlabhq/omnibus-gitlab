@@ -816,10 +816,10 @@ be located at `/etc/nginx/sites-available/gitlab` and symlinked to
 `/etc/nginx/sites-enabled/gitlab`.
 
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)
-should be added to the `git` group. This can be done using the following command:
+should be added to the `gitlab-www` group. This can be done using the following command:
 
 ```shell
-sudo usermod -aG git www-data
+sudo usermod -aG gitlab-www www-data
 ```
 
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
