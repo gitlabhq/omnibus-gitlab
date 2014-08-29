@@ -46,6 +46,7 @@ module Gitlab
   logging Mash.new
   remote_syslog Mash.new
   high_availability Mash.new
+  web_server Mash.new
   node nil
   external_url nil
   git_data_dir nil
@@ -170,7 +171,8 @@ module Gitlab
         "logging",
         "remote_syslog",
         "high_availability",
-        "postgresql"
+        "postgresql",
+        "web_server"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]

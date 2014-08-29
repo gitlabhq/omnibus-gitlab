@@ -333,6 +333,29 @@ external_url "https://gitlab.example.com:2443"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+#### Use non-bundled web-server
+
+By default, omnibus-gitlab installs GitLab with bundled Nginx.
+To use another web server like Apache or an existing Nginx installation you will
+have to do the following steps:
+
+Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['enable'] = false
+```
+
+omnibus-gitlab allows webserver access through user `gitlab-www` which resides in the group with the same name.
+To allow an external webserver access to GitLab, you will need to add the webserver user to `gitlab-www` group.
+Let's say that webserver user is `www-data`. Adding the user to `gitlab-www` group can be done with:
+
+```
+usermod -G gitlab-www www-data
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
 If you need Gitlab to have access to certain environment variables, you can

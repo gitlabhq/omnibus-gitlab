@@ -26,12 +26,10 @@ gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_direct
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
-  gitlab_rails_dir,
   gitlab_rails_etc_dir,
   gitlab_rails_env_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
-  gitlab_rails_public_uploads_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   gitlab_rails_log_dir
@@ -41,6 +39,19 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
     mode '0700'
     recursive true
   end
+end
+
+directory gitlab_rails_dir do
+  owner node['gitlab']['user']['username']
+  mode '0755'
+  recursive true
+end
+
+directory gitlab_rails_public_uploads_dir do
+  owner node['gitlab']['user']['username']
+  group node['gitlab']['web-server']['username']
+  mode '0750'
+  recursive true
 end
 
 dependent_services = []
