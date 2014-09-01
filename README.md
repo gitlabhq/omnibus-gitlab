@@ -281,23 +281,27 @@ Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
 ### Enable HTTPS
 
-By default, omnibus-gitlab does not use HTTPS. If you want to enable
-HTTPS for gitlab.example.com, first place your key and certificate in
-`/etc/gitlab/ssl/gitlab.example.com.key` and
-`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively.
-
-```
-sudo mkdir -p /etc/gitlab/ssl
-sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/
-```
-
-Next, add the following line to `/etc/gitlab/gitlab.rb` and run `sudo
-gitlab-ctl reconfigure`.
+By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
+gitlab.example.com, add the following statement to `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 external_url "https://gitlab.example.com"
 ```
+
+Because the hostname in our example is 'gitlab.example.com', omnibus-gitlab
+will look for key and certificate files called
+`/etc/gitlab/ssl/gitlab.example.com.key` and
+`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively. Create the
+`/etc/gitlab/ssl` directory and copy your key and certificate there.
+
+```
+sudo mkdir -p /etc/gitlab/ssl
+sudo chmod 700 /etc/gitlab/ssl
+sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
+```
+
+Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
+GitLab instance should be reachable at `http://gitlab.example.com`.
 
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
@@ -306,8 +310,12 @@ HTTPS traffic.
 # UFW example (Debian, Ubuntu)
 sudo ufw allow https
 
-# lokkit example (RedHat, CentOS)
+# lokkit example (RedHat, CentOS 6)
 sudo lokkit -s https
+
+# firewall-cmd (RedHat, Centos 7)
+sudo firewall-cmd --permanent --add-service=https
+sudo systemctl reload firewalld
 ```
 
 #### Redirect `HTTP` requests to `HTTPS`.
