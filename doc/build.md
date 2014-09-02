@@ -17,6 +17,7 @@ sudo ufw enable
 
 # Check for SSH password logins, they should be disabled; The command below should return no results
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+sudo service ssh reload
 
 # Install dependencies
 sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential cmake
@@ -61,6 +62,7 @@ sudo lokkit -s ssh
 
 # Check for SSH password logins; they should be disabled
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+sudo service sshd reload
 
 sudo yum groupinstall 'Development Tools'
 # Install RedHat Software Collections to get Ruby 1.9.3
@@ -101,10 +103,13 @@ As an administrator (or root):
 ```
 yum update
 
-# Firewall is OK by default??
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --list-all
 
 # Check for SSH password logins; they should be disabled
 grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
+sudo systemctl reload sshd
 
 sudo yum groupinstall 'Development Tools'
 sudo yum install ruby ruby-devel cmake

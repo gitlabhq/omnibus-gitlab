@@ -47,10 +47,13 @@ git push origin 6-6-stable 6.6.0.omnibus
 # Ubuntu
 sudo apt-get install python-pip
 
-# CentOS
+# CentOS 6
 sudo yum install python-pip
 
-# Both
+# Centos 7
+sudo easy_install pip
+
+# All
 sudo pip install awscli
 ```
 
@@ -59,8 +62,11 @@ sudo pip install awscli
 # Ubuntu / Debian
 sudo apt-get install mailutils
 
-# Centos
+# Centos 6
 sudo yum install mail
+
+# Centos 7
+sudo yum install mailx
 ```
 
 As omnibus-build user:
