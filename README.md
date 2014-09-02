@@ -67,6 +67,19 @@ installing omnibus-gitlab on an unsupported platform. Solution: double check on
 the download page whether you downloaded a package for the correct operating
 system.
 
+#### Debian 7 and Upstart
+
+Some variants of Debian 7 (e.g. OpenVZ) use Upstart. This will trip up
+`gitlab-ctl reconfigure` at `ruby_block[supervise_redis_sleep] action run`,
+because the internal Runit cookbook assumes that Debian 7 uses inittab. You can
+work around this as follows.
+
+```
+sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
+sudo initctl start gitlab-runsvdir
+sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
+```
+
 #### TCP ports for GitLab services are already taken
 
 By default, the services in omnibus-gitlab are using the following TCP ports:
