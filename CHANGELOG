@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Add a Centos 7 SELinux module for ssh-keygen permissions
 - Log `rake db:migrate` output in /tmp
 - Support `issue_closing_pattern` via gitlab.rb (Michael Hill)
+- Use SIGHUP for zero-downtime NGINX configuration changes
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
