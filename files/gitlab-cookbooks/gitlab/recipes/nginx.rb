@@ -18,11 +18,13 @@
 
 nginx_dir = node['gitlab']['nginx']['dir']
 nginx_etc_dir = File.join(nginx_dir, "etc")
+nginx_working_dir = File.join(nginx_dir, "working")
 nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 [
   nginx_dir,
   nginx_etc_dir,
+  nginx_working_dir,
   nginx_log_dir,
 ].each do |dir_name|
   directory dir_name do

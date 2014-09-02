@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Log `rake db:migrate` output in /tmp
 - Support `issue_closing_pattern` via gitlab.rb (Michael Hill)
 - Use SIGHUP for zero-downtime NGINX configuration changes
+- Give NGINX its own working directory
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
