@@ -64,6 +64,7 @@ production: &base
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com
     # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+'
+    issue_closing_pattern: <%= single_quote(@gitlab_issue_closing_pattern) %>
 
     ## Default project features settings
     default_projects_features:
