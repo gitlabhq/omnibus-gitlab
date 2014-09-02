@@ -104,6 +104,29 @@ get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 `/var/opt/gitlab/.ssh`.
 
+#### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
+
+The bundled Postgres instance will try to allocate 25% of total memory as
+shared memory. On some Linux (virtual) servers, there is less shared memory
+available, which will prevent Postgres from starting. In
+`/var/log/gitlab/postgresql/current`:
+
+```
+  1885  2014-08-08_16:28:43.71000 FATAL:  could not create shared memory segment: Cannot allocate memory
+  1886  2014-08-08_16:28:43.71002 DETAIL:  Failed system call was shmget(key=5432001, size=1126563840, 03600).
+  1887  2014-08-08_16:28:43.71003 HINT:  This error usually means that PostgreSQL's request for a shared memory segment exceeded available memory or swap space, or exceeded your kernel's SHMALL parameter.  You can either reduce the request size or reconfigure the kernel with larger SHMALL.  To reduce the request size (currently 1126563840 bytes), reduce PostgreSQL's shared memory usage, perhaps by reducing shared_buffers or max_connections.
+  1888  2014-08-08_16:28:43.71004       The PostgreSQL documentation contains more information about shared memory configuration.
+```
+
+You can manually lower the amount of shared memory Postgres tries to allocate
+in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+postgresql['shared_buffers'] = "100MB"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 #### Reconfigure fails to create the git user
 
 This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
