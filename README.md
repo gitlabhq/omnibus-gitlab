@@ -67,6 +67,19 @@ installing omnibus-gitlab on an unsupported platform. Solution: double check on
 the download page whether you downloaded a package for the correct operating
 system.
 
+#### Debian 7 and Upstart
+
+Some variants of Debian 7 (e.g. OpenVZ) use Upstart. This will trip up
+`gitlab-ctl reconfigure` at `ruby_block[supervise_redis_sleep] action run`,
+because the internal Runit cookbook assumes that Debian 7 uses inittab. You can
+work around this as follows.
+
+```
+sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
+sudo initctl start gitlab-runsvdir
+sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
+```
+
 #### TCP ports for GitLab services are already taken
 
 By default, the services in omnibus-gitlab are using the following TCP ports:
@@ -90,6 +103,29 @@ On SELinux-enabled systems the git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 `/var/opt/gitlab/.ssh`.
+
+#### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
+
+The bundled Postgres instance will try to allocate 25% of total memory as
+shared memory. On some Linux (virtual) servers, there is less shared memory
+available, which will prevent Postgres from starting. In
+`/var/log/gitlab/postgresql/current`:
+
+```
+  1885  2014-08-08_16:28:43.71000 FATAL:  could not create shared memory segment: Cannot allocate memory
+  1886  2014-08-08_16:28:43.71002 DETAIL:  Failed system call was shmget(key=5432001, size=1126563840, 03600).
+  1887  2014-08-08_16:28:43.71003 HINT:  This error usually means that PostgreSQL's request for a shared memory segment exceeded available memory or swap space, or exceeded your kernel's SHMALL parameter.  You can either reduce the request size or reconfigure the kernel with larger SHMALL.  To reduce the request size (currently 1126563840 bytes), reduce PostgreSQL's shared memory usage, perhaps by reducing shared_buffers or max_connections.
+  1888  2014-08-08_16:28:43.71004       The PostgreSQL documentation contains more information about shared memory configuration.
+```
+
+You can manually lower the amount of shared memory Postgres tries to allocate
+in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+postgresql['shared_buffers'] = "100MB"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 #### Reconfigure fails to create the git user
 
@@ -281,23 +317,27 @@ Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
 ### Enable HTTPS
 
-By default, omnibus-gitlab does not use HTTPS. If you want to enable
-HTTPS for gitlab.example.com, first place your key and certificate in
-`/etc/gitlab/ssl/gitlab.example.com.key` and
-`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively.
-
-```
-sudo mkdir -p /etc/gitlab/ssl
-sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.crt gitlab.example.com.key /etc/gitlab/ssl/
-```
-
-Next, add the following line to `/etc/gitlab/gitlab.rb` and run `sudo
-gitlab-ctl reconfigure`.
+By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
+gitlab.example.com, add the following statement to `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 external_url "https://gitlab.example.com"
 ```
+
+Because the hostname in our example is 'gitlab.example.com', omnibus-gitlab
+will look for key and certificate files called
+`/etc/gitlab/ssl/gitlab.example.com.key` and
+`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively. Create the
+`/etc/gitlab/ssl` directory and copy your key and certificate there.
+
+```
+sudo mkdir -p /etc/gitlab/ssl
+sudo chmod 700 /etc/gitlab/ssl
+sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
+```
+
+Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
+GitLab instance should be reachable at `http://gitlab.example.com`.
 
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
@@ -306,8 +346,12 @@ HTTPS traffic.
 # UFW example (Debian, Ubuntu)
 sudo ufw allow https
 
-# lokkit example (RedHat, CentOS)
+# lokkit example (RedHat, CentOS 6)
 sudo lokkit -s https
+
+# firewall-cmd (RedHat, Centos 7)
+sudo firewall-cmd --permanent --add-service=https
+sudo systemctl reload firewalld
 ```
 
 #### Redirect `HTTP` requests to `HTTPS`.
@@ -332,6 +376,34 @@ external_url "https://gitlab.example.com:2443"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+#### Use non-bundled web-server
+
+By default, omnibus-gitlab installs GitLab with bundled Nginx.  To use another
+web server like Apache or an existing Nginx installation you will have to do
+the following steps:
+
+Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['enable'] = false
+```
+
+Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
+in the group with the same name.  To allow an external webserver access to
+GitLab, you will need to add the webserver user to `gitlab-www` group.  Let's
+say that webserver user is `www-data`. Adding the user to `gitlab-www` group
+can be done with:
+
+```
+usermod -aG gitlab-www www-data
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+Note: if you are using SELinux and your web server runs under a restricted
+SELinux profile you may have to [loosen the restrictions on your web
+server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -482,6 +554,14 @@ sudo gitlab-rake gitlab:backup:create
 
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
 `1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
+
+If you want to store your GitLab backups in a different directory, add the
+following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
+reconfigure`:
+
+```ruby
+gitlab_rails['backup_path'] = '/mnt/backups'
+```
 
 ### Scheduling a backup
 
@@ -785,10 +865,10 @@ be located at `/etc/nginx/sites-available/gitlab` and symlinked to
 `/etc/nginx/sites-enabled/gitlab`.
 
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)
-should be added to the `git` group. This can be done using the following command:
+should be added to the `gitlab-www` group. This can be done using the following command:
 
 ```shell
-sudo usermod -aG git www-data
+sudo usermod -aG gitlab-www www-data
 ```
 
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS

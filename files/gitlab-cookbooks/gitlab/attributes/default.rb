@@ -158,7 +158,7 @@ default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = 2
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
-default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/tmp/sockets/gitlab.socket'
+default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 64
@@ -233,6 +233,15 @@ default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['port'] = 6379
 
+####
+# Web server
+####
+# Username for the webserver user
+default['gitlab']['web-server']['username'] = 'gitlab-www'
+default['gitlab']['web-server']['group'] = 'gitlab-www'
+default['gitlab']['web-server']['uid'] = nil
+default['gitlab']['web-server']['gid'] = nil
+default['gitlab']['web-server']['shell'] = "/bin/false"
 
 ####
 # Nginx
