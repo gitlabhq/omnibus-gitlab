@@ -343,9 +343,9 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 #### Use non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx.
-To use another web server like Apache or an existing Nginx installation you will
-have to do the following steps:
+By default, omnibus-gitlab installs GitLab with bundled Nginx.  To use another
+web server like Apache or an existing Nginx installation you will have to do
+the following steps:
 
 Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
 
@@ -353,16 +353,21 @@ Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
 nginx['enable'] = false
 ```
 
-omnibus-gitlab allows webserver access through user `gitlab-www` which resides in the group with the same name.
-To allow an external webserver access to GitLab, you will need to add the webserver user to `gitlab-www` group.
-Let's say that webserver user is `www-data`. Adding the user to `gitlab-www` group can be done with:
+Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
+in the group with the same name.  To allow an external webserver access to
+GitLab, you will need to add the webserver user to `gitlab-www` group.  Let's
+say that webserver user is `www-data`. Adding the user to `gitlab-www` group
+can be done with:
 
 ```
-usermod -G gitlab-www www-data
+usermod -aG gitlab-www www-data
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+Note: if you are using SELinux and your web server runs under a restricted
+SELinux profile you may have to [loosen the restrictions on your web
+server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -824,10 +829,10 @@ be located at `/etc/nginx/sites-available/gitlab` and symlinked to
 `/etc/nginx/sites-enabled/gitlab`.
 
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)
-should be added to the `git` group. This can be done using the following command:
+should be added to the `gitlab-www` group. This can be done using the following command:
 
 ```shell
-sudo usermod -aG git www-data
+sudo usermod -aG gitlab-www www-data
 ```
 
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
