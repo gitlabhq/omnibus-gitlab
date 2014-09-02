@@ -49,7 +49,7 @@ end
 
 directory gitlab_rails_public_uploads_dir do
   owner node['gitlab']['user']['username']
-  group node['gitlab']['web-server']['username']
+  group node['gitlab']['web-server']['group']
   mode '0750'
   recursive true
 end
