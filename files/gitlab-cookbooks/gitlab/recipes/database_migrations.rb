@@ -22,8 +22,10 @@ end
 
 bash "migrate database" do
   code <<-EOH
-    log_file="/tmp/gitlab-db-migrate-$(date +%s)-$$"
+    set -e
+    log_file="/tmp/gitlab-db-migrate-$(date +%s)-$$/output.log"
     umask 077
+    mkdir $(dirname ${log_file})
     /opt/gitlab/bin/gitlab-rake db:migrate 2>& 1 | tee ${log_file}
     exit ${PIPESTATUS[0]}
   EOH
