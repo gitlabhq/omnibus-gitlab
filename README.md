@@ -377,7 +377,7 @@ external_url "https://gitlab.example.com:2443"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-#### Use non-bundled web-server
+### Use non-bundled web-server
 
 By default, omnibus-gitlab installs GitLab with bundled Nginx.  To use another
 web server like Apache or an existing Nginx installation you will have to do
