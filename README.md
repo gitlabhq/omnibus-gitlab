@@ -127,6 +127,18 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+#### Reconfigure complains about the GLIBC version
+
+```
+$ gitlab-ctl reconfigure
+/opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
+/opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.17' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
+```
+
+This can happen if the omnibus package you installed was built for a different
+OS release than the one on your server. Double-check that you downloaded and
+installed the correct omnibus-gitlab package for your operating system.
+
 #### Reconfigure fails to create the git user
 
 This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
