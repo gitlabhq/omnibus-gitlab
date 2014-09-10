@@ -61,18 +61,26 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 #### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
-This happens when Runit has not been installed succesfully during `gitlab-ctl
-reconfigure`. The most common cause for a failed Runit installation is
-installing omnibus-gitlab on an unsupported platform. Solution: double check on
-the download page whether you downloaded a package for the correct operating
-system.
+During the first `gitlab-ctl reconfigure` run, omnibus-gitlab needs to figure
+out if your Linux server is using SysV Init, Upstart or Systemd so that it can
+install and activate the `gitlab-runsvdir` service. If `gitlab-ctl reconfigure`
+makes the wrong decision, it will later hang at
+`ruby_block[supervise_redis_sleep] action run`.
 
-#### Debian 7 and Upstart
+The choice of init system is currently made in [the embedded Runit
+cookbook](files/gitlab-cookbooks/runit/recipes/default.rb) by essentially
+looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
+can make the wrong decision in situations such as:
 
-Some variants of Debian 7 (e.g. OpenVZ) use Upstart. This will trip up
-`gitlab-ctl reconfigure` at `ruby_block[supervise_redis_sleep] action run`,
-because the internal Runit cookbook assumes that Debian 7 uses inittab. You can
-work around this as follows.
+- your OS release looks like 'Debian 7' but it is really some variant which
+  uses Upstart instead of SysV Init;
+- your OS release is unknown to the Runit cookbook (e.g. ClearOS 6.5).
+
+Solving problems like this would require changes to the embedded Runit
+cookbook; Merge Requests are welcome. Until this problem is fixed, you can work
+around it by manually performing the appropriate installation steps for your
+particular init system. For instance, to manually set up `gitlab-runsvdir` with
+Upstart, you can do the following:
 
 ```
 sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
