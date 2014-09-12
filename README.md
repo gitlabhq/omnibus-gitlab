@@ -472,8 +472,9 @@ since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
 ### Specify numeric user and group identifiers
 
-Omnibus-gitlab creates users for GitLab, PostgreSQL and Redis. You can specify
-the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
+Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
+follows.
 
 ```ruby
 user['uid'] = 1234
@@ -482,6 +483,8 @@ postgresql['uid'] = 1235
 postgresql['gid'] = 1235
 redis['uid'] = 1236
 redis['gid'] = 1236
+web_server['uid'] = 1237
+web_server['gid'] = 1237
 ```
 
 ### Storing user attachments on Amazon S3
