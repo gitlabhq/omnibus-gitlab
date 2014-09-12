@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Use SIGHUP for zero-downtime NGINX configuration changes
 - Give NGINX its own working directory
 - Use the default NGINX directory layout
+- Raise the default Unicorn socket backlog to 1024 (upstream default)
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
