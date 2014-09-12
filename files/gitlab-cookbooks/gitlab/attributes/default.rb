@@ -136,7 +136,8 @@ default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
-default['gitlab']['gitlab-rails']['redis_port'] = 6379
+default['gitlab']['gitlab-rails']['redis_port'] = nil
+default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil
@@ -231,7 +232,9 @@ default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
-default['gitlab']['redis']['port'] = 6379
+default['gitlab']['redis']['port'] = 0
+default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['redis']['unixsocketperm'] = "777"
 
 ####
 # Web server

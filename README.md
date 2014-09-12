@@ -90,8 +90,7 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 
 #### TCP ports for GitLab services are already taken
 
-By default, the services in omnibus-gitlab are using the following TCP ports:
-Redis (6379), PostgreSQL (5432) and Unicorn (8080) listen on 127.0.0.1. Nginx
+By default, Unicorn listens at TCP address 127.0.0.1:8080. Nginx
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
 The ports for Redis, PostgreSQL and Unicorn can be overriden in
@@ -810,8 +809,13 @@ settings to take effect.
 
 ```ruby
 redis['enable'] = false
+
+# Redis via TCP
 gitlab_rails['redis_host'] = 'redis.example.com'
-gitlab_rails['redis_port'] = 6380 # defaults to 6379
+gitlab_rails['redis_port'] = 6379 # mandatory, otherwise gitlab-rails uses a socket
+
+# OR Redis via Unix domain sockets
+gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
 ```
 
 ## Only start omnibus-gitlab services after a given filesystem is mounted
