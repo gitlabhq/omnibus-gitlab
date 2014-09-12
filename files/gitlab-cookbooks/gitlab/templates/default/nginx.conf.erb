@@ -5,6 +5,7 @@
 user <%= node['gitlab']['web-server']['username'] %> <%= node['gitlab']['web-server']['group']%>;
 worker_processes <%= @worker_processes %>;
 error_log stderr;
+pid nginx.pid;
 
 daemon off;
 

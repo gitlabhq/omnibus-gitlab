@@ -32,6 +32,10 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
   end
 end
 
+link File.join(nginx_dir, "logs") do
+  to nginx_log_dir
+end
+
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
