@@ -815,7 +815,7 @@ redis['enable'] = false
 
 # Redis via TCP
 gitlab_rails['redis_host'] = 'redis.example.com'
-gitlab_rails['redis_port'] = 6379 # mandatory, otherwise gitlab-rails uses a socket
+gitlab_rails['redis_port'] = 6380
 
 # OR Redis via Unix domain sockets
 gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
