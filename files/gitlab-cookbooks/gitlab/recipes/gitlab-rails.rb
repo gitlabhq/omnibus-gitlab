@@ -173,7 +173,7 @@ end
 
 env_vars = {
   'HOME' => node['gitlab']['user']['home'],
-  'BUNDLE_GEMFILE' => File.join(gitlab_rails_source_dir, 'Gemfile')
+  'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
 }.merge(node['gitlab']['gitlab-rails']['env'])
 
 env_vars.each do |key, value|

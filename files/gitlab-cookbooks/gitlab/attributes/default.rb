@@ -44,7 +44,10 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
-default['gitlab']['gitlab-rails']['env'] = {}
+default['gitlab']['gitlab-rails']['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
