@@ -796,7 +796,15 @@ following command to import the schema and create the first admin user:
 sudo gitlab-rake gitlab:setup
 ```
 
-This is a destructive command; do not run it on an existing database!
+If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `root_password` setting:
+
+```ruby
+  gitlab_rails['root_password'] = 'nonstandardpassword'
+```
+
+and then run the `gitlab:setup` command.
+
+**This is a destructive command; do not run it on an existing database!**
 
 ## Using a non-packaged PostgreSQL database management server
 
