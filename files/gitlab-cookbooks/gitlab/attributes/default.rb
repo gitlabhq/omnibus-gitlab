@@ -171,6 +171,7 @@ default['gitlab']['unicorn']['worker_timeout'] = 30
 default['gitlab']['sidekiq']['enable'] = true
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
+default['gitlab']['sidekiq']['shutdown_timeout'] = 4
 
 
 ###
