@@ -1,7 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-gitlab_user=$(ls -lLd <%= install_dir %>/embedded/service/gitlab-rails/log | awk '{ print $3 }')
+gitlab_rails_rc='<%= install_dir %>/etc/gitlab-rails/gitlab-rails-rc'
+if ! [ -f ${gitlab_rails_rc} ] ; then
+  echo "$0 error: could not load ${gitlab_rails_rc}" 2>& 1
+  echo "You can generate it with:   sudo gitlab-ctl reconfigure" 2>& 1
+  exit 1
+fi
+
+. ${gitlab_rails_rc}
 
 cd <%= install_dir %>/embedded/service/gitlab-rails
 
-exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env -u $gitlab_user -U $gitlab_user <%= install_dir %>/embedded/bin/bundle exec <%= command %>
+exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env -u ${gitlab_user} -U ${gitlab_user} <%= install_dir %>/embedded/bin/bundle exec <%= command %>

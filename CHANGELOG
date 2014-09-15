@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Hard-code the environment directory for gitlab-rails
 - Set PATH and RAILS_ENV via the env directory
 - Set the environment for gitlab-rails and gitlab-rake via chpst
+- Configure bundle exec wrapper with gitlab-rails-rc
 - Raise the default Unicorn socket backlog to 1024 (upstream default)
 - Connect to Redis via sockets by default
 - Set Sidekiq shutdown timeout to 4 seconds

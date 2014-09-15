@@ -60,6 +60,8 @@ directory gitlab_rails_env_dir do
   recursive true
 end
 
+template "/opt/gitlab/etc/gitlab-rails/gitlab-rails-rc"
+
 dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
