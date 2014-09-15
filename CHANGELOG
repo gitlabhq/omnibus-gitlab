@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Give NGINX its own working directory
 - Use the default NGINX directory layout
 - Fix broken environment variable removal
+- Hard-code the environment directory for gitlab-rails
 - Raise the default Unicorn socket backlog to 1024 (upstream default)
 - Connect to Redis via sockets by default
 - Set Sidekiq shutdown timeout to 4 seconds

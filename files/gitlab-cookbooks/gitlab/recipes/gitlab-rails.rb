@@ -19,7 +19,7 @@
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
-gitlab_rails_env_dir = File.join(gitlab_rails_etc_dir, "env")
+gitlab_rails_env_dir = "/opt/gitlab/etc/gitlab-rails/env"
 gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
@@ -27,7 +27,6 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
   gitlab_rails_etc_dir,
-  gitlab_rails_env_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
@@ -50,6 +49,13 @@ end
 directory gitlab_rails_public_uploads_dir do
   owner node['gitlab']['user']['username']
   group node['gitlab']['web-server']['group']
+  mode '0750'
+  recursive true
+end
+
+directory gitlab_rails_env_dir do
+  owner 'root' # Do not allow the git user to change its own env variables
+  group node['gitlab']['user']['group']
   mode '0750'
   recursive true
 end
