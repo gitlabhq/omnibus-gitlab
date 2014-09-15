@@ -32,6 +32,7 @@ redis:
 <% if @redis_socket %>
   socket: <%= @redis_socket %>
 <% end %>
+  database: 0
   namespace: resque:gitlab
 
 # Log file.
