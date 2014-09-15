@@ -185,7 +185,7 @@ end
 if File.directory?(gitlab_rails_env_dir)
   deleted_env_vars = Dir.entries(gitlab_rails_env_dir) - env_vars.keys - %w{. ..}
   deleted_env_vars.each do |deleted_var|
-    file deleted_var do
+    file File.join(gitlab_rails_env_dir, deleted_var) do
       action :delete
       dependent_services.each do |svc|
         notifies :restart, svc
