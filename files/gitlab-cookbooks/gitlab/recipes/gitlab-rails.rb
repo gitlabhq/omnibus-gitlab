@@ -54,9 +54,8 @@ directory gitlab_rails_public_uploads_dir do
 end
 
 directory gitlab_rails_env_dir do
-  owner 'root' # Do not allow the git user to change its own env variables
-  group node['gitlab']['user']['group']
-  mode '0750'
+  owner node['gitlab']['user']['username']
+  mode '0500'
   recursive true
 end
 
