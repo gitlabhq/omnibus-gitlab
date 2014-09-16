@@ -226,8 +226,6 @@ remote_file File.join(gitlab_rails_dir, 'VERSION') do
   end
 end
 
-execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
-
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
   action :nothing
