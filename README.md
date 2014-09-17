@@ -489,6 +489,7 @@ web_server['gid'] = 1237
 
 ### Storing user attachments on Amazon S3
 
+By default, attachments are stored in `/var/opt/gitlab/gitlab-rails/uploads`.
 Instead of using local storage you can also store the user attachments for your
 GitLab instance on Amazon S3.
 
