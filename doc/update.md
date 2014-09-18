@@ -15,7 +15,7 @@ First, download the latest [CE](https://www.gitlab.com/downloads/) or
 package to your GitLab server.
 
 ```shell
-# Stop unicorn and sidekiq but leave postgresql running so that we can do database migrations
+# Stop unicorn and sidekiq so we can do database migrations
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 

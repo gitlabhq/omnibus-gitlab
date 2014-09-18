@@ -42,8 +42,8 @@ bind 127.0.0.1
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-unixsocket <%= node['gitlab']['redis']['unixsocket'] %>
-unixsocketperm <%= node['gitlab']['redis']['unixsocketperm'] %>
+# unixsocket /tmp/redis.sock
+# unixsocketperm 755
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout 0

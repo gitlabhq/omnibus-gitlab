@@ -11,4 +11,3 @@ requests.
 ## Merge request guidelines
 
 - Please add a CHANGELOG entry for your contribution
-- Have a look at the [development tips and tricks](doc/development.md)

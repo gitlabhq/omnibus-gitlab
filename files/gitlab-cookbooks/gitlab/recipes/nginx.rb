@@ -17,12 +17,12 @@
 #
 
 nginx_dir = node['gitlab']['nginx']['dir']
-nginx_conf_dir = File.join(nginx_dir, "conf")
+nginx_etc_dir = File.join(nginx_dir, "etc")
 nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 [
   nginx_dir,
-  nginx_conf_dir,
+  nginx_etc_dir,
   nginx_log_dir,
 ].each do |dir_name|
   directory dir_name do
@@ -32,13 +32,9 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
   end
 end
 
-link File.join(nginx_dir, "logs") do
-  to nginx_log_dir
-end
-
-nginx_config = File.join(nginx_conf_dir, "nginx.conf")
+nginx_config = File.join(nginx_etc_dir, "nginx.conf")
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
-  :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
+  :gitlab_http_config => File.join(nginx_etc_dir, "gitlab-http.conf"),
 })
 
 template nginx_vars[:gitlab_http_config] do

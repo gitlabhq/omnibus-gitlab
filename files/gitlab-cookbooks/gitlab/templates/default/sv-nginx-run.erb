@@ -1,5 +1,4 @@
 #!/bin/sh
 exec 2>&1
 <%= render("mount_point_check.erb") %>
-cd <%= node['gitlab']['nginx']['dir'] %>
-exec chpst -P /opt/gitlab/embedded/sbin/nginx -p <%= node['gitlab']['nginx']['dir'] %>
+exec chpst -P /opt/gitlab/embedded/sbin/nginx -c <%= File.join(node['gitlab']['nginx']['dir'], "etc", "nginx.conf") %>
