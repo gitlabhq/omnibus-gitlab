@@ -61,18 +61,26 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 #### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
-This happens when Runit has not been installed succesfully during `gitlab-ctl
-reconfigure`. The most common cause for a failed Runit installation is
-installing omnibus-gitlab on an unsupported platform. Solution: double check on
-the download page whether you downloaded a package for the correct operating
-system.
+During the first `gitlab-ctl reconfigure` run, omnibus-gitlab needs to figure
+out if your Linux server is using SysV Init, Upstart or Systemd so that it can
+install and activate the `gitlab-runsvdir` service. If `gitlab-ctl reconfigure`
+makes the wrong decision, it will later hang at
+`ruby_block[supervise_redis_sleep] action run`.
 
-#### Debian 7 and Upstart
+The choice of init system is currently made in [the embedded Runit
+cookbook](files/gitlab-cookbooks/runit/recipes/default.rb) by essentially
+looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
+can make the wrong decision in situations such as:
 
-Some variants of Debian 7 (e.g. OpenVZ) use Upstart. This will trip up
-`gitlab-ctl reconfigure` at `ruby_block[supervise_redis_sleep] action run`,
-because the internal Runit cookbook assumes that Debian 7 uses inittab. You can
-work around this as follows.
+- your OS release looks like 'Debian 7' but it is really some variant which
+  uses Upstart instead of SysV Init;
+- your OS release is unknown to the Runit cookbook (e.g. ClearOS 6.5).
+
+Solving problems like this would require changes to the embedded Runit
+cookbook; Merge Requests are welcome. Until this problem is fixed, you can work
+around it by manually performing the appropriate installation steps for your
+particular init system. For instance, to manually set up `gitlab-runsvdir` with
+Upstart, you can do the following:
 
 ```
 sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
@@ -82,8 +90,7 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 
 #### TCP ports for GitLab services are already taken
 
-By default, the services in omnibus-gitlab are using the following TCP ports:
-Redis (6379), PostgreSQL (5432) and Unicorn (8080) listen on 127.0.0.1. Nginx
+By default, Unicorn listens at TCP address 127.0.0.1:8080. Nginx
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
 The ports for Redis, PostgreSQL and Unicorn can be overriden in
@@ -126,6 +133,18 @@ postgresql['shared_buffers'] = "100MB"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+#### Reconfigure complains about the GLIBC version
+
+```
+$ gitlab-ctl reconfigure
+/opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
+/opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.17' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
+```
+
+This can happen if the omnibus package you installed was built for a different
+OS release than the one on your server. Double-check that you downloaded and
+installed the correct omnibus-gitlab package for your operating system.
 
 #### Reconfigure fails to create the git user
 
@@ -377,7 +396,7 @@ external_url "https://gitlab.example.com:2443"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-#### Use non-bundled web-server
+### Use non-bundled web-server
 
 By default, omnibus-gitlab installs GitLab with bundled Nginx.  To use another
 web server like Apache or an existing Nginx installation you will have to do
@@ -453,8 +472,9 @@ since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
 ### Specify numeric user and group identifiers
 
-Omnibus-gitlab creates users for GitLab, PostgreSQL and Redis. You can specify
-the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
+Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
+follows.
 
 ```ruby
 user['uid'] = 1234
@@ -463,6 +483,8 @@ postgresql['uid'] = 1235
 postgresql['gid'] = 1235
 redis['uid'] = 1236
 redis['gid'] = 1236
+web_server['uid'] = 1237
+web_server['gid'] = 1237
 ```
 
 ### Storing user attachments on Amazon S3
@@ -774,7 +796,15 @@ following command to import the schema and create the first admin user:
 sudo gitlab-rake gitlab:setup
 ```
 
-This is a destructive command; do not run it on an existing database!
+If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `root_password` setting:
+
+```ruby
+  gitlab_rails['root_password'] = 'nonstandardpassword'
+```
+
+and then run the `gitlab:setup` command.
+
+**This is a destructive command; do not run it on an existing database!**
 
 ## Using a non-packaged PostgreSQL database management server
 
@@ -790,8 +820,13 @@ settings to take effect.
 
 ```ruby
 redis['enable'] = false
+
+# Redis via TCP
 gitlab_rails['redis_host'] = 'redis.example.com'
-gitlab_rails['redis_port'] = 6380 # defaults to 6379
+gitlab_rails['redis_port'] = 6380
+
+# OR Redis via Unix domain sockets
+gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
 ```
 
 ## Only start omnibus-gitlab services after a given filesystem is mounted

@@ -92,13 +92,19 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   restarts dependent_services
 end
 
+if node['gitlab']['gitlab-rails']['redis_port']
+  redis_url = "redis://#{node['gitlab']['gitlab-rails']['redis_host']}:#{node['gitlab']['gitlab-rails']['redis_port']}"
+else
+  redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/resque.yml")
   source "resque.yml.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
+  variables(:redis_url => redis_url)
   restarts dependent_services
 end
 
@@ -219,8 +225,6 @@ remote_file File.join(gitlab_rails_dir, 'VERSION') do
     notifies :restart, sv
   end
 end
-
-execute "chown -R #{node['gitlab']['user']['username']} /opt/gitlab/embedded/service/gitlab-rails/public"
 
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"

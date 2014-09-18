@@ -136,7 +136,8 @@ default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
-default['gitlab']['gitlab-rails']['redis_port'] = 6379
+default['gitlab']['gitlab-rails']['redis_port'] = nil
+default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil
@@ -148,6 +149,10 @@ default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
+
+default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
+
+default['gitlab']['gitlab-rails']['root_password'] = nil
 
 ####
 # Unicorn
@@ -161,7 +166,7 @@ default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
-default['gitlab']['unicorn']['backlog_socket'] = 64
+default['gitlab']['unicorn']['backlog_socket'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 30
 
 ####
@@ -170,6 +175,7 @@ default['gitlab']['unicorn']['worker_timeout'] = 30
 default['gitlab']['sidekiq']['enable'] = true
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
+default['gitlab']['sidekiq']['shutdown_timeout'] = 4
 
 
 ###
@@ -231,7 +237,9 @@ default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
-default['gitlab']['redis']['port'] = 6379
+default['gitlab']['redis']['port'] = 0
+default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['redis']['unixsocketperm'] = "777"
 
 ####
 # Web server
@@ -267,10 +275,10 @@ default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4"
+default['gitlab']['nginx']['ssl_ciphers'] = "AES256+EECDH:AES256+EDH"
 default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 
