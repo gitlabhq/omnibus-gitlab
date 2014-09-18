@@ -18,7 +18,7 @@
 
 name "gitlab"
 maintainer "GitLab.com"
-homepage "http://www.gitlab.com/"
+homepage "https://about.gitlab.com/"
 
 replaces        "gitlab"
 install_dir     "/opt/gitlab"
@@ -51,3 +51,6 @@ dependency "version-manifest"
 
 exclude "\.git*"
 exclude "bundler\/git"
+
+package_user 'root'
+package_group 'root'
