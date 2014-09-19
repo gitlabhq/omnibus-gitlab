@@ -571,7 +571,7 @@ some reason you can use the following setting.
 
 ```ruby
 # Example: block raw file downloads from a specific repository
-nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ { deny all; }"
+nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 ```
 
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
