@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "630d042433e0cecffe80aa5ebd7aa7a91c5eb2d8" # 7.3.1.rc1
+default_version "df3ea809f872254f19fa6765cd80d48725f9b9ce" # 7.3.1.rc1-ee
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -33,7 +33,7 @@ dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "rugged"
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
+source :git => "git@gitlab.com:subscribers/gitlab-ee.git"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
