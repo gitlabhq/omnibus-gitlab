@@ -564,6 +564,19 @@ You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
 nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
 ```
 
+### Inserting custom NGINX settings into the GitLab server block
+
+If you need to add custom settings into the NGINX `server` block for GitLab for
+some reason you can use the following setting.
+
+```ruby
+# Example: block raw file downloads from a specific repository
+nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ { deny all; }"
+```
+
+Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
+NGINX.
+
 ## Backups
 
 ### Creating an application backup
