@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Raise the default Unicorn socket backlog to 1024 (upstream default)
 - Connect to Redis via sockets by default
 - Set Sidekiq shutdown timeout to 4 seconds
+- Add the ability to insert custom NGINX settings into the gitlab server block
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
