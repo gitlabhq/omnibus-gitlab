@@ -273,6 +273,7 @@ default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommen
 default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
+default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
 
 ###
 # Logging
