@@ -15,6 +15,9 @@ omnibus-gitlab repository.
 - Connect to Redis via sockets by default
 - Set Sidekiq shutdown timeout to 4 seconds
 - Add the ability to insert custom NGINX settings into the gitlab server block
+- Change the owner of gitlab-rails/public back to root:root
+- Restart Redis and PostgreSQL immediately after configuration changes
+- Perform chown 7.2.x security fix in postinst
 
 7.2.0
 - Pass environment variables to Unicorn and Sidekiq (Chris Portman)
