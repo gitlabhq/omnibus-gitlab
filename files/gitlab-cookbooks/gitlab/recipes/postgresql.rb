@@ -102,7 +102,7 @@ template postgresql_config do
   owner node['gitlab']['postgresql']['username']
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end
 
 pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
@@ -112,7 +112,7 @@ template pg_hba_config do
   owner node['gitlab']['postgresql']['username']
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end
 
 template File.join(postgresql_data_dir, "pg_ident.conf") do
