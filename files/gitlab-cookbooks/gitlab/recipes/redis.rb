@@ -32,14 +32,15 @@ user redis_user do
   home node['gitlab']['redis']['home']
 end
 
-[
-  redis_dir,
-  redis_log_dir
-].each do |dir|
-  directory dir do
-    owner node['gitlab']['redis']['username']
-    mode "0700"
-  end
+directory redis_dir do
+  owner redis_user
+  group node['gitlab']['user']['group']
+  mode "0750"
+end
+
+directory redis_log_dir do
+  owner redis_user
+  mode "0700"
 end
 
 redis_config = File.join(redis_dir, "redis.conf")

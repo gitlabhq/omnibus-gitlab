@@ -29,7 +29,10 @@ redis:
   bin: /opt/gitlab/embedded/bin/redis-cli
   host: <%= @redis_host %>
   port: <%= @redis_port %>
-  # socket: /tmp/redis.socket # Only define this if you want to use sockets
+<% if @redis_socket %>
+  socket: <%= @redis_socket %>
+<% end %>
+  database: 0
   namespace: resque:gitlab
 
 # Log file.

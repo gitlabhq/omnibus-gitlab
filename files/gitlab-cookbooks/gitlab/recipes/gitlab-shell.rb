@@ -74,6 +74,15 @@ end
 api_url = node['gitlab']['gitlab-rails']['internal_api_url']
 api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
 
+redis_port = node['gitlab']['gitlab-rails']['redis_port']
+if redis_port
+  # Leave out redis socket setting because in gitlab-shell, setting a Redis socket
+  # overrides TCP connection settings.
+  redis_socket = nil
+else
+  redis_socket = node['gitlab']['gitlab-rails']['redis_socket']
+end
+
 template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   link_from File.join(gitlab_shell_dir, "config.yml")
   source "gitlab-shell-config.yml.erb"
@@ -83,7 +92,8 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
     :repositories_path => repositories_path,
     :authorized_keys => authorized_keys,
     :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
-    :redis_port => node['gitlab']['gitlab-rails']['redis_port'],
+    :redis_port => redis_port,
+    :redis_socket => redis_socket,
     :log_file => File.join(log_directory, "gitlab-shell.log")
   )
 end

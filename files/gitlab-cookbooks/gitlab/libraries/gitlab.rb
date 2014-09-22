@@ -142,9 +142,12 @@ module Gitlab
     end
 
     def parse_redis_settings
-      # No need to check redis['host'] because that setting is not configurable.
-      if redis['port']
-        Gitlab['gitlab_rails']['redis_port'] ||= redis['port']
+      if gitlab_rails['redis_host']
+        # The user wants to connect to a non-bundled Redis instance via TCP.
+        # Override the gitlab-rails default redis_port value (nil) to signal
+        # that gitlab-rails should connect to Redis via TCP instead of a Unix
+        # domain socket.
+        Gitlab['gitlab_rails']['redis_port'] ||= 6379
       end
     end
 
