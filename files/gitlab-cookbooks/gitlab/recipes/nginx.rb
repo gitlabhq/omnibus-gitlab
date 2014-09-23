@@ -20,14 +20,16 @@ nginx_dir = node['gitlab']['nginx']['dir']
 nginx_conf_dir = File.join(nginx_dir, "conf")
 nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
+# These directories do not need to be writable for gitlab-www
 [
   nginx_dir,
   nginx_conf_dir,
   nginx_log_dir,
 ].each do |dir_name|
   directory dir_name do
-    owner node['gitlab']['web-server']['username']
-    mode '0700'
+    owner 'root'
+    group node['gitlab']['web-server']['group']
+    mode '0750'
     recursive true
   end
 end
