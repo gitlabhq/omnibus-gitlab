@@ -26,6 +26,7 @@ end
 # Create the webserver user
 user webserver_username do
   shell node['gitlab']['web-server']['shell']
+  home node['gitlab']['nginx']['dir']
   uid node['gitlab']['web-server']['uid']
   gid webserver_group
   supports manage_home: false
