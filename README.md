@@ -34,6 +34,13 @@ run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
 run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
 ```
 
+If any of the processes is not behaving like expected, try tailing their logs
+to see what is wrong.
+
+```
+sudo gitlab-ctl tail postgresql
+```
+
 Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
 You can login as an admin user with username `root` and password `5iveL!fe`.
 
