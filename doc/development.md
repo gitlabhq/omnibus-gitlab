@@ -19,8 +19,7 @@ Clone the omnibus-gitlab repository from
 example your home directory.
 
 ```
-cd
-git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
+git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
 ```
 
 Once the repository is cloned symlink the cookbook in the omnibus-gitlab
