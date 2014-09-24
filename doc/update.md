@@ -19,7 +19,7 @@ package to your GitLab server.
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 
-# If you are installing 7.3.1
+# If you are upgrading from 7.3.0
 sudo gitlab-ctl stop nginx
 
 # Create a database backup in case the upgrade fails
