@@ -27,6 +27,18 @@ EOF
   chmod 600 /etc/gitlab/gitlab.rb
 fi
 
+if [ -x /usr/bin/dpkg-query ] ; then
+  # We are in the land of .deb packages. We should fix package directory owners
+  # because of the faulty 7.2.0 / 7.2.1 .deb packages.
+  /usr/bin/dpkg-query -L gitlab | while read f ; do
+    if [ -d "$f" ] ; then
+      # This directory may have been created when installing omnibus-gitlab
+      # 7.2.0 / 7.2.1, so it could have the wrong owner.
+      chown root:root "$f"
+    fi
+  done
+fi
+
 echo "Thank you for installing GitLab!"
 echo "You can configure GitLab for your system by running the following command:"
 echo

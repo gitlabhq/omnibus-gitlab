@@ -50,7 +50,7 @@ template redis_config do
   owner node['gitlab']['redis']['username']
   mode "0644"
   variables(node['gitlab']['redis'].to_hash)
-  notifies :restart, 'service[redis]' if OmnibusHelper.should_notify?("redis")
+  notifies :restart, 'service[redis]', :immediately if OmnibusHelper.should_notify?("redis")
 end
 
 runit_service "redis" do
