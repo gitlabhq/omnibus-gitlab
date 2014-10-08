@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.4.0
+- Add a logrotate service for `gitlab-rails/production.log` etc.
+
 7.3.1
 - Fix web-server recipe order
 - Make /var/opt/gitlab/nginx gitlab-www's home dir

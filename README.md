@@ -716,6 +716,31 @@ logging['svlogd_prefix'] = nil # custom prefix for log messages
 nginx['svlogd_prefix'] = "nginx"
 ```
 
+### Logrotate
+
+Starting with omnibus-gitlab 7.4 there is a built-in logrotate service in
+omnibus-gitlab. This service will rotate, compress and eventually delete the
+log data that is not captured by Runit, such as `gitlab-rails/production.log`
+and `nginx/gitlab_access.log`. You can configure logrotate via
+`/etc/gitlab/gitlab.rb`.
+
+```
+# Below are some of the default settings
+logging['logrotate_frequency'] = "daily" # rotate logs daily
+logging['logrotate_size'] = nil # do not rotate by size by default
+logging['logrotate_rotate'] = 30 # keep 30 rotated logs
+logging['logrotate_compress'] = "compress" # see 'man logrotate'
+logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
+logging['logrotate_postrotate'] = nil # no postrotate command by default
+
+# You can add overrides per service
+nginx['logrotate_frequency'] = nil
+nginx['logrotate_size'] = "200M"
+
+# You can also disable the built-in logrotate service if you want
+logrotate['enable'] = false
+```
+
 ### UDP log shipping (GitLab Enterprise Edition only)
 
 You can configure omnibus-gitlab to send syslog-ish log messages via UDP.
