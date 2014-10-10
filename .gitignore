@@ -11,3 +11,4 @@ vendor/cookbooks
 .rvmrc
 .rbenv-version
 build.txt
+Vagrantfile
