@@ -75,6 +75,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   owner "root"
   group "root"
   mode "0644"
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
 end
 
