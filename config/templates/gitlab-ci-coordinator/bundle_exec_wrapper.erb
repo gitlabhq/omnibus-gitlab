@@ -1,0 +1,14 @@
+#!/bin/sh
+
+gitlab_ci_coordinator_rc='<%= install_dir %>/etc/gitlab-ci-coordinator/gitlab-ci-coordinator-rc'
+if ! [ -f ${gitlab_ci_coordinator_rc} ] ; then
+  echo "$0 error: could not load ${gitlab_ci_coordinator_rc}" 2>& 1
+  echo "You can generate it with:   sudo gitlab-ctl reconfigure" 2>& 1
+  exit 1
+fi
+
+. ${gitlab_ci_coordinator_rc}
+
+cd <%= install_dir %>/embedded/service/gitlab-ci-coordinator
+
+exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-ci-coordinator/env -u ${gitlab_user} -U ${gitlab_user} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
