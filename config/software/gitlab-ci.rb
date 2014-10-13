@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-name "gitlab-ci-coordinator"
+name "gitlab-ci"
 default_version "96906f2bceb04c7323f8514aa5ad8cb1313e2898" # 5.1.0.rc1
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
@@ -57,8 +57,8 @@ build do
   # mysql-postgresql-converter.)
   command "cp db/schema.rb db/schema.rb.bundled"
 
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-ci-coordinator"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-ci-coordinator/"
+  command "mkdir -p #{install_dir}/embedded/service/gitlab-ci"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-ci/"
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
