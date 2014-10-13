@@ -12,7 +12,7 @@ function error_exit
   exit 1
 }
 
-for command in gitlab-ctl gitlab-rake gitlab-rails
+for command in gitlab-ctl gitlab-rake gitlab-rails gitlab-ci-rake gitlab-ci-rails
 do
   ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
 done
