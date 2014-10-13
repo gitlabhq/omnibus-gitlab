@@ -48,11 +48,13 @@ if [ -x /usr/bin/dpkg-query ] ; then
 fi
 
 echo "Thank you for installing GitLab!"
-echo "You can reach GitLab at ${external_url}"
-echo "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
-echo "And running the following command:"
+echo "Configure and start GitLab by running the following command:"
 echo
 echo "sudo gitlab-ctl reconfigure"
+echo
+echo "GitLab should be reachable at ${external_url}"
+echo "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
+echo "And running reconfigure again."
 echo
 
 exit 0
