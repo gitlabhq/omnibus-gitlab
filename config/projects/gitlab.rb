@@ -38,6 +38,7 @@ dependency "chef-gem"
 if system("#{Config.project_root}/support/is_gitlab_ee.sh") || system("#{Config.project_root}/support/is_gitlab_com.sh")
   dependency "remote-syslog"
 end
+dependency "logrotate"
 dependency "runit"
 dependency "gitlab-rails"
 dependency "gitlab-shell"
