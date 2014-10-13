@@ -45,6 +45,7 @@ module Gitlab
   nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
+  logrotate Mash.new
   high_availability Mash.new
   web_server Mash.new
   node nil
@@ -173,6 +174,7 @@ module Gitlab
         "nginx",
         "logging",
         "remote_syslog",
+        "logrotate",
         "high_availability",
         "postgresql",
         "web_server"

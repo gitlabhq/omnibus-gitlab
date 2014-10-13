@@ -44,7 +44,10 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
-default['gitlab']['gitlab-rails']['env'] = {}
+default['gitlab']['gitlab-rails']['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
@@ -167,7 +170,7 @@ default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/g
 default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
-default['gitlab']['unicorn']['worker_timeout'] = 30
+default['gitlab']['unicorn']['worker_timeout'] = 60
 
 ####
 # Sidekiq
@@ -275,7 +278,7 @@ default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-default['gitlab']['nginx']['ssl_ciphers'] = "AES256+EECDH:AES256+EDH"
+default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4"
 default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
 default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
@@ -294,6 +297,12 @@ default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
 default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages
 default['gitlab']['logging']['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
 default['gitlab']['logging']['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
+default['gitlab']['logging']['logrotate_frequency'] = "daily" # rotate logs daily
+default['gitlab']['logging']['logrotate_size'] = nil # do not rotate by size by default
+default['gitlab']['logging']['logrotate_rotate'] = 30 # keep 30 rotated logs
+default['gitlab']['logging']['logrotate_compress'] = "compress" # see 'man logrotate'
+default['gitlab']['logging']['logrotate_method'] = "copytruncate" # see 'man logrotate'
+default['gitlab']['logging']['logrotate_postrotate'] = nil # no postrotate command by default
 
 ###
 # Remote syslog
@@ -305,6 +314,17 @@ default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-sy
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
 default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+
+###
+# Logrotate
+###
+default['gitlab']['logrotate']['enable'] = true
+default['gitlab']['logrotate']['ha'] = false
+default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
+default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
+default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell}
+default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
+default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
 ###
 # High Availability

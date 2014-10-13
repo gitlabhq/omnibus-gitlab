@@ -19,6 +19,9 @@ package to your GitLab server.
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 
+# If you are upgrading from 7.3.0
+sudo gitlab-ctl stop nginx
+
 # Create a database backup in case the upgrade fails
 sudo gitlab-rake gitlab:backup:create
 
@@ -106,7 +109,6 @@ Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as gitlab.yml, unicorn.rb and smtp_settings.rb.
 You will have to [configure those settings in /etc/gitlab/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
-SMTP is not supported in omnibus-gitlab at this time.
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
 Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).

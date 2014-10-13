@@ -39,70 +39,6 @@ git push origin 6-6-stable 6.6.0.omnibus
 
 ## On the build machines
 
-### One-time
-
-- Install release dependencies
-
-```shell
-# Ubuntu
-sudo apt-get install python-pip
-
-# CentOS 6
-sudo yum install python-pip
-
-# Centos 7
-sudo easy_install pip
-
-# All
-sudo pip install awscli
-```
-
-# Make sure mail is installed
-```shell
-# Ubuntu / Debian
-sudo apt-get install mailutils
-
-# Centos 6
-sudo yum install mail
-
-# Centos 7
-sudo yum install mailx
-```
-
-As omnibus-build user:
-
-```shell
-sudo su - omnibus-build
-```
-
-- Set up a deploy key to fetch the GitLab EE source code.
-- Put your email address in `~omnibus-build/.forward`.
-- Test email delivery:
-
-```shell
-date | mail -s "testing from $(uname -n)" $(cat ~/.forward)
-```
-
-- Configure aws credentials
-
-```shell
-aws configure # enter AWS key and secret
-```
-
-- Set up the `attach.sh` script
-
-```shell
-# Install screen first
-sudo apt-get install screen
-cat > attach.sh <<EOF
-#!/bin/sh
-script -c 'screen -x || screen' /dev/null
-EOF
-chmod +x attach.sh
-```
-
-### Each build
-
 - Log in as the build user and start a screen session
 
 ```shell
@@ -132,7 +68,7 @@ You can adjust the time with the `date` command if necessary.
 ./release.sh
 ```
 
-This will `clean --purge` the build environment, build a package and upload it to S3.
+This will clean the build environment, build a package and upload it to S3.
 
 - Detach from screen: press Ctrl-a DD
 - Check in on the build after 30 minutes.

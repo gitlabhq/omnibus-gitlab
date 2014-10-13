@@ -34,6 +34,13 @@ run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
 run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
 ```
 
+If any of the processes is not behaving like expected, try tailing their logs
+to see what is wrong.
+
+```
+sudo gitlab-ctl tail postgresql
+```
+
 Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
 You can login as an admin user with username `root` and password `5iveL!fe`.
 
@@ -398,31 +405,9 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Use non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx.  To use another
-web server like Apache or an existing Nginx installation you will have to do
-the following steps:
-
-Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
-
-```ruby
-nginx['enable'] = false
-```
-
-Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
-in the group with the same name.  To allow an external webserver access to
-GitLab, you will need to add the webserver user to `gitlab-www` group.  Let's
-say that webserver user is `www-data`. Adding the user to `gitlab-www` group
-can be done with:
-
-```
-usermod -aG gitlab-www www-data
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
-Note: if you are using SELinux and your web server runs under a restricted
-SELinux profile you may have to [loosen the restrictions on your web
-server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+By default, omnibus-gitlab installs GitLab with bundled Nginx. We added support
+for non-bundled web servers in 7.3.0 but it turns out this is not working yet,
+see https://gitlab.com/gitlab-org/omnibus-gitlab/issues/267 .
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -489,6 +474,7 @@ web_server['gid'] = 1237
 
 ### Storing user attachments on Amazon S3
 
+By default, attachments are stored in `/var/opt/gitlab/gitlab-rails/uploads`.
 Instead of using local storage you can also store the user attachments for your
 GitLab instance on Amazon S3.
 
@@ -728,6 +714,31 @@ logging['svlogd_prefix'] = nil # custom prefix for log messages
 
 # Optionally, you can override the prefix for e.g. Nginx
 nginx['svlogd_prefix'] = "nginx"
+```
+
+### Logrotate
+
+Starting with omnibus-gitlab 7.4 there is a built-in logrotate service in
+omnibus-gitlab. This service will rotate, compress and eventually delete the
+log data that is not captured by Runit, such as `gitlab-rails/production.log`
+and `nginx/gitlab_access.log`. You can configure logrotate via
+`/etc/gitlab/gitlab.rb`.
+
+```
+# Below are some of the default settings
+logging['logrotate_frequency'] = "daily" # rotate logs daily
+logging['logrotate_size'] = nil # do not rotate by size by default
+logging['logrotate_rotate'] = 30 # keep 30 rotated logs
+logging['logrotate_compress'] = "compress" # see 'man logrotate'
+logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
+logging['logrotate_postrotate'] = nil # no postrotate command by default
+
+# You can add overrides per service
+nginx['logrotate_frequency'] = nil
+nginx['logrotate_size'] = "200M"
+
+# You can also disable the built-in logrotate service if you want
+logrotate['enable'] = false
 ```
 
 ### UDP log shipping (GitLab Enterprise Edition only)
