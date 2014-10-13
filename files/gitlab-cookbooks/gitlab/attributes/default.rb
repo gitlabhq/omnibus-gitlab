@@ -252,7 +252,9 @@ default['gitlab']['web-server']['username'] = 'gitlab-www'
 default['gitlab']['web-server']['group'] = 'gitlab-www'
 default['gitlab']['web-server']['uid'] = nil
 default['gitlab']['web-server']['gid'] = nil
-default['gitlab']['web-server']['shell'] = "/bin/false"
+default['gitlab']['web-server']['shell'] = '/bin/false'
+# When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
+default['gitlab']['web-server']['external_username'] = 'www-data'
 
 ####
 # Nginx
