@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,16 @@
 # limitations under the License.
 #
 
-root_password = node['gitlab']['gitlab-rails']['root_password']
-
-execute "initialize database" do
-  command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
-  environment ({'GITLAB_ROOT_PASSWORD' => root_password }) if root_password
-  action :nothing
-end
-
-migrate_database 'gitlab-rails' do
-  command '/opt/gitlab/bin/gitlab-rake db:migrate'
-  action :nothing
+define :migrate_database, :command => nil, :action => :run do
+  bash "migrate #{params[:name]} database" do
+    code <<-EOH
+      set -e
+      log_file="/tmp/#{params[:name]}-db-migrate-$(date +%s)-$$/output.log"
+      umask 077
+      mkdir $(dirname ${log_file})
+      #{params[:command]} 2>& 1 | tee ${log_file}
+      exit ${PIPESTATUS[0]}
+    EOH
+    action params[:action]
+  end
 end
