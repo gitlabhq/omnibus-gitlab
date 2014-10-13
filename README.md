@@ -419,14 +419,16 @@ the following steps:
 nginx['enable'] = false
 ```
 
-* Check the username of the non-bundled web-server user. By default, omnibus-gitlab assumes
-that this user is `www-data`. If this is the case for you, there is no need to specify the user in configuration.
-Let's say for example that webserver user is `nobody`.
+* Check the username of the non-bundled web-server user. By default, omnibus-gitlab has no default setting for external webserver user.
+You have to specify the external webserver user username in the configuration!
+Let's say for example that webserver user is `www-data`.
 In `/etc/gitlab/gitlab.rb` set:
 
 ```ruby
-web_server['external_username'] = 'nobody'
+web_server['external_users'] = ['www-data']
 ```
+
+*This setting is an array so you can specify more than one user to be added to gitlab-www group.*
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
