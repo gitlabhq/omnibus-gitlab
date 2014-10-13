@@ -330,3 +330,57 @@ default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rota
 # High Availability
 ###
 default['gitlab']['high-availability']['mountpoint'] = nil
+
+####
+# GitLab CI Rails app
+####
+default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['environment'] = 'production'
+default['gitlab']['gitlab-ci']['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
+
+default['gitlab']['gitlab-ci']['username'] = "gitlab-ci"
+default['gitlab']['gitlab-ci']['uid'] = nil
+default['gitlab']['gitlab-ci']['gid'] = nil
+default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
+
+default['gitlab']['gitlab-ci']['gitlab_server_urls'] = []
+default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
+default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
+default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
+default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil
+
+default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
+default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
+default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
+
+default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
+default['gitlab']['gitlab-ci']['db_encoding'] = "unicode"
+default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
+default['gitlab']['gitlab-ci']['db_pool'] = 10
+default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
+default['gitlab']['gitlab-ci']['db_password'] = nil
+default['gitlab']['gitlab-ci']['db_host'] = nil
+default['gitlab']['gitlab-ci']['db_port'] = 5432
+default['gitlab']['gitlab-ci']['db_socket'] = nil
+
+default['gitlab']['gitlab-ci']['redis_host'] = "127.0.0.1"
+default['gitlab']['gitlab-ci']['redis_port'] = nil
+default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+
+default['gitlab']['gitlab-ci']['smtp_enable'] = false
+default['gitlab']['gitlab-ci']['smtp_address'] = nil
+default['gitlab']['gitlab-ci']['smtp_port'] = nil
+default['gitlab']['gitlab-ci']['smtp_user_name'] = nil
+default['gitlab']['gitlab-ci']['smtp_password'] = nil
+default['gitlab']['gitlab-ci']['smtp_domain'] = nil
+default['gitlab']['gitlab-ci']['smtp_authentication'] = nil
+default['gitlab']['gitlab-ci']['smtp_enable_starttls_auto'] = nil
+default['gitlab']['gitlab-ci']['smtp_tls'] = nil
+default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil

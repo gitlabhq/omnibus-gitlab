@@ -27,3 +27,8 @@ migrate_database 'gitlab-rails' do
   command '/opt/gitlab/bin/gitlab-rake db:migrate'
   action :nothing
 end
+
+migrate_database 'gitlab-ci' do
+  command '/opt/gitlab/bin/gitlab-ci-rake db:migrate'
+  action :nothing
+end
