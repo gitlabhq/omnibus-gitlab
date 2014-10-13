@@ -61,13 +61,13 @@ build do
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-ci/"
 
   # Create a wrapper for the rake tasks of the Rails app
-  erb :dest => "#{install_dir}/bin/gitlab-rake",
+  erb :dest => "#{install_dir}/bin/gitlab-ci-rake",
     :source => "bundle_exec_wrapper.erb",
     :mode => 0755,
     :vars => {:command => 'rake "$@"', :install_dir => install_dir}
 
   # Create a wrapper for the rails command, useful for e.g. `rails console`
-  erb :dest => "#{install_dir}/bin/gitlab-rails",
+  erb :dest => "#{install_dir}/bin/gitlab-ci-rails",
     :source => "bundle_exec_wrapper.erb",
     :mode => 0755,
     :vars => {:command => 'rails "$@"', :install_dir => install_dir}
