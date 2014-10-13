@@ -297,6 +297,12 @@ default['gitlab']['logging']['svlogd_udp'] = nil # transmit log messages via UDP
 default['gitlab']['logging']['svlogd_prefix'] = nil # custom prefix for log messages
 default['gitlab']['logging']['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
 default['gitlab']['logging']['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
+default['gitlab']['logging']['logrotate_frequency'] = "daily" # rotate logs daily
+default['gitlab']['logging']['logrotate_size'] = nil # do not rotate by size by default
+default['gitlab']['logging']['logrotate_rotate'] = 30 # keep 30 rotated logs
+default['gitlab']['logging']['logrotate_compress'] = "compress" # see 'man logrotate'
+default['gitlab']['logging']['logrotate_method'] = "copytruncate" # see 'man logrotate'
+default['gitlab']['logging']['logrotate_postrotate'] = nil # no postrotate command by default
 
 ###
 # Remote syslog
@@ -308,6 +314,17 @@ default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-sy
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
 default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+
+###
+# Logrotate
+###
+default['gitlab']['logrotate']['enable'] = true
+default['gitlab']['logrotate']['ha'] = false
+default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
+default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
+default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell}
+default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
+default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
 ###
 # High Availability
