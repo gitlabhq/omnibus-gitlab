@@ -20,15 +20,15 @@ define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_na
   rails_home = node['gitlab'][rails_service]['dir']
   svc = params[:name]
   user = params[:user]
-  
+
   unicorn_etc_dir = File.join(rails_home, "etc")
   unicorn_working_dir = File.join(rails_home, "working")
-  
+
   unicorn_listen_socket = node['gitlab'][svc]['socket']
   unicorn_pidfile = node['gitlab'][svc]['pidfile']
   unicorn_log_dir = node['gitlab'][svc]['log_directory']
   unicorn_socket_dir = File.dirname(unicorn_listen_socket)
-  
+
   [
     unicorn_log_dir,
     File.dirname(unicorn_pidfile)
@@ -39,17 +39,17 @@ define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_na
       recursive true
     end
   end
-  
+
   directory unicorn_socket_dir do
     owner user
     group node['gitlab']['web-server']['group']
     mode '0750'
     recursive true
   end
-  
+
   unicorn_listen_tcp = node['gitlab'][svc]['listen']
   unicorn_listen_tcp << ":#{node['gitlab'][svc]['port']}"
-  
+
   unicorn_rb = File.join(unicorn_etc_dir, "unicorn.rb")
   unicorn_config unicorn_rb do
     listen(
@@ -82,7 +82,7 @@ define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_na
     mode "0644"
     notifies :restart, "service[#{svc}]" if OmnibusHelper.should_notify?(svc)
   end
-  
+
   runit_template_name = params[:runit_template_name]
   runit_service svc do
     down node['gitlab'][svc]['ha']
@@ -97,7 +97,7 @@ define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_na
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end
-  
+
   if node['gitlab']['bootstrap']['enable']
     execute "/opt/gitlab/bin/gitlab-ctl start #{svc}" do
       retries 20
