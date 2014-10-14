@@ -17,6 +17,7 @@
 #
 
 unicorn_service 'unicorn' do
+  rails_service 'gitlab-rails'
   rails_home node['gitlab']['gitlab-rails']['dir']
   user node['gitlab']['user']['username']
 end
