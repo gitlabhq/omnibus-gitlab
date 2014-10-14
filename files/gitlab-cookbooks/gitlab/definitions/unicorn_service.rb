@@ -15,13 +15,14 @@
 # limitations under the License.
 #
 
-define :unicorn_service, :rails_service => nil, :rails_home => nil, :user => nil, :runit_template_name => 'unicorn' do
+define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_name => 'unicorn' do
   rails_service = params[:rails_service]
+  rails_home = node['gitlab'][rails_service]['dir']
   svc = params[:name]
   user = params[:user]
   
-  unicorn_etc_dir = File.join(params[:rails_home], "etc")
-  unicorn_working_dir = File.join(params[:rails_home], "working")
+  unicorn_etc_dir = File.join(rails_home, "etc")
+  unicorn_working_dir = File.join(rails_home, "working")
   
   unicorn_listen_socket = node['gitlab'][svc]['socket']
   unicorn_pidfile = node['gitlab'][svc]['pidfile']
