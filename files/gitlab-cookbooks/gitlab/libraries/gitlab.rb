@@ -39,6 +39,7 @@ module Gitlab
   postgresql Mash.new
   redis Mash.new
   gitlab_rails Mash.new
+  gitlab_ci Mash.new
   gitlab_shell Mash.new
   unicorn Mash.new
   sidekiq Mash.new
@@ -71,6 +72,7 @@ module Gitlab
       end
 
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
+      Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
 
       if File.directory?("/etc/gitlab")
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
@@ -78,6 +80,9 @@ module Gitlab
             Chef::JSONCompat.to_json_pretty({
               'gitlab_rails' => {
                 'secret_token' => Gitlab['gitlab_rails']['secret_token'],
+              },
+              'gitlab_ci' => {
+                'secret_token' => Gitlab['gitlab_ci']['secret_token'],
               }
             })
           )
@@ -168,6 +173,7 @@ module Gitlab
         "user",
         "redis",
         "gitlab_rails",
+        "gitlab_ci",
         "gitlab_shell",
         "unicorn",
         "sidekiq",
