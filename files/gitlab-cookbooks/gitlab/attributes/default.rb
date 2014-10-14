@@ -384,3 +384,18 @@ default['gitlab']['gitlab-ci']['smtp_authentication'] = nil
 default['gitlab']['gitlab-ci']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-ci']['smtp_tls'] = nil
 default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil
+
+####
+# CI Unicorn
+####
+default['gitlab']['ci-unicorn']['enable'] = true
+default['gitlab']['ci-unicorn']['ha'] = false
+default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
+default['gitlab']['ci-unicorn']['worker_processes'] = 2
+default['gitlab']['ci-unicorn']['listen'] = '127.0.0.1'
+default['gitlab']['ci-unicorn']['port'] = 8181
+default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
+default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
+default['gitlab']['ci-unicorn']['tcp_nopush'] = true
+default['gitlab']['ci-unicorn']['backlog_socket'] = 1024
+default['gitlab']['ci-unicorn']['worker_timeout'] = 60

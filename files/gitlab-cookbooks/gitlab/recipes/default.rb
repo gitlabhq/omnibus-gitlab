@@ -56,6 +56,7 @@ include_recipe "gitlab::selinux"
 # the corresponding service recipe is not loaded below.
 [
   "unicorn",
+  "ci-unicorn",
   "sidekiq"
 ].each do |dummy|
   service dummy do
@@ -71,6 +72,7 @@ include_recipe "runit"
   "redis",
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
+  "ci-unicorn",
   "sidekiq",
   "nginx",
   "remote-syslog",
