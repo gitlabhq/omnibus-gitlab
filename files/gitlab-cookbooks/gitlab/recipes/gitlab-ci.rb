@@ -20,7 +20,7 @@ gitlab_ci_source_dir = "/opt/gitlab/embedded/service/gitlab-ci"
 gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_home_dir = File.join(gitlab_ci_dir, "home")
 gitlab_ci_etc_dir = File.join(gitlab_ci_dir, "etc")
-gitlab_ci_env_dir = "/opt/gitlab/etc/gitlab-ci/env"
+gitlab_ci_static_etc_dir = "/opt/gitlab/etc/gitlab-ci"
 gitlab_ci_working_dir = File.join(gitlab_ci_dir, "working")
 gitlab_ci_tmp_dir = File.join(gitlab_ci_dir, "tmp")
 gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
@@ -29,6 +29,7 @@ gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
 
 [
   gitlab_ci_etc_dir,
+  gitlab_ci_static_etc_dir,
   gitlab_ci_home_dir,
   gitlab_ci_working_dir,
   gitlab_ci_tmp_dir,
@@ -47,13 +48,6 @@ directory gitlab_ci_dir do
   recursive true
 end
 
-directory gitlab_ci_env_dir do
-  owner 'root' # Do not allow the git user to change its own env variables
-  group gitlab_ci_user
-  mode '0750'
-  recursive true
-end
-
 group gitlab_ci_user do
   gid node['gitlab']['gitlab-ci']['gid']
 end
@@ -66,7 +60,7 @@ user gitlab_ci_user do
   home gitlab_ci_home_dir
 end
 
-template "/opt/gitlab/etc/gitlab-ci/gitlab-ci-rc"
+template File.join(gitlab_ci_static_etc_dir, "gitlab-ci-rc")
 
 dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
@@ -150,32 +144,14 @@ template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   end
 end
 
-env_vars = {
-  'HOME' => gitlab_ci_home_dir,
-  'RAILS_ENV' => node['gitlab']['gitlab-ci']['environment'],
-}.merge(node['gitlab']['gitlab-ci']['env'])
-
-env_vars.each do |key, value|
-  file File.join(gitlab_ci_env_dir, key) do
-    owner gitlab_ci_user
-    mode "0600"
-    content value
-    dependent_services.each do |svc|
-      notifies :restart, svc
-    end
-  end
-end
-
-if File.directory?(gitlab_ci_env_dir)
-  deleted_env_vars = Dir.entries(gitlab_ci_env_dir) - env_vars.keys - %w{. ..}
-  deleted_env_vars.each do |deleted_var|
-    file File.join(gitlab_ci_env_dir, deleted_var) do
-      action :delete
-      dependent_services.each do |svc|
-        notifies :restart, svc
-      end
-    end
-  end
+env_dir File.join(gitlab_ci_static_etc_dir, 'env') do
+  variables(
+    {
+      'HOME' => gitlab_ci_home_dir,
+      'RAILS_ENV' => node['gitlab']['gitlab-ci']['environment'],
+    }.merge(node['gitlab']['gitlab-ci']['env'])
+  )
+  restarts dependent_services
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
