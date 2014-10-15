@@ -63,7 +63,6 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com
-    # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+'
     issue_closing_pattern: <%= single_quote(@gitlab_issue_closing_pattern) %>
 
     ## Default project features settings
@@ -117,6 +116,7 @@ production: &base
     <% end %>
 
   ## Gravatar
+  ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:
     enabled: <%= @gravatar_enabled %>            # Use user avatar image from Gravatar.com (default: true)
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
@@ -132,63 +132,81 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_enabled %>
-    host: <%= single_quote(@ldap_host) %>
-    port: <%= @ldap_port %>
-    uid: <%= single_quote(@ldap_uid) %>
-    method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
-    bind_dn: <%= single_quote(@ldap_bind_dn) %>
-    password: <%= single_quote(@ldap_password) %>
+    servers:
+    <% @ldap_servers.each do |server| %>
+      <%= server['id'].to_sym %> # 'main' is the GitLab 'provider ID' of this LDAP server
+        ## label
+        #
+        # A human-friendly name for your LDAP server. It is OK to change the label later,
+        # for instance if you find out it is too large to fit on the web page.
+        #
+        # Example: 'Paris' or 'Acme, Ltd.'
+        label: <%= single_quote(server['label']) %>
 
-    # This setting controls the amount of time between LDAP permission checks for each user.
-    # After this time has expired for a given user, their next interaction with GitLab (a click in the web UI, a git pull etc.) will be slower because the LDAP permission check is being performed.
-    # How much slower depends on your LDAP setup, but it is not uncommon for this check to add seconds of waiting time.
-    # The default value is to have a 'slow click' once every 3600 seconds, i.e. once per hour.
-    #
-    # Warning: if you set this value too low, every click in GitLab will be a 'slow click' for all of your LDAP users.
-    sync_time: <%= @ldap_sync_time %>
+        host: <%= single_quote(server['ldap_host']) %>
+        port: <%= server['port'] %>
+        uid: <%= single_quote(server['uid']) %>
+        method: <%= single_quote(server['method']) %> # "tls" or "ssl" or "plain"
+        bind_dn: <%= single_quote(server['bind_dn']) %>
+        password: <%= single_quote(server['password']) %>
 
-    # If allow_username_or_email_login is enabled, GitLab will ignore everything
-    # after the first '@' in the LDAP username submitted by the user on login.
-    #
-    # Example:
-    # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
-    # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
-    #
-    # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
-    # disable this setting, because the userPrincipalName contains an '@'.
-    allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
+        # This setting specifies if LDAP server is Active Directory LDAP server.
+        # For non AD servers it skips the AD specific queries.
+        # If your LDAP server is not AD, set this to false.
+        active_directory: <% server['active_directory'] %>
 
-    # Base where we can search for users
-    #
-    #   Ex. ou=People,dc=gitlab,dc=example
-    #
-    base: <%= single_quote(@ldap_base) %>
+        # If allow_username_or_email_login is enabled, GitLab will ignore everything
+        # after the first '@' in the LDAP username submitted by the user on login.
+        #
+        # Example:
+        # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
+        # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
+        #
+        # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
+        # disable this setting, because the userPrincipalName contains an '@'.
+        allow_username_or_email_login: <%= server['allow_username_or_email_login'] %>
 
-    # Filter LDAP users
-    #
-    #   Format: RFC 4515
-    #   Ex. (employeeType=developer)
-    #
-    user_filter: <%= single_quote(@ldap_user_filter) %>
+        # Base where we can search for users
+        #
+        #   Ex. ou=People,dc=gitlab,dc=example
+        #
+        base: <%= single_quote(server['base']) %>
 
-    # Base where we can search for groups
-    #
-    #   Ex. ou=Groups,dc=gitlab,dc=example
-    #
-    group_base: <%= single_quote(@ldap_group_base) %>
+        # Filter LDAP users
+        #
+        #   Format: RFC 4515
+        #   Ex. (employeeType=developer)
+        #
+        user_filter: <%= single_quote(server['user_filter']) %>
 
-    # LDAP group of users who should be admins in GitLab
-    #
-    #   Ex. GLAdmins
-    #
-    admin_group: <%= single_quote(@ldap_admin_group) %>
+        # Base where we can search for groups
+        #
+        #   Ex. ou=Groups,dc=gitlab,dc=example
+        #
+        group_base: <%= single_quote(server['group_base']) %>
 
-    # Name of attribute which holds a ssh public key of the user object.
-    # If false or nil, SSH key syncronisation will be disabled.
-    #
-    #   Ex. sshpublickey
-    #
-    sync_ssh_keys: <%= single_quote(@ldap_sync_ssh_keys) %>
+        # LDAP group of users who should be admins in GitLab
+        #
+        #   Ex. GLAdmins
+        #
+        admin_group: <%= single_quote(server['admin_group']) %>
+
+        # Name of attribute which holds a ssh public key of the user object.
+        # If false or nil, SSH key syncronisation will be disabled.
+        #
+        #   Ex. sshpublickey
+        #
+        sync_ssh_keys: <%= single_quote(server['sync_ssh_keys']) %>
+    <% end %>
+
+      # GitLab EE only: add more LDAP servers
+      # Choose an ID made of a-z and 0-9 . This ID will be stored in the database
+      # so that GitLab can remember which LDAP server a user belongs to.
+      # uswest2:
+      #   label:
+      #   host:
+      #   ....
+
 
   ## OmniAuth settings
   omniauth:
