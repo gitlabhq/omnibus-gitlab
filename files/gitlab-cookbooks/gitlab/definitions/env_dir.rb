@@ -38,7 +38,7 @@ define :env_dir, :variables => Hash.new, :restarts => [] do
     deleted_env_vars.each do |deleted_var|
       file File.join(env_dir, deleted_var) do
         action :delete
-        dependent_services.each do |svc|
+        restarts.each do |svc|
           notifies :restart, svc
         end
       end
