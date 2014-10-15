@@ -17,9 +17,14 @@
 
 root_password = node['gitlab']['gitlab-rails']['root_password']
 
-execute "initialize database" do
+execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   environment ({'GITLAB_ROOT_PASSWORD' => root_password }) if root_password
+  action :nothing
+end
+
+execute "initialize gitlab-ci database" do
+  command "/opt/gitlab/bin/gitlab-ci-rake setup"
   action :nothing
 end
 

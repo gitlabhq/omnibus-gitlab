@@ -78,7 +78,6 @@ if node['gitlab']['postgresql']['enable']
   database_attributes.merge!(
     :db_adapter => "postgresql",
     :db_username => node['gitlab']['postgresql']['sql_user'],
-    :db_password => node['gitlab']['postgresql']['sql_password'],
     :db_host => node['gitlab']['postgresql']['listen_address'],
     :db_port => node['gitlab']['postgresql']['port']
   )

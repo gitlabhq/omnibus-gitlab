@@ -63,8 +63,8 @@ end
 template File.join(gitlab_ci_static_etc_dir, "gitlab-ci-rc")
 
 dependent_services = []
-dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
-dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
+dependent_services << "service[ci-unicorn]" if OmnibusHelper.should_notify?("ci-unicorn")
+dependent_services << "service[ci-sidekiq]" if OmnibusHelper.should_notify?("ci-sidekiq")
 
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
@@ -83,8 +83,7 @@ database_attributes = node['gitlab']['gitlab-ci'].to_hash
 if node['gitlab']['postgresql']['enable']
   database_attributes.merge!(
     :db_adapter => "postgresql",
-    :db_username => node['gitlab']['postgresql']['sql_user'],
-    :db_password => node['gitlab']['postgresql']['sql_password'],
+    :db_username => node['gitlab']['postgresql']['sql_ci_user'],
     :db_host => node['gitlab']['postgresql']['listen_address'],
     :db_port => node['gitlab']['postgresql']['port']
   )

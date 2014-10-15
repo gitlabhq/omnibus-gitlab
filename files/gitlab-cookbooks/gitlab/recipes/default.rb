@@ -57,7 +57,8 @@ include_recipe "gitlab::selinux"
 [
   "unicorn",
   "ci-unicorn",
-  "sidekiq"
+  "sidekiq",
+  "ci-sidekiq"
 ].each do |dummy|
   service dummy do
     supports []

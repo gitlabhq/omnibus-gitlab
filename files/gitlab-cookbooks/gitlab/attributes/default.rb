@@ -203,6 +203,7 @@ default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
+default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['port'] = 5432
 default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
