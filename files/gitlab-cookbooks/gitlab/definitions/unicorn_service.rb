@@ -15,9 +15,9 @@
 # limitations under the License.
 #
 
-define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_name => 'unicorn' do
-  rails_service = params[:rails_service]
-  rails_home = node['gitlab'][rails_service]['dir']
+define :unicorn_service, :rails_app => nil, :user => nil, :runit_template_name => 'unicorn' do
+  rails_app = params[:rails_app]
+  rails_home = node['gitlab'][rails_app]['dir']
   svc = params[:name]
   user = params[:user]
 
@@ -91,7 +91,7 @@ define :unicorn_service, :rails_service => nil, :user => nil, :runit_template_na
     options({
       :service => svc,
       :user => user,
-      :rails_service => rails_service,
+      :rails_app => rails_app,
       :unicorn_rb => unicorn_rb,
       :log_directory => unicorn_log_dir
     }.merge(params))

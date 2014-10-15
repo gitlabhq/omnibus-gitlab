@@ -10,7 +10,7 @@ readonly unicorn_poll_alive=1 # time in seconds
 
 function main
 {
-  cd /opt/gitlab/embedded/service/<%= @options[:rails_service] %>
+  cd /opt/gitlab/embedded/service/<%= @options[:rails_app] %>
   find_us_a_unicorn
   trap_signals
   wait_for_unicorn_to_exit
@@ -65,12 +65,12 @@ function is_unicorn
 function start_unicorn_master
 {
   <%= render("mount_point_check.erb") %>
-  chpst -e /opt/gitlab/etc/<%= @options[:rails_service] %>/env -P -U <%= @options[:user] %> -u <%= @options[:user] %> \
+  chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P -U <%= @options[:user] %> -u <%= @options[:user] %> \
     /opt/gitlab/embedded/bin/bundle exec unicorn \
       -D \
-      -E <%= node['gitlab'][@options[:rails_service]]['environment'] %> \
+      -E <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
       -c <%= @options[:unicorn_rb] %> \
-      /opt/gitlab/embedded/service/<%= @options[:rails_service] %>/config.ru
+      /opt/gitlab/embedded/service/<%= @options[:rails_app] %>/config.ru
 }
 
 function trap_signals
