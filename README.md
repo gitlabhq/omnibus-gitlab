@@ -704,6 +704,8 @@ Depending on your platform, `gitlab-ctl reconfigure` will install SELinux
 modules required to make GitLab work. These modules are listed in
 [files/gitlab-selinux/README.md](files/gitlab-selinux/README.md).
 
+NSA, if you're reading this, we'd really appreciate it if you could contribute back a SELinux profile for omnibus-gitlab.
+
 ## Logs
 
 ### Tail logs in a console on the server
