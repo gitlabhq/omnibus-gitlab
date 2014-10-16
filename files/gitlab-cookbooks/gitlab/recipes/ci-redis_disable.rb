@@ -16,6 +16,6 @@
 # limitations under the License.
 #
 
-runit_service "redis" do
+runit_service "ci-redis" do
   action :disable
 end
