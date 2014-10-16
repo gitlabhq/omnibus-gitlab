@@ -365,7 +365,8 @@ gitlab_rails['ldap_servers'] = [
     "base" => "DC=mycorp,DC=com",
     "group_base" => "OU=groups,DC=mycorp,DC=com",
     "admin_group" => "",
-    "sync_ssh_keys" => false
+    "sync_ssh_keys" => false,
+    "sync_time" => 3600
   },
   {
     "id" => "secondary",

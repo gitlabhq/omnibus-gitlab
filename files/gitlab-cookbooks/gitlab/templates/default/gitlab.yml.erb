@@ -132,6 +132,7 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_enabled %>
+  <% if @ldap_servers.any? %>
     servers:
     <% @ldap_servers.each do |server| %>
       <%= server['id'].to_sym %>: # 'main' is the GitLab 'provider ID' of this LDAP server
@@ -151,8 +152,27 @@ production: &base
         group_base: <%= single_quote(server['group_base']) %>
         admin_group: <%= single_quote(server['admin_group']) %>
         sync_ssh_keys: <%= single_quote(server['sync_ssh_keys']) %>
+        sync_time: <%= server['sync_time'] %>
 
     <% end %>
+  <% else %>
+    host: <%= single_quote(@ldap_host) %>
+    port: <%= @ldap_port %>
+    uid: <%= single_quote(@ldap_uid) %>
+    method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
+    bind_dn: <%= single_quote(@ldap_bind_dn) %>
+    password: <%= single_quote(@ldap_password) %>
+    active_directory: <%= @ldap_active_directory %>
+    allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
+    base: <%= single_quote(@ldap_base) %>
+    user_filter: <%= single_quote(@ldap_user_filter) %>
+
+    ## EE only
+    group_base: <%= single_quote(@ldap_group_base) %>
+    admin_group: <%= single_quote(@ldap_admin_group) %>
+    sync_ssh_keys: <%= single_quote(@ldap_sync_ssh_keys) %>
+    sync_time: <%= @ldap_sync_time %>
+  <% end %>
 
   ## OmniAuth settings
   omniauth:
