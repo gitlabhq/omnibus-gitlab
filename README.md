@@ -321,22 +321,68 @@ If you have an LDAP directory service such as Active Directory, you can configur
 GitLab so that your users can sign in with their LDAP credentials. Add the following
 to `/etc/gitlab/gitlab.rb`, edited for your server.
 
+For GitLab Community Edition:
+
 ```ruby
 # These settings are documented in more detail at
-# https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
+# https://gitlab.com/gitlab-org/gitlab-ce/blob/a0a826ebdcb783c660dd40d8cb217db28a9d4998/config/gitlab.yml.example#L136
 gitlab_rails['ldap_enabled'] = true
-gitlab_rails['ldap_host'] = 'hostname of LDAP server'
-gitlab_rails['ldap_port'] = 389
-gitlab_rails['ldap_uid'] = 'sAMAccountName'
-gitlab_rails['ldap_method'] = 'plain' # 'ssl' or 'plain'
-gitlab_rails['ldap_bind_dn'] = 'CN=query user,CN=Users,DC=mycorp,DC=com'
-gitlab_rails['ldap_password'] = 'query user password'
-gitlab_rails['ldap_allow_username_or_email_login'] = true
-gitlab_rails['ldap_base'] = 'DC=mycorp,DC=com'
+gitlab_rails['ldap_servers'] = [
+  {
+    "id" => "main",
+    "label" => "LDAP",
+    "host" => "hostname of LDAP server",
+    "port" => 389,
+    "uid" => "sAMAccountName",
+    "method" => "plain", # 'ssl' or 'plain'
+    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+    "password" => "query user password",
+    "active_directory" => true,
+    "allow_username_or_email_login" => true,
+    "base" => "DC=mycorp,DC=com",
+    "user_filter" => ""
+  }
+]
 
-# GitLab Enterprise Edition only
-gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
-gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
+```
+
+If you are installing GitLab Enterprise edition package you can use multiple LDAP servers:
+
+```ruby
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = [
+  {
+    "id" => "main",
+    "label" => "LDAP",
+    "host" => "hostname of LDAP server",
+    "port" => 389,
+    "uid" => "sAMAccountName",
+    "method" => "plain", # 'ssl' or 'plain'
+    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+    "password" => "query user password",
+    "active_directory" => true,
+    "allow_username_or_email_login" => true,
+    "base" => "DC=mycorp,DC=com",
+    "group_base" => "OU=groups,DC=mycorp,DC=com",
+    "admin_group" => "",
+    "sync_ssh_keys" => false
+  },
+  {
+    "id" => "secondary",
+    "label" => "LDAP 2",
+    "host" => "hostname of LDAP server 2",
+    "port" => 389,
+    "uid" => "sAMAccountName",
+    "method" => "plain", # 'ssl' or 'plain'
+    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+    "password" => "query user password",
+    "active_directory" => true,
+    "allow_username_or_email_login" => true,
+    "base" => "DC=mycorp,DC=com",
+    "group_base" => "OU=groups,DC=mycorp,DC=com",
+    "sync_ssh_keys" => false
+  }
+]
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.

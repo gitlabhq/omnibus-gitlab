@@ -134,79 +134,25 @@ production: &base
     enabled: <%= @ldap_enabled %>
     servers:
     <% @ldap_servers.each do |server| %>
-      <%= server['id'].to_sym %> # 'main' is the GitLab 'provider ID' of this LDAP server
-        ## label
-        #
-        # A human-friendly name for your LDAP server. It is OK to change the label later,
-        # for instance if you find out it is too large to fit on the web page.
-        #
-        # Example: 'Paris' or 'Acme, Ltd.'
+      <%= server['id'].to_sym %>: # 'main' is the GitLab 'provider ID' of this LDAP server
         label: <%= single_quote(server['label']) %>
-
-        host: <%= single_quote(server['ldap_host']) %>
+        host: <%= single_quote(server['host']) %>
         port: <%= server['port'] %>
         uid: <%= single_quote(server['uid']) %>
         method: <%= single_quote(server['method']) %> # "tls" or "ssl" or "plain"
         bind_dn: <%= single_quote(server['bind_dn']) %>
         password: <%= single_quote(server['password']) %>
-
-        # This setting specifies if LDAP server is Active Directory LDAP server.
-        # For non AD servers it skips the AD specific queries.
-        # If your LDAP server is not AD, set this to false.
-        active_directory: <% server['active_directory'] %>
-
-        # If allow_username_or_email_login is enabled, GitLab will ignore everything
-        # after the first '@' in the LDAP username submitted by the user on login.
-        #
-        # Example:
-        # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
-        # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
-        #
-        # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
-        # disable this setting, because the userPrincipalName contains an '@'.
+        active_directory: <%= server['active_directory'] %>
         allow_username_or_email_login: <%= server['allow_username_or_email_login'] %>
-
-        # Base where we can search for users
-        #
-        #   Ex. ou=People,dc=gitlab,dc=example
-        #
         base: <%= single_quote(server['base']) %>
-
-        # Filter LDAP users
-        #
-        #   Format: RFC 4515
-        #   Ex. (employeeType=developer)
-        #
         user_filter: <%= single_quote(server['user_filter']) %>
 
-        # Base where we can search for groups
-        #
-        #   Ex. ou=Groups,dc=gitlab,dc=example
-        #
+        # EE only
         group_base: <%= single_quote(server['group_base']) %>
-
-        # LDAP group of users who should be admins in GitLab
-        #
-        #   Ex. GLAdmins
-        #
         admin_group: <%= single_quote(server['admin_group']) %>
-
-        # Name of attribute which holds a ssh public key of the user object.
-        # If false or nil, SSH key syncronisation will be disabled.
-        #
-        #   Ex. sshpublickey
-        #
         sync_ssh_keys: <%= single_quote(server['sync_ssh_keys']) %>
+
     <% end %>
-
-      # GitLab EE only: add more LDAP servers
-      # Choose an ID made of a-z and 0-9 . This ID will be stored in the database
-      # so that GitLab can remember which LDAP server a user belongs to.
-      # uswest2:
-      #   label:
-      #   host:
-      #   ....
-
 
   ## OmniAuth settings
   omniauth:
