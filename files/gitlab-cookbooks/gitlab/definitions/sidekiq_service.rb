@@ -28,10 +28,12 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
     recursive true
   end
 
-  runit_service "sidekiq" do
+  runit_service svc do
     down node['gitlab'][svc]['ha']
+    template_name 'sidekiq'
     options({
       :rails_app => rails_app,
+      :user => user,
       :shutdown_timeout => node['gitlab'][svc]['shutdown_timeout'],
       :log_directory => sidekiq_log_dir
     }.merge(params))
