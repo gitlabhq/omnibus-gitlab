@@ -38,11 +38,14 @@ module Gitlab
   user Mash.new
   postgresql Mash.new
   redis Mash.new
+  ci_redis Mash.new
   gitlab_rails Mash.new
   gitlab_ci Mash.new
   gitlab_shell Mash.new
   unicorn Mash.new
+  ci_unicorn Mash.new
   sidekiq Mash.new
+  ci_sidekiq Mash.new
   nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
@@ -142,7 +145,7 @@ module Gitlab
         Gitlab['logging']['svlogd_udp'] ||= logging['udp_log_shipping_host']
       end
 
-      %w{redis nginx sidekiq unicorn postgresql remote-syslog}.each do |runit_sv|
+      %w{redis ci-redis nginx sidekiq ci-sidekiq unicorn ci-unicorn postgresql remote-syslog}.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
       end
     end
@@ -172,11 +175,14 @@ module Gitlab
         "bootstrap",
         "user",
         "redis",
+        "ci_redis",
         "gitlab_rails",
         "gitlab_ci",
         "gitlab_shell",
         "unicorn",
+        "ci_unicorn",
         "sidekiq",
+        "ci_sidekiq",
         "nginx",
         "logging",
         "remote_syslog",
