@@ -16,24 +16,7 @@
 # limitations under the License.
 #
 
-sidekiq_log_dir = node['gitlab']['sidekiq']['log_directory']
-
-directory sidekiq_log_dir do
-  owner node['gitlab']['user']['username']
-  mode '0700'
-  recursive true
-end
-
-runit_service "sidekiq" do
-  down node['gitlab']['sidekiq']['ha']
-  options({
-    :log_directory => sidekiq_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['sidekiq'].to_hash)
-end
-
-if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start sidekiq" do
-    retries 20
-  end
+sidekiq_service 'sidekiq' do
+  rails_app 'gitlab-rails'
+  user node['gitlab']['user']['username']
 end
