@@ -71,6 +71,7 @@ include_recipe "runit"
 # Configure Services
 [
   "redis",
+  "ci-redis",
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
   "ci-unicorn",

@@ -373,7 +373,7 @@ default['gitlab']['gitlab-ci']['db_socket'] = nil
 
 default['gitlab']['gitlab-ci']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-ci']['redis_port'] = nil
-default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
 
 default['gitlab']['gitlab-ci']['smtp_enable'] = false
 default['gitlab']['gitlab-ci']['smtp_address'] = nil
@@ -408,3 +408,14 @@ default['gitlab']['ci-sidekiq']['enable'] = true
 default['gitlab']['ci-sidekiq']['ha'] = false
 default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
 default['gitlab']['ci-sidekiq']['shutdown_timeout'] = 4
+
+####
+# CI Redis
+####
+default['gitlab']['ci-redis']['enable'] = true
+default['gitlab']['ci-redis']['ha'] = false
+default['gitlab']['ci-redis']['dir'] = "/var/opt/gitlab/ci-redis"
+default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"
+default['gitlab']['ci-redis']['port'] = 0
+default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
+default['gitlab']['ci-redis']['unixsocketperm'] = "777"
