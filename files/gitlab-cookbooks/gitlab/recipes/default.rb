@@ -75,6 +75,7 @@ include_recipe "runit"
   "unicorn",
   "ci-unicorn",
   "sidekiq",
+  "ci-sidekiq",
   "nginx",
   "remote-syslog",
   "logrotate",

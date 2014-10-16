@@ -400,3 +400,11 @@ default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn
 default['gitlab']['ci-unicorn']['tcp_nopush'] = true
 default['gitlab']['ci-unicorn']['backlog_socket'] = 1024
 default['gitlab']['ci-unicorn']['worker_timeout'] = 60
+
+####
+# CI Sidekiq
+####
+default['gitlab']['ci-sidekiq']['enable'] = true
+default['gitlab']['ci-sidekiq']['ha'] = false
+default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
+default['gitlab']['ci-sidekiq']['shutdown_timeout'] = 4
