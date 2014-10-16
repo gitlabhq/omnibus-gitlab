@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :unicorn_service, :rails_app => nil, :user => nil, :runit_template_name => 'unicorn' do
+define :unicorn_service, :rails_app => nil, :user => nil do
   rails_app = params[:rails_app]
   rails_home = node['gitlab'][rails_app]['dir']
   svc = params[:name]
@@ -83,11 +83,10 @@ define :unicorn_service, :rails_app => nil, :user => nil, :runit_template_name =
     notifies :restart, "service[#{svc}]" if OmnibusHelper.should_notify?(svc)
   end
 
-  runit_template_name = params[:runit_template_name]
   runit_service svc do
     down node['gitlab'][svc]['ha']
     restart_command 2 # Restart Unicorn using SIGUSR2
-    template_name runit_template_name
+    template_name 'unicorn'
     options({
       :service => svc,
       :user => user,
