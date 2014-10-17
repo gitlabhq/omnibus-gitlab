@@ -87,6 +87,13 @@ default['gitlab']['gitlab-rails']['gravatar_enabled'] = true
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
+default['gitlab']['gitlab-rails']['ldap_servers'] = []
+
+####
+# These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
+# Check
+# https://gitlab.com/gitlab-org/omnibus-gitlab/blob/935ab9e1700bfe8db6ba084e3687658d8921716f/README.md#setting-up-ldap-sign-in
+# for the new syntax.
 default['gitlab']['gitlab-rails']['ldap_host'] = nil
 default['gitlab']['gitlab-rails']['ldap_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_port'] = nil
@@ -100,6 +107,9 @@ default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
+default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
+####
+
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
