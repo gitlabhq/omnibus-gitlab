@@ -663,6 +663,10 @@ reconfigure`:
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
 
+### Upload backups to remote (cloud) storage
+
+For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+
 ### Scheduling a backup
 
 To schedule a cron job that backs up your repositories and GitLab metadata, use the root user:
