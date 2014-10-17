@@ -138,7 +138,7 @@ production: &base
       <%= ldap_server.keys.first %>:
       <% setting = ldap_server.values.first %>
         host: <%= single_quote(setting["host"]) %>
-        port: <%= setting["host"] %>
+        port: <%= setting["port"] %>
         uid: <%= single_quote(setting["uid"]) %>
         method: <%= single_quote(setting["method"]) %> # "tls" or "ssl" or "plain"
         bind_dn: <%= single_quote(setting["bind_dn"]) %>

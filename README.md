@@ -391,7 +391,7 @@ gitlab_rails['ldap_servers'] = [
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
-*Note*: If you are using pre GitLab 7.4 [configuration syntax like described in the old version README LDAP section](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/e65f026839594d54ad46a31a672d735b9caa16f0/README.md#setting-up-ldap-sign-in) be advised that it is deprecated and it will be removed in omnibus-gitlab 8.x version.
+*Note*: If you are using pre GitLab 7.4 [configuration syntax like described in the old version README LDAP section](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/e65f026839594d54ad46a31a672d735b9caa16f0/README.md#setting-up-ldap-sign-in) be advised that it is deprecated.
 
 ### Enable HTTPS
 
