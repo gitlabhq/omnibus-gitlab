@@ -329,18 +329,19 @@ For GitLab Community Edition:
 gitlab_rails['ldap_enabled'] = true
 gitlab_rails['ldap_servers'] = [
   {
-    "id" => "main",
-    "label" => "LDAP",
-    "host" => "hostname of LDAP server",
-    "port" => 389,
-    "uid" => "sAMAccountName",
-    "method" => "plain", # 'ssl' or 'plain'
-    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-    "password" => "query user password",
-    "active_directory" => true,
-    "allow_username_or_email_login" => true,
-    "base" => "DC=mycorp,DC=com",
-    "user_filter" => ""
+    "main" => {
+      "label" => "LDAP",
+      "host" => "hostname of LDAP server",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "user_filter" => ""
+    }
   }
 ]
 
@@ -352,36 +353,38 @@ If you are installing GitLab Enterprise edition package you can use multiple LDA
 gitlab_rails['ldap_enabled'] = true
 gitlab_rails['ldap_servers'] = [
   {
-    "id" => "main",
-    "label" => "LDAP",
-    "host" => "hostname of LDAP server",
-    "port" => 389,
-    "uid" => "sAMAccountName",
-    "method" => "plain", # 'ssl' or 'plain'
-    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-    "password" => "query user password",
-    "active_directory" => true,
-    "allow_username_or_email_login" => true,
-    "base" => "DC=mycorp,DC=com",
-    "group_base" => "OU=groups,DC=mycorp,DC=com",
-    "admin_group" => "",
-    "sync_ssh_keys" => false,
-    "sync_time" => 3600
+    "main" => {
+      "label" => "LDAP",
+      "host" => "hostname of LDAP server",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "group_base" => "OU=groups,DC=mycorp,DC=com",
+      "admin_group" => "",
+      "sync_ssh_keys" => false,
+      "sync_time" => 3600
+    }
   },
   {
-    "id" => "secondary",
-    "label" => "LDAP 2",
-    "host" => "hostname of LDAP server 2",
-    "port" => 389,
-    "uid" => "sAMAccountName",
-    "method" => "plain", # 'ssl' or 'plain'
-    "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-    "password" => "query user password",
-    "active_directory" => true,
-    "allow_username_or_email_login" => true,
-    "base" => "DC=mycorp,DC=com",
-    "group_base" => "OU=groups,DC=mycorp,DC=com",
-    "sync_ssh_keys" => false
+    "secondary" => {
+      "label" => "LDAP 2",
+      "host" => "hostname of LDAP server 2",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "group_base" => "OU=groups,DC=mycorp,DC=com",
+      "sync_ssh_keys" => false
+    }
   }
 ]
 ```
