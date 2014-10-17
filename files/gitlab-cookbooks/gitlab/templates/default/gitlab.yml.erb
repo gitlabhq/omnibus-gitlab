@@ -221,6 +221,17 @@ production: &base
   backup:
     path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     keep_time: <%= @backup_keep_time %>   # default: 0 (forever) (in seconds)
+    upload:
+      # Fog storage connection settings, see http://fog.io/storage/ .
+      connection:
+      <% if @backup_upload_connection %>
+        provider: <%= single_quote(@backup_upload_connection['provider']) %>
+        region: <%= single_quote(@backup_upload_connection['region']) %>
+        aws_access_key_id: <%= single_quote(@backup_upload_connection['aws_access_key_id']) %>
+        aws_secret_access_key: <%= single_quote(@backup_upload_connection['aws_secret_access_key']) %>
+      <% end %>
+      # The remote 'directory' to store your backups. For S3, this would be the bucket name.
+      remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
 
   ## GitLab Shell settings
   gitlab_shell:
@@ -300,6 +311,20 @@ test:
       project_url: "http://redmine/projects/:issues_tracker_id"
       issues_url: "http://redmine/:project_id/:issues_tracker_id/:id"
       new_issue_url: "http://redmine/projects/:issues_tracker_id/issues/new"
+  ldap:
+    enabled: false
+    servers:
+      main:
+        label: ldap
+        host: 127.0.0.1
+        port: 3890
+        uid: 'uid'
+        method: 'plain' # "tls" or "ssl" or "plain"
+        base: 'dc=example,dc=com'
+        user_filter: ''
+        group_base: 'ou=groups,dc=example,dc=com'
+        admin_group: ''
+        sync_ssh_keys: false
 
 staging:
   <<: *base
