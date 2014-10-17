@@ -223,13 +223,7 @@ production: &base
     keep_time: <%= @backup_keep_time %>   # default: 0 (forever) (in seconds)
     upload:
       # Fog storage connection settings, see http://fog.io/storage/ .
-      connection:
-      <% if @backup_upload_connection %>
-        provider: <%= single_quote(@backup_upload_connection['provider']) %>
-        region: <%= single_quote(@backup_upload_connection['region']) %>
-        aws_access_key_id: <%= single_quote(@backup_upload_connection['aws_access_key_id']) %>
-        aws_secret_access_key: <%= single_quote(@backup_upload_connection['aws_secret_access_key']) %>
-      <% end %>
+      connection: <%= @backup_upload_connection.to_json if @backup_upload_connection %>
       # The remote 'directory' to store your backups. For S3, this would be the bucket name.
       remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
 
