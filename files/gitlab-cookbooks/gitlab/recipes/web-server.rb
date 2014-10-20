@@ -17,10 +17,17 @@
 
 webserver_username = node['gitlab']['web-server']['username']
 webserver_group = node['gitlab']['web-server']['group']
+external_webserver_users = node['gitlab']['web-server']['external_users']
 
 # Create the group for the GitLab user
+# If external webserver is used, add the external webserver user to
+# GitLab webserver group
 group webserver_group do
   gid node['gitlab']['web-server']['gid']
+  if external_webserver_users.any? && !node['gitlab']['nginx']['enable']
+    append true
+    members external_webserver_users
+  end
 end
 
 # Create the webserver user

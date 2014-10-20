@@ -63,7 +63,6 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com
-    # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+'
     issue_closing_pattern: <%= single_quote(@gitlab_issue_closing_pattern) %>
 
     ## Default project features settings
@@ -117,6 +116,7 @@ production: &base
     <% end %>
 
   ## Gravatar
+  ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:
     enabled: <%= @gravatar_enabled %>            # Use user avatar image from Gravatar.com (default: true)
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
@@ -132,63 +132,46 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_enabled %>
+  <% if @ldap_servers.any? %>
+    servers:
+    <% @ldap_servers.each do |ldap_server| %>
+      <%= ldap_server.keys.first %>:
+      <% setting = ldap_server.values.first %>
+        host: <%= single_quote(setting["host"]) %>
+        port: <%= setting["port"] %>
+        uid: <%= single_quote(setting["uid"]) %>
+        method: <%= single_quote(setting["method"]) %> # "tls" or "ssl" or "plain"
+        bind_dn: <%= single_quote(setting["bind_dn"]) %>
+        password: <%= single_quote(setting["password"]) %>
+        active_directory: <%= setting["active_directory"] %>
+        allow_username_or_email_login: <%= setting["allow_username_or_email_login"] %>
+        base: <%= single_quote(setting["base"]) %>
+        user_filter: <%= single_quote(setting["user_filter"]) %>
+
+        ## EE only
+        group_base: <%= single_quote(setting["group_base"]) %>
+        admin_group: <%= single_quote(setting["admin_group"]) %>
+        sync_ssh_keys: <%= single_quote(setting["sync_ssh_keys"]) %>
+        sync_time: <%= setting["sync_time"] %>
+    <% end %>
+  <% else %>
     host: <%= single_quote(@ldap_host) %>
     port: <%= @ldap_port %>
     uid: <%= single_quote(@ldap_uid) %>
     method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
     bind_dn: <%= single_quote(@ldap_bind_dn) %>
     password: <%= single_quote(@ldap_password) %>
-
-    # This setting controls the amount of time between LDAP permission checks for each user.
-    # After this time has expired for a given user, their next interaction with GitLab (a click in the web UI, a git pull etc.) will be slower because the LDAP permission check is being performed.
-    # How much slower depends on your LDAP setup, but it is not uncommon for this check to add seconds of waiting time.
-    # The default value is to have a 'slow click' once every 3600 seconds, i.e. once per hour.
-    #
-    # Warning: if you set this value too low, every click in GitLab will be a 'slow click' for all of your LDAP users.
-    sync_time: <%= @ldap_sync_time %>
-
-    # If allow_username_or_email_login is enabled, GitLab will ignore everything
-    # after the first '@' in the LDAP username submitted by the user on login.
-    #
-    # Example:
-    # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
-    # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
-    #
-    # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
-    # disable this setting, because the userPrincipalName contains an '@'.
+    active_directory: <%= @ldap_active_directory %>
     allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
-
-    # Base where we can search for users
-    #
-    #   Ex. ou=People,dc=gitlab,dc=example
-    #
     base: <%= single_quote(@ldap_base) %>
-
-    # Filter LDAP users
-    #
-    #   Format: RFC 4515
-    #   Ex. (employeeType=developer)
-    #
     user_filter: <%= single_quote(@ldap_user_filter) %>
 
-    # Base where we can search for groups
-    #
-    #   Ex. ou=Groups,dc=gitlab,dc=example
-    #
+    ## EE only
     group_base: <%= single_quote(@ldap_group_base) %>
-
-    # LDAP group of users who should be admins in GitLab
-    #
-    #   Ex. GLAdmins
-    #
     admin_group: <%= single_quote(@ldap_admin_group) %>
-
-    # Name of attribute which holds a ssh public key of the user object.
-    # If false or nil, SSH key syncronisation will be disabled.
-    #
-    #   Ex. sshpublickey
-    #
     sync_ssh_keys: <%= single_quote(@ldap_sync_ssh_keys) %>
+    sync_time: <%= @ldap_sync_time %>
+  <% end %>
 
   ## OmniAuth settings
   omniauth:
@@ -238,6 +221,11 @@ production: &base
   backup:
     path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     keep_time: <%= @backup_keep_time %>   # default: 0 (forever) (in seconds)
+    upload:
+      # Fog storage connection settings, see http://fog.io/storage/ .
+      connection: <%= @backup_upload_connection.to_json if @backup_upload_connection %>
+      # The remote 'directory' to store your backups. For S3, this would be the bucket name.
+      remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
 
   ## GitLab Shell settings
   gitlab_shell:
@@ -317,6 +305,20 @@ test:
       project_url: "http://redmine/projects/:issues_tracker_id"
       issues_url: "http://redmine/:project_id/:issues_tracker_id/:id"
       new_issue_url: "http://redmine/projects/:issues_tracker_id/issues/new"
+  ldap:
+    enabled: false
+    servers:
+      main:
+        label: ldap
+        host: 127.0.0.1
+        port: 3890
+        uid: 'uid'
+        method: 'plain' # "tls" or "ssl" or "plain"
+        base: 'dc=example,dc=com'
+        user_filter: ''
+        group_base: 'ou=groups,dc=example,dc=com'
+        admin_group: ''
+        sync_ssh_keys: false
 
 staging:
   <<: *base

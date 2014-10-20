@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Add a logrotate service for `gitlab-rails/production.log` etc.
 - Again using backwards compatible ssl ciphers
 - Increased Unicorn timeout to 60s
+- For non-bundled webserver added an option of supplying external webserver user username
 
 7.3.1
 - Fix web-server recipe order

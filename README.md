@@ -321,25 +321,77 @@ If you have an LDAP directory service such as Active Directory, you can configur
 GitLab so that your users can sign in with their LDAP credentials. Add the following
 to `/etc/gitlab/gitlab.rb`, edited for your server.
 
+For GitLab Community Edition:
+
 ```ruby
 # These settings are documented in more detail at
-# https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
+# https://gitlab.com/gitlab-org/gitlab-ce/blob/a0a826ebdcb783c660dd40d8cb217db28a9d4998/config/gitlab.yml.example#L136
 gitlab_rails['ldap_enabled'] = true
-gitlab_rails['ldap_host'] = 'hostname of LDAP server'
-gitlab_rails['ldap_port'] = 389
-gitlab_rails['ldap_uid'] = 'sAMAccountName'
-gitlab_rails['ldap_method'] = 'plain' # 'ssl' or 'plain'
-gitlab_rails['ldap_bind_dn'] = 'CN=query user,CN=Users,DC=mycorp,DC=com'
-gitlab_rails['ldap_password'] = 'query user password'
-gitlab_rails['ldap_allow_username_or_email_login'] = true
-gitlab_rails['ldap_base'] = 'DC=mycorp,DC=com'
+gitlab_rails['ldap_servers'] = [
+  {
+    "main" => {
+      "label" => "LDAP",
+      "host" => "hostname of LDAP server",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "user_filter" => ""
+    }
+  }
+]
 
-# GitLab Enterprise Edition only
-gitlab_rails['ldap_group_base'] = '' # Example: 'OU=groups,DC=mycorp,DC=com'
-gitlab_rails['ldap_user_filter'] = '' # Example: '(memberOf=CN=my department,OU=groups,DC=mycorp,DC=com)'
+```
+
+If you are installing GitLab Enterprise edition package you can use multiple LDAP servers:
+
+```ruby
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = [
+  {
+    "main" => {
+      "label" => "LDAP",
+      "host" => "hostname of LDAP server",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "group_base" => "OU=groups,DC=mycorp,DC=com",
+      "admin_group" => "",
+      "sync_ssh_keys" => false,
+      "sync_time" => 3600
+    }
+  },
+  {
+    "secondary" => {
+      "label" => "LDAP 2",
+      "host" => "hostname of LDAP server 2",
+      "port" => 389,
+      "uid" => "sAMAccountName",
+      "method" => "plain", # 'ssl' or 'plain'
+      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
+      "password" => "query user password",
+      "active_directory" => true,
+      "allow_username_or_email_login" => true,
+      "base" => "DC=mycorp,DC=com",
+      "group_base" => "OU=groups,DC=mycorp,DC=com",
+      "sync_ssh_keys" => false
+    }
+  }
+]
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
+
+*Note*: If you are using pre GitLab 7.4 [configuration syntax like described in the old version README LDAP section](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/e65f026839594d54ad46a31a672d735b9caa16f0/README.md#setting-up-ldap-sign-in) be advised that it is deprecated.
 
 ### Enable HTTPS
 
@@ -405,9 +457,36 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Use non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx. We added support
-for non-bundled web servers in 7.3.0 but it turns out this is not working yet,
-see https://gitlab.com/gitlab-org/omnibus-gitlab/issues/267 .
+By default, omnibus-gitlab installs GitLab with bundled Nginx.
+Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
+in the group with the same name. To allow an external webserver access to
+GitLab, external webserver user needs to be added `gitlab-www` group.
+
+To use another web server like Apache or an existing Nginx installation you will have to do
+the following steps:
+
+* Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['enable'] = false
+```
+
+* Check the username of the non-bundled web-server user. By default, omnibus-gitlab has no default setting for external webserver user.
+You have to specify the external webserver user username in the configuration!
+Let's say for example that webserver user is `www-data`.
+In `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+web_server['external_users'] = ['www-data']
+```
+
+*This setting is an array so you can specify more than one user to be added to gitlab-www group.*
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+Note: if you are using SELinux and your web server runs under a restricted
+SELinux profile you may have to [loosen the restrictions on your web
+server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -584,6 +663,10 @@ reconfigure`:
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
 
+### Upload backups to remote (cloud) storage
+
+For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+
 ### Scheduling a backup
 
 To schedule a cron job that backs up your repositories and GitLab metadata, use the root user:
@@ -676,6 +759,9 @@ The correct operation of Git access via SSH depends on the labeling of
 Depending on your platform, `gitlab-ctl reconfigure` will install SELinux
 modules required to make GitLab work. These modules are listed in
 [files/gitlab-selinux/README.md](files/gitlab-selinux/README.md).
+
+NSA, if you're reading this, we'd really appreciate it if you could contribute back a SELinux profile for omnibus-gitlab :)
+Of course, if anyone else is reading this, you're welcome to contribute the SELinux profile too.
 
 ## Logs
 
