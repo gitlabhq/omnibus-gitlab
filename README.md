@@ -327,23 +327,54 @@ For GitLab Community Edition:
 # These settings are documented in more detail at
 # https://gitlab.com/gitlab-org/gitlab-ce/blob/a0a826ebdcb783c660dd40d8cb217db28a9d4998/config/gitlab.yml.example#L136
 gitlab_rails['ldap_enabled'] = true
-gitlab_rails['ldap_servers'] = [
-  {
-    "main" => {
-      "label" => "LDAP",
-      "host" => "hostname of LDAP server",
-      "port" => 389,
-      "uid" => "sAMAccountName",
-      "method" => "plain", # 'ssl' or 'plain'
-      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-      "password" => "query user password",
-      "active_directory" => true,
-      "allow_username_or_email_login" => true,
-      "base" => "DC=mycorp,DC=com",
-      "user_filter" => ""
-    }
-  }
-]
+gitlab_rails['ldap_servers'] = YAML.load <<-EOS # remember to close this block with 'EOS' below
+main: # 'main' is the GitLab 'provider ID' of this LDAP server
+  ## label
+  #
+  # A human-friendly name for your LDAP server. It is OK to change the label later,
+  # for instance if you find out it is too large to fit on the web page.
+  #
+  # Example: 'Paris' or 'Acme, Ltd.'
+  label: 'LDAP'
+
+  host: '_your_ldap_server'
+  port: 636
+  uid: 'sAMAccountName'
+  method: 'ssl' # "tls" or "ssl" or "plain"
+  bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+  password: '_the_password_of_the_bind_user'
+
+  # This setting specifies if LDAP server is Active Directory LDAP server.
+  # For non AD servers it skips the AD specific queries.
+  # If your LDAP server is not AD, set this to false.
+  active_directory: true
+
+  # If allow_username_or_email_login is enabled, GitLab will ignore everything
+  # after the first '@' in the LDAP username submitted by the user on login.
+  #
+  # Example:
+  # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
+  # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
+  #
+  # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
+  # disable this setting, because the userPrincipalName contains an '@'.
+  allow_username_or_email_login: false
+
+  # Base where we can search for users
+  #
+  #   Ex. ou=People,dc=gitlab,dc=example
+  #
+  base: ''
+
+  # Filter LDAP users
+  #
+  #   Format: RFC 4515 http://tools.ietf.org/search/rfc4515
+  #   Ex. (employeeType=developer)
+  #
+  #   Note: GitLab does not support omniauth-ldap's custom filter syntax.
+  #
+  user_filter: ''
+EOS
 
 ```
 
@@ -351,42 +382,42 @@ If you are installing GitLab Enterprise edition package you can use multiple LDA
 
 ```ruby
 gitlab_rails['ldap_enabled'] = true
-gitlab_rails['ldap_servers'] = [
-  {
-    "main" => {
-      "label" => "LDAP",
-      "host" => "hostname of LDAP server",
-      "port" => 389,
-      "uid" => "sAMAccountName",
-      "method" => "plain", # 'ssl' or 'plain'
-      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-      "password" => "query user password",
-      "active_directory" => true,
-      "allow_username_or_email_login" => true,
-      "base" => "DC=mycorp,DC=com",
-      "group_base" => "OU=groups,DC=mycorp,DC=com",
-      "admin_group" => "",
-      "sync_ssh_keys" => false,
-      "sync_time" => 3600
-    }
-  },
-  {
-    "secondary" => {
-      "label" => "LDAP 2",
-      "host" => "hostname of LDAP server 2",
-      "port" => 389,
-      "uid" => "sAMAccountName",
-      "method" => "plain", # 'ssl' or 'plain'
-      "bind_dn" => "CN=query user,CN=Users,DC=mycorp,DC=com",
-      "password" => "query user password",
-      "active_directory" => true,
-      "allow_username_or_email_login" => true,
-      "base" => "DC=mycorp,DC=com",
-      "group_base" => "OU=groups,DC=mycorp,DC=com",
-      "sync_ssh_keys" => false
-    }
-  }
-]
+gitlab_rails['ldap_servers'] = YAML.load <<-EOS # remember to close this block with 'EOS' below
+main: # 'main' is the GitLab 'provider ID' of this LDAP server
+  label: 'LDAP'
+  host: '_your_ldap_server'
+  port: 636
+  uid: 'sAMAccountName'
+  method: 'ssl' # "tls" or "ssl" or "plain"
+  bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+  password: '_the_password_of_the_bind_user'
+  active_directory: true
+  allow_username_or_email_login: false
+  base: ''
+  user_filter: ''
+  ## EE only
+  group_base: ''
+  admin_group: ''
+  sync_ssh_keys: false
+
+secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
+  label: 'LDAP'
+  host: '_your_ldap_server'
+  port: 636
+  uid: 'sAMAccountName'
+  method: 'ssl' # "tls" or "ssl" or "plain"
+  bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+  password: '_the_password_of_the_bind_user'
+  active_directory: true
+  allow_username_or_email_login: false
+  base: ''
+  user_filter: ''
+  ## EE only
+  group_base: ''
+  admin_group: ''
+  sync_ssh_keys: false
+EOS
+
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
