@@ -163,6 +163,11 @@ end
   end
 end
 
+# Create tmp/cache to make 'rake cache:clear' work
+directory File.join(gitlab_ci_tmp_dir, 'cache') do
+  user gitlab_ci_user
+end
+
 # Make schema.rb writable for when we run `rake db:migrate`
 file "/opt/gitlab/embedded/service/gitlab-ci/db/schema.rb" do
   owner gitlab_ci_user
