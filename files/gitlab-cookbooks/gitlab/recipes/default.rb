@@ -51,6 +51,7 @@ include_recipe "gitlab::gitlab-shell"
 include_recipe "gitlab::gitlab-rails"
 include_recipe "gitlab::gitlab-ci" if node['gitlab']['gitlab-ci']['enable']
 include_recipe "gitlab::selinux"
+include_recipe "gitlab::cron"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case
 # the corresponding service recipe is not loaded below.

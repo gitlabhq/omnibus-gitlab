@@ -343,6 +343,7 @@ default['gitlab']['gitlab-ci']['env'] = {
   'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 }
+default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 
 default['gitlab']['gitlab-ci']['username'] = "gitlab-ci"
 default['gitlab']['gitlab-ci']['uid'] = nil
