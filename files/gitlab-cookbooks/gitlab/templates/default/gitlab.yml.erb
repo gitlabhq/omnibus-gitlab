@@ -134,25 +134,8 @@ production: &base
     enabled: <%= @ldap_enabled %>
   <% if @ldap_servers.any? %>
     servers:
-    <% @ldap_servers.each do |ldap_server| %>
-      <%= ldap_server.keys.first %>:
-      <% setting = ldap_server.values.first %>
-        host: <%= single_quote(setting["host"]) %>
-        port: <%= setting["port"] %>
-        uid: <%= single_quote(setting["uid"]) %>
-        method: <%= single_quote(setting["method"]) %> # "tls" or "ssl" or "plain"
-        bind_dn: <%= single_quote(setting["bind_dn"]) %>
-        password: <%= single_quote(setting["password"]) %>
-        active_directory: <%= setting["active_directory"] %>
-        allow_username_or_email_login: <%= setting["allow_username_or_email_login"] %>
-        base: <%= single_quote(setting["base"]) %>
-        user_filter: <%= single_quote(setting["user_filter"]) %>
-
-        ## EE only
-        group_base: <%= single_quote(setting["group_base"]) %>
-        admin_group: <%= single_quote(setting["admin_group"]) %>
-        sync_ssh_keys: <%= single_quote(setting["sync_ssh_keys"]) %>
-        sync_time: <%= setting["sync_time"] %>
+    <% @ldap_servers.each do |provider_id, settings| %>
+      <%= provider_id %>: <%= settings.to_json %>
     <% end %>
   <% else %>
     host: <%= single_quote(@ldap_host) %>
