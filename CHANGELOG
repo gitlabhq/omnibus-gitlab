@@ -14,7 +14,7 @@ omnibus-gitlab repository.
 - Increased Unicorn timeout to 60s
 - For non-bundled webserver added an option of supplying external webserver user username
 - Add option for using backup uploader
-
+- Update openssl to 1.0.1j
 
 7.3.1
 - Fix web-server recipe order
