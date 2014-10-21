@@ -420,3 +420,8 @@ default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"
 default['gitlab']['ci-redis']['port'] = 0
 default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
 default['gitlab']['ci-redis']['unixsocketperm'] = "777"
+
+####
+# CI NGINX
+####
+default['gitlab']['ci-nginx']['enable'] = false

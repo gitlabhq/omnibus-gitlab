@@ -181,6 +181,7 @@ module Gitlab
       ci_unicorn['enable'] ||= true
       ci_sidekiq['enable'] ||= true
       ci_redis['enable'] ||= true
+      ci_nginx['enable'] ||= true
     end
 
     def parse_ci_external_url
