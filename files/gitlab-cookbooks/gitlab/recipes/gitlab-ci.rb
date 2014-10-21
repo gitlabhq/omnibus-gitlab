@@ -129,6 +129,9 @@ template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
   end
 end
 
+unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
+gitlab_server_urls = node['gitlab']['gitlab-ci']['gitlab_server_urls'] || [unicorn_url]
+
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   link_from File.join(gitlab_ci_source_dir, "config/application.yml")
   source "application.yml.erb"
@@ -136,7 +139,11 @@ template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-ci'].to_hash)
+  variables(
+    node['gitlab']['gitlab-ci'].to_hash.merge(
+      :gitlab_server_urls => gitlab_server_urls
+    )
+  )
   restarts dependent_services
   unless redis_not_listening
     notifies :run, 'execute[clear the gitlab-ci cache]'

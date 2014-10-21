@@ -349,7 +349,7 @@ default['gitlab']['gitlab-ci']['uid'] = nil
 default['gitlab']['gitlab-ci']['gid'] = nil
 default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
 
-default['gitlab']['gitlab-ci']['gitlab_server_urls'] = []
+default['gitlab']['gitlab-ci']['gitlab_server_urls'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
 default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
 default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
