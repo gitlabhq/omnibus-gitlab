@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Again using backwards compatible ssl ciphers
 - Increased Unicorn timeout to 60s
 - For non-bundled webserver added an option of supplying external webserver user username
+- Add option for using backup uploader
 
 
 7.3.1
