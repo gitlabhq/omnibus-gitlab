@@ -35,6 +35,9 @@ build do
   bundle_without << "mysql" unless EE
   bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem", :env => env
 
+  # Record the current Git revision to be displayed in the app
+  command "git log --pretty=format:'%h' -n 1 > REVISION"
+
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
   command "cp config/application.yml.example config/application.yml"
