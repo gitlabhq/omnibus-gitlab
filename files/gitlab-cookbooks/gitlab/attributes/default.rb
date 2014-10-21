@@ -335,6 +335,7 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 ####
 # GitLab CI Rails app
 ####
+default['gitlab']['gitlab-ci']['enable'] = false
 default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
@@ -389,7 +390,7 @@ default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil
 ####
 # CI Unicorn
 ####
-default['gitlab']['ci-unicorn']['enable'] = true
+default['gitlab']['ci-unicorn']['enable'] = false
 default['gitlab']['ci-unicorn']['ha'] = false
 default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
 default['gitlab']['ci-unicorn']['worker_processes'] = 2
@@ -404,7 +405,7 @@ default['gitlab']['ci-unicorn']['worker_timeout'] = 60
 ####
 # CI Sidekiq
 ####
-default['gitlab']['ci-sidekiq']['enable'] = true
+default['gitlab']['ci-sidekiq']['enable'] = false
 default['gitlab']['ci-sidekiq']['ha'] = false
 default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
 default['gitlab']['ci-sidekiq']['shutdown_timeout'] = 4
@@ -412,7 +413,7 @@ default['gitlab']['ci-sidekiq']['shutdown_timeout'] = 4
 ####
 # CI Redis
 ####
-default['gitlab']['ci-redis']['enable'] = true
+default['gitlab']['ci-redis']['enable'] = false
 default['gitlab']['ci-redis']['ha'] = false
 default['gitlab']['ci-redis']['dir'] = "/var/opt/gitlab/ci-redis"
 default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"

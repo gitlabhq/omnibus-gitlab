@@ -169,6 +169,14 @@ module Gitlab
       nginx['listen_addresses'] = [nginx['listen_address']]
     end
 
+    def parse_gitlab_ci
+      return unless gitlab_ci['enable']
+
+      ci_unicorn['enable'] ||= true
+      ci_sidekiq['enable'] ||= true
+      ci_redis['enable'] ||= true
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -205,6 +213,7 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_nginx_listen_address
+      parse_gitlab_ci
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

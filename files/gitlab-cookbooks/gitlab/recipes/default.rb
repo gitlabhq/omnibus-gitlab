@@ -49,7 +49,7 @@ include_recipe "gitlab::users"
 include_recipe "gitlab::web-server"
 include_recipe "gitlab::gitlab-shell"
 include_recipe "gitlab::gitlab-rails"
-include_recipe "gitlab::gitlab-ci"
+include_recipe "gitlab::gitlab-ci" if node['gitlab']['gitlab-ci']['enable']
 include_recipe "gitlab::selinux"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case
