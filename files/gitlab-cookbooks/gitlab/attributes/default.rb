@@ -350,7 +350,10 @@ default['gitlab']['gitlab-ci']['uid'] = nil
 default['gitlab']['gitlab-ci']['gid'] = nil
 default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
 
+# application.yml top-level settings
 default['gitlab']['gitlab-ci']['gitlab_server_urls'] = nil
+
+# application.yml, gitlab_ci section
 default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
 default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
 default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
@@ -359,10 +362,12 @@ default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil
 
+# application.yml, gravatar section
 default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
 default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
 
+# database.yml settings
 default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-ci']['db_encoding'] = "unicode"
 default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
@@ -373,10 +378,12 @@ default['gitlab']['gitlab-ci']['db_host'] = nil
 default['gitlab']['gitlab-ci']['db_port'] = 5432
 default['gitlab']['gitlab-ci']['db_socket'] = nil
 
+# resque.yml settings
 default['gitlab']['gitlab-ci']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-ci']['redis_port'] = nil
 default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
 
+# config/initializers/smtp_settings.rb settings
 default['gitlab']['gitlab-ci']['smtp_enable'] = false
 default['gitlab']['gitlab-ci']['smtp_address'] = nil
 default['gitlab']['gitlab-ci']['smtp_port'] = nil
