@@ -47,6 +47,7 @@ module Gitlab
   sidekiq Mash.new
   ci_sidekiq Mash.new
   nginx Mash.new
+  ci_nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
   logrotate Mash.new
@@ -54,6 +55,7 @@ module Gitlab
   web_server Mash.new
   node nil
   external_url nil
+  ci_external_url nil
   git_data_dir nil
 
   class << self
@@ -158,6 +160,10 @@ module Gitlab
         # domain socket.
         Gitlab['gitlab_rails']['redis_port'] ||= 6379
       end
+
+      if gitlab_ci['redis_host']
+        Gitlab['gitlab_ci']['redis_port'] ||= 6379
+      end
     end
 
     def parse_nginx_listen_address
@@ -177,6 +183,36 @@ module Gitlab
       ci_redis['enable'] ||= true
     end
 
+    def parse_ci_external_url
+      return unless ci_external_url
+
+      uri = URI(ci_external_url.to_s)
+
+      unless uri.host
+        raise "CI external URL must include a FQDN"
+      end
+      Gitlab['gitlab_ci']['gitlab_ci_host'] = uri.host
+      Gitlab['gitlab_ci']['gitlab_ci_email_from'] ||= "gitlab-ci@#{uri.host}"
+
+      case uri.scheme
+      when "http"
+        Gitlab['gitlab_ci']['gitlab_ci_https'] = false
+      when "https"
+        Gitlab['gitlab_ci']['gitlab_ci_https'] = true
+        Gitlab['ci_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['ci_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+      else
+        raise "Unsupported external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported CI external URL path: #{uri.path}"
+      end
+
+      Gitlab['gitlab_ci']['gitlab_ci_port'] = uri.port
+    end
+
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -192,6 +228,7 @@ module Gitlab
         "sidekiq",
         "ci_sidekiq",
         "nginx",
+        "ci_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
@@ -214,6 +251,7 @@ module Gitlab
       parse_redis_settings
       parse_nginx_listen_address
       parse_gitlab_ci
+      parse_ci_external_url
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

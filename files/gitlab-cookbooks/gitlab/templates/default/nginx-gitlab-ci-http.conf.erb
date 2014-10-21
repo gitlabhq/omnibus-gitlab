@@ -1,0 +1,87 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+## GitLab CI
+## Maintainer: @randx
+
+upstream gitlab_ci {
+  server unix:<%= @socket %>;
+}
+
+<% if @https && @redirect_http_to_https %>
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
+<% end %>
+  server_name <%= @fqdn %>;
+  server_tokens off;
+  return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+  access_log  <%= @log_directory %>/gitlab_access.log;
+  error_log   <%= @log_directory %>/gitlab_error.log;
+}
+<% end %>
+
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @port %>;
+<% end %>
+  server_name <%= @fqdn %>;
+  server_tokens off;     # don't show the version number, a security best practice
+  root /opt/gitlab/embedded/service/gitlab-ci/public;
+
+  <% if @https %>
+  ssl on;
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
+  add_header Strict-Transport-Security max-age=63072000;
+  add_header X-Frame-Options SAMEORIGIN;
+  add_header X-Content-Type-Options nosniff;
+  <% end %>
+
+  ## Individual nginx logs for this GitLab vhost
+  access_log  <%= @log_directory %>/gitlab_ci_access.log;
+  error_log   <%= @log_directory %>/gitlab_ci_error.log;
+
+  location / {
+    ## Serve static files from defined root folder.
+    ## @gitlab is a named location for the upstream fallback, see below.
+    try_files $uri $uri/index.html $uri.html @gitlab_ci;
+  }
+
+  ## If a file, which is not found in the root folder is requested,
+  ## then the proxy passes the request to the upsteam (gitlab unicorn).
+  location @gitlab_ci {
+    ## If you use HTTPS make sure you disable gzip compression
+    ## to be safe against BREACH attack.
+    <%= 'gzip off;' if @https %>
+
+    ## https://github.com/gitlabhq/gitlabhq/issues/694
+    ## Some requests take more than 30 seconds.
+    proxy_read_timeout      300;
+    proxy_connect_timeout   300;
+    proxy_redirect          off;
+
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_set_header   Host              $http_host;
+    proxy_set_header   X-Real-IP         $remote_addr;
+    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Frame-Options   SAMEORIGIN;
+
+    <% if @https %>
+    proxy_set_header   X-Forwarded-Ssl     on;
+    <% end %>
+    proxy_pass http://gitlab_ci;
+  }
+
+  # adjust this to match the largest build log your runners might submit,
+  # set to 0 to disable limit
+  client_max_body_size <%= @client_max_body_size %>;
+
+  <%= @custom_gitlab_server_config %>
+}
