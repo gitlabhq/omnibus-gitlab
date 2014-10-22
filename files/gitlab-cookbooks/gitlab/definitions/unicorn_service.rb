@@ -47,8 +47,7 @@ define :unicorn_service, :rails_app => nil, :user => nil do
     recursive true
   end
 
-  unicorn_listen_tcp = node['gitlab'][svc]['listen']
-  unicorn_listen_tcp << ":#{node['gitlab'][svc]['port']}"
+  unicorn_listen_tcp = [node['gitlab'][svc]['listen'], node['gitlab'][svc]['port']].join(':')
 
   unicorn_rb = File.join(unicorn_etc_dir, "unicorn.rb")
   unicorn_config unicorn_rb do
