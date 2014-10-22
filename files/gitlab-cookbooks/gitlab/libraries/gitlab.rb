@@ -175,17 +175,10 @@ module Gitlab
       nginx['listen_addresses'] = [nginx['listen_address']]
     end
 
-    def parse_gitlab_ci
-      return unless gitlab_ci['enable']
-
-      ci_unicorn['enable'] ||= true
-      ci_sidekiq['enable'] ||= true
-      ci_redis['enable'] ||= true
-      ci_nginx['enable'] ||= true
-    end
-
     def parse_ci_external_url
       return unless ci_external_url
+      # Enable gitlab_ci. This setting will be picked up by parse_gitlab_ci
+      gitlab_ci['enable'] = true if gitlab_ci['enable'].nil?
 
       uri = URI(ci_external_url.to_s)
 
@@ -213,6 +206,14 @@ module Gitlab
       Gitlab['gitlab_ci']['gitlab_ci_port'] = uri.port
     end
 
+    def parse_gitlab_ci
+      return unless gitlab_ci['enable']
+
+      ci_unicorn['enable'] = true if ci_unicorn['enable'].nil?
+      ci_sidekiq['enable'] = true if ci_sidekiq['enable'].nil?
+      ci_redis['enable'] = true if ci_redis['enable'].nil?
+      ci_nginx['enable'] = true if ci_nginx['enable'].nil?
+    end
 
     def generate_hash
       results = { "gitlab" => {} }
@@ -251,8 +252,10 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_nginx_listen_address
-      parse_gitlab_ci
+      # Parse ci_external_url _before_ gitlab_ci settings so that the user
+      # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_gitlab_ci
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
