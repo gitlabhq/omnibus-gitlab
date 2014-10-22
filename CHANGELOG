@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - For non-bundled webserver added an option of supplying external webserver user username
 - Add option for using backup uploader
 - Update openssl to 1.0.1j
+- If hostname is correctly set, omnibus will prefill external_url
 
 7.3.1
 - Fix web-server recipe order
