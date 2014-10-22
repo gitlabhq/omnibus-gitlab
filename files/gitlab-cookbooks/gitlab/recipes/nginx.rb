@@ -43,12 +43,6 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
 })
 
-if node['gitlab']['ci-nginx']['enable']
-  nginx_vars.merge!(
-    :gitlab_ci_http_config => File.join(nginx_conf_dir, "gitlab-ci-http.conf")
-  )
-end
-
 template nginx_vars[:gitlab_http_config] do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
@@ -66,7 +60,12 @@ template nginx_vars[:gitlab_http_config] do
 end
 
 if node['gitlab']['ci-nginx']['enable']
-  ci_nginx_vars = nginx_vars.merge((node['gitlab']['ci-nginx'] || {}).to_hash)
+  # Include the config file for gitlab-ci in nginx.conf later
+  nginx_vars.merge!(
+    :gitlab_ci_http_config => File.join(nginx_conf_dir, "gitlab-ci-http.conf")
+  )
+
+  ci_nginx_vars = node['gitlab']['ci-nginx']
   template nginx_vars[:gitlab_ci_http_config] do
     source "nginx-gitlab-ci-http.conf.erb"
     owner "root"

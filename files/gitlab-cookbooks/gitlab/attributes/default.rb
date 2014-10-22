@@ -398,38 +398,31 @@ default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil
 ####
 # CI Unicorn
 ####
+default['gitlab']['ci-unicorn'] = default['gitlab']['unicorn'].dup
 default['gitlab']['ci-unicorn']['enable'] = false
-default['gitlab']['ci-unicorn']['ha'] = false
 default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
-default['gitlab']['ci-unicorn']['worker_processes'] = 2
-default['gitlab']['ci-unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['ci-unicorn']['port'] = 8181
 default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
 default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
-default['gitlab']['ci-unicorn']['tcp_nopush'] = true
-default['gitlab']['ci-unicorn']['backlog_socket'] = 1024
-default['gitlab']['ci-unicorn']['worker_timeout'] = 60
 
 ####
 # CI Sidekiq
 ####
+default['gitlab']['ci-sidekiq'] = default['gitlab']['sidekiq'].dup
 default['gitlab']['ci-sidekiq']['enable'] = false
-default['gitlab']['ci-sidekiq']['ha'] = false
 default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
-default['gitlab']['ci-sidekiq']['shutdown_timeout'] = 4
 
 ####
 # CI Redis
 ####
+default['gitlab']['ci-redis'] = default['gitlab']['redis'].dup
 default['gitlab']['ci-redis']['enable'] = false
-default['gitlab']['ci-redis']['ha'] = false
 default['gitlab']['ci-redis']['dir'] = "/var/opt/gitlab/ci-redis"
 default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"
-default['gitlab']['ci-redis']['port'] = 0
 default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
-default['gitlab']['ci-redis']['unixsocketperm'] = "777"
 
 ####
 # CI NGINX
 ####
+default['gitlab']['ci-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['ci-nginx']['enable'] = false
