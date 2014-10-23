@@ -24,6 +24,7 @@ postgresql_user = node['gitlab']['postgresql']['username']
 
 group postgresql_user do
   gid node['gitlab']['postgresql']['gid']
+  system true
 end
 
 user postgresql_user do
