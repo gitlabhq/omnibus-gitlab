@@ -50,6 +50,7 @@ end
 
 group gitlab_ci_user do
   gid node['gitlab']['gitlab-ci']['gid']
+  system true
 end
 
 user gitlab_ci_user do

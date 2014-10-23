@@ -24,6 +24,7 @@ define :redis_service, :socket_group => nil do
 
   group redis_user do
     gid node['gitlab']['redis']['gid']
+    system true
   end
 
   user redis_user do
