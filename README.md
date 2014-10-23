@@ -18,6 +18,10 @@ stable branch (example shown below).
 
 ![documentation version](doc/images/omnibus-documentation-version.png)
 
+## GitLab CI
+
+Please see the [separate GitLab CI documentation](doc/gitlab-ci/README.md).
+
 ## Installation
 
 Please follow the steps on the [downloads page][downloads].
