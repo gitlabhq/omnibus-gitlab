@@ -5,8 +5,6 @@ service on your GitLab server.
 
 ## Getting started
 
-We assume GitLab is already configured and running on your server.
-
 GitLab CI expects to run on its own virtual host. In your DNS you would then
 have two entries pointing to the same machine, e.g. `gitlab.example.com` and
 `ci.example.com`.
