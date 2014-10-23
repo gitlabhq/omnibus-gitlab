@@ -20,7 +20,8 @@ stable branch (example shown below).
 
 ## GitLab CI
 
-Please see the [separate GitLab CI documentation](doc/gitlab-ci/README.md).
+To setup GitLab CI please see the [separate GitLab CI
+documentation](doc/gitlab-ci/README.md).
 
 ## Installation
 
