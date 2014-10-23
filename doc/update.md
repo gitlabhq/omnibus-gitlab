@@ -186,7 +186,7 @@ README](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#confi
 ### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 Unlike the previous chapter, the non-Omnibus installation is using MySQL while the Omnibus installation is using PostgreSQL.
 
-Option #1: Omnibus can be configured to use an external [non-packaged MySQL database](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#using-a-non-packaged-database-management-server).
+Option #1: Omnibus packages for EE can be configured to use an external [non-packaged MySQL database](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#using-a-mysql-database-management-server-enterprise-edition-only).
 
 Option #2: Convert to PostgreSQL and use the built-in server as the instructions below.
 
