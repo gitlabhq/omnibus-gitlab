@@ -26,7 +26,7 @@ pidfile /var/run/redis.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port <%= node['gitlab']['redis']['port'] %>
+port <%= @port %>
 
 # By default Redis listens for connections from all the network interfaces
 # available on the server. It is possible to listen to just one or multiple
@@ -42,8 +42,8 @@ bind 127.0.0.1
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-unixsocket <%= node['gitlab']['redis']['unixsocket'] %>
-unixsocketperm <%= node['gitlab']['redis']['unixsocketperm'] %>
+unixsocket <%= @unixsocket %>
+unixsocketperm <%= @unixsocketperm %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout 0
@@ -159,7 +159,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 # 
 # Note that you must specify a directory here, not a file name.
-dir <%= node['gitlab']['redis']['dir'] %>
+dir <%= @dir %>
 
 ################################# REPLICATION #################################
 

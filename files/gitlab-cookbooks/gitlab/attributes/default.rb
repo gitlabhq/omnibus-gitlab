@@ -215,6 +215,7 @@ default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
+default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['port'] = 5432
 default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
@@ -344,3 +345,98 @@ default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rota
 # High Availability
 ###
 default['gitlab']['high-availability']['mountpoint'] = nil
+
+####
+# GitLab CI Rails app
+####
+default['gitlab']['gitlab-ci']['enable'] = false
+default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['environment'] = 'production'
+default['gitlab']['gitlab-ci']['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
+default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
+
+default['gitlab']['gitlab-ci']['username'] = "gitlab-ci"
+default['gitlab']['gitlab-ci']['uid'] = nil
+default['gitlab']['gitlab-ci']['gid'] = nil
+default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
+
+# application.yml top-level settings
+default['gitlab']['gitlab-ci']['gitlab_server_urls'] = nil
+
+# application.yml, gitlab_ci section
+default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
+default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
+default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
+default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil
+
+# application.yml, gravatar section
+default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
+default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
+default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
+
+# database.yml settings
+default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
+default['gitlab']['gitlab-ci']['db_encoding'] = "unicode"
+default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
+default['gitlab']['gitlab-ci']['db_pool'] = 10
+default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
+default['gitlab']['gitlab-ci']['db_password'] = nil
+default['gitlab']['gitlab-ci']['db_host'] = nil
+default['gitlab']['gitlab-ci']['db_port'] = 5432
+default['gitlab']['gitlab-ci']['db_socket'] = nil
+
+# resque.yml settings
+default['gitlab']['gitlab-ci']['redis_host'] = "127.0.0.1"
+default['gitlab']['gitlab-ci']['redis_port'] = nil
+default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
+
+# config/initializers/smtp_settings.rb settings
+default['gitlab']['gitlab-ci']['smtp_enable'] = false
+default['gitlab']['gitlab-ci']['smtp_address'] = nil
+default['gitlab']['gitlab-ci']['smtp_port'] = nil
+default['gitlab']['gitlab-ci']['smtp_user_name'] = nil
+default['gitlab']['gitlab-ci']['smtp_password'] = nil
+default['gitlab']['gitlab-ci']['smtp_domain'] = nil
+default['gitlab']['gitlab-ci']['smtp_authentication'] = nil
+default['gitlab']['gitlab-ci']['smtp_enable_starttls_auto'] = nil
+default['gitlab']['gitlab-ci']['smtp_tls'] = nil
+default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil
+
+####
+# CI Unicorn
+####
+default['gitlab']['ci-unicorn'] = default['gitlab']['unicorn'].dup
+default['gitlab']['ci-unicorn']['enable'] = false
+default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
+default['gitlab']['ci-unicorn']['port'] = 8181
+default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
+default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
+
+####
+# CI Sidekiq
+####
+default['gitlab']['ci-sidekiq'] = default['gitlab']['sidekiq'].dup
+default['gitlab']['ci-sidekiq']['enable'] = false
+default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
+
+####
+# CI Redis
+####
+default['gitlab']['ci-redis'] = default['gitlab']['redis'].dup
+default['gitlab']['ci-redis']['enable'] = false
+default['gitlab']['ci-redis']['dir'] = "/var/opt/gitlab/ci-redis"
+default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"
+default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
+
+####
+# CI NGINX
+####
+default['gitlab']['ci-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['ci-nginx']['enable'] = false

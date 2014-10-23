@@ -1,7 +1,19 @@
 #!/bin/sh
 
-cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
+cd <%= node['gitlab'][@options[:rails_app]]['dir'] %>/working
 
 exec 2>&1
 <%= render("mount_point_check.erb") %>
-exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /opt/gitlab/embedded/bin/bundle exec sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e <%= node['gitlab']['gitlab-rails']['environment'] %> -r /opt/gitlab/embedded/service/gitlab-rails -t <%= node['gitlab']['sidekiq']['shutdown_timeout'] %>
+exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
+  -U <%= @options[:user] %> -u <%= @options[:user] %> \
+  /opt/gitlab/embedded/bin/bundle exec sidekiq \
+    -q post_receive \
+    -q mailer \
+    -q system_hook \
+    -q project_web_hook \
+    -q gitlab_shell \
+    -q common \
+    -q default \
+    -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
+    -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
+    -t <%= @options[:shutdown_timeout] %>

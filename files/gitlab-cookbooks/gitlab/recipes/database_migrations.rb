@@ -17,20 +17,23 @@
 
 root_password = node['gitlab']['gitlab-rails']['root_password']
 
-execute "initialize database" do
+execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   environment ({'GITLAB_ROOT_PASSWORD' => root_password }) if root_password
   action :nothing
 end
 
-bash "migrate database" do
-  code <<-EOH
-    set -e
-    log_file="/tmp/gitlab-db-migrate-$(date +%s)-$$/output.log"
-    umask 077
-    mkdir $(dirname ${log_file})
-    /opt/gitlab/bin/gitlab-rake db:migrate 2>& 1 | tee ${log_file}
-    exit ${PIPESTATUS[0]}
-  EOH
+execute "initialize gitlab-ci database" do
+  command "/opt/gitlab/bin/gitlab-ci-rake setup"
+  action :nothing
+end
+
+migrate_database 'gitlab-rails' do
+  command '/opt/gitlab/bin/gitlab-rake db:migrate'
+  action :nothing
+end
+
+migrate_database 'gitlab-ci' do
+  command '/opt/gitlab/bin/gitlab-ci-rake db:migrate'
   action :nothing
 end

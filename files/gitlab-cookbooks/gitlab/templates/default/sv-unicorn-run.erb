@@ -3,14 +3,14 @@
 # Let runit capture all script error messages
 exec 2>&1
 
-readonly current_pidfile=<%= node['gitlab']['unicorn']['pidfile'] %>
+readonly current_pidfile=<%= node['gitlab'][@options[:service]]['pidfile'] %>
 readonly oldbin_pidfile=${current_pidfile}.oldbin
 readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
 
 function main
 {
-  cd /opt/gitlab/embedded/service/gitlab-rails
+  cd /opt/gitlab/embedded/service/<%= @options[:rails_app] %>
   find_us_a_unicorn
   trap_signals
   wait_for_unicorn_to_exit
@@ -65,7 +65,12 @@ function is_unicorn
 function start_unicorn_master
 {
   <%= render("mount_point_check.erb") %>
-  chpst -e /opt/gitlab/etc/gitlab-rails/env -P -U <%= node['gitlab']['user']['username'] %> -u <%= node['gitlab']['user']['username'] %> /opt/gitlab/embedded/bin/bundle exec unicorn -D -E <%= node['gitlab']['gitlab-rails']['environment'] %> -c <%= File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "unicorn.rb") %> /opt/gitlab/embedded/service/gitlab-rails/config.ru
+  chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P -U <%= @options[:user] %> -u <%= @options[:user] %> \
+    /opt/gitlab/embedded/bin/bundle exec unicorn \
+      -D \
+      -E <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
+      -c <%= @options[:unicorn_rb] %> \
+      /opt/gitlab/embedded/service/<%= @options[:rails_app] %>/config.ru
 }
 
 function trap_signals
