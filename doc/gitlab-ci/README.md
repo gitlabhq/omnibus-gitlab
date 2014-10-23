@@ -1,6 +1,7 @@
 # GitLab CI
 
-You can run a GitLab CI Coordinator service on your GitLab server.
+You can run a [GitLab CI](https://about.gitlab.com/gitlab-ci/) Coordinator
+service on your GitLab server.
 
 ## Getting started
 
