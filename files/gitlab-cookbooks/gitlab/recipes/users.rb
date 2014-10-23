@@ -27,6 +27,7 @@ end
 # Create the group for the GitLab user
 group gitlab_group do
   gid node['gitlab']['user']['gid']
+  system true
 end
 
 # Create the GitLab user
@@ -35,6 +36,7 @@ user gitlab_username do
   home gitlab_home
   uid node['gitlab']['user']['uid']
   gid gitlab_group
+  system true
 end
 
 # Configure Git settings for the GitLab user

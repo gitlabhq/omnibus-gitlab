@@ -22,6 +22,7 @@ redis_user = node['gitlab']['redis']['username']
 
 group redis_user do
   gid node['gitlab']['redis']['gid']
+  system true
 end
 
 user redis_user do
