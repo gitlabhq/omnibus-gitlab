@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.5.0
+- Use system UIDs and GIDs when creating accounts (Tim Bishop) cfc04342129a4c4dca5c4827d541c8888adadad3
+- Bundle GitLab CI with the package 3715204d86900e8501483f70c6370ba4e3f2bb3d
+
 7.4.0
 - Fix broken environment variable removal
 - Hard-code the environment directory for gitlab-rails
