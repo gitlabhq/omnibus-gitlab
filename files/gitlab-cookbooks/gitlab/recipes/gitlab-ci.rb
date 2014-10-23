@@ -27,6 +27,19 @@ gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
 
 gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
 
+group gitlab_ci_user do
+  gid node['gitlab']['gitlab-ci']['gid']
+  system true
+end
+
+user gitlab_ci_user do
+  uid node['gitlab']['gitlab-ci']['uid']
+  gid gitlab_ci_user
+  system true
+  shell node['gitlab']['gitlab-ci']['shell']
+  home gitlab_ci_home_dir
+end
+
 [
   gitlab_ci_etc_dir,
   gitlab_ci_static_etc_dir,
@@ -46,19 +59,6 @@ directory gitlab_ci_dir do
   owner gitlab_ci_user
   mode '0755'
   recursive true
-end
-
-group gitlab_ci_user do
-  gid node['gitlab']['gitlab-ci']['gid']
-  system true
-end
-
-user gitlab_ci_user do
-  uid node['gitlab']['gitlab-ci']['uid']
-  gid gitlab_ci_user
-  system true
-  shell node['gitlab']['gitlab-ci']['shell']
-  home gitlab_ci_home_dir
 end
 
 template File.join(gitlab_ci_static_etc_dir, "gitlab-ci-rc")
