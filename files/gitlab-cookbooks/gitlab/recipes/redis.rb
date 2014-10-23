@@ -16,54 +16,6 @@
 # limitations under the License.
 #
 
-redis_dir = node['gitlab']['redis']['dir']
-redis_log_dir = node['gitlab']['redis']['log_directory']
-redis_user = node['gitlab']['redis']['username']
-
-group redis_user do
-  gid node['gitlab']['redis']['gid']
-  system true
-end
-
-user redis_user do
-  uid node['gitlab']['redis']['uid']
-  gid redis_user
-  system true
-  shell node['gitlab']['redis']['shell']
-  home node['gitlab']['redis']['home']
-end
-
-directory redis_dir do
-  owner redis_user
-  group node['gitlab']['user']['group']
-  mode "0750"
-end
-
-directory redis_log_dir do
-  owner redis_user
-  mode "0700"
-end
-
-redis_config = File.join(redis_dir, "redis.conf")
-
-template redis_config do
-  source "redis.conf.erb"
-  owner node['gitlab']['redis']['username']
-  mode "0644"
-  variables(node['gitlab']['redis'].to_hash)
-  notifies :restart, 'service[redis]', :immediately if OmnibusHelper.should_notify?("redis")
-end
-
-runit_service "redis" do
-  down node['gitlab']['redis']['ha']
-  options({
-    :log_directory => redis_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['redis'].to_hash)
-end
-
-if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start redis" do
-    retries 20
-  end
+redis_service 'redis' do
+  socket_group node['gitlab']['user']['group']
 end
