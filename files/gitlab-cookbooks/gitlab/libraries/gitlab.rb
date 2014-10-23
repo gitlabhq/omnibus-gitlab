@@ -164,6 +164,12 @@ module Gitlab
       if gitlab_ci['redis_host']
         Gitlab['gitlab_ci']['redis_port'] ||= 6379
       end
+
+      if gitlab_rails['redis_host'] &&
+        gitlab_rails.values_at('redis_host', 'redis_port') == gitlab_ci.values_at('redis_host', 'redis_port')
+        Chef::Log.warn "gitlab-rails and gitlab-ci are configured to connect to "\
+                       "the same Redis instance. This is not recommended."
+      end
     end
 
     def parse_nginx_listen_address
