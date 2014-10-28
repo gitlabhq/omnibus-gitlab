@@ -28,7 +28,7 @@ fi
 # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
 if ! [ -e /etc/gitlab/gitlab.rb ] ; then
   mkdir -p /etc/gitlab
-  cat > /etc/gitlab/gitlab.rb <<'EOF'
+  cat > /etc/gitlab/gitlab.rb <<EOF
 # Check and change the external_url to the address your users will type in their browser
 external_url '${external_url}'
 EOF
