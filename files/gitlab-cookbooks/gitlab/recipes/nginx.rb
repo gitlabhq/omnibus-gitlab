@@ -28,8 +28,8 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
-    group 'root'
-    mode '0700'
+    group node['gitlab']['web-server']['group']
+    mode '0750'
     recursive true
   end
 end
