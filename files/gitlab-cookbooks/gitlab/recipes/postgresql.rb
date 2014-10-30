@@ -24,6 +24,7 @@ postgresql_user = node['gitlab']['postgresql']['username']
 
 group postgresql_user do
   gid node['gitlab']['postgresql']['gid']
+  system true
 end
 
 user postgresql_user do
@@ -147,20 +148,26 @@ pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
-db_name = "gitlabhq_production"
 
-sql_user        = node['gitlab']['postgresql']['sql_user']
-
-execute "create #{sql_user} database user" do
-  command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user}\""
-  user pg_user
-  not_if { !pg_helper.is_running? || pg_helper.sql_user_exists? }
+databases = [
+  ['gitlab-rails', 'gitlabhq_production', node['gitlab']['postgresql']['sql_user']]
+]
+if node['gitlab']['gitlab-ci']['enable']
+  databases << ['gitlab-ci', 'gitlab_ci_production', node['gitlab']['postgresql']['sql_ci_user']]
 end
 
-execute "create #{db_name} database" do
-  command "#{bin_dir}/createdb --port #{pg_port} -O #{sql_user} #{db_name}"
-  user pg_user
-  not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
-  retries 30
-  notifies :run, "execute[initialize database]", :immediately
+databases.each do |rails_app, db_name, sql_user|
+  execute "create #{sql_user} database user" do
+    command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user}\""
+    user pg_user
+    not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
+  end
+
+  execute "create #{db_name} database" do
+    command "#{bin_dir}/createdb --port #{pg_port} -O #{sql_user} #{db_name}"
+    user pg_user
+    not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
+    retries 30
+    notifies :run, "execute[initialize #{rails_app} database]", :immediately
+  end
 end

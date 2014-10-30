@@ -12,7 +12,7 @@ function error_exit
   exit 1
 }
 
-for command in gitlab-ctl gitlab-rake gitlab-rails
+for command in gitlab-ctl gitlab-rake gitlab-rails gitlab-ci-rake gitlab-ci-rails
 do
   ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
 done
@@ -28,7 +28,7 @@ fi
 # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
 if ! [ -e /etc/gitlab/gitlab.rb ] ; then
   mkdir -p /etc/gitlab
-  cat > /etc/gitlab/gitlab.rb <<'EOF'
+  cat > /etc/gitlab/gitlab.rb <<EOF
 # Check and change the external_url to the address your users will type in their browser
 external_url '${external_url}'
 EOF

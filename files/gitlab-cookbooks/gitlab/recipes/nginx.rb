@@ -28,8 +28,8 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
-    group node['gitlab']['web-server']['group']
-    mode '0750'
+    group 'root'
+    mode '0700'
     recursive true
   end
 end
@@ -57,6 +57,30 @@ template nginx_vars[:gitlab_http_config] do
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+end
+
+if node['gitlab']['ci-nginx']['enable']
+  # Include the config file for gitlab-ci in nginx.conf later
+  nginx_vars.merge!(
+    :gitlab_ci_http_config => File.join(nginx_conf_dir, "gitlab-ci-http.conf")
+  )
+
+  ci_nginx_vars = node['gitlab']['ci-nginx']
+  template nginx_vars[:gitlab_ci_http_config] do
+    source "nginx-gitlab-ci-http.conf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(ci_nginx_vars.merge(
+      {
+        :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
+        :https => node['gitlab']['gitlab-ci']['gitlab_ci_https'],
+        :socket => node['gitlab']['ci-unicorn']['socket'],
+        :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
+      }
+    ))
+    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  end
 end
 
 template nginx_config do

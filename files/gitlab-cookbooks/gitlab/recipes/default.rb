@@ -49,13 +49,17 @@ include_recipe "gitlab::users"
 include_recipe "gitlab::web-server"
 include_recipe "gitlab::gitlab-shell"
 include_recipe "gitlab::gitlab-rails"
+include_recipe "gitlab::gitlab-ci" if node['gitlab']['gitlab-ci']['enable']
 include_recipe "gitlab::selinux"
+include_recipe "gitlab::cron"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
 [
   "unicorn",
-  "sidekiq"
+  "ci-unicorn",
+  "sidekiq",
+  "ci-sidekiq"
 ].each do |dummy|
   service dummy do
     supports []
@@ -68,9 +72,12 @@ include_recipe "runit"
 # Configure Services
 [
   "redis",
+  "ci-redis",
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
+  "ci-unicorn",
   "sidekiq",
+  "ci-sidekiq",
   "nginx",
   "remote-syslog",
   "logrotate",
