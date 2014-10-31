@@ -69,38 +69,54 @@ sudo gitlab-ctl start
 
 Done!
 
-## Reverting to GitLab 6.6.x
+## Reverting to GitLab 6.6.x or later
 
-First download a GitLab 6.6.x [CE](https://www.gitlab.com/downloads/archives/) or
+First download a GitLab 6.x.x [CE](https://www.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
 
+
+#### Stop GitLab
+
 ```
-# Stop GitLab
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
+```
 
-# Downgrade GitLab to 6.6
+#### Downgrade GitLab to 6.x
+
+```
 # Ubuntu
 sudo dpkg -r gitlab
-sudo dpkg -i gitlab-6.6.x-yyy.deb
+sudo dpkg -i gitlab-6.x.x-yyy.deb
 
 # CentOS:
 sudo rpm -e gitlab
-sudo rpm -ivh gitlab-6.6.x-yyy.rpm
+sudo rpm -ivh gitlab-6.x.x-yyy.rpm
+```
 
-# Prepare GitLab for receiving the backup restore
+#### Prepare GitLab for receiving the backup restore
 
-# Due to a backup restore bug in GitLab 6.6, it is needed to drop the database
-# _before_ running `gitlab-ctl reconfigure`.
+##### Due to a backup restore bug in versions earlier than GitLab 6.8.0, it is needed to drop the database
+_before_ running `gitlab-ctl reconfigure`, only if you are downgrading to 6.7.x or less.
+
+```
 sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
+```
 
+```
 sudo gitlab-ctl reconfigure
+```
 
-# Restore your backup
+#### Restore your backup
+
+```
 sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
+```
 
-# Start GitLab
+#### Start GitLab
+
+```
 sudo gitlab-ctl start
 ```
 
