@@ -34,7 +34,7 @@ sudo gitlab-ctl stop nginx
 sudo gitlab-rake gitlab:backup:create
 ```
 
-##### Install the latest package
+#### Install the latest package
 
 ```
 # Ubuntu/Debian:
