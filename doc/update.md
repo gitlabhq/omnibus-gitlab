@@ -137,6 +137,8 @@ _before_ running `gitlab-ctl reconfigure`, only if you are downgrading to 6.7.x 
 sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
 ```
 
+#### Reconfigure GitLab (includes database migrations)
+
 ```
 sudo gitlab-ctl reconfigure
 ```
