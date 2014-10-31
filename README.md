@@ -735,15 +735,17 @@ the [required version](https://www.gitlab.com/downloads/archives/) and try again
 
 ## Invoking Rake tasks
 
-To invoke a GitLab Rake task, use `gitlab-rake`. For example:
+To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
+`gitlab-ci-rake` (for GitLab CI). For example:
 
 ```shell
 sudo gitlab-rake gitlab:check
+sudo gitlab-ci-rake -T
 ```
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
-`gitlab-rake` wrapper script.
+`gitlab-rake` and `gitlab-ci-rake` wrapper scripts.
 
 ## Directory structure
 
