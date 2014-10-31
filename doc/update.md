@@ -97,7 +97,7 @@ sudo rpm -ivh gitlab-6.x.x-yyy.rpm
 
 #### Prepare GitLab for receiving the backup restore
 
-##### Due to a backup restore bug in versions earlier than GitLab 6.8.0, it is needed to drop the database
+Due to a backup restore bug in versions earlier than GitLab 6.8.0, it is needed to drop the database
 _before_ running `gitlab-ctl reconfigure`, only if you are downgrading to 6.7.x or less.
 
 ```
