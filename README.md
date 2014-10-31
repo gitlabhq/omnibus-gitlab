@@ -606,24 +606,7 @@ gitlab_rails['aws_region'] = 'us-east-1'
 
 ### Sending application email via SMTP
 
-If you would rather send email via an SMTP server instead of via Sendmail, add
-the following configuration information to `/etc/gitlab/gitlab.rb` and run
-`gitlab-ctl reconfigure`.
-
-```
-gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "smtp.server"
-gitlab_rails['smtp_port'] = 456
-gitlab_rails['smtp_user_name'] = "smtp user"
-gitlab_rails['smtp_password'] = "smtp password"
-gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_enable_starttls_auto'] = true
-
-# If your SMTP server does not like the default 'From: gitlab@localhost' you
-# can change the 'From' with this setting.
-gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
-```
+See [doc/settings/smtp.md](doc/settings/smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
@@ -647,14 +630,7 @@ gitlab_rails['omniauth_providers'] = [
 
 ### Adjusting Unicorn settings
 
-If you need to adjust the Unicorn timeout or the number of workers you can use
-the following settings in `/etc/gitlab/gitlab.rb`. Run `sudo gitlab-ctl
-reconfigure for the change to take effect.
-
-```ruby
-unicorn['worker_processes'] = 3
-unicorn['worker_timeout'] = 60
-```
+See [doc/settings/unicorn.md](doc/settings/unicorn.md).
 
 ### Setting the NGINX listen address or addresses
 
@@ -759,15 +735,17 @@ the [required version](https://www.gitlab.com/downloads/archives/) and try again
 
 ## Invoking Rake tasks
 
-To invoke a GitLab Rake task, use `gitlab-rake`. For example:
+To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
+`gitlab-ci-rake` (for GitLab CI). For example:
 
 ```shell
 sudo gitlab-rake gitlab:check
+sudo gitlab-ci-rake -T
 ```
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
-`gitlab-rake` wrapper script.
+`gitlab-rake` and `gitlab-ci-rake` wrapper scripts.
 
 ## Directory structure
 
@@ -893,7 +871,11 @@ you can start one with the command below. Please be warned that it is very easy
 to inadvertently modify, corrupt or destroy data from the console.
 
 ```shell
+# start a Rails console for GitLab
 sudo gitlab-rails console
+
+# start a Rails console for GitLab CI
+sudo gitlab-ci-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
