@@ -114,7 +114,8 @@ postgresql['port'] = 2345
 unicorn['port'] = 3456
 ```
 
-For Nginx port changes please see the section on enabling HTTPS below.
+For Nginx port changes please see
+[doc/settings/nginx.md](doc/settings/nginx.md).
 
 #### Git SSH access stops working on SELinux-enabled systems
 
@@ -470,59 +471,15 @@ sudo systemctl reload firewalld
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-By default, when you specify an external_url starting with 'https', Nginx will
-no longer listen for unencrypted HTTP traffic on port 80. If you want to
-redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
-setting.
-
-```ruby
-external_url "https://gitlab.example.com"
-nginx['redirect_http_to_https'] = true
-```
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 #### Change the default port and the ssl certificate locations.
 
-If you need to use an HTTPS port other than the default (443), just specify it
-as part of the external_url.
-
-```ruby
-external_url "https://gitlab.example.com:2443"
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Use non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx.
-Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
-in the group with the same name. To allow an external webserver access to
-GitLab, external webserver user needs to be added `gitlab-www` group.
-
-To use another web server like Apache or an existing Nginx installation you will have to do
-the following steps:
-
-* Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
-
-```ruby
-nginx['enable'] = false
-```
-
-* Check the username of the non-bundled web-server user. By default, omnibus-gitlab has no default setting for external webserver user.
-You have to specify the external webserver user username in the configuration!
-Let's say for example that webserver user is `www-data`.
-In `/etc/gitlab/gitlab.rb` set:
-
-```ruby
-web_server['external_users'] = ['www-data']
-```
-
-*This setting is an array so you can specify more than one user to be added to gitlab-www group.*
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
-Note: if you are using SELinux and your web server runs under a restricted
-SELinux profile you may have to [loosen the restrictions on your web
-server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -606,16 +563,7 @@ nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 ad
 
 ### Inserting custom NGINX settings into the GitLab server block
 
-If you need to add custom settings into the NGINX `server` block for GitLab for
-some reason you can use the following setting.
-
-```ruby
-# Example: block raw file downloads from a specific repository
-nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
-```
-
-Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
-NGINX.
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Backups
 
