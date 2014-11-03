@@ -623,6 +623,8 @@ NGINX.
 
 To create a backup of your repositories and GitLab metadata, run the following command.
 
+__Note that GitLab CI currently does not have a backup script.__
+
 ```shell
 sudo gitlab-rake gitlab:backup:create
 ```
