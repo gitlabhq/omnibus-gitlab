@@ -39,4 +39,5 @@ Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
 since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
 [gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
+[gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
 [application.yml.example]: https://gitlab.com/gitlab-org/gitlab-ci/blob/master/config/application.yml.example

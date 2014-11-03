@@ -1024,7 +1024,6 @@ This omnibus installer project is based on the awesome work done by Chef in
 [downloads]: https://about.gitlab.com/downloads/
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
-[gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
 [database.yml.postgresql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.postgresql
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
