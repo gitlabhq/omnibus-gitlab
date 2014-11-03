@@ -36,7 +36,8 @@ gitlab_ci['gitlab_ci_all_broken_builds'] = false
 Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 
 Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
-since it will be overwritten on the next `gitlab-ctl reconfigure` run.
+or `/var/opt/gitlab/gitlab-ci/etc/application.yml` since it will be overwritten
+on the next `gitlab-ctl reconfigure` run.
 
 [gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
 [gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
