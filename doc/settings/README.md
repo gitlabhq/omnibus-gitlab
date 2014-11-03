@@ -3,3 +3,4 @@
 - [SMTP](smtp.md)
 - [Unicorn](unicorn.md)
 - [Environment variables](environment-variables.md).
+- [gitlab.yml](gitlab.yml.md)
