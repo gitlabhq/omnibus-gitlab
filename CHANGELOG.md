@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 - Use system UIDs and GIDs when creating accounts (Tim Bishop) cfc04342129a4c4dca5c4827d541c8888adadad3
 - Bundle GitLab CI with the package 3715204d86900e8501483f70c6370ba4e3f2bb3d
 - Fix inserting external_url in gitlab.rb after installation 59f5976562ce3439fb3a6e43caac489a5c230db4
+- Avoid duplicate sidekiq log entries on remote syslog servers
 
 7.4.0
 - Fix broken environment variable removal
