@@ -38,11 +38,16 @@ module Gitlab
   user Mash.new
   postgresql Mash.new
   redis Mash.new
+  ci_redis Mash.new
   gitlab_rails Mash.new
+  gitlab_ci Mash.new
   gitlab_shell Mash.new
   unicorn Mash.new
+  ci_unicorn Mash.new
   sidekiq Mash.new
+  ci_sidekiq Mash.new
   nginx Mash.new
+  ci_nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
   logrotate Mash.new
@@ -50,6 +55,7 @@ module Gitlab
   web_server Mash.new
   node nil
   external_url nil
+  ci_external_url nil
   git_data_dir nil
 
   class << self
@@ -71,6 +77,7 @@ module Gitlab
       end
 
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
+      Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
 
       if File.directory?("/etc/gitlab")
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
@@ -78,6 +85,9 @@ module Gitlab
             Chef::JSONCompat.to_json_pretty({
               'gitlab_rails' => {
                 'secret_token' => Gitlab['gitlab_rails']['secret_token'],
+              },
+              'gitlab_ci' => {
+                'secret_token' => Gitlab['gitlab_ci']['secret_token'],
               }
             })
           )
@@ -137,7 +147,7 @@ module Gitlab
         Gitlab['logging']['svlogd_udp'] ||= logging['udp_log_shipping_host']
       end
 
-      %w{redis nginx sidekiq unicorn postgresql remote-syslog}.each do |runit_sv|
+      %w{redis ci-redis nginx sidekiq ci-sidekiq unicorn ci-unicorn postgresql remote-syslog}.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
       end
     end
@@ -150,6 +160,16 @@ module Gitlab
         # domain socket.
         Gitlab['gitlab_rails']['redis_port'] ||= 6379
       end
+
+      if gitlab_ci['redis_host']
+        Gitlab['gitlab_ci']['redis_port'] ||= 6379
+      end
+
+      if gitlab_rails['redis_host'] &&
+        gitlab_rails.values_at('redis_host', 'redis_port') == gitlab_ci.values_at('redis_host', 'redis_port')
+        Chef::Log.warn "gitlab-rails and gitlab-ci are configured to connect to "\
+                       "the same Redis instance. This is not recommended."
+      end
     end
 
     def parse_nginx_listen_address
@@ -161,17 +181,62 @@ module Gitlab
       nginx['listen_addresses'] = [nginx['listen_address']]
     end
 
+    def parse_ci_external_url
+      return unless ci_external_url
+      # Enable gitlab_ci. This setting will be picked up by parse_gitlab_ci
+      gitlab_ci['enable'] = true if gitlab_ci['enable'].nil?
+
+      uri = URI(ci_external_url.to_s)
+
+      unless uri.host
+        raise "CI external URL must include a FQDN"
+      end
+      Gitlab['gitlab_ci']['gitlab_ci_host'] = uri.host
+      Gitlab['gitlab_ci']['gitlab_ci_email_from'] ||= "gitlab-ci@#{uri.host}"
+
+      case uri.scheme
+      when "http"
+        Gitlab['gitlab_ci']['gitlab_ci_https'] = false
+      when "https"
+        Gitlab['gitlab_ci']['gitlab_ci_https'] = true
+        Gitlab['ci_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['ci_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+      else
+        raise "Unsupported external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported CI external URL path: #{uri.path}"
+      end
+
+      Gitlab['gitlab_ci']['gitlab_ci_port'] = uri.port
+    end
+
+    def parse_gitlab_ci
+      return unless gitlab_ci['enable']
+
+      ci_unicorn['enable'] = true if ci_unicorn['enable'].nil?
+      ci_sidekiq['enable'] = true if ci_sidekiq['enable'].nil?
+      ci_redis['enable'] = true if ci_redis['enable'].nil?
+      ci_nginx['enable'] = true if ci_nginx['enable'].nil?
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
         "bootstrap",
         "user",
         "redis",
+        "ci_redis",
         "gitlab_rails",
+        "gitlab_ci",
         "gitlab_shell",
         "unicorn",
+        "ci_unicorn",
         "sidekiq",
+        "ci_sidekiq",
         "nginx",
+        "ci_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
@@ -193,6 +258,10 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_nginx_listen_address
+      # Parse ci_external_url _before_ gitlab_ci settings so that the user
+      # can turn on gitlab_ci by only specifying ci_external_url
+      parse_ci_external_url
+      parse_gitlab_ci
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

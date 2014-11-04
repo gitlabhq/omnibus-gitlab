@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,16 @@
 # limitations under the License.
 #
 
-unicorn_service 'unicorn' do
-  rails_app 'gitlab-rails'
-  user node['gitlab']['user']['username']
+define :migrate_database, :command => nil, :action => :run do
+  bash "migrate #{params[:name]} database" do
+    code <<-EOH
+      set -e
+      log_file="/tmp/#{params[:name]}-db-migrate-$(date +%s)-$$/output.log"
+      umask 077
+      mkdir $(dirname ${log_file})
+      #{params[:command]} 2>& 1 | tee ${log_file}
+      exit ${PIPESTATUS[0]}
+    EOH
+    action params[:action]
+  end
 end

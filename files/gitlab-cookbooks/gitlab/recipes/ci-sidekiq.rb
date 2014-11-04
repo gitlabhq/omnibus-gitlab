@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-unicorn_service 'unicorn' do
-  rails_app 'gitlab-rails'
-  user node['gitlab']['user']['username']
+sidekiq_service 'ci-sidekiq' do
+  rails_app 'gitlab-ci'
+  user node['gitlab']['gitlab-ci']['username']
 end

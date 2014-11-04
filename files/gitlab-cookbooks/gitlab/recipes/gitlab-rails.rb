@@ -19,7 +19,7 @@
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
-gitlab_rails_env_dir = "/opt/gitlab/etc/gitlab-rails/env"
+gitlab_rails_static_etc_dir = "/opt/gitlab/etc/gitlab-rails"
 gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
@@ -27,6 +27,7 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
   gitlab_rails_etc_dir,
+  gitlab_rails_static_etc_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
@@ -53,14 +54,7 @@ directory gitlab_rails_public_uploads_dir do
   recursive true
 end
 
-directory gitlab_rails_env_dir do
-  owner 'root' # Do not allow the git user to change its own env variables
-  group node['gitlab']['user']['group']
-  mode '0750'
-  recursive true
-end
-
-template "/opt/gitlab/etc/gitlab-rails/gitlab-rails-rc"
+template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 
 dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
@@ -75,6 +69,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   owner "root"
   group "root"
   mode "0644"
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
 end
 
@@ -83,7 +78,6 @@ if node['gitlab']['postgresql']['enable']
   database_attributes.merge!(
     :db_adapter => "postgresql",
     :db_username => node['gitlab']['postgresql']['sql_user'],
-    :db_password => node['gitlab']['postgresql']['sql_password'],
     :db_host => node['gitlab']['postgresql']['listen_address'],
     :db_port => node['gitlab']['postgresql']['port']
   )
@@ -173,33 +167,14 @@ directory node['gitlab']['gitlab-rails']['satellites_path'] do
   recursive true
 end
 
-env_vars = {
-  'HOME' => node['gitlab']['user']['home'],
-  'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
-}.merge(node['gitlab']['gitlab-rails']['env'])
-
-env_vars.each do |key, value|
-  file File.join(gitlab_rails_env_dir, key) do
-    owner node['gitlab']['user']['username']
-    group node['gitlab']['user']['group']
-    mode "0600"
-    content value
-    dependent_services.each do |svc|
-      notifies :restart, svc
-    end
-  end
-end
-
-if File.directory?(gitlab_rails_env_dir)
-  deleted_env_vars = Dir.entries(gitlab_rails_env_dir) - env_vars.keys - %w{. ..}
-  deleted_env_vars.each do |deleted_var|
-    file File.join(gitlab_rails_env_dir, deleted_var) do
-      action :delete
-      dependent_services.each do |svc|
-        notifies :restart, svc
-      end
-    end
-  end
+env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
+  variables(
+    {
+      'HOME' => node['gitlab']['user']['home'],
+      'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
+    }.merge(node['gitlab']['gitlab-rails']['env'])
+  )
+  restarts dependent_services
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
@@ -227,7 +202,7 @@ end
 # Only run `rake db:migrate` when the gitlab-rails version has changed
 remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
-  notifies :run, 'bash[migrate database]' unless postgresql_not_listening
+  notifies :run, 'bash[migrate gitlab-rails database]' unless postgresql_not_listening
   notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
   dependent_services.each do |sv|
     notifies :restart, sv
