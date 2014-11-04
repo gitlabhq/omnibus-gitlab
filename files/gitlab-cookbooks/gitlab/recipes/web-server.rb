@@ -24,6 +24,7 @@ external_webserver_users = node['gitlab']['web-server']['external_users']
 # GitLab webserver group
 group webserver_group do
   gid node['gitlab']['web-server']['gid']
+  system true
   if external_webserver_users.any? && !node['gitlab']['nginx']['enable']
     append true
     members external_webserver_users
@@ -36,5 +37,6 @@ user webserver_username do
   home node['gitlab']['nginx']['dir']
   uid node['gitlab']['web-server']['uid']
   gid webserver_group
+  system true
   supports manage_home: false
 end
