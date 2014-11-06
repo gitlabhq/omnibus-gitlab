@@ -14,6 +14,14 @@ First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package to your GitLab server.
 
+### Upgrade Notice for EE omnibus packages
+
+If you are running **CentOS** or **Red Hat Enterprise Linux** and are upgrading to 7.4.x-ee from 7.2.x-ee or lower, you need
+to update to 7.3.2-ee _first_ by following the steps below in order to avoid migration issues.
+
+Once you have updated the package and reconfigured GitLab, you can _then_ upgrade to 7.4.3-ee.
+
+We are working on a patch to fix this migration issue.
 
 #### Stop unicorn and sidekiq but leave postgresql running so that we can do database migrations
 
