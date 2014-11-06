@@ -24,7 +24,9 @@ now be reachable at `http://ci.example.com`.
 
 If you want to run GitLab and GitLab CI Coordinator on two separate servers you
 can use the following settings on the GitLab CI server to effectively disable
-the GitLab service bundled into the Omnibus package.
+the GitLab service bundled into the Omnibus package. The GitLab services will
+still be set up on your CI server, but they will not accept user requests or
+consume system resources.
 
 ```
 ci_external_url 'http://ci.example.com'
