@@ -3,7 +3,9 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 ## GitLab
-## Maintainer: @randx
+## Contributors: randx, yin8086, sashkab, orkoden, axilleas, bbodenmiller
+##
+## Modified from https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/support/nginx/gitlab-ssl & https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/support/nginx/gitlab
 ##
 ## Lines starting with two hashes (##) are comments with information.
 ## Lines starting with one hash (#) are configuration parameters that can be uncommented.
@@ -29,19 +31,19 @@
 ###################################
 ##         configuration         ##
 ###################################
-##
 
 upstream gitlab {
-  server unix:<%= @socket %>;
+  server unix:<%= @socket %> fail_timeout=0;
 }
 
 <% if @https && @redirect_http_to_https %>
+## Redirects all HTTP traffic to the HTTPS host
 server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
 <% end %>
   server_name <%= @fqdn %>;
-  server_tokens off;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
   access_log  <%= @log_directory %>/gitlab_access.log;
   error_log   <%= @log_directory %>/gitlab_error.log;
@@ -53,23 +55,27 @@ server {
   listen <%= listen_address %>:<%= @port %>;
 <% end %>
   server_name <%= @fqdn %>;
-  server_tokens off;     # don't show the version number, a security best practice
+  server_tokens off; ## Don't show the nginx version number, a security best practice
   root /opt/gitlab/embedded/service/gitlab-rails/public;
-
-  <% if @https %>
-  ssl on;
-  ssl_certificate <%= @ssl_certificate %>;
-  ssl_certificate_key <%= @ssl_certificate_key %>;
-  ssl_ciphers '<%= @ssl_ciphers %>';
-  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
-  ssl_protocols  <%= @ssl_protocols %>;
-  ssl_session_cache  <%= @ssl_session_cache %>;
-  ssl_session_timeout  <%= @ssl_session_timeout %>;
-  <% end %>
 
   ## Increase this if you want to upload large attachments
   ## Or if you want to accept large git objects over http
   client_max_body_size <%= @client_max_body_size %>;
+    
+  <% if @https %>
+  ## Strong SSL Security
+  ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+  ssl on;
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+
+  # GitLab needs backwards compatible ciphers to retain compatibility with Java IDEs
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
+  <% end %>
 
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_access.log;
@@ -94,15 +100,15 @@ server {
     proxy_connect_timeout   300;
     proxy_redirect          off;
 
-    proxy_set_header   X-Forwarded-Proto $scheme;
-    proxy_set_header   Host              $http_host;
-    proxy_set_header   X-Real-IP         $remote_addr;
-    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-    proxy_set_header   X-Frame-Options   SAMEORIGIN;
-
+    proxy_set_header    Host                $http_host;
+    proxy_set_header    X-Real-IP           $remote_addr;
     <% if @https %>
-    proxy_set_header   X-Forwarded-Ssl     on;
+    proxy_set_header    X-Forwarded-Ssl     on;
     <% end %>
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+    proxy_set_header    X-Forwarded-Proto   $scheme;
+    proxy_set_header    X-Frame-Options     SAMEORIGIN;
+
     proxy_pass http://gitlab;
   }
 
