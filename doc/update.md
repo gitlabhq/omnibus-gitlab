@@ -4,7 +4,7 @@
 
 Please make sure you are viewing this file on the master branch.
 
-![documentation version](doc/images/omnibus-documentation-version-update-md.png)
+![documentation version](images/omnibus-documentation-version-update-md.png)
 
 ## Updating from GitLab 6.6.x and higher to the latest version
 
