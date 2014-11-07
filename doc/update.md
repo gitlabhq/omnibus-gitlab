@@ -14,27 +14,53 @@ First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package to your GitLab server.
 
+### Upgrade Notice for EE omnibus packages
+
+If you are running **CentOS** or **Red Hat Enterprise Linux** and are upgrading to 7.4.x-ee from 7.2.x-ee or lower, you need
+to update to 7.3.2-ee _first_ by following the steps below in order to avoid migration issues.
+
+Once you have updated the package and reconfigured GitLab, you can _then_ upgrade to 7.4.3-ee.
+
+We are working on a patch to fix this migration issue.
+
+#### Stop unicorn and sidekiq but leave postgresql running so that we can do database migrations
+
 ```shell
-# Stop unicorn and sidekiq but leave postgresql running so that we can do database migrations
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
+```
 
-# If you are upgrading from 7.3.0
+#### If you are upgrading from 7.3.0
+
+```
 sudo gitlab-ctl stop nginx
+```
 
-# Create a database backup in case the upgrade fails
+#### Create a database backup in case the upgrade fails
+
+```
 sudo gitlab-rake gitlab:backup:create
+```
 
-# Install the latest package
+#### Install the latest package
+
+```
 # Ubuntu/Debian:
 sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
+
 # CentOS:
 sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
+```
 
-# Reconfigure GitLab (includes database migrations)
+#### Reconfigure GitLab (includes database migrations)
+
+```
 sudo gitlab-ctl reconfigure
+```
 
-# Restart all gitlab services
+#### Restart all gitlab services
+
+```
 sudo gitlab-ctl restart
 ```
 
@@ -44,63 +70,96 @@ Done!
 
 First, download the latest package from https://www.gitlab.com/downloads/ to your GitLab server.
 
+
+#### Stop unicorn and sidekiq so we can do database migrations
+
 ```shell
-# Stop unicorn and sidekiq so we can do database migrations
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
+```
 
-# One-time migration because we changed some directories since 6.6.0.pre1
+#### One-time migration because we changed some directories since 6.6.0.pre1
+
+```
 sudo mkdir -p /var/opt/gitlab/git-data
 sudo mv /var/opt/gitlab/{repositories,gitlab-satellites} /var/opt/gitlab/git-data/
 sudo mv /var/opt/gitlab/uploads /var/opt/gitlab/gitlab-rails/
+```
 
-# Install the latest package
+#### Install the latest package
+
+```
 # Ubuntu:
 sudo dpkg -i gitlab_6.6.4-omnibus.xxx.deb
+
 # CentOS:
 sudo rpm -Uvh gitlab-6.6.4_xxx.rpm
+```
 
-# Reconfigure GitLab (includes database migrations)
+#### Reconfigure GitLab (includes database migrations)
+
+```
 sudo gitlab-ctl reconfigure
+```
 
-# Start unicorn and sidekiq
+#### Start unicorn and sidekiq
+
+```
 sudo gitlab-ctl start
 ```
 
 Done!
 
-## Reverting to GitLab 6.6.x
+## Reverting to GitLab 6.6.x or later
 
-First download a GitLab 6.6.x [CE](https://www.gitlab.com/downloads/archives/) or
+First download a GitLab 6.x.x [CE](https://www.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
 
+
+#### Stop GitLab
+
 ```
-# Stop GitLab
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
+```
 
-# Downgrade GitLab to 6.6
+#### Downgrade GitLab to 6.x
+
+```
 # Ubuntu
 sudo dpkg -r gitlab
-sudo dpkg -i gitlab-6.6.x-yyy.deb
+sudo dpkg -i gitlab-6.x.x-yyy.deb
 
 # CentOS:
 sudo rpm -e gitlab
-sudo rpm -ivh gitlab-6.6.x-yyy.rpm
+sudo rpm -ivh gitlab-6.x.x-yyy.rpm
+```
 
-# Prepare GitLab for receiving the backup restore
+#### Prepare GitLab for receiving the backup restore
 
-# Due to a backup restore bug in GitLab 6.6, it is needed to drop the database
-# _before_ running `gitlab-ctl reconfigure`.
+Due to a backup restore bug in versions earlier than GitLab 6.8.0, it is needed to drop the database
+_before_ running `gitlab-ctl reconfigure`, only if you are downgrading to 6.7.x or less.
+
+```
 sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
+```
 
+#### Reconfigure GitLab (includes database migrations)
+
+```
 sudo gitlab-ctl reconfigure
+```
 
-# Restore your backup
+#### Restore your backup
+
+```
 sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
+```
 
-# Start GitLab
+#### Start GitLab
+
+```
 sudo gitlab-ctl start
 ```
 

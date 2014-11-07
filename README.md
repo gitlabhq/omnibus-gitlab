@@ -114,7 +114,8 @@ postgresql['port'] = 2345
 unicorn['port'] = 3456
 ```
 
-For Nginx port changes please see the section on enabling HTTPS below.
+For Nginx port changes please see
+[doc/settings/nginx.md](doc/settings/nginx.md).
 
 #### Git SSH access stops working on SELinux-enabled systems
 
@@ -431,144 +432,28 @@ Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
 ### Enable HTTPS
 
-By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
-gitlab.example.com, add the following statement to `/etc/gitlab/gitlab.rb`:
-
-```ruby
-external_url "https://gitlab.example.com"
-```
-
-Because the hostname in our example is 'gitlab.example.com', omnibus-gitlab
-will look for key and certificate files called
-`/etc/gitlab/ssl/gitlab.example.com.key` and
-`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively. Create the
-`/etc/gitlab/ssl` directory and copy your key and certificate there.
-
-```
-sudo mkdir -p /etc/gitlab/ssl
-sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
-```
-
-Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
-GitLab instance should be reachable at `http://gitlab.example.com`.
-
-If you are using a firewall you may have to open port 443 to allow inbound
-HTTPS traffic.
-
-```
-# UFW example (Debian, Ubuntu)
-sudo ufw allow https
-
-# lokkit example (RedHat, CentOS 6)
-sudo lokkit -s https
-
-# firewall-cmd (RedHat, Centos 7)
-sudo firewall-cmd --permanent --add-service=https
-sudo systemctl reload firewalld
-```
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-By default, when you specify an external_url starting with 'https', Nginx will
-no longer listen for unencrypted HTTP traffic on port 80. If you want to
-redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
-setting.
-
-```ruby
-external_url "https://gitlab.example.com"
-nginx['redirect_http_to_https'] = true
-```
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 #### Change the default port and the ssl certificate locations.
 
-If you need to use an HTTPS port other than the default (443), just specify it
-as part of the external_url.
-
-```ruby
-external_url "https://gitlab.example.com:2443"
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Use non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx.
-Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
-in the group with the same name. To allow an external webserver access to
-GitLab, external webserver user needs to be added `gitlab-www` group.
-
-To use another web server like Apache or an existing Nginx installation you will have to do
-the following steps:
-
-* Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
-
-```ruby
-nginx['enable'] = false
-```
-
-* Check the username of the non-bundled web-server user. By default, omnibus-gitlab has no default setting for external webserver user.
-You have to specify the external webserver user username in the configuration!
-Let's say for example that webserver user is `www-data`.
-In `/etc/gitlab/gitlab.rb` set:
-
-```ruby
-web_server['external_users'] = ['www-data']
-```
-
-*This setting is an array so you can specify more than one user to be added to gitlab-www group.*
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
-Note: if you are using SELinux and your web server runs under a restricted
-SELinux profile you may have to [loosen the restrictions on your web
-server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
-If you need Gitlab to have access to certain environment variables, you can
-configure them in `/etc/gitlab/gitlab.rb`.  This is useful in situations where
-you need to use a proxy to access the internet and you will be wanting to
-clone externally hosted repositories directly into gitlab.  In `/etc/gitlab/gitlab.rb`
-supply a `gitlab_rails['env']` with a hash value. For example:
-
-```ruby
-gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+See
+[doc/settings/environment-variables.md](doc/settings/environment-variables.md).
 
 ### Changing gitlab.yml settings
 
-Some of GitLab's features can be customized through
-[gitlab.yml][gitlab.yml.example]. If you want to change a `gitlab.yml` setting
-with omnibus-gitlab, you need to do so via `/etc/gitlab/gitlab.rb`. The
-translation works as follows.
-
-In `gitlab.yml`, you will find structure like this:
-
-```yaml
-production: &base
-  gitlab:
-    default_projects_limit: 10
-```
-
-In `gitlab.rb`, this translates to:
-
-```ruby
-gitlab_rails['gitlab_default_projects_limit'] = 10
-```
-
-What happens here is that we forget about `production: &base`, and join
-`gitlab:` with `default_projects_limit:` into `gitlab_default_projects_limit`.
-Note that not all `gitlab.yml` settings can be changed via `gitlab.rb` yet; see
-the [gitlab.yml ERB template][gitlab.yml.erb].  If you think an attribute is
-missing please create a merge request on the omnibus-gitlab repository.
-
-Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
-
-Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
-since it will be overwritten on the next `gitlab-ctl reconfigure` run.
+See [doc/settings/gitlab.yml.md](doc/settings/gitlab.yml.md).
 
 ### Specify numeric user and group identifiers
 
@@ -606,24 +491,7 @@ gitlab_rails['aws_region'] = 'us-east-1'
 
 ### Sending application email via SMTP
 
-If you would rather send email via an SMTP server instead of via Sendmail, add
-the following configuration information to `/etc/gitlab/gitlab.rb` and run
-`gitlab-ctl reconfigure`.
-
-```
-gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "smtp.server"
-gitlab_rails['smtp_port'] = 456
-gitlab_rails['smtp_user_name'] = "smtp user"
-gitlab_rails['smtp_password'] = "smtp password"
-gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_enable_starttls_auto'] = true
-
-# If your SMTP server does not like the default 'From: gitlab@localhost' you
-# can change the 'From' with this setting.
-gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
-```
+See [doc/settings/smtp.md](doc/settings/smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
@@ -647,42 +515,23 @@ gitlab_rails['omniauth_providers'] = [
 
 ### Adjusting Unicorn settings
 
-If you need to adjust the Unicorn timeout or the number of workers you can use
-the following settings in `/etc/gitlab/gitlab.rb`. Run `sudo gitlab-ctl
-reconfigure for the change to take effect.
-
-```ruby
-unicorn['worker_processes'] = 3
-unicorn['worker_timeout'] = 60
-```
+See [doc/settings/unicorn.md](doc/settings/unicorn.md).
 
 ### Setting the NGINX listen address or addresses
 
-By default NGINX will accept incoming connections on all local IPv4 addresses.
-You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
-
-```ruby
-nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
-```
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
 
-If you need to add custom settings into the NGINX `server` block for GitLab for
-some reason you can use the following setting.
-
-```ruby
-# Example: block raw file downloads from a specific repository
-nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
-```
-
-Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
-NGINX.
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Backups
 
 ### Creating an application backup
 
 To create a backup of your repositories and GitLab metadata, run the following command.
+
+__Note that GitLab CI currently does not have a backup script.__
 
 ```shell
 sudo gitlab-rake gitlab:backup:create
@@ -759,15 +608,17 @@ the [required version](https://www.gitlab.com/downloads/archives/) and try again
 
 ## Invoking Rake tasks
 
-To invoke a GitLab Rake task, use `gitlab-rake`. For example:
+To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
+`gitlab-ci-rake` (for GitLab CI). For example:
 
 ```shell
 sudo gitlab-rake gitlab:check
+sudo gitlab-ci-rake -T
 ```
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
-`gitlab-rake` wrapper script.
+`gitlab-rake` and `gitlab-ci-rake` wrapper scripts.
 
 ## Directory structure
 
@@ -893,87 +744,38 @@ you can start one with the command below. Please be warned that it is very easy
 to inadvertently modify, corrupt or destroy data from the console.
 
 ```shell
+# start a Rails console for GitLab
 sudo gitlab-rails console
+
+# start a Rails console for GitLab CI
+sudo gitlab-ci-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
-If you want to use MySQL and are using the **GitLab Enterprise Edition packages** please do the following:
-
-Important note: if you are connecting omnibus-gitlab to an existing GitLab
-database you should create a backup before attempting this procedure.
+See [doc/settings/database.md](doc/settings/database.md).
 
 ### Create a user and database for GitLab
 
-First, set up your database server according to the [upstream GitLab
-instructions](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#5-database).
-If you want to keep using an existing GitLab database you can skip this step.
+See [doc/settings/database.md](doc/settings/database.md).
 
 ### Configure omnibus-gitlab to connect to it
 
-Next, we add the following settings to `/etc/gitlab/gitlab.rb`.
-
-```ruby
-# Disable the built-in Postgres
-postgresql['enable'] = false
-
-# Fill in the values for database.yml
-gitlab_rails['db_adapter'] = 'mysql2'
-gitlab_rails['db_encoding'] = 'utf8'
-gitlab_rails['db_host'] = '127.0.0.1'
-gitlab_rails['db_port'] = '3306'
-gitlab_rails['db_username'] = 'git'
-gitlab_rails['db_password'] = 'password'
-```
-
-Parameters such as `db_adapter` correspond to `adapter` in `database.yml`; see the upstream GitLab for a [MySQL configuration example][database.yml.mysql].
-We remind you that `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains plaintext passwords.
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+See [doc/settings/database.md](doc/settings/database.md).
 
 ### Seed the database (fresh installs only)
 
-Omnibus-gitlab will not automatically seed your external database. Run the
-following command to import the schema and create the first admin user:
-
-```shell
-sudo gitlab-rake gitlab:setup
-```
-
-If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `root_password` setting:
-
-```ruby
-  gitlab_rails['root_password'] = 'nonstandardpassword'
-```
-
-and then run the `gitlab:setup` command.
-
-**This is a destructive command; do not run it on an existing database!**
+See [doc/settings/database.md](doc/settings/database.md).
 
 ## Using a non-packaged PostgreSQL database management server
 
-If you do do not want to use the packaged Postgres server you can configure an external one similar to configuring a MySQL server (shown above).
-Configuring a PostgreSQL server is possible both with GitLab Community Edition and Enterprise Edition packages.
-Please see the upstream GitLab for a [PostgreSQL configuration example][database.yml.postgresql].
+See [doc/settings/database.md](doc/settings/database.md).
 
 ## Using a non-packaged Redis instance
 
-If you want to use your own Redis instance instead of the bundled Redis, you
-can use the `gitlab.rb` settings below. Run `gitlab-ctl reconfigure` for the
-settings to take effect.
-
-```ruby
-redis['enable'] = false
-
-# Redis via TCP
-gitlab_rails['redis_host'] = 'redis.example.com'
-gitlab_rails['redis_port'] = 6380
-
-# OR Redis via Unix domain sockets
-gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
-```
+See [doc/settings/redis.md](doc/settings/redis.md).
 
 ## Only start omnibus-gitlab services after a given filesystem is mounted
 
@@ -985,79 +787,10 @@ from starting before a given filesystem is mounted, add the following to
 # wait for /var/opt/gitlab to be mounted
 high_availability['mountpoint'] = '/var/opt/gitlab'
 ```
+
 ## Using an existing Passenger/Nginx installation
 
-In some cases you may want to host GitLab using an existing Passenger/Nginx
-installation but still have the convenience of updating and installing using
-the omnibus packages.
-
-First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
-Nginx and Unicorn:
-
-```ruby
-# Disable the built-in nginx
-nginx['enable'] = false
-
-# Disable the built-in unicorn
-unicorn['enable'] = false
-
-# Set the internal API URL
-gitlab_rails['internal_api_url'] = 'http://git.yourdomain.com'
-```
-
-Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
-
-Then, in your custom Passenger/Nginx installation, create the following site
-configuration file:
-
-```
-server {
-  listen *:80;
-  server_name git.yourdomain.com;
-  server_tokens off;
-  root /opt/gitlab/embedded/service/gitlab-rails/public;
-
-  client_max_body_size 250m;
-
-  access_log  /var/log/gitlab/nginx/gitlab_access.log;
-  error_log   /var/log/gitlab/nginx/gitlab_error.log;
-
-  # Ensure Passenger uses the bundled Ruby version
-  passenger_ruby /opt/gitlab/embedded/bin/ruby;
-
-  # Correct the $PATH variable to included packaged executables
-  passenger_set_cgi_param PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
-
-  # Make sure Passenger runs as the correct user and group to
-  # prevent permission issues
-  passenger_user git;
-  passenger_group git;
-
-  # Enable Passenger & keep at least one instance running at all times
-  passenger_enabled on;
-  passenger_min_instances 1;
-
-  error_page 502 /502.html;
-}
-```
-
-For a typical Passenger installation this file should probably
-be located at `/etc/nginx/sites-available/gitlab` and symlinked to
-`/etc/nginx/sites-enabled/gitlab`.
-
-To ensure that user uploads are accessible your Nginx user (usually `www-data`)
-should be added to the `gitlab-www` group. This can be done using the following command:
-
-```shell
-sudo usermod -aG gitlab-www www-data
-```
-
-Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
-(although this could be enabled) this file is mostly identical to the
-[bundled Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb).
-
-Don't forget to restart Nginx to load the new configuration (on Debian-based
-systems `sudo service nginx restart`).
+See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Building your own package
 
@@ -1079,9 +812,6 @@ This omnibus installer project is based on the awesome work done by Chef in
 [downloads]: https://about.gitlab.com/downloads/
 [CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
-[gitlab.yml.erb]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb
-[database.yml.postgresql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.postgresql
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
-[gitlab.yml.example]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example
 [svlogd]: http://smarden.org/runit/svlogd.8.html
 [installation]: https://about.gitlab.com/installation/
