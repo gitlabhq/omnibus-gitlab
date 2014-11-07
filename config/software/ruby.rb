@@ -26,6 +26,7 @@ dependency "libiconv"
 dependency "libffi"
 dependency "gdbm"
 dependency "libgcc" if Ohai['platform'] == "solaris2"
+dependency "jemalloc"
 
 version("1.9.3-p484") { source md5: "8ac0dee72fe12d75c8b2d0ef5d0c2968" }
 version("1.9.3-p547") { source md5: "7531f9b1b35b16f3eb3d7bea786babfd" }
@@ -62,6 +63,9 @@ when "aix"
 else  # including solaris, linux
   env['CFLAGS'] << " -O3 -g -pipe"
 end
+
+# Use jemalloc instead of glibc malloc
+env['LIBS'] = env['LIBS'].to_s + " -ljemalloc"
 
 build do
   configure_command = ["./configure",
