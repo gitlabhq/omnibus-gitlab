@@ -26,7 +26,7 @@ version "2.4.7" do
   source md5: "6afffb6120724183e40f1cac324ac71c"
 end
 
-depends 'jemalloc'
+dependency "jemalloc"
 
 source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
 
