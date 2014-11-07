@@ -1,0 +1,12 @@
+29,34c29
+< # Default allocator
+< ifeq ($(uname_S),Linux)
+< 	MALLOC=jemalloc
+< else
+< 	MALLOC=libc
+< endif
+---
+> MALLOC=libc
+55a51,52
+> 
+> FINAL_LIBS+= -ljemalloc

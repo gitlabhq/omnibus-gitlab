@@ -1,5 +1,6 @@
 #
 # Copyright 2012-2014 Chef Software, Inc.
+# Copyright 2014 GitLab B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +26,8 @@ version "2.4.7" do
   source md5: "6afffb6120724183e40f1cac324ac71c"
 end
 
+depends 'jemalloc'
+
 source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
 
 relative_path "redis-#{version}"
@@ -33,6 +36,8 @@ build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
     "PREFIX" => "#{install_dir}/embedded",
   )
+
+  patch source: "system-jemalloc.diff", target: 'src/Makefile'
 
   command "make -j #{max_build_jobs}", env: env
   command "make install", env: env
