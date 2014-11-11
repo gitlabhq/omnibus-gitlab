@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "8acc2b354f7b8a43cba547c870d86c4e4ab995d8" # 7.4.4-ee with Sidekiq RSS logging
+default_version "76073a9c3cd9ad888ef044baf92e783dc77b9d36" # 7.4.4-ee with Sidekiq GC.start
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
