@@ -25,7 +25,7 @@ install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
-override :ruby, version: '2.1.2'
+override :ruby, version: '2.1.4'
 override :rubygems, version: '2.2.1'
 
 # creates required build directories
