@@ -25,6 +25,9 @@ gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
+# Needed for .gitlab_shell_secret
+gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
+
 [
   gitlab_rails_etc_dir,
   gitlab_rails_static_etc_dir,
@@ -158,6 +161,10 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
+end
+
+link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
+  to File.join(gitlab_shell_var_dir, "gitlab_shell_secret")
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
