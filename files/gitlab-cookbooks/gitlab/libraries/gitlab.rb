@@ -76,6 +76,7 @@ module Gitlab
         end
       end
 
+      Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
 
@@ -83,6 +84,9 @@ module Gitlab
         File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
           f.puts(
             Chef::JSONCompat.to_json_pretty({
+              'gitlab_shell' => {
+                'secret_token' => Gitlab['gitlab_shell']['secret_token'],
+              },
               'gitlab_rails' => {
                 'secret_token' => Gitlab['gitlab_rails']['secret_token'],
               },
