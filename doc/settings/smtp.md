@@ -19,10 +19,12 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 ```
 
-To send GitLab CI email via SMTP, use `gitlab_ci` instead of `gitlab_rails`.
+To change GitLab CI email configuration (e.g. use SMTP), use `gitlab_ci` instead
+of `gitlab_rails`.
 
 ```ruby
 # in /etc/gitlab/gitlab.rb
+gitlab_ci['gitlab_ci_email_from'] = 'gitlab-ci@example.com'
 gitlab_ci['smtp_enable'] = true
 gitlab_ci['smtp_address'] = "smtp.server"
 # etc.
