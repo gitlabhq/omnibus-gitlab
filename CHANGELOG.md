@@ -10,10 +10,10 @@ omnibus-gitlab repository.
 - Avoid duplicate sidekiq log entries on remote syslog servers cb514282f03add2fa87427e4601438653882fa03
 - Update nginx config and SSL ciphers (Ben Bodenmiller) 0722d29c 89afa691
 - Remove duplicate http headers (Phill Campbell) 8ea0d201c32527f095d3afa707a38865984e27d2
-- Paralelize bundle install during build c53e92b80f423c90f2169fbd2d9ef33ce0233cb6
+- Parallelize bundle install during build c53e92b80f423c90f2169fbd2d9ef33ce0233cb6
 - Use Ruby 2.1.4 e083162579f00814086f34c1cf02c96dc9796f69
 - Remove exec symlinks after gitlab uninstall 70c9a6e00be8814b8cad337b1e6d212be88a3f99
-- Generate require gitlab_shell_secret d65d4832f1164dfe62036a65d1899ccf80cbe0c6
+- Generate required gitlab_shell_secret d65d4832f1164dfe62036a65d1899ccf80cbe0c6
 
 7.4.0
 - Fix broken environment variable removal
