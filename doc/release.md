@@ -17,6 +17,8 @@ git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing 
   `default_version '490f99d45e0f610e88505ff0fb2dc83a557e22c5' # 6.6.0`.
 - Change [the gitlab-shell version] if necessary, for example
   `default_version 'c26647b9d919085c669f49c71d0646ac23b9c9d9' # 1.9.4`.
+- Change [the gitlab-ci version] if necessary, for example
+  `default_version 'd69e6b7703043490e0f0f7aa458292fc2ed81fd2' # 5.1.0`.
 - Change [the source] to the repo you want to build from (CE / EE)
 - Commit the new version to the release branch
 
@@ -79,4 +81,5 @@ and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92
 
 [the gitlab-rails version in omnibus-gitlab]: ../master/config/software/gitlab-rails.rb#L20
 [the gitlab-shell version]: ../master/config/software/gitlab-shell.rb#L20
+[the gitlab-ci version]: ../master/config/software/gitlab-ci.rb#L19
 [the source]: ../master/config/software/gitlab-rails.rb#L34

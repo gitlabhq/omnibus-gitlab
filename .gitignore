@@ -12,3 +12,4 @@ vendor/cookbooks
 .rbenv-version
 build.txt
 Vagrantfile
+.idea
