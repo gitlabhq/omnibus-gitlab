@@ -241,34 +241,9 @@ Option #1: Omnibus packages for EE can be configured to use an external [non-pac
 
 Option #2: Convert to PostgreSQL and use the built-in server as the instructions below.
 
-* [create a backup of the non-Omnibus MySQL installation.](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
-* unpack the newly created backup.
+**Note:** Please make sure to have Python 2.7.x (or higher) installed.
 
-```shell
-mkdir unpacked_backup
-tar -C unpacked_backup -xvf <TIMESTAMP>_gitlab_backup.tar
-```
-
-* [export and convert the existing MySQL database](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md)  (without importing to PostgreSQL).
-
-```shell
-mysqldump --compatible=postgresql --default-character-set=utf8 -r gitlab.mysql -u root gitlabhq_production
-python db_converter.py gitlab.mysql gitlab.psql
-
-```
-
-* replace `unpacked_backup/db/database.sql` with the converted `gitlab.psql`
-
-```shell
-cp gitlab.pSql unpacked_backup/db/database.sql
-```
-
-* repack the modified backup.
-
-```shell
-cd unpacked_backup
-tar cvf ../converted_gitlab_backup.tar *
-```
-
-* [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup)
+* [Create a backup of the non-Omnibus MySQL installation.](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
+* [Export and convert the existing MySQL database in the GitLab backup file](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
+* [Restore this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup)
 * Enjoy!
