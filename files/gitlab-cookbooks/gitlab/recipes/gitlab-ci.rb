@@ -119,6 +119,7 @@ end
 
 template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
   link_from File.join(gitlab_ci_source_dir, "config/initializers/smtp_settings.rb")
+  source "smtp_settings-gitlab-ci.rb.erb"
   owner "root"
   group "root"
   mode "0644"
