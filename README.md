@@ -253,6 +253,8 @@ sudo tar -xf etc-gitlab-1399948539.tar -C /
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
 backup.
 
+NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
+
 ### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
