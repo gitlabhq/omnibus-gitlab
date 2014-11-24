@@ -40,9 +40,9 @@ redis:
 log_file: "<%= @log_file %>"
 
 # Log level. INFO by default
-log_level: INFO
+log_level: <%= @log_level %>
 
 # Audit usernames.
 # Set to true to see real usernames in the logs instead of key ids, which is easier to follow, but
 # incurs an extra API call on every gitlab-shell command.
-audit_usernames: false
+audit_usernames: <%= @audit_usernames %>
