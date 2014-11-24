@@ -17,7 +17,7 @@
 #
 
 name "rugged"
-default_version "0.21.0"
+default_version "0.21.2"
 
 dependency "ruby"
 dependency "rubygems"

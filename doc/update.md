@@ -159,10 +159,10 @@ sudo gitlab-ctl start
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as gitlab.yml, unicorn.rb and smtp_settings.rb.
-You will have to [configure those settings in /etc/gitlab/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
+You will have to [configure those settings in /etc/gitlab/gitlab.rb](/README.md#configuration).
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
-Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup).
+Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](/README.md#restoring-an-application-backup).
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to achieve this.
 
@@ -232,43 +232,17 @@ server to make sure none of the old services interferes with omnibus-gitlab.
 
 If you are using special features such as LDAP you will have to put your
 settings in gitlab.rb; see the [omnibus-gitlab
-README](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
+README](/README.md#configuration).
 
 ### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 Unlike the previous chapter, the non-Omnibus installation is using MySQL while the Omnibus installation is using PostgreSQL.
 
-Option #1: Omnibus packages for EE can be configured to use an external [non-packaged MySQL database](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#using-a-mysql-database-management-server-enterprise-edition-only).
+Option #1: Omnibus packages for EE can be configured to use an external [non-packaged MySQL database](/README.md#using-a-mysql-database-management-server-enterprise-edition-only).
 
 Option #2: Convert to PostgreSQL and use the built-in server as the instructions below.
 
-* [create a backup of the non-Omnibus MySQL installation.](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
-* unpack the newly created backup.
-
-```shell
-mkdir unpacked_backup
-tar -C unpacked_backup -xvf <TIMESTAMP>_gitlab_backup.tar
-```
-
-* [export and convert the existing MySQL database](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md)  (without importing to PostgreSQL).
-
-```shell
-mysqldump --compatible=postgresql --default-character-set=utf8 -r gitlab.mysql -u root gitlabhq_production
-python db_converter.py gitlab.mysql gitlab.psql
-
-```
-
-* replace `unpacked_backup/db/database.sql` with the converted `gitlab.psql`
-
-```shell
-cp gitlab.pSql unpacked_backup/db/database.sql
-```
-
-* repack the modified backup.
-
-```shell
-cd unpacked_backup
-tar cvf ../converted_gitlab_backup.tar *
-```
-
-* [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#restoring-an-application-backup)
+* [Create a backup of the non-Omnibus MySQL installation](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
+* [Export and convert the existing MySQL database in the GitLab backup file](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
+* [Restore this in the Omnibus installation](/README.md#restoring-an-application-backup)
+* [Rebuild database indexes](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#for-omnibus-gitlab-installations)
 * Enjoy!
