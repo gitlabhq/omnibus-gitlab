@@ -119,11 +119,14 @@ end
 
 template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
   link_from File.join(gitlab_ci_source_dir, "config/initializers/smtp_settings.rb")
-  source "smtp_settings-gitlab-ci.rb.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-ci'].to_hash)
+  variables(
+    node['gitlab']['gitlab-ci'].to_hash.merge(
+      :app => 'gitlab-ci'
+    )
+  )
   restarts dependent_services
 
   unless node['gitlab']['gitlab-ci']['smtp_enable']
