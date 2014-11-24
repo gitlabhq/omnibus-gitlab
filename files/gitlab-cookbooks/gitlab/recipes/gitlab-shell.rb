@@ -96,7 +96,8 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
     :redis_socket => redis_socket,
     :log_file => File.join(log_directory, "gitlab-shell.log"),
     :log_level => node['gitlab']['gitlab-shell']['log_level'],
-    :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames']
+    :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames'],
+    :http_settings => node['gitlab']['gitlab-shell']['http_settings']
   )
 end
 

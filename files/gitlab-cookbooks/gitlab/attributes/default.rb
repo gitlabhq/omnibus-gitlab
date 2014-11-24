@@ -201,6 +201,7 @@ default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-she
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
 default['gitlab']['gitlab-shell']['git_data_directory'] = "/var/opt/gitlab/git-data"
+default['gitlab']['gitlab-shell']['http_settings'] = nil
 
 
 ###
