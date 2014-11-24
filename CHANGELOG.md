@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.6.0
+- Update libgit2 and rugged to version 0.21.2
+
 7.5.0
 - Use system UIDs and GIDs when creating accounts (Tim Bishop) cfc04342129a4c4dca5c4827d541c8888adadad3
 - Bundle GitLab CI with the package 3715204d86900e8501483f70c6370ba4e3f2bb3d
