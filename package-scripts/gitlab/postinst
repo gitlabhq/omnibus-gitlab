@@ -30,7 +30,7 @@ if ! [ -e /etc/gitlab/gitlab.rb ] ; then
   mkdir -p /etc/gitlab
   cat > /etc/gitlab/gitlab.rb <<EOF
 # Check and change the external_url to the address your users will type in their browser
-external_url '${external_url}'
+external_url 'http://${external_url}'
 EOF
   chmod 600 /etc/gitlab/gitlab.rb
 fi
@@ -52,7 +52,7 @@ echo "Configure and start GitLab by running the following command:"
 echo
 echo "sudo gitlab-ctl reconfigure"
 echo
-echo "GitLab should be reachable at ${external_url}"
+echo "GitLab should be reachable at http://${external_url}"
 echo "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
 echo "And running reconfigure again."
 echo
