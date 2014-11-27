@@ -304,6 +304,7 @@ default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
+default['gitlab']['nginx']['custom_nginx_config'] = nil
 
 ###
 # Logging

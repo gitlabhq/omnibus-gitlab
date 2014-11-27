@@ -527,6 +527,10 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
+### Inserting custom settings into the NGINX config
+
+See [doc/settings/nginx.md](doc/settings/nginx.md).
+
 ## Backups
 
 ### Creating an application backup
