@@ -32,4 +32,6 @@ http {
   <% if @gitlab_ci_http_config %>
   include <%= @gitlab_ci_http_config %>;
   <% end %>
+
+  <%= @custom_nginx_config %>
 }
