@@ -183,6 +183,10 @@ sudo dpkg -r gitlab
 sudo rpm -e gitlab
 ```
 
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+
+To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove_users`. *Note* All gitlab processes need to be stopped before runnign the command.
+
 ## Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
