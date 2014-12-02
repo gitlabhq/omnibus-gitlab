@@ -1,0 +1,447 @@
+#
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2014 GitLab.com
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+####
+# omnibus options
+####
+bootstrap['enable'] = true
+
+
+####
+# The Git User that services run as
+####
+# The username for the chef services user
+user['username'] = "git"
+user['group'] = "git"
+user['uid'] = nil
+user['gid'] = nil
+# The shell for the chef services user
+user['shell'] = "/bin/sh"
+# The home directory for the chef services user
+user['home'] = "/var/opt/gitlab"
+user['git_user_name'] = "GitLab"
+user['git_user_email'] = "gitlab@#{node['fqdn']}"
+
+
+####
+# GitLab Rails app
+####
+gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
+gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
+gitlab_rails['environment'] = 'production'
+gitlab_rails['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
+
+gitlab_rails['internal_api_url'] = nil
+gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
+gitlab_rails['rate_limit_requests_per_period'] = 10
+gitlab_rails['rate_limit_period'] = 60
+
+gitlab_rails['gitlab_host'] = node['fqdn']
+gitlab_rails['gitlab_port'] = 80
+gitlab_rails['gitlab_https'] = false
+gitlab_rails['gitlab_ssh_host'] = nil
+gitlab_rails['time_zone'] = nil
+gitlab_rails['gitlab_email_from'] = nil
+gitlab_rails['gitlab_default_projects_limit'] = nil
+gitlab_rails['gitlab_default_can_create_group'] = nil
+gitlab_rails['gitlab_username_changing_enabled'] = nil
+gitlab_rails['gitlab_default_theme'] = nil
+gitlab_rails['gitlab_signup_enabled'] = nil
+gitlab_rails['gitlab_signin_enabled'] = nil
+gitlab_rails['gitlab_restricted_visibility_levels'] = nil
+gitlab_rails['gitlab_default_projects_features_issues'] = nil
+gitlab_rails['gitlab_default_projects_features_merge_requests'] = nil
+gitlab_rails['gitlab_default_projects_features_wiki'] = nil
+gitlab_rails['gitlab_default_projects_features_wall'] = nil
+gitlab_rails['gitlab_default_projects_features_snippets'] = nil
+gitlab_rails['gitlab_default_projects_features_visibility_level'] = nil
+gitlab_rails['gitlab_repository_downloads_path'] = nil
+gitlab_rails['issues_tracker_redmine'] = false
+gitlab_rails['issues_tracker_redmine_title'] = "Redmine"
+gitlab_rails['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
+gitlab_rails['issues_tracker_redmine_issues_url'] = "http://redmine.sample/issues/:id"
+gitlab_rails['issues_tracker_redmine_new_issue_url'] = "http://redmine.sample/projects/:issues_tracker_id/issues/new"
+gitlab_rails['issues_tracker_jira'] = false
+gitlab_rails['issues_tracker_jira_title'] = "Atlassian Jira"
+gitlab_rails['issues_tracker_jira_project_url'] = "http://jira.sample/issues/?jql=project=:issues_tracker_id"
+gitlab_rails['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
+gitlab_rails['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
+gitlab_rails['gravatar_enabled'] = true
+gitlab_rails['gravatar_plain_url'] = nil
+gitlab_rails['gravatar_ssl_url'] = nil
+gitlab_rails['ldap_enabled'] = false
+gitlab_rails['ldap_servers'] = []
+
+####
+# These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
+# Check
+# https://gitlab.com/gitlab-org/omnibus-gitlab/blob/935ab9e1700bfe8db6ba084e3687658d8921716f/README.md#setting-up-ldap-sign-in
+# for the new syntax.
+gitlab_rails['ldap_host'] = nil
+gitlab_rails['ldap_base'] = nil
+gitlab_rails['ldap_port'] = nil
+gitlab_rails['ldap_uid'] = nil
+gitlab_rails['ldap_method'] = nil
+gitlab_rails['ldap_bind_dn'] = nil
+gitlab_rails['ldap_password'] = nil
+gitlab_rails['ldap_allow_username_or_email_login'] = nil
+gitlab_rails['ldap_user_filter'] = nil
+gitlab_rails['ldap_group_base'] = nil
+gitlab_rails['ldap_admin_group'] = nil
+gitlab_rails['ldap_sync_ssh_keys'] = nil
+gitlab_rails['ldap_sync_time'] = nil
+gitlab_rails['ldap_active_directory'] = nil
+####
+
+gitlab_rails['omniauth_enabled'] = false
+gitlab_rails['omniauth_allow_single_sign_on'] = nil
+gitlab_rails['omniauth_block_auto_created_users'] = nil
+gitlab_rails['omniauth_providers'] = []
+gitlab_rails['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
+gitlab_rails['satellites_timeout'] = nil
+gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+gitlab_rails['backup_keep_time'] = nil
+gitlab_rails['backup_upload_connection'] = nil
+gitlab_rails['backup_upload_remote_directory'] = nil
+gitlab_rails['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
+gitlab_rails['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
+gitlab_rails['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
+gitlab_rails['gitlab_shell_upload_pack'] = nil
+gitlab_rails['gitlab_shell_receive_pack'] = nil
+gitlab_rails['gitlab_shell_ssh_port'] = nil
+gitlab_rails['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
+gitlab_rails['git_max_size'] = nil
+gitlab_rails['git_timeout'] = nil
+gitlab_rails['extra_google_analytics_id'] = nil
+gitlab_rails['extra_piwik_url'] = nil
+gitlab_rails['extra_piwik_site_id'] = nil
+gitlab_rails['extra_sign_in_text'] = nil
+
+gitlab_rails['aws_enable'] = false
+gitlab_rails['aws_access_key_id'] = nil
+gitlab_rails['aws_secret_access_key'] = nil
+gitlab_rails['aws_bucket'] = nil
+gitlab_rails['aws_region'] = nil
+
+gitlab_rails['db_adapter'] = "postgresql"
+gitlab_rails['db_encoding'] = "unicode"
+gitlab_rails['db_database'] = "gitlabhq_production"
+gitlab_rails['db_pool'] = 10
+gitlab_rails['db_username'] = "gitlab"
+gitlab_rails['db_password'] = nil
+gitlab_rails['db_host'] = nil
+gitlab_rails['db_port'] = 5432
+gitlab_rails['db_socket'] = nil
+
+gitlab_rails['redis_host'] = "127.0.0.1"
+gitlab_rails['redis_port'] = nil
+gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+
+gitlab_rails['smtp_enable'] = false
+gitlab_rails['smtp_address'] = nil
+gitlab_rails['smtp_port'] = nil
+gitlab_rails['smtp_user_name'] = nil
+gitlab_rails['smtp_password'] = nil
+gitlab_rails['smtp_domain'] = nil
+gitlab_rails['smtp_authentication'] = nil
+gitlab_rails['smtp_enable_starttls_auto'] = nil
+gitlab_rails['smtp_tls'] = nil
+gitlab_rails['smtp_openssl_verify_mode'] = nil
+
+gitlab_rails['webhook_timeout'] = nil
+
+gitlab_rails['root_password'] = nil
+
+####
+# Unicorn
+####
+unicorn['enable'] = true
+unicorn['ha'] = false
+unicorn['log_directory'] = "/var/log/gitlab/unicorn"
+unicorn['worker_processes'] = 2
+unicorn['listen'] = '127.0.0.1'
+unicorn['port'] = 8080
+unicorn['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
+unicorn['tcp_nopush'] = true
+unicorn['backlog_socket'] = 1024
+unicorn['worker_timeout'] = 60
+
+####
+# Sidekiq
+####
+sidekiq['enable'] = true
+sidekiq['ha'] = false
+sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
+sidekiq['shutdown_timeout'] = 4
+
+
+###
+# gitlab-shell
+###
+gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+gitlab_shell['log_level'] = nil
+gitlab_shell['audit_usernames'] = nil
+gitlab_shell['git_data_directory'] = "/var/opt/gitlab/git-data"
+gitlab_shell['http_settings'] = nil
+
+
+###
+# PostgreSQL
+###
+postgresql['enable'] = true
+postgresql['ha'] = false
+postgresql['dir'] = "/var/opt/gitlab/postgresql"
+postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
+postgresql['log_directory'] = "/var/log/gitlab/postgresql"
+postgresql['username'] = "gitlab-psql"
+postgresql['uid'] = nil
+postgresql['gid'] = nil
+postgresql['shell'] = "/bin/sh"
+postgresql['home'] = "/var/opt/gitlab/postgresql"
+postgresql['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
+postgresql['sql_user'] = "gitlab"
+postgresql['sql_ci_user'] = "gitlab_ci"
+postgresql['port'] = 5432
+postgresql['listen_address'] = nil
+postgresql['max_connections'] = 200
+postgresql['md5_auth_cidr_addresses'] = []
+postgresql['trust_auth_cidr_addresses'] = []
+postgresql['shmmax'] = kernel['machine'] =~ /x86_64/ ? 17179869184 : 4294967295
+postgresql['shmall'] = kernel['machine'] =~ /x86_64/ ? 4194304 : 1048575
+
+# Resolves CHEF-3889
+if (node['memory']['total'].to_i / 4) > ((node['gitlab']['postgresql']['shmmax'].to_i / 1024) - 2097152)
+  # guard against setting shared_buffers > shmmax on hosts with installed RAM > 64GB
+  # use 2GB less than shmmax as the default for these large memory machines
+  ['postgresql']['shared_buffers'] = "14336MB"
+else
+  ['postgresql']['shared_buffers'] = "#{(node['memory']['total'].to_i / 4) / (1024)}MB"
+end
+
+postgresql['work_mem'] = "8MB"
+postgresql['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
+postgresql['checkpoint_segments'] = 10
+postgresql['checkpoint_timeout'] = "5min"
+postgresql['checkpoint_completion_target'] = 0.9
+postgresql['checkpoint_warning'] = "30s"
+
+
+####
+# Redis
+####
+redis['enable'] = true
+redis['ha'] = false
+redis['dir'] = "/var/opt/gitlab/redis"
+redis['log_directory'] = "/var/log/gitlab/redis"
+redis['username'] = "gitlab-redis"
+redis['uid'] = nil
+redis['gid'] = nil
+redis['shell'] = "/bin/nologin"
+redis['home'] = "/var/opt/gitlab/redis"
+redis['port'] = 0
+redis['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
+redis['unixsocketperm'] = "777"
+
+####
+# Web server
+####
+# Username for the webserver user
+['username'] = 'gitlab-www'
+['group'] = 'gitlab-www'
+['uid'] = nil
+['gid'] = nil
+['shell'] = '/bin/false'
+# When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
+['external_users'] = []
+
+####
+# Nginx
+####
+nginx['enable'] = true
+nginx['ha'] = false
+nginx['dir'] = "/var/opt/gitlab/nginx"
+nginx['log_directory'] = "/var/log/gitlab/nginx"
+nginx['worker_processes'] = node['cpu']['total'].to_i
+nginx['worker_connections'] = 10240
+nginx['sendfile'] = 'on'
+nginx['tcp_nopush'] = 'on'
+nginx['tcp_nodelay'] = 'on'
+nginx['gzip'] = "on"
+nginx['gzip_http_version'] = "1.0"
+nginx['gzip_comp_level'] = "2"
+nginx['gzip_proxied'] = "any"
+nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+nginx['keepalive_timeout'] = 65
+nginx['client_max_body_size'] = '250m'
+nginx['cache_max_size'] = '5000m'
+nginx['redirect_http_to_https'] = false
+nginx['redirect_http_to_https_port'] = 80
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
+nginx['ssl_prefer_server_ciphers'] = "on"
+nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+nginx['listen_addresses'] = ['*']
+nginx['custom_gitlab_server_config'] = nil
+nginx['custom_nginx_config'] = nil
+
+###
+# Logging
+###
+logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
+logging['svlogd_num'] = 30 # keep 30 rotated log files
+logging['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 hours
+logging['svlogd_filter'] = "gzip" # compress logs with gzip
+logging['svlogd_udp'] = nil # transmit log messages via UDP
+logging['svlogd_prefix'] = nil # custom prefix for log messages
+logging['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
+logging['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
+logging['logrotate_frequency'] = "daily" # rotate logs daily
+logging['logrotate_size'] = nil # do not rotate by size by default
+logging['logrotate_rotate'] = 30 # keep 30 rotated logs
+logging['logrotate_compress'] = "compress" # see 'man logrotate'
+logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
+logging['logrotate_postrotate'] = nil # no postrotate command by default
+
+###
+# Remote syslog
+###
+remote_syslog['enable'] = false
+remote_syslog['ha'] = false
+remote_syslog['dir'] = "/var/opt/gitlab/remote-syslog"
+remote_syslog['log_directory'] = "/var/log/gitlab/remote-syslog"
+remote_syslog['destination_host'] = "localhost"
+remote_syslog['destination_port'] = 514
+remote_syslog['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+
+###
+# Logrotate
+###
+logrotate['enable'] = true
+logrotate['ha'] = false
+logrotate['dir'] = "/var/opt/gitlab/logrotate"
+logrotate['log_directory'] = "/var/log/gitlab/logrotate"
+logrotate['services'] = %w{nginx unicorn gitlab-rails gitlab-shell}
+logrotate['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
+logrotate['post_sleep'] = 3000 # wait 50 minutes after rotating
+
+###
+# High Availability
+###
+high_availability['mountpoint'] = nil
+
+####
+# GitLab CI Rails app
+####
+gitlab_ci['enable'] = false
+gitlab_ci['dir'] = "/var/opt/gitlab/gitlab-ci"
+gitlab_ci['log_directory'] = "/var/log/gitlab/gitlab-ci"
+gitlab_ci['environment'] = 'production'
+gitlab_ci['env'] = {
+  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
+  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+}
+gitlab_ci['schedule_builds_minute'] = "0"
+
+gitlab_ci['username'] = "gitlab-ci"
+gitlab_ci['uid'] = nil
+gitlab_ci['gid'] = nil
+gitlab_ci['shell'] = "/bin/false"
+
+# application.yml top-level settings
+gitlab_ci['gitlab_server_urls'] = nil
+
+# application.yml, gitlab_ci section
+gitlab_ci['gitlab_ci_host'] = node['fqdn']
+gitlab_ci['gitlab_ci_port'] = 80
+gitlab_ci['gitlab_ci_https'] = false
+gitlab_ci['gitlab_ci_email_from'] = nil
+gitlab_ci['gitlab_ci_support_email'] = nil
+gitlab_ci['gitlab_ci_all_broken_builds'] = nil
+gitlab_ci['gitlab_ci_add_committer'] = nil
+
+# application.yml, gravatar section
+gitlab_ci['gravatar_enabled'] = true
+gitlab_ci['gravatar_plain_url'] = nil
+gitlab_ci['gravatar_ssl_url'] = nil
+
+# database.yml settings
+gitlab_ci['db_adapter'] = "postgresql"
+gitlab_ci['db_encoding'] = "unicode"
+gitlab_ci['db_database'] = "gitlab_ci_production"
+gitlab_ci['db_pool'] = 10
+gitlab_ci['db_username'] = "gitlab_ci"
+gitlab_ci['db_password'] = nil
+gitlab_ci['db_host'] = nil
+gitlab_ci['db_port'] = 5432
+gitlab_ci['db_socket'] = nil
+
+# resque.yml settings
+gitlab_ci['redis_host'] = "127.0.0.1"
+gitlab_ci['redis_port'] = nil
+gitlab_ci['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
+
+# config/initializers/smtp_settings.rb settings
+gitlab_ci['smtp_enable'] = false
+gitlab_ci['smtp_address'] = nil
+gitlab_ci['smtp_port'] = nil
+gitlab_ci['smtp_user_name'] = nil
+gitlab_ci['smtp_password'] = nil
+gitlab_ci['smtp_domain'] = nil
+gitlab_ci['smtp_authentication'] = nil
+gitlab_ci['smtp_enable_starttls_auto'] = nil
+gitlab_ci['smtp_tls'] = nil
+gitlab_ci['smtp_openssl_verify_mode'] = nil
+
+####
+# CI Unicorn
+####
+ci_unicorn = ['unicorn'].dup
+ci_unicorn['enable'] = false
+ci_unicorn['log_directory'] = "/var/log/gitlab/ci-unicorn"
+ci_unicorn['port'] = 8181
+ci_unicorn['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
+ci_unicorn['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
+
+####
+# CI Sidekiq
+####
+ci_sidekiq = ['sidekiq'].dup
+ci_sidekiq['enable'] = false
+ci_sidekiq['log_directory'] = "/var/log/gitlab/ci-sidekiq"
+
+####
+# CI Redis
+####
+ci_redis = ['redis'].dup
+ci_redis['enable'] = false
+ci_redis['dir'] = "/var/opt/gitlab/ci-redis"
+ci_redis['log_directory'] = "/var/log/gitlab/ci-redis"
+ci_redis['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
+
+####
+# CI NGINX
+####
+ci_nginx = ['nginx'].dup
+ci_nginx['enable'] = false
