@@ -106,7 +106,7 @@ module Gitlab
       uri = URI(external_url.to_s)
 
       unless uri.host
-        raise "External URL must include a FQDN"
+        raise "GitLab external URL must include a schema and FQDN, e.g. http://gitlab.example.com/"
       end
       Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
@@ -193,7 +193,7 @@ module Gitlab
       uri = URI(ci_external_url.to_s)
 
       unless uri.host
-        raise "CI external URL must include a FQDN"
+        raise "GitLab CI external URL must must include a schema and FQDN, e.g. http://ci.example.com/"
       end
       Gitlab['gitlab_ci']['gitlab_ci_host'] = uri.host
       Gitlab['gitlab_ci']['gitlab_ci_email_from'] ||= "gitlab-ci@#{uri.host}"

@@ -29,7 +29,7 @@ fi
 if ! [ -e /etc/gitlab/gitlab.rb ] ; then
   mkdir -p /etc/gitlab
   cat > /etc/gitlab/gitlab.rb <<EOF
-# Check and change the external_url to the address your users will type in their browser
+# Check and change the external_url to the address your users will type in their browser, e.g. http://gitlab.example.com/
 external_url 'http://${external_url}'
 EOF
   chmod 600 /etc/gitlab/gitlab.rb
