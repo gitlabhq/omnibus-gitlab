@@ -20,7 +20,7 @@ done
 # Try collecting fqdn if it is set correctly
 fqdn=$(/bin/hostname -f)
 if [[ ! -z ${fqdn} ]]; then
-  external_url=${fqdn}
+  external_url="http://${fqdn}"
 else
   external_url="http://gitlab.example.com"
 fi
@@ -28,10 +28,8 @@ fi
 # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
 if ! [ -e /etc/gitlab/gitlab.rb ] ; then
   mkdir -p /etc/gitlab
-  cat > /etc/gitlab/gitlab.rb <<EOF
-# Check and change the external_url to the address your users will type in their browser
-external_url 'http://${external_url}'
-EOF
+  cp /opt/gitlab/etc/gitlab.rb.template /etc/gitlab/gitlab.rb
+  sed -i 's!GENERATED_EXTERNAL_URL!'$external_url'!g' /etc/gitlab/gitlab.rb
   chmod 600 /etc/gitlab/gitlab.rb
 fi
 
@@ -52,7 +50,7 @@ echo "Configure and start GitLab by running the following command:"
 echo
 echo "sudo gitlab-ctl reconfigure"
 echo
-echo "GitLab should be reachable at http://${external_url}"
+echo "GitLab should be reachable at ${external_url}"
 echo "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
 echo "And running reconfigure again."
 echo
