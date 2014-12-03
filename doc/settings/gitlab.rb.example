@@ -3,7 +3,9 @@
 # https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
 external_url 'http://gitlab.example.com'
 
+
 # Note: configuration settings below are optional
+# Uncomment and change the value.
 ##
 # gitlab.yml configuration
 ##
@@ -44,18 +46,39 @@ external_url 'http://gitlab.example.com'
 
 # gitlab_rails['ldap_enabled'] = false
 # gitlab_rails['ldap_servers'] = YAML.load <<-EOS # remember to close this block with 'EOS' below
-# main: # 'main' is the GitLab 'provider ID' of this LDAP server
-#   label: 'LDAP'
-#   host: '_your_ldap_server'
-#   port: 636
-#   uid: 'sAMAccountName'
-#   method: 'ssl' # "tls" or "ssl" or "plain"
-#   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-#   password: '_the_password_of_the_bind_user'
-#   active_directory: true
-#   allow_username_or_email_login: false
-#   base: ''
-#   user_filter: ''
+#   main: # 'main' is the GitLab 'provider ID' of this LDAP server
+#     label: 'LDAP'
+#     host: '_your_ldap_server'
+#     port: 636
+#     uid: 'sAMAccountName'
+#     method: 'ssl' # "tls" or "ssl" or "plain"
+#     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+#     password: '_the_password_of_the_bind_user'
+#     active_directory: true
+#     allow_username_or_email_login: false
+#     base: ''
+#     user_filter: ''
+#     ## EE only
+#     group_base: ''
+#     admin_group: ''
+#     sync_ssh_keys: false
+#
+#   secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
+#     label: 'LDAP'
+#     host: '_your_ldap_server'
+#     port: 636
+#     uid: 'sAMAccountName'
+#     method: 'ssl' # "tls" or "ssl" or "plain"
+#     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+#     password: '_the_password_of_the_bind_user'
+#     active_directory: true
+#     allow_username_or_email_login: false
+#     base: ''
+#     user_filter: ''
+#     ## EE only
+#     group_base: ''
+#     admin_group: ''
+#     sync_ssh_keys: false
 # EOS
 
 ## For setting up omniauth
@@ -91,20 +114,10 @@ external_url 'http://gitlab.example.com'
 ## If you want to use a single non-default directory to store git data use:
 # git_data_dir "/var/opt/gitlab/git-data"
 
-## Alternatively, you can use a separate path for each set of data
-# gitlab_shell['git_data_directory'] = "/var/opt/gitlab/git-data"
-# gitlab_rails['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
-# gitlab_rails['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
-
 # gitlab_rails['satellites_timeout'] = 30
 
 ## GitLab Shell settings for GitLab
-# gitlab_rails['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
-# gitlab_rails['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
-# gitlab_rails['gitlab_shell_upload_pack'] = true
-# gitlab_rails['gitlab_shell_receive_pack'] = true
 # gitlab_rails['gitlab_shell_ssh_port'] = 22
-# gitlab_rails['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
 # gitlab_rails['git_max_size'] = 20971520
 # gitlab_rails['git_timeout'] = 10
 
@@ -116,38 +129,30 @@ external_url 'http://gitlab.example.com'
 #   ![Company Logo](http://www.companydomain.com/logo.png)
 #   [Learn more about CompanyName](http://www.companydomain.com/)'
 
-
-# gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
-# gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
-# gitlab_rails['environment'] = 'production'
 # gitlab_rails['env'] = {
 #   'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 # }
 
+# We do not recommend changing these directories.
+# gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
+# gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
+
 ###
 ## GitLab application settings
 ###
 
-# gitlab_rails['internal_api_url'] = nil
 # gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 # gitlab_rails['rate_limit_requests_per_period'] = 10
 # gitlab_rails['rate_limit_period'] = 60
 
-###
-## Store GitLab attachments on AWS S3
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#storing-user-attachments-on-amazon-s3
-###
-
-# gitlab_rails['aws_enable'] = false
-# gitlab_rails['aws_access_key_id'] = nil
-# gitlab_rails['aws_secret_access_key'] = nil
-# gitlab_rails['aws_bucket'] = nil
-# gitlab_rails['aws_region'] = nil
+# Change the default admin password.
+# gitlab_rails['root_password'] = "password"
 
 ###
 ## GitLab database settings
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings
+## Only needed if you use an external database.
 ###
 
 # gitlab_rails['db_adapter'] = "postgresql"
@@ -159,11 +164,12 @@ external_url 'http://gitlab.example.com'
 # gitlab_rails['db_host'] = nil
 # gitlab_rails['db_port'] = 5432
 # gitlab_rails['db_socket'] = nil
-# gitlab_rails['root_password'] = nil
+
 
 ###
 ## GitLab redis settings
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings
+## Connect to your own redis instance.
 ###
 
 # gitlab_rails['redis_host'] = "127.0.0.1"
@@ -173,6 +179,7 @@ external_url 'http://gitlab.example.com'
 ###
 ## GitLab email server settings
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings
+## Use smtp instead of sendmail/postfix.
 ###
 
 # gitlab_rails['smtp_enable'] = true
@@ -186,47 +193,45 @@ external_url 'http://gitlab.example.com'
 # gitlab_rails['smtp_tls'] = false
 # gitlab_rails['smtp_openssl_verify_mode'] = false
 
-## Do not start the services on setup.
-# bootstrap['enable'] = true
-
 ###
 ## GitLab user
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#changing-the-name-of-the-git-user-group
+## Modify default git user.
 ###
 
 # user['username'] = "git"
 # user['group'] = "git"
 # user['uid'] = nil
 # user['gid'] = nil
-# # The shell for the chef services user
+# # The shell for the git user
 # user['shell'] = "/bin/sh"
-# # The home directory for the chef services user
+# # The home directory for the git user
 # user['home'] = "/var/opt/gitlab"
 # user['git_user_name'] = "GitLab"
 # user['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 ###
 ## GitLab Unicorn
+## Tweak unicorn settings.
 ###
 
-# unicorn['enable'] = true
-# unicorn['ha'] = false
-# unicorn['log_directory'] = "/var/log/gitlab/unicorn"
+# unicorn['worker_timeout'] = 60
 # unicorn['worker_processes'] = 2
+
+## Advanced settings
 # unicorn['listen'] = '127.0.0.1'
 # unicorn['port'] = 8080
 # unicorn['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 # unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 # unicorn['tcp_nopush'] = true
 # unicorn['backlog_socket'] = 1024
-# unicorn['worker_timeout'] = 60
+# We do not recommend changing this setting
+# unicorn['log_directory'] = "/var/log/gitlab/unicorn"
 
 ###
 ## GitLab Sidekiq
 ###
 
-# sidekiq['enable'] = true
-# sidekiq['ha'] = false
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['shutdown_timeout'] = 4
 
@@ -235,20 +240,24 @@ external_url 'http://gitlab.example.com'
 ## gitlab-shell
 ###
 
-# gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
-# gitlab_shell['log_level'] = 'INFO'
 # gitlab_shell['audit_usernames'] = false
+# gitlab_shell['log_level'] = 'INFO'
 # gitlab_shell['http_settings'] = { user: 'username', password: 'password', ca_file: '/etc/ssl/cert.pem', ca_path: '/etc/pki/tls/certs', self_signed_cert: false}
-
+# gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 
 ###
 ## GitLab PostgreSQL
 ###
 
 # postgresql['enable'] = true
+# postgresql['listen_address'] = nil
+# postgresql['port'] = 5432
+# postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
+# postgresql['shared_buffers'] = "256MB" # recommend value is 1/4 of total RAM, up to 14GB.
+
+## Advanced settings
 # postgresql['ha'] = false
 # postgresql['dir'] = "/var/opt/gitlab/postgresql"
-# postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
 # postgresql['log_directory'] = "/var/log/gitlab/postgresql"
 # postgresql['username'] = "gitlab-psql"
 # postgresql['uid'] = nil
@@ -258,16 +267,11 @@ external_url 'http://gitlab.example.com'
 # postgresql['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 # postgresql['sql_user'] = "gitlab"
 # postgresql['sql_ci_user'] = "gitlab_ci"
-# postgresql['port'] = 5432
-# postgresql['listen_address'] = nil
 # postgresql['max_connections'] = 200
 # postgresql['md5_auth_cidr_addresses'] = []
 # postgresql['trust_auth_cidr_addresses'] = []
 # postgresql['shmmax'] =  17179869184 # or 4294967295
 # postgresql['shmall'] =  4194304 # or 1048575
-# # See CHEF-3889
-# postgresql['shared_buffers'] = "14336MB"
-
 # postgresql['work_mem'] = "8MB"
 # postgresql['effective_cache_size'] = "1MB"
 # postgresql['checkpoint_segments'] = 10
@@ -278,33 +282,27 @@ external_url 'http://gitlab.example.com'
 
 ###
 ## GitLab Redis
+## Can be disabled if you are using your own redis instance.
 ###
 
 # redis['enable'] = true
-# redis['ha'] = false
-# redis['dir'] = "/var/opt/gitlab/redis"
-# redis['log_directory'] = "/var/log/gitlab/redis"
 # redis['username'] = "gitlab-redis"
 # redis['uid'] = nil
 # redis['gid'] = nil
-# redis['shell'] = "/bin/nologin"
-# redis['home'] = "/var/opt/gitlab/redis"
-# redis['port'] = 0
-# redis['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
-# redis['unixsocketperm'] = "777"
+
 
 ###
 ## GitLab Web server
 ## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md#using-a-non-bundled-web-server
+## When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.
 ###
 
+# web_server['external_users'] = []
 # web_server['username'] = 'gitlab-www'
 # web_server['group'] = 'gitlab-www'
 # web_server['uid'] = nil
 # web_server['gid'] = nil
-# web_server['shell'] = '/bin/false'
-# # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
-# web_server['external_users'] = []
+
 
 ###
 ## GitLab Nginx
@@ -312,22 +310,7 @@ external_url 'http://gitlab.example.com'
 ###
 
 # nginx['enable'] = true
-# nginx['ha'] = false
-# nginx['dir'] = "/var/opt/gitlab/nginx"
-# nginx['log_directory'] = "/var/log/gitlab/nginx"
-# nginx['worker_processes'] = 4
-# nginx['worker_connections'] = 10240
-# nginx['sendfile'] = 'on'
-# nginx['tcp_nopush'] = 'on'
-# nginx['tcp_nodelay'] = 'on'
-# nginx['gzip'] = "on"
-# nginx['gzip_http_version'] = "1.0"
-# nginx['gzip_comp_level'] = "2"
-# nginx['gzip_proxied'] = "any"
-# nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
-# nginx['keepalive_timeout'] = 65
 # nginx['client_max_body_size'] = '250m'
-# nginx['cache_max_size'] = '5000m'
 # nginx['redirect_http_to_https'] = false
 # nginx['redirect_http_to_https_port'] = 80
 # nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
@@ -341,6 +324,24 @@ external_url 'http://gitlab.example.com'
 # nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
 
+## Advanced settings
+# nginx['dir'] = "/var/opt/gitlab/nginx"
+# nginx['log_directory'] = "/var/log/gitlab/nginx"
+# nginx['worker_processes'] = 4
+# nginx['worker_connections'] = 10240
+# nginx['sendfile'] = 'on'
+# nginx['tcp_nopush'] = 'on'
+# nginx['tcp_nodelay'] = 'on'
+# nginx['gzip'] = "on"
+# nginx['gzip_http_version'] = "1.0"
+# nginx['gzip_comp_level'] = "2"
+# nginx['gzip_proxied'] = "any"
+# nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+# nginx['keepalive_timeout'] = 65
+# nginx['cache_max_size'] = '5000m'
+
+
+
 ###
 ## GitLab Logging
 ## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logs
@@ -352,45 +353,23 @@ external_url 'http://gitlab.example.com'
 # logging['svlogd_filter'] = "gzip" # compress logs with gzip
 # logging['svlogd_udp'] = nil # transmit log messages via UDP
 # logging['svlogd_prefix'] = nil # custom prefix for log messages
-# logging['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
-# logging['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
 # logging['logrotate_frequency'] = "daily" # rotate logs daily
 # logging['logrotate_size'] = nil # do not rotate by size by default
 # logging['logrotate_rotate'] = 30 # keep 30 rotated logs
 # logging['logrotate_compress'] = "compress" # see 'man logrotate'
 # logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
 # logging['logrotate_postrotate'] = nil # no postrotate command by default
-
-###
-## Remote syslog
-###
-
-# remote_syslog['enable'] = false
-# remote_syslog['ha'] = false
-# remote_syslog['dir'] = "/var/opt/gitlab/remote-syslog"
-# remote_syslog['log_directory'] = "/var/log/gitlab/remote-syslog"
-# remote_syslog['destination_host'] = "localhost"
-# remote_syslog['destination_port'] = 514
-# remote_syslog['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+# Enterprise Edition only
+# logging['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
+# logging['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
 
 ###
 ## Logrotate
 ## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logrotate
+## You can disable built in logrotate feature.
 ###
 
 # logrotate['enable'] = true
-# logrotate['ha'] = false
-# logrotate['dir'] = "/var/opt/gitlab/logrotate"
-# logrotate['log_directory'] = "/var/log/gitlab/logrotate"
-# logrotate['services'] = %w{nginx unicorn gitlab-rails gitlab-shell}
-# logrotate['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
-# logrotate['post_sleep'] = 3000 # wait 50 minutes after rotating
-
-###
-## High Availability
-###
-# high_availability['mountpoint'] = nil
-
 
 ###
 ## Url on which GitLab CI will be reachable
@@ -418,6 +397,7 @@ external_url 'http://gitlab.example.com'
 ###
 ## GitLab CI database settings
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings
+## Only needed if you use an external database.
 ###
 
 # gitlab_ci['db_adapter'] = "postgresql"
@@ -433,6 +413,7 @@ external_url 'http://gitlab.example.com'
 ###
 ## GitLab CI redis settings
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings
+## Connect to your own redis instance.
 ###
 
 # gitlab_ci['redis_host'] = "127.0.0.1"
@@ -460,94 +441,47 @@ external_url 'http://gitlab.example.com'
 ## GitLab CI
 ###
 
-# gitlab_ci['enable'] = false
-# gitlab_ci['dir'] = "/var/opt/gitlab/gitlab-ci"
-# gitlab_ci['log_directory'] = "/var/log/gitlab/gitlab-ci"
-# gitlab_ci['environment'] = 'production'
+# gitlab_ci['schedule_builds_minute'] = "0"
 # gitlab_ci['env'] = {
 #   'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 # }
-# gitlab_ci['schedule_builds_minute'] = "0"
 
 # gitlab_ci['username'] = "gitlab-ci"
 # gitlab_ci['uid'] = nil
 # gitlab_ci['gid'] = nil
-# gitlab_ci['shell'] = "/bin/false"
+
 
 ###
 ## GitLab CI Unicorn
+## Tweak unicorn settings.
 ####
 
-# ci_unicorn['enable'] = true
-# ci_unicorn['ha'] = false
-# ci_unicorn['log_directory'] = "/var/log/gitlab/ci-unicorn"
 # ci_unicorn['worker_processes'] = 2
+# ci_unicorn['worker_timeout'] = 60
+## Advanced settings
 # ci_unicorn['listen'] = '127.0.0.1'
 # ci_unicorn['port'] = 8181
 # ci_unicorn['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
-# ci_unicorn['pidfile'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
+# ci_unicorn['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
 # ci_unicorn['tcp_nopush'] = true
 # ci_unicorn['backlog_socket'] = 1024
-# ci_unicorn['worker_timeout'] = 60
 
-###
-## GitLab CI Sidekiq
-###
-
-# ci_sidekiq['enable'] = true
-# ci_sidekiq['ha'] = false
-# ci_sidekiq['log_directory'] = "/var/log/gitlab/ci-sidekiq"
-# ci_sidekiq['shutdown_timeout'] = 4
 
 ###
 ## GitLab CI Redis
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md
+## You can turn off bundled redis if you want to use your own redis instanance
 ###
 
 # ci_redis['enable'] = true
-# ci_redis['ha'] = false
-# ci_redis['dir'] = "/var/opt/gitlab/ci-redis"
-# ci_redis['log_directory'] = "/var/opt/gitlab/ci-redis"
-# ci_redis['username'] = "gitlab-redis"
-# ci_redis['uid'] = nil
-# ci_redis['gid'] = nil
-# ci_redis['shell'] = "/bin/nologin"
-# ci_redis['home'] = "/var/opt/gitlab/redis"
-# ci_redis['port'] = 0
-# ci_redis['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
-# ci_redis['unixsocketperm'] = "777"
+
 
 ###
 ## GitLab CI NGINX
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md
+## You can tell the bundled NGINX that it should not serve up GitLab CI by setting ci_nginx['enable'] to false.
 ###
 
 # ci_nginx['enable'] = false
-# ci_nginx['ha'] = false
-# ci_nginx['dir'] = "/var/opt/gitlab/nginx"
-# ci_nginx['log_directory'] = "/var/log/gitlab/nginx"
-# ci_nginx['worker_processes'] = 4
-# ci_nginx['worker_connections'] = 10240
-# ci_nginx['sendfile'] = 'on'
-# ci_nginx['tcp_nopush'] = 'on'
-# ci_nginx['tcp_nodelay'] = 'on'
-# ci_nginx['gzip'] = "on"
-# ci_nginx['gzip_http_version'] = "1.0"
-# ci_nginx['gzip_comp_level'] = "2"
-# ci_nginx['gzip_proxied'] = "any"
-# ci_nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
-# ci_nginx['keepalive_timeout'] = 65
-# ci_nginx['client_max_body_size'] = '250m'
-# ci_nginx['cache_max_size'] = '5000m'
-# ci_nginx['redirect_http_to_https'] = false
-# ci_nginx['redirect_http_to_https_port'] = 80
-# ci_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
-# ci_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-# ci_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
-# ci_nginx['ssl_prefer_server_ciphers'] = "on"
-# ci_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-# ci_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# ci_nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# ci_nginx['listen_addresses'] = ['*']
-# ci_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
+
