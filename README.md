@@ -478,23 +478,6 @@ web_server['uid'] = 1237
 web_server['gid'] = 1237
 ```
 
-### Storing user attachments on Amazon S3
-
-By default, attachments are stored in `/var/opt/gitlab/gitlab-rails/uploads`.
-Instead of using local storage you can also store the user attachments for your
-GitLab instance on Amazon S3.
-
-__This currently only works if you are packaging a forked version of GitLab.__
-
-```
-# /etc/gitlab/gitlab.rb
-gitlab_rails['aws_enable'] = true
-gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
-gitlab_rails['aws_secret_access_key'] = 'secret'
-gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
-gitlab_rails['aws_region'] = 'us-east-1'
-```
-
 ### Sending application email via SMTP
 
 See [doc/settings/smtp.md](doc/settings/smtp.md).
