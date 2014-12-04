@@ -1,11 +1,11 @@
-# Url on which GitLab will be reachable.
-# For more details on configuring external_url see:
-# https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
+## Url on which GitLab will be reachable.
+## For more details on configuring external_url see:
+## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
 external_url 'GENERATED_EXTERNAL_URL'
 
 
-# Note: configuration settings below are optional.
-# Uncomment and change the value.
+## Note: configuration settings below are optional.
+## Uncomment and change the value.
 ############################
 # gitlab.yml configuration #
 ############################
@@ -149,11 +149,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Change the default admin password.
 # gitlab_rails['root_password'] = "password"
 
-###
-## GitLab database settings
+############################
+# GitLab database settings #
+############################
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings
 ## Only needed if you use an external database.
-###
 
 # gitlab_rails['db_adapter'] = "postgresql"
 # gitlab_rails['db_encoding'] = "unicode"
@@ -166,21 +166,21 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_socket'] = nil
 
 
-#######################################################################################################################################
-# GitLab redis settings                                                                                                               #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings #
-# Connect to your own redis instance.                                                                                                 #
-#######################################################################################################################################
+#########################
+# GitLab redis settings #
+#########################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings
+## Connect to your own redis instance.
 
 # gitlab_rails['redis_host'] = "127.0.0.1"
 # gitlab_rails['redis_port'] = nil
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
-#####################################################################################################################################
-# GitLab email server settings                                                                                                      #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings #
-# Use smtp instead of sendmail/postfix.                                                                                             #
-#####################################################################################################################################
+################################
+# GitLab email server settings #
+################################
+# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings
+# Use smtp instead of sendmail/postfix.
 
 # gitlab_rails['smtp_enable'] = true
 # gitlab_rails['smtp_address'] = "smtp.server"
@@ -193,11 +193,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_tls'] = false
 # gitlab_rails['smtp_openssl_verify_mode'] = false
 
-####################################################################################################################################################
-# GitLab user                                                                                                                                      #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#changing-the-name-of-the-git-user-group #
-# Modify default git user.                                                                                                                         #
-####################################################################################################################################################
+###############
+# GitLab user #
+###############
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#changing-the-name-of-the-git-user-group
+## Modify default git user.
+
 
 # user['username'] = "git"
 # user['group'] = "git"
@@ -210,10 +211,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # user['git_user_name'] = "GitLab"
 # user['git_user_email'] = "gitlab@#{node['fqdn']}"
 
-###########################
-# GitLab Unicorn          #
-# Tweak unicorn settings. #
-###########################
+##################
+# GitLab Unicorn #
+##################
+## Tweak unicorn settings.
 
 # unicorn['worker_timeout'] = 60
 # unicorn['worker_processes'] = 2
@@ -280,10 +281,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['checkpoint_warning'] = "30s"
 
 
-#############################################################
-# GitLab Redis                                              #
-# Can be disabled if you are using your own redis instance. #
-#############################################################
+################
+# GitLab Redis #
+################
+## Can be disabled if you are using your own redis instance.
 
 # redis['enable'] = true
 # redis['username'] = "gitlab-redis"
@@ -291,11 +292,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['gid'] = nil
 
 
-########################################################################################################################################################
-# GitLab Web server                                                                                                                                    #
-# see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md#using-a-non-bundled-web-server #
-# When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.                                             #
-########################################################################################################################################################
+#####################
+# GitLab Web server #
+#####################
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md#using-a-non-bundled-web-server
+## When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.
 
 # web_server['external_users'] = []
 # web_server['username'] = 'gitlab-www'
@@ -304,10 +305,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # web_server['gid'] = nil
 
 
-#########################################################################################################################
-# GitLab Nginx                                                                                                          #
-# see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md #
-#########################################################################################################################
+################
+# GitLab Nginx #
+################
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md
 
 # nginx['enable'] = true
 # nginx['client_max_body_size'] = '250m'
@@ -342,10 +343,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 
 
-##################################################################################################################
-# GitLab Logging                                                                                                 #
-# see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logs #
-##################################################################################################################
+##################
+# GitLab Logging #
+##################
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logs
 
 # logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
 # logging['svlogd_num'] = 30 # keep 30 rotated log files
@@ -363,18 +364,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
 # logging['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
 
-#######################################################################################################################
-# Logrotate                                                                                                           #
-# see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logrotate #
-# You can disable built in logrotate feature.                                                                         #
-#######################################################################################################################
+#############
+# Logrotate #
+#############
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logrotate
+## You can disable built in logrotate feature.
 
 # logrotate['enable'] = true
 
-##########################################################################################################################
-# Url on which GitLab CI will be reachable                                                                               #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/gitlab-ci/README.md #
-##########################################################################################################################
+############################################
+# Url on which GitLab CI will be reachable #
+############################################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/gitlab-ci/README.md
 
 # ci_external_url 'http://ci.example.com'
 
@@ -394,11 +395,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
 # gitlab_ci['gravatar_ssl_url'] =  "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
 
-#############################################################################################################################################
-# GitLab CI database settings                                                                                                               #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings #
-# Only needed if you use an external database.                                                                                              #
-#############################################################################################################################################
+###############################
+# GitLab CI database settings #
+###############################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings
+## Only needed if you use an external database.
 
 # gitlab_ci['db_adapter'] = "postgresql"
 # gitlab_ci['db_encoding'] = "unicode"
@@ -410,20 +411,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['db_port'] = 5432
 # gitlab_ci['db_socket'] = nil
 
-#######################################################################################################################################
-# GitLab CI redis settings                                                                                                            #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings #
-# Connect to your own redis instance.                                                                                                 #
-#######################################################################################################################################
+############################
+# GitLab CI redis settings #
+############################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings
+## Connect to your own redis instance.
 
 # gitlab_ci['redis_host'] = "127.0.0.1"
 # gitlab_ci['redis_port'] = nil
 # gitlab_ci['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
 
-#####################################################################################################################################
-# GitLab CI email server settings                                                                                                   #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings #
-#####################################################################################################################################
+###################################
+# GitLab CI email server settings #
+###################################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings
 
 # gitlab_ci['smtp_enable'] = true
 # gitlab_ci['smtp_address'] = "smtp.server"
@@ -452,10 +453,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gid'] = nil
 
 
-###########################
-# GitLab CI Unicorn       #
-# Tweak unicorn settings. #
-###########################
+#####################
+# GitLab CI Unicorn #
+#####################
+## Tweak unicorn settings.
 
 # ci_unicorn['worker_processes'] = 2
 # ci_unicorn['worker_timeout'] = 60
@@ -468,19 +469,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ci_unicorn['backlog_socket'] = 1024
 
 
-########################################################################################################################
-# GitLab CI Redis                                                                                                      #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md #
-# You can turn off bundled redis if you want to use your own redis instanance                                          #
-########################################################################################################################
+###################
+# GitLab CI Redis #
+###################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md
+## You can turn off bundled redis if you want to use your own redis instanance
 
 # ci_redis['enable'] = true
 
 
-########################################################################################################################
-# GitLab CI NGINX                                                                                                      #
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md #
-# You can tell the bundled NGINX that it should not serve up GitLab CI by setting ci_nginx['enable'] to false.         #
-########################################################################################################################
+###################
+# GitLab CI NGINX #
+###################
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md
+## You can tell the bundled NGINX that it should not serve up GitLab CI by setting ci_nginx['enable'] to false.
 
 # ci_nginx['enable'] = false
