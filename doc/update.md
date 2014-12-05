@@ -246,3 +246,17 @@ Option #2: Convert to PostgreSQL and use the built-in server as the instructions
 * [Restore this in the Omnibus installation](/README.md#restoring-an-application-backup)
 * [Rebuild database indexes](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#for-omnibus-gitlab-installations)
 * Enjoy!
+
+## RPM 'package is already installed' error
+
+If you are using RPM and you are upgrading from GitLab Community Edition to GitLab Enterprise Edition you may get an error like this:
+
+```
+package gitlab-7.5.2_omnibus.5.2.1.ci-1.el7.x86_64 (which is newer than gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64) is already installed
+```
+
+You can override this version check with the `--oldpackage` option:
+
+```
+rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
+```
