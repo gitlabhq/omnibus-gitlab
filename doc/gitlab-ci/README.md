@@ -38,5 +38,4 @@ gitlab_ci['gitlab_server_urls'] = ['http://gitlab.example.com']
 # Shut down GitLab services on the CI server
 unicorn['enable'] = false
 sidekiq['enable'] = false
-redis['enable'] = false
 ```
