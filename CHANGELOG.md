@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 - Update libgit2 and rugged to version 0.21.2 66ac2e805a166ecb10bdf8ba001b106acd7e49f3
 - Generate SMTP settings using one template for both applications (Michael Ruoss) a6d6ff11f102c6fa9da6209f80162c5e137feeb9
 - Add gitlab-shell configuration settings for http_settings, audit_usernames, log_level 5e4310442a608c5c420ffe670a9ab6f111489151
+- Enable Sidekiq MemoryKiller by default with a 1,000,000 kB limit
 
 
 7.5.0
