@@ -15,25 +15,26 @@
 # limitations under the License.
 #
 
-name "krb5"
+name "byacc"
 
-default_version "1.13"
+default_version '20141128'
 
-dependency 'byacc'
+source url: "http://invisible-island.net/datafiles/release/byacc.tar.gz",
+       md5: 'acb0ff0fb6cc414a6b50c799794b2425'
 
-source url: "http://web.mit.edu/kerberos/dist/krb5/#{version}/krb5-#{version}-signed.tar",
-       md5: 'fa5d4dcd7b79e2165d0ec4affa0956ea'
-
-relative_path 'krb5-#{version}'
+relative_path 'byacc'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command "tar xf krb5-#{version}.tar.gz", cwd: Config.source_dir
+  # byacc.tar.gz will contain current date at the time of the build
+  # eg. byacc-20141128
+  # move it to a known name for consitency
+  command "mv byacc-* byacc", cwd: source_dir
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
+          " --prefix=#{install_dir}/embedded", env: env
 
-  command "make -j #{max_build_jobs}", :env => env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
-  command "make install", cwd: "#{Config.source_dir}/krb5-#{version}/src"
+  command "make -j #{max_build_jobs}", :env => env
+  command "make install"
 end
