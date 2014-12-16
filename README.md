@@ -23,6 +23,13 @@ stable branch (example shown below).
 To setup GitLab CI please see the [separate GitLab CI
 documentation](doc/gitlab-ci/README.md).
 
+## Configuration options
+
+GitLab and GitLab CI are configured by setting their relevant options in
+`/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
+[gitlab.rb.template][]. New installations starting from GitLab 7.6, will have
+all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
+
 ## Installation
 
 Please follow the steps on the [downloads page][downloads].
@@ -808,3 +815,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
 [installation]: https://about.gitlab.com/installation/
+[gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
