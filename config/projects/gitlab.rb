@@ -47,8 +47,8 @@ dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
 dependency "gitlab-config-template"
-dependency "krb5"
 dependency "byacc"
+dependency "krb5"
 
 # version manifest file
 dependency "version-manifest"

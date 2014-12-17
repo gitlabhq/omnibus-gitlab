@@ -30,7 +30,7 @@ build do
   # byacc.tar.gz will contain current date at the time of the build
   # eg. byacc-20141128
   # move it to a known name for consitency
-  command "mv byacc-* byacc", cwd: source_dir
+  command "mv byacc-* byacc", cwd: Config.source_dir
 
   command "./configure" \
           " --prefix=#{install_dir}/embedded", env: env
