@@ -20,7 +20,7 @@ grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
 sudo service ssh reload
 
 # Install dependencies
-sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential cmake
+sudo apt-get install ruby1.9.1 ruby1.9.1-dev git build-essential cmake byacc
 sudo gem install --no-ri --no-rdoc bundler
 
 # Create the build user
@@ -67,7 +67,7 @@ sudo service sshd reload
 sudo yum groupinstall 'Development Tools'
 # Install RedHat Software Collections to get Ruby 1.9.3
 sudo yum install centos-release-SCL
-sudo yum install ruby193 ruby193-ruby-devel
+sudo yum install ruby193 ruby193-ruby-devel byacc
 
 # Create the build user
 sudo adduser -c 'Omnibus Build' omnibus-build
@@ -112,7 +112,7 @@ grep '^[^#]*PasswordAuthentication' /etc/ssh/sshd_config
 sudo systemctl reload sshd
 
 sudo yum groupinstall 'Development Tools'
-sudo yum install ruby ruby-devel cmake
+sudo yum install ruby ruby-devel cmake byacc
 sudo gem install bundler --no-ri --no-rdoc
 
 # Create the build user

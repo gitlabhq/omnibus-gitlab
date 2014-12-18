@@ -17,8 +17,8 @@ server {
   server_name <%= @fqdn %>;
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
-  access_log  <%= @log_directory %>/gitlab_access.log;
-  error_log   <%= @log_directory %>/gitlab_error.log;
+  access_log  <%= @log_directory %>/gitlab_ci_access.log;
+  error_log   <%= @log_directory %>/gitlab_ci_error.log;
 }
 <% end %>
 
@@ -44,18 +44,18 @@ server {
   add_header X-Content-Type-Options nosniff;
   <% end %>
 
-  ## Individual nginx logs for this GitLab vhost
+  ## Individual nginx logs for this GitLab CI vhost
   access_log  <%= @log_directory %>/gitlab_ci_access.log;
   error_log   <%= @log_directory %>/gitlab_ci_error.log;
 
   location / {
     ## Serve static files from defined root folder.
-    ## @gitlab is a named location for the upstream fallback, see below.
+    ## @gitlab_ci is a named location for the upstream fallback, see below.
     try_files $uri $uri/index.html $uri.html @gitlab_ci;
   }
 
   ## If a file, which is not found in the root folder is requested,
-  ## then the proxy passes the request to the upsteam (gitlab unicorn).
+  ## then the proxy passes the request to the upsteam (gitlab-ci unicorn).
   location @gitlab_ci {
     ## If you use HTTPS make sure you disable gzip compression
     ## to be safe against BREACH attack.

@@ -26,6 +26,7 @@ gitlab_ci_tmp_dir = File.join(gitlab_ci_dir, "tmp")
 gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
 
 gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
+gitlab_app = "gitlab-ci"
 
 group gitlab_ci_user do
   gid node['gitlab']['gitlab-ci']['gid']
@@ -122,7 +123,11 @@ template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-ci'].to_hash)
+  variables(
+    node['gitlab']['gitlab-ci'].to_hash.merge(
+      :app => gitlab_app
+    )
+  )
   restarts dependent_services
 
   unless node['gitlab']['gitlab-ci']['smtp_enable']

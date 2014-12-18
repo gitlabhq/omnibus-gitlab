@@ -17,7 +17,7 @@
 #
 
 name "libgit2"
-default_version "v0.21.1"
+default_version "v0.21.2"
 
 source git: "git://github.com/libgit2/libgit2.git"
 

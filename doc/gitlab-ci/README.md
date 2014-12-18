@@ -29,6 +29,7 @@ still be set up on your CI server, but they will not accept user requests or
 consume system resources.
 
 ```
+external_url 'http://localhost'
 ci_external_url 'http://ci.example.com'
 
 # Tell GitLab CI to integrate with gitlab.example.com

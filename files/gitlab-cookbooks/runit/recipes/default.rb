@@ -40,8 +40,7 @@ when "rhel"
     end
   end
 when "fedora"
-  # TODO: platform_version check for old distro without upstart
-  include_recipe "runit::upstart"
+  include_recipe "runit::systemd"
 else
   include_recipe "runit::sysvinit"
 end
