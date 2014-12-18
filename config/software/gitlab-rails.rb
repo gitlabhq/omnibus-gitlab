@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "4d70bfc1eb90276f29407ebfdea4b85e33fbb98c" # 7.5.3-ee with sidekiq RSS, latest sidekiq memory killer and smarter MR reload
+default_version "a879011aa5b30b7eac179fe3ff7a6cc12a6824e9" # 7.6.0.rc1-ee
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
