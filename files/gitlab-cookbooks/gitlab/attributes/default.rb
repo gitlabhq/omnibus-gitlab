@@ -45,6 +45,7 @@ default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 default['gitlab']['gitlab-rails']['env'] = {
+  'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '1000000',
   'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 }
@@ -198,7 +199,10 @@ default['gitlab']['sidekiq']['shutdown_timeout'] = 4
 # gitlab-shell
 ###
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+default['gitlab']['gitlab-shell']['log_level'] = nil
+default['gitlab']['gitlab-shell']['audit_usernames'] = nil
 default['gitlab']['gitlab-shell']['git_data_directory'] = "/var/opt/gitlab/git-data"
+default['gitlab']['gitlab-shell']['http_settings'] = nil
 
 
 ###
@@ -301,6 +305,7 @@ default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
+default['gitlab']['nginx']['custom_nginx_config'] = nil
 
 ###
 # Logging

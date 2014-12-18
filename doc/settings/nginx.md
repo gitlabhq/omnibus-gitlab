@@ -4,9 +4,9 @@
 
 ### Warning
 
-The Nginix config will tell browsers and clients to only communicate with your 
-GitLab instance over a secure connection for the next 24 months. By enabling 
-HTTPS you'll need to provide a secure connection to your instance for at least 
+The Nginix config will tell browsers and clients to only communicate with your
+GitLab instance over a secure connection for the next 24 months. By enabling
+HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
 
 By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
@@ -145,6 +145,19 @@ nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/r
 
 # You can do the same for GitLab-CI
 ci_nginx['custom_gitlab_ci_server_config'] = "some settings"
+```
+
+Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
+NGINX.
+
+## Inserting custom settings into the NGINX config
+
+If you need to add custom settings into the NGINX config, for example to include
+existing server blocks, you can use the following setting.
+
+```ruby
+# Example: include a directory to scan for additional config files
+nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
 ```
 
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart

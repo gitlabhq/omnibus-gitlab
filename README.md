@@ -23,6 +23,13 @@ stable branch (example shown below).
 To setup GitLab CI please see the [separate GitLab CI
 documentation](doc/gitlab-ci/README.md).
 
+## Configuration options
+
+GitLab and GitLab CI are configured by setting their relevant options in
+`/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
+[gitlab.rb.template][]. New installations starting from GitLab 7.6, will have
+all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
+
 ## Installation
 
 Please follow the steps on the [downloads page][downloads].
@@ -182,6 +189,10 @@ sudo dpkg -r gitlab
 # Redhat/Centos
 sudo rpm -e gitlab
 ```
+
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+
+To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove_users`. *Note* All gitlab processes need to be stopped before runnign the command.
 
 ## Updating
 
@@ -474,23 +485,6 @@ web_server['uid'] = 1237
 web_server['gid'] = 1237
 ```
 
-### Storing user attachments on Amazon S3
-
-By default, attachments are stored in `/var/opt/gitlab/gitlab-rails/uploads`.
-Instead of using local storage you can also store the user attachments for your
-GitLab instance on Amazon S3.
-
-__This currently only works if you are packaging a forked version of GitLab.__
-
-```
-# /etc/gitlab/gitlab.rb
-gitlab_rails['aws_enable'] = true
-gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
-gitlab_rails['aws_secret_access_key'] = 'secret'
-gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
-gitlab_rails['aws_region'] = 'us-east-1'
-```
-
 ### Sending application email via SMTP
 
 See [doc/settings/smtp.md](doc/settings/smtp.md).
@@ -524,6 +518,10 @@ See [doc/settings/unicorn.md](doc/settings/unicorn.md).
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
+
+See [doc/settings/nginx.md](doc/settings/nginx.md).
+
+### Inserting custom settings into the NGINX config
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
@@ -817,3 +815,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
 [installation]: https://about.gitlab.com/installation/
+[gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template

@@ -24,6 +24,7 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
+gitlab_app = "gitlab"
 
 # Needed for .gitlab_shell_secret
 gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
@@ -131,7 +132,11 @@ template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
+  variables(
+    node['gitlab']['gitlab-rails'].to_hash.merge(
+      :app => gitlab_app
+    )
+  )
   restarts dependent_services
 
   unless node['gitlab']['gitlab-rails']['smtp_enable']
