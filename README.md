@@ -23,6 +23,13 @@ stable branch (example shown below).
 To setup GitLab CI please see the [separate GitLab CI
 documentation](doc/gitlab-ci/README.md).
 
+## Configuration options
+
+GitLab and GitLab CI are configured by setting their relevant options in
+`/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
+[gitlab.rb.template][]. New installations starting from GitLab 7.6, will have
+all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
+
 ## Installation
 
 Please follow the steps on the [downloads page][downloads].
@@ -183,6 +190,10 @@ sudo dpkg -r gitlab
 sudo rpm -e gitlab
 ```
 
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+
+To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove_users`. *Note* All gitlab processes need to be stopped before runnign the command.
+
 ## Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
@@ -252,6 +263,8 @@ sudo tar -xf etc-gitlab-1399948539.tar -C /
 
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
 backup.
+
+NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
 ### Configuring the external URL for GitLab
 
@@ -472,23 +485,6 @@ web_server['uid'] = 1237
 web_server['gid'] = 1237
 ```
 
-### Storing user attachments on Amazon S3
-
-By default, attachments are stored in `/var/opt/gitlab/gitlab-rails/uploads`.
-Instead of using local storage you can also store the user attachments for your
-GitLab instance on Amazon S3.
-
-__This currently only works if you are packaging a forked version of GitLab.__
-
-```
-# /etc/gitlab/gitlab.rb
-gitlab_rails['aws_enable'] = true
-gitlab_rails['aws_access_key_id'] = 'AKIA1111111111111UA'
-gitlab_rails['aws_secret_access_key'] = 'secret'
-gitlab_rails['aws_bucket'] = 'my_gitlab_bucket'
-gitlab_rails['aws_region'] = 'us-east-1'
-```
-
 ### Sending application email via SMTP
 
 See [doc/settings/smtp.md](doc/settings/smtp.md).
@@ -522,6 +518,10 @@ See [doc/settings/unicorn.md](doc/settings/unicorn.md).
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
+
+See [doc/settings/nginx.md](doc/settings/nginx.md).
+
+### Inserting custom settings into the NGINX config
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
@@ -815,3 +815,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
 [installation]: https://about.gitlab.com/installation/
+[gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template

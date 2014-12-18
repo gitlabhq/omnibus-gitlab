@@ -11,7 +11,7 @@ database you should create a backup before attempting this procedure.
 
 First, set up your database server according to the [upstream GitLab
 instructions](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#5-database).
-For manual GitLab CI database setup instructions see [the GitLab CI manual installation instructions[(https://gitlab.com/gitlab-org/gitlab-ci/blob/master/doc/install/installation.md#4-prepare-the-database).
+For manual GitLab CI database setup instructions see [the GitLab CI manual installation instructions](https://gitlab.com/gitlab-org/gitlab-ci/blob/master/doc/install/installation.md#4-prepare-the-database).
 If you want to keep using an existing GitLab database you can skip this step.
 
 ### Configure omnibus-gitlab to connect to it
