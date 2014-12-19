@@ -175,6 +175,31 @@ More importantly: do not give sudo rights to the git user or to any of the
 other users used by omnibus-gitlab. Bestowing unnecessary privileges on a
 system user weakens the security of your system.
 
+
+#### Failed to modify kernel parameters with sysctl
+
+If sysctl cannot modify the kernel parameters you could possibly get an error with the following stack trace:
+
+```
+ * execute[sysctl] action run
+================================================================================
+Error executing action `run` on resource 'execute[sysctl]'
+================================================================================
+
+
+Mixlib::ShellOut::ShellCommandFailed
+------------------------------------
+Expected process to exit with [0], but received '255'
+---- Begin output of /sbin/sysctl -p /etc/sysctl.conf ----
+
+```
+This is unlikely to happen with non virtualized machines but on a VPS with virtualization like openVZ, container might not have the required module enabled
+or container doesn't have access to kernel parameters.
+
+Try enabling the module on which sysctl errored out, on how to enable the module see example [here](http://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
+
+There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
+
 ### Uninstalling omnibus-gitlab
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
