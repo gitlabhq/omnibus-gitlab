@@ -22,7 +22,7 @@ sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
 ```
 
-#### If you are upgrading from 7.3.0
+#### If you are upgrading from versions <= 7.3.0
 
 ```
 sudo gitlab-ctl stop nginx
