@@ -67,6 +67,13 @@ external_url "https://gitlab.example.com"
 nginx['redirect_http_to_https'] = true
 ```
 
+Also you must enable the following directives:
+```ruby
+external_port = "443"
+gitlab_rails['gitlab_https'] = true
+gitlab_rails['gitlab_port']  = 443
+```
+
 To enable HTTP to HTTPS redirects for GitLab CI, use the `nginx_ci` directive.
 
 ```ruby
