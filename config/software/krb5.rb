@@ -36,10 +36,7 @@ build do
   patch source: 'disable-keyutils.patch', target: 'src/configure'
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
-
-  command "./configure" \
-          " --prefix=#{install_dir}/embedded", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
+          " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
 
   command "make -j #{max_build_jobs}", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
   command "make install", cwd: "#{Config.source_dir}/krb5-#{version}/src"
