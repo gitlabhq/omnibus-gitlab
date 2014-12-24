@@ -17,14 +17,14 @@
 #
 
 name "git"
-default_version "2.0.0"
+default_version "2.0.5"
 
 dependency "zlib"
 dependency "openssl"
 dependency "curl"
 
 source :url => "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       :md5 => "a461ea86f5d655e449a3356ac7eb71ec"
+       :md5 => "3f98341b4e960eeff139457286ddb488"
 
 relative_path "git-#{version}"
 
