@@ -4,6 +4,7 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 7.6.0
+- Update git to 2.0.5 0749ffc43b4583fae6fc8ac1b91111340a225f92
 - Update libgit2 and rugged to version 0.21.2 66ac2e805a166ecb10bdf8ba001b106acd7e49f3
 - Generate SMTP settings using one template for both applications (Michael Ruoss) a6d6ff11f102c6fa9da6209f80162c5e137feeb9
 - Add gitlab-shell configuration settings for http_settings, audit_usernames, log_level 5e4310442a608c5c420ffe670a9ab6f111489151
