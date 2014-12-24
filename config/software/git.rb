@@ -53,4 +53,9 @@ NO_PYTHON=YesPlease
 
   command "make -j #{max_build_jobs}", :env => env
   command "make install"
+
+  mkdir "#{install_dir}/embedded/etc/"
+  erb :dest => "#{install_dir}/etc/gitconfig",
+    :source => "gitconfig.erb",
+    :mode => 0755,
 end
