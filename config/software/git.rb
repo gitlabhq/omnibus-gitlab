@@ -55,7 +55,7 @@ NO_PYTHON=YesPlease
   command "make install"
 
   mkdir "#{install_dir}/embedded/etc/"
-  erb :dest => "#{install_dir}/etc/gitconfig",
+  erb :dest => "#{install_dir}/embedded/etc/gitconfig",
     :source => "gitconfig.erb",
-    :mode => 0755,
+    :mode => 0755
 end
