@@ -45,6 +45,20 @@ directory "/var/opt/gitlab" do
   action :create
 end
 
+directory "/opt/gitlab/embedded/etc" do
+  owner "root"
+  group "root"
+  mode "0755"
+  recursive true
+  action :create
+end
+
+template "/opt/gitlab/embedded/etc/gitconfig" do
+  source "gitconfig-system.erb"
+  mode 0755
+  variables gitconfig: node['gitlab']['omnibus_gitconfig']
+end
+
 include_recipe "gitlab::users"
 include_recipe "gitlab::web-server"
 include_recipe "gitlab::gitlab-shell"
