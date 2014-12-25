@@ -56,7 +56,7 @@ end
 template "/opt/gitlab/embedded/etc/gitconfig" do
   source "gitconfig-system.erb"
   mode 0755
-  variables gitconfig: node['gitlab']['omnibus_gitconfig']
+  variables gitconfig: node['gitlab']['omnibus-gitconfig']['system']
 end
 
 include_recipe "gitlab::users"

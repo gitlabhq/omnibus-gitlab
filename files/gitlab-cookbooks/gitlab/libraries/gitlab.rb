@@ -35,6 +35,7 @@ module Gitlab
   extend(Mixlib::Config)
 
   bootstrap Mash.new
+  omnibus_gitconfig Mash.new
   user Mash.new
   postgresql Mash.new
   redis Mash.new
@@ -229,6 +230,7 @@ module Gitlab
       results = { "gitlab" => {} }
       [
         "bootstrap",
+        "omnibus_gitconfig",
         "user",
         "redis",
         "ci_redis",
