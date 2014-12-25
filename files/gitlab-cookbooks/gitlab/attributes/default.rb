@@ -20,6 +20,9 @@
 # omnibus options
 ####
 default['gitlab']['bootstrap']['enable'] = true
+default['gitlab']['omnibus-gitconfig']['system'] = {
+  "receive" => ["fsckObjects = true"]
+ }
 
 
 ####

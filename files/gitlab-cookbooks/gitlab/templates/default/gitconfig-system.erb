@@ -1,0 +1,4 @@
+<% @gitconfig.each do |key, value| %>
+[<%= key %>]
+  <%= value.join("\n") %>
+<% end %>

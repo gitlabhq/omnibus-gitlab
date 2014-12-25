@@ -372,6 +372,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # logrotate['enable'] = true
 
+#######
+# Git #
+#######
+## Advanced setting for configuring git system settings for omnibus-gitlab internal git
+## For multiple options under one header use array of comma separated values, eg.
+## { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
+
+# omnibus_gitconfig['system'] = { "receive" => ["fsckObjects = true"] }
+
 ############################################
 # Url on which GitLab CI will be reachable #
 ############################################
