@@ -41,13 +41,13 @@ end
 dependency "logrotate"
 dependency "runit"
 dependency "gitlab-ci"
+dependency "krb5"
 dependency "gitlab-rails"
 dependency "gitlab-shell"
 dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
 dependency "gitlab-config-template"
-dependency "krb5"
 
 # version manifest file
 dependency "version-manifest"
