@@ -39,11 +39,11 @@ git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
 git push origin 6-6-stable 6.6.0.omnibus
 ```
 
-- Make sure that the master branch has the latest CE stable tag
+- Make sure that the master branch of omnibus-gitlab has the latest changes from the omnibus-gitlab CE stable branch
 
 ```shell
 git checkout master
-git cherry-pick $(git rev-parse 6-6-stable)
+git merge 6-6-stable
 
 ```
 
