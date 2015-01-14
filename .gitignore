@@ -13,3 +13,4 @@ vendor/cookbooks
 build.txt
 Vagrantfile
 .idea
+*.log
