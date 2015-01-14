@@ -39,6 +39,14 @@ git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
 git push origin 6-6-stable 6.6.0.omnibus
 ```
 
+- Make sure that the master branch of omnibus-gitlab has the latest changes from the omnibus-gitlab CE stable branch
+
+```shell
+git checkout master
+git merge 6-6-stable
+
+```
+
 ## On the build machines
 
 - Log in as the build user and start a screen session
