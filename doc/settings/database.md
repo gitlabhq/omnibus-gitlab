@@ -55,10 +55,10 @@ You can manually seed the GitLab CI database with the following command:
 sudo gitlab-ci-rake setup
 ```
 
-If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `root_password` setting:
+If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `initial_root_password` setting:
 
 ```ruby
-  gitlab_rails['root_password'] = 'nonstandardpassword'
+  gitlab_rails['initial_root_password'] = 'nonstandardpassword'
 ```
 
 and then run the `gitlab:setup` command.
