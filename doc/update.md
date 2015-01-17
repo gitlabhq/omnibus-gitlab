@@ -243,7 +243,7 @@ Option #2: Convert to PostgreSQL and use the built-in server as the instructions
 
 * [Create a backup of the non-Omnibus MySQL installation](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
 * [Export and convert the existing MySQL database in the GitLab backup file](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
-* [Restore this in the Omnibus installation](/README.md#restoring-an-application-backup)
+* [Restore this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/98b1bfb0d70082953d63abbc329cd6f2c628d3bc/README.md#restoring-an-application-backup)
 * [Rebuild database indexes](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#for-omnibus-gitlab-installations)
 * Enjoy!
 
