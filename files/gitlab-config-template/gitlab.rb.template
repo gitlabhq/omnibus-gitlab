@@ -148,8 +148,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['rate_limit_requests_per_period'] = 10
 # gitlab_rails['rate_limit_period'] = 60
 
-# Change the default admin password.
-# gitlab_rails['root_password'] = "password"
+# Change the initial default admin password.
+# Only applicable on inital setup, changing this setting after database is created and seeded
+# won't yield any change.
+# gitlab_rails['initial_root_password'] = "password"
 
 ############################
 # GitLab database settings #
