@@ -19,7 +19,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_theme'] = 2
 # gitlab_rails['gitlab_signup_enabled'] = false
 # gitlab_rails['gitlab_signin_enabled'] = true
-# gitlab_rails['gitlab_restricted_visibility_levels'] = nil
+# gitlab_rails['gitlab_restricted_visibility_levels'] = nil # to restrict public and internal: ['public', 'internal']
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
