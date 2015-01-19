@@ -374,7 +374,7 @@ default['gitlab']['gitlab-ci']['gid'] = nil
 default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
 
 # application.yml top-level settings
-default['gitlab']['gitlab-ci']['gitlab_server_urls'] = nil
+default['gitlab']['gitlab-ci']['gitlab_server'] = nil
 
 # application.yml, gitlab_ci section
 default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
