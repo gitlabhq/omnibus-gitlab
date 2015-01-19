@@ -395,7 +395,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # application.yml configuration #
 #################################
 
-# gitlab_ci['gitlab_server_urls'] = ['http://gitlab.example.com', 'http://gitlab2.example.com']
+# gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
 
 # gitlab_ci['gitlab_ci_email_from'] = 'gitlab-ci@example.com'
 # gitlab_ci['gitlab_ci_support_email'] = 'gitlab-ci@example.com'
