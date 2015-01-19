@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.7.0
+
+- Update ruby to 2.1.5 79e6833045e70a43ac66f65252d40773c20438df
+- Change the root_password setting to initial_root_password 577a4b7b895e17cbe159bf317169d173c6d3567a
+- Include CI Oauth settings option 2e5ae7414ecd9f73cbfe284af5d38ee65ac892e4
+- Include option to set global git config options 8eae0942ec27ffeec534ba02e4171a3b6cd6d193
+
 7.6.0
 - Update git to 2.0.5 0749ffc43b4583fae6fc8ac1b91111340a225f92
 - Update libgit2 and rugged to version 0.21.2 66ac2e805a166ecb10bdf8ba001b106acd7e49f3
