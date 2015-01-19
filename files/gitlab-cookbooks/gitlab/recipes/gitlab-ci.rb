@@ -136,7 +136,14 @@ template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
 end
 
 unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
-gitlab_server_urls = node['gitlab']['gitlab-ci']['gitlab_server_urls'] || [unicorn_url]
+gitlab_server_url = if node['gitlab']['gitlab-ci']['gitlab_server_urls']
+                      node['gitlab']['gitlab-ci']['gitlab_server_urls'].first
+                    end
+gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
+                  node['gitlab']['gitlab-ci']['gitlab_server']
+                else
+                  { 'url' => gitlab_server_url || unicorn_url, 'app_id' => nil, 'app_secret' => nil}
+                end
 
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   link_from File.join(gitlab_ci_source_dir, "config/application.yml")
@@ -147,7 +154,7 @@ template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   mode "0644"
   variables(
     node['gitlab']['gitlab-ci'].to_hash.merge(
-      :gitlab_server_urls => gitlab_server_urls
+      :gitlab_server => gitlab_server
     )
   )
   restarts dependent_services
