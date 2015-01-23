@@ -260,3 +260,24 @@ You can override this version check with the `--oldpackage` option:
 ```
 rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
+
+# Updating GitLab CI via omnibus-gitlab
+## Updating from GitLab CI version prior to 5.4.0 to the latest version
+
+In GitLab CI 5.4.0 we changed the way GitLab CI authorizes with GitLab.
+
+In order to use GitLab CI 5.4.x, GitLab 7.7.x is required.
+
+Make sure that GitLab 7.7.x is installed and running and then go to Admin section of GitLab.
+Under Applications create a new a application which will generate the `app_id` and `app_secret`.
+
+In `/etc/gitlab/gitlab.rb`:
+
+```
+gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
+
+```
+
+where `url` is the url to the GitLab instance.
+
+Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
