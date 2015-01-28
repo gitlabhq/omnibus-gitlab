@@ -3,6 +3,14 @@
 You can run a [GitLab CI](https://about.gitlab.com/gitlab-ci/) Coordinator
 service on your GitLab server.
 
+## Documentation version
+
+Please make sure you are viewing the documentation for the version of
+omnibus-gitlab you are using. In most cases this should be the highest numbered
+stable branch (example shown below).
+
+![documentation version](doc/images/omnibus-documentation-version.png)
+
 ## Getting started
 
 GitLab CI expects to run on its own virtual host. In your DNS you would then
