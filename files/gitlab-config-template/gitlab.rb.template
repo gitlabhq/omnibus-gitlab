@@ -195,7 +195,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_authentication'] = "login"
 # gitlab_rails['smtp_enable_starttls_auto'] = true
 # gitlab_rails['smtp_tls'] = false
-# gitlab_rails['smtp_openssl_verify_mode'] = false
+# gitlab_rails['smtp_openssl_verify_mode'] = 'none' # Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert', see http://api.rubyonrails.org/classes/ActionMailer/Base.html
 
 ###############
 # GitLab user #
