@@ -13,7 +13,7 @@ gitlab_rails['smtp_password'] = "smtp password"
 gitlab_rails['smtp_domain'] = "example.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['smtp_openssl_verify_mode'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 
 # If your SMTP server does not like the default 'From: gitlab@localhost' you
 # can change the 'From' with this setting.
