@@ -3,3 +3,4 @@ file_cache_path "#{CURRENT_PATH}/cache"
 cookbook_path CURRENT_PATH
 verbose_logging false
 ssl_verify_mode :verify_peer
+Ohai::Config[:disabled_plugins] = [:GCE]
