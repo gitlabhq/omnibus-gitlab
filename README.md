@@ -415,23 +415,8 @@ See [doc/settings/smtp.md](doc/settings/smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
-Omniauth configuration is documented on
-[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html). To effect
-the necessary changes in `gitlab.yml`, use the following syntax in
-`/etc/gitlab/gitlab.rb`. Note that the providers are specified as an array of
-Ruby hashes.
-
-```ruby
-gitlab_rails['omniauth_enabled'] = true
-gitlab_rails['omniauth_providers'] = [
-  {
-    "name" => "google_oauth2",
-    "app_id" => "YOUR APP ID",
-    "app_secret" => "YOUR APP SECRET",
-    "args" => { "access_type" => "offline", "approval_prompt" => "" }
-  }
-]
-```
+Omniauth configuration is documented in
+[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
 
 ### Adjusting Unicorn settings
 
