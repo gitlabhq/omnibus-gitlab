@@ -243,7 +243,7 @@ Option #2: Convert to PostgreSQL and use the built-in server as the instructions
 
 * [Create a backup of the non-Omnibus MySQL installation](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system)
 * [Export and convert the existing MySQL database in the GitLab backup file](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
-* [Restore this in the Omnibus installation](/README.md#restoring-an-application-backup)
+* [Restore this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/98b1bfb0d70082953d63abbc329cd6f2c628d3bc/README.md#restoring-an-application-backup)
 * [Rebuild database indexes](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/update/mysql_to_postgresql.md#for-omnibus-gitlab-installations)
 * Enjoy!
 
@@ -260,3 +260,24 @@ You can override this version check with the `--oldpackage` option:
 ```
 rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
+
+# Updating GitLab CI via omnibus-gitlab
+## Updating from GitLab CI version prior to 5.4.0 to the latest version
+
+In GitLab CI 5.4.0 we changed the way GitLab CI authorizes with GitLab.
+
+In order to use GitLab CI 5.4.x, GitLab 7.7.x is required.
+
+Make sure that GitLab 7.7.x is installed and running and then go to Admin section of GitLab.
+Under Applications create a new a application which will generate the `app_id` and `app_secret`.
+
+In `/etc/gitlab/gitlab.rb`:
+
+```
+gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
+
+```
+
+where `url` is the url to the GitLab instance.
+
+Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
