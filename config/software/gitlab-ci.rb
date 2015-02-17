@@ -16,7 +16,7 @@
 #
 
 name "gitlab-ci"
-default_version "8ba2fc2e39dedcccb669bbe779bf2dfde62737b1" # CI 5.4.2
+default_version "34ac5b479a4051b5884731af490060ef6a8d7655" # CI 7.8.0.rc1
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
