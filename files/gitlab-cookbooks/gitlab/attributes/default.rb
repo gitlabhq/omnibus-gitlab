@@ -172,7 +172,7 @@ default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
-default['gitlab']['gitlab-rails']['root_password'] = nil
+default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 
 ####
 # Unicorn
@@ -346,7 +346,7 @@ default['gitlab']['logrotate']['enable'] = true
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell}
+default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell gitlab-ci}
 default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 

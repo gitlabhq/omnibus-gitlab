@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.8.0
+
+- Add gitlab-ci to logrotate (François Conil) 397ce5bab202d9d86e30a62538dca1323b7f6f4c
+- New LDAP defaults, port and method 7a65245c59fd094e88784f924ecd968d134716fa
+- Disable GCE plugin 35b7b89c78fe7e1c35bb7063c2a03e70d6915c1d
+
 7.7.0
 
 - Update ruby to 2.1.5 79e6833045e70a43ac66f65252d40773c20438df

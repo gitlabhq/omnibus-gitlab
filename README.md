@@ -219,6 +219,10 @@ To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
 
 To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove_users`. *Note* All gitlab processes need to be stopped before runnign the command.
 
+#### 'Short read or OOM loading DB' error
+
+Try cleaning the old redis session by following the [documentation here.](http://doc.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
+
 ## Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
@@ -411,23 +415,8 @@ See [doc/settings/smtp.md](doc/settings/smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
-Omniauth configuration is documented on
-[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html). To effect
-the necessary changes in `gitlab.yml`, use the following syntax in
-`/etc/gitlab/gitlab.rb`. Note that the providers are specified as an array of
-Ruby hashes.
-
-```ruby
-gitlab_rails['omniauth_enabled'] = true
-gitlab_rails['omniauth_providers'] = [
-  {
-    "name" => "google_oauth2",
-    "app_id" => "YOUR APP ID",
-    "app_secret" => "YOUR APP SECRET",
-    "args" => { "access_type" => "offline", "approval_prompt" => "" }
-  }
-]
-```
+Omniauth configuration is documented in
+[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
 
 ### Adjusting Unicorn settings
 
@@ -520,6 +509,12 @@ sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186
 
 # Start GitLab
 sudo gitlab-ctl start
+
+# Create satellites
+sudo gitlab-rake gitlab:satellites:create
+
+# Check GitLab
+sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
 If there is a GitLab version mismatch between your backup tar file and the installed

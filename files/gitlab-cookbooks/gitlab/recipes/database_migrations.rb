@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-root_password = node['gitlab']['gitlab-rails']['root_password']
+initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 
 execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
-  environment ({'GITLAB_ROOT_PASSWORD' => root_password }) if root_password
+  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
   action :nothing
 end
 
