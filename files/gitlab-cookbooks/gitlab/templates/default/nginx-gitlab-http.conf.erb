@@ -61,7 +61,7 @@ server {
   ## Increase this if you want to upload large attachments
   ## Or if you want to accept large git objects over http
   client_max_body_size <%= @client_max_body_size %>;
-    
+
   <% if @https %>
   ## Strong SSL Security
   ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
@@ -85,6 +85,27 @@ server {
     ## Serve static files from defined root folder.
     ## @gitlab is a named location for the upstream fallback, see below.
     try_files $uri $uri/index.html $uri.html @gitlab;
+  }
+
+  location /uploads/ {
+    ## If you use HTTPS make sure you disable gzip compression
+    ## to be safe against BREACH attack.
+    gzip off;
+
+    ## https://github.com/gitlabhq/gitlabhq/issues/694
+    ## Some requests take more than 30 seconds.
+    proxy_read_timeout      300;
+    proxy_connect_timeout   300;
+    proxy_redirect          off;
+
+    proxy_set_header    Host                $http_host;
+    proxy_set_header    X-Real-IP           $remote_addr;
+    proxy_set_header    X-Forwarded-Ssl     on;
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+    proxy_set_header    X-Forwarded-Proto   $scheme;
+    proxy_set_header    X-Frame-Options     SAMEORIGIN;
+
+    proxy_pass http://gitlab;
   }
 
   ## If a file, which is not found in the root folder is requested,
@@ -123,6 +144,7 @@ server {
     expires max;
     add_header Cache-Control public;
   }
+
 
   error_page 502 /502.html;
 
