@@ -30,6 +30,8 @@ production: &base
     time_zone: <%= single_quote(@time_zone) %>
 
     ## Email settings
+    # Uncomment and set to false if you need to disable email sending from GitLab (default: true)
+    email_enabled: <%= @gitlab_email_enabled %>
     # Email address used in the "From" field in mails sent by GitLab
     email_from: <%= @gitlab_email_from %>
 

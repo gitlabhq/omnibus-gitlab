@@ -12,6 +12,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['gitlab_ssh_host'] = 'ssh.host_example.com'
 # gitlab_rails['time_zone'] = 'UTC'
+# gitlab_rails['gitlab_email_enabled'] = true
 # gitlab_rails['gitlab_email_from'] = 'example@example.com'
 # gitlab_rails['gitlab_default_projects_limit'] = 10
 # gitlab_rails['gitlab_default_can_create_group'] = true
