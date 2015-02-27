@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Respect gitlab_email_enabled property (Daniel Serodio) e2982692d49772c4f896a775e476a62b4831b8a1
 - Use correct cert for CI (Flávio J. Saraiva) 484227e2dfe33f59e3683a5757be6842d7ce79d2
+- Add custom listen_port to nginx config for reverse proxies (Stan Hu) 671d6d45a8094997774da61eca4dd9edae
 
 7.8.0
 

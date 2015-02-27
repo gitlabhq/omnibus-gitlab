@@ -43,6 +43,14 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
 })
 
+gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
+
+# To support reverse proxies: only override the listen_port if
+# none has been specified
+if nginx_vars['listen_port'].nil?
+  nginx_vars['listen_port'] = gitlab_port
+end
+
 template nginx_vars[:gitlab_http_config] do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
@@ -53,7 +61,7 @@ template nginx_vars[:gitlab_http_config] do
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
       :https => node['gitlab']['gitlab-rails']['gitlab_https'],
       :socket => node['gitlab']['unicorn']['socket'],
-      :port => node['gitlab']['gitlab-rails']['gitlab_port'],
+      :port => gitlab_port
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
