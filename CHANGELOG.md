@@ -3,9 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-7.8.1
+7.9.0
 
-- Respect gitlab_email_enabled property (Daniel Serodio)
+- Respect gitlab_email_enabled property (Daniel Serodio) e2982692d49772c4f896a775e476a62b4831b8a1
+- Use correct cert for CI (Flávio J. Saraiva) 484227e2dfe33f59e3683a5757be6842d7ce79d2
 
 7.8.0
 
