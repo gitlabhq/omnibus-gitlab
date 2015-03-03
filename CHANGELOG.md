@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.8.1
+
+- Respect gitlab_email_enabled property (Daniel Serodio)
+
 7.8.0
 
 - Add gitlab-ci to logrotate (François Conil) 397ce5bab202d9d86e30a62538dca1323b7f6f4c
