@@ -197,6 +197,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_enable_starttls_auto'] = true
 # gitlab_rails['smtp_tls'] = false
 # gitlab_rails['smtp_openssl_verify_mode'] = 'none' # Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert', see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+# gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
+# gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
 ###############
 # GitLab user #
