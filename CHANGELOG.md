@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Add ca_path and ca_file params for smtp email configuration (Thireus) fa9c1464bc1eb173660edfded1a2f7add7ac24b3
 - Add custom listen_port to nginx config for reverse proxies (Stan Hu) 671d6d45a8094997774da61eca4dd9edae
 - Update openssl to 1.0.1k
+- DEPRECATION: 'gitlab_signup_enabled', 'gitlab_signin_enabled', 'gitlab_default_projects_limit', 'gravatar_enabled' are deprecated, settings can be changed in admin section of GitLab UI
 
 7.8.0
 
