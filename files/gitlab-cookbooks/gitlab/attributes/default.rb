@@ -387,7 +387,9 @@ default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
 default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
+
+default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil # Deprecated, will be removed in the next release
 
 # application.yml, gravatar section
 default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
