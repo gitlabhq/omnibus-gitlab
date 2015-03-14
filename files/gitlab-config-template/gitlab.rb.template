@@ -14,12 +14,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['time_zone'] = 'UTC'
 # gitlab_rails['gitlab_email_enabled'] = true
 # gitlab_rails['gitlab_email_from'] = 'example@example.com'
-# gitlab_rails['gitlab_default_projects_limit'] = 10
 # gitlab_rails['gitlab_default_can_create_group'] = true
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 # gitlab_rails['gitlab_default_theme'] = 2
-# gitlab_rails['gitlab_signup_enabled'] = false
-# gitlab_rails['gitlab_signin_enabled'] = true
 # gitlab_rails['gitlab_restricted_visibility_levels'] = nil # to restrict public and internal: ['public', 'internal']
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
@@ -37,7 +34,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['issues_tracker_jira_project_url'] = "http://jira.sample/issues/?jql=project=:issues_tracker_id"
 # gitlab_rails['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
 # gitlab_rails['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
-# gitlab_rails['gravatar_enabled'] = true
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['webhook_timeout'] = 10
