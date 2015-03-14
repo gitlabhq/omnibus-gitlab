@@ -24,16 +24,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_snippets'] = false
 # gitlab_rails['gitlab_default_projects_features_visibility_level'] = 'private'
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
-# gitlab_rails['issues_tracker_redmine'] = false
-# gitlab_rails['issues_tracker_redmine_title'] = "Redmine"
-# gitlab_rails['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
-# gitlab_rails['issues_tracker_redmine_issues_url'] = "http://redmine.sample/issues/:id"
-# gitlab_rails['issues_tracker_redmine_new_issue_url'] = "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-# gitlab_rails['issues_tracker_jira'] = false
-# gitlab_rails['issues_tracker_jira_title'] = "Atlassian Jira"
-# gitlab_rails['issues_tracker_jira_project_url'] = "http://jira.sample/issues/?jql=project=:issues_tracker_id"
-# gitlab_rails['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
-# gitlab_rails['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['webhook_timeout'] = 10
