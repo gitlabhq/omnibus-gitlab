@@ -21,7 +21,11 @@ case node["platform_family"]
 when "debian"
   case node["platform"]
   when "debian"
-    include_recipe "runit::sysvinit"
+    if node["platform_version"] =~ /^8/
+      include_recipe "runit::systemd"
+    else
+      include_recipe "runit::sysvinit"
+    end
   else
     include_recipe "runit::upstart"
   end
