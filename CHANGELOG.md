@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - DEPRECATION: CI setting `gitlab_ci_add_committer` is deprecated. Use `gitlab_ci_add_pusher` to notify user who pushed the commit of a failing build
 - DEPRECATION: 'issues_tracker_redmine', 'issues_tracker_jira' and related settings are deprecated. Configuring external issues tracker has been moved to Project Services section of GitLab UI
 - Change default number of unicorn workers from 2 to 3 3d3f6e632b61326f6ff0376d7151cf7cf945383b
+- Use systemd for debian 8 6f8a9e2c8258de883a437d1b8104d69726a18bdd
 
 7.8.0
 
