@@ -209,7 +209,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##################
 ## Tweak unicorn settings.
 
-# unicorn['worker_timeout'] = 60
+# unicorn['worker_timeout'] = 3600
 # unicorn['worker_processes'] = 2
 
 ## Advanced settings
