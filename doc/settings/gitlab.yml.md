@@ -11,17 +11,17 @@ In `gitlab.yml`, you will find structure like this:
 ```yaml
 production: &base
   gitlab:
-    default_projects_limit: 10
+    default_theme: 2
 ```
 
 In `gitlab.rb`, this translates to:
 
 ```ruby
-gitlab_rails['gitlab_default_projects_limit'] = 10
+gitlab_rails['gitlab_default_theme'] = 2
 ```
 
 What happens here is that we forget about `production: &base`, and join
-`gitlab:` with `default_projects_limit:` into `gitlab_default_projects_limit`.
+`gitlab:` with `default_theme:` into `gitlab_default_theme`.
 Note that not all `gitlab.yml` settings can be changed via `gitlab.rb` yet; see
 the [gitlab.yml ERB template][gitlab.yml.erb].  If you think an attribute is
 missing please create a merge request on the omnibus-gitlab repository.

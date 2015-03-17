@@ -6,7 +6,7 @@ Please make sure you are viewing this file on the master branch.
 
 ![documentation version](images/omnibus-documentation-version-update-md.png)
 
-## Updating from GitLab 6.6.x and higher to the latest version
+## Updating from GitLab 6.6 and higher to the latest version
 
 The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
 
@@ -14,23 +14,12 @@ First, download the latest [CE](https://www.gitlab.com/downloads/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package to your GitLab server.
 
-
-#### Stop unicorn and sidekiq but leave postgresql running so that we can do database migrations
+#### Stop services but leave postgresql running for the database migrations and create a backup
 
 ```shell
 sudo gitlab-ctl stop unicorn
 sudo gitlab-ctl stop sidekiq
-```
-
-#### If you are upgrading from version 7.3.0 and older
-
-```
 sudo gitlab-ctl stop nginx
-```
-
-#### Create a database backup in case the upgrade fails
-
-```
 sudo gitlab-rake gitlab:backup:create
 ```
 
@@ -44,15 +33,10 @@ sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
 ```
 
-#### Reconfigure GitLab (includes database migrations)
+#### Reconfigure GitLab (includes running database migrations) and restart all services
 
 ```
 sudo gitlab-ctl reconfigure
-```
-
-#### Restart all gitlab services
-
-```
 sudo gitlab-ctl restart
 ```
 

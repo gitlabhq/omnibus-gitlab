@@ -22,7 +22,7 @@ defaults: &defaults
     all_broken_builds: <%= @gitlab_ci_all_broken_builds %>
     #
     # Add committer to recipients list (default: false)
-    add_committer: <%= @gitlab_ci_add_committer %>
+    add_pusher: <%= @gitlab_ci_add_pusher || @gitlab_ci_add_committer %>
 
   gravatar:
     enabled: <%= @gravatar_enabled %>

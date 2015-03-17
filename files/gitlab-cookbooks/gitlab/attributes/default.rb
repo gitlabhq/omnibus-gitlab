@@ -64,12 +64,9 @@ default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
-default['gitlab']['gitlab-rails']['gitlab_default_projects_limit'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
-default['gitlab']['gitlab-rails']['gitlab_signup_enabled'] = nil
-default['gitlab']['gitlab-rails']['gitlab_signin_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_restricted_visibility_levels'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_issues'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_merge_requests'] = nil
@@ -78,17 +75,6 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_level'] = nil
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
-default['gitlab']['gitlab-rails']['issues_tracker_redmine'] = false
-default['gitlab']['gitlab-rails']['issues_tracker_redmine_title'] = "Redmine"
-default['gitlab']['gitlab-rails']['issues_tracker_redmine_project_url'] = "http://redmine.sample/projects/:issues_tracker_id"
-default['gitlab']['gitlab-rails']['issues_tracker_redmine_issues_url'] = "http://redmine.sample/issues/:id"
-default['gitlab']['gitlab-rails']['issues_tracker_redmine_new_issue_url'] = "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-default['gitlab']['gitlab-rails']['issues_tracker_jira'] = false
-default['gitlab']['gitlab-rails']['issues_tracker_jira_title'] = "Atlassian Jira"
-default['gitlab']['gitlab-rails']['issues_tracker_jira_project_url'] = "http://jira.sample/issues/?jql=project=:issues_tracker_id"
-default['gitlab']['gitlab-rails']['issues_tracker_jira_issues_url'] = "http://jira.sample/browse/:id"
-default['gitlab']['gitlab-rails']['issues_tracker_jira_new_issue_url'] = "http://jira.sample/secure/CreateIssue.jspa"
-default['gitlab']['gitlab-rails']['gravatar_enabled'] = true
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
@@ -169,6 +155,8 @@ default['gitlab']['gitlab-rails']['smtp_authentication'] = nil
 default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
+default['gitlab']['gitlab-rails']['smtp_ca_path'] = nil
+default['gitlab']['gitlab-rails']['smtp_ca_file'] = nil
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
@@ -180,14 +168,14 @@ default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['worker_processes'] = 2
+default['gitlab']['unicorn']['worker_processes'] = 3
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
-default['gitlab']['unicorn']['worker_timeout'] = 60
+default['gitlab']['unicorn']['worker_timeout'] = 3600
 
 ####
 # Sidekiq
@@ -308,6 +296,7 @@ default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommen
 default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
+default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
 default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
 default['gitlab']['nginx']['custom_nginx_config'] = nil
 
@@ -384,7 +373,9 @@ default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
 default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil
+default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
+
+default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil # Deprecated, will be removed in the next release
 
 # application.yml, gravatar section
 default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
