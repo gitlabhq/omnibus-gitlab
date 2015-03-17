@@ -17,6 +17,11 @@
 # limitations under the License.
 #
 
+directory "/etc/systemd/system/default.target.wants" do
+  recursive true
+  not_if { ::File.directory?("/etc/systemd/system/default.target.wants") }
+end
+
 link "/etc/systemd/system/default.target.wants/gitlab-runsvdir.service" do
   to "/opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.service"
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
