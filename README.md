@@ -369,19 +369,19 @@ See [doc/settings/ldap.md](doc/settings/ldap.md).
 
 ### Enable HTTPS
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](doc/settings/nginx.md#enable-https).
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-https).
 
 #### Change the default port and the ssl certificate locations.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
 ### Use non-bundled web-server
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+For using an external Nginx webserver or Apache see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
