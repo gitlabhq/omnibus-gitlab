@@ -102,7 +102,6 @@ end
 
 runit_service "nginx" do
   down node['gitlab']['nginx']['ha']
-  restart_command 'h' # Restart NGINX using SIGHUP
   options({
     :log_directory => nginx_log_dir
   }.merge(params))
