@@ -40,9 +40,9 @@ if system("#{Config.project_root}/support/is_gitlab_ee.sh") || system("#{Config.
 end
 dependency "logrotate"
 dependency "runit"
+dependency "nodejs"
 dependency "gitlab-ci"
 dependency "krb5"
-dependency "nodejs"
 dependency "gitlab-rails"
 dependency "gitlab-shell"
 dependency "gitlab-ctl"
