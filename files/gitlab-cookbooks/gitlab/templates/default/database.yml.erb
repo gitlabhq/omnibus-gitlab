@@ -12,3 +12,5 @@ production:
   host: <%= single_quote(@db_host) %>
   port: <%= @db_port %>
   socket: <%= single_quote(@db_socket) %>
+  socket: <%= single_quote(@db_sslmode) %>
+  socket: <%= single_quote(@db_sslrootcert) %>
