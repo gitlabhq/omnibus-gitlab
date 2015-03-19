@@ -26,10 +26,12 @@ relative_path 'icu/source'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['LD_RPATH'] = "#{install_dir}/embedded/lib"
 
   command ["./runConfigureICU",
            "Linux/gcc",
            "--prefix=#{install_dir}/embedded",
+           "--with-data-packaging=archive"
 	   ].join(" "), :env => env
 
   command "make -j #{max_build_jobs}", :env => env
