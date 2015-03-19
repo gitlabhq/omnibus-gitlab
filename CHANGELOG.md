@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Add gitlab-ci to logrotate (François Conil) 397ce5bab202d9d86e30a62538dca1323b7f6f4c
 - New LDAP defaults, port and method 7a65245c59fd094e88784f924ecd968d134716fa
 - Disable GCE plugin 35b7b89c78fe7e1c35bb7063c2a03e70d6915c1d
+- Update to openssl 1.0.1m
 
 7.7.0
 
