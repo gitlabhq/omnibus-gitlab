@@ -175,7 +175,7 @@ default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/g
 default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
-default['gitlab']['unicorn']['worker_timeout'] = 3600
+default['gitlab']['unicorn']['worker_timeout'] = 60
 
 ####
 # Sidekiq
