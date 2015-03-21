@@ -16,7 +16,7 @@ omnibus-gitlab repository.
 - Change default number of unicorn workers from 2 to 3 3d3f6e632b61326f6ff0376d7151cf7cf945383b
 - Use systemd for debian 8 6f8a9e2c8258de883a437d1b8104d69726a18bdd
 - Increase unicorn timeout to 1 hour f21dddc2d2e20c7a7d3376dc2839fff2629ec406
-- Add nodejs
+- Add nodejs dependency
 - Added option to add keys needed for bitbucket importer c8c720f97098774679bca2c1d1200e2a8126827f
 
 7.8.0
