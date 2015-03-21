@@ -24,6 +24,8 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
+ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
+known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_app = "gitlab"
 
 # Needed for .gitlab_shell_secret
@@ -232,4 +234,29 @@ execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
   action :nothing
+end
+
+bitbucket_keys = node['gitlab']['gitlab-rails']['bitbucket']
+
+unless bitbucket_keys.nil?
+  execute 'trust bitbucket.org fingerprint' do
+    command "echo '#{bitbucket_keys['known_hosts_key']}' >> #{known_hosts}"
+    user node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    not_if "grep '#{bitbucket_keys['known_hosts_key']}' #{known_hosts}"
+  end
+
+  file File.join(ssh_dir, 'bitbucket_rsa') do
+    content "#{bitbucket_keys['private_key']}\n"
+    owner node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    mode 0600
+  end
+
+  file File.join(ssh_dir, 'bitbucket_rsa.pub') do
+    content "#{bitbucket_keys['public_key']}\n"
+    owner node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    mode 0644
+  end
 end
