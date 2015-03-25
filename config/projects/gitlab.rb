@@ -28,6 +28,9 @@ build_iteration 1
 override :ruby, version: '2.1.5'
 override :rubygems, version: '2.2.1'
 
+# Openssh needs to be installed
+runtime_dependency "openssh-server"
+
 # creates required build directories
 dependency "preparation"
 
