@@ -2,7 +2,22 @@
 
 See
 https://gitlab.com/gitlab-org/gitlab-omnibus-builder/blob/master/README.md#recipe-default
-for instructions on how to prepare a build box using Chef.
+for instructions on how to prepare a build box using Chef. After running the cookbook you can perform builds as the `omnibus-build` user.
+
+```shell
+# Login as omnibus-build user
+sudo su - omnibus-build
+
+# Clone the omnibus repo
+git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
+
+# Install gem dependencies for omnibus-ruby
+cd omnibus-gitlab
+bundle install --path .bundle --binstubs
+
+# Do a build
+bin/omnibus build project gitlab
+```
 
 ## Usage
 
