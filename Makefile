@@ -2,7 +2,7 @@ PROJECT=gitlab
 ifndef TESTBUCKET
 	RELEASE_BUCKET=downloads-packages
 else
-	RELEASE_BUCKET=omnibus-build
+	RELEASE_BUCKET=omnibus-builds
 endif
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
