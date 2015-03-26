@@ -23,8 +23,6 @@ EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
-dependency "libxml2"
-dependency "libxslt"
 dependency "curl"
 dependency "rsync"
 dependency "libicu"
