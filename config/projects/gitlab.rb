@@ -27,6 +27,7 @@ build_iteration 1
 
 override :ruby, version: '2.1.5'
 override :rubygems, version: '2.2.1'
+override :'chef-gem', version: "11.18.0"
 
 # creates required build directories
 dependency "preparation"
