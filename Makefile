@@ -1,5 +1,9 @@
 PROJECT=gitlab
-RELEASE_BUCKET=downloads-packages
+ifndef TESTBUCKET
+	RELEASE_BUCKET=downloads-packages
+else
+	RELEASE_BUCKET=omnibus-build
+endif
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
@@ -9,9 +13,7 @@ build:
 
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 
-do_packages:
-	RELEASE_BUCKET=omnibus-builds
-	no_changes purge build move_to_platform_dir sync
+do_packages: no_changes purge build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD
