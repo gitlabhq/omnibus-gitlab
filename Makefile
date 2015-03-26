@@ -9,7 +9,9 @@ build:
 
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 
-do_packages: no_changes purge build move_to_platform_dir move_to_secret_dir md5
+do_packages:
+	RELEASE_BUCKET=omnibus-builds
+	no_changes purge build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD
