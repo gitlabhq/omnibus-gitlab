@@ -30,6 +30,9 @@ override :rubygems, version: '2.2.1'
 override :'chef-gem', version: '11.18.0'
 override :'omnibus-ctl', version: '0.3.3'
 
+# Openssh needs to be installed
+runtime_dependency "openssh-server"
+
 # creates required build directories
 dependency "preparation"
 
