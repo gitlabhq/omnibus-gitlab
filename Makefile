@@ -1,9 +1,5 @@
 PROJECT=gitlab
-ifndef TESTBUCKET
-	RELEASE_BUCKET=downloads-packages
-else
-	RELEASE_BUCKET=omnibus-builds
-endif
+RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
@@ -11,9 +7,17 @@ PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("pla
 build:
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
+# No need to suppress timestamps on the test builds
+test_build:
+	bin/omnibus build ${PROJECT} --log-level info
+
+# If this task were called 'release', running 'make release' would confuse Make
+# because there exists a file called 'release.sh' in this directory. Make has
+# built-in rules on how to build .sh files. By calling this task do_release, it
+# can coexist with the release.sh file.
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 
-do_packages: no_changes purge build move_to_platform_dir sync
+test: no_changes purge test_build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD
