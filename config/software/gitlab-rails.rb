@@ -32,6 +32,7 @@ dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "rugged"
+dependency "krb5"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-ce.git"
 
