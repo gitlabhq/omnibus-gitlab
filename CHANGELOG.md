@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Increase unicorn timeout to 1 hour f21dddc2d2e20c7a7d3376dc2839fff2629ec406
 - Add nodejs dependency
 - Added option to add keys needed for bitbucket importer c8c720f97098774679bca2c1d1200e2a8126827f
+- Add rack attack and email_display name config options e3dcc9a7efcec9b4ddf7e715fed9da7ac971cc57
 
 7.8.0
 
