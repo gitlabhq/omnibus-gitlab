@@ -17,6 +17,8 @@ test_build:
 # can coexist with the release.sh file.
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 
+# Redefine RELEASE_BUCKET for test builds
+test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge test_build move_to_platform_dir sync
 
 no_changes:
