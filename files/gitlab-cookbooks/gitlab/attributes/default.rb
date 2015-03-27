@@ -64,6 +64,7 @@ default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
+default['gitlab']['gitlab-rails']['gitlab_email_display_name'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
@@ -125,6 +126,7 @@ default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
 default['gitlab']['gitlab-rails']['extra_sign_in_text'] = nil
+default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
 
 default['gitlab']['gitlab-rails']['aws_enable'] = false
 default['gitlab']['gitlab-rails']['aws_access_key_id'] = nil
