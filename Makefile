@@ -2,7 +2,7 @@ PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
-PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
+PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 
 build:
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
