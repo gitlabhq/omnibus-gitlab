@@ -66,4 +66,4 @@ s3_sync:
 	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
 
 packagecloud:
-	bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} pkg/*/*.deb pkg/*/*/*.deb pkg/*/*.rpm pkg/*/*/*.rpm
+	bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb')
