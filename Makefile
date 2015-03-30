@@ -3,6 +3,9 @@ RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
+PACKAGECLOUD_USER=jacob
+PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab; fi)
+PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 
 build:
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
@@ -15,7 +18,7 @@ test_build:
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
 # can coexist with the release.sh file.
-do_release: no_changes on_tag purge build move_to_platform_dir sync
+do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
@@ -61,3 +64,6 @@ s3_sync:
 	# empty line for aws status crud
 	# Download URLS:
 	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
+
+packagecloud:
+	bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} pkg/*/*.deb pkg/*/*/*.deb pkg/*/*.rpm pkg/*/*/*.rpm
