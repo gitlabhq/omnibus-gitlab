@@ -20,7 +20,7 @@ name "gitlab-cookbooks"
 
 dependency "rsync"
 
-always_build true
+version `git ls-tree HEAD -- files/gitlab-cookbooks | awk '{ print $3 }'`
 
 source :path => File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)
 

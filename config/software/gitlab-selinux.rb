@@ -19,7 +19,7 @@ name "gitlab-selinux"
 
 dependency "rsync"
 
-always_build true
+version `git ls-tree HEAD -- files/gitlab-selinux | awk '{ print $3 }'`
 
 source :path => File.expand_path("files/gitlab-selinux", Omnibus::Config.project_root)
 

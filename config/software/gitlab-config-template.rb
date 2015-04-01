@@ -19,7 +19,7 @@ name "gitlab-config-template"
 
 dependency "rsync"
 
-always_build true
+version `git ls-tree HEAD -- files/gitlab-config-template | awk '{ print $3 }'`
 
 source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)
 
