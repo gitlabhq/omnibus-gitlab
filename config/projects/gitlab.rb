@@ -35,7 +35,6 @@ maintainer "GitLab B.V."
 homepage "https://about.gitlab.com/"
 
 # Replace older omnibus-gitlab packages
-replaces        "gitlab"
 conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
