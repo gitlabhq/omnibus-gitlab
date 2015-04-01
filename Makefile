@@ -4,7 +4,7 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=jacob
-PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab; fi)
+PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 
 build:

@@ -19,17 +19,25 @@ ee = system("#{Config.project_root}/support/is_gitlab_ee.sh") || system("#{Confi
 
 if ee
   name "gitlab-ee"
-  description "GitLab Enterprise Edition and GitLab CI (including NGINX, Postgres, Redis)"
+  description "GitLab Enterprise Edition and GitLab CI "\
+    "(including NGINX, Postgres, Redis)"
+  replaces        "gitlab-ce"
+  conflict        "gitlab-ce"
 else
-  name "gitlab"
-  description "GitLab Community Edition and GitLab CI (including NGINX, Postgres, Redis)"
+  name "gitlab-ce"
+  description "GitLab Community Edition and GitLab CI "\
+    "(including NGINX, Postgres, Redis)"
+  replaces        "gitlab-ee"
+  conflict        "gitlab-ee"
 end
 
 maintainer "GitLab B.V."
 homepage "https://about.gitlab.com/"
 
+# Replace older omnibus-gitlab packages
 replaces        "gitlab"
 conflict        "gitlab"
+
 install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
