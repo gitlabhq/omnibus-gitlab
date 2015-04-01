@@ -33,7 +33,7 @@ build do
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
-  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{max_build_jobs}", :env => env
+  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers}", :env => env
 
   # Record the current Git revision to be displayed in the app
   command "git log --pretty=format:'%h' -n 1 > REVISION"
