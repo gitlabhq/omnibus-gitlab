@@ -21,7 +21,7 @@ dependency "rsync"
 
 always_build true
 
-source :path => File.expand_path("files/gitlab-config-template", Config.project_root)
+source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/etc"

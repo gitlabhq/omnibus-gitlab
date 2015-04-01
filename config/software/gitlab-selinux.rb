@@ -21,7 +21,7 @@ dependency "rsync"
 
 always_build true
 
-source :path => File.expand_path("files/gitlab-selinux", Config.project_root)
+source :path => File.expand_path("files/gitlab-selinux", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/selinux"

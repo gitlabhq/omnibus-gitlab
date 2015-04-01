@@ -18,7 +18,7 @@
 name "gitlab-ci"
 default_version "8e29dee98e3ac0fa5c69708f78429a0d758a92cb" # CI 7.9.1
 
-EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
+EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
