@@ -4,12 +4,17 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
 
-build:
+build: fetch_uuid
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
 # No need to suppress timestamps on the test builds
-test_build:
+test_build: fetch_uuid
 	bin/omnibus build ${PROJECT} --log-level info
+
+fetch_uuid:
+	# Download libossp-uuid outside of omnibus, because FTP through firewall sucks
+	mkdir -p /var/cache/omnibus/cache
+	cd /var/cache/omnibus/cache && curl -O --silent ftp://ftp.ossp.org/pkg/lib/uuid/uuid-1.6.2.tar.gz
 
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
