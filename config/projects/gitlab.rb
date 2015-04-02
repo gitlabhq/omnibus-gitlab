@@ -21,13 +21,13 @@ if ee
   name "gitlab-ee"
   description "GitLab Enterprise Edition and GitLab CI "\
     "(including NGINX, Postgres, Redis)"
-  replaces        "gitlab-ce"
+  replace        "gitlab-ce"
   conflict        "gitlab-ce"
 else
   name "gitlab-ce"
   description "GitLab Community Edition and GitLab CI "\
     "(including NGINX, Postgres, Redis)"
-  replaces        "gitlab-ee"
+  replace        "gitlab-ee"
   conflict        "gitlab-ee"
 end
 
@@ -35,6 +35,7 @@ maintainer "GitLab B.V."
 homepage "https://about.gitlab.com/"
 
 # Replace older omnibus-gitlab packages
+replace         "gitlab"
 conflict        "gitlab"
 
 install_dir     "/opt/gitlab"

@@ -19,9 +19,13 @@ name "gitlab-selinux"
 
 dependency "rsync"
 
-always_build true
+# Help omnibus-ruby to cache the build product of this software. This is a
+# workaround for the deprecation of `always_build true`. What happens now is
+# that we build only if the contents of the specified directory have changed
+# according to git.
+version `git ls-tree HEAD -- files/gitlab-selinux | awk '{ print $3 }'`
 
-source :path => File.expand_path("files/gitlab-selinux", Config.project_root)
+source :path => File.expand_path("files/gitlab-selinux", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/selinux"

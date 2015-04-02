@@ -19,7 +19,7 @@
 name "gitlab-rails"
 default_version "6f6c5f18a010eb96f9e6ff98cf91e6c8a8fb6d8d" # CE 7.9.1
 
-EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
+EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
@@ -48,7 +48,7 @@ build do
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
-  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{max_build_jobs}", :env => env
+  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers}", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
@@ -60,7 +60,7 @@ build do
   # database at this point so that is a problem. This bug is fixed in
   # acts-as-taggable-on 3.0.0 by
   # https://github.com/mbleigh/acts-as-taggable-on/commit/ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e
-  aato_patch = "#{Config.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
+  aato_patch = "#{Omnibus::Config.project_root}/config/patches/acts-as-taggable-on-ad02dc9bb24ec8e1e79e7e35e2d4bb5910a66d8e.diff"
 
   # To make this idempotent, we apply the patch (in case this is a first run) or
   # we revert and re-apply the patch (if this is a second or later run).

@@ -215,7 +215,7 @@ server {
   passenger_ruby /opt/gitlab/embedded/bin/ruby;
 
   # Correct the $PATH variable to included packaged executables
-  passenger_set_cgi_param PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
+  passenger_env_var PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
 
   # Make sure Passenger runs as the correct user and group to
   # prevent permission issues

@@ -43,5 +43,5 @@ build do
   ]
   mkdir build_dir
   command "cmake .. #{cmake_options.join(' ')}", env: env, cwd: build_dir
-  command "make -j #{max_build_jobs} install", env: env, cwd: build_dir
+  command "make -j #{workers} install", env: env, cwd: build_dir
 end
