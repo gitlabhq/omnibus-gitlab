@@ -56,11 +56,9 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   log 'Backing up application data (except Git repositories) prior to running '\
     'migrations'
   # Missing: GitLab CI backup
-  status = system(
-    *%W(#{base_path}/bin/gitlab-rake gitlab:backup:create),
-    env: {'SKIP' => 'repositories'}
-  )
-  exit! 1 unless status
+  if ! system(*%W(#{base_path}/bin/gitlab-rake gitlab:backup:create SKIP=repositories))
+    exit! 1
+  end
 
   log 'Reconfiguring GitLab to apply migrations'
   reconfigure(false) # sending 'false' means "don't quit afterwards"
