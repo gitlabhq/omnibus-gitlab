@@ -45,6 +45,10 @@ if [ -x /usr/bin/dpkg-query ] ; then
   done
 fi
 
+# Perform automatic migrations in case of an upgrade. Will exit without doing
+# anything if this is fresh install.
+/opt/gitlab/bin/gitlab-ctl upgrade
+
 echo "Thank you for installing GitLab!"
 echo "Configure and start GitLab by running the following command:"
 echo

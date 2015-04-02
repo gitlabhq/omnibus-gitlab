@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.1.0
+
+- Automatically stop GitLab, backup, reconfigure and start after a new package is installed
+
 7.9.0
 
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 428ee157c346f3f0eae53762b51145502b1456a6
