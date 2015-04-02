@@ -75,5 +75,10 @@ dependency "version-manifest"
 exclude "\.git*"
 exclude "bundler\/git"
 
+# Because we have a dynamic 'name' (gitlab-ce or gitlab-ee), omnibus-ruby would
+# look in either package-scripts/gitlab-ce or package-scripts/gitlab-ee. We
+# don't want that so let's hard-code the path.
+package_scripts_path "#{Omnibus::Config.project_root}/package-scripts/gitlab"
+
 package_user 'root'
 package_group 'root'
