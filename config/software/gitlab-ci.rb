@@ -40,8 +40,8 @@ build do
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
-  command "cp config/application.yml.example config/application.yml"
-  command "cp config/database.yml.postgresql config/database.yml"
+  copy 'config/application.yml.example', 'config/application.yml'
+  copy 'config/database.yml.postgresql', 'config/database.yml'
 
   assets_precompile_env = {
     "RAILS_ENV" => "production",
@@ -50,15 +50,18 @@ build do
   bundle "exec rake assets:precompile", :env => assets_precompile_env
 
   # Tear down now that the assets:precompile is done.
-  command "rm config/application.yml config/database.yml .secret"
+  delete 'config/application.yml'
+  delete 'config/database.yml'
+  delete '.secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
-  command "rm -rf log tmp"
+  delete 'log'
+  delete 'tmp'
 
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
   # mysql-postgresql-converter.)
-  command "cp db/schema.rb db/schema.rb.bundled"
+  copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-ci"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-ci/"
