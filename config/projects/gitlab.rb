@@ -20,7 +20,6 @@ name "gitlab"
 maintainer "GitLab.com"
 homepage "https://about.gitlab.com/"
 
-replaces        "gitlab"
 install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
@@ -40,7 +39,7 @@ dependency "git"
 dependency "redis"
 dependency "nginx"
 dependency "chef-gem"
-if system("#{Config.project_root}/support/is_gitlab_ee.sh") || system("#{Config.project_root}/support/is_gitlab_com.sh")
+if system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
   dependency "remote-syslog"
 end
 dependency "logrotate"
