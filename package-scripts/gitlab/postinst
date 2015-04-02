@@ -73,4 +73,18 @@ print_welcome()
 create_symlinks
 create_config_template
 fix_directory_permissions
-print_welcome
+
+case "$1" in
+  2)
+    # Looks like an RPM upgrade
+    /opt/gitlab/bin/gitlab-ctl upgrade
+    ;;
+  upgrade)
+    # Looks like a DEB upgrade
+    /opt/gitlab/bin/gitlab-ctl upgrade
+    ;;
+  *)
+    # Assume this is a fresh install
+    print_welcome
+    ;;
+esac
