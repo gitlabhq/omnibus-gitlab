@@ -235,7 +235,7 @@ developer-friendly format to an end-user friendly (compact, fast) format; that
 is what the `rake assets:precompile` script is for.
 
 When you install GitLab from source (which was the only way to do it before we
-have omnibus packages) you need to convert the assets on your GitLab server
+had omnibus packages) you need to convert the assets on your GitLab server
 every time you update GitLab. People used to overlook this step so there are
 lots of posts, comments and mails out there on the internet where users
 recommend eachother to run `rake assets:precompile`. With the omnibus packages
