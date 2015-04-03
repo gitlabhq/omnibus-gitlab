@@ -218,6 +218,41 @@ process running as root that can open privileged TCP ports (80/443) and files
 (SSL certificates), while pushing the risky business of handling web requests
 to 'worker' processes running as gitlab-www.
 
+#### gitlab-rake assets:precompile fails with 'Permission denied'
+
+Some users report that running `gitlab-rake assets:precompile` does not work
+with the omnibus packages. The short answer to this is: do not run that
+command, it is only for GitLab installations from source.
+
+The GitLab web interface uses CSS and Javascript files, called 'assets' in Ruby
+on Rails-speak. In the [upstream GitLab
+repository](https://gitlab.com/gitlab-org/gitlab-ce/tree/master/app/assets)
+these files are stored in a developer-friendly way: easy to read and edit. When
+you are a normal user of GitLab, you do not want these files to be in the
+developer friendly format however because that makes GitLab slow. This is why
+part of the GitLab setup process is to convert the assets from a
+developer-friendly format to an end-user friendly (compact, fast) format; that
+is what the `rake assets:precompile` script is for.
+
+When you install GitLab from source (which was the only way to do it before we
+had omnibus packages) you need to convert the assets on your GitLab server
+every time you update GitLab. People used to overlook this step so there are
+lots of posts, comments and mails out there on the internet where users
+recommend eachother to run `rake assets:precompile`. With the omnibus packages
+things are different: when we build the package [we convert the assets for
+you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
+When you install GitLab with an omnibus package, the converted assets are
+already there! That is why you do not need to run `rake assets:precompile` when
+you install GitLab from a package.
+
+When `gitlab-rake assets:precompile` fails with a permission error it fails for
+a good reason from a security standpoint: the fact that the assets cannot
+easily be rewritten makes it harder for an attacker to use your GitLab server
+to serve evil Javascript code to the visitors of your GitLab server.
+
+If you want to run GitLab with custom Javascript or CSS code you are probably
+better off running GitLab from source, or building your own packages.
+
 ### Uninstalling omnibus-gitlab
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
