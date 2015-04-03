@@ -200,6 +200,24 @@ Try enabling the module on which sysctl errored out, on how to enable the module
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
+#### I am unable to install omnibus-gitlab without root access
+
+Occasionally people ask if they can install GitLab without root access. This is
+not possible because GitLab uses multiple system users (privilege separation)
+for security reasons. The `gitlab-ctl reconfigure` script needs root access to
+create/manage these users and the files they have access to.
+
+Once GitLab is up an running on your system, you will see that several
+processes run as root, for instance the 'runsv' and 'runsvdir' processes
+(Runit) and the NGINX master process. Runit is a process supervisor that
+manages the different GitLab services for you. Because those services run as
+different users (privilege separation), and Runit needs to manage all of those
+services, Runit itself needs root. NGINX (the front-end web server) has its own
+built-in process supervision and privilege separation. It has a 'master'
+process running as root that can open privileged TCP ports (80/443) and files
+(SSL certificates), while pushing the risky business of handling web requests
+to 'worker' processes running as gitlab-www.
+
 ### Uninstalling omnibus-gitlab
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
