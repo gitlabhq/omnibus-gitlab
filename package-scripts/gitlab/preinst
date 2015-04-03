@@ -1,0 +1,36 @@
+#!/bin/sh
+# GitLab pre-install script
+
+main() {
+  if [ -e /etc/gitlab/skip-auto-migrations ] ; then
+    # The user does not want our automagic
+    exit 0
+  fi
+
+  notify "Shutting down all GitLab services except the database"
+  /opt/gitlab/bin/gitlab-ctl stop
+  /opt/gitlab/bin/gitlab-ctl start postgresql
+  notify "Backing up GitLab application data (except repositories)"
+  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories ; then
+    notify "Failed to backup GitLab application data prior to upgrading. Aborting."
+    exit 1
+  fi
+  # Missing: GitLab CI backup
+}
+
+notify() {
+  echo "gitlab preinst: $1"
+}
+
+case "$1" in
+  2)
+    # Looks like an RPM upgrade
+    main
+    ;;
+  upgrade)
+    # Looks like a DEB upgrade
+    main
+    ;;
+  *)
+    ;;
+esac
