@@ -77,6 +77,7 @@ fi
 create_symlinks
 create_config_template
 fix_directory_permissions
+print_welcome
 
 case "$1" in
   2)
@@ -91,5 +92,3 @@ case "$1" in
   *)
     ;;
 esac
-
-print_welcome
