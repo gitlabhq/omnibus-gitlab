@@ -83,9 +83,13 @@ case "$1" in
     # Looks like an RPM upgrade
     /opt/gitlab/bin/gitlab-ctl upgrade
     ;;
-  upgrade)
-    # Looks like a DEB upgrade
-    /opt/gitlab/bin/gitlab-ctl upgrade
+  configure)
+    # Looks like a DEB. We expect the arguments to be 'configure old-version';
+    # if the 'old-version' part is null then this is a fresh install.
+    if [ -n "$2" ] ; then
+      # Not a fresh install probably
+      /opt/gitlab/bin/gitlab-ctl upgrade
+    fi
     ;;
   *)
     # Assume this is a fresh install
