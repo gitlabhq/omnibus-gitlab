@@ -24,7 +24,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   service_statuses = ''
   begin
-    service_statuses = File.read(base_path, 'tmp/running-processes')
+    service_statuses = File.read("#{base_path}/tmp/running-processes")
   rescue Errno::ENOENT
   end
 
