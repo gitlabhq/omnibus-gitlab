@@ -1,6 +1,11 @@
 #!/bin/sh
 # GitLab pre-install script
 
+# Do not use /tmp because of race conditions; do not use /var/opt/gitlab
+# because it contains cluster state, not instance state.
+tmp_dir=/opt/gitlab/tmp
+running_processes="${tmp_dir}/running-processes"
+
 main() {
   if [ -e /etc/gitlab/skip-auto-migrations ] ; then
     # The user does not want our automagic
@@ -18,6 +23,11 @@ main() {
   # Missing: GitLab CI backup
 }
 
+record_running_processes() {
+  mkdir -p "${tmp_dir}"
+  /opt/gitlab/bin/gitlab-ctl status > "${running_processes}" 2> /dev/null
+}
+
 notify() {
   echo "gitlab preinstall: $1"
 }
@@ -25,6 +35,10 @@ notify() {
 if [ -n "${GITLAB_DEBUG}" ] ; then
   notify "debug: arguments: $@"
 fi
+
+# Always record running processes to make the job of the postinst script
+# easier.
+record_running_processes
 
 case "$1" in
   2)

@@ -22,7 +22,12 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
-  service_statuses = IO.popen(%W(#{base_path}/bin/gitlab-ctl status)).read
+  service_statuses = ''
+  begin
+    service_statuses = File.read(base_path, 'tmp/running-processes')
+  rescue Errno::ENOENT
+  end
+
 
   if /: runsv not running/.match(service_statuses) then
     log 'It looks like GitLab has not been installed yet; skipping the upgrade '\
