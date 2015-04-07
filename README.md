@@ -224,7 +224,7 @@ Some users report that running `gitlab-rake assets:precompile` does not work
 with the omnibus packages. The short answer to this is: do not run that
 command, it is only for GitLab installations from source.
 
-The GitLab web interface uses CSS and Javascript files, called 'assets' in Ruby
+The GitLab web interface uses CSS and JavaScript files, called 'assets' in Ruby
 on Rails-speak. In the [upstream GitLab
 repository](https://gitlab.com/gitlab-org/gitlab-ce/tree/master/app/assets)
 these files are stored in a developer-friendly way: easy to read and edit. When
@@ -248,9 +248,9 @@ you install GitLab from a package.
 When `gitlab-rake assets:precompile` fails with a permission error it fails for
 a good reason from a security standpoint: the fact that the assets cannot
 easily be rewritten makes it harder for an attacker to use your GitLab server
-to serve evil Javascript code to the visitors of your GitLab server.
+to serve evil JavaScript code to the visitors of your GitLab server.
 
-If you want to run GitLab with custom Javascript or CSS code you are probably
+If you want to run GitLab with custom JavaScript or CSS code you are probably
 better off running GitLab from source, or building your own packages.
 
 ### Uninstalling omnibus-gitlab
