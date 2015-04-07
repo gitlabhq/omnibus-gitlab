@@ -10,8 +10,8 @@ main() {
   notify "Shutting down all GitLab services except the database"
   /opt/gitlab/bin/gitlab-ctl stop
   /opt/gitlab/bin/gitlab-ctl start postgresql
-  notify "Backing up GitLab application data (except repositories)"
-  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories ; then
+  notify "Backing up GitLab application data"
+  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create ; then
     notify "Failed to backup GitLab application data prior to upgrading. Aborting."
     exit 1
   fi
