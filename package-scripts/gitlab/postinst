@@ -71,7 +71,7 @@ print_welcome()
 }
 
 if [ -n "${GITLAB_DEBUG}" ] ; then
-  echo "gitlab postinstall: debug: arguments are $@"
+  echo "gitlab postinstall: debug: arguments: $@"
 fi
 
 create_symlinks

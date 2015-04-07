@@ -23,7 +23,7 @@ notify() {
 }
 
 if [ -n "${GITLAB_DEBUG}" ] ; then
-  notify "debug: arguments are $@"
+  notify "debug: arguments: $@"
 fi
 
 case "$1" in
