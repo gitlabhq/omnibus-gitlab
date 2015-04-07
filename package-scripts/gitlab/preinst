@@ -19,8 +19,12 @@ main() {
 }
 
 notify() {
-  echo "gitlab preinst: $1"
+  echo "gitlab preinstall: $1"
 }
+
+if [ -n "${GITLAB_DEBUG}" ] ; then
+  notify "debug: arguments are $@"
+fi
 
 case "$1" in
   2)

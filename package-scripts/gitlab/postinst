@@ -70,6 +70,10 @@ print_welcome()
   echo
 }
 
+if [ -n "${GITLAB_DEBUG}" ] ; then
+  echo "gitlab postinstall: debug: arguments are $@"
+fi
+
 create_symlinks
 create_config_template
 fix_directory_permissions
