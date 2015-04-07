@@ -236,10 +236,10 @@ is what the `rake assets:precompile` script is for.
 
 When you install GitLab from source (which was the only way to do it before we
 had omnibus packages) you need to convert the assets on your GitLab server
-every time you update GitLab. People used to overlook this step so there are
-lots of posts, comments and mails out there on the internet where users
-recommend eachother to run `rake assets:precompile`. With the omnibus packages
-things are different: when we build the package [we convert the assets for
+every time you update GitLab. People used to overlook this step and there are
+still posts, comments and mails out there on the internet where users recommend
+each other to run `rake assets:precompile`. With the omnibus packages things
+are different: when we build the package [we convert the assets for
 you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
 When you install GitLab with an omnibus package, the converted assets are
 already there! That is why you do not need to run `rake assets:precompile` when
