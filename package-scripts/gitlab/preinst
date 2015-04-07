@@ -12,6 +12,11 @@ main() {
     exit 0
   fi
 
+  # Saving running process state so we can restore this state after the upgrade
+  # script finishes
+  mkdir -p "${tmp_dir}"
+  /opt/gitlab/bin/gitlab-ctl status > "${running_processes}" 2> /dev/null
+
   notify "Shutting down all GitLab services except the database"
   /opt/gitlab/bin/gitlab-ctl stop
   /opt/gitlab/bin/gitlab-ctl start postgresql
@@ -23,11 +28,6 @@ main() {
   # Missing: GitLab CI backup
 }
 
-record_running_processes() {
-  mkdir -p "${tmp_dir}"
-  /opt/gitlab/bin/gitlab-ctl status > "${running_processes}" 2> /dev/null
-}
-
 notify() {
   echo "gitlab preinstall: $1"
 }
@@ -36,9 +36,8 @@ if [ -n "${GITLAB_DEBUG}" ] ; then
   notify "debug: arguments: $@"
 fi
 
-# Always record running processes to make the job of the postinst script
-# easier.
-record_running_processes
+# Always clean up the process list, even if this is a fresh install
+rm -f "${running_processes}"
 
 case "$1" in
   2)
@@ -50,5 +49,6 @@ case "$1" in
     main
     ;;
   *)
+    # This is not an upgrade, nothing to do.
     ;;
 esac
