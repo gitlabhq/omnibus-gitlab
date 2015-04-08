@@ -34,7 +34,7 @@ end
 # Create the webserver user
 user webserver_username do
   shell node['gitlab']['web-server']['shell']
-  home node['gitlab']['nginx']['home']
+  home node['gitlab']['web-server']['home']
   uid node['gitlab']['web-server']['uid']
   gid webserver_group
   system true
