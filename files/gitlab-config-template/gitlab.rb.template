@@ -322,6 +322,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # web_server['group'] = 'gitlab-www'
 # web_server['uid'] = nil
 # web_server['gid'] = nil
+# web_server['shell'] = '/bin/false'
+# web_server['home'] = '/var/opt/gitlab/nginx'
 
 
 ################
