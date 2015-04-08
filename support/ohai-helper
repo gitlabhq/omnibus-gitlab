@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 require 'ohai'
 
+# This prints something like 'ubuntu-12.04'; used by our legacy AWS uploads
 def platform_dir
   puts "#{ohai['platform']}-#{ohai['platform_version']}"
 end
 
+# This prints something like 'ubuntu/precise'; used for packagecloud uploads
 def repo_string
   os = :unknown
   version = :unknown
