@@ -20,6 +20,11 @@ error_exit()
   exit 1
 }
 
+notify()
+{
+  echo "gitlab postinstall: $1"
+}
+
 create_symlinks()
 {
   for command in gitlab-ctl gitlab-rake gitlab-rails gitlab-ci-rake gitlab-ci-rails
@@ -56,22 +61,22 @@ fi
 
 print_welcome()
 {
-  echo "Thank you for installing GitLab!"
-  echo "Configure and start GitLab by running the following command:"
-  echo
-  echo "sudo gitlab-ctl reconfigure"
-  echo
-  echo "GitLab should be reachable at ${external_url}"
-  echo "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
-  echo "And running reconfigure again."
-  echo
-  echo "For a comprehensive list of configuration options please see the Omnibus GitLab readme"
-  echo "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md"
-  echo
+  notify "Thank you for installing GitLab!"
+  notify "Configure and start GitLab by running the following command:"
+  notify
+  notify "sudo gitlab-ctl reconfigure"
+  notify
+  notify "GitLab should be reachable at ${external_url}"
+  notify "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
+  notify "And running reconfigure again."
+  notify
+  notify "For a comprehensive list of configuration options please see the Omnibus GitLab readme"
+  notify "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md"
+  notify
 }
 
 if [ -n "${GITLAB_DEBUG}" ] ; then
-  echo "gitlab postinstall: debug: arguments: $@"
+  notify "debug: arguments: $@"
 fi
 
 create_symlinks
