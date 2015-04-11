@@ -51,6 +51,12 @@ if nginx_vars['listen_port'].nil?
   nginx_vars['listen_port'] = gitlab_port
 end
 
+if nginx_vars['listen_https'].nil?
+  nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
+else
+  nginx_vars['https'] = nginx_vars['listen_https']
+end
+
 template nginx_vars[:gitlab_http_config] do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
@@ -59,7 +65,6 @@ template nginx_vars[:gitlab_http_config] do
   variables(nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :https => node['gitlab']['gitlab-rails']['gitlab_https'],
       :socket => node['gitlab']['unicorn']['socket'],
       :port => gitlab_port
     }
