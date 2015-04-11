@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 7.10.0
 
-- Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 455b15a63e428c294b115438469705678a26493d
+- Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
 
 7.9.0
 
