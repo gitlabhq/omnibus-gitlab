@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.10.0
+
+- Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
+
 7.9.0
 
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 428ee157c346f3f0eae53762b51145502b1456a6
