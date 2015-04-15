@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 
 7.9.0
 
+- Add gitlab_email_reply_to property (Stan Hu) e04fe3e8227d0356add3095a0cd56955d7acfe60
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 428ee157c346f3f0eae53762b51145502b1456a6
 - Respect gitlab_email_enabled property (Daniel Serodio) e2982692d49772c4f896a775e476a62b4831b8a1
 - Use correct cert for CI (Flávio J. Saraiva) 484227e2dfe33f59e3683a5757be6842d7ce79d2

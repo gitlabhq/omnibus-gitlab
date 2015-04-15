@@ -18,6 +18,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 # If your SMTP server does not like the default 'From: gitlab@localhost' you
 # can change the 'From' with this setting.
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
 ## GitLab CI
@@ -39,6 +40,7 @@ gitlab_ci['smtp_address'] = "smtp.server"
 
 ```
 gitlab_rails['gitlab_email_from'] = 'my.email@gmail.com'
+gitlab_rails['gitlab_email_reply_to'] = 'my.email@gmail.com'
 
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.gmail.com"
