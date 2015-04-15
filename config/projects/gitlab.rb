@@ -24,7 +24,7 @@ install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
-override :ruby, version: '2.1.5'
+override :ruby, version: '2.1.6',  source: { md5: "6e5564364be085c45576787b48eeb75f" }
 override :rubygems, version: '2.2.1'
 override :'chef-gem', version: '11.18.0'
 override :'omnibus-ctl', version: '0.3.3'
