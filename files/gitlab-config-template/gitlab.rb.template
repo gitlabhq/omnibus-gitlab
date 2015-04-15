@@ -47,6 +47,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
 #     ## EE only
@@ -64,6 +65,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
 #     ## EE only
