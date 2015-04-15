@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "b18d07e69ff8aac8bf04685372cd87bb8929232a" # EE 7.9.3-ee
+default_version "db21c7519b309df19f9932c8539f95c1dd57dbee" # EE 7.9.4-ee
 
 EE = system("#{Config.project_root}/support/is_gitlab_ee.sh")
 
