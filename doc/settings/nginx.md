@@ -139,10 +139,17 @@ For GitLab CI, use the `ci_nginx['listen_addresses']` setting.
 By default NGINX will listen on the port specified in `external_url` or
 implicitly use the right port (80 for HTTP, 443 for HTTPS). If you are running
 GitLab behind a reverse proxy, you may want to override the listen port to
-something else.  For example, to use port 8080:
+something else.  For example, to use port 9080:
 
 ```ruby
-nginx['listen_port'] = 8080
+external_url 'http://gitlab.example.com'
+#ci_external_url "http://ci.example.com"
+
+nginx['listen_port']=9080
+#ci_nginx['listen_port']=9090
+
+#nginx['listen_https'] = false
+#ci_nginx['listen_https'] = false
 ```
 
 ## Supporting proxied SSL
