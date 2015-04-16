@@ -27,7 +27,7 @@ relative_path "krb5-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command "tar xf krb5-#{version}.tar.gz", cwd: Config.source_dir
+  command "tar xf krb5-#{version}.tar.gz", cwd: Omnibus::Config.source_dir
 
   # 'configure' will detect libkeyutils and set up the krb5 build
   # to link against it. This gives us trouble during the Omnibus 'health
@@ -36,8 +36,8 @@ build do
   patch source: 'disable-keyutils.patch', target: 'src/configure'
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
+          " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
 
-  command "make -j #{max_build_jobs}", env: env, cwd: "#{Config.source_dir}/krb5-#{version}/src"
-  command "make install", cwd: "#{Config.source_dir}/krb5-#{version}/src"
+  command "make -j #{workers}", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
+  command "make install", cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
 end

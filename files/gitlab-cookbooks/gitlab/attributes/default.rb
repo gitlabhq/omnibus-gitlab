@@ -171,7 +171,7 @@ default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['worker_processes'] = 3
+default['gitlab']['unicorn']['worker_processes'] = node['cpu']['total'].to_i + 1
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
@@ -266,6 +266,7 @@ default['gitlab']['web-server']['group'] = 'gitlab-www'
 default['gitlab']['web-server']['uid'] = nil
 default['gitlab']['web-server']['gid'] = nil
 default['gitlab']['web-server']['shell'] = '/bin/false'
+default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
 default['gitlab']['web-server']['external_users'] = []
 
@@ -300,6 +301,7 @@ default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
+default['gitlab']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
 default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
 default['gitlab']['nginx']['custom_nginx_config'] = nil
 
@@ -330,7 +332,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq}
+default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq ci-redis ci-unicorn ci-sidekiq}
 
 ###
 # Logrotate

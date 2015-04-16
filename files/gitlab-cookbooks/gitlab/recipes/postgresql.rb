@@ -148,12 +148,14 @@ pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
+database_name = node['gitlab']['gitlab-rails']['db_database']
+ci_database_name = node['gitlab']['gitlab-ci']['db_database']
 
 databases = [
-  ['gitlab-rails', 'gitlabhq_production', node['gitlab']['postgresql']['sql_user']]
+  ['gitlab-rails', database_name, node['gitlab']['postgresql']['sql_user']]
 ]
 if node['gitlab']['gitlab-ci']['enable']
-  databases << ['gitlab-ci', 'gitlab_ci_production', node['gitlab']['postgresql']['sql_ci_user']]
+  databases << ['gitlab-ci', ci_database_name, node['gitlab']['postgresql']['sql_ci_user']]
 end
 
 databases.each do |rails_app, db_name, sql_user|

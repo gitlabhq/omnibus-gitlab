@@ -79,6 +79,7 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   password: '_the_password_of_the_bind_user'
   active_directory: true
   allow_username_or_email_login: false
+  block_auto_created_users: false
   base: ''
   user_filter: ''
   ## EE only
@@ -96,6 +97,7 @@ secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
   password: '_the_password_of_the_bind_user'
   active_directory: true
   allow_username_or_email_login: false
+  block_auto_created_users: false
   base: ''
   user_filter: ''
   ## EE only
