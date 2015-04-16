@@ -22,11 +22,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
-  service_statuses = ''
-  begin
-    service_statuses = File.read("#{base_path}/tmp/running-processes")
-  rescue Errno::ENOENT
-  end
+  service_statuses = `/opt/gitlab/bin/gitlab-ctl status`
 
   if /: runsv not running/.match(service_statuses) || service_statuses.empty? then
     log 'It looks like GitLab has not been installed yet; skipping the upgrade '\
@@ -74,6 +70,6 @@ Upgrade complete! If your GitLab server is misbehaving try running
    sudo gitlab-ctl restart
 
 before anything else. If you need to roll back to the previous version you can
-use the application backup made during the upgrade (scroll up for the filename).
+use the database backup made during the upgrade (scroll up for the filename).
 EOS
 end

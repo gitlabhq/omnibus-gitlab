@@ -1,30 +1,9 @@
 #!/bin/sh
 # GitLab pre-install script
 
-# Do not use /tmp because of race conditions; do not use /var/opt/gitlab
-# because it contains cluster state, not instance state.
-tmp_dir=/opt/gitlab/tmp
-running_processes="${tmp_dir}/running-processes"
-
 main() {
-  if [ -e /etc/gitlab/skip-auto-migrations ] ; then
-    # The user does not want our automagic
-    exit 0
-  fi
-
-  # Saving running process state so we can restore this state after the upgrade
-  # script finishes
-  mkdir -p "${tmp_dir}"
-  /opt/gitlab/bin/gitlab-ctl status > "${running_processes}" 2> /dev/null
-
-  notify "Shutting down all GitLab services except the database"
-  /opt/gitlab/bin/gitlab-ctl stop
-  /opt/gitlab/bin/gitlab-ctl start postgresql
-  notify "Backing up GitLab application data"
-  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create ; then
-    notify "Failed to backup GitLab application data prior to upgrading. Aborting."
-    exit 1
-  fi
+  notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
+  /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads
   # Missing: GitLab CI backup
 }
 
@@ -35,9 +14,6 @@ notify() {
 if [ -n "${GITLAB_DEBUG}" ] ; then
   notify "debug: arguments: $@"
 fi
-
-# Always clean up the process list, even if this is a fresh install
-rm -f "${running_processes}"
 
 case "$1" in
   2)
