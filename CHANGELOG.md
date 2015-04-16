@@ -6,11 +6,26 @@ omnibus-gitlab repository.
 7.10.0
 
 - Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
+- Add openssh as runtime dependency e9b4f537a67ea6a060d8a974d3fc56f927a218b2
+- Upgrade chef-gem version to 11.18.0 5a5300fe6b43c3ce11b796bb0ffc9fe62c731b1b
+- Upgrade gitlab-ctl version to 0.3.3 cdcbb3b4bc299ef264633188570228d886d1a5c4
+- Specify build directory for pip for docutils build a0e240c9693ebd8ec272282d37626f12dfee5da5
+- Upgrade ruby to 2.1.6 5058dd591df5bcea08b98ed365eb29f955715ea6
+- Add archive_repo sidekiq queue 3ed5e6e162794f4dc173a5e801dab975be6f61a2
+- Add CI services to remote syslog 5fa5235aef0b8b119b3deb1ab1274a9e72ac6a2d
+- Set number of unicorn workers to CPU core count + 1 5ad7e8b89c10417d8663520ecc43432bf3d8a0db
+- Upgrade omnibusy-ruby to 4.0.0 d8d6a20551cd8376e2cfc05b53487911da7aa7b1
+- Upgrade postgresql version to 9.2.9  d8d6a20551cd8376e2cfc05b53487911da7aa7b1
+- Upgrade nginx to 1.7.11 528658852f9f5a1cc75a80ea86f48f92b75d54a3
+- Upgrade zlib to 1.2.8 20ed5ce4d0a6eb5326319761fc7fd53dbcebb620
+- Create database using the database name in attributes c5dfbe87869f85f45d6df16b1ebd3f4967fc7eb0
+- Add gitlab_email_reply_to property (Stan Hu) e34317a289ae2a904c981b1ff6db7c4098571835
+- Add configuration option for gitlab-www user home dir e975b3ab47a4ccb795da4721ef32b54340434354
+- Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 72d09b9b29a1a974e35aa6088912b6a6c4d7e4ac
+
 
 7.9.0
 
-- Add gitlab_email_reply_to property (Stan Hu) e04fe3e8227d0356add3095a0cd56955d7acfe60
-- Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 428ee157c346f3f0eae53762b51145502b1456a6
 - Respect gitlab_email_enabled property (Daniel Serodio) e2982692d49772c4f896a775e476a62b4831b8a1
 - Use correct cert for CI (Flávio J. Saraiva) 484227e2dfe33f59e3683a5757be6842d7ce79d2
 - Add ca_path and ca_file params for smtp email configuration (Thireus) fa9c1464bc1eb173660edfded1a2f7add7ac24b3
