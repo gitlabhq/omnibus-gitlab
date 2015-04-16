@@ -19,7 +19,7 @@ been unpacked, GitLab will automatically:
 
 - Stop all GitLab services;
 - Create a backup using your current, old GitLab version. This is a 'light'
-  backup that only backs up the SQL database;
+  backup that **only backs up the SQL database**;
 - Run `gitlab-ctl reconfigure`, which will perform any necessary database
   migrations (using the new GitLab version);
 - Restart the services that were running when the upgrade script was invoked.
