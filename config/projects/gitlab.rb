@@ -15,10 +15,28 @@
 ## limitations under the License.
 ##
 #
+ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
 
-name "gitlab"
-maintainer "GitLab.com"
+if ee
+  name "gitlab-ee"
+  description "GitLab Enterprise Edition and GitLab CI "\
+    "(including NGINX, Postgres, Redis)"
+  replace        "gitlab-ce"
+  conflict        "gitlab-ce"
+else
+  name "gitlab-ce"
+  description "GitLab Community Edition and GitLab CI "\
+    "(including NGINX, Postgres, Redis)"
+  replace        "gitlab-ee"
+  conflict        "gitlab-ee"
+end
+
+maintainer "GitLab B.V."
 homepage "https://about.gitlab.com/"
+
+# Replace older omnibus-gitlab packages
+replace         "gitlab"
+conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
@@ -40,9 +58,7 @@ dependency "git"
 dependency "redis"
 dependency "nginx"
 dependency "chef-gem"
-if system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
-  dependency "remote-syslog"
-end
+dependency "remote-syslog" if ee
 dependency "logrotate"
 dependency "runit"
 dependency "nodejs"
@@ -59,6 +75,11 @@ dependency "version-manifest"
 
 exclude "\.git*"
 exclude "bundler\/git"
+
+# Because we have a dynamic 'name' (gitlab-ce or gitlab-ee), omnibus-ruby would
+# look in either package-scripts/gitlab-ce or package-scripts/gitlab-ee. We
+# don't want that so let's hard-code the path.
+package_scripts_path "#{Omnibus::Config.project_root}/package-scripts/gitlab"
 
 package_user 'root'
 package_group 'root'

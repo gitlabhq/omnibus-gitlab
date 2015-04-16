@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: 023b7eed619b4ff72f43a1ea4edb430a35f848c2
+  revision: be79783ecc0e5d9caf816f13718d2f45ac049605
   branch: master
   specs:
     omnibus-software (4.0.0)
@@ -10,12 +10,15 @@ GEM
   specs:
     chef-sugar (2.5.0)
     cleanroom (1.0.0)
+    colorize (0.6.0)
     ffi (1.9.8)
     ffi-yajl (1.4.0)
       ffi (~> 1.5)
       libyajl2 (~> 1.2)
+    highline (1.6.20)
     ipaddress (0.8.0)
     json (1.8.2)
+    json_pure (1.8.1)
     libyajl2 (1.2.0)
     mime-types (1.25.1)
     mixlib-cli (1.5.0)
@@ -40,8 +43,16 @@ GEM
       ohai (~> 7.2)
       thor (~> 0.18)
       uber-s3
+    package_cloud (0.2.18)
+      colorize (= 0.6.0)
+      highline (= 1.6.20)
+      json_pure (= 1.8.1)
+      rest-client (= 1.6.7)
+      thor (= 0.18.1)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     systemu (2.6.5)
-    thor (0.19.1)
+    thor (0.18.1)
     uber-s3 (0.2.4)
       mime-types (~> 1.17)
     wmi-lite (1.0.0)
@@ -54,3 +65,5 @@ DEPENDENCIES
   ohai
   omnibus
   omnibus-software!
+  package_cloud
+  thor (= 0.18.1)
