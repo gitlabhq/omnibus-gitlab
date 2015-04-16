@@ -34,7 +34,7 @@ env.merge!(
 )
 
 # Force CentOS-5 to use gcc/g++ v4.4
-if Ohai['platform'] =~ /centos/ and Ohai['platform_version'] =~ /^5/
+if ohai['platform'] =~ /centos/ and ohai['platform_version'] =~ /^5/
     env.merge!( {
         "CC" => "gcc44",
         "CXX" => "g++44"
