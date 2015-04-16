@@ -17,14 +17,16 @@ All you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
 -Uvh gitlab-ce-XXX.rpm` (for Centos/Enterprise Linux). After the package has
 been unpacked, GitLab will automatically:
 
-- stop all GitLab services;
-- create a backup (using your current, old GitLab version)
-- run `gitlab-ctl reconfigure`, which will perform any necessary database
+- Stop all GitLab services;
+- Create a backup using your current, old GitLab version. This is a 'light'
+  backup that only backs up the SQL database;
+- Run `gitlab-ctl reconfigure`, which will perform any necessary database
   migrations (using the new GitLab version);
-- restart the services that were running when the upgrade script was invoked;
+- Restart the services that were running when the upgrade script was invoked.
 
-If you do not want the above steps to be performed automatically please run the
-following command before upgrading your GitLab instance:
+If you do not want the automatic start/stop and DB migrations to be performed
+automatically please run the following command before upgrading your GitLab
+instance:
 
 ```
 sudo touch /etc/gitlab/skip-auto-migrations
