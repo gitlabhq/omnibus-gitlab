@@ -66,6 +66,13 @@ sudo gitlab-ctl restart
 
 Done!
 
+#### Troube? Check status details
+
+```
+sudo gitlab-ctl status
+sudo gitlab-rake gitlab:check SANITIZE=true
+```
+
 ## Updating from GitLab 6.6.0.pre1 to 6.6.4
 
 First, download the latest package from https://www.gitlab.com/downloads/ to your GitLab server.

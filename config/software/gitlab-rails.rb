@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "6f6c5f18a010eb96f9e6ff98cf91e6c8a8fb6d8d" # CE 7.9.1
+default_version "c46d4f54653c0ca25da38c44df7c556a57cc5c90" # CE 7.9.2
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -52,8 +52,8 @@ build do
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
-  command "cp config/gitlab.yml.example config/gitlab.yml"
-  command "cp config/database.yml.postgresql config/database.yml"
+  copy 'config/gitlab.yml.example', 'config/gitlab.yml'
+  copy 'config/database.yml.postgresql', 'config/database.yml'
 
   # There is a bug in the acts-as-taggable-on gem that makes
   # rake assets:precompile check for a database connection. We do not have a
@@ -74,15 +74,19 @@ build do
   bundle "exec rake assets:precompile", :env => assets_precompile_env
 
   # Tear down now that the assets:precompile is done.
-  command "rm config/gitlab.yml config/database.yml .secret"
+  delete 'config/gitlab.yml'
+  delete 'config/database.yml'
+  delete '.secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
-  command "rm -rf log tmp public/uploads"
+  delete 'log'
+  delete 'tmp'
+  delete 'public/uploads'
 
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
   # mysql-postgresql-converter.)
-  command "cp db/schema.rb db/schema.rb.bundled"
+  copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
