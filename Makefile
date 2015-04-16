@@ -1,19 +1,31 @@
 PROJECT=gitlab
-ifndef TESTBUCKET
-	RELEASE_BUCKET=downloads-packages
-else
-	RELEASE_BUCKET=omnibus-builds
-endif
+RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
+UUID_TARBALL=/var/cache/omnibus/cache/uuid-1.6.2.tar.gz
 
-build:
+build: ${UUID_TARBALL}
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
+# No need to suppress timestamps on the test builds
+test_build: ${UUID_TARBALL}
+	bin/omnibus build ${PROJECT} --log-level info
+
+${UUID_TARBALL}:
+	# Download libossp-uuid outside of omnibus, because FTP through firewalls sucks
+	mkdir -p /var/cache/omnibus/cache
+	curl ftp://ftp.ossp.org/pkg/lib/uuid/uuid-1.6.2.tar.gz > ${UUID_TARBALL}
+
+# If this task were called 'release', running 'make release' would confuse Make
+# because there exists a file called 'release.sh' in this directory. Make has
+# built-in rules on how to build .sh files. By calling this task do_release, it
+# can coexist with the release.sh file.
 do_release: no_changes on_tag purge build move_to_platform_dir sync
 
-do_packages: no_changes purge build move_to_platform_dir sync
+# Redefine RELEASE_BUCKET for test builds
+test: RELEASE_BUCKET=omnibus-builds
+test: no_changes purge test_build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD

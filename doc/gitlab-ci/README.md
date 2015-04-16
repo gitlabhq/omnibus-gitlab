@@ -17,8 +17,8 @@ GitLab CI expects to run on its own virtual host. In your DNS you would then
 have two entries pointing to the same machine, e.g. `gitlab.example.com` and
 `ci.example.com`.
 
-To enable GitLab CI, just tell omnibus-gitlab what the external URL for the CI
-server is:
+GitLab CI is disabled by default, to enable it just tell omnibus-gitlab what 
+the external URL for the CI server is:
 
 ```
 # in /etc/gitlab/gitlab.rb

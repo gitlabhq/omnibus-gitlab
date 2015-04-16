@@ -20,7 +20,7 @@
 case node["platform_family"]
 when "debian"
   case node["platform"]
-  when "debian"
+  when "debian", "raspbian"
     if node["platform_version"] =~ /^8/
       include_recipe "runit::systemd"
     else

@@ -200,6 +200,59 @@ Try enabling the module on which sysctl errored out, on how to enable the module
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
+#### I am unable to install omnibus-gitlab without root access
+
+Occasionally people ask if they can install GitLab without root access. This is
+not possible because GitLab uses multiple system users (privilege separation)
+for security reasons. The `gitlab-ctl reconfigure` script needs root access to
+create/manage these users and the files they have access to.
+
+Once GitLab is up an running on your system, you will see that several
+processes run as root, for instance the 'runsv' and 'runsvdir' processes
+(Runit) and the NGINX master process. Runit is a process supervisor that
+manages the different GitLab services for you. Because those services run as
+different users (privilege separation), and Runit needs to manage all of those
+services, Runit itself needs root. NGINX (the front-end web server) has its own
+built-in process supervision and privilege separation. It has a 'master'
+process running as root that can open privileged TCP ports (80/443) and files
+(SSL certificates), while pushing the risky business of handling web requests
+to 'worker' processes running as gitlab-www.
+
+#### gitlab-rake assets:precompile fails with 'Permission denied'
+
+Some users report that running `gitlab-rake assets:precompile` does not work
+with the omnibus packages. The short answer to this is: do not run that
+command, it is only for GitLab installations from source.
+
+The GitLab web interface uses CSS and JavaScript files, called 'assets' in Ruby
+on Rails-speak. In the [upstream GitLab
+repository](https://gitlab.com/gitlab-org/gitlab-ce/tree/master/app/assets)
+these files are stored in a developer-friendly way: easy to read and edit. When
+you are a normal user of GitLab, you do not want these files to be in the
+developer friendly format however because that makes GitLab slow. This is why
+part of the GitLab setup process is to convert the assets from a
+developer-friendly format to an end-user friendly (compact, fast) format; that
+is what the `rake assets:precompile` script is for.
+
+When you install GitLab from source (which was the only way to do it before we
+had omnibus packages) you need to convert the assets on your GitLab server
+every time you update GitLab. People used to overlook this step and there are
+still posts, comments and mails out there on the internet where users recommend
+each other to run `rake assets:precompile`. With the omnibus packages things
+are different: when we build the package [we convert the assets for
+you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
+When you install GitLab with an omnibus package, the converted assets are
+already there! That is why you do not need to run `rake assets:precompile` when
+you install GitLab from a package.
+
+When `gitlab-rake assets:precompile` fails with a permission error it fails for
+a good reason from a security standpoint: the fact that the assets cannot
+easily be rewritten makes it harder for an attacker to use your GitLab server
+to serve evil JavaScript code to the visitors of your GitLab server.
+
+If you want to run GitLab with custom JavaScript or CSS code you are probably
+better off running GitLab from source, or building your own packages.
+
 ### Uninstalling omnibus-gitlab
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
@@ -473,17 +526,19 @@ crontab -e
 There, add the following line to schedule the backup for everyday at 2 AM:
 
 ```
-0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create
+0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create CRON=1
 ```
 
 You may also want to set a limited lifetime for backups to prevent regular
 backups using all your disk space.  To do this add the following lines to
-`/etc/gitlab/gitlab.rb` and reconfigure:-
+`/etc/gitlab/gitlab.rb` and reconfigure:
 
 ```
 # limit backup lifetime to 7 days - 604800 seconds
 gitlab_rails['backup_keep_time'] = 604800
 ```
+
+NOTE: This cron job does not [backup your omnibus-gitlab configuration](#backup-and-restore-omnibus-gitlab-configuration) or [SSH host keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079).
 
 ### Restoring an application backup
 

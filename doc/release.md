@@ -33,10 +33,12 @@ git commit -m 'Pin GitLab to v6.6.0' config/software/gitlab-rails.rb
 git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
 ```
 
-- Push the branch and the tag to the main repository.
+- Push the branch and the tag to the main repository and dev.gitlab.org.
+  Pushing an annotated tag to dev.gitlab.org triggers a package release.
 
 ```shell
-git push origin 6-6-stable 6.6.0.omnibus
+git push git@gitlab.com:gitlab-org/omnibus-gitlab.git  6-6-stable 6.6.0.omnibus
+git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git  6-6-stable 6.6.0.omnibus
 ```
 
 - Make sure that the master branch of omnibus-gitlab has the latest changes from the omnibus-gitlab CE stable branch
@@ -44,45 +46,13 @@ git push origin 6-6-stable 6.6.0.omnibus
 ```shell
 git checkout master
 git merge 6-6-stable
-
 ```
 
-## On the build machines
+## Publishing the packages
 
-- Log in as the build user and start a screen session
+The package are being built at https://ci.gitlab.org .
 
-```shell
-sudo su - omnibus-build
-./attach.sh
-```
-
-- Check out the release tag of omnibus-gitlab.
-
-```shell
-cd ~/omnibus-gitlab
-git fetch --all
-git checkout 6.6.0.my-tag
-```
-
-- Check the system time; the S3 upload will fail if it is off by too much
-
-```shell
-date
-```
-
-You can adjust the time with the `date` command if necessary.
-
-- Start the release script
-
-```shell
-./release.sh
-```
-
-This will clean the build environment, build a package and upload it to S3.
-
-- Detach from screen: press Ctrl-a DD
-- Check in on the build after 30 minutes.
-- When the build is done, update the download page with the package URL's and MD5 hashes.
+- When the build is done, update the download page with the package URL's and SHA1 hashes.
 
 See a previous [CE example](https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/141)
 and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92ca7c0a9940408ef414ef3c01).

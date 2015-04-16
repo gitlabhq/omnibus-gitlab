@@ -1,5 +1,5 @@
 #
-## Copyright:: Copyright (c) 2014 GitLab.com
+## Copyright:: Copyright (c) 2014 GitLab B.V.
 ## License:: Apache License, Version 2.0
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,21 +17,25 @@
 #
 
 name "libicu"
-default_version "52.1"
+default_version "54.1"
 
-source :url => "http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-src.tgz",
-       :md5 => "9e96ed4c1d99c0d14ac03c140f9f346c"
+source :url => "http://download.icu-project.org/files/icu4c/54.1/icu4c-54_1-src.tgz",
+       :md5 => "e844caed8f2ca24c088505b0d6271bc0"
 
 relative_path 'icu/source'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['LD_RPATH'] = "#{install_dir}/embedded/lib"
 
   command ["./runConfigureICU",
            "Linux/gcc",
            "--prefix=#{install_dir}/embedded",
-	   ].join(" "), :env => env
+           "--with-data-packaging=files",
+           "--enable-shared",
+           "--without-samples"
+     ].join(" "), :env => env
 
-  command "make -j #{max_build_jobs}", :env => env
+  command "make -j #{workers}", :env => env
   command "make install"
 end

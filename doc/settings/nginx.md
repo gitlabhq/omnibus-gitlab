@@ -145,6 +145,27 @@ something else.  For example, to use port 8080:
 nginx['listen_port'] = 8080
 ```
 
+## Supporting proxied SSL
+
+By default NGINX will auto-detect whether to use SSL if `external_url`
+contains `https://`.  If you are running GitLab behind a reverse proxy, you
+may wish to keep the `external_url` as an HTTPS address but communicate with
+the GitLab NGINX internally over HTTP. To do this, you can disable HTTPS using
+the `listen_https` option:
+
+```ruby
+nginx['listen_https'] = false
+```
+
+Note that you may need to configure your reverse proxy to forward certain
+headers (e.g. `Host`, `X-Forwarded-Ssl'`, `X-Forwarded-For``) to GitLab. You
+may see improper redirections or errors (e.g. "422 Unprocessable Entity",
+"Can't verify CSRF token authenticity") if you forget this step. For more
+information, see:
+
+http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
+https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
+
 ## Inserting custom NGINX settings into the GitLab server block
 
 If you need to add custom settings into the NGINX `server` block for GitLab for
@@ -215,7 +236,7 @@ server {
   passenger_ruby /opt/gitlab/embedded/bin/ruby;
 
   # Correct the $PATH variable to included packaged executables
-  passenger_set_cgi_param PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
+  passenger_env_var PATH "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin";
 
   # Make sure Passenger runs as the correct user and group to
   # prevent permission issues
