@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
 - Automatically stop GitLab, backup, reconfigure and start after a new package is installed
+- Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
 
 7.9.0
 
