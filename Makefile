@@ -2,7 +2,10 @@ PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
-PLATFORM_DIR:=$(shell ruby -rjson -e 'puts JSON.parse(`bin/ohai`).values_at("platform", "platform_version").join("-")')
+PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
+PACKAGECLOUD_USER=gitlab
+PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
+PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 UUID_TARBALL=/var/cache/omnibus/cache/uuid-1.6.2.tar.gz
 
 build: ${UUID_TARBALL}
@@ -21,7 +24,7 @@ ${UUID_TARBALL}:
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
 # can coexist with the release.sh file.
-do_release: no_changes on_tag purge build move_to_platform_dir sync
+do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
@@ -67,3 +70,7 @@ s3_sync:
 	# empty line for aws status crud
 	# Download URLS:
 	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
+
+packagecloud:
+	# We set LC_ALL below because package_cloud is picky about the locale
+	LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb')

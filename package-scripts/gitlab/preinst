@@ -1,0 +1,30 @@
+#!/bin/sh
+# GitLab pre-install script
+
+main() {
+  notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
+  /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads
+  # Missing: GitLab CI backup
+}
+
+notify() {
+  echo "gitlab preinstall: $1"
+}
+
+if [ -n "${GITLAB_DEBUG}" ] ; then
+  notify "debug: arguments: $@"
+fi
+
+case "$1" in
+  2)
+    # Looks like an RPM upgrade
+    main
+    ;;
+  upgrade)
+    # Looks like a DEB upgrade
+    main
+    ;;
+  *)
+    # This is not an upgrade, nothing to do.
+    ;;
+esac

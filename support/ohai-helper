@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+require 'ohai'
+
+# This prints something like 'ubuntu-12.04'; used by our legacy AWS uploads
+def platform_dir
+  puts "#{ohai['platform']}-#{ohai['platform_version']}"
+end
+
+# This prints something like 'ubuntu/precise'; used for packagecloud uploads
+def repo_string
+  os = :unknown
+  version = :unknown
+
+  case ohai['platform']
+  when 'ubuntu'
+    os = 'ubuntu'
+    case ohai['platform_version']
+    when /^12\.04/
+      version = 'precise'
+    when /^14\.04/
+      version = 'trusty'
+    end
+  when 'debian'
+    os = 'debian'
+    case ohai['platform_version']
+    when /^7\./
+      version = 'wheezy'
+    end
+  when 'centos'
+    os = 'el'
+    case ohai['platform_version']
+    when /^6\./
+      version = '6'
+    when /^7\./
+      version = '7'
+    end
+  end
+
+  if os == :unknown or version == :unknown
+    abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}"
+  end
+
+  puts "#{os}/#{version}"
+end
+
+def ohai
+  @ohai ||= Ohai::System.new.tap do |oh|
+    oh.all_plugins(['platform'])
+  end.data
+end
+
+case ARGV.first
+when 'platform-dir'
+  platform_dir
+when 'repo-string'
+  repo_string
+else
+  abort "Usage: #{$0} platform-dir|repo-string"
+end

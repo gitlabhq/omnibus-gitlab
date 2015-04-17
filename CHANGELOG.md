@@ -22,7 +22,8 @@ omnibus-gitlab repository.
 - Add gitlab_email_reply_to property (Stan Hu) e34317a289ae2a904c981b1ff6db7c4098571835
 - Add configuration option for gitlab-www user home dir e975b3ab47a4ccb795da4721ef32b54340434354
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 72d09b9b29a1a974e35aa6088912b6a6c4d7e4ac
-
+- Automatically stop GitLab, backup, reconfigure and start after a new package is installed
+- Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
 
 7.9.0
 
