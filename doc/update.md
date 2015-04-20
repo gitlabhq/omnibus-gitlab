@@ -6,6 +6,32 @@ Please make sure you are viewing this file on the master branch.
 
 ![documentation version](images/omnibus-documentation-version-update-md.png)
 
+## Updating from GitLab 6.6 and higher to 7.10 or newer
+
+In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
+configured the packages to run this command automatically after the new package
+is installed. If you are installing GitLab 7.9 or earlier, please see the
+[procedure below](#updating-from-gitlab-6-6-and-higher-to-the-latest-version).
+
+All you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
+-Uvh gitlab-ce-XXX.rpm` (for Centos/Enterprise Linux). After the package has
+been unpacked, GitLab will automatically:
+
+- Stop all GitLab services;
+- Create a backup using your current, old GitLab version. This is a 'light'
+  backup that **only backs up the SQL database**;
+- Run `gitlab-ctl reconfigure`, which will perform any necessary database
+  migrations (using the new GitLab version);
+- Restart the services that were running when the upgrade script was invoked.
+
+If you do not want the automatic start/stop and DB migrations to be performed
+automatically please run the following command before upgrading your GitLab
+instance:
+
+```
+sudo touch /etc/gitlab/skip-auto-migrations
+```
+
 ## Updating from GitLab 6.6 and higher to the latest version
 
 The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
