@@ -16,7 +16,7 @@
 #
 
 name "gitlab-ci"
-default_version "d0e81f9d2e03d98cfaada7ca49ca0c871a7f32e8" # CI 7.10.0.rc4
+default_version "ba8c1977e498bc9765766a06aae4ff2f036e6349" # CI 7.10.0.rc8
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
