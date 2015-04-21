@@ -17,4 +17,13 @@ fi
 
 cd <%= install_dir %>/embedded/service/gitlab-ci
 
-exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-ci/env -u ${gitlab_ci_user} -U ${gitlab_ci_user} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
+if [ "$(id -n -u)" = "${gitlab_ci_user}" ] ; then
+  # We are already running at the intended privilege; don't try to drop
+  # privileges again because only root can do that (and we are apparently not
+  # root!).
+  privilege_drop=''
+else
+  privilege_drop="-u ${gitlab_ci_user}"
+fi
+
+exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-ci/env ${privilege_drop} -U ${gitlab_ci_user} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
