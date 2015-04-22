@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 72d09b9b29a1a974e35aa6088912b6a6c4d7e4ac
 - Automatically stop GitLab, backup, reconfigure and start after a new package is installed
 - Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
+- Update cacerts version e57085281e9f4d3ae15d4f2e14a88b3399cb4df3
 
 7.9.0
 
