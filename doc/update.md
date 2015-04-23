@@ -24,9 +24,9 @@ been unpacked, GitLab will automatically:
   migrations (using the new GitLab version);
 - Restart the services that were running when the upgrade script was invoked.
 
-If you do not want the automatic start/stop and DB migrations to be performed
-automatically please run the following command before upgrading your GitLab
-instance:
+If you do not want the DB-only backup, automatic start/stop and DB migrations
+to be performed automatically please run the following command before upgrading
+your GitLab instance:
 
 ```
 sudo touch /etc/gitlab/skip-auto-migrations
