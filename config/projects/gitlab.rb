@@ -48,6 +48,7 @@ override :'chef-gem', version: '11.18.0'
 override :'omnibus-ctl', version: '0.3.3'
 override :zlib, version: '1.2.8'
 override :'libossp-uuid', version: '1.6.2', source: { md5: "5db0d43a9022a6ebbbc25337ae28942f", url: "http://gnome-build-stage-1.googlecode.com/files/uuid-1.6.2.tar.gz" }
+override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
