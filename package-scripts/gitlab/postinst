@@ -5,6 +5,14 @@
 #
 
 PROGNAME=$(basename $0)
+usr_bin_symlinks="\
+  /opt/gitlab/bin/gitlab-ctl \
+  /opt/gitlab/bin/gitlab-rake \
+  /opt/gitlab/bin/gitlab-rails \
+  /opt/gitlab/bin/gitlab-ci-rake \
+  /opt/gitlab/bin/gitlab-ci-rails \
+"
+symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
 
 # Try collecting fqdn if it is set correctly
 fqdn=$(/bin/hostname -f)
@@ -22,15 +30,12 @@ error_exit()
 
 notify()
 {
-  echo "gitlab postinstall: $1"
+  echo "gitlab: $1"
 }
 
 create_symlinks()
 {
-  for command in gitlab-ctl gitlab-rake gitlab-rails gitlab-ci-rake gitlab-ci-rails
-  do
-    ln -sf /opt/gitlab/bin/$command /usr/bin || error_exit "Could not symlink $command in /usr/bin"
-  done
+  ${symlink_command} || error_exit "Failed to create symlinks in /usr/bin"
 }
 
 create_config_template()
@@ -95,5 +100,15 @@ case "$1" in
     /opt/gitlab/bin/gitlab-ctl upgrade
     ;;
   *)
+    if [ -x /bin/rpm ] ; then
+      # This might be a fresh RPM install, replacing the legacy 'gitlab' package.
+      # The postuninstall script of 'gitlab' will clobber our symlinks, so we
+      # kindly ask the user to recreate them.
+      notify
+      notify "If you just upgraded from GitLab 7.9 or earlier, please run the following"
+      notify "command:"
+      notify
+      notify "sudo ${symlink_command}"
+    fi
     ;;
 esac
