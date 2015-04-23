@@ -1,9 +1,24 @@
 #!/bin/sh
 # GitLab pre-install script
 
+skip_migrations_file=/etc/gitlab/skip-auto-migrations
+
 main() {
+  if [ -e "${skip_migrations_file}" ] ; then
+    # The user wants us to do nothing
+    return
+  fi
+
   notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
-  /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads
+  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
+    notify
+    notify "Backup failed! If you want to skip this backup, run the following command and"
+    notify "try again:"
+    notify
+    notify "  sudo touch ${skip_migrations_file}"
+    notify
+  fi
+
   # Missing: GitLab CI backup
 }
 
