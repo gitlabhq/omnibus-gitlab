@@ -28,3 +28,13 @@ gitlab_ci['redis_host'] = 'ci-redis.example.com'
 Note that GitLab and GitLab CI are not designed to share a single Redis
 instance. This is why omnibus-gitlab has separate `redis` and `ci_redis`
 services.
+
+## Making a bundled Redis instance reachable via TCP
+
+Use the following settings if you want to make one of the Redis instances
+managed by omnibus-gitlab reachable via TCP.
+
+```ruby
+redis['port'] = 6379
+redis['bind'] = '127.0.0.1'
+```
