@@ -3,6 +3,7 @@
 If you would rather send application email via an SMTP server instead of via
 Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
+There are [example configurations](#examples) at the end of this page.
 
 ```
 gitlab_rails['smtp_enable'] = true
@@ -36,7 +37,7 @@ gitlab_ci['smtp_address'] = "smtp.server"
 
 ## Example configuration
 
-### GMail
+### Gmail
 
 ```
 gitlab_rails['gitlab_email_from'] = 'my.email@gmail.com'
@@ -55,3 +56,14 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer' # Can be: 'none', 'peer', 'cli
 ```
 
 _Don't forget to change my.email@gmail.com to your email address and my-gmail-password to your own password._
+
+### Mailgun
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.mailgun.org"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
+gitlab_rails['smtp_password'] = "8b6ffrmle180"
+gitlab_rails['smtp_domain'] = "mg.gitlab.com"
