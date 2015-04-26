@@ -5,7 +5,7 @@ Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 There are [example configurations](#examples) at the end of this page.
 
-```
+```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.server"
 gitlab_rails['smtp_port'] = 456
@@ -39,7 +39,7 @@ gitlab_ci['smtp_address'] = "smtp.server"
 
 ### Gmail
 
-```
+```ruby
 gitlab_rails['gitlab_email_from'] = 'my.email@gmail.com'
 gitlab_rails['gitlab_email_reply_to'] = 'my.email@gmail.com'
 
@@ -59,6 +59,7 @@ _Don't forget to change my.email@gmail.com to your email address and my-gmail-pa
 
 ### Mailgun
 
+```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.mailgun.org"
 gitlab_rails['smtp_port'] = 587
@@ -67,3 +68,4 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
 gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
+```
