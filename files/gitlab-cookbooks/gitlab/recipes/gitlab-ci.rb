@@ -81,23 +81,13 @@ template_symlink File.join(gitlab_ci_etc_dir, "secret") do
   restarts dependent_services
 end
 
-database_attributes = node['gitlab']['gitlab-ci'].to_hash
-if node['gitlab']['postgresql']['enable']
-  database_attributes.merge!(
-    :db_adapter => "postgresql",
-    :db_username => node['gitlab']['postgresql']['sql_ci_user'],
-    :db_host => node['gitlab']['postgresql']['listen_address'],
-    :db_port => node['gitlab']['postgresql']['port']
-  )
-end
-
 template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
   link_from File.join(gitlab_ci_source_dir, "config/database.yml")
   source "database.yml.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables database_attributes
+  variables node['gitlab']['gitlab-ci'].to_hash
   helpers SingleQuoteHelper
   restarts dependent_services
 end
