@@ -6,19 +6,13 @@ PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-UUID_TARBALL=/var/cache/omnibus/cache/uuid-1.6.2.tar.gz
 
-build: ${UUID_TARBALL}
+build:
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
 # No need to suppress timestamps on the test builds
-test_build: ${UUID_TARBALL}
+test_build:
 	bin/omnibus build ${PROJECT} --log-level info
-
-${UUID_TARBALL}:
-	# Download libossp-uuid outside of omnibus, because FTP through firewalls sucks
-	mkdir -p /var/cache/omnibus/cache
-	curl ftp://ftp.ossp.org/pkg/lib/uuid/uuid-1.6.2.tar.gz > ${UUID_TARBALL}
 
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
