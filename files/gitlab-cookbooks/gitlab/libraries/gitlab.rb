@@ -177,6 +177,33 @@ module Gitlab
       end
     end
 
+    def parse_postgresql_settings
+      # If the user wants to run the internal Postgres service using an alternative
+      # DB username, host or port, then those settings should also be applied to
+      # gitlab-rails and gitlab-ci.
+      [
+        # %w{gitlab_rails db_username} corresponds to
+        # Gitlab['gitlab_rails']['db_username'], etc.
+        [%w{gitlab_rails db_username}, %w{postgresql sql_user}],
+        [%w{gitlab_rails db_host}, %w{postgresql listen_address}],
+        [%w{gitlab_rails db_port}, %w{postgresql port}],
+        [%w{gitlab_ci db_username}, %w{postgresql sql_ci_user}],
+        [%w{gitlab_ci db_host}, %w{postgresql listen_address}],
+        [%w{gitlab_ci db_port}, %w{postgresql port}],
+      ].each do |left, right|
+        if ! Gitlab[left.first][left.last].nil?
+          # If the user explicitly sets a value for e.g.
+          # gitlab_rails['db_port'] in gitlab.rb then we should never override
+          # that.
+          next
+        end
+
+        better_value_from_gitlab_rb = Gitlab[right.first][right.last] 
+        default_from_attributes = node['gitlab'][right.first.gsub('_', '-')][right.last]
+        Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
+      end
+    end
+
     def parse_nginx_listen_address
       return unless nginx['listen_address']
 
@@ -263,6 +290,7 @@ module Gitlab
       parse_git_data_dir
       parse_udp_log_shipping
       parse_redis_settings
+      parse_postgresql_settings
       parse_nginx_listen_address
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
