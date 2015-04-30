@@ -20,7 +20,7 @@
 case node["platform_family"]
 when "debian"
   case node["platform"]
-  when "debian", "raspbian"
+  when "debian", "raspbian", "devuan"
     if File.exist?("/sbin/init")
        if File.symlink?("/sbin/init")
          if File.basename(File.readlink("/sbin/init")) == "systemd"
