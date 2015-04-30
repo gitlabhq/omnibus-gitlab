@@ -25,6 +25,8 @@ def repo_string
     case ohai['platform_version']
     when /^7\./
       version = 'wheezy'
+    when /^8\./
+      version = 'jessie'
     end
   when 'centos'
     os = 'el'
