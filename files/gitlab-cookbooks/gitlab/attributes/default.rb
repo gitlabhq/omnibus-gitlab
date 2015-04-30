@@ -44,6 +44,7 @@ default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
 ####
 # GitLab Rails app
 ####
+default['gitlab']['gitlab-rails']['enable'] = true
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
