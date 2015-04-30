@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 7.11.0
 
 - Use a different mirror for libossp-uuid (DJ Mountney) 7f46d70855a4d97eb2b833fc2d120ddfc514dfd4
+- try to better detect init system in use on debian derived (nextime) c7bdee17a9927c57e72b41494110b50c7098f42f
 
 7.10.0
 
