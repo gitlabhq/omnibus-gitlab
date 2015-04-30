@@ -21,10 +21,22 @@ case node["platform_family"]
 when "debian"
   case node["platform"]
   when "debian", "raspbian"
-    if node["platform_version"] =~ /^8/
-      include_recipe "runit::systemd"
+    if File.exist?("/sbin/init")
+       if File.symlink?("/sbin/init")
+         if File.basename(File.readlink("/sbin/init")) == "systemd"
+           include_recipe "runit::systemd"
+         else
+           include_recipe "runit::upstart"
+         end
+       else
+         include_recipe "runit::sysvinit"
+       end
     else
-      include_recipe "runit::sysvinit"
+      if node["platform_version"] =~ /^8/
+        include_recipe "runit::systemd"
+      else
+        include_recipe "runit::sysvinit"
+      end
     end
   else
     include_recipe "runit::upstart"
