@@ -28,7 +28,10 @@ http {
 
   include /opt/gitlab/embedded/conf/mime.types;
 
+  <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
+  <% end %>
+
   <% if @gitlab_ci_http_config %>
   include <%= @gitlab_ci_http_config %>;
   <% end %>
