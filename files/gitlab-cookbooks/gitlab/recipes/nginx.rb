@@ -43,33 +43,37 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
   :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
 })
 
-gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
 
-# To support reverse proxies: only override the listen_port if
-# none has been specified
-if nginx_vars['listen_port'].nil?
-  nginx_vars['listen_port'] = gitlab_port
-end
+if node['gitlab']['gitlab-rails']['enable']
+  gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
 
-if nginx_vars['listen_https'].nil?
-  nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
-else
-  nginx_vars['https'] = nginx_vars['listen_https']
-end
+  # To support reverse proxies: only override the listen_port if
+  # none has been specified
+  if nginx_vars['listen_port'].nil?
+    nginx_vars['listen_port'] = gitlab_port
+  end
 
-template nginx_vars[:gitlab_http_config] do
-  source "nginx-gitlab-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(nginx_vars.merge(
-    {
-      :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :socket => node['gitlab']['unicorn']['socket'],
-      :port => gitlab_port
-    }
-  ))
-  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  if nginx_vars['listen_https'].nil?
+    nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
+  else
+    nginx_vars['https'] = nginx_vars['listen_https']
+  end
+
+  template nginx_vars[:gitlab_http_config] do
+    source "nginx-gitlab-http.conf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(nginx_vars.merge(
+      {
+        :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
+        :socket => node['gitlab']['unicorn']['socket'],
+        :port => gitlab_port
+      }
+    ))
+    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+    action node['gitlab']['gitlab-rails']['enable'] ? :create : :delete
+  end
 end
 
 if node['gitlab']['ci-nginx']['enable']
@@ -93,6 +97,7 @@ if node['gitlab']['ci-nginx']['enable']
       }
     ))
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+    action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
   end
 end
 
