@@ -198,7 +198,7 @@ module Gitlab
           next
         end
 
-        better_value_from_gitlab_rb = Gitlab[right.first][right.last] 
+        better_value_from_gitlab_rb = Gitlab[right.first][right.last]
         default_from_attributes = node['gitlab'][right.first.gsub('_', '-')][right.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
       end
