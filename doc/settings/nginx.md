@@ -33,7 +33,7 @@ sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
 ```
 
 Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
-GitLab instance should be reachable at `http://gitlab.example.com`.
+GitLab instance should be reachable at `https://gitlab.example.com`.
 
 The SSL certificate and key paths are derived the same way for GitLab CI. If
 you write `ci_external_url "https://ci.example.com"` then `gitlab-ctl
