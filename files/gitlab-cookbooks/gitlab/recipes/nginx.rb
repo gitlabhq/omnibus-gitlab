@@ -56,16 +56,15 @@ gitlab_ci_enabled = if node['gitlab']['gitlab-ci']['enable']
                       false
                     end
 
-nginx_vars = node['gitlab']['nginx'].dup
+# Include the config file for gitlab-rails in nginx.conf later
+nginx_vars = node['gitlab']['nginx'].to_hash.merge({
+               :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
+             })
 
-nginx_vars = if gitlab_rails_enabled
-               nginx_vars.to_hash.merge({
-                 :gitlab_http_config => gitlab_rails_http_conf
-               })
-             else
-               nginx_vars.delete(:gitlab_http_config)
-               nginx_vars
-             end
+# Include the config file for gitlab-ci in nginx.conf later
+nginx_vars =  nginx_vars.merge!(
+                :gitlab_ci_http_config => gitlab_ci_enabled ? gitlab_ci_http_conf : nil
+              )
 
 gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
 
@@ -98,15 +97,6 @@ template gitlab_rails_http_conf do
 end
 
 ci_nginx_vars = node['gitlab']['ci-nginx']
-
-if gitlab_ci_enabled
-  # Include the config file for gitlab-ci in nginx.conf later
-  nginx_vars.merge!(
-    :gitlab_ci_http_config => gitlab_ci_http_conf
-  )
-else
-  nginx_vars.delete(:gitlab_ci_http_config)
-end
 
 template gitlab_ci_http_conf do
   source "nginx-gitlab-ci-http.conf.erb"
