@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - try to better detect init system in use on debian derived (nextime) c7bdee17a9927c57e72b41494110b50c7098f42f
 - Devuan support added in runit (nextime) ae62a5938a84f5c96d1aeae8d893191eec3586b6
 
+7.10.1.omnibus.3, 7.10.1-ee.omnibus.3
+
+- Better parsing of DB settings in gitlab.rb 503fad5f9d0a4653d8540331f77f487a7b51ce3d
+
 7.10.0
 
 - Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
