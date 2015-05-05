@@ -25,6 +25,9 @@ omnibus-gitlab repository.
 - Automatically stop GitLab, backup, reconfigure and start after a new package is installed
 - Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
 - Update cacerts version e57085281e9f4d3ae15d4f2e14a88b3399cb4df3
+- Update omnibus-ctl version to 0.3.4 b5972560c801bc22658d459ad00fa4f33a6c34d2
+- Try to detect init system in use on Debian (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
+- Devuan support added in runit (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
 
 7.9.0
 
