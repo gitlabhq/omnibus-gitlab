@@ -36,6 +36,13 @@ gitlab_ci['smtp_address'] = "smtp.server"
 ```
 
 ## Example configuration
+### SMTP on localhost
+This configuration, which simply enables SMTP and otherwise uses the default settings, can be used for an MTA running on localhost that does not provide a `sendmail` interface or that provides a `sendmail` interface that is incompatible with GitLab, such as Exim.
+
+```
+gitlab_rails['smtp_enable'] = true
+gitlab_ci['smtp_enable'] = true
+```
 
 ### Gmail
 
@@ -69,3 +76,4 @@ gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
 gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
+
