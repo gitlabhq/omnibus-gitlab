@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 7.11.0
 
+- Set the default certificate authority bundle to the embedded copy (Stan Hu) 673ac210216b9c01d58196e826b98db780a4ccd5
 - Use a different mirror for libossp-uuid (DJ Mountney) 7f46d70855a4d97eb2b833fc2d120ddfc514dfd4
 - try to better detect init system in use on debian derived (nextime) c7bdee17a9927c57e72b41494110b50c7098f42f
 - Devuan support added in runit (nextime) ae62a5938a84f5c96d1aeae8d893191eec3586b6
