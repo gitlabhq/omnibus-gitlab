@@ -7,12 +7,7 @@ omnibus-gitlab repository.
 
 - Set the default certificate authority bundle to the embedded copy (Stan Hu) 673ac210216b9c01d58196e826b98db780a4ccd5
 - Use a different mirror for libossp-uuid (DJ Mountney) 7f46d70855a4d97eb2b833fc2d120ddfc514dfd4
-- try to better detect init system in use on debian derived (nextime) c7bdee17a9927c57e72b41494110b50c7098f42f
-- Devuan support added in runit (nextime) ae62a5938a84f5c96d1aeae8d893191eec3586b6
-
-7.10.1.omnibus.3, 7.10.1-ee.omnibus.3
-
-- Better parsing of DB settings in gitlab.rb 503fad5f9d0a4653d8540331f77f487a7b51ce3d
+- Update omnibus-software 42839a91c297b9c637a13fbe4beb05058672abe2
 
 7.10.0
 
@@ -36,6 +31,10 @@ omnibus-gitlab repository.
 - Automatically stop GitLab, backup, reconfigure and start after a new package is installed
 - Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
 - Update cacerts version e57085281e9f4d3ae15d4f2e14a88b3399cb4df3
+- Better parsing of DB settings in gitlab.rb 503fad5f9d0a4653d8540331f77f487a7b51ce3d
+- Update omnibus-ctl version to 0.3.4 b5972560c801bc22658d459ad00fa4f33a6c34d2
+- Try to detect init system in use on Debian (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
+- Devuan support added in runit (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
 
 7.9.0
 
