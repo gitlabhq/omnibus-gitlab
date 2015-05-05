@@ -159,7 +159,7 @@ default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
 default['gitlab']['gitlab-rails']['smtp_ca_path'] = nil
-default['gitlab']['gitlab-rails']['smtp_ca_file'] = nil
+default['gitlab']['gitlab-rails']['smtp_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
