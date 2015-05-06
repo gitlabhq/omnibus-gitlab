@@ -54,7 +54,7 @@ fix_directory_permissions()
   if [ -x /usr/bin/dpkg-query ] ; then
     # We are in the land of .deb packages. We should fix package directory owners
     # because of the faulty 7.2.0 / 7.2.1 .deb packages.
-    /usr/bin/dpkg-query -L gitlab | while read f ; do
+    /usr/bin/dpkg-query -L gitlab-ce gitlab-ee 2>/dev/null | while read f ; do
     if [ -d "$f" ] ; then
       # This directory may have been created when installing omnibus-gitlab
       # 7.2.0 / 7.2.1, so it could have the wrong owner.
