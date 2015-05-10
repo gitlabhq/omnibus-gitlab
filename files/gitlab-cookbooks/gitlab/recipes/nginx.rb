@@ -47,8 +47,8 @@ gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
 
 # To support reverse proxies: only override the listen_port if
 # none has been specified
-if nginx_vars['listen_port'].nil?
-  nginx_vars['listen_port'] = gitlab_port
+unless nginx_vars['listen_port'].nil?
+ gitlab_port= nginx_vars['listen_port']
 end
 
 if nginx_vars['listen_https'].nil?
@@ -79,6 +79,20 @@ if node['gitlab']['ci-nginx']['enable']
   )
 
   ci_nginx_vars = node['gitlab']['ci-nginx']
+  gitlab_ci_port = node['gitlab']['gitlab-ci']['gitlab_ci_port']
+
+  # To support reverse proxies: only override the listen_port if
+  # none has been specified
+  unless ci_nginx_vars['listen_port'].nil?
+   gitlab_ci_port= ci_nginx_vars['listen_port']
+  end
+  
+  if ci_nginx_vars['listen_https'].nil?
+    ci_nginx_vars['https'] = node['gitlab']['gitlab-ci']['gitlab_ci_https']
+  else
+    ci_nginx_vars['https'] = ci_nginx_vars['listen_https']
+  end
+  
   template nginx_vars[:gitlab_ci_http_config] do
     source "nginx-gitlab-ci-http.conf.erb"
     owner "root"
@@ -87,9 +101,8 @@ if node['gitlab']['ci-nginx']['enable']
     variables(ci_nginx_vars.merge(
       {
         :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
-        :https => node['gitlab']['gitlab-ci']['gitlab_ci_https'],
         :socket => node['gitlab']['ci-unicorn']['socket'],
-        :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
+        :port => gitlab_ci_port
       }
     ))
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
