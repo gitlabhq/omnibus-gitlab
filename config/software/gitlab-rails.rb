@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "72b0cfe6c25bf2142835f392227ab4845fd260c9" # CE 7.10.3
+default_version "337225a4fcfa9674e2528cb6d41c46556bba9dfa" # CE 7.10.4
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
