@@ -1,6 +1,8 @@
 #!/bin/sh
 # GitLab pre-install script
 
+DEST_DIR=<%= install_dir %>
+
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
 
 main() {
@@ -10,7 +12,7 @@ main() {
   fi
 
   notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
-  if ! /opt/gitlab/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
+  if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
     notify
     notify "Backup failed! If you want to skip this backup, run the following command and"
     notify "try again:"

@@ -22,7 +22,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
-  service_statuses = `/opt/gitlab/bin/gitlab-ctl status`
+  service_statuses = `#{base_path}/bin/gitlab-ctl status`
 
   if /: runsv not running/.match(service_statuses) || service_statuses.empty? then
     log 'It looks like GitLab has not been installed yet; skipping the upgrade '\
