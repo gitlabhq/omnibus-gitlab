@@ -10,3 +10,4 @@ recipe "gitlab", "Configures GitLab from Omnibus"
 supports "ubuntu"
 
 depends "runit"
+depends "package"

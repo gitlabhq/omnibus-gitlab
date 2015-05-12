@@ -18,7 +18,8 @@
 
 require 'openssl'
 
-ENV['PATH'] = "/opt/gitlab/bin:/opt/gitlab/embedded/bin:#{ENV['PATH']}"
+install_dir = node['package']['install-dir']
+ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
 directory "/etc/gitlab" do
   owner "root"
@@ -45,7 +46,7 @@ directory "/var/opt/gitlab" do
   action :create
 end
 
-directory "/opt/gitlab/embedded/etc" do
+directory "#{install_dir}/embedded/etc" do
   owner "root"
   group "root"
   mode "0755"
@@ -53,7 +54,7 @@ directory "/opt/gitlab/embedded/etc" do
   action :create
 end
 
-template "/opt/gitlab/embedded/etc/gitconfig" do
+template "#{install_dir}/embedded/etc/gitconfig" do
   source "gitconfig-system.erb"
   mode 0755
   variables gitconfig: node['gitlab']['omnibus-gitconfig']['system']

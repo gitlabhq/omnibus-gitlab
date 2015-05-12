@@ -50,8 +50,8 @@ default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rai
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 default['gitlab']['gitlab-rails']['env'] = {
   'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '1000000',
-  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
-  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
@@ -114,13 +114,13 @@ default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
-default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
+default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
 default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
-default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
+default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/hooks/"
 default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = nil
-default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
+default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = nil
 default['gitlab']['gitlab-rails']['git_timeout'] = nil
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
@@ -160,7 +160,7 @@ default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
 default['gitlab']['gitlab-rails']['smtp_ca_path'] = nil
-default['gitlab']['gitlab-rails']['smtp_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
@@ -176,7 +176,7 @@ default['gitlab']['unicorn']['worker_processes'] = node['cpu']['total'].to_i + 1
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
-default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
+default['gitlab']['unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/unicorn/unicorn.pid"
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
@@ -214,7 +214,7 @@ default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
-default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
+default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
 default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['port'] = 5432
@@ -360,8 +360,8 @@ default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
 default['gitlab']['gitlab-ci']['env'] = {
-  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
-  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-ci/Gemfile",
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 
@@ -425,7 +425,7 @@ default['gitlab']['ci-unicorn']['enable'] = false
 default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
 default['gitlab']['ci-unicorn']['port'] = 8181
 default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
-default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
+default['gitlab']['ci-unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/ci-unicorn/unicorn.pid"
 
 ####
 # CI Sidekiq
