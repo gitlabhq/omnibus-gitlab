@@ -59,11 +59,18 @@ template "/opt/gitlab/embedded/etc/gitconfig" do
   variables gitconfig: node['gitlab']['omnibus-gitconfig']['system']
 end
 
-include_recipe "gitlab::users"
 include_recipe "gitlab::web-server"
-include_recipe "gitlab::gitlab-shell"
-include_recipe "gitlab::gitlab-rails"
-include_recipe "gitlab::gitlab-ci" if node['gitlab']['gitlab-ci']['enable']
+
+if node['gitlab']['gitlab-rails']['enable']
+  include_recipe "gitlab::users"
+  include_recipe "gitlab::gitlab-shell"
+  include_recipe "gitlab::gitlab-rails"
+end
+
+if node['gitlab']['gitlab-ci']['enable']
+  include_recipe "gitlab::gitlab-ci"
+end
+
 include_recipe "gitlab::selinux"
 include_recipe "gitlab::cron"
 
