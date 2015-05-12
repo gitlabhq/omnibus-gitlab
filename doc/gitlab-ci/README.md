@@ -46,13 +46,13 @@ still be set up on your CI server, but they will not accept user requests or
 consume system resources.
 
 ```
-external_url 'http://localhost'
 ci_external_url 'http://ci.example.com'
 
 # Tell GitLab CI to integrate with gitlab.example.com
 gitlab_ci['gitlab_server'] = { 'url' => 'http://gitlab.example.com', 'app_id' => "1234", 'app_secret' => 'qwertyuio'}
 
 # Shut down GitLab services on the CI server
+gitlab_rails['enable'] = false
 unicorn['enable'] = false
 sidekiq['enable'] = false
 ```
