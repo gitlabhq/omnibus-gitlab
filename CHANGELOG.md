@@ -8,6 +8,8 @@ omnibus-gitlab repository.
 - Set the default certificate authority bundle to the embedded copy (Stan Hu) 673ac210216b9c01d58196e826b98db780a4ccd5
 - Use a different mirror for libossp-uuid (DJ Mountney) 7f46d70855a4d97eb2b833fc2d120ddfc514dfd4
 - Update omnibus-software 42839a91c297b9c637a13fbe4beb05058672abe2
+- Add option to disable gitlab-rails when using only CI a784851e268ca1f23ce817c13a8d421c3211f96a
+- Point to different state file for gitlab logrotate 42591805f64c48cb845538012b2a43fe765637d2
 
 7.10.0
 
@@ -35,7 +37,8 @@ omnibus-gitlab repository.
 - Update omnibus-ctl version to 0.3.4 b5972560c801bc22658d459ad00fa4f33a6c34d2
 - Try to detect init system in use on Debian (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
 - Devuan support added in runit (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
-- Disable EC2 plugin
+- Disable EC2 plugin 70ba5285e1e89ababf25c9cb9ac817bb582f5a43
+- Disable multiple ohai plugins 0026ba26757a2b7168e7de86ab0652c0aec62ddf
 
 7.9.0
 
