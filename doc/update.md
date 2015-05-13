@@ -36,7 +36,7 @@ sudo touch /etc/gitlab/skip-auto-migrations
 
 The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
 
-First, download the latest [CE](https://www.gitlab.com/downloads/) or
+First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package to your GitLab server.
 
