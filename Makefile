@@ -66,5 +66,9 @@ s3_sync:
 	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
 
 packagecloud:
-	# We set LC_ALL below because package_cloud is picky about the locale
-	LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb')
+	# - We set LC_ALL below because package_cloud is picky about the locale
+	# - To avoid pushing RC packages to packages.gitlab.com, only push if the
+	#   current tag does not contain 'rc'
+	if git describe | grep -q -v rc ; then \
+	  LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb') \
+	; fi
