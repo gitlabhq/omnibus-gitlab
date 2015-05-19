@@ -16,7 +16,7 @@
 ##
 #
 
-require_relative '../../lib/gitlab/build_iteration.rb'
+require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
 
