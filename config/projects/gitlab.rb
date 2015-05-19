@@ -15,6 +15,9 @@
 ## limitations under the License.
 ##
 #
+
+require_relative '../../lib/gitlab/build_iteration.rb'
+
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
 
 if ee
@@ -40,7 +43,7 @@ conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
-build_iteration 1
+build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.1.6',  source: { md5: "6e5564364be085c45576787b48eeb75f" }
 override :rubygems, version: '2.2.1'
