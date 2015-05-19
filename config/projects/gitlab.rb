@@ -54,6 +54,7 @@ runtime_dependency "openssh-server"
 
 # creates required build directories
 dependency "preparation"
+dependency "package-scripts"
 
 dependency "git"
 dependency "redis"
@@ -77,10 +78,10 @@ dependency "version-manifest"
 exclude "\.git*"
 exclude "bundler\/git"
 
-# Because we have a dynamic 'name' (gitlab-ce or gitlab-ee), omnibus-ruby would
-# look in either package-scripts/gitlab-ce or package-scripts/gitlab-ee. We
-# don't want that so let's hard-code the path.
-package_scripts_path "#{Omnibus::Config.project_root}/package-scripts/gitlab"
+# Our package scripts are generated from .erb files,
+# so we will grab them from an excluded folder
+package_scripts_path "#{install_dir}/.package_util/package-scripts"
+exclude '.package_util'
 
 package_user 'root'
 package_group 'root'
