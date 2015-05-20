@@ -1,3 +1,5 @@
+# This module has tests in spec/gitlab/build_iteration_spec.rb
+
 module Gitlab
   class BuildIteration
     def initialize(git_describe=nil)
@@ -5,11 +7,11 @@ module Gitlab
     end
 
     def build_iteration
-      match = /\+[^.]*.(\d+)$/.match(@git_describe)
+      match = /[^+]*\+(..*)$/.match(@git_describe)
       if match
-        match[1].to_i
+        match[1]
       else
-        0
+        '0'
       end
     end
   end
