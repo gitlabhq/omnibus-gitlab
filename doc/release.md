@@ -40,7 +40,7 @@ Example tags, with 'upstream tag => omnibus tag sequence':
 - `v7.11.0.rc1-ee` => `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, ...
 
 ```shell
-git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
+git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
 ```
 
 - Push the branch and the tag to the main repository and dev.gitlab.org.
