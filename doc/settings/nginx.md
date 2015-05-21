@@ -166,6 +166,28 @@ information, see:
 http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
 https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
 
+## Using custom ssl ciphers
+
+By default GitLab is using SSL ciphers that are combination of testing on gitlab.com and various best practices contributed by the GitLab community.
+
+However, you can change the ssl ciphers by adding to `gitlab.rb`:
+
+```ruby
+  nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
+```
+
+and running reconfigure.
+
+You can also enable `ssl_dhparam` directive.
+
+First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Then, in `gitlab.rb` add a path to the generated file, for example:
+
+```ruby
+  nginx['ssl_dhparam'] = /etc/gitlab/ssl/dhparams.pem
+```
+
+After the change run `sudo gitlab-ctl reconfigure`.
+
 ## Inserting custom NGINX settings into the GitLab server block
 
 If you need to add custom settings into the NGINX `server` block for GitLab for
