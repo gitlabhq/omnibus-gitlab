@@ -317,6 +317,7 @@ default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
 default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
 default['gitlab']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
