@@ -176,7 +176,11 @@ However, you can change the ssl ciphers by adding to `gitlab.rb`:
   nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
 ```
 
-and running reconfigure.
+and running reconfigure. Similar, for GitLab CI:
+
+```ruby
+  ci_nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
+```
 
 You can also enable `ssl_dhparam` directive.
 
@@ -186,7 +190,11 @@ First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Th
   nginx['ssl_dhparam'] = /etc/gitlab/ssl/dhparams.pem
 ```
 
-After the change run `sudo gitlab-ctl reconfigure`.
+After the change run `sudo gitlab-ctl reconfigure`. Similar, for GitLab CI:
+
+```ruby
+  ci_nginx['ssl_dhparam'] = /etc/gitlab/ssl/ci_dhparams.pem
+```
 
 ## Inserting custom NGINX settings into the GitLab server block
 
