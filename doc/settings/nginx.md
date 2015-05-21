@@ -187,13 +187,13 @@ You can also enable `ssl_dhparam` directive.
 First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Then, in `gitlab.rb` add a path to the generated file, for example:
 
 ```ruby
-  nginx['ssl_dhparam'] = /etc/gitlab/ssl/dhparams.pem
+  nginx['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
 ```
 
 After the change run `sudo gitlab-ctl reconfigure`. Similar, for GitLab CI:
 
 ```ruby
-  ci_nginx['ssl_dhparam'] = /etc/gitlab/ssl/ci_dhparams.pem
+  ci_nginx['ssl_dhparam'] = "/etc/gitlab/ssl/ci_dhparams.pem"
 ```
 
 ## Inserting custom NGINX settings into the GitLab server block
