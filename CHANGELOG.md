@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Update omnibus-software 42839a91c297b9c637a13fbe4beb05058672abe2
 - Add option to disable gitlab-rails when using only CI a784851e268ca1f23ce817c13a8d421c3211f96a
 - Point to different state file for gitlab logrotate 42591805f64c48cb845538012b2a43fe765637d2
+- Allow setting ssl_dhparam in nginx config 7b0c80ed9c1d85bebeedfc211a9b9e395593278c
 
 7.10.0
 
