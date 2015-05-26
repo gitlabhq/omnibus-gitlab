@@ -27,5 +27,5 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   command "#{install_dir}/embedded/bin/pip install --build . docutils==#{version}", env: env
   # Generate .pyc and .pyo files
-  command "#{install_dir}/embedded/bin/python #{install_dir}/embedded/lib/python2.7/compileall.py #{install_dir}/embedded/lib/python2.7"
+  command "#{install_dir}/embedded/bin/python #{install_dir}/embedded/lib/python2.7/compileall.py #{install_dir}/embedded/lib/python2.7", env: env
 end
