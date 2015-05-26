@@ -24,6 +24,10 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge test_build move_to_platform_dir sync
 
+# Redefine PLATFORM_DIR for Raspberry Pi 2 packages. Do not sync to packagecloud
+do_rpi2_release: PLATFORM_DIR=raspberry-pi
+do_rpi2_release: no_changes purge test_build move_to_platform_dir sync
+
 no_changes:
 	git diff --quiet HEAD
 
