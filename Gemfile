@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'omnibus'
+gem 'omnibus', git: 'git@gitlab.com:gitlab-org/omnibus.git', branch: 'gitlab_omnibus'
 gem 'omnibus-software', :git => 'git://github.com/opscode/omnibus-software.git', :branch => 'master'
 gem 'ohai'
 gem 'package_cloud'
