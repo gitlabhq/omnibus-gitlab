@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 7.12.0
 
 - Allow install_dir to be changed to allow different build paths (DJ Mountney) d205dc9e4da86ea39af18a6715f9538d3893488cf
+- Switched to omnibus fork 99c713cb579e8371a334b4e43a7d7863794d8374
+- Upgraded chef to 12.4.0.rc.0 b1a3870bd5a5bc60335655a4965f8f80a9be939f
+- Remove generated gitlab_shell_secret file during build 8ba8e9221516a0235f565bc5560bd0cec9c3c48e
 
 7.11.0
 
