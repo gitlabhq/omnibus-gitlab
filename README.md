@@ -18,6 +18,10 @@ stable branch (example shown below).
 
 ![documentation version](doc/images/omnibus-documentation-version.png)
 
+## Omnibus fork
+
+Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus). Fork is located at [gitlab.com](https://gitlab.com/gitlab-org/omnibus).
+
 ## GitLab CI
 
 To setup GitLab CI please see the [separate GitLab CI
