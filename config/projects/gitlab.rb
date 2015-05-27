@@ -44,7 +44,7 @@ build_iteration 1
 
 override :ruby, version: '2.1.6',  source: { md5: "6e5564364be085c45576787b48eeb75f" }
 override :rubygems, version: '2.2.1'
-override :'chef-gem', version: '11.18.0'
+override :chef, version: '12.4.0.rc.0'
 override :'omnibus-ctl', version: '0.3.4'
 override :zlib, version: '1.2.8'
 override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
@@ -58,7 +58,7 @@ dependency "preparation"
 dependency "git"
 dependency "redis"
 dependency "nginx"
-dependency "chef-gem"
+dependency "chef"
 dependency "remote-syslog" if ee
 dependency "logrotate"
 dependency "runit"
