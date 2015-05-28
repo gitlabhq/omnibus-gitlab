@@ -20,7 +20,7 @@ have two entries pointing to the same machine, e.g. `gitlab.example.com` and
 GitLab CI is disabled by default, to enable it just tell omnibus-gitlab what
 the external URL for the CI server is:
 
-```
+```ruby
 # in /etc/gitlab/gitlab.rb
 ci_external_url 'http://ci.example.com'
 ```
@@ -31,7 +31,7 @@ now be reachable at `http://ci.example.com`.
 Follow the on screen instructions on how to generate the app id and secret.
 Once generated, edit `/etc/gitlab/gitlab.rb` to set the URL for your GitLab server, your generated app id and generated secret:
 
-```
+```ruby
 gitlab_ci['gitlab_server'] = { 'url' => 'http://gitlab.example.com', 'app_id' => "1234", 'app_secret' => 'qwertyuio'}
 ```
 
@@ -45,7 +45,7 @@ the GitLab service bundled into the Omnibus package. The GitLab services will
 still be set up on your CI server, but they will not accept user requests or
 consume system resources.
 
-```
+```ruby
 ci_external_url 'http://ci.example.com'
 
 # Tell GitLab CI to integrate with gitlab.example.com
