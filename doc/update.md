@@ -13,7 +13,9 @@ configured the packages to run this command automatically after the new package
 is installed. If you are installing GitLab 7.9 or earlier, please see the
 [procedure below](#updating-from-gitlab-6-6-and-higher-to-the-latest-version).
 
-All you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
+First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
+[EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
+package to your GitLab server then all you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
 -Uvh gitlab-ce-XXX.rpm` (for Centos/Enterprise Linux). After the package has
 been unpacked, GitLab will automatically:
 
