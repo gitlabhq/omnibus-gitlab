@@ -78,6 +78,7 @@ Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
 ```
 
+Read more about `apt-cacher-ng` and the reasons why this change is need [on the packagecloud blog](http://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
 
 #### GitLab is unreachable in my browser
 
