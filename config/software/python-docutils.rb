@@ -22,6 +22,7 @@ default_version "0.11"
 
 dependency "pip"
 dependency "python"
+dependency "libxml2"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
