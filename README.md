@@ -62,6 +62,23 @@ You can login as an admin user with username `root` and password `5iveL!fe`.
 
 ### Common installation problems
 
+#### Unable to install using apt/yum repository
+
+When trying to install GitLab using the apt or yum repo if you receive an error similar to:
+
+```bash
+W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/CODENAME/main/source/Sources  The requested URL returned error: 403
+```
+
+check if there is a repository cacher in front of your server, like for example `apt-cacher-ng`.
+
+Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
+
+```bash
+PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
+```
+
+
 #### GitLab is unreachable in my browser
 
 Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
