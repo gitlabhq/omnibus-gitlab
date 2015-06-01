@@ -24,7 +24,7 @@ ${UUID_TARBALL}:
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
 # can coexist with the release.sh file.
-do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
+do_release: no_changes on_tag purge build move_to_platform_dir sync
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
