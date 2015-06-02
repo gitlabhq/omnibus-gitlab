@@ -19,6 +19,7 @@ main() {
     notify
     notify "  sudo touch ${skip_migrations_file}"
     notify
+    exit 1
   fi
 
   # Missing: GitLab CI backup
