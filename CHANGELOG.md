@@ -9,6 +9,9 @@ omnibus-gitlab repository.
 - Switched to omnibus fork 99c713cb579e8371a334b4e43a7d7863794d8374
 - Upgraded chef to 12.4.0.rc.0 b1a3870bd5a5bc60335655a4965f8f80a9be939f
 - Remove generated gitlab_shell_secret file during build 8ba8e9221516a0235f565bc5560bd0cec9c3c48e
+- Update redis to 2.8.20 6589e23ed79c883988e0ebefc356699f5f94228f
+- Exit on package installation if backup failed and wasn't skipped 710253c318a029bf1bb158c6c9fc81f0f695fe34
+- Added sslmode and sslrootcert database configuration option (Anthony Brodard) dbeb00346ccafdda50e52cf601c6b457b5981b74
 
 7.11.0
 
