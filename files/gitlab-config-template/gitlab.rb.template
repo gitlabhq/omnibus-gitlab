@@ -178,6 +178,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_host'] = nil
 # gitlab_rails['db_port'] = 5432
 # gitlab_rails['db_socket'] = nil
+# gitlab_rails['db_sslmode'] = nil
+# gitlab_rails['db_sslrootcert'] = nil
 
 
 #########################
@@ -446,6 +448,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['db_host'] = nil
 # gitlab_ci['db_port'] = 5432
 # gitlab_ci['db_socket'] = nil
+# gitlab_ci['db_sslmode'] = nil
+# gitlab_ci['db_sslrootcert'] = nil
 
 ############################
 # GitLab CI redis settings #
