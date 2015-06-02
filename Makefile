@@ -4,7 +4,7 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
-PACKAGECLOUD_REPO:=$(shell if git describe | grep -q -e rc ; then echo unstable; elif support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
+PACKAGECLOUD_REPO:=$(shell support/repo_name.sh)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 
 build:
@@ -54,7 +54,7 @@ move_to_platform_dir:
 sync: move_to_secret_dir md5 s3_sync
 
 move_to_secret_dir:
-	if support/is_gitlab_ee.sh || support/is_gitlab_com.sh ; then \
+	if support/is_gitlab_ee.sh ; then \
 	  mv pkg ${SECRET_DIR} \
 	  && mkdir pkg \
 	  && mv ${SECRET_DIR} pkg/ \
