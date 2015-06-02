@@ -4,7 +4,7 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
-PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
+PACKAGECLOUD_REPO:=$(shell if git describe | grep -q -e rc ; then echo unstable; elif support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 
 build:
@@ -71,8 +71,4 @@ s3_sync:
 
 packagecloud:
 	# - We set LC_ALL below because package_cloud is picky about the locale
-	# - To avoid pushing RC packages to packages.gitlab.com, only push if the
-	#   current tag does not contain 'rc'
-	if git describe | grep -q -v rc ; then \
-	  LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb') \
-	; fi
+	LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb')
