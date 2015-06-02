@@ -231,12 +231,17 @@ In some cases you may want to host GitLab using an existing Passenger/Nginx
 installation but still have the convenience of updating and installing using
 the omnibus packages.
 
+### Configuration
+
 First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
 Nginx and Unicorn:
 
 ```ruby
 # Disable the built-in nginx
 nginx['enable'] = false
+
+# Disable the built-in nginx for Gitlab CI
+ci_nginx['enable'] = false
 
 # Disable the built-in unicorn
 unicorn['enable'] = false
@@ -247,13 +252,17 @@ gitlab_rails['internal_api_url'] = 'http://git.yourdomain.com'
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
+### Vhost (server block)
+
 Then, in your custom Passenger/Nginx installation, create the following site
-configuration file:
+configuration files:
+
+#### Gitlab
 
 ```
 server {
   listen *:80;
-  server_name git.yourdomain.com;
+  server_name git.example.com;
   server_tokens off;
   root /opt/gitlab/embedded/service/gitlab-rails/public;
 
@@ -285,6 +294,57 @@ For a typical Passenger installation this file should probably
 be located at `/etc/nginx/sites-available/gitlab` and symlinked to
 `/etc/nginx/sites-enabled/gitlab`.
 
+#### Gitlab CI
+
+```
+upstream gitlab_ci {
+  server unix:/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket;
+}
+
+server {
+  listen *:80;
+  server_name ci.example.com;
+  server_tokens off;
+  root /opt/gitlab/embedded/service/gitlab-ci/public;
+
+  client_max_body_size 250m;
+
+  access_log  /var/log/gitlab/nginx/gitlab_ci_access.log;
+  error_log   /var/log/gitlab/nginx/gitlab_ci_error.log;
+
+  location / {
+    ## Serve static files from defined root folder.
+    ## @gitlab_ci is a named location for the upstream fallback, see below.
+    try_files $uri $uri/index.html $uri.html @gitlab_ci;
+  }
+
+  ## If a file, which is not found in the root folder is requested,
+  ## then the proxy passes the request to the upsteam (gitlab-ci unicorn).
+  location @gitlab_ci {
+    ## https://github.com/gitlabhq/gitlabhq/issues/694
+    ## Some requests take more than 30 seconds.
+    proxy_read_timeout      300;
+    proxy_connect_timeout   300;
+    proxy_redirect          off;
+
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_set_header   Host              $http_host;
+    proxy_set_header   X-Real-IP         $remote_addr;
+    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Frame-Options   SAMEORIGIN;
+
+    proxy_pass http://gitlab_ci;
+  }
+
+}
+```
+
+For a typical Passenger installation this file should probably
+be located at `/etc/nginx/sites-available/gitlab_ci` and symlinked to
+`/etc/nginx/sites-enabled/gitlab_ci`.
+
+#### Warning
+
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)
 should be added to the `gitlab-www` group. This can be done using the following command:
 
@@ -292,9 +352,13 @@ should be added to the `gitlab-www` group. This can be done using the following 
 sudo usermod -aG gitlab-www www-data
 ```
 
+#### Templates
+
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
-(although this could be enabled) this file is mostly identical to the
-[bundled Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb).
+(although this could be enabled) these files are mostly identical to :
+
+- [bundled Gitlab Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
+- [bundled Gitlab CI Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-ci-http.conf.erb)
 
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
