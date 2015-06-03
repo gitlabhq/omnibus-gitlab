@@ -179,9 +179,19 @@ Please be advised that you lose your settings in files such as gitlab.yml, unico
 You will have to [configure those settings in /etc/gitlab/gitlab.rb](/README.md#configuration).
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
-Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](/README.md#restoring-an-application-backup).
+Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#omnibus-installations).
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to achieve this.
+
+After upgrading make sure that you run the check task: `sudo gitlab-rake gitlab:check`.
+
+If you receive an error similar to `No such file or directory @ realpath_rec - /home/git` run this one liner to fix the git hooks path:
+
+```bash
+find . -lname /home/git/gitlab-shell/hooks -exec sh -c 'ln -snf /opt/gitlab/embedded/service/gitlab-shell/hooks $0' {} \;
+```
+
+This assumes that `gitlab-shell` is located in `/home/git`
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place
 It is also possible to upgrade a source GitLab installation to omnibus-gitlab
