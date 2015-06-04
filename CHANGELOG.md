@@ -3,6 +3,25 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.12.0
+
+- Allow install_dir to be changed to allow different build paths (DJ Mountney) d205dc9e4da86ea39af18a6715f9538d3893488cf
+- Switched to omnibus fork 99c713cb579e8371a334b4e43a7d7863794d8374
+- Upgraded chef to 12.4.0.rc.0 b1a3870bd5a5bc60335655a4965f8f80a9be939f
+- Remove generated gitlab_shell_secret file during build 8ba8e9221516a0235f565bc5560bd0cec9c3c48e
+- Update redis to 2.8.20 6589e23ed79c883988e0ebefc356699f5f94228f
+- Exit on package installation if backup failed and wasn't skipped 710253c318a029bf1bb158c6c9fc81f0f695fe34
+- Added sslmode and sslrootcert database configuration option (Anthony Brodard) dbeb00346ccafdda50e52cf601c6b457b5981b74
+
+7.11.0
+
+- Set the default certificate authority bundle to the embedded copy (Stan Hu) 673ac210216b9c01d58196e826b98db780a4ccd5
+- Use a different mirror for libossp-uuid (DJ Mountney) 7f46d70855a4d97eb2b833fc2d120ddfc514dfd4
+- Update omnibus-software 42839a91c297b9c637a13fbe4beb05058672abe2
+- Add option to disable gitlab-rails when using only CI a784851e268ca1f23ce817c13a8d421c3211f96a
+- Point to different state file for gitlab logrotate 42591805f64c48cb845538012b2a43fe765637d2
+- Allow setting ssl_dhparam in nginx config 7b0c80ed9c1d85bebeedfc211a9b9e395593278c
+
 7.10.0
 
 - Add option to disable HTTPS on nginx to support proxied SSL (Stan Hu) 80f4204052ceb3d47a0fdde2e006e79c099e5237
@@ -24,6 +43,13 @@ omnibus-gitlab repository.
 - Restart nginx instead of issuing a HUP signal changes so that changes in listen_address work (Stan Hu) 72d09b9b29a1a974e35aa6088912b6a6c4d7e4ac
 - Automatically stop GitLab, backup, reconfigure and start after a new package is installed
 - Rename the package from 'gitlab' to 'gitlab-ce' / 'gitlab-ee'
+- Update cacerts version e57085281e9f4d3ae15d4f2e14a88b3399cb4df3
+- Better parsing of DB settings in gitlab.rb 503fad5f9d0a4653d8540331f77f487a7b51ce3d
+- Update omnibus-ctl version to 0.3.4 b5972560c801bc22658d459ad00fa4f33a6c34d2
+- Try to detect init system in use on Debian (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
+- Devuan support added in runit (nextime) 7dd0234c19616e1cbe0656e55ef8a53be3fe882b
+- Disable EC2 plugin 70ba5285e1e89ababf25c9cb9ac817bb582f5a43
+- Disable multiple ohai plugins 0026ba26757a2b7168e7de86ab0652c0aec62ddf
 
 7.9.0
 

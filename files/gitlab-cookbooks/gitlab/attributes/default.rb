@@ -37,20 +37,22 @@ default['gitlab']['user']['gid'] = nil
 default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
-default['gitlab']['user']['git_user_name'] = "GitLab"
-default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
-
 
 ####
 # GitLab Rails app
 ####
+default['gitlab']['gitlab-rails']['enable'] = true
 default['gitlab']['gitlab-rails']['dir'] = "/var/opt/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rails"
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 default['gitlab']['gitlab-rails']['env'] = {
   'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '1000000',
-  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
-  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+  # Path to the Gemfile
+  # defaults to /opt/gitlab/embedded/service/gitlab-rails/Gemfile. The install-dir path is set at build time
+  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
+  # PATH to set on the environment
+  # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
@@ -113,13 +115,19 @@ default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
-default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "/opt/gitlab/embedded/service/gitlab-shell/"
+# Path to the GitLab Shell installation
+# defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time
+default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
 default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
-default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks/"
+# Path to the git hooks used by GitLab Shell
+# defaults to /opt/gitlab/embedded/service/gitlab-shell/hooks/. The install-dir path is set at build time
+default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/hooks/"
 default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = nil
-default['gitlab']['gitlab-rails']['git_bin_path'] = "/opt/gitlab/embedded/bin/git"
+# Path to the Git Executable
+# defaults to /opt/gitlab/embedded/bin/git. The install-dir path is set at build time
+default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['git_max_size'] = nil
 default['gitlab']['gitlab-rails']['git_timeout'] = nil
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
@@ -143,6 +151,8 @@ default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_host'] = nil
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
+default['gitlab']['gitlab-rails']['db_sslmode'] = nil
+default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
@@ -159,7 +169,9 @@ default['gitlab']['gitlab-rails']['smtp_enable_starttls_auto'] = nil
 default['gitlab']['gitlab-rails']['smtp_tls'] = nil
 default['gitlab']['gitlab-rails']['smtp_openssl_verify_mode'] = nil
 default['gitlab']['gitlab-rails']['smtp_ca_path'] = nil
-default['gitlab']['gitlab-rails']['smtp_ca_file'] = nil
+# Path to the public Certificate Authority file
+# defaults to /opt/gitlab/embedded/ssl/certs/cacert.pem. The install-dir path is set at build time
+default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
@@ -175,7 +187,9 @@ default['gitlab']['unicorn']['worker_processes'] = node['cpu']['total'].to_i + 1
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
-default['gitlab']['unicorn']['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
+# Path to the unicorn server Process ID file
+# defaults to /opt/gitlab/var/unicorn/unicorn.pid. The install-dir path is set at build time
+default['gitlab']['unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/unicorn/unicorn.pid"
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
@@ -213,7 +227,9 @@ default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
 default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
-default['gitlab']['postgresql']['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
+# Postgres User's Environment Path
+# defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
+default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
 default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['port'] = 5432
@@ -253,6 +269,7 @@ default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
+default['gitlab']['redis']['bind'] = '127.0.0.1'
 default['gitlab']['redis']['port'] = 0
 default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['redis']['unixsocketperm'] = "777"
@@ -299,6 +316,7 @@ default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
 default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
 default['gitlab']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
@@ -358,8 +376,12 @@ default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
 default['gitlab']['gitlab-ci']['env'] = {
-  'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-ci/Gemfile",
-  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+  # Path the the GitLab CI Gemfile
+  # defaults to /opt/gitlab/embedded/service/gitlab-ci/Gemfile. The install-dir path is set at build time
+  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-ci/Gemfile",
+  # Path variable set in the environment for the GitLab CI processes
+  # defaults to /opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 
@@ -423,7 +445,9 @@ default['gitlab']['ci-unicorn']['enable'] = false
 default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
 default['gitlab']['ci-unicorn']['port'] = 8181
 default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
-default['gitlab']['ci-unicorn']['pidfile'] = '/opt/gitlab/var/ci-unicorn/unicorn.pid'
+# Path to the GitLab CI's Unicorn Process ID file
+# defaults to /opt/gitlab/var/ci-unicorn/unicorn.pid. The install-dir path is set at build time
+default['gitlab']['ci-unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/ci-unicorn/unicorn.pid"
 
 ####
 # CI Sidekiq

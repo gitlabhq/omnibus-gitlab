@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2015 GitLab.com
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,26 +16,24 @@
 # limitations under the License.
 #
 
-name "gitlab-cookbooks"
-
-dependency "rsync"
+name "package-scripts"
 
 # Help omnibus-ruby to cache the build product of this software. This is a
 # workaround for the deprecation of `always_build true`. What happens now is
 # that we build only if the contents of the specified directory have changed
 # according to git.
-version `git ls-tree HEAD -- files/gitlab-cookbooks | awk '{ print $3 }'`
-
-source :path => File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)
+default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`
 
 build do
-  command "mkdir -p #{install_dir}/embedded/cookbooks"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/cookbooks/"
+  # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
+  command "mkdir -p #{install_dir}/.package_util/package-scripts"
 
-  # Create a package cookbook.
-  command "mkdir -p #{install_dir}/embedded/cookbooks/package/attributes"
-  erb :dest => "#{install_dir}/embedded/cookbooks/package/attributes/default.rb",
-      :source => "cookbook_packages_default.erb",
-      :mode => 0755,
-      :vars => { :install_dir => project.install_dir }
+  # Render the package script erb files
+  Dir.glob(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/*.erb')).each do |package_script|
+    script = File.basename(package_script, '.*')
+    erb :dest => "#{install_dir}/.package_util/package-scripts/#{script}",
+        :source => File.basename(package_script),
+        :mode => 0755,
+        :vars => { :install_dir => project.install_dir }
+  end
 end

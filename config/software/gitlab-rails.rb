@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "743f3ed60c9a8545bf7bc038bb561ca468485780" # CE 7.10.0.rc2
+default_version "e3e32921a2016a2a80b17532a500b067e4568ba4" # CE 7.11.0
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -64,7 +64,10 @@ build do
   # Tear down now that the assets:precompile is done.
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
+
+  # Remove auto-generated files
   delete '.secret'
+  delete '.gitlab_shell_secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'

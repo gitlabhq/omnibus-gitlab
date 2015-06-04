@@ -151,9 +151,11 @@ bin_dir = "/opt/gitlab/embedded/bin"
 database_name = node['gitlab']['gitlab-rails']['db_database']
 ci_database_name = node['gitlab']['gitlab-ci']['db_database']
 
-databases = [
-  ['gitlab-rails', database_name, node['gitlab']['postgresql']['sql_user']]
-]
+databases = []
+if node['gitlab']['gitlab-rails']['enable']
+  databases << ['gitlab-rails', database_name, node['gitlab']['postgresql']['sql_user']]
+end
+
 if node['gitlab']['gitlab-ci']['enable']
   databases << ['gitlab-ci', ci_database_name, node['gitlab']['postgresql']['sql_ci_user']]
 end

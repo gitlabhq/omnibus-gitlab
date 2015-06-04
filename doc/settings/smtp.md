@@ -3,8 +3,9 @@
 If you would rather send application email via an SMTP server instead of via
 Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
+There are [example configurations](#examples) at the end of this page.
 
-```
+```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.server"
 gitlab_rails['smtp_port'] = 456
@@ -35,10 +36,17 @@ gitlab_ci['smtp_address'] = "smtp.server"
 ```
 
 ## Example configuration
+### SMTP on localhost
+This configuration, which simply enables SMTP and otherwise uses the default settings, can be used for an MTA running on localhost that does not provide a `sendmail` interface or that provides a `sendmail` interface that is incompatible with GitLab, such as Exim.
 
-### GMail
-
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_ci['smtp_enable'] = true
 ```
+
+### Gmail
+
+```ruby
 gitlab_rails['gitlab_email_from'] = 'my.email@gmail.com'
 gitlab_rails['gitlab_email_reply_to'] = 'my.email@gmail.com'
 
@@ -55,3 +63,20 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer' # Can be: 'none', 'peer', 'cli
 ```
 
 _Don't forget to change my.email@gmail.com to your email address and my-gmail-password to your own password._
+
+### Mailgun
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.mailgun.org"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
+gitlab_rails['smtp_password'] = "8b6ffrmle180"
+gitlab_rails['smtp_domain'] = "mg.gitlab.com"
+```
+
+### More examples are welcome
+
+If you have figured out an example configuration yourself please send a merge request to save other people time.

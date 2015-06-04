@@ -39,9 +39,32 @@ link File.join(nginx_dir, "logs") do
 end
 
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
+
+gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
+gitlab_ci_http_conf = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
+
+# If the service is enabled, check if we are using internal nginx
+gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
+                         node['gitlab']['nginx']['enable']
+                       else
+                         false
+                       end
+
+gitlab_ci_enabled = if node['gitlab']['gitlab-ci']['enable']
+                      node['gitlab']['ci-nginx']['enable']
+                    else
+                      false
+                    end
+
+# Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
-  :gitlab_http_config => File.join(nginx_conf_dir, "gitlab-http.conf")
-})
+               :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
+             })
+
+# Include the config file for gitlab-ci in nginx.conf later
+nginx_vars =  nginx_vars.merge!(
+                :gitlab_ci_http_config => gitlab_ci_enabled ? gitlab_ci_http_conf : nil
+              )
 
 gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
 
@@ -57,7 +80,7 @@ else
   nginx_vars['https'] = nginx_vars['listen_https']
 end
 
-template nginx_vars[:gitlab_http_config] do
+template gitlab_rails_http_conf do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
   group "root"
@@ -70,30 +93,26 @@ template nginx_vars[:gitlab_http_config] do
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action gitlab_rails_enabled ? :create : :delete
 end
 
-if node['gitlab']['ci-nginx']['enable']
-  # Include the config file for gitlab-ci in nginx.conf later
-  nginx_vars.merge!(
-    :gitlab_ci_http_config => File.join(nginx_conf_dir, "gitlab-ci-http.conf")
-  )
+ci_nginx_vars = node['gitlab']['ci-nginx']
 
-  ci_nginx_vars = node['gitlab']['ci-nginx']
-  template nginx_vars[:gitlab_ci_http_config] do
-    source "nginx-gitlab-ci-http.conf.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-    variables(ci_nginx_vars.merge(
-      {
-        :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
-        :https => node['gitlab']['gitlab-ci']['gitlab_ci_https'],
-        :socket => node['gitlab']['ci-unicorn']['socket'],
-        :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
-      }
-    ))
-    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
-  end
+template gitlab_ci_http_conf do
+  source "nginx-gitlab-ci-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(ci_nginx_vars.merge(
+    {
+      :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
+      :https => node['gitlab']['gitlab-ci']['gitlab_ci_https'],
+      :socket => node['gitlab']['ci-unicorn']['socket'],
+      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
+    }
+  ))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action gitlab_ci_enabled ? :create : :delete
 end
 
 template nginx_config do

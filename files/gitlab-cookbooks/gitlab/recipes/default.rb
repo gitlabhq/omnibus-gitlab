@@ -18,7 +18,10 @@
 
 require 'openssl'
 
-ENV['PATH'] = "/opt/gitlab/bin:/opt/gitlab/embedded/bin:#{ENV['PATH']}"
+# Default location of install-dir is /opt/gitlab/. This path is set during build time.
+# DO NOT change this value unless you are building your own GitLab packages
+install_dir = node['package']['install-dir']
+ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
 directory "/etc/gitlab" do
   owner "root"
@@ -45,7 +48,7 @@ directory "/var/opt/gitlab" do
   action :create
 end
 
-directory "/opt/gitlab/embedded/etc" do
+directory "#{install_dir}/embedded/etc" do
   owner "root"
   group "root"
   mode "0755"
@@ -53,17 +56,24 @@ directory "/opt/gitlab/embedded/etc" do
   action :create
 end
 
-template "/opt/gitlab/embedded/etc/gitconfig" do
+template "#{install_dir}/embedded/etc/gitconfig" do
   source "gitconfig-system.erb"
   mode 0755
   variables gitconfig: node['gitlab']['omnibus-gitconfig']['system']
 end
 
-include_recipe "gitlab::users"
 include_recipe "gitlab::web-server"
-include_recipe "gitlab::gitlab-shell"
-include_recipe "gitlab::gitlab-rails"
-include_recipe "gitlab::gitlab-ci" if node['gitlab']['gitlab-ci']['enable']
+
+if node['gitlab']['gitlab-rails']['enable']
+  include_recipe "gitlab::users"
+  include_recipe "gitlab::gitlab-shell"
+  include_recipe "gitlab::gitlab-rails"
+end
+
+if node['gitlab']['gitlab-ci']['enable']
+  include_recipe "gitlab::gitlab-ci"
+end
+
 include_recipe "gitlab::selinux"
 include_recipe "gitlab::cron"
 

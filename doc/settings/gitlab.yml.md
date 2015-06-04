@@ -4,7 +4,9 @@ Some of GitLab's features can be customized through
 [gitlab.yml][gitlab.yml.example] and [application.yml (GitLab
 CI)][application.yml.example]. If you want to change a `gitlab.yml` setting
 with omnibus-gitlab, you need to do so via `/etc/gitlab/gitlab.rb`. The
-translation works as follows.
+translation works as follows. For a complete list of available options, visit the
+[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template). New installations starting from GitLab 7.6, will have
+all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
 In `gitlab.yml`, you will find structure like this:
 
