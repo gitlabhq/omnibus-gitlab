@@ -15,7 +15,7 @@
 ## limitations under the License.
 ##
 #
-ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
+ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 if ee
   name "gitlab-ee"
