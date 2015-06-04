@@ -213,6 +213,23 @@ module Gitlab
       nginx['listen_addresses'] = [nginx['listen_address']]
     end
 
+    def parse_nginx_listen_ports
+      [
+        [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
+        [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
+
+      ].each do |left, right|
+        if !Gitlab[left.first][left.last].nil?
+          next
+        end
+
+        default_set_gitlab_port = node['gitlab'][right.first.gsub('_', '-')][right.last]
+        user_set_gitlab_port = Gitlab[right.first][right.last]
+
+        Gitlab[left.first][left.last] = user_set_gitlab_port || default_set_gitlab_port
+      end
+    end
+
     def parse_ci_external_url
       return unless ci_external_url
       # Enable gitlab_ci. This setting will be picked up by parse_gitlab_ci
@@ -292,6 +309,7 @@ module Gitlab
       parse_redis_settings
       parse_postgresql_settings
       parse_nginx_listen_address
+      parse_nginx_listen_ports
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
