@@ -129,11 +129,27 @@ unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['u
 gitlab_server_url = if node['gitlab']['gitlab-ci']['gitlab_server_urls']
                       node['gitlab']['gitlab-ci']['gitlab_server_urls'].first
                     end
+
+
+cmd = '/usr/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: "#{Gitlab[\'gitlab_rails\'][\'gitlab_host\']}", name: "GitLab CI").first_or_create ; puts "#{app.uid} #{app.secret}";\''
+o = Mixlib::ShellOut.new(cmd)
+o.run_command
+
+if o.exitstatus == 0
+  app_id, app_secret = o.stdout.chomp.split(" ")
+end
+
 gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
                   node['gitlab']['gitlab-ci']['gitlab_server']
                 else
-                  { 'url' => gitlab_server_url || unicorn_url, 'app_id' => nil, 'app_secret' => nil}
+                  { 'url' => 'http://127.0.0.1:3000', 'app_id' => app_id, 'app_secret' => app_secret}
                 end
+
+# gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
+#                   node['gitlab']['gitlab-ci']['gitlab_server']
+#                 else
+#                   { 'url' => gitlab_server_url || unicorn_url, 'app_id' => nil, 'app_secret' => nil}
+#                 end
 
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   link_from File.join(gitlab_ci_source_dir, "config/application.yml")

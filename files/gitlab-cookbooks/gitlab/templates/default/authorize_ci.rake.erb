@@ -1,0 +1,42 @@
+namespace :gitlab do
+  namespace :ci do
+    desc "Create GitLab CI authorization"
+    task authorize: :environment do
+      redirect_uri = <%= @redirect_uri %>
+      ci_apps = Doorkeeper::Application.where(redirect_uri: redirect_uri)
+
+      if ci_apps.any?
+         puts "Nothing to do, GitLab CI authorization already exists".green
+         exit 0
+      else
+        new_ci_app = Doorkeeper::Application.new({"name"=>"test", "redirect_uri"=>redirect_uri})
+
+        if new_ci_app.save
+          puts "Created GitLab CI authorization".green
+          exit 0
+        else
+          puts "Unable to create GitLab CI oauth authorization".red
+          exit 1
+        end
+      end
+    end
+
+    task show_secret: :environment do
+      redirect_uri = <%= @redirect_uri %>
+      ci_apps = Doorkeeper::Application.where(redirect_uri: redirect_uri)
+
+      if ci_apps.any?
+        puts ci_apps.last.secret
+      end
+    end
+
+    task show_id: :environment do
+      redirect_uri = <%= @redirect_uri %>
+      ci_apps = Doorkeeper::Application.where(redirect_uri: redirect_uri)
+
+      if ci_apps.any?
+        puts ci_apps.last.uid
+      end
+    end
+  end
+end
