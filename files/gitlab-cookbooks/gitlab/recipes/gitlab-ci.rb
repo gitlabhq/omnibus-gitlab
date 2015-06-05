@@ -131,18 +131,10 @@ gitlab_server_url = if node['gitlab']['gitlab-ci']['gitlab_server_urls']
                     end
 
 
-cmd = '/usr/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: "#{Gitlab[\'gitlab_rails\'][\'gitlab_host\']}", name: "GitLab CI").first_or_create ; puts "#{app.uid} #{app.secret}";\''
-o = Mixlib::ShellOut.new(cmd)
-o.run_command
-
-if o.exitstatus == 0
-  app_id, app_secret = o.stdout.chomp.split(" ")
-end
-
 gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
                   node['gitlab']['gitlab-ci']['gitlab_server']
                 else
-                  { 'url' => 'http://127.0.0.1:3000', 'app_id' => app_id, 'app_secret' => app_secret}
+                  CiHelper.authorize_app("http://127.0.0.1:3000")
                 end
 
 # gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']

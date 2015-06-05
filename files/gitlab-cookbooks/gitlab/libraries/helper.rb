@@ -90,6 +90,22 @@ class OmnibusHelper
 
 end
 
+class CiHelper
+
+  def self.authorize_app(gitlab_external_url)
+    cmd = "/usr/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create ; puts app.uid.concat(\" \").concat(app.secret);\'"
+    o = Mixlib::ShellOut.new(cmd)
+    o.run_command
+
+    app_id, app_secret = nil
+    if o.exitstatus == 0
+      app_id, app_secret = o.stdout.chomp.split(" ")
+    end
+
+    { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
+  end
+end
+
 module SingleQuoteHelper
 
   def single_quote(string)
