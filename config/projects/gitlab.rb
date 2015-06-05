@@ -71,6 +71,7 @@ dependency "gitlab-shell"
 dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
+dependency "gitlab-scripts"
 dependency "gitlab-config-template"
 
 # version manifest file
