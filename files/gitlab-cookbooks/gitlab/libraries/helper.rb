@@ -97,10 +97,13 @@ class CiHelper
     credentials_file = "/var/opt/gitlab/gitlab-ci/etc/gitlab_server.yml"
 
     if File.exists?(credentials_file)
+      Chef::Log.debug("Reading the CI credentials file at #{credentials_file}")
+      Chef::Log.debug("If you need to change app_id and app_secret use gitlab.rb.")
       gitlab_server = YAML::load_file(credentials_file)
       app_id = gitlab_server[:app_id]
       app_secret = gitlab_server[:app_secret]
     else
+      Chef::Log.debug("Didn't find #{credentials_file}, connecting to database to generate new app_id and app_secret.")
       cmd = "/opt/gitlab/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create ; puts app.uid.concat(\" \").concat(app.secret);\'"
       o = Mixlib::ShellOut.new(cmd)
       o.run_command
@@ -110,6 +113,9 @@ class CiHelper
         app_id, app_secret = o.stdout.chomp.split(" ")
         gitlab_server = { app_id: app_id, app_secret: app_secret }
         File.open(credentials_file, 'w') { |file| file.write gitlab_server.to_yaml }
+        Chef::Log.debug("Created the CI credentials file at #{credentials_file}")
+      else
+        Chef::Log.warn("Something went wrong while trying to create #{credentials_file}. Check the file permissions and try reconfiguring again.")
       end
     end
 
