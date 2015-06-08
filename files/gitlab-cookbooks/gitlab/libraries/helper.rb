@@ -104,7 +104,18 @@ class CiHelper
       app_secret = gitlab_server[:app_secret]
     else
       Chef::Log.debug("Didn't find #{credentials_file}, connecting to database to generate new app_id and app_secret.")
-      cmd = "/opt/gitlab/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create ; puts app.uid.concat(\" \").concat(app.secret);\'"
+      runner_cmd = [
+        "app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create",
+        "puts app.uid.concat(\" \").concat(app.secret);"
+        ].join(" ;")
+
+      cmd = [
+        '/opt/gitlab/bin/gitlab-rails',
+        'runner',
+        '-e production',
+        "\'#{runner_cmd}\'"
+      ].join(" ")
+
       o = Mixlib::ShellOut.new(cmd)
       o.run_command
 
