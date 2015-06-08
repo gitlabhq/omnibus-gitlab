@@ -126,22 +126,12 @@ template_symlink File.join(gitlab_ci_etc_dir, "smtp_settings.rb") do
 end
 
 unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
-gitlab_server_url = if node['gitlab']['gitlab-ci']['gitlab_server_urls']
-                      node['gitlab']['gitlab-ci']['gitlab_server_urls'].first
-                    end
-
 
 gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
                   node['gitlab']['gitlab-ci']['gitlab_server']
                 else
-                  CiHelper.authorize_app("http://127.0.0.1:3000")
+                  CiHelper.authorize_with_gitlab(Gitlab['external_url']) unless postgresql_not_listening
                 end
-
-# gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
-#                   node['gitlab']['gitlab-ci']['gitlab_server']
-#                 else
-#                   { 'url' => gitlab_server_url || unicorn_url, 'app_id' => nil, 'app_secret' => nil}
-#                 end
 
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
   link_from File.join(gitlab_ci_source_dir, "config/application.yml")

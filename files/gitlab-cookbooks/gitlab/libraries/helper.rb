@@ -92,18 +92,30 @@ end
 
 class CiHelper
 
-  def self.authorize_app(gitlab_external_url)
-    cmd = "/usr/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create ; puts app.uid.concat(\" \").concat(app.secret);\'"
-    o = Mixlib::ShellOut.new(cmd)
-    o.run_command
+  def self.authorize_with_gitlab(gitlab_external_url)
+    require 'yaml'
+    credentials_file = "/var/opt/gitlab/gitlab-ci/etc/gitlab_server.yml"
 
-    app_id, app_secret = nil
-    if o.exitstatus == 0
-      app_id, app_secret = o.stdout.chomp.split(" ")
+    if File.exists?(credentials_file)
+      gitlab_server = YAML::load_file(credentials_file)
+      app_id = gitlab_server[:app_id]
+      app_secret = gitlab_server[:app_secret]
+    else
+      cmd = "/opt/gitlab/bin/gitlab-rails runner -e production \'app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create ; puts app.uid.concat(\" \").concat(app.secret);\'"
+      o = Mixlib::ShellOut.new(cmd)
+      o.run_command
+
+      app_id, app_secret = nil
+      if o.exitstatus == 0
+        app_id, app_secret = o.stdout.chomp.split(" ")
+        gitlab_server = { app_id: app_id, app_secret: app_secret }
+        File.open(credentials_file, 'w') { |file| file.write gitlab_server.to_yaml }
+      end
     end
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
   end
+
 end
 
 module SingleQuoteHelper

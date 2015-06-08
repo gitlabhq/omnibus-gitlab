@@ -275,7 +275,9 @@ module Gitlab
         "logrotate",
         "high_availability",
         "postgresql",
-        "web_server"
+        "web_server",
+        "external_url",
+        "ci_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
