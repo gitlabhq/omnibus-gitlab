@@ -93,12 +93,21 @@ end
 class CiHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
+    require 'yaml'
+    credentials_file = "/var/opt/gitlab/gitlab-ci/etc/gitlab_server.yml"
 
-    Chef::Log.warn("Didn't find gitlab_ci['gitlab_server'] in gitlab.rb, connecting to database to generate new app_id and app_secret.")
-    runner_cmd = [
-      "app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create",
-      "puts app.uid.concat(\" \").concat(app.secret);"
-      ].join(" ;")
+    if File.exists?(credentials_file)
+      Chef::Log.debug("Reading the CI credentials file at #{credentials_file}")
+      Chef::Log.debug("If you need to change app_id and app_secret use gitlab.rb.")
+      gitlab_server = YAML::load_file(credentials_file)
+      app_id = gitlab_server[:app_id]
+      app_secret = gitlab_server[:app_secret]
+    else
+      Chef::Log.debug("Didn't find #{credentials_file}, connecting to database to generate new app_id and app_secret.")
+      runner_cmd = [
+        "app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create",
+        "puts app.uid.concat(\" \").concat(app.secret);"
+        ].join(" ;")
 
       cmd = [
         '/opt/gitlab/bin/gitlab-rails',
@@ -113,13 +122,11 @@ class CiHelper
       app_id, app_secret = nil
       if o.exitstatus == 0
         app_id, app_secret = o.stdout.chomp.split(" ")
-        gitlab_server = { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
-        gitlab_rb = File.read("/etc/gitlab/gitlab.rb")
-        File.write("/etc/gitlab/gitlab.rb", gitlab_rb.gsub(/^#(\s*|)gitlab_ci\[\'gitlab_server\'\].*$/, "gitlab_ci['gitlab_server'] = #{gitlab_server}"))
-
-        Chef::Log.warn("Updated gitlab.rb with gitlab_ci['gitlab_server'] credentials.")
+        gitlab_server = { app_id: app_id, app_secret: app_secret }
+        File.open(credentials_file, 'w') { |file| file.write gitlab_server.to_yaml }
+        Chef::Log.debug("Created the CI credentials file at #{credentials_file}")
       else
-        Chef::Log.warn("Something went wrong while trying to generate credentials #{o.inspect}.")
+        Chef::Log.warn("Something went wrong while trying to create #{credentials_file}. Check the file permissions and try reconfiguring again.")
       end
     end
 
