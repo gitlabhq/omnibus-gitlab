@@ -18,6 +18,15 @@
 
 require 'mixlib/shellout'
 
+module ShellOutHelper
+
+  def do_shell_out(cmd)
+    o = Mixlib::ShellOut.new(cmd)
+    o.run_command
+    o
+  end
+end
+
 class PgHelper
   attr_reader :node
 
@@ -91,16 +100,14 @@ class OmnibusHelper
 end
 
 class CiHelper
+  extend ShellOutHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
-    Chef::Log.warn("Connecting to GitLab to generate new app_id and app_secret.")
+    warn("Connecting to GitLab to generate new app_id and app_secret.")
 
     runner_cmd = create_or_find_authorization(gitlab_external_url)
-
     cmd = execute_rails_runner(runner_cmd)
-
-    o = Mixlib::ShellOut.new(cmd)
-    o.run_command
+    o = do_shell_out(cmd)
 
     app_id, app_secret = nil
     if o.exitstatus == 0
@@ -112,10 +119,9 @@ class CiHelper
                                                }
 
       SecretsHelper.write_to_gitlab_secrets
-
-      Chef::Log.info("Updated the gitlab-secrets.json file.")
+      info("Updated the gitlab-secrets.json file.")
     else
-      Chef::Log.warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
+      warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
     end
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
@@ -141,6 +147,14 @@ class CiHelper
       -e production
       '#{cmd}'
     ).join(" ")
+  end
+
+  def self.warn(msg)
+    Chef::Log.warn(msg)
+  end
+
+  def self.info(msg)
+    Chef::Log.info(msg)
   end
 
 end
