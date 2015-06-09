@@ -25,9 +25,20 @@ module ShellOutHelper
     o.run_command
     o
   end
+
+  def success?(cmd)
+    o = do_shell_out(cmd)
+    o.exitstatus == 0
+  end
+
+  def failure?(cmd)
+    o = do_shell_out(cmd)
+    o.exitstatus == 3
+  end
 end
 
 class PgHelper
+  include ShellOutHelper
   attr_reader :node
 
   def initialize(node)
@@ -56,7 +67,7 @@ class PgHelper
            "/opt/gitlab/embedded/bin/psql",
            "--port #{pg_port}",
            cmd_list.join(" ")].join(" ")
-    do_shell_out(cmd, 0)
+    success?(cmd)
   end
 
   def pg_user
@@ -67,15 +78,10 @@ class PgHelper
     node['gitlab']['postgresql']['port']
   end
 
-  def do_shell_out(cmd, expect_status)
-    o = Mixlib::ShellOut.new(cmd)
-    o.run_command
-    o.exitstatus == expect_status
-  end
-
 end
 
 class OmnibusHelper
+  extend ShellOutHelper
 
   def self.should_notify?(service_name)
     File.symlink?("/opt/gitlab/service/#{service_name}") && service_up?(service_name)
@@ -86,15 +92,11 @@ class OmnibusHelper
   end
 
   def self.service_up?(service_name)
-    o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
-    o.run_command
-    o.exitstatus == 0
+    success?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
   end
 
   def self.service_down?(service_name)
-    o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
-    o.run_command
-    o.exitstatus == 3
+    failure?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
   end
 
 end
