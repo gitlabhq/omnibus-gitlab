@@ -93,9 +93,8 @@ end
 class CiHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
-    credentials_file = "/etc/gitlab/gitlab-secrets.json"
-
     Chef::Log.warn("Connecting to GitLab to generate new app_id and app_secret.")
+
     runner_cmd = [
       "app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create",
       "puts app.uid.concat(\" \").concat(app.secret);"
@@ -122,9 +121,9 @@ class CiHelper
 
       SecretsHelper.write_to_gitlab_secrets
 
-      Chef::Log.info("Updated the #{credentials_file} file.")
+      Chef::Log.info("Updated the gitlab-secrets.json file.")
     else
-      Chef::Log.warn("Something went wrong while trying to update #{credentials_file}. Check the file permissions (default 600) and try reconfiguring again.")
+      Chef::Log.warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
     end
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
@@ -163,18 +162,19 @@ class SecretsHelper
                     }
 
     ci_credentials = if Gitlab['gitlab_ci']['gitlab_server']
-       { 'gitlab_ci' => {
-                          'secret_token' => Gitlab['gitlab_ci']['secret_token'],
-                          'gitlab_server' => {
-                            'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
-                            'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
-                            'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
-                          }
-                        }
-        }
-    else
-      {}
-    end
+                       {
+                         'gitlab_ci' => {
+                                          'secret_token' => Gitlab['gitlab_ci']['secret_token'],
+                                          'gitlab_server' => {
+                                            'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
+                                            'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
+                                            'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
+                                           }
+                                         }
+                       }
+                     else
+                       {}
+                     end
 
     if File.directory?("/etc/gitlab")
       File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
