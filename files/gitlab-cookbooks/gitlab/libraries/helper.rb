@@ -95,17 +95,9 @@ class CiHelper
   def self.authorize_with_gitlab(gitlab_external_url)
     Chef::Log.warn("Connecting to GitLab to generate new app_id and app_secret.")
 
-    runner_cmd = [
-      "app=Doorkeeper::Application.where(redirect_uri: \"#{gitlab_external_url}\", name: \"GitLab CI\").first_or_create",
-      "puts app.uid.concat(\" \").concat(app.secret);"
-      ].join(" ;")
+    runner_cmd = create_or_find_authorization(gitlab_external_url)
 
-    cmd = [
-      '/opt/gitlab/bin/gitlab-rails',
-      'runner',
-      '-e production',
-      "\'#{runner_cmd}\'"
-    ].join(" ")
+    cmd = execute_rails_runner(runner_cmd)
 
     o = Mixlib::ShellOut.new(cmd)
     o.run_command
@@ -127,6 +119,28 @@ class CiHelper
     end
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
+  end
+
+  def self.create_or_find_authorization(gitlab_external_url)
+    args = %Q(redirect_uri: "#{gitlab_external_url}", name: "GitLab CI")
+
+    app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+
+    output = %Q(puts app.uid.concat(" ").concat(app.secret);)
+
+    %W(
+      #{app}
+      #{output}
+    ).join
+  end
+
+  def self.execute_rails_runner(cmd)
+    %W(
+      /opt/gitlab/bin/gitlab-rails
+      runner
+      -e production
+      '#{cmd}'
+    ).join(" ")
   end
 
 end
