@@ -62,6 +62,24 @@ You can login as an admin user with username `root` and password `5iveL!fe`.
 
 ### Common installation problems
 
+#### Apt error 'The requested URL returned error: 403'
+
+When trying to install GitLab using the apt repo if you receive an error similar to:
+
+```bash
+W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/CODENAME/main/source/Sources  The requested URL returned error: 403
+```
+
+check if there is a repository cacher in front of your server, like for example `apt-cacher-ng`.
+
+Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
+
+```bash
+PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
+```
+
+Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](http://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
+
 #### GitLab is unreachable in my browser
 
 Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
