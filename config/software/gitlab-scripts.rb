@@ -17,17 +17,8 @@
 
 name "gitlab-scripts"
 
-dependency "rsync"
-
-# Help omnibus-ruby to cache the build product of this software. This is a
-# workaround for the deprecation of `always_build true`. What happens now is
-# that we build only if the contents of the specified directory have changed
-# according to git.
-version `git ls-tree HEAD -- files/gitlab-scripts | awk '{ print $3 }'`
-
 source :path => File.expand_path("files/gitlab-scripts", Omnibus::Config.project_root)
 
 build do
-  command "mkdir -p #{install_dir}/embedded/bin"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/bin/"
+  copy "*", "#{install_dir}/embedded/bin/"
 end
