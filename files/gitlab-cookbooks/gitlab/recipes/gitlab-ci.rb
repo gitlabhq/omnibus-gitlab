@@ -127,10 +127,13 @@ end
 
 unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
 
+pg_helper = PgHelper.new(node)
+database_ready = pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database'])
+
 gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
                   node['gitlab']['gitlab-ci']['gitlab_server']
                 else
-                  OmnibusHelper.service_up?("postgresql") ? CiHelper.authorize_with_gitlab(Gitlab['external_url']):{}
+                  database_ready ? CiHelper.authorize_with_gitlab(Gitlab['external_url']):{}
                 end
 
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
