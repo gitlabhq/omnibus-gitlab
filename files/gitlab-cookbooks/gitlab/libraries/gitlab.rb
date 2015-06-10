@@ -69,6 +69,7 @@ module Gitlab
     def generate_secrets(node_name)
       SecretsHelper.read_gitlab_secrets
 
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
       Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
