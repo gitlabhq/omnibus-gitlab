@@ -191,25 +191,21 @@ class SecretsHelper
                       }
                     }
 
-    ci_credentials = if Gitlab['gitlab_ci']['gitlab_server']
-                       {
-                         'gitlab_ci' => {
-                                          'secret_token' => Gitlab['gitlab_ci']['secret_token'],
-                                          'gitlab_server' => {
-                                            'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
-                                            'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
-                                            'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
-                                           }
-                                         }
-                       }
-                     else
-                       {}
-                     end
+    if Gitlab['gitlab_ci']['gitlab_server']
+      ci_auth = {
+                  'gitlab_server' => {
+                    'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
+                    'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
+                    'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
+                  }
+                }
+      secret_tokens['gitlab_ci'].merge!(ci_auth)
+    end
 
     if File.directory?("/etc/gitlab")
       File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
         f.puts(
-          Chef::JSONCompat.to_json_pretty(secret_tokens.merge(ci_credentials))
+          Chef::JSONCompat.to_json_pretty(secret_tokens)
         )
         system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
       end
