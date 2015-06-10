@@ -130,7 +130,7 @@ unicorn_url = "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['u
 gitlab_server = if node['gitlab']['gitlab-ci']['gitlab_server']
                   node['gitlab']['gitlab-ci']['gitlab_server']
                 else
-                  CiHelper.authorize_with_gitlab(Gitlab['external_url']) unless postgresql_not_listening
+                  OmnibusHelper.service_up?("postgresql") ? CiHelper.authorize_with_gitlab(Gitlab['external_url']):{}
                 end
 
 template_symlink File.join(gitlab_ci_etc_dir, "application.yml") do
