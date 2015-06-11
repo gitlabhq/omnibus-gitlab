@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Update redis to 2.8.20 6589e23ed79c883988e0ebefc356699f5f94228f
 - Exit on package installation if backup failed and wasn't skipped 710253c318a029bf1bb158c6c9fc81f0f695fe34
 - Added sslmode and sslrootcert database configuration option (Anthony Brodard) dbeb00346ccafdda50e52cf601c6b457b5981b74
+- Transmit gitlab-shell logs with remote_syslog 9242b83525cc18df22d1f44fb002a67e94b4ad5c
+- Moved GitLab CI cronjob from root to the gitlab-ci user 4b9926b8c016c2c10f8511a5b083f6d5a7071041
+- gitlab-rake and gitlab-ci-rake can be ran without sudo 4d4e3702ffee890eabed1d4cb61dd351baf2b554
+- Git username and email are removed from git users gitconfig 1911109c0679f90e5184415c52ad5da4e31b7171
 
 7.11.0
 
