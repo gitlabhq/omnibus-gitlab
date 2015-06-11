@@ -12,6 +12,8 @@ omnibus-gitlab repository.
 - Update redis to 2.8.20 6589e23ed79c883988e0ebefc356699f5f94228f
 - Exit on package installation if backup failed and wasn't skipped 710253c318a029bf1bb158c6c9fc81f0f695fe34
 - Added sslmode and sslrootcert database configuration option (Anthony Brodard) dbeb00346ccafdda50e52cf601c6b457b5981b74
+- IMPORTANT: secret_token in gitlab.rb for GitLab, GitLab-shell and GitLab CI will now take presedence over the auto generated one
+- Automatically authorise GitLab CI with GitLab when they are on the same server
 
 7.11.0
 
