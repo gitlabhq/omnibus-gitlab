@@ -99,7 +99,7 @@ jobs:
   runner: RaspberryPi2
 - script: |
     bundle install --binstubs --path ~/gems
-    make do_release
+    make do_rpi2_release
   name: Raspberry Pi 2
   branches: false
   tags: true
