@@ -47,6 +47,7 @@ end
   gitlab_ci_home_dir,
   gitlab_ci_working_dir,
   gitlab_ci_tmp_dir,
+  node['gitlab']['gitlab-ci']['backup_path'],
   gitlab_ci_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
