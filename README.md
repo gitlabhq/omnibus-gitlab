@@ -515,10 +515,14 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 To create a backup of your repositories and GitLab metadata, run the following command.
 
-__Note that GitLab CI currently does not have a backup script.__
-
 ```shell
-sudo gitlab-rake gitlab:backup:create
+gitlab-rake gitlab:backup:create
+```
+
+For GitLab CI run:
+
+```
+gitlab-ci-rake backup:create
 ```
 
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
