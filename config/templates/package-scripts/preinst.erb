@@ -22,7 +22,16 @@ main() {
     exit 1
   fi
 
-  # Missing: GitLab CI backup
+  notify "Backing up GitLab CI SQL database"
+  if ! ${DEST_DIR}/bin/gitlab-ci-rake backup:create ; then
+    notify
+    notify "Backup failed! If you want to skip this backup, run the following command and"
+    notify "try again:"
+    notify
+    notify "  sudo touch ${skip_migrations_file}"
+    notify
+    exit 1
+  fi
 }
 
 notify() {
