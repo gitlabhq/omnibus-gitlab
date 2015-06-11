@@ -518,6 +518,7 @@ To create a backup of your repositories and GitLab metadata, run the following c
 __Note that GitLab CI currently does not have a backup script.__
 
 ```shell
+# Remove 'sudo' if you are the 'git' user
 sudo gitlab-rake gitlab:backup:create
 ```
 
@@ -545,6 +546,8 @@ To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
 sudo gitlab-rake gitlab:check
 sudo gitlab-ci-rake -T
 ```
+
+Leave out 'sudo' if you are the 'git' user or the 'gitlab-ci' user.
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the

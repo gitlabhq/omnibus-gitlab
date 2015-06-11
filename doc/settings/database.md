@@ -46,12 +46,14 @@ Omnibus-gitlab will not automatically seed your external database. Run the
 following command to import the schema and create the first admin user:
 
 ```shell
+# Remove 'sudo' if you are the 'git' user
 sudo gitlab-rake gitlab:setup
 ```
 
 You can manually seed the GitLab CI database with the following command:
 
 ```shell
+# Remove 'sudo' if you are the 'gitlab-ci' user
 sudo gitlab-ci-rake setup
 ```
 
