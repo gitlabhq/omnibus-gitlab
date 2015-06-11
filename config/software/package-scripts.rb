@@ -18,12 +18,6 @@
 
 name "package-scripts"
 
-# Help omnibus-ruby to cache the build product of this software. This is a
-# workaround for the deprecation of `always_build true`. What happens now is
-# that we build only if the contents of the specified directory have changed
-# according to git.
-default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`
-
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
   command "mkdir -p #{install_dir}/.package_util/package-scripts"
