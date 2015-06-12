@@ -1,0 +1,136 @@
+#!/bin/bash
+#
+# Copyright:: Copyright (c) 2015 GitLab B.V.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# This wrapper is meant to be invoked by omnibus-gitlab via Runit
+
+# Let runit capture all script error messages
+exec 2>&1
+
+function assert_non_empty
+{
+  if [ -z "$(eval echo \$$1)" ] ; then
+    echo "$0 error: \$$1 is empty"
+    exit 1
+  fi
+}
+
+# We expect the following variables to be set for us in the environment
+assert_non_empty current_pidfile
+assert_non_empty rails_app
+assert_non_empty user
+assert_non_empty environment
+assert_non_empty unicorn_rb
+
+readonly oldbin_pidfile=${current_pidfile}.oldbin
+readonly unicorn_wait_start=1 # time in seconds
+readonly unicorn_poll_alive=1 # time in seconds
+
+function main
+{
+  cd /opt/gitlab/embedded/service/${rails_app}
+  find_us_a_unicorn
+  trap_signals
+  wait_for_unicorn_to_exit
+}
+
+function find_us_a_unicorn
+{
+  adopt ${current_pidfile}
+  if [[ ${unicorn_pid} ]]; then
+    echo "adopted existing unicorn master ${unicorn_pid}"
+    return
+  fi
+
+  adopt ${oldbin_pidfile}
+  if [[ ${unicorn_pid} ]]; then
+    echo "adopted existing oldbin unicorn master ${unicorn_pid}"
+    return
+  fi
+
+  echo "starting new unicorn master"
+  start_unicorn_master
+  sleep ${unicorn_wait_start}
+
+  adopt ${current_pidfile}
+  if [[ ${unicorn_pid} ]]; then
+    echo "adopted new unicorn master ${unicorn_pid}"
+    return
+  fi
+
+  echo "failed to start a new unicorn master"
+  exit
+}
+
+function adopt
+{
+  local pid=$(cat $1 2>/dev/null)
+  if alive ${pid} && is_unicorn ${pid}; then
+    readonly unicorn_pid=${pid}
+  fi
+}
+
+function alive
+{
+  kill -0 $1 > /dev/null 2>&1
+}
+
+function is_unicorn
+{
+  ps -p $1 -o args | grep -q unicorn
+}
+
+function start_unicorn_master
+{
+  chpst -e /opt/gitlab/etc/${rails_app}/env -U ${user} \
+    /opt/gitlab/embedded/bin/bundle exec unicorn \
+      -D \
+      -E ${environment} \
+      -c ${unicorn_rb} \
+      /opt/gitlab/embedded/service/${rails_app}/config.ru
+}
+
+function trap_signals
+{
+  # Forward all common runit signals except:
+  # - HUP which we handle below;
+  # - KILL which cannot be caught.
+  for sig in STOP CONT ALRM INT QUIT USR1 USR2 TERM; do
+    trap "forward_signal ${sig}" ${sig}
+  done
+
+  # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
+  # To allow for reloading unicorn from the command line, translate HUP to
+  # USR2.
+  trap "echo 'wrapper received HUP'; forward_signal USR2" HUP
+}
+
+function forward_signal
+{
+  echo "forwarding $1 to unicorn master ${unicorn_pid}"
+  kill -$1 ${unicorn_pid}
+}
+
+function wait_for_unicorn_to_exit
+{
+  while sleep ${unicorn_poll_alive}; do
+    alive ${unicorn_pid} || break
+  done
+}
+
+main
+echo "wrapper for unicorn master ${unicorn_pid} exiting"

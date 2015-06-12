@@ -2,7 +2,6 @@
 jobs:
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Ubuntu 12.04
   branches: false
@@ -10,7 +9,6 @@ jobs:
   runner: ubuntu1204
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Ubuntu 14.04
   branches: false
@@ -18,7 +16,6 @@ jobs:
   runner: ubuntu1404
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Debian 7
   branches: false
@@ -26,7 +23,6 @@ jobs:
   runner: debian7
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Centos 6
   branches: false
@@ -34,7 +30,6 @@ jobs:
   runner: centos6
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Centos 7
   branches: false
@@ -77,7 +72,6 @@ jobs:
   runner: centos7
 - script: |
     bundle install --binstubs --path ~/gems
-    ssh -T git@dev.gitlab.org
     make do_release
   name: Debian 8
   branches: false
@@ -99,7 +93,7 @@ jobs:
   runner: RaspberryPi2
 - script: |
     bundle install --binstubs --path ~/gems
-    make do_release
+    make do_rpi2_release
   name: Raspberry Pi 2
   branches: false
   tags: true

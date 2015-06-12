@@ -350,7 +350,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails postgresql sidekiq ci-redis ci-unicorn ci-sidekiq}
+default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails gitlab-shell postgresql sidekiq ci-redis ci-unicorn ci-sidekiq}
 
 ###
 # Logrotate
@@ -408,6 +408,12 @@ default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil # Deprecated, wi
 default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
 default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
+
+# application.yml, backup section
+default['gitlab']['gitlab-ci']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-ci']['backup_keep_time'] = nil
+default['gitlab']['gitlab-ci']['backup_upload_connection'] = nil
+default['gitlab']['gitlab-ci']['backup_upload_remote_directory'] = nil
 
 # database.yml settings
 default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
