@@ -145,6 +145,12 @@ something else.  For example, to use port 8080:
 nginx['listen_port'] = 8080
 ```
 
+Similarly, for GitLab CI:
+
+```ruby
+ci_nginx['listen_port'] = 8081
+```
+
 ## Supporting proxied SSL
 
 By default NGINX will auto-detect whether to use SSL if `external_url`
@@ -155,6 +161,12 @@ the `listen_https` option:
 
 ```ruby
 nginx['listen_https'] = false
+```
+
+Similarly, for GitLab CI:
+
+```ruby
+ci_nginx['listen_https'] = false
 ```
 
 Note that you may need to configure your reverse proxy to forward certain
