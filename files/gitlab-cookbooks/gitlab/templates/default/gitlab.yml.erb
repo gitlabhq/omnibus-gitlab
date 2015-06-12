@@ -171,6 +171,7 @@ production: &base
       connection: <%= @backup_upload_connection.to_json if @backup_upload_connection %>
       # The remote 'directory' to store your backups. For S3, this would be the bucket name.
       remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
+      multipart_chunk_size: <%= @backup_multipart_chunk_size %>
 
   ## GitLab Shell settings
   gitlab_shell:
