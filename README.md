@@ -516,13 +516,15 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 To create a backup of your repositories and GitLab metadata, run the following command.
 
 ```shell
-gitlab-rake gitlab:backup:create
+# Remove 'sudo' if you are the 'git' user
+sudo gitlab-rake gitlab:backup:create
 ```
 
 For GitLab CI run:
 
 ```
-gitlab-ci-rake backup:create
+# Remove 'sudo' if you are the 'git' user
+sudo gitlab-ci-rake backup:create
 ```
 
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
@@ -549,6 +551,8 @@ To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
 sudo gitlab-rake gitlab:check
 sudo gitlab-ci-rake -T
 ```
+
+Leave out 'sudo' if you are the 'git' user or the 'gitlab-ci' user.
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the

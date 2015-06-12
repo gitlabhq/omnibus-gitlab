@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,10 @@
 # limitations under the License.
 #
 
-name "gitlab-config-template"
+name "gitlab-scripts"
 
-dependency "rsync"
-
-source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)
+source :path => File.expand_path("files/gitlab-scripts", Omnibus::Config.project_root)
 
 build do
-  command "mkdir -p #{install_dir}/etc"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/etc/"
+  copy "*", "#{install_dir}/embedded/bin/"
 end
