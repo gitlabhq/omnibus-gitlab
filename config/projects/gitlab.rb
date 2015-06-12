@@ -49,7 +49,7 @@ override :'omnibus-ctl', version: '0.3.4'
 override :zlib, version: '1.2.8'
 override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
 override :redis, version: '2.8.20', source: { md5: 'a2588909eb497719bbbf664e6364962a' }
-override :openssl, version: '1.0.1n', source: { md5: '139568bd5a56fa49b72a290d37113f30' }
+override :openssl, version: '1.0.1n', source: { source: 'https://www.openssl.org/source/openssl-1.0.1n.tar.gz' md5: '139568bd5a56fa49b72a290d37113f30' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
