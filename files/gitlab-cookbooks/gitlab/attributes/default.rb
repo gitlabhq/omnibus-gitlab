@@ -409,6 +409,12 @@ default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
 default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
 
+# application.yml, backup section
+default['gitlab']['gitlab-ci']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-ci']['backup_keep_time'] = nil
+default['gitlab']['gitlab-ci']['backup_upload_connection'] = nil
+default['gitlab']['gitlab-ci']['backup_upload_remote_directory'] = nil
+
 # database.yml settings
 default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-ci']['db_encoding'] = "unicode"
