@@ -11,8 +11,8 @@ main() {
     return
   fi
 
-  notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
   if [ -d ${DEST_DIR}/service/unicorn ] ; then
+    notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
       notify
       notify "Backup failed! If you want to skip this backup, run the following command and"
@@ -24,8 +24,8 @@ main() {
     fi
   fi
 
-  notify "Backing up GitLab CI SQL database"
   if [ -d ${DEST_DIR}/service/ci-unicorn ] ; then
+    notify "Backing up GitLab CI SQL database"
     if ! ${DEST_DIR}/bin/gitlab-ci-rake backup:create ; then
       notify
       notify "Backup failed! If you want to skip this backup, run the following command and"
