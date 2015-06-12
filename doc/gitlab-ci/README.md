@@ -26,16 +26,9 @@ ci_external_url 'http://ci.example.com'
 ```
 
 After you run `sudo gitlab-ctl reconfigure`, your GitLab CI Coordinator should
-now be reachable at `http://ci.example.com`.
+now be reachable at `http://ci.example.com` and authorized to connect to GitLab.
 
-Follow the on screen instructions on how to generate the app id and secret.
-Once generated, edit `/etc/gitlab/gitlab.rb` to set the URL for your GitLab server, your generated app id and generated secret:
-
-```ruby
-gitlab_ci['gitlab_server'] = { 'url' => 'http://gitlab.example.com', 'app_id' => "1234", 'app_secret' => 'qwertyuio'}
-```
-
-then run `sudo gitlab-ctl reconfigure` again.
+Omnibus-gitlab package will attempt to automatically authorise GitLab CI with GitLab if applications are running on the same server. This is because automatic authorisation requires access to GitLab database. If GitLab database is not available you will need to manually authorise GitLab CI for access to GitLab.
 
 ## Running GitLab CI on its own server
 
@@ -49,6 +42,7 @@ consume system resources.
 ci_external_url 'http://ci.example.com'
 
 # Tell GitLab CI to integrate with gitlab.example.com
+
 gitlab_ci['gitlab_server'] = { 'url' => 'http://gitlab.example.com', 'app_id' => "1234", 'app_secret' => 'qwertyuio'}
 
 # Shut down GitLab services on the CI server
@@ -56,3 +50,26 @@ gitlab_rails['enable'] = false
 unicorn['enable'] = false
 sidekiq['enable'] = false
 ```
+
+## Manually (re)authorising GitLab CI with GitLab
+
+### Authorise GitLab CI
+
+To do this, using browser navigate to the `admin area` of GitLab, `Application` section. Create a new application and for the callback URL use: `http://ci.example.com/user_sessions/callback` (replace http with https if you use https).
+
+Once the application is created you will receive an `Application ID` and `Secret`. One other information needed is the URL of GitLab instance.
+
+Now, go to the GitLab server and edit the `/etc/gitlab/gitlab.rb` configuration file.
+
+In `gitlab.rb` use the values you've received above:
+
+```
+gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
+```
+Save the changes and then run `sudo gitlab-ctl reconfigure`.
+
+If there are no errors your GitLab and GitLab CI should be configured correctly.
+
+### Reauthorise GitLab CI
+
+To reauthorise GitLab CI you will first need to revoke access of the existing authorisation. This can be done in the Admin area of GitLab under `Applications`. Once that is done follow the steps in the `Authorise GitLab CI` section.

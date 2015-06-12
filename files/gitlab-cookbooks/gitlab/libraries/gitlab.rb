@@ -67,38 +67,16 @@ module Gitlab
     end
 
     def generate_secrets(node_name)
-      existing_secrets ||= Hash.new
-      if File.exists?("/etc/gitlab/gitlab-secrets.json")
-        existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
-      end
-      existing_secrets.each do |k, v|
-        v.each do |pk, p|
-          Gitlab[k][pk] = p
-        end
-      end
+      SecretsHelper.read_gitlab_secrets
 
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
       Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
 
-      if File.directory?("/etc/gitlab")
-        File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
-          f.puts(
-            Chef::JSONCompat.to_json_pretty({
-              'gitlab_shell' => {
-                'secret_token' => Gitlab['gitlab_shell']['secret_token'],
-              },
-              'gitlab_rails' => {
-                'secret_token' => Gitlab['gitlab_rails']['secret_token'],
-              },
-              'gitlab_ci' => {
-                'secret_token' => Gitlab['gitlab_ci']['secret_token'],
-              }
-            })
-          )
-          system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
-        end
-      end
+      # Note: Besides the section below, gitlab-secrets.json will also change
+      # in CiHelper in libraries/helper.rb
+      SecretsHelper.write_to_gitlab_secrets
     end
 
     def parse_external_url
@@ -275,7 +253,9 @@ module Gitlab
         "logrotate",
         "high_availability",
         "postgresql",
-        "web_server"
+        "web_server",
+        "external_url",
+        "ci_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
