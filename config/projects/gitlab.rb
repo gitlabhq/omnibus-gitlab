@@ -15,7 +15,7 @@
 ## limitations under the License.
 ##
 #
-ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh") || system("#{Omnibus::Config.project_root}/support/is_gitlab_com.sh")
+ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 if ee
   name "gitlab-ee"
@@ -43,7 +43,7 @@ build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
 override :ruby, version: '2.1.6',  source: { md5: "6e5564364be085c45576787b48eeb75f" }
-override :rubygems, version: '2.2.1'
+override :rubygems, version: '2.2.5', source: { md5: "7701b5bc348d8da41a511ac012a092a8" }
 override :chef, version: '12.4.0.rc.0'
 override :'omnibus-ctl', version: '0.3.4'
 override :zlib, version: '1.2.8'
@@ -71,6 +71,7 @@ dependency "gitlab-shell"
 dependency "gitlab-ctl"
 dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
+dependency "gitlab-scripts"
 dependency "gitlab-config-template"
 
 # version manifest file

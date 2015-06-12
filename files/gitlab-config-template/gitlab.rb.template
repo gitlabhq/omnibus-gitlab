@@ -112,6 +112,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_secret_access_key' => 'secret123'
 # }
 # gitlab_rails['backup_upload_remote_directory'] = 'my.s3.bucket'
+# gitlab_rails['backup_multipart_chunk_size'] = 104857600
 
 ## For setting up different data storing directory
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#storing-git-data-in-an-alternative-directory
@@ -227,8 +228,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # user['shell'] = "/bin/sh"
 # # The home directory for the git user
 # user['home'] = "/var/opt/gitlab"
-# user['git_user_name'] = "GitLab"
-# user['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 ##################
 # GitLab Unicorn #
@@ -432,6 +431,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gravatar_enabled'] = true
 # gitlab_ci['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
 # gitlab_ci['gravatar_ssl_url'] =  "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
+
+## For setting up backups
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#backups
+
+# gitlab_ci['backup_path'] = "/var/opt/gitlab/backups"
+# gitlab_ci['backup_keep_time'] = 604800
+# gitlab_ci['backup_upload_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AKIAKIAKI',
+#   'aws_secret_access_key' => 'secret123'
+# }
+# gitlab_ci['backup_upload_remote_directory'] = 'my.s3.bucket'
+# gitlab_ci['backup_multipart_chunk_size'] = 104857600
 
 ###############################
 # GitLab CI database settings #
