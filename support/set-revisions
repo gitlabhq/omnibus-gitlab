@@ -1,0 +1,87 @@
+#!/bin/sh
+
+main() {
+  gitlab_rails_ref=$1
+  gitlab_ci_ref=$2
+  gitlab_shell_ref=$3
+
+  if [ "$ee" = "1" ] ; then
+    gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlab-ee.git 
+  else
+    gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlabhq.git 
+  fi
+  gitlab_ci_repo=git@dev.gitlab.org:gitlab/gitlab-ci.git
+  gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
+
+  gitlab_rails_oid=$(fetch_oid gitlab_rails)
+  assert_non_empty gitlab_rails_oid
+  gitlab_ci_oid=$(fetch_oid gitlab_ci)
+  assert_non_empty gitlab_ci_oid
+  gitlab_shell_oid=$(fetch_oid gitlab_shell)
+  assert_non_empty gitlab_shell_oid
+
+  set_source_and_version gitlab_rails config/software/gitlab-rails.rb 
+  set_source_and_version gitlab_ci config/software/gitlab-ci.rb 
+  set_source_and_version gitlab_shell config/software/gitlab-shell.rb
+}
+
+# set_source_and_version foo file.rb
+# Will look for variables $foo_ref, $foo_repo and $foo_oid. Fills them in in
+# file.rb.
+set_source_and_version() {
+  # Change (c) the first line starting with 'default_version '. Jump back to
+  # the beginning of the file with '1'. Change the first line starting with
+  # 'source '.
+  ed -s "$2" <<EOF
+H
+/^default_version /c
+default_version "$(eval echo \$${1}_oid)" # $(eval echo \$${1}_ref)
+.
+1
+/^source /c
+source :git => "$(eval echo \$${1}_repo)"
+.
+wq
+EOF
+  if [ $? -ne 0 ] ; then
+    warn "Error: ed -s $2 failed"
+    exit 1
+  fi
+}
+
+# fetch_oid foo
+# Query the Git remote at $foo_repo about $foo_ref, return the SHA1 OID
+fetch_oid() {
+  git_ls_remote_cmd="git ls-remote $(eval echo \$${1}_repo) $(eval echo \$${1}_ref)"
+  result=$(${git_ls_remote_cmd} | awk '{print $1}')
+  if [ -z "${result}" ] ; then
+    warn "Error: ${git_ls_remote_cmd} returned no output"
+    exit 1
+  fi
+  echo "${result}"
+}
+
+# assert_non_empty foo
+# Abort if $foo is unset or the empty string.
+assert_non_empty() {
+  if [ -z "$(eval echo \$$1)" ]; then
+    warn "Assertion failed: \$$1 is empty"
+    exit 1
+  fi
+}
+
+warn() {
+  echo "$@" 1>&2
+}
+
+if [ "$1" = "--ee" ] ; then
+  ee=1
+  shift
+fi
+
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -n "$4" ] ; then
+  warn "Usage: $0 [--ee] GITLAB_RAILS_REF GITLAB_CI_REF GITLAB_SHELL_REF"
+  exit 1
+fi
+
+main "$@"
