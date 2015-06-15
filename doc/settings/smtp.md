@@ -76,3 +76,7 @@ gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
 gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
+
+### More examples are welcome
+
+If you have figured out an example configuration yourself please send a merge request to save other people time.

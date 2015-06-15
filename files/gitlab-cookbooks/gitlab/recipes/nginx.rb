@@ -65,15 +65,6 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
 nginx_vars =  nginx_vars.merge!(
                 :gitlab_ci_http_config => gitlab_ci_enabled ? gitlab_ci_http_conf : nil
               )
-
-gitlab_port = node['gitlab']['gitlab-rails']['gitlab_port']
-
-# To support reverse proxies: only override the listen_port if
-# none has been specified
-if nginx_vars['listen_port'].nil?
-  nginx_vars['listen_port'] = gitlab_port
-end
-
 if nginx_vars['listen_https'].nil?
   nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
 else
@@ -88,15 +79,20 @@ template gitlab_rails_http_conf do
   variables(nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :socket => node['gitlab']['unicorn']['socket'],
-      :port => gitlab_port
+      :socket => node['gitlab']['unicorn']['socket']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_rails_enabled ? :create : :delete
 end
 
-ci_nginx_vars = node['gitlab']['ci-nginx']
+ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
+
+if ci_nginx_vars['listen_https'].nil?
+  ci_nginx_vars['https'] = node['gitlab']['gitlab-ci']['gitlab_ci_https']
+else
+  ci_nginx_vars['https'] = ci_nginx_vars['listen_https']
+end
 
 template gitlab_ci_http_conf do
   source "nginx-gitlab-ci-http.conf.erb"
@@ -106,9 +102,7 @@ template gitlab_ci_http_conf do
   variables(ci_nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
-      :https => node['gitlab']['gitlab-ci']['gitlab_ci_https'],
-      :socket => node['gitlab']['ci-unicorn']['socket'],
-      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
+      :socket => node['gitlab']['ci-unicorn']['socket']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

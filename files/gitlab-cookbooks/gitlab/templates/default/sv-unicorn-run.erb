@@ -3,103 +3,13 @@
 # Let runit capture all script error messages
 exec 2>&1
 
-readonly current_pidfile=<%= node['gitlab'][@options[:service]]['pidfile'] %>
-readonly oldbin_pidfile=${current_pidfile}.oldbin
-readonly unicorn_wait_start=1 # time in seconds
-readonly unicorn_poll_alive=1 # time in seconds
+<%= render("mount_point_check.erb") %>
 
-function main
-{
-  cd /opt/gitlab/embedded/service/<%= @options[:rails_app] %>
-  find_us_a_unicorn
-  trap_signals
-  wait_for_unicorn_to_exit
-}
-
-function find_us_a_unicorn
-{
-  adopt ${current_pidfile}
-  if [[ ${unicorn_pid} ]]; then
-    echo "adopted existing unicorn master ${unicorn_pid}"
-    return
-  fi
-
-  adopt ${oldbin_pidfile}
-  if [[ ${unicorn_pid} ]]; then
-    echo "adopted existing oldbin unicorn master ${unicorn_pid}"
-    return
-  fi
-
-  echo "starting new unicorn master"
-  start_unicorn_master
-  sleep ${unicorn_wait_start}
-
-  adopt ${current_pidfile}
-  if [[ ${unicorn_pid} ]]; then
-    echo "adopted new unicorn master ${unicorn_pid}"
-    return
-  fi
-
-  echo "failed to start a new unicorn master"
-  exit
-}
-
-function adopt
-{
-  local pid=$(cat $1 2>/dev/null)
-  if alive ${pid} && is_unicorn ${pid}; then
-    readonly unicorn_pid=${pid}
-  fi
-}
-
-function alive
-{
-  kill -0 $1 > /dev/null 2>&1
-}
-
-function is_unicorn
-{
-  ps -p $1 -o args | grep -q unicorn
-}
-
-function start_unicorn_master
-{
-  <%= render("mount_point_check.erb") %>
-  chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P -U <%= @options[:user] %> -u <%= @options[:user] %> \
-    /opt/gitlab/embedded/bin/bundle exec unicorn \
-      -D \
-      -E <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
-      -c <%= @options[:unicorn_rb] %> \
-      /opt/gitlab/embedded/service/<%= @options[:rails_app] %>/config.ru
-}
-
-function trap_signals
-{
-  # Forward all common runit signals except:
-  # - HUP which we handle below;
-  # - KILL which cannot be caught.
-  for sig in STOP CONT ALRM INT QUIT USR1 USR2 TERM; do
-    trap "forward_signal ${sig}" ${sig}
-  done
-
-  # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
-  # To allow for reloading unicorn from the command line, translate HUP to
-  # USR2.
-  trap "echo 'wrapper received HUP'; forward_signal USR2" HUP
-}
-
-function forward_signal
-{
-  echo "forwarding $1 to unicorn master ${unicorn_pid}"
-  kill -$1 ${unicorn_pid}
-}
-
-function wait_for_unicorn_to_exit
-{
-  while sleep ${unicorn_poll_alive}; do
-    alive ${unicorn_pid} || break
-  done
-}
-
-main
-echo "wrapper for unicorn master ${unicorn_pid} exiting"
+exec chpst -P -u <%= @options[:user] %> \
+  /usr/bin/env \
+    current_pidfile=<%= node['gitlab'][@options[:service]]['pidfile'] %> \
+    rails_app=<%= @options[:rails_app] %> \
+    user=<%= @options[:user] %> \
+    environment=<%= node['gitlab'][@options[:rails_app]]['environment'] %> \
+    unicorn_rb=<%= @options[:unicorn_rb] %> \
+    /opt/gitlab/embedded/bin/gitlab-unicorn-wrapper

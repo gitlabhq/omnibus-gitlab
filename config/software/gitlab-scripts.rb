@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,10 @@
 # limitations under the License.
 #
 
-# Remove the old cronjob from root's crontab
-cron 'gitlab-ci schedule builds' do
-  user 'root'
-  action :delete
-end
+name "gitlab-scripts"
 
-cron 'gitlab-ci schedule builds' do
-  minute node['gitlab']['gitlab-ci']['schedule_builds_minute']
-  command '/opt/gitlab/bin/gitlab-ci-rake schedule_builds'
-  user node['gitlab']['gitlab-ci']['username']
-  action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
+source :path => File.expand_path("files/gitlab-scripts", Omnibus::Config.project_root)
+
+build do
+  copy "*", "#{install_dir}/embedded/bin/"
 end
