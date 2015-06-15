@@ -20,6 +20,10 @@ omnibus-gitlab repository.
 - Moved GitLab CI cronjob from root to the gitlab-ci user 4b9926b8c016c2c10f8511a5b083f6d5a7071041
 - gitlab-rake and gitlab-ci-rake can be ran without sudo 4d4e3702ffee890eabed1d4cb61dd351baf2b554
 - Git username and email are removed from git users gitconfig 1911109c0679f90e5184415c52ad5da4e31b7171
+- Updated openssl to 1.0.1o 163305cac9ecd37425c3b1e10a390176a753717c
+- Updated git version to 2.4.3 88186e3e71064c0d9e7ae674c5f68450226dfa68
+- Updated SSL ciphers to exclude all DHE suites 08f790400b31eb3fbf4ce0ee736f7cc9082b28fc
+- Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
 
 7.11.0
 
