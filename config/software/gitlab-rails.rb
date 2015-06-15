@@ -64,7 +64,10 @@ build do
   # Tear down now that the assets:precompile is done.
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
+
+  # Remove auto-generated files
   delete '.secret'
+  delete '.gitlab_shell_secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'

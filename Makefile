@@ -4,7 +4,7 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
-PACKAGECLOUD_REPO:=$(shell if support/is_gitlab_ee.sh ; then echo gitlab-ee; else echo gitlab-ce; fi)
+PACKAGECLOUD_REPO:=$(shell support/repo_name.sh)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 
 build:
@@ -23,6 +23,10 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge test_build move_to_platform_dir sync
+
+# Redefine PLATFORM_DIR for Raspberry Pi 2 packages. Do not sync to packagecloud
+do_rpi2_release: PLATFORM_DIR=raspberry-pi
+do_rpi2_release: no_changes purge test_build move_to_platform_dir sync
 
 no_changes:
 	git diff --quiet HEAD
@@ -50,7 +54,7 @@ move_to_platform_dir:
 sync: move_to_secret_dir md5 s3_sync
 
 move_to_secret_dir:
-	if support/is_gitlab_ee.sh || support/is_gitlab_com.sh ; then \
+	if support/is_gitlab_ee.sh ; then \
 	  mv pkg ${SECRET_DIR} \
 	  && mkdir pkg \
 	  && mv ${SECRET_DIR} pkg/ \
@@ -67,8 +71,4 @@ s3_sync:
 
 packagecloud:
 	# - We set LC_ALL below because package_cloud is picky about the locale
-	# - To avoid pushing RC packages to packages.gitlab.com, only push if the
-	#   current tag does not contain 'rc'
-	if git describe | grep -q -v rc ; then \
-	  LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb') \
-	; fi
+	LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb')

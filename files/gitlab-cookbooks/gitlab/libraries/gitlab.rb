@@ -67,38 +67,16 @@ module Gitlab
     end
 
     def generate_secrets(node_name)
-      existing_secrets ||= Hash.new
-      if File.exists?("/etc/gitlab/gitlab-secrets.json")
-        existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
-      end
-      existing_secrets.each do |k, v|
-        v.each do |pk, p|
-          Gitlab[k][pk] = p
-        end
-      end
+      SecretsHelper.read_gitlab_secrets
 
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
       Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_ci']['secret_token'] ||= generate_hex(64)
 
-      if File.directory?("/etc/gitlab")
-        File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
-          f.puts(
-            Chef::JSONCompat.to_json_pretty({
-              'gitlab_shell' => {
-                'secret_token' => Gitlab['gitlab_shell']['secret_token'],
-              },
-              'gitlab_rails' => {
-                'secret_token' => Gitlab['gitlab_rails']['secret_token'],
-              },
-              'gitlab_ci' => {
-                'secret_token' => Gitlab['gitlab_ci']['secret_token'],
-              }
-            })
-          )
-          system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
-        end
-      end
+      # Note: Besides the section below, gitlab-secrets.json will also change
+      # in CiHelper in libraries/helper.rb
+      SecretsHelper.write_to_gitlab_secrets
     end
 
     def parse_external_url
@@ -109,7 +87,7 @@ module Gitlab
       unless uri.host
         raise "GitLab external URL must include a schema and FQDN, e.g. http://gitlab.example.com/"
       end
-      Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
+
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
       Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"
 
@@ -213,6 +191,23 @@ module Gitlab
       nginx['listen_addresses'] = [nginx['listen_address']]
     end
 
+    def parse_nginx_listen_ports
+      [
+        [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
+        [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
+
+      ].each do |left, right|
+        if !Gitlab[left.first][left.last].nil?
+          next
+        end
+
+        default_set_gitlab_port = node['gitlab'][right.first.gsub('_', '-')][right.last]
+        user_set_gitlab_port = Gitlab[right.first][right.last]
+
+        Gitlab[left.first][left.last] = user_set_gitlab_port || default_set_gitlab_port
+      end
+    end
+
     def parse_ci_external_url
       return unless ci_external_url
       # Enable gitlab_ci. This setting will be picked up by parse_gitlab_ci
@@ -275,7 +270,9 @@ module Gitlab
         "logrotate",
         "high_availability",
         "postgresql",
-        "web_server"
+        "web_server",
+        "external_url",
+        "ci_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -292,6 +289,7 @@ module Gitlab
       parse_redis_settings
       parse_postgresql_settings
       parse_nginx_listen_address
+      parse_nginx_listen_ports
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url

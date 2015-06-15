@@ -1,5 +1,6 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +16,8 @@
 # limitations under the License.
 #
 
-# Remove the old cronjob from root's crontab
-cron 'gitlab-ci schedule builds' do
-  user 'root'
-  action :delete
-end
+# Package attributes
 
-cron 'gitlab-ci schedule builds' do
-  minute node['gitlab']['gitlab-ci']['schedule_builds_minute']
-  command '/opt/gitlab/bin/gitlab-ci-rake schedule_builds'
-  user node['gitlab']['gitlab-ci']['username']
-  action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
-end
+# Default location of install-dir is /opt/gitlab/. This path is set during build time.
+# DO NOT change this value unless you are building your own GitLab packages
+default['package']['install-dir'] = "<%= install_dir %>"

@@ -18,7 +18,27 @@
 
 require 'mixlib/shellout'
 
+module ShellOutHelper
+
+  def do_shell_out(cmd)
+    o = Mixlib::ShellOut.new(cmd)
+    o.run_command
+    o
+  end
+
+  def success?(cmd)
+    o = do_shell_out(cmd)
+    o.exitstatus == 0
+  end
+
+  def failure?(cmd)
+    o = do_shell_out(cmd)
+    o.exitstatus == 3
+  end
+end
+
 class PgHelper
+  include ShellOutHelper
   attr_reader :node
 
   def initialize(node)
@@ -47,7 +67,7 @@ class PgHelper
            "/opt/gitlab/embedded/bin/psql",
            "--port #{pg_port}",
            cmd_list.join(" ")].join(" ")
-    do_shell_out(cmd, 0)
+    success?(cmd)
   end
 
   def pg_user
@@ -58,15 +78,10 @@ class PgHelper
     node['gitlab']['postgresql']['port']
   end
 
-  def do_shell_out(cmd, expect_status)
-    o = Mixlib::ShellOut.new(cmd)
-    o.run_command
-    o.exitstatus == expect_status
-  end
-
 end
 
 class OmnibusHelper
+  extend ShellOutHelper
 
   def self.should_notify?(service_name)
     File.symlink?("/opt/gitlab/service/#{service_name}") && service_up?(service_name)
@@ -77,15 +92,124 @@ class OmnibusHelper
   end
 
   def self.service_up?(service_name)
-    o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
-    o.run_command
-    o.exitstatus == 0
+    success?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
   end
 
   def self.service_down?(service_name)
-    o = Mixlib::ShellOut.new("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
-    o.run_command
-    o.exitstatus == 3
+    failure?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+  end
+
+end
+
+class CiHelper
+  extend ShellOutHelper
+
+  def self.authorize_with_gitlab(gitlab_external_url)
+    warn("Connecting to GitLab to generate new app_id and app_secret.")
+
+    runner_cmd = create_or_find_authorization(gitlab_external_url)
+    cmd = execute_rails_runner(runner_cmd)
+    o = do_shell_out(cmd)
+
+    app_id, app_secret = nil
+    if o.exitstatus == 0
+      app_id, app_secret = o.stdout.chomp.split(" ")
+
+      Gitlab['gitlab_ci']['gitlab_server'] = { 'url' => gitlab_external_url,
+                                                 'app_id' => app_id,
+                                                 'app_secret' => app_secret
+                                               }
+
+      SecretsHelper.write_to_gitlab_secrets
+      info("Updated the gitlab-secrets.json file.")
+    else
+      warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
+    end
+
+    { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
+  end
+
+  def self.create_or_find_authorization(gitlab_external_url)
+    args = %Q(redirect_uri: "#{gitlab_external_url}", name: "GitLab CI")
+
+    app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+
+    output = %Q(puts app.uid.concat(" ").concat(app.secret);)
+
+    %W(
+      #{app}
+      #{output}
+    ).join
+  end
+
+  def self.execute_rails_runner(cmd)
+    %W(
+      /opt/gitlab/bin/gitlab-rails
+      runner
+      -e production
+      '#{cmd}'
+    ).join(" ")
+  end
+
+  def self.warn(msg)
+    Chef::Log.warn(msg)
+  end
+
+  def self.info(msg)
+    Chef::Log.info(msg)
+  end
+
+end
+
+class SecretsHelper
+
+  def self.read_gitlab_secrets
+    existing_secrets ||= Hash.new
+
+    if File.exists?("/etc/gitlab/gitlab-secrets.json")
+      existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
+    end
+
+    existing_secrets.each do |k, v|
+      v.each do |pk, p|
+        # Note: Specifiying a secret in gitlab.rb will take precendence over "gitlab-secrets.json"
+        Gitlab[k][pk] ||= p
+      end
+    end
+  end
+
+  def self.write_to_gitlab_secrets
+    secret_tokens = {
+                      'gitlab_shell' => {
+                        'secret_token' => Gitlab['gitlab_shell']['secret_token'],
+                      },
+                      'gitlab_rails' => {
+                        'secret_token' => Gitlab['gitlab_rails']['secret_token'],
+                      },
+                      'gitlab_ci' => {
+                        'secret_token' => Gitlab['gitlab_ci']['secret_token'],
+                      }
+                    }
+
+    if Gitlab['gitlab_ci']['gitlab_server']
+      ci_auth = {
+                  'gitlab_server' => {
+                    'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
+                    'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
+                    'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
+                  }
+                }
+      secret_tokens['gitlab_ci'].merge!(ci_auth)
+    end
+
+    if File.directory?("/etc/gitlab")
+      File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
+        f.puts(
+          Chef::JSONCompat.to_json_pretty(secret_tokens)
+        )
+        system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
+      end
+    end
   end
 
 end

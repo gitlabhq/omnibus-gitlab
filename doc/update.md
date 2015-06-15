@@ -11,7 +11,7 @@ Please make sure you are viewing this file on the master branch.
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
 configured the packages to run this command automatically after the new package
 is installed. If you are installing GitLab 7.9 or earlier, please see the
-[procedure below](#updating-from-gitlab-6-6-and-higher-to-the-latest-version).
+[procedure below](#updating-from-gitlab-66-and-higher-to-the-latest-version).
 
 All you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
 -Uvh gitlab-ce-XXX.rpm` (for Centos/Enterprise Linux). After the package has
@@ -36,7 +36,7 @@ sudo touch /etc/gitlab/skip-auto-migrations
 
 The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
 
-First, download the latest [CE](https://www.gitlab.com/downloads/) or
+First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package to your GitLab server.
 
@@ -179,9 +179,19 @@ Please be advised that you lose your settings in files such as gitlab.yml, unico
 You will have to [configure those settings in /etc/gitlab/gitlab.rb](/README.md#configuration).
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
-Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](/README.md#restoring-an-application-backup).
+Upgrade by [creating a backup from the non-Omnibus install](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#create-a-backup-of-the-gitlab-system) and [restoring this in the Omnibus installation](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md#omnibus-installations).
 Please ensure you are using exactly equal versions of GitLab (for example 6.7.3) when you do this.
 You might have to upgrade your non-Omnibus installation before creating the backup to achieve this.
+
+After upgrading make sure that you run the check task: `sudo gitlab-rake gitlab:check`.
+
+If you receive an error similar to `No such file or directory @ realpath_rec - /home/git` run this one liner to fix the git hooks path:
+
+```bash
+find . -lname /home/git/gitlab-shell/hooks -exec sh -c 'ln -snf /opt/gitlab/embedded/service/gitlab-shell/hooks $0' {} \;
+```
+
+This assumes that `gitlab-shell` is located in `/home/git`
 
 ### Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place
 It is also possible to upgrade a source GitLab installation to omnibus-gitlab
