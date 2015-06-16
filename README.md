@@ -460,7 +460,7 @@ For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/ng
 
 ## Using a non-packaged PostgreSQL database management server
 
-See [doc/settings/database.md](doc/settings/database.md).
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
 
 ## Using a non-packaged Redis instance
 
