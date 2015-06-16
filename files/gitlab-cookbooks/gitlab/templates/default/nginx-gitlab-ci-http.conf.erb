@@ -24,7 +24,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @port %><% if @https %> ssl<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% end %>;
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
@@ -39,6 +39,9 @@ server {
   ssl_protocols  <%= @ssl_protocols %>;
   ssl_session_cache  <%= @ssl_session_cache %>;
   ssl_session_timeout  <%= @ssl_session_timeout %>;
+  <% if @ssl_dhparam %>
+  ssl_dhparam <%= @ssl_dhparam %>;
+  <% end %>
   add_header Strict-Transport-Security max-age=63072000;
   add_header X-Frame-Options SAMEORIGIN;
   add_header X-Content-Type-Options nosniff;

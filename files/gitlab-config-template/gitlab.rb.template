@@ -112,6 +112,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_secret_access_key' => 'secret123'
 # }
 # gitlab_rails['backup_upload_remote_directory'] = 'my.s3.bucket'
+# gitlab_rails['backup_multipart_chunk_size'] = 104857600
 
 ## For setting up different data storing directory
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#storing-git-data-in-an-alternative-directory
@@ -178,6 +179,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_host'] = nil
 # gitlab_rails['db_port'] = 5432
 # gitlab_rails['db_socket'] = nil
+# gitlab_rails['db_sslmode'] = nil
+# gitlab_rails['db_sslrootcert'] = nil
 
 
 #########################
@@ -225,8 +228,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # user['shell'] = "/bin/sh"
 # # The home directory for the git user
 # user['home'] = "/var/opt/gitlab"
-# user['git_user_name'] = "GitLab"
-# user['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 ##################
 # GitLab Unicorn #
@@ -340,11 +341,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['redirect_http_to_https_port'] = 80
 # nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 # nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-# nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
+# nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # nginx['ssl_prefer_server_ciphers'] = "on"
 # nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
 # nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 # nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
 # nginx['listen_addresses'] = ['*']
 # nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
 # nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
@@ -430,6 +432,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
 # gitlab_ci['gravatar_ssl_url'] =  "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
 
+## For setting up backups
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#backups
+
+# gitlab_ci['backup_path'] = "/var/opt/gitlab/backups"
+# gitlab_ci['backup_keep_time'] = 604800
+# gitlab_ci['backup_upload_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AKIAKIAKI',
+#   'aws_secret_access_key' => 'secret123'
+# }
+# gitlab_ci['backup_upload_remote_directory'] = 'my.s3.bucket'
+# gitlab_ci['backup_multipart_chunk_size'] = 104857600
+
 ###############################
 # GitLab CI database settings #
 ###############################
@@ -445,6 +461,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['db_host'] = nil
 # gitlab_ci['db_port'] = 5432
 # gitlab_ci['db_socket'] = nil
+# gitlab_ci['db_sslmode'] = nil
+# gitlab_ci['db_sslrootcert'] = nil
 
 ############################
 # GitLab CI redis settings #
@@ -525,12 +543,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ci_nginx['redirect_http_to_https_port'] = 80
 # ci_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 # ci_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-# ci_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
+# ci_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # ci_nginx['ssl_prefer_server_ciphers'] = "on"
 # ci_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
 # ci_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 # ci_nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# ci_nginx['ssl_dhparam'] = nil # Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
 # ci_nginx['listen_addresses'] = ['*']
+# ci_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
+# ci_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
 # ci_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # ci_nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
 

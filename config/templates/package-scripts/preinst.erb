@@ -1,0 +1,61 @@
+#!/bin/sh
+# GitLab pre-install script
+
+DEST_DIR=<%= install_dir %>
+
+skip_migrations_file=/etc/gitlab/skip-auto-migrations
+
+main() {
+  if [ -e "${skip_migrations_file}" ] ; then
+    # The user wants us to do nothing
+    return
+  fi
+
+  if [ -d ${DEST_DIR}/service/unicorn ] ; then
+    notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
+    if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
+      notify
+      notify "Backup failed! If you want to skip this backup, run the following command and"
+      notify "try again:"
+      notify
+      notify "  sudo touch ${skip_migrations_file}"
+      notify
+      exit 1
+    fi
+  fi
+
+  if [ -d ${DEST_DIR}/service/ci-unicorn ] ; then
+    notify "Backing up GitLab CI SQL database"
+    if ! ${DEST_DIR}/bin/gitlab-ci-rake backup:create ; then
+      notify
+      notify "Backup failed! If you want to skip this backup, run the following command and"
+      notify "try again:"
+      notify
+      notify "  sudo touch ${skip_migrations_file}"
+      notify
+      exit 1
+    fi
+  fi
+}
+
+notify() {
+  echo "gitlab preinstall: $1"
+}
+
+if [ -n "${GITLAB_DEBUG}" ] ; then
+  notify "debug: arguments: $@"
+fi
+
+case "$1" in
+  2)
+    # Looks like an RPM upgrade
+    main
+    ;;
+  upgrade)
+    # Looks like a DEB upgrade
+    main
+    ;;
+  *)
+    # This is not an upgrade, nothing to do.
+    ;;
+esac

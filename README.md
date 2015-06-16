@@ -18,6 +18,10 @@ stable branch (example shown below).
 
 ![documentation version](doc/images/omnibus-documentation-version.png)
 
+## Omnibus fork
+
+Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus). Fork is located at [gitlab.com](https://gitlab.com/gitlab-org/omnibus).
+
 ## GitLab CI
 
 To setup GitLab CI please see the [separate GitLab CI
@@ -57,6 +61,24 @@ Your GitLab instance should reachable over HTTP at the IP or hostname of your se
 You can login as an admin user with username `root` and password `5iveL!fe`.
 
 ### Common installation problems
+
+#### Apt error 'The requested URL returned error: 403'
+
+When trying to install GitLab using the apt repo if you receive an error similar to:
+
+```bash
+W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/CODENAME/main/source/Sources  The requested URL returned error: 403
+```
+
+check if there is a repository cacher in front of your server, like for example `apt-cacher-ng`.
+
+Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
+
+```bash
+PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
+```
+
+Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](http://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
 
 #### GitLab is unreachable in my browser
 
@@ -133,7 +155,7 @@ gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 
 #### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
-The bundled Postgres instance will try to allocate 25% of total memory as
+The packaged Postgres instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
 available, which will prevent Postgres from starting. In
 `/var/log/gitlab/postgresql/current`:
@@ -432,9 +454,17 @@ See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-http
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
-### Use non-bundled web-server
+### Use non-packaged web-server
 
-For using an external Nginx webserver or Apache see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+
+## Using a non-packaged PostgreSQL database management server
+
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+
+## Using a non-packaged Redis instance
+
+See [doc/settings/redis.md](doc/settings/redis.md).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -493,10 +523,16 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 To create a backup of your repositories and GitLab metadata, run the following command.
 
-__Note that GitLab CI currently does not have a backup script.__
-
 ```shell
+# Remove 'sudo' if you are the 'git' user
 sudo gitlab-rake gitlab:backup:create
+```
+
+For GitLab CI run:
+
+```
+# Remove 'sudo' if you are the 'git' user
+sudo gitlab-ci-rake backup:create
 ```
 
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
@@ -523,6 +559,8 @@ To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
 sudo gitlab-rake gitlab:check
 sudo gitlab-ci-rake -T
 ```
+
+Leave out 'sudo' if you are the 'git' user or the 'gitlab-ci' user.
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
@@ -677,14 +715,6 @@ See [doc/settings/database.md](doc/settings/database.md).
 
 See [doc/settings/database.md](doc/settings/database.md).
 
-## Using a non-packaged PostgreSQL database management server
-
-See [doc/settings/database.md](doc/settings/database.md).
-
-## Using a non-packaged Redis instance
-
-See [doc/settings/redis.md](doc/settings/redis.md).
-
 ## Only start omnibus-gitlab services after a given filesystem is mounted
 
 If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
@@ -695,10 +725,6 @@ from starting before a given filesystem is mounted, add the following to
 # wait for /var/opt/gitlab to be mounted
 high_availability['mountpoint'] = '/var/opt/gitlab'
 ```
-
-## Using an existing Passenger/Nginx installation
-
-See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Building your own package
 

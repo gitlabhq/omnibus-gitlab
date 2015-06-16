@@ -3,6 +3,28 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.12.0
+
+- Allow install_dir to be changed to allow different build paths (DJ Mountney) d205dc9e4da86ea39af18a6715f9538d3893488cf
+- Switched to omnibus fork 99c713cb579e8371a334b4e43a7d7863794d8374
+- Upgraded chef to 12.4.0.rc.0 b1a3870bd5a5bc60335655a4965f8f80a9be939f
+- Remove generated gitlab_shell_secret file during build 8ba8e9221516a0235f565bc5560bd0cec9c3c48e
+- Update redis to 2.8.20 6589e23ed79c883988e0ebefc356699f5f94228f
+- Exit on package installation if backup failed and wasn't skipped 710253c318a029bf1bb158c6c9fc81f0f695fe34
+- Added sslmode and sslrootcert database configuration option (Anthony Brodard) dbeb00346ccafdda50e52cf601c6b457b5981b74
+- Added option to disable HTTPS on nginx to support proxied SSL for GitLab CI
+- Added custom listen_port for GitLab CI nginx to support reverse proxies
+- IMPORTANT: secret_token in gitlab.rb for GitLab, GitLab-shell and GitLab CI will now take presedence over the auto generated one
+- Automatically authorise GitLab CI with GitLab when they are on the same server
+- Transmit gitlab-shell logs with remote_syslog 9242b83525cc18df22d1f44fb002a67e94b4ad5c
+- Moved GitLab CI cronjob from root to the gitlab-ci user 4b9926b8c016c2c10f8511a5b083f6d5a7071041
+- gitlab-rake and gitlab-ci-rake can be ran without sudo 4d4e3702ffee890eabed1d4cb61dd351baf2b554
+- Git username and email are removed from git users gitconfig 1911109c0679f90e5184415c52ad5da4e31b7171
+- Updated openssl to 1.0.1o 163305cac9ecd37425c3b1e10a390176a753717c
+- Updated git version to 2.4.3 88186e3e71064c0d9e7ae674c5f68450226dfa68
+- Updated SSL ciphers to exclude all DHE suites 08f790400b31eb3fbf4ce0ee736f7cc9082b28fc
+- Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
+
 7.11.0
 
 - Set the default certificate authority bundle to the embedded copy (Stan Hu) 673ac210216b9c01d58196e826b98db780a4ccd5
@@ -10,6 +32,7 @@ omnibus-gitlab repository.
 - Update omnibus-software 42839a91c297b9c637a13fbe4beb05058672abe2
 - Add option to disable gitlab-rails when using only CI a784851e268ca1f23ce817c13a8d421c3211f96a
 - Point to different state file for gitlab logrotate 42591805f64c48cb845538012b2a43fe765637d2
+- Allow setting ssl_dhparam in nginx config 7b0c80ed9c1d85bebeedfc211a9b9e395593278c
 
 7.10.0
 

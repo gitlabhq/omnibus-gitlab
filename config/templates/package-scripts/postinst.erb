@@ -5,12 +5,13 @@
 #
 
 PROGNAME=$(basename $0)
+DEST_DIR=<%= install_dir %>
 usr_bin_symlinks="\
-  /opt/gitlab/bin/gitlab-ctl \
-  /opt/gitlab/bin/gitlab-rake \
-  /opt/gitlab/bin/gitlab-rails \
-  /opt/gitlab/bin/gitlab-ci-rake \
-  /opt/gitlab/bin/gitlab-ci-rails \
+  ${DEST_DIR}/bin/gitlab-ctl \
+  ${DEST_DIR}/bin/gitlab-rake \
+  ${DEST_DIR}/bin/gitlab-rails \
+  ${DEST_DIR}/bin/gitlab-ci-rake \
+  ${DEST_DIR}/bin/gitlab-ci-rails \
 "
 symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
 
@@ -43,7 +44,7 @@ create_config_template()
   # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
   if ! [ -e /etc/gitlab/gitlab.rb ] ; then
     mkdir -p /etc/gitlab
-    cp /opt/gitlab/etc/gitlab.rb.template /etc/gitlab/gitlab.rb
+    cp "${DEST_DIR}/etc/gitlab.rb.template" /etc/gitlab/gitlab.rb
     sed -i 's!GENERATED_EXTERNAL_URL!'$external_url'!g' /etc/gitlab/gitlab.rb
     chmod 600 /etc/gitlab/gitlab.rb
   fi
@@ -92,12 +93,12 @@ print_welcome
 case "$1" in
   2)
     # Looks like an RPM upgrade
-    /opt/gitlab/bin/gitlab-ctl upgrade
+    ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   configure)
     # Looks like a DEB install. We don't know if it is a fresh install or an
     # upgrade.
-    /opt/gitlab/bin/gitlab-ctl upgrade
+    ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)
     if [ -x /bin/rpm ] ; then
