@@ -155,7 +155,7 @@ gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 
 #### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
-The bundled Postgres instance will try to allocate 25% of total memory as
+The packaged Postgres instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
 available, which will prevent Postgres from starting. In
 `/var/log/gitlab/postgresql/current`:
@@ -454,9 +454,17 @@ See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-http
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
-### Use non-bundled web-server
+### Use non-packaged web-server
 
-For using an external Nginx webserver or Apache see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+
+## Using a non-packaged PostgreSQL database management server
+
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+
+## Using a non-packaged Redis instance
+
+See [doc/settings/redis.md](doc/settings/redis.md).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -707,14 +715,6 @@ See [doc/settings/database.md](doc/settings/database.md).
 
 See [doc/settings/database.md](doc/settings/database.md).
 
-## Using a non-packaged PostgreSQL database management server
-
-See [doc/settings/database.md](doc/settings/database.md).
-
-## Using a non-packaged Redis instance
-
-See [doc/settings/redis.md](doc/settings/redis.md).
-
 ## Only start omnibus-gitlab services after a given filesystem is mounted
 
 If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
@@ -725,10 +725,6 @@ from starting before a given filesystem is mounted, add the following to
 # wait for /var/opt/gitlab to be mounted
 high_availability['mountpoint'] = '/var/opt/gitlab'
 ```
-
-## Using an existing Passenger/Nginx installation
-
-See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Building your own package
 
