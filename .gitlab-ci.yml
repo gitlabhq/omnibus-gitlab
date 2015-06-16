@@ -108,7 +108,7 @@ Debian 8 master:
   except:
   - tags
 Raspberry Pi 2 master:
-  test:
+  script:
   - bundle install --binstubs --path ~/gems
   - make test
   tags:
@@ -116,7 +116,7 @@ Raspberry Pi 2 master:
   except:
   - tags
 Raspberry Pi 2:
-  test:
+  script:
   - bundle install --binstubs --path ~/gems
   - make do_rpi2_release
   tags:
