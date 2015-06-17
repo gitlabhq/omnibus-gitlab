@@ -288,11 +288,11 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_postgresql_settings
-      parse_nginx_listen_address
-      parse_nginx_listen_ports
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_nginx_listen_address
+      parse_nginx_listen_ports
       parse_gitlab_ci
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
