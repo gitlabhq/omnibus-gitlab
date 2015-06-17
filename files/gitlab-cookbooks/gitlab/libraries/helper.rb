@@ -130,7 +130,7 @@ class CiHelper
   end
 
   def self.create_or_find_authorization(gitlab_external_url)
-    args = %Q(redirect_uri: "#{gitlab_external_url}", name: "GitLab CI")
+    args = %Q(redirect_uri: "#{gitlab_external_url}/user_sessions/callback", name: "GitLab CI")
 
     app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
 
