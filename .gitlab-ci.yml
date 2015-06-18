@@ -110,7 +110,7 @@ Debian 8 master:
 Raspberry Pi 2 master:
   script:
   - bundle install --binstubs --path ~/gems
-  - make test
+  - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
   tags:
   - RaspberryPi2
   except:
@@ -118,7 +118,7 @@ Raspberry Pi 2 master:
 Raspberry Pi 2:
   script:
   - bundle install --binstubs --path ~/gems
-  - make do_rpi2_release
+  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
   tags:
   - RaspberryPi2
   except:
