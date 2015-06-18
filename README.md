@@ -530,6 +530,8 @@ sudo gitlab-ci-rake backup:create
 This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
 `1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
 
+Similarly for CI, this will store a tar file in `/var/opt/gitlab/ci-backups`.
+
 If you want to store your GitLab backups in a different directory, add the
 following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
 reconfigure`:
