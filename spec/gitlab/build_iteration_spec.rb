@@ -12,6 +12,14 @@ describe Gitlab::BuildIteration do
       end
     end
 
+    context 'with a git_describe from master' do
+      let(:git_describe) { '1.2.3+rc1.ce.2-6-ge5626d5' }
+
+      it 'returns 0' do
+        expect(subject.build_iteration).to eq('rc1.ce.2')
+      end
+    end
+
     context 'with a proper git_describe' do
       let(:git_describe) { '1.2.3+foo.4' }
 
