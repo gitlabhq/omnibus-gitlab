@@ -24,6 +24,8 @@ omnibus-gitlab repository.
 - Updated git version to 2.4.3 88186e3e71064c0d9e7ae674c5f68450226dfa68
 - Updated SSL ciphers to exclude all DHE suites 08f790400b31eb3fbf4ce0ee736f7cc9082b28fc
 - Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
+- Rewrite runit default recipe which will now decide differently on which init is used  d3156878eadd643f136ee49d233e6c0b4ccebb28
+- Do not depend on Ohai platform helper for running selinux recipe cee73a23488f61fd5a0c2b090a8e86ca5209cd3c
 
 7.11.0
 
