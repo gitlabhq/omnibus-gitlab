@@ -17,46 +17,13 @@
 # limitations under the License.
 #
 
-case node["platform_family"]
-when "debian"
-  case node["platform"]
-  when "debian", "raspbian", "devuan"
-    if File.exist?("/sbin/init")
-       if File.symlink?("/sbin/init")
-         if File.basename(File.readlink("/sbin/init")) == "systemd"
-           include_recipe "runit::systemd"
-         else
-           include_recipe "runit::upstart"
-         end
-       else
-         include_recipe "runit::sysvinit"
-       end
-    else
-      if node["platform_version"] =~ /^8/
-        include_recipe "runit::systemd"
-      else
-        include_recipe "runit::sysvinit"
-      end
-    end
-  else
-    include_recipe "runit::upstart"
-  end
-when "rhel"
-  case node["platform"]
-  when "amazon", "xenserver"
-    # TODO: platform_version check for old distro without upstart
-    include_recipe "runit::upstart"
-  else
-    if node['platform_version'] =~ /^5/
-      include_recipe "runit::sysvinit"
-    elsif node['platform_version'] =~ /^6/
-      include_recipe "runit::upstart"
-    elsif node['platform_version'] =~ /^7/
-      include_recipe "runit::systemd"
-    end
-  end
-when "fedora"
+if system('/sbin/init --version | grep upstart')
+  Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
+  include_recipe "runit::upstart"
+elsif system('systemctl | grep "\-\.mount"')
+  Chef::Log.warn "Selected systemd because systemctl shows .mount units"
   include_recipe "runit::systemd"
 else
+  Chef::Log.warn "Selected sysvinit because it looks like it is not upstart or systemd."
   include_recipe "runit::sysvinit"
 end
