@@ -7,8 +7,8 @@ module Gitlab
     end
 
     def build_iteration
-      match = /[^+]*\+(..*)$/.match(@git_describe)
-      if match
+      match = /[^+]*\+([^\-]*)/.match(@git_describe)
+      if match && !match[1].empty?
         match[1]
       else
         '0'
