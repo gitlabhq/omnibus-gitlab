@@ -41,7 +41,7 @@ describe Gitlab::BuildIteration do
       let(:git_describe) { '1.2.3+' }
 
       it 'returns an empty string' do
-        expect(subject.build_iteration).to eq('')
+        expect(subject.build_iteration).to eq('0')
       end
     end
   end
