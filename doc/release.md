@@ -13,17 +13,20 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing release branch
 ```
 
-- Change [the gitlab-rails version in omnibus-gitlab]. In our example that would be
-  `default_version '490f99d45e0f610e88505ff0fb2dc83a557e22c5' # 6.6.0`.
-- Change [the gitlab-shell version] if necessary, for example
-  `default_version 'c26647b9d919085c669f49c71d0646ac23b9c9d9' # 1.9.4`.
-- Change [the gitlab-ci version] if necessary, for example
-  `default_version 'd69e6b7703043490e0f0f7aa458292fc2ed81fd2' # 5.1.0`.
-- Change [the source] to the repo you want to build from (CE / EE)
+- Use `support/set-revisions` to set the revisions in `config/software/...`. It
+will take tag names and look up the Git SHA1's, and set the download sources to
+dev.gitlab.org. Use `set-revisions --ee` for an EE release.
+
+```
+# usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_CI_REF GITLAB_SHELL_REF
+support/set-revisions v6.6.0 v6.6.0 v1.2.3
+```
+
 - Commit the new version to the release branch
 
+
 ```shell
-git commit -m 'Pin GitLab to v6.6.0' config/software/gitlab-rails.rb
+git commit -v config/software
 ```
 
 Create an annotated tag on omnibus-gitlab corresponding to the GitLab tag.  The
