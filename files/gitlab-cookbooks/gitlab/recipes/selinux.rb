@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-if node["platform_family"] == "rhel" && node["platform_version"] =~ /7\./
+if RedhatHelper.system_is_rhel7?
   ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
   execute "semodule -i /opt/gitlab/embedded/selinux/rhel/7/#{ssh_keygen_module}.pp" do
     not_if "semodule -l | grep '^#{ssh_keygen_module}\\s'"
