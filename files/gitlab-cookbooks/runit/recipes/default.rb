@@ -21,7 +21,7 @@ if system('/sbin/init --version | grep upstart')
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
   include_recipe "runit::upstart"
 elsif system('systemctl | grep "\-\.mount"')
-  Chef::Log.warn "Selected systemd because systemctl shows it is mounted."
+  Chef::Log.warn "Selected systemd because systemctl shows .mount units"
   include_recipe "runit::systemd"
 else
   Chef::Log.warn "Selected sysvinit because it looks like it is not upstart or systemd."
