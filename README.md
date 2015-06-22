@@ -397,6 +397,8 @@ the `git-data` parent directory by adding the following line to
 git_data_dir "/mnt/nas/git-data"
 ```
 
+Note that the target directory and any of its subpaths must not be a symlink.
+
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 If you already have existing Git repositories in `/var/opt/gitlab/git-data` you
