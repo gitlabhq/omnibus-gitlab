@@ -52,7 +52,8 @@ default['gitlab']['gitlab-rails']['env'] = {
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
   # PATH to set on the environment
   # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  'PGHOST' => "/var/opt/gitlab/tmp"
 }
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
@@ -223,6 +224,7 @@ default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
+default['gitlab']['postgresql']['socket_dir'] = "/var/opt/gitlab/tmp"
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
@@ -382,7 +384,8 @@ default['gitlab']['gitlab-ci']['env'] = {
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-ci/Gemfile",
   # Path variable set in the environment for the GitLab CI processes
   # defaults to /opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  'PGHOST' => "/var/opt/gitlab/tmp"
 }
 default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 

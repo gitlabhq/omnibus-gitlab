@@ -20,6 +20,7 @@ postgresql_dir = node['gitlab']['postgresql']['dir']
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
+postgresql_socket_dir = node['gitlab']['postgresql']['socket_dir']
 postgresql_user = node['gitlab']['postgresql']['username']
 
 group postgresql_user do
@@ -45,6 +46,11 @@ end
     mode "0700"
     recursive true
   end
+end
+
+directory postgresql_socket_dir do
+  owner node['gitlab']['postgresql']['username']
+  mode "0777"
 end
 
 link postgresql_data_dir_symlink do
@@ -168,7 +174,7 @@ databases.each do |rails_app, db_name, sql_user|
   end
 
   execute "create #{db_name} database" do
-    command "#{bin_dir}/createdb --port #{pg_port} -O #{sql_user} #{db_name}"
+    command "#{bin_dir}/createdb --port #{pg_port} -h postgresql_socket_dir -O #{sql_user} #{db_name}"
     user pg_user
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
     retries 30
