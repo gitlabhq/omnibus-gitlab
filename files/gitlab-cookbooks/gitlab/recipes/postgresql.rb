@@ -168,13 +168,13 @@ end
 
 databases.each do |rails_app, db_name, sql_user|
   execute "create #{sql_user} database user" do
-    command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user}\""
+    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
     user pg_user
     not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
   end
 
   execute "create #{db_name} database" do
-    command "#{bin_dir}/createdb --port #{pg_port} -h postgresql_socket_dir -O #{sql_user} #{db_name}"
+    command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{sql_user} #{db_name}"
     user pg_user
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
     retries 30
