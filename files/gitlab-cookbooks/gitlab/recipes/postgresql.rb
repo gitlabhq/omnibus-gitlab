@@ -20,7 +20,7 @@ postgresql_dir = node['gitlab']['postgresql']['dir']
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
-postgresql_socket_dir = node['gitlab']['postgresql']['socket_dir']
+postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_user = node['gitlab']['postgresql']['username']
 
 group postgresql_user do

@@ -52,8 +52,7 @@ default['gitlab']['gitlab-rails']['env'] = {
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
   # PATH to set on the environment
   # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'PGHOST' => "/var/opt/gitlab/tmp"
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
@@ -150,7 +149,8 @@ default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
-default['gitlab']['gitlab-rails']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/tmp"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
@@ -224,7 +224,7 @@ default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
-default['gitlab']['postgresql']['socket_dir'] = "/var/opt/gitlab/tmp"
+default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/tmp"
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
@@ -384,8 +384,7 @@ default['gitlab']['gitlab-ci']['env'] = {
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-ci/Gemfile",
   # Path variable set in the environment for the GitLab CI processes
   # defaults to /opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'PGHOST' => "/var/opt/gitlab/tmp"
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
 }
 default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 
@@ -427,7 +426,8 @@ default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
 default['gitlab']['gitlab-ci']['db_pool'] = 10
 default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
 default['gitlab']['gitlab-ci']['db_password'] = nil
-default['gitlab']['gitlab-ci']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-ci']['db_host'] = "/var/opt/gitlab/tmp"
 default['gitlab']['gitlab-ci']['db_port'] = 5432
 default['gitlab']['gitlab-ci']['db_socket'] = nil
 

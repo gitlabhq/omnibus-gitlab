@@ -80,7 +80,7 @@ class PgHelper
   end
 
   def pg_host
-    node['gitlab']['postgresql']['socket_dir']
+    node['gitlab']['postgresql']['unix_socket_directory']
   end
 
 end
