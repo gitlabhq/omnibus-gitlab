@@ -17,7 +17,7 @@
 #
 
 name "remote-syslog"
-default_version "1.6.14"
+default_version "1.6.15"
 
 dependency "ruby"
 dependency "rubygems"
