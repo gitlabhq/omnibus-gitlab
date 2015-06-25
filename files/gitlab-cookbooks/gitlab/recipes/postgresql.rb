@@ -38,6 +38,16 @@ end
 
 [
   postgresql_dir,
+  postgresql_socket_dir
+].each do |dir|
+  directory dir do
+    owner node['gitlab']['postgresql']['username']
+    mode "0755"
+    recursive true
+  end
+end
+
+[
   postgresql_data_dir,
   postgresql_log_dir
 ].each do |dir|
@@ -48,11 +58,6 @@ end
   end
 end
 
-directory postgresql_socket_dir do
-  owner node['gitlab']['postgresql']['username']
-  mode "0777"
-end
-
 link postgresql_data_dir_symlink do
   to postgresql_data_dir
   not_if { postgresql_data_dir == postgresql_data_dir_symlink }
@@ -60,7 +65,7 @@ end
 
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
   owner node['gitlab']['postgresql']['username']
-  mode "0644"
+  mode "0600"
   content <<-EOH
 PATH=#{node['gitlab']['postgresql']['user_path']}
 EOH
