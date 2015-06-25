@@ -101,5 +101,5 @@ which pg_dump psql
 # Symlink to /opt/gitlab/bin
 ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
 ```
-After this is done, ensure that backup and restore tasks are using the correct executables by running both backup and backup restore tasks.
+After this is done, ensure that backup and restore tasks are using the correct executables by running both [backup](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) and [backup restore](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations) tasks.
 
