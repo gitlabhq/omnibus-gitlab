@@ -521,26 +521,15 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Backups
 
+If you are using non-packaged database see [documentation on using non-packaged database](doc/settings/database.md#using-a-non-packaged-postgresql-database-management-server).
+
 ### Creating an application backup
 
-To create a backup of your repositories and GitLab metadata, run the following command.
+To create a backup of your repositories and GitLab metadata, follow the [backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
 
-```shell
-# Remove 'sudo' if you are the 'git' user
-sudo gitlab-rake gitlab:backup:create
-```
+Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
-For GitLab CI run:
-
-```
-# Remove 'sudo' if you are the 'git' user
-sudo gitlab-ci-rake backup:create
-```
-
-This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
-`1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
-
-Similarly for CI, this will store a tar file in `/var/opt/gitlab/ci-backups`.
+Similarly for CI, backup create will store a tar file in `/var/opt/gitlab/ci-backups`.
 
 If you want to store your GitLab backups in a different directory, add the
 following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
@@ -549,6 +538,10 @@ reconfigure`:
 ```ruby
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
+
+### Restoring an application backup
+
+See [backup restore documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
 
 ### Upload backups to remote (cloud) storage
 
