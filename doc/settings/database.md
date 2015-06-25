@@ -87,7 +87,7 @@ gitlab_ci['db_host'] = '127.0.0.1'
 # etc.
 ```
 
-When using [backup create and restore task](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system), GitLab will attempt using the `pg_dump` command to create a database backup file and `psql` to restore a backup from the previously created file. In omnibus-gitlab, PATH env. variable is setup in a way that puts omnibus required paths first. This means that backup will be using packaged `pg_dump` and `psql`.
+When using [backup create and restore task](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system), GitLab will attempt using the `pg_dump` command to create a database backup file and `psql` to restore a backup from the previously created file. In omnibus-gitlab, the PATH env. variable is setup in a way that puts omnibus required paths first. This means that backup will be using the packaged `pg_dump` and `psql`.
 
 To go around this issue and use the external `pg_dump` and `psql` commands you can symlink the executables to `/opt/gitlab/bin`. The executable location depends on the OS. As an example, for Debian:
 
