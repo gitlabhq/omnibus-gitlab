@@ -36,15 +36,10 @@ user postgresql_user do
   home node['gitlab']['postgresql']['home']
 end
 
-[
-  postgresql_dir,
-  postgresql_socket_dir
-].each do |dir|
-  directory dir do
-    owner node['gitlab']['postgresql']['username']
-    mode "0755"
-    recursive true
-  end
+directory postgresql_dir do
+  owner node['gitlab']['postgresql']['username']
+  mode "0755"
+  recursive true
 end
 
 [
