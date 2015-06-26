@@ -149,7 +149,8 @@ default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
-default['gitlab']['gitlab-rails']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
@@ -223,6 +224,7 @@ default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
+default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
@@ -424,7 +426,8 @@ default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
 default['gitlab']['gitlab-ci']['db_pool'] = 10
 default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
 default['gitlab']['gitlab-ci']['db_password'] = nil
-default['gitlab']['gitlab-ci']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-ci']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-ci']['db_port'] = 5432
 default['gitlab']['gitlab-ci']['db_socket'] = nil
 

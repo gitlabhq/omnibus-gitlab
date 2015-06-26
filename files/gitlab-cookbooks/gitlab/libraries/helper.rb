@@ -65,6 +65,7 @@ class PgHelper
     cmd = ["/opt/gitlab/embedded/bin/chpst",
            "-u #{pg_user}",
            "/opt/gitlab/embedded/bin/psql",
+           "-h #{pg_host}",
            "--port #{pg_port}",
            cmd_list.join(" ")].join(" ")
     success?(cmd)
@@ -76,6 +77,10 @@ class PgHelper
 
   def pg_port
     node['gitlab']['postgresql']['port']
+  end
+
+  def pg_host
+    node['gitlab']['postgresql']['unix_socket_directory']
   end
 
 end
