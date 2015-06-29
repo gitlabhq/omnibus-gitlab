@@ -7,25 +7,27 @@ GIT
 
 GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: c009e40aeb5e87116255386ab454ebf35bcfd496
+  revision: 1b336f7474ac953f10df93df3e2f98ed90dc0687
   branch: gitlab_omnibus
   specs:
     omnibus (4.0.0)
-      chef-sugar (~> 2.2)
+      chef-sugar (~> 3.0)
       cleanroom (~> 1.0)
       mixlib-shellout (~> 1.4)
+      mixlib-versioning
       ohai (~> 7.2)
+      ruby-progressbar (~> 1.7)
       thor (~> 0.18)
       uber-s3
 
 GEM
   remote: https://rubygems.org/
   specs:
-    chef-sugar (2.5.0)
+    chef-sugar (3.1.1)
     cleanroom (1.0.0)
     colorize (0.6.0)
     diff-lcs (1.2.5)
-    ffi (1.9.8)
+    ffi (1.9.9)
     ffi-yajl (1.4.0)
       ffi (~> 1.5)
       libyajl2 (~> 1.2)
@@ -36,9 +38,10 @@ GEM
     libyajl2 (1.2.0)
     mime-types (1.25.1)
     mixlib-cli (1.5.0)
-    mixlib-config (2.1.0)
+    mixlib-config (2.2.1)
     mixlib-log (1.6.0)
     mixlib-shellout (1.6.1)
+    mixlib-versioning (1.1.0)
     ohai (7.4.1)
       ffi (~> 1.9)
       ffi-yajl (~> 1.1)
@@ -71,6 +74,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
+    ruby-progressbar (1.7.5)
     systemu (2.6.5)
     thor (0.18.1)
     uber-s3 (0.2.4)
