@@ -3,6 +3,21 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.13.0
+
+- IMPORTANT: Default number of unicorn workers is at minimum 2, maximum number is calculated to leave 1GB of RAM free 2f623a5e9b6d8c64b9ac30cd656a4e852895fcf0
+- IMPORTANT: Postgresql unix socket is now moved from Postgresql default to prevent clashes between packaged and (possibly) existing Postgresql installation 9ca63f517d1bc6876abe90738e1fd99ea6f17ef6
+- Packages will be built with new tags b81165d93422a8cb7ed80b0f33107bba636b094f
+- Updated remote-syslog to 1.6.15 9a5698d52dd8aae86fd4a4c01a7d18af4cce0976
+- Unicorn worker restart memory range is now configurable 69e0f8f2412509bead62944c6cd891a57926303a
+- Updated redis to 2.8.21 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated omnibus-ctl to 0.3.6 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated chef to 12.4.0.rc.2 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated nginx to 1.7.12 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated libxml2 to 2.9.2 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated postgresql to 9.2.10 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
+
 7.12.0
 
 - Allow install_dir to be changed to allow different build paths (DJ Mountney) d205dc9e4da86ea39af18a6715f9538d3893488cf
