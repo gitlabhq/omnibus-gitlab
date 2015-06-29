@@ -248,6 +248,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # We do not recommend changing this setting
 # unicorn['log_directory'] = "/var/log/gitlab/unicorn"
 
+## Only change these settings if you understand well what they mean
+## see https://about.gitlab.com/2015/06/05/how-gitlab-uses-unicorn-and-unicorn-worker-killer/
+## and https://github.com/kzk/unicorn-worker-killer
+# unicorn['worker_memory_limit_min'] = "200*(1024**2)"
+# unicorn['worker_memory_limit_max'] = "250*(1024**2)"
+
+
 ##################
 # GitLab Sidekiq #
 ##################
