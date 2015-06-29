@@ -51,7 +51,6 @@ override :chef, version: '12.4.0.rc.0'
 override :'omnibus-ctl', version: '0.3.4'
 override :zlib, version: '1.2.8'
 override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
-override :redis, version: '2.8.20', source: { md5: 'a2588909eb497719bbbf664e6364962a' }
 override :openssl, version: '1.0.1o', source: { url: 'https://www.openssl.org/source/openssl-1.0.1o.tar.gz', md5: 'af1096f500a612e2e2adacb958d7eab1' }
 
 # Openssh needs to be installed
