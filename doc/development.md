@@ -11,7 +11,7 @@ Once the package is installed, navigate to `/opt/gitlab/embedded/cookbooks` and
 rename the `gitlab` directory which holds the internal omnibus-gitlab cookbook.
 
 ```
-sudo mv /opt/gitlab/embedded/cookbooks /opt/gitlab/embedded/cookbooks.$(date +%s)
+sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
 ```
 
 Clone the omnibus-gitlab repository from
@@ -26,7 +26,7 @@ Once the repository is cloned symlink the cookbook in the omnibus-gitlab
 repository, for example:
 
 ```
-sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks /opt/gitlab/embedded/cookbooks
+sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
 ```
 
 Now you can do the changes in the omnibus-gitlab repository, try the changes
