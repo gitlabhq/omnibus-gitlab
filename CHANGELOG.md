@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
 - Rewrite runit default recipe which will now decide differently on which init is used  d3156878eadd643f136ee49d233e6c0b4ccebb28
 - Do not depend on Ohai platform helper for running selinux recipe cee73a23488f61fd5a0c2b090a8e86ca5209cd3c
+- Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider
 
 7.11.0
 
