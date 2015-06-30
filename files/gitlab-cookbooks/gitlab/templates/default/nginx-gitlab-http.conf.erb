@@ -3,8 +3,6 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 ## GitLab
-## Contributors: randx, yin8086, sashkab, orkoden, axilleas, bbodenmiller
-##
 ## Modified from https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/support/nginx/gitlab-ssl & https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/support/nginx/gitlab
 ##
 ## Lines starting with two hashes (##) are comments with information.
@@ -94,7 +92,7 @@ server {
   location /uploads/ {
     ## If you use HTTPS make sure you disable gzip compression
     ## to be safe against BREACH attack.
-    gzip off;
+    <%= 'gzip off;' if @https %>
 
     ## https://github.com/gitlabhq/gitlabhq/issues/694
     ## Some requests take more than 30 seconds.
