@@ -107,7 +107,7 @@ class CiHelper
   def self.authorize_with_gitlab(gitlab_external_url)
     warn("Connecting to GitLab to generate new app_id and app_secret.")
 
-    runner_cmd = create_or_find_authorization(gitlab_external_url)
+    runner_cmd = create_or_find_authorization
     cmd = execute_rails_runner(runner_cmd)
     o = do_shell_out(cmd)
 
@@ -129,8 +129,9 @@ class CiHelper
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
   end
 
-  def self.create_or_find_authorization(gitlab_external_url)
-    args = %Q(redirect_uri: "#{gitlab_external_url}/user_sessions/callback", name: "GitLab CI")
+  def self.create_or_find_authorization
+    ci_external_url = Gitlab['ci_external_url']
+    args = %Q(redirect_uri: "#{ci_external_url}/user_sessions/callback", name: "GitLab CI")
 
     app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
 
