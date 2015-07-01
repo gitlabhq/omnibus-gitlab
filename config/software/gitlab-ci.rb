@@ -16,7 +16,7 @@
 #
 
 name "gitlab-ci"
-default_version "930f7215866a72c3b04538360d2e64c3d32f3e64" # v7.12.0
+default_version "362b0abaea48f0eff41200d502c22e6987103615" # v7.12.1
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -26,7 +26,7 @@ dependency "rsync"
 dependency "postgresql"
 dependency "mysql-client" if EE
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-ci.git"
+source :git => "git@dev.gitlab.org:gitlab/gitlab-ci.git"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
