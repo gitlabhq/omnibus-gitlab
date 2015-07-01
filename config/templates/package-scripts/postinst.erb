@@ -40,6 +40,8 @@ create_config_template()
     cp "${DEST_DIR}/etc/gitlab.rb.template" /etc/gitlab/gitlab.rb
     sed -i 's!GENERATED_EXTERNAL_URL!'$EXTERNAL_URL'!g' /etc/gitlab/gitlab.rb
     chmod 600 /etc/gitlab/gitlab.rb
+  else
+    EXTERNAL_URL=$(awk '/^external_url/ { print $2 }' /etc/gitlab/gitlab.rb | tr -d "'\"")
   fi
 }
 
@@ -135,8 +137,10 @@ case "$1" in
       notify
       notify "If you just upgraded from GitLab 7.9 or earlier, please run the following"
       notify "command:"
-      notify
+      echo ""
       notify "sudo ${symlink_command}"
+      echo ""
+      notify ""
     fi
     ;;
 esac
