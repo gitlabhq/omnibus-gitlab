@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Updated libxml2 to 2.9.2 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Updated postgresql to 9.2.10 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Postinstall message will check if instance is on EC2. Improved message output. dba7d1ed2ad06c6830b2f51d0d2090e2fc1d1490
 
 7.12.0
 
