@@ -170,8 +170,14 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   restarts dependent_services
 end
 
-link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
-  to File.join(gitlab_shell_var_dir, "gitlab_shell_secret")
+template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
+  link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables secret_token: node['gitlab-shell']['secret_token']
+  restarts dependent_services
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
