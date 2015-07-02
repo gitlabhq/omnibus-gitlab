@@ -37,6 +37,9 @@ default['gitlab']['user']['gid'] = nil
 default['gitlab']['user']['shell'] = "/bin/sh"
 # The home directory for the chef services user
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
+default['gitlab']['user']['git_user_name'] = "GitLab"
+default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
+
 
 ####
 # GitLab Rails app
