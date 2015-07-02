@@ -230,6 +230,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # user['shell'] = "/bin/sh"
 # # The home directory for the git user
 # user['home'] = "/var/opt/gitlab"
+# user['git_user_name'] = "GitLab"
+# user['git_user_email'] = "gitlab@#{node['fqdn']}"
 
 ##################
 # GitLab Unicorn #
