@@ -8,7 +8,6 @@ omnibus-gitlab repository.
 - IMPORTANT: Default number of unicorn workers is at minimum 2, maximum number is calculated to leave 1GB of RAM free 2f623a5e9b6d8c64b9ac30cd656a4e852895fcf0
 - IMPORTANT: Postgresql unix socket is now moved from Postgresql default to prevent clashes between packaged and (possibly) existing Postgresql installation 9ca63f517d1bc6876abe90738e1fd99ea6f17ef6
 - Packages will be built with new tags b81165d93422a8cb7ed80b0f33107bba636b094f
-- Updated remote-syslog to 1.6.15 9a5698d52dd8aae86fd4a4c01a7d18af4cce0976
 - Unicorn worker restart memory range is now configurable 69e0f8f2412509bead62944c6cd891a57926303a
 - Updated redis to 2.8.21 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Updated omnibus-ctl to 0.3.6 d1f2f38da7381507624e18fcb77e489dff1d988b
@@ -18,6 +17,12 @@ omnibus-gitlab repository.
 - Updated postgresql to 9.2.10 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Postinstall message will check if instance is on EC2. Improved message output. dba7d1ed2ad06c6830b2f51d0d2090e2fc1d1490
+
+7.12.1
+
+- Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider fdb185c14fa8fd7e57fddb41b62ce15ae4544380
+- Update remote_syslog to 1.6.15 a1b3772ad32a3989b172aea175e7850609deb6e2
+- Fixed callback url for CI autoauthorization dbb46b073d70aec5385efd056cfa45e39fbce764
 
 7.12.0
 
@@ -42,7 +47,6 @@ omnibus-gitlab repository.
 - Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
 - Rewrite runit default recipe which will now decide differently on which init is used  d3156878eadd643f136ee49d233e6c0b4ccebb28
 - Do not depend on Ohai platform helper for running selinux recipe cee73a23488f61fd5a0c2b090a8e86ca5209cd3c
-- Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider fdb185c14fa8fd7e57fddb41b62ce15ae4544380
 
 7.11.0
 
