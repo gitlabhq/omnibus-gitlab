@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.12.1
+
+- Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider fdb185c14fa8fd7e57fddb41b62ce15ae4544380
+- Update remote_syslog to 1.6.15 a1b3772ad32a3989b172aea175e7850609deb6e2
+- Fixed callback url for CI autoauthorization dbb46b073d70aec5385efd056cfa45e39fbce764
+
 7.12.0
 
 - Allow install_dir to be changed to allow different build paths (DJ Mountney) d205dc9e4da86ea39af18a6715f9538d3893488cf
@@ -26,7 +32,6 @@ omnibus-gitlab repository.
 - Updated rubygems version to 2.2.5 c85aed400bd8e17c5e919d19cd93c08616190e0b
 - Rewrite runit default recipe which will now decide differently on which init is used  d3156878eadd643f136ee49d233e6c0b4ccebb28
 - Do not depend on Ohai platform helper for running selinux recipe cee73a23488f61fd5a0c2b090a8e86ca5209cd3c
-- Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider fdb185c14fa8fd7e57fddb41b62ce15ae4544380
 
 7.11.0
 
