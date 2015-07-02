@@ -28,9 +28,6 @@ ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_app = "gitlab"
 
-# Needed for .gitlab_shell_secret
-gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
-
 [
   gitlab_rails_etc_dir,
   gitlab_rails_static_etc_dir,
@@ -170,13 +167,13 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   restarts dependent_services
 end
 
-template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
+template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
   source "secret_token.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables secret_token: node['gitlab-shell']['secret_token']
+  variables secret_token: Gitlab['gitlab_shell']['secret_token']
   restarts dependent_services
 end
 
