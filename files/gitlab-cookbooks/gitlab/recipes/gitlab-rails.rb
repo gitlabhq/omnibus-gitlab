@@ -17,6 +17,7 @@
 #
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
+gitlab_shell_source_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 gitlab_rails_static_etc_dir = "/opt/gitlab/etc/gitlab-rails"
@@ -27,9 +28,6 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_app = "gitlab"
-
-# Needed for .gitlab_shell_secret
-gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 
 [
   gitlab_rails_etc_dir,
@@ -171,7 +169,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
 end
 
 link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
-  to File.join(gitlab_shell_var_dir, "gitlab_shell_secret")
+  to File.join(gitlab_shell_source_dir, ".gitlab_shell_secret")
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
