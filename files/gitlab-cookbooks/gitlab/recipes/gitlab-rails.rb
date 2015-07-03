@@ -173,7 +173,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   owner "root"
   group "root"
   mode "0644"
-  variables secret_token: Gitlab['gitlab_shell']['secret_token']
+  variables secret_token: node['gitlab']['gitlab-shell']['secret_token']
   restarts dependent_services
 end
 
