@@ -7,6 +7,9 @@
 PROGNAME=$(basename $0)
 DEST_DIR=<%= install_dir %>
 EXTERNAL_URL="http://gitlab.example.com"
+
+# Symlinks also exist in posttrans script
+# Do not forget to change it there too if edited here
 usr_bin_symlinks="\
   ${DEST_DIR}/bin/gitlab-ctl \
   ${DEST_DIR}/bin/gitlab-rake \
