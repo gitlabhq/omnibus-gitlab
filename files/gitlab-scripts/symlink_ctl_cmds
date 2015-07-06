@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# Symlink the ctl commands
+if [ "$#" -eq  "0" ] ; then
+  DEST_DIR=/opt/gitlab
+else
+  DEST_DIR=$1
+fi
+
+usr_bin_symlinks="\
+  ${DEST_DIR}/bin/gitlab-ctl \
+  ${DEST_DIR}/bin/gitlab-rake \
+  ${DEST_DIR}/bin/gitlab-rails \
+  ${DEST_DIR}/bin/gitlab-ci-rake \
+  ${DEST_DIR}/bin/gitlab-ci-rails \
+"
+symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
+
+error_exit()
+{
+  echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
+  exit 1
+}
+
+create_symlinks()
+{
+  ${symlink_command} || error_exit "Failed to create symlinks in /usr/bin"
+}
+
+create_symlinks
