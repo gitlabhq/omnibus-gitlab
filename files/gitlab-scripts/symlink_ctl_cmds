@@ -1,11 +1,7 @@
 #!/bin/sh
 #
 # Symlink the ctl commands
-if [ "$#" -eq  "0" ] ; then
-  DEST_DIR=/opt/gitlab
-else
-  DEST_DIR=$1
-fi
+DEST_DIR=${1:-/opt/gitlab}
 
 usr_bin_symlinks="\
   ${DEST_DIR}/bin/gitlab-ctl \
