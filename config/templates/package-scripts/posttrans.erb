@@ -2,24 +2,11 @@
 # GitLab post-transition script
 # RPM only
 DEST_DIR=<%= install_dir %>
-usr_bin_symlinks="\
-  ${DEST_DIR}/bin/gitlab-ctl \
-  ${DEST_DIR}/bin/gitlab-rake \
-  ${DEST_DIR}/bin/gitlab-rails \
-  ${DEST_DIR}/bin/gitlab-ci-rake \
-  ${DEST_DIR}/bin/gitlab-ci-rails \
-"
-symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
-
-create_symlinks()
-{
-  ${symlink_command} || error_exit "Failed to create symlinks in /usr/bin"
-}
 
 case "$1" in
   0)
     # RPM install/upgrade
-    create_symlinks
+    ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
     ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)

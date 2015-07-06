@@ -8,31 +8,9 @@ PROGNAME=$(basename $0)
 DEST_DIR=<%= install_dir %>
 EXTERNAL_URL="http://gitlab.example.com"
 
-# Symlinks also exist in posttrans script
-# Do not forget to change it there too if edited here
-usr_bin_symlinks="\
-  ${DEST_DIR}/bin/gitlab-ctl \
-  ${DEST_DIR}/bin/gitlab-rake \
-  ${DEST_DIR}/bin/gitlab-rails \
-  ${DEST_DIR}/bin/gitlab-ci-rake \
-  ${DEST_DIR}/bin/gitlab-ci-rails \
-"
-symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
-
-error_exit()
-{
-  echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
-  exit 1
-}
-
 notify()
 {
   echo "gitlab: $1"
-}
-
-create_symlinks()
-{
-  ${symlink_command} || error_exit "Failed to create symlinks in /usr/bin"
 }
 
 create_config_template()
@@ -117,7 +95,7 @@ else
   get_fqdn_from_hostname
 fi
 
-create_symlinks
+${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
 create_config_template
 fix_directory_permissions
 print_welcome
