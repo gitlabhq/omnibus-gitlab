@@ -120,27 +120,12 @@ fix_directory_permissions
 print_welcome
 
 case "$1" in
-  2)
-    # Looks like an RPM upgrade
-    ${DEST_DIR}/bin/gitlab-ctl upgrade
-    ;;
   configure)
     # Looks like a DEB install. We don't know if it is a fresh install or an
     # upgrade.
     ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)
-    if [ -x /bin/rpm ] ; then
-      # This might be a fresh RPM install, replacing the legacy 'gitlab' package.
-      # The postuninstall script of 'gitlab' will clobber our symlinks, so we
-      # kindly ask the user to recreate them.
-      notify
-      notify "If you just upgraded from GitLab 7.9 or earlier, please run the following"
-      notify "command:"
-      echo ""
-      notify "sudo ${symlink_command}"
-      echo ""
-      notify ""
-    fi
+    # No op.
     ;;
 esac
