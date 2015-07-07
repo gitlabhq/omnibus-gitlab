@@ -18,6 +18,10 @@ omnibus-gitlab repository.
 - Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Postinstall message will check if instance is on EC2. Improved message output. dba7d1ed2ad06c6830b2f51d0d2090e2fc1d1490
 
+7.12.2
+
+- Fix gitlab_shell_secret symlink which was removed by previous package on Redhat platform systems b34d4bcf4fae9581d94bdc5ed104a4655b72f4ad
+
 7.12.1
 
 - Added configuration options for auto_link_ldap_user and auto_sign_in_with_provider fdb185c14fa8fd7e57fddb41b62ce15ae4544380
