@@ -18,21 +18,15 @@
 #
 
 cookbook_file "/usr/lib/systemd/system/gitlab-runsvdir.service" do
-  owner "root"
-  group "root"
   mode "0644"
   source "gitlab-runsvdir.service"
-end
-
-directory "/etc/systemd/system/default.target.wants" do
-  recursive true
-  not_if { ::File.directory?("/etc/systemd/system/default.target.wants") }
-end
-
-link "/etc/systemd/system/default.target.wants/gitlab-runsvdir.service" do
-  to "/usr/lib/systemd/system/gitlab-runsvdir.service"
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
   notifies :run, 'execute[systemctl start gitlab-runsvdir]', :immediately
+end
+
+# Remove old symlink
+file "/etc/systemd/system/default.target.wants/gitlab-runsvdir.service" do
+  action :delete
 end
 
 execute "systemctl daemon-reload" do

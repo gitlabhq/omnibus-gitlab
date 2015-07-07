@@ -1,6 +1,6 @@
 [Unit]
 Description=GitLab Runit supervision process
-ConditionPathExists=/opt/gitlab/
+After=default.target
 
 [Service]
 ExecStart=/opt/gitlab/embedded/bin/runsvdir-start
