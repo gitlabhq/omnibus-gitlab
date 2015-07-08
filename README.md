@@ -86,6 +86,34 @@ Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
+#### GitLab CI shows GitLab login page
+
+When you setup GitLab and GitLab CI on the same server you need to specify different urls:
+
+```ruby
+external_url 'http://gitlab.example.com'
+ci_external_url 'http://ci.example.com'
+```
+
+DNS records for these two domains need to point to the same server.
+
+If you've correctly set the DNS records and navigating in your browser to `http://ci.example.com` shows GitLab login page it is possible that the server internally cannot resolve the domains due to network/firewall restrictions.
+
+Login to the server where GitLab and GitLab CI are installed and try querying the url, eg:
+
+```bash
+curl -v http://gitlab.example.com
+```
+
+If you don't get a response try adding a record in the server `hosts` file, eg in `/etc/hosts`:
+
+```bash
+127.0.0.1 gitlab.example.com
+```
+
+Depending on your setup you might need to add an entry for ci hostname too.
+
+
 #### Emails are not being delivered
 
 To test email delivery you can create a new GitLab account for an email that is
