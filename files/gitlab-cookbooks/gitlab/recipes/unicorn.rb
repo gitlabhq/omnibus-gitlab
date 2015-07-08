@@ -47,6 +47,6 @@ else
       echo 'net.core.somaxconn = #{node['gitlab']['unicorn']['somaxconn']}' >> /etc/sysctl.conf
     EOF
     notifies :run, 'execute[sysctl]', :immediately
-    not_if "egrep '^kernel.shmmax = ' /etc/sysctl.conf"
+    not_if "egrep '^net.core.somaxconn = ' /etc/sysctl.conf"
   end
 end
