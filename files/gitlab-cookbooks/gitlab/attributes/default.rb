@@ -393,6 +393,7 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 default['gitlab']['gitlab-ci']['enable'] = false
 default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['build_log_directory'] = "/var/log/gitlab/gitlab-ci-builds"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
 default['gitlab']['gitlab-ci']['env'] = {
   # Path the the GitLab CI Gemfile

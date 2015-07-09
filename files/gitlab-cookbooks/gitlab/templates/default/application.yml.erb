@@ -24,6 +24,8 @@ defaults: &defaults
     # Add committer to recipients list (default: false)
     add_pusher: <%= @gitlab_ci_add_pusher || @gitlab_ci_add_committer %>
 
+    builds_path: <%= @build_log_directory %>
+
   gravatar:
     enabled: <%= @gravatar_enabled %>
     plain_url: <%= single_quote(@gravatar_plain_url) %>
