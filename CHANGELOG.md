@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Use posttrans scriplet for RHEL systems to run upgrade or symlink omnibus-gitlab commands f9169ba540ae82017680d3bb313ecc1f5dc3567d
 - Set net.core.somaxconn parameter for unicorn f147911fd0f9ddb4b55c26010bcedca1705c1b0b
 - Add configuration option for builds directory for GitLab CI a9bb2580db4f9aabf086d25122d30aeb78e2f756
+- Skip running selinux module load if selinux is disabled 5707ef1d25ff3ea202ce88d444154b5c5a6a9158
 
 7.12.2
 
