@@ -25,7 +25,7 @@ gitlab_ci_static_etc_dir = "/opt/gitlab/etc/gitlab-ci"
 gitlab_ci_working_dir = File.join(gitlab_ci_dir, "working")
 gitlab_ci_tmp_dir = File.join(gitlab_ci_dir, "tmp")
 gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
-gitlab_ci_build_log_dir = node['gitlab']['gitlab-ci']['build_log_directory']
+gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 
 gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
 gitlab_app = "gitlab-ci"
@@ -51,7 +51,7 @@ end
   gitlab_ci_tmp_dir,
   node['gitlab']['gitlab-ci']['backup_path'],
   gitlab_ci_log_dir,
-  gitlab_ci_build_log_dir
+  gitlab_ci_builds_dir
 ].compact.each do |dir_name|
   directory dir_name do
     owner gitlab_ci_user
@@ -171,7 +171,8 @@ end
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
 {
   "#{package_install_dir}/embedded/service/gitlab-ci/tmp" => gitlab_ci_tmp_dir,
-  "#{package_install_dir}/embedded/service/gitlab-ci/log" => gitlab_ci_log_dir
+  "#{package_install_dir}/embedded/service/gitlab-ci/log" => gitlab_ci_log_dir,
+  "#{package_install_dir}/embedded/service/gitlab-ci/builds" => gitlab_ci_builds_dir
 }.each do |link_dir, target_dir|
   link link_dir do
     to target_dir
