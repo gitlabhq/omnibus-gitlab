@@ -249,6 +249,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 # unicorn['tcp_nopush'] = true
 # unicorn['backlog_socket'] = 1024
+# Make sure somaxconn is equal or higher then backlog_socket
+# unicorn['somaxconn'] = 1024
 # We do not recommend changing this setting
 # unicorn['log_directory'] = "/var/log/gitlab/unicorn"
 
@@ -439,6 +441,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gitlab_ci_support_email'] = 'gitlab-ci@example.com'
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
 # gitlab_ci['gitlab_ci_add_pusher'] = true
+# gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
 
 # gitlab_ci['gravatar_enabled'] = true
 # gitlab_ci['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"

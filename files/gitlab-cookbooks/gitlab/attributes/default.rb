@@ -208,6 +208,7 @@ default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/g
 default['gitlab']['unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/unicorn/unicorn.pid"
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
+default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
 default['gitlab']['unicorn']['worker_memory_limit_min'] = "200*(1024**2)"
 default['gitlab']['unicorn']['worker_memory_limit_max'] = "250*(1024**2)"
@@ -393,6 +394,7 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 default['gitlab']['gitlab-ci']['enable'] = false
 default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
 default['gitlab']['gitlab-ci']['env'] = {
   # Path the the GitLab CI Gemfile
