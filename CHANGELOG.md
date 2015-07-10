@@ -17,10 +17,15 @@ omnibus-gitlab repository.
 - Updated postgresql to 9.2.10 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
 - Postinstall message will check if instance is on EC2. Improved message output. dba7d1ed2ad06c6830b2f51d0d2090e2fc1d1490
+- Change systemd service so GitLab starts up only after all FS are mounted and services started 2fc8482dafed474cb508b67ef17e982e3a30bdd1
+- Use posttrans scriplet for RHEL systems to run upgrade or symlink omnibus-gitlab commands f9169ba540ae82017680d3bb313ecc1f5dc3567d
+- Set net.core.somaxconn parameter for unicorn f147911fd0f9ddb4b55c26010bcedca1705c1b0b
+- Add configuration option for builds directory for GitLab CI a9bb2580db4f9aabf086d25122d30aeb78e2f756
 
 7.12.2
 
 - Fix gitlab_shell_secret symlink which was removed by previous package on Redhat platform systems b34d4bcf4fae9581d94bdc5ed104a4655b72f4ad
+- Upgrade openssl to 1.0.1p 0ebb908e130d191c3fa7e98b0a16f1e303d50890
 
 7.12.1
 
