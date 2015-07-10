@@ -57,6 +57,7 @@ build do
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'
   delete 'tmp'
+  delete 'builds'
 
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
