@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+directory '/usr/lib/systemd/system' do
+  recursive true
+end
+
 cookbook_file "/usr/lib/systemd/system/gitlab-runsvdir.service" do
   mode "0644"
   source "gitlab-runsvdir.service"
