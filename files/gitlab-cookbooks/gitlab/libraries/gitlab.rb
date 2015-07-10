@@ -73,11 +73,11 @@ module Gitlab
       Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
       Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
 
-      Gitlab['gitlab_ci']['secret_key_base'] = if Gitlab['gitlab_ci']['secret_token']
-                                                Gitlab['gitlab_ci']['secret_token']
-                                               else
-                                                 generate_hex(64)
-                                               end
+      Gitlab['gitlab_ci']['secret_key_base'] ||= if Gitlab['gitlab_ci']['secret_token']
+                                                   Gitlab['gitlab_ci']['secret_token']
+                                                 else
+                                                   generate_hex(64)
+                                                 end
       Gitlab['gitlab_ci']['db_key_base'] ||= generate_hex(64)
 
       # Note: Besides the section below, gitlab-secrets.json will also change
