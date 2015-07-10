@@ -57,7 +57,7 @@ print_welcome()
 
 check_if_ec2()
 {
-  if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
+  if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` = 'ec2' ]; then
     return 0
   else
     return 1
