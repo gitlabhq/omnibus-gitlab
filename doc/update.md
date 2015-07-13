@@ -121,6 +121,21 @@ Done!
 
 ## Reverting to GitLab 6.6.x or later
 
+This section contains general information on how to revert to an earlier version of a package.
+
+*NOTE* This guide assumes that you have a backup archive created under the version you are reverting to.
+
+These steps consist of:
+
+* Download the package of a target version.(example below uses GitLab 6.x.x)
+* Stop GitLab
+* Install the old package
+* Reconfigure GitLab
+* Restoring the backup
+* Starting GitLab
+
+See example below:
+
 First download a GitLab 6.x.x [CE](https://www.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
