@@ -2,7 +2,7 @@
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
-If you want to use MySQL and are using the **GitLab Enterprise Edition packages** please do the following:
+If you want to use MySQL or MariaDB and are using the **GitLab Enterprise Edition packages** please do the following:
 
 Important note: if you are connecting omnibus-gitlab to an existing GitLab
 database you should create a backup before attempting this procedure.
@@ -102,4 +102,3 @@ which pg_dump psql
 ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
 ```
 After this is done, ensure that backup and restore tasks are using the correct executables by running both [backup](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) and [backup restore](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations) tasks.
-

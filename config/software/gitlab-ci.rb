@@ -42,6 +42,7 @@ build do
   # load the Rails environment.
   copy 'config/application.yml.example', 'config/application.yml'
   copy 'config/database.yml.postgresql', 'config/database.yml'
+  copy 'config/secrets.yml.example', 'config/secrets.yml'
 
   assets_precompile_env = {
     "RAILS_ENV" => "production",
@@ -52,6 +53,7 @@ build do
   # Tear down now that the assets:precompile is done.
   delete 'config/application.yml'
   delete 'config/database.yml'
+  delete 'config/secrets.yml'
   delete '.secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`

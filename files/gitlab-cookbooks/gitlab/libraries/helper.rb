@@ -194,6 +194,8 @@ class SecretsHelper
                       },
                       'gitlab_ci' => {
                         'secret_token' => Gitlab['gitlab_ci']['secret_token'],
+                        'secret_key_base' => Gitlab['gitlab_ci']['secret_key_base'],
+                        'db_key_base' => Gitlab['gitlab_ci']['db_key_base'],
                       }
                     }
 

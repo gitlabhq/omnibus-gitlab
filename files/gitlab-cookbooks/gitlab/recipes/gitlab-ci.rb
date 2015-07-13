@@ -96,6 +96,17 @@ template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
   restarts dependent_services
 end
 
+template_symlink File.join(gitlab_ci_etc_dir, "secrets.yml") do
+  link_from File.join(gitlab_ci_source_dir, "config/secrets.yml")
+  source "secrets.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables node['gitlab']['gitlab-ci'].to_hash
+  helpers SingleQuoteHelper
+  restarts dependent_services
+end
+
 if node['gitlab']['gitlab-ci']['redis_port']
   redis_url = "redis://#{node['gitlab']['gitlab-ci']['redis_host']}:#{node['gitlab']['gitlab-ci']['redis_port']}"
 else
