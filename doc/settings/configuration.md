@@ -75,6 +75,38 @@ user['group'] = "gitlab"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Specify numeric user and group identifiers
+
+Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
+follows.
+
+```ruby
+user['uid'] = 1234
+user['gid'] = 1234
+postgresql['uid'] = 1235
+postgresql['gid'] = 1235
+redis['uid'] = 1236
+redis['gid'] = 1236
+web_server['uid'] = 1237
+web_server['gid'] = 1237
+```
+
+Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+## Only start omnibus-gitlab services after a given filesystem is mounted
+
+If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
+from starting before a given filesystem is mounted, add the following to
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+# wait for /var/opt/gitlab to be mounted
+high_availability['mountpoint'] = '/var/opt/gitlab'
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ### Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](doc/settings/ldap.md).
@@ -111,23 +143,6 @@ See
 ### Changing gitlab.yml settings
 
 See [doc/settings/gitlab.yml.md](doc/settings/gitlab.yml.md).
-
-### Specify numeric user and group identifiers
-
-Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
-specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
-follows.
-
-```ruby
-user['uid'] = 1234
-user['gid'] = 1234
-postgresql['uid'] = 1235
-postgresql['gid'] = 1235
-redis['uid'] = 1236
-redis['gid'] = 1236
-web_server['uid'] = 1237
-web_server['gid'] = 1237
-```
 
 ### Sending application email via SMTP
 

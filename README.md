@@ -27,7 +27,7 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 To setup GitLab CI please see the [separate GitLab CI
 documentation](doc/gitlab-ci/README.md).
 
-## Configuration options
+### Configuration options
 
 See [doc/settings/configuration.md](doc/settings/configuration.md).
 
@@ -108,6 +108,10 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 ##### Inserting custom settings into the NGINX config
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
+
+##### Only start omnibus-gitlab services after a given filesystem is mounted
+
+See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted).
 
 ## Installation
 
@@ -262,59 +266,25 @@ See [doc/common_installation_problems.md](doc/common_installation_problems.md#gi
 See [doc/common_installation_problems.md](doc/common_installation_problems.mdr#short-read-or-oom-loading-db-error).
 
 
-## Configuration
+### Backups
 
-### Backup and restore omnibus-gitlab configuration
+See [doc/settings/backups.md](doc/settings/backups.md).
 
-All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
-configuration, just backup this directory.
+##### Backup and restore omnibus-gitlab configuration
 
-```shell
-# Example backup command for /etc/gitlab:
-# Create a time-stamped .tar file in the current directory.
-# The .tar file will be readable only to root.
-sudo sh -c 'umask 0077; tar -cf $(date "+etc-gitlab-%s.tar") -C / etc/gitlab'
-```
+See [doc/settings/backups.md](doc/settings/backups.md#backup-and-restore-omnibus-gitlab-configuration).
 
-You can extract the .tar file as follows.
+##### Creating an application backup
 
-```shell
-# Rename the existing /etc/gitlab, if any
-sudo mv /etc/gitlab /etc/gitlab.$(date +%s)
-# Change the example timestamp below for your configuration backup
-sudo tar -xf etc-gitlab-1399948539.tar -C /
-```
-
-Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
-backup.
-
-NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
-
-
-
-## Backups
-
-If you are using non-packaged database see [documentation on using non-packaged database](doc/settings/database.md#using-a-non-packaged-postgresql-database-management-server).
-
-### Creating an application backup
-
-To create a backup of your repositories and GitLab metadata, follow the [backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
-
-Backup create will store a tar file in `/var/opt/gitlab/backups`.
-
-Similarly for CI, backup create will store a tar file in `/var/opt/gitlab/ci-backups`.
-
-If you want to store your GitLab backups in a different directory, add the
-following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
-reconfigure`:
-
-```ruby
-gitlab_rails['backup_path'] = '/mnt/backups'
-```
+See [doc/settings/backups.md](doc/settings/backups.md#creating-an-application-backup).
 
 ### Restoring an application backup
 
 See [backup restore documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
+
+### Backup and restore using non-packaged database
+
+If you are using non-packaged database see [documentation on using non-packaged database](doc/settings/database.md#using-a-non-packaged-postgresql-database-management-server).
 
 ### Upload backups to remote (cloud) storage
 
@@ -417,17 +387,6 @@ See [doc/settings/database.md](doc/settings/database.md).
 ### Seed the database (fresh installs only)
 
 See [doc/settings/database.md](doc/settings/database.md).
-
-## Only start omnibus-gitlab services after a given filesystem is mounted
-
-If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
-from starting before a given filesystem is mounted, add the following to
-`/etc/gitlab/gitlab.rb`:
-
-```ruby
-# wait for /var/opt/gitlab to be mounted
-high_availability['mountpoint'] = '/var/opt/gitlab'
-```
 
 ## Building your own package
 

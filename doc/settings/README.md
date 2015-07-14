@@ -10,3 +10,4 @@
 - [Redis](redis.md)
 - [Database](database.md)
 - [Logs](logs.md)
+- [Backups](backups.md)
