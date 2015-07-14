@@ -19,7 +19,7 @@
 
 ## Configuring
 
-- [Configuration options](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+- [Configuration options](settings/configuration.md)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)

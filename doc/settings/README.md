@@ -1,5 +1,6 @@
 # Configuring omnibus settings
 
+- [Configuration options](configuration.md)
 - [SMTP](smtp.md)
 - [NGINX](nginx.md)
 - [LDAP](ldap.md)
