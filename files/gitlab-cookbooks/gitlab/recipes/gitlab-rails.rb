@@ -67,6 +67,16 @@ dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sideki
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
 
+template_symlink File.join(gitlab_rails_etc_dir, "config.ru") do
+  link_from File.join(gitlab_rails_source_dir, "config.ru")
+  source "gitlab-rails-config.ru.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['unicorn'].to_hash)
+  restarts dependent_services
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
   source "secret_token.erb"

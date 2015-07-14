@@ -154,7 +154,8 @@ default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
-default['gitlab']['gitlab-rails']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
@@ -189,7 +190,16 @@ default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['worker_processes'] = node['cpu']['total'].to_i + 1
+default['gitlab']['unicorn']['worker_processes'] = [
+  2, # Two is the minimum or HTTP(S) Git pushes will no longer work.
+  [
+    # Cores + 1 gives good CPU utilization.
+    node['cpu']['total'].to_i + 1,
+    # See how many 250MB worker processes fit in (total RAM - 1GB). We add
+    # 128000 KB in the numerator to get rounding instead of integer truncation.
+    (node['memory']['total'].to_i - 1048576 + 128000) / 256000
+  ].min # min because we want to exceed neither CPU nor RAM
+].max # max because we need at least 2 workers
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
@@ -198,7 +208,10 @@ default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/g
 default['gitlab']['unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/unicorn/unicorn.pid"
 default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
+default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
+default['gitlab']['unicorn']['worker_memory_limit_min'] = "200*(1024**2)"
+default['gitlab']['unicorn']['worker_memory_limit_max'] = "250*(1024**2)"
 
 ####
 # Sidekiq
@@ -228,6 +241,7 @@ default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
+default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
@@ -380,6 +394,7 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 default['gitlab']['gitlab-ci']['enable'] = false
 default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
+default['gitlab']['gitlab-ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
 default['gitlab']['gitlab-ci']['environment'] = 'production'
 default['gitlab']['gitlab-ci']['env'] = {
   # Path the the GitLab CI Gemfile
@@ -429,7 +444,8 @@ default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
 default['gitlab']['gitlab-ci']['db_pool'] = 10
 default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
 default['gitlab']['gitlab-ci']['db_password'] = nil
-default['gitlab']['gitlab-ci']['db_host'] = nil
+# Path to postgresql socket directory
+default['gitlab']['gitlab-ci']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-ci']['db_port'] = 5432
 default['gitlab']['gitlab-ci']['db_socket'] = nil
 

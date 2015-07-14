@@ -20,6 +20,7 @@ postgresql_dir = node['gitlab']['postgresql']['dir']
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
+postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_user = node['gitlab']['postgresql']['username']
 
 group postgresql_user do
@@ -35,8 +36,13 @@ user postgresql_user do
   home node['gitlab']['postgresql']['home']
 end
 
+directory postgresql_dir do
+  owner node['gitlab']['postgresql']['username']
+  mode "0755"
+  recursive true
+end
+
 [
-  postgresql_dir,
   postgresql_data_dir,
   postgresql_log_dir
 ].each do |dir|
@@ -54,7 +60,7 @@ end
 
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
   owner node['gitlab']['postgresql']['username']
-  mode "0644"
+  mode "0600"
   content <<-EOH
 PATH=#{node['gitlab']['postgresql']['user_path']}
 EOH
@@ -162,13 +168,13 @@ end
 
 databases.each do |rails_app, db_name, sql_user|
   execute "create #{sql_user} database user" do
-    command "#{bin_dir}/psql --port #{pg_port} -d template1 -c \"CREATE USER #{sql_user}\""
+    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
     user pg_user
     not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
   end
 
   execute "create #{db_name} database" do
-    command "#{bin_dir}/createdb --port #{pg_port} -O #{sql_user} #{db_name}"
+    command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{sql_user} #{db_name}"
     user pg_user
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
     retries 30

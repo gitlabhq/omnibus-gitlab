@@ -1,6 +1,10 @@
 [Unit]
 Description=GitLab Runit supervision process
+After=basic.target
 
 [Service]
 ExecStart=/opt/gitlab/embedded/bin/runsvdir-start
 Restart=always
+
+[Install]
+WantedBy=basic.target

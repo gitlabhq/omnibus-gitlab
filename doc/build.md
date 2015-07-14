@@ -2,7 +2,8 @@
 
 See
 https://gitlab.com/gitlab-org/gitlab-omnibus-builder/blob/master/README.md#recipe-default
-for instructions on how to prepare a build box using Chef. After running the cookbook you can perform builds as the `omnibus-build` user.
+for instructions on how to prepare a build box using Chef. After running the
+cookbook you can perform builds as the `omnibus-build` user.
 
 ```shell
 # Login as omnibus-build user
@@ -16,17 +17,17 @@ cd omnibus-gitlab
 bundle install --path .bundle --binstubs
 
 # Do a build
-bin/omnibus build project gitlab
+bin/omnibus build gitlab
 ```
 
 ## Usage
 
 ### Build
 
-You create a platform-specific package using the `build project` command:
+You create a platform-specific package using the `build` command:
 
 ```shell
-$ bin/omnibus build project gitlab
+$ bin/omnibus build gitlab
 ```
 
 The platform/architecture type of the package created will match the platform

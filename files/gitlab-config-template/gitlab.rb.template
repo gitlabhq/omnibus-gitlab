@@ -118,7 +118,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## For setting up different data storing directory
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#storing-git-data-in-an-alternative-directory
-## If you want to use a single non-default directory to store git data use:
+## If you want to use a single non-default directory to store git data use
+## a path that doesn't contain symlinks.
 # git_data_dir "/var/opt/gitlab/git-data"
 
 # gitlab_rails['satellites_timeout'] = 30
@@ -248,8 +249,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
 # unicorn['tcp_nopush'] = true
 # unicorn['backlog_socket'] = 1024
+# Make sure somaxconn is equal or higher then backlog_socket
+# unicorn['somaxconn'] = 1024
 # We do not recommend changing this setting
 # unicorn['log_directory'] = "/var/log/gitlab/unicorn"
+
+## Only change these settings if you understand well what they mean
+## see https://about.gitlab.com/2015/06/05/how-gitlab-uses-unicorn-and-unicorn-worker-killer/
+## and https://github.com/kzk/unicorn-worker-killer
+# unicorn['worker_memory_limit_min'] = "200*(1024**2)"
+# unicorn['worker_memory_limit_max'] = "250*(1024**2)"
+
 
 ##################
 # GitLab Sidekiq #
@@ -431,6 +441,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_ci['gitlab_ci_support_email'] = 'gitlab-ci@example.com'
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
 # gitlab_ci['gitlab_ci_add_pusher'] = true
+# gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
 
 # gitlab_ci['gravatar_enabled'] = true
 # gitlab_ci['gravatar_plain_url'] = "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
