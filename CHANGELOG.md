@@ -3,9 +3,30 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.13.0
+
+- IMPORTANT: Default number of unicorn workers is at minimum 2, maximum number is calculated to leave 1GB of RAM free 2f623a5e9b6d8c64b9ac30cd656a4e852895fcf0
+- IMPORTANT: Postgresql unix socket is now moved from Postgresql default to prevent clashes between packaged and (possibly) existing Postgresql installation 9ca63f517d1bc6876abe90738e1fd99ea6f17ef6
+- Packages will be built with new tags b81165d93422a8cb7ed80b0f33107bba636b094f
+- Unicorn worker restart memory range is now configurable 69e0f8f2412509bead62944c6cd891a57926303a
+- Updated redis to 2.8.21 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated omnibus-ctl to 0.3.6 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated chef to 12.4.0.rc.2 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated nginx to 1.7.12 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated libxml2 to 2.9.2 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated postgresql to 9.2.10 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Updated omnibus to commit 0abab93bb67377d20c94bc4322018e2248b4a610 d1f2f38da7381507624e18fcb77e489dff1d988b
+- Postinstall message will check if instance is on EC2. Improved message output. dba7d1ed2ad06c6830b2f51d0d2090e2fc1d1490
+- Change systemd service so GitLab starts up only after all FS are mounted and services started 2fc8482dafed474cb508b67ef17e982e3a30bdd1
+- Use posttrans scriplet for RHEL systems to run upgrade or symlink omnibus-gitlab commands f9169ba540ae82017680d3bb313ecc1f5dc3567d
+- Set net.core.somaxconn parameter for unicorn f147911fd0f9ddb4b55c26010bcedca1705c1b0b
+- Add configuration option for builds directory for GitLab CI a9bb2580db4f9aabf086d25122d30aeb78e2f756
+- Skip running selinux module load if selinux is disabled 5707ef1d25ff3ea202ce88d444154b5c5a6a9158
+
 7.12.2
 
 - Fix gitlab_shell_secret symlink which was removed by previous package on Redhat platform systems b34d4bcf4fae9581d94bdc5ed104a4655b72f4ad
+- Upgrade openssl to 1.0.1p 0ebb908e130d191c3fa7e98b0a16f1e303d50890
 
 7.12.1
 

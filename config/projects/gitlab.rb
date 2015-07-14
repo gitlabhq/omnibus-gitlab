@@ -15,6 +15,9 @@
 ## limitations under the License.
 ##
 #
+
+require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
+
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 if ee
@@ -40,13 +43,11 @@ conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
-build_iteration 1
+build_iteration Gitlab::BuildIteration.new.build_iteration
 
-override :ruby, version: '2.1.6',  source: { md5: "6e5564364be085c45576787b48eeb75f" }
+override :ruby, version: '2.1.6'
 override :rubygems, version: '2.2.5', source: { md5: "7701b5bc348d8da41a511ac012a092a8" }
-override :chef, version: '12.4.0.rc.0'
-override :'omnibus-ctl', version: '0.3.4'
-override :zlib, version: '1.2.8'
+override :chef, version: '12.4.0.rc.2'
 override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
 override :redis, version: '2.8.20', source: { md5: 'a2588909eb497719bbbf664e6364962a' }
 override :openssl, version: '1.0.1p', source: { url: 'https://www.openssl.org/source/openssl-1.0.1p.tar.gz', md5: '7563e92327199e0067ccd0f79f436976' }

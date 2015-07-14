@@ -86,6 +86,34 @@ Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
+#### GitLab CI shows GitLab login page
+
+When you setup GitLab and GitLab CI on the same server you need to specify different urls:
+
+```ruby
+external_url 'http://gitlab.example.com'
+ci_external_url 'http://ci.example.com'
+```
+
+DNS records for these two domains need to point to the same server.
+
+If you've correctly set the DNS records and navigating in your browser to `http://ci.example.com` shows GitLab login page it is possible that the server internally cannot resolve the domains due to network/firewall restrictions.
+
+Login to the server where GitLab and GitLab CI are installed and try querying the url, eg:
+
+```bash
+curl -v http://gitlab.example.com
+```
+
+If you don't get a response try adding a record in the server `hosts` file, eg in `/etc/hosts`:
+
+```bash
+127.0.0.1 gitlab.example.com
+```
+
+Depending on your setup you might need to add an entry for ci hostname too.
+
+
 #### Emails are not being delivered
 
 To test email delivery you can create a new GitLab account for an email that is
@@ -155,7 +183,7 @@ gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 
 #### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
-The bundled Postgres instance will try to allocate 25% of total memory as
+The packaged Postgres instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
 available, which will prevent Postgres from starting. In
 `/var/log/gitlab/postgresql/current`:
@@ -397,6 +425,8 @@ the `git-data` parent directory by adding the following line to
 git_data_dir "/mnt/nas/git-data"
 ```
 
+Note that the target directory and any of its subpaths must not be a symlink.
+
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 If you already have existing Git repositories in `/var/opt/gitlab/git-data` you
@@ -454,9 +484,17 @@ See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-http
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
-### Use non-bundled web-server
+### Use non-packaged web-server
 
-For using an external Nginx webserver or Apache see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+
+## Using a non-packaged PostgreSQL database management server
+
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+
+## Using a non-packaged Redis instance
+
+See [doc/settings/redis.md](doc/settings/redis.md).
 
 ### Adding ENV Vars to the Gitlab Runtime Environment
 
@@ -511,26 +549,15 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Backups
 
+If you are using non-packaged database see [documentation on using non-packaged database](doc/settings/database.md#using-a-non-packaged-postgresql-database-management-server).
+
 ### Creating an application backup
 
-To create a backup of your repositories and GitLab metadata, run the following command.
+To create a backup of your repositories and GitLab metadata, follow the [backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
 
-```shell
-# Remove 'sudo' if you are the 'git' user
-sudo gitlab-rake gitlab:backup:create
-```
+Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
-For GitLab CI run:
-
-```
-# Remove 'sudo' if you are the 'git' user
-sudo gitlab-ci-rake backup:create
-```
-
-This will store a tar file in `/var/opt/gitlab/backups`. The filename will look like
-`1393513186_gitlab_backup.tar`, where 1393513186 is a timestamp.
-
-Similarly for CI, this will store a tar file in `/var/opt/gitlab/ci-backups`.
+Similarly for CI, backup create will store a tar file in `/var/opt/gitlab/ci-backups`.
 
 If you want to store your GitLab backups in a different directory, add the
 following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
@@ -539,6 +566,10 @@ reconfigure`:
 ```ruby
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
+
+### Restoring an application backup
+
+See [backup restore documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
 
 ### Upload backups to remote (cloud) storage
 
@@ -709,14 +740,6 @@ See [doc/settings/database.md](doc/settings/database.md).
 
 See [doc/settings/database.md](doc/settings/database.md).
 
-## Using a non-packaged PostgreSQL database management server
-
-See [doc/settings/database.md](doc/settings/database.md).
-
-## Using a non-packaged Redis instance
-
-See [doc/settings/redis.md](doc/settings/redis.md).
-
 ## Only start omnibus-gitlab services after a given filesystem is mounted
 
 If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
@@ -727,10 +750,6 @@ from starting before a given filesystem is mounted, add the following to
 # wait for /var/opt/gitlab to be mounted
 high_availability['mountpoint'] = '/var/opt/gitlab'
 ```
-
-## Using an existing Passenger/Nginx installation
-
-See [doc/settings/nginx.md](doc/settings/nginx.md).
 
 ## Building your own package
 

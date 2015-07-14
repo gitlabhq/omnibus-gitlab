@@ -20,3 +20,33 @@ unicorn_service 'unicorn' do
   rails_app 'gitlab-rails'
   user node['gitlab']['user']['username']
 end
+
+if File.directory?("/etc/sysctl.d") && File.exists?("/etc/init.d/procps")
+  # smells like ubuntu...
+  service "procps" do
+    action :nothing
+  end
+
+  template "/etc/sysctl.d/90-unicorn.conf" do
+    source "90-unicorn.conf.sysctl.erb"
+    owner "root"
+    mode  "0644"
+    variables(node['gitlab']['unicorn'].to_hash)
+    notifies :start, 'service[procps]', :immediately
+  end
+else
+  # hope this works...
+  execute "sysctl" do
+    command "/sbin/sysctl -p /etc/sysctl.conf"
+    action :nothing
+  end
+
+  bash "add somaxconn settings" do
+    user "root"
+    code <<-EOF
+      echo 'net.core.somaxconn = #{node['gitlab']['unicorn']['somaxconn']}' >> /etc/sysctl.conf
+    EOF
+    notifies :run, 'execute[sysctl]', :immediately
+    not_if "egrep '^net.core.somaxconn = ' /etc/sysctl.conf"
+  end
+end

@@ -7,3 +7,4 @@
 - [Environment variables](environment-variables.md).
 - [gitlab.yml](gitlab.yml.md)
 - [Redis](redis.md)
+- [Database](database.md)

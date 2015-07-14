@@ -6,7 +6,8 @@ DEST_DIR=<%= install_dir %>
 case "$1" in
   0)
     # RPM install/upgrade
-    ln -sf ${DEST_DIR}/embedded/service/gitlab-shell/.gitlab_shell_secret ${DEST_DIR}/embedded/service/gitlab-rails/.gitlab_shell_secret
+    ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+    ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)
     # Noop.

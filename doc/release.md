@@ -29,11 +29,21 @@ support/set-revisions v6.6.0 v6.6.0 v1.2.3
 git commit -v config/software
 ```
 
-- Create an annotated tag on omnibus-gitlab corresponding to the GitLab tag.
-  GitLab tag `v6.6.0` becomes omnibus-gitlab tag `6.6.0.omnibus`.
+Create an annotated tag on omnibus-gitlab corresponding to the GitLab tag.  The
+omnibus tag looks like: `MAJOR.MINOR.PATCH+OTHER.OMNIBUS_RELEASE`, where
+`MAJOR.MINOR.PATCH` is the GitLab version, `OTHER` can be something like `ce`,
+`ee` or `rc1` (or `rc1.ee`), and `OMNIBUS_RELEASE` is a number (starting at 0).
+
+> Do NOT use `-` in the omnibus-gitlab tag anywhere.
+
+Example tags, with 'upstream tag => omnibus tag sequence':
+
+- `v7.10.4` => `7.10.4+ce.0`, `7.10.4+ce.1`, ...
+- `v7.10.4-ee` => `7.10.4+ee.0`, `7.10.4+ee.1`, ...
+- `v7.11.0.rc1-ee` => `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, ...
 
 ```shell
-git tag -a 6.6.0.omnibus -m 'Pin GitLab to v6.6.0'
+git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
 ```
 
 - Push the branch and the tag to the main repository and dev.gitlab.org.
