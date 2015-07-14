@@ -8,3 +8,4 @@
 - [gitlab.yml](gitlab.yml.md)
 - [Redis](redis.md)
 - [Database](database.md)
+- [Logs](logs.md)

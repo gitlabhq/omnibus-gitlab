@@ -27,6 +27,7 @@
 - [Environment variables](settings/environment-variables.md).
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Redis](settings/redis.md)
+- [Logs](settings/logs.md)
 
 ## Troubleshooting
 
