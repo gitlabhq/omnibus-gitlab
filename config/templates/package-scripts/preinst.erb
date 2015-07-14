@@ -25,15 +25,18 @@ main() {
   fi
 
   if [ -d ${DEST_DIR}/service/ci-unicorn ] ; then
-    notify "Backing up GitLab CI SQL database"
-    if ! ${DEST_DIR}/bin/gitlab-ci-rake backup:create ; then
-      notify
-      notify "Backup failed! If you want to skip this backup, run the following command and"
-      notify "try again:"
-      notify
-      notify "  sudo touch ${skip_migrations_file}"
-      notify
-      exit 1
+    if ${DEST_DIR}/bin/gitlab-ci-rake -T | grep backup:create ; then
+      # We are upgrading from a version which has CI backup task
+      notify "Backing up GitLab CI SQL database"
+      if ! ${DEST_DIR}/bin/gitlab-ci-rake backup:create ; then
+        notify
+        notify "Backup failed! If you want to skip this backup, run the following command and"
+        notify "try again:"
+        notify
+        notify "  sudo touch ${skip_migrations_file}"
+        notify
+        exit 1
+      fi
     fi
   fi
 }
