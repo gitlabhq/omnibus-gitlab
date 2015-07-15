@@ -28,6 +28,14 @@ describe Gitlab::BuildIteration do
       end
     end
 
+    context 'with a git_describe with new line char' do
+      let(:git_describe) { "1.2.3+foo.4\n" }
+
+      it 'returns foo.4' do
+        expect(subject.build_iteration).to eq('foo.4')
+      end
+    end
+
     context 'with multiple plus signs' do
       let(:git_describe) { '1.2.3+foo.4+bar' }
 

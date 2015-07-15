@@ -4,6 +4,7 @@ module Gitlab
   class BuildIteration
     def initialize(git_describe=nil)
       @git_describe = git_describe || `git describe`
+      @git_describe = @git_describe.chomp
     end
 
     def build_iteration
