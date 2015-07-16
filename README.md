@@ -204,66 +204,66 @@ To remove all users and groups created by omnibus-gitlab, before removing the gi
 
 ### Common installation problems
 
-This section has been moved to the separate document [doc/common_installation_problems.md](doc/common_installation_problems.md).
+This section has been moved to the separate document [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md).
 
 Section below remains for historical reasons(mainly to not break existing links). Each section contains the link to the new location.
 
 ##### Apt error 'The requested URL returned error: 403'
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#apt-error-the-requested-url-returned-error-403).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 
 ##### GitLab is unreachable in my browser
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#gitlab-is-unreachable-in-my-browser).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 
 ##### GitLab CI shows GitLab login page
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#gitlab-ci-shows-gitlab-login-page).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-ci-shows-gitlab-login-page).
 
 ##### Emails are not being delivered
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#emails-are-not-being-delivered).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#emails-are-not-being-delivered).
 
 ##### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 
 ##### TCP ports for GitLab services are already taken
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#tcp-ports-for-gitlab-services-are-already-taken).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
 
 ##### Git SSH access stops working on SELinux-enabled systems
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#git-ssh-access-stops-working-on-selinux-enabled-systems
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#git-ssh-access-stops-working-on-selinux-enabled-systems
 ).
 
 ##### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#postgres-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#postgres-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
 
 ##### Reconfigure complains about the GLIBC version
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#reconfigure-complains-about-the-glibc-version).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
 
 ##### Reconfigure fails to create the git user
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#reconfigure-fails-to-create-the-git-user).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 
 ##### Failed to modify kernel parameters with sysctl
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#failed-to-modify-kernel-parameters-with-sysctl).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
 
 ##### I am unable to install omnibus-gitlab without root access
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
 
 ##### gitlab-rake assets:precompile fails with 'Permission denied'
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 
 ##### 'Short read or OOM loading DB' error
 
-See [doc/common_installation_problems.md](doc/common_installation_problems.mdr#short-read-or-oom-loading-db-error).
+See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#short-read-or-oom-loading-db-error).
 
 
 ### Backups
