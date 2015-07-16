@@ -37,7 +37,7 @@
 ## Omnibus GitLab developer documentation
 
 - [Development Setup](development.md)
-- [Release process](release.md)
+- [Release process](doc/release/README.md)
 - [Building your own package](build.md)
 
 
