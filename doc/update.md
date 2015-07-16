@@ -22,7 +22,7 @@ See [doc/update/README.md.](doc/update/README.md#updating-from-gitlab-660pre1-to
 
 See [doc/update/README.md.](doc/update/README.md#reverting-to-gitlab-66x-or-later)
 
-### Upgrading from a non-Omnibus installation to an Omnibus installation
+#### Upgrading from a non-Omnibus installation to an Omnibus installation
 
 See [doc/update/README.md.](doc/update/README.md#upgrading-from-a-non-omnibus-installation-to-an-omnibus-installation)
 
@@ -34,15 +34,15 @@ See [doc/update/README.md.](doc/update/README.md#upgrading-from-non-omnibus-post
 
 See [doc/update/README.md.](doc/update/README.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
 
-### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
+#### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 
 See [doc/update/README.md.](doc/update/README.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
 
-### RPM 'package is already installed' error
+#### RPM 'package is already installed' error
 
 See [doc/update/README.md.](doc/update/README.md#rpm-package-is-already-installed-error)
 
-# Updating GitLab CI via omnibus-gitlab
-## Updating from GitLab CI version prior to 5.4.0 to the latest version
+#### Updating GitLab CI via omnibus-gitlab
+#### Updating from GitLab CI version prior to 5.4.0 to the latest version
 
 See [doc/update/README.md.](doc/update/README.md#updating-from-gitlab-ci-version-prior-to-540-to-the-latest-version)
