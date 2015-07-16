@@ -27,6 +27,17 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 To setup GitLab CI please see the [separate GitLab CI
 documentation](doc/gitlab-ci/README.md).
 
+## Installation
+
+Please follow the steps on the [downloads page][downloads].
+
+### After installation
+
+Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
+You can login as an admin user with username `root` and password `5iveL!fe`.
+
+See [doc/maintenance/README.md](doc/maintenance/README.md) for useful commands to control/debug your GitLab instance.
+
 ### Configuration options
 
 See [doc/settings/configuration.md](doc/settings/configuration.md).
@@ -112,72 +123,6 @@ See [doc/settings/nginx.md](doc/settings/nginx.md).
 ##### Only start omnibus-gitlab services after a given filesystem is mounted
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted).
-
-## Installation
-
-Please follow the steps on the [downloads page][downloads].
-
-### After installation
-
-Run `sudo gitlab-ctl status`; the output should look like this:
-
-```
-run: nginx: (pid 972) 7s; run: log: (pid 971) 7s
-run: postgresql: (pid 962) 7s; run: log: (pid 959) 7s
-run: redis: (pid 964) 7s; run: log: (pid 963) 7s
-run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
-run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
-```
-
-If any of the processes is not behaving like expected, try tailing their logs
-to see what is wrong.
-
-```
-sudo gitlab-ctl tail postgresql
-```
-
-Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
-You can login as an admin user with username `root` and password `5iveL!fe`.
-
-#### Starting and stopping
-
-After omnibus-gitlab is installed and configured, your server will have a Runit
-service directory (`runsvdir`) process running that gets started at boot via
-`/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource.  You
-should not have to deal with the `runsvdir` process directly; you can use the
-`gitlab-ctl` front-end instead.
-
-You can start, stop or restart GitLab and all of its components with the
-following commands.
-
-```shell
-# Start all GitLab components
-sudo gitlab-ctl start
-
-# Stop all GitLab components
-sudo gitlab-ctl stop
-
-# Restart all GitLab components
-sudo gitlab-ctl restart
-```
-
-Note that on a single-core server it may take up to a minute to restart Unicorn
-and Sidekiq. Your GitLab instance will give a 502 error until Unicorn is up
-again.
-
-It is also possible to start, stop or restart individual components.
-
-```shell
-sudo gitlab-ctl restart sidekiq
-```
-
-Unicorn supports zero-downtime reloads. These can be triggered as follows:
-
-```shell
-sudo gitlab-ctl hup unicorn
-```
-
-Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ### Updating
 
@@ -292,19 +237,7 @@ For details check [backup restore document of GitLab CE](https://gitlab.com/gitl
 
 ## Invoking Rake tasks
 
-To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
-`gitlab-ci-rake` (for GitLab CI). For example:
-
-```shell
-sudo gitlab-rake gitlab:check
-sudo gitlab-ci-rake -T
-```
-
-Leave out 'sudo' if you are the 'git' user or the 'gitlab-ci' user.
-
-Contrary to with a traditional GitLab installation, there is no need to change
-the user or the `RAILS_ENV` environment variable; this is taken care of by the
-`gitlab-rake` and `gitlab-ci-rake` wrapper scripts.
+See [doc/maintenance/README.md](doc/maintenance/README.md#invoking-rake-tasks).
 
 ## Directory structure
 
@@ -355,22 +288,6 @@ See [doc/settings/logs.md](doc/settings/logs.md#logrotate).
 ##### UDP log shipping (GitLab Enterprise Edition only)
 
 See [doc/settings/logs.md](doc/settings/logs.md#udp-log-shipping-gitlab-enterprise-edition-only)
-
-## Starting a Rails console session
-
-If you need access to a Rails production console for your GitLab installation
-you can start one with the command below. Please be warned that it is very easy
-to inadvertently modify, corrupt or destroy data from the console.
-
-```shell
-# start a Rails console for GitLab
-sudo gitlab-rails console
-
-# start a Rails console for GitLab CI
-sudo gitlab-ci-rails console
-```
-
-This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
