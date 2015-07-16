@@ -390,14 +390,14 @@ See [doc/settings/database.md](doc/settings/database.md).
 
 ## Building your own package
 
-See [the separate build documentation](doc/build.md).
+See [the separate build documentation](doc/build/README.md).
 
 ## Running a custom GitLab version
 
 It is not recommended to make changes to any of the files in `/opt/gitlab`
 after installing omnibus-gitlab: they will either conflict with or be
 overwritten by future updates. If you want to run a custom version of GitLab
-you can [build your own package](doc/build.md) or use [another installation
+you can [build your own package](doc/build/README.md) or use [another installation
 method][CE README].
 
 ## Acknowledgments

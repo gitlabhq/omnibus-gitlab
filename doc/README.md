@@ -38,7 +38,7 @@
 
 - [Development Setup](doc/development/README.md)
 - [Release process](doc/release/README.md)
-- [Building your own package](build.md)
+- [Building your own package](doc/build/README.md)
 
 
 
