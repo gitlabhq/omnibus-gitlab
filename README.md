@@ -181,7 +181,7 @@ Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ### Updating
 
-Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update.md).
+Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update/README.md).
 
 ### Uninstalling omnibus-gitlab
 
