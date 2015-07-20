@@ -170,7 +170,7 @@ ci_nginx['listen_https'] = false
 ```
 
 Note that you may need to configure your reverse proxy to forward certain
-headers (e.g. `Host`, `X-Forwarded-Ssl'`, `X-Forwarded-For``) to GitLab. You
+headers (e.g. `Host`, `X-Forwarded-Ssl'`, `X-Forwarded-For`, `X-Forwarded-Port`) to GitLab. You
 may see improper redirections or errors (e.g. "422 Unprocessable Entity",
 "Can't verify CSRF token authenticity") if you forget this step. For more
 information, see:
