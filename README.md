@@ -10,13 +10,9 @@ The source of omnibus-gitlab is [hosted on
 GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab) and there are mirrors
 to make contributing as easy as possible.
 
-## Documentation version
+## Documentation
 
-Please make sure you are viewing the documentation for the version of
-omnibus-gitlab you are using. In most cases this should be the highest numbered
-stable branch (example shown below).
-
-![documentation version](doc/images/omnibus-documentation-version.png)
+The documentation overview is in the [readme in the doc directory](doc/README.md).
 
 ## Omnibus fork
 
