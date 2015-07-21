@@ -2,6 +2,16 @@
 
 ### Backup and restore omnibus-gitlab configuration
 
+It is recommended to keep a copy of `/etc/gitlab`, or at least of
+`/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
+need to restore a GitLab application backup you need to also restore
+`gitlab-secrets.json`. If you do not, GitLab users who are using
+two-factor authentication will loose access to your GitLab server
+and 'secure variables' stored in GitLab CI will be lost.
+
+It is not recommended to store your configuration backup in the
+same place as your application data abckup, see below.
+
 All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
 configuration, just backup this directory.
 
@@ -26,6 +36,21 @@ backup.
 
 NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
+#### Separate configuration backups from application data
+
+Do not store your GitLab application backups (Git repositories, SQL
+data) in the same place as your configuration backup (`/etc/gitlab`).
+The `gitlab-secrets.json` file (and possibly also the `gitlab.rb`
+file) contain database encryption keys to protect sensitive data
+in the SQL database:
+
+- GitLab two-factor authentication (2FA) user secrets ('QR codes')
+- GitLab CI 'secure variables'
+
+If you keep your configuration backup in a different place from
+your application data backup you reduce the chances of exposing the
+sensitive data mentioned above in case one of your application
+backups is lost/leaked/stolen.
 
 ### Creating an application backup
 
