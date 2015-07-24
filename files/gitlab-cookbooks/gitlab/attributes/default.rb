@@ -21,6 +21,7 @@
 ####
 default['gitlab']['bootstrap']['enable'] = true
 default['gitlab']['omnibus-gitconfig']['system'] = {
+  "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true"]
  }
 
