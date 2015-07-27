@@ -17,6 +17,13 @@
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 
+dependent_services = []
+dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
+dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
+dependent_services << "service[ci-sidekiq]" if OmnibusHelper.should_notify?("ci-sidekiq")
+dependent_services << "service[ci-unicorn]" if OmnibusHelper.should_notify?("ci-unicorn")
+
+
 execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
@@ -31,9 +38,11 @@ end
 migrate_database 'gitlab-rails' do
   command '/opt/gitlab/bin/gitlab-rake db:migrate'
   action :nothing
+  restarts dependent_services
 end
 
 migrate_database 'gitlab-ci' do
   command '/opt/gitlab/bin/gitlab-ci-rake db:migrate'
   action :nothing
+  restarts dependent_services
 end
