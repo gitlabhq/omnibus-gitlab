@@ -71,8 +71,8 @@ template_symlink File.join(gitlab_rails_dir, "config.ru") do
   link_from File.join(gitlab_rails_source_dir, "config.ru")
   source "gitlab-rails-config.ru.erb"
   owner "root"
-  group node['gitlab']['web-server']['group']
-  mode "0654"
+  group "root"
+  mode "0644"
   variables(node['gitlab']['unicorn'].to_hash)
   restarts dependent_services
 end
