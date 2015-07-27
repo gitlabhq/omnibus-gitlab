@@ -27,6 +27,7 @@
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
+- [Database](settings/database.md)
 
 ## Updating
 
@@ -56,6 +57,7 @@
 - [I am unable to install omnibus-gitlab without root access](common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
 - [gitlab-rake assets:precompile fails with 'Permission denied'](common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 - ['Short read or OOM loading DB' error](common_installation_problems/README.md#short-read-or-oom-loading-db-error).
+- ['pg_dump: aborting because of server version mismatch'](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
 
 ## Omnibus GitLab developer documentation
 
