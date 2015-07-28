@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :migrate_database, :command => nil, :action => :run do
+define :migrate_database, :command => nil, :action => :run, :restarts => [] do
   bash "migrate #{params[:name]} database" do
     code <<-EOH
       set -e
@@ -26,5 +26,8 @@ define :migrate_database, :command => nil, :action => :run do
       exit ${PIPESTATUS[0]}
     EOH
     action params[:action]
+    params[:restarts].each do |svc|
+      notifies :restart, svc, :immediately
+    end
   end
 end
