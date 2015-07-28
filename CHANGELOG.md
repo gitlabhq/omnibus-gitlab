@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.13.2
+
+- Move config.ru out of etc directory to prevent passenger problems 5ee0ac221485ce0e385f4999838f319ba65755ed
+- Fix merge gone wrong to include upgrade to redis 2.8.21 528400090ed82ff212f08c4402c0b4681f91dc2e
+
+7.13.1
+
+- No changes
+
 7.13.0
 
 - IMPORTANT: Default number of unicorn workers is at minimum 2, maximum number is calculated to leave 1GB of RAM free 2f623a5e9b6d8c64b9ac30cd656a4e852895fcf0
