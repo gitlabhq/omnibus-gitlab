@@ -10,7 +10,7 @@ two-factor authentication will loose access to your GitLab server
 and 'secure variables' stored in GitLab CI will be lost.
 
 It is not recommended to store your configuration backup in the
-same place as your application data abckup, see below.
+same place as your application data backup, see below.
 
 All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
 configuration, just backup this directory.
