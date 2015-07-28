@@ -67,7 +67,7 @@ dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sideki
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
 
-template_symlink File.join(gitlab_rails_etc_dir, "config.ru") do
+template_symlink File.join(gitlab_rails_dir, "config.ru") do
   link_from File.join(gitlab_rails_source_dir, "config.ru")
   source "gitlab-rails-config.ru.erb"
   owner "root"
