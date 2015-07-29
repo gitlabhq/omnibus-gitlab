@@ -4,7 +4,7 @@
 
 ### Warning
 
-The Nginix config will tell browsers and clients to only communicate with your
+The Nginx config will tell browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 24 months. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
