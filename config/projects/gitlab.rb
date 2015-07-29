@@ -74,6 +74,7 @@ dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
 dependency "gitlab-scripts"
 dependency "gitlab-config-template"
+dependency "mattermost"
 
 # version manifest file
 dependency "version-manifest"
