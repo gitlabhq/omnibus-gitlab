@@ -47,3 +47,22 @@ template File.join(gitlab_home, ".gitconfig") do
   mode "0644"
   variables(node['gitlab']['user'].to_hash)
 end
+
+# Mattermost
+
+mattermost_home = "#{gitlab_home}/mattermost"
+
+directory mattermost_home do
+  recursive true
+end
+
+group 'mattermost' do
+  system true
+end
+
+user 'mattermost' do
+  shell '/bin/sh'
+  home mattermost_home
+  gid 'mattermost'
+  system true
+end
