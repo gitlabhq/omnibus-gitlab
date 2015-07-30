@@ -8,10 +8,10 @@ main() {
   if [ "$ee" = "1" ] ; then
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlab-ee.git 
   else
-    gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlabhq.git 
+    gitlab_rails_repo=https://github.com/liamdawson/gitlabhq.git 
   fi
-  gitlab_ci_repo=git@dev.gitlab.org:gitlab/gitlab-ci.git
-  gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
+  gitlab_ci_repo=https://github.com/liamdawson/gitlab-ci.git
+  gitlab_shell_repo=https://github.com/liamdawson/gitlab-shell.git
 
   gitlab_rails_oid=$(fetch_oid gitlab_rails)
   assert_non_empty gitlab_rails_oid
