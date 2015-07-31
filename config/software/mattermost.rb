@@ -35,11 +35,18 @@ build do
     "GOPATH" => gopath
   )
 
+  gem "install compass -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v 1.0.3", env: env
+
   command "go get github.com/tools/godep", env: env
   command "#{gopath}/bin/godep restore", env: env
 
-  gem "install compass -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v 1.0.3", env: env
+  command "#{install_dir}/embedded/bin/compass compile", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/sass-files"
+  command "#{install_dir}/embedded/bin/npm install", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/react"
+  command "#{install_dir}/embedded/bin/npm build", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/react"
 
   command "go build mattermost.go", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform"
   move "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/mattermost", "#{install_dir}/embedded/bin/"
+
+  command "mkdir -p #{install_dir}/embedded/service/mattermost"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/mattermost/"
 end
