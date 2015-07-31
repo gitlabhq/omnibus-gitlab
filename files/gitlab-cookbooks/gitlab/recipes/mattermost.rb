@@ -19,10 +19,11 @@
 gitlab_home = node['gitlab']['user']['home']
 
 mattermost_home = "#{gitlab_home}/mattermost"
-mattermost_user = node['mattermost']['username'] = 'mattermost'
+mattermost_user = node['mattermost']['username']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 
 directory mattermost_home do
+  owner mattermost_user
   recursive true
 end
 
