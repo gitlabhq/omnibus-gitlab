@@ -115,3 +115,9 @@ include_recipe "runit"
 end
 
 include_recipe "gitlab::database_migrations"
+
+# TODO: mattermost configuration
+
+if true
+  include_recipe "gitlab::mattermost"
+end

@@ -67,6 +67,4 @@ template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
   mode "0644"
-  #variables(node['gitlab']['postgresql'].to_hash)
-  #notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end
