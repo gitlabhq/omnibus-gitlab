@@ -50,6 +50,7 @@ override :rubygems, version: '2.2.5', source: { md5: "7701b5bc348d8da41a511ac012
 override :chef, version: '12.4.0.rc.2'
 override :cacerts, version: '2015.04.22', source: { md5: '380df856e8f789c1af97d0da9a243769' }
 override :openssl, version: '1.0.1p', source: { url: 'https://www.openssl.org/source/openssl-1.0.1p.tar.gz', md5: '7563e92327199e0067ccd0f79f436976' }
+override :nodejs, version: '0.12.7', source: { md5: '5523ec4347d7fe6b0f6dda1d1c7799d5' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
