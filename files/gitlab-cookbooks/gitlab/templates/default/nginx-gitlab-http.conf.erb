@@ -34,6 +34,12 @@ upstream gitlab {
   server unix:<%= @socket %> fail_timeout=0;
 }
 
+<% if node['gitlab']['gitlab-git-http-server']['enable'] %>
+upstream gitlab-git-http-server {
+  server unix:<%= node['gitlab']['gitlab-git-http-server']['listen_addr'] %>;
+}
+<% end %>
+
 <% if @https && @redirect_http_to_https %>
 ## Redirects all HTTP traffic to the HTTPS host
 server {
@@ -136,6 +142,30 @@ server {
 
     proxy_pass http://gitlab;
   }
+
+<% if node['gitlab']['gitlab-git-http-server']['enable'] %>
+  location ~ [-\/\w\.]+\.git\/ {
+    ## If you use HTTPS make sure you disable gzip compression
+    ## to be safe against BREACH attack.
+    <%= 'gzip off;' if @https %>
+
+    ## https://github.com/gitlabhq/gitlabhq/issues/694
+    ## Some requests take more than 30 seconds.
+    proxy_read_timeout      300;
+    proxy_connect_timeout   300;
+    proxy_redirect          off;
+
+    proxy_set_header    Host                $http_host;
+    proxy_set_header    X-Real-IP           $remote_addr;
+    <% if @https %>
+    proxy_set_header    X-Forwarded-Ssl     on;
+    <% end %>
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+    proxy_set_header    X-Forwarded-Proto   $scheme;
+
+    proxy_pass http://gitlab-git-http-server;
+  }
+<% end %>
 
   ## Enable gzip compression as per rails guide:
   ## http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
