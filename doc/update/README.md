@@ -70,7 +70,7 @@ sudo gitlab-ctl restart
 
 Done!
 
-#### Troube? Check status details
+#### Trouble? Check status details
 
 ```
 sudo gitlab-ctl status
