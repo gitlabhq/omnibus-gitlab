@@ -2,6 +2,24 @@
 
 Below you can find the most common issues users encounter when installing omnibus-gitlab packages.
 
+### Hash Sum mismatch when downloading packages
+
+apt-get install outputs something like:
+
+```
+E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trusty/main/g/gitlab-ce/gitlab-ce_7.12.0~omnibus.1-1_amd64.deb  Hash Sum mismatch
+```
+
+Please run the following to fix this:
+
+```
+sudo rm -rf /var/lib/apt/lists/partial/*
+sudo apt-get update
+sudo apt-get clean
+```
+
+See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) for more context.
+
 ### GitLab is unreachable in my browser
 
 Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
