@@ -27,7 +27,7 @@ end
 
 # Reload the configuration to ensure the new conf file is loaded
 execute "initctl reload-configuration" do
-  command "initctl repload-configuration"
+  command "initctl reload-configuration"
 end
 
 # Keep on trying till the job is found :(
