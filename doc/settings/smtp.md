@@ -8,7 +8,7 @@ There are [example configurations](#examples) at the end of this page.
 ```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.server"
-gitlab_rails['smtp_port'] = 456
+gitlab_rails['smtp_port'] = 465
 gitlab_rails['smtp_user_name'] = "smtp user"
 gitlab_rails['smtp_password'] = "smtp password"
 gitlab_rails['smtp_domain'] = "example.com"
