@@ -20,7 +20,8 @@ gitlab = node['gitlab']
 mattermost_user = gitlab['mattermost']['username']
 mattermost_group = gitlab['mattermost']['group']
 mattermost_home = gitlab['mattermost']['home']
-mattermost_log_dir =  gitlab['mattermost']['log_directory']
+mattermost_log_dir = gitlab['mattermost']['log_directory']
+mattermost_storage_directory = gitlab['mattermost']['service_storage_directory']
 
 ###
 # Create group and user that will be running mattermost
@@ -42,7 +43,8 @@ end
 
 [
   mattermost_home,
-  mattermost_log_dir
+  mattermost_log_dir,
+  mattermost_storage_directory
 ].compact.each do |dir|
   directory dir do
     owner mattermost_user
@@ -84,6 +86,7 @@ end
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
+  variables gitlab['mattermost'].to_hash
   mode "0644"
 end
 

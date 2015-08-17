@@ -510,5 +510,25 @@ default['gitlab']['mattermost']['enable'] = true
 default['gitlab']['mattermost']['username'] = 'mattermost'
 default['gitlab']['mattermost']['group'] = 'mattermost'
 default['gitlab']['mattermost']['home'] = '/var/opt/gitlab/mattermost'
-default['gitlab']['mattermost']['log_directory'] = '/var/log/gitlab/mattermost'
 default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
+
+default['gitlab']['mattermost']['log_directory'] = '/var/log/gitlab/mattermost'
+default['gitlab']['mattermost']['log_console_enable'] = true
+default['gitlab']['mattermost']['log_console_level'] = 'INFO'
+default['gitlab']['mattermost']['log_file_enable'] = true
+default['gitlab']['mattermost']['log_file_level'] = 'INFO'
+default['gitlab']['mattermost']['log_file_format'] = nil
+
+default['gitlab']['mattermost']['service_site_name'] = "GitLab Mattermost"
+default['gitlab']['mattermost']['service_mode'] = 'beta'
+default['gitlab']['mattermost']['service_allow_testing'] = false
+default['gitlab']['mattermost']['service_use_ssl'] = false
+default['gitlab']['mattermost']['service_port'] = "8065"
+default['gitlab']['mattermost']['service_version'] = "developer"
+default['gitlab']['mattermost']['service_invite_salt'] = "gxHVDcKUyP2y1eiyW8S8na1UYQAfq6J6"
+default['gitlab']['mattermost']['service_public_link_salt'] = "TO3pTyXIZzwHiwyZgGql7lM7DG3zeId4"
+default['gitlab']['mattermost']['service_reset_salt'] = "IPxFzSfnDFsNsRafZxz8NaYqFKhf9y2t"
+default['gitlab']['mattermost']['service_analytics_url'] = nil
+default['gitlab']['mattermost']['service_use_local_storage'] = true
+default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
+default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10

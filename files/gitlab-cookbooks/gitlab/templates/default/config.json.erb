@@ -1,28 +1,26 @@
 {
     "LogSettings": {
-        "ConsoleEnable": true,
-        "ConsoleLevel": "DEBUG",
-        "FileEnable": true,
-        "FileLevel": "INFO",
-        "FileFormat": "",
-        "FileLocation": "/var/log/gitlab/mattermost/mattermost.log"
+        "ConsoleEnable": <%= @log_console_enable %>,
+        "ConsoleLevel": "<%= @log_console_level %>",
+        "FileEnable": <%= @log_file_enable %>,
+        "FileLevel": "<%= @log_file_level %>",
+        "FileFormat": "<%= @log_file_format %>",
+        "FileLocation": "<%= @log_directory %>/mattermost.log"
     },
     "ServiceSettings": {
-        "SiteName": "Mattermost",
-        "Mode" : "prod",
-    "AllowTesting" : false,
-        "UseSSL": false,
-        "Port": "8065",
-        "Version": "developer",
-        "Shards": {
-        },
-        "InviteSalt": "gxHVDcKUyP2y1eiyW8S8na1UYQAfq6J6",
-        "PublicLinkSalt": "TO3pTyXIZzwHiwyZgGql7lM7DG3zeId4",
-        "ResetSalt": "IPxFzSfnDFsNsRafZxz8NaYqFKhf9y2t",
-        "AnalyticsUrl": "",
-        "UseLocalStorage": true,
-        "StorageDirectory": "./data/",
-        "AllowedLoginAttempts": 10
+        "SiteName": "<%= @service_site_name %>",
+        "Mode" : "<%= @service_mode %>",
+        "AllowTesting" : <%= @service_allow_testing %>,
+        "UseSSL": <%= @service_use_ssl %>,
+        "Port": "<%= @service_port %>",
+        "Version": "<%= @service_version %>",
+        "InviteSalt": "<%= @service_invite_salt %>",
+        "PublicLinkSalt": "<%= @service_public_link_salt %>",
+        "ResetSalt": "<%= @service_reset_salt %>",
+        "AnalyticsUrl": "<%= @service_analytics_url %>",
+        "UseLocalStorage": <%= @service_use_local_storage %>,
+        "StorageDirectory": "<%= @service_storage_directory %>",
+        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>
     },
     "SSOSettings": {
         "gitlab": {
@@ -50,12 +48,13 @@
         "S3Region": ""
     },
     "ImageSettings": {
-        "ThumbnailWidth": 200,
-        "ThumbnailHeight": 0,
+        "ThumbnailWidth": 120,
+        "ThumbnailHeight": 100,
         "PreviewWidth": 1024,
         "PreviewHeight": 0,
         "ProfileWidth": 128,
-        "ProfileHeight": 128
+        "ProfileHeight": 128,
+        "InitialFont": "luximbi.ttf"
     },
     "EmailSettings": {
         "ByPassEmail" : true,
@@ -68,6 +67,13 @@
         "ApplePushServer": "",
         "ApplePushCertPublic": "",
         "ApplePushCertPrivate": ""
+    },
+    "RateLimitSettings": {
+        "UseRateLimiter": true,
+        "PerSec": 10,
+        "MemoryStoreSize": 10000,
+        "VaryByRemoteAddr": true,
+        "VaryByHeader": ""
     },
     "PrivacySettings": {
         "ShowEmailAddress": true,
