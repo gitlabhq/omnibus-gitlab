@@ -1,0 +1,26 @@
+#!/bin/sh
+
+main()
+{
+  assert_non_empty pre_sleep
+  assert_non_empty post_sleep
+  assert_non_empty dir
+
+  # Sleep a bit to avoid going nuts after gitlab just started.
+  sleep ${pre_sleep}
+
+  nice /opt/gitlab/embedded/sbin/logrotate -s ${dir}/logrotate.status logrotate.conf
+
+  # Sleep some more. After this, the script exits to be restarted by Runit.
+  sleep ${post_sleep}
+}
+
+assert_non_empty()
+{
+  if [ -z "$(eval echo \$$1)" ] ; then
+    echo "$0 error: \$$1 is empty"
+    exit 1
+  fi
+}
+
+main
