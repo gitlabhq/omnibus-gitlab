@@ -72,3 +72,10 @@ template "#{mattermost_home}/config.json" do
   owner mattermost_user
   mode "0644"
 end
+
+runit_service "mattermost" do
+  options({
+    :log_directory => mattermost_log_dir
+  }.merge(params))
+  log_options node['gitlab']['logging'].to_hash
+end

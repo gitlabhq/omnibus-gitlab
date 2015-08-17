@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+cd /opt/gitlab/embedded/service/mattermost
+exec chpst -P -U mattermost -u mattermost /opt/gitlab/embedded/bin/mattermost -config /var/opt/gitlab/mattermost/config.json
