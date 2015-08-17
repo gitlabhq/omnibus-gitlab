@@ -17,42 +17,18 @@
 #
 
 name "mattermost"
-default_version "63a17cf4f6c23ccd32a569194956425f22c761d6"
+default_version "v0.6.0"
 
-source :git => "https://github.com/mattermost/platform.git"
-
-relative_path "golang/src/github.com/mattermost/platform"
-
-dependency "rubygems"
+source url: "https://github.com/mattermost/platform/releases/download/#{version}/mattermost.tar.gz",
+       md5: '9731b432644862d2025c68afabc852f5'
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
-  gopath = "#{Omnibus::Config.source_dir}/golang"
-  command "mkdir -p #{gopath}"
-
-  env.merge!(
-    "GOPATH" => gopath
-  )
-
-  gem "install compass -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v 1.0.3", env: env
-
-  command "go get github.com/tools/godep", env: env
-  command "#{gopath}/bin/godep restore", env: env
-
-  command "#{install_dir}/embedded/bin/compass compile", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/sass-files"
-  command "#{install_dir}/embedded/bin/npm install", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/react"
-  # Cannot use npm build because the path to uglifyjs is not in PATH
-  command "NODE_ENV=production ./node_modules/browserify/bin/cmd.js ./**/*.jsx | ./node_modules/uglify-js/bin/uglifyjs  > ../static/js/bundle.min.js", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/web/react"
-
-  command "go build mattermost.go", env: env, cwd: "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform"
-  move "#{Omnibus::Config.source_dir}/golang/src/github.com/mattermost/platform/mattermost", "#{install_dir}/embedded/bin/"
-
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./web/static/js/bundle.min.js ./web/static/js/bundle.js"
+  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./web/static/js/bundle-741.min.js ./web/static/js/bundle.js"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./api/templates #{install_dir}/embedded/service/mattermost/api/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./web/static #{install_dir}/embedded/service/mattermost/web/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./web/templates #{install_dir}/embedded/service/mattermost/web/"
-
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./api/templates #{install_dir}/embedded/service/mattermost/api/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/static #{install_dir}/embedded/service/mattermost/web/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/templates #{install_dir}/embedded/service/mattermost/web/"
 end
