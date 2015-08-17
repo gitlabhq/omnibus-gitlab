@@ -19,6 +19,7 @@
 gitlab_home = node['gitlab']['user']['home']
 
 mattermost_home = "#{gitlab_home}/mattermost"
+mattermost_log_dir = "/var/log/gitlab/mattermost"
 mattermost_user = node['mattermost']['username']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 
@@ -33,9 +34,12 @@ user mattermost_user do
   system true
 end
 
-directory mattermost_home do
-  owner mattermost_user
-  recursive true
+[ mattermost_home, mattermost_log_dir ].compact.each do |dir|
+
+  directory dir do
+    owner mattermost_user
+    recursive true
+  end
 end
 
 ###

@@ -5,7 +5,7 @@
         "FileEnable": true,
         "FileLevel": "INFO",
         "FileFormat": "",
-        "FileLocation": "/var/opt/gitlab/mattermost/mattermost.log"
+        "FileLocation": "/var/log/gitlab/mattermost/mattermost.log"
     },
     "ServiceSettings": {
         "SiteName": "Mattermost",
@@ -21,7 +21,8 @@
         "ResetSalt": "IPxFzSfnDFsNsRafZxz8NaYqFKhf9y2t",
         "AnalyticsUrl": "",
         "UseLocalStorage": true,
-        "StorageDirectory": "./data/"
+        "StorageDirectory": "./data/",
+        "AllowedLoginAttempts": 10
     },
     "SSOSettings": {
         "gitlab": {
