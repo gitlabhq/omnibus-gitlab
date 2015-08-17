@@ -21,7 +21,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Storing Git data in an alternative directory
 
-By default, omnibus-gitlab stores Git repository data under
+By default, Omnibus-GitLab stores Git repository data under
 `/var/opt/gitlab/git-data`: repositories are stored in
 `/var/opt/gitlab/git-data/repositories`, and satellites in
 `/var/opt/gitlab/git-data/gitlab-satellites`.  You can change the location of
@@ -62,7 +62,7 @@ sudo gitlab-ctl start
 
 ### Changing the name of the Git user / group
 
-By default, omnibus-gitlab uses the user name `git` for Git gitlab-shell login,
+By default, Omnibus-GitLab uses the user name `git` for Git GitLab-shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
 Similarly, `git` group is used for group ownership of the Git data.  You can
 change the user and group by adding the following lines to
@@ -77,7 +77,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Specify numeric user and group identifiers
 
-Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+Omnibus-GitLab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
 specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
 follows.
 
@@ -94,9 +94,9 @@ web_server['gid'] = 1237
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Only start omnibus-gitlab services after a given filesystem is mounted
+## Only start Omnibus-GitLab services after a given filesystem is mounted
 
-If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
+If you want to prevent Omnibus-GitLab services (NGINX, Redis, Unicorn etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -109,62 +109,62 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Setting up LDAP sign-in
 
-See [doc/settings/ldap.md](doc/settings/ldap.md).
+See [LDAP](ldap.md).
 
 ### Enable HTTPS
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#enable-https).
+See [NGINX](nginx.md#enable-https).
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-https).
+See [NGINX](nginx.md#redirect-http-requests-to-https).
 
 #### Change the default port and the ssl certificate locations.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+See [NGINX](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
 ### Use non-packaged web-server
 
-For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [NGINX](nginx.md#using-a-non-bundled-web-server).
 
 ## Using a non-packaged PostgreSQL database management server
 
-To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+To connect to an external PostgreSQL or MySQL DBMS see [database](database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
 
 ## Using a non-packaged Redis instance
 
-See [doc/settings/redis.md](doc/settings/redis.md).
+See [Redis](redis.md).
 
-### Adding ENV Vars to the Gitlab Runtime Environment
+### Adding ENV Vars to the GitLab Runtime Environment
 
 See
-[doc/settings/environment-variables.md](doc/settings/environment-variables.md).
+[environment-variables](environment-variables.md).
 
-### Changing gitlab.yml settings
+### Changing GitLab.yml settings
 
-See [doc/settings/gitlab.yml.md](doc/settings/gitlab.yml.md).
+See [GitLab.yml](gitlab.yml.md).
 
 ### Sending application email via SMTP
 
-See [doc/settings/smtp.md](doc/settings/smtp.md).
+See [SMTP](smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
 Omniauth configuration is documented in
-[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
+[doc.GitLab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
 
 ### Adjusting Unicorn settings
 
-See [doc/settings/unicorn.md](doc/settings/unicorn.md).
+See [Unicorn](unicorn.md).
 
 ### Setting the NGINX listen address or addresses
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [NGINX](nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [NGINX](nginx.md).
 
 ### Inserting custom settings into the NGINX config
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [NGINX](nginx.md).
