@@ -15,27 +15,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+gitlab = node['gitlab']
 
-gitlab_home = node['gitlab']['user']['home']
+mattermost_user = gitlab['mattermost']['username']
+mattermost_group = gitlab['mattermost']['group']
+mattermost_home = gitlab['mattermost']['home']
+mattermost_log_dir =  gitlab['mattermost']['log_directory']
 
-mattermost_home = "#{gitlab_home}/mattermost"
-mattermost_log_dir = "/var/log/gitlab/mattermost"
-mattermost_user = node['mattermost']['username']
-postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
-
-group mattermost_user do
+###
+# Create group and user that will be running mattermost
+###
+group mattermost_group do
   system true
 end
 
 user mattermost_user do
   shell '/bin/sh'
   home mattermost_home
-  gid mattermost_user
+  gid mattermost_group
   system true
 end
 
-[ mattermost_home, mattermost_log_dir ].compact.each do |dir|
+###
+# Create required directories
+###
 
+[
+  mattermost_home,
+  mattermost_log_dir
+].compact.each do |dir|
   directory dir do
     owner mattermost_user
     recursive true
@@ -43,16 +51,18 @@ end
 end
 
 ###
-# Create the database, migrate it, and create the users we need, and grant them
+# Create the database, and create the users we need, and grant them
 # privileges.
 ###
+
+postgresql_socket_dir = gitlab['postgresql']['unix_socket_directory']
 pg_helper = PgHelper.new(node)
-pg_port = node['gitlab']['postgresql']['port']
-pg_user = node['gitlab']['postgresql']['username']
+pg_port = gitlab['postgresql']['port']
+pg_user = gitlab['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
 
-db_name = "mattermost_test"
-sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
+db_name = gitlab['mattermost']['database_name']
+sql_user = gitlab['postgresql']['sql_mattermost_user']
 
 execute "create #{sql_user} database user" do
   command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
@@ -67,15 +77,23 @@ execute "create #{db_name} database" do
   retries 30
 end
 
+###
+# Populate mattermost configuration options
+###
+
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
   mode "0644"
 end
 
+###
+# Mattermost control service
+###
+
 runit_service "mattermost" do
   options({
     :log_directory => mattermost_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash
+  log_options gitlab['logging'].to_hash.merge(gitlab['mattermost'].to_hash)
 end

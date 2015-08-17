@@ -116,8 +116,8 @@ end
 
 include_recipe "gitlab::database_migrations"
 
-# TODO: mattermost configuration
+# Configure mattermost
 
-if true
+if node["gitlab"]["mattermost"]["enable"]
   include_recipe "gitlab::mattermost"
 end
