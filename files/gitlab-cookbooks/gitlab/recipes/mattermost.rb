@@ -86,7 +86,7 @@ end
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
-  variables gitlab['mattermost'].to_hash
+  variables gitlab['mattermost'].to_hash.merge(gitlab['postgresql']).to_hash
   mode "0644"
 end
 

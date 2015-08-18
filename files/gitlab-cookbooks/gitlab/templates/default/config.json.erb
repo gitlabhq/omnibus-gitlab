@@ -34,12 +34,12 @@
     },
     "SqlSettings": {
         "DriverName": "postgres",
-        "DataSource": "user=mattermost host=/var/opt/gitlab/postgresql port=5432 dbname=mattermost_test",
-        "DataSourceReplicas": ["user=mattermost host=/var/opt/gitlab/postgresql port=5432 dbname=mattermost_test"],
-        "MaxIdleConns": 10,
-        "MaxOpenConns": 10,
-        "Trace": false,
-        "AtRestEncryptKey": "Ya0xMrybACJ3sZZVWQC7e31h5nSDWZFS"
+        "DataSource": "user=<%= @sql_mattermost_user %> host=<%= @unix_socket_directory %> port=<%= @port %> dbname=<%= @database_name%>",
+        "DataSourceReplicas": ["user=<%= @sql_mattermost_user %> host=<%= @unix_socket_directory %> port=<%= @port %> dbname=<%= @database_name %>"],
+        "MaxIdleConns": <%= @sql_max_idle_conns %>,
+        "MaxOpenConns": <%= @sql_max_open_conns %>,
+        "Trace": <%= @sql_trace %>,
+        "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>"
     },
     "AWSSettings": {
         "S3AccessKeyId": "",

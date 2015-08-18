@@ -532,3 +532,8 @@ default['gitlab']['mattermost']['service_analytics_url'] = nil
 default['gitlab']['mattermost']['service_use_local_storage'] = true
 default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
+
+default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
+default['gitlab']['mattermost']['sql_max_open_conns'] = 10
+default['gitlab']['mattermost']['sql_trace'] = false
+default['gitlab']['mattermost']['sql_at_rest_encrypt_key'] = 'Ya0xMrybACJ3sZZVWQC7e31h5nSDWZFS'
