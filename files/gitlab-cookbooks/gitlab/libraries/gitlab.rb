@@ -47,6 +47,7 @@ module Gitlab
   ci_unicorn Mash.new
   sidekiq Mash.new
   ci_sidekiq Mash.new
+  gitlab_git_http_server Mash.new
   nginx Mash.new
   ci_nginx Mash.new
   logging Mash.new
@@ -188,6 +189,13 @@ module Gitlab
       end
     end
 
+    def parse_unicorn_listen_address
+      # Make sure gitlab-git-http-server can talk to unicorn
+      listen_address = unicorn['listen'] || node['gitlab']['unicorn']['listen']
+      listen_port = unicorn['port'] || node['gitlab']['unicorn']['port']
+      gitlab_git_http_server['auth_backend'] ||= "http://#{listen_address}:#{listen_port}"
+    end
+
     def parse_nginx_listen_address
       return unless nginx['listen_address']
 
@@ -269,6 +277,7 @@ module Gitlab
         "ci_unicorn",
         "sidekiq",
         "ci_sidekiq",
+        "gitlab_git_http_server",
         "nginx",
         "ci_nginx",
         "logging",
@@ -297,6 +306,7 @@ module Gitlab
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_unicorn_listen_address
       parse_nginx_listen_address
       parse_nginx_listen_ports
       parse_gitlab_ci

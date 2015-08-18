@@ -1,5 +1,6 @@
 # Configuring omnibus settings
 
+- [Configuration options](configuration.md)
 - [SMTP](smtp.md)
 - [NGINX](nginx.md)
 - [LDAP](ldap.md)
@@ -8,3 +9,5 @@
 - [gitlab.yml](gitlab.yml.md)
 - [Redis](redis.md)
 - [Database](database.md)
+- [Logs](logs.md)
+- [Backups](backups.md)

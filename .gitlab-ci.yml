@@ -112,8 +112,7 @@ Raspberry Pi 2 master:
   - bundle install --binstubs --path ~/gems
   - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
   tags:
-  - RaspberryPi2
-  - branch
+  - RaspberryPi2-branch
   except:
   - tags
 Raspberry Pi 2:
@@ -121,6 +120,6 @@ Raspberry Pi 2:
   - bundle install --binstubs --path ~/gems
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
   tags:
-  - RaspberryPi2
+  - RaspberryPi2-tag
   except:
   - branches

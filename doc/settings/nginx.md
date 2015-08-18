@@ -4,7 +4,7 @@
 
 ### Warning
 
-The Nginix config will tell browsers and clients to only communicate with your
+The Nginx config will tell browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 24 months. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
@@ -170,7 +170,7 @@ ci_nginx['listen_https'] = false
 ```
 
 Note that you may need to configure your reverse proxy to forward certain
-headers (e.g. `Host`, `X-Forwarded-Ssl'`, `X-Forwarded-For``) to GitLab. You
+headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`, `X-Forwarded-Port`) to GitLab. You
 may see improper redirections or errors (e.g. "422 Unprocessable Entity",
 "Can't verify CSRF token authenticity") if you forget this step. For more
 information, see:
