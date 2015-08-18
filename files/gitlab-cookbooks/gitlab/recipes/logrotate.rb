@@ -46,6 +46,7 @@ end
 
 runit_service "logrotate" do
   down node['gitlab']['logrotate']['ha']
+  control ['t']
   options({
     :log_directory => logrotate_log_dir
   }.merge(params))

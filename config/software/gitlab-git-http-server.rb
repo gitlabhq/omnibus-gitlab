@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,11 @@
 # limitations under the License.
 #
 
-define :migrate_database, :command => nil, :action => :run, :restarts => [] do
-  bash "migrate #{params[:name]} database" do
-    code <<-EOH
-      set -e
-      log_file="/tmp/#{params[:name]}-db-migrate-$(date +%s)-$$/output.log"
-      umask 077
-      mkdir $(dirname ${log_file})
-      #{params[:command]} 2>& 1 | tee ${log_file}
-      exit ${PIPESTATUS[0]}
-    EOH
-    action params[:action]
-    params[:restarts].each do |svc|
-      notifies :restart, svc, :immediately
-    end
-  end
+name "gitlab-git-http-server"
+default_version "85e4d75c885617c983ecc664348195e3b06daf6a" # 0.2.0
+
+source :git => "https://gitlab.com/gitlab-org/gitlab-git-http-server.git"
+
+build do
+  make "install PREFIX=#{install_dir}/embedded"
 end

@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.14.0 (unreleased)
+
+- Add gitlab-git-http-server (disabled by default) 009aa7d2e68bc84717fd363c88e655ee510aa8e5
+- Resolved intermittent issues in gitlab-ctl reconfigure 83ce5ac3fe50acf3da1da572cd8b88016039f1a0
+- Added backup_archive_permissions configuration option fdf9a793d533c0b3ca19295746ba6cba33b1af7a
+- Refactor gitlab-ctl stop for unicorn and logrotate b692b824454681c6a204f627b9be72d6fcf7838d
+
 7.13.2
 
 - Move config.ru out of etc directory to prevent passenger problems 5ee0ac221485ce0e385f4999838f319ba65755ed

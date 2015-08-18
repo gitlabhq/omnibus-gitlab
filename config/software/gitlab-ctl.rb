@@ -57,6 +57,10 @@ do
   unset $ruby_env_var
 done
 
+# This bumps the default svwait timeout from 7 seconds to 30 seconds
+# As documented at http://smarden.org/runit/sv.8.html
+export SVWAIT=30
+
 #{install_dir}/embedded/bin/omnibus-ctl #{File.basename(install_dir)} #{install_dir}/embedded/service/omnibus-ctl $@
        EOH
     end

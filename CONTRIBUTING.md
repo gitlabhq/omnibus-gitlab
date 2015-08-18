@@ -17,7 +17,7 @@ This can be the case when installation and `gitlab-ctl reconfigure` run went wit
 ## Merge request guidelines
 
 - Please add a CHANGELOG entry for your contribution
-- Have a look at the [development tips and tricks](doc/development.md)
+- Have a look at the [development tips and tricks](doc/development/README.md)
 
 
 ## Maintainer documentation
