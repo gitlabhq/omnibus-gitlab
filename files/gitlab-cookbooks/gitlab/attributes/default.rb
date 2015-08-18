@@ -537,3 +537,48 @@ default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
 default['gitlab']['mattermost']['sql_max_open_conns'] = 10
 default['gitlab']['mattermost']['sql_trace'] = false
 default['gitlab']['mattermost']['sql_at_rest_encrypt_key'] = 'Ya0xMrybACJ3sZZVWQC7e31h5nSDWZFS'
+
+# default['gitlab']['mattermost']['oauth'] = {'gitlab' => {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }}
+default['gitlab']['mattermost']['oauth'] = {}
+# default['gitlab']['mattermost']['aws'] = {'S3AccessKeyId' => '123', 'S3SecretAccessKey' => '123', 'S3Bucket' => 'aa', 'S3Region' => 'bb'}
+default['gitlab']['mattermost']['aws'] = {}
+default['gitlab']['mattermost']['image_thumbnail_width'] = 120
+default['gitlab']['mattermost']['image_thumbnail_height'] = 100
+default['gitlab']['mattermost']['image_preview_width'] = 1024
+default['gitlab']['mattermost']['image_preview_height'] = 0
+default['gitlab']['mattermost']['image_profile_width'] = 128
+default['gitlab']['mattermost']['image_profile_height'] = 128
+default['gitlab']['mattermost']['image_initial_font'] = 'luximbi.ttf'
+
+default['gitlab']['mattermost']['email_by_pass_email'] = true
+default['gitlab']['mattermost']['email_smtp_username'] = nil
+default['gitlab']['mattermost']['email_smtp_password'] = nil
+default['gitlab']['mattermost']['email_smtp_server'] = nil
+default['gitlab']['mattermost']['email_use_tls'] = false
+default['gitlab']['mattermost']['email_feedback_email'] = nil
+default['gitlab']['mattermost']['email_feedback_name'] = nil
+default['gitlab']['mattermost']['email_apple_push_server'] = nil
+default['gitlab']['mattermost']['email_apple_push_cert_public'] = nil
+default['gitlab']['mattermost']['email_apple_push_cert_private'] = nil
+
+default['gitlab']['mattermost']['ratelimit_use_rate_limiter'] = true
+default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
+default['gitlab']['mattermost']['ratelimit_memory_store_size'] = 10000
+default['gitlab']['mattermost']['ratelimit_vary_by_remote_addr'] = true
+default['gitlab']['mattermost']['ratelimit_vary_by_header'] = nil
+
+default['gitlab']['mattermost']['privacy_show_email_address'] = true
+default['gitlab']['mattermost']['privacy_show_phone_number'] = true
+default['gitlab']['mattermost']['privacy_show_skype_id'] = true
+default['gitlab']['mattermost']['privacy_show_full_name'] = true
+
+default['gitlab']['mattermost']['team_max_users_per_team'] = 150
+default['gitlab']['mattermost']['team_allow_public_link'] = true
+default['gitlab']['mattermost']['team_allow_valet_default'] = false
+default['gitlab']['mattermost']['team_terms_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_privacy_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_about_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_help_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_report_problem_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_tour_link'] = '/static/help/configure_links.html'
+default['gitlab']['mattermost']['team_default_color'] = '#2389D7'

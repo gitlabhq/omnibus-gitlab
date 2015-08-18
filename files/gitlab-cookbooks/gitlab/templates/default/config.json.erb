@@ -22,16 +22,7 @@
         "StorageDirectory": "<%= @service_storage_directory %>",
         "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>
     },
-    "SSOSettings": {
-        "gitlab": {
-            "Allow": false,
-            "Secret" : "",
-            "Id": "",
-            "AuthEndpoint": "",
-            "TokenEndpoint": "",
-            "UserApiEndpoint": ""
-        }
-    },
+    "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
         "DriverName": "postgres",
         "DataSource": "user=<%= @sql_mattermost_user %> host=<%= @unix_socket_directory %> port=<%= @port %> dbname=<%= @database_name%>",
@@ -41,56 +32,51 @@
         "Trace": <%= @sql_trace %>,
         "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>"
     },
-    "AWSSettings": {
-        "S3AccessKeyId": "",
-        "S3SecretAccessKey": "",
-        "S3Bucket": "",
-        "S3Region": ""
-    },
+    "AWSSettings": <%= @aws.to_json %>,
     "ImageSettings": {
-        "ThumbnailWidth": 120,
-        "ThumbnailHeight": 100,
-        "PreviewWidth": 1024,
-        "PreviewHeight": 0,
-        "ProfileWidth": 128,
-        "ProfileHeight": 128,
-        "InitialFont": "luximbi.ttf"
+        "ThumbnailWidth": <%= @image_thumbnail_width %>,
+        "ThumbnailHeight": <%= @image_thumbnail_height %>,
+        "PreviewWidth": <%= @image_preview_width %>,
+        "PreviewHeight": <%= @image_preview_height %>,
+        "ProfileWidth": <%= @image_profile_width %>,
+        "ProfileHeight": <%= @image_profile_height %>,
+        "InitialFont": <%= @image_initial_font %>
     },
     "EmailSettings": {
-        "ByPassEmail" : true,
-        "SMTPUsername": "",
-        "SMTPPassword": "",
-        "SMTPServer": "",
-    "UseTLS": false,
-        "FeedbackEmail": "",
-        "FeedbackName": "",
-        "ApplePushServer": "",
-        "ApplePushCertPublic": "",
-        "ApplePushCertPrivate": ""
+        "ByPassEmail" : <%= @email_by_pass_email %>,
+        "SMTPUsername": <%= @email_smtp_username %>,
+        "SMTPPassword": <%= @email_smtp_password %>,
+        "SMTPServer": <%= @email_smtp_server %>,
+        "UseTLS": <%= @email_use_tls %>,
+        "FeedbackEmail": <%= @email_feedback_email %>,
+        "FeedbackName": <%= @email_feedback_name %>,
+        "ApplePushServer": <%= @email_apple_push_server %>,
+        "ApplePushCertPublic": <%= @email_apple_push_cert_public %>,
+        "ApplePushCertPrivate": <%= @email_apple_push_cert_private %>
     },
     "RateLimitSettings": {
-        "UseRateLimiter": true,
-        "PerSec": 10,
-        "MemoryStoreSize": 10000,
-        "VaryByRemoteAddr": true,
-        "VaryByHeader": ""
+        "UseRateLimiter": <%= @ratelimit_use_rate_limiter %> ,
+        "PerSec": <%= @ratelimit_per_sec %>,
+        "MemoryStoreSize": <%= @ratelimit_memory_store_size %>,
+        "VaryByRemoteAddr": <%= @ratelimit_vary_by_remote_addr %>,
+        "VaryByHeader": <%= @ratelimit_vary_by_header %>
     },
     "PrivacySettings": {
-        "ShowEmailAddress": true,
-        "ShowPhoneNumber": true,
-        "ShowSkypeId": true,
-        "ShowFullName": true
+        "ShowEmailAddress": <%= @privacy_show_email_address %>,
+        "ShowPhoneNumber": <%= @privacy_show_phone_number %>,
+        "ShowSkypeId": <%= @privacy_show_skype_id %>,
+        "ShowFullName": <%= @privacy_show_full_name %>
     },
     "TeamSettings": {
-        "MaxUsersPerTeam": 150,
-        "AllowPublicLink": true,
-        "AllowValetDefault": false,
-        "TermsLink": "/static/help/configure_links.html",
-        "PrivacyLink": "/static/help/configure_links.html",
-        "AboutLink": "/static/help/configure_links.html",
-        "HelpLink": "/static/help/configure_links.html",
-        "ReportProblemLink": "/static/help/configure_links.html",
-        "TourLink": "/static/help/configure_links.html",
-        "DefaultThemeColor": "#2389D7"
+        "MaxUsersPerTeam": <%= @team_max_users_per_team %>,
+        "AllowPublicLink": <%= @team_allow_public_link %>,
+        "AllowValetDefault": <%= @team_allow_valet_default %>,
+        "TermsLink": <%= @team_terms_link %>,
+        "PrivacyLink": <%= @team_privacy_link %>,
+        "AboutLink": <%= @team_about_link %>,
+        "HelpLink": <%= @team_help_link %>,
+        "ReportProblemLink": <%= @team_report_problem_link %>,
+        "TourLink": <%= @team_tour_link %>,
+        "DefaultThemeColor": <%= @team_default_color %>
     }
 }
