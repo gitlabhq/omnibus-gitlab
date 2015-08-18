@@ -106,13 +106,46 @@ class OmnibusHelper
 
 end
 
+module AuthorizeHelper
+  def create_or_find_authorization(uri, name)
+    args = %Q(redirect_uri: "#{uri}", name: "#{name}")
+
+    app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+
+    output = %Q(puts app.uid.concat(" ").concat(app.secret);)
+
+    %W(
+      #{app}
+      #{output}
+    ).join
+  end
+
+  def execute_rails_runner(cmd)
+    %W(
+      /opt/gitlab/bin/gitlab-rails
+      runner
+      -e production
+      '#{cmd}'
+    ).join(" ")
+  end
+
+  def warn(msg)
+    Chef::Log.warn(msg)
+  end
+
+  def info(msg)
+    Chef::Log.info(msg)
+  end
+end
+
 class CiHelper
   extend ShellOutHelper
+  extend AuthorizeHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
     warn("Connecting to GitLab to generate new app_id and app_secret.")
 
-    runner_cmd = create_or_find_authorization
+    runner_cmd = create_or_find_authorization(Gitlab['ci_external_url'], "GitLab CI")
     cmd = execute_rails_runner(runner_cmd)
     o = do_shell_out(cmd)
 
@@ -133,38 +166,46 @@ class CiHelper
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
   end
+end
 
-  def self.create_or_find_authorization
-    ci_external_url = Gitlab['ci_external_url']
-    args = %Q(redirect_uri: "#{ci_external_url}/user_sessions/callback", name: "GitLab CI")
+class MattermostHelper
+  extend ShellOutHelper
+  extend AuthorizeHelper
 
-    app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+  def self.authorize_with_gitlab(gitlab_external_url)
+    warn("Connecting to GitLab to generate oauth app_id and app_secret for Mattermost.")
 
-    output = %Q(puts app.uid.concat(" ").concat(app.secret);)
+    runner_cmd = create_or_find_authorization("http://192.168.3.4:8065", "GitLab Mattermost")
+    cmd = execute_rails_runner(runner_cmd)
+    o = do_shell_out(cmd)
 
-    %W(
-      #{app}
-      #{output}
-    ).join
+    app_id, app_secret = nil
+    if o.exitstatus == 0
+      app_id, app_secret = o.stdout.chomp.split(" ")
+      gitlab_url = gitlab_external_url.chomp("/")
+
+      Gitlab['mattermost']['oauth']['gitlab'] = { 'Allow' => true,
+                                                  'Secret' => app_secret,
+                                                  'Id' => app_id,
+                                                  'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
+                                                  'TokenEndpoint' => "#{gitlab_url}/oauth/token",
+                                                  'UserApiEndpoint' => "#{gitlab_url}/api/v3/user"
+                                                }
+
+      SecretsHelper.write_to_gitlab_secrets
+      info("Updated the gitlab-secrets.json file.")
+    else
+      warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
+    end
+
+    { 'Allow' => true,
+      'Secret' => app_secret,
+      'Id' => app_id,
+      'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
+      'TokenEndpoint' => "#{gitlab_url}/oauth/token",
+      'UserApiEndpoint' => "#{gitlab_url}/api/v3/user"
+     }
   end
-
-  def self.execute_rails_runner(cmd)
-    %W(
-      /opt/gitlab/bin/gitlab-rails
-      runner
-      -e production
-      '#{cmd}'
-    ).join(" ")
-  end
-
-  def self.warn(msg)
-    Chef::Log.warn(msg)
-  end
-
-  def self.info(msg)
-    Chef::Log.info(msg)
-  end
-
 end
 
 class SecretsHelper
