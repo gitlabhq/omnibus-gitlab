@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e # fail on errors
+
+# Redirect stderr -> stdout
+exec 2>&1
+
+<%= render("mount_point_check.erb") %>
+
+cd <%= node['gitlab']['gitlab-git-http-server']['dir'] %>
+
+exec chpst -P \
+  -U <%= node['gitlab']['user']['username'] %> \
+  -u <%= node['gitlab']['user']['username'] %> \
+  /usr/bin/env \
+    PATH=/opt/gitlab/bin:/opt/gitlab/embedded/bin:/usr/local/bin:/usr/bin:/bin \
+    /opt/gitlab/embedded/bin/gitlab-git-http-server \
+      -listenNetwork <%= node['gitlab']['gitlab-git-http-server']['listen_network'] %> \
+      -listenUmask <%= node['gitlab']['gitlab-git-http-server']['listen_umask'] %> \
+      -listenAddr <%= node['gitlab']['gitlab-git-http-server']['listen_addr'] %> \
+      -authBackend <%= node['gitlab']['gitlab-git-http-server']['auth_backend'] %> \
+      <%= node['gitlab']['gitlab-git-http-server']['repo_root'] %>

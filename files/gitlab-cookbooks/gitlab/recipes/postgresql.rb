@@ -170,6 +170,8 @@ databases.each do |rails_app, db_name, sql_user|
   execute "create #{sql_user} database user" do
     command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
     user pg_user
+    # Added retries to give the service time to start on slower systems
+    retries 20
     not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
   end
 

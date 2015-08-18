@@ -3,10 +3,8 @@ exec 2>&1
 
 cd <%= node['gitlab']['logrotate']['dir'] %>
 
-# Sleep a bit to avoid going nuts after gitlab just started.
-sleep <%= node['gitlab']['logrotate']['pre_sleep'] %>
-
-nice /opt/gitlab/embedded/sbin/logrotate -s /var/log/gitlab/logrotate/logrotate.status logrotate.conf
-
-# Sleep some more. After this, the script exits to be restarted by Runit.
-sleep <%= node['gitlab']['logrotate']['post_sleep'] %>
+exec /opt/gitlab/embedded/bin/chpst -P /usr/bin/env \
+  dir=<%= node['gitlab']['logrotate']['dir'] %> \
+  pre_sleep=<%= node['gitlab']['logrotate']['pre_sleep'] %> \
+  post_sleep=<%= node['gitlab']['logrotate']['post_sleep'] %> \
+  /opt/gitlab/embedded/bin/gitlab-logrotate-wrapper

@@ -118,6 +118,7 @@ default['gitlab']['gitlab-rails']['bitbucket'] = nil
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
 default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
@@ -308,6 +309,20 @@ default['gitlab']['web-server']['shell'] = '/bin/false'
 default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
 default['gitlab']['web-server']['external_users'] = []
+
+####
+# gitlab-git-http-server
+####
+
+default['gitlab']['gitlab-git-http-server']['enable'] = false
+default['gitlab']['gitlab-git-http-server']['ha'] = false
+default['gitlab']['gitlab-git-http-server']['repo_root'] = "/var/opt/gitlab/git-data/repositories"
+default['gitlab']['gitlab-git-http-server']['listen_network'] = "unix"
+default['gitlab']['gitlab-git-http-server']['listen_umask'] = 000
+default['gitlab']['gitlab-git-http-server']['listen_addr'] = "/var/opt/gitlab/gitlab-git-http-server/socket"
+default['gitlab']['gitlab-git-http-server']['auth_backend'] = "http://localhost:8080"
+default['gitlab']['gitlab-git-http-server']['dir'] = "/var/opt/gitlab/gitlab-git-http-server"
+default['gitlab']['gitlab-git-http-server']['log_dir'] = "/var/log/gitlab/gitlab-git-http-server"
 
 ####
 # Nginx

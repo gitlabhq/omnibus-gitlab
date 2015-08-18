@@ -1,3 +1,5 @@
+## Latest options listed at https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+
 ## Url on which GitLab will be reachable.
 ## For more details on configuring external_url see:
 ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
@@ -106,6 +108,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#backups
 
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+# gitlab_rails['backup_archive_permissions'] = 0644 # See: http://doc.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_keep_time'] = 604800
 # gitlab_rails['backup_upload_connection'] = {
 #   'provider' => 'AWS',

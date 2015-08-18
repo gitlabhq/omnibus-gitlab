@@ -25,6 +25,11 @@ cookbook_file "/etc/init/gitlab-runsvdir.conf" do
   source "gitlab-runsvdir.conf"
 end
 
+# Reload the configuration to ensure the new conf file is loaded
+execute "initctl reload-configuration" do
+  command "initctl reload-configuration"
+end
+
 # Keep on trying till the job is found :(
 execute "initctl status gitlab-runsvdir" do
   retries 30

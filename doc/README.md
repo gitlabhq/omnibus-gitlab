@@ -43,6 +43,7 @@
 
 ## Troubleshooting
 
+- [Hash Sum mismatch when installing packages](common_installation_problems/README.md#hash-sum-mismatch-when-installing-packages)
 - [Apt error: 'The requested URL returned error: 403'](common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 - [GitLab is unreachable in my browser](common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 - [GitLab CI shows GitLab login page](common_installation_problems/README.md#gitlab-ci-shows-gitlab-login-page).
