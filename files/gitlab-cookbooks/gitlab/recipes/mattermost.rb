@@ -20,7 +20,7 @@ gitlab = node['gitlab']
 mattermost_user = gitlab['mattermost']['username']
 mattermost_group = gitlab['mattermost']['group']
 mattermost_home = gitlab['mattermost']['home']
-mattermost_log_dir = gitlab['mattermost']['log_directory']
+mattermost_log_dir = gitlab['mattermost']['log_file_directory']
 mattermost_storage_directory = gitlab['mattermost']['service_storage_directory']
 
 ###
