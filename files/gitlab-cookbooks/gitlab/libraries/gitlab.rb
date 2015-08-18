@@ -55,6 +55,7 @@ module Gitlab
   logrotate Mash.new
   high_availability Mash.new
   web_server Mash.new
+  mattermost Mash.new
   node nil
   external_url nil
   ci_external_url nil
@@ -262,6 +263,10 @@ module Gitlab
       ci_nginx['enable'] = true if ci_nginx['enable'].nil?
     end
 
+    def parse_mattermost_external_url
+      Gitlab['mattermost']['oauth'] = {}
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -286,6 +291,7 @@ module Gitlab
         "high_availability",
         "postgresql",
         "web_server",
+        "mattermost"
         "external_url",
         "ci_external_url"
       ].each do |key|
@@ -310,6 +316,7 @@ module Gitlab
       parse_nginx_listen_address
       parse_nginx_listen_ports
       parse_gitlab_ci
+      parse_mattermost_external_url
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
