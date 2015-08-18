@@ -82,6 +82,11 @@ module Gitlab
                                                  end
       Gitlab['gitlab_ci']['db_key_base'] ||= generate_hex(64)
 
+      Gitlab['mattermost']['service_invite_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['service_public_link_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['service_reset_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= generate_hex(64)
+
       # Note: Besides the section below, gitlab-secrets.json will also change
       # in CiHelper in libraries/helper.rb
       SecretsHelper.write_to_gitlab_secrets

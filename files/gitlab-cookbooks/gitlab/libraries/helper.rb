@@ -237,6 +237,12 @@ class SecretsHelper
                         'secret_token' => Gitlab['gitlab_ci']['secret_token'],
                         'secret_key_base' => Gitlab['gitlab_ci']['secret_key_base'],
                         'db_key_base' => Gitlab['gitlab_ci']['db_key_base'],
+                      },
+                      'mattermost' => {
+                        'service_invite_salt' => Gitlab['mattermost']['service_invite_salt'],
+                        'service_public_link_salt' => Gitlab['mattermost']['service_public_link_salt'],
+                        'service_reset_salt' => Gitlab['mattermost']['service_reset_salt'],
+                        'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key']
                       }
                     }
 
@@ -249,6 +255,15 @@ class SecretsHelper
                   }
                 }
       secret_tokens['gitlab_ci'].merge!(ci_auth)
+    end
+
+    if Gitlab['mattermost']['oauth'] && Gitlab['mattermost']['oauth']['gitlab']
+      gitlab_oauth = { 'oauth' =>
+                        {
+                          'gitlab' => Gitlab['mattermost']['oauth']['gitlab']
+                        }
+                     }
+      secret_tokens['mattermost'].merge!(gitlab_oauth)
     end
 
     if File.directory?("/etc/gitlab")
