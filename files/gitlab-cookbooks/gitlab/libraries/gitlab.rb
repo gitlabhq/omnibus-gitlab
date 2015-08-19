@@ -59,6 +59,7 @@ module Gitlab
   node nil
   external_url nil
   ci_external_url nil
+  mattermost_external_url nil
   git_data_dir nil
 
   class << self
@@ -269,7 +270,43 @@ module Gitlab
     end
 
     def parse_mattermost_external_url
+      return unless mattermost_external_url
+
+      mattermost['enable'] = true if mattermost['enable'].nil?
+
+
+      uri = URI(mattermost_external_url.to_s)
+
+      unless uri.host
+        raise "GitLab Mattermost external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
+      end
+
+      Gitlab['mattermost']['host'] = uri.host
+
+
+      case uri.scheme
+      when "http"
+        Gitlab['mattermost']['service_use_ssl'] = false
+      when "https"
+        Gitlab['mattermost']['service_use_ssl'] = true
+        Gitlab['mattermost_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['mattermost_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+      else
+        raise "Unsupported external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported CI external URL path: #{uri.path}"
+      end
+
+      Gitlab['mattermost_nginx']['listen_port'] = uri.port
       Gitlab['mattermost']['oauth'] = {}
+    end
+
+    def parse_gitlab_mattermost
+      return unless mattermost['enable']
+
+      mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
     end
 
     def generate_hash
@@ -322,6 +359,7 @@ module Gitlab
       parse_nginx_listen_ports
       parse_gitlab_ci
       parse_mattermost_external_url
+      parse_gitlab_mattermost
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
