@@ -521,7 +521,7 @@ default['gitlab']['ci-nginx']['enable'] = false
 # Mattermost
 ####
 
-default['gitlab']['mattermost']['enable'] = true
+default['gitlab']['mattermost']['enable'] = false
 default['gitlab']['mattermost']['username'] = 'mattermost'
 default['gitlab']['mattermost']['group'] = 'mattermost'
 default['gitlab']['mattermost']['home'] = '/var/opt/gitlab/mattermost'
@@ -593,3 +593,9 @@ default['gitlab']['mattermost']['team_help_link'] = '/static/help/configure_link
 default['gitlab']['mattermost']['team_report_problem_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_tour_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
+
+####
+# Mattermost NGINX
+####
+default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['mattermost-nginx']['enable'] = false

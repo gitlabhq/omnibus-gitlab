@@ -50,6 +50,7 @@ module Gitlab
   gitlab_git_http_server Mash.new
   nginx Mash.new
   ci_nginx Mash.new
+  mattermost_nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
   logrotate Mash.new
@@ -327,15 +328,17 @@ module Gitlab
         "gitlab_git_http_server",
         "nginx",
         "ci_nginx",
+        "mattermost_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
         "high_availability",
         "postgresql",
         "web_server",
-        "mattermost"
+        "mattermost",
         "external_url",
-        "ci_external_url"
+        "ci_external_url",
+        "mattermost_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
