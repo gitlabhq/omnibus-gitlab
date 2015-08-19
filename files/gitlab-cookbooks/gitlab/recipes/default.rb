@@ -107,6 +107,7 @@ include_recipe "runit"
   "remote-syslog",
   "logrotate",
   "bootstrap",
+  "mattermost"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
@@ -116,9 +117,3 @@ include_recipe "runit"
 end
 
 include_recipe "gitlab::database_migrations"
-
-# Configure mattermost
-
-if node["gitlab"]["mattermost"]["enable"]
-  include_recipe "gitlab::mattermost"
-end
