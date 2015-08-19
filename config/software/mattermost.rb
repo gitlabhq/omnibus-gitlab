@@ -25,8 +25,6 @@ source url: "https://github.com/mattermost/platform/releases/download/#{version}
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./web/static/js/bundle-741.min.js ./web/static/js/bundle.js"
-
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./api/templates #{install_dir}/embedded/service/mattermost/api/"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./web/static #{install_dir}/embedded/service/mattermost/web/"
