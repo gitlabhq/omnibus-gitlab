@@ -275,7 +275,6 @@ module Gitlab
 
       mattermost['enable'] = true if mattermost['enable'].nil?
 
-
       uri = URI(mattermost_external_url.to_s)
 
       unless uri.host
@@ -283,7 +282,6 @@ module Gitlab
       end
 
       Gitlab['mattermost']['host'] = uri.host
-
 
       case uri.scheme
       when "http"

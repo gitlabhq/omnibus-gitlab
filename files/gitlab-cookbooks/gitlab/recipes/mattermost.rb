@@ -22,6 +22,9 @@ mattermost_group = gitlab['mattermost']['group']
 mattermost_home = gitlab['mattermost']['home']
 mattermost_log_dir = gitlab['mattermost']['log_file_directory']
 mattermost_storage_directory = gitlab['mattermost']['service_storage_directory']
+postgresql_socket_dir = gitlab['postgresql']['unix_socket_directory']
+pg_port = gitlab['postgresql']['port']
+pg_user = gitlab['postgresql']['username']
 
 ###
 # Create group and user that will be running mattermost
@@ -53,14 +56,11 @@ end
 end
 
 ###
-# Create the database, and create the users we need, and grant them
+# Create the database users, create the database we need, and grant them
 # privileges.
 ###
 
-postgresql_socket_dir = gitlab['postgresql']['unix_socket_directory']
 pg_helper = PgHelper.new(node)
-pg_port = gitlab['postgresql']['port']
-pg_user = gitlab['postgresql']['username']
 bin_dir = "/opt/gitlab/embedded/bin"
 
 db_name = gitlab['mattermost']['database_name']

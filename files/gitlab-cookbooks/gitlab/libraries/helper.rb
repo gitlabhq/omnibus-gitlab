@@ -107,6 +107,14 @@ class OmnibusHelper
 end
 
 module AuthorizeHelper
+
+  def query_gitlab_rails(uri, name)
+    warn("Connecting to GitLab to generate new app_id and app_secret for #{name}.")
+    runner_cmd = create_or_find_authorization(uri, name)
+    cmd = execute_rails_runner(runner_cmd)
+    do_shell_out(cmd)
+  end
+
   def create_or_find_authorization(uri, name)
     args = %Q(redirect_uri: "#{uri}", name: "#{name}")
 
@@ -143,12 +151,10 @@ class CiHelper
   extend AuthorizeHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
-    warn("Connecting to GitLab to generate new app_id and app_secret.")
     redirect_uri = "#{Gitlab['ci_external_url']}/user_sessions/callback"
+    app_name = "GitLab CI"
 
-    runner_cmd = create_or_find_authorization(redirect_uri, "GitLab CI")
-    cmd = execute_rails_runner(runner_cmd)
-    o = do_shell_out(cmd)
+    o = query_gitlab_rails(redirect_uri, app_name)
 
     app_id, app_secret = nil
     if o.exitstatus == 0
@@ -174,12 +180,10 @@ class MattermostHelper
   extend AuthorizeHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
-    warn("Connecting to GitLab to generate oauth app_id and app_secret for Mattermost.")
-    redirect_uri = Gitlab['mattermost_external_url']
+    redirect_uri = "#{Gitlab['mattermost_external_url']}/signup/gitlab/complete\r\n#{Gitlab['mattermost_external_url']}/login/gitlab/complete"
+    app_name = "GitLab Mattermost"
 
-    runner_cmd = create_or_find_authorization(redirect_uri, "GitLab Mattermost")
-    cmd = execute_rails_runner(runner_cmd)
-    o = do_shell_out(cmd)
+    o = query_gitlab_rails(redirect_uri, app_name)
 
     app_id, app_secret = nil
     if o.exitstatus == 0
