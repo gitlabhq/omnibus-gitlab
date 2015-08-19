@@ -301,7 +301,6 @@ module Gitlab
       end
 
       Gitlab['mattermost_nginx']['listen_port'] = uri.port
-      Gitlab['mattermost']['oauth'] = {}
     end
 
     def parse_gitlab_mattermost

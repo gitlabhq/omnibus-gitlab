@@ -144,8 +144,9 @@ class CiHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
     warn("Connecting to GitLab to generate new app_id and app_secret.")
+    redirect_uri = "#{Gitlab['ci_external_url']}/user_sessions/callback"
 
-    runner_cmd = create_or_find_authorization(Gitlab['ci_external_url'], "GitLab CI")
+    runner_cmd = create_or_find_authorization(redirect_uri, "GitLab CI")
     cmd = execute_rails_runner(runner_cmd)
     o = do_shell_out(cmd)
 
@@ -174,8 +175,9 @@ class MattermostHelper
 
   def self.authorize_with_gitlab(gitlab_external_url)
     warn("Connecting to GitLab to generate oauth app_id and app_secret for Mattermost.")
+    redirect_uri = Gitlab['mattermost_external_url']
 
-    runner_cmd = create_or_find_authorization("http://192.168.3.4:8065", "GitLab Mattermost")
+    runner_cmd = create_or_find_authorization(redirect_uri, "GitLab Mattermost")
     cmd = execute_rails_runner(runner_cmd)
     o = do_shell_out(cmd)
 
@@ -184,6 +186,7 @@ class MattermostHelper
       app_id, app_secret = o.stdout.chomp.split(" ")
       gitlab_url = gitlab_external_url.chomp("/")
 
+      Gitlab['mattermost']['oauth'] = {} unless Gitlab['mattermost']['oauth']
       Gitlab['mattermost']['oauth']['gitlab'] = { 'Allow' => true,
                                                   'Secret' => app_secret,
                                                   'Id' => app_id,
