@@ -339,7 +339,7 @@ module Gitlab
 
       mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
 
-      unless gitlab_rails["enable"]
+      unless gitlab_rails["enable"] || node['gitlab']['gitlab-rails']['enable']
         redis["enable"] = false
         unicorn["enable"] = false
         sidekiq["enable"] = false
