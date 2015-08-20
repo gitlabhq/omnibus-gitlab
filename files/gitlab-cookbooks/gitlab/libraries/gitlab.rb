@@ -219,6 +219,23 @@ module Gitlab
       end
     end
 
+    def parse_mattermost_postgresql_settings
+      value_from_gitlab_rb = Gitlab['mattermost']['sql_data_source']
+
+      attributes_values = []
+      [
+        %w{postgresql sql_mattermost_user},
+        %w{postgresql unix_socket_directory},
+        %w{postgresql port},
+        %w{mattermost database_name}
+      ].each do |value|
+        attributes_values << (Gitlab[value.first][value.last] || node['gitlab'][value.first][value.last])
+      end
+
+      value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
+      Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
+    end
+
     def parse_unicorn_listen_address
       # Make sure gitlab-git-http-server can talk to unicorn
       listen_address = unicorn['listen'] || node['gitlab']['unicorn']['listen']
@@ -373,6 +390,7 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_postgresql_settings
+      parse_mattermost_postgresql_settings
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url

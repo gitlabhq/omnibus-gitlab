@@ -25,8 +25,8 @@
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
         "DriverName": "postgres",
-        "DataSource": "user=<%= @sql_mattermost_user %> host=<%= @unix_socket_directory %> port=<%= @port %> dbname=<%= @database_name%>",
-        "DataSourceReplicas": ["user=<%= @sql_mattermost_user %> host=<%= @unix_socket_directory %> port=<%= @port %> dbname=<%= @database_name %>"],
+        "DataSource": "<%= @sql_data_source %>",
+        "DataSourceReplicas": <%= @sql_data_source_replicas %>,
         "MaxIdleConns": <%= @sql_max_idle_conns %>,
         "MaxOpenConns": <%= @sql_max_open_conns %>,
         "Trace": <%= @sql_trace %>,
