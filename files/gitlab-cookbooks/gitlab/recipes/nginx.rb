@@ -121,7 +121,6 @@ template gitlab_ci_http_conf do
   action gitlab_ci_enabled ? :create : :delete
 end
 
-
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
 
 if mattermost_nginx_vars['listen_https'].nil?
