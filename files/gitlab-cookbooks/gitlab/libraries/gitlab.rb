@@ -155,7 +155,18 @@ module Gitlab
         Gitlab['logging']['svlogd_udp'] ||= logging['udp_log_shipping_host']
       end
 
-      %w{redis ci-redis nginx sidekiq ci-sidekiq unicorn ci-unicorn postgresql remote-syslog}.each do |runit_sv|
+      %w{
+        redis
+        ci-redis
+        nginx
+        sidekiq
+        ci-sidekiq
+        unicorn
+        ci-unicorn
+        postgresql
+        remote-syslog
+        gitlab-git-http-server
+      }.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
       end
     end
