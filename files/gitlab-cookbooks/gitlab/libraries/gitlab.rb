@@ -95,10 +95,7 @@ module Gitlab
     end
 
     def parse_external_url
-      unless external_url
-        disable_gitlab_rails_services
-        return
-      end
+      return unless external_url
 
       uri = URI(external_url.to_s)
 
@@ -125,13 +122,6 @@ module Gitlab
       end
 
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port
-    end
-
-    def disable_gitlab_rails_services
-      gitlab_rails["enable"] = false
-      redis["enable"] = false
-      unicorn["enable"] = false
-      sidekiq["enable"] = false
     end
 
     def parse_git_data_dir
@@ -348,6 +338,12 @@ module Gitlab
       return unless mattermost['enable']
 
       mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
+
+      unless gitlab_rails["enable"]
+        redis["enable"] = false
+        unicorn["enable"] = false
+        sidekiq["enable"] = false
+      end
     end
 
     def generate_hash
