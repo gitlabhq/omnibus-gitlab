@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Resolved intermittent issues in gitlab-ctl reconfigure 83ce5ac3fe50acf3da1da572cd8b88016039f1a0
 - Added backup_archive_permissions configuration option fdf9a793d533c0b3ca19295746ba6cba33b1af7a
 - Refactor gitlab-ctl stop for unicorn and logrotate b692b824454681c6a204f627b9be72d6fcf7838d
+- Include GitLab Mattermost in the package 7a6f6012b8c3a8e187bd6213278e5b37d533d228
 
 7.13.2
 

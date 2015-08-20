@@ -1,0 +1,82 @@
+{
+    "LogSettings": {
+        "ConsoleEnable": <%= @log_console_enable %>,
+        "ConsoleLevel": "<%= @log_console_level %>",
+        "FileEnable": <%= @log_file_enable %>,
+        "FileLevel": "<%= @log_file_level %>",
+        "FileFormat": "<%= @log_file_format %>",
+        "FileLocation": "<%= @log_file_directory %>/mattermost.log"
+    },
+    "ServiceSettings": {
+        "SiteName": "<%= @service_site_name %>",
+        "Mode" : "<%= @service_mode %>",
+        "AllowTesting" : <%= @service_allow_testing %>,
+        "UseSSL": <%= @service_use_ssl %>,
+        "Port": "<%= @service_port %>",
+        "Version": "<%= @service_version %>",
+        "InviteSalt": "<%= @service_invite_salt %>",
+        "PublicLinkSalt": "<%= @service_public_link_salt %>",
+        "ResetSalt": "<%= @service_reset_salt %>",
+        "AnalyticsUrl": "<%= @service_analytics_url %>",
+        "UseLocalStorage": <%= @service_use_local_storage %>,
+        "StorageDirectory": "<%= @service_storage_directory %>",
+        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>
+    },
+    "SSOSettings": <%= @oauth.to_json %>,
+    "SqlSettings": {
+        "DriverName": "postgres",
+        "DataSource": "<%= @sql_data_source %>",
+        "DataSourceReplicas": [<%= @sql_data_source_replicas.map{ |dsr| "\"#{dsr}\"" }.join(',') %>],
+        "MaxIdleConns": <%= @sql_max_idle_conns %>,
+        "MaxOpenConns": <%= @sql_max_open_conns %>,
+        "Trace": <%= @sql_trace %>,
+        "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>"
+    },
+    "AWSSettings": <%= @aws.to_json %>,
+    "ImageSettings": {
+        "ThumbnailWidth": <%= @image_thumbnail_width %>,
+        "ThumbnailHeight": <%= @image_thumbnail_height %>,
+        "PreviewWidth": <%= @image_preview_width %>,
+        "PreviewHeight": <%= @image_preview_height %>,
+        "ProfileWidth": <%= @image_profile_width %>,
+        "ProfileHeight": <%= @image_profile_height %>,
+        "InitialFont": "<%= @image_initial_font %>"
+    },
+    "EmailSettings": {
+        "ByPassEmail" : <%= @email_by_pass_email %>,
+        "SMTPUsername": "<%= @email_smtp_username %>",
+        "SMTPPassword": "<%= @email_smtp_password %>",
+        "SMTPServer": "<%= @email_smtp_server %>",
+        "UseTLS": <%= @email_use_tls %>,
+        "FeedbackEmail": "<%= @email_feedback_email %>",
+        "FeedbackName": "<%= @email_feedback_name %>",
+        "ApplePushServer": "<%= @email_apple_push_server %>",
+        "ApplePushCertPublic": "<%= @email_apple_push_cert_public %>",
+        "ApplePushCertPrivate": "<%= @email_apple_push_cert_private %>"
+    },
+    "RateLimitSettings": {
+        "UseRateLimiter": <%= @ratelimit_use_rate_limiter %>,
+        "PerSec": <%= @ratelimit_per_sec %>,
+        "MemoryStoreSize": <%= @ratelimit_memory_store_size %>,
+        "VaryByRemoteAddr": <%= @ratelimit_vary_by_remote_addr %>,
+        "VaryByHeader": "<%= @ratelimit_vary_by_header %>"
+    },
+    "PrivacySettings": {
+        "ShowEmailAddress": <%= @privacy_show_email_address %>,
+        "ShowPhoneNumber": <%= @privacy_show_phone_number %>,
+        "ShowSkypeId": <%= @privacy_show_skype_id %>,
+        "ShowFullName": <%= @privacy_show_full_name %>
+    },
+    "TeamSettings": {
+        "MaxUsersPerTeam": <%= @team_max_users_per_team %>,
+        "AllowPublicLink": <%= @team_allow_public_link %>,
+        "AllowValetDefault": <%= @team_allow_valet_default %>,
+        "TermsLink": "<%= @team_terms_link %>",
+        "PrivacyLink": "<%= @team_privacy_link %>",
+        "AboutLink": "<%= @team_about_link %>",
+        "HelpLink": "<%= @team_help_link %>",
+        "ReportProblemLink": "<%= @team_report_problem_link %>",
+        "TourLink": "<%= @team_tour_link %>",
+        "DefaultThemeColor": "<%= @team_default_color %>"
+    }
+}
