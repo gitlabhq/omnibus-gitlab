@@ -26,7 +26,7 @@
     "SqlSettings": {
         "DriverName": "postgres",
         "DataSource": "<%= @sql_data_source %>",
-        "DataSourceReplicas": <%= @sql_data_source_replicas %>,
+        "DataSourceReplicas": [<%= @sql_data_source_replicas.map{|dsr| "\"#{dsr}\"" }.join(',') %>],
         "MaxIdleConns": <%= @sql_max_idle_conns %>,
         "MaxOpenConns": <%= @sql_max_open_conns %>,
         "Trace": <%= @sql_trace %>,

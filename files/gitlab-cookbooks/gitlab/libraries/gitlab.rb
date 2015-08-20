@@ -234,6 +234,10 @@ module Gitlab
 
       value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
+
+      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && node['gitlab']['mattermost']['sql_data_source_replicas'].empty?
+        Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
+      end
     end
 
     def parse_unicorn_listen_address
