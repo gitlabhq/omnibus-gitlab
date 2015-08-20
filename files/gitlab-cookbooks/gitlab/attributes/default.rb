@@ -530,7 +530,7 @@ default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
 default['gitlab']['mattermost']['log_console_enable'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
-default['gitlab']['mattermost']['log_file_enable'] = true
+default['gitlab']['mattermost']['log_file_enable'] = false
 default['gitlab']['mattermost']['log_file_level'] = 'INFO'
 default['gitlab']['mattermost']['log_file_format'] = nil
 
