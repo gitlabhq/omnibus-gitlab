@@ -107,6 +107,7 @@ include_recipe "runit"
   "remote-syslog",
   "logrotate",
   "bootstrap",
+  "mattermost"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"

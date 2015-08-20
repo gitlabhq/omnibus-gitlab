@@ -588,3 +588,119 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ci_nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # ci_nginx['keepalive_timeout'] = 65
 # ci_nginx['cache_max_size'] = '5000m'
+
+
+#####################
+# GitLab Mattermost #
+#####################
+
+# mattermost['enable'] = false
+# mattermost['username'] = 'mattermost'
+# mattermost['group'] = 'mattermost'
+# mattermost['home'] = '/var/opt/gitlab/mattermost'
+# mattermost['database_name'] = 'mattermost_production'
+
+# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost'
+# mattermost['log_console_enable'] = true
+# mattermost['log_console_level'] = 'INFO'
+# mattermost['log_file_enable'] = false
+# mattermost['log_file_level'] = 'INFO'
+# mattermost['log_file_format'] = nil
+
+# mattermost['service_site_name'] = "GitLab Mattermost"
+# mattermost['service_mode'] = 'beta'
+# mattermost['service_allow_testing'] = false
+# mattermost['service_use_ssl'] = false
+# mattermost['service_port'] = "8065"
+# mattermost['service_version'] = "developer"
+# mattermost['service_analytics_url'] = nil
+# mattermost['service_use_local_storage'] = true
+# mattermost['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
+# mattermost['service_allowed_login_attempts'] = 10
+
+# mattermost['sql_data_source'] = nil
+# mattermost['sql_data_source_replicas'] = []
+# mattermost['sql_max_idle_conns'] = 10
+# mattermost['sql_max_open_conns'] = 10
+# mattermost['sql_trace'] = false
+
+# mattermost['oauth'] = {'gitlab' => {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }}
+# mattermost['aws'] = {'S3AccessKeyId' => '123', 'S3SecretAccessKey' => '123', 'S3Bucket' => 'aa', 'S3Region' => 'bb'}
+# mattermost['image_thumbnail_width'] = 120
+# mattermost['image_thumbnail_height'] = 100
+# mattermost['image_preview_width'] = 1024
+# mattermost['image_preview_height'] = 0
+# mattermost['image_profile_width'] = 128
+# mattermost['image_profile_height'] = 128
+# mattermost['image_initial_font'] = 'luximbi.ttf'
+
+# mattermost['email_by_pass_email'] = true
+# mattermost['email_smtp_username'] = nil
+# mattermost['email_smtp_password'] = nil
+# mattermost['email_smtp_server'] = nil
+# mattermost['email_use_tls'] = false
+# mattermost['email_feedback_email'] = nil
+# mattermost['email_feedback_name'] = nil
+# mattermost['email_apple_push_server'] = nil
+# mattermost['email_apple_push_cert_public'] = nil
+# mattermost['email_apple_push_cert_private'] = nil
+
+# mattermost['ratelimit_use_rate_limiter'] = true
+# mattermost['ratelimit_per_sec'] = 10
+# mattermost['ratelimit_memory_store_size'] = 10000
+# mattermost['ratelimit_vary_by_remote_addr'] = true
+# mattermost['ratelimit_vary_by_header'] = nil
+
+# mattermost['privacy_show_email_address'] = true
+# mattermost['privacy_show_phone_number'] = true
+# mattermost['privacy_show_skype_id'] = true
+# mattermost['privacy_show_full_name'] = true
+
+# mattermost['team_max_users_per_team'] = 150
+# mattermost['team_allow_public_link'] = true
+# mattermost['team_allow_valet_default'] = false
+# mattermost['team_terms_link'] = '/static/help/configure_links.html'
+# mattermost['team_privacy_link'] = '/static/help/configure_links.html'
+# mattermost['team_about_link'] = '/static/help/configure_links.html'
+# mattermost['team_help_link'] = '/static/help/configure_links.html'
+# mattermost['team_report_problem_link'] = '/static/help/configure_links.html'
+# mattermost['team_tour_link'] = '/static/help/configure_links.html'
+# mattermost['team_default_color'] = '#2389D7'
+
+####################
+# Mattermost NGINX #
+####################
+
+# mattermost_nginx['enable'] = false
+# mattermost_nginx['client_max_body_size'] = '250m'
+# mattermost_nginx['redirect_http_to_https'] = false
+# mattermost_nginx['redirect_http_to_https_port'] = 80
+# mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
+# mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+# mattermost_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
+# mattermost_nginx['ssl_prefer_server_ciphers'] = "on"
+# mattermost_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+# mattermost_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# mattermost_nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# mattermost_nginx['ssl_dhparam'] = nil # Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
+# mattermost_nginx['listen_addresses'] = ['*']
+# mattermost_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
+# mattermost_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# mattermost_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
+# mattermost_nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
+
+## Advanced settings
+# mattermost_nginx['dir'] = "/var/opt/gitlab/nginx"
+# mattermost_nginx['log_directory'] = "/var/log/gitlab/nginx"
+# mattermost_nginx['worker_processes'] = 4
+# mattermost_nginx['worker_connections'] = 10240
+# mattermost_nginx['sendfile'] = 'on'
+# mattermost_nginx['tcp_nopush'] = 'on'
+# mattermost_nginx['tcp_nodelay'] = 'on'
+# mattermost_nginx['gzip'] = "on"
+# mattermost_nginx['gzip_http_version'] = "1.0"
+# mattermost_nginx['gzip_comp_level'] = "2"
+# mattermost_nginx['gzip_proxied'] = "any"
+# mattermost_nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+# mattermost_nginx['keepalive_timeout'] = 65
+# mattermost_nginx['cache_max_size'] = '5000m'

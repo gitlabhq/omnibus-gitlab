@@ -50,14 +50,17 @@ module Gitlab
   gitlab_git_http_server Mash.new
   nginx Mash.new
   ci_nginx Mash.new
+  mattermost_nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
   logrotate Mash.new
   high_availability Mash.new
   web_server Mash.new
+  mattermost Mash.new
   node nil
   external_url nil
   ci_external_url nil
+  mattermost_external_url nil
   git_data_dir nil
 
   class << self
@@ -80,6 +83,11 @@ module Gitlab
                                                    generate_hex(64)
                                                  end
       Gitlab['gitlab_ci']['db_key_base'] ||= generate_hex(64)
+
+      Gitlab['mattermost']['service_invite_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['service_public_link_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['service_reset_salt'] ||= generate_hex(64)
+      Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= generate_hex(64)
 
       # Note: Besides the section below, gitlab-secrets.json will also change
       # in CiHelper in libraries/helper.rb
@@ -148,6 +156,7 @@ module Gitlab
         postgresql
         remote-syslog
         gitlab-git-http-server
+        mattermost
       }.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
       end
@@ -197,6 +206,27 @@ module Gitlab
         better_value_from_gitlab_rb = Gitlab[right.first][right.last]
         default_from_attributes = node['gitlab'][right.first.gsub('_', '-')][right.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
+      end
+    end
+
+    def parse_mattermost_postgresql_settings
+      value_from_gitlab_rb = Gitlab['mattermost']['sql_data_source']
+
+      attributes_values = []
+      [
+        %w{postgresql sql_mattermost_user},
+        %w{postgresql unix_socket_directory},
+        %w{postgresql port},
+        %w{mattermost database_name}
+      ].each do |value|
+        attributes_values << (Gitlab[value.first][value.last] || node['gitlab'][value.first][value.last])
+      end
+
+      value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
+      Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
+
+      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && node['gitlab']['mattermost']['sql_data_source_replicas'].empty?
+        Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
       end
     end
 
@@ -273,6 +303,49 @@ module Gitlab
       ci_nginx['enable'] = true if ci_nginx['enable'].nil?
     end
 
+    def parse_mattermost_external_url
+      return unless mattermost_external_url
+
+      mattermost['enable'] = true if mattermost['enable'].nil?
+
+      uri = URI(mattermost_external_url.to_s)
+
+      unless uri.host
+        raise "GitLab Mattermost external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
+      end
+
+      Gitlab['mattermost']['host'] = uri.host
+
+      case uri.scheme
+      when "http"
+        Gitlab['mattermost']['service_use_ssl'] = false
+      when "https"
+        Gitlab['mattermost']['service_use_ssl'] = true
+        Gitlab['mattermost_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['mattermost_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+      else
+        raise "Unsupported external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported CI external URL path: #{uri.path}"
+      end
+
+      Gitlab['mattermost_nginx']['listen_port'] = uri.port
+    end
+
+    def parse_gitlab_mattermost
+      return unless mattermost['enable']
+
+      mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
+
+      unless gitlab_rails["enable"] || node['gitlab']['gitlab-rails']['enable']
+        redis["enable"] = false
+        unicorn["enable"] = false
+        sidekiq["enable"] = false
+      end
+    end
+
     def generate_hash
       results = { "gitlab" => {} }
       [
@@ -291,14 +364,17 @@ module Gitlab
         "gitlab_git_http_server",
         "nginx",
         "ci_nginx",
+        "mattermost_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
         "high_availability",
         "postgresql",
         "web_server",
+        "mattermost",
         "external_url",
-        "ci_external_url"
+        "ci_external_url",
+        "mattermost_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -314,6 +390,7 @@ module Gitlab
       parse_udp_log_shipping
       parse_redis_settings
       parse_postgresql_settings
+      parse_mattermost_postgresql_settings
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
@@ -321,6 +398,8 @@ module Gitlab
       parse_nginx_listen_address
       parse_nginx_listen_ports
       parse_gitlab_ci
+      parse_mattermost_external_url
+      parse_gitlab_mattermost
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

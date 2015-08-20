@@ -42,6 +42,7 @@ nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
 gitlab_ci_http_conf = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
+gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
 
 # If the service is enabled, check if we are using internal nginx
 gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
@@ -56,6 +57,12 @@ gitlab_ci_enabled = if node['gitlab']['gitlab-ci']['enable']
                       false
                     end
 
+gitlab_mattermost_enabled = if node['gitlab']['mattermost']['enable']
+                              node['gitlab']['mattermost-nginx']['enable']
+                            else
+                              false
+                            end
+
 # Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
@@ -65,6 +72,11 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
 nginx_vars =  nginx_vars.merge!(
                 :gitlab_ci_http_config => gitlab_ci_enabled ? gitlab_ci_http_conf : nil
               )
+# Include the config file for gitlab mattermost in nginx.conf later
+nginx_vars = nginx_vars.to_hash.merge!({
+               :gitlab_mattermost_http_config => gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
+             })
+
 if nginx_vars['listen_https'].nil?
   nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
 else
@@ -107,6 +119,29 @@ template gitlab_ci_http_conf do
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_ci_enabled ? :create : :delete
+end
+
+mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
+
+if mattermost_nginx_vars['listen_https'].nil?
+  mattermost_nginx_vars['https'] = node['gitlab']['mattermost']['service_use_ssl']
+else
+  mattermost_nginx_vars['https'] = mattermost_nginx_vars['listen_https']
+end
+
+template gitlab_mattermost_http_conf do
+  source "nginx-gitlab-mattermost-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(mattermost_nginx_vars.merge(
+   {
+     :fqdn => node['gitlab']['mattermost']['host'],
+     :service_port => node['gitlab']['mattermost']['service_port']
+   }
+  ))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action gitlab_mattermost_enabled ? :create : :delete
 end
 
 template nginx_config do
