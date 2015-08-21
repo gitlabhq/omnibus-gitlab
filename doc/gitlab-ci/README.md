@@ -47,8 +47,6 @@ gitlab_ci['gitlab_server'] = { 'url' => 'http://gitlab.example.com', 'app_id' =>
 
 # Shut down GitLab services on the CI server
 gitlab_rails['enable'] = false
-unicorn['enable'] = false
-sidekiq['enable'] = false
 ```
 
 ## Manually (re)authorising GitLab CI with GitLab
