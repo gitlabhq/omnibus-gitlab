@@ -17,7 +17,7 @@
 #
 
 name "gitlab-shell"
-default_version "0384cff17506dcd1d53d239c570cf67140a08d6c" # v2.6.3
+default_version "a6da081aeca0a01257d87b5352b65cc981b0326f" # v2.6.4
 
 dependency "ruby"
 dependency "rsync"
