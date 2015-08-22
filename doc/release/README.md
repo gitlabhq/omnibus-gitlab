@@ -47,11 +47,11 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 
   Examples of converting an upstream tag to an omnibus tag sequence:
 
-  | upstream tag     | omnibus tag sequence                        |
-  | ------------     | --------------------                        |
-  | `v7.10.4`        | `7.10.4+ce.0`, `7.10.4+ce.1`, `...`         |
-  | `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
-  | `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
+| upstream tag     | omnibus tag sequence                        |
+| ------------     | --------------------                        |
+| `v7.10.4`        | `7.10.4+ce.0`, `7.10.4+ce.1`, `...`         |
+| `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
+| `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
 
 - Push the branch and the tag to both gitlab.com and dev.gitlab.org:
 
