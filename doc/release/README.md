@@ -67,10 +67,8 @@ The package are being built at https://ci.gitlab.org .
 
 - When the build is done, update the download page with the package URL's and SHA1 hashes.
 
-See a previous [CE example](https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/141)
-and [EE example](https://dev.gitlab.org/gitlab/gitlab-ee/commit/7301417820404f92ca7c0a9940408ef414ef3c01).
+## Publishing the packages
 
-[the gitlab-rails version in omnibus-gitlab]: ../master/config/software/gitlab-rails.rb#L20
-[the gitlab-shell version]: ../master/config/software/gitlab-shell.rb#L20
-[the gitlab-ci version]: ../master/config/software/gitlab-ci.rb#L19
-[the source]: ../master/config/software/gitlab-rails.rb#L34
+You can track the progress of package building on [ci.gitlab.org](https://ci.gitlab.org/projects/55).
+They are pushed to [packagecloud](https://packages.gitlab.com/gitlab/)
+automatically after successful builds.
