@@ -62,7 +62,8 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 
     Pushing an annotated tag to dev.gitlab.org triggers a package release.
 
-- Make sure that the master branch of omnibus-gitlab has the latest changes from the omnibus-gitlab CE stable branch
+- Make sure that the master branch of omnibus-gitlab has the latest changes from
+  the omnibus-gitlab CE stable branch:
 
     ```shell
     git checkout master
