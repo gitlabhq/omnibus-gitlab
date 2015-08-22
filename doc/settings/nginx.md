@@ -74,7 +74,7 @@ ci_external_url "https://ci.example.com"
 ci_nginx['redirect_http_to_https'] = true
 ```
 
-## Change the default port and the SSL certificate locations
+## Change the default port
 
 If you need to use an HTTPS port other than the default (443), just specify it
 as part of the external_url.
@@ -85,16 +85,18 @@ external_url "https://gitlab.example.com:2443"
 
 The same syntax works for GitLab CI with `ci_external_url`.
 
-To set the location of ssl certificates create `/etc/gitlab/ssl` directory, place the `.crt` and `.key` files in the directory and specify the following configuration:
+## Change the SSL certificate locations
+
+To set the location of the SSL certificates create a directory, place the `.crt` and `.key` files in the directory and specify the following configuration:
 
 ```ruby
 # For GitLab
-nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.crt"
-nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
+nginx['ssl_certificate'] = "/somewhere/ssl/gitlab.example.crt"
+nginx['ssl_certificate_key'] = "/somewhere/ssl/gitlab.example.com.key"
 
 # For GitLab CI
-ci_nginx['ssl_certificate'] = "/etc/gitlab/ssl/ci.example.crt"
-ci_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/ci.example.com.key"
+ci_nginx['ssl_certificate'] = "/somewhere/ssl/ci.example.crt"
+ci_nginx['ssl_certificate_key'] = "/somewhere/ssl/ci.example.com.key"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
