@@ -56,8 +56,8 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
 - Push the branch and the tag to both gitlab.com and dev.gitlab.org:
 
     ```shell
-    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0.omnibus
-    git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0.omnibus
+    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
+    git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
     ```
 
     Pushing an annotated tag to dev.gitlab.org triggers a package release.
