@@ -4,8 +4,6 @@
 
 Please make sure you are viewing this file on the master branch.
 
-![documentation version](images/omnibus-documentation-version-update-md.png)
-
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we

@@ -5,11 +5,9 @@ service on your GitLab server.
 
 ## Documentation version
 
-Please make sure you are viewing the documentation for the version of
-omnibus-gitlab you are using. In most cases this should be the highest numbered
-stable branch (example shown below).
+Make sure you view this guide from the tag (version) of GitLab you would like to install. In most cases this should be the highest numbered production tag (without rc in it). You can select the tag in the version dropdown in the top left corner of GitLab (below the menu bar).
 
-![documentation version](doc/images/omnibus-documentation-version.png)
+If the highest number stable branch is unclear please check the [GitLab Blog](https://about.gitlab.com/blog/) for installation guide links by version.
 
 ## Getting started
 
