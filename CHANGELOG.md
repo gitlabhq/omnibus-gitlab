@@ -3,7 +3,7 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-7.14.0 (unreleased)
+7.14.0
 
 - Add gitlab-git-http-server (disabled by default) 009aa7d2e68bc84717fd363c88e655ee510aa8e5
 - Resolved intermittent issues in gitlab-ctl reconfigure 83ce5ac3fe50acf3da1da572cd8b88016039f1a0
