@@ -338,8 +338,10 @@ module Gitlab
       return unless mattermost['enable']
 
       mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
+    end
 
-      unless gitlab_rails["enable"] || node['gitlab']['gitlab-rails']['enable']
+    def disable_gitlab_rails_services
+      if gitlab_rails["enable"] == false
         redis["enable"] = false
         unicorn["enable"] = false
         sidekiq["enable"] = false
@@ -400,6 +402,7 @@ module Gitlab
       parse_gitlab_ci
       parse_mattermost_external_url
       parse_gitlab_mattermost
+      disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
