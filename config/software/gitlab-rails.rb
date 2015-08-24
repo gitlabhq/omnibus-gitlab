@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "f5483791e5bfd8b51e985e0f8087c44715dc2eb4" # v7.14.0
+default_version "master" # Nightly build
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
