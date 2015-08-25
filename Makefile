@@ -23,6 +23,10 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge test_build move_to_platform_dir sync
+ifdef NIGHTLY
+test: PACKAGECLOUD_REPO=nightly-builds
+test: packagecloud
+endif
 
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
