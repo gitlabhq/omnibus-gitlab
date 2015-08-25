@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.14.1
+
+- Update gitlab-git-http-server to version 0.2.8 505de5318f8e464f88e7a57e65d76387ef86cfe5
+- Fix automatic SSO authorization between GitLab and Mattermost (Hiroyuki Sato) 1e7453bb71b92ba0fb095fc9ebab25015451b6bc
+
 7.14.0
 
 - Add gitlab-git-http-server (disabled by default) 009aa7d2e68bc84717fd363c88e655ee510aa8e5
