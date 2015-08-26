@@ -14,6 +14,7 @@
     :name: <%= @reply_by_email_mailbox_name %>
     # Always "sidekiq".
     :delivery_method: sidekiq
+    :delete_after_delivery: true
     :delivery_options:
       # The URL to the Redis server used by Sidekiq. Should match the URL in config/resque.yml.
       :redis_url: <%= @redis_url %>

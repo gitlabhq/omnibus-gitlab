@@ -174,10 +174,11 @@ template_symlink File.join(gitlab_rails_etc_dir, "mail_room.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables
+  variables(
     node['gitlab']['gitlab-rails'].to_hash.merge(
       :redis_url => redis_url
     )
+  )
   restarts dependent_services
   action node['gitlab']['gitlab-rails']['reply_by_email_enabled'] ? :create : :delete
 end

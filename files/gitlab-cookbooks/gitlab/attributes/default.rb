@@ -90,6 +90,7 @@ default['gitlab']['gitlab-rails']['reply_by_email_host'] = nil
 default['gitlab']['gitlab-rails']['reply_by_email_port'] = nil
 default['gitlab']['gitlab-rails']['reply_by_email_ssl'] = nil
 default['gitlab']['gitlab-rails']['reply_by_email_email'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_log_directory'] = "/var/opt/gitlab/mailroom"
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
