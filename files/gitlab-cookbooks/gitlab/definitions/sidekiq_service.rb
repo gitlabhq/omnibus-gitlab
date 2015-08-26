@@ -22,9 +22,6 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
 
   sidekiq_log_dir = node['gitlab'][svc]['log_directory']
 
-  reply_by_email_enabled = node['gitlab']['gitlab-rails']['reply_by_email_enabled']
-  mail_room_config = File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "mail_room.yml")
-
   directory sidekiq_log_dir do
     owner user
     mode '0700'
@@ -38,9 +35,7 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
       :rails_app => rails_app,
       :user => user,
       :shutdown_timeout => node['gitlab'][svc]['shutdown_timeout'],
-      :log_directory => sidekiq_log_dir,
-      :reply_by_email_enabled => reply_by_email_enabled,
-      :mail_room_config => mail_room_config
+      :log_directory => sidekiq_log_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end
