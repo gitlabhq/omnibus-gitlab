@@ -43,6 +43,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['reply_by_email_email'] = "replies@gitlab.example.com"  # Email account username. Usually the full email address.
 # gitlab_rails['reply_by_email_password'] = "password" # Email account password
 # gitlab_rails['reply_by_email_mailbox_name'] = "inbox" # The name of the mailbox where incoming mail will end up.
+# gitlab_rails['reply_by_email_log_directory'] = "/var/log/gitlab/mailroom"
 
 ## For setting up LDAP
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#setting-up-ldap-sign-in
