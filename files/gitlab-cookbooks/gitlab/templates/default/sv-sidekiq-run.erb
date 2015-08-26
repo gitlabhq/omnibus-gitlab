@@ -19,3 +19,10 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
     -t <%= @options[:shutdown_timeout] %>
+
+<% if @options[:reply_by_email_enabled] %>
+exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
+  -U <%= @options[:user] %> -u <%= @options[:user] %> \
+  /opt/gitlab/embedded/bin/bundle exec mail_room \
+    -q -c <%= @options[:mail_room_config] %>
+<% end %>
