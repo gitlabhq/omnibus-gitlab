@@ -84,6 +84,12 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_l
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_enabled'] = false
+default['gitlab']['gitlab-rails']['reply_by_email_address'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_host'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_port'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_ssl'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_email'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
