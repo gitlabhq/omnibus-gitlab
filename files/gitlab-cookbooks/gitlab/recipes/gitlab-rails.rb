@@ -168,6 +168,20 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   restarts dependent_services
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "mail_room.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/mail_room.yml")
+  source "mail_room.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables
+    node['gitlab']['gitlab-rails'].to_hash.merge(
+      :redis_url => redis_url
+    )
+  restarts dependent_services
+  action node['gitlab']['gitlab-rails']['reply_by_email_enabled'] ? :create : :delete
+end
+
 link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
   to File.join(gitlab_shell_source_dir, ".gitlab_shell_secret")
 end
