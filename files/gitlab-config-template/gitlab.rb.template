@@ -76,6 +76,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     sync_ssh_keys: false
 # EOS
 
+## Setting up Kerberos (EE only)
+## See http://doc.gitlab.com/ee/integration/kerberos.html#http-git-access
+# gitlab_rails['kerberos_enabled'] = true
+# gitlab_rails['kerberos_keytab'] = /etc/http.keytab
+# gitlab_rails['kerberos_service_principal_name'] = HTTP/gitlab.example.com@EXAMPLE.COM
+# gitlab_rails['kerberos_use_dedicated_port'] = true
+# gitlab_rails['kerberos_port'] = 8443
+# gitlab_rails['kerberos_https'] = true
+
 ## For setting up omniauth
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#omniauth-google-twitter-github-login
 
