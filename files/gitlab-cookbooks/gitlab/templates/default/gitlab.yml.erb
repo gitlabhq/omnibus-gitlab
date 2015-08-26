@@ -78,6 +78,13 @@ production: &base
     # The default is 'tmp/repositories' relative to the root of the Rails app.
     repository_downloads_path: <%= @gitlab_repository_downloads_path %>
 
+  ## Reply by email
+  # Allow users to comment on issues and merge requests by replying to notification emails.
+  # For documentation on how to set this up, see http://doc.gitlab.com/ce/reply_by_email/README.md
+  reply_by_email:
+    enabled: <%= @reply_by_email_enabled %>
+    address: <%= @reply_by_email_address %>
+
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:

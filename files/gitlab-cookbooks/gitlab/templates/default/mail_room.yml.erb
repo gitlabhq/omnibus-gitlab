@@ -1,0 +1,26 @@
+:mailboxes:
+  -
+    # IMAP server host
+    :host: <%= @reply_by_email_host %>
+    # IMAP server port
+    :port: <%= @reply_by_email_port %>
+    # Whether the IMAP server uses SSL
+    :ssl: <%= @reply_by_email_ssl %>
+    # Email account username. Usually the full email address.
+    :email: <%= @reply_by_email_email %>
+    # Email account password
+    :password: <%= @reply_by_email_password %>
+    # The name of the mailbox where incoming mail will end up. Usually "inbox".
+    :name: <%= @reply_by_email_mailbox_name %>
+    # Always "sidekiq".
+    :delivery_method: sidekiq
+    :delete_after_delivery: true
+    :delivery_options:
+      # The URL to the Redis server used by Sidekiq. Should match the URL in config/resque.yml.
+      :redis_url: <%= @redis_url %>
+      # Always "resque:gitlab".
+      :namespace: resque:gitlab
+      # Always "incoming_email".
+      :queue: incoming_email
+      # Always "EmailReceiverWorker"
+      :worker: EmailReceiverWorker

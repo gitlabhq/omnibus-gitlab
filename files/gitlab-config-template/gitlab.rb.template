@@ -32,6 +32,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['webhook_timeout'] = 10
 
+## Reply by email
+# You need access to IMAP-enabled email account. For details
+# see http://doc.gitlab.com/ce/reply_by_email/README.html
+# gitlab_rails['reply_by_email_enabled'] = true
+# gitlab_rails['reply_by_email_address'] = "replies+%{reply_key}@gitlab.example.com"
+# gitlab_rails['reply_by_email_host'] = "imap.gmail.com" # IMAP server host
+# gitlab_rails['reply_by_email_port'] = 993 # IMAP server port
+# gitlab_rails['reply_by_email_ssl'] = true # Whether the IMAP server uses SSL
+# gitlab_rails['reply_by_email_email'] = "replies@gitlab.example.com"  # Email account username. Usually the full email address.
+# gitlab_rails['reply_by_email_password'] = "password" # Email account password
+# gitlab_rails['reply_by_email_mailbox_name'] = "inbox" # The name of the mailbox where incoming mail will end up.
+# gitlab_rails['reply_by_email_log_directory'] = "/var/log/gitlab/mailroom"
+
 ## For setting up LDAP
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#setting-up-ldap-sign-in
 ## Be careful not to break the identation in the ldap_servers block. It is in

@@ -20,3 +20,10 @@ sidekiq_service 'sidekiq' do
   rails_app 'gitlab-rails'
   user node['gitlab']['user']['username']
 end
+
+if node['gitlab']['gitlab-rails']['reply_by_email_enabled']
+  mailroom_service 'mailroom' do
+    rails_app 'gitlab-rails'
+    user node['gitlab']['user']['username']
+  end
+end
