@@ -108,6 +108,13 @@ default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 ####
 
+default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
+default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
+default['gitlab']['gitlab-rails']['kerberos_service_principal_name'] = nil
+default['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'] = nil
+default['gitlab']['gitlab-rails']['kerberos_port'] = nil
+default['gitlab']['gitlab-rails']['kerberos_https'] = nil
+
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_sign_in_with_provider'] = nil
