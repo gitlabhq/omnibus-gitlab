@@ -249,20 +249,6 @@ nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
-### Using a custom NGINX log format
-
-By default the NGINX access logs will use the 'combined' NGINX
-format, see
-http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format .
-If you want to use a custom log format string you can specify it
-in gitlab.rb.
-
-```
-nginx['log_format'] = 'my format string $foo $bar'
-ci_nginx['log_format'] = 'my format string $foo $bar'
-mattermost_nginx['log_format'] = 'my format string $foo $bar'
-```
-
 ## Using an existing Passenger/Nginx installation
 
 In some cases you may want to host GitLab using an existing Passenger/Nginx
