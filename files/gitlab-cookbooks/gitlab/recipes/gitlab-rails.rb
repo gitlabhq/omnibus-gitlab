@@ -266,6 +266,16 @@ unless bitbucket_keys.nil?
     mode 0600
   end
 
+  ssh_config_file = File.join(ssh_dir, 'config')
+  bitbucket_host_config = "Host bitbucket.org\n  IdentityFile ~/.ssh/bitbucket_rsa\n  User #{node['gitlab']['user']['username']}"
+
+  execute 'manage config for bitbucket import key' do
+    command "echo '#{bitbucket_host_config}' >> #{ssh_config_file}"
+    user node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    not_if "grep 'IdentityFile ~/.ssh/bitbucket_rsa' #{ssh_config_file}"
+  end
+
   file File.join(ssh_dir, 'bitbucket_rsa.pub') do
     content "#{bitbucket_keys['public_key']}\n"
     owner node['gitlab']['user']['username']
