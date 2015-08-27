@@ -273,7 +273,7 @@ unless bitbucket_keys.nil?
     command "echo '#{bitbucket_host_config}' >> #{ssh_config_file}"
     user node['gitlab']['user']['username']
     group node['gitlab']['user']['group']
-    not_if "grep '#{bitbucket_host_config}' #{ssh_config_file}"
+    not_if "grep 'IdentityFile ~/.ssh/bitbucket_rsa' #{ssh_config_file}"
   end
 
   file File.join(ssh_dir, 'bitbucket_rsa.pub') do
