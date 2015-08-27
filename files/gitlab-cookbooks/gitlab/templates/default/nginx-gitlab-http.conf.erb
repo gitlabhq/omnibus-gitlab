@@ -57,6 +57,11 @@ server {
 server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% end %>;
+
+  <% if @kerberos_enabled && @kerberos_use_dedicated_port %>
+  listen <%= listen_address %>:<%= @kerberos_port %><% if @kerberos_https %> ssl<% end %>;
+  <% end %>
+
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
