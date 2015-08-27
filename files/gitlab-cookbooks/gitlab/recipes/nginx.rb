@@ -148,6 +148,10 @@ template gitlab_mattermost_http_conf do
   action gitlab_mattermost_enabled ? :create : :delete
 end
 
+nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
+nginx_vars['gitlab_ci_access_log_format'] = node['gitlab']['ci-nginx']['log_format']
+nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
+
 template nginx_config do
   source "nginx.conf.erb"
   owner "root"
