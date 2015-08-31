@@ -95,7 +95,7 @@ template gitlab_rails_http_conf do
       :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
       :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
       :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],
-      :kerberos_https => default['gitlab']['gitlab-rails']['kerberos_https']
+      :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
