@@ -54,7 +54,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl spdy<% end %>;
 
   <% if @kerberos_enabled && @kerberos_use_dedicated_port %>
   listen <%= listen_address %>:<%= @kerberos_port %><% if @kerberos_https %> ssl<% end %>;
