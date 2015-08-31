@@ -130,6 +130,7 @@ module Gitlab
       Gitlab['gitlab_shell']['git_data_directory'] ||= git_data_dir
       Gitlab['gitlab_rails']['gitlab_shell_repos_path'] ||= File.join(git_data_dir, "repositories")
       Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
+      Gitlab['gitlab_git_http_server']['repo_root'] ||= File.join(git_data_dir, "repositories")
     end
 
     def parse_udp_log_shipping
