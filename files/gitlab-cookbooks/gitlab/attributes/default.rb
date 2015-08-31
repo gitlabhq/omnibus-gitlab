@@ -328,7 +328,7 @@ default['gitlab']['web-server']['external_users'] = []
 # gitlab-git-http-server
 ####
 
-default['gitlab']['gitlab-git-http-server']['enable'] = false
+default['gitlab']['gitlab-git-http-server']['enable'] = true
 default['gitlab']['gitlab-git-http-server']['ha'] = false
 default['gitlab']['gitlab-git-http-server']['repo_root'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-git-http-server']['listen_network'] = "unix"
