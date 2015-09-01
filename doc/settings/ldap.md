@@ -26,7 +26,7 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   host: '_your_ldap_server'
   port: 389 # or 636
   uid: 'sAMAccountName'
-  method: 'plain # "tls" or "ssl" or "plain"
+  method: 'plain' # "tls" or "ssl" or "plain"
   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
   password: '_the_password_of_the_bind_user'
 
@@ -111,4 +111,3 @@ EOS
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
 *Note*: If you are using pre GitLab 7.4 [configuration syntax like described in the old version README LDAP section](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/e65f026839594d54ad46a31a672d735b9caa16f0/README.md#setting-up-ldap-sign-in) be advised that it is deprecated.
-
