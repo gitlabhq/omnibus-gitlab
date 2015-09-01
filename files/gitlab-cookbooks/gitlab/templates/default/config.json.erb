@@ -20,7 +20,8 @@
         "AnalyticsUrl": "<%= @service_analytics_url %>",
         "UseLocalStorage": <%= @service_use_local_storage %>,
         "StorageDirectory": "<%= @service_storage_directory %>",
-        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>
+        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>,
+        "AllowEmailSignUp": <%= @service_allow_email_sign_up %>
     },
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
@@ -77,6 +78,8 @@
         "HelpLink": "<%= @team_help_link %>",
         "ReportProblemLink": "<%= @team_report_problem_link %>",
         "TourLink": "<%= @team_tour_link %>",
-        "DefaultThemeColor": "<%= @team_default_color %>"
+        "DefaultThemeColor": "<%= @team_default_color %>",
+        "DisableTeamCreation": <%= @team_disable_team_creation %>,
+        "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>"
     }
 }

@@ -560,6 +560,7 @@ default['gitlab']['mattermost']['service_analytics_url'] = nil
 default['gitlab']['mattermost']['service_use_local_storage'] = true
 default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
+default['gitlab']['mattermost']['service_allow_email_sign_up'] = true
 
 default['gitlab']['mattermost']['sql_data_source'] = nil
 default['gitlab']['mattermost']['sql_data_source_replicas'] = []
@@ -611,6 +612,8 @@ default['gitlab']['mattermost']['team_help_link'] = '/static/help/configure_link
 default['gitlab']['mattermost']['team_report_problem_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_tour_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
+default['gitlab']['mattermost']['team_disable_team_creation'] = false
+default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 
 ####
 # Mattermost NGINX
