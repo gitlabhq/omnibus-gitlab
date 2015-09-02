@@ -241,6 +241,22 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
 # gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
+##########################
+# GitLab git http server #
+##########################
+# see https://gitlab.com/gitlab-org/gitlab-git-http-server/blob/master/README.md
+
+# gitlab_git_http_server['enable'] = true
+# gitlab_git_http_server['ha'] = false
+# gitlab_git_http_server['repo_root'] = "/var/opt/gitlab/git-data/repositories"
+# gitlab_git_http_server['listen_network'] = "unix"
+# gitlab_git_http_server['listen_umask'] = 000
+# gitlab_git_http_server['listen_addr'] = "/var/opt/gitlab/gitlab-git-http-server/socket"
+# gitlab_git_http_server['auth_backend'] = "http://localhost:8080"
+# gitlab_git_http_server['pprof_listen_addr'] = "''" # put an empty string on the command line
+# gitlab_git_http_server['dir'] = "/var/opt/gitlab/gitlab-git-http-server"
+# gitlab_git_http_server['log_dir'] = "/var/log/gitlab/gitlab-git-http-server"
+
 ###############
 # GitLab user #
 ###############

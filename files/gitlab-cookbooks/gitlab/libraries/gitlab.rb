@@ -346,6 +346,7 @@ module Gitlab
         redis["enable"] = false
         unicorn["enable"] = false
         sidekiq["enable"] = false
+        gitlab_git_http_server["enable"] = false
       end
     end
 
