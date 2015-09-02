@@ -8,6 +8,11 @@ upstream gitlab_mattermost {
   server 127.0.0.1:<%= @service_port %>;
 }
 
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+
 <% if @https && @redirect_http_to_https %>
 server {
 <% @listen_addresses.each do |listen_address| %>
@@ -63,6 +68,10 @@ server {
     <% if @https %>
     proxy_set_header   X-Forwarded-Ssl     on;
     <% end %>
+
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
     proxy_pass http://gitlab_mattermost;
   }
 
