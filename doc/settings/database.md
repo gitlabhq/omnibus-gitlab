@@ -1,5 +1,14 @@
 # Database settings
 
+## Connecting to the bundled Postgresql database
+
+If you need to connect to the bundled Postgresql database and are using default omnibus-gitlab database configuration,
+you can connect using:
+
+```bash
+sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql -h /var/opt/gitlab/postgresql -d gitlabhq_production
+```
+
 ## Using a MySQL database management server (Enterprise Edition only)
 
 If you want to use MySQL or MariaDB and are using the **GitLab Enterprise Edition packages** please do the following:
