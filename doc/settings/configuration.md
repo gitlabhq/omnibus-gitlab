@@ -109,44 +109,45 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Setting up LDAP sign-in
 
-See [LDAP](ldap.md).
+See [doc/settings/ldap.md](ldap.md).
 
 ### Enable HTTPS
 
-See [NGINX](nginx.md#enable-https).
+See [doc/settings/nginx.md](nginx.md#enable-https).
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-See [NGINX](nginx.md#redirect-http-requests-to-https).
+See [doc/settings/nginx.md](nginx.md#redirect-http-requests-to-https).
 
 #### Change the default port and the ssl certificate locations.
 
-See [NGINX](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+See
+[doc/settings/nginx.md](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
 ### Use non-packaged web-server
 
-For using an existing Nginx, Passenger, or Apache webserver see [NGINX](nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](nginx.md#using-a-non-bundled-web-server).
 
 ## Using a non-packaged PostgreSQL database management server
 
-To connect to an external PostgreSQL or MySQL DBMS see [database](database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
 
 ## Using a non-packaged Redis instance
 
-See [Redis](redis.md).
+See [doc/settings/redis.md](redis.md).
 
 ### Adding ENV Vars to the GitLab Runtime Environment
 
 See
-[environment-variables](environment-variables.md).
+[doc/settings/environment-variables.md](environment-variables.md).
 
 ### Changing GitLab.yml settings
 
-See [GitLab.yml](gitlab.yml.md).
+See [doc/settings/gitlab.yml.md](gitlab.yml.md).
 
 ### Sending application email via SMTP
 
-See [SMTP](smtp.md).
+See [doc/settings/smtp.md](smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
@@ -155,16 +156,16 @@ Omniauth configuration is documented in
 
 ### Adjusting Unicorn settings
 
-See [Unicorn](unicorn.md).
+See [doc/settings/unicorn.md](unicorn.md).
 
 ### Setting the NGINX listen address or addresses
 
-See [NGINX](nginx.md).
+See [doc/settings/nginx.md](nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
 
-See [NGINX](nginx.md).
+See [doc/settings/nginx.md](nginx.md).
 
 ### Inserting custom settings into the NGINX config
 
-See [NGINX](nginx.md).
+See [doc/settings/nginx.md](nginx.md).
