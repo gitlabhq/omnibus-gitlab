@@ -25,7 +25,7 @@
     },
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
-        "DriverName": "postgres",
+        "DriverName": "<%= @sql_driver_name %>",
         "DataSource": "<%= @sql_data_source %>",
         "DataSourceReplicas": [<%= @sql_data_source_replicas.map{ |dsr| "\"#{dsr}\"" }.join(',') %>],
         "MaxIdleConns": <%= @sql_max_idle_conns %>,

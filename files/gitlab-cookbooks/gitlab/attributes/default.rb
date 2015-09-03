@@ -563,6 +563,7 @@ default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/
 default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
 default['gitlab']['mattermost']['service_allow_email_sign_up'] = true
 
+default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
 default['gitlab']['mattermost']['sql_data_source_replicas'] = []
 default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
