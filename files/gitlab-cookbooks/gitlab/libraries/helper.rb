@@ -227,9 +227,13 @@ class SecretsHelper
     end
 
     existing_secrets.each do |k, v|
-      v.each do |pk, p|
-        # Note: Specifiying a secret in gitlab.rb will take precendence over "gitlab-secrets.json"
-        Gitlab[k][pk] ||= p
+      if Gitlab[k]
+        v.each do |pk, p|
+          # Note: Specifiying a secret in gitlab.rb will take precendence over "gitlab-secrets.json"
+          Gitlab[k][pk] ||= p
+        end
+      else
+        warn("Ignoring section #{k} in /etc/gitlab/giltab-secrets.json, does not exist in gitlab.rb")
       end
     end
   end
