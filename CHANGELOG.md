@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.14.2(Unreleased)
+
+- Update gitlab-git-http-server to version 0.2.9 82a3bec2eb3f006bb9327a59608f99cae81d5c92
+- Ignore unknown values from gitlab-secrets.json (Stan Hu) ef76c81d7b71f72d6438e3458d61ecaef8965e17
+- Update cacerts to 2015.09.02 6bb15558b681035e0db75e41f5a14cc878344c9d
+
 7.14.1
 
 - Update gitlab-git-http-server to version 0.2.8 505de5318f8e464f88e7a57e65d76387ef86cfe5
