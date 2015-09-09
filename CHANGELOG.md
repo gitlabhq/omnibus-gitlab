@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.0.0 (Unreleased)
+
+- gitlab-git-http-server 0.2.9 is enabled by default e6fa1b77c9501da6b6ef44c92e2705b1e94166ea
+- Added reply by email configuration 3181425e05bd7be76832957367a24df771bdc84c
+- Add to host to ssh config for git user for bitbucket importer 3b0f7ebefcb9221b4ed97f234f9e728e3faf0b7d
+- Add ability to configure the format of nginx logs 03511afa1d3440459b327bd873550c3cc6a6a44e
+- Add option to configure db driver for Mattermost f8f00ff20304753b3eeef5d004930c4a8c404e1c
+- Remove local_mode_cache_warning warnings durning reconfigure run 6cd30475cde59803f2d6f9ff8e00bde520512113
+- Update chef server version to 12.4.1 435183d75f4d2c8333923e95fc6254c52901295f
+- Enable spdy support when using ssl (Manuel Gutierrez) caafd1d9cf86ccecfc1f7ecddd3fd005727beddd
+- Explicitly set scheme for X-Forwarded-Proto (Stan Hu) 19d71ac3cbd086f25a2e4ce284ea341d96b7ec46
+- Add option to set ssl_client_certificate path (Brayden Lopez) fc0f7e9344a80ff882f4247049668ac1636e4229
+- Add new Kerberos configuration settings for EE 40fc4a8687e649b0b662014dfa61442aaf4bd437
+
 7.14.2(Unreleased)
 
 - Update gitlab-git-http-server to version 0.2.9 82a3bec2eb3f006bb9327a59608f99cae81d5c92
