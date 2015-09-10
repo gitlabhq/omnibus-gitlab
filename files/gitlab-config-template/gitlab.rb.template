@@ -683,6 +683,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_smtp_password'] = nil
 # mattermost['email_smtp_server'] = nil
 # mattermost['email_use_tls'] = false
+# mattermost['email_use_start_tls'] = false
 # mattermost['email_feedback_email'] = nil
 # mattermost['email_feedback_name'] = nil
 # mattermost['email_apple_push_server'] = nil

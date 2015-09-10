@@ -587,6 +587,7 @@ default['gitlab']['mattermost']['email_smtp_username'] = nil
 default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
 default['gitlab']['mattermost']['email_use_tls'] = false
+default['gitlab']['mattermost']['email_use_start_tls'] = false
 default['gitlab']['mattermost']['email_feedback_email'] = nil
 default['gitlab']['mattermost']['email_feedback_name'] = nil
 default['gitlab']['mattermost']['email_apple_push_server'] = nil
