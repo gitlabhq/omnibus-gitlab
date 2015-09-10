@@ -83,15 +83,17 @@ end
 # Populate mattermost configuration options
 ###
 # Try connecting to GitLab only if it is enabled
-if gitlab['gitlab-rails']['enable']
-  database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
-  gitlab_oauth  = if gitlab['mattermost']['oauth']['gitlab']
-                    gitlab['mattermost']['oauth']['gitlab']
+database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
+gitlab_oauth  = if gitlab['mattermost']['oauth']['gitlab']
+                  gitlab['mattermost']['oauth']['gitlab']
+                else
+                  if gitlab['gitlab-rails']['enable'] && database_ready
+                     MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
                   else
-                    database_ready ? MattermostHelper.authorize_with_gitlab(Gitlab['external_url']):{}
+                    {}
                   end
-  oauth_attributes = gitlab['mattermost']['oauth'].to_hash.merge('gitlab' => gitlab_oauth)
-end
+                end
+oauth_attributes = gitlab['mattermost']['oauth'].to_hash.merge('gitlab' => gitlab_oauth)
 
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
