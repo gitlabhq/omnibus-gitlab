@@ -381,8 +381,8 @@ sudo usermod -aG gitlab-www www-data
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to :
 
-- [bundled Gitlab Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
-- [bundled Gitlab CI Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-ci-http.conf.erb)
+- [bundled Gitlab Nginx configuration](../../files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
+- [bundled Gitlab CI Nginx configuration](../../files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-ci-http.conf.erb)
 
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
