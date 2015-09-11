@@ -19,25 +19,33 @@ usernames = [
               node['gitlab']['user']['username'],
               node['gitlab']['postgresql']['username'],
               node['gitlab']['web-server']['username'],
-              node['gitlab']['redis']['username']
+              node['gitlab']['redis']['username'],
+              node['gitlab']['gitlab-ci']['username'],
+              node['gitlab']['ci-redis']['username'],
+              node['gitlab']['mattermost']['username']
             ]
 
 groups = [
             node['gitlab']['user']['group'],
             node['gitlab']['web-server']['group'],
             node['gitlab']['postgresql']['username'], # Group name is same as the username
-            node['gitlab']['redis']['username'] # Group name is same as the username
+            node['gitlab']['redis']['username'], # Group name is same as the username
+            node['gitlab']['gitlab-ci']['username'], # Group name is same as the username
+            node['gitlab']['ci-redis']['username'], # Group name is same as the username
+            node['gitlab']['mattermost']['group']
           ]
 
 
 usernames.each do |username|
-  user username do
+  account username do
+    username username
     action :remove
   end
 end
 
 groups.each do |group|
-  group group do
+  account group do
+    groupname group
     action :remove
   end
 end
