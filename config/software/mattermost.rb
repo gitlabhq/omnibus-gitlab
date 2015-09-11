@@ -20,7 +20,7 @@ name "mattermost"
 default_version "v0.7.1"
 
 source url: "https://github.com/mattermost/platform/releases/download/#{version}/mattermost.tar.gz",
-       md5: '0d5329fadb87dfe60a6b9a189782c3b6'
+       md5: '644bfdec4664c39597e04e57584afa60'
 
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
