@@ -29,15 +29,12 @@ pg_user = gitlab['postgresql']['username']
 ###
 # Create group and user that will be running mattermost
 ###
-group mattermost_group do
-  system true
-end
-
-user mattermost_user do
+account "Mattermost user and group" do
+  username mattermost_user
+  groupname mattermost_group
+  gid mattermost_group
   shell '/bin/sh'
   home mattermost_home
-  gid mattermost_group
-  system true
 end
 
 ###
