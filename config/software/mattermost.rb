@@ -30,10 +30,12 @@ build do
   command "#{install_dir}/embedded/bin/rsync -a --delete ./web/static #{install_dir}/embedded/service/mattermost/web/"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./web/templates #{install_dir}/embedded/service/mattermost/web/"
 
-  license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
-  license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
+  block do
+    license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
+    license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
 
-  File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
+    File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
+  end
 end
 
 GITLAB_MATTERMOST_COMPILED_LICENSE = <<-EOH
@@ -50,4 +52,5 @@ The above copyright notice and this permission notice shall be included in all c
 The receiver of the Software will not remove or alter any product identification, trademark, copyright or other notices embedded within or appearing within or on the Software;
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 EOH
