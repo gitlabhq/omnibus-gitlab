@@ -21,7 +21,7 @@
         "UseLocalStorage": <%= @service_use_local_storage %>,
         "StorageDirectory": "<%= @service_storage_directory %>",
         "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>,
-        "AllowEmailSignUp": <%= @service_allow_email_sign_up %>
+        "DisableEmailSignUp": <%= @service_disable_email_signup %>
     },
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
