@@ -22,16 +22,13 @@ define :redis_service, :socket_group => nil do
   redis_log_dir = node['gitlab'][svc]['log_directory']
   redis_user = node['gitlab']['redis']['username']
 
-  group redis_user do
-    gid node['gitlab']['redis']['gid']
-    system true
-  end
-
-  user redis_user do
+  account "Redis user and group" do
+    username redis_user
     uid node['gitlab']['redis']['uid']
-    gid redis_user
-    system true
-    shell node['gitlab']['redis']['shell']
+    ugid redis_user
+    groupname redis_user
+    gid node['gitlab']['redis']['gid']
+    shell  node['gitlab']['redis']['shell']
     home node['gitlab']['redis']['home']
   end
 
