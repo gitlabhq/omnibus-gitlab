@@ -31,8 +31,8 @@ pg_user = gitlab['postgresql']['username']
 ###
 account "Mattermost user and group" do
   username mattermost_user
+  ugid mattermost_group
   groupname mattermost_group
-  gid mattermost_group
   shell '/bin/sh'
   home mattermost_home
 end

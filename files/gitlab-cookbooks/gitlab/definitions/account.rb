@@ -28,6 +28,7 @@ define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil
         append true
         members params[:group_members]
       end
+      action params[:action]
     end
   end
 
@@ -39,6 +40,7 @@ define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil
       gid params[:ugid]
       system params[:system]
       supports params[:user_supports]
+      action params[:action]
     end
   end
 end
