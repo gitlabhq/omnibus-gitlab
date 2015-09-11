@@ -21,7 +21,7 @@
         "UseLocalStorage": <%= @service_use_local_storage %>,
         "StorageDirectory": "<%= @service_storage_directory %>",
         "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>,
-        "AllowEmailSignUp": <%= @service_allow_email_sign_up %>
+        "DisableEmailSignUp": <%= @service_disable_email_signup %>
     },
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
@@ -49,6 +49,7 @@
         "SMTPPassword": "<%= @email_smtp_password %>",
         "SMTPServer": "<%= @email_smtp_server %>",
         "UseTLS": <%= @email_use_tls %>,
+        "UseStartTLS": <%= @email_use_start_tls %>,
         "FeedbackEmail": "<%= @email_feedback_email %>",
         "FeedbackName": "<%= @email_feedback_name %>",
         "ApplePushServer": "<%= @email_apple_push_server %>",

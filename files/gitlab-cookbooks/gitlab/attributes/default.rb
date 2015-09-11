@@ -563,7 +563,7 @@ default['gitlab']['mattermost']['service_analytics_url'] = nil
 default['gitlab']['mattermost']['service_use_local_storage'] = true
 default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
-default['gitlab']['mattermost']['service_allow_email_sign_up'] = true
+default['gitlab']['mattermost']['service_disable_email_signup'] = false
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -589,6 +589,7 @@ default['gitlab']['mattermost']['email_smtp_username'] = nil
 default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
 default['gitlab']['mattermost']['email_use_tls'] = false
+default['gitlab']['mattermost']['email_use_start_tls'] = false
 default['gitlab']['mattermost']['email_feedback_email'] = nil
 default['gitlab']['mattermost']['email_feedback_name'] = nil
 default['gitlab']['mattermost']['email_apple_push_server'] = nil

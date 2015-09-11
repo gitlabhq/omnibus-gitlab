@@ -661,7 +661,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_use_local_storage'] = true
 # mattermost['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
 # mattermost['service_allowed_login_attempts'] = 10
-# mattermost['service_allow_email_sign_up'] = false
+# mattermost['service_disable_email_signup'] = true
 
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"
@@ -685,6 +685,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_smtp_password'] = nil
 # mattermost['email_smtp_server'] = nil
 # mattermost['email_use_tls'] = false
+# mattermost['email_use_start_tls'] = false
 # mattermost['email_feedback_email'] = nil
 # mattermost['email_feedback_name'] = nil
 # mattermost['email_apple_push_server'] = nil
