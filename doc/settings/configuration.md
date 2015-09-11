@@ -21,7 +21,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Storing Git data in an alternative directory
 
-By default, Omnibus-GitLab stores Git repository data under
+By default, omnibus-gitlab stores Git repository data under
 `/var/opt/gitlab/git-data`: repositories are stored in
 `/var/opt/gitlab/git-data/repositories`, and satellites in
 `/var/opt/gitlab/git-data/gitlab-satellites`.  You can change the location of
@@ -62,7 +62,7 @@ sudo gitlab-ctl start
 
 ### Changing the name of the Git user / group
 
-By default, Omnibus-GitLab uses the user name `git` for Git GitLab-shell login,
+By default, omnibus-gitLab uses the user name `git` for Git gitlab-shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
 Similarly, `git` group is used for group ownership of the Git data.  You can
 change the user and group by adding the following lines to
@@ -77,7 +77,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Specify numeric user and group identifiers
 
-Omnibus-GitLab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
 specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
 follows.
 
@@ -94,9 +94,9 @@ web_server['gid'] = 1237
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Only start Omnibus-GitLab services after a given filesystem is mounted
+## Only start omnibus-gitlab services after a given filesystem is mounted
 
-If you want to prevent Omnibus-GitLab services (NGINX, Redis, Unicorn etc.)
+If you want to prevent omnibus-gitlab services (NGINX, Redis, Unicorn etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -152,7 +152,7 @@ See [doc/settings/smtp.md](smtp.md).
 ### Omniauth (Google, Twitter, GitHub login)
 
 Omniauth configuration is documented in
-[doc.GitLab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
+[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
 
 ### Adjusting Unicorn settings
 
