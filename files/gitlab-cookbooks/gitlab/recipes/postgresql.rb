@@ -23,15 +23,12 @@ postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_user = node['gitlab']['postgresql']['username']
 
-group postgresql_user do
+account "Postgresql user and group" do
+  username postgresql_user
+  uid node['gitlab']['postgresql']['uid']
+  ugid postgresql_user
+  groupname postgresql_user
   gid node['gitlab']['postgresql']['gid']
-  system true
-end
-
-user postgresql_user do
-  uid  node['gitlab']['postgresql']['uid']
-  gid postgresql_user
-  system true
   shell node['gitlab']['postgresql']['shell']
   home node['gitlab']['postgresql']['home']
 end

@@ -24,19 +24,13 @@ directory gitlab_home do
   recursive true
 end
 
-# Create the group for the GitLab user
-group gitlab_group do
+account "GitLab user and group" do
+  username gitlab_username
+  uid node['gitlab']['user']['uid']
+  groupname gitlab_group
   gid node['gitlab']['user']['gid']
-  system true
-end
-
-# Create the GitLab user
-user gitlab_username do
   shell node['gitlab']['user']['shell']
   home gitlab_home
-  uid node['gitlab']['user']['uid']
-  gid gitlab_group
-  system true
 end
 
 # Configure Git settings for the GitLab user
