@@ -101,27 +101,5 @@ class AccountHelper
         #{mattermost_group}
       )
   end
-
-  def users_for_gitlab_rb
-    "
-      Users:\n
-      user['username'] = \"#{gitlab_user}\"
-      postgresql['username'] = \"#{postgresgl_user}\"
-      redis['username'] = \"#{redis_user}\"
-      web_server['username'] = \"#{web_server_user}\"
-      gitlab_ci['username'] = \"#{gitlab_ci_user}\"
-      ci_redis['username'] = \"#{ci_redis_user}\"
-      mattermost['username'] = \"#{mattermost_user}\"
-    "
-  end
-
-  def groups_for_gitlab_rb
-    "
-      Groups:\n
-      user['group'] = \"#{gitlab_group}\"
-      web_server['group'] = \"#{web_server_group}\"
-      mattermost['group'] = \"#{mattermost_group}\"
-    "
-  end
 end
 
