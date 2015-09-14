@@ -111,44 +111,44 @@ By default, omnibus-gitlab package expects that following users exist:
 
 
 ```bash
-# GitLab user
+# GitLab user (required)
 git
 
-# Web server user
+# Web server user (required)
 gitlab-www
 
-# Redis user for GitLab or GitLab CI
+# Redis user for GitLab or GitLab CI (only when using packaged Redis)
 gitlab-redis
 
-# Postgresql user
+# Postgresql user (only when using packaged Postgresql)
 gitlab-psql
 
-# GitLab CI user
+# GitLab CI user (only when using GitLab CI)
 gitlab-ci
 
-# GitLab Mattermost user
+# GitLab Mattermost user (only when using GitLab Mattermost)
 mattermost
 ```
 
 By default, omnibus-gitlab package expects that following groups exist:
 
 ```bash
-# GitLab group
+# GitLab group (required)
 git
 
-# Web server gropu
+# Web server group (required)
 gitlab-www
 
-# Redis group for GitLab or GitLab CI
+# Redis group for GitLab or GitLab CI (only when using packaged Redis)
 gitlab-redis
 
-# Postgresql group
+# Postgresql group (only when using packaged Postgresql)
 gitlab-psql
 
-# GitLab CI group
+# GitLab CI group (only when using GitLab CI)
 gitlab-ci
 
-# GitLab Mattermost group
+# GitLab Mattermost group (only when using GitLab Mattermost)
 mattermost
 ```
 
@@ -164,22 +164,21 @@ user['group'] = "custom-gitlab"
 user['shell'] = "/bin/sh"
 user['home'] = "/var/opt/custom-gitlab"
 
-# Postgresql
-postgresql['username'] = "postgres-gitlab"
-postgresql['shell'] = "/bin/sh"
-postgresql['home'] = "/var/opt/postgres-gitlab"
-
-# Redis
-redis['username'] = "redis-gitlab"
-redis['shell'] = "/bin/false"
-redis['home'] = "/var/opt/redis-gitlab"
-
 # Web server
 web_server['username'] = 'webserver-gitlab'
 web_server['group'] = 'webserver-gitlab'
 web_server['shell'] = '/bin/false'
 web_server['home'] = '/var/opt/gitlab/webserver'
 
+# Postgresql (not needed when using external Postgresql)
+postgresql['username'] = "postgres-gitlab"
+postgresql['shell'] = "/bin/sh"
+postgresql['home'] = "/var/opt/postgres-gitlab"
+
+# Redis (not needed when using external Redis)
+redis['username'] = "redis-gitlab"
+redis['shell'] = "/bin/false"
+redis['home'] = "/var/opt/redis-gitlab"
 
 # And so on for users/groups for GitLab CI GitLab Mattermost
 ```
