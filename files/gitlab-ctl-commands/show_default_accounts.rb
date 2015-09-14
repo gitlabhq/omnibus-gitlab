@@ -15,12 +15,12 @@
 # limitations under the License.
 #
 
-add_command "remove_users", "Delete *all* users and groups used by gitlab", 2 do
+add_command "show-default-accounts", "Show default users and groups needed by this package", 2 do
 
   command = %W( chef-client
                 -z
                 -c #{base_path}/embedded/cookbooks/solo.rb
-                -o recipe[gitlab::remove_users]
+                -o recipe[gitlab::show_default_accounts]
              )
 
   status = run_command(command.join(" "))
