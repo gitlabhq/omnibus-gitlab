@@ -35,6 +35,7 @@ account "Mattermost user and group" do
   groupname mattermost_group
   shell '/bin/sh'
   home mattermost_home
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 ###

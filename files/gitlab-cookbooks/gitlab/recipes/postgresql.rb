@@ -31,6 +31,7 @@ account "Postgresql user and group" do
   gid node['gitlab']['postgresql']['gid']
   shell node['gitlab']['postgresql']['shell']
   home node['gitlab']['postgresql']['home']
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 directory postgresql_dir do

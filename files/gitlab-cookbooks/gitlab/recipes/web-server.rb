@@ -35,4 +35,5 @@ account "Webserver user and group" do
   append_to_group append_members
   group_members external_webserver_users
   user_supports manage_home: false
+  manage node['gitlab']['manage-accounts']['enable']
 end

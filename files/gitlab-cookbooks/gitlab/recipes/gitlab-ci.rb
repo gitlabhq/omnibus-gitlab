@@ -38,6 +38,7 @@ account "GitLab CI user and group" do
   gid node['gitlab']['gitlab-ci']['gid']
   shell node['gitlab']['gitlab-ci']['shell']
   home gitlab_ci_home_dir
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 [

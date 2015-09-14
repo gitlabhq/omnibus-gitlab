@@ -24,7 +24,8 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true"]
  }
-
+# Create users and groups needed for the package
+default['gitlab']['manage-accounts']['enable'] = true
 
 ####
 # The Git User that services run as

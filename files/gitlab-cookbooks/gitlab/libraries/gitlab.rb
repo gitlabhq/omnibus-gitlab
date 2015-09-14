@@ -36,6 +36,7 @@ module Gitlab
 
   bootstrap Mash.new
   omnibus_gitconfig Mash.new
+  manage_accounts Mash.new
   user Mash.new
   postgresql Mash.new
   redis Mash.new
@@ -355,6 +356,7 @@ module Gitlab
       [
         "bootstrap",
         "omnibus_gitconfig",
+        "manage_accounts"
         "user",
         "redis",
         "ci_redis",

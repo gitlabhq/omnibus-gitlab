@@ -15,12 +15,14 @@
 # limitations under the License.
 #
 
-define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil, gid: nil, shell: nil, home: nil, system: true, append_to_group: false, group_members: [], user_supports: {} do
+define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil, gid: nil, shell: nil, home: nil, system: true, append_to_group: false, group_members: [], user_supports: {}, manage: nil do
+
+  manage = params[:manage]
 
   groupname = params[:groupname]
   username = params[:username]
 
-  if groupname
+  if manage && groupname
     group groupname do
       gid params[:gid]
       system params[:system]
@@ -32,7 +34,7 @@ define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil
     end
   end
 
-  if username
+  if manage && username
     user username do
       shell params[:shell]
       home params[:home]
