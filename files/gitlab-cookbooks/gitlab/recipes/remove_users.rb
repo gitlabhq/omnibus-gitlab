@@ -15,14 +15,29 @@
 # limitations under the License.
 #
 
-add_command "remove_users", "Delete *all* users and groups used by gitlab", 2 do
-
-  command = %W( chef-client
-                -z
-                -c #{base_path}/embedded/cookbooks/solo.rb
-                -o recipe[gitlab::remove_users]
-             )
-
-  status = run_command(command.join(" "))
-  exit! 1 unless status.success?
+Gitlab[:node] = node
+if File.exists?("/etc/gitlab/gitlab.rb")
+  Gitlab.from_file("/etc/gitlab/gitlab.rb")
 end
+node.consume_attributes(Gitlab.generate_config(node['fqdn']))
+
+account_helper = AccountHelper.new(node)
+
+usernames = account_helper.users
+
+groups = account_helper.groups
+
+usernames.each do |username|
+  account username do
+    username username
+    action :remove
+  end
+end
+
+groups.each do |group|
+  account group do
+    groupname group
+    action :remove
+  end
+end
+
