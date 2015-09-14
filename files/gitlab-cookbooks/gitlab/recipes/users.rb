@@ -27,7 +27,7 @@ end
 account "GitLab user and group" do
   username gitlab_username
   uid node['gitlab']['user']['uid']
-  guid gitlab_group
+  ugid gitlab_group
   groupname gitlab_group
   gid node['gitlab']['user']['gid']
   shell node['gitlab']['user']['shell']

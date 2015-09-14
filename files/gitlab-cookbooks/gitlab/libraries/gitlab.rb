@@ -356,7 +356,7 @@ module Gitlab
       [
         "bootstrap",
         "omnibus_gitconfig",
-        "manage_accounts"
+        "manage_accounts",
         "user",
         "redis",
         "ci_redis",
