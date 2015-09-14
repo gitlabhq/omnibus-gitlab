@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-add_command "remove-accounts", "Delete *all* users and groups used by this package", 2 do
+add_command "remove-accounts", "Delete *all* users and groups used by this package", 1 do
 
   command = %W( chef-client
                 -z
@@ -24,5 +24,6 @@ add_command "remove-accounts", "Delete *all* users and groups used by this packa
              )
 
   status = run_command(command.join(" "))
+  remove_old_node_state
   exit! 1 unless status.success?
 end
