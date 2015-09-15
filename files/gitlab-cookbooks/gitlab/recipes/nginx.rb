@@ -143,6 +143,7 @@ template gitlab_mattermost_http_conf do
   variables(mattermost_nginx_vars.merge(
    {
      :fqdn => node['gitlab']['mattermost']['host'],
+     :port => node['gitlab']['mattermost']['port'],
      :service_port => node['gitlab']['mattermost']['service_port']
    }
   ))
