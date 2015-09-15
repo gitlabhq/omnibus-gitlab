@@ -2,7 +2,8 @@
 
 GitLab and GitLab CI are configured by setting their relevant options in
 `/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
-[gitlab.rb.template][]. New installations starting from GitLab 7.6, will have
+[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+New installations starting from GitLab 7.6, will have
 all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
 
@@ -18,6 +19,23 @@ external_url "http://gitlab.example.com"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+### Loading configuration from external file
+
+Omnibus-gitlab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
+This file has strict file permissions and is owned by `root` user. The reason for strict permissions
+and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by `root` user during `gitlab-ctl reconfigure`. This means
+that users who have write access to `/etc/gitlab/gitlab.rb` can add configuration that will be executed as code by `root`.
+
+In certain organizations it is allowed to have access to the configuration files but not as root user.
+You can include an external configuration file inside `/etc/gitlab/gitlab.rb` by specifying the path to the file:
+
+```ruby
+from_file "/home/admin/external_gitlab.rb"
+
+```
+Please note that code you include into `/etc/gitlab/gitlab.rb` using `from_file` will run with `root` privileges when you run `sudo gitlab-ctl reconfigure`.
+Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is included will take precedence over the configuration from included file.
 
 ### Storing Git data in an alternative directory
 
