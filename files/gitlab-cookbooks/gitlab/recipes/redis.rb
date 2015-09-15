@@ -17,5 +17,5 @@
 #
 
 redis_service 'redis' do
-  socket_group node['gitlab']['user']['group']
+  socket_group AccountHelper.new(node).gitlab_group
 end

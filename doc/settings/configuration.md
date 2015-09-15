@@ -113,7 +113,96 @@ web_server['gid'] = 1237
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Only start omnibus-gitlab services after a given filesystem is mounted
+### Disable user and group account management
+
+By default, omnibus-gitlab takes care of user and group accounts creation as well as keeping the accounts information updated.
+This behaviour makes sense for most users but in certain environments user and group accounts are managed by other software, eg. LDAP.
+
+In order to disable user and group accounts management, in `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+manage_accounts['enable'] = false
+```
+
+*Warning* Omnibus-gitlab still expects users and groups to exist on the system where omnibus-gitlab package is installed.
+
+By default, omnibus-gitlab package expects that following users exist:
+
+
+```bash
+# GitLab user (required)
+git
+
+# Web server user (required)
+gitlab-www
+
+# Redis user for GitLab or GitLab CI (only when using packaged Redis)
+gitlab-redis
+
+# Postgresql user (only when using packaged Postgresql)
+gitlab-psql
+
+# GitLab CI user (only when using GitLab CI)
+gitlab-ci
+
+# GitLab Mattermost user (only when using GitLab Mattermost)
+mattermost
+```
+
+By default, omnibus-gitlab package expects that following groups exist:
+
+```bash
+# GitLab group (required)
+git
+
+# Web server group (required)
+gitlab-www
+
+# Redis group for GitLab or GitLab CI (only when using packaged Redis)
+gitlab-redis
+
+# Postgresql group (only when using packaged Postgresql)
+gitlab-psql
+
+# GitLab CI group (only when using GitLab CI)
+gitlab-ci
+
+# GitLab Mattermost group (only when using GitLab Mattermost)
+mattermost
+```
+
+You can also use different user/group names but then you must specify user/group details in `/etc/gitlab/gitlab.rb`, eg.
+
+```ruby
+# Do not manage user/group accounts
+manage_accounts['enable'] = false
+
+# GitLab
+user['username'] = "custom-gitlab"
+user['group'] = "custom-gitlab"
+user['shell'] = "/bin/sh"
+user['home'] = "/var/opt/custom-gitlab"
+
+# Web server
+web_server['username'] = 'webserver-gitlab'
+web_server['group'] = 'webserver-gitlab'
+web_server['shell'] = '/bin/false'
+web_server['home'] = '/var/opt/gitlab/webserver'
+
+# Postgresql (not needed when using external Postgresql)
+postgresql['username'] = "postgres-gitlab"
+postgresql['shell'] = "/bin/sh"
+postgresql['home'] = "/var/opt/postgres-gitlab"
+
+# Redis (not needed when using external Redis)
+redis['username'] = "redis-gitlab"
+redis['shell'] = "/bin/false"
+redis['home'] = "/var/opt/redis-gitlab"
+
+# And so on for users/groups for GitLab CI GitLab Mattermost
+```
+
+## Only start Omnibus-GitLab services after a given filesystem is mounted
 
 If you want to prevent omnibus-gitlab services (NGINX, Redis, Unicorn etc.)
 from starting before a given filesystem is mounted, add the following to

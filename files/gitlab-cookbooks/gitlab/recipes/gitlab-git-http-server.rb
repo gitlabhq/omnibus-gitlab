@@ -14,19 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-git-http-server']['dir']
 log_dir = node['gitlab']['gitlab-git-http-server']['log_dir']
 
 directory working_dir do
-  owner node['gitlab']['user']['username']
-  group node['gitlab']['web-server']['username']
+  owner account_helper.gitlab_user
+  group account_helper.web_server_group
   mode '0750'
   recursive true
 end
-  
+
 directory log_dir do
-  owner node['gitlab']['user']['username']
+  owner account_helper.gitlab_user
   mode '0700'
   recursive true
 end

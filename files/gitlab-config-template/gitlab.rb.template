@@ -459,6 +459,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # logrotate['enable'] = true
 
+#############################
+# Users and groups accounts #
+#############################
+## Should omnibus-gitlab package manage users and groups accounts.
+## Only set if creating accounts manually
+##
+
+# manage_accounts['enable'] = true
+
 #######
 # Git #
 #######

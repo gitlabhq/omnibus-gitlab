@@ -15,10 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 unicorn_service 'unicorn' do
   rails_app 'gitlab-rails'
-  user node['gitlab']['user']['username']
+  user account_helper.gitlab_user
 end
 
 if File.directory?("/etc/sysctl.d") && File.exists?("/etc/init.d/procps")

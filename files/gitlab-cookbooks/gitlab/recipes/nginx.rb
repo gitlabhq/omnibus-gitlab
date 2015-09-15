@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 nginx_dir = node['gitlab']['nginx']['dir']
 nginx_conf_dir = File.join(nginx_dir, "conf")
@@ -28,7 +29,7 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
-    group node['gitlab']['web-server']['group']
+    group account_helper.web_server_group
     mode '0750'
     recursive true
   end

@@ -27,20 +27,18 @@ gitlab_ci_tmp_dir = File.join(gitlab_ci_dir, "tmp")
 gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 
-gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
+gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
 gitlab_app = "gitlab-ci"
 
-group gitlab_ci_user do
-  gid node['gitlab']['gitlab-ci']['gid']
-  system true
-end
-
-user gitlab_ci_user do
+account "GitLab CI user and group" do
+  username gitlab_ci_user
   uid node['gitlab']['gitlab-ci']['uid']
-  gid gitlab_ci_user
-  system true
+  ugid gitlab_ci_user
+  groupname gitlab_ci_user
+  gid node['gitlab']['gitlab-ci']['gid']
   shell node['gitlab']['gitlab-ci']['shell']
   home gitlab_ci_home_dir
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 [

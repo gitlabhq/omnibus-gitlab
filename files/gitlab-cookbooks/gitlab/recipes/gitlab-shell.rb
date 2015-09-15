@@ -15,9 +15,10 @@
 ## limitations under the License.
 ##
 #
+account_helper = AccountHelper.new(node)
 
-git_user = node['gitlab']['user']['username']
-git_group = node['gitlab']['user']['group']
+git_user = account_helper.gitlab_user
+git_group = account_helper.gitlab_group
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 repositories_path = node['gitlab']['gitlab-rails']['gitlab_shell_repos_path']

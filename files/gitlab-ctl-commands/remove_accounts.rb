@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,15 @@
 # limitations under the License.
 #
 
-# Remove the old cronjob from root's crontab
-cron 'gitlab-ci schedule builds' do
-  user 'root'
-  action :delete
-end
+add_command "remove-accounts", "Delete *all* users and groups used by this package", 1 do
 
-cron 'gitlab-ci schedule builds' do
-  minute node['gitlab']['gitlab-ci']['schedule_builds_minute']
-  command '/opt/gitlab/bin/gitlab-ci-rake schedule_builds'
-  user AccountHelper.new(node).gitlab_ci_user
-  action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
+  command = %W( chef-client
+                -z
+                -c #{base_path}/embedded/cookbooks/solo.rb
+                -o recipe[gitlab::remove_accounts]
+             )
+
+  status = run_command(command.join(" "))
+  remove_old_node_state
+  exit! 1 unless status.success?
 end
