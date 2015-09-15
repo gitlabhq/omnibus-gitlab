@@ -291,6 +291,7 @@ If you are using self-signed certificate do not forget to set `self_signed_cert:
 ### Error executing action create on resource cron[gitlab-ci schedule builds]
 
 1. Double check if you have cron package installed: For Debian like systems `sudo apt-get install cron` or RHEL-like systems `sudo yum install cronie`
+1. Check if user `gitlab-ci` is in `/etc/cron.deny` and if yes remove it. You can add the `gitlab-ci` user to `/etc/cron.allow``.
 1. Check if you have PAM enabled and if gitlab-ci user is allowed to access crontab. If yes, try changing your `/etc/security/access.conf` to allow the user access to the resource, for example `+:gitlab-ci:ALL`.
 
 [CAcert.org]: http://www.cacert.org/
