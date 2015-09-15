@@ -15,8 +15,9 @@
 # limitations under the License.
 #
 
-webserver_username = node['gitlab']['web-server']['username']
-webserver_group = node['gitlab']['web-server']['group']
+account_helper = AccountHelper.new(node)
+webserver_username = account_helper.web_server_user
+webserver_group = account_helper.web_server_group
 external_webserver_users = node['gitlab']['web-server']['external_users']
 
 # Create the group for the GitLab user

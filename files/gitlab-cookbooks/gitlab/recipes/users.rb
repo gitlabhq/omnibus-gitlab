@@ -15,9 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
-gitlab_username = node['gitlab']['user']['username']
-gitlab_group = node['gitlab']['user']['group']
+gitlab_username = account_helper.gitlab_user
+gitlab_group = account_helper.gitlab_group
 gitlab_home = node['gitlab']['user']['home']
 
 directory gitlab_home do

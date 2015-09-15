@@ -20,7 +20,7 @@ define :redis_service, :socket_group => nil do
 
   redis_dir = node['gitlab'][svc]['dir']
   redis_log_dir = node['gitlab'][svc]['log_directory']
-  redis_user = node['gitlab']['redis']['username']
+  redis_user = AccountHelper.new(node).redis_user
 
   account "Redis user and group" do
     username redis_user
@@ -48,7 +48,7 @@ define :redis_service, :socket_group => nil do
 
   template redis_config do
     source "redis.conf.erb"
-    owner node['gitlab']['redis']['username']
+    owner redis_user
     mode "0644"
     variables(node['gitlab'][svc].to_hash)
     notifies :restart, "service[#{svc}]", :immediately if OmnibusHelper.should_notify?(svc)

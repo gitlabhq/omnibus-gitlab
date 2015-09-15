@@ -24,6 +24,6 @@ end
 cron 'gitlab-ci schedule builds' do
   minute node['gitlab']['gitlab-ci']['schedule_builds_minute']
   command '/opt/gitlab/bin/gitlab-ci-rake schedule_builds'
-  user node['gitlab']['gitlab-ci']['username']
+  user AccountHelper.new(node).gitlab_ci_user
   action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
 end

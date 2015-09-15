@@ -27,7 +27,7 @@ gitlab_ci_tmp_dir = File.join(gitlab_ci_dir, "tmp")
 gitlab_ci_log_dir = node['gitlab']['gitlab-ci']['log_directory']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 
-gitlab_ci_user = node['gitlab']['gitlab-ci']['username']
+gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
 gitlab_app = "gitlab-ci"
 
 account "GitLab CI user and group" do

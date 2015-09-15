@@ -18,5 +18,5 @@
 
 sidekiq_service 'ci-sidekiq' do
   rails_app 'gitlab-ci'
-  user node['gitlab']['gitlab-ci']['username']
+  user AccountHelper.new(node).gitlab_ci_user
 end

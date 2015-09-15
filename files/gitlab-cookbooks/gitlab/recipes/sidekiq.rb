@@ -15,15 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 sidekiq_service 'sidekiq' do
   rails_app 'gitlab-rails'
-  user node['gitlab']['user']['username']
+  user account_helper.gitlab_user
 end
 
 if node['gitlab']['gitlab-rails']['reply_by_email_enabled']
   mailroom_service 'mailroom' do
     rails_app 'gitlab-rails'
-    user node['gitlab']['user']['username']
+    user account_helper.gitlab_user
   end
 end
