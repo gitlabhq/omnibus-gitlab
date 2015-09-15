@@ -91,6 +91,7 @@ template gitlab_rails_http_conf do
   variables(nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
+      :port => node['gitlab']['gitlab-rails']['gitlab_port'],
       :socket => node['gitlab']['unicorn']['socket'],
       :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
       :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
@@ -118,6 +119,7 @@ template gitlab_ci_http_conf do
   variables(ci_nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
+      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
       :socket => node['gitlab']['ci-unicorn']['socket']
     }
   ))
@@ -141,6 +143,7 @@ template gitlab_mattermost_http_conf do
   variables(mattermost_nginx_vars.merge(
    {
      :fqdn => node['gitlab']['mattermost']['host'],
+     :port => node['gitlab']['mattermost']['port'],
      :service_port => node['gitlab']['mattermost']['service_port']
    }
   ))

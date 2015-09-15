@@ -251,6 +251,7 @@ module Gitlab
       [
         [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
         [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
+        [%w{mattermost_nginx listen_port}, %w{mattermost port}]
 
       ].each do |left, right|
         if !Gitlab[left.first][left.last].nil?
@@ -332,7 +333,7 @@ module Gitlab
         raise "Unsupported CI external URL path: #{uri.path}"
       end
 
-      Gitlab['mattermost_nginx']['listen_port'] = uri.port
+      Gitlab['mattermost']['port'] = uri.port
     end
 
     def parse_gitlab_mattermost
@@ -398,11 +399,11 @@ module Gitlab
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_mattermost_external_url
       parse_unicorn_listen_address
       parse_nginx_listen_address
       parse_nginx_listen_ports
       parse_gitlab_ci
-      parse_mattermost_external_url
       parse_gitlab_mattermost
       disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys
