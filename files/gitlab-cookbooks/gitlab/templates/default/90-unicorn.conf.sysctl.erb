@@ -1,8 +1,0 @@
-# This file is managed by gitlab-ctl. Manual changes will be
-# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
-# and run `sudo gitlab-ctl reconfigure`.
-#
-# gitlab somaxconn kernel tweak for unicorn
-#
-# make sure this value is equal or higher then unicorn backlog_socket
-net.core.somaxconn = <%= node['gitlab']['unicorn']['somaxconn'] %>
