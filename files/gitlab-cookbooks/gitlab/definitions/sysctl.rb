@@ -48,7 +48,7 @@ define :sysctl, value: nil do
 
   ["/etc/sysctl.d/90-postgresql.conf", "/etc/sysctl.d/90-unicorn.conf"].each do |conf|
     file conf do
-      action :remove
+      action :delete
       only_if { File.exists?(conf) }
     end
   end
