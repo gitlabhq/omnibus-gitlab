@@ -36,11 +36,12 @@ if File.exists?("/etc/gitlab/gitlab.rb")
 end
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))
 
-if File.exists?("/var/opt/gitlab/bootstrapped")
+gitlab_var_dir = node['gitlab']['gitlab-rails']['var_directory']
+if File.exists?(File.join(gitlab_var_dir, "bootstrapped"))
 	node.set['gitlab']['bootstrap']['enable'] = false
 end
 
-directory "/var/opt/gitlab" do
+directory gitlab_var_dir do
   owner "root"
   group "root"
   mode "0755"
