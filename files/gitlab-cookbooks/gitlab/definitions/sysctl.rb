@@ -33,6 +33,7 @@ define :sysctl, value: nil do
     block do
       fe = Chef::Util::FileEdit.new("/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf")
       fe.search_file_replace_line(/^#{param} = /,"#{param} = #{value}")
+      fe.insert_line_if_no_match(/^#{param} = /,"#{param} = #{value}")
       fe.write_file
       if fe.file_edited?
         resources(execute: "sysctl").run_action(:run, :immediately)
@@ -45,6 +46,12 @@ define :sysctl, value: nil do
     to "/etc/sysctl.d/90-omnibus-gitlab.conf"
   end
 
+  ["/etc/sysctl.d/90-postgresql.conf", "/etc/sysctl.d/90-unicorn.conf"].each do |conf|
+    file conf do
+      action :remove
+      only_if { File.exists?(conf) }
+    end
+  end
   # Load the settings right away
   execute "sysctl" do
     command "cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -"
