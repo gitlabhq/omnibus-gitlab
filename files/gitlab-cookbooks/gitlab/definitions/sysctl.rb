@@ -25,15 +25,19 @@ define :sysctl, value: nil do
   end
 
   file "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf" do
-    action :touch
+    action :create_if_missing
+    manage_symlink_source true
   end
 
-  bash "add #{param} settings" do
-    user "root"
-    code <<-EOF
-      echo '#{param} = #{value}' >> /opt/gitlab/embedded/etc/90-omnibus-gitlab.conf
-    EOF
-    notifies :run, 'execute[sysctl]', :immediately
+  ruby_block "maintain sysctl config" do
+    block do
+      fe = Chef::Util::FileEdit.new("/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf")
+      fe.search_file_replace_line(/^#{param} = /,"#{param} = #{value}")
+      fe.write_file
+      if fe.file_edited?
+        resources(execute: "sysctl").run_action(:run, :immediately)
+      end
+    end
     not_if "sysctl -n #{param} | grep -q -x #{value}"
   end
 
