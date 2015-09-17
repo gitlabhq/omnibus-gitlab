@@ -1,5 +1,6 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +16,18 @@
 # limitations under the License.
 #
 
-# Remove all cronjobs for gitlab-ci builds
+ci_dependent_services = []
+ci_dependent_services << "service[ci-unicorn]" if OmnibusHelper.should_notify?("ci-unicorn")
+ci_dependent_services << "service[ci-sidekiq]" if OmnibusHelper.should_notify?("ci-sidekiq")
 
-cron 'gitlab-ci schedule builds' do
-  user 'root'
-  action :delete
-end
 
-cron 'gitlab-ci schedule builds' do
-  user AccountHelper.new(node).gitlab_ci_user
-  action :delete
+# Disable Services
+[
+  "ci-redis",
+  "ci-unicorn",
+  "ci-sidekiq",
+].each do |service|
+  if node["gitlab"][service]["enable"]
+    include_recipe "gitlab::#{service}_disable"
+  end
 end
