@@ -17,6 +17,7 @@
 #
 
 require 'mixlib/shellout'
+require 'uri'
 
 module ShellOutHelper
 
@@ -289,6 +290,19 @@ class SecretsHelper
     end
   end
 
+  def self.gitlab_server
+    return unless Gitlab['gitlab_ci']['gitlab_server']
+    Gitlab['gitlab_ci']['gitlab_server']
+  end
+
+  def self.gitlab_server_fqdn
+    if gitlab_server && gitlab_server['url']
+      uri = URI(gitlab_server['url'].to_s)
+      uri.host
+    else
+      ""
+    end
+  end
 end
 
 module SingleQuoteHelper
