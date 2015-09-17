@@ -24,6 +24,7 @@ remote_syslog_log_dir = node['gitlab']['remote-syslog']['log_directory']
 ].each do |dir|
   directory dir do
     mode "0700"
+    recursive true
   end
 end
 

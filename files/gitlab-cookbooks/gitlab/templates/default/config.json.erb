@@ -20,11 +20,12 @@
         "AnalyticsUrl": "<%= @service_analytics_url %>",
         "UseLocalStorage": <%= @service_use_local_storage %>,
         "StorageDirectory": "<%= @service_storage_directory %>",
-        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>
+        "AllowedLoginAttempts": <%= @service_allowed_login_attempts %>,
+        "DisableEmailSignUp": <%= @service_disable_email_signup %>
     },
     "SSOSettings": <%= @oauth.to_json %>,
     "SqlSettings": {
-        "DriverName": "postgres",
+        "DriverName": "<%= @sql_driver_name %>",
         "DataSource": "<%= @sql_data_source %>",
         "DataSourceReplicas": [<%= @sql_data_source_replicas.map{ |dsr| "\"#{dsr}\"" }.join(',') %>],
         "MaxIdleConns": <%= @sql_max_idle_conns %>,
@@ -48,6 +49,7 @@
         "SMTPPassword": "<%= @email_smtp_password %>",
         "SMTPServer": "<%= @email_smtp_server %>",
         "UseTLS": <%= @email_use_tls %>,
+        "UseStartTLS": <%= @email_use_start_tls %>,
         "FeedbackEmail": "<%= @email_feedback_email %>",
         "FeedbackName": "<%= @email_feedback_name %>",
         "ApplePushServer": "<%= @email_apple_push_server %>",
@@ -77,6 +79,8 @@
         "HelpLink": "<%= @team_help_link %>",
         "ReportProblemLink": "<%= @team_report_problem_link %>",
         "TourLink": "<%= @team_tour_link %>",
-        "DefaultThemeColor": "<%= @team_default_color %>"
+        "DefaultThemeColor": "<%= @team_default_color %>",
+        "DisableTeamCreation": <%= @team_disable_team_creation %>,
+        "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>"
     }
 }

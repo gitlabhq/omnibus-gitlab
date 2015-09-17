@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab B.V.
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,30 +15,31 @@
 # limitations under the License.
 #
 
-usernames = [
-              node['gitlab']['user']['username'],
-              node['gitlab']['postgresql']['username'],
-              node['gitlab']['web-server']['username'],
-              node['gitlab']['redis']['username']
-            ]
+Gitlab[:node] = node
+if File.exists?("/etc/gitlab/gitlab.rb")
+  Gitlab.from_file("/etc/gitlab/gitlab.rb")
+end
+node.consume_attributes(Gitlab.generate_config(node['fqdn']))
 
-groups = [
-            node['gitlab']['user']['group'],
-            node['gitlab']['web-server']['group'],
-            node['gitlab']['postgresql']['username'], # Group name is same as the username
-            node['gitlab']['redis']['username'] # Group name is same as the username
-          ]
+account_helper = AccountHelper.new(node)
 
+usernames = account_helper.users
+
+groups = account_helper.groups
 
 usernames.each do |username|
-  user username do
+  account username do
+    username username
     action :remove
+    manage node['gitlab']['manage-accounts']['enable']
   end
 end
 
 groups.each do |group|
-  group group do
+  account group do
+    groupname group
     action :remove
+    manage node['gitlab']['manage-accounts']['enable']
   end
 end
 

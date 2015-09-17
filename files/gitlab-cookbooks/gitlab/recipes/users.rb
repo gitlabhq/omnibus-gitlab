@@ -15,28 +15,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
-gitlab_username = node['gitlab']['user']['username']
-gitlab_group = node['gitlab']['user']['group']
+gitlab_username = account_helper.gitlab_user
+gitlab_group = account_helper.gitlab_group
 gitlab_home = node['gitlab']['user']['home']
 
 directory gitlab_home do
   recursive true
 end
 
-# Create the group for the GitLab user
-group gitlab_group do
+account "GitLab user and group" do
+  username gitlab_username
+  uid node['gitlab']['user']['uid']
+  ugid gitlab_group
+  groupname gitlab_group
   gid node['gitlab']['user']['gid']
-  system true
-end
-
-# Create the GitLab user
-user gitlab_username do
   shell node['gitlab']['user']['shell']
   home gitlab_home
-  uid node['gitlab']['user']['uid']
-  gid gitlab_group
-  system true
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 # Configure Git settings for the GitLab user

@@ -4,8 +4,6 @@
 
 Please make sure you are viewing this file on the master branch.
 
-![documentation version](images/omnibus-documentation-version-update-md.png)
-
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
@@ -13,10 +11,12 @@ configured the packages to run this command automatically after the new package
 is installed. If you are installing GitLab 7.9 or earlier, please see the
 [procedure below](#updating-from-gitlab-66-and-higher-to-the-latest-version).
 
-First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
+If you installed using the package server all you need to do is run `sudo apt-get update && sudo apt-get install gitlab-ce` (for Debian/Ubuntu) or `sudo yum install gitlab-ce` (for CentOS/Enterprise Linux).
+
+If you are not using the package server, consider [upgrading to the package repository](https://about.gitlab.com/upgrade-to-package-repository). Otherwise, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://packages.gitlab.com/gitlab/gitlab-ee)
 package to your GitLab server then all you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
--Uvh gitlab-ce-XXX.rpm` (for Centos/Enterprise Linux). After the package has
+-Uvh gitlab-ce-XXX.rpm` (for CentOS/Enterprise Linux). After the package has
 been unpacked, GitLab will automatically:
 
 - Stop all GitLab services;

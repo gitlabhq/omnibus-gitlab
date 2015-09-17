@@ -29,15 +29,13 @@ pg_user = gitlab['postgresql']['username']
 ###
 # Create group and user that will be running mattermost
 ###
-group mattermost_group do
-  system true
-end
-
-user mattermost_user do
+account "Mattermost user and group" do
+  username mattermost_user
+  ugid mattermost_group
+  groupname mattermost_group
   shell '/bin/sh'
   home mattermost_home
-  gid mattermost_group
-  system true
+  manage node['gitlab']['manage-accounts']['enable']
 end
 
 ###
@@ -83,15 +81,17 @@ end
 # Populate mattermost configuration options
 ###
 # Try connecting to GitLab only if it is enabled
-if gitlab['gitlab-rails']['enable']
-  database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
-  gitlab_oauth  = if gitlab['mattermost']['oauth']['gitlab']
-                    gitlab['mattermost']['oauth']['gitlab']
+database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
+gitlab_oauth  = if gitlab['mattermost']['oauth']['gitlab']
+                  gitlab['mattermost']['oauth']['gitlab']
+                else
+                  if gitlab['gitlab-rails']['enable'] && database_ready
+                     MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
                   else
-                    database_ready ? MattermostHelper.authorize_with_gitlab(Gitlab['external_url']):{}
+                    {}
                   end
-  oauth_attributes = gitlab['mattermost']['oauth'].to_hash.merge('gitlab' => gitlab_oauth)
-end
+                end
+oauth_attributes = gitlab['mattermost']['oauth'].to_hash.merge('gitlab' => gitlab_oauth)
 
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"

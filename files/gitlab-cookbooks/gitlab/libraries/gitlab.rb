@@ -36,6 +36,7 @@ module Gitlab
 
   bootstrap Mash.new
   omnibus_gitconfig Mash.new
+  manage_accounts Mash.new
   user Mash.new
   postgresql Mash.new
   redis Mash.new
@@ -130,6 +131,7 @@ module Gitlab
       Gitlab['gitlab_shell']['git_data_directory'] ||= git_data_dir
       Gitlab['gitlab_rails']['gitlab_shell_repos_path'] ||= File.join(git_data_dir, "repositories")
       Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
+      Gitlab['gitlab_git_http_server']['repo_root'] ||= File.join(git_data_dir, "repositories")
     end
 
     def parse_udp_log_shipping
@@ -250,6 +252,7 @@ module Gitlab
       [
         [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
         [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
+        [%w{mattermost_nginx listen_port}, %w{mattermost port}]
 
       ].each do |left, right|
         if !Gitlab[left.first][left.last].nil?
@@ -331,7 +334,7 @@ module Gitlab
         raise "Unsupported CI external URL path: #{uri.path}"
       end
 
-      Gitlab['mattermost_nginx']['listen_port'] = uri.port
+      Gitlab['mattermost']['port'] = uri.port
     end
 
     def parse_gitlab_mattermost
@@ -345,6 +348,7 @@ module Gitlab
         redis["enable"] = false
         unicorn["enable"] = false
         sidekiq["enable"] = false
+        gitlab_git_http_server["enable"] = false
       end
     end
 
@@ -353,6 +357,7 @@ module Gitlab
       [
         "bootstrap",
         "omnibus_gitconfig",
+        "manage_accounts",
         "user",
         "redis",
         "ci_redis",
@@ -396,11 +401,11 @@ module Gitlab
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_mattermost_external_url
       parse_unicorn_listen_address
       parse_nginx_listen_address
       parse_nginx_listen_ports
       parse_gitlab_ci
-      parse_mattermost_external_url
       parse_gitlab_mattermost
       disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys

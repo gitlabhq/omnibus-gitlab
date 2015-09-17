@@ -196,7 +196,8 @@ class MattermostHelper
                                                   'Id' => app_id,
                                                   'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
                                                   'TokenEndpoint' => "#{gitlab_url}/oauth/token",
-                                                  'UserApiEndpoint' => "#{gitlab_url}/api/v3/user"
+                                                  'UserApiEndpoint' => "#{gitlab_url}/api/v3/user",
+                                                  'Scope' => ""
                                                 }
 
       SecretsHelper.write_to_gitlab_secrets
@@ -210,7 +211,8 @@ class MattermostHelper
       'Id' => app_id,
       'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
       'TokenEndpoint' => "#{gitlab_url}/oauth/token",
-      'UserApiEndpoint' => "#{gitlab_url}/api/v3/user"
+      'UserApiEndpoint' => "#{gitlab_url}/api/v3/user",
+      'Scope' => ""
      }
   end
 end

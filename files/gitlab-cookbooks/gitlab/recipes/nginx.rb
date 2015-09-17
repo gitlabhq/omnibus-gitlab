@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 nginx_dir = node['gitlab']['nginx']['dir']
 nginx_conf_dir = File.join(nginx_dir, "conf")
@@ -28,7 +29,7 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
-    group node['gitlab']['web-server']['group']
+    group account_helper.web_server_group
     mode '0750'
     recursive true
   end
@@ -91,7 +92,12 @@ template gitlab_rails_http_conf do
   variables(nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :socket => node['gitlab']['unicorn']['socket']
+      :port => node['gitlab']['gitlab-rails']['gitlab_port'],
+      :socket => node['gitlab']['unicorn']['socket'],
+      :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
+      :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
+      :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],
+      :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
@@ -114,6 +120,7 @@ template gitlab_ci_http_conf do
   variables(ci_nginx_vars.merge(
     {
       :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
+      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
       :socket => node['gitlab']['ci-unicorn']['socket']
     }
   ))
@@ -137,12 +144,17 @@ template gitlab_mattermost_http_conf do
   variables(mattermost_nginx_vars.merge(
    {
      :fqdn => node['gitlab']['mattermost']['host'],
+     :port => node['gitlab']['mattermost']['port'],
      :service_port => node['gitlab']['mattermost']['service_port']
    }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_mattermost_enabled ? :create : :delete
 end
+
+nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
+nginx_vars['gitlab_ci_access_log_format'] = node['gitlab']['ci-nginx']['log_format']
+nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
 
 template nginx_config do
   source "nginx.conf.erb"

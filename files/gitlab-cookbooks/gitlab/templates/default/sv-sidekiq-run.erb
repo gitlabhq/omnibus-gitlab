@@ -13,6 +13,7 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
     -q system_hook \
     -q project_web_hook \
     -q gitlab_shell \
+    -q incoming_email \
     -q common \
     -q default \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \

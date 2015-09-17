@@ -85,6 +85,18 @@ external_url "https://gitlab.example.com:2443"
 
 The same syntax works for GitLab CI with `ci_external_url`.
 
+To set the location of ssl certificates create `/etc/gitlab/ssl` directory, place the `.crt` and `.key` files in the directory and specify the following configuration:
+
+```ruby
+# For GitLab
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
+
+# For GitLab CI
+ci_nginx['ssl_certificate'] = "/etc/gitlab/ssl/ci.example.crt"
+ci_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/ci.example.com.key"
+```
+
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Using a non-bundled web-server

@@ -5,11 +5,9 @@ service on your GitLab server.
 
 ## Documentation version
 
-Please make sure you are viewing the documentation for the version of
-omnibus-gitlab you are using. In most cases this should be the highest numbered
-stable branch (example shown below).
+Make sure you view this guide from the tag (version) of GitLab you would like to install. In most cases this should be the highest numbered production tag (without rc in it). You can select the tag in the version dropdown in the top left corner of GitLab (below the menu bar).
 
-![documentation version](doc/images/omnibus-documentation-version.png)
+If the highest number stable branch is unclear please check the [GitLab Blog](https://about.gitlab.com/blog/) for installation guide links by version.
 
 ## Getting started
 
@@ -76,7 +74,57 @@ If there are no errors your GitLab and GitLab Mattermost should be configured co
 
 To reauthorise GitLab Mattermost you will first need to revoke access of the existing authorisation. This can be done in the Admin area of GitLab under `Applications`. Once that is done follow the steps in the `Authorise GitLab Mattermost` section.
 
-### GitLab Mattermost configuration
+## Running GitLab Mattermost with HTTPS
+
+Place the ssl certificate and ssl certificate key inside of `/etc/gitlab/ssl` directory. If directory doesn't exist, create one.
+
+In `/etc/gitlab/gitlab.rb` specify the following configuration:
+
+```ruby
+mattermost_external_url 'https://mattermost.gitlab.example'
+
+mattermost_nginx['redirect_http_to_https'] = true
+mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/mattermost-nginx.crt"
+mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/mattermost-nginx.key"
+mattermost['service_use_ssl'] = true
+```
+
+where `mattermost-nginx.crt` and `mattermost-nginx.key` are ssl cert and key, respectively.
+Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+## Setting up SMTP for GitLab Mattermost
+
+By default, `mattermost['email_by_pass_email'] = true`  which allows account creation and system operation without having to setup an email service. This option completely shuts off the email service.
+
+When you do want to have emails enabled, you need to set this option to false`.
+
+SMTP configuration depends on SMTP provider used. If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
+
+```ruby
+mattermost['email_by_pass_email'] = false
+mattermost['email_smtp_username'] = "username"
+mattermost['email_smtp_password'] = "password"
+mattermost['email_smtp_server'] = "smtp.example.com:465"
+mattermost['email_feedback_email'] = "email@example.com"
+```
+
+If you are using TLS, configuration can look something like this:
+
+```ruby
+mattermost['email_by_pass_email'] = false
+mattermost['email_smtp_username'] = "username"
+mattermost['email_smtp_password'] = "password"
+mattermost['email_smtp_server'] = "smtp.example.com:587"
+mattermost['email_feedback_email'] = "email@example.com"
+mattermost['email_use_tls'] = false
+mattermost['email_use_start_tls'] = true
+```
+
+`email_use_start_tls` and `email_use_tls` options depend on your SMTP provider so you need to verify which of those two is valid for your provider.
+
+Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+## GitLab Mattermost configuration
 
 For a complete list of available options, visit the [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 We welcome contributions to improve the configuration settings explanations both in the gitlab.rb.template and in the documentation.

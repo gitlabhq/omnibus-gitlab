@@ -2,7 +2,8 @@
 
 GitLab and GitLab CI are configured by setting their relevant options in
 `/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
-[gitlab.rb.template][]. New installations starting from GitLab 7.6, will have
+[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+New installations starting from GitLab 7.6, will have
 all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
 
@@ -18,6 +19,24 @@ external_url "http://gitlab.example.com"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+### Loading configuration from external file
+
+Omnibus-gitlab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
+This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
+and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by the `root` user during `gitlab-ctl reconfigure`. This means
+that users who have write access to `/etc/gitlab/gitlab.rb` can add configuration that will be executed as code by `root`.
+
+In certain organizations it is allowed to have access to the configuration files but not as the root user.
+You can include an external configuration file inside `/etc/gitlab/gitlab.rb` by specifying the path to the file:
+
+```ruby
+from_file "/home/admin/external_gitlab.rb"
+
+```
+
+Please note that code you include into `/etc/gitlab/gitlab.rb` using `from_file` will run with `root` privileges when you run `sudo gitlab-ctl reconfigure`.
+Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is included will take precedence over the configuration from the included file.
 
 ### Storing Git data in an alternative directory
 
@@ -62,7 +81,7 @@ sudo gitlab-ctl start
 
 ### Changing the name of the Git user / group
 
-By default, omnibus-gitlab uses the user name `git` for Git gitlab-shell login,
+By default, omnibus-gitLab uses the user name `git` for Git gitlab-shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
 Similarly, `git` group is used for group ownership of the Git data.  You can
 change the user and group by adding the following lines to
@@ -77,7 +96,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Specify numeric user and group identifiers
 
-Omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
 specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
 follows.
 
@@ -94,9 +113,98 @@ web_server['gid'] = 1237
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Only start omnibus-gitlab services after a given filesystem is mounted
+### Disable user and group account management
 
-If you want to prevent omnibus-gitlab services (nginx, redis, unicorn etc.)
+By default, omnibus-gitlab takes care of user and group accounts creation as well as keeping the accounts information updated.
+This behaviour makes sense for most users but in certain environments user and group accounts are managed by other software, eg. LDAP.
+
+In order to disable user and group accounts management, in `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+manage_accounts['enable'] = false
+```
+
+*Warning* Omnibus-gitlab still expects users and groups to exist on the system where omnibus-gitlab package is installed.
+
+By default, omnibus-gitlab package expects that following users exist:
+
+
+```bash
+# GitLab user (required)
+git
+
+# Web server user (required)
+gitlab-www
+
+# Redis user for GitLab or GitLab CI (only when using packaged Redis)
+gitlab-redis
+
+# Postgresql user (only when using packaged Postgresql)
+gitlab-psql
+
+# GitLab CI user (only when using GitLab CI)
+gitlab-ci
+
+# GitLab Mattermost user (only when using GitLab Mattermost)
+mattermost
+```
+
+By default, omnibus-gitlab package expects that following groups exist:
+
+```bash
+# GitLab group (required)
+git
+
+# Web server group (required)
+gitlab-www
+
+# Redis group for GitLab or GitLab CI (only when using packaged Redis)
+gitlab-redis
+
+# Postgresql group (only when using packaged Postgresql)
+gitlab-psql
+
+# GitLab CI group (only when using GitLab CI)
+gitlab-ci
+
+# GitLab Mattermost group (only when using GitLab Mattermost)
+mattermost
+```
+
+You can also use different user/group names but then you must specify user/group details in `/etc/gitlab/gitlab.rb`, eg.
+
+```ruby
+# Do not manage user/group accounts
+manage_accounts['enable'] = false
+
+# GitLab
+user['username'] = "custom-gitlab"
+user['group'] = "custom-gitlab"
+user['shell'] = "/bin/sh"
+user['home'] = "/var/opt/custom-gitlab"
+
+# Web server
+web_server['username'] = 'webserver-gitlab'
+web_server['group'] = 'webserver-gitlab'
+web_server['shell'] = '/bin/false'
+web_server['home'] = '/var/opt/gitlab/webserver'
+
+# Postgresql (not needed when using external Postgresql)
+postgresql['username'] = "postgres-gitlab"
+postgresql['shell'] = "/bin/sh"
+postgresql['home'] = "/var/opt/postgres-gitlab"
+
+# Redis (not needed when using external Redis)
+redis['username'] = "redis-gitlab"
+redis['shell'] = "/bin/false"
+redis['home'] = "/var/opt/redis-gitlab"
+
+# And so on for users/groups for GitLab CI GitLab Mattermost
+```
+
+## Only start Omnibus-GitLab services after a given filesystem is mounted
+
+If you want to prevent omnibus-gitlab services (NGINX, Redis, Unicorn etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -109,44 +217,45 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Setting up LDAP sign-in
 
-See [doc/settings/ldap.md](doc/settings/ldap.md).
+See [doc/settings/ldap.md](ldap.md).
 
 ### Enable HTTPS
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#enable-https).
+See [doc/settings/nginx.md](nginx.md#enable-https).
 
 #### Redirect `HTTP` requests to `HTTPS`.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-https).
+See [doc/settings/nginx.md](nginx.md#redirect-http-requests-to-https).
 
 #### Change the default port and the ssl certificate locations.
 
-See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+See
+[doc/settings/nginx.md](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
 ### Use non-packaged web-server
 
-For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](nginx.md#using-a-non-bundled-web-server).
 
 ## Using a non-packaged PostgreSQL database management server
 
-To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
 
 ## Using a non-packaged Redis instance
 
-See [doc/settings/redis.md](doc/settings/redis.md).
+See [doc/settings/redis.md](redis.md).
 
-### Adding ENV Vars to the Gitlab Runtime Environment
+### Adding ENV Vars to the GitLab Runtime Environment
 
 See
-[doc/settings/environment-variables.md](doc/settings/environment-variables.md).
+[doc/settings/environment-variables.md](environment-variables.md).
 
-### Changing gitlab.yml settings
+### Changing GitLab.yml settings
 
-See [doc/settings/gitlab.yml.md](doc/settings/gitlab.yml.md).
+See [doc/settings/gitlab.yml.md](gitlab.yml.md).
 
 ### Sending application email via SMTP
 
-See [doc/settings/smtp.md](doc/settings/smtp.md).
+See [doc/settings/smtp.md](smtp.md).
 
 ### Omniauth (Google, Twitter, GitHub login)
 
@@ -155,16 +264,16 @@ Omniauth configuration is documented in
 
 ### Adjusting Unicorn settings
 
-See [doc/settings/unicorn.md](doc/settings/unicorn.md).
+See [doc/settings/unicorn.md](unicorn.md).
 
 ### Setting the NGINX listen address or addresses
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](nginx.md).
 
 ### Inserting custom NGINX settings into the GitLab server block
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](nginx.md).
 
 ### Inserting custom settings into the NGINX config
 
-See [doc/settings/nginx.md](doc/settings/nginx.md).
+See [doc/settings/nginx.md](nginx.md).

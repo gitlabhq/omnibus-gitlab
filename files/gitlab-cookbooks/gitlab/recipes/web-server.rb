@@ -15,28 +15,26 @@
 # limitations under the License.
 #
 
-webserver_username = node['gitlab']['web-server']['username']
-webserver_group = node['gitlab']['web-server']['group']
+account_helper = AccountHelper.new(node)
+webserver_username = account_helper.web_server_user
+webserver_group = account_helper.web_server_group
 external_webserver_users = node['gitlab']['web-server']['external_users']
 
 # Create the group for the GitLab user
 # If external webserver is used, add the external webserver user to
 # GitLab webserver group
-group webserver_group do
-  gid node['gitlab']['web-server']['gid']
-  system true
-  if external_webserver_users.any? && !node['gitlab']['nginx']['enable']
-    append true
-    members external_webserver_users
-  end
-end
+append_members = external_webserver_users.any? && !node['gitlab']['nginx']['enable']
 
-# Create the webserver user
-user webserver_username do
+account "Webserver user and group" do
+  username webserver_username
+  uid node['gitlab']['web-server']['uid']
+  ugid webserver_group
+  groupname webserver_group
+  gid node['gitlab']['web-server']['gid']
   shell node['gitlab']['web-server']['shell']
   home node['gitlab']['web-server']['home']
-  uid node['gitlab']['web-server']['uid']
-  gid webserver_group
-  system true
-  supports manage_home: false
+  append_to_group append_members
+  group_members external_webserver_users
+  user_supports manage_home: false
+  manage node['gitlab']['manage-accounts']['enable']
 end

@@ -8,6 +8,11 @@ upstream gitlab_mattermost {
   server 127.0.0.1:<%= @service_port %>;
 }
 
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+
 <% if @https && @redirect_http_to_https %>
 server {
 <% @listen_addresses.each do |listen_address| %>
@@ -16,7 +21,7 @@ server {
   server_name <%= @fqdn %>;
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
-  access_log  <%= @log_directory %>/gitlab_mattermost_access.log;
+  access_log  <%= @log_directory %>/gitlab_mattermost_access.log gitlab_mattermost_access;
   error_log   <%= @log_directory %>/gitlab_mattermost_error.log;
 }
 <% end %>
@@ -42,7 +47,7 @@ server {
   <% end %>
   <% end %>
 
-  access_log  <%= @log_directory %>/gitlab_mattermost_access.log;
+  access_log  <%= @log_directory %>/gitlab_mattermost_access.log gitlab_mattermost_access;
   error_log   <%= @log_directory %>/gitlab_mattermost_error.log;
 
   location / {
@@ -50,11 +55,11 @@ server {
     ## to be safe against BREACH attack.
     <%= 'gzip off;' if @https %>
 
-    proxy_read_timeout      300;
-    proxy_connect_timeout   300;
+    proxy_read_timeout      <%= @proxy_read_timeout %>;
+    proxy_connect_timeout   <%= @proxy_connect_timeout %>;
     proxy_redirect          off;
 
-    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_set_header   X-Forwarded-Proto <%= @https ? "https" : "http" %>;
     proxy_set_header   Host              $http_host;
     proxy_set_header   X-Real-IP         $remote_addr;
     proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
@@ -63,6 +68,10 @@ server {
     <% if @https %>
     proxy_set_header   X-Forwarded-Ssl     on;
     <% end %>
+
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
     proxy_pass http://gitlab_mattermost;
   }
 

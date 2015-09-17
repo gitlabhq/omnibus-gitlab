@@ -7,8 +7,10 @@ If you are experiencing problems during GitLab package installation or have issu
 
 - Include the omnibus-gitlab version when discussing behavior: `dpkg-query -W
   gitlab` or `rpm -q gitlab`.
-- Be careful when pasting log output of `gitlab-ctl reconfigure`; Chef happily
-  writes secrets to the log.
+- Include the omnibus-gitlab configuration: `sudo gitlab-ctl show-config`
+- Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks "```".
+
+*Warning* Be careful when pasting log outputs of `gitlab-ctl reconfigure` or `gitlab-ctl show-config`; They will contain secrets like passwords and keys so *make sure to edit out all secrets before pasting the log output*.
 
 #### For problems not related to package installation and configuration check ways to get help [at GitLab website.](https://about.gitlab.com/getting-help/)
 

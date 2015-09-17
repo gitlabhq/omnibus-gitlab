@@ -4,6 +4,7 @@
 
 - [Package downloads page](https://about.gitlab.com/downloads/)
 - [GitLab CI](gitlab-ci/README.md) Set up the GitLab CI coordinator that ships with Omnibus GitLab package.
+- [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 
 ## Maintenance
 

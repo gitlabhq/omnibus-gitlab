@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_shell_source_dir = "/opt/gitlab/embedded/service/gitlab-shell"
@@ -29,6 +30,9 @@ ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_app = "gitlab"
 
+gitlab_user = account_helper.gitlab_user
+gitlab_group = account_helper.gitlab_group
+
 [
   gitlab_rails_etc_dir,
   gitlab_rails_static_etc_dir,
@@ -39,21 +43,21 @@ gitlab_app = "gitlab"
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
-    owner node['gitlab']['user']['username']
+    owner gitlab_user
     mode '0700'
     recursive true
   end
 end
 
 directory gitlab_rails_dir do
-  owner node['gitlab']['user']['username']
+  owner gitlab_user
   mode '0755'
   recursive true
 end
 
 directory gitlab_rails_public_uploads_dir do
-  owner node['gitlab']['user']['username']
-  group node['gitlab']['web-server']['group']
+  owner gitlab_user
+  group account_helper.web_server_group
   mode '0750'
   recursive true
 end
@@ -168,13 +172,28 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   restarts dependent_services
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "mail_room.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/mail_room.yml")
+  source "mail_room.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    node['gitlab']['gitlab-rails'].to_hash.merge(
+      :redis_url => redis_url
+    )
+  )
+  restarts dependent_services
+  action node['gitlab']['gitlab-rails']['reply_by_email_enabled'] ? :create : :delete
+end
+
 link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
   to File.join(gitlab_shell_source_dir, ".gitlab_shell_secret")
 end
 
 directory node['gitlab']['gitlab-rails']['satellites_path'] do
-  owner node['gitlab']['user']['username']
-  group node['gitlab']['user']['group']
+  owner gitlab_user
+  group gitlab_group
   mode "0750"
   recursive true
 end
@@ -208,7 +227,7 @@ end
 
 # Make schema.rb writable for when we run `rake db:migrate`
 file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
-  owner node['gitlab']['user']['username']
+  owner gitlab_user
 end
 
 # Only run `rake db:migrate` when the gitlab-rails version has changed
@@ -239,22 +258,32 @@ bitbucket_keys = node['gitlab']['gitlab-rails']['bitbucket']
 unless bitbucket_keys.nil?
   execute 'trust bitbucket.org fingerprint' do
     command "echo '#{bitbucket_keys['known_hosts_key']}' >> #{known_hosts}"
-    user node['gitlab']['user']['username']
-    group node['gitlab']['user']['group']
+    user gitlab_user
+    group gitlab_group
     not_if "grep '#{bitbucket_keys['known_hosts_key']}' #{known_hosts}"
   end
 
   file File.join(ssh_dir, 'bitbucket_rsa') do
     content "#{bitbucket_keys['private_key']}\n"
-    owner node['gitlab']['user']['username']
-    group node['gitlab']['user']['group']
+    owner gitlab_user
+    group gitlab_group
     mode 0600
+  end
+
+  ssh_config_file = File.join(ssh_dir, 'config')
+  bitbucket_host_config = "Host bitbucket.org\n  IdentityFile ~/.ssh/bitbucket_rsa\n  User #{node['gitlab']['user']['username']}"
+
+  execute 'manage config for bitbucket import key' do
+    command "echo '#{bitbucket_host_config}' >> #{ssh_config_file}"
+    user gitlab_user
+    group gitlab_group
+    not_if "grep 'IdentityFile ~/.ssh/bitbucket_rsa' #{ssh_config_file}"
   end
 
   file File.join(ssh_dir, 'bitbucket_rsa.pub') do
     content "#{bitbucket_keys['public_key']}\n"
-    owner node['gitlab']['user']['username']
-    group node['gitlab']['user']['group']
+    owner gitlab_user
+    group gitlab_group
     mode 0644
   end
 end

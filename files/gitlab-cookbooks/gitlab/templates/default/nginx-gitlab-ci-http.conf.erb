@@ -16,7 +16,7 @@ server {
   server_name <%= @fqdn %>;
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
-  access_log  <%= @log_directory %>/gitlab_ci_access.log;
+  access_log  <%= @log_directory %>/gitlab_ci_access.log gitlab_ci_access;
   error_log   <%= @log_directory %>/gitlab_ci_error.log;
 }
 <% end %>
@@ -33,6 +33,9 @@ server {
   ssl on;
   ssl_certificate <%= @ssl_certificate %>;
   ssl_certificate_key <%= @ssl_certificate_key %>;
+  <% if @ssl_client_certificate %>
+  ssl_client_certificate <%= @ssl_client_certificate%>;
+   <% end %>
   ssl_ciphers '<%= @ssl_ciphers %>';
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   ssl_protocols  <%= @ssl_protocols %>;
@@ -47,7 +50,7 @@ server {
   <% end %>
 
   ## Individual nginx logs for this GitLab CI vhost
-  access_log  <%= @log_directory %>/gitlab_ci_access.log;
+  access_log  <%= @log_directory %>/gitlab_ci_access.log gitlab_ci_access;
   error_log   <%= @log_directory %>/gitlab_ci_error.log;
 
   location / {
@@ -65,11 +68,11 @@ server {
 
     ## https://github.com/gitlabhq/gitlabhq/issues/694
     ## Some requests take more than 30 seconds.
-    proxy_read_timeout      300;
-    proxy_connect_timeout   300;
+    proxy_read_timeout      <%= @proxy_read_timeout %>;
+    proxy_connect_timeout   <%= @proxy_connect_timeout %>;
     proxy_redirect          off;
 
-    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_set_header   X-Forwarded-Proto <%= @https ? "https" : "http" %>;
     proxy_set_header   Host              $http_host;
     proxy_set_header   X-Real-IP         $remote_addr;
     proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;

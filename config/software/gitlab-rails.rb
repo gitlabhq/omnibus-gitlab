@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "8aebf6a36614a2a4a784cc58428ea8576449c461" # v7.14.1-ee
+default_version "master" # Nightly build
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -57,7 +57,8 @@ build do
 
   assets_precompile_env = {
     "RAILS_ENV" => "production",
-    "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}"
+    "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
+    "USE_DB" => "false"
   }
   bundle "exec rake assets:precompile", :env => assets_precompile_env
 

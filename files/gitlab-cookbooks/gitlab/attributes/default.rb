@@ -24,7 +24,8 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true"]
  }
-
+# Create users and groups needed for the package
+default['gitlab']['manage-accounts']['enable'] = true
 
 ####
 # The Git User that services run as
@@ -84,6 +85,13 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_visibility_l
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_enabled'] = false
+default['gitlab']['gitlab-rails']['reply_by_email_address'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_host'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_port'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_ssl'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_email'] = nil
+default['gitlab']['gitlab-rails']['reply_by_email_log_directory'] = "/var/log/gitlab/mailroom"
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
@@ -107,6 +115,13 @@ default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 ####
+
+default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
+default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
+default['gitlab']['gitlab-rails']['kerberos_service_principal_name'] = nil
+default['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'] = nil
+default['gitlab']['gitlab-rails']['kerberos_port'] = nil
+default['gitlab']['gitlab-rails']['kerberos_https'] = nil
 
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = nil
@@ -314,7 +329,7 @@ default['gitlab']['web-server']['external_users'] = []
 # gitlab-git-http-server
 ####
 
-default['gitlab']['gitlab-git-http-server']['enable'] = false
+default['gitlab']['gitlab-git-http-server']['enable'] = true
 default['gitlab']['gitlab-git-http-server']['ha'] = false
 default['gitlab']['gitlab-git-http-server']['repo_root'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-git-http-server']['listen_network'] = "unix"
@@ -334,6 +349,7 @@ default['gitlab']['nginx']['dir'] = "/var/opt/gitlab/nginx"
 default['gitlab']['nginx']['log_directory'] = "/var/log/gitlab/nginx"
 default['gitlab']['nginx']['worker_processes'] = node['cpu']['total'].to_i
 default['gitlab']['nginx']['worker_connections'] = 10240
+default['gitlab']['nginx']['log_format'] = '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"' #  NGINX 'combined' format
 default['gitlab']['nginx']['sendfile'] = 'on'
 default['gitlab']['nginx']['tcp_nopush'] = 'on'
 default['gitlab']['nginx']['tcp_nodelay'] = 'on'
@@ -347,6 +363,7 @@ default['gitlab']['nginx']['client_max_body_size'] = '250m'
 default['gitlab']['nginx']['cache_max_size'] = '5000m'
 default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
+default['gitlab']['nginx']['ssl_client_certificate'] = nil # Most root CA's will be included by default
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
 default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
@@ -360,6 +377,8 @@ default['gitlab']['nginx']['listen_port'] = nil # override only if you have a re
 default['gitlab']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
 default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
 default['gitlab']['nginx']['custom_nginx_config'] = nil
+default['gitlab']['nginx']['proxy_read_timeout'] = 300
+default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 
 ###
 # Logging
@@ -545,7 +564,9 @@ default['gitlab']['mattermost']['service_analytics_url'] = nil
 default['gitlab']['mattermost']['service_use_local_storage'] = true
 default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
+default['gitlab']['mattermost']['service_disable_email_signup'] = false
 
+default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
 default['gitlab']['mattermost']['sql_data_source_replicas'] = []
 default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
@@ -569,6 +590,7 @@ default['gitlab']['mattermost']['email_smtp_username'] = nil
 default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
 default['gitlab']['mattermost']['email_use_tls'] = false
+default['gitlab']['mattermost']['email_use_start_tls'] = false
 default['gitlab']['mattermost']['email_feedback_email'] = nil
 default['gitlab']['mattermost']['email_feedback_name'] = nil
 default['gitlab']['mattermost']['email_apple_push_server'] = nil
@@ -596,6 +618,8 @@ default['gitlab']['mattermost']['team_help_link'] = '/static/help/configure_link
 default['gitlab']['mattermost']['team_report_problem_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_tour_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
+default['gitlab']['mattermost']['team_disable_team_creation'] = false
+default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 
 ####
 # Mattermost NGINX

@@ -4,8 +4,6 @@
 
 Please make sure you are viewing this file on the master branch.
 
-![documentation version](images/omnibus-documentation-version-update-md.png)
-
 #### Updating from GitLab 6.6 and higher to 7.10 or newer
 
 See [doc/update/README.md.](doc/update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)

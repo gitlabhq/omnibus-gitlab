@@ -84,3 +84,17 @@ Example log messages:
 2014-06-26_13:33:46.52608 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7muoc RepositoryImportWorker JID-57ee926c3655fcfa062338ae INFO: start
 
 ```
+
+### Using a custom NGINX log format
+
+By default the NGINX access logs will use the 'combined' NGINX
+format, see
+http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format .
+If you want to use a custom log format string you can specify it
+in gitlab.rb.
+
+```
+nginx['log_format'] = 'my format string $foo $bar'
+ci_nginx['log_format'] = 'my format string $foo $bar'
+mattermost_nginx['log_format'] = 'my format string $foo $bar'
+```
