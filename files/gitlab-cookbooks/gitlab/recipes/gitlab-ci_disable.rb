@@ -17,17 +17,17 @@
 #
 
 ci_dependent_services = []
-ci_dependent_services << "service[ci-unicorn]" if OmnibusHelper.should_notify?("ci-unicorn")
-ci_dependent_services << "service[ci-sidekiq]" if OmnibusHelper.should_notify?("ci-sidekiq")
+ci_dependent_services << "ci-unicorn" if OmnibusHelper.should_notify?("ci-unicorn")
+ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sidekiq")
+ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
 
+# Stop and disable services
+ci_dependent_services.each do |ci_service|
+  service ci_service do
+    action :stop
+  end
 
-# Disable Services
-[
-  "ci-redis",
-  "ci-unicorn",
-  "ci-sidekiq",
-].each do |service|
-  if node["gitlab"][service]["enable"]
-    include_recipe "gitlab::#{service}_disable"
+  if node["gitlab"][ci_service]["enable"]
+    include_recipe "gitlab::#{ci_service}_disable"
   end
 end
