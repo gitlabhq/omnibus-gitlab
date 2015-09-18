@@ -134,6 +134,7 @@ default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data
 default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil
+default['gitlab']['gitlab-rails']['backup_pg_schema'] = nil
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
