@@ -174,6 +174,20 @@ class CiHelper
 
     { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
   end
+
+  def self.gitlab_server
+    return unless Gitlab['gitlab_ci']['gitlab_server']
+    Gitlab['gitlab_ci']['gitlab_server']
+  end
+
+  def self.gitlab_server_fqdn
+    if gitlab_server && gitlab_server['url']
+      uri = URI(gitlab_server['url'].to_s)
+      uri.host
+    else
+      ""
+    end
+  end
 end
 
 class MattermostHelper
@@ -287,20 +301,6 @@ class SecretsHelper
         )
         system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
       end
-    end
-  end
-
-  def self.gitlab_server
-    return unless Gitlab['gitlab_ci']['gitlab_server']
-    Gitlab['gitlab_ci']['gitlab_server']
-  end
-
-  def self.gitlab_server_fqdn
-    if gitlab_server && gitlab_server['url']
-      uri = URI(gitlab_server['url'].to_s)
-      uri.host
-    else
-      ""
     end
   end
 end

@@ -66,12 +66,12 @@ server {
 
     # You need to specify your DNS servers that are able to resolve YOUR_GITLAB_SERVER_FQDN
     resolver <%= @resolver %>;
-    proxy_pass  <%= @https ? "https" : "http" %>://<%= gitlab_fqdn %>/ci$request_uri;
+    proxy_pass  <%= @https ? "https" : "http" %>://<%= @gitlab_fqdn %>/ci$request_uri;
   }
 
   # redirect all other CI requests
   location / {
-    return 301 <%= @https ? "https" : "http" %>://<%= gitlab_fqdn %>/ci$request_uri;
+    return 301 <%= @https ? "https" : "http" %>://<%= @gitlab_fqdn %>/ci$request_uri;
   }
 
   # adjust this to match the largest build log your runners might submit,

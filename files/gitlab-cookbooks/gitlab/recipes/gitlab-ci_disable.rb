@@ -29,5 +29,6 @@ ci_dependent_services.each do |ci_service|
 
   if node["gitlab"][ci_service]["enable"]
     include_recipe "gitlab::#{ci_service}_disable"
+    node.override["gitlab"][ci_service]["enable"] = false
   end
 end
