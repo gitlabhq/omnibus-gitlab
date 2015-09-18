@@ -121,7 +121,8 @@ template gitlab_ci_http_conf do
     {
       :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
       :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
-      :socket => node['gitlab']['ci-unicorn']['socket']
+      :socket => node['gitlab']['ci-unicorn']['socket'],
+      :gitlab_fqdn => CiHelper.gitlab_server_fqdn
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

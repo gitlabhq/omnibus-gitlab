@@ -536,6 +536,7 @@ default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.so
 ####
 default['gitlab']['ci-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['ci-nginx']['enable'] = false
+default['gitlab']['ci-nginx']['resolver'] = "8.8.8.8 8.8.4.4"
 
 ####
 # Mattermost
