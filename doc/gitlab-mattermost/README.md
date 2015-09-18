@@ -96,7 +96,7 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 By default, `mattermost['email_by_pass_email'] = true`  which allows account creation and system operation without having to setup an email service. This option completely shuts off the email service.
 
-When you do want to have emails enabled, you need to set this option to false`.
+When you do want to have emails enabled, you need to set this option to `false`.
 
 SMTP configuration depends on SMTP provider used. If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
 
