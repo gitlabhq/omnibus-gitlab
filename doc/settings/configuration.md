@@ -20,7 +20,7 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-### Loading configuration from external file
+### Loading external configuration file from non-root user
 
 Omnibus-gitlab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
 This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
