@@ -79,3 +79,17 @@ If you are using non-packaged database see [documentation on using non-packaged 
 ### Upload backups to remote (cloud) storage
 
 For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+
+### Manually manage backup directory
+
+Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by user that is running GitLab and it has strict permissions set to be accessible to only that user.
+That directory will hold backup archives and they contain sensitive information.
+In some organizations permissions need to be different because of, for example, shipping the backup archives offsite.
+
+To disable backup directory management, in `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+gitlab_rails['manage_backup_path'] = false
+```
+*Warning* If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
+which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.
