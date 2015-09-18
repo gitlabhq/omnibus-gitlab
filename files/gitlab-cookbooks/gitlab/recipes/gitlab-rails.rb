@@ -26,6 +26,8 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
+gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
+
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_app = "gitlab"
@@ -38,6 +40,7 @@ gitlab_group = account_helper.gitlab_group
   gitlab_rails_static_etc_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
+  gitlab_ci_builds_dir,
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
@@ -173,7 +176,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
+  variables(node['gitlab']['gitlab-rails'].to_hash.merge(node['gitlab']['gitlab-ci'].to_hash))
   restarts dependent_services
   unless redis_not_listening
     notifies :run, 'execute[clear the gitlab-rails cache]'
