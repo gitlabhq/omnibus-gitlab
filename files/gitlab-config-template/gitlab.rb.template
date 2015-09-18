@@ -129,6 +129,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## For setting up backups
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#backups
 
+# gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
 # gitlab_rails['backup_archive_permissions'] = 0644 # See: http://doc.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_pg_schema'] = 'public'

@@ -38,7 +38,6 @@ gitlab_group = account_helper.gitlab_group
   gitlab_rails_static_etc_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
-  node['gitlab']['gitlab-rails']['backup_path'],
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
@@ -47,6 +46,13 @@ gitlab_group = account_helper.gitlab_group
     mode '0700'
     recursive true
   end
+end
+
+directory node['gitlab']['gitlab-rails']['backup_path'] do
+  owner gitlab_user
+  mode '0700'
+  recursive true
+  only_if node['gitlab']['gitlab-rails']['manage_backup_path']
 end
 
 directory gitlab_rails_dir do

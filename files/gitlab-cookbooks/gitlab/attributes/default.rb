@@ -133,6 +133,7 @@ default['gitlab']['gitlab-rails']['bitbucket'] = nil
 default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
 default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-rails']['manage_backup_path'] = true
 default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil
 default['gitlab']['gitlab-rails']['backup_pg_schema'] = nil
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
