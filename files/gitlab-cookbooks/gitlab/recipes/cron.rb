@@ -15,15 +15,14 @@
 # limitations under the License.
 #
 
-# Remove the old cronjob from root's crontab
+# Remove all cronjobs for gitlab-ci builds
+
 cron 'gitlab-ci schedule builds' do
   user 'root'
   action :delete
 end
 
 cron 'gitlab-ci schedule builds' do
-  minute node['gitlab']['gitlab-ci']['schedule_builds_minute']
-  command '/opt/gitlab/bin/gitlab-ci-rake schedule_builds'
   user AccountHelper.new(node).gitlab_ci_user
-  action node['gitlab']['gitlab-ci']['enable'] ? :create : :delete
+  action :delete
 end

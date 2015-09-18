@@ -108,6 +108,18 @@ else
   redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
 end
 
+
+template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
+  link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
+  source "secrets.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables node['gitlab']['gitlab-rails'].to_hash.merge(node['gitlab']['gitlab-ci'].to_hash)
+  helpers SingleQuoteHelper
+  restarts dependent_services
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/resque.yml")
   source "resque.yml.erb"
