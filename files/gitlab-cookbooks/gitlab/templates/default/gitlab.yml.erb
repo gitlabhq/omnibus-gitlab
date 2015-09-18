@@ -93,7 +93,23 @@ production: &base
     ssl_url:   <%= single_quote(@gravatar_ssl_url) %>    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
 
   #
-  # 2. Auth settings
+  # 2. GitLab CI settings
+  # ==========================
+
+  gitlab_ci:
+    # Default project notifications settings:
+    #
+    # Send emails only on broken builds (default: true)
+    all_broken_builds: <%= @gitlab_ci_all_broken_builds %>
+    #
+    # Add pusher to recipients list (default: false)
+    add_pusher: <%= @gitlab_ci_add_pusher || @gitlab_ci_add_committer %>
+
+    # The location where build traces are stored (default: builds/). Relative paths are relative to Rails.root
+    builds_path: <%= @builds_directory %>
+
+  #
+  # 3. Auth settings
   # ==========================
 
   ## LDAP settings
@@ -191,7 +207,7 @@ production: &base
 
 
   #
-  # 3. Advanced settings
+  # 4. Advanced settings
   # ==========================
 
   # GitLab Satellites
@@ -241,7 +257,7 @@ production: &base
     timeout: <%= @git_timeout %>
 
   #
-  # 4. Extra customization
+  # 5. Extra customization
   # ==========================
 
   extra:
