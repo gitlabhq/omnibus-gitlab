@@ -205,6 +205,7 @@ production: &base
     path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     archive_permissions: <%= @backup_archive_permissions %> # Permissions for the resulting backup.tar file (default: 0600)
     keep_time: <%= @backup_keep_time %>   # default: 0 (forever) (in seconds)
+    pg_schema: <%= @backup_pg_schema %>   # default: nil, it means that all schemas will be backed up
     upload:
       # Fog storage connection settings, see http://fog.io/storage/ .
       connection: <%= @backup_upload_connection.to_json if @backup_upload_connection %>
