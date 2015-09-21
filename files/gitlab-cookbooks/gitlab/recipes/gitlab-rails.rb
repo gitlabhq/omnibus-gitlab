@@ -117,6 +117,11 @@ else
   redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
 end
 
+gitlab_rails = if node['gitlab']['gitlab-ci']['db_key_base']
+                 node['gitlab']['gitlab-rails'].to_hash.merge!({ db_key_base: node['gitlab']['gitlab-ci']['db_key_base'] })
+               else
+                 node['gitlab']['gitlab-rails']
+               end
 
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -124,7 +129,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables node['gitlab']['gitlab-rails'].to_hash.merge(node['gitlab']['gitlab-ci'].to_hash)
+  variables(gitlab_rails.to_hash)
   helpers SingleQuoteHelper
   restarts dependent_services
 end
@@ -176,7 +181,13 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash.merge(node['gitlab']['gitlab-ci'].to_hash))
+  variables(
+    node['gitlab']['gitlab-rails'].to_hash.merge(
+      gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
+      gitlab_ci_add_pusher: node['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'],
+      builds_directory: gitlab_ci_builds_dir
+    )
+  )
   restarts dependent_services
   unless redis_not_listening
     notifies :run, 'execute[clear the gitlab-rails cache]'
