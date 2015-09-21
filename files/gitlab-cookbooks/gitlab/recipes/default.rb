@@ -71,7 +71,7 @@ if node['gitlab']['gitlab-rails']['enable']
 end
 
 if node['gitlab']['gitlab-ci']['enable']
-  include_recipe "gitlab::gitlab-ci"
+  include_recipe "gitlab::gitlab-ci_disable"
 end
 
 include_recipe "gitlab::selinux"
@@ -96,12 +96,9 @@ include_recipe "runit"
 # Configure Services
 [
   "redis",
-  "ci-redis",
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
-  "ci-unicorn",
   "sidekiq",
-  "ci-sidekiq",
   "gitlab-git-http-server",
   "nginx",
   "remote-syslog",

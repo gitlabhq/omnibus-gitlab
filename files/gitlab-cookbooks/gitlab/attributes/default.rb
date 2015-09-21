@@ -134,6 +134,7 @@ default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data
 default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil
+default['gitlab']['gitlab-rails']['backup_pg_schema'] = nil
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
@@ -536,6 +537,7 @@ default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.so
 ####
 default['gitlab']['ci-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['ci-nginx']['enable'] = false
+default['gitlab']['ci-nginx']['resolver'] = "8.8.8.8 8.8.4.4"
 
 ####
 # Mattermost
