@@ -216,7 +216,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "mail_room.yml") do
     )
   )
   restarts dependent_services
-  action node['gitlab']['gitlab-rails']['reply_by_email_enabled'] ? :create : :delete
+  action node['gitlab']['gitlab-rails']['incoming_email_enabled'] ? :create : :delete
 end
 
 link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
