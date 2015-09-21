@@ -21,6 +21,13 @@ ci_dependent_services << "ci-unicorn" if OmnibusHelper.should_notify?("ci-unicor
 ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sidekiq")
 ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
 
+directory node['gitlab']['gitlab-ci']['backup_path'] do
+  owner AccountHelper.new(node).gitlab_ci_user
+  mode '0755'
+  recursive true
+end
+
+
 # Stop and disable services
 ci_dependent_services.each do |ci_service|
   service ci_service do
