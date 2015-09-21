@@ -117,9 +117,11 @@ else
   redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
 end
 
-if node['gitlab']['gitlab-ci']['db_key_base']
-  node['gitlab']['gitlab-rails'].to_hash.merge!({ db_key_base: node['gitlab']['gitlab-ci']['db_key_base'] })
-end
+gitlab_rails = if node['gitlab']['gitlab-ci']['db_key_base']
+                 node['gitlab']['gitlab-rails'].to_hash.merge!({ db_key_base: node['gitlab']['gitlab-ci']['db_key_base'] })
+               else
+                 node['gitlab']['gitlab-rails']
+               end
 
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -127,7 +129,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
+  variables(gitlab_rails.to_hash)
   helpers SingleQuoteHelper
   restarts dependent_services
 end
