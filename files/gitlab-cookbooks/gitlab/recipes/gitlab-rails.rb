@@ -179,7 +179,13 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash.merge(node['gitlab']['gitlab-ci'].to_hash))
+  variables(
+    node['gitlab']['gitlab-rails'].to_hash.merge(
+      gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
+      gitlab_ci_add_pusher: node['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'],
+      builds_directory: gitlab_ci_builds_dir
+    )
+  )
   restarts dependent_services
   unless redis_not_listening
     notifies :run, 'execute[clear the gitlab-rails cache]'
