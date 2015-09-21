@@ -26,6 +26,7 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
+gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
@@ -59,6 +60,12 @@ directory node['gitlab']['gitlab-rails']['backup_path'] do
 end
 
 directory gitlab_rails_dir do
+  owner gitlab_user
+  mode '0755'
+  recursive true
+end
+
+directory gitlab_ci_dir do
   owner gitlab_user
   mode '0755'
   recursive true
