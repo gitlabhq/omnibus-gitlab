@@ -55,7 +55,7 @@ directory node['gitlab']['gitlab-rails']['backup_path'] do
   owner gitlab_user
   mode '0700'
   recursive true
-  only_if node['gitlab']['gitlab-rails']['manage_backup_path']
+  only_if { node['gitlab']['gitlab-rails']['manage_backup_path'] }
 end
 
 directory gitlab_rails_dir do
