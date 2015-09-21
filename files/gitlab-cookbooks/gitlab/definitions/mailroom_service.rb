@@ -20,7 +20,7 @@ define :mailroom_service, :rails_app => nil, :user => nil do
   user = params[:user]
   rails_app = params[:rails_app]
 
-  mailroom_log_dir = node['gitlab']['gitlab-rails']['reply_by_email_log_directory']
+  mailroom_log_dir = node['gitlab']['gitlab-rails']['incoming_email_log_directory']
   mail_room_config = File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "mail_room.yml")
 
   directory mailroom_log_dir do

@@ -22,7 +22,7 @@ sidekiq_service 'sidekiq' do
   user account_helper.gitlab_user
 end
 
-if node['gitlab']['gitlab-rails']['reply_by_email_enabled']
+if node['gitlab']['gitlab-rails']['incoming_email_enabled']
   mailroom_service 'mailroom' do
     rails_app 'gitlab-rails'
     user account_helper.gitlab_user

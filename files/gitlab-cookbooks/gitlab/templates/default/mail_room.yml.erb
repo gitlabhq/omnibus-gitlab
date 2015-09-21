@@ -1,17 +1,17 @@
 :mailboxes:
   -
     # IMAP server host
-    :host: <%= @reply_by_email_host %>
+    :host: <%= @incoming_email_host %>
     # IMAP server port
-    :port: <%= @reply_by_email_port %>
+    :port: <%= @incoming_email_port %>
     # Whether the IMAP server uses SSL
-    :ssl: <%= @reply_by_email_ssl %>
+    :ssl: <%= @incoming_email_ssl %>
     # Email account username. Usually the full email address.
-    :email: <%= @reply_by_email_email %>
+    :email: <%= @incoming_email_email %>
     # Email account password
-    :password: <%= @reply_by_email_password %>
+    :password: <%= @incoming_email_password %>
     # The name of the mailbox where incoming mail will end up. Usually "inbox".
-    :name: <%= @reply_by_email_mailbox_name %>
+    :name: <%= @incoming_email_mailbox_name %>
     # Always "sidekiq".
     :delivery_method: sidekiq
     :delete_after_delivery: true
