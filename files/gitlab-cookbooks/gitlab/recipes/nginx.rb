@@ -42,7 +42,6 @@ end
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
-gitlab_ci_http_conf = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
 
 # If the service is enabled, check if we are using internal nginx
@@ -51,12 +50,6 @@ gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
                        else
                          false
                        end
-
-gitlab_ci_enabled = if node['gitlab']['gitlab-ci']['enable']
-                      node['gitlab']['ci-nginx']['enable']
-                    else
-                      false
-                    end
 
 gitlab_mattermost_enabled = if node['gitlab']['mattermost']['enable']
                               node['gitlab']['mattermost-nginx']['enable']
@@ -69,10 +62,6 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
              })
 
-# Include the config file for gitlab-ci in nginx.conf later
-nginx_vars =  nginx_vars.merge!(
-                :gitlab_ci_http_config => gitlab_ci_enabled ? gitlab_ci_http_conf : nil
-              )
 # Include the config file for gitlab mattermost in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
                :gitlab_mattermost_http_config => gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
@@ -104,31 +93,6 @@ template gitlab_rails_http_conf do
   action gitlab_rails_enabled ? :create : :delete
 end
 
-ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
-
-if ci_nginx_vars['listen_https'].nil?
-  ci_nginx_vars['https'] = node['gitlab']['gitlab-ci']['gitlab_ci_https']
-else
-  ci_nginx_vars['https'] = ci_nginx_vars['listen_https']
-end
-
-template gitlab_ci_http_conf do
-  source "nginx-gitlab-ci-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(ci_nginx_vars.merge(
-    {
-      :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
-      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
-      :socket => node['gitlab']['ci-unicorn']['socket'],
-      :gitlab_fqdn => CiHelper.gitlab_server_fqdn
-    }
-  ))
-  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
-  action gitlab_ci_enabled ? :create : :delete
-end
-
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
 
 if mattermost_nginx_vars['listen_https'].nil?
@@ -154,7 +118,6 @@ template gitlab_mattermost_http_conf do
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
-nginx_vars['gitlab_ci_access_log_format'] = node['gitlab']['ci-nginx']['log_format']
 nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
 
 template nginx_config do

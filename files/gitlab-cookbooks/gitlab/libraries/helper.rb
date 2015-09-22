@@ -105,6 +105,9 @@ class OmnibusHelper
     failure?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
   end
 
+  def self.user_exists?(username)
+    success?("id -u #{username}")
+  end
 end
 
 module AuthorizeHelper
