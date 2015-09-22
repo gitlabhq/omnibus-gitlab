@@ -46,7 +46,6 @@ template File.join(nginx_conf_dir, "gitlab-ci-http.conf") do
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
-  action :create
 end
 
 if OmnibusHelper.user_exists?(gitlab_ci_user)
@@ -56,7 +55,6 @@ if OmnibusHelper.user_exists?(gitlab_ci_user)
     recursive true
   end
 
-
   # Stop and disable services
   ci_dependent_services.each do |ci_service|
     service ci_service do
@@ -64,12 +62,11 @@ if OmnibusHelper.user_exists?(gitlab_ci_user)
     end
 
     include_recipe "gitlab::#{ci_service}_disable"
-  end
 
-  if node["gitlab"][ci_service]["enable"]
-    node.override["gitlab"][ci_service]["enable"] = false
+    if node["gitlab"][ci_service]["enable"]
+      node.override["gitlab"][ci_service]["enable"] = false
+    end
   end
-
 end
 
 if node["gitlab"]['gitlab-ci']["enable"]
