@@ -3,7 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.0.0 (Unreleased)
+8.0.1
+
+- Revert "Do not buffer with nginx git http requests"
+
+8.0.0
 
 - gitlab-git-http-server 0.2.9 is enabled by default e6fa1b77c9501da6b6ef44c92e2705b1e94166ea
 - Added reply by email configuration 3181425e05bd7be76832957367a24df771bdc84c
