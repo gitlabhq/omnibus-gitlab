@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.1.0
+
+- Update gitlab-git-http-server to 0.2.10
+
 8.0.1
 
 - Revert "Do not buffer with nginx git http requests"
