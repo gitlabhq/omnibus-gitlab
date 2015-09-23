@@ -22,18 +22,18 @@ ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sideki
 ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
 gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
 
+ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
+
+if ci_nginx_vars['listen_https'].nil?
+  ci_nginx_vars['https'] = node['gitlab']['gitlab-ci']['gitlab_ci_https']
+else
+  ci_nginx_vars['https'] = ci_nginx_vars['listen_https']
+end
+
+nginx_conf_dir = File.join(node['gitlab']['nginx']['dir'], "conf")
+gitlab_ci_http_config = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
+
 if node["gitlab"]['gitlab-ci']["enable"]
-  ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
-
-  if ci_nginx_vars['listen_https'].nil?
-    ci_nginx_vars['https'] = node['gitlab']['gitlab-ci']['gitlab_ci_https']
-  else
-    ci_nginx_vars['https'] = ci_nginx_vars['listen_https']
-  end
-
-  nginx_conf_dir = File.join(node['gitlab']['nginx']['dir'], "conf")
-  gitlab_ci_http_config = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
-
   template gitlab_ci_http_config do
     source "nginx-gitlab-ci-http.conf.erb"
     owner "root"
@@ -51,6 +51,13 @@ if node["gitlab"]['gitlab-ci']["enable"]
   end
 
   node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = gitlab_ci_http_config
+  node.override["gitlab"]['gitlab-ci']["enable"] = false
+else
+  template gitlab_ci_http_config do
+    action :delete
+  end
+
+  node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = nil
 end
 
 if OmnibusHelper.user_exists?(gitlab_ci_user)

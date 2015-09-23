@@ -70,9 +70,7 @@ if node['gitlab']['gitlab-rails']['enable']
   include_recipe "gitlab::gitlab-rails"
 end
 
-if node['gitlab']['gitlab-ci']['enable']
-  include_recipe "gitlab::gitlab-ci_disable"
-end
+include_recipe "gitlab::gitlab-ci_disable"
 
 include_recipe "gitlab::selinux"
 include_recipe "gitlab::cron"
