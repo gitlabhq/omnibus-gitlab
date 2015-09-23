@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+7.14.3
+
+- Add redis password option when using TCP auth d847479b8bcb523110aae9230bcf480def3eab15
+
 7.14.2
 
 - Update gitlab-git-http-server to version 0.2.9 82a3bec2eb3f006bb9327a59608f99cae81d5c92
