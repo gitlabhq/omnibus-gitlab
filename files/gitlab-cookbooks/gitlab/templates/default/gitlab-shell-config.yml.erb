@@ -34,7 +34,7 @@ redis:
   socket: <%= @redis_socket %>
 <% end %>
 <% if @redis_password %>
-  pass: <%= @redis_pass %>
+  pass: <%= @redis_password %>
 <% end %>
   database: <%= @redis_database %>
   namespace: resque:gitlab
