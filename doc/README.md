@@ -24,11 +24,12 @@
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
 - [Unicorn](settings/unicorn.md)
-- [Environment variables](settings/environment-variables.md).
-- [gitlab.yml](settings/gitlab.yml.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)
+- [Reply by email](http://doc.gitlab.com/ce/incoming_email/README.html)
+- [Environment variables](settings/environment-variables.md)
+- [gitlab.yml](settings/gitlab.yml.md)
 
 ## Updating
 
