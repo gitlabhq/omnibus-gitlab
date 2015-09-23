@@ -220,6 +220,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['redis_host'] = "127.0.0.1"
 # gitlab_rails['redis_port'] = nil
+# gitlab_rails['redis_password'] = nil
 # gitlab_rails['redis_database'] = 0
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
