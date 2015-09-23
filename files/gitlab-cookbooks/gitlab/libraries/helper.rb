@@ -188,7 +188,7 @@ class CiHelper
       uri = URI(gitlab_server['url'].to_s)
       uri.host
     else
-      ""
+      Gitlab['gitlab_rails']['gitlab_host']
     end
   end
 end
