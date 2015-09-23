@@ -361,3 +361,16 @@ class RedhatHelper
     contents[/Rawhide/i] ? contents[/((\d+) \(Rawhide\))/i, 1].downcase : contents[/release ([\d\.]+)/, 1]
   end
 end
+
+class GGHSHelper
+  extend ShellOutHelper
+
+  def self.version
+    result = do_shell_out("/opt/gitlab/embedded/bin/gitlab-git-http-server --version")
+    if result.exitstatus == 0
+      result.stdout
+    else
+      nil
+    end
+  end
+end

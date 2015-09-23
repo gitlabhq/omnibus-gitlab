@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.1.0
 
 - Update gitlab-git-http-server to 0.2.10
+- Restart gitlab-git-http-server on version change
 
 8.0.1
 

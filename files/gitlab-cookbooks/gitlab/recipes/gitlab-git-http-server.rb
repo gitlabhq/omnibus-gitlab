@@ -18,6 +18,7 @@ account_helper = AccountHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-git-http-server']['dir']
 log_dir = node['gitlab']['gitlab-git-http-server']['log_dir']
+version_file = File.join(working_dir, "VERSION")
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -38,4 +39,11 @@ runit_service 'gitlab-git-http-server' do
     :log_directory => log_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-git-http-server'].to_hash)
+end
+
+version = GGHSHelper.version
+file version_file do
+  content version
+  notifies :restart, "service[gitlab-git-http-server]"
+  not_if "grep #{version} #{version_file}"
 end
