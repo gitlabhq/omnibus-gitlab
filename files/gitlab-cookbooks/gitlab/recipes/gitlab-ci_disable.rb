@@ -31,21 +31,33 @@ else
 end
 
 nginx_conf_dir = File.join(node['gitlab']['nginx']['dir'], "conf")
+gitlab_ci_http_config = File.join(nginx_conf_dir, "gitlab-ci-http.conf")
 
-template File.join(nginx_conf_dir, "gitlab-ci-http.conf") do
-  source "nginx-gitlab-ci-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(ci_nginx_vars.merge(
-    {
-      :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
-      :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
-      :socket => node['gitlab']['ci-unicorn']['socket'],
-      :gitlab_fqdn => CiHelper.gitlab_server_fqdn
-    }
-  ))
-  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+if node["gitlab"]['gitlab-ci']["enable"]
+  template gitlab_ci_http_config do
+    source "nginx-gitlab-ci-http.conf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(ci_nginx_vars.merge(
+      {
+        :fqdn => node['gitlab']['gitlab-ci']['gitlab_ci_host'],
+        :port => node['gitlab']['gitlab-ci']['gitlab_ci_port'],
+        :socket => node['gitlab']['ci-unicorn']['socket'],
+        :gitlab_fqdn => CiHelper.gitlab_server_fqdn
+      }
+    ))
+    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  end
+
+  node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = gitlab_ci_http_config
+  node.override["gitlab"]['gitlab-ci']["enable"] = false
+else
+  template gitlab_ci_http_config do
+    action :delete
+  end
+
+  node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = nil
 end
 
 if OmnibusHelper.user_exists?(gitlab_ci_user)
