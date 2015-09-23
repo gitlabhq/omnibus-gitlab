@@ -8,6 +8,10 @@ omnibus-gitlab repository.
 - Update gitlab-git-http-server to 0.2.10
 - Restart gitlab-git-http-server on version change
 
+8.0.2
+
+- Add redis password option when using TCP auth
+
 8.0.1
 
 - Revert "Do not buffer with nginx git http requests"
