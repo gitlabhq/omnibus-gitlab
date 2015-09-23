@@ -54,6 +54,7 @@ if node["gitlab"]['gitlab-ci']["enable"]
   node.override["gitlab"]['gitlab-ci']["enable"] = false
 else
   template gitlab_ci_http_config do
+    source "nginx-gitlab-ci-http.conf.erb"
     action :delete
   end
 
