@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+8.0.2
+
+- Add redis password option when using TCP auth d847479b8bcb523110aae9230bcf480def3eab15
+
 8.0.1
 
 - Revert "Do not buffer with nginx git http requests"

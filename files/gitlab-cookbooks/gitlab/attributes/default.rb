@@ -181,6 +181,7 @@ default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
+default['gitlab']['gitlab-rails']['redis_password'] = nil
 default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false

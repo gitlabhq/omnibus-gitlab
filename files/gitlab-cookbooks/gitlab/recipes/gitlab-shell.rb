@@ -95,6 +95,7 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
     :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
     :redis_port => redis_port,
     :redis_socket => redis_socket,
+    :redis_password => node['gitlab']['gitlab-rails']['redis_password'],
     :redis_database => node['gitlab']['gitlab-rails']['redis_database'],
     :log_file => File.join(log_directory, "gitlab-shell.log"),
     :log_level => node['gitlab']['gitlab-shell']['log_level'],
