@@ -10,7 +10,7 @@ omnibus-gitlab repository.
 
 8.0.2
 
-- Add redis password option when using TCP auth
+- If using external mysql for mattermost don't run postgres code d847479b8bcb523110aae9230bcf480def3eab15
 
 8.0.1
 
@@ -37,7 +37,7 @@ omnibus-gitlab repository.
 
 7.14.3
 
-- No changes
+- Add redis password option when using TCP auth d847479b8bcb523110aae9230bcf480def3eab15
 
 7.14.2
 
