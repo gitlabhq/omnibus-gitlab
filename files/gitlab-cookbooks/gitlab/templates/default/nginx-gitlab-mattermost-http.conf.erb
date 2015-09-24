@@ -32,6 +32,7 @@ server {
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
+  client_max_body_size <%= @client_max_body_size %>;
 
   <% if @https %>
   ssl on;
