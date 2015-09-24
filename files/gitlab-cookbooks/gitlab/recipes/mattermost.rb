@@ -61,19 +61,20 @@ end
 pg_helper = PgHelper.new(node)
 bin_dir = "/opt/gitlab/embedded/bin"
 
+mysql_adapter = gitlab['mattermost']['sql_driver_name'] == 'mysql' ? true:false
 db_name = gitlab['mattermost']['database_name']
 sql_user = gitlab['postgresql']['sql_mattermost_user']
 
 execute "create #{sql_user} database user" do
   command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
   user pg_user
-  not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
+  not_if { mysql_adapter || !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
 end
 
 execute "create #{db_name} database" do
   command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{sql_user} #{db_name}"
   user pg_user
-  not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
+  not_if { mysql_adapter || !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
   retries 30
 end
 
