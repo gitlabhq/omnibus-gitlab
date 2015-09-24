@@ -25,6 +25,12 @@ module ShellOutHelper
     o = Mixlib::ShellOut.new(cmd)
     o.run_command
     o
+  rescue Errno::EACCES
+    Chef::Log.info("Cannot execute #{cmd}.")
+    o
+  rescue Errno::ENOENT
+    Chef::Log.info("#{cmd} does not exist.")
+    o
   end
 
   def success?(cmd)
@@ -34,7 +40,7 @@ module ShellOutHelper
 
   def failure?(cmd)
     o = do_shell_out(cmd)
-    o.exitstatus == 3
+    o.exitstatus != 0
   end
 end
 
@@ -98,11 +104,11 @@ class OmnibusHelper
   end
 
   def self.service_up?(service_name)
-    success?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+    success?("/opt/gitlab/embedded/bin/sv status #{service_name}")
   end
 
   def self.service_down?(service_name)
-    failure?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+    failure?("/opt/gitlab/embedded/bin/sv status #{service_name}")
   end
 
   def self.user_exists?(username)
