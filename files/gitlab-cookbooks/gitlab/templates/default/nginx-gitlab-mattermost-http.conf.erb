@@ -32,6 +32,7 @@ server {
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
+  client_max_body_size <%= @client_max_body_size %>;
 
   <% if @https %>
   ssl on;
@@ -73,8 +74,6 @@ server {
     proxy_set_header Connection $connection_upgrade;
 
     proxy_pass http://gitlab_mattermost;
-
-    client_max_body_size <%= @client_max_body_size %>;
   }
 
   <%= @custom_gitlab_mattermost_server_config %>
