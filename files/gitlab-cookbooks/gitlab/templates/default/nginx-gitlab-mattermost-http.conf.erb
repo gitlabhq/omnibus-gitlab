@@ -73,6 +73,8 @@ server {
     proxy_set_header Connection $connection_upgrade;
 
     proxy_pass http://gitlab_mattermost;
+
+    client_max_body_size <%= @client_max_body_size %>;
   }
 
   <%= @custom_gitlab_mattermost_server_config %>
