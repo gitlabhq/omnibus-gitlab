@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.0.2
 
 - If using external mysql for mattermost don't run postgres code d847479b8bcb523110aae9230bcf480def3eab15
+- Add incoming_email_start_tls config ec02a9076f1c59dbd9a85cbfd8b164f56a8c4da7
 
 8.0.1
 
