@@ -90,6 +90,7 @@ default['gitlab']['gitlab-rails']['incoming_email_address'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_host'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_port'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_ssl'] = nil
+default['gitlab']['gitlab-rails']['incoming_email_start_tls'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_email'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
