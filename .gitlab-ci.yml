@@ -123,3 +123,21 @@ Raspberry Pi 2:
   - RaspberryPi2-tag
   except:
   - branches
+
+Docker master:
+  script:
+  - bundle install --binstubs --path ~/gems
+  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_docker_master;fi
+  tags:
+  - docker-build
+  except:
+  - tags
+
+Docker:
+  script:
+  - bundle install --binstubs --path ~/gems
+  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_docker_release;fi
+  tags:
+  - docker-build
+  except:
+  - branches
