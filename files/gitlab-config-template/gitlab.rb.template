@@ -40,6 +40,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['incoming_email_host'] = "imap.gmail.com" # IMAP server host
 # gitlab_rails['incoming_email_port'] = 993 # IMAP server port
 # gitlab_rails['incoming_email_ssl'] = true # Whether the IMAP server uses SSL
+# gitlab_rails['incoming_email_start_tls'] = false # Whether the IMAP server uses StartTLS
 # gitlab_rails['incoming_email_email'] = "incoming@gitlab.example.com"  # Email account username. Usually the full email address.
 # gitlab_rails['incoming_email_password'] = "password" # Email account password
 # gitlab_rails['incoming_email_mailbox_name'] = "inbox" # The name of the mailbox where incoming mail will end up.
