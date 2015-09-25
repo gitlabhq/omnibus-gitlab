@@ -15,6 +15,12 @@ if [[ ! -e /etc/gitlab/gitlab.rb ]]; then
 	chmod 0600 /etc/gitlab/gitlab.rb
 fi
 
+# Generate ssh host key for the first time
+if [[ ! -f /etc/gitlab/ssh_host_key ]]; then
+	ssh-keygen -f /etc/gitlab/ssh_host_rsa_key -N '' -t rsa
+	chmod 0600 /etc/gitlab/ssh_host_key
+fi
+
 # Remove all services, the reconfigure will create them
 rm -f /opt/gitlab/service/*
 ln -s /opt/gitlab/sv/sshd /opt/gitlab/service

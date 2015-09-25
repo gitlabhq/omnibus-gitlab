@@ -13,7 +13,7 @@ apt-get install -yq --no-install-recommends ${RELEASE_PACKAGE}=${RELEASE_VERSION
 # Create sshd daemon
 mkdir -p /opt/gitlab/sv/sshd/supervise
 mkfifo /opt/gitlab/sv/sshd/supervise/ok
-printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D" > /opt/gitlab/sv/sshd/run
+printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D -f /assets/sshd_config" > /opt/gitlab/sv/sshd/run
 chmod a+x /opt/gitlab/sv/sshd/run
 mkdir -p /var/run/sshd
 
