@@ -284,6 +284,10 @@ configuration files:
 #### Gitlab
 
 ```
+upstream gitlab-git-http-server {
+  server unix://var/opt/gitlab/gitlab-git-http-server/socket fail_timeout=0;
+}
+
 server {
   listen *:80;
   server_name git.example.com;
@@ -309,6 +313,34 @@ server {
   # Enable Passenger & keep at least one instance running at all times
   passenger_enabled on;
   passenger_min_instances 1;
+
+  location ~ [-\/\w\.]+\.git\/ {
+    ## If you use HTTPS make sure you disable gzip compression
+    ## to be safe against BREACH attack.
+    gzip off;
+
+    ## https://github.com/gitlabhq/gitlabhq/issues/694
+    ## Some requests take more than 30 seconds.
+    proxy_read_timeout      300;
+    proxy_connect_timeout   300;
+    proxy_redirect          off;
+
+    # Do not buffer Git HTTP responses
+    proxy_buffering off;
+
+    # The following settings only work with NGINX 1.7.11 or newer
+    #
+    # Pass chunked request bodies to gitlab-git-http-server as-is
+    # proxy_request_buffering off;
+    # proxy_http_version 1.1;
+    
+    proxy_set_header    Host                $http_host;
+    proxy_set_header    X-Real-IP           $remote_addr;
+    proxy_set_header    X-Forwarded-Ssl     on;
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+    proxy_set_header    X-Forwarded-Proto   $scheme;
+    proxy_pass http://gitlab-git-http-server;
+  }
 
   error_page 502 /502.html;
 }
