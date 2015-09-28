@@ -176,15 +176,12 @@ sudo docker push gitlab/gitlab-ce:latest
 
 ### Permission problems
 
-When updating from older GitLab Docker images you can get permission problems.
-This can happen due to fact that users created by docker image are pinned.
+When updating from older GitLab Docker images you can see a permission problems.
+This can happen due to fact that users by previous images were not preserved correctly.
 There's script that fixes permissions for all files.
 
-To fix your container, simply execute `update-permissions` script:
+To fix your container, simply execute `update-permissions` script and restart container afterwards:
 ```
 sudo docker exec gitlab update-permissions
+sudo docker restart gitlab
 ```
-
-Note: We use `fig.yml` to have compatibility with fig and because docker-compose also supports it.
-
-Our docker image runs chef at every start to generate GitLab configuration.
