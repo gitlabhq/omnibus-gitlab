@@ -51,7 +51,7 @@ end
 directory hooks_directory do
   owner git_user
   group git_group
-  mode "0775"
+  mode "0755"
 end
 
 # gitlab-shell 1.9.4 uses a lock file in the gitlab-shell root
