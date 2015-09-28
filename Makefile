@@ -13,9 +13,9 @@ RELEASE_PACKAGE=gitlab-ce
 endif
 RELEASE_VERSION?=$(shell git describe)
 ifdef NIGHTLY
-DOCKER_TAG?=nightly
+DOCKER_TAG:=nightly
 else
-DOCKER_TAG?=$(shell git describe | tr '+' '.')
+DOCKER_TAG:=$(shell echo $(RELEASE_VERSION) | tr '+' '.')
 endif
 
 build:
@@ -83,13 +83,14 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	docker build -t gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG) -f docker/Dockerfile docker/
+	docker build -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
 
 docker_push:
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
 docker_push_latest:
-	docker tag gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG) gitlab/$(RELEASE_PACKAGE):latest
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
 	docker push gitlab/$(RELEASE_PACKAGE):latest
 
 do_docker_master: 
