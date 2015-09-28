@@ -11,10 +11,11 @@ RELEASE_PACKAGE=gitlab-ee
 else
 RELEASE_PACKAGE=gitlab-ce
 endif
+RELEASE_VERSION?=$(shell git describe)
 ifdef NIGHTLY
-DOCKER_TAG=nightly
+DOCKER_TAG?=nightly
 else
-DOCKER_TAG:=$(shell git describe | tr '+' '.')
+DOCKER_TAG?=$(shell git describe | tr '+' '.')
 endif
 
 build:
@@ -81,7 +82,7 @@ docker_cleanup:
 docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(shell git describe) >> docker/RELEASE
+	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
 	docker build -t gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG) -f docker/Dockerfile docker/
 
 docker_push:
