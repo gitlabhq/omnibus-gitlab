@@ -40,7 +40,7 @@ You can fine tune these directories to meet your requirements.
 
 This container uses the official Omnibus GitLab package, so all configuration is done in the unique configuration file `/etc/gitlab/gitlab.rb`.
 
-To access GitLab configuration, you can start an bash in a new the context of running container, you will be able to browse all directories and use your favorite text editor:
+To access GitLab configuration, you can start an bash in a context of running container. This will allow you to browse all directories and use your favorite text editor:
 ```bash
 sudo docker exec -it gitlab /bin/bash
 ```
@@ -52,7 +52,7 @@ sudo docker exec -it gitlab vi /etc/gitlab/gitlab.rb
 
 **You should set the `external_url` to point to a valid URL.**
 
-**You may also be interesting in [Enabling HTTPS](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#enable-https).**
+**You may also be interested in [Enabling HTTPS](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#enable-https).**
 
 **To receive e-mails from GitLab you have to configure the [SMTP settings](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/smtp.md),
 because Docker image doesn't have a SMTP server.**
@@ -155,32 +155,12 @@ sudo docker run --detach \
 
 You can then access GitLab instance at http://1.1.1.1/ and https://1.1.1.1/.
 
-### Build the image
-
-This guide will also let you know how to build docker image yourself.
-Please run the command from the GitLab repo root directory.
-People using boot2docker should run all the commands without sudo.
-
-```bash
-make do_docker_build
-```
-
-### Publish the image to Dockerhub
-
-- Ensure the containers are running
-- Login to Dockerhub with `sudo docker login`
-
-```bash
-sudo docker login
-sudo docker push gitlab/gitlab-ce:latest
-```
-
 ## Troubleshooting
 
 ### Permission problems
 
-When updating from older GitLab Docker images you can see a permission problems.
-This can happen due to fact that users by previous images were not preserved correctly.
+When updating from older GitLab Docker images you might encounter permission problems.
+This happens due to a fact that users in previous images were not preserved correctly.
 There's script that fixes permissions for all files.
 
 To fix your container, simply execute `update-permissions` script and restart container afterwards:
