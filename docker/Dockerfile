@@ -21,7 +21,7 @@ RUN /assets/setup
 ENV PATH /opt/gitlab/embedded/bin:/opt/gitlab/bin:/assets:$PATH
 
 # Resolve error: TERM environment variable not set.
-ENV TERM dumb
+ENV TERM xterm
 
 # Expose web & ssh
 EXPOSE 443 80 22
