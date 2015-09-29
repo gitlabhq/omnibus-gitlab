@@ -11,6 +11,7 @@ To use GitLab EE instead of GitLab CE replace image name to `gitlab/gitlab-ee:la
 Run the image:
 ```bash
 sudo docker run --detach \
+	--hostname gitlab.example.com \
 	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
 	--name gitlab \
 	--restart always \
@@ -37,7 +38,7 @@ You can fine tune these directories to meet your requirements.
 
 ### Configure GitLab
 
-This container uses the official Omnibus GitLab distribution, so all configuration is done in the unique configuration file `/etc/gitlab/gitlab.rb`.
+This container uses the official Omnibus GitLab package, so all configuration is done in the unique configuration file `/etc/gitlab/gitlab.rb`.
 
 To access GitLab configuration, you can start an bash in a new the context of running container, you will be able to browse all directories and use your favorite text editor:
 ```bash
@@ -111,6 +112,7 @@ sudo docker pull gitlab/gitlab-ce:latest
 1. create the container once again with previously specified options.
 ```bash
 sudo docker run --detach \
+	--hostname gitlab.example.com \
 	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
 	--name gitlab \
 	--restart always \
@@ -141,6 +143,7 @@ To expose GitLab CE on IP 1.1.1.1:
 
 ```bash
 sudo docker run --detach \
+	--hostname gitlab.example.com \
 	--publish 1.1.1.1:443:443 --publish 1.1.1.1:80:80 --publish 1.1.1.1:22:22 \
 	--name gitlab \
 	--restart always \
