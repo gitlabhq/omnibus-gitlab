@@ -77,7 +77,9 @@ move_to_secret_dir:
 	  ; fi
 
 docker_cleanup:
-	-docker images | grep gitlab/$(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi
+	-docker ps -q -a | xargs docker rm -v
+	-docker images -f dangling=true -q | xargs docker rmi
+	-docker images | grep $(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi
 
 docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
