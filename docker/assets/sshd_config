@@ -1,0 +1,18 @@
+Port 22
+ChallengeResponseAuthentication no
+HostKey /etc/gitlab/ssh_host_rsa_key
+Protocol 2
+PermitRootLogin no
+PasswordAuthentication no
+MaxStartups 100:30:200
+AllowUsers git
+PrintMotd no
+PrintLastLog no
+PubkeyAuthentication yes
+
+# Fix: User username not allowed because account is locked
+# With "UsePAM yes" the "!" is seen as a password disabled account and not fully locked so ssh public key login works
+UsePAM yes
+
+# Disabling use DNS in ssh since it tends to slow connecting
+UseDNS no

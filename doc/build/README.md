@@ -60,3 +60,28 @@ Full help for the Omnibus command line interface can be accessed with the
 ```shell
 $ bin/omnibus help
 ```
+
+## Build Docker image
+
+```shell
+# Build with stable packagecloud packages
+# This will build gitlab-ee (8.0.2-ee.1) using STABLE repo and tag it as gitlab-ee:latest
+make docker_build RELEASE_VERSION=8.0.2-ee.1 PACKAGECLOUD_REPO=gitlab-ee RELEASE_PACKAGE=gitlab-ee
+
+# Build with unstable packagecloud packages
+# This will build gitlab-ce (8.0.2-ce.1) using UNSTABLE repo and tag it as gitlab-ce:latest
+make docker_build RELEASE_VERSION=8.0.2-ce.1 PACKAGECLOUD_REPO=unstable RELEASE_PACKAGE=gitlab-ce
+```
+
+### Publish Docker image
+
+```shell
+# This will push gitlab-ee:latest as gitlab/gitlab-ee:8.0.2-ee.1
+make docker_push RELEASE_PACKAGE=gitlab-ee RELEASE_VERSION=8.0.2-ee.1
+
+# This will push gitlab-ce:latest as gitlab/gitlab-ce:8.0.2-ce.1
+make docker_push RELEASE_PACKAGE=gitlab-ce RELEASE_VERSION=8.0.2-ce.1
+
+# This will push gitlab-ce:latest as gitlab/gitlab-ce:latest
+make docker_push_latest RELEASE_PACKAGE=gitlab-ce
+```
