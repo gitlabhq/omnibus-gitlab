@@ -11,11 +11,11 @@ RELEASE_PACKAGE=gitlab-ee
 else
 RELEASE_PACKAGE=gitlab-ce
 endif
-RELEASE_VERSION?=$(shell git describe)
+RELEASE_VERSION?=$(shell git describe | tr '+' '-')
 ifdef NIGHTLY
 DOCKER_TAG:=nightly
 else
-DOCKER_TAG:=$(shell echo $(RELEASE_VERSION) | tr '+' '.')
+DOCKER_TAG:=$(RELEASE_VERSION)
 endif
 
 build:
