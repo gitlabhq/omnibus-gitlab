@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.0.3
+
+- Update gitlab-git-http-server to 0.2.10 76ea52321be798329e5ece9f4b935bb1f2b579ad
+
 8.0.2
 
 - If using external mysql for mattermost don't run postgres code d847479b8bcb523110aae9230bcf480def3eab15
@@ -10,7 +14,7 @@ omnibus-gitlab repository.
 
 8.0.1
 
-- Revert "Do not buffer with nginx git http requests"
+- Revert "Do not buffer with nginx git http requests" 36af3c28623eb959c1a7f99a5da0830986481e51
 
 8.0.0
 
