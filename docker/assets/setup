@@ -11,14 +11,12 @@ apt-get update
 apt-get install -yq --no-install-recommends ${RELEASE_PACKAGE}=${RELEASE_VERSION}
 
 # Create sshd daemon
-mkdir -p /opt/gitlab/sv/sshd/supervise
-mkfifo /opt/gitlab/sv/sshd/supervise/ok
-printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D -f /assets/sshd_config" > /opt/gitlab/sv/sshd/run
-chmod a+x /opt/gitlab/sv/sshd/run
+mkdir -p /opt/gitlab/sv/sshd/supervise /opt/gitlab/sv/sshd/log/supervise
+mkfifo /opt/gitlab/sv/sshd/supervise/ok /opt/gitlab/sv/sshd/log/supervise/ok
+printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D -f /assets/sshd_config -e" > /opt/gitlab/sv/sshd/run
+printf "#!/bin/sh\nexec svlogd -tt /var/log/gitlab/sshd" > /opt/gitlab/sv/sshd/log/run
+chmod a+x /opt/gitlab/sv/sshd/run /opt/gitlab/sv/sshd/log/run
 mkdir -p /var/run/sshd
-
-# Disabling use DNS in ssh since it tends to slow connecting
-echo "UseDNS no" >> /etc/ssh/sshd_config
 
 # Remove current gitlab.rb file
 rm -f /etc/gitlab/gitlab.rb
