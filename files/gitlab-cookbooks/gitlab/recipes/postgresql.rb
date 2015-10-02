@@ -73,6 +73,14 @@ sysctl "kernel.shmall" do
   value node['gitlab']['postgresql']['shmall']
 end
 
+sem = "#{node['gitlab']['postgresql']['semmsl']} "
+sem += "#{node['gitlab']['postgresql']['semmns']} "
+sem += "#{node['gitlab']['postgresql']['semopm']} "
+sem += "#{node['gitlab']['postgresql']['semmni']}"
+sysctl "kernel.sem" do
+  value sem
+end
+
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
   not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }

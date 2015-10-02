@@ -281,6 +281,10 @@ default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['shmmax'] = kernel['machine'] =~ /x86_64/ ? 17179869184 : 4294967295
 default['gitlab']['postgresql']['shmall'] = kernel['machine'] =~ /x86_64/ ? 4194304 : 1048575
+default['gitlab']['postgresql']['semmsl'] = 250
+default['gitlab']['postgresql']['semmns'] = 32000
+default['gitlab']['postgresql']['semopm'] = 32
+default['gitlab']['postgresql']['semmni'] = ((node['gitlab']['postgresql']['max_connections'].to_i / 16) + 250)
 
 # Resolves CHEF-3889
 if (node['memory']['total'].to_i / 4) > ((node['gitlab']['postgresql']['shmmax'].to_i / 1024) - 2097152)
