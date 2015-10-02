@@ -21,6 +21,8 @@ ci_dependent_services << "ci-unicorn" if OmnibusHelper.should_notify?("ci-unicor
 ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sidekiq")
 ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
 gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
+gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
+gitlab_ci_etc_dir = File.join(gitlab_ci_dir, "etc")
 
 ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
 
@@ -48,6 +50,26 @@ if node["gitlab"]['gitlab-ci']["enable"]
       }
     ))
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  end
+
+  template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
+    link_from File.join("/opt/gitlab/embedded/service/gitlab-ci", "config/database.yml")
+    source "database.yml.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables node['gitlab']['gitlab-ci'].to_hash
+    helpers SingleQuoteHelper
+  end
+
+  template_symlink File.join(gitlab_ci_etc_dir, "secrets.yml") do
+    link_from File.join("/opt/gitlab/embedded/service/gitlab-ci", "config/secrets.yml")
+    source "secrets.yml.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables node['gitlab']['gitlab-ci'].to_hash
+    helpers SingleQuoteHelper
   end
 
   node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = gitlab_ci_http_config
