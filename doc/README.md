@@ -31,6 +31,7 @@
 - [Reply by email](http://doc.gitlab.com/ce/incoming_email/README.html)
 - [Environment variables](settings/environment-variables.md)
 - [gitlab.yml](settings/gitlab.yml.md)
+- [Backups](settings/backups.md)
 
 ## Updating
 
