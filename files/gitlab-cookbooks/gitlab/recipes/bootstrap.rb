@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-bootstrap_status_file = "/var/opt/gitlab/bootstrapped"
+bootstrap_status_file = File.join(node['gitlab']['gitlab-rails']['var_directory'], "bootstrapped")
 
 file bootstrap_status_file do
   owner "root"
