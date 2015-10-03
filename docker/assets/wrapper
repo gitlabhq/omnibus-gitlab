@@ -63,4 +63,7 @@ echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
 # Tail all logs
-gitlab-ctl tail
+gitlab-ctl tail &
+
+# Wait for SIGTERM
+wait
