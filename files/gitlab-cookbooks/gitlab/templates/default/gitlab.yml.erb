@@ -228,6 +228,7 @@ production: &base
       # The remote 'directory' to store your backups. For S3, this would be the bucket name.
       remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
+      encryption: <%= @backup_encryption %>
 
   ## GitLab Shell settings
   gitlab_shell:

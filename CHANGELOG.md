@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Using sv to check for service status e7b00e4a5d8f0195d9a3f59a6d398a6d0dba3773
 - Set kernel.sem for postgres connections dff749b36a929f9a7dfc128b60f3d53cf2464ed8
 - Use ruby 2.1.7
+- Add backup encription option for AWS backups
 
 8.0.4(Unreleased)
 
