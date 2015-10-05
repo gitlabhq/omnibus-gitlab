@@ -20,9 +20,12 @@ ci_dependent_services = []
 ci_dependent_services << "ci-unicorn" if OmnibusHelper.should_notify?("ci-unicorn")
 ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sidekiq")
 ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
-gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
-gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
+accounts = AccountHelper.new(node)
+gitlab_user = accounts.gitlab_user
+gitlab_ci_user = accounts.gitlab_ci_user
+gitlab_ci_dir = "#{node['gitlab']['gitlab-ci']['dir']}-legacy"
 gitlab_ci_etc_dir = File.join(gitlab_ci_dir, "etc")
+gitlab_ci_log_dir = File.join(gitlab_ci_dir, "log")
 
 ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
 
@@ -50,6 +53,17 @@ if node["gitlab"]['gitlab-ci']["enable"]
       }
     ))
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  end
+
+  [ gitlab_ci_dir, gitlab_ci_etc_dir, gitlab_ci_log_dir ].each do |dir|
+    directory dir do
+      owner gitlab_ci_user
+      recursive true
+    end
+  end
+
+  link "#{node['package']['install-dir']}/embedded/service/gitlab-ci/log" do
+    to gitlab_ci_log_dir
   end
 
   template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
