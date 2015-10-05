@@ -20,7 +20,13 @@ ci_dependent_services = []
 ci_dependent_services << "ci-unicorn" if OmnibusHelper.should_notify?("ci-unicorn")
 ci_dependent_services << "ci-sidekiq" if OmnibusHelper.should_notify?("ci-sidekiq")
 ci_dependent_services << "ci-redis" if OmnibusHelper.should_notify?("ci-redis")
-gitlab_ci_user = AccountHelper.new(node).gitlab_ci_user
+accounts = AccountHelper.new(node)
+gitlab_user = accounts.gitlab_user
+gitlab_ci_user = accounts.gitlab_ci_user
+gitlab_ci_dir = "#{node['gitlab']['gitlab-ci']['dir']}-legacy"
+gitlab_ci_static_dir = "/opt/gitlab/etc/gitlab-ci"
+gitlab_ci_etc_dir = File.join(gitlab_ci_dir, "etc")
+gitlab_ci_log_dir = File.join(gitlab_ci_dir, "log")
 
 ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
 
@@ -48,6 +54,48 @@ if node["gitlab"]['gitlab-ci']["enable"]
       }
     ))
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  end
+
+  [ gitlab_ci_dir, gitlab_ci_etc_dir, gitlab_ci_log_dir gitlab_ci_static_dir ].each do |dir|
+    directory dir do
+      owner gitlab_ci_user
+      recursive true
+    end
+  end
+
+  link "#{node['package']['install-dir']}/embedded/service/gitlab-ci/log" do
+    to gitlab_ci_log_dir
+  end
+
+  template File.join(gitlab_ci_static_dir, "gitlab-ci-rc")
+
+  env_dir File.join(gitlab_ci_static_dir, 'env') do
+    variables(
+      {
+        'HOME' => File.join(gitlab_ci_dir, "home"),
+        'RAILS_ENV' => node['gitlab']['gitlab-ci']['environment'],
+      }.merge(node['gitlab']['gitlab-ci']['env'])
+    )
+  end
+
+  template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
+    link_from File.join("/opt/gitlab/embedded/service/gitlab-ci", "config/database.yml")
+    source "database.yml.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables node['gitlab']['gitlab-ci'].to_hash
+    helpers SingleQuoteHelper
+  end
+
+  template_symlink File.join(gitlab_ci_etc_dir, "secrets.yml") do
+    link_from File.join("/opt/gitlab/embedded/service/gitlab-ci", "config/secrets.yml")
+    source "secrets.yml.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables node['gitlab']['gitlab-ci'].to_hash
+    helpers SingleQuoteHelper
   end
 
   node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = gitlab_ci_http_config
