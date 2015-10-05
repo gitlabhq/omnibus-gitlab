@@ -3,10 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.1.0
+8.1.0(Unreleased)
 
-- Update gitlab-git-http-server to 0.2.10
 - Restart gitlab-git-http-server on version change
+
+8.0.4(Unreleased)
+
+- Fix accidental removal of creating backup directory cb7afb0dff528b8e7f3e8c54801e3635576e33a7
+- Create secrets and database templates for gitlab-ci for users upgrading from versions prior to 7.14 b9df5e8ce58b818c3b0650ab4d99c883bead3991
+- Change the ownership of gitlab-shell/hooks directory a6fe61e7e1f54c1eadce78072ba902388db5453f
+
+8.0.3
+
+- Update gitlab-git-http-server to 0.2.10 76ea52321be798329e5ece9f4b935bb1f2b579ad
+- Switch to chef-gem 6b15effce70a41c0041e0bca8b80d72c02be1fcf
 
 8.0.2
 
