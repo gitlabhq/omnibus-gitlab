@@ -25,6 +25,7 @@ repositories_path = node['gitlab']['gitlab-rails']['gitlab_shell_repos_path']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = File.join(ssh_dir, "authorized_keys")
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
+hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 
 # Create directories because the git_user does not own its home directory
 directory repositories_path do
@@ -45,6 +46,12 @@ file authorized_keys do
   owner git_user
   group git_group
   mode "0600"
+end
+
+directory hooks_directory do
+  owner git_user
+  group git_group
+  mode "0755"
 end
 
 # gitlab-shell 1.9.4 uses a lock file in the gitlab-shell root
