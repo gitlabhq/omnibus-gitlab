@@ -68,6 +68,7 @@ if node["gitlab"]['gitlab-ci']["enable"]
   end
 
   template File.join(gitlab_ci_static_dir, "gitlab-ci-rc")
+
   env_dir File.join(gitlab_ci_static_dir, 'env') do
     variables(
       {
@@ -75,8 +76,8 @@ if node["gitlab"]['gitlab-ci']["enable"]
         'RAILS_ENV' => node['gitlab']['gitlab-ci']['environment'],
       }.merge(node['gitlab']['gitlab-ci']['env'])
     )
-    restarts dependent_services
   end
+
   template_symlink File.join(gitlab_ci_etc_dir, "database.yml") do
     link_from File.join("/opt/gitlab/embedded/service/gitlab-ci", "config/database.yml")
     source "database.yml.erb"
