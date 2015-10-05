@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 8.1.0(Unreleased)
 
 - Restart gitlab-git-http-server on version change
+- Moved docker build to omnibus-gitlab repository 9757575747c9d78e355ecd76b11dd7b9dc4d94b5
+- Using sv to check for service status e7b00e4a5d8f0195d9a3f59a6d398a6d0dba3773
+- Set kernel.sem for postgres connections dff749b36a929f9a7dfc128b60f3d53cf2464ed8
 
 8.0.4(Unreleased)
 
