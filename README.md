@@ -133,10 +133,10 @@ To uninstall omnibus-gitlab, preserving your data (repositories, database, confi
 sudo gitlab-ctl uninstall
 
 # Debian/Ubuntu
-sudo dpkg -r gitlab
+sudo dpkg -r gitlab-ce
 
 # Redhat/Centos
-sudo rpm -e gitlab
+sudo rpm -e gitlab-ce
 ```
 
 To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
