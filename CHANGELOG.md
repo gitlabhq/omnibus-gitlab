@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Set kernel.sem for postgres connections dff749b36a929f9a7dfc128b60f3d53cf2464ed8
 - Use ruby 2.1.7
 - Add backup encription option for AWS backups
+- Update git to 2.6.1
 
 8.0.4(Unreleased)
 
