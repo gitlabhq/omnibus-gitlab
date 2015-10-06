@@ -46,7 +46,7 @@ build_version   Omnibus::BuildVersion.new.semver
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.1.7'
-override :rubygems, version: '2.2.5', source: { md5: "7701b5bc348d8da41a511ac012a092a8" }
+override :rubygems, version: 'ccfafdc2c52c5c605ff69ed3a772d83eb19ef55a' # 2.2.5
 override :'chef-gem', version: '12.4.1'
 override :cacerts, version: '2015.09.02', source: { md5: '3e0e6f302bd4f5b94040b8bcee0ffe15' }
 override :openssl, version: '1.0.1p', source: { url: 'https://www.openssl.org/source/openssl-1.0.1p.tar.gz', md5: '7563e92327199e0067ccd0f79f436976' }
