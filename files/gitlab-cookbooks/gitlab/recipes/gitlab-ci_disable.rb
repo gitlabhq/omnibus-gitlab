@@ -56,7 +56,7 @@ if node["gitlab"]['gitlab-ci']["enable"]
     notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   end
 
-  [ gitlab_ci_dir, gitlab_ci_etc_dir, gitlab_ci_log_dir gitlab_ci_static_dir ].each do |dir|
+  [ gitlab_ci_dir, gitlab_ci_etc_dir, gitlab_ci_log_dir, gitlab_ci_static_dir ].each do |dir|
     directory dir do
       owner gitlab_ci_user
       recursive true
