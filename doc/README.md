@@ -21,6 +21,7 @@
 - [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user-group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
 - [Only start omnibus-gitlab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
+- [Using self signed certificate or custom certificate authorities](settings/configuration.md#using-self-signed-certificate-or-custom-certificate-authorities)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
