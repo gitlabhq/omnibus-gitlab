@@ -160,7 +160,6 @@ default['gitlab']['gitlab-rails']['git_timeout'] = nil
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
-default['gitlab']['gitlab-rails']['extra_sign_in_text'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
 
 default['gitlab']['gitlab-rails']['aws_enable'] = false
