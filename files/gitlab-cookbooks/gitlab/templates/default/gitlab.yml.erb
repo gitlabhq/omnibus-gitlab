@@ -80,10 +80,32 @@ production: &base
 
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
-  # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.md
+  # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
   incoming_email:
     enabled: <%= @incoming_email_enabled %>
-    address: <%= @incoming_email_address %>
+
+    # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
+    # The `%{key}` placeholder is added after the user part, after a `+` character, before the `@`.
+    address: <%= single_quote(@incoming_email_address) %>
+
+    # Email account username
+    # With third party providers, this is usually the full email address.
+    # With self-hosted email servers, this is usually the user part of the email address.
+    user: <%= single_quote(@incoming_email_email) %>
+    # Email account password
+    password: <%= single_quote(@incoming_email_password) %>
+
+    # IMAP server host
+    host: <%= single_quote(@incoming_email_host) %>
+    # IMAP server port
+    port: <%= @incoming_email_port %>
+    # Whether the IMAP server uses SSL
+    ssl: <%= @incoming_email_ssl %>
+    # Whether the IMAP server uses StartTLS
+    start_tls: <%= @incoming_email_start_tls %>
+
+    # The mailbox where incoming mail will end up. Usually "inbox".
+    mailbox: <%= single_quote(@incoming_email_mailbox_name) %>
 
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
