@@ -341,7 +341,6 @@ default['gitlab']['web-server']['external_users'] = []
 
 default['gitlab']['gitlab-git-http-server']['enable'] = true
 default['gitlab']['gitlab-git-http-server']['ha'] = false
-default['gitlab']['gitlab-git-http-server']['repo_root'] = "/var/opt/gitlab/git-data/repositories"
 default['gitlab']['gitlab-git-http-server']['listen_network'] = "unix"
 default['gitlab']['gitlab-git-http-server']['listen_umask'] = 000
 default['gitlab']['gitlab-git-http-server']['listen_addr'] = "/var/opt/gitlab/gitlab-git-http-server/socket"
