@@ -9,9 +9,11 @@ omnibus-gitlab repository.
 - Moved docker build to omnibus-gitlab repository 9757575747c9d78e355ecd76b11dd7b9dc4d94b5
 - Using sv to check for service status e7b00e4a5d8f0195d9a3f59a6d398a6d0dba3773
 - Set kernel.sem for postgres connections dff749b36a929f9a7dfc128b60f3d53cf2464ed8
-- Use ruby 2.1.7
-- Add backup encription option for AWS backups
-- Update git to 2.6.1
+- Use ruby 2.1.7 6fb46c4db9e5daf8a724f5c389b56ea8d918b36e
+- Add backup encription option for AWS backups 8562644f3dfe44b6faed35f8e0769a0b7c202569
+- Update git to 2.6.1 b379c1060a6af314209b86161ea44c8467c5a49f
+- Update gitlab-git-http-server to 0.3.0 737815fd22a71f1b94379a1a11d8b82367cc7b3a
+- Move incoming email settings to gitlab.yml 9d8673e221ad869199d633c7feccab167a64df6d
 
 8.0.4
 
