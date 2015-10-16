@@ -16,7 +16,7 @@
 #
 
 name "gitlab-ci"
-default_version "4733b5740ae13a75371ff96f344582875bb76432" # v8.1.0.rc1
+default_version "master" # Nightly build
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
