@@ -18,5 +18,4 @@ exec chpst -P \
       -listenUmask <%= node['gitlab']['gitlab-git-http-server']['listen_umask'] %> \
       -listenAddr <%= node['gitlab']['gitlab-git-http-server']['listen_addr'] %> \
       -authBackend <%= node['gitlab']['gitlab-git-http-server']['auth_backend'] %> \
-      -pprofListenAddr <%= node['gitlab']['gitlab-git-http-server']['pprof_listen_addr'] %> \
-      <%= node['gitlab']['gitlab-git-http-server']['repo_root'] %>
+      -pprofListenAddr <%= node['gitlab']['gitlab-git-http-server']['pprof_listen_addr'] %>
