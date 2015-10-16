@@ -36,18 +36,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Allow users to comment on issues and merge requests by replying to notification emails.
 # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
 # gitlab_rails['incoming_email_enabled'] = true
-# 
+#
 # # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
 # # The `+%{key}` placeholder is added after the user part, after a `+` character, before the `@`.
 # gitlab_rails['incoming_email_address'] = "gitlab-incoming+%{key}@gmail.com"
-# 
+#
 # # Email account username
 # # With third party providers, this is usually the full email address.
 # # With self-hosted email servers, this is usually the user part of the email address.
 # gitlab_rails['incoming_email_email'] = "gitlab-incoming@gmail.com"
 # # Email account password
 # gitlab_rails['incoming_email_password'] = "[REDACTED]"
-# 
+#
 # # IMAP server host
 # gitlab_rails['incoming_email_host'] = "imap.gmail.com"
 # # IMAP server port
@@ -56,12 +56,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['incoming_email_ssl'] = true
 # # Whether the IMAP server uses StartTLS
 # gitlab_rails['incoming_email_start_tls'] = false
-# 
+#
 # # The mailbox where incoming mail will end up. Usually "inbox".
 # gitlab_rails['incoming_email_mailbox_name'] = "inbox"
-# 
+#
 # gitlab_rails['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
-
 
 ## For setting up LDAP
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#setting-up-ldap-sign-in
