@@ -13,7 +13,7 @@ omnibus-gitlab repository.
 - Add backup encription option for AWS backups
 - Update git to 2.6.1
 
-8.0.4(Unreleased)
+8.0.4
 
 - Fix accidental removal of creating backup directory cb7afb0dff528b8e7f3e8c54801e3635576e33a7
 - Create secrets and database templates for gitlab-ci for users upgrading from versions prior to 7.14 b9df5e8ce58b818c3b0650ab4d99c883bead3991
