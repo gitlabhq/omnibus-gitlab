@@ -77,6 +77,18 @@ gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
+### QQ Mail
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.qq.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_user_name'] = "1315331828"
+gitlab_rails['smtp_password'] = "youmoo@XX"
+gitlab_rails['smtp_domain'] = "smtp.qq.com"
+gitlab_rails['gitlab_email_from'] = '1315331828@qq.com'
+gitlab_rails['smtp_authentication'] = "login"
+```
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a merge request to save other people time.
