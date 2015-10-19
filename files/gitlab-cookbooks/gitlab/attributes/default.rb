@@ -633,6 +633,14 @@ default['gitlab']['mattermost']['team_allow_valet_default'] = false
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 
+default['gitlab']['mattermost']['gitlab_enable'] = false
+default['gitlab']['mattermost']['gitlab_secret'] = nil
+default['gitlab']['mattermost']['gitlab_id'] = nil
+default['gitlab']['mattermost']['gitlab_scope'] = nil
+default['gitlab']['mattermost']['gitlab_auth_endpoint'] = nil
+default['gitlab']['mattermost']['gitlab_token_endpoint'] = nil
+default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
+
 ####
 # Mattermost NGINX
 ####

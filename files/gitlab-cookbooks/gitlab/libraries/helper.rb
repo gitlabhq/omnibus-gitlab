@@ -214,30 +214,19 @@ class MattermostHelper
       app_id, app_secret = o.stdout.chomp.split(" ")
       gitlab_url = gitlab_external_url.chomp("/")
 
-      Gitlab['mattermost']['oauth'] = {} unless Gitlab['mattermost']['oauth']
-      Gitlab['mattermost']['oauth']['gitlab'] = { 'Allow' => true,
-                                                  'Secret' => app_secret,
-                                                  'Id' => app_id,
-                                                  'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
-                                                  'TokenEndpoint' => "#{gitlab_url}/oauth/token",
-                                                  'UserApiEndpoint' => "#{gitlab_url}/api/v3/user",
-                                                  'Scope' => ""
-                                                }
+      Gitlab['mattermost']['gitlab_enable'] = true
+      Gitlab['mattermost']['gitlab_secret'] = app_secret
+      Gitlab['mattermost']['gitlab_id'] = app_id
+      Gitlab['mattermost']['gitlab_scope'] = ""
+      Gitlab['mattermost']['gitlab_auth_endpoint'] = "#{gitlab_url}/oauth/authorize"
+      Gitlab['mattermost']['gitlab_token_endpoint'] = "#{gitlab_url}/oauth/token"
+      Gitlab['mattermost']['gitlab_user_api_endpoint'] = "#{gitlab_url}/api/v3/user"
 
       SecretsHelper.write_to_gitlab_secrets
       info("Updated the gitlab-secrets.json file.")
     else
       warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
     end
-
-    { 'Allow' => true,
-      'Secret' => app_secret,
-      'Id' => app_id,
-      'AuthEndpoint' => "#{gitlab_url}/oauth/authorize",
-      'TokenEndpoint' => "#{gitlab_url}/oauth/token",
-      'UserApiEndpoint' => "#{gitlab_url}/api/v3/user",
-      'Scope' => ""
-     }
   end
 end
 
@@ -295,10 +284,14 @@ class SecretsHelper
     end
 
     if Gitlab['mattermost']['oauth'] && Gitlab['mattermost']['oauth']['gitlab']
-      gitlab_oauth = { 'oauth' =>
-                        {
-                          'gitlab' => Gitlab['mattermost']['oauth']['gitlab']
-                        }
+      gitlab_oauth = {
+                        'gitlab_enable' => Gitlab['mattermost']['gitlab_enable'],
+                        'gitlab_secret' => Gitlab['mattermost']['gitlab_secret'],
+                        'gitlab_id' => Gitlab['mattermost']['gitlab_id'],
+                        'gitlab_scope' => Gitlab['mattermost']['gitlab_scope'],
+                        'gitlab_auth_endpoint' => Gitlab['mattermost']['gitlab_auth_endpoint'],
+                        'gitlab_token_endpoint' => Gitlab['mattermost']['gitlab_token_endpoint'],
+                        'gitlab_user_api_endpoint' => Gitlab['mattermost']['gitlab_user_api_endpoint']
                      }
       secret_tokens['mattermost'].merge!(gitlab_oauth)
     end

@@ -78,12 +78,12 @@
         "ShowFullName": <%= @privacy_show_full_name %>
     },
     "GitLabSettings": {
-        "Enable": false,
-        "Secret": "",
-        "Id": "",
-        "Scope": "",
-        "AuthEndpoint": "",
-        "TokenEndpoint": "",
-        "UserApiEndpoint": ""
+        "Enable": <%= @gitlab_enable %>,
+        "Secret": "<%= @gitlab_secret %>",
+        "Id": "<%= @gitlab_id %>",
+        "Scope": "<%= @gitlab_scope %>",
+        "AuthEndpoint": "<%= @gitlab_auth_endpoint %>",
+        "TokenEndpoint": "<%= @gitlab_token_endpoint %>",
+        "UserApiEndpoint": <%= @gitlab_user_api_endpoint %>""
     }
 }
