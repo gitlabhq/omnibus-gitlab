@@ -219,6 +219,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['db_adapter'] = "postgresql"
 # gitlab_rails['db_encoding'] = "unicode"
+# gitlab_rails['db_collation'] = nil
 # gitlab_rails['db_database'] = "gitlabhq_production"
 # gitlab_rails['db_pool'] = 10
 # gitlab_rails['db_username'] = "gitlab"

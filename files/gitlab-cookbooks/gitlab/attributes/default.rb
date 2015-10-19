@@ -172,6 +172,7 @@ default['gitlab']['gitlab-rails']['aws_region'] = nil
 
 default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
+default['gitlab']['gitlab-rails']['db_collation'] = nil
 default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
