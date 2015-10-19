@@ -283,7 +283,7 @@ class SecretsHelper
       secret_tokens['gitlab_ci'].merge!(ci_auth)
     end
 
-    if Gitlab['mattermost']['oauth'] && Gitlab['mattermost']['oauth']['gitlab']
+    if Gitlab['mattermost']['gitlab_enable']
       gitlab_oauth = {
                         'gitlab_enable' => Gitlab['mattermost']['gitlab_enable'],
                         'gitlab_secret' => Gitlab['mattermost']['gitlab_secret'],
