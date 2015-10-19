@@ -299,6 +299,7 @@ end
 
 default['gitlab']['postgresql']['work_mem'] = "8MB"
 default['gitlab']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
+default['gitlab']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
 default['gitlab']['postgresql']['checkpoint_segments'] = 10
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
