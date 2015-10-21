@@ -17,10 +17,10 @@
 #
 
 name "mattermost"
-default_version "v1.1.0"
+default_version "v1.1.1"
 
 source url: "https://github.com/mattermost/platform/releases/download/#{version}/mattermost.tar.gz",
-       md5: '73d5709ff04a5285c743c159451496ef'
+       md5: '0668e384bdaa6a58f4c6ff477791a227'
 
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
