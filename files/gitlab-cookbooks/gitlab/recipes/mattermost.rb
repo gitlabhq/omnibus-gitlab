@@ -21,7 +21,7 @@ mattermost_user = gitlab['mattermost']['username']
 mattermost_group = gitlab['mattermost']['group']
 mattermost_home = gitlab['mattermost']['home']
 mattermost_log_dir = gitlab['mattermost']['log_file_directory']
-mattermost_storage_directory = gitlab['mattermost']['service_storage_directory']
+mattermost_storage_directory = gitlab['mattermost']['file_directory']
 postgresql_socket_dir = gitlab['postgresql']['unix_socket_directory']
 pg_port = gitlab['postgresql']['port']
 pg_user = gitlab['postgresql']['username']
@@ -83,21 +83,17 @@ end
 ###
 # Try connecting to GitLab only if it is enabled
 database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
-gitlab_oauth  = if gitlab['mattermost']['oauth']['gitlab']
-                  gitlab['mattermost']['oauth']['gitlab']
-                else
-                  if gitlab['gitlab-rails']['enable'] && database_ready
-                     MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
-                  else
-                    {}
-                  end
-                end
-oauth_attributes = gitlab['mattermost']['oauth'].to_hash.merge('gitlab' => gitlab_oauth)
+
+unless gitlab['mattermost']['gitlab_enable']
+  if gitlab['gitlab-rails']['enable'] && database_ready
+    MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
+  end
+end
 
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
-  variables gitlab['mattermost'].to_hash.merge(gitlab['postgresql']).to_hash.merge('oauth' => oauth_attributes)
+  variables gitlab['mattermost'].to_hash.merge(gitlab['postgresql']).to_hash
   mode "0644"
   notifies :restart, "service[mattermost]"
 end

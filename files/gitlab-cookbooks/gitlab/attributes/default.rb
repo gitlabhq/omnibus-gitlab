@@ -561,21 +561,22 @@ default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
 default['gitlab']['mattermost']['log_console_enable'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
-default['gitlab']['mattermost']['log_file_enable'] = false
+default['gitlab']['mattermost']['log_enable_file'] = false
 default['gitlab']['mattermost']['log_file_level'] = 'INFO'
 default['gitlab']['mattermost']['log_file_format'] = nil
 
-default['gitlab']['mattermost']['service_site_name'] = "GitLab Mattermost"
-default['gitlab']['mattermost']['service_mode'] = 'beta'
-default['gitlab']['mattermost']['service_allow_testing'] = false
 default['gitlab']['mattermost']['service_use_ssl'] = false
 default['gitlab']['mattermost']['service_port'] = "8065"
-default['gitlab']['mattermost']['service_version'] = "developer"
-default['gitlab']['mattermost']['service_analytics_url'] = nil
-default['gitlab']['mattermost']['service_use_local_storage'] = true
-default['gitlab']['mattermost']['service_storage_directory'] = "/var/opt/gitlab/mattermost/data"
-default['gitlab']['mattermost']['service_allowed_login_attempts'] = 10
-default['gitlab']['mattermost']['service_disable_email_signup'] = false
+
+default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
+default['gitlab']['mattermost']['service_segment_developer_key'] = nil
+default['gitlab']['mattermost']['service_google_developer_key'] = nil
+default['gitlab']['mattermost']['service_enable_incoming_webhooks'] = true
+default['gitlab']['mattermost']['service_enable_post_username_override'] = false
+default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
+default['gitlab']['mattermost']['service_enable_testing'] = false
+default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
+
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -584,53 +585,61 @@ default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
 default['gitlab']['mattermost']['sql_max_open_conns'] = 10
 default['gitlab']['mattermost']['sql_trace'] = false
 
-# default['gitlab']['mattermost']['oauth'] = {'gitlab' => {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }}
-default['gitlab']['mattermost']['oauth'] = {}
-# default['gitlab']['mattermost']['aws'] = {'S3AccessKeyId' => '123', 'S3SecretAccessKey' => '123', 'S3Bucket' => 'aa', 'S3Region' => 'bb'}
-default['gitlab']['mattermost']['aws'] = {}
-default['gitlab']['mattermost']['image_thumbnail_width'] = 120
-default['gitlab']['mattermost']['image_thumbnail_height'] = 100
-default['gitlab']['mattermost']['image_preview_width'] = 1024
-default['gitlab']['mattermost']['image_preview_height'] = 0
-default['gitlab']['mattermost']['image_profile_width'] = 128
-default['gitlab']['mattermost']['image_profile_height'] = 128
-default['gitlab']['mattermost']['image_initial_font'] = 'luximbi.ttf'
+# default['gitlab']['mattermost']['gitlab'] = {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }
+default['gitlab']['mattermost']['gitlab'] = {}
 
-default['gitlab']['mattermost']['email_by_pass_email'] = true
+default['gitlab']['mattermost']['file_driver_name'] = "local"
+default['gitlab']['mattermost']['file_directory'] = "/var/opt/gitlab/mattermost/data"
+default['gitlab']['mattermost']['file_enable_public_link'] = true
+default['gitlab']['mattermost']['file_thumbnail_width'] = 120
+default['gitlab']['mattermost']['file_thumbnail_height'] = 100
+default['gitlab']['mattermost']['file_preview_width'] = 1024
+default['gitlab']['mattermost']['file_preview_height'] = 0
+default['gitlab']['mattermost']['file_profile_width'] = 128
+default['gitlab']['mattermost']['file_profile_height'] = 128
+default['gitlab']['mattermost']['file_initial_font'] = 'luximbi.ttf'
+default['gitlab']['mattermost']['file_amazon_s3_access_key_id'] = nil
+default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
+default['gitlab']['mattermost']['file_amazon_s3_secret_access_key'] = nil
+default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
+
+default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = true
+default['gitlab']['mattermost']['email_send_email_notifications'] = false
+default['gitlab']['mattermost']['email_require_email_verification'] = false
 default['gitlab']['mattermost']['email_smtp_username'] = nil
 default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
-default['gitlab']['mattermost']['email_use_tls'] = false
-default['gitlab']['mattermost']['email_use_start_tls'] = false
-default['gitlab']['mattermost']['email_feedback_email'] = nil
-default['gitlab']['mattermost']['email_feedback_name'] = nil
+default['gitlab']['mattermost']['email_smtp_port'] = nil
+default['gitlab']['mattermost']['email_connection_security'] = nil
 default['gitlab']['mattermost']['email_apple_push_server'] = nil
 default['gitlab']['mattermost']['email_apple_push_cert_public'] = nil
 default['gitlab']['mattermost']['email_apple_push_cert_private'] = nil
 
-default['gitlab']['mattermost']['ratelimit_use_rate_limiter'] = true
+default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
 default['gitlab']['mattermost']['ratelimit_memory_store_size'] = 10000
 default['gitlab']['mattermost']['ratelimit_vary_by_remote_addr'] = true
 default['gitlab']['mattermost']['ratelimit_vary_by_header'] = nil
 
 default['gitlab']['mattermost']['privacy_show_email_address'] = true
-default['gitlab']['mattermost']['privacy_show_phone_number'] = true
-default['gitlab']['mattermost']['privacy_show_skype_id'] = true
 default['gitlab']['mattermost']['privacy_show_full_name'] = true
 
+default['gitlab']['mattermost']['team_site_name'] = "GitLab Mattermost"
+default['gitlab']['mattermost']['team_enable_team_creation'] = true
+default['gitlab']['mattermost']['team_enable_user_creation'] = true
 default['gitlab']['mattermost']['team_max_users_per_team'] = 150
 default['gitlab']['mattermost']['team_allow_public_link'] = true
 default['gitlab']['mattermost']['team_allow_valet_default'] = false
-default['gitlab']['mattermost']['team_terms_link'] = '/static/help/configure_links.html'
-default['gitlab']['mattermost']['team_privacy_link'] = '/static/help/configure_links.html'
-default['gitlab']['mattermost']['team_about_link'] = '/static/help/configure_links.html'
-default['gitlab']['mattermost']['team_help_link'] = '/static/help/configure_links.html'
-default['gitlab']['mattermost']['team_report_problem_link'] = '/static/help/configure_links.html'
-default['gitlab']['mattermost']['team_tour_link'] = '/static/help/configure_links.html'
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
-default['gitlab']['mattermost']['team_disable_team_creation'] = false
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
+
+default['gitlab']['mattermost']['gitlab_enable'] = false
+default['gitlab']['mattermost']['gitlab_secret'] = nil
+default['gitlab']['mattermost']['gitlab_id'] = nil
+default['gitlab']['mattermost']['gitlab_scope'] = nil
+default['gitlab']['mattermost']['gitlab_auth_endpoint'] = nil
+default['gitlab']['mattermost']['gitlab_token_endpoint'] = nil
+default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
 
 ####
 # Mattermost NGINX
