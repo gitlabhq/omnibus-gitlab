@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Update gitlab-git-http-server to 0.3.0 737815fd22a71f1b94379a1a11d8b82367cc7b3a
 - Move incoming email settings to gitlab.yml 9d8673e221ad869199d633c7feccab167a64df6d
 - Add config to enable slow query logging e3c4013d4c01ec372962b1310f17af5ded963ea4
+- GitLab Mattermost to 1.1.1 38ef5d7b609c190502d48374cc2b88cbe0caa307
 
 8.0.4
 
