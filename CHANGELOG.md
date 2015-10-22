@@ -3,7 +3,7 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.1.0(Unreleased)
+8.1.0
 
 - Restart gitlab-git-http-server on version change
 - Moved docker build to omnibus-gitlab repository 9757575747c9d78e355ecd76b11dd7b9dc4d94b5
@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Move incoming email settings to gitlab.yml 9d8673e221ad869199d633c7feccab167a64df6d
 - Add config to enable slow query logging e3c4013d4c01ec372962b1310f17af5ded963ea4
 - GitLab Mattermost to 1.1.1 38ef5d7b609c190502d48374cc2b88cbe0caa307
+- Do not try to stop ci services if they are already disabled 635d7952fad2d501a8f1a38a9e977c4297ce2e52
 
 8.0.4
 
