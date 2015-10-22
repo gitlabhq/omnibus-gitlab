@@ -3,7 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.1.0(Unreleased)
+8.2.0
+
+- Skip builds directory backup in preinstall 1bfbf440866e0834f133e305f7659df1ee1c9e8a
+
+8.1.0
 
 - Restart gitlab-git-http-server on version change
 - Moved docker build to omnibus-gitlab repository 9757575747c9d78e355ecd76b11dd7b9dc4d94b5
