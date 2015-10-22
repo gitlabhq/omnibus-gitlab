@@ -94,24 +94,25 @@ Next time, you can just use docker start and stop to run the container.
 ### Upgrade GitLab to newer version
 
 To upgrade GitLab to new version you have to do:
-1. pull new image,
-```bash
-sudo docker stop gitlab
-```
 
 1. stop running container,
-```bash
-sudo docker rm gitlab
-```
+   ```bash
+   sudo docker stop gitlab
+   ```
+   
+2. remove existing container,
+   ```bash
+   sudo docker rm gitlab
+   ```
 
-1. remove existing container,
-```bash
-sudo docker pull gitlab/gitlab-ce:latest
-```
+3. pull new image,
+   ```bash
+   sudo docker pull gitlab/gitlab-ce:latest
+   ```
 
-1. create the container once again with previously specified options.
-```bash
-sudo docker run --detach \
+4. create the container once again with previously specified options.
+   ```bash
+   sudo docker run --detach \
 	--hostname gitlab.example.com \
 	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
 	--name gitlab \
@@ -120,7 +121,7 @@ sudo docker run --detach \
 	--volume /srv/gitlab/logs:/var/log/gitlab \
 	--volume /srv/gitlab/data:/var/opt/gitlab \
 	gitlab/gitlab-ce:latest
-```
+   ```
 
 On the first run GitLab will reconfigure and update itself.
 
