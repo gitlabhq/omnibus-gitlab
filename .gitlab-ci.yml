@@ -133,7 +133,7 @@ Raspberry Pi 2:
 Docker master:
   stage: docker
   script:
-  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_docker_master;fi
+  - if ! ./support/is_gitlab_ee.sh; then make do_docker_master; fi
   tags:
   - docker-build
   except:
@@ -142,7 +142,7 @@ Docker master:
 Docker:
   stage: docker
   script:
-  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_docker_release;fi
+  - make do_docker_release
   tags:
   - docker-build
   except:
