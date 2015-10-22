@@ -20,6 +20,7 @@ omnibus-gitlab repository.
 - Move incoming email settings to gitlab.yml 9d8673e221ad869199d633c7feccab167a64df6d
 - Add config to enable slow query logging e3c4013d4c01ec372962b1310f17af5ded963ea4
 - GitLab Mattermost to 1.1.1 38ef5d7b609c190502d48374cc2b88cbe0caa307
+- Do not try to stop ci services if they are already disabled 635d7952fad2d501a8f1a38a9e977c4297ce2e52
 
 8.0.4
 
