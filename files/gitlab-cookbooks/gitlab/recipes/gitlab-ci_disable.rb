@@ -120,6 +120,7 @@ if OmnibusHelper.user_exists?(gitlab_ci_user)
   ci_dependent_services.each do |ci_service|
     service ci_service do
       action :stop
+      only_if { node["gitlab"][ci_service]["enable"] }
     end
 
     include_recipe "gitlab::#{ci_service}_disable"
