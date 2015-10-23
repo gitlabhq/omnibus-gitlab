@@ -157,6 +157,7 @@ module Gitlab
         postgresql
         remote-syslog
         gitlab-git-http-server
+        mailroom
         mattermost
       }.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
