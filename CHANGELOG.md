@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Skip builds directory backup in preinstall 1bfbf440866e0834f133e305f7659df1ee1c9e8a
 
+8.1.1 (Unreleased)
+
+- Fix missing email feedback address for Mattermost (Pete Deffendol) 4121e5853a00ed882a6eb97a40fc274f05d3b68c
+
 8.1.0
 
 - Restart gitlab-git-http-server on version change
