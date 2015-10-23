@@ -233,6 +233,9 @@ production: &base
   # ==========================
 
   # GitLab Satellites
+  # Important: keep the satellites.path setting until GitLab 9.0 at
+  # least. This setting is fed to 'rm -rf' in
+  # db/migrate/20151023144219_remove_satellites.rb
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
     path: <%= @satellites_path %>
