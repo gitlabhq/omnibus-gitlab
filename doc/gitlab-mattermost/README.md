@@ -96,33 +96,33 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 ## Setting up SMTP for GitLab Mattermost
 
-By default, `mattermost['email_by_pass_email'] = true`  which allows account creation and system operation without having to setup an email service. This option completely shuts off the email service.
-
-When you do want to have emails enabled, you need to set this option to `false`.
+By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows team creation and account signup using email and password. This should be `false` if you're using only an external authentication source such as GitLab.
 
 SMTP configuration depends on SMTP provider used. If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
 
 ```ruby
-mattermost['email_by_pass_email'] = false
+mattermost['email_enable_sign_up_with_email'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
 mattermost['email_smtp_server'] = "smtp.example.com:465"
+mattermost['email_connection_security'] = nil
+mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
 ```
 
 If you are using TLS, configuration can look something like this:
 
 ```ruby
-mattermost['email_by_pass_email'] = false
+mattermost['email_enable_sign_up_with_email'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
 mattermost['email_smtp_server'] = "smtp.example.com:587"
+mattermost['email_connection_security'] = 'TLS' # Or 'STARTTLS'
+mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
-mattermost['email_use_tls'] = false
-mattermost['email_use_start_tls'] = true
 ```
 
-`email_use_start_tls` and `email_use_tls` options depend on your SMTP provider so you need to verify which of those two is valid for your provider.
+`email_connection_security` depends on your SMTP provider so you need to verify which of `TLS` or `STARTTLS` is valid for your provider.
 
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
