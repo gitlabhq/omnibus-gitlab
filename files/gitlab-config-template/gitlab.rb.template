@@ -167,7 +167,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## a path that doesn't contain symlinks.
 # git_data_dir "/var/opt/gitlab/git-data"
 
-# gitlab_rails['satellites_timeout'] = 30
+
+# DEPRECATED: gitlab_rails['satellites_timeout'] = 30
 
 ## GitLab Shell settings for GitLab
 # gitlab_rails['gitlab_shell_ssh_port'] = 22
