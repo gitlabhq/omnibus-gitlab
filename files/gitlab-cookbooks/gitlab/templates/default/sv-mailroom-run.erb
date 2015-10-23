@@ -10,4 +10,4 @@ echo 'Runit: starting mail_room'
 exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
   -U <%= @options[:user] %> -u <%= @options[:user] %> \
   /opt/gitlab/embedded/bin/bundle exec mail_room \
-    -q -c <%= @options[:mail_room_config] %>
+    -c <%= @options[:mail_room_config] %>
