@@ -217,13 +217,6 @@ link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
   to File.join(gitlab_shell_source_dir, ".gitlab_shell_secret")
 end
 
-directory node['gitlab']['gitlab-rails']['satellites_path'] do
-  owner gitlab_user
-  group gitlab_group
-  mode "0750"
-  recursive true
-end
-
 env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
   variables(
     {
