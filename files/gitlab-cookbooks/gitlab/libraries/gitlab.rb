@@ -130,6 +130,10 @@ module Gitlab
 
       Gitlab['gitlab_shell']['git_data_directory'] ||= git_data_dir
       Gitlab['gitlab_rails']['gitlab_shell_repos_path'] ||= File.join(git_data_dir, "repositories")
+
+      # Important: keep the satellites.path setting until GitLab 9.0 at
+      # least. This setting is fed to 'rm -rf' in
+      # db/migrate/20151023144219_remove_satellites.rb
       Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
     end
 
