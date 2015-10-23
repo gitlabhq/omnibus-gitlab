@@ -23,6 +23,10 @@ define :mailroom_service, :rails_app => nil, :user => nil do
   mailroom_log_dir = node['gitlab']['gitlab-rails']['incoming_email_log_directory']
   mail_room_config = File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "mail_room.yml")
 
+  cookbook_file mail_room_config do
+    notifies :restart, 'service[mailroom]'
+  end
+
   directory mailroom_log_dir do
     owner user
     mode '0700'
