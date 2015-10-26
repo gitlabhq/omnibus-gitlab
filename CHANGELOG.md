@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Fix missing email feedback address for Mattermost (Pete Deffendol) 4121e5853a00ed882a6eb97a40fc274f05d3b68c
 - Fix reply by email support in the package 49cc150360028d62d8d64c6416fad78d474a5933
 - Add mailroom to the log 01e26d3412a4e2fac7411874bc81a20a27123921
+- Fix sysctl param loading da0c487ff8518f0989052a53d397a7cb669acb35
 
 8.1.0
 
