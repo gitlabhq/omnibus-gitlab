@@ -79,7 +79,7 @@ move_to_secret_dir:
 docker_cleanup:
 	-docker ps -q -a | xargs docker rm -v
 	-docker images -f dangling=true -q | xargs docker rmi
-	-docker images | grep $(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi
+	-docker images | grep $(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi -f
 
 docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
@@ -88,11 +88,11 @@ docker_build: docker_cleanup
 	docker build -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
 
 docker_push:
-	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
+	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
 docker_push_latest:
-	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
+	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
 	docker push gitlab/$(RELEASE_PACKAGE):latest
 
 do_docker_master: 
