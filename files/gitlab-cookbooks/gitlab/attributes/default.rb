@@ -94,7 +94,6 @@ default['gitlab']['gitlab-rails']['incoming_email_start_tls'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_email'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_password'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_mailbox_name'] = nil
-default['gitlab']['gitlab-rails']['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 default['gitlab']['gitlab-rails']['lfs_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
@@ -365,6 +364,14 @@ default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
+
+####
+# mailroom
+####
+
+default['gitlab']['mailroom']['enable'] = false
+default['gitlab']['mailroom']['ha'] = false
+default['gitlab']['mailroom']['log_dir'] = "/var/log/gitlab/mailroom"
 
 ####
 # Nginx

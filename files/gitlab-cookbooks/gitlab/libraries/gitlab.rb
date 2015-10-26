@@ -50,6 +50,7 @@ module Gitlab
   ci_sidekiq Mash.new
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
+  mailroom Mash.new
   nginx Mash.new
   ci_nginx Mash.new
   mattermost_nginx Mash.new
@@ -360,6 +361,12 @@ module Gitlab
       mattermost_nginx['enable'] = true if mattermost_nginx['enable'].nil?
     end
 
+    def parse_incoming_email
+      return unless gitlab_rails['incoming_email_enabled']
+
+      mailroom['enable'] = true if mailroom['enable'].nil?
+    end
+
     def disable_gitlab_rails_services
       if gitlab_rails["enable"] == false
         redis["enable"] = false
@@ -386,6 +393,7 @@ module Gitlab
         "sidekiq",
         "ci_sidekiq",
         "gitlab_workhorse",
+        "mailroom",
         "nginx",
         "ci_nginx",
         "mattermost_nginx",
@@ -425,6 +433,7 @@ module Gitlab
       parse_nginx_listen_ports
       parse_gitlab_ci
       parse_gitlab_mattermost
+      parse_incoming_email
       disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
