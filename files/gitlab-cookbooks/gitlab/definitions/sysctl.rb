@@ -16,7 +16,7 @@
 #
 
 define :sysctl, value: nil do
-  param = params[:name]
+  name = params[:name]
   value = params[:value]
 
   directory "/etc/sysctl.d" do
@@ -24,36 +24,32 @@ define :sysctl, value: nil do
     recursive true
   end
 
-  file "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf" do
-    action :create_if_missing
-    manage_symlink_source true
+  conf_name = "90-omnibus-gitlab-#{name}.conf"
+
+  file "/opt/gitlab/embedded/etc/#{conf_name}" do
+    content "#{name} = #{value}\n"
+    notifies :run, 'execute[load sysctl conf]'
   end
 
-  ruby_block "maintain sysctl config" do
-    block do
-      fe = Chef::Util::FileEdit.new("/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf")
-      fe.search_file_replace_line(/^#{param} = /,"#{param} = #{value}")
-      fe.insert_line_if_no_match(/^#{param} = /,"#{param} = #{value}")
-      fe.write_file
-      if fe.file_edited?
-        resources(execute: "sysctl").run_action(:run, :immediately)
-      end
-    end
-    not_if "sysctl -n #{param} | grep -q -x #{value}"
+  link "/etc/sysctl.d/#{conf_name}" do
+    to "/opt/gitlab/embedded/etc/#{conf_name}"
   end
 
-  link "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf" do
-    to "/etc/sysctl.d/90-omnibus-gitlab.conf"
-  end
-
-  ["/etc/sysctl.d/90-postgresql.conf", "/etc/sysctl.d/90-unicorn.conf"].each do |conf|
+  # Remove old (not-used) configs
+  [
+    "/etc/sysctl.d/90-postgresql.conf",
+    "/etc/sysctl.d/90-unicorn.conf",
+    "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf",
+    "/etc/sysctl.d/90-omnibus-gitlab.conf"
+  ].each do |conf|
     file conf do
       action :delete
       only_if { File.exists?(conf) }
     end
   end
+
   # Load the settings right away
-  execute "sysctl" do
+  execute "load sysctl conf" do
     command "cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -"
     action :nothing
   end
