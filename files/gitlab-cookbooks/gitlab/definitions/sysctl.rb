@@ -27,7 +27,7 @@ define :sysctl, value: nil do
   conf_name = "90-omnibus-gitlab-#{name}.conf"
 
   file "/opt/gitlab/embedded/etc/#{conf_name}" do
-    content "#{name} = #{value}"
+    content "#{name} = #{value}\n"
     notifies :run, 'execute[load sysctl conf]'
   end
 
