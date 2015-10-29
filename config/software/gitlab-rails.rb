@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "93cd5baaed0d0d5083351b978d8ef82d7fedeca4" # v8.1.1
+default_version "4c11cac969a2307287421c8f65b1a7f90d2418fb" # v8.1.2
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
