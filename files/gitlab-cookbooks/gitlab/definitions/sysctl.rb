@@ -28,7 +28,7 @@ define :sysctl, value: nil do
 
   file "/opt/gitlab/embedded/etc/#{conf_name}" do
     content "#{name} = #{value}\n"
-    notifies :run, 'execute[load sysctl conf]'
+    notifies :run, 'execute[load sysctl conf]', :immediately
   end
 
   link "/etc/sysctl.d/#{conf_name}" do
