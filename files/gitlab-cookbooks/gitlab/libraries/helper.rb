@@ -365,7 +365,7 @@ class GGHSHelper
   extend ShellOutHelper
 
   def self.version
-    result = do_shell_out("/opt/gitlab/embedded/bin/gitlab-git-http-server --version")
+    result = do_shell_out("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
     if result.exitstatus == 0
       result.stdout
     else

@@ -48,7 +48,8 @@ module Gitlab
   ci_unicorn Mash.new
   sidekiq Mash.new
   ci_sidekiq Mash.new
-  gitlab_git_http_server Mash.new
+  gitlab_workhorse Mash.new
+  gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
   nginx Mash.new
   ci_nginx Mash.new
   mattermost_nginx Mash.new
@@ -93,6 +94,18 @@ module Gitlab
       # Note: Besides the section below, gitlab-secrets.json will also change
       # in CiHelper in libraries/helper.rb
       SecretsHelper.write_to_gitlab_secrets
+    end
+
+    def parse_gitlab_git_http_server
+      Gitlab['gitlab_git_http_server'].each do |k, v|
+        Chef::Log.warn "gitlab_git_http_server is deprecated. Please use gitlab_workhorse in gitlab.rb"
+        if Gitlab['gitlab_workhorse'][k].nil?
+          Chef::Log.warn "applying legacy setting gitlab_git_http_server[#{k.inspect}]"
+          Gitlab['gitlab_workhorse'][k] = v
+        else
+          Chef::Log.warn "ignoring legacy setting gitlab_git_http_server[#{k.inspect}]"
+        end
+      end
     end
 
     def parse_external_url
@@ -160,7 +173,7 @@ module Gitlab
         ci-unicorn
         postgresql
         remote-syslog
-        gitlab-git-http-server
+        gitlab-workhorse
         mailroom
         mattermost
       }.each do |runit_sv|
@@ -237,10 +250,10 @@ module Gitlab
     end
 
     def parse_unicorn_listen_address
-      # Make sure gitlab-git-http-server can talk to unicorn
+      # Make sure gitlab-workhorse can talk to unicorn
       listen_address = unicorn['listen'] || node['gitlab']['unicorn']['listen']
       listen_port = unicorn['port'] || node['gitlab']['unicorn']['port']
-      gitlab_git_http_server['auth_backend'] ||= "http://#{listen_address}:#{listen_port}"
+      gitlab_workhorse['auth_backend'] ||= "http://#{listen_address}:#{listen_port}"
     end
 
     def parse_nginx_listen_address
@@ -352,7 +365,7 @@ module Gitlab
         redis["enable"] = false
         unicorn["enable"] = false
         sidekiq["enable"] = false
-        gitlab_git_http_server["enable"] = false
+        gitlab_workhorse["enable"] = false
       end
     end
 
@@ -372,7 +385,7 @@ module Gitlab
         "ci_unicorn",
         "sidekiq",
         "ci_sidekiq",
-        "gitlab_git_http_server",
+        "gitlab_workhorse",
         "nginx",
         "ci_nginx",
         "mattermost_nginx",
@@ -396,6 +409,7 @@ module Gitlab
 
     def generate_config(node_name)
       generate_secrets(node_name)
+      parse_gitlab_git_http_server
       parse_external_url
       parse_git_data_dir
       parse_udp_log_shipping

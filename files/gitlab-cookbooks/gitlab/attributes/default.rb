@@ -344,18 +344,18 @@ default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
 default['gitlab']['web-server']['external_users'] = []
 
 ####
-# gitlab-git-http-server
+# gitlab-workhorse
 ####
 
-default['gitlab']['gitlab-git-http-server']['enable'] = true
-default['gitlab']['gitlab-git-http-server']['ha'] = false
-default['gitlab']['gitlab-git-http-server']['listen_network'] = "unix"
-default['gitlab']['gitlab-git-http-server']['listen_umask'] = 000
-default['gitlab']['gitlab-git-http-server']['listen_addr'] = "/var/opt/gitlab/gitlab-git-http-server/socket"
-default['gitlab']['gitlab-git-http-server']['auth_backend'] = "http://localhost:8080"
-default['gitlab']['gitlab-git-http-server']['pprof_listen_addr'] = "''" # put an empty string on the command line
-default['gitlab']['gitlab-git-http-server']['dir'] = "/var/opt/gitlab/gitlab-git-http-server"
-default['gitlab']['gitlab-git-http-server']['log_dir'] = "/var/log/gitlab/gitlab-git-http-server"
+default['gitlab']['gitlab-workhorse']['enable'] = true
+default['gitlab']['gitlab-workhorse']['ha'] = false
+default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
+default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
+default['gitlab']['gitlab-workhorse']['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/socket"
+default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
+default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
+default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
+default['gitlab']['gitlab-workhorse']['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
 
 ####
 # Nginx
