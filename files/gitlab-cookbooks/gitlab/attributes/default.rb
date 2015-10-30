@@ -134,6 +134,8 @@ default['gitlab']['gitlab-rails']['omniauth_auto_link_ldap_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['bitbucket'] = nil
 
+default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
+
 # Important: keep the satellites.path setting until GitLab 9.0 at
 # least. This setting is fed to 'rm -rf' in
 # db/migrate/20151023144219_remove_satellites.rb

@@ -226,6 +226,9 @@ production: &base
       - <%= provider.to_json %>
 <% end %>
 
+  # Shared file storage settings
+  shared:
+    path: <%= @shared_path %>
 
 
   #
