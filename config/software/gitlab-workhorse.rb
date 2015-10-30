@@ -15,10 +15,10 @@
 # limitations under the License.
 #
 
-name "gitlab-git-http-server"
-default_version "bf2a3cedd9b631939330d2e54241f95a7b478763" # 0.3.0
+name "gitlab-workhorse"
+default_version "5e28545e0441d02ae2734553bce17353ebf43b26" # 0.4.0
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-git-http-server.git"
+source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
 
 build do
   make "install PREFIX=#{install_dir}/embedded"
