@@ -13,7 +13,7 @@ If the highest number stable branch is unclear please check the [GitLab Blog](ht
 
 Starting with GitLab 8, GitLab CI is integrated into GitLab.
 
-To see how to configure your project with GitLab CI, see the [GitLab CI quickstart documentation](http://doc.gitlab.com/omnibus/gitlab-ci/README.html).
+To see how to configure your project with GitLab CI, see the [GitLab CI quickstart documentation](http://doc.gitlab.com/ce/ci/quick_start/README.html).
 
 ## Running GitLab CI on its own server
 
