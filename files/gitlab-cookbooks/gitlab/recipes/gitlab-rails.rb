@@ -44,6 +44,7 @@ gitlab_group = account_helper.gitlab_group
   gitlab_ci_builds_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
+  node['gitlab']['gitlab-rails']['shared_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
