@@ -311,7 +311,12 @@ default['gitlab']['postgresql']['checkpoint_segments'] = 10
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
-
+# Replication settings
+default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
+default['gitlab']['postgresql']['wal_level'] = "hot_standby"
+default['gitlab']['postgresql']['max_wal_senders'] = 5
+default['gitlab']['postgresql']['wal_keep_segments'] = 10
+default['gitlab']['postgresql']['hot_standby'] = "off"
 
 ####
 # Redis
