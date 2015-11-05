@@ -3,7 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.1.1 (Unreleased)
+8.1.2
+
+- Load the sysctl config as soon as it is set a9f5ece8e7f08a23ceb792e919c941d01d3e14b7
+- Added postgresql replication settings f1949604de8017355c26710205156a0147ffa793
+
+8.1.1
 
 - Fix missing email feedback address for Mattermost (Pete Deffendol) 4121e5853a00ed882a6eb97a40fc274f05d3b68c
 - Fix reply by email support in the package 49cc150360028d62d8d64c6416fad78d474a5933
