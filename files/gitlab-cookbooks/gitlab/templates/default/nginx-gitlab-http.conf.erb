@@ -34,8 +34,8 @@ upstream gitlab {
   server unix:<%= @socket %> fail_timeout=0;
 }
 
-upstream gitlab-git-http-server {
-  server unix:<%= node['gitlab']['gitlab-git-http-server']['listen_addr'] %>;
+upstream gitlab-workhorse {
+  server unix:<%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
 }
 
 <% if @https && @redirect_http_to_https %>
@@ -150,24 +150,24 @@ server {
   }
 
   location ~ ^/[\w\.-]+/[\w\.-]+/(info/refs|git-upload-pack|git-receive-pack)$ {
-    # 'Error' 418 is a hack to re-use the @gitlab-git-http-server block
-    error_page 418 = @gitlab-git-http-server;
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
     return 418;
   }
 
   location ~ ^/[\w\.-]+/[\w\.-]+/repository/archive {
-    # 'Error' 418 is a hack to re-use the @gitlab-git-http-server block
-    error_page 418 = @gitlab-git-http-server;
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
     return 418;
   }
 
   location ~ ^/api/v3/projects/.*/repository/archive {
-    # 'Error' 418 is a hack to re-use the @gitlab-git-http-server block
-    error_page 418 = @gitlab-git-http-server;
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
     return 418;
   }
 
-  location @gitlab-git-http-server {
+  location @gitlab-workhorse {
     ## If you use HTTPS make sure you disable gzip compression
     ## to be safe against BREACH attack.
     <%= 'gzip off;' if @https %>
@@ -186,7 +186,7 @@ server {
     proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
     proxy_set_header    X-Forwarded-Proto   <%= @https ? "https" : "http" %>;
 
-    proxy_pass http://gitlab-git-http-server;
+    proxy_pass http://gitlab-workhorse;
   }
 
   ## Enable gzip compression as per rails guide:

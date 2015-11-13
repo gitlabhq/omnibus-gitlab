@@ -15,6 +15,11 @@
 # limitations under the License.
 #
 
-runit_service "gitlab-git-http-server" do
-  action :disable
+name "gitlab-workhorse"
+default_version "5e28545e0441d02ae2734553bce17353ebf43b26" # 0.4.0
+
+source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+
+build do
+  make "install PREFIX=#{install_dir}/embedded"
 end
