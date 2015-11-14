@@ -62,6 +62,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # gitlab_rails['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 
+## Git LFS
+# gitlab_rails['lfs_enabled'] = true
+# gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
+
 ## For setting up LDAP
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#setting-up-ldap-sign-in
 ## Be careful not to break the identation in the ldap_servers block. It is in
