@@ -8,10 +8,3 @@ reconfigure for the change to take effect.
 unicorn['worker_processes'] = 3
 unicorn['worker_timeout'] = 60
 ```
-
-To adjust Unicorn settings for GitLab CI, use the `ci_unicorn` directive in
-`/etc/gitlab/gitlab.rb`.
-
-```ruby
-ci_unicorn['worker_processes'] = 3
-```
