@@ -584,8 +584,8 @@ default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
 default['gitlab']['mattermost']['log_console_enable'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
-default['gitlab']['mattermost']['log_enable_file'] = false
-default['gitlab']['mattermost']['log_file_level'] = 'INFO'
+default['gitlab']['mattermost']['log_enable_file'] = true
+default['gitlab']['mattermost']['log_file_level'] = 'ERROR'
 default['gitlab']['mattermost']['log_file_format'] = nil
 
 default['gitlab']['mattermost']['service_use_ssl'] = false
@@ -599,6 +599,7 @@ default['gitlab']['mattermost']['service_enable_post_username_override'] = false
 default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
 default['gitlab']['mattermost']['service_enable_testing'] = false
 default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
+default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = true
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
@@ -626,7 +627,7 @@ default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_secret_access_key'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
 
-default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = true
+default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
 default['gitlab']['mattermost']['email_send_email_notifications'] = false
 default['gitlab']['mattermost']['email_require_email_verification'] = false
 default['gitlab']['mattermost']['email_smtp_username'] = nil
@@ -655,6 +656,8 @@ default['gitlab']['mattermost']['team_allow_public_link'] = true
 default['gitlab']['mattermost']['team_allow_valet_default'] = false
 default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
+default['gitlab']['mattermost']['team_restrict_team_names'] = true
+default['gitlab']['mattermost']['team_enable_team_listing'] = false
 
 default['gitlab']['mattermost']['gitlab_enable'] = false
 default['gitlab']['mattermost']['gitlab_secret'] = nil
