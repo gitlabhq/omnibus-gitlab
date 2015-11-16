@@ -126,7 +126,7 @@ will have to perform the following steps:
 
     ```
     gitlab_workhorse['listen_network'] = "tcp"
-    gitlab_workhorse['listen_addr'] = "localhost:8181"
+    gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
     ```
 
     Run `sudo gitlab-ctl reconfigure` for the change to take effect.
