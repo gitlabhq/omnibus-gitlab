@@ -116,9 +116,7 @@ will have to perform the following steps:
 
     Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-    Note: if you are using SELinux and your web server runs under a restricted
-    SELinux profile you may have to [loosen the restrictions on your web
-    server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+    *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
 
 1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
 
@@ -386,3 +384,4 @@ Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
 
 [recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
+[selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications
