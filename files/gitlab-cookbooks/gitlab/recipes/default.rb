@@ -98,6 +98,7 @@ include_recipe "runit"
   "unicorn",
   "sidekiq",
   "gitlab-workhorse",
+  "mailroom",
   "nginx",
   "remote-syslog",
   "logrotate",

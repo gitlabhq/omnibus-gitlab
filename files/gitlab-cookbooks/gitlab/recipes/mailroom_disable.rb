@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-account_helper = AccountHelper.new(node)
 
-sidekiq_service 'sidekiq' do
-  rails_app 'gitlab-rails'
-  user account_helper.gitlab_user
+runit_service "mailroom" do
+  action :disable
 end
