@@ -120,6 +120,8 @@ will have to perform the following steps:
 
 1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
 
+    *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
+
     Apache cannot connect to a UNIX socket but instead needs to connect to a
     TCP Port. To allow gitlab-workhorse to listen on TCP (by default port 8181)
     edit `/etc/gitlab/gitlab.rb`:
