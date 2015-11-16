@@ -2,26 +2,21 @@
 
 main() {
   gitlab_rails_ref=$1
-  gitlab_ci_ref=$2
-  gitlab_shell_ref=$3
+  gitlab_shell_ref=$2
 
   if [ "$ee" = "1" ] ; then
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlab-ee.git 
   else
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlabhq.git 
   fi
-  gitlab_ci_repo=git@dev.gitlab.org:gitlab/gitlab-ci.git
   gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
 
   gitlab_rails_oid=$(fetch_oid gitlab_rails)
   assert_non_empty gitlab_rails_oid
-  gitlab_ci_oid=$(fetch_oid gitlab_ci)
-  assert_non_empty gitlab_ci_oid
   gitlab_shell_oid=$(fetch_oid gitlab_shell)
   assert_non_empty gitlab_shell_oid
 
   set_source_and_version gitlab_rails config/software/gitlab-rails.rb 
-  set_source_and_version gitlab_ci config/software/gitlab-ci.rb 
   set_source_and_version gitlab_shell config/software/gitlab-shell.rb
 }
 
@@ -79,8 +74,8 @@ if [ "$1" = "--ee" ] ; then
   shift
 fi
 
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -n "$4" ] ; then
-  warn "Usage: $0 [--ee] GITLAB_RAILS_REF GITLAB_CI_REF GITLAB_SHELL_REF"
+if [ -z "$1" ] || [ -z "$2" ] || [ -n "$3" ] ; then
+  warn "Usage: $0 [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF"
   exit 1
 fi
 
