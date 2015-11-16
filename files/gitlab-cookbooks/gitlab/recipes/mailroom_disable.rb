@@ -15,11 +15,6 @@
 # limitations under the License.
 #
 
-name "gitlab-git-http-server"
-default_version "bf2a3cedd9b631939330d2e54241f95a7b478763" # 0.3.0
-
-source :git => "https://gitlab.com/gitlab-org/gitlab-git-http-server.git"
-
-build do
-  make "install PREFIX=#{install_dir}/embedded"
+runit_service "mailroom" do
+  action :disable
 end

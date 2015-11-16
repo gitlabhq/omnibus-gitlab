@@ -7,7 +7,7 @@ Below you can find the most common issues users encounter when installing omnibu
 apt-get install outputs something like:
 
 ```
-E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trusty/main/g/gitlab-ce/gitlab-ce_7.12.0~omnibus.1-1_amd64.deb  Hash Sum mismatch
+E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trusty/main/g/gitlab-ce/gitlab-ce_8.1.0-ce.0_amd64.deb  Hash Sum mismatch
 ```
 
 Please run the following to fix this:
@@ -19,6 +19,13 @@ sudo apt-get clean
 ```
 
 See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) for more context.
+
+Another workaround is to download the package manually by selecting the correct package from [packages.gitlab.com CE](https://packages.gitlab.com/gitlab/gitlab-ce) [or EE repository](https://packages.gitlab.com/gitlab/gitlab-ee):
+
+```
+curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download
+dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
+```
 
 ### GitLab is unreachable in my browser
 

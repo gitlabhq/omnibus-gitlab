@@ -107,6 +107,12 @@ production: &base
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: <%= single_quote(@incoming_email_mailbox_name) %>
 
+  ## Git LFS
+  lfs:
+    enabled: <%= @lfs_enabled %>
+    # The location where LFS objects are stored (default: shared/lfs-objects).
+    storage_path: <%= @lfs_storage_path %>
+
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:
@@ -226,6 +232,9 @@ production: &base
       - <%= provider.to_json %>
 <% end %>
 
+  # Shared file storage settings
+  shared:
+    path: <%= @shared_path %>
 
 
   #

@@ -83,8 +83,10 @@ sudo gitlab-ctl start
 
 By default, omnibus-gitLab uses the user name `git` for Git gitlab-shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
-Similarly, `git` group is used for group ownership of the Git data.  You can
-change the user and group by adding the following lines to
+Similarly, `git` group is used for group ownership of the Git data.
+
+We do not recommend changing the user/group of an existing installation because it can cause unpredictable side-effects.
+If you still want to do change the user and group, you can do so by adding the following lines to
 `/etc/gitlab/gitlab.rb`.
 
 ```ruby
@@ -93,6 +95,8 @@ user['group'] = "gitlab"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+Note that if you are changing the username of an existing installation, the reconfigure run won't change the ownership of the nested directories so you will have to do that manually. Make sure that the new user can access `repositories` as well as the `uploads` directory.
 
 ### Specify numeric user and group identifiers
 

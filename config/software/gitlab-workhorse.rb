@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2015 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-account_helper = AccountHelper.new(node)
 
-sidekiq_service 'sidekiq' do
-  rails_app 'gitlab-rails'
-  user account_helper.gitlab_user
+name "gitlab-workhorse"
+default_version "5e28545e0441d02ae2734553bce17353ebf43b26" # 0.4.0
+
+source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+
+build do
+  make "install PREFIX=#{install_dir}/embedded"
 end

@@ -77,6 +77,19 @@ gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
+### Amazon SES
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "email-smtp.region-1.amazonaws.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "IAMmailerKey"
+gitlab_rails['smtp_password'] = "IAMmailerSecret"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a merge request to save other people time.

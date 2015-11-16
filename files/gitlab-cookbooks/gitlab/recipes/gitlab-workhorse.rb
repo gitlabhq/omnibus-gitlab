@@ -16,8 +16,8 @@
 #
 account_helper = AccountHelper.new(node)
 
-working_dir = node['gitlab']['gitlab-git-http-server']['dir']
-log_dir = node['gitlab']['gitlab-git-http-server']['log_dir']
+working_dir = node['gitlab']['gitlab-workhorse']['dir']
+log_dir = node['gitlab']['gitlab-workhorse']['log_dir']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -32,15 +32,15 @@ directory log_dir do
   recursive true
 end
 
-runit_service 'gitlab-git-http-server' do
-  down node['gitlab']['gitlab-git-http-server']['ha']
+runit_service 'gitlab-workhorse' do
+  down node['gitlab']['gitlab-workhorse']['ha']
   options({
     :log_directory => log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-git-http-server'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
 
 file File.join(working_dir, "VERSION") do
   content GGHSHelper.version
-  notifies :restart, "service[gitlab-git-http-server]"
+  notifies :restart, "service[gitlab-workhorse]"
 end

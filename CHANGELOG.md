@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.2.0 (Unreleased)
+
+- Skip builds directory backup in preinstall 1bfbf440866e0834f133e305f7659df1ee1c9e8a
+- GitLab Mattermost version 1.2.0, few default settings changed 7536581bb0cd0cf44fa821ad1d6a5f67175e7a83
+- Refactor mailroom into a separate service 959c1b3f437d49eb1a173dea5d6d5ca3d79cd098
+- Update nginx config for artifacts and lfs 4e365f159e3c70aa1aa3a578bb7440e27fcdc179
+- Added lfs config settings 4e365f159e3c70aa1aa3a578bb7440e27fcdc179
+- Rename gitlab-git-http-server to gitlab-workhorse 47afb19142fcb68d5c35645a1efa637f367e6f84
+- Updated chef version to 12.5.1 (Jayesh Mistry) 814263c9ecdd3e6a95148dfdb15867468ef43c7e
+
+8.1.3
+
+- Update cacerts to 2015.10.28 e349060c81b75f9543ececec14f5c9c721c91d50
+
 8.1.2
 
 - Load the sysctl config as soon as it is set a9f5ece8e7f08a23ceb792e919c941d01d3e14b7

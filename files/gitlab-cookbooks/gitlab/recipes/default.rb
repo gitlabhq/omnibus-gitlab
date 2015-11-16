@@ -97,7 +97,8 @@ include_recipe "runit"
   "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
   "unicorn",
   "sidekiq",
-  "gitlab-git-http-server",
+  "gitlab-workhorse",
+  "mailroom",
   "nginx",
   "remote-syslog",
   "logrotate",
@@ -109,6 +110,11 @@ include_recipe "runit"
   else
     include_recipe "gitlab::#{service}_disable"
   end
+end
+
+# Deprecated in favor of gitlab-workhorse since 8.2
+runit_service "gitlab-git-http-server" do
+  action :disable
 end
 
 include_recipe "gitlab::database_migrations"

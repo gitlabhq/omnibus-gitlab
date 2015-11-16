@@ -5,6 +5,7 @@
 production:
   adapter: <%= @db_adapter %>
   encoding: <%= @db_encoding %>
+  collation: <%= @db_collation %>
   database: <%= @db_database %>
   pool: <%= @db_pool %>
   username: <%= single_quote(@db_username) %>

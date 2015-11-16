@@ -19,13 +19,13 @@ Our main goal is to make it clear which version of GitLab is in an omnibus packa
   release:
 
     ```
-    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_CI_REF GITLAB_SHELL_REF
+    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF
 
     # For 6.6.0 CE:
-    support/set-revisions v6.6.0 v6.6.0 v1.2.3
+    support/set-revisions v6.6.0 v1.2.3
 
     # For 7.14 EE:
-    support/set-revisions --ee v7.14.0-ee v7.14.0 v2.6.4
+    support/set-revisions --ee v7.14.0-ee v2.6.4
     ```
 
 1. Commit the new version to the release branch:
