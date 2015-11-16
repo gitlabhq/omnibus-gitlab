@@ -694,6 +694,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_post_icon_override'] = false
 # mattermost['service_enable_testing'] = false
 # mattermost['service_enable_security_fix_alert'] = true
+# mattermost['service_enable_outgoing_webhooks'] = true
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -703,6 +704,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_allow_valet_default'] = false
 # mattermost['team_default_color'] = '#2389D7'
 # mattermost['team_restrict_creation_to_domains'] = "gmail.com"
+# mattermost['team_restrict_team_names'] = true
+# mattermost['team_enable_team_listing'] = false
+
 
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"

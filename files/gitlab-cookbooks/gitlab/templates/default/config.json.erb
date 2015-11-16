@@ -8,14 +8,17 @@
         "EnablePostUsernameOverride": <%= @service_enable_post_username_override %>,
         "EnablePostIconOverride": <%= @service_enable_post_icon_override %>,
         "EnableTesting": <%= @service_enable_testing %>,
-        "EnableSecurityFixAlert": <%= @service_enable_security_fix_alert %>
+        "EnableSecurityFixAlert": <%= @service_enable_security_fix_alert %>,
+        "EnableOutgoingWebhooks": <%= @service_enable_outgoing_webhooks %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
         "MaxUsersPerTeam": <%= @team_max_users_per_team %>,
         "EnableTeamCreation": <%= @team_enable_team_creation %>,
         "EnableUserCreation": <%= @team_enable_user_creation %>,
-        "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>"
+        "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>,
+        "RestrictTeamNames": <%= @team_restrict_team_names %>,
+        "EnableTeamListing": <%= @team_enable_team_listing %>
     },
     "SqlSettings": {
         "DriverName": "<%= @sql_driver_name %>",
