@@ -13,7 +13,7 @@ main() {
 
   if [ -d ${DEST_DIR}/service/unicorn ] ; then
     notify "Backing up GitLab SQL database (excluding Git repositories, uploads)"
-    if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads ; then
+    if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds ; then
       notify
       notify "Backup failed! If you want to skip this backup, run the following command and"
       notify "try again:"
