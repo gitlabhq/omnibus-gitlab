@@ -129,4 +129,24 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 ## GitLab Mattermost configuration
 
 For a complete list of available options, visit the [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+
+Also see:
+
+### GitLab Mattermost Administrator's Guide
+
+The [GitLab Mattermost Administrator's Guide](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#gitlab-mattermost-administration) is maintained by the Mattermost community for GitLab users.
+
+#### GitLab Mattermost Trouble Shooting
+
+The [GitLab Mattermost Trouble Shooting](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#troubleshooting-gitlab-mattermost) section includes common error messages that may be encountered under different configurations as well as common solutions.
+
+#### Configuring Mattermost Incoming Webhooks
+
+See [the section on configuring incoming webhooks in Mattermost](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#connecting-mattermost-to-integrations-with-incoming-webhooks) to support Slack-equivalent notifications from GitLab, as well as for fully customizable alerting through the **GitLab Integration Service for Mattermost**.
+
+#### Configuring Mattermost Outgoing Webhooks
+
+See [the section on configuring outoing webhooks in Mattermost](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#connecting-mattermost-to-integrations-with-outgoing-webhooks) for connecting to Mattermost applications created by the Mattermost community for interactivity with systems like **Hubot** and **IRC**.
+
+
 We welcome contributions to improve the configuration settings explanations both in the gitlab.rb.template and in the documentation.
