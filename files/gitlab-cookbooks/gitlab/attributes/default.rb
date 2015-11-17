@@ -594,12 +594,12 @@ default['gitlab']['mattermost']['service_port'] = "8065"
 default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
 default['gitlab']['mattermost']['service_segment_developer_key'] = nil
 default['gitlab']['mattermost']['service_google_developer_key'] = nil
-default['gitlab']['mattermost']['service_enable_incoming_webhooks'] = true
+default['gitlab']['mattermost']['service_enable_incoming_webhooks'] = false
 default['gitlab']['mattermost']['service_enable_post_username_override'] = false
 default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
 default['gitlab']['mattermost']['service_enable_testing'] = false
 default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
-default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = true
+default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = false
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
