@@ -16,7 +16,7 @@
 #
 
 name "gitlab-workhorse"
-default_version "5e28545e0441d02ae2734553bce17353ebf43b26" # 0.4.0
+default_version "9123131eab0de3b896b8c365dc8f8892c13f70a9" # 0.4.2
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
 
