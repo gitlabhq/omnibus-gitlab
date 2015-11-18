@@ -15,9 +15,6 @@ gitlab.example.com, add the following statement to `/etc/gitlab/gitlab.rb`:
 ```ruby
 # note the 'https' below
 external_url "https://gitlab.example.com"
-
-# For GitLab CI:
-ci_external_url "https://ci.example.com"
 ```
 
 Because the hostname in our example is 'gitlab.example.com', omnibus-gitlab
@@ -34,11 +31,6 @@ sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
 
 Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
 GitLab instance should be reachable at `https://gitlab.example.com`.
-
-The SSL certificate and key paths are derived the same way for GitLab CI. If
-you write `ci_external_url "https://ci.example.com"` then `gitlab-ctl
-reconfigure` will look for `/etc/gitlab/ssl/ci.example.com.crt` and
- `/etc/gitlab/ssl/ci.example.com.key`.
 
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
@@ -67,13 +59,6 @@ external_url "https://gitlab.example.com"
 nginx['redirect_http_to_https'] = true
 ```
 
-To enable HTTP to HTTPS redirects for GitLab CI, use the `nginx_ci` directive.
-
-```ruby
-ci_external_url "https://ci.example.com"
-ci_nginx['redirect_http_to_https'] = true
-```
-
 ## Change the default port and the SSL certificate locations
 
 If you need to use an HTTPS port other than the default (443), just specify it
@@ -83,18 +68,12 @@ as part of the external_url.
 external_url "https://gitlab.example.com:2443"
 ```
 
-The same syntax works for GitLab CI with `ci_external_url`.
-
 To set the location of ssl certificates create `/etc/gitlab/ssl` directory, place the `.crt` and `.key` files in the directory and specify the following configuration:
 
 ```ruby
 # For GitLab
 nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.crt"
 nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
-
-# For GitLab CI
-ci_nginx['ssl_certificate'] = "/etc/gitlab/ssl/ci.example.crt"
-ci_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/ci.example.com.key"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
@@ -106,34 +85,62 @@ Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
 in the group with the same name. To allow an external webserver access to
 GitLab, external webserver user needs to be added `gitlab-www` group.
 
-To use another web server like Apache or an existing Nginx installation you will have to do
-the following steps:
+To use another web server like Apache or an existing Nginx installation you
+will have to perform the following steps:
 
-* Disable bundled Nginx by specifying in `/etc/gitlab/gitlab.rb`:
+1. **Disable bundled Nginx**
 
-```ruby
-nginx['enable'] = false
+    In `/etc/gitlab/gitlab.rb` set:
 
-# For GitLab CI, use the following:
-ci_nginx['enable'] = false
-```
+    ```ruby
+    nginx['enable'] = false
+    ```
 
-* Check the username of the non-bundled web-server user. By default, omnibus-gitlab has no default setting for external webserver user.
-You have to specify the external webserver user username in the configuration!
-Let's say for example that webserver user is `www-data`.
-In `/etc/gitlab/gitlab.rb` set:
+1. **Set the username of the non-bundled web-server user**
 
-```ruby
-web_server['external_users'] = ['www-data']
-```
+    By default, omnibus-gitlab has no default setting for the external webserver
+    user, you have to specify it in the configuration. For Debian/Ubuntu the
+    default user is `www-data` for both Apache/Nginx whereas for RHEL/CentOS
+    the Nginx user is `nginx`.
 
-*This setting is an array so you can specify more than one user to be added to gitlab-www group.*
+    *Note: Make sure you have first installed Apache/Nginx so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
 
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+    Let's say for example that the webserver user is `www-data`.
+    In `/etc/gitlab/gitlab.rb` set:
 
-Note: if you are using SELinux and your web server runs under a restricted
-SELinux profile you may have to [loosen the restrictions on your web
-server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+    ```ruby
+    web_server['external_users'] = ['www-data']
+    ```
+
+    *Note: This setting is an array so you can specify more than one user to be added to gitlab-www group.*
+
+    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+    *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
+
+1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
+
+    *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
+
+    Apache cannot connect to a UNIX socket but instead needs to connect to a
+    TCP Port. To allow gitlab-workhorse to listen on TCP (by default port 8181)
+    edit `/etc/gitlab/gitlab.rb`:
+
+    ```
+    gitlab_workhorse['listen_network'] = "tcp"
+    gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
+    ```
+
+    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+1. **Download the right web server configs**
+
+    Go to [GitLab recipes repository][recipes-web] and look for the omnibus
+    configs in the webserver directory of your choice. Make sure you pick the
+    right configuration file depending whether you choose to serve GitLab with
+    SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
+    your own FQDN and if you use SSL, the location where your SSL keys currently
+    reside. You also might need to change the location of your log files.
 
 ## Setting the NGINX listen address or addresses
 
@@ -144,8 +151,6 @@ You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
 nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
 ```
 
-For GitLab CI, use the `ci_nginx['listen_addresses']` setting.
-
 ## Setting the NGINX listen port
 
 By default NGINX will listen on the port specified in `external_url` or
@@ -155,12 +160,6 @@ something else.  For example, to use port 8080:
 
 ```ruby
 nginx['listen_port'] = 8080
-```
-
-Similarly, for GitLab CI:
-
-```ruby
-ci_nginx['listen_port'] = 8081
 ```
 
 ## Supporting proxied SSL
@@ -175,22 +174,16 @@ the `listen_https` option:
 nginx['listen_https'] = false
 ```
 
-Similarly, for GitLab CI:
-
-```ruby
-ci_nginx['listen_https'] = false
-```
-
 Note that you may need to configure your reverse proxy to forward certain
-headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`, `X-Forwarded-Port`) to GitLab. You
-may see improper redirections or errors (e.g. "422 Unprocessable Entity",
-"Can't verify CSRF token authenticity") if you forget this step. For more
-information, see:
+headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`, `X-Forwarded-Port`)
+to GitLab. You may see improper redirections or errors (e.g. "422 Unprocessable
+Entity", "Can't verify CSRF token authenticity") if you forget this step. For
+more information, see:
 
-http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
-https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
+* http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
+* https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
 
-## Using custom ssl ciphers
+## Using custom SSL ciphers
 
 By default GitLab is using SSL ciphers that are combination of testing on gitlab.com and various best practices contributed by the GitLab community.
 
@@ -200,11 +193,7 @@ However, you can change the ssl ciphers by adding to `gitlab.rb`:
   nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
 ```
 
-and running reconfigure. Similar, for GitLab CI:
-
-```ruby
-  ci_nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
-```
+and running reconfigure.
 
 You can also enable `ssl_dhparam` directive.
 
@@ -214,11 +203,7 @@ First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Th
   nginx['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
 ```
 
-After the change run `sudo gitlab-ctl reconfigure`. Similar, for GitLab CI:
-
-```ruby
-  ci_nginx['ssl_dhparam'] = "/etc/gitlab/ssl/ci_dhparams.pem"
-```
+After the change run `sudo gitlab-ctl reconfigure`.
 
 ## Inserting custom NGINX settings into the GitLab server block
 
@@ -228,9 +213,6 @@ some reason you can use the following setting.
 ```ruby
 # Example: block raw file downloads from a specific repository
 nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
-
-# You can do the same for GitLab-CI
-ci_nginx['custom_gitlab_ci_server_config'] = "some settings"
 ```
 
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
@@ -264,9 +246,6 @@ Nginx and Unicorn:
 # Disable the built-in nginx
 nginx['enable'] = false
 
-# Disable the built-in nginx for Gitlab CI
-ci_nginx['enable'] = false
-
 # Disable the built-in unicorn
 unicorn['enable'] = false
 
@@ -279,13 +258,11 @@ Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 ### Vhost (server block)
 
 Then, in your custom Passenger/Nginx installation, create the following site
-configuration files:
-
-#### Gitlab
+configuration file:
 
 ```
-upstream gitlab-git-http-server {
-  server unix://var/opt/gitlab/gitlab-git-http-server/socket fail_timeout=0;
+upstream gitlab-workhorse {
+  server unix://var/opt/gitlab/gitlab-workhorse/socket fail_timeout=0;
 }
 
 server {
@@ -314,10 +291,41 @@ server {
   passenger_enabled on;
   passenger_min_instances 1;
 
-  location ~ [-\/\w\.]+\.git\/ {
-    ## If you use HTTPS make sure you disable gzip compression
-    ## to be safe against BREACH attack.
-    gzip off;
+  location ~ ^/[\w\.-]+/[\w\.-]+/(info/refs|git-upload-pack|git-receive-pack)$ {
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
+    return 418;
+  }
+
+  location ~ ^/[\w\.-]+/[\w\.-]+/repository/archive {
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
+    return 418;
+  }
+
+  location ~ ^/api/v3/projects/.*/repository/archive {
+    # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+    error_page 418 = @gitlab-workhorse;
+    return 418;
+  }
+
+  # Build artifacts should be submitted to this location
+  location ~ ^/[\w\.-]+/[\w\.-]+/builds/download {
+      client_max_body_size 0;
+      # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+      error_page 418 = @gitlab-workhorse;
+      return 418;
+  }
+
+  # Build artifacts should be submitted to this location
+  location ~ /ci/api/v1/builds/[0-9]+/artifacts {
+      client_max_body_size 0;
+      # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+      error_page 418 = @gitlab-workhorse;
+      return 418;
+  }
+
+  location @gitlab-workhorse {
 
     ## https://github.com/gitlabhq/gitlabhq/issues/694
     ## Some requests take more than 30 seconds.
@@ -328,76 +336,35 @@ server {
     # Do not buffer Git HTTP responses
     proxy_buffering off;
 
-    # The following settings only work with NGINX 1.7.11 or newer
-    #
-    # Pass chunked request bodies to gitlab-git-http-server as-is
-    # proxy_request_buffering off;
-    # proxy_http_version 1.1;
-    
     proxy_set_header    Host                $http_host;
     proxy_set_header    X-Real-IP           $remote_addr;
-    proxy_set_header    X-Forwarded-Ssl     on;
     proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
     proxy_set_header    X-Forwarded-Proto   $scheme;
-    proxy_pass http://gitlab-git-http-server;
+
+    proxy_pass http://gitlab-workhorse;
+
+    ## The following settings only work with NGINX 1.7.11 or newer
+    #
+    ## Pass chunked request bodies to gitlab-workhorse as-is
+    # proxy_request_buffering off;
+    # proxy_http_version 1.1;
+  }
+
+  ## Enable gzip compression as per rails guide:
+  ## http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+  ## WARNING: If you are using relative urls remove the block below
+  ## See config/application.rb under "Relative url support" for the list of
+  ## other files that need to be changed for relative url support
+  location ~ ^/(assets)/ {
+    root /opt/gitlab/embedded/service/gitlab-rails/public;
+    gzip_static on; # to serve pre-gzipped version
+    expires max;
+    add_header Cache-Control public;
   }
 
   error_page 502 /502.html;
 }
 ```
-
-For a typical Passenger installation this file should probably
-be located at `/etc/nginx/sites-available/gitlab` and symlinked to
-`/etc/nginx/sites-enabled/gitlab`.
-
-#### Gitlab CI
-
-```
-upstream gitlab_ci {
-  server unix:/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket;
-}
-
-server {
-  listen *:80;
-  server_name ci.example.com;
-  server_tokens off;
-  root /opt/gitlab/embedded/service/gitlab-ci/public;
-
-  client_max_body_size 250m;
-
-  access_log  /var/log/gitlab/nginx/gitlab_ci_access.log;
-  error_log   /var/log/gitlab/nginx/gitlab_ci_error.log;
-
-  location / {
-    ## Serve static files from defined root folder.
-    ## @gitlab_ci is a named location for the upstream fallback, see below.
-    try_files $uri $uri/index.html $uri.html @gitlab_ci;
-  }
-
-  ## If a file, which is not found in the root folder is requested,
-  ## then the proxy passes the request to the upsteam (gitlab-ci unicorn).
-  location @gitlab_ci {
-    ## https://github.com/gitlabhq/gitlabhq/issues/694
-    ## Some requests take more than 30 seconds.
-    proxy_read_timeout      300;
-    proxy_connect_timeout   300;
-    proxy_redirect          off;
-
-    proxy_set_header   X-Forwarded-Proto $scheme;
-    proxy_set_header   Host              $http_host;
-    proxy_set_header   X-Real-IP         $remote_addr;
-    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-    proxy_set_header   X-Frame-Options   SAMEORIGIN;
-
-    proxy_pass http://gitlab_ci;
-  }
-
-}
-```
-
-For a typical Passenger installation this file should probably
-be located at `/etc/nginx/sites-available/gitlab_ci` and symlinked to
-`/etc/nginx/sites-enabled/gitlab_ci`.
 
 #### Warning
 
@@ -414,7 +381,9 @@ Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to :
 
 - [bundled Gitlab Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
-- [bundled Gitlab CI Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-ci-http.conf.erb)
 
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
+
+[recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
+[selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications
