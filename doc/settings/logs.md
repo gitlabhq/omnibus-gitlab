@@ -91,10 +91,9 @@ By default the NGINX access logs will use the 'combined' NGINX
 format, see
 http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format .
 If you want to use a custom log format string you can specify it
-in gitlab.rb.
+in `/etc/gitlab/gitlab.rb`.
 
 ```
 nginx['log_format'] = 'my format string $foo $bar'
-ci_nginx['log_format'] = 'my format string $foo $bar'
 mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ```

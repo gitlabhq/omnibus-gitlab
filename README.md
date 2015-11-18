@@ -16,12 +16,12 @@ The documentation overview is in the [readme in the doc directory](doc/README.md
 
 ## Omnibus fork
 
-Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus). Fork is located at [gitlab.com](https://gitlab.com/gitlab-org/omnibus).
+Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus).
+Fork is located at [gitlab.com](https://gitlab.com/gitlab-org/omnibus).
 
 ## GitLab CI
 
-To setup GitLab CI please see the [separate GitLab CI
-documentation](doc/gitlab-ci/README.md).
+To setup GitLab CI please see the [separate GitLab CI documentation](doc/gitlab-ci/README.md).
 
 ## Installation
 
@@ -29,10 +29,11 @@ Please follow the steps on the [downloads page][downloads].
 
 ### After installation
 
-Your GitLab instance should reachable over HTTP at the IP or hostname of your server.
-You can login as an admin user with username `root` and password `5iveL!fe`.
+Your GitLab instance should reachable over HTTP at the IP or hostname of your
+server. You can login as an admin user with username `root` and password `5iveL!fe`.
 
-See [doc/maintenance/README.md](doc/maintenance/README.md) for useful commands to control/debug your GitLab instance.
+See [doc/maintenance/README.md](doc/maintenance/README.md) for useful commands
+to control/debug your GitLab instance.
 
 ### Configuration options
 
@@ -122,7 +123,8 @@ See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omn
 
 ### Updating
 
-Instructions for updating your Omnibus installation and upgrading from a manual installation are in the [update doc](doc/update/README.md).
+Instructions for updating your Omnibus installation and upgrading from a manual
+installation are in the [update doc](doc/update/README.md).
 
 ### Uninstalling omnibus-gitlab
 
@@ -262,8 +264,10 @@ Depending on your platform, `gitlab-ctl reconfigure` will install SELinux
 modules required to make GitLab work. These modules are listed in
 [files/gitlab-selinux/README.md](files/gitlab-selinux/README.md).
 
-NSA, if you're reading this, we'd really appreciate it if you could contribute back a SELinux profile for omnibus-gitlab :)
-Of course, if anyone else is reading this, you're welcome to contribute the SELinux profile too.
+NSA, if you're reading this, we'd really appreciate it if you could contribute
+back a SELinux profile for omnibus-gitlab :)
+Of course, if anyone else is reading this, you're welcome to contribute the
+SELinux profile too.
 
 ### Logs
 
