@@ -20,7 +20,7 @@ database you should create a backup before attempting this procedure.
 
 First, set up your database server according to the [upstream GitLab
 instructions](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#5-database).
-For manual GitLab CI database setup instructions see [the GitLab CI manual installation instructions](https://gitlab.com/gitlab-org/gitlab-ci/blob/master/doc/install/installation.md#4-prepare-the-database).
+
 If you want to keep using an existing GitLab database you can skip this step.
 
 ### Configure omnibus-gitlab to connect to it
@@ -59,14 +59,8 @@ following command to import the schema and create the first admin user:
 sudo gitlab-rake gitlab:setup
 ```
 
-You can manually seed the GitLab CI database with the following command:
-
-```shell
-# Remove 'sudo' if you are the 'gitlab-ci' user
-sudo gitlab-ci-rake setup
-```
-
-If you want to specify a password for the default `root` user, in `gitlab.rb` specify the `initial_root_password` setting:
+If you want to specify a password for the default `root` user, in `gitlab.rb`
+specify the `initial_root_password` setting:
 
 ```ruby
 gitlab_rails['initial_root_password'] = 'nonstandardpassword'

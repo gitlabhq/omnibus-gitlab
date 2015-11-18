@@ -22,26 +22,12 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
-## GitLab CI
-
-To change GitLab CI email configuration (e.g. use SMTP), use `gitlab_ci` instead
-of `gitlab_rails`.
-
-```ruby
-# in /etc/gitlab/gitlab.rb
-gitlab_ci['gitlab_ci_email_from'] = 'gitlab-ci@example.com'
-gitlab_ci['smtp_enable'] = true
-gitlab_ci['smtp_address'] = "smtp.server"
-# etc.
-```
-
 ## Example configuration
 ### SMTP on localhost
 This configuration, which simply enables SMTP and otherwise uses the default settings, can be used for an MTA running on localhost that does not provide a `sendmail` interface or that provides a `sendmail` interface that is incompatible with GitLab, such as Exim.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
-gitlab_ci['smtp_enable'] = true
 ```
 
 ### Gmail
@@ -92,4 +78,5 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ### More examples are welcome
 
-If you have figured out an example configuration yourself please send a merge request to save other people time.
+If you have figured out an example configuration yourself please send a Merge
+Request to save other people time.
