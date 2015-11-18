@@ -1,6 +1,5 @@
 # Maintenance commands
 
-
 ## After installation
 
 ### Get service status
@@ -61,19 +60,17 @@ Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
 ### Invoking Rake tasks
 
-To invoke a GitLab Rake task, use `gitlab-rake` (for GitLab) or
-`gitlab-ci-rake` (for GitLab CI). For example:
+To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 
 ```shell
 sudo gitlab-rake gitlab:check
-sudo gitlab-ci-rake -T
 ```
 
-Leave out 'sudo' if you are the 'git' user or the 'gitlab-ci' user.
+Leave out 'sudo' if you are the 'git' user.
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
-`gitlab-rake` and `gitlab-ci-rake` wrapper scripts.
+`gitlab-rake` wrapper script.
 
 ### Starting a Rails console session
 
@@ -84,9 +81,6 @@ to inadvertently modify, corrupt or destroy data from the console.
 ```shell
 # start a Rails console for GitLab
 sudo gitlab-rails console
-
-# start a Rails console for GitLab CI
-sudo gitlab-ci-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.

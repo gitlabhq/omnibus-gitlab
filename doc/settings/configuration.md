@@ -6,7 +6,6 @@ GitLab and GitLab CI are configured by setting their relevant options in
 New installations starting from GitLab 7.6, will have
 all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
-
 ### Configuring the external URL for GitLab
 
 In order for GitLab to display correct repository clone links to your users
@@ -140,14 +139,11 @@ git
 # Web server user (required)
 gitlab-www
 
-# Redis user for GitLab or GitLab CI (only when using packaged Redis)
+# Redis user for GitLab (only when using packaged Redis)
 gitlab-redis
 
 # Postgresql user (only when using packaged Postgresql)
 gitlab-psql
-
-# GitLab CI user (only when using GitLab CI)
-gitlab-ci
 
 # GitLab Mattermost user (only when using GitLab Mattermost)
 mattermost
@@ -162,14 +158,11 @@ git
 # Web server group (required)
 gitlab-www
 
-# Redis group for GitLab or GitLab CI (only when using packaged Redis)
+# Redis group for GitLab (only when using packaged Redis)
 gitlab-redis
 
 # Postgresql group (only when using packaged Postgresql)
 gitlab-psql
-
-# GitLab CI group (only when using GitLab CI)
-gitlab-ci
 
 # GitLab Mattermost group (only when using GitLab Mattermost)
 mattermost
