@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Added lfs config settings 4e365f159e3c70aa1aa3a578bb7440e27fcdc179
 - Rename gitlab-git-http-server to gitlab-workhorse 47afb19142fcb68d5c35645a1efa637f367e6f84
 - gitlab-workhorse version 0.4.2 3b66c9be19e5718d3e92df3a32df4edaea0d85c2
+- Fix docker image pushing
 
 8.1.3
 
