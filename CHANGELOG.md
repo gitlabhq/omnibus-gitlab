@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Rename gitlab-git-http-server to gitlab-workhorse 47afb19142fcb68d5c35645a1efa637f367e6f84
 - Updated chef version to 12.5.1 (Jayesh Mistry) 814263c9ecdd3e6a95148dfdb15867468ef43c7e
 - gitlab-workhorse version 0.4.2 3b66c9be19e5718d3e92df3a32df4edaea0d85c2
+- Fix docker image pushing
 
 8.1.3
 

@@ -6,6 +6,8 @@ The GitLab EE docker image is [available on Docker Hub](https://registry.hub.doc
 
 To use GitLab EE instead of GitLab CE replace image name to `gitlab/gitlab-ee:latest`.
 
+If you want to use latest RC image as image name use `gitlab/gitlab-ce:rc` or `gitlab/gitlab-ee:rc`.
+
 ## Run the image
 
 Run the image:
