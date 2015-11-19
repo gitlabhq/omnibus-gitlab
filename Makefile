@@ -92,8 +92,15 @@ docker_push:
 	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
 docker_push_latest:
+	# push as :rc tag first, if it's stable it overwrites the :rc
+	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
+	docker push gitlab/$(RELEASE_PACKAGE):rc
+
+ifeq (,$(findstring rc,$(RELEASE_VERSION)))
+	# push as :latest tag, the :latest is always the latest stable release
 	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
 	docker push gitlab/$(RELEASE_PACKAGE):latest
+endif
 
 do_docker_master: 
 ifdef NIGHTLY
