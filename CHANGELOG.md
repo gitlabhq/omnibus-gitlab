@@ -3,16 +3,22 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.2.0 (Unreleased)
+8.2.1
+
+- Expose artifacs configuration options 4aca77a5ae78a836cc9f3be060afacc3c4e72a28
+- Display deploy page on all pages b362ee7d70851c291ff0d090fd75ef550c5c5baa
+
+8.2.0
 
 - Skip builds directory backup in preinstall 1bfbf440866e0834f133e305f7659df1ee1c9e8a
-- GitLab Mattermost version 1.2.0, few default settings changed 7536581bb0cd0cf44fa821ad1d6a5f67175e7a83
+- GitLab Mattermost version 1.2.1, few default settings changed 34a3a366eb9b6e5deb8117bcf4430659c0fb7ecc
 - Refactor mailroom into a separate service 959c1b3f437d49eb1a173dea5d6d5ca3d79cd098
 - Update nginx config for artifacts and lfs 4e365f159e3c70aa1aa3a578bb7440e27fcdc179
 - Added lfs config settings 4e365f159e3c70aa1aa3a578bb7440e27fcdc179
 - Rename gitlab-git-http-server to gitlab-workhorse 47afb19142fcb68d5c35645a1efa637f367e6f84
+- Updated chef version to 12.5.1 (Jayesh Mistry) 814263c9ecdd3e6a95148dfdb15867468ef43c7e
 - gitlab-workhorse version 0.4.2 3b66c9be19e5718d3e92df3a32df4edaea0d85c2
-- Fix docker image pushing
+- Fix docker image pushing when package is RC 99bad0cf400460ade2b2360a1e4e19605539a6c9
 
 8.1.3
 

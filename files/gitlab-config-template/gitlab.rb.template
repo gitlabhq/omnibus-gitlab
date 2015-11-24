@@ -176,7 +176,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # git_data_dir "/var/opt/gitlab/git-data"
 
 
-## For storing GitLab application data like artifacts, LFS objects
+## For storing GitLab application uploads
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
 # DEPRECATED: gitlab_rails['satellites_timeout'] = 30
