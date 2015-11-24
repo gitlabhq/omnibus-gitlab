@@ -42,7 +42,6 @@ gitlab_group = account_helper.gitlab_group
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   gitlab_ci_builds_dir,
-  node['gitlab']['gitlab-rails']['backup_path'],
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   node['gitlab']['gitlab-rails']['shared_path'],
   node['gitlab']['gitlab-rails']['artifacts_path'],
