@@ -152,7 +152,7 @@ module Gitlab
     end
 
     def parse_shared_dir
-      Gitlab['gitlab_rails']['shared_path'] ||= node['gitlab']['gitlab']['shared_path']
+      Gitlab['gitlab_rails']['shared_path'] ||= node['gitlab']['gitlab-rails']['shared_path']
     end
 
     def parse_artifacts_dir
