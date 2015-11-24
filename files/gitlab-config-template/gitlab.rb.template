@@ -62,6 +62,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # gitlab_rails['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 
+## Build Artifacts
+# gitlab_rails['artifacts_enabled'] = true
+# gitlab_rails['artifacts_path'] = "/mnt/storage/artifacts"
+
 ## Git LFS
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
@@ -171,7 +175,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## a path that doesn't contain symlinks.
 # git_data_dir "/var/opt/gitlab/git-data"
 
-## For storing GitLab application data like artifacts, LFS objects
+## For storing GitLab application uploads
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
 # DEPRECATED: gitlab_rails['satellites_timeout'] = 30

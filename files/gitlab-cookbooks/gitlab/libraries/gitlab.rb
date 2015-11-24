@@ -151,6 +151,18 @@ module Gitlab
       Gitlab['gitlab_rails']['satellites_path'] ||= File.join(git_data_dir, "gitlab-satellites")
     end
 
+    def parse_shared_dir
+      Gitlab['gitlab_rails']['shared_path'] ||= node['gitlab']['gitlab-rails']['shared_path']
+    end
+
+    def parse_artifacts_dir
+      Gitlab['gitlab_rails']['artifacts_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'artifacts')
+    end
+
+    def parse_lfs_objects_dir
+      Gitlab['gitlab_rails']['lfs_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'lfs-objects')
+    end
+
     def parse_udp_log_shipping
       return unless logging['udp_log_shipping_host']
 
@@ -420,6 +432,9 @@ module Gitlab
       parse_gitlab_git_http_server
       parse_external_url
       parse_git_data_dir
+      parse_shared_dir
+      parse_artifacts_dir
+      parse_lfs_objects_dir
       parse_udp_log_shipping
       parse_redis_settings
       parse_postgresql_settings
