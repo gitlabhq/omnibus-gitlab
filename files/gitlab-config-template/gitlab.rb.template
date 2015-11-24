@@ -62,6 +62,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # gitlab_rails['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 
+## Build Artifacts
+# gitlab_rails['artifacts_enabled'] = true
+# gitlab_rails['artifacts_path'] = "/mnt/storage/artifacts"
+
 ## Git LFS
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"

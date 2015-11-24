@@ -107,6 +107,12 @@ production: &base
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: <%= single_quote(@incoming_email_mailbox_name) %>
 
+  ## Build Artifacts
+  artifacts:
+    enabled: <%= @artifacts_enabled %>
+    # The location where Build Artifacts are stored (default: shared/artifacts).
+    storage_path: <%= @artifacts_path %>
+
   ## Git LFS
   lfs:
     enabled: <%= @lfs_enabled %>
