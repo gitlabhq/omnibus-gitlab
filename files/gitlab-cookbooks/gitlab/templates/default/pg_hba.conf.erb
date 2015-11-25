@@ -75,5 +75,6 @@ host    all         all         <%= cidr %>           trust
 
 <% node['gitlab']['postgresql']['md5_auth_cidr_addresses'].each do |cidr| %>
 host    all         all         <%= cidr %>           md5
+host    replication <%= node['gitlab']['postgresql']['sql_replication_user'] %> <%= cidr %>     md5
 <% end %>
 
