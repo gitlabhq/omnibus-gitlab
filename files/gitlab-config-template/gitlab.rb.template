@@ -341,6 +341,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['shutdown_timeout'] = 4
+# sidekiq['concurrency'] = 25
 
 
 ################

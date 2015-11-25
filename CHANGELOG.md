@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.3.0
+
+- Add sidekiq concurrency setting
+
 8.2.1
 
 - Expose artifacs configuration options 4aca77a5ae78a836cc9f3be060afacc3c4e72a28

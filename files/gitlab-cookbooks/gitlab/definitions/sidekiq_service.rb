@@ -35,6 +35,7 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
       :rails_app => rails_app,
       :user => user,
       :shutdown_timeout => node['gitlab'][svc]['shutdown_timeout'],
+      :concurrency => node['gitlab'][svc]['concurrency'],
       :log_directory => sidekiq_log_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)

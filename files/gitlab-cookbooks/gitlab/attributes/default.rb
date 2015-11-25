@@ -255,6 +255,7 @@ default['gitlab']['sidekiq']['enable'] = true
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 4
+default['gitlab']['sidekiq']['concurrency'] = 25
 
 
 ###
