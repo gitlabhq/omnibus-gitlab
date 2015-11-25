@@ -36,6 +36,15 @@ gitlab_app = "gitlab"
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
 
+# Explicitly try to create directory holding the logs to make sure
+# that the directory is created with correct permissions and not fallback
+# on umask of the process
+directory File.dirname(gitlab_rails_log_dir) do
+  owner gitlab_user
+  mode '0755'
+  recursive true
+end
+
 [
   gitlab_rails_etc_dir,
   gitlab_rails_static_etc_dir,
