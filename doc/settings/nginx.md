@@ -118,6 +118,8 @@ will have to perform the following steps:
 
     *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
 
+    *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
+
 1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
 
     *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
