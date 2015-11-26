@@ -43,7 +43,13 @@ mattermost_external_url 'http://mattermost.example.com'
 
 # Tell GitLab Mattermost to integrate with gitlab.example.com
 
-mattermost['oauth'] = {'gitlab' => {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "http://gitlab.example.com/oauth/authorize", "TokenEndpoint" => "http://gitlab.example.com/oauth/token", "UserApiEndpoint" => "http://gitlab.example.com/api/v3/user" }}
+mattermost['gitlab_enable'] = true
+mattermost['gitlab_secret'] = "123456789"
+mattermost['gitlab_id'] = "12345656"
+mattermost['gitlab_scope'] = ""
+mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
+mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
+mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v3/user"
 
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
@@ -66,8 +72,15 @@ Now, go to the GitLab server and edit the `/etc/gitlab/gitlab.rb` configuration 
 In `gitlab.rb` use the values you've received above:
 
 ```
-mattermost['oauth'] = {'gitlab' => {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "http://gitlab.example.com/oauth/authorize", "TokenEndpoint" => "http://gitlab.example.com/oauth/token", "UserApiEndpoint" => "http://gitlab.example.com/api/v3/user" }}
+mattermost['gitlab_enable'] = true
+mattermost['gitlab_secret'] = "123456789"
+mattermost['gitlab_id'] = "12345656"
+mattermost['gitlab_scope'] = ""
+mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
+mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
+mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v3/user"
 ```
+
 Save the changes and then run `sudo gitlab-ctl reconfigure`.
 
 If there are no errors your GitLab and GitLab Mattermost should be configured correctly.
