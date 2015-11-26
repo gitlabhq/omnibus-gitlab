@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: dc6b89b2effdefcabf3d8d622bbc220253c7ae81
+  revision: fd95fde3ecc3fb67ea183a84c4fb66be1739feb4
   branch: upgrade_omnibus_version
   specs:
-    omnibus (4.1.0)
+    omnibus (5.0.0)
       aws-sdk (~> 2)
       chef-sugar (~> 3.0)
       cleanroom (~> 1.0)
