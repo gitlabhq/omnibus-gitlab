@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: fd95fde3ecc3fb67ea183a84c4fb66be1739feb4
-  branch: upgrade_omnibus_version
+  revision: a20b6cad63d08b5a465362e4f34ac49dbe6f8100
+  branch: gitlab_omnibus
   specs:
     omnibus (5.0.0)
       aws-sdk (~> 2)
