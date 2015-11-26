@@ -18,4 +18,5 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
     -q default \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
-    -t <%= @options[:shutdown_timeout] %>
+    -t <%= @options[:shutdown_timeout] %> \
+    -c <%= @options[:concurrency] %>
