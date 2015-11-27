@@ -20,31 +20,18 @@ main() {
   gitlab_workhorse_oid=$(fetch_oid gitlab_workhorse)
   assert_non_empty gitlab_workhorse_oid
 
-  set_source_and_version gitlab_rails config/software/gitlab-rails.rb
-  set_source_and_version gitlab_shell config/software/gitlab-shell.rb
-  set_source_and_version gitlab_workhorse config/software/gitlab-workhorse.rb
+  set_source_and_version $gitlab_rails_ref GITLAB_VERSION
+  set_source_and_version $gitlab_shell_ref GITLAB_SHELL_VERSION
 }
 
-# set_source_and_version foo file.rb
-# Will look for variables $foo_ref, $foo_repo and $foo_oid. Fills them in in
-# file.rb.
+# set_source_and_version foo_ref file
+# Will look for variable $foo_ref. Adds it to
+# file.
 set_source_and_version() {
-  # Change (c) the first line starting with 'default_version '. Jump back to
-  # the beginning of the file with '1'. Change the first line starting with
-  # 'source '.
-  ed -s "$2" <<EOF
-H
-/^default_version /c
-default_version "$(eval echo \$${1}_oid)" # $(eval echo \$${1}_ref)
-.
-1
-/^source /c
-source :git => "$(eval echo \$${1}_repo)"
-.
-wq
-EOF
+  echo "$1" > "$2"
+
   if [ $? -ne 0 ] ; then
-    warn "Error: ed -s $2 failed"
+    warn "Error: adding to $2 failed"
     exit 1
   fi
 }

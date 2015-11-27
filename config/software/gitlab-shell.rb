@@ -16,15 +16,15 @@
 ##
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("GITLAB_SHELL_VERSION").print
+version = Gitlab::Version.new("GITLAB_SHELL_VERSION")
 
 name "gitlab-shell"
-default_version version
+default_version version.print
 
 dependency "ruby"
 dependency "rsync"
 
-source :git => "git@dev.gitlab.org:gitlab/gitlab-shell.git"
+source :git => version.remote
 
 build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
