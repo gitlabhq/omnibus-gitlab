@@ -10,7 +10,7 @@ module Gitlab
       @read_version = ""
     end
 
-    def version
+    def print
       if @read_version.include?('.pre')
         "master"
       elsif @read_version.empty?

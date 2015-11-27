@@ -15,10 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = Gitlab::Version.new("GITLAB_VERSION")
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+version = Gitlab::Version.new("GITLAB_VERSION").print
 
 name "gitlab-rails"
-default_version "v#{version}"
+default_version version
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 

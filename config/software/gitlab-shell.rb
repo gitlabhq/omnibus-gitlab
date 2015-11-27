@@ -15,10 +15,11 @@
 ## limitations under the License.
 ##
 #
-version = Gitlab::Version.new("GITLAB_SHELL_VERSION")
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+version = Gitlab::Version.new("GITLAB_SHELL_VERSION").print
 
 name "gitlab-shell"
-default_version "v#{version}"
+default_version version
 
 dependency "ruby"
 dependency "rsync"
