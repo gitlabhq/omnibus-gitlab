@@ -15,9 +15,10 @@
 ## limitations under the License.
 ##
 #
+version = Gitlab::Version.new("GITLAB_SHELL_VERSION")
 
 name "gitlab-shell"
-default_version "master" # Nightly build
+default_version "v#{version}"
 
 dependency "ruby"
 dependency "rsync"

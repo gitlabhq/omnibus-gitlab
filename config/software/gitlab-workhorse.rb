@@ -14,9 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+version = Gitlab::Version.new("GITLAB_WORKHORSE_VERSION")
 
 name "gitlab-workhorse"
-default_version "master" # Nightly build
+default_version version
 
 source :git => "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
 

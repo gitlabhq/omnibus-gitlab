@@ -15,9 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+version = Gitlab::Version.new("GITLAB_VERSION")
 
 name "gitlab-rails"
-default_version "master" # Nightly build
+default_version "v#{version}"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
