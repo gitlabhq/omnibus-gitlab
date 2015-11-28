@@ -76,6 +76,21 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+### 126 Email
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.126.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_user_name'] = "your_email@126.com"
+gitlab_rails['smtp_password'] = "your_smtp_authorization_code"
+gitlab_rails['smtp_domain'] = "126.com"
+gitlab_rails['smtp_authentication'] = :login
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = 'your_email@126.com'
+user["git_user_email"] = "your_email@126.com"
+
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
