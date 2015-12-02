@@ -8,7 +8,7 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
   -U <%= @options[:user] %> -u <%= @options[:user] %> \
   /opt/gitlab/embedded/bin/bundle exec sidekiq \
     -q post_receive \
-    -q mailer \
+    -q mailers \
     -q archive_repo \
     -q system_hook \
     -q project_web_hook \
