@@ -176,21 +176,51 @@ There is a reported workaround described in [this issue](https://gitlab.com/gitl
 
 ### I am unable to install omnibus-gitlab without root access
 
-Occasionally people ask if they can install GitLab without root access. This is
-not possible because GitLab uses multiple system users (privilege separation)
-for security reasons. The `gitlab-ctl reconfigure` script needs root access to
-create/manage these users and the files they have access to.
+Occasionally people ask if they can install GitLab without root access.
+This is problematic for several reasons.
 
-Once GitLab is up an running on your system, you will see that several
-processes run as root, for instance the 'runsv' and 'runsvdir' processes
-(Runit) and the NGINX master process. Runit is a process supervisor that
-manages the different GitLab services for you. Because those services run as
-different users (privilege separation), and Runit needs to manage all of those
-services, Runit itself needs root. NGINX (the front-end web server) has its own
-built-in process supervision and privilege separation. It has a 'master'
-process running as root that can open privileged TCP ports (80/443) and files
-(SSL certificates), while pushing the risky business of handling web requests
-to 'worker' processes running as gitlab-www.
+#### Installing the .deb or .rpm
+
+To our knowledge there is no clean way to install Debian or RPM
+packages as a non-privileged user. You cannot omnibus-gitlab RPM's
+because the Omnibus build process does not create source RPM's.
+
+#### Hassle-free hosting on port 80 and 443
+
+The most common way to deploy GitLab is to have a web server
+(NGINX/Apache) running on the same server as GitLab, with the web
+server listening on a privileged (below-1024) TCP port. In
+omnibus-gitlab we provide this convenience by bundling an
+automatically configured NGINX service that needs to run its master
+process as root to open ports 80 and 443.
+
+If this is problematic, administrators installing GitLab can disable
+the bundled NGINX service, but this puts the burden on them to keep
+the NGINX configuration in tune with GitLab during application
+updates.
+
+#### Isolation between Omnibus services
+
+Bundled services in omnibus-gitlab (GitLab itself, NGINX, Postgres,
+Redis, Mattermost) are isolated from eachother using Unix user
+accounts. Creating and managing these user accounts requires root
+access. By default, omnibus-gitlab will create the required Unix
+accounts during 'gitlab-ctl reconfigure' but that behavior can be
+[disabled](http://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
+
+In principle omnibus-gitlab could do with only 2 user accounts (one
+for GitLab and one for Mattermost) if we give each application its own
+Runit (runsvdir), Postgres and Redis process. But this would be a
+major change in the 'gitlab-ctl reconfigure' Chef code and it would
+probably create major upgrade pain for all existing omnibus-gitlab
+installations. (We would probably have to rearrange the directory
+structure under /var/opt/gitlab.)
+
+#### Tweaking the operating system for better performance
+
+During 'gitlab-ctl reconfigure' we set and install several sysctl
+tweaks to improve Postgres performance and increase connection limits.
+This can only be done with root access.
 
 ### gitlab-rake assets:precompile fails with 'Permission denied'
 
