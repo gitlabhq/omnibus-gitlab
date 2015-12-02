@@ -68,6 +68,7 @@ production: &base
       wiki: <%= @gitlab_default_projects_features_wiki %>
       snippets: <%= @gitlab_default_projects_features_snippets %>
       visibility_level: <%= single_quote(@gitlab_default_projects_features_visibility_level) %>  # can be "private" | "internal" | "public"
+      builds: <%= @gitlab_default_projects_features_builds %>
 
     ## Webhook settings
     # Number of seconds to wait for HTTP response after sending webhook HTTP POST request (default: 10)
