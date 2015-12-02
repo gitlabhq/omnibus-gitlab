@@ -39,10 +39,9 @@ Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is in
 
 ### Storing Git data in an alternative directory
 
-By default, omnibus-gitlab stores Git repository data under
-`/var/opt/gitlab/git-data`: repositories are stored in
-`/var/opt/gitlab/git-data/repositories`, and satellites in
-`/var/opt/gitlab/git-data/gitlab-satellites`.  You can change the location of
+By default, omnibus-gitlab stores the Git repository data under
+`/var/opt/gitlab/git-data`. The repositories are stored in a subfolder
+`repositories`. You can change the location of
 the `git-data` parent directory by adding the following line to
 `/etc/gitlab/gitlab.rb`.
 
@@ -61,8 +60,7 @@ can move them to the new location as follows:
 # Prevent users from writing to the repositories while you move them.
 sudo gitlab-ctl stop
 
-# Only move 'repositories'; 'gitlab-satellites' will be recreated
-# automatically. Note there is _no_ slash behind 'repositories', but there _is_ a
+# Note there is _no_ slash behind 'repositories', but there _is_ a
 # slash behind 'git-data'.
 sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
 
