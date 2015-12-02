@@ -210,6 +210,38 @@ high_availability['mountpoint'] = '/var/opt/gitlab'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+## Using self signed certificate or custom certificate authorities
+
+Omnibus-gitlab is shipped with the official [CAcert.org][] collection of trusted root certification authorities which are used to verify certificate authenticity.
+
+If you are installing GitLab in an isolated network with custom certificate authorities or using self signed certificate make sure that the certificate can be reached by GitLab. Not doing so will cause errors like:
+
+```bash
+Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed)
+```
+
+when GitLab tries to connect with the internal services like gitlab-shell, GitLab CI, web hooks, or system hooks.
+
+To install individual certificates you need to:
+
+1. Run `sudo mkdir -m 755 -p /etc/gitlab/CA` and place your certificates files in `/etc/gitlab/CA`
+1. Fix permissions on certificates files: `sudo chmod uog+r /etc/gitlab/CA/*`
+1. Create the hash-based symlink to the newly created certificates files:
+
+  ```
+  sudo nano /opt/gitlab/embedded/ssl/certs/certlink.sh
+  # Paste from https://gitlab.com/snippets/6285
+  sudo chmod +x /opt/gitlab/embedded/ssl/certs/certlink.sh
+  cd /opt/gitlab/embedded/ssl/certs/
+  sudo ./certlink.sh /etc/gitlab/CA/*
+  ```
+
+After the custom certificates are symlinked the errors should be gone and your custom certificates preserved on GitLab upgrades.
+
+Make sure to backup the certificates as GitLab is not backing up `/etc/gitlab/` contents. See [backups](doc/settings/backups.md) for suggested configuration backup strategies.
+
+If you are using self-signed certificate do not forget to set `self_signed_cert: true` for gitlab-shell, see [gitlab.rb.template][] for more details.
+
 ### Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](ldap.md).
