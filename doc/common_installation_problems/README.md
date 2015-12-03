@@ -182,8 +182,8 @@ This is problematic for several reasons.
 #### Installing the .deb or .rpm
 
 To our knowledge there is no clean way to install Debian or RPM
-packages as a non-privileged user. You cannot omnibus-gitlab RPM's
-because the Omnibus build process does not create source RPM's.
+packages as a non-privileged user. You cannot install omnibus-gitlab
+RPM's because the Omnibus build process does not create source RPM's.
 
 #### Hassle-free hosting on port 80 and 443
 
@@ -202,7 +202,7 @@ updates.
 #### Isolation between Omnibus services
 
 Bundled services in omnibus-gitlab (GitLab itself, NGINX, Postgres,
-Redis, Mattermost) are isolated from eachother using Unix user
+Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, omnibus-gitlab will create the required Unix
 accounts during 'gitlab-ctl reconfigure' but that behavior can be
