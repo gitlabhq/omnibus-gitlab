@@ -10,6 +10,15 @@ omnibus-gitlab repository.
 - Updated omnibus to v5.0.0 18835f14453fd4fb834d228caf1bc1b37f1fe910
 - Change mailer to mailers sidekiq queue
 
+8.2.3
+
+- Add gitlab_default_projects_features_builds variable (Patrice Bouillet) e13556d33772c2d6b084d358ff67ea7da2c78a91
+
+8.2.2
+
+- Set client_max_body_size back to all required blocks 40047e09192686a739e2b7e52133885d192dab7c
+- Specific replication entry in pg_hba.conf for Postgresql replication 7e32b1f96aaebe810d320ade965244fc2352314e
+
 8.2.1
 
 - Expose artifacs configuration options 4aca77a5ae78a836cc9f3be060afacc3c4e72a28
