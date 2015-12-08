@@ -143,7 +143,8 @@ template gitlab_mattermost_http_conf do
    {
      :fqdn => node['gitlab']['mattermost']['host'],
      :port => node['gitlab']['mattermost']['port'],
-     :service_port => node['gitlab']['mattermost']['service_port']
+     :service_port => node['gitlab']['mattermost']['service_port'],
+     :service_address => node['gitlab']['mattermost']['service_address']
    }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

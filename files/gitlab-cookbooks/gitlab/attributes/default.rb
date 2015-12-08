@@ -600,6 +600,7 @@ default['gitlab']['mattermost']['log_file_level'] = 'ERROR'
 default['gitlab']['mattermost']['log_file_format'] = nil
 
 default['gitlab']['mattermost']['service_use_ssl'] = false
+default['gitlab']['mattermost']['service_address'] = "127.0.0.1"
 default['gitlab']['mattermost']['service_port'] = "8065"
 
 default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
