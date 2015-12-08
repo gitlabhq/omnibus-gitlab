@@ -23,6 +23,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_theme'] = 2
 # gitlab_rails['gitlab_restricted_visibility_levels'] = nil # to restrict public and internal: ['public', 'internal']
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
+# See http://doc.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)"
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
