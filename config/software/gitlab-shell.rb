@@ -17,7 +17,7 @@
 #
 
 name "gitlab-shell"
-default_version "master" # Nightly build
+default_version "6e965ecbe2b7a38463b4bc00910700dcc3704e85" # v2.6.8
 
 dependency "ruby"
 dependency "rsync"
