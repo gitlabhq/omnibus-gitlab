@@ -53,6 +53,8 @@ on_tag:
 purge:
 	# Force a new clone of gitlab-rails because we change remotes for CE/EE
 	rm -rf /var/cache/omnibus/src/gitlab-rails
+	# Avoid mysterious GitFetcher omnibus errors
+	rm -rf /var/cache/omnibus/src/gitlab-shell /var/cache/omnibus/src/gitlab-workhorse
 	# Force a new download of Curl's certificate bundle because it gets updated
 	# upstream silently once every while
 	rm -rf /var/cache/omnibus/cache/cacert.pem
