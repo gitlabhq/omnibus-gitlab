@@ -18,4 +18,6 @@ exec chpst -P \
       -listenUmask <%= node['gitlab']['gitlab-workhorse']['listen_umask'] %> \
       -listenAddr <%= node['gitlab']['gitlab-workhorse']['listen_addr'] %> \
       -authBackend <%= node['gitlab']['gitlab-workhorse']['auth_backend'] %> \
+      -authSocket <%= node['gitlab']['gitlab-workhorse']['auth_socket'] %> \
+      -documentRoot /opt/gitlab/embedded/service/gitlab-rails/public \
       -pprofListenAddr <%= node['gitlab']['gitlab-workhorse']['pprof_listen_addr'] %>
