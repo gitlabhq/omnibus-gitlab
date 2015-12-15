@@ -82,7 +82,6 @@ template gitlab_rails_http_conf do
     {
       :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
       :port => node['gitlab']['gitlab-rails']['gitlab_port'],
-      :socket => node['gitlab']['unicorn']['socket'],
       :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
       :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
       :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],

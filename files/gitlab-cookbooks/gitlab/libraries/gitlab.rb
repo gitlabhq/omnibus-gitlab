@@ -263,10 +263,12 @@ module Gitlab
     end
 
     def parse_unicorn_listen_address
-      # Make sure gitlab-workhorse can talk to unicorn
-      listen_address = unicorn['listen'] || node['gitlab']['unicorn']['listen']
-      listen_port = unicorn['port'] || node['gitlab']['unicorn']['port']
-      gitlab_workhorse['auth_backend'] ||= "http://#{listen_address}:#{listen_port}"
+      unicorn_socket = unicorn['socket'] || node['gitlab']['unicorn']['socket']
+      if gitlab_workhorse['auth_backend'].nil?
+        # The user has no custom settings for connecting workhorse to unicorn. Let's
+        # do what we think is best.
+        gitlab_workhorse['auth_socket'] = unicorn_socket 
+      end
     end
 
     def parse_nginx_listen_address
