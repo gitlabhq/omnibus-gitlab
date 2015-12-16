@@ -123,10 +123,10 @@ production: &base
   ## GitLab Pages
   pages:
     enabled: <%= @pages_enabled %>
-    domain: <%= @pages_domain %>
-    port: <%= @pages_port %>
-    https: <%= @pages_port %>
     path: <%= @pages_path %>
+    host: <%= @pages_host %>
+    port: <%= @pages_port %>
+    https: <%= @pages_https %>
 
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html

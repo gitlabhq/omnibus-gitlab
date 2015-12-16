@@ -141,14 +141,6 @@ module Gitlab
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port
     end
 
-    def parse_gitlab_pages
-      return unless Gitlab['gitlab_rails']['pages_enabled']
-
-      unless Gitlab['gitlab_rails']['pages_domain']
-        raise "GitLab Pages require a valid domain, e.g. example.com"
-      end
-    end
-
     def parse_git_data_dir
       return unless git_data_dir
 
@@ -364,7 +356,7 @@ module Gitlab
         raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
       end
 
-      Gitlab['gitlab_rails']['pages_domain'] = uri.host
+      Gitlab['gitlab_rails']['pages_host'] = uri.host
       Gitlab['gitlab_rails']['pages_port'] = uri.port
 
       case uri.scheme
@@ -481,7 +473,6 @@ module Gitlab
       generate_secrets(node_name)
       parse_gitlab_git_http_server
       parse_external_url
-      parse_gitlab_pages
       parse_git_data_dir
       parse_shared_dir
       parse_artifacts_dir
