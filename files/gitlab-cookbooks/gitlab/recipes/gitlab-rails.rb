@@ -55,7 +55,6 @@ end
   node['gitlab']['gitlab-rails']['shared_path'],
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
-  node['gitlab']['gitlab-rails']['pages_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
@@ -85,6 +84,13 @@ directory gitlab_ci_dir do
 end
 
 directory gitlab_rails_public_uploads_dir do
+  owner gitlab_user
+  group account_helper.web_server_group
+  mode '0750'
+  recursive true
+end
+
+directory node['gitlab']['gitlab-rails']['pages_path'] do
   owner gitlab_user
   group account_helper.web_server_group
   mode '0750'

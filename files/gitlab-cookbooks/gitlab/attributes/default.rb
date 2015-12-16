@@ -683,3 +683,9 @@ default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
 ####
 default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['mattermost-nginx']['enable'] = false
+
+####
+# GitLab Pages NGINX
+####
+default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['pages-nginx']['enable'] = true

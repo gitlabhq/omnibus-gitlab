@@ -58,7 +58,7 @@ gitlab_mattermost_enabled = if node['gitlab']['mattermost']['enable']
                               false
                             end
 
-gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enable']
+gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
                          node['gitlab']['pages-nginx']['enable']
                        else
                          false
@@ -106,6 +106,12 @@ end
 
 pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash
 
+if pages_nginx_vars['listen_https'].nil?
+  pages_nginx_vars['https'] = node['gitlab']['gitlab-rails']['pages_https']
+else
+  pages_nginx_vars['https'] = pages_nginx_vars['listen_https']
+end
+
 template gitlab_pages_http_conf do
   source "nginx-gitlab-pages-http.conf.erb"
   owner "root"
@@ -117,7 +123,7 @@ template gitlab_pages_http_conf do
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
-  action gitlab_rails_enabled ? :create : :delete
+  action gitlab_pages_enabled ? :create : :delete
 end
 
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash

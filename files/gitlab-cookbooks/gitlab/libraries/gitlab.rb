@@ -291,7 +291,7 @@ module Gitlab
         [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
         [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
         [%w{mattermost_nginx listen_port}, %w{mattermost port}],
-        [%w{pages_nginx listen_port}],
+        [%w{pages_nginx listen_port}, %w{gitlab_rails pages_port}],
 
       ].each do |left, right|
         if !Gitlab[left.first][left.last].nil?
@@ -348,7 +348,7 @@ module Gitlab
     def parse_pages_external_url
       return unless pages_external_url
 
-      gitlab_rails['pages_enable'] = true if gitlab_rails['pages_enable'].nil?
+      gitlab_rails['pages_enabled'] = true if gitlab_rails['pages_enabled'].nil?
 
       uri = URI(pages_external_url.to_s)
 
@@ -451,6 +451,7 @@ module Gitlab
         "nginx",
         "ci_nginx",
         "mattermost_nginx",
+        "pages_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
