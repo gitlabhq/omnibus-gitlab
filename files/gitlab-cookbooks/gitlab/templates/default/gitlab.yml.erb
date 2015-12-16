@@ -120,6 +120,14 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: <%= @lfs_storage_path %>
 
+  ## GitLab Pages
+  pages:
+    enabled: <%= @pages_enabled %>
+    domain: <%= @pages_domain %>
+    port: <%= @pages_port %>
+    https: <%= @pages_port %>
+    path: <%= @pages_path %>
+
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:

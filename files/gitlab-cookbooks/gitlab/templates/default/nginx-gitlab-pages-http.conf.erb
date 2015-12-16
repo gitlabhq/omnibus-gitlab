@@ -1,0 +1,78 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+## Lines starting with two hashes (##) are comments with information.
+## Lines starting with one hash (#) are configuration parameters that can be uncommented.
+##
+###################################
+##         configuration         ##
+###################################
+
+<% if @https && @redirect_http_to_https %>
+## Redirects all HTTP traffic to the HTTPS host
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
+<% end %>
+  server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  return 301 https://$host:<%= @port %>$request_uri;
+  access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_pages_error.log;
+}
+<% end %>
+
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl spdy<% end %>;
+<% end %>
+	server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  root <%= @pages_path %>/${group};
+
+	## Disable symlink traversal
+	disable_symlinks on;
+
+  <% if @https %>
+  ## Strong SSL Security
+  ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+  ssl on;
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+  <% if @ssl_client_certificate %>
+  ssl_client_certificate <%= @ssl_client_certificate%>;
+ 	<% end %>
+
+  # GitLab needs backwards compatible ciphers to retain compatibility with Java IDEs
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
+
+  <% if @ssl_dhparam %>
+  ssl_dhparam <%= @ssl_dhparam %>;
+  <% end %>
+  <% end %>
+
+  ## Individual nginx logs for this GitLab vhost
+  access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_pages_error.log;
+
+	# 1. Try to get /project/ to => shared/pages/${group}/public/ or index.html
+	# 2. Try to get / to => shared/pages/${group}/${host}/public/ or index.html
+	location ~ ^/([^/]*)(/.*)?$ {
+		try_files "/$1/public$2"
+							"/$1/public$2/index.html"
+							"/${host}/public/${uri}"
+							"/${host}/public/${uri}/index.html"
+							=404;
+	}
+
+	# Define custom error pages
+	error_page 403 /403.html;
+	error_page 404 /404.html;
+
+  <%= @custom_gitlab_server_config %>
+}

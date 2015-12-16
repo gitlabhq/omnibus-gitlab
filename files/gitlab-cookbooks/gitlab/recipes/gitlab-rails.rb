@@ -55,6 +55,7 @@ end
   node['gitlab']['gitlab-rails']['shared_path'],
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
+  node['gitlab']['gitlab-rails']['pages_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do

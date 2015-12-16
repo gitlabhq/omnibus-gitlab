@@ -100,6 +100,11 @@ default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
+default['gitlab']['gitlab-rails']['pages_enabled'] = false
+default['gitlab']['gitlab-rails']['pages_domain'] = nil
+default['gitlab']['gitlab-rails']['pages_port'] = nil
+default['gitlab']['gitlab-rails']['pages_https'] = false
+default['gitlab']['gitlab-rails']['pages_path'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
