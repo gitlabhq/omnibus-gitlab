@@ -119,6 +119,7 @@ template gitlab_pages_http_conf do
   mode "0644"
   variables(pages_nginx_vars.merge(
     {
+      pages_host: node['gitlab']['gitlab-rails']['pages_host'],
       pages_path: node['gitlab']['gitlab-rails']['pages_path'],
     }
   ))

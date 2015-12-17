@@ -373,9 +373,6 @@ module Gitlab
       unless ["", "/"].include?(uri.path)
         raise "Unsupported GitLab Pages external URL path: #{uri.path}"
       end
-
-      # FQDN are prepared to be used as regexp: the dot is escaped
-      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.sub('.', '\.')
     end
 
     def parse_mattermost_external_url
