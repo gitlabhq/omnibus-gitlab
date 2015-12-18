@@ -100,6 +100,11 @@ default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
+default['gitlab']['gitlab-rails']['pages_enabled'] = false
+default['gitlab']['gitlab-rails']['pages_host'] = nil
+default['gitlab']['gitlab-rails']['pages_port'] = nil
+default['gitlab']['gitlab-rails']['pages_https'] = false
+default['gitlab']['gitlab-rails']['pages_path'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
@@ -678,3 +683,9 @@ default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
 ####
 default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['mattermost-nginx']['enable'] = false
+
+####
+# GitLab Pages NGINX
+####
+default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['pages-nginx']['enable'] = true
