@@ -50,6 +50,7 @@ module Gitlab
   ci_sidekiq Mash.new
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
+  pages_nginx Mash.new
   mailroom Mash.new
   nginx Mash.new
   ci_nginx Mash.new
@@ -62,6 +63,7 @@ module Gitlab
   mattermost Mash.new
   node nil
   external_url nil
+  pages_external_url nil
   ci_external_url nil
   mattermost_external_url nil
   git_data_dir nil
@@ -156,11 +158,18 @@ module Gitlab
     end
 
     def parse_artifacts_dir
+      # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['artifacts_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'artifacts')
     end
 
     def parse_lfs_objects_dir
+      # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['lfs_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'lfs-objects')
+    end
+
+    def parse_pages_dir
+      # This requires the parse_shared_dir to be executed before
+      Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
     end
 
     def parse_udp_log_shipping
@@ -284,7 +293,8 @@ module Gitlab
       [
         [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
         [%w{ci_nginx listen_port}, %w{gitlab_ci gitlab_ci_port}],
-        [%w{mattermost_nginx listen_port}, %w{mattermost port}]
+        [%w{mattermost_nginx listen_port}, %w{mattermost port}],
+        [%w{pages_nginx listen_port}, %w{gitlab_rails pages_port}],
 
       ].each do |left, right|
         if !Gitlab[left.first][left.last].nil?
@@ -336,6 +346,39 @@ module Gitlab
       ci_sidekiq['enable'] = true if ci_sidekiq['enable'].nil?
       ci_redis['enable'] = true if ci_redis['enable'].nil?
       ci_nginx['enable'] = true if ci_nginx['enable'].nil?
+    end
+
+    def parse_pages_external_url
+      return unless pages_external_url
+
+      gitlab_rails['pages_enabled'] = true if gitlab_rails['pages_enabled'].nil?
+
+      uri = URI(pages_external_url.to_s)
+
+      unless uri.host
+        raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://pages.example.com/"
+      end
+
+      Gitlab['gitlab_rails']['pages_host'] = uri.host
+      Gitlab['gitlab_rails']['pages_port'] = uri.port
+
+      case uri.scheme
+      when "http"
+        Gitlab['gitlab_rails']['pages_https'] = false
+      when "https"
+        Gitlab['gitlab_rails']['pages_https'] = true
+        Gitlab['pages_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['pages_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+      else
+        raise "Unsupported GitLab Pages external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported GitLab Pages external URL path: #{uri.path}"
+      end
+
+      # FQDN are prepared to be used as regexp: the dot is escaped
+      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.sub('.', '\.')
     end
 
     def parse_mattermost_external_url
@@ -411,6 +454,7 @@ module Gitlab
         "nginx",
         "ci_nginx",
         "mattermost_nginx",
+        "pages_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
@@ -437,6 +481,7 @@ module Gitlab
       parse_shared_dir
       parse_artifacts_dir
       parse_lfs_objects_dir
+      parse_pages_dir
       parse_udp_log_shipping
       parse_redis_settings
       parse_postgresql_settings
@@ -444,6 +489,7 @@ module Gitlab
       # Parse ci_external_url _before_ gitlab_ci settings so that the user
       # can turn on gitlab_ci by only specifying ci_external_url
       parse_ci_external_url
+      parse_pages_external_url
       parse_mattermost_external_url
       parse_unicorn_listen_address
       parse_nginx_listen_address

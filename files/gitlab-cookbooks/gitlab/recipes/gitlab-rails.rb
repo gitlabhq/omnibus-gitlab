@@ -45,6 +45,14 @@ directory File.dirname(gitlab_rails_log_dir) do
   recursive true
 end
 
+# We create shared_path with 711 allowing other users to enter into the directories
+# It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
+directory node['gitlab']['gitlab-rails']['shared_path'] do
+  owner gitlab_user
+  mode '0711'
+  recursive true
+end
+
 [
   gitlab_rails_etc_dir,
   gitlab_rails_static_etc_dir,
@@ -52,7 +60,6 @@ end
   gitlab_rails_tmp_dir,
   gitlab_ci_builds_dir,
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
-  node['gitlab']['gitlab-rails']['shared_path'],
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
   gitlab_rails_log_dir
@@ -84,6 +91,13 @@ directory gitlab_ci_dir do
 end
 
 directory gitlab_rails_public_uploads_dir do
+  owner gitlab_user
+  group account_helper.web_server_group
+  mode '0750'
+  recursive true
+end
+
+directory node['gitlab']['gitlab-rails']['pages_path'] do
   owner gitlab_user
   group account_helper.web_server_group
   mode '0750'

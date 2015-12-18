@@ -15,6 +15,7 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
     -q gitlab_shell \
     -q incoming_email \
     -q common \
+    -q pages \
     -q default \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
