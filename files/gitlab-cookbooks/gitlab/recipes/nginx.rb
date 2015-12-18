@@ -42,6 +42,7 @@ end
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
+gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
 
 # If the service is enabled, check if we are using internal nginx
@@ -57,6 +58,12 @@ gitlab_mattermost_enabled = if node['gitlab']['mattermost']['enable']
                               false
                             end
 
+gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
+                         node['gitlab']['pages-nginx']['enable']
+                       else
+                         false
+                       end
+
 # Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
@@ -66,6 +73,11 @@ nginx_vars = node['gitlab']['nginx'].to_hash.merge({
 nginx_vars = nginx_vars.to_hash.merge!({
                :gitlab_mattermost_http_config => gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
              })
+
+# Include the config file for gitlab mattermost in nginx.conf later
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         :gitlab_pages_http_config => gitlab_pages_enabled ? gitlab_pages_http_conf : nil
+                                       })
 
 if nginx_vars['listen_https'].nil?
   nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
@@ -90,6 +102,28 @@ template gitlab_rails_http_conf do
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_rails_enabled ? :create : :delete
+end
+
+pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash
+
+if pages_nginx_vars['listen_https'].nil?
+  pages_nginx_vars['https'] = node['gitlab']['gitlab-rails']['pages_https']
+else
+  pages_nginx_vars['https'] = pages_nginx_vars['listen_https']
+end
+
+template gitlab_pages_http_conf do
+  source "nginx-gitlab-pages-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(pages_nginx_vars.merge(
+    {
+      pages_path: node['gitlab']['gitlab-rails']['pages_path'],
+    }
+  ))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action gitlab_pages_enabled ? :create : :delete
 end
 
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
