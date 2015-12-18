@@ -158,14 +158,17 @@ module Gitlab
     end
 
     def parse_artifacts_dir
+      # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['artifacts_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'artifacts')
     end
 
     def parse_lfs_objects_dir
+      # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['lfs_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'lfs-objects')
     end
 
     def parse_pages_dir
+      # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
     end
 
