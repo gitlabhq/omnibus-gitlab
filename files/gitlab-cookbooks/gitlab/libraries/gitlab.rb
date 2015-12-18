@@ -353,7 +353,7 @@ module Gitlab
       uri = URI(pages_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
+        raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://pages.example.com/"
       end
 
       Gitlab['gitlab_rails']['pages_host'] = uri.host
