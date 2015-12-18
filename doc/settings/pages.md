@@ -64,6 +64,18 @@ where `pages-nginx.crt` and `pages-nginx.key` are the SSL cert and key,
 respectively. Once the configuration is set, run `sudo gitlab-ctl reconfigure`
 for the changes to take effect.
 
+## Change storage path
+
+Pages are stored by default in `/var/opt/gitlab/gitlab-rails/shared/pages`.
+If you wish to store them in another location you must set it up in
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['pages_path'] = "/mnt/storage/pages"
+```
+
+Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
 [user-doc]: http://doc.gitlab.com/pages/README.md
 [ee-80]: https://gitlab.com/gitlab-org/gitlab-ee/merge_requests/80
 [wiki-wildcard-dns]: https://en.wikipedia.org/wiki/Wildcard_DNS_record
