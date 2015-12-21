@@ -646,9 +646,8 @@ default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
 default['gitlab']['mattermost']['email_smtp_port'] = nil
 default['gitlab']['mattermost']['email_connection_security'] = nil
-default['gitlab']['mattermost']['email_apple_push_server'] = nil
-default['gitlab']['mattermost']['email_apple_push_cert_public'] = nil
-default['gitlab']['mattermost']['email_apple_push_cert_private'] = nil
+default['gitlab']['mattermost']['email_send_push_notifications'] = false
+default['gitlab']['mattermost']['email_push_notification_server'] = nil
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10

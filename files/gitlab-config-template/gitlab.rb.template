@@ -753,9 +753,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_connection_security'] = nil
 # mattermost['email_feedback_name'] = nil
 # mattermost['email_feedback_email'] = nil
-# mattermost['email_apple_push_server'] = nil
-# mattermost['email_apple_push_cert_public'] = nil
-# mattermost['email_apple_push_cert_private'] = nil
+# mattermost['email_send_push_notifications'] = true
+# mattermost['email_push_notification_server'] = ""
 
 # mattermost['file_driver_name'] = "local"
 # mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
