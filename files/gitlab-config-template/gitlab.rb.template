@@ -695,6 +695,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['database_name'] = 'mattermost_production'
 
 # mattermost['service_use_ssl'] = false
+# mattermost['service_address'] = "127.0.0.1"
 # mattermost['service_port'] = "8065"
 
 # mattermost['service_maximum_login_attempts'] = 10
