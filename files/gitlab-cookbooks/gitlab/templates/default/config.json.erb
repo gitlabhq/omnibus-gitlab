@@ -67,9 +67,8 @@
         "PasswordResetSalt": "<%= @email_password_reset_salt %>",
         "FeedbackName": "<%= @email_feedback_name %>",
         "FeedbackEmail": "<%= @email_feedback_email %>",
-        "ApplePushServer": "<%= @email_apple_push_server %>",
-        "ApplePushCertPublic": "<%= @email_apple_push_cert_public %>",
-        "ApplePushCertPrivate": "<%= @email_apple_push_cert_private %>"
+        "SendPushNotifications": <%= @email_send_push_notifications %>,
+        "PushNotificationServer": "<%= @email_push_notification_server %>"
     },
     "RateLimitSettings": {
         "EnableRateLimiter": <%= @ratelimit_enable_rate_limiter %>,
