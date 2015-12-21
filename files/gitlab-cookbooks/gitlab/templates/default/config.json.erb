@@ -1,6 +1,6 @@
 {
     "ServiceSettings": {
-        "ListenAddress": ":<%= @service_port %>",
+        "ListenAddress": "<%=@service_address %>:<%= @service_port %>",
         "MaximumLoginAttempts": <%= @service_maximum_login_attempts %>,
         "SegmentDeveloperKey": "<%= @service_segment_developer_key %>",
         "GoogleDeveloperKey": "<%= @service_google_developer_key %>",
