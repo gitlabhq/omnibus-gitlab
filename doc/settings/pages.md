@@ -23,10 +23,10 @@ add a [wildcard DNS A record][wiki-wildcard-dns] pointing to the host that
 GitLab runs. For example, an entry would look like this:
 
 ```
-*.gitlabpages.com. 60 IN A 1.2.3.4
+*.example.com. 60 IN A 1.2.3.4
 ```
 
-where `gitlabpages.com` is the domain under which GitLab Pages will be served
+where `example.com` is the domain under which GitLab Pages will be served
 and `1.2.3.4` is the IP address of your GitLab instance.
 
 It is strongly advised to **not** use the GitLab domain to serve user pages to
@@ -37,7 +37,7 @@ the external URL for GitLab Pages is:
 
 ```ruby
 # in /etc/gitlab/gitlab.rb
-pages_external_url 'http://gitlabpages.com'
+pages_external_url 'http://example.com'
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect and read the
@@ -53,7 +53,7 @@ Place the certificate and key inside `/etc/gitlab/ssl` and in
 `/etc/gitlab/gitlab.rb` specify the following configuration:
 
 ```ruby
-pages_external_url 'https://gitlabpages.com'
+pages_external_url 'https://example.com'
 
 pages_nginx['redirect_http_to_https'] = true
 pages_nginx['ssl_certificate'] = "/etc/gitlab/ssl/pages-nginx.crt"
