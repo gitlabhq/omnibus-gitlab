@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Explicitly create directory that holds the logs 50caed92198aef685c8e7815a67bcb13d9ebf911
 - Updated omnibus to v5.0.0 18835f14453fd4fb834d228caf1bc1b37f1fe910
 - Change mailer to mailers sidekiq queue
+- Increase default worker memory from 250MB to 300MB.
 
 8.2.3
 
