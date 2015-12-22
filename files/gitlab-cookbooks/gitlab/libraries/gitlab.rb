@@ -276,7 +276,7 @@ module Gitlab
       if gitlab_workhorse['auth_backend'].nil?
         # The user has no custom settings for connecting workhorse to unicorn. Let's
         # do what we think is best.
-        gitlab_workhorse['auth_socket'] = unicorn_socket 
+        gitlab_workhorse['auth_socket'] = unicorn_socket
       end
     end
 
@@ -464,7 +464,8 @@ module Gitlab
         "mattermost",
         "external_url",
         "ci_external_url",
-        "mattermost_external_url"
+        "mattermost_external_url",
+        "pages_external_url"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
