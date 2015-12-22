@@ -43,16 +43,13 @@ production: &base
     default_can_create_group: <%= @gitlab_default_can_create_group %>  # default: true
     username_changing_enabled: <%= @gitlab_username_changing_enabled %> # default: true - User can change her username/namespace
     ## Default theme
-    ##   BASIC  = 1
-    ##   MARS   = 2
-    ##   MODERN = 3
-    ##   GRAY   = 4
-    ##   COLOR  = 5
+    ##   1 - Graphite
+    ##   2 - Charcoal
+    ##   3 - Green
+    ##   4 - Gray
+    ##   5 - Violet
+    ##   6 - Blue
     default_theme: <%= @gitlab_default_theme %> # default: 2
-
-    # Restrict setting visibility levels for non-admin users.
-    # The default is to allow all levels.
-    restricted_visibility_levels: <%= @gitlab_restricted_visibility_levels unless @gitlab_restricted_visibility_levels.nil? %>
 
     ## Automatic issue closing
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
@@ -67,7 +64,6 @@ production: &base
       merge_requests: <%= @gitlab_default_projects_features_merge_requests %>
       wiki: <%= @gitlab_default_projects_features_wiki %>
       snippets: <%= @gitlab_default_projects_features_snippets %>
-      visibility_level: <%= single_quote(@gitlab_default_projects_features_visibility_level) %>  # can be "private" | "internal" | "public"
       builds: <%= @gitlab_default_projects_features_builds %>
 
     ## Webhook settings
@@ -134,6 +130,31 @@ production: &base
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
     plain_url: <%= single_quote(@gravatar_plain_url) %>     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
     ssl_url:   <%= single_quote(@gravatar_ssl_url) %>    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
+
+  ## Auxiliary jobs
+  # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
+  # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
+  cron_jobs:
+    # Flag stuck CI builds as failed
+    stuck_ci_builds_worker:
+      cron: <%= @stuck_ci_builds_worker_cron %>
+
+    ##
+    # GitLab EE only jobs:
+
+    # Snapshot active users statistics
+    historical_data_worker:
+      cron: <%= @historical_data_worker_cron %>
+
+    # Update mirrored repositories
+    update_all_mirrors_worker:
+      cron: <%= @update_all_mirrors_worker_cron %>
+
+    # In addition to refreshing users when they log in,
+    # periodically refresh LDAP users membership.
+    # NOTE: This will only take effect if LDAP is enabled
+    ldap_sync_worker:
+      cron: <%= @ldap_sync_worker_cron %>
 
   #
   # 2. GitLab CI settings
