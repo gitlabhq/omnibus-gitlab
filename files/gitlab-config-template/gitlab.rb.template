@@ -21,18 +21,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_can_create_group'] = true
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 # gitlab_rails['gitlab_default_theme'] = 2
-# gitlab_rails['gitlab_restricted_visibility_levels'] = nil # to restrict public and internal: ['public', 'internal']
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
 # See http://doc.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)"
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
 # gitlab_rails['gitlab_default_projects_features_snippets'] = false
-# gitlab_rails['gitlab_default_projects_features_visibility_level'] = 'private'
 # gitlab_rails['gitlab_default_projects_features_builds'] = true
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
+# gitlab_rails['stuck_ci_builds_worker_cron'] = "0 0 * * *"
+# gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
+# gitlab_rails['update_all_mirrors_worker_cron'] = "0 * * * *"
+# gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['webhook_timeout'] = 10
 
 ## Reply by email
