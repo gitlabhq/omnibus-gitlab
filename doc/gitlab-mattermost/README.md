@@ -117,7 +117,8 @@ SMTP configuration depends on SMTP provider used. If you are using SMTP without 
 mattermost['email_enable_sign_up_with_email'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
-mattermost['email_smtp_server'] = "smtp.example.com:465"
+mattermost['email_smtp_server'] = "smtp.example.com"
+mattermost['email_smtp_port'] = "465"
 mattermost['email_connection_security'] = nil
 mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
@@ -129,7 +130,8 @@ If you are using TLS, configuration can look something like this:
 mattermost['email_enable_sign_up_with_email'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
-mattermost['email_smtp_server'] = "smtp.example.com:587"
+mattermost['email_smtp_server'] = "smtp.example.com"
+mattermost['email_smtp_port'] = "587"
 mattermost['email_connection_security'] = 'TLS' # Or 'STARTTLS'
 mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
