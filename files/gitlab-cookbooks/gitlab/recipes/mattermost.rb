@@ -15,16 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-gitlab = node['gitlab']
-
-mattermost_user = gitlab['mattermost']['username']
-mattermost_group = gitlab['mattermost']['group']
-mattermost_home = gitlab['mattermost']['home']
-mattermost_log_dir = gitlab['mattermost']['log_file_directory']
-mattermost_storage_directory = gitlab['mattermost']['file_directory']
-postgresql_socket_dir = gitlab['postgresql']['unix_socket_directory']
-pg_port = gitlab['postgresql']['port']
-pg_user = gitlab['postgresql']['username']
+mattermost_user = node['gitlab']['mattermost']['username']
+mattermost_group = node['gitlab']['mattermost']['group']
+mattermost_home = node['gitlab']['mattermost']['home']
+mattermost_log_dir = node['gitlab']['mattermost']['log_file_directory']
+mattermost_storage_directory = node['gitlab']['mattermost']['file_directory']
+postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
+pg_port = node['gitlab']['postgresql']['port']
+pg_user = node['gitlab']['postgresql']['username']
 
 ###
 # Create group and user that will be running mattermost
@@ -61,9 +59,9 @@ end
 pg_helper = PgHelper.new(node)
 bin_dir = "/opt/gitlab/embedded/bin"
 
-mysql_adapter = gitlab['mattermost']['sql_driver_name'] == 'mysql' ? true:false
-db_name = gitlab['mattermost']['database_name']
-sql_user = gitlab['postgresql']['sql_mattermost_user']
+mysql_adapter = node['gitlab']['mattermost']['sql_driver_name'] == 'mysql' ? true:false
+db_name = node['gitlab']['mattermost']['database_name']
+sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
 
 execute "create #{sql_user} database user" do
   command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
@@ -82,18 +80,20 @@ end
 # Populate mattermost configuration options
 ###
 # Try connecting to GitLab only if it is enabled
-database_ready = pg_helper.is_running? && pg_helper.database_exists?(gitlab['gitlab-rails']['db_database'])
+database_ready = pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database'])
 
-unless gitlab['mattermost']['gitlab_enable']
-  if gitlab['gitlab-rails']['enable'] && database_ready
+unless node['gitlab']['mattermost']['gitlab_enable']
+  if node['gitlab']['gitlab-rails']['enable'] && database_ready
     MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
   end
 end
 
+node.consume_attributes(Gitlab.generate_hash)
+
 template "#{mattermost_home}/config.json" do
   source "config.json.erb"
   owner mattermost_user
-  variables gitlab['mattermost'].to_hash.merge(gitlab['postgresql']).to_hash
+  variables node['gitlab']['mattermost'].to_hash.merge(node['gitlab']['postgresql']).to_hash
   mode "0644"
   notifies :restart, "service[mattermost]"
 end
@@ -106,5 +106,5 @@ runit_service "mattermost" do
   options({
     :log_directory => mattermost_log_dir
   }.merge(params))
-  log_options gitlab['logging'].to_hash.merge(gitlab['mattermost'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mattermost'].to_hash)
 end
