@@ -1,5 +1,7 @@
 # Omnibus GitLab
 
+## Description
+
 This project creates full-stack platform-specific [downloadable packages for GitLab][downloads].
 For other installation options please see the
 [GitLab installation page][installation].
@@ -17,11 +19,10 @@ The documentation overview is in the [readme in the doc directory](doc/README.md
 ## Omnibus fork
 
 Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus).
-Fork is located at [gitlab.com](https://gitlab.com/gitlab-org/omnibus).
 
-## GitLab CI
+# Deprecated links
 
-To setup GitLab CI please see the [separate GitLab CI documentation](doc/gitlab-ci/README.md).
+*We left the links below in the readme to preserve old links, but please use the [readme in the doc directory](doc/README.md) to browse the complete documentation.*
 
 ## Installation
 
