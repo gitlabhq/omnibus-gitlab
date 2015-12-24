@@ -208,5 +208,10 @@ define :runit_service, :directory => nil, :only_if => false, :finish_script => f
     link service_dir_name do
       action :delete
     end
+
+    directory sv_dir_name do
+      recursive true
+      action :delete
+    end
   end
 end
