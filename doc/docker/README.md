@@ -67,6 +67,25 @@ sudo docker restart gitlab
 
 For more options for configuring the container please check [Omnibus GitLab documentation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
 
+### Preconfigure Docker container
+
+It's possible to preconfigure the GitLab image by adding the environment variable: `GITLAB_OMNIBUS_CONFIG` to docker run command. This variable can contain any `gitlab.rb` variable. The `GITLAB_OMNIBUS_CONFIG` will be evaluated before loading the container's `gitlab.rb` file. It makes it possible to easily configure GitLab external URL, database configuration or any other option from [Omnibus GitLab documentation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#configuration).
+
+```bash
+sudo docker run --detach \
+	--hostname gitlab.example.com \
+	--env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/'; gitlab_rails['lfs_enabled'] = true;"
+	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--name gitlab \
+	--restart always \
+	--volume /srv/gitlab/config:/etc/gitlab \
+	--volume /srv/gitlab/logs:/var/log/gitlab \
+	--volume /srv/gitlab/data:/var/opt/gitlab \
+	gitlab/gitlab-ce:latest
+```
+
+Every time you execute a `docker run` command you need to provide the GITLAB_OMNIBUS_CONFIG option, the content of GITLAB_OMNIBUS_CONFIG is not preserved between subsequent runs.
+
 ## Diagnose potential problems
 
 Read container logs:
