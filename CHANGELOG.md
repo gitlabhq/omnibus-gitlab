@@ -3,13 +3,19 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.3.1
+
+- Increase default worker memory from 250MB to 300MB.
+- Update GitLab workhorse to 0.5.1 cd01ed859e6ace690a4f57a8c16d56a8fd1b7b47
+- Update rubygemst to 2.5.1 58fcbbdb31a3e6ea478e223c659634e60d82e191
+- Update libgit2 to 0.23.4 and let rugged be compiled during bundle install fb54c1f0f2dc4f122d814de408f4d751f7cc8ed5
+
 8.3.0
 
 - Add sidekiq concurrency setting 787aa2ffc3b50783ae17e32d69e4b8efae8ca9ac
 - Explicitly create directory that holds the logs 50caed92198aef685c8e7815a67bcb13d9ebf911
 - Updated omnibus to v5.0.0 18835f14453fd4fb834d228caf1bc1b37f1fe910
 - Change mailer to mailers sidekiq queue
-- Increase default worker memory from 250MB to 300MB.
 
 8.2.3
 
