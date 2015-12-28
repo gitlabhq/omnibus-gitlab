@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 8.3.1
 
 - Increase default worker memory from 250MB to 300MB.
+- Update GitLab workhorse to 0.5.1 cd01ed859e6ace690a4f57a8c16d56a8fd1b7b47
+- Update rubygemst to 2.5.1 58fcbbdb31a3e6ea478e223c659634e60d82e191
+- Update libgit2 to 0.23.4 and let rugged be compiled during bundle install fb54c1f0f2dc4f122d814de408f4d751f7cc8ed5
 
 8.3.0
 
