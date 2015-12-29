@@ -86,6 +86,8 @@ sudo docker run --detach \
 
 Every time you execute a `docker run` command you need to provide the GITLAB_OMNIBUS_CONFIG option, the content of GITLAB_OMNIBUS_CONFIG is not preserved between subsequent runs.
 
+There are also environment variables to configure a limited section of GitLab the application, these are documented in the [environment variables section of the GitLab documentation](http://doc.gitlab.com/ce/administration/environment_variables.html).
+
 ## Diagnose potential problems
 
 Read container logs:
@@ -120,7 +122,7 @@ To upgrade GitLab to new version you have to do:
    ```bash
    sudo docker stop gitlab
    ```
-   
+
 2. remove existing container,
    ```bash
    sudo docker rm gitlab
