@@ -47,6 +47,16 @@ if [[ ! -f /etc/gitlab/ssh_host_rsa_key ]]; then
 	ssh-keygen -f /etc/gitlab/ssh_host_rsa_key -N '' -t rsa
 	chmod 0600 /etc/gitlab/ssh_host_rsa_key
 fi
+if [[ ! -f /etc/gitlab/ssh_host_ecdsa_key ]]; then
+	echo "Generating ssh_host_ecdsa_key..."
+	ssh-keygen -f /etc/gitlab/ssh_host_ecdsa_key -N '' -t ecdsa
+	chmod 0600 /etc/gitlab/ssh_host_ecdsa_key
+fi
+if [[ ! -f /etc/gitlab/ssh_host_ed25519_key ]]; then
+	echo "Generating ssh_host_ed25519_key..."
+	ssh-keygen -f /etc/gitlab/ssh_host_ed25519_key -N '' -t ed25519
+	chmod 0600 /etc/gitlab/ssh_host_ed25519_key
+fi
 
 # Remove all services, the reconfigure will create them
 echo "Preparing services..."

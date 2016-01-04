@@ -3,6 +3,8 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+- Add support for ecdsa and ed25519 keys to Docker image
+
 8.3.1
 
 - Increase default worker memory from 250MB to 300MB.
