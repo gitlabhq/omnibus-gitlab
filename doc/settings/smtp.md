@@ -76,7 +76,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
-## Mandrill
+### Mandrill
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'your.email@domain.com'
