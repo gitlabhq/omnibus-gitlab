@@ -47,6 +47,7 @@ NO_EXPAT=YesPlease
 NO_TCLTK=YesPlease
 NO_GETTEXT=YesPlease
 NO_PYTHON=YesPlease
+NO_INSTALL_HARDLINKS=YesPlease
       EOH
     end
   end
