@@ -198,8 +198,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['extra_google_analytics_id'] = '_your_tracking_id'
 # gitlab_rails['extra_piwik_url'] = '_your_piwik_url'
 # gitlab_rails['extra_piwik_site_id'] = '_your_piwik_site_id'
-#   ![Company Logo](http://www.companydomain.com/logo.png)
-#   [Learn more about CompanyName](http://www.companydomain.com/)'
 
 # gitlab_rails['env'] = {
 #   'BUNDLE_GEMFILE' => "/opt/gitlab/embedded/service/gitlab-rails/Gemfile",
