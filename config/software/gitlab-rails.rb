@@ -32,7 +32,6 @@ dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "krb5"
-dependency "libgit2"
 
 source :git => "git@dev.gitlab.org:gitlab/gitlabhq.git"
 
@@ -48,7 +47,6 @@ build do
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
-  bundle "config build.rugged --use-system-libraries", :env => env
   bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers}", :env => env
 
   # In order to precompile the assets, we need to get to a state where rake can
