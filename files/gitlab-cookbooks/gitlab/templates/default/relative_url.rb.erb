@@ -1,0 +1,7 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+Rails.application.configure do
+  config.relative_url_root = "<%= @gitlab_relative_url %>"
+end

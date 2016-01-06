@@ -50,3 +50,8 @@ stderr_path '<%= @stderr_path %>'
 stdout_path '<%= @stdout_path %>'
 
 <%- end %>
+<%- if @relative_url %>
+# Relative url from where GitLab is served
+ENV['RAILS_RELATIVE_URL_ROOT'] = "<%= @relative_url %>"
+
+<%- end %>

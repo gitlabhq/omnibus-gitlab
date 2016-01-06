@@ -135,7 +135,10 @@ module Gitlab
       end
 
       unless ["", "/"].include?(uri.path)
-        raise "Unsupported external URL path: #{uri.path}"
+        relative_url = uri.path.chomp("/")
+        Gitlab['gitlab_rails']['gitlab_relative_url'] ||= relative_url
+        Gitlab['unicorn']['relative_url'] ||= relative_url
+        Gitlab['gitlab_workhorse']['relative_url'] ||= relative_url
       end
 
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port

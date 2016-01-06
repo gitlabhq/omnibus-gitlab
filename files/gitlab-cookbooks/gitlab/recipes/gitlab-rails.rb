@@ -208,6 +208,20 @@ template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   end
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "relative_url.rb") do
+  link_from File.join(gitlab_rails_source_dir, "config/initializers/relative_url.rb")
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(node['gitlab']['gitlab-rails'].to_hash)
+  notifies :run, 'bash[generate assets]'
+  restarts dependent_services
+
+  unless node['gitlab']['gitlab-rails']['gitlab_relative_url']
+    action :delete
+  end
+end
+
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   source "gitlab.yml.erb"
@@ -280,6 +294,7 @@ remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
   notifies :run, 'bash[migrate gitlab-rails database]' unless postgresql_not_listening
   notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
+  notifies :run, 'bash[generate assets]' if node['gitlab']['gitlab-rails']['gitlab_relative_url']
   dependent_services.each do |sv|
     notifies :restart, sv
   end
@@ -295,6 +310,17 @@ execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
 
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
+  action :nothing
+end
+
+bash "generate assets" do
+  code <<-EOS
+    set -e
+    /opt/gitlab/bin/gitlab-rake assets:clean assets:precompile
+    chown -R #{gitlab_user}:#{gitlab_group} #{gitlab_rails_tmp_dir}/cache
+  EOS
+  # We have to precompile assets as root because of permissions and ownership of files
+  environment ({ 'NO_PRIVILEGE_DROP' => 'true', 'USE_DB' => 'false' })
   action :nothing
 end
 
