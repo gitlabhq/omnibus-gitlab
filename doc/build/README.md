@@ -6,8 +6,8 @@ for instructions on how to prepare a build box using Chef. After running the
 cookbook you can perform builds as the `omnibus-build` user.
 
 ```shell
-# Login as omnibus-build user
-sudo su - omnibus-build
+# Login as build user
+sudo su - gitlab_ci_multi_runner
 
 # Clone the omnibus repo
 git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
