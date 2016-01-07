@@ -19,6 +19,76 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+## Configuring a relative URL for Gitlab
+
+_**Note:** Relative URL support is **experimental** and was [introduced][590]
+in Omnibus GitLab 8.5._
+
+The omnibus-gitlab package is shipped with pre-compiled assets (CSS, JavaScript,
+etc.).
+
+In case you configure Omnibus with a relative URL, the assets will need to be
+recompiled. This is a task which consumes a lot of CPU and memory resources, so
+to avoid out-of-memory errors, you should have at least 2GB of RAM available on
+your system, while we recommend 4GB RAM and 4 or 8 CPU cores.
+
+### Enable relative URL in GitLab
+
+Follow the steps below to enable a relative URL in GitLab:
+
+1.  (Optional) If you run short on resources, you can temporarily free up some
+    memory by shutting down Unicorn and Sidekiq with the following command:
+
+    ```shell
+    sudo gitlab-ctl stop unicorn
+    sudo gitlab-ctl stop sidekiq
+    ```
+
+2.  Set the `external_url` in `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    external_url "https://gitlab.example.com/gitlab"
+    ```
+
+    In this case, the relative URL under which GitLab will be served will be
+    `/gitlab`. Change it to your liking.
+
+3.  Reconfigure GitLab for the changes to take effect:
+
+    ```shell
+    sudo gitlab-ctl reconfigure
+    ```
+
+4.  Restart GitLab in case you shut down Unicorn and Sidekiq in the first step:
+
+    ```shell
+    sudo gitlab-ctl start
+    ```
+
+---
+
+If for some reason the asset compilation fails (i.e. the server runs out of memory),
+you can execute the task manually after you addressed the issue (i.e. add swap):
+
+```shell
+sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
+# user and path might be different if you changed the defaults of
+# user['username'], user['group'] and gitlab_rails['dir'] in gitlab.rb
+sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
+```
+
+### Disable relative URL in GitLab
+
+To disable the relative URL, follow the same steps as above and set up the
+`external_url` to a one that doesn't contain a relative path. You may need to
+restart Unicorn after the reconfigure task is done:
+
+```shell
+sudo gitlab-ctl restart unicorn
+```
+
+[590]: https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/590 "Merge request - Relative url support for omnibus installations"
+
 ## Loading external configuration file from non-root user
 
 Omnibus-gitlab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
