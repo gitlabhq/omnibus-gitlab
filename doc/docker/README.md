@@ -14,7 +14,7 @@ Run the image:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--publish 443:443 --publish 80:80 --publish 22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -75,7 +75,7 @@ It's possible to preconfigure the GitLab image by adding the environment variabl
 sudo docker run --detach \
 	--hostname gitlab.example.com \
 	--env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/'; gitlab_rails['lfs_enabled'] = true;"
-	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--publish 443:443 --publish 80:80 --publish 22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -137,7 +137,7 @@ To upgrade GitLab to new version you have to do:
    ```bash
    sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--publish 443:443 --publish 80:80 --publish 22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -178,6 +178,39 @@ sudo docker run --detach \
 ```
 
 You can then access GitLab instance at http://1.1.1.1/ and https://1.1.1.1/.
+
+### Expose GitLab on different ports
+
+If you want to use different port than 80 (for HTTP) or 443 (for HTTPS) you need to add separate `--publish` directive to `docker run` command:
+
+To expose Web interface on 8929 and SSH service on 2289 use a following `docker run` command:
+```bash
+sudo docker run --detach \
+	--hostname gitlab.example.com \
+	--publish 8929:8929 --publish 2289:22 \
+	--name gitlab \
+	--restart always \
+	--volume /srv/gitlab/config:/etc/gitlab \
+	--volume /srv/gitlab/logs:/var/log/gitlab \
+	--volume /srv/gitlab/data:/var/opt/gitlab \
+	gitlab/gitlab-ce:latest
+```
+
+The second, you need to configure `gitlab.rb`:
+
+1. Set `external_url`:
+```
+# For HTTP
+external_url "http://gitlab.example.com:8929/"
+
+# For HTTPS
+external_url "https://gitlab.example.com:8929/"
+```
+
+2. Set `gitlab_shell_ssh_port`:
+```
+gitlab_rails['gitlab_shell_ssh_port'] = 2289
+```
 
 ## Troubleshooting
 
