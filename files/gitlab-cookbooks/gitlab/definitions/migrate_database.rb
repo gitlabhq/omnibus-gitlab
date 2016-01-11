@@ -26,6 +26,7 @@ define :migrate_database, :command => nil, :action => :run, :restarts => [] do
       exit ${PIPESTATUS[0]}
     EOH
     action params[:action]
+    notifies :run, 'execute[clear the gitlab-rails cache]', :immediately unless OmnibusHelper.not_listening?("redis")
     params[:restarts].each do |svc|
       notifies :restart, svc, :immediately
     end
