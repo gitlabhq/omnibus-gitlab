@@ -18,7 +18,7 @@
 name "gitlab-workhorse"
 default_version "0.5.3"
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+source :git => "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
 
 build do
   make "install PREFIX=#{install_dir}/embedded"
