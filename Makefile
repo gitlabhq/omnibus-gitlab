@@ -87,7 +87,7 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	docker build -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
+	docker build --pull -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
 
 docker_push:
 	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)

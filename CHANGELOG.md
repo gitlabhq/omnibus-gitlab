@@ -4,6 +4,7 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 - Add support for ecdsa and ed25519 keys to Docker image
+- Pull the latest base image before building the GitLab Docker image
 
 8.3.1
 
