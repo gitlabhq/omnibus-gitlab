@@ -99,12 +99,24 @@ unicorn['port'] = 3456
 For Nginx port changes please see
 [doc/settings/nginx.md](doc/settings/nginx.md).
 
-### Git SSH access stops working on SELinux-enabled systems
+### Git user does not have SSH access
+#### SELinux-enabled systems
 
 On SELinux-enabled systems the git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 `/var/opt/gitlab/.ssh`.
+
+#### All systems
+
+The git user is created, by default, with a locked password, shown by `'!'` in
+/etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon will prevent the
+git user from authenticating even with ssh keys. An alternative secure solution
+is to unlock the password by replacing `'!'` with `'*'` in `/etc/shadow`. The git
+user will still be unable to change the password because it runs in a restricted
+shell and the `passwd` command for non-superusers requires entering the current
+password prior to a new password. The user cannot enter a password that will
+match `'*'` and therefore the account remains password-less.
 
 ### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
