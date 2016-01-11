@@ -16,7 +16,7 @@
 #
 
 name "gitlab-workhorse"
-default_version "0.5.1"
+default_version "0.5.3"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
 
