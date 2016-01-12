@@ -42,9 +42,3 @@ migrate_database 'gitlab-rails' do
   action :nothing
   restarts dependent_services
 end
-
-migrate_database 'gitlab-ci' do
-  command '/opt/gitlab/bin/gitlab-ci-rake db:migrate'
-  action :nothing
-  restarts ci_dependent_services
-end
