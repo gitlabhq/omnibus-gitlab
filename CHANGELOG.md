@@ -3,8 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-- Add support for ecdsa and ed25519 keys to Docker image
-- Pull the latest base image before building the GitLab Docker image
+8.4.0
+
+- Add support for ecdsa and ed25519 keys to Docker image (Matthew Monaco) 3bfcb2617d240937fdb77d38900ee00f1ffbce02
+- Pull the latest base image before building the GitLab Docker image (Ben Sjoberg) c9926773d708b7e94cd70b190e213ae322dbee17
+- Remove runit files when service is disabled 8c4c446c2ba42cf8a76d9a61882ac0605f678532
+- Add GITLAB_OMNIBUS_CONFIG to Docker image bfe5cb8187b0c05778fe401c2a6bbbd31b1efe2e
+- Compile all .py files during packaging b131e0fc0562c416fd62d84f43a6b3e3a03baa23
+- Correctly update md5sums for deb packager b131e0fc0562c416fd62d84f43a6b3e3a03baa23
+- Fix syntax for md5sums file b131e0fc0562c416fd62d84f43a6b3e3a03baa23
+- Update git to use symlinks for alias commands 65df6a4dcfc89557ec8413e8e967242f4db96dba
+- Remove libgit definition and rely on it being built by rugged fe38fa17db9e855f2a844a1b68a4aaf2ac169184
+- Update ruby to 2.1.8 6f1d4204ca24f67bbf453c7d751ba7977c23f55e
+- Update git to 2.6.2 6f1d4204ca24f67bbf453c7d751ba7977c23f55e
+- Ensure that cache clear is run after db:migrate b4dfb1f7b493ae5ef5fabda5c04e2dee6f4b849e
 
 8.3.4
 
@@ -30,7 +42,10 @@ omnibus-gitlab repository.
 - Add sidekiq concurrency setting 787aa2ffc3b50783ae17e32d69e4b8efae8ca9ac
 - Explicitly create directory that holds the logs 50caed92198aef685c8e7815a67bcb13d9ebf911
 - Updated omnibus to v5.0.0 18835f14453fd4fb834d228caf1bc1b37f1fe910
-- Change mailer to mailers sidekiq queue
+- Change mailer to mailers sidekiq queue d4d52734072382159b0c4249fe76c104c1c3f9cd
+- Update openssl to 1.0.1q f99fd257a6aa541662095fb72ce8af802c59c3a0
+- Added support for GitLab Pages aef69fe5fccbd14c9c0112bae58d5ecaa6e680bd
+- Updated Mattermost to v1.3.0 53d8606cf3642949ced4d6e8432d4b45b0541c88
 
 8.2.3
 
