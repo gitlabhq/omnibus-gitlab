@@ -614,6 +614,12 @@ default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
 default['gitlab']['mattermost']['service_enable_testing'] = false
 default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
 default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = false
+default['gitlab']['mattermost']['service_enable_oauth_service_provider'] = false
+default['gitlab']['mattermost']['service_enable_developer'] = false
+default['gitlab']['mattermost']['service_session_length_web_in_days'] = 30
+default['gitlab']['mattermost']['service_session_length_mobile_in_days'] = 30
+default['gitlab']['mattermost']['service_session_length_sso_in_days'] = 30
+default['gitlab']['mattermost']['service_session_cache_in_minutes'] = 10
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
@@ -640,6 +646,10 @@ default['gitlab']['mattermost']['file_amazon_s3_access_key_id'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_secret_access_key'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
+default['gitlab']['mattermost']["file_amazon_s3_endpoint"] = nil
+default['gitlab']['mattermost']["file_amazon_s3_bucket_endpoint"] = nil
+default['gitlab']['mattermost']["file_amazon_s3_location_constraint"] = false
+default['gitlab']['mattermost']["file_amazon_s3_lowercase_bucket"] = false
 
 default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
 default['gitlab']['mattermost']['email_send_email_notifications'] = false
@@ -671,6 +681,12 @@ default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 default['gitlab']['mattermost']['team_restrict_team_names'] = true
 default['gitlab']['mattermost']['team_enable_team_listing'] = false
+
+default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
+default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
+default['gitlab']['mattermost']['support_about_link'] = "/static/help/about.html"
+default['gitlab']['mattermost']['support_report_a_problem_link'] =  "/static/help/report_problem.html"
+default['gitlab']['mattermost']['support_email'] =  "support@example.com"
 
 default['gitlab']['mattermost']['gitlab_enable'] = false
 default['gitlab']['mattermost']['gitlab_secret'] = nil
