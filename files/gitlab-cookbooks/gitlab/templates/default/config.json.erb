@@ -1,15 +1,21 @@
 {
     "ServiceSettings": {
-        "ListenAddress": "<%=@service_address %>:<%= @service_port %>",
+        "ListenAddress": "<%= @service_address %>:<%= @service_port %>",
         "MaximumLoginAttempts": <%= @service_maximum_login_attempts %>,
         "SegmentDeveloperKey": "<%= @service_segment_developer_key %>",
         "GoogleDeveloperKey": "<%= @service_google_developer_key %>",
+        "EnableOAuthServiceProvider": <%= @service_enable_oauth_service_provider %>,
         "EnableIncomingWebhooks": <%= @service_enable_incoming_webhooks %>,
+        "EnableOutgoingWebhooks": <%= @service_enable_outgoing_webhooks %>,
         "EnablePostUsernameOverride": <%= @service_enable_post_username_override %>,
         "EnablePostIconOverride": <%= @service_enable_post_icon_override %>,
         "EnableTesting": <%= @service_enable_testing %>,
         "EnableSecurityFixAlert": <%= @service_enable_security_fix_alert %>,
-        "EnableOutgoingWebhooks": <%= @service_enable_outgoing_webhooks %>
+        "EnableDeveloper": <%= @service_enable_developer %>,
+        "SessionLengthWebInDays" : <%= @service_session_length_web_in_days %>,
+        "SessionLengthMobileInDays" : <%= @service_session_length_mobile_in_days %>,
+        "SessionLengthSSOInDays" : <%= @service_session_length_sso_in_days %>,
+        "SessionCacheInMinutes" : <%= @service_session_cache_in_minutes %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -52,7 +58,11 @@
         "AmazonS3AccessKeyId": "<%= @file_amazon_s3_access_key_id %>",
         "AmazonS3SecretAccessKey": "<%= @file_amazon_s3_secret_access_key %>",
         "AmazonS3Bucket": "<%= @file_amazon_s3_bucket %>",
-        "AmazonS3Region": "<%= @file_amazon_s3_region %>"
+        "AmazonS3Region": "<%= @file_amazon_s3_region %>",
+        "AmazonS3Endpoint": "<%= @file_amazon_s3_endpoint %>",
+        "AmazonS3BucketEndpoint": "<%= @file_amazon_s3_bucket_endpoint %>",
+        "AmazonS3LocationConstraint": <%= @file_amazon_s3_location_constraint %>,
+        "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>
     },
     "EmailSettings": {
         "EnableSignUpWithEmail" : <%= @email_enable_sign_up_with_email %>,
@@ -80,6 +90,14 @@
     "PrivacySettings": {
         "ShowEmailAddress": <%= @privacy_show_email_address %>,
         "ShowFullName": <%= @privacy_show_full_name %>
+    },
+    "SupportSettings": {
+        "TermsOfServiceLink": "<%= @support_terms_of_service_link %>",
+        "PrivacyPolicyLink": "<%= @support_privacy_policy_link %>",
+        "AboutLink": "<%= @support_about_link %>",
+        "HelpLink": "<%= @support_help_link %>",
+        "ReportAProblemLink": "<%= @support_report_a_problem_link %>",
+        "SupportEmail": "<%= @support_email %>"
     },
     "GitLabSettings": {
         "Enable": <%= @gitlab_enable %>,

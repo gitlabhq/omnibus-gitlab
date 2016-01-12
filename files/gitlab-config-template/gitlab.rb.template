@@ -707,6 +707,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_testing'] = false
 # mattermost['service_enable_security_fix_alert'] = true
 # mattermost['service_enable_outgoing_webhooks'] = true
+# mattermost['service_enable_oauth_service_provider'] = false
+# mattermost['service_enable_developer'] = false
+# mattermost['service_session_length_web_in_days'] = 30
+# mattermost['service_session_length_mobile_in_days'] = 30
+# mattermost['service_session_length_sso_in_days'] = 30
+# mattermost['service_session_cache_in_minutes'] = 10
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -771,13 +777,22 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['file_amazon_s3_bucket'] = nil
 # mattermost['file_amazon_s3_secret_access_key'] = nil
 # mattermost['file_amazon_s3_bucket'] = nil
-
+# mattermost["file_amazon_s3_endpoint"] = nil
+# mattermost["file_amazon_s3_bucket_endpoint"] = nil
+# mattermost["file_amazon_s3_location_constraint"] = false
+# mattermost["file_amazon_s3_lowercase_bucket"] = false
 
 # mattermost['ratelimit_enable_rate_limiter'] = true
 # mattermost['ratelimit_per_sec'] = 10
 # mattermost['ratelimit_memory_store_size'] = 10000
 # mattermost['ratelimit_vary_by_remote_addr'] = true
 # mattermost['ratelimit_vary_by_header'] = nil
+
+# mattermost['support_terms_of_service_link'] = "/static/help/terms.html"
+# mattermost['support_privacy_policy_link'] = "/static/help/privacy.html"
+# mattermost['support_about_link'] = "/static/help/about.html"
+# mattermost['support_report_a_problem_link'] =  "/static/help/report_problem.html"
+# mattermost['support_email'] =  "support@example.com"
 
 # mattermost['privacy_show_email_address'] = true
 # mattermost['privacy_show_full_name'] = true
