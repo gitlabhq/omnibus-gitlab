@@ -6,6 +6,18 @@ omnibus-gitlab repository.
 - Add support for ecdsa and ed25519 keys to Docker image
 - Pull the latest base image before building the GitLab Docker image
 
+8.3.4
+
+- Update gitlab-workhorse to 0.5.4 7968c80843ac7deaaebe313c6976615a2268ac03
+
+8.3.3
+
+- Update gitlab-workhorse to 0.5.3 6fbe783cfd677ea16fcfe1e1090887e5ee0a0028
+
+8.3.2
+
+- No changes
+
 8.3.1
 
 - Increase default worker memory from 250MB to 300MB.
