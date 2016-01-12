@@ -45,7 +45,7 @@ install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
-override :ruby, version: '2.1.7'
+override :ruby, version: '2.1.8', source: { md5: '091b62f0a9796a3c55de2a228a0e6ef3' }
 override :rubygems, version: 'v2.5.1'
 override :'chef-gem', version: '12.5.1'
 override :cacerts, version: '2015.10.28', source: { md5: '6f41fb0f0c4b4695c2a6296892278141' }
