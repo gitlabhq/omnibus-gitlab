@@ -16,7 +16,7 @@
 #
 
 name "gitlab-workhorse"
-default_version "master" # Nightly build
+default_version "0.5.4" # 0.5.4
 
 source :git => "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
 

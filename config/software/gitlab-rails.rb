@@ -17,7 +17,7 @@
 #
 
 name "gitlab-rails"
-default_version "master" # Nightly build
+default_version "v8.4.0.rc1-ee" # v8.4.0.rc1-ee
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -33,7 +33,7 @@ dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "krb5"
 
-source :git => "git@dev.gitlab.org:gitlab/gitlabhq.git"
+source :git => "git@dev.gitlab.org:gitlab/gitlab-ee.git"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
