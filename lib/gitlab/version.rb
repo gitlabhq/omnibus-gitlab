@@ -22,7 +22,7 @@ module Gitlab
 
     def remote
       case @filename
-      when "GITLAB_VERSION"
+      when "VERSION"
         if @read_version.include?('-ee')
           "git@dev.gitlab.org:gitlab/gitlab-ee.git"
         else

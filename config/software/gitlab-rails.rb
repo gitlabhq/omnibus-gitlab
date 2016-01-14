@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("GITLAB_VERSION")
+version = Gitlab::Version.new("VERSION")
 
 name "gitlab-rails"
 default_version version.print

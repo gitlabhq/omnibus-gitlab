@@ -20,7 +20,7 @@ main() {
   gitlab_workhorse_ref_id=$(check_remote_ref gitlab_workhorse)
   assert_non_empty gitlab_workhorse_ref_id
 
-  set_source_and_version $gitlab_rails_ref GITLAB_VERSION
+  set_source_and_version $gitlab_rails_ref VERSION
   set_source_and_version $gitlab_shell_ref GITLAB_SHELL_VERSION
   set_source_and_version $gitlab_workhorse_ref GITLAB_WORKHORSE_VERSION
 }
