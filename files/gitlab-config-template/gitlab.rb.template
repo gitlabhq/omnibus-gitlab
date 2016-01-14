@@ -98,6 +98,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
+#     attributes:
+#       username: ['uid', 'userid', 'sAMAccountName']
+#       email:    ['mail', 'email', 'userPrincipalName']
+#       name:       'cn'
+#       first_name: 'givenName'
+#       last_name:  'sn'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''
@@ -116,6 +122,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
+#     attributes:
+#       username: ['uid', 'userid', 'sAMAccountName']
+#       email:    ['mail', 'email', 'userPrincipalName']
+#       name:       'cn'
+#       first_name: 'givenName'
+#       last_name:  'sn'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''
