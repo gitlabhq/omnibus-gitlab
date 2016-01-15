@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Update ruby to 2.1.8 6f1d4204ca24f67bbf453c7d751ba7977c23f55e
 - Update git to 2.6.2 6f1d4204ca24f67bbf453c7d751ba7977c23f55e
 - Ensure that cache clear is run after db:migrate b4dfb1f7b493ae5ef5fabda5c04e2dee6f4b849e
+- Add support for Elasticsearch config (EE only)
 
 8.3.4
 

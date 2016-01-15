@@ -116,13 +116,21 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: <%= @lfs_storage_path %>
 
-  ## GitLab Pages
+  ## GitLab Pages (EE only)
   pages:
     enabled: <%= @pages_enabled %>
     path: <%= @pages_path %>
     host: <%= @pages_host %>
     port: <%= @pages_port %>
     https: <%= @pages_https %>
+
+  ## Elasticsearch (EE only)
+  # Enable it if you are going to use elasticsearch instead of
+  # regular database search
+  elasticsearch:
+    enabled: <%= @elasticsearch_enabled %>
+    host: <%= @elasticsearch_host %>
+    port: <%= @elasticsearch_port %>
 
   ## Gravatar
   ## For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
