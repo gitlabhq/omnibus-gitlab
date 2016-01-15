@@ -199,18 +199,20 @@ sudo docker run --detach \
 The second, you need to configure `gitlab.rb`:
 
 1. Set `external_url`:
-```
-# For HTTP
-external_url "http://gitlab.example.com:8929/"
 
-# For HTTPS
-external_url "https://gitlab.example.com:8929/"
-```
+    ```
+    # For HTTP
+    external_url "http://gitlab.example.com:8929/"
+    
+    # For HTTPS
+    external_url "https://gitlab.example.com:8929/"
+    ```
 
 2. Set `gitlab_shell_ssh_port`:
-```
-gitlab_rails['gitlab_shell_ssh_port'] = 2289
-```
+
+    ```
+    gitlab_rails['gitlab_shell_ssh_port'] = 2289
+    ```
 
 ## Troubleshooting
 
@@ -221,6 +223,7 @@ This happens due to a fact that users in previous images were not preserved corr
 There's script that fixes permissions for all files.
 
 To fix your container, simply execute `update-permissions` script and restart container afterwards:
+
 ```
 sudo docker exec gitlab update-permissions
 sudo docker restart gitlab
