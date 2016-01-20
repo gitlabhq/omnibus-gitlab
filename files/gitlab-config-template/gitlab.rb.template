@@ -75,7 +75,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
 
-## GitLab Pages
+## ElasticSearch (EE only)
+# gitlab_rails['elasticsearch_enabled'] = false
+# gitlab_rails['elasticsearch_host'] = "localhost"
+# gitlab_rails['elasticsearch_port'] = 9200
+
+## GitLab Pages (EE only)
 # gitlab_rails['pages_path'] = "/mnt/storage/pages"
 
 ## For setting up LDAP
@@ -98,6 +103,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
+#     attributes:
+#       username: ['uid', 'userid', 'sAMAccountName']
+#       email:    ['mail', 'email', 'userPrincipalName']
+#       name:       'cn'
+#       first_name: 'givenName'
+#       last_name:  'sn'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''
@@ -116,6 +127,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
+#     attributes:
+#       username: ['uid', 'userid', 'sAMAccountName']
+#       email:    ['mail', 'email', 'userPrincipalName']
+#       name:       'cn'
+#       first_name: 'givenName'
+#       last_name:  'sn'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''

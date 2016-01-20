@@ -5,7 +5,7 @@ main() {
   gitlab_shell_ref=$2
   gitlab_workhorse_ref=$3
 
-  if [ "$ee" = "1" ] ; then
+  if [[ "$gitlab_rails_ref" == *"-ee"* ]] ; then
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlab-ee.git
   else
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlabhq.git
@@ -13,47 +13,43 @@ main() {
   gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
   gitlab_workhorse_repo=git@dev.gitlab.org:gitlab/gitlab-workhorse.git
 
-  gitlab_rails_oid=$(fetch_oid gitlab_rails)
-  assert_non_empty gitlab_rails_oid
-  gitlab_shell_oid=$(fetch_oid gitlab_shell)
-  assert_non_empty gitlab_shell_oid
-  gitlab_workhorse_oid=$(fetch_oid gitlab_workhorse)
-  assert_non_empty gitlab_workhorse_oid
+  gitlab_rails_ref_id=$(check_remote_ref gitlab_rails)
+  assert_non_empty gitlab_rails_ref_id
+  gitlab_shell_ref_id=$(check_remote_ref gitlab_shell)
+  assert_non_empty gitlab_shell_ref_id
+  gitlab_workhorse_ref_id=$(check_remote_ref gitlab_workhorse)
+  assert_non_empty gitlab_workhorse_ref_id
 
-  set_source_and_version gitlab_rails config/software/gitlab-rails.rb
-  set_source_and_version gitlab_shell config/software/gitlab-shell.rb
-  set_source_and_version gitlab_workhorse config/software/gitlab-workhorse.rb
+  set_source_and_version $gitlab_rails_ref VERSION
+  set_source_and_version $gitlab_shell_ref GITLAB_SHELL_VERSION
+  set_source_and_version $gitlab_workhorse_ref GITLAB_WORKHORSE_VERSION
 }
 
-# set_source_and_version foo file.rb
-# Will look for variables $foo_ref, $foo_repo and $foo_oid. Fills them in in
-# file.rb.
+# set_source_and_version foo_ref file
+# Will look for variable $foo_ref. Adds it to
+# file.
 set_source_and_version() {
-  # Change (c) the first line starting with 'default_version '. Jump back to
-  # the beginning of the file with '1'. Change the first line starting with
-  # 'source '.
-  ed -s "$2" <<EOF
-H
-/^default_version /c
-default_version "$(eval echo \$${1}_oid)" # $(eval echo \$${1}_ref)
-.
-1
-/^source /c
-source :git => "$(eval echo \$${1}_repo)"
-.
-wq
-EOF
+  echo "$1" > "$2"
+
   if [ $? -ne 0 ] ; then
-    warn "Error: ed -s $2 failed"
+    warn "Error: adding to $2 failed"
     exit 1
   fi
 }
 
-# fetch_oid foo
-# Query the Git remote at $foo_repo about $foo_ref, return the SHA1 OID
-fetch_oid() {
-  git_ls_remote_cmd="git ls-remote $(eval echo \$${1}_repo) $(eval echo \$${1}_ref)"
-  result=$(${git_ls_remote_cmd})
+# check_remote_ref foo
+# Check if the $foo_ref is being set to .pre
+# return $foo_ref if version contains .pre
+# Query the Git remote at $foo_repo about $foo_ref
+# return the SHA1 OID if version exists
+check_remote_ref() {
+  if [[ "$(eval echo \$${1}_ref)" == *".pre"* ]] ; then
+    result="\$${1}_ref"
+  else
+    git_ls_remote_cmd="git ls-remote $(eval echo \$${1}_repo) $(eval echo \$${1}_ref)"
+    result=$(${git_ls_remote_cmd} | awk '{print $1}')
+  fi
+
   if [ -z "${result}" ] ; then
     warn "Error: ${git_ls_remote_cmd} returned no output"
     exit 1
@@ -75,12 +71,13 @@ warn() {
 }
 
 if [ "$1" = "--ee" ] ; then
-  ee=1
-  shift
+  warn "--ee flag is obsolete, use the new syntax."
+  exit 1
 fi
 
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -n "$4" ] ; then
-  warn "Usage: $0 [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF"
+
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -n "$4" ]; then
+  warn "Usage: $0 GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF"
   exit 1
 fi
 
