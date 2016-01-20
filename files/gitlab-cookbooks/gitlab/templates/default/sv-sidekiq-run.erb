@@ -16,6 +16,7 @@ exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
     -q incoming_email \
     -q common \
     -q pages \
+    -q elasticsearch \
     -q default \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
