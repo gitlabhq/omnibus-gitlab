@@ -14,11 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+version = Gitlab::Version.new("GITLAB_WORKHORSE_VERSION")
 
 name "gitlab-workhorse"
-default_version "master" # Nightly build
+default_version version.print
 
-source :git => "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
+source :git => version.remote
+
 
 build do
   make "install PREFIX=#{install_dir}/embedded"
