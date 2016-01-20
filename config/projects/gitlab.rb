@@ -48,8 +48,8 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 override :ruby, version: '2.1.7'
 override :rubygems, version: 'ccfafdc2c52c5c605ff69ed3a772d83eb19ef55a' # 2.2.5
 override :'chef-gem', version: '12.5.1'
-override :cacerts, version: '2015.10.28', source: { md5: '6f41fb0f0c4b4695c2a6296892278141' }
-override :openssl, version: '1.0.1p', source: { url: 'https://www.openssl.org/source/openssl-1.0.1p.tar.gz', md5: '7563e92327199e0067ccd0f79f436976' }
+override :cacerts, version: '2016.01.20', source: { md5: '06629db7f712ff3a75630eccaecc1fe4' }
+override :openssl, version: '1.0.1q', source: { url: 'https://www.openssl.org/source/openssl-1.0.1q.tar.gz', md5: '54538d0cdcb912f9bc2b36268388205e' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
