@@ -380,6 +380,7 @@ default['gitlab']['gitlab-workhorse']['auth_socket'] = "''" # the empty string i
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
+default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
 
 ####
 # mailroom
