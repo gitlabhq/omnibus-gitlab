@@ -13,9 +13,9 @@ module Gitlab
     def print
       case @filename
       when "VERSION"
-        "v#{version}"
+        version == "master" ? version : "v#{version}"
       when "GITLAB_SHELL_VERSION"
-        "v#{version}"
+        version == "master" ? version : "v#{version}"
       when "GITLAB_WORKHORSE_VERSION"
         version
       else
