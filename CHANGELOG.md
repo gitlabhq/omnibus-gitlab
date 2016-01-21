@@ -21,6 +21,11 @@ omnibus-gitlab repository.
 - Update cacerts to 2016.01.20 8ddedf2effd8944bd79b46682ce48a1c8f635c76
 - Change the way version is specified for gitlab-rails, gitlab-shell and gitlab-workhorse a8676c647aca93c428335d35350f00bf757ee42a
 - Update Mattermost to v1.4.0 82149cf5fa9d556be558b69867c0859ea15e1a64
+- Add config for specifying environmental variables for gitlab-workhorse 79b807649d54384ddf93b214b2a23d7a2180b48e
+- Increase default Unicorn memory limits to 300-350 814ee578bbfe1f9eb2a83a9c728cd56565e89cb8
+- Forward git-annex config to gitlab.yml 796a0d9875b2c7d889878a2db29bb4689cd64b64
+- Prevent mailroom from going into restart loop 378f2355c5e9728c43baf14595bf9362c03b8b4c
+- Add gitlab-workhorse config for proxy_headers_timeout d3de62c54b5efe1d5f60c2dccef65e786b631c3b
 
 8.3.4
 
