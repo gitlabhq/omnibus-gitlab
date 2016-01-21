@@ -31,7 +31,7 @@ directory mailroom_log_dir do
 end
 
 runit_service 'mailroom' do
-  template_name 'mailroom'
+  finish_script true
   options({
     :user => user,
     :log_directory => mailroom_log_dir,
