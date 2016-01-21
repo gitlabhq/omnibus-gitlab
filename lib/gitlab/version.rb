@@ -11,6 +11,19 @@ module Gitlab
     end
 
     def print
+      case @filename
+      when "VERSION"
+        "v#{version}"
+      when "GITLAB_SHELL_VERSION"
+        "v#{version}"
+      when "GITLAB_WORKHORSE_VERSION"
+        version
+      else
+        nil
+      end
+    end
+
+    def version
       if @read_version.include?('.pre')
         "master"
       elsif @read_version.empty?
