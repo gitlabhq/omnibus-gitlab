@@ -313,6 +313,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 # gitlab_workhorse['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
 # gitlab_workhorse['proxy_headers_timeout'] = "1m0s"
+# gitlab_workhorse['env'] = {
+#   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+# }
 
 ###############
 # GitLab user #
