@@ -381,6 +381,9 @@ default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
+default['gitlab']['gitlab-workhorse']['env'] = {
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
+}
 
 ####
 # mailroom
