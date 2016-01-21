@@ -297,21 +297,25 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
 # gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
-##########################
-# GitLab git http server #
-##########################
-# see https://gitlab.com/gitlab-org/gitlab-git-http-server/blob/master/README.md
+####################
+# GitLab Workhorse #
+####################
+# see https://gitlab.com/gitlab-org/gitlab-workhorse/blob/master/README.md
 
-# gitlab_git_http_server['enable'] = true
-# gitlab_git_http_server['ha'] = false
-# gitlab_git_http_server['repo_root'] = "/var/opt/gitlab/git-data/repositories"
-# gitlab_git_http_server['listen_network'] = "unix"
-# gitlab_git_http_server['listen_umask'] = 000
-# gitlab_git_http_server['listen_addr'] = "/var/opt/gitlab/gitlab-git-http-server/socket"
-# gitlab_git_http_server['auth_backend'] = "http://localhost:8080"
-# gitlab_git_http_server['pprof_listen_addr'] = "''" # put an empty string on the command line
-# gitlab_git_http_server['dir'] = "/var/opt/gitlab/gitlab-git-http-server"
-# gitlab_git_http_server['log_dir'] = "/var/log/gitlab/gitlab-git-http-server"
+# gitlab_workhorse['enable'] = true
+# gitlab_workhorse['ha'] = false
+# gitlab_workhorse['listen_network'] = "unix"
+# gitlab_workhorse['listen_umask'] = 000
+# gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/socket"
+# gitlab_workhorse['auth_backend'] = "http://localhost:8080"
+# gitlab_workhorse['auth_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
+# gitlab_workhorse['pprof_listen_addr'] = "''" # put an empty string on the command line
+# gitlab_workhorse['dir'] = "/var/opt/gitlab/gitlab-workhorse"
+# gitlab_workhorse['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
+# gitlab_workhorse['proxy_headers_timeout'] = "1m0s"
+# gitlab_workhorse['env'] = {
+#   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+# }
 
 ###############
 # GitLab user #
@@ -354,8 +358,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Only change these settings if you understand well what they mean
 ## see https://about.gitlab.com/2015/06/05/how-gitlab-uses-unicorn-and-unicorn-worker-killer/
 ## and https://github.com/kzk/unicorn-worker-killer
-# unicorn['worker_memory_limit_min'] = "200*(1024**2)"
-# unicorn['worker_memory_limit_max'] = "250*(1024**2)"
+# unicorn['worker_memory_limit_min'] = "300*(1024**2)"
+# unicorn['worker_memory_limit_max'] = "350*(1024**2)"
 
 
 ##################

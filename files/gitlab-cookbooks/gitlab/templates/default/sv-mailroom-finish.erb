@@ -1,0 +1,15 @@
+#!/bin/sh
+# Fixes https://github.com/gitlabhq/gitlabhq/issues/9891 :
+# mailroom respawn loop pinning the CPU.
+
+if [ x$2 = x15 ] ; then
+  # mailroom received SIGTERM (15) so this is probably a
+  # user-initiated restart. Skip the waiting.
+  exit 0
+fi
+
+# If the user runs 'gitlab-ctl restart mailroom' during this sleep
+# they may get a timeout, unfortunately.
+wait=30
+echo "Runit: waiting ${wait} seconds before restarting mail_room"
+sleep ${wait}
