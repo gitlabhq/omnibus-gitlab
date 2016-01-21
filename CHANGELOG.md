@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Forward git-annex config to gitlab.yml 796a0d9875b2c7d889878a2db29bb4689cd64b64
 - Prevent mailroom from going into restart loop 378f2355c5e9728c43baf14595bf9362c03b8b4c
 - Add gitlab-workhorse config for proxy_headers_timeout d3de62c54b5efe1d5f60c2dccef65e786b631c3b
+- Bundle unzip which is required for EE features 56e1fc0b11cd2fb5458fa8a9585d3a1f4faa8d6f
 
 8.3.4
 
