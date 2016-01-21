@@ -34,6 +34,7 @@ dependency "postgresql"
 dependency "python-docutils"
 dependency "mysql-client" if EE
 dependency "krb5"
+dependency "unzip" if EE
 
 source :git => version.remote
 
