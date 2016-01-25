@@ -3,6 +3,8 @@
 
 DEST_DIR=<%= install_dir %>
 
+mkdir -p /var/log/gitlab/reconfigure
+
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
 
 main() {
