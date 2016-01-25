@@ -141,27 +141,66 @@ mattermost['email_feedback_email'] = "email@example.com"
 
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## GitLab Mattermost configuration
+## Community Support Resources
 
-For a complete list of available options, visit the [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+For help and support around your GitLab Mattermost deployment please see:
 
-Also see:
+- [Troubleshooting Forum](https://forum.mattermost.org/t/about-the-trouble-shooting-category/150/1) for configuration questions and issues
+- [Troubleshooting FAQ](http://docs.mattermost.com/install/troubleshooting.html)
+- [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps
 
-### GitLab Mattermost Administrator's Guide
+## Upgrading GitLab Mattermost 
 
-The [GitLab Mattermost Administrator's Guide](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#gitlab-mattermost-administration) is maintained by the Mattermost community for GitLab users.
+GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided: 
 
-#### GitLab Mattermost Trouble Shooting
+1. No major build versions are skipped 
+   (e.g. upgrading GitLab omnibus from 8.2.x to 8.3.x works, but upgrading from 8.2.x to 8.4.x will not) 
+2. Mattermost configuration settings have not been changed outside of GitLab
+   That means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`. 
 
-The [GitLab Mattermost Trouble Shooting](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#troubleshooting-gitlab-mattermost) section includes common error messages that may be encountered under different configurations as well as common solutions.
+If this is the case, upgrading GitLab using omnibus and running `gitlab-ctl reconfigure` should upgrade GitLab Mattermost to the next version. 
 
-#### Configuring Mattermost Incoming Webhooks
+If this is not the case, there are two options: 
 
-See [the section on configuring incoming webhooks in Mattermost](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#connecting-mattermost-to-integrations-with-incoming-webhooks) to support Slack-equivalent notifications from GitLab, as well as for fully customizable alerting through the **GitLab Integration Service for Mattermost**.
+1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`
+   This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
+2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below). 
 
-#### Configuring Mattermost Outgoing Webhooks
+### Migrating Mattermost outside of GitLab 
 
-See [the section on configuring outoing webhooks in Mattermost](https://github.com/mattermost/platform/blob/master/doc/install/Administration.md#connecting-mattermost-to-integrations-with-outgoing-webhooks) for connecting to Mattermost applications created by the Mattermost community for interactivity with systems like **Hubot** and **IRC**.
+Follow the [Mattermost Migration Guide](http://docs.mattermost.com/administration/migrating.html) to move your Mattermost configuration settings and data to another directory or server independent from GitLab omnibus.
 
+### Upgrading GitLab Mattermost outside of GitLab
 
-We welcome contributions to improve the configuration settings explanations both in the gitlab.rb.template and in the documentation.
+If you choose to upgrade Mattermost outside of GitLab's omnibus automation, please [follow this guide](http://docs.mattermost.com/administration/upgrade-guide.html).
+
+## Administering GitLab Mattermost 
+
+### GitLab notifications in Mattermost
+
+There are multiple ways to send notifications depending on how much control you'd like over the messages. 
+
+#### Setting up Mattermost as a Slack project service integration:
+
+Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's default formatting you can use their project service option to set up Mattermost integration: 
+
+1. In Mattermost go to **Account Settings** > **Integrations** > **Incoming Webhooks** 
+2. Select a channel and click **Add* and copy the `Webhook URL`
+3. In GitLab, go to **Settings** > **Project Services** > **Slack** and paste in the `Webhook URL` into **Webhook** 
+4. Enter **Username** for how you would like to name the account that posts the notifications
+4. Select **Triggers** for GitLab events on which you'd like to receive notifications
+6. Click **Save changes** then **Test settings** to make sure everything is working
+
+Any issues, please see the [Mattermost Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150).
+
+#### Setting up GitLab integration service for Mattermost 
+
+You can also set up the [open source integration service](https://github.com/NotSqrt/mattermost-integration-gitlab) to let you configure notifications on GitLab issues, pushes, build events, merge requests and comments to be delivered to selected Mattermost channels. 
+
+This integration lets you completely control how notifications are formatted and, unlike Slack, offers full markdown support. 
+
+The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see: 
+- [Mattermost incoming webhook documentation](http://docs.mattermost.com/developer/webhooks-incoming.html)
+- [GitLab webhook documentation](http://doc.gitlab.com/ce/web_hooks/web_hooks.html)
+
+![webhooks](https://gitlab.com/gitlab-org/omnibus-gitlab/uploads/677b0aa055693c4dcabad0ee580c61b8/730_gitlab_feature_request.png)
