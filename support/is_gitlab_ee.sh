@@ -1,2 +1,2 @@
 #!/bin/bash
-[[ -n $ee ]] || grep -q '-ee' VERSION
+[[ -n $ee ]] || grep -q -E "\-ee" VERSION
