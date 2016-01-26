@@ -337,7 +337,7 @@ You can increase the default timeout value by setting the value in `/etc/gitlab/
 gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 ```
 
-Save the file and [reconfigure GitLab](../administration/restart_gitlab.md#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 [CAcert.org]: http://www.cacert.org/
