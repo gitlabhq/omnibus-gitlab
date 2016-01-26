@@ -320,6 +320,26 @@ If you are using self-signed certificate do not forget to set `self_signed_cert:
 1. Check if user `gitlab-ci` is in `/etc/cron.deny` and if yes remove it. You can add the `gitlab-ci` user to `/etc/cron.allow``.
 1. Check if you have PAM enabled and if gitlab-ci user is allowed to access crontab. If yes, try changing your `/etc/security/access.conf` to allow the user access to the resource, for example `+:gitlab-ci:ALL`.
 
+### error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
+
+Starting with version 8.3, gitlab-workorse is the default router for any requests
+going to GitLab.
+
+If gitlab-workhorse doesn't receive an answer from
+GitLab within 1 minute (default), it will serve a 502 page.
+
+There are various reasons why the request might timeout, perhaps user
+was loading a very large diff or similar.
+
+You can increase the default timeout value by setting the value in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
+```
+
+Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+for the changes to take effect.
+
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
