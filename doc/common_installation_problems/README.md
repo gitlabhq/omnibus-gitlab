@@ -269,6 +269,16 @@ to serve evil JavaScript code to the visitors of your GitLab server.
 If you want to run GitLab with custom JavaScript or CSS code you are probably
 better off running GitLab from source, or building your own packages.
 
+If you really know what you are doing,
+you can execute `gitlab-rake assets:precompile` like this
+
+```shell
+sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
+# user and path might be different if you changed the defaults of
+# user['username'], user['group'] and gitlab_rails['dir'] in gitlab.rb
+sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
+```
+
 ### 'Short read or OOM loading DB' error
 
 Try cleaning the old redis session by following the [documentation here.](http://doc.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)

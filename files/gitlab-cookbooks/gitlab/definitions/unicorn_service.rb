@@ -65,6 +65,7 @@ define :unicorn_service, :rails_app => nil, :user => nil do
     preload_app true
     stderr_path File.join(unicorn_log_dir, "unicorn_stderr.log")
     stdout_path File.join(unicorn_log_dir, "unicorn_stdout.log")
+    relative_url node['gitlab'][svc]['relative_url']
     pid unicorn_pidfile
     before_fork <<-'EOS'
       old_pid = "#{server.config[:pid]}.oldbin"

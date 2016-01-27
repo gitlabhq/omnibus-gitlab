@@ -80,7 +80,7 @@ end
 
 # If no internal_api_url is specified, default to the IP/port Unicorn listens on
 api_url = node['gitlab']['gitlab-rails']['internal_api_url']
-api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}"
+api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}#{node['gitlab']['unicorn']['relative_url']}"
 
 redis_port = node['gitlab']['gitlab-rails']['redis_port']
 if redis_port

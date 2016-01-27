@@ -17,7 +17,9 @@ fi
 
 cd <%= install_dir %>/embedded/service/gitlab-rails
 
-if [ "$(id -n -u)" = "${gitlab_user}" ] ; then
+if [ -n "$NO_PRIVILEGE_DROP" ]; then
+  privilege_drop=''
+elif [ "$(id -n -u)" = "${gitlab_user}" ] ; then
   # We are already running at the intended privilege; don't try to drop
   # privileges again because only root can do that (and we are apparently not
   # root!).

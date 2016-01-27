@@ -91,7 +91,8 @@ server {
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
 
-  location / {
+  <% path = @relative_url ? @relative_url : "/" %>
+  location <%= path %> {
     ## If you use HTTPS make sure you disable gzip compression
     ## to be safe against BREACH attack.
     <%= 'gzip off;' if @https %>

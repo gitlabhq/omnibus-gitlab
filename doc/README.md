@@ -17,6 +17,7 @@
 ## Configuring
 
 - [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
+- [Configuring a relative URL for Gitlab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
 - [Storing git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
 - [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user-group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)

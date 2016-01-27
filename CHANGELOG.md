@@ -3,6 +3,8 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+- Add experimental support for relative url installations
+
 8.4.0
 
 - Add support for ecdsa and ed25519 keys to Docker image (Matthew Monaco) 3bfcb2617d240937fdb77d38900ee00f1ffbce02
