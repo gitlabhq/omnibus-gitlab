@@ -3,7 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-- Add experimental support for relative url installations
+8.5.0
+
+- Add experimental support for relative url installations (Artem Sidorenko) c3639dc311f2f70ec09dcd579a09443189266864
 
 8.4.0
 
