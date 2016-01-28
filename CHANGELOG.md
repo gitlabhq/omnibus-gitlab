@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.5.0
 
 - Add experimental support for relative url installations (Artem Sidorenko) c3639dc311f2f70ec09dcd579a09443189266864
+- Update ruby to 2.2.4
 
 8.4.0
 
