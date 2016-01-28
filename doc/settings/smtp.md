@@ -104,6 +104,24 @@ gitlab_rails['smtp_password'] = "your.password"
 gitlab_rails['smtp_domain'] = "domain.com"
 ```
 
+### Zoho Mail
+
+This configuration was tested on Zoho Mail with a custom domain.
+
+```ruby
+gitlab_rails['gitlab_email_from'] = 'gitlab@mydomain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'gitlab@mydomain.com'
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.zoho.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_user_name'] = "gitlab@mydomain.com"
+gitlab_rails['smtp_password'] = "mypassword"
+gitlab_rails['smtp_domain'] = "smtp.zoho.com"
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
