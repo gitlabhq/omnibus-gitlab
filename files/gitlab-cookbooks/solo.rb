@@ -1,9 +1,11 @@
 CURRENT_PATH = File.expand_path(File.dirname(__FILE__))
+TIME = Time.now.to_i
 file_cache_path "#{CURRENT_PATH}/cache"
 cookbook_path CURRENT_PATH
 cache_path "#{CURRENT_PATH}/cache"
 verbose_logging false
 ssl_verify_mode :verify_peer
+log_location "/var/log/gitlab/reconfigure/#{TIME}.log"
 # Omnibus-GitLab only needs to know very little about the system it is running
 # on. We want to disable as many Ohai plugins as we can to avoid plugin bugs
 # and speed up 'gitlab-ctl reconfigure'.
