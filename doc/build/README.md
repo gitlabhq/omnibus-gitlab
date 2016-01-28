@@ -3,7 +3,7 @@
 See
 https://gitlab.com/gitlab-org/gitlab-omnibus-builder/blob/master/README.md#recipe-default
 for instructions on how to prepare a build box using Chef. After running the
-cookbook you can perform builds as the `omnibus-build` user.
+cookbook you can perform builds as the `gitlab_ci_multi_runner` user.
 
 ```shell
 # Ubuntu/Debian only: ensure you have proper locale available
