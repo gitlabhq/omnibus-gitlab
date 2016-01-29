@@ -6,7 +6,9 @@ omnibus-gitlab repository.
 8.5.0
 
 - Add experimental support for relative url installations (Artem Sidorenko) c3639dc311f2f70ec09dcd579a09443189266864
-- Update ruby to 2.2.4
+- Update ruby to 2.2.4 4d760a6de16ee690aa535bb7683d41ef682eaffd
+- Restart mailroom service when a config changes f77dcfe9949ba6a425c448aff34fdb9cbe289164
+- Remove gitlab-ci standalone from the build, not all gitlab-ci code de6419c850d0302a230b172c06d9e542845bc5b7
 
 8.4.3
 
