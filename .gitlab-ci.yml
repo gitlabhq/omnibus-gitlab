@@ -129,7 +129,14 @@ Raspberry Pi 2:
   - RaspberryPi2-tag
   except:
   - branches
-
+Raspberry Pi 2:
+  stage: extra
+  script:
+  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+  tags:
+  - RaspberryPi2-jessie-tag
+  except:
+  - branches
 Docker master:
   stage: extra
   script:
