@@ -21,19 +21,9 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
-ci_dependent_services = []
-ci_dependent_services << "service[ci-sidekiq]" if OmnibusHelper.should_notify?("ci-sidekiq")
-ci_dependent_services << "service[ci-unicorn]" if OmnibusHelper.should_notify?("ci-unicorn")
-
-
 execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
-  action :nothing
-end
-
-execute "initialize gitlab-ci database" do
-  command "/opt/gitlab/bin/gitlab-ci-rake setup"
   action :nothing
 end
 

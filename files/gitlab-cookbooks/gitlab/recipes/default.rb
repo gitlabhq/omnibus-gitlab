@@ -73,7 +73,6 @@ end
 include_recipe "gitlab::gitlab-ci_disable"
 
 include_recipe "gitlab::selinux"
-include_recipe "gitlab::cron"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
