@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.4.3
+
+- Update openssl to 1.0.1r 541a0ed432bfa6a5eac58be7aeb70b15b1b6ea43
+
+8.4.2
+
+- Update gitlab-workhorse to 0.6.2 32b3a74179e28c1572608cc62c1484caf907cb9c
+
+8.4.1
+
+- No changes
+
 8.4.0
 
 - Add support for ecdsa and ed25519 keys to Docker image (Matthew Monaco) 3bfcb2617d240937fdb77d38900ee00f1ffbce02
