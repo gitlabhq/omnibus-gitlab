@@ -109,6 +109,7 @@ template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
+dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable']
 
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
@@ -238,9 +239,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
     )
   )
   restarts dependent_services
-  unless redis_not_listening
-    notifies :run, 'execute[clear the gitlab-rails cache]'
-  end
+  notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do

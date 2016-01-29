@@ -15,6 +15,12 @@
 # limitations under the License.
 #
 
+# IMPORTANT:
+# When using template_symlink restarts property
+# be aware that any additional "notifies :restart" outside of this property
+# will be IGNORED.
+# You must specify EITHER one restarts property OR multiple "notifies :restart"
+
 define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :group => nil, :mode => nil, :variables => nil, :helpers => nil, :notifies => nil, :restarts => [], :action => :create do
   template params[:name] do
     source params[:source]

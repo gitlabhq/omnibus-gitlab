@@ -80,7 +80,8 @@ include_recipe "gitlab::selinux"
   "unicorn",
   "ci-unicorn",
   "sidekiq",
-  "ci-sidekiq"
+  "ci-sidekiq",
+  "mailroom"
 ].each do |dummy|
   service dummy do
     supports []
