@@ -4,6 +4,37 @@
 
 Please make sure you are viewing this file on the master branch.
 
+## From Community Edition to Enterprise Edition
+
+This is how you upgrade an existing GitLab Community Edition server,
+installed using the Omnibus packages, to GitLab Enterprise Edition.
+**Make sure you have retrieved your license file before installing
+GitLab Enterprise Edition.**
+
+First you must add the 'gitlab-ee' Apt or Yum repo:
+https://packages.gitlab.com/gitlab/gitlab-ee/install . (If you want to
+use dpkg/rpm instead of apt-get/yum you can download individual
+gitlab-ee packages from https://packages.gitlab.com/gitlab/gitlab-ee .)
+
+Next, install the `gitlab-ee` package with apt-get or yum. Note that
+this will automatically uninstall the `gitlab-ce` package on your GitLab
+server. Run `sudo gitlab-ctl reconfigure` after installing the gitlab-ee
+package.
+
+
+```
+# Ubuntu/Debian
+sudo apt-get install gitlab-ee
+sudo gitlab-ctl reconfigure
+
+# Centos/RHEL
+sudo yum install gitlab-ee
+sudo gitlab-ctl reconfigure
+```
+
+Now go to the GitLab admin panel of your server
+(gitlab.example.com/admin) and upload your license file.
+
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
