@@ -1,5 +1,6 @@
 #
 # Copyright 2012-2014 Chef Software, Inc.
+# Copyright 2016 GitLab Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,12 +22,11 @@ dependency "cacerts"
 dependency "makedepend" unless aix?
 dependency "patch" if solaris2?
 
-default_version "1.0.1p"
+default_version "1.0.2f"
 
 source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz"
 
-version("1.0.1m") { source md5: "d143d1555d842a069cb7cc34ba745a06" }
-version("1.0.1p") { source md5: "7563e92327199e0067ccd0f79f436976" }
+version("1.0.2f") { source md5: "b3bf73f507172be9292ea2a8c28b659d" }
 
 relative_path "openssl-#{version}"
 

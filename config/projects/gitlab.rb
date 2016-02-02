@@ -49,7 +49,6 @@ override :ruby, version: '2.2.4', source: { md5: '9a5e15f9d5255ba37ace18771b0a8d
 override :rubygems, version: 'v2.5.1'
 override :'chef-gem', version: '12.5.1'
 override :cacerts, version: '2016.01.20', source: { md5: '06629db7f712ff3a75630eccaecc1fe4' }
-override :openssl, version: '1.0.2f', source: { md5: 'b3bf73f507172be9292ea2a8c28b659d' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
 
 # Openssh needs to be installed
