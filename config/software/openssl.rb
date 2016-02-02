@@ -151,9 +151,9 @@ build do
   if aix?
     patch_env = env.dup
     patch_env['PATH'] = "/opt/freeware/bin:#{env['PATH']}"
-    patch source: "openssl-1.0.1f-do-not-build-docs.patch", env: patch_env
+    patch source: "openssl-1.0.2f-remove-build-docs.patch", env: patch_env
   else
-    patch source: "openssl-1.0.1f-do-not-build-docs.patch"
+    patch source: "openssl-1.0.2f-remove-build-docs.patch"
   end
 
   command configure_command, env: env
