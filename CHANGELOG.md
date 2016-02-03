@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.4.4
+
+- Allow webserver user to access the gitlab pages e0cbafafad88d2478514c1485f69fc41cc076a85
+
 8.4.3
 
 - Update openssl to 1.0.1r 541a0ed432bfa6a5eac58be7aeb70b15b1b6ea43
