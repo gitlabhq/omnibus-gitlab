@@ -49,7 +49,8 @@ end
 # It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
 directory node['gitlab']['gitlab-rails']['shared_path'] do
   owner gitlab_user
-  mode '0711'
+  group account_helper.web_server_group
+  mode '0751'
   recursive true
 end
 
