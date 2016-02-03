@@ -37,7 +37,7 @@
 
 ## Updating
 
-- [Upgrade from Community Edition to Enterprise Edition](update/README.md#from-community-edition-to-enterprise-edition
+- [Upgrade from Community Edition to Enterprise Edition](update/README.md#from-community-edition-to-enterprise-edition)
 - [Note about updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
 - [Updating to the latest version](update/README.md#updating-from-gitlab-66-and-higher-to-the-latest-version)
 - [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-660pre1-to-664)
