@@ -18,6 +18,9 @@ GitLab:
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
 - Use an [external MySQL server](#using-a-mysql-database-management-server-enterprise-edition-only)
 
+If you are going to use MySQL/MariaDB, make sure to read the [MySQL special notes]
+(#omnibus-mysql-special-notes) before proceeding.
+
 ## Using a non-packaged PostgreSQL database management server
 
 If you do not want to use the packaged PostgreSQL server, you can configure an
@@ -82,6 +85,15 @@ After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup][rake-backup] and
 [restore][rake-restore] tasks.
 
+## Omnibus MySQL special notes
+
+MySQL in Omnibus is only supported in GitLab Enterprise Edition.
+The MySQL server itself is _not_ shipped with Omnibus.
+
+Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
+hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
+(#set-mysql-collation-to-utf-8) to fix any relevant errors.
+
 ## Using a MySQL database management server (Enterprise Edition only)
 
 _**Important note:**
@@ -89,14 +101,6 @@ If you are connecting Omnibus GitLab to an existing GitLab database you should
 [create a backup][rake-backup] before attempting this procedure._
 
 ---
-
-GitLab Enterprise Edition supports setting an external MySQL server instead of
-the PostgreSQL bundled one. The MySQL server itself is _not_ shipped with
-Omnibus.
-
-Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
-hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
-(#set-mysql-collation-to-utf-8) to fix any relevant errors.
 
 The following guide assumes that you want to use MySQL or MariaDB and are using
 the **GitLab Enterprise Edition packages**.
