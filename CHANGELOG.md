@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Restart mailroom service when a config changes f77dcfe9949ba6a425c448aff34fdb9cbe289164
 - Remove gitlab-ci standalone from the build, not all gitlab-ci code de6419c850d0302a230b172c06d9e542845bc5b7
 
+8.4.4
+
+- Allow webserver user to access the gitlab pages e0cbafafad88d2478514c1485f69fc41cc076a85
+
 8.4.3
 
 - Update openssl to 1.0.1r 541a0ed432bfa6a5eac58be7aeb70b15b1b6ea43
