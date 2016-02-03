@@ -30,7 +30,7 @@ external one:
     postgresql['enable'] = false
 
     # Fill in the connection details for database.yml
-    gitlab_rails['db_adapter'] = 'pg'
+    gitlab_rails['db_adapter'] = 'postgresql'
     gitlab_rails['db_encoding'] = 'utf8'
     gitlab_rails['db_host'] = '127.0.0.1'
     gitlab_rails['db_port'] = '3306'
