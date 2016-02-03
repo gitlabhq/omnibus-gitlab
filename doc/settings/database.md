@@ -33,9 +33,9 @@ external one:
     gitlab_rails['db_adapter'] = 'postgresql'
     gitlab_rails['db_encoding'] = 'utf8'
     gitlab_rails['db_host'] = '127.0.0.1'
-    gitlab_rails['db_port'] = '3306'
-    gitlab_rails['db_username'] = 'git'
-    gitlab_rails['db_password'] = 'password'
+    gitlab_rails['db_port'] = '5432'
+    gitlab_rails['db_username'] = 'USERNAME'
+    gitlab_rails['db_password'] = 'PASSWORD'
     ```
 
 1.  [Reconfigure GitLab][] for the changes to take effect.
@@ -117,8 +117,8 @@ the **GitLab Enterprise Edition packages**.
     gitlab_rails['db_encoding'] = 'utf8'
     gitlab_rails['db_host'] = '127.0.0.1'
     gitlab_rails['db_port'] = '3306'
-    gitlab_rails['db_username'] = 'git'
-    gitlab_rails['db_password'] = 'password'
+    gitlab_rails['db_username'] = 'USERNAME'
+    gitlab_rails['db_password'] = 'PASSWORD'
     ```
 
     `db_adapter` and `db_encoding` should be like the example above. Change
