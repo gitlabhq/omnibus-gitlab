@@ -88,7 +88,8 @@ correct executables by running both the [backup][rake-backup] and
 ## Omnibus MySQL special notes
 
 MySQL in Omnibus is only supported in GitLab Enterprise Edition.
-The MySQL server itself is _not_ shipped with Omnibus.
+The MySQL server itself is _not_ shipped with Omnibus, you will have to install
+it on your own or use an existing one. Omnibus ships only the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
 hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
