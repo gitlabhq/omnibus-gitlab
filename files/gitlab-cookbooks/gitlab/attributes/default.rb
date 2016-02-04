@@ -437,6 +437,14 @@ default['gitlab']['nginx']['proxy_host'] = "$http_host"
 default['gitlab']['nginx']['proxy_x_real_ip'] = "$remote_addr"
 default['gitlab']['nginx']['proxy_x_forwarded_for'] = "$proxy_add_x_forwarded_for"
 default['gitlab']['nginx']['proxy_x_forwarded_proto'] = nil
+default['gitlab']['nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "http",
+  "X-Forwarded-Ssl" => nil
+}
+
 
 ###
 # Logging

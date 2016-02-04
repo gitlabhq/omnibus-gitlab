@@ -473,10 +473,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['proxy_read_timeout'] = 300
 # nginx['proxy_connect_timeout'] = 300
 # nginx['set_proxy_headers'] = true
-# nginx['proxy_host'] = "$http_host"
-# nginx['proxy_x_real_ip'] = "$remote_addr"
-# nginx['proxy_x_forwarded_for'] = "$proxy_add_x_forwarded_for"
-# nginx['proxy_x_forwarded_proto'] = "http"
+# nginx['proxy_set_headers'] = {
+#  "Host" => "$http_host",
+#  "X-Real-IP" => "$remote_addr",
+#  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+#  "X-Forwarded-Proto" => "https",
+#  "X-Forwarded-Ssl" => "on"
+# }
 
 ## Advanced settings
 # nginx['dir'] = "/var/opt/gitlab/nginx"

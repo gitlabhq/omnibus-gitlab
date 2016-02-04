@@ -126,12 +126,12 @@ module Gitlab
       case uri.scheme
       when "http"
         Gitlab['gitlab_rails']['gitlab_https'] = false
-        Gitlab['nginx']['proxy_x_forwarded_proto'] ||= "http"
+        parse_nginx_proxy_headers(false)
       when "https"
         Gitlab['gitlab_rails']['gitlab_https'] = true
         Gitlab['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
-        Gitlab['nginx']['proxy_x_forwarded_proto'] ||= "https"
+        parse_nginx_proxy_headers(true)
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end
@@ -311,6 +311,22 @@ module Gitlab
 
         Gitlab[left.first][left.last] = user_set_gitlab_port || default_set_gitlab_port
       end
+    end
+
+    def parse_nginx_proxy_headers(https)
+      value_from_gitlab_rb = Gitlab['nginx']['proxy_set_headers']
+      default_from_attributes = node['gitlab']['nginx']['proxy_set_headers']
+
+      if https
+        default_from_attributes = default_from_attributes.to_hash.merge('X-Forwarded-Proto' => "https") unless value_from_gitlab_rb && value_from_gitlab_rb['X-Forwarded-Proto']
+        default_from_attributes = default_from_attributes.to_hash.merge('X-Forwarded-Ssl' => "on") unless value_from_gitlab_rb && value_from_gitlab_rb['X-Forwarded-Ssl']
+      end
+
+      Gitlab['nginx']['proxy_set_headers'] = if value_from_gitlab_rb
+                                               default_from_attributes.merge(value_from_gitlab_rb.to_hash)
+                                             else
+                                               default_from_attributes
+                                             end
     end
 
     def parse_ci_external_url
