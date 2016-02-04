@@ -60,6 +60,7 @@ end
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   gitlab_ci_builds_dir,
+  gitlab_rails_public_uploads_dir,
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
@@ -88,13 +89,6 @@ end
 directory gitlab_ci_dir do
   owner gitlab_user
   mode '0755'
-  recursive true
-end
-
-directory gitlab_rails_public_uploads_dir do
-  owner gitlab_user
-  group account_helper.web_server_group
-  mode '0750'
   recursive true
 end
 
