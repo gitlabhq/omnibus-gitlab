@@ -121,7 +121,7 @@ Raspberry Pi 2 master:
   - RaspberryPi2-branch
   except:
   - tags
-Raspberry Pi 2:
+Raspberry Pi 2 wheezy:
   stage: extra
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
@@ -129,7 +129,7 @@ Raspberry Pi 2:
   - RaspberryPi2-tag
   except:
   - branches
-Raspberry Pi 2:
+Raspberry Pi 2 jessie:
   stage: extra
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
