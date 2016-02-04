@@ -352,7 +352,7 @@ Save the file and [reconfigure GitLab][] for the changes to take effect.
 ### The change you wanted was rejected
 
 Most likely you have GitLab setup in an environment that has proxy in front
-of Gitlab and the proxy headers set in package by default are incorrect
+of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
 See [Change the default proxy headers section of nginx doc][] for details on
@@ -360,10 +360,16 @@ how to override the default headers.
 
 ### Can't verify CSRF token authenticity Completed 422 Unprocessable
 
+Most likely you have GitLab setup in an environment that has proxy in front
+of GitLab and the proxy headers set in package by default are incorrect
+for your environment.
+
+See [Change the default proxy headers section of nginx doc][] for details on
+how to override the default headers.
 
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
-[Change the default proxy headers section of nginx doc]: doc/settings/nginx.md](doc/settings/nginx.md
+[Change the default proxy headers section of nginx doc]: doc/settings/nginx.md
 [reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
