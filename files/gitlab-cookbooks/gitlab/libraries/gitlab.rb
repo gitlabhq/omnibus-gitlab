@@ -126,10 +126,12 @@ module Gitlab
       case uri.scheme
       when "http"
         Gitlab['gitlab_rails']['gitlab_https'] = false
+        Gitlab['nginx']['proxy_x_forwarded_proto'] ||= "http"
       when "https"
         Gitlab['gitlab_rails']['gitlab_https'] = true
         Gitlab['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Gitlab['nginx']['proxy_x_forwarded_proto'] ||= "https"
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end

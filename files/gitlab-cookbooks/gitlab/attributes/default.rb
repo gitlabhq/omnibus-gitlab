@@ -432,6 +432,11 @@ default['gitlab']['nginx']['custom_gitlab_server_config'] = nil
 default['gitlab']['nginx']['custom_nginx_config'] = nil
 default['gitlab']['nginx']['proxy_read_timeout'] = 300
 default['gitlab']['nginx']['proxy_connect_timeout'] = 300
+default['gitlab']['nginx']['set_proxy_headers'] = true
+default['gitlab']['nginx']['proxy_host'] = "$http_host"
+default['gitlab']['nginx']['proxy_x_real_ip'] = "$remote_addr"
+default['gitlab']['nginx']['proxy_x_forwarded_for'] = "$proxy_add_x_forwarded_for"
+default['gitlab']['nginx']['proxy_x_forwarded_proto'] = nil
 
 ###
 # Logging
