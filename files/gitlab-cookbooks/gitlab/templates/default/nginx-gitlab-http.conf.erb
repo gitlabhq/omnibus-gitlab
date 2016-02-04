@@ -105,11 +105,9 @@ server {
 
     proxy_http_version 1.1;
 
-    <% if @set_proxy_headers %>
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>
     proxy_set_header <%= header[0] %> <%= header[1] %>;
-    <% end %>
     <% end %>
 
     proxy_pass http://gitlab-workhorse;
