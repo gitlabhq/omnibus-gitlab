@@ -68,7 +68,9 @@ as part of the external_url.
 external_url "https://gitlab.example.com:2443"
 ```
 
-To set the location of ssl certificates create `/etc/gitlab/ssl` directory, place the `.crt` and `.key` files in the directory and specify the following configuration:
+To set the location of ssl certificates create `/etc/gitlab/ssl` directory,
+place the `.crt` and `.key` files in the directory and specify the following
+configuration:
 
 ```ruby
 # For GitLab
@@ -77,6 +79,40 @@ nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+## Change the default proxy headers
+
+By default, when you specify `external_url` omnibus-gitlab will set a few
+NGINX proxy headers that are assumed to be sane in most environments.
+
+For example, omnibus-gitlab will set:
+
+```
+  "X-Forwarded-Proto" => "https",
+  "X-Forwarded-Ssl" => "on"
+```
+
+if you have specified `https` schema in the `external_url`.
+
+However, if you have a situation where your GitLab is in a more complex setup
+like behind a reverse proxy, you will need to tweak the proxy headers in order
+to avoid errors like `The change you wanted was rejected` or
+`Can't verify CSRF token authenticity Completed 422 Unprocessable`.
+
+This can be achieved by overriding the default headers, eg. specify
+in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+ nginx['proxy_set_headers'] = {
+  "X-Forwarded-Proto" => "http",
+  "CUSTOM_HEADER" => "VALUE"
+ }
+```
+
+Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+for the changes to take effect.
+
+This way you can specify any header supported by NGINX you require.
 
 ## Using a non-bundled web-server
 
