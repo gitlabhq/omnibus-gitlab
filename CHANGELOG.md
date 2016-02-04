@@ -10,8 +10,10 @@ omnibus-gitlab repository.
 - Restart mailroom service when a config changes f77dcfe9949ba6a425c448aff34fdb9cbe289164
 - Remove gitlab-ci standalone from the build, not all gitlab-ci code de6419c850d0302a230b172c06d9e542845bc5b7
 - Switch openssl to 1.0.2f a53d77674f32de055e7f6b4128e25ff7c801a284
-- Update nginx to 1.9.10
-- Use http2 module
+- Update nginx to 1.9.10 8201623411c028202392d7f90056e1494812ced0
+- Use http2 module 8201623411c028202392d7f90056e1494812ced0
+- Update openssl to 1.0.2f 6ddf0d83c19c13ad17c3fb032b701fb8102b116d
+- Add configuration options to override default proxy headers 3807ed87ec887ca60343a5dc09fc99af746e1535
 
 8.4.4
 
