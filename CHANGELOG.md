@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Use http2 module 8201623411c028202392d7f90056e1494812ced0
 - Update openssl to 1.0.2f 6ddf0d83c19c13ad17c3fb032b701fb8102b116d
 - Add configuration options to override default proxy headers 3807ed87ec887ca60343a5dc09fc99af746e1535
+- Change permissions of public/uploads directory to be more restrictive 7e4aa2f5e60cbb8a5f6c6475514a73be813b74fe
 
 8.4.4
 
