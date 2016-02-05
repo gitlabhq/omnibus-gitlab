@@ -314,19 +314,29 @@ module Gitlab
     end
 
     def parse_nginx_proxy_headers(https)
-      value_from_gitlab_rb = Gitlab['nginx']['proxy_set_headers']
-      default_from_attributes = node['gitlab']['nginx']['proxy_set_headers']
+      values_from_gitlab_rb = Gitlab['nginx']['proxy_set_headers']
+      default_from_attributes = node['gitlab']['nginx']['proxy_set_headers'].to_hash
 
-      if https
-        default_from_attributes = default_from_attributes.to_hash.merge('X-Forwarded-Proto' => "https") unless value_from_gitlab_rb && value_from_gitlab_rb['X-Forwarded-Proto']
-        default_from_attributes = default_from_attributes.to_hash.merge('X-Forwarded-Ssl' => "on") unless value_from_gitlab_rb && value_from_gitlab_rb['X-Forwarded-Ssl']
+      default_from_attributes = if https
+                                  default_from_attributes.merge({
+                                                                 'X-Forwarded-Proto' => "https",
+                                                                 'X-Forwarded-Ssl' => "on"
+                                                               })
+                                else
+                                  default_from_attributes.merge({
+                                                                 "X-Forwarded-Proto" => "http"
+                                                               })
+                                end
+
+      if values_from_gitlab_rb
+        values_from_gitlab_rb.each do |key, value|
+          default_from_attributes.delete(key) if value.nil?
+        end
+
+        default_from_attributes = default_from_attributes.merge(values_from_gitlab_rb.to_hash)
       end
 
-      Gitlab['nginx']['proxy_set_headers'] = if value_from_gitlab_rb
-                                               default_from_attributes.merge(value_from_gitlab_rb.to_hash)
-                                             else
-                                               default_from_attributes
-                                             end
+      Gitlab['nginx']['proxy_set_headers'] = default_from_attributes
     end
 
     def parse_ci_external_url

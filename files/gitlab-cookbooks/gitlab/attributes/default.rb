@@ -435,9 +435,7 @@ default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 default['gitlab']['nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
-  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
-  "X-Forwarded-Proto" => "http",
-  "X-Forwarded-Ssl" => nil
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
 }
 
 
