@@ -216,6 +216,11 @@ The second, you need to configure `gitlab.rb`:
 
 ## Troubleshooting
 
+### 500 Internal Error
+When updating some the docker image you may encounter an issue where all paths display the '500' page.  
+If this is occurs, just execute `sudo docker restart gitlab` to restart the container and rectify the issue.
+
+
 ### Permission problems
 
 When updating from older GitLab Docker images you might encounter permission problems.
