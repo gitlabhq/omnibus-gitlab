@@ -21,20 +21,30 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Configuring a relative URL for Gitlab
 
-_**Note:** Relative URL support is **experimental** and was [introduced][590]
-in Omnibus GitLab 8.5._
+_**Note:** Relative URL support in Omnibus GitLab is **experimental** and was
+[introduced][590] in version 8.5. For source installations there is a
+[separate document](http://doc.gitlab.com/ce/install/relative_url.html)._
 
-The omnibus-gitlab package is shipped with pre-compiled assets (CSS, JavaScript,
-etc.).
+---
 
-In case you configure Omnibus with a relative URL, the assets will need to be
-recompiled. This is a task which consumes a lot of CPU and memory resources, so
-to avoid out-of-memory errors, you should have at least 2GB of RAM available on
-your system, while we recommend 4GB RAM and 4 or 8 CPU cores.
+While it is recommended to install GitLab in its own (sub)domain, sometimes
+this is not possible due to a variety of reasons. In that case, GitLab can also
+be installed under a relative URL, for example `https://example.com/gitlab`.
+
+Note that by changing the URL, all remote URLS will change, so you'll have to
+manually edit them in any local repository that points to your GitLab instance.
+
+### Relative URL requirements
+
+The Omnibus GitLab package is shipped with pre-compiled assets (CSS, JavaScript,
+fonts, etc.). If you configure Omnibus with a relative URL, the assets will
+need to be recompiled, which is a task which consumes a lot of CPU and memory
+resources. To avoid out-of-memory errors, you should have at least 2GB of RAM
+available on your system, while we recommend 4GB RAM, and 4 or 8 CPU cores.
 
 ### Enable relative URL in GitLab
 
-Follow the steps below to enable a relative URL in GitLab:
+Follow the steps below to enable relative URL in GitLab:
 
 1.  (Optional) If you run short on resources, you can temporarily free up some
     memory by shutting down Unicorn and Sidekiq with the following command:
@@ -44,48 +54,57 @@ Follow the steps below to enable a relative URL in GitLab:
     sudo gitlab-ctl stop sidekiq
     ```
 
-2.  Set the `external_url` in `/etc/gitlab/gitlab.rb`:
+1.  Set the `external_url` in `/etc/gitlab/gitlab.rb`:
 
     ```ruby
-    external_url "https://gitlab.example.com/gitlab"
+    external_url "https://example.com/gitlab"
     ```
 
-    In this case, the relative URL under which GitLab will be served will be
+    In this example, the relative URL under which GitLab will be served will be
     `/gitlab`. Change it to your liking.
 
-3.  Reconfigure GitLab for the changes to take effect:
+1.  Reconfigure GitLab for the changes to take effect:
 
     ```shell
     sudo gitlab-ctl reconfigure
     ```
 
-4.  Restart GitLab in case you shut down Unicorn and Sidekiq in the first step:
+1.  Restart GitLab in case you shut down Unicorn and Sidekiq in the first step:
 
     ```shell
-    sudo gitlab-ctl start
+    sudo gitlab-ctl restart
     ```
 
----
-
-If for some reason the asset compilation fails (i.e. the server runs out of memory),
-you can execute the task manually after you addressed the issue (i.e. add swap):
-
-```shell
-sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
-# user and path might be different if you changed the defaults of
-# user['username'], user['group'] and gitlab_rails['dir'] in gitlab.rb
-sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
-```
+If you stumble upon any issues, see the [troubleshooting section]
+(#relative-url-troubleshooting).
 
 ### Disable relative URL in GitLab
 
 To disable the relative URL, follow the same steps as above and set up the
 `external_url` to a one that doesn't contain a relative path. You may need to
-restart Unicorn after the reconfigure task is done:
+explicitly restart Unicorn after the reconfigure task is done:
 
 ```shell
 sudo gitlab-ctl restart unicorn
 ```
+
+If you stumble upon any issues, see the [troubleshooting section]
+(#relative-url-troubleshooting).
+
+### Relative URL troubleshooting
+
+If for some reason the asset compilation fails (i.e. the server runs out of memory),
+you can execute the task manually after you addressed the issue (e.g. add swap):
+
+```shell
+sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
+sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
+```
+
+User and path might be different if you changed the defaults of
+`user['username']`, `user['group']` and `gitlab_rails['dir']` in `gitlab.rb`.
+In that case, make sure that the `chown` command above is run with the right
+username and group.
 
 [590]: https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/590 "Merge request - Relative url support for omnibus installations"
 
