@@ -105,13 +105,13 @@ default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['elasticsearch_enabled'] = false
 default['gitlab']['gitlab-rails']['elasticsearch_host'] = nil
 default['gitlab']['gitlab-rails']['elasticsearch_port'] = nil
+default['gitlab']['gitlab-rails']['ldap_enabled'] = false
+default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
 default['gitlab']['gitlab-rails']['pages_host'] = nil
 default['gitlab']['gitlab-rails']['pages_port'] = nil
 default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
-default['gitlab']['gitlab-rails']['ldap_enabled'] = false
-default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
 ####
 # These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
@@ -392,6 +392,22 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_dir'] = "/var/log/gitlab/mailroom"
+
+####
+# GitLab Pages Daemon
+####
+default['gitlab']['gitlab-pages']['enable'] = false
+default['gitlab']['gitlab-pages']['pages_host'] = "localhost"
+default['gitlab']['gitlab-pages']['pages_port'] = "8090"
+default['gitlab']['gitlab-pages']['pages_https'] = false
+default['gitlab']['gitlab-pages']['pages_path'] = nil
+default['gitlab']['gitlab-pages']['domain'] = nil
+default['gitlab']['gitlab-pages']['cert'] = nil
+default['gitlab']['gitlab-pages']['cert_key'] = nil
+default['gitlab']['gitlab-pages']['serve_http'] = true
+default['gitlab']['gitlab-pages']['http2'] = false
+default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
+default['gitlab']['gitlab-pages']['log_dir'] = "/var/log/gitlab/gitlab-pages"
 
 ####
 # Nginx
