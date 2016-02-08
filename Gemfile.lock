@@ -102,6 +102,3 @@ DEPENDENCIES
   package_cloud
   rspec
   thor (= 0.18.1)
-
-BUNDLED WITH
-   1.11.2
