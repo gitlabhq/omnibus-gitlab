@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: 139f3c33b86214f02d4381ba4b327374f54a666b
+  revision: be6630690f1798c0c9e06261b80ec2f830e3ab64
   branch: gitlab_omnibus
   specs:
     omnibus (5.0.0)
@@ -23,16 +23,16 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-sdk (2.2.3)
-      aws-sdk-resources (= 2.2.3)
-    aws-sdk-core (2.2.3)
+    aws-sdk (2.2.14)
+      aws-sdk-resources (= 2.2.14)
+    aws-sdk-core (2.2.14)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.2.3)
-      aws-sdk-core (= 2.2.3)
+    aws-sdk-resources (2.2.14)
+      aws-sdk-core (= 2.2.14)
     chef-config (12.5.1)
       mixlib-config (~> 2.0)
       mixlib-shellout (~> 2.0)
-    chef-sugar (3.1.1)
+    chef-sugar (3.3.0)
     cleanroom (1.0.0)
     colorize (0.6.0)
     diff-lcs (1.2.5)
