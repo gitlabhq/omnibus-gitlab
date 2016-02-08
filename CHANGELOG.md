@@ -12,7 +12,7 @@ omnibus-gitlab repository.
 - Switch openssl to 1.0.2f a53d77674f32de055e7f6b4128e25ff7c801a284
 - Update nginx to 1.9.10 8201623411c028202392d7f90056e1494812ced0
 - Use http2 module 8201623411c028202392d7f90056e1494812ced0
-- Update openssl to 1.0.2f 6ddf0d83c19c13ad17c3fb032b701fb8102b116d
+- Update omnibus to include -O2 compiler flag e9acc03ca296f9146fd5824e8818861c7b584a63
 - Add configuration options to override default proxy headers 3807ed87ec887ca60343a5dc09fc99af746e1535
 - Change permissions of public/uploads directory to be more restrictive 7e4aa2f5e60cbb8a5f6c6475514a73be813b74fe
 
