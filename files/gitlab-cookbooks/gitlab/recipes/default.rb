@@ -70,8 +70,6 @@ if node['gitlab']['gitlab-rails']['enable']
   include_recipe "gitlab::gitlab-rails"
 end
 
-include_recipe "gitlab::gitlab-ci_disable"
-
 include_recipe "gitlab::selinux"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case

@@ -384,6 +384,7 @@ module Gitlab
       return unless pages_external_url
 
       gitlab_rails['pages_enabled'] = true if gitlab_rails['pages_enabled'].nil?
+      gitlab_pages['enable'] = true if gitlab_pages['enable'].nil?
 
       uri = URI(pages_external_url.to_s)
 
@@ -416,20 +417,11 @@ module Gitlab
     def parse_gitlab_pages_daemon
       return unless gitlab_pages['enable']
 
-      unless gitlab_pages['domain']
-        raise "Enabled gitlab-pages daemon, cannot find gitlab-pages domain."
-      end
+      gitlab_pages['domain'] = Gitlab['gitlab_rails']['pages_host']
 
-      pages_host = Gitlab['gitlab_pages']['pages_host'] || Gitlab['gitlab_rails']['pages_host']
-      pages_port = Gitlab['gitlab_pages']['pages_port'] || Gitlab['gitlab_rails']['pages_port']
-
-      listen_address = "#{pages_host}:#{pages_port}"
-      if gitlab_pages['pages_https']
-        Gitlab['gitlab_pages']['listen_https'] = listen_address
-        Gitlab['gitlab-pages']['cert'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.crt"
-        Gitlab['gitlab-pages']['cert_key'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.key"
-      else
-        Gitlab['gitlab_pages']['listen_http'] = listen_address
+      if gitlab_pages['external_https']
+        Gitlab['gitlab_pages']['cert'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.crt"
+        Gitlab['gitlab_pages']['cert_key'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.key"
       end
 
       Gitlab['gitlab_pages']['pages_root'] ||= (gitlab_rails['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))

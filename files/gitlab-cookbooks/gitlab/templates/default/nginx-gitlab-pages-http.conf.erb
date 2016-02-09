@@ -25,7 +25,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl spdy<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl http2<% end %>;
 <% end %>
   server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
   server_tokens off; ## Don't show the nginx version number, a security best practice
@@ -63,11 +63,7 @@ server {
   # 1. Try to get /project/ to => shared/pages/${group}/public/ or index.html
   # 2. Try to get / to => shared/pages/${group}/${host}/public/ or index.html
   location ~ ^/([^/]*)(/.*)?$ {
-    try_files "/$1/public$2"
-              "/$1/public$2/index.html"
-              "/${host}/public/${uri}"
-              "/${host}/public/${uri}/index.html"
-              =404;
+    proxy_pass http://<%= @pages_listen_proxy %>;
   }
 
   # Define custom error pages

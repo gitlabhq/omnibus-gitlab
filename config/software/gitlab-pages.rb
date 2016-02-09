@@ -20,7 +20,6 @@ default_version "master"
 source :git => "https://gitlab.com/gitlab-org/gitlab-pages.git"
 
 build do
-  command "GOPATH=#{Omnibus::Config.source_dir}/workspace go get -d"
-  command "GOPATH=#{Omnibus::Config.source_dir}/workspace go build"
+  make "gitlab-pages"
   move "gitlab-pages", "#{install_dir}/embedded/bin/gitlab-pages"
 end

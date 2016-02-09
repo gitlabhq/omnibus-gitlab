@@ -230,7 +230,9 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
       gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
       gitlab_ci_add_pusher: node['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'],
       builds_directory: gitlab_ci_builds_dir,
-      git_annex_enabled: node['gitlab']['gitlab-shell']['git_annex_enabled']
+      git_annex_enabled: node['gitlab']['gitlab-shell']['git_annex_enabled'],
+      pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
+      pages_external_https: node['gitlab']['gitlab-pages']['external_https']
     )
   )
   restarts dependent_services
