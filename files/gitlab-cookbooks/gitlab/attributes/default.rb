@@ -398,14 +398,14 @@ default['gitlab']['mailroom']['log_dir'] = "/var/log/gitlab/mailroom"
 ####
 default['gitlab']['gitlab-pages']['enable'] = false
 default['gitlab']['gitlab-pages']['external_http'] = nil
-default['gitlab']['gitlab-pages']['external_htts'] = nil
+default['gitlab']['gitlab-pages']['external_https'] = nil
 default['gitlab']['gitlab-pages']['listen_proxy'] = "localhost:8090"
 default['gitlab']['gitlab-pages']['pages_path'] = nil
 default['gitlab']['gitlab-pages']['domain'] = nil
 default['gitlab']['gitlab-pages']['cert'] = nil
 default['gitlab']['gitlab-pages']['cert_key'] = nil
-default['gitlab']['gitlab-pages']['serve_http'] = true
-default['gitlab']['gitlab-pages']['http2'] = true
+default['gitlab']['gitlab-pages']['redirect_http'] = true
+default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_dir'] = "/var/log/gitlab/gitlab-pages"
 

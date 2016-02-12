@@ -6,20 +6,17 @@ exec 2>&1
 
 cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
-exec chpst -P \
-  -U <%= node['gitlab']['user']['username'] %> \
-  -u <%= node['gitlab']['user']['username'] %> \
-  /opt/gitlab/embedded/bin/gitlab-pages \
+exec /opt/gitlab/embedded/bin/gitlab-pages \
     -listen-https "<%= node['gitlab']['gitlab-pages']['external_https'] %>" \
     -listen-http  "<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
     -listen-proxy "<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
+    \
+    -root-cert "<%= node['gitlab']['gitlab-pages']['cert'] %>" \
+    -root-key  "<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
+    \
+    -pages-user "<%= node['gitlab']['web-server']['username'] %>" \
     -pages-domain "<%= node['gitlab']['gitlab-pages']['domain'] %>" \
-    <% if node['gitlab']['gitlab-pages']['cert'] %>
-    -root-cert <(cat <%= node['gitlab']['gitlab-pages']['cert'] %>) \
-    <% end %>
-    <% if node['gitlab']['gitlab-pages']['cert_key']  %>
-    -root-key <(cat <%= node['gitlab']['gitlab-pages']['cert_key'] %>) \
-    <% end %>
     -pages-root "<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
-    -serve-http <%= node['gitlab']['gitlab-pages']['serve_http'] %> \
-    -http2 <%= node['gitlab']['gitlab-pages']['http2'] %> \
+    \
+    -redirect_http <%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
+    -use-http2 <%= node['gitlab']['gitlab-pages']['use_http2'] %> \
