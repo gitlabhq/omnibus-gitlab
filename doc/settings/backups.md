@@ -58,8 +58,6 @@ To create a backup of your repositories and GitLab metadata, follow the [backup 
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
-Similarly for CI, backup create will store a tar file in `/var/opt/gitlab/ci-backups`.
-
 If you want to store your GitLab backups in a different directory, add the
 following setting to `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl
 reconfigure`:
