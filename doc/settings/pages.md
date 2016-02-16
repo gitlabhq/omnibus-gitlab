@@ -76,6 +76,6 @@ gitlab_rails['pages_path'] = "/mnt/storage/pages"
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-[user-doc]: http://doc.gitlab.com/pages/README.md
+[user-doc]: http://doc.gitlab.com/ee/pages/README.html
 [ee-80]: https://gitlab.com/gitlab-org/gitlab-ee/merge_requests/80
 [wiki-wildcard-dns]: https://en.wikipedia.org/wiki/Wildcard_DNS_record
