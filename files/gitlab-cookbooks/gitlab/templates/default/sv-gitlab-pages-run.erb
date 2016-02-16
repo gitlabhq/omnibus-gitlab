@@ -7,7 +7,9 @@ exec 2>&1
 cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
 exec /opt/gitlab/embedded/bin/gitlab-pages \
+    <% if node['gitlab']['pages-nginx']['enable'] && node['gitlab']['gitlab-pages']['listen_proxy'] %>
     -listen-proxy "<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
+    <% end %>
     <% if node['gitlab']['gitlab-pages']['external_http'] %>
     -listen-http  "<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
     <% end %>
