@@ -7,16 +7,20 @@ exec 2>&1
 cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
 exec /opt/gitlab/embedded/bin/gitlab-pages \
-    -listen-https "<%= node['gitlab']['gitlab-pages']['external_https'] %>" \
-    -listen-http  "<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
     -listen-proxy "<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
-    \
+    <% if node['gitlab']['gitlab-pages']['external_http'] %>
+    -listen-http  "<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['external_https'] %>
+    -listen-https "<%= node['gitlab']['gitlab-pages']['external_https'] %>" \
     -root-cert "<%= node['gitlab']['gitlab-pages']['cert'] %>" \
     -root-key  "<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
+    <% end %>
+    -daemon-uid "$(id -u "<%= node['gitlab']['user']['username'] %>")" \
+    -daemon-gid "$(id -g "<%= node['gitlab']['user']['username'] %>")" \
     \
-    -pages-user "<%= node['gitlab']['web-server']['username'] %>" \
     -pages-domain "<%= node['gitlab']['gitlab-pages']['domain'] %>" \
     -pages-root "<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
     \
-    -redirect_http <%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
+    -redirect-http <%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
     -use-http2 <%= node['gitlab']['gitlab-pages']['use_http2'] %> \
