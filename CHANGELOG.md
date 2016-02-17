@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Add configuration options to override default proxy headers 3807ed87ec887ca60343a5dc09fc99af746e1535
 - Change permissions of public/uploads directory to be more restrictive 7e4aa2f5e60cbb8a5f6c6475514a73be813b74fe
 - Update mattermost to v2.0.0 8caacf73e23c930bab286b0affbf1a3c0bd93361
+- Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
 
 8.4.4
 
