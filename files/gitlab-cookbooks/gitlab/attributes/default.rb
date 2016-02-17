@@ -105,13 +105,13 @@ default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['elasticsearch_enabled'] = false
 default['gitlab']['gitlab-rails']['elasticsearch_host'] = nil
 default['gitlab']['gitlab-rails']['elasticsearch_port'] = nil
+default['gitlab']['gitlab-rails']['ldap_enabled'] = false
+default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
 default['gitlab']['gitlab-rails']['pages_host'] = nil
 default['gitlab']['gitlab-rails']['pages_port'] = nil
 default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
-default['gitlab']['gitlab-rails']['ldap_enabled'] = false
-default['gitlab']['gitlab-rails']['ldap_servers'] = []
 
 ####
 # These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
@@ -394,6 +394,22 @@ default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_dir'] = "/var/log/gitlab/mailroom"
 
 ####
+# GitLab Pages Daemon
+####
+default['gitlab']['gitlab-pages']['enable'] = false
+default['gitlab']['gitlab-pages']['external_http'] = nil
+default['gitlab']['gitlab-pages']['external_https'] = nil
+default['gitlab']['gitlab-pages']['listen_proxy'] = "localhost:8090"
+default['gitlab']['gitlab-pages']['pages_path'] = nil
+default['gitlab']['gitlab-pages']['domain'] = nil
+default['gitlab']['gitlab-pages']['cert'] = nil
+default['gitlab']['gitlab-pages']['cert_key'] = nil
+default['gitlab']['gitlab-pages']['redirect_http'] = true
+default['gitlab']['gitlab-pages']['use_http2'] = true
+default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
+default['gitlab']['gitlab-pages']['log_dir'] = "/var/log/gitlab/gitlab-pages"
+
+####
 # Nginx
 ####
 default['gitlab']['nginx']['enable'] = true
@@ -466,7 +482,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails gitlab-shell postgresql sidekiq ci-redis ci-unicorn ci-sidekiq}
+default['gitlab']['remote-syslog']['services'] = %w{redis nginx unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages}
 
 ###
 # Logrotate
@@ -475,7 +491,7 @@ default['gitlab']['logrotate']['enable'] = true
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell gitlab-ci}
+default['gitlab']['logrotate']['services'] = %w{nginx unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages}
 default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
