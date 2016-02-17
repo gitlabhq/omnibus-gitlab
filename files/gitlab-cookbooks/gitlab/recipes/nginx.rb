@@ -74,7 +74,7 @@ nginx_vars = nginx_vars.to_hash.merge!({
                :gitlab_mattermost_http_config => gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
              })
 
-# Include the config file for gitlab mattermost in nginx.conf later
+# Include the config file for gitlab pages in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
                                          :gitlab_pages_http_config => gitlab_pages_enabled ? gitlab_pages_http_conf : nil
                                        })
@@ -121,6 +121,7 @@ template gitlab_pages_http_conf do
   variables(pages_nginx_vars.merge(
     {
       pages_path: node['gitlab']['gitlab-rails']['pages_path'],
+      pages_listen_proxy: node['gitlab']['gitlab-pages']['listen_proxy']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

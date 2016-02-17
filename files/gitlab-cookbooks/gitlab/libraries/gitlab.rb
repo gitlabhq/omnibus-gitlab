@@ -61,6 +61,7 @@ module Gitlab
   high_availability Mash.new
   web_server Mash.new
   mattermost Mash.new
+  gitlab_pages Mash.new
   node nil
   external_url nil
   pages_external_url nil
@@ -383,6 +384,7 @@ module Gitlab
       return unless pages_external_url
 
       gitlab_rails['pages_enabled'] = true if gitlab_rails['pages_enabled'].nil?
+      gitlab_pages['enable'] = true if gitlab_pages['enable'].nil?
 
       uri = URI(pages_external_url.to_s)
 
@@ -410,6 +412,19 @@ module Gitlab
 
       # FQDN are prepared to be used as regexp: the dot is escaped
       Gitlab['pages_nginx']['fqdn_regex'] = uri.host.sub('.', '\.')
+    end
+
+    def parse_gitlab_pages_daemon
+      return unless gitlab_pages['enable']
+
+      gitlab_pages['domain'] = Gitlab['gitlab_rails']['pages_host']
+
+      if gitlab_pages['external_https']
+        Gitlab['gitlab_pages']['cert'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.crt"
+        Gitlab['gitlab_pages']['cert_key'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.key"
+      end
+
+      Gitlab['gitlab_pages']['pages_root'] ||= (gitlab_rails['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
     end
 
     def parse_mattermost_external_url
@@ -496,7 +511,8 @@ module Gitlab
         "external_url",
         "ci_external_url",
         "mattermost_external_url",
-        "pages_external_url"
+        "pages_external_url",
+        "gitlab_pages"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -529,6 +545,7 @@ module Gitlab
       parse_gitlab_ci
       parse_gitlab_mattermost
       parse_incoming_email
+      parse_gitlab_pages_daemon
       disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
