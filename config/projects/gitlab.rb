@@ -34,8 +34,10 @@ else
   conflict        "gitlab-ee"
 end
 
-maintainer "GitLab B.V."
+maintainer "GitLab Inc."
 homepage "https://about.gitlab.com/"
+
+vendor "support@gitlab.com"
 
 # Replace older omnibus-gitlab packages
 replace         "gitlab"
