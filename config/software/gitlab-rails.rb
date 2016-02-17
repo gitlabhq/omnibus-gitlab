@@ -32,9 +32,13 @@ dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
 dependency "python-docutils"
-dependency "mysql-client" if EE
 dependency "krb5"
-dependency "unzip" if EE
+
+if EE
+  dependency "mysql-client"
+  dependency "unzip"
+  dependency "gitlab-pages"
+end
 
 source :git => version.remote
 
