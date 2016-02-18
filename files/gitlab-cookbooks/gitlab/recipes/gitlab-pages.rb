@@ -17,12 +17,12 @@
 account_helper = AccountHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-pages']['dir']
-log_dir = node['gitlab']['gitlab-pages']['log_dir']
+log_directory = node['gitlab']['gitlab-pages']['log_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 
 [
   working_dir,
-  log_dir,
+  log_directory,
   gitlab_pages_static_etc_dir
 ].each do |dir|
   directory dir do
@@ -34,7 +34,7 @@ end
 
 runit_service 'gitlab-pages' do
   options({
-    :log_directory => log_dir
+    :log_directory => log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end

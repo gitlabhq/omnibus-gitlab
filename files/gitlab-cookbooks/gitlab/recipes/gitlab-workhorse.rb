@@ -17,7 +17,7 @@
 account_helper = AccountHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-workhorse']['dir']
-log_dir = node['gitlab']['gitlab-workhorse']['log_dir']
+log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
 
 directory working_dir do
@@ -27,7 +27,7 @@ directory working_dir do
   recursive true
 end
 
-directory log_dir do
+directory log_directory do
   owner account_helper.gitlab_user
   mode '0700'
   recursive true
@@ -47,7 +47,7 @@ end
 runit_service 'gitlab-workhorse' do
   down node['gitlab']['gitlab-workhorse']['ha']
   options({
-    :log_directory => log_dir
+    :log_directory => log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
