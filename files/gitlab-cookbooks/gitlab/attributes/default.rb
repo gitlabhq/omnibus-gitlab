@@ -379,7 +379,7 @@ default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
 default['gitlab']['gitlab-workhorse']['auth_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
-default['gitlab']['gitlab-workhorse']['log_dir'] = "/var/log/gitlab/gitlab-workhorse"
+default['gitlab']['gitlab-workhorse']['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
@@ -391,7 +391,7 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
-default['gitlab']['mailroom']['log_dir'] = "/var/log/gitlab/mailroom"
+default['gitlab']['mailroom']['log_directory'] = "/var/log/gitlab/mailroom"
 
 ####
 # GitLab Pages Daemon
@@ -407,7 +407,7 @@ default['gitlab']['gitlab-pages']['cert_key'] = nil
 default['gitlab']['gitlab-pages']['redirect_http'] = true
 default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
-default['gitlab']['gitlab-pages']['log_dir'] = "/var/log/gitlab/gitlab-pages"
+default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
 ####
 # Nginx
