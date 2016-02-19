@@ -17,7 +17,7 @@
 
 user = AccountHelper.new(node).gitlab_user
 
-mailroom_log_dir = node['gitlab']['mailroom']['log_dir']
+mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "mail_room.yml")
 
 cookbook_file mail_room_config do
