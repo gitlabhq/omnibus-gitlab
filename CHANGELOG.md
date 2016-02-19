@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Change permissions of public/uploads directory to be more restrictive 7e4aa2f5e60cbb8a5f6c6475514a73be813b74fe
 - Update mattermost to v2.0.0 8caacf73e23c930bab286b0affbf1a3c0bd93361
 - Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
+- Added configuration options for new allow_single_sign_on behavior and auto_link_saml_user 96ba41274864857f494e220a684e9e34954c85d1
 
 8.4.4
 
