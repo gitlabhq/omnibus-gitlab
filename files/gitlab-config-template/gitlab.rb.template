@@ -152,10 +152,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#omniauth-google-twitter-github-login
 
 # gitlab_rails['omniauth_enabled'] = true
-# gitlab_rails['omniauth_allow_single_sign_on'] = false
+# gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
 # gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
 # gitlab_rails['omniauth_block_auto_created_users'] = true
 # gitlab_rails['omniauth_auto_link_ldap_user'] = false
+# gitlab_rails['omniauth_auto_link_saml_user'] = false
 # gitlab_rails['omniauth_providers'] = [
 #   {
 #     "name" => "google_oauth2",
