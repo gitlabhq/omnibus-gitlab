@@ -260,7 +260,7 @@ From within the container you can administer the GitLab container as you would
 normally administer an
 [Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md)
 
-## Use docker-compose
+## Install GitLab using docker-compose
 
 With [Docker compose] you can easily configure, install, and upgrade your
 Docker-based GitLab installation.
@@ -321,7 +321,8 @@ web:
 
 ## Update GitLab using Docker compose
 
-All you have to do is run `docker-compose pull` and `docker-compose up -d` to
+Provided you [installed GitLab using docker-compose](#install-gitlab-using-docker-compose),
+all you have to do is run `docker-compose pull` and `docker-compose up -d` to
 download a new release and upgrade your GitLab instance.
 
 ## Troubleshooting
