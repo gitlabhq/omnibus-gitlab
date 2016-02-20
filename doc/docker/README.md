@@ -124,7 +124,7 @@ After starting a container you can visit <http://localhost/> or
 <http://192.168.59.103> if you use boot2docker. It might take a while before
 the docker container starts to respond to queries.
 
-Login to the web interface with the following credentials:
+Login to GitLab with the following credentials:
 
 ```
 username: `root`
@@ -259,6 +259,70 @@ sudo docker exec -it gitlab /bin/bash
 From within the container you can administer the GitLab container as you would
 normally administer an
 [Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md)
+
+## Use docker-compose
+
+With [Docker compose] you can easily configure, install, and upgrade your
+Docker-based GitLab installation.
+
+1. [Install][install-compose] Docker Compose
+1. Create a `docker-compose.yml` file (or [download an example][down-yml]):
+
+    ```
+    web:
+      image: 'gitlab/gitlab-ce:latest'
+      restart: always
+      hostname: 'gitlab.example.com'
+      environment:
+        GITLAB_OMNIBUS_CONFIG: |
+          external_url 'https://gitlab.example.com'
+          # Add any other gitlab.rb configuration here, each on its own line
+      ports:
+        - '80:80'
+        - '443:443'
+        - '22:22'
+      volumes:
+        - '/srv/gitlab/config:/etc/gitlab'
+        - '/srv/gitlab/logs:/var/log/gitlab'
+        - '/srv/gitlab/data:/var/opt/gitlab'
+    ```
+
+1. Make sure you are in the same directory as `docker-compose.yml` and run
+  `docker-compose up -d` to start GitLab
+
+Read ["Pre-configure Docker container"](#pre-configure-docker-container) to see
+how the `GITLAB_OMNIBUS_CONFIG` variable works.
+
+Below is another `docker-compose.yml` example with GitLab running on a custom
+HTTP and SSH port. Notice how the `GITLAB_OMNIBUS_CONFIG` variables match the
+`ports` section:
+
+```
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: 'gitlab.example.com'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      external_url 'http://gitlab.example.com:9090'
+      gitlab_rails['gitlab_shell_ssh_port'] = 2224
+  ports:
+    - '9090:9090'
+    - '2224:22'
+  volumes:
+    - '/srv/gitlab/config:/etc/gitlab'
+    - '/srv/gitlab/logs:/var/log/gitlab'
+    - '/srv/gitlab/data:/var/opt/gitlab'
+```
+
+[docker compose]: https://docs.docker.com/compose/
+[install-compose]: https://docs.docker.com/compose/install/
+[down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
+
+## Update GitLab using Docker compose
+
+All you have to do is run `docker-compose pull` and `docker-compose up -d` to
+download a new release and upgrade your GitLab instance.
 
 ## Troubleshooting
 
