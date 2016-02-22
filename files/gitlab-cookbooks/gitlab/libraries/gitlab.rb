@@ -342,8 +342,9 @@ module Gitlab
 
     def parse_ci_external_url
       return unless ci_external_url
-      # Enable gitlab_ci. This setting will be picked up by parse_gitlab_ci
-      gitlab_ci['enable'] = true if gitlab_ci['enable'].nil?
+      # Disable gitlab_ci. This setting will be picked up by parse_gitlab_ci
+      # The code below will be removed in the next major release.
+      gitlab_ci['enable'] = false
 
       uri = URI(ci_external_url.to_s)
 
