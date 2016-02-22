@@ -580,10 +580,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_post_icon_override'] = false
 # mattermost['service_enable_testing'] = false
 # mattermost['service_enable_security_fix_alert'] = true
-# mattermost['service_enable_insecure_outgoing_connections'] = false
 # mattermost['service_enable_outgoing_webhooks'] = true
-# mattermost['service_enable_commands'] = false
-# mattermost['service_enable_only_admin_integrations'] = true
 # mattermost['service_enable_oauth_service_provider'] = false
 # mattermost['service_enable_developer'] = false
 # mattermost['service_session_length_web_in_days'] = 30
@@ -628,8 +625,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['aws'] = {'S3AccessKeyId' => '123', 'S3SecretAccessKey' => '123', 'S3Bucket' => 'aa', 'S3Region' => 'bb'}
 
 # mattermost['email_enable_sign_up_with_email'] = true
-# mattermost['email_enable_sign_in_with_email'] = true
-# mattermost['email_enable_sign_in_with_username'] = false
 # mattermost['email_send_email_notifications'] = false
 # mattermost['email_require_email_verification'] = false
 # mattermost['email_smtp_username'] = nil
