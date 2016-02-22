@@ -35,7 +35,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Environment variables](settings/environment-variables.md)
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
-- [Pages (EE-only)](settings/pages.md)
+- [Pages (EE-only)](http://doc.gitlab.com/ee/pages/administration.html)
 
 ## Updating
 
