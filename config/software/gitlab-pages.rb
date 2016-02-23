@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 name "gitlab-pages"
-default_version "master"
+default_version "v0.2.0"
 
 source :git => "https://gitlab.com/gitlab-org/gitlab-pages.git"
 
