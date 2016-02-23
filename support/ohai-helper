@@ -21,7 +21,7 @@ def repo_string
       version = 'trusty'
     end
   when 'debian', 'raspbian'
-    os = 'debian'
+    os = ohai['platform']
     case ohai['platform_version']
     when /^7\./
       version = 'wheezy'
