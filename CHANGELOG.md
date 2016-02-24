@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.5.1
+
+- Push Raspbian repository for RPI2 to packagecloud 57acdde0465ed9213726d84e2b92545344449002
+- Update GitLab pages daemon to v0.2.0 326add9babb605d4116da22dcfa30ed1aa12271f
+
 8.5.0
 
 - Add experimental support for relative url installations (Artem Sidorenko) c3639dc311f2f70ec09dcd579a09443189266864
