@@ -32,6 +32,18 @@ bin/omnibus build gitlab
 
 ## Usage
 
+*Important note* omnibus-gitlab project is used to build official GitLab
+packages. These packages are also used to deploy GitLab.com.
+
+The build tools are optimised for internal GitLab Inc infrastructure.
+For example, omnibus-gitlab project will pull GitLab and dependent projects
+code from internal dev.gitlab.org server. The internal server hosts the same
+copy of the source code available elsewhere. Alternative source location is necessary
+in case of an unforeseen circumstances.
+
+If you are using these tools to build your own packages, you will have to
+adjust them to your needs.
+
 ### Build
 
 You create a platform-specific package using the `build` command:
