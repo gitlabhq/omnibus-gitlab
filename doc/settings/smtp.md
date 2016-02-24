@@ -33,9 +33,6 @@ gitlab_rails['smtp_enable'] = true
 ### Gmail
 
 ```ruby
-gitlab_rails['gitlab_email_from'] = 'my.email@gmail.com'
-gitlab_rails['gitlab_email_reply_to'] = 'my.email@gmail.com'
-
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.gmail.com"
 gitlab_rails['smtp_port'] = 587
@@ -79,9 +76,6 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 ### Mandrill
 
 ```ruby
-gitlab_rails['gitlab_email_from'] = 'your.email@domain.com'
-gitlab_rails['gitlab_email_reply_to'] = 'your.email@domain.com'
-
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.mandrillapp.com"
 gitlab_rails['smtp_port'] = 587
@@ -109,9 +103,6 @@ gitlab_rails['smtp_domain'] = "domain.com"
 This configuration was tested on Zoho Mail with a custom domain.
 
 ```ruby
-gitlab_rails['gitlab_email_from'] = 'gitlab@mydomain.com'
-gitlab_rails['gitlab_email_reply_to'] = 'gitlab@mydomain.com'
-
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.zoho.com"
 gitlab_rails['smtp_port'] = 587
@@ -164,6 +155,19 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
+### 1&1
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.1and1.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "my.email@domain.com"
+gitlab_rails['smtp_password'] = "1and1-email-password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
 ### More examples are welcome
