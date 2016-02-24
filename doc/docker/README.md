@@ -34,6 +34,24 @@ access SSH, HTTP and HTTPS. All GitLab data will be stored as subdirectories of
 You can now login to the web interface as explained in
 [After starting a container](#after-starting-a-container).
 
+
+If you are on *SELinux* then run this instead:
+
+```bash
+sudo docker run --detach \
+	--hostname gitlab.example.com \
+	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--name gitlab \
+	--restart always \
+	--volume /srv/gitlab/config:/etc/gitlab:Z \
+	--volume /srv/gitlab/logs:/var/log/gitlab:Z \
+	--volume /srv/gitlab/data:/var/opt/gitlab:Z \
+	gitlab/gitlab-ce:latest
+```
+
+This will ensure that the docker process has enough permissions to create the 
+config files in the mounted volumes.
+
 ## Where is the data stored?
 
 The GitLab container uses host mounted volumes to store persistent data:
