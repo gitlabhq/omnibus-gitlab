@@ -528,7 +528,7 @@ default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
 default['gitlab']['gitlab-ci']['gitlab_server'] = nil
 
 # application.yml, gitlab_ci section
-default['gitlab']['gitlab-ci']['gitlab_ci_host'] = node['fqdn']
+default['gitlab']['gitlab-ci']['gitlab_ci_host'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
 default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
 default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
