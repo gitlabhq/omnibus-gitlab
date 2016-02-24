@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Push Raspbian repository for RPI2 to packagecloud 57acdde0465ed9213726d84e2b92545344449002
 - Update GitLab pages daemon to v0.2.0 326add9babb605d4116da22dcfa30ed1aa12271f
+- Unset env variables that could interfere with gitlab-rake and gitlab-rails commands e72a6f0e256dc6cc415248ce6bc63a5580bb22f6
 
 8.5.0
 
