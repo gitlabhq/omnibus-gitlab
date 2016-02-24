@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.5.2
+
+- Fix regression where NGINX config for standalone ci was not created d3352a78b4c3653d922e415de5c9dece1d8e10f8
+
 8.5.1
 
 - Push Raspbian repository for RPI2 to packagecloud 57acdde0465ed9213726d84e2b92545344449002
