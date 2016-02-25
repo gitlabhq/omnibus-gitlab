@@ -5,7 +5,7 @@ package.
 
 # How is official omnibus-gitlab package built
 
-Official package build is fully automated by GitLab Inc.
+The official package build is fully automated by GitLab Inc.
 
 We can differentiate between two types of build:
 
@@ -16,43 +16,43 @@ Both types are built on the same infrastructure.
 
 ## Infrastructure
 
-Each package is built on the platform it is intended for(CentOS 6 packages are
+Each package is built on the platform it is intended for (CentOS 6 packages are
 built on CentOS6 servers, Debian 8 packages on Debian 8 servers and so on).
-Number of build servers vary but there is always at least one build server per
-platform.
+The number of build servers varies but there is always at least one build
+server per platform.
 
-omnibus-gitlab project fully utilizes GitLab CI. This means that each push
+The omnibus-gitlab project fully utilizes GitLab CI. This means that each push
 to omnibus-gitlab repository will trigger a build in GitLab CI which will
 then create a package.
 
 Since we deploy GitLab.com using omnibus-gitlab packages, we need a separate
-remote to built the packages in case of a problem with GitLab.com or due to
+remote to build the packages in case of a problem with GitLab.com or due to
 a security release of a package.
 
-This remote is located on dev.gitlab.org. Only difference between omnibus-gitlab
-project on dev.gitlab.org and other public remotes is that the project has
-active GitLab CI and has specific runners assigned to the project which run
-on the build servers. This is also the case for all GitLab components, eg.
-gitlab-shell is exactly the same on dev.gitlab.org as it is on GitLab.com.
+This remote is located on dev.gitlab.org. The only difference between
+omnibus-gitlab project on dev.gitlab.org and other public remotes is that the
+project has active GitLab CI and has specific runners assigned to the project
+which run on the build servers. This is also the case for all GitLab components,
+eg. gitlab-shell is exactly the same on dev.gitlab.org as it is on GitLab.com.
 
-All build servers run [gitlab runner][] and all runners use a deploy key
+All build servers run [gitlab runner] and all runners use a deploy key
 to connect to the projects on dev.gitlab.org. The build servers also have
 access to official package repository at packages.gitlab.com and to a special
 Amazon S3 bucket which stores the test packages.
 
 ## Build process
 
-GitLab Inc is using [release-tools project][] to automate the release tasks for
-every release. When the release manager starts the release process, couple of
-important things for omnibus-gitlab will be done:
+GitLab Inc is using the [release-tools project] to automate the release tasks
+for every release. When the release manager starts the release process, a couple
+of important things for omnibus-gitlab will be done:
 
 1. All remotes of the project will be synced
 1. The versions of components will be read from GitLab CE/EE repository
   (eg. VERSION, GITLAB_SHELL_VERSION) and written to omnibus-gitlab repository
-1. Specific Git tag will be created and synced to omnibus-gitlab repositories
+1. A specific Git tag will be created and synced to omnibus-gitlab repositories
 
-When omnibus-gitlab repository on dev.gitlab.org gets updated, GitLab CI build
-gets triggered.
+When the omnibus-gitlab repository on dev.gitlab.org gets updated, GitLab CI
+build gets triggered.
 
 The specific steps can be seen in `.gitlab-ci.yml` file in omnibus-gitlab
 repository. The builds are executed on all platforms at the same time.
@@ -63,7 +63,7 @@ so on will be pulled from dev.gitlab.org.
 
 Once the build completes and the .deb or .rpm packages are built, depending on
 the build type package will be pushed to packages.gitlab.com or to a temporary
-(files older than 30days are purged) S3 bucket.
+(files older than 30 days are purged) S3 bucket.
 
 ## Specifying component versions manually
 ### On your development machine
@@ -129,11 +129,11 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 
 ### Publishing the packages
 
-You can track the progress of package building on [ci.gitlab.org][].
-They are pushed to [packagecloud repositories][] automatically after
+You can track the progress of package building on [dev.gitlab.org].
+They are pushed to [packagecloud repositories] automatically after
 successful builds.
 
-[ci.gitlab.org]: https://dev.gitlab.org/gitlab/omnibus-gitlab/builds
+[dev.gitlab.org]: https://dev.gitlab.org/gitlab/omnibus-gitlab/builds
 [release-tools project]: https://gitlab.com/gitlab-org/release-tools/tree/master
 [gitlab runner]: https://gitlab.com/gitlab-org/gitlab-ci-multi-runner
 [packagecloud repositories]: https://packages.gitlab.com/gitlab/
