@@ -1,7 +1,7 @@
 # Unicorn settings
 
 If you need to adjust the Unicorn timeout or the number of workers you can use
-the following settings in `/etc/gitlab/gitlab.rb`. Run `sudo gitlab-ctl
+the following settings in `/etc/gitlab/gitlab.rb`. Run `sudo gitlab-ctl`
 reconfigure for the change to take effect.
 
 ```ruby
