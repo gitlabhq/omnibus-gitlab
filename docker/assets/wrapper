@@ -69,6 +69,13 @@ echo "Starting services..."
 GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 
 # Configure gitlab package
+# WARNING:
+# the preinst script has the database backup
+# It will not be executed, because all services are not yet started
+# They will be started when `reconfigure` is executed
+echo "Configuring GitLab package..."
+/var/lib/dpkg/info/${RELEASE_PACKAGE}.preinst upgrade
+
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
