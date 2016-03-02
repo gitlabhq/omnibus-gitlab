@@ -204,19 +204,24 @@ nginx['listen_port'] = 8080
 
 By default NGINX will auto-detect whether to use SSL if `external_url`
 contains `https://`.  If you are running GitLab behind a reverse proxy, you
-may wish to keep the `external_url` as an HTTPS address but communicate with
-the GitLab NGINX internally over HTTP. To do this, you can disable HTTPS using
-the `listen_https` option:
+may wish to terminate SSL at another proxy server or load balancer. To do this,
+be sure the `external_url` contains `https://` and apply the following
+configuration to `gitlab.rb`:
 
 ```ruby
+nginx['listen_port'] = 80
 nginx['listen_https'] = false
+nginx['proxy_set_headers'] = {
+  "X-Forwarded-Proto" => "https",
+  "X-Forwarded-Ssl" => "on"
+}
 ```
 
-Note that you may need to configure your reverse proxy to forward certain
-headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`, `X-Forwarded-Port`)
-to GitLab. You may see improper redirections or errors (e.g. "422 Unprocessable
-Entity", "Can't verify CSRF token authenticity") if you forget this step. For
-more information, see:
+Note that you may need to configure your reverse proxy or load balancer to
+forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
+`X-Forwarded-Port`) to GitLab. You may see improper redirections or errors
+(e.g. "422 Unprocessable Entity", "Can't verify CSRF token authenticity") if
+you forget this step. For more information, see:
 
 * http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
 * https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
