@@ -3,7 +3,7 @@
 Our main goal is to make it clear which version of GitLab is in an omnibus
 package.
 
-# How is official omnibus-gitlab package built
+# How is the official omnibus-gitlab package built
 
 The official package build is fully automated by GitLab Inc.
 
