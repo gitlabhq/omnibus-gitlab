@@ -351,6 +351,7 @@ default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['bind'] = '127.0.0.1'
 default['gitlab']['redis']['port'] = 0
+default['gitlab']['redis']['password'] = nil
 default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['redis']['unixsocketperm'] = "777"
 
