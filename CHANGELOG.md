@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Fix regression where NGINX config for standalone ci was not created d3352a78b4c3653d922e415de5c9dece1d8e10f8
 - Execute package preinst when starting Docker image 03bfd49cca03485d9e6056db0b7eab5a882dd3b4
 - Update openssl to 1.0.2g 0e44b8e91033f3e1662c8ea92641f1a653b5b871
+- Add Redis server password support 791174b01ec2c4a96defd6feba003805255aa3f3
 
 8.5.1
 
