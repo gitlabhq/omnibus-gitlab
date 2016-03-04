@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Update redis version to 8.2.24 2773274
 
+8.5.4
+
+- No changes
+
 8.5.3
 
 - No changes
