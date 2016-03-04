@@ -34,3 +34,16 @@ Thanks for reporting this issue. I suspect that the issue you are experiencing i
 [how to get help](https://about.gitlab.com/getting-help/) for your issue. I will close this issue but if you still think this is a problem with the package please @ mention me with the steps to reproduce the problem and I will reopen the issue.
 
 ```
+
+### Closing issues
+
+If an issue has a `Awaiting Feedback` label and the response from the reporter
+has not been received for 14 days, we can close the issue using the following
+response template:
+
+```
+We haven't received an update for more than 14 days so we will assume that the
+problem is fixed or is no longer valid. If you still experience the same problem
+try upgrading to the latest version. If the issue persists, reopen this issue
+with the relevant information.
+```
