@@ -31,7 +31,7 @@
 ###################################
 
 upstream gitlab-workhorse {
-  server unix:<%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
+  server <%= "unix:" if node['gitlab']['gitlab-workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
 }
 
 <% if @https && @redirect_http_to_https %>
