@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.6.0
 
 - Update redis version to 8.2.24 2773274
+- Pass listen_network of gitlab_workhorse to gitlab nginx template 51b20e2
 
 8.5.4
 
