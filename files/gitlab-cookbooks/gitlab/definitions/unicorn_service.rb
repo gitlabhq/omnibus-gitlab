@@ -60,6 +60,8 @@ define :unicorn_service, :rails_app => nil, :user => nil do
       }
     )
     worker_timeout node['gitlab'][svc]['worker_timeout']
+    worker_memory_limit_min node['gitlab'][svc]['worker_memory_limit_min']
+    worker_memory_limit_max node['gitlab'][svc]['worker_memory_limit_max']
     working_directory unicorn_working_dir
     worker_processes node['gitlab'][svc]['worker_processes']
     preload_app true

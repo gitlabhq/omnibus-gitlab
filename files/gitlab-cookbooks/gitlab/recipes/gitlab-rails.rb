@@ -109,16 +109,6 @@ dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable'
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
 
-template_symlink File.join(gitlab_rails_dir, "config.ru") do
-  link_from File.join(gitlab_rails_source_dir, "config.ru")
-  source "gitlab-rails-config.ru.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['unicorn'].to_hash)
-  restarts dependent_services
-end
-
 template_symlink File.join(gitlab_rails_etc_dir, "secret") do
   link_from File.join(gitlab_rails_source_dir, ".secret")
   source "secret_token.erb"
@@ -353,4 +343,13 @@ unless bitbucket_keys.nil?
     group gitlab_group
     mode 0644
   end
+end
+
+#
+# Up to release 8.6 default config.ru was replaced with omnibus-based one.
+# After 8.6 this is not necessery. We can remove this file.
+#
+old_config_ru_file = File.join(gitlab_rails_dir, "config.ru")
+if File.exists?(old_config_ru_file)
+  File.delete(old_config_ru_file)
 end

@@ -75,9 +75,6 @@ build do
   delete 'config/database.yml'
   delete 'config/secrets.yml'
 
-  # Remove so we can place our template
-  delete 'config.ru'
-
   # Remove auto-generated files
   delete '.secret'
   delete '.gitlab_shell_secret'
