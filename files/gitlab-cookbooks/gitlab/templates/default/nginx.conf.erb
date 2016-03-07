@@ -32,6 +32,9 @@ http {
 
   include /opt/gitlab/embedded/conf/mime.types;
 
+  proxy_cache_path <%= @proxy_cache_path %>;
+  proxy_cache <%= @proxy_cache %>;
+
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
   <% end %>
