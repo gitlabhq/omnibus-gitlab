@@ -40,7 +40,7 @@ If you are on *SELinux* then run this instead:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8443:443 --publish 8080:80 --publish 2222:22 \
+	--publish 443:443 --publish 80:80 --publish 22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab:Z \
@@ -157,35 +157,35 @@ To upgrade GitLab to a new version you have to:
 
 1. Stop the running container:
 
-     ```bash
-     sudo docker stop gitlab
-     ```
+    ```bash
+    sudo docker stop gitlab
+    ```
 
 2. Remove existing container:
-
-     ```bash
-     sudo docker rm gitlab
-     ```
+    
+    ```bash
+    sudo docker rm gitlab
+    ```
 
 3. Pull the new image:
-
-     ```bash
-     sudo docker pull gitlab/gitlab-ce:latest
-     ```
+    
+    ```bash
+    sudo docker pull gitlab/gitlab-ce:latest
+    ```
 
 4. Create the container once again with previously specified options:
 
-     ```bash
-     sudo docker run --detach \
-     --hostname gitlab.example.com \
-     --publish 443:443 --publish 80:80 --publish 22:22 \
-     --name gitlab \
-     --restart always \
-     --volume /srv/gitlab/config:/etc/gitlab \
-     --volume /srv/gitlab/logs:/var/log/gitlab \
-     --volume /srv/gitlab/data:/var/opt/gitlab \
-     gitlab/gitlab-ce:latest
-     ```
+    ```bash
+    sudo docker run --detach \
+    --hostname gitlab.example.com \
+    --publish 443:443 --publish 80:80 --publish 22:22 \
+    --name gitlab \
+    --restart always \
+    --volume /srv/gitlab/config:/etc/gitlab \
+    --volume /srv/gitlab/logs:/var/log/gitlab \
+    --volume /srv/gitlab/data:/var/opt/gitlab \
+    gitlab/gitlab-ce:latest
+    ```
 
 On the first run, GitLab will reconfigure and update itself.
 
@@ -211,7 +211,9 @@ To expose GitLab CE on IP 1.1.1.1:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 1.1.1.1:443:443 --publish 1.1.1.1:80:80 --publish 1.1.1.1:22:22 \
+	--publish 1.1.1.1:443:443 \
+    --publish 1.1.1.1:80:80 \
+    --publish 1.1.1.1:22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -233,7 +235,7 @@ port `2289`, use the following `docker run` command:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:80 --publish 2289:22 \
+	--publish 8929:8929 --publish 2289:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
