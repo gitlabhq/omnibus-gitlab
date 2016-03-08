@@ -456,6 +456,11 @@ default['gitlab']['nginx']['proxy_set_headers'] = {
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
 }
 
+# Cache up to 1GB of HTTP responses from GitLab on disk
+default['gitlab']['nginx']['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
+# Set to 'off' to disable proxy caching.
+default['gitlab']['nginx']['proxy_cache'] = 'gitlab'
+
 
 ###
 # Logging

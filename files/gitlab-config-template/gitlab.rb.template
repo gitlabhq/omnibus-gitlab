@@ -480,6 +480,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Forwarded-Proto" => "https",
 #  "X-Forwarded-Ssl" => "on"
 # }
+# nginx['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
+# nginx['proxy_cache'] = 'gitlab'
 
 ## Advanced settings
 # nginx['dir'] = "/var/opt/gitlab/nginx"
