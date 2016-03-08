@@ -212,8 +212,8 @@ To expose GitLab CE on IP 1.1.1.1:
 sudo docker run --detach \
 	--hostname gitlab.example.com \
 	--publish 1.1.1.1:443:443 \
-    --publish 1.1.1.1:80:80 \
-    --publish 1.1.1.1:22:22 \
+	--publish 1.1.1.1:80:80 \
+	--publish 1.1.1.1:22:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
