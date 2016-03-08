@@ -421,6 +421,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['checkpoint_completion_target'] = 0.9
 # postgresql['checkpoint_warning'] = "30s"
 
+## Replication settings
+# postgresql['sql_replication_user'] = "gitlab_replicator"
+# postgresql['wal_level'] = "hot_standby"
+# postgresql['max_wal_senders'] = 5
+# postgresql['wal_keep_segments'] = 10
+# postgresql['hot_standby'] = "off"
 
 ################
 # GitLab Redis #
