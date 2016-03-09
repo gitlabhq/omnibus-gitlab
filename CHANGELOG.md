@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.5.5
 
-- No changes
+- Add ldap_sync_time global configuration as the EE is still supporting it
 
 8.5.4
 
