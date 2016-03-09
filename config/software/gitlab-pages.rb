@@ -14,10 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-name "gitlab-pages"
-default_version "v0.2.0"
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+version = Gitlab::Version.new("GITLAB_PAGES_VERSION")
 
-source :git => "https://gitlab.com/gitlab-org/gitlab-pages.git"
+name "gitlab-pages"
+default_version version.print
+
+source :git => version.remote
 
 build do
   # We use the `base_dir`, because the sources are put in `src/gitlab-pages`
