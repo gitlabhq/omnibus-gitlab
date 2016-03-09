@@ -5,6 +5,10 @@
   <%= @options['logrotate_frequency'] %>
   <%= "size #{@options['logrotate_size']}" if @options['logrotate_size'] %>
   rotate <%= @options['logrotate_rotate'] %>
+<% if @options['logrotate_dateformat'] %>
+  <%= "dateext" %>
+  <%= "dateformat #{@options['logrotate_dateformat']}" %>
+<% end %>
   <%= @options['logrotate_compress'] %>
   <%= @options['logrotate_method'] %>
   missingok

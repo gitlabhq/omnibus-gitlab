@@ -53,6 +53,8 @@ logging['logrotate_rotate'] = 30 # keep 30 rotated logs
 logging['logrotate_compress'] = "compress" # see 'man logrotate'
 logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
 logging['logrotate_postrotate'] = nil # no postrotate command by default
+logging['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
+
 
 # You can add overrides per service
 nginx['logrotate_frequency'] = nil

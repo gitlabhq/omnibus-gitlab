@@ -479,6 +479,7 @@ default['gitlab']['logging']['logrotate_rotate'] = 30 # keep 30 rotated logs
 default['gitlab']['logging']['logrotate_compress'] = "compress" # see 'man logrotate'
 default['gitlab']['logging']['logrotate_method'] = "copytruncate" # see 'man logrotate'
 default['gitlab']['logging']['logrotate_postrotate'] = nil # no postrotate command by default
+default['gitlab']['logging']['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
 
 ###
 # Remote syslog

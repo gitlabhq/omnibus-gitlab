@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Pass listen_network of gitlab_workhorse to gitlab nginx template 51b20e2
 - Enable NGINX proxy caching 8b91c071
 - Restart unicorn when bundled ruby is updated aca3cb2
+- Add ablity to use dateformat for logrotate configuration (Steve Norman)
 
 8.5.4
 
