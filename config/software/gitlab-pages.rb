@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 version = Gitlab::Version.new("GITLAB_PAGES_VERSION")
 
 name "gitlab-pages"
-default_version  version.print
+default_version version.print
 
 source :git => version.remote
 
