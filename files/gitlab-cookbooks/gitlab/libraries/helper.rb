@@ -361,11 +361,11 @@ class RedhatHelper
   end
 end
 
-class GGHSHelper
+class VersionHelper
   extend ShellOutHelper
 
-  def self.version
-    result = do_shell_out("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
+  def self.version(cmd)
+    result = do_shell_out(cmd)
     if result.exitstatus == 0
       result.stdout
     else

@@ -53,6 +53,6 @@ runit_service 'gitlab-workhorse' do
 end
 
 file File.join(working_dir, "VERSION") do
-  content GGHSHelper.version
+  content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
   notifies :restart, "service[gitlab-workhorse]"
 end

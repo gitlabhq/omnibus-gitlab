@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Update redis version to 8.2.24 2773274
 - Pass listen_network of gitlab_workhorse to gitlab nginx template 51b20e2
 - Enable NGINX proxy caching 8b91c071
+- Restart unicorn when bundled ruby is updated aca3cb2
 
 8.5.4
 

@@ -296,6 +296,13 @@ remote_file File.join(gitlab_rails_dir, 'VERSION') do
   end
 end
 
+# If a version of ruby changes restart unicorn. If not, unicorn will fail to
+# reload until restarted
+file File.join(gitlab_rails_dir, "RUBY_VERSION") do
+  content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
+  notifies :restart, "service[unicorn]"
+end
+
 # We shipped packages with 'chown -R git' below for quite some time. That chown
 # was an unnecessary leftover from the manual installation guide; it is better
 # to just leave these files owned by root. If we just remove the 'chown git',
