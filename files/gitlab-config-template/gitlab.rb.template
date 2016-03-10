@@ -1,8 +1,13 @@
-## Latest options listed at https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+## Configuration options with # in front are not active and they were
+## valid at install time. Updating the package does not update this file
+## automatically.
+## Latest options listed at:
+## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+
 
 ## Url on which GitLab will be reachable.
 ## For more details on configuring external_url see:
-## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
+## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/configuration.md#configuring-the-external-url-for-gitlab
 external_url 'GENERATED_EXTERNAL_URL'
 
 
@@ -556,15 +561,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # omnibus_gitconfig['system'] = { "receive" => ["fsckObjects = true"] }
 
-############################################
-# Url on which GitLab CI will be reachable #
-############################################
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/gitlab-ci/README.md
+#############
+# GitLab CI #
+#############
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/gitlab-ci/README.md
 
-# ci_external_url 'http://ci.example.com'
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
 # gitlab_ci['gitlab_ci_add_pusher'] = true
 # gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
+
+# DEPRECATED
+# ci_external_url 'http://ci.example.com'
+#
 
 #####################
 # GitLab Mattermost #
