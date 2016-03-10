@@ -525,6 +525,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['logrotate_compress'] = "compress" # see 'man logrotate'
 # logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
 # logging['logrotate_postrotate'] = nil # no postrotate command by default
+# logging['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
 # Enterprise Edition only
 # logging['udp_log_shipping_host'] = nil # remote host to ship log messages to via UDP
 # logging['udp_log_shipping_port'] = 514 # remote host to ship log messages to via UDP
