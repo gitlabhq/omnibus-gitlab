@@ -170,12 +170,14 @@ end
 ###
 # Create replication user
 ###
-sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
+if node['gitlab']['gitlab-rails']['enable']
+  sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
 
-execute "create #{sql_replication_user} replication user" do
-  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_replication_user} REPLICATION\""
-  user postgresql_user
-  # Added retries to give the service time to start on slower systems
-  retries 20
-  not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_replication_user) }
+  execute "create #{sql_replication_user} replication user" do
+    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_replication_user} REPLICATION\""
+    user postgresql_user
+    # Added retries to give the service time to start on slower systems
+    retries 20
+    not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_replication_user) }
+  end
 end
