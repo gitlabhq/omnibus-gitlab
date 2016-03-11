@@ -24,6 +24,22 @@ This can be the case when installation and `gitlab-ctl reconfigure` run went wit
 
 ## Maintainer documentation
 
+### Issue description templates
+
+Issue description template will show this message to
+all users that create issues in this repository:
+
+```
+When submitting an issue that is not a feature request, please submit the following:
+
+1. Make sure that the issue is with the package itself. If your GitLab is running but you are seeing error page 500, first check https://about.gitlab.com/getting-help/ on where to ask your question
+1. Include the omnibus-gitlab package version with: dpkg-query -W
+gitlab or rpm -q gitlab
+1. Relevant sections of `/etc/gitlab/gitlab.rb` (make sure to omit any sections that start with # and passwords)
+1. Whether the problems are caused on a fresh install or an upgrade(Describe the upgrade history)
+1. Describe the OS and the system environment GitLab is installed on (Is it a clean VM, is anything else running on it, etc.)
+```
+
 ### Issue response template
 
 When the maintainer suspects the reported issue is not related to the problems with omnibus-gitlab, following template can be used to respond to the issue reporter:
