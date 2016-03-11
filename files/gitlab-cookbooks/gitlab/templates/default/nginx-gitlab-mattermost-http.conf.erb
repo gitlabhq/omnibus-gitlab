@@ -28,7 +28,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice

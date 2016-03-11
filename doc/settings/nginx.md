@@ -114,6 +114,35 @@ for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
 
+## Configuring HTTP2 protocol
+
+By default, when you specify that your Gitlab instance should be reachable
+through HTTPS by specifying `external_url "https://gitlab.example.com"`,
+[http2 protocol] is also enabled.
+
+The omnibus-gitlab package sets required ssl_ciphers that are compatible with
+http2 protocol.
+
+If you are specifying custom ssl_ciphers in your configuration and a cipher is
+in [http2 cipher blacklist], once you try to reach your GitLab instance you will
+be presented with `INADEQUATE_SECURITY` error in your browser.
+
+Consider removing the offending ciphers from the cipher list. Changing ciphers
+is only necessary if you have a very specific custom setup.
+
+For more info on why you would want to have http2 protocol enabled, check out
+the [http2 whitepaper].
+
+If changing the ciphers is not an option you can disable http2 support by
+specifying in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['http2_enabled'] = false
+```
+
+Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+for the changes to take effect.
+
 ## Using a non-bundled web-server
 
 By default, omnibus-gitlab installs GitLab with bundled Nginx.
@@ -430,3 +459,6 @@ systems `sudo service nginx restart`).
 
 [recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
 [selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications
+[http2 protocol]: https://tools.ietf.org/html/rfc7540
+[http2 whitepaper]: https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744
+[http2 cipher blacklist]: https://tools.ietf.org/html/rfc7540#appendix-A

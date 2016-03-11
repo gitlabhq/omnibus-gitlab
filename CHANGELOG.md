@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Enable NGINX proxy caching 8b91c071
 - Restart unicorn when bundled ruby is updated aca3cb2
 - Add ability to use dateformat for logrotate configuration (Steve Norman)
+- Added configuration option that allows disabling http2 protocol bcaa9e9
 
 8.5.5
 
