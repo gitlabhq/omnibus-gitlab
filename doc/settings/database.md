@@ -24,7 +24,11 @@ If you are going to use MySQL/MariaDB, make sure to read the [MySQL special note
 ## Using a non-packaged PostgreSQL database management server
 
 If you do not want to use the packaged PostgreSQL server, you can configure an
-external one:
+omnibus-gitlab package to use an external one.
+
+**WARNING** If you are using non-packaged PostgreSQL server, you need to make
+sure that PostgreSQL is setup according to the requirements, see
+[database requirements document] for more information.
 
 1.  Edit `/etc/gitlab/gitlab.rb`:
 
@@ -195,3 +199,4 @@ sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql -h /var/opt/gitlab/postgresql 
 [Reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
 [rake-restore]: http://doc.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
 [mysql-install]: http://doc.gitlab.com/ce/install/installation.html#database "MySQL documentation"
+[database requirements document]: http://doc.gitlab.com/ce/install/requirements.html#database
