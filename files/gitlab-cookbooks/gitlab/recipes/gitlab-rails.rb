@@ -349,7 +349,6 @@ end
 # Up to release 8.6 default config.ru was replaced with omnibus-based one.
 # After 8.6 this is not necessery. We can remove this file.
 #
-old_config_ru_file = File.join(gitlab_rails_dir, "config.ru")
-if File.exists?(old_config_ru_file)
-  File.delete(old_config_ru_file)
+file File.join(gitlab_rails_dir, 'config.ru') do
+  action :delete
 end
