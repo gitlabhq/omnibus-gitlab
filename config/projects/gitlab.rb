@@ -51,6 +51,7 @@ override :'chef-gem', version: '12.5.1'
 override :cacerts, version: '2016.01.20', source: { md5: '06629db7f712ff3a75630eccaecc1fe4' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
 override :redis, version: '2.8.24', source: { md5: '7b6eb6e4ccc050c351df8ae83c55a035' }
+override :postgresql, version: '9.2.15', source: { md5: '235b4fc09eff4569a7972be65c449ecc' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"

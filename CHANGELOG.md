@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Add ability to use dateformat for logrotate configuration (Steve Norman) 6667865d
 - Added configuration option that allows disabling http2 protocol bcaa9e9
 - Enable pg_trgm extension for packaged Postgres f88fe25
+- Update postgresql to 9.2.15 to address CVE-2016-0773 (Takuya Noguchi)
 
 8.5.5
 
