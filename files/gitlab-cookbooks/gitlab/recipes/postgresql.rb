@@ -138,33 +138,33 @@ pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
 bin_dir = "/opt/gitlab/embedded/bin"
 database_name = node['gitlab']['gitlab-rails']['db_database']
-ci_database_name = node['gitlab']['gitlab-ci']['db_database']
+gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
 
-databases = []
 if node['gitlab']['gitlab-rails']['enable']
-  databases << ['gitlab-rails', database_name, node['gitlab']['postgresql']['sql_user']]
-end
-
-if node['gitlab']['gitlab-ci']['enable']
-  databases << ['gitlab-ci', ci_database_name, node['gitlab']['postgresql']['sql_ci_user']]
-end
-
-databases.each do |rails_app, db_name, sql_user|
-  execute "create #{sql_user} database user" do
-    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
+  execute "create #{gitlab_sql_user} database user" do
+    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{gitlab_sql_user}\""
     user postgresql_user
     # Added retries to give the service time to start on slower systems
     retries 20
-    not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
+    not_if { !pg_helper.is_running? || pg_helper.user_exists?(gitlab_sql_user) }
   end
 
-  execute "create #{db_name} database" do
-    command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{sql_user} #{db_name}"
+  execute "create #{database_name} database" do
+    command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
     user postgresql_user
-    not_if { !pg_helper.is_running? || pg_helper.database_exists?(db_name) }
     retries 30
-    notifies :run, "execute[initialize #{rails_app} database]", :immediately
+    notifies :run, "execute[enable pg_trgm extension]", :immediately
+    notifies :run, "execute[initialize gitlab-rails database]", :immediately
+    not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) }
   end
+end
+
+execute "enable pg_trgm extension" do
+  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
+  user postgresql_user
+  retries 20
+  action :nothing
+  not_if { !pg_helper.is_running? }
 end
 
 ###
