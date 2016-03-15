@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.5.6
+
+- No changes
+
 8.5.5
 
 - Add ldap_sync_time global configuration as the EE is still supporting it
