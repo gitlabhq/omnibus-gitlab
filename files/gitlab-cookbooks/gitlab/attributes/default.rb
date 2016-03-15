@@ -651,6 +651,7 @@ default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
 default['gitlab']['mattermost']['service_enable_testing'] = false
 default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
 default['gitlab']['mattermost']['service_enable_insecure_outgoing_connections'] = false
+default['gitlab']['mattermost']['service_allow_cors_from'] = nil
 default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = false
 default['gitlab']['mattermost']['service_enable_commands'] = false
 default['gitlab']['mattermost']['service_enable_only_admin_integrations'] = true
