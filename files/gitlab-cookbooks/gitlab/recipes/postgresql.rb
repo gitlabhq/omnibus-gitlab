@@ -139,6 +139,7 @@ pg_port = node['gitlab']['postgresql']['port']
 bin_dir = "/opt/gitlab/embedded/bin"
 database_name = node['gitlab']['gitlab-rails']['db_database']
 gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
+sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
 
 if node['gitlab']['gitlab-rails']['enable']
   execute "create #{gitlab_sql_user} database user" do
@@ -157,21 +158,6 @@ if node['gitlab']['gitlab-rails']['enable']
     notifies :run, "execute[initialize gitlab-rails database]", :immediately
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) }
   end
-end
-
-execute "enable pg_trgm extension" do
-  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
-  user postgresql_user
-  retries 20
-  action :nothing
-  not_if { !pg_helper.is_running? }
-end
-
-###
-# Create replication user
-###
-if node['gitlab']['gitlab-rails']['enable']
-  sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
 
   execute "create #{sql_replication_user} replication user" do
     command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_replication_user} REPLICATION\""
@@ -180,4 +166,12 @@ if node['gitlab']['gitlab-rails']['enable']
     retries 20
     not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_replication_user) }
   end
+end
+
+execute "enable pg_trgm extension" do
+  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
+  user postgresql_user
+  retries 20
+  action :nothing
+  not_if { !pg_helper.is_running? }
 end
