@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.5.7
+
+- Bump Git version to 2.7.3
+
 8.5.6
 
 - No changes
