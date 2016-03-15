@@ -16,6 +16,10 @@ omnibus-gitlab repository.
 - If gitlab rails is disabled, reconfigure needs to run without errors 5e695aac
 - Update mattermost to v2.1.0 f555c232
 
+8.5.6
+
+- No changes
+
 8.5.5
 
 - Add ldap_sync_time global configuration as the EE is still supporting it 3a58bfd
