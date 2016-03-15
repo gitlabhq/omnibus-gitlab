@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Added configuration option that allows disabling http2 protocol bcaa9e9
 - Enable pg_trgm extension for packaged Postgres f88fe25
 - Update postgresql to 9.2.15 to address CVE-2016-0773 (Takuya Noguchi) 16bf321
+- If gitlab rails is disabled, reconfigure needs to run without errors 5e695aac
 
 8.5.5
 
