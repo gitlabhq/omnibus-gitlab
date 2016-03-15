@@ -118,4 +118,4 @@ runit_service "gitlab-git-http-server" do
   action :disable
 end
 
-include_recipe "gitlab::database_migrations"
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable']
