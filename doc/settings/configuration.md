@@ -286,6 +286,44 @@ redis['home'] = "/var/opt/redis-gitlab"
 # And so on for users/groups for GitLab CI GitLab Mattermost
 ```
 
+## Disable storage directories management
+
+The omnibus-gitlab package takes care of creating all the necessary directories
+with the correct ownership and permissions, as well as keeping this updated.
+
+Some of these directories will hold large amount of data so in certain setups,
+these directories will most likely be mounted on a NFS (or some other) share.
+
+Some types of mounts won't allow automatic creation of directories by root user
+ (default user for initial setup), eg. NFS with `no_root_squash` enabled on the
+share.
+
+In order to disable management of these directories,
+in `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+manage_storage_directories['enable'] = false
+```
+
+**Warning** The omnibus-gitlab package still expects these directories to exist
+on the filesystem. It is up to the administrator to create and set correct
+permissions if this setting is set.
+
+Enabling this setting will prevent the creation of the following directories:
+
+| Default location | Permissions | Ownership | Purpose |
+| ---------------- | ----------- | --------- | ------- |
+| `/var/opt/gitlab/git-data`   | 0700 | git:root | Holds repositories directory |
+| `/var/opt/gitlab/git-data/repositories` | 2770 | git:git | Holds git repositories |
+| `/var/opt/gitlab/gitlab-rails/shared` | 0751 | git:gitlab-www | Holds large object directories |
+| `/var/opt/gitlab/gitlab-rails/shared/artifacts` | 0700 | git:root | Holds CI artifacts |
+| `/var/opt/gitlab/gitlab-rails/shared/lfs` | 0700 | git:root | Holds LFS objects |
+| `/var/opt/gitlab/gitlab-rails/uploads` | 0700 | git:root | Holds user attachments |
+| `/var/opt/gitlab/gitlab-pages` | 0750 | git:gitlab-www | Holds user pages |
+| `/var/opt/gitlab/gitlab-ci/builds` | 0700 | git:root | Holds CI build logs |
+
+
+
 ## Only start Omnibus-GitLab services after a given filesystem is mounted
 
 If you want to prevent omnibus-gitlab services (NGINX, Redis, Unicorn etc.)
