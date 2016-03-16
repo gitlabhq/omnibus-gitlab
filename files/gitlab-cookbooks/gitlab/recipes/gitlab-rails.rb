@@ -66,13 +66,14 @@ if node['gitlab']['manage-storage-directories']['enable']
       mode '0700'
       recursive true
     end
+  end
 
-    directory node['gitlab']['gitlab-rails']['pages_path'] do
-      owner gitlab_user
-      group account_helper.web_server_group
-      mode '0750'
-      recursive true
-    end
+  directory node['gitlab']['gitlab-rails']['pages_path'] do
+    owner gitlab_user
+    group account_helper.web_server_group
+    mode '0750'
+    recursive true
+  end
 end
 
 [
@@ -80,7 +81,7 @@ end
   gitlab_rails_static_etc_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
-  node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path']
+  node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
