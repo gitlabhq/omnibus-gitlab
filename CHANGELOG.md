@@ -16,6 +16,10 @@ omnibus-gitlab repository.
 - If gitlab rails is disabled, reconfigure needs to run without errors 5e695aac
 - Update mattermost to v2.1.0 f555c232
 
+8.5.7
+
+- Bump Git version to 2.7.3
+
 8.5.6
 
 - No changes
