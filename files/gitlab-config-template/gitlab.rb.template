@@ -89,7 +89,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['pages_path'] = "/mnt/storage/pages"
 
 ## For setting up LDAP
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#setting-up-ldap-sign-in
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#setting-up-ldap-sign-in
 ## Be careful not to break the identation in the ldap_servers block. It is in
 ## yaml format and the spaces must be retained. Using tabs will not work.
 
@@ -154,7 +154,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['kerberos_https'] = true
 
 ## For setting up omniauth
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#omniauth-google-twitter-github-login
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#omniauth-google-twitter-github-login
 
 # gitlab_rails['omniauth_enabled'] = true
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
@@ -183,7 +183,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ## For setting up backups
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#backups
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#backups
 
 # gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
@@ -201,7 +201,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256' # Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for backups
 
 ## For setting up different data storing directory
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#storing-git-data-in-an-alternative-directory
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#storing-git-data-in-an-alternative-directory
 ## If you want to use a single non-default directory to store git data use
 ## a path that doesn't contain symlinks.
 # git_data_dir "/var/opt/gitlab/git-data"
@@ -256,7 +256,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ############################
 # GitLab database settings #
 ############################
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/database.md#database-settings
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/database.md#database-settings
 ## Only needed if you use an external database.
 
 # gitlab_rails['db_adapter'] = "postgresql"
@@ -276,7 +276,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #########################
 # GitLab redis settings #
 #########################
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/redis.md#redis-settings
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/redis.md#redis-settings
 ## Connect to your own redis instance.
 
 # gitlab_rails['redis_host'] = "127.0.0.1"
@@ -288,7 +288,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################
 # GitLab email server settings #
 ################################
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/smtp.md#smtp-settings
+# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/smtp.md#smtp-settings
 # Use smtp instead of sendmail/postfix.
 
 # gitlab_rails['smtp_enable'] = true
@@ -327,7 +327,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###############
 # GitLab user #
 ###############
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#changing-the-name-of-the-git-user-group
+## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#changing-the-name-of-the-git-user-group
 ## Modify default git user.
 
 
@@ -447,7 +447,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #####################
 # GitLab Web server #
 #####################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md#using-a-non-bundled-web-server
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/doc/settings/nginx.md#using-a-non-bundled-web-server
 ## When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.
 
 # web_server['external_users'] = []
@@ -462,7 +462,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################
 # GitLab Nginx #
 ################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/doc/settings/nginx.md
 
 # nginx['enable'] = true
 # nginx['client_max_body_size'] = '250m'
@@ -517,7 +517,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##################
 # GitLab Logging #
 ##################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logs
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#logs
 
 # logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
 # logging['svlogd_num'] = 30 # keep 30 rotated log files
@@ -539,7 +539,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############
 # Logrotate #
 #############
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#logrotate
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#logrotate
 ## You can disable built in logrotate feature.
 
 # logrotate['enable'] = true
