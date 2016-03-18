@@ -24,6 +24,8 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user-group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
 - [Only start omnibus-gitlab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
+- [Disable user and group account management](settings/configuration.html#disable-user-and-group-account-management)
+- [Disable storage directory management](settings/configuration.html#disable-storage-directories-management)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
