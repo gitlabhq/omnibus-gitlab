@@ -547,11 +547,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############################
 # Users and groups accounts #
 #############################
-## Should omnibus-gitlab package manage users and groups accounts.
-## Only set if creating accounts manually
-##
+## Disable management of users and groups accounts.
+## Set only if creating accounts manually
+## See: http://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
+# manage_accounts['enable'] = false
 
-# manage_accounts['enable'] = true
+#######################
+# Storage directories #
+#######################
+## Disable managing storage directories
+## Set only if the select directories are created manually
+## See: http://doc.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
+# manage_storage_directories['enable'] = false
 
 #######
 # Git #
