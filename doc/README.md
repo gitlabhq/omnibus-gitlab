@@ -52,6 +52,10 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [RPM error: 'package is already installed' ](update/README.md#rpm-package-is-already-installed-error)
 - [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-from-gitlab-ci-version-prior-to-540-to-the-latest-version)
 
+## Package information
+
+- [Checking the versions of bundled software](package-information/#README.md#checking-the-versions-of-bundled-software)
+
 ## Troubleshooting
 
 - [Hash Sum mismatch when installing packages](common_installation_problems/README.md#hash-sum-mismatch-when-installing-packages)
