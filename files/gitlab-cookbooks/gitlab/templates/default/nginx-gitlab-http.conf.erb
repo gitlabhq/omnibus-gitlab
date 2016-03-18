@@ -59,7 +59,6 @@ server {
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
-  root /opt/gitlab/embedded/service/gitlab-rails/public;
 
   ## Increase this if you want to upload large attachments
   ## Or if you want to accept large git objects over http
@@ -111,6 +110,15 @@ server {
     <% end %>
 
     proxy_pass http://gitlab-workhorse;
+  }
+
+  error_page 404 /404.html;
+  error_page 422 /422.html;
+  error_page 500 /500.html;
+  error_page 502 /502.html;
+  location ~ ^/(404|422|500|502)\.html$ {
+    root /opt/gitlab/embedded/service/gitlab-rails/public;
+    internal;
   }
 
   <%= @custom_gitlab_server_config %>
