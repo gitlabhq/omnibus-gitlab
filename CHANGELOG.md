@@ -15,7 +15,8 @@ omnibus-gitlab repository.
 - Update postgresql to 9.2.15 to address CVE-2016-0773 (Takuya Noguchi) 16bf321
 - If gitlab rails is disabled, reconfigure needs to run without errors 5e695aac
 - Update mattermost to v2.1.0 f555c232
-- No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko)
+- No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
+- Add configuration option to disable management of storage directories 81a370d3
 
 8.5.7
 
