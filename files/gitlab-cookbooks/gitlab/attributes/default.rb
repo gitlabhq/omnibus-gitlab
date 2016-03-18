@@ -261,8 +261,8 @@ default['gitlab']['unicorn']['tcp_nopush'] = true
 default['gitlab']['unicorn']['backlog_socket'] = 1024
 default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
-default['gitlab']['unicorn']['worker_memory_limit_min'] = "300*(1024**2)"
-default['gitlab']['unicorn']['worker_memory_limit_max'] = "350*(1024**2)"
+default['gitlab']['unicorn']['worker_memory_limit_min'] = "300 * 1 << 20"
+default['gitlab']['unicorn']['worker_memory_limit_max'] = "350 * 1 << 20"
 
 ####
 # Sidekiq

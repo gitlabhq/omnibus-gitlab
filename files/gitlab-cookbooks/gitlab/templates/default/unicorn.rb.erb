@@ -55,3 +55,13 @@ stdout_path '<%= @stdout_path %>'
 ENV['RAILS_RELATIVE_URL_ROOT'] = "<%= @relative_url %>"
 
 <%- end %>
+<%- if @worker_memory_limit_min %>
+# Min memory size (RSS) per worker
+ENV['GITLAB_UNICORN_MEMORY_MIN'] = (<%= @worker_memory_limit_min %>).to_s
+
+<%- end %>
+<%- if @worker_memory_limit_max %>
+# Max memory size (RSS) per worker
+ENV['GITLAB_UNICORN_MEMORY_MAX'] = (<%= @worker_memory_limit_max %>).to_s
+
+<%- end %>
