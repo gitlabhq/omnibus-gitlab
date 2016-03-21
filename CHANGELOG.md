@@ -18,6 +18,10 @@ omnibus-gitlab repository.
 - No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
 - Add configuration option to disable management of storage directories 81a370d3
 
+8.5.8
+
+- Bump Git version to 2.7.4
+
 8.5.7
 
 - Bump Git version to 2.7.3
