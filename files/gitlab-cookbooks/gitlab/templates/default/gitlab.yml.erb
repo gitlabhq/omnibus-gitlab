@@ -108,7 +108,7 @@ production: &base
   artifacts:
     enabled: <%= @artifacts_enabled %>
     # The location where Build Artifacts are stored (default: shared/artifacts).
-    storage_path: <%= @artifacts_path %>
+    path: <%= @artifacts_path %>
 
   ## Git LFS
   lfs:
