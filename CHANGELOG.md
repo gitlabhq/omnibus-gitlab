@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.6.0
 
-- Update redis version to 8.2.24 2773274
+- Update redis version to 2.8.24 2773274
 - Pass listen_network of gitlab_workhorse to gitlab nginx template 51b20e2
 - Enable NGINX proxy caching 8b91c071
 - Restart unicorn when bundled ruby is updated aca3cb2
@@ -17,6 +17,10 @@ omnibus-gitlab repository.
 - Update mattermost to v2.1.0 f555c232
 - No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
 - Add configuration option to disable management of storage directories 81a370d3
+
+8.5.8
+
+- Bump Git version to 2.7.4
 
 8.5.7
 
