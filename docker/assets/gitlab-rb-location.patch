@@ -1,9 +1,9 @@
 --- etc/gitlab.rb.template.bak	2015-09-22 20:55:42.088202003 +0000
 +++ etc/gitlab.rb.template	2015-09-22 20:55:50.888202003 +0000
-@@ -3,7 +3,7 @@
+@@ -8,7 +8,7 @@
  ## Url on which GitLab will be reachable.
  ## For more details on configuring external_url see:
- ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
+ ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/configuration.md#configuring-the-external-url-for-gitlab
 -external_url 'GENERATED_EXTERNAL_URL'
 +# external_url 'GENERATED_EXTERNAL_URL' # default: http://hostname
  
