@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.6.1
+
+  - Fix artifacts path key in gitlab.yml.erb c29c1a5d
+
 8.6.0
 
 - Update redis version to 2.8.24 2773274
