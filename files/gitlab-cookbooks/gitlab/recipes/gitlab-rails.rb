@@ -28,6 +28,7 @@ gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_direct
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
+upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
@@ -82,6 +83,7 @@ end
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   node['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'],
+  upgrade_status_dir,
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
   directory dir_name do
@@ -286,15 +288,16 @@ file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
   owner gitlab_user
 end
 
-# Only run `rake db:migrate` when the gitlab-rails version has changed
+# Link the VERSION file just for easier administration
 remote_file File.join(gitlab_rails_dir, 'VERSION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/VERSION"
-  notifies :run, 'bash[migrate gitlab-rails database]' unless postgresql_not_listening
-  notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
+end
+
+# Only run `rake db:migrate` when the gitlab-rails version has changed
+# Or migration failed for some reason
+remote_file File.join(gitlab_rails_dir, 'REVISION') do
+  source "file:///opt/gitlab/embedded/service/gitlab-rails/REVISION"
   notifies :run, 'bash[generate assets]' if node['gitlab']['gitlab-rails']['gitlab_relative_url']
-  dependent_services.each do |sv|
-    notifies :restart, sv
-  end
 end
 
 # If a version of ruby changes restart unicorn. If not, unicorn will fail to
@@ -325,6 +328,9 @@ bash "generate assets" do
   EOS
   # We have to precompile assets as root because of permissions and ownership of files
   environment ({ 'NO_PRIVILEGE_DROP' => 'true', 'USE_DB' => 'false' })
+  dependent_services.each do |sv|
+    notifies :restart, sv
+  end
   action :nothing
 end
 

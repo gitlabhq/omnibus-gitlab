@@ -28,8 +28,11 @@ execute "initialize gitlab-rails database" do
   notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
 end
 
-migrate_database 'gitlab-rails' do
-  command '/opt/gitlab/bin/gitlab-rake db:migrate'
-  action :nothing
-  restarts dependent_services
+gitlab_migrate_database 'gitlab-rails' do
+  action :run
+  notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
+  notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless OmnibusHelper.not_listening?("redis")
+  dependent_services.each do |svc|
+    notifies :restart, svc, :immediately
+  end
 end
