@@ -156,7 +156,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## For setting up omniauth
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#omniauth-google-twitter-github-login
 
-# gitlab_rails['omniauth_enabled'] = true
+# gitlab_rails['omniauth_enabled'] = false
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
 # gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
 # gitlab_rails['omniauth_block_auto_created_users'] = true
