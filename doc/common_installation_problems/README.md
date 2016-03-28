@@ -367,6 +367,61 @@ for your environment.
 See [Change the default proxy headers section of nginx doc][] for details on
 how to override the default headers.
 
+### Extension missing pg_trgm
+
+When upgrading to GitLab 8.6, PostgreSQL requires the `pg_trgm` extension.
+While this should be handled by the upgrade process, you might encounter a
+migration error which also displays a 500 server error. It's worth noting that
+this usually happens on instances that have external database connections.
+
+To fix this issue, you'll need access to `psql` as superuser. Then you can
+install the extension and run migrations again.
+
+1. Access `psql` as superuser:
+
+    ```
+    sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql \
+                        -h /var/opt/gitlab/postgresql \
+                        -d gitlabhq_production
+    ```
+
+1. Add the extension:
+
+    ```
+    CREATE EXTENSION pg_trgm;
+    ```
+
+1. Exit `psql`:
+
+    ```
+    \q
+    ```
+
+1. Now run migrations again:
+
+    ```
+    sudo gitlab-rake db:migrate
+    ```
+
+---
+
+If using Docker, you first need to access your container, then run the commands
+above, and finally restart the container.
+
+1. Access the container:
+
+    ```
+    docker exec -it gitlab bash
+    ```
+
+1. Run the commands above
+
+1. Restart the container:
+
+    ```
+    docker restart gitlab
+    ```
+
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
