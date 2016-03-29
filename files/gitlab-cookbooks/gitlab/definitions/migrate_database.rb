@@ -26,6 +26,7 @@ define :migrate_database, :command => nil, :action => :run, :restarts => [] do
       exit ${PIPESTATUS[0]}
     EOH
     action params[:action]
+    notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
     notifies :run, "execute[clear the #{params[:name]} cache]", :immediately unless OmnibusHelper.not_listening?("redis")
     params[:restarts].each do |svc|
       notifies :restart, svc, :immediately

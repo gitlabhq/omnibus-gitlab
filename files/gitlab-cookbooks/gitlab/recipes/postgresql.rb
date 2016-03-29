@@ -154,7 +154,6 @@ if node['gitlab']['gitlab-rails']['enable']
     command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
     user postgresql_user
     retries 30
-    notifies :run, "execute[enable pg_trgm extension]", :immediately
     notifies :run, "execute[initialize gitlab-rails database]", :immediately
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) }
   end
