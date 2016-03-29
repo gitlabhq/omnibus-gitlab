@@ -9,7 +9,7 @@ manage_accounts['enable'] = false
 host = `hostname`.strip
 external_url "http://#{host}"
 
-# Load custom config from environemt variable: GITLAB_OMNIBUS_CONFIG
+# Load custom config from environment variable: GITLAB_OMNIBUS_CONFIG
 eval ENV["GITLAB_OMNIBUS_CONFIG"].to_s
 
 # Load configuration stored in /etc/gitlab/gitlab.rb
