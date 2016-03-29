@@ -25,6 +25,7 @@ execute "initialize gitlab-rails database" do
   command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
   environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
   action :nothing
+  notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
 end
 
 migrate_database 'gitlab-rails' do
