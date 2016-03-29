@@ -47,7 +47,7 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.1.8', source: { md5: '091b62f0a9796a3c55de2a228a0e6ef3' }
 override :rubygems, version: 'v2.5.1'
-override :'chef-gem', version: '12.5.1'
+override :'chef-gem', version: '12.6.0'
 override :cacerts, version: '2016.01.20', source: { md5: '06629db7f712ff3a75630eccaecc1fe4' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
 override :redis, version: '2.8.24', source: { md5: '7b6eb6e4ccc050c351df8ae83c55a035' }
