@@ -5,6 +5,9 @@ omnibus-gitlab repository.
 
 8.7.0
 
+- Updated libicu to 56.1 4de944d9
+- Updated liblzma to 5.2.2 4de944d9
+
 8.6.2
 
 - Updated chef version to 12.6.0 37bf798
