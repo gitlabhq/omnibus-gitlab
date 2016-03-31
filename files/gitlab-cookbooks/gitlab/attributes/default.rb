@@ -463,6 +463,10 @@ default['gitlab']['nginx']['http2_enabled'] = true
 default['gitlab']['nginx']['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
 # Set to 'off' to disable proxy caching.
 default['gitlab']['nginx']['proxy_cache'] = 'gitlab'
+# Config for the http_realip_module http://nginx.org/en/docs/http/ngx_http_realip_module.html
+default['gitlab']['nginx']['real_ip_trusted_addresses'] = [] # Each entry creates a set_real_ip_from directive
+default['gitlab']['nginx']['real_ip_header'] = 'X-Real-IP'
+default['gitlab']['nginx']['real_ip_recursive'] = true
 
 
 ###
