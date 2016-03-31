@@ -369,13 +369,26 @@ how to override the default headers.
 
 ### Extension missing pg_trgm
 
-When upgrading to GitLab 8.6, PostgreSQL requires the `pg_trgm` extension.
-While this should be handled by the upgrade process, you might encounter a
-migration error which also displays a 500 server error. It's worth noting that
-this usually happens on instances that have external database connections.
+Starting from GitLab 8.6, [GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#postgresql-requirements)
+the PostgreSQL extension `pg_trgm`.
+If you are using omnibus-gitlab package with the bundled database, the extension
+should be automatically enabled when you upgrade.
 
-To fix this issue, you'll need access to `psql` as superuser. Then you can
-install the extension and run migrations again.
+If you however, are using an external (non-packaged) database, you will need to
+enable the extension manually. The reason for this is that omnibus-gitlab
+package with external database has no way of confirming if the extension exists,
+and it also doesn't have a way of enabling the extension.
+
+
+To fix this issue, you'll need to first install the `pg_trgm` extension.
+The extension is located in the `postgresql-contrib` package. For Debian:
+
+```
+sudo apt-get install postgresql-contrib
+```
+
+Once the extension is installed, access the `psql` as superuser and enable the
+extension.
 
 1. Access `psql` as superuser:
 
@@ -385,24 +398,17 @@ install the extension and run migrations again.
                         -d gitlabhq_production
     ```
 
-1. Add the extension:
+1. Enable the extension:
 
     ```
     CREATE EXTENSION pg_trgm;
-    ```
-
-1. Exit `psql`:
-
-    ```
     \q
     ```
-
 1. Now run migrations again:
 
     ```
     sudo gitlab-rake db:migrate
     ```
-
 ---
 
 If using Docker, you first need to access your container, then run the commands
