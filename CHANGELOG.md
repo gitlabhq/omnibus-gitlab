@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
+- Change the way db:migrate is triggered 3b42520a
 
 8.6.2
 
