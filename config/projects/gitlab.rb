@@ -50,6 +50,7 @@ override :rubygems, version: 'v2.5.1'
 override :'chef-gem', version: '12.5.1'
 override :cacerts, version: '2016.04.20', source: { md5: '782dcde8f5d53b1b9e888fdf113c42b9' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
+override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
