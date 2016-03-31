@@ -247,6 +247,11 @@ default['gitlab']['gitlab-rails']['smtp_ca_path'] = nil
 # defaults to /opt/gitlab/embedded/ssl/certs/cacert.pem. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 
+# Path to directory that contains (ca) certificates that should also be trusted (e.g. on
+# outgoing Webhooks connections). For these certificates symlinks will be created in
+# /opt/gitlab/embedded/ssl/certs/ using the subject hash ( + ".0") as the filename.
+default['gitlab']['gitlab-rails']['trusted_certs_dir'] = "/etc/gitlab/ssl/trusted-certs"
+
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil

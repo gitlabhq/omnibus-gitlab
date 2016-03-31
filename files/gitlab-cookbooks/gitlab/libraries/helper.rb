@@ -390,3 +390,19 @@ class MattermostHelper
     "/opt/gitlab/embedded/bin/mattermost -config='#{path}' -upgrade_db_30 -confirm_backup='YES' -team_name='#{team_name}'"
   end
 end
+
+class CertificateHelper
+
+  def is_x509_certificate?(file)
+    begin
+      OpenSSL::X509::Certificate.new(File.read(file)) # DER- or PEM-encoded
+      true
+    rescue OpenSSL::X509::CertificateError => e
+      warn("ERROR: " + file + ": OpenSSL error: " + e.message + "!")
+      false
+    rescue Exception => e
+      warn(e.message)
+      false
+    end
+  end
+end
