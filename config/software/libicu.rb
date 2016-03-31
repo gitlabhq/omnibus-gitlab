@@ -17,10 +17,10 @@
 #
 
 name "libicu"
-default_version "54.1"
+default_version "56.1"
 
-source :url => "http://download.icu-project.org/files/icu4c/54.1/icu4c-54_1-src.tgz",
-       :md5 => "e844caed8f2ca24c088505b0d6271bc0"
+source :url => "http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.tgz",
+       :md5 => "c4a2d71ff56aec5ebfab2a3f059be99d"
 
 relative_path 'icu/source'
 
