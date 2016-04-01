@@ -129,7 +129,7 @@ proxy to the `real_ip_trusted_addresses` list:
 nginx['real_ip_trusted_addresses'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
 # other real_ip config options
 nginx['real_ip_header'] = 'X-Real-IP'
-nginx['real_ip_recursive'] = true
+nginx['real_ip_recursive'] = 'on'
 ```
 
 Description of the options:
