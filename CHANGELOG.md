@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.7.0
 
+- Support the ability to change mattermost UID and GID
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a

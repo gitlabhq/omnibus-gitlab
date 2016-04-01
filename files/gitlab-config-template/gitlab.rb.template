@@ -591,6 +591,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['enable'] = false
 # mattermost['username'] = 'mattermost'
 # mattermost['group'] = 'mattermost'
+# mattermost['uid'] = nil
+# mattermost['gid'] = nil
 # mattermost['home'] = '/var/opt/gitlab/mattermost'
 # mattermost['database_name'] = 'mattermost_production'
 
