@@ -1,6 +1,8 @@
 stages:
   - package
+  - notifications
   - extra
+  - notifications
 
 before_script:
   - bundle install --binstubs --path ~/gems
@@ -8,7 +10,7 @@ before_script:
 Ubuntu 12.04:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - ubuntu1204
@@ -17,7 +19,7 @@ Ubuntu 12.04:
 Ubuntu 14.04:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - ubuntu1404
@@ -26,7 +28,7 @@ Ubuntu 14.04:
 Debian 7:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - debian7
@@ -35,7 +37,7 @@ Debian 7:
 Centos 6:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - centos6
@@ -44,7 +46,7 @@ Centos 6:
 Centos 7:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - centos7
@@ -53,7 +55,7 @@ Centos 7:
 Ubuntu 12.04 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - ubuntu1204
@@ -62,7 +64,7 @@ Ubuntu 12.04 master:
 Ubuntu 14.04 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - ubuntu1404
@@ -71,7 +73,7 @@ Ubuntu 14.04 master:
 Debian 7 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - debian7
@@ -80,7 +82,7 @@ Debian 7 master:
 CentOS 6 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - centos6
@@ -89,7 +91,7 @@ CentOS 6 master:
 CentOS 7 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - centos7
@@ -98,7 +100,7 @@ CentOS 7 master:
 Debian 8:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make do_release
   tags:
   - debian8
@@ -107,7 +109,7 @@ Debian 8:
 Debian 8 master:
   stage: package
   script:
-  - ssh -T git@dev.gitlab.org
+  - ssh -vvT git@dev.gitlab.org
   - make test
   tags:
   - debian8
@@ -153,3 +155,9 @@ Docker:
   - docker-build
   except:
   - branches
+
+notify:slack:
+  stage: notifications
+  script:
+    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+  when: on_failure
