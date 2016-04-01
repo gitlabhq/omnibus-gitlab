@@ -1,8 +1,9 @@
 stages:
+  - notification_start
   - package
-  - notifications
+  - notification_fail
   - extra
-  - notifications
+  - notification_fail
 
 before_script:
   - bundle install --binstubs --path ~/gems
@@ -157,7 +158,15 @@ Docker:
   - branches
 
 notify:slack:
-  stage: notifications
+  stage: notification_fail
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_failure
+
+notify:slack:
+  stage: notification_start
+  script:
+    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` started! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+  when: always
+  only:
+    - tags@gitlab/omnibus-gitlab
