@@ -127,7 +127,7 @@ proxy to the `real_ip_trusted_addresses` list:
 ```ruby
 # Each address is added to the the NGINX config as 'set_real_ip_from <address>;'
 nginx['real_ip_trusted_addresses'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
-# real_ip default options
+# other real_ip config options
 nginx['real_ip_header'] = 'X-Real-IP'
 nginx['real_ip_recursive'] = true
 ```
