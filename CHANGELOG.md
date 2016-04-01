@@ -3,12 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.6.3
+
+- No changes
+
 8.6.2
-  - Updated chef version to 12.6.0 37bf798
-  - Use `:before` from Chef 12.6 to enable extension before migration or database seed fd6c88e0
+
+- Updated chef version to 12.6.0 37bf798
+- Use `:before` from Chef 12.6 to enable extension before migration or database seed fd6c88e0
 
 8.6.1
-  - Fix artifacts path key in gitlab.yml.erb c29c1a5d
+
+- Fix artifacts path key in gitlab.yml.erb c29c1a5d
 
 8.6.0
 
