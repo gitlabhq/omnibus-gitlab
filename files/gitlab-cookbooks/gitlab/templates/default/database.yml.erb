@@ -14,4 +14,5 @@ production:
   port: <%= @db_port %>
   socket: <%= single_quote(@db_socket) %>
   sslmode: <%= single_quote(@db_sslmode) %>
-  sslrootcert: <%= single_quote(@db_sslrootcert) %>
+  sslrootcert: <%= single_quote(@db_sslrootcert) || single_quote(@db_sslca) %>
+  sslca: <%= single_quote(@db_sslca) || single_quote(@db_sslrootcert) %>
