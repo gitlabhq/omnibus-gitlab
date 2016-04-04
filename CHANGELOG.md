@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.7.0
 
+- Added db_sslca to the configuration options for connecting to an external database
 - Compile NGINX with the real_ip module and add configuration options
 - Support the ability to change mattermost UID and GID
 - Updated libicu to 56.1 4de944d9
