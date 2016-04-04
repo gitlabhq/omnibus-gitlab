@@ -204,3 +204,15 @@ The source code can be modified to support not only GitLab, but any in-house app
 - [GitLab webhook documentation](http://doc.gitlab.com/ce/web_hooks/web_hooks.html)
 
 ![webhooks](https://gitlab.com/gitlab-org/omnibus-gitlab/uploads/677b0aa055693c4dcabad0ee580c61b8/730_gitlab_feature_request.png)
+
+## Specify numeric user and group identifiers
+
+omnibus-gitlab creates a user and group mattermost. You can specify the
+numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
+
+```ruby
+mattermost['uid'] = 1234
+mattermost['gid'] = 1234
+```
+
+Run `sudo gitlab-ctl reconfigure` for the changes to take effect.

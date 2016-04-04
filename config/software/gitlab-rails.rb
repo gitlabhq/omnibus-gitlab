@@ -51,6 +51,7 @@ build do
   # source code to include the Git revision of the code included in the omnibus
   # build.
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
+  command "echo $(git log --pretty=format:'%h' -n 1) > REVISION"
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
