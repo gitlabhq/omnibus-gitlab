@@ -34,6 +34,7 @@ build do
            "--with-http_stub_status_module",
            "--with-http_gzip_static_module",
            "--with-http_v2_module",
+           "--with-http_realip_module",
            "--with-ipv6",
            "--with-debug",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",

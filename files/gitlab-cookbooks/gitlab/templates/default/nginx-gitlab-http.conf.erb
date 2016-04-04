@@ -86,6 +86,18 @@ server {
   <% end %>
   <% end %>
 
+  ## Real IP Module Config
+  ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
+  <% if @real_ip_header %>
+  real_ip_header <%= @real_ip_header %>;
+  <% end %>
+  <% if @real_ip_recursive %>
+  real_ip_recursive <%= @real_ip_recursive %>;
+  <% end %>
+  <% @real_ip_trusted_addresses.each do |trusted_address| %>
+  set_real_ip_from <%= trusted_address %>;
+  <% end %>
+
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
