@@ -5,9 +5,20 @@ omnibus-gitlab repository.
 
 8.7.0
 
+- Compile NGINX with the real_ip module and add configuration options
+- Support the ability to change mattermost UID and GID
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a
+- Enable Git LFS by default
+
+8.6.4
+
+- No changes
+
+8.6.3
+
+- No changes
 
 8.6.2
 

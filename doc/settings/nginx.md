@@ -114,6 +114,30 @@ for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
 
+## Configuring the `real_ip` module
+
+By default, NGINX will use the IP address of the connected client in the logs.
+
+If your GitLab is behind a reverse proxy, you may not want the IP address of
+the proxy to show up as the client address.
+
+You can have NGINX look for a different address to use by adding your reverse
+proxy to the `real_ip_trusted_addresses` list:
+
+```ruby
+# Each address is added to the the NGINX config as 'set_real_ip_from <address>;'
+nginx['real_ip_trusted_addresses'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
+# other real_ip config options
+nginx['real_ip_header'] = 'X-Real-IP'
+nginx['real_ip_recursive'] = 'on'
+```
+
+Description of the options:
+* http://nginx.org/en/docs/http/ngx_http_realip_module.html
+
+Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+for the changes to take effect.
+
 ## Configuring HTTP2 protocol
 
 By default, when you specify that your Gitlab instance should be reachable

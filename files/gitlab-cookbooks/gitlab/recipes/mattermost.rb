@@ -17,6 +17,8 @@
 #
 mattermost_user = node['gitlab']['mattermost']['username']
 mattermost_group = node['gitlab']['mattermost']['group']
+mattermost_uid = node['gitlab']['mattermost']['uid']
+mattermost_gid = node['gitlab']['mattermost']['gid']
 mattermost_home = node['gitlab']['mattermost']['home']
 mattermost_log_dir = node['gitlab']['mattermost']['log_file_directory']
 mattermost_storage_directory = node['gitlab']['mattermost']['file_directory']
@@ -29,8 +31,10 @@ pg_user = node['gitlab']['postgresql']['username']
 ###
 account "Mattermost user and group" do
   username mattermost_user
+  uid mattermost_uid
   ugid mattermost_group
   groupname mattermost_group
+  gid mattermost_gid
   shell '/bin/sh'
   home mattermost_home
   manage node['gitlab']['manage-accounts']['enable']
