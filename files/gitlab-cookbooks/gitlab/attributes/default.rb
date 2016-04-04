@@ -631,6 +631,8 @@ default['gitlab']['ci-nginx']['resolver'] = "8.8.8.8 8.8.4.4"
 default['gitlab']['mattermost']['enable'] = false
 default['gitlab']['mattermost']['username'] = 'mattermost'
 default['gitlab']['mattermost']['group'] = 'mattermost'
+default['gitlab']['mattermost']['uid'] = nil
+default['gitlab']['mattermost']['gid'] = nil
 default['gitlab']['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 
