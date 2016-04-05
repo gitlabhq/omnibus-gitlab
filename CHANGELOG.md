@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.3.6
+
+- No changes
+
+8.3.5
+
+- No changes
+
 8.3.4
 
 - Update gitlab-workhorse to 0.5.4 7968c80843ac7deaaebe313c6976615a2268ac03
