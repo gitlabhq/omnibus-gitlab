@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.4.7
+
+- No changes
+
+8.4.6
+
+- No changes
+
+8.4.5
+
+- No changes
+
 8.4.4
 
 - Allow webserver user to access the gitlab pages e0cbafafad88d2478514c1485f69fc41cc076a85
