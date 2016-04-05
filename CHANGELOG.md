@@ -99,6 +99,18 @@ omnibus-gitlab repository.
 - Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
 - Added configuration options for new allow_single_sign_on behavior and auto_link_saml_user 96ba41274864857f494e220a684e9e34954c85d1
 
+8.4.7
+
+- No changes
+
+8.4.6
+
+- No changes
+
+8.4.5
+
+- No changes
+
 8.4.4
 
 - Allow webserver user to access the gitlab pages e0cbafafad88d2478514c1485f69fc41cc076a85
