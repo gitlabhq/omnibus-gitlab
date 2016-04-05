@@ -160,24 +160,36 @@ notify:slack-fail-pkg:
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_failure
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
 
 notify:slack-fail-extra:
   stage: notification_fail_extra
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "Docker or RPI2 build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_failure
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
 
 notify:slack-success-pkg:
   stage: notification_success_pkg
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "Package build on \`$CI_BUILD_REF_NAME\` finished! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_success
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
 
 notify:slack-success-extra:
   stage: notification_success_extra
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "Extra packages (Docker, RPI2) built on \`$CI_BUILD_REF_NAME\`! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_success
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
 
 notify:slack-tag-start:
   stage: notification_start
@@ -185,4 +197,5 @@ notify:slack-tag-start:
     - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` started! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: always
   only:
+    - master
     - tags@gitlab/omnibus-gitlab
