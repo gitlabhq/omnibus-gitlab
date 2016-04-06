@@ -184,9 +184,10 @@ There are multiple ways to send notifications depending on how much control you'
 
 Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's default formatting you can use their project service option to set up Mattermost integration: 
 
-1. In Mattermost go to **Account Settings** > **Integrations** > **Incoming Webhooks** 
+1. In Mattermost, go to **System Console** → **Service Settings** and turn on **Enable Incoming Webhooks**
+1. Go to **Account Settings** → **Integrations** → **Incoming Webhooks** 
 2. Select a channel and click **Add* and copy the `Webhook URL`
-3. In GitLab, go to **Settings** > **Project Services** > **Slack** and paste in the `Webhook URL` into **Webhook** 
+3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** → **Services** → **Slack**
 4. Enter **Username** for how you would like to name the account that posts the notifications
 4. Select **Triggers** for GitLab events on which you'd like to receive notifications
 6. Click **Save changes** then **Test settings** to make sure everything is working
