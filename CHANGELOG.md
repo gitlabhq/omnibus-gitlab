@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a
 - Enable Git LFS by default
+- Updated how we detect when to update the :latest and :rc docker build tags
 
 8.6.4
 
