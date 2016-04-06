@@ -5,14 +5,15 @@ omnibus-gitlab repository.
 
 8.7.0
 
-- Added db_sslca to the configuration options for connecting to an external database
-- Compile NGINX with the real_ip module and add configuration options
-- Support the ability to change mattermost UID and GID
+- Added db_sslca to the configuration options for connecting to an external database 2b4033cb
+- Compile NGINX with the real_ip module and add configuration options b4830b90
+- Support the ability to change mattermost UID and GID c5a588da
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a
-- Enable Git LFS by default
-- Updated how we detect when to update the :latest and :rc docker build tags
+- Enable Git LFS by default (Ben Bodenmiller) 22345799
+- Updated how we detect when to update the :latest and :rc docker build tags cb3af445
+- Disable automatic git gc 8ed13f4b
 
 8.6.4
 
