@@ -8,10 +8,14 @@ PACKAGECLOUD_REPO:=$(shell support/repo_name.sh)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 ifeq ($(shell support/is_gitlab_ee.sh; echo $$?), 0)
 RELEASE_PACKAGE=gitlab-ee
+TAG_MATCH='*[+.]ee.*'
 else
 RELEASE_PACKAGE=gitlab-ce
+TAG_MATCH='*[+.]ce.*'
 endif
 RELEASE_VERSION?=$(shell git describe | tr '+' '-')
+LATEST_TAG=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
+LATEST_STABLE_TAG=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
 ifdef NIGHTLY
 DOCKER_TAG:=nightly
 else
@@ -93,22 +97,30 @@ docker_push:
 	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
-docker_push_latest:
-	# push as :rc tag first, if it's stable it overwrites the :rc
+docker_push_rc:
+	# push as :rc tag, the :rc is always the latest tagged release
 	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
 	docker push gitlab/$(RELEASE_PACKAGE):rc
 
-ifeq (,$(findstring rc,$(RELEASE_VERSION)))
+docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
 	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
 	docker push gitlab/$(RELEASE_PACKAGE):latest
-endif
 
-do_docker_master: 
+do_docker_master:
 ifdef NIGHTLY
 do_docker_master: docker_build docker_push
 endif
-do_docker_release: no_changes on_tag docker_build docker_push docker_push_latest
+
+do_docker_release: no_changes on_tag docker_build docker_push
+# The rc should always be the latest tag, stable or upcoming release
+ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} 2> /dev/null), ${LATEST_TAG})
+do_docker_release: docker_push_rc
+endif
+# The lastest tag is alwasy the latest stable
+ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} 2> /dev/null), ${LATEST_STABLE_TAG})
+do_docker_release: docker_push_latest
+endif
 
 md5:
 	find pkg -name '*.json' -exec cat {} \;
