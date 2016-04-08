@@ -30,6 +30,9 @@ gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
+# Set path to the private key used for communication betwee registry and Gitlab.
+node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
+
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
 

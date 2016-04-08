@@ -1,0 +1,69 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+## Lines starting with two hashes (##) are comments with information.
+## Lines starting with one hash (#) are configuration parameters that can be uncommented.
+##
+###################################
+##         configuration         ##
+###################################
+
+## Redirects all HTTP traffic to the HTTPS host
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
+<% end %>
+  server_name  <%= @registry_host %>;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  return 301 https://$http_host:<%= @port %>$request_uri;
+  access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_registry_error.log;
+}
+
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl http2<% end %>;
+<% end %>
+  server_name  <%= @registry_host %>;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+
+  client_max_body_size 0;
+  chunked_transfer_encoding on;
+
+  <% if @https %>
+  ## Strong SSL Security
+  ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+  ssl on;
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+  <% if @ssl_client_certificate %>
+  ssl_client_certificate <%= @ssl_client_certificate%>;
+  <% end %>
+
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
+
+  <% if @ssl_dhparam %>
+  ssl_dhparam <%= @ssl_dhparam %>;
+  <% end %>
+  <% end %>
+
+  access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_registry_error.log;
+
+  location / {
+    proxy_set_header  Host              $http_host;   # required for docker client's sake
+    proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+    proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+    proxy_read_timeout                  900;
+
+    proxy_pass          <%= @registry_internal_host %>;
+  }
+
+  <%= @custom_gitlab_server_config %>
+}

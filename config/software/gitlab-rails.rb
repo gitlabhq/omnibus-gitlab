@@ -33,6 +33,7 @@ dependency "libicu"
 dependency "postgresql"
 dependency "python-docutils"
 dependency "krb5"
+dependency "registry"
 
 if EE
   dependency "mysql-client"

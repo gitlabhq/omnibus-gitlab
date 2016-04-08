@@ -104,7 +104,8 @@ include_recipe "runit"
   "logrotate",
   "bootstrap",
   "mattermost",
-  "gitlab-pages"
+  "gitlab-pages",
+  "registry"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
