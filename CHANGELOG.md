@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a
+- Allow Omniauth providers to be marked as external 7dd68edf
 - Enable Git LFS by default (Ben Bodenmiller) 22345799
 - Updated how we detect when to update the :latest and :rc docker build tags cb3af445
 - Disable automatic git gc 8ed13f4b
