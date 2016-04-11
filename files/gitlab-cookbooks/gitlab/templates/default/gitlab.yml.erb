@@ -166,6 +166,11 @@ production: &base
     ldap_sync_worker:
       cron: <%= @ldap_sync_worker_cron %>
 
+    # Gitlab Geo nodes notification worker
+    # NOTE: This will only take effect if Geo is enabled
+    geo_bulk_notify_worker:
+      cron: <%= @geo_bulk_notify_worker_cron %>
+
   #
   # 2. GitLab CI settings
   # ==========================
