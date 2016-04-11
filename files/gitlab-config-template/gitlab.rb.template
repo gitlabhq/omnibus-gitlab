@@ -37,6 +37,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['stuck_ci_builds_worker_cron'] = "0 0 * * *"
+# gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
 # gitlab_rails['update_all_mirrors_worker_cron'] = "0 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
