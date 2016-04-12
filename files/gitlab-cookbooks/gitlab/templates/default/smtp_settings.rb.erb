@@ -10,7 +10,7 @@ if Rails.env.production?
 
   ActionMailer::Base.smtp_settings = {
     authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
-<% %w{ address port user_name password domain enable_starttls_auto tls openssl_verify_mode ca_path ca_file }.each do |key| %>
+<% %w{ address port user_name password domain enable_starttls_auto tls ssl openssl_verify_mode ca_path ca_file }.each do |key| %>
   <% value = node['gitlab'][container]["smtp_#{key}"] %>
     <%= "#{key}: #{value.inspect}," unless value.nil? %>
 <% end %>
