@@ -14,8 +14,8 @@ RELEASE_PACKAGE=gitlab-ce
 TAG_MATCH='*[+.]ce.*'
 endif
 RELEASE_VERSION?=$(shell git describe | tr '+' '-')
-LATEST_TAG=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
-LATEST_STABLE_TAG=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
+LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
+LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
 ifdef NIGHTLY
 DOCKER_TAG:=nightly
 else
@@ -114,11 +114,11 @@ endif
 
 do_docker_release: no_changes on_tag docker_build docker_push
 # The rc should always be the latest tag, stable or upcoming release
-ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} 2> /dev/null), ${LATEST_TAG})
+ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} > /dev/null 2>&1; echo $$?), 0)
 do_docker_release: docker_push_rc
 endif
 # The lastest tag is alwasy the latest stable
-ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} 2> /dev/null), ${LATEST_STABLE_TAG})
+ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
 do_docker_release: docker_push_latest
 endif
 
