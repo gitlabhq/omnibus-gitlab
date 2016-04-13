@@ -85,7 +85,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
-### PostSpark
+### SparkPost
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
