@@ -149,6 +149,10 @@ production: &base
     stuck_ci_builds_worker:
       cron: <%= @stuck_ci_builds_worker_cron %>
 
+    # Remove outdated repository archives
+    repository_archive_cache_worker:
+      cron: <%= @repository_archive_cache_worker_cron %>
+
     ##
     # GitLab EE only jobs:
 

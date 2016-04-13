@@ -89,6 +89,7 @@ default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['stuck_ci_builds_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['update_all_mirrors_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
