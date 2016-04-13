@@ -198,6 +198,20 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
+
+###QQ exmail
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.exmail.qq.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "xxxx@xx.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_ssl'] = true
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
