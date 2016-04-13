@@ -92,6 +92,7 @@ default['gitlab']['gitlab-rails']['stuck_ci_builds_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['update_all_mirrors_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['update_all_remote_mirrors_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
