@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Enable Git LFS by default (Ben Bodenmiller) 22345799
 - Updated how we detect when to update the :latest and :rc docker build tags cb3af445
 - Disable automatic git gc 8ed13f4b
+- Restart GitLab pages daemon on version change
 - Add git-annex to the docker image
 
 8.6.5
