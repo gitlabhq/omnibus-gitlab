@@ -341,6 +341,11 @@ module Gitlab
       Gitlab['nginx']['proxy_set_headers'] = default_from_attributes
     end
 
+    def parse_gitlab_trusted_proxies
+      return unless nginx['enable']
+      Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
+    end
+
     def parse_ci_external_url
       return unless ci_external_url
       # Disable gitlab_ci. This setting will be picked up by parse_gitlab_ci
@@ -545,6 +550,7 @@ module Gitlab
       parse_unicorn_listen_address
       parse_nginx_listen_address
       parse_nginx_listen_ports
+      parse_gitlab_trusted_proxies
       parse_gitlab_ci
       parse_gitlab_mattermost
       parse_incoming_email

@@ -114,9 +114,9 @@ for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
 
-## Configuring the `real_ip` module
+## Configuring GitLab `trusted_proxies` and the NGINX `real_ip` module
 
-By default, NGINX will use the IP address of the connected client in the logs.
+By default, NGINX and GitLab will log the IP address of the connected client.
 
 If your GitLab is behind a reverse proxy, you may not want the IP address of
 the proxy to show up as the client address.
@@ -134,6 +134,10 @@ nginx['real_ip_recursive'] = 'on'
 
 Description of the options:
 * http://nginx.org/en/docs/http/ngx_http_realip_module.html
+
+By default, omnibus-gitlab will use the IP addresses in `real_ip_trusted_addresses`
+as GitLab's trusted proxies, which will keep users from being listed as signed
+in from those IPs.
 
 Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
@@ -208,6 +212,19 @@ will have to perform the following steps:
     *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
 
     *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
+
+1. **Add the non-bundled web-server to the list of trusted proxies**
+
+    Normally, omnibus-gitlab defaults the list of trusted proxies to the what was
+    configured in the real_ip module for the bundled NGINX.
+
+    For non-bundled web-servers the list needs to be configured directly, and should
+    include the IP address of your web-server if it not on the same machine as GitLab.
+    Otherwise users will be shown as being signed in from your web-server's IP address.
+
+    ```ruby
+    gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
+    ```
 
 1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
 
