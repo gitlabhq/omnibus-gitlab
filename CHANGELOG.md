@@ -18,6 +18,10 @@ omnibus-gitlab repository.
 - Restart GitLab pages daemon on version change
 - Add git-annex to the docker image
 
+8.6.6
+
+- No changes
+
 8.6.5
 
 - No changes
