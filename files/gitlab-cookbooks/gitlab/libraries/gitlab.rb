@@ -342,7 +342,7 @@ module Gitlab
     end
 
     def parse_gitlab_trusted_proxies
-      return unless nginx['enable']
+      Gitlab['nginx']['real_ip_trusted_addresses'] ||= node['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
     end
 
