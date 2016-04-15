@@ -47,14 +47,14 @@ in the SQL database:
 - GitLab two-factor authentication (2FA) user secrets ('QR codes')
 - GitLab CI 'secure variables'
 
-If you keep your configuration backup in a different place from
-your application data backup you reduce the chances of exposing the
-sensitive data mentioned above in case one of your application
-backups is lost/leaked/stolen.
+If you separate your configuration backup from your application data backup,
+you reduce the chance that your encrypted application date will be 
+lost/leaked/stolen together with the keys needed to decrypt it.
 
 ### Creating an application backup
 
-To create a backup of your repositories and GitLab metadata, follow the [backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
+To create a backup of your repositories and GitLab metadata, follow the
+[backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
