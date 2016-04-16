@@ -44,6 +44,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
 # gitlab_rails['webhook_timeout'] = 10
+# gitlab_rails['trusted_proxies'] = [] 
 
 ## Reply by email
 # Allow users to comment on issues and merge requests by replying to notification emails.

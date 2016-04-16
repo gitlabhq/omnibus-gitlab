@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Added db_sslca to the configuration options for connecting to an external database 2b4033cb
 - Compile NGINX with the real_ip module and add configuration options b4830b90
+- Added trusted_proxies configuration option for non-bundled web-server
 - Support the ability to change mattermost UID and GID c5a588da
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
