@@ -6,7 +6,7 @@ It is recommended to keep a copy of `/etc/gitlab`, or at least of
 `/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
 need to restore a GitLab application backup you need to also restore
 `gitlab-secrets.json`. If you do not, GitLab users who are using
-two-factor authentication will loose access to your GitLab server
+two-factor authentication will lose access to your GitLab server
 and 'secure variables' stored in GitLab CI will be lost.
 
 It is not recommended to store your configuration backup in the
@@ -80,7 +80,7 @@ For details check [backup restore document of GitLab CE](https://gitlab.com/gitl
 
 ### Manually manage backup directory
 
-Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by user that is running GitLab and it has strict permissions set to be accessible to only that user.
+Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
 That directory will hold backup archives and they contain sensitive information.
 In some organizations permissions need to be different because of, for example, shipping the backup archives offsite.
 
