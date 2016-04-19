@@ -61,7 +61,7 @@ directory node['gitlab']['gitlab-rails']['registry_path'] do
   group account_helper.web_server_group
   mode '0750'
   recursive true
-  only_if node['gitlab']['manage-storage-directories']['enable']
+  only_if { node['gitlab']['manage-storage-directories']['enable'] }
 end
 
 key_file_path = node['gitlab']['gitlab-rails']['registry_key_path']
