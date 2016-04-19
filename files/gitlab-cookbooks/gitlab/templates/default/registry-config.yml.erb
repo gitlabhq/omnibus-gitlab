@@ -20,7 +20,7 @@ health:
     threshold: 3
 auth:
   token:
-    realm: http://127.0.0.1/api/v3/auth/token
+    realm: <%= @token_realm %>/api/v3/auth/token
     service: docker
     issuer: omnibus-issuer
     rootcertbundle: <%= @rootcertbundle %>

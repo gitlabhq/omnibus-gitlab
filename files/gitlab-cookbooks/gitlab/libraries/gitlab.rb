@@ -517,6 +517,7 @@ module Gitlab
 
       Gitlab['gitlab_rails']['registry_internal_host'] ||= "http://127.0.0.1:5000"
       Gitlab['registry']['registry_http_addr'] ||= Gitlab['gitlab_rails']['registry_internal_host'].gsub(/^https?\:\/\//, '')
+      Gitlab['registry']['token_realm'] ||= external_url
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
