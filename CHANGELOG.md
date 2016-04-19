@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Disable automatic git gc 8ed13f4b
 - Restart GitLab pages daemon on version change
 - Add git-annex to the docker image
+- Update Nginx to 1.9.12
 
 8.6.6
 
