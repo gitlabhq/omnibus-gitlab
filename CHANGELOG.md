@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Restart GitLab pages daemon on version change
 - Add git-annex to the docker image
 - Update Nginx to 1.9.12
+- Update Mattermost to v2.2.0
 
 8.6.6
 
