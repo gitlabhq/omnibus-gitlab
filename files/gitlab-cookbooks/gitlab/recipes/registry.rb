@@ -36,6 +36,15 @@ account "Docker registry user and group" do
   manage node['gitlab']['manage-accounts']['enable']
 end
 
+# Add registry user to web server group
+# To allow access to the registry directory located in shared
+if node['gitlab']['manage-accounts']['enable']
+  group account_helper.web_server_group do
+    append true
+    members account_helper.registry_user
+  end
+end
+
 [
   working_dir,
   log_directory,
@@ -45,6 +54,14 @@ end
     mode '0700'
     recursive true
   end
+end
+
+directory node['gitlab']['gitlab-rails']['registry_path'] do
+  owner account_helper.registry_user
+  group account_helper.web_server_group
+  mode '0750'
+  recursive true
+  only_if node['gitlab']['manage-storage-directories']['enable']
 end
 
 key_file_path = node['gitlab']['gitlab-rails']['registry_key_path']

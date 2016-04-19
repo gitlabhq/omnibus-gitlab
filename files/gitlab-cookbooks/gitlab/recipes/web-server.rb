@@ -18,13 +18,12 @@
 account_helper = AccountHelper.new(node)
 webserver_username = account_helper.web_server_user
 webserver_group = account_helper.web_server_group
+external_webserver_users = node['gitlab']['web-server']['external_users']
 
-# Add docker registry user to the GitLab webserver group.
+# Create the group for the GitLab user
 # If external webserver is used, add the external webserver user to
-# GitLab webserver group.
-
-# TODO THIS WON'T WORK ON THE FIRST RUN
-external_webserver_users = [ account_helper.registry_user ] + node['gitlab']['web-server']['external_users']
+# GitLab webserver group
+append_members = external_webserver_users.any? && !node['gitlab']['nginx']['enable']
 
 account "Webserver user and group" do
   username webserver_username
