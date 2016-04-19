@@ -1,19 +1,19 @@
 # Database settings
 
 _**Note:**
-Omnibus GitLab has a bundled PostgreSQL server and PostgreSQ> is the preferred
+Omnibus GitLab has a bundled PostgreSQL server and PostgreSQL is the preferred
 database for GitLab._
 
 ---
 
-GitLab supports the following data base management systems:
+GitLab supports the following database management systems:
 
 - PostgreSQL
 - MySQL
 
 Thus you have three options for database servers to use with Omnibus GitLab:
 
-- Use the PostgreSQL bundled server (no configuration required)
+- Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
 - Use an [external MySQL server](#using-a-mysql-database-management-server-enterprise-edition-only)
 
@@ -23,7 +23,7 @@ If you are planning to use MySQL/MariaDB, make sure to read the [MySQL special n
 ## Using a non-packaged PostgreSQL database management server
 
 By default, GitLab is configured to use the PostgreSQL server that is included
-in Omnibus GitLab.  You can also reconfigure it to use an external instance of
+in Omnibus GitLab. You can also reconfigure it to use an external instance of
 PostgreSQL.
 
 **WARNING** If you are using non-packaged PostgreSQL server, you need to make
@@ -44,6 +44,9 @@ sure that PostgreSQL is set up according to the [database requirements document]
     gitlab_rails['db_password'] = 'PASSWORD'
     ```
 
+    Don't forget to remove the `#` comment characters at the beginning of these
+    lines.
+    
 1.  [Reconfigure GitLab][] for the changes to take effect.
 
 1.  [Seed the database](#seed-the-database-fresh-installs-only).
@@ -56,12 +59,14 @@ plain-text passwords.
 
 When using the [rake backup create and restore task][rake-backup], GitLab will
 attempt to use the packaged `pg_dump` command to create a database backup file
-and the packaged `psql` command to restore a backup.  This will only work if
+and the packaged `psql` command to restore a backup. This will only work if
 they are the correct versions. Check the versions of the packaged `pg_dump` and
 `psql`:
 
-    /opt/gitlab/bin/pg_dump --version
-    /opt/gitlab/bin/psql -- version
+```bash
+/opt/gitlab/bin/pg_dump --version
+/opt/gitlab/bin/psql -- version
+```
 
 If these versions are different from your non-packaged external PostgreSQL
 (most likely they are different), move them aside and replace them with
@@ -69,27 +74,33 @@ symbolic links to your non-packaged PostgreSQL:
 
 1. Check the location of the non-packaged executables:
 
-        bash
-        which pg_dump psql
-
+    ```bash
+    which pg_dump psql
+    ```
+    
     This will output something like:
 
-        /usr/bin/pg_dump
-        /usr/bin/psql
+    ```
+    /usr/bin/pg_dump
+    /usr/bin/psql
+    ```
 
 1.  Move aside the existing executables and replace them with symbolic links to
     the non-packaged versions:
 
-        bash
-        cd /opt/gitlab/bin
-        mv psqi psql_moved
-        mv pg_dump pg_dump_moved
-        ln -s /usr/bin/pg_dump /usr/bin/psql .
-        
-1. Re-check the versions:
+    ```bash
+    cd /opt/gitlab/bin
+    mv psqi psql_moved
+    mv pg_dump pg_dump_moved
+    ln -s /usr/bin/pg_dump /usr/bin/psql .
+    ```
 
-        /opt/gitlab/bin/pg_dump --version
-        /opt/gitlab/bin/psql -- version
+1.  Re-check the versions:
+
+    ```
+    /opt/gitlab/bin/pg_dump --version
+    /opt/gitlab/bin/psql --version
+    ```
 
     They should now be the same as your non-packaged external PostgreSQL.
         
