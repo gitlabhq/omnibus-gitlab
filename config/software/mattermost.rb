@@ -17,10 +17,10 @@
 #
 
 name "mattermost"
-default_version "v2.1.0"
+default_version "2.2.0"
 
-source url: "https://github.com/mattermost/platform/releases/download/#{version}/mattermost.tar.gz",
-       md5: '751f237d227db6c8da73a79e41a545b2'
+source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
+       md5: '805d06929dfd7f89ac8acdaab87bc291'
 
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
@@ -46,7 +46,7 @@ GitLab Mattermost Compiled License
 
 **Note: this license does not cover source code, for information on source code licensing see http://www.mattermost.org/license/
 
-Copyright (c) 2015 Spinpunch, Inc.
+Copyright (c) 2015 Mattermost, Inc.
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software;
