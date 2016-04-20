@@ -89,9 +89,12 @@ default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['stuck_ci_builds_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['update_all_mirrors_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['update_all_remote_mirrors_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
 default['gitlab']['gitlab-rails']['incoming_email_address'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_host'] = nil
@@ -150,6 +153,7 @@ default['gitlab']['gitlab-rails']['omniauth_auto_sign_in_with_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_ldap_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_saml_user'] = nil
+default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['bitbucket'] = nil
 
@@ -235,6 +239,7 @@ default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
+default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
 ####
 # Unicorn

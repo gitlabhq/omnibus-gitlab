@@ -7,13 +7,32 @@ omnibus-gitlab repository.
 
 - Added db_sslca to the configuration options for connecting to an external database 2b4033cb
 - Compile NGINX with the real_ip module and add configuration options b4830b90
+- Added trusted_proxies configuration option for non-bundled web-server 3f137f1c
 - Support the ability to change mattermost UID and GID c5a588da
 - Updated libicu to 56.1 4de944d9
 - Updated liblzma to 5.2.2 4de944d9
 - Change the way db:migrate is triggered 3b42520a
+- Allow Omniauth providers to be marked as external 7dd68edf
 - Enable Git LFS by default (Ben Bodenmiller) 22345799
 - Updated how we detect when to update the :latest and :rc docker build tags cb3af445
 - Disable automatic git gc 8ed13f4b
+- Restart GitLab pages daemon on version change 922f7655
+- Add git-annex to the docker image c1fdc4ff
+- Update Nginx to 1.9.12 96ca0916
+- Update Mattermost to v2.2.0 fd740e17
+- Update cacerts to 2016.04.20  edefbe2e
+- Add configuration for geo_bulk_notify_worker_cron 219125bf
+- Add configuration repository_archive_cache_worker_cron 8240ab3a
+- Update the docker update-permissions script 13343b4f
+- Add SMTP ssl configuration option (wu0407) 4a377fc2
+
+8.6.6
+
+- No changes
+
+8.6.5
+
+- No changes
 
 8.6.4
 
@@ -46,6 +65,10 @@ omnibus-gitlab repository.
 - Update mattermost to v2.1.0 f555c232
 - No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
 - Add configuration option to disable management of storage directories 81a370d3
+
+8.5.10
+
+- No changes
 
 8.5.9
 
@@ -101,6 +124,10 @@ omnibus-gitlab repository.
 - Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
 - Added configuration options for new allow_single_sign_on behavior and auto_link_saml_user 96ba41274864857f494e220a684e9e34954c85d1
 
+8.4.8
+
+- No changes
+
 8.4.7
 
 - No changes
@@ -153,6 +180,10 @@ omnibus-gitlab repository.
 - Prevent mailroom from going into restart loop 378f2355c5e9728c43baf14595bf9362c03b8b4c
 - Add gitlab-workhorse config for proxy_headers_timeout d3de62c54b5efe1d5f60c2dccef65e786b631c3b
 - Bundle unzip which is required for EE features 56e1fc0b11cd2fb5458fa8a9585d3a1f4faa8d6f
+
+8.3.7
+
+- No changes
 
 8.3.6
 

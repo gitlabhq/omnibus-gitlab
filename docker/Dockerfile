@@ -10,7 +10,8 @@ RUN apt-get update -q \
       apt-transport-https \
       vim \
       nano \
-      patch
+      patch \
+      git-annex
 
 # Copy assets
 COPY RELEASE /

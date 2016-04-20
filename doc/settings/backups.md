@@ -6,7 +6,7 @@ It is recommended to keep a copy of `/etc/gitlab`, or at least of
 `/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
 need to restore a GitLab application backup you need to also restore
 `gitlab-secrets.json`. If you do not, GitLab users who are using
-two-factor authentication will loose access to your GitLab server
+two-factor authentication will lose access to your GitLab server
 and 'secure variables' stored in GitLab CI will be lost.
 
 It is not recommended to store your configuration backup in the
@@ -47,14 +47,14 @@ in the SQL database:
 - GitLab two-factor authentication (2FA) user secrets ('QR codes')
 - GitLab CI 'secure variables'
 
-If you keep your configuration backup in a different place from
-your application data backup you reduce the chances of exposing the
-sensitive data mentioned above in case one of your application
-backups is lost/leaked/stolen.
+If you separate your configuration backup from your application data backup,
+you reduce the chance that your encrypted application date will be 
+lost/leaked/stolen together with the keys needed to decrypt it.
 
 ### Creating an application backup
 
-To create a backup of your repositories and GitLab metadata, follow the [backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
+To create a backup of your repositories and GitLab metadata, follow the
+[backup create documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
@@ -80,7 +80,7 @@ For details check [backup restore document of GitLab CE](https://gitlab.com/gitl
 
 ### Manually manage backup directory
 
-Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by user that is running GitLab and it has strict permissions set to be accessible to only that user.
+Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
 That directory will hold backup archives and they contain sensitive information.
 In some organizations permissions need to be different because of, for example, shipping the backup archives offsite.
 

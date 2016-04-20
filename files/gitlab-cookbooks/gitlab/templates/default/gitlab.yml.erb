@@ -23,6 +23,14 @@ production: &base
     # other files that need to be changed for relative url support
     relative_url_root: <%= @gitlab_relative_url %>
 
+    # Trusted Proxies
+    # Customize if you have GitLab behind a reverse proxy which is running on a different machine.
+    # Add the IP address for your reverse proxy to the list, otherwise users will appear signed in from that address.
+    trusted_proxies:
+<% @trusted_proxies.each do |proxy| %>
+      - <%= proxy %>
+<% end %>
+
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     user: <%= node['gitlab']['user']['username'] %>
 
@@ -149,6 +157,10 @@ production: &base
     stuck_ci_builds_worker:
       cron: <%= @stuck_ci_builds_worker_cron %>
 
+    # Remove outdated repository archives
+    repository_archive_cache_worker:
+      cron: <%= @repository_archive_cache_worker_cron %>
+
     ##
     # GitLab EE only jobs:
 
@@ -160,11 +172,20 @@ production: &base
     update_all_mirrors_worker:
       cron: <%= @update_all_mirrors_worker_cron %>
 
+    # Update remote mirrors
+    update_all_remote_mirrors_worker:
+      cron: <%= @update_all_remote_mirrors_worker_cron %>
+
     # In addition to refreshing users when they log in,
     # periodically refresh LDAP users membership.
     # NOTE: This will only take effect if LDAP is enabled
     ldap_sync_worker:
       cron: <%= @ldap_sync_worker_cron %>
+
+    # Gitlab Geo nodes notification worker
+    # NOTE: This will only take effect if Geo is enabled
+    geo_bulk_notify_worker:
+      cron: <%= @geo_bulk_notify_worker_cron %>
 
   #
   # 2. GitLab CI settings
@@ -265,6 +286,12 @@ production: &base
     # (default: false)
     auto_link_saml_user: <%= @omniauth_auto_link_saml_user.to_json %>
 
+    # Set different Omniauth providers as external so that all users creating accounts
+    # via these providers will not be able to have access to internal projects. You
+    # will need to use the full name of the provider, like `google_oauth2` for Google.
+    # Refer to the examples below for the full names of the supported providers.
+    # (default: [])
+    external_providers: <%= @omniauth_external_providers.to_json %>
 
     ## Auth providers
     # Uncomment the following lines and fill in the data of the auth provider you want to use
