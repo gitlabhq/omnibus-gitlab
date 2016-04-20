@@ -133,6 +133,7 @@ production: &base
     internal_host: <%= @registry_internal_host %> # internal address to the registry, will be used by GitLab to directly communicate with API
     path: <%= @registry_path %>
     key: <%= @registry_key_path %>
+    issuer: <%= @registry_issuer %>
 
   ## GitLab Pages (EE only)
   pages:

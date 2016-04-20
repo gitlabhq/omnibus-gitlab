@@ -127,6 +127,7 @@ default['gitlab']['gitlab-rails']['registry_https'] = nil
 default['gitlab']['gitlab-rails']['registry_internal_host'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
+default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
 
 ####
 # These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.

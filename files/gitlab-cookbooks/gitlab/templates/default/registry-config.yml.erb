@@ -22,5 +22,5 @@ auth:
   token:
     realm: <%= @token_realm %>/api/v3/auth/token
     service: docker
-    issuer: omnibus-issuer
+    issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>
