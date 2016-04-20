@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.3.8
 
-- No changes
+- Update Mattermost download URL from GitHub to releases.mattermost.com
 
 8.3.7
 
