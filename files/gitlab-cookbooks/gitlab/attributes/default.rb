@@ -239,6 +239,7 @@ default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
+default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
 ####
 # Unicorn
