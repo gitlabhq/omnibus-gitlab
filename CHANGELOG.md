@@ -5,11 +5,7 @@ omnibus-gitlab repository.
 
 8.6.9
 
-- No changes
-
-8.6.8
-
-- Update Mattermost download URL from GitHub to releases.mattermost.com
+- Build curl dependency without libssh2 17e41f8
 
 8.6.7
 
