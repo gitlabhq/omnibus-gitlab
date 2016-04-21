@@ -26,6 +26,10 @@ omnibus-gitlab repository.
 - Update the docker update-permissions script 13343b4f
 - Add SMTP ssl configuration option (wu0407) 4a377fc2
 
+8.6.7
+
+- No changes
+
 8.6.6
 
 - No changes
