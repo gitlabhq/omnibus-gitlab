@@ -25,5 +25,5 @@ dependency "python"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  command "#{install_dir}/embedded/bin/pip install --force-reinstall --compile --build . docutils==#{version}", env: env
+  command "#{install_dir}/embedded/bin/pip install --compile --build #{Time.now.to_i} docutils==#{version}", env: env
 end
