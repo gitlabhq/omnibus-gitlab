@@ -25,6 +25,7 @@ omnibus-gitlab repository.
 - Add configuration repository_archive_cache_worker_cron 8240ab3a
 - Update the docker update-permissions script 13343b4f
 - Add SMTP ssl configuration option (wu0407) 4a377fc2
+- Build curl dependency without libssh2 17e41f8
 
 8.6.7
 
