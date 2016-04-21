@@ -21,7 +21,7 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
-revision_file = ::File.join(node['gitlab']['gitlab-rails']['dir'], "REVISION")
+revision_file = "/opt/gitlab/embedded/service/gitlab-rails/REVISION"
 if ::File.exist?(revision_file)
   revision = IO.read(revision_file).chomp
 end
