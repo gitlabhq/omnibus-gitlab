@@ -1,39 +1,133 @@
 # Updating GitLab via omnibus-gitlab
 
+This document will help you update Omnibus GitLab.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Documentation version](#documentation-version)
+- [Updating using the official repositories](#updating-using-the-official-repositories)
+- [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages)
+- [From Community Edition to Enterprise Edition](#from-community-edition-to-enterprise-edition)
+- [Updating from GitLab 6.6 and higher to 7.10 or newer](#updating-from-gitlab-6-6-and-higher-to-7-10-or-newer)
+- [Updating from GitLab 6.6 and higher to the latest version](#updating-from-gitlab-6-6-and-higher-to-the-latest-version)
+        - [Stop services but leave postgresql running for the database migrations and create a backup](#stop-services-but-leave-postgresql-running-for-the-database-migrations-and-create-a-backup)
+        - [Install the latest package](#install-the-latest-package)
+        - [Reconfigure GitLab (includes running database migrations) and restart all services](#reconfigure-gitlab-includes-running-database-migrations-and-restart-all-services)
+        - [Trouble? Check status details](#trouble-check-status-details)
+- [Updating from GitLab 6.6.0.pre1 to 6.6.4](#updating-from-gitlab-6-6-0-pre1-to-6-6-4)
+        - [Stop unicorn and sidekiq so we can do database migrations](#stop-unicorn-and-sidekiq-so-we-can-do-database-migrations)
+        - [One-time migration because we changed some directories since 6.6.0.pre1](#one-time-migration-because-we-changed-some-directories-since-6-6-0-pre1)
+        - [Install the latest package](#install-the-latest-package)
+        - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations)
+        - [Start unicorn and sidekiq](#start-unicorn-and-sidekiq)
+- [Reverting to GitLab 6.6.x or later](#reverting-to-gitlab-6-6-x-or-later)
+        - [Stop GitLab](#stop-gitlab)
+        - [Downgrade GitLab to 6.x](#downgrade-gitlab-to-6-x)
+        - [Prepare GitLab for receiving the backup restore](#prepare-gitlab-for-receiving-the-backup-restore)
+        - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations)
+        - [Restore your backup](#restore-your-backup)
+        - [Start GitLab](#start-gitlab)
+- [Upgrading from a non-Omnibus installation to an Omnibus installation](#upgrading-from-a-non-omnibus-installation-to-an-omnibus-installation)
+    - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
+    - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
+    - [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-6-8)
+- [RPM 'package is already installed' error](#rpm-package-is-already-installed-error)
+- [Updating GitLab CI via omnibus-gitlab](#updating-gitlab-ci-via-omnibus-gitlab)
+    - [Updating from GitLab CI version prior to 5.4.0 to the latest version](#updating-from-gitlab-ci-version-prior-to-5-4-0-to-the-latest-version)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Documentation version
 
 Please make sure you are viewing this file on the master branch.
 
-## From Community Edition to Enterprise Edition
+## Updating using the official repositories
 
-This is how you upgrade an existing GitLab Community Edition server,
-installed using the Omnibus packages, to GitLab Enterprise Edition.
-**Make sure you have retrieved your license file before installing
-GitLab Enterprise Edition.**
+If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/downloads)
+or [Enterprise Edition](https://about.gitlab.com/downloads-ee/), then the
+official GitLab repository should have already been set up for you.
 
-First you must add the 'gitlab-ee' Apt or Yum repo:
-https://packages.gitlab.com/gitlab/gitlab-ee/install . (If you want to
-use dpkg/rpm instead of apt-get/yum you can download individual
-gitlab-ee packages from https://packages.gitlab.com/gitlab/gitlab-ee .)
-
-Next, install the `gitlab-ee` package with apt-get or yum. Note that
-this will automatically uninstall the `gitlab-ce` package on your GitLab
-server. Run `sudo gitlab-ctl reconfigure` after installing the gitlab-ee
-package.
-
+To update to a newer GitLab version, all you have to do is:
 
 ```
 # Ubuntu/Debian
-sudo apt-get install gitlab-ee
-sudo gitlab-ctl reconfigure
+sudo apt-get update
+sudo apt-get install gitlab-ce
 
 # Centos/RHEL
-sudo yum install gitlab-ee
-sudo gitlab-ctl reconfigure
+sudo yum install gitlab-ce
 ```
 
-Now go to the GitLab admin panel of your server
-(gitlab.example.com/admin) and upload your license file.
+If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in
+the above commands.
+
+## Updating by manually downloading the official packages
+
+If for some reason you don't use the official repositories, it is possible to
+download the package and install it manually.
+
+1. Visit the [Community Edition repository](https://packages.gitlab.com/gitlab/gitlab-ce)
+   or the [Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee)
+   depending on the edition you already have installed.
+1. Find the package version you wish to install and click on it.
+1. Click the 'Download' button in the upper right corner to download the package.
+1. Once the GitLab package is downloaded, install it using the following
+   commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
+
+    ```
+    # Ubuntu/Debian
+    dpkg -i gitlab-ce-XXX.deb
+
+    # CentOS/RHEL
+    rpm -i gitlab-ce-XXX.rpm
+    ```
+
+    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
+    in the above commands.
+
+## From Community Edition to Enterprise Edition
+
+>**Note:**
+Make sure you have retrieved your license file before installing
+GitLab Enterprise Edition, otherwise you will not be able to use certain
+features.
+
+To upgrade an existing GitLab Community Edition (CE) server, installed using the
+Omnibus packages, to GitLab Enterprise Edition (EE), all you have to do is
+install the **same version** EE package on top of CE.
+
+The steps can be summed up to:
+
+1. Add the `gitlab-ee` [Apt or Yum repository](https://packages.gitlab.com/gitlab/gitlab-ee/install):
+
+    ```
+    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+    ```
+
+    The above command will find your OS and automatically set up the repository.
+
+1. Next, install the `gitlab-ee` package. Note that this will automatically
+   uninstall the `gitlab-ce` package on your GitLab server. Reconfigure
+   Omnibus right after the `gitlab-ee` package is installed:
+
+    ```
+    # Ubuntu/Debian
+    sudo apt-get update
+    sudo apt-get install gitlab-ee
+    sudo gitlab-ctl reconfigure
+
+    # Centos/RHEL
+    sudo yum install gitlab-ee
+    sudo gitlab-ctl reconfigure
+    ```
+
+1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
+   upload your license file.
+
+If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, follow the steps in
+[Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages).
 
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
@@ -336,8 +430,9 @@ You can override this version check with the `--oldpackage` option:
 rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
 
-# Updating GitLab CI via omnibus-gitlab
-## Updating from GitLab CI version prior to 5.4.0 to the latest version
+## Updating GitLab CI via omnibus-gitlab
+
+### Updating from GitLab CI version prior to 5.4.0 to the latest version
 
 In GitLab CI 5.4.0 we changed the way GitLab CI authorizes with GitLab.
 
