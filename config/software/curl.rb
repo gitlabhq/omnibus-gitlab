@@ -15,13 +15,16 @@
 #
 
 name "curl"
-default_version "7.36.0"
+default_version "7.47.1"
 
 dependency "zlib"
 dependency "openssl"
 
-source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-       md5: "643a7030b27449e76413d501d4b8eb57"
+version "7.47.1" do
+  source md5: "3f9d1be7bf33ca4b8c8602820525302b"
+end
+
+source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz"
 
 relative_path "curl-#{version}"
 
@@ -56,6 +59,7 @@ build do
     "--without-libidn",
     "--without-gnutls",
     "--without-librtmp",
+    "--without-libssh2",
     "--with-ssl=#{install_dir}/embedded",
     "--with-zlib=#{install_dir}/embedded",
   ]
