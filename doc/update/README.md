@@ -107,6 +107,8 @@ The steps can be summed up to:
     ```
 
     The above command will find your OS and automatically set up the repository.
+    If you are not comfortable installing the repository through a piped script,
+    you can first [check its contents](https://packages.gitlab.com/gitlab/gitlab-ce/install).
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
    uninstall the `gitlab-ce` package on your GitLab server. Reconfigure
@@ -432,7 +434,12 @@ rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 
 ## Updating GitLab CI via omnibus-gitlab
 
-### Updating from GitLab CI version prior to 5.4.0 to the latest version
+### Updating from GitLab CI version prior to 5.4.0 to version 7.14
+
+>**Warning:**
+Omnibus GitLab 7.14 was the last version where CI was bundled in the package.
+Starting from GitLab 8.0, CI was merged into GitLab, thus it's no longer a
+separate application included in the Omnibus package.
 
 In GitLab CI 5.4.0 we changed the way GitLab CI authorizes with GitLab.
 
