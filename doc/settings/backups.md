@@ -22,6 +22,29 @@ configuration, just backup this directory.
 sudo sh -c 'umask 0077; tar -cf $(date "+etc-gitlab-%s.tar") -C / etc/gitlab'
 ```
 
+To create a daily application backup, edit the cron table for user root:
+
+```shell
+sudo crontab -e -u root
+```
+
+The cron table will appear in an editor.
+
+Enter the command to create a compressed tar file containing the contents of
+`/etc/gitlab/`.  For example, schedule the backup to run every morning after a
+weekday, Tuesday (day 2) through Saturday (day 6):
+
+```
+15 04 * * 2-6  umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab
+
+```
+
+[cron is rather particular](http://www.pantz.org/software/cron/croninfo.html)
+about the cron table. Note:
+
+- The empty line after the command
+- The escaped percent character:  \%
+ 
 You can extract the .tar file as follows.
 
 ```shell
