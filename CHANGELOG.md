@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.4.11
 
-- No changes
+- Build curl dependency without libssh2 17e41f8
 
 8.4.10
 
