@@ -64,6 +64,8 @@ dependency "package-scripts"
 dependency "git"
 dependency "redis"
 dependency "nginx"
+dependency "chef-zero"
+dependency "ohai"
 dependency "chef-gem"
 dependency "remote-syslog" if ee
 dependency "logrotate"
