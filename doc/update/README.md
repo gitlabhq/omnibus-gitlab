@@ -52,7 +52,7 @@ official GitLab repository should have already been set up for you.
 To update to a newer GitLab version, all you have to do is:
 
 ```
-# Ubuntu/Debian
+# Debian/Ubuntu
 sudo apt-get update
 sudo apt-get install gitlab-ce
 
@@ -77,7 +77,7 @@ download the package and install it manually.
    commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
 
     ```
-    # Ubuntu/Debian
+    # Debian/Ubuntu
     dpkg -i gitlab-ce-XXX.deb
 
     # CentOS/RHEL
@@ -100,35 +100,106 @@ install the **same version** EE package on top of CE.
 
 The steps can be summed up to:
 
+1. Find the currently installed GitLab version:
+
+    **For Debian/Ubuntu**
+
+    ```
+    sudo apt-cache policy gitlab-ce | grep Installed
+    ```
+
+    The output should be similar to: `Installed: 8.6.7-ce.0`. In that case,
+    the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
+    value down.
+
+    ---
+
+    **For CentOS/RHEL**
+
+    ```
+    sudo rpm -q gitlab-ce
+    ```
+
+    The output should be similar to: `gitlab-ce-8.6.7-ce.0.el7.x86_64`. In that
+    case, the equivalent Enterprise Edition version will be:
+    `gitlab-ee-8.6.7-ee.0.el7.x86_64`. Write this value down.
+
 1. Add the `gitlab-ee` [Apt or Yum repository](https://packages.gitlab.com/gitlab/gitlab-ee/install):
+
+    **For Debian/Ubuntu**
 
     ```
     curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
     ```
 
-    The above command will find your OS and automatically set up the repository.
-    If you are not comfortable installing the repository through a piped script,
-    you can first [check its contents](https://packages.gitlab.com/gitlab/gitlab-ce/install).
+    **For CentOS/RHEL**
+
+    ```
+    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+    ```
+
+    ---
+
+    The above command will find your OS version and automatically set up the
+    repository. If you are not comfortable installing the repository through a
+    piped script, you can first
+    [check its contents](https://packages.gitlab.com/gitlab/gitlab-ee/install).
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
    uninstall the `gitlab-ce` package on your GitLab server. Reconfigure
-   Omnibus right after the `gitlab-ee` package is installed:
+   Omnibus right after the `gitlab-ee` package is installed. Make sure that you
+   install the exact same GitLab version:
+
+    **For Debian/Ubuntu**
 
     ```
-    # Ubuntu/Debian
+    ## Make sure the repositories are up-to-date
     sudo apt-get update
-    sudo apt-get install gitlab-ee
-    sudo gitlab-ctl reconfigure
 
-    # Centos/RHEL
-    sudo yum install gitlab-ee
+    ## Install the package using the version you wrote down from step 1
+    sudo apt-get install gitlab-ee=8.6.7-ee.0
+
+    ## Reconfigure GitLab
+    sudo gitlab-ctl reconfigure
+    ```
+
+    **For CentOS/RHEL**
+
+    ```
+    ## Install the package using the version you wrote down from step 1
+    sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
+
+    ## Reconfigure GitLab
     sudo gitlab-ctl reconfigure
     ```
 
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
 
-If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, follow the steps in
+1. After you confirm that GitLab is working as expected, you may remove the old
+   Community Edition repository:
+
+    **For Debian/Ubuntu**
+
+    ```
+    sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
+    ```
+
+    ---
+
+    **For CentOS/RHEL**
+
+    ```
+    sudo rm /etc/yum.repos.d/gitlab_gitlab-ce.repo
+    ```
+
+That's it! You can now use GitLab Enterprise Edition! To update to a newer
+version follow the section on
+[Updating using the official repositories](#updating-using-the-official-repositories).
+
+>**Note:**
+If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
+step to find the current GitLab version and then follow the steps in
 [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages).
 
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
@@ -181,7 +252,7 @@ sudo gitlab-rake gitlab:backup:create
 #### Install the latest package
 
 ```
-# Ubuntu/Debian:
+# Debian/Ubuntu:
 sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 
 # CentOS:
