@@ -47,13 +47,13 @@ sure that PostgreSQL is set up according to the [database requirements document]
     Don't forget to remove the `#` comment characters at the beginning of these
     lines.
     
+    **Note:**
+    `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
+    plain-text passwords.
+    
 1.  [Reconfigure GitLab][] for the changes to take effect.
 
 1.  [Seed the database](#seed-the-database-fresh-installs-only).
-
-**Note:**
-`/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
-plain-text passwords.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
@@ -92,7 +92,7 @@ symbolic links to your non-packaged PostgreSQL:
     cd /opt/gitlab/bin
     mv psqi psql_moved
     mv pg_dump pg_dump_moved
-    ln -s /usr/bin/pg_dump /usr/bin/psql .
+    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
     ```
 
 1.  Re-check the versions:
