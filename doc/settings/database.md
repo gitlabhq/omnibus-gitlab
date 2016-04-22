@@ -90,7 +90,7 @@ symbolic links to your non-packaged PostgreSQL:
 
     ```bash
     cd /opt/gitlab/bin
-    mv psqi psql_moved
+    mv psql psql_moved
     mv pg_dump pg_dump_moved
     ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
     ```
