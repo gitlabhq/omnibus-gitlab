@@ -71,6 +71,7 @@ gitlab_rails['smtp_password'] = "IAMmailerSecret"
 gitlab_rails['smtp_domain'] = "yourdomain.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
 ```
 
 ### Mandrill
