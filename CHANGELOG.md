@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.7.1
+
+- Package supports Ubuntu 16.04 8a4ce1f5
+- Pin versions of ohai and chef-zero to prevent reconfigure outputting too much info f9b2307c
+
 8.7.0
 
 - Added db_sslca to the configuration options for connecting to an external database 2b4033cb
