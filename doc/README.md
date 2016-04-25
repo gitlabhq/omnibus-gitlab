@@ -80,3 +80,4 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Development Setup](development/README.md)
 - [Release process](release/README.md)
 - [Building your own package](build/README.md)
+- [Building a package from a custom branch](build/README.md#building-a-package-from-a-custom-branch)
