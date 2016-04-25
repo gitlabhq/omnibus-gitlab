@@ -64,6 +64,14 @@ build do
     patch source: "ncurses-5.9-solaris-xopen_source_extended-detection.patch", plevel: 0
   end
 
+  # AIX's old version of patch doesn't like the patches here
+  unless aix?
+    if version == "5.9"
+      # Patch to add support for GCC 5, doesn't break previous versions
+      patch source: "ncurses-5.9-gcc-5.patch", plevel: 1, env: env
+    end
+  end
+
   if mac_os_x? ||
     # Clang became the default compiler in FreeBSD 10+
     (freebsd? && ohai['os_version'].to_i >= 1000024)
