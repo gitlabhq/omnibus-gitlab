@@ -200,7 +200,7 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-###QQ exmail
+### QQ exmail
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
