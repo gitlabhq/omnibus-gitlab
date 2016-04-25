@@ -14,7 +14,7 @@ module Gitlab
       if @read_version.include?('.pre') || @read_version == "master"
         "master"
       elsif @read_version.start_with?('buildfrombranch:')
-        @read_version.gsub(/^buildfrombranch:/,'')
+        @read_version.gsub(/^buildfrombranch:/,'').strip
       elsif @read_version.empty?
         nil
       else
