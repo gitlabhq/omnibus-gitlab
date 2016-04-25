@@ -1,34 +1,33 @@
 # Database settings
 
 _**Note:**
-Omnibus GitLab has a bundled PostgreSQL server and it is the preferred DBMS to
-be used with GitLab._
+Omnibus GitLab has a bundled PostgreSQL server and PostgreSQL is the preferred
+database for GitLab._
 
 ---
 
-GitLab supports the following DBMSs:
+GitLab supports the following database management systems:
 
 - PostgreSQL
 - MySQL
 
-All in all, you have three options of database servers to use with Omnibus
-GitLab:
+Thus you have three options for database servers to use with Omnibus GitLab:
 
-- Use the PostgreSQL bundled server (no configuration required)
+- Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
 - Use an [external MySQL server](#using-a-mysql-database-management-server-enterprise-edition-only)
 
-If you are going to use MySQL/MariaDB, make sure to read the [MySQL special notes]
+If you are planning to use MySQL/MariaDB, make sure to read the [MySQL special notes]
 (#omnibus-mysql-special-notes) before proceeding.
 
 ## Using a non-packaged PostgreSQL database management server
 
-If you do not want to use the packaged PostgreSQL server, you can configure an
-omnibus-gitlab package to use an external one.
+By default, GitLab is configured to use the PostgreSQL server that is included
+in Omnibus GitLab. You can also reconfigure it to use an external instance of
+PostgreSQL.
 
 **WARNING** If you are using non-packaged PostgreSQL server, you need to make
-sure that PostgreSQL is setup according to the requirements, see
-[database requirements document] for more information.
+sure that PostgreSQL is set up according to the [database requirements document].
 
 1.  Edit `/etc/gitlab/gitlab.rb`:
 
@@ -45,32 +44,40 @@ sure that PostgreSQL is setup according to the requirements, see
     gitlab_rails['db_password'] = 'PASSWORD'
     ```
 
+    Don't forget to remove the `#` comment characters at the beginning of these
+    lines.
+    
+    **Note:**
+    `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
+    plain-text passwords.
+    
 1.  [Reconfigure GitLab][] for the changes to take effect.
 
 1.  [Seed the database](#seed-the-database-fresh-installs-only).
 
-**Note:**
-`/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
-plain-text passwords.
+### Backup and restore a non-packaged PostgreSQL database
 
----
+When using the [rake backup create and restore task][rake-backup], GitLab will
+attempt to use the packaged `pg_dump` command to create a database backup file
+and the packaged `psql` command to restore a backup. This will only work if
+they are the correct versions. Check the versions of the packaged `pg_dump` and
+`psql`:
 
-When using the [backup create and restore task][rake-backup], GitLab will
-attempt to use the `pg_dump` command to create a database backup file and `psql`
-to restore a backup from the previously created file. In Omnibus GitLab, the
-`PATH` environment variable is set up in a way that puts Omnibus required paths
-first. This means that backup will be using the packaged `pg_dump` and `psql`.
+```bash
+/opt/gitlab/bin/pg_dump --version
+/opt/gitlab/bin/psql -- version
+```
 
-To go around this issue and use the external `pg_dump` and `psql` commands, you
-can symlink the executables to `/opt/gitlab/bin/`. The executable location
-depends on the OS. As an example, for Debian:
+If these versions are different from your non-packaged external PostgreSQL
+(most likely they are different), move them aside and replace them with
+symbolic links to your non-packaged PostgreSQL:
 
-1.  Find the location of `psql` and `pg_dump`:
+1. Check the location of the non-packaged executables:
 
     ```bash
     which pg_dump psql
     ```
-
+    
     This will output something like:
 
     ```
@@ -78,13 +85,25 @@ depends on the OS. As an example, for Debian:
     /usr/bin/psql
     ```
 
-1.  Symlink to `/opt/gitlab/bin`:
+1.  Move aside the existing executables and replace them with symbolic links to
+    the non-packaged versions:
 
     ```bash
+    cd /opt/gitlab/bin
+    mv psql psql_moved
+    mv pg_dump pg_dump_moved
     ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
     ```
----
 
+1.  Re-check the versions:
+
+    ```
+    /opt/gitlab/bin/pg_dump --version
+    /opt/gitlab/bin/psql --version
+    ```
+
+    They should now be the same as your non-packaged external PostgreSQL.
+        
 After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup][rake-backup] and
 [restore][rake-restore] tasks.
