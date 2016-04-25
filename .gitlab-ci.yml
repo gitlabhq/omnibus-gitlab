@@ -35,6 +35,14 @@ Ubuntu 14.04:
   - ubuntu1404
   except:
   - branches
+Ubuntu 16.04:
+  stage: package
+  script:
+  <<: *tag_build
+  tags:
+  - ubuntu1604
+  except:
+  - branches
 Debian 7:
   stage: package
   script:
@@ -80,6 +88,14 @@ Ubuntu 14.04 branch:
   <<: *branch_build
   tags:
   - ubuntu1404
+  except:
+  - tags
+Ubuntu 16.04 branch:
+  stage: package
+  script:
+  <<: *branch_build
+  tags:
+  - ubuntu1604
   except:
   - tags
 Debian 7 branch:
