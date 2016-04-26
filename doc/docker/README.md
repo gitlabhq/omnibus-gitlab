@@ -5,6 +5,10 @@ Both GitLab CE and EE are in Docker Hub:
 - [GitLab CE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ce/)
 - [GitLab EE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ee/)
 
+You can also deploy to Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose):
+
+[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/gitlabhq/omnibus-gitlab/tree/master/docker)
+
 In the following examples we are using the image of GitLab CE. To use GitLab EE
 instead of GitLab CE, replace the image name to `gitlab/gitlab-ee:latest`.
 
@@ -49,7 +53,7 @@ sudo docker run --detach \
 	gitlab/gitlab-ce:latest
 ```
 
-This will ensure that the docker process has enough permissions to create the 
+This will ensure that the docker process has enough permissions to create the
 config files in the mounted volumes.
 
 ## Where is the data stored?
@@ -162,13 +166,13 @@ To upgrade GitLab to a new version you have to:
     ```
 
 2. Remove existing container:
-    
+
     ```bash
     sudo docker rm gitlab
     ```
 
 3. Pull the new image:
-    
+
     ```bash
     sudo docker pull gitlab/gitlab-ce:latest
     ```
