@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.8.0
+- Disable Rack Attack throttling if specified in config 631511f8
+
 8.7.1
 
 - Package supports Ubuntu 16.04 8a4ce1f5
