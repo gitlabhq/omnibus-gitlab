@@ -19,6 +19,8 @@ def repo_string
       version = 'precise'
     when /^14\.04/
       version = 'trusty'
+    when /^16\.04/
+      version = 'xenial'
     end
   when 'debian', 'raspbian'
     os = ohai['platform']
