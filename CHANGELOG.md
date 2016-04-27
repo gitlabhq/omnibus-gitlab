@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.2.5
 
-- No changes
+- cacerts to 2016.04.20
 
 8.2.4
 
