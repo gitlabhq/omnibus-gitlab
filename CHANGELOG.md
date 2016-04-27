@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.5.12
+
+- No changes
+
 8.5.11
 
 - Update Mattermost download URL from GitHub to releases.mattermost.com
