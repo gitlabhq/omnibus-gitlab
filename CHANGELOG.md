@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.2.5
+
+- No changes
+
+8.2.4
+
+- Cacerts 20.01.2016.
+- Upgrade rubygems to 2.5.1.
+
 8.2.3
 
 - Add gitlab_default_projects_features_builds variable (Patrice Bouillet) e13556d33772c2d6b084d358ff67ea7da2c78a91
