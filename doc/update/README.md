@@ -10,32 +10,32 @@ This document will help you update Omnibus GitLab.
 - [Updating using the official repositories](#updating-using-the-official-repositories)
 - [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages)
 - [From Community Edition to Enterprise Edition](#from-community-edition-to-enterprise-edition)
-- [Updating from GitLab 6.6 and higher to 7.10 or newer](#updating-from-gitlab-6-6-and-higher-to-7-10-or-newer)
-- [Updating from GitLab 6.6 and higher to the latest version](#updating-from-gitlab-6-6-and-higher-to-the-latest-version)
+- [Updating from GitLab 6.6 and higher to 7.10 or newer](#updating-from-gitlab-66-and-higher-to-710-or-newer)
+- [Updating from GitLab 6.6 and higher to the latest version](#updating-from-gitlab-66-and-higher-to-the-latest-version)
     - [Stop services but leave postgresql running for the database migrations and create a backup](#stop-services-but-leave-postgresql-running-for-the-database-migrations-and-create-a-backup)
     - [Install the latest package](#install-the-latest-package)
     - [Reconfigure GitLab (includes running database migrations) and restart all services](#reconfigure-gitlab-includes-running-database-migrations-and-restart-all-services)
-    - [Trouble? Check status details](#trouble-check-status-details)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](#updating-from-gitlab-6-6-0-pre1-to-6-6-4)
+- [Updating from GitLab 6.6.0.pre1 to 6.6.4](#updating-from-gitlab-660pre1-to-664)
     - [Stop unicorn and sidekiq so we can do database migrations](#stop-unicorn-and-sidekiq-so-we-can-do-database-migrations)
-    - [One-time migration because we changed some directories since 6.6.0.pre1](#one-time-migration-because-we-changed-some-directories-since-6-6-0-pre1)
-    - [Install the latest package](#install-the-latest-package)
+    - [One-time migration because we changed some directories since 6.6.0.pre1](#one-time-migration-because-we-changed-some-directories-since-660pre1)
+    - [Install the latest package](#install-the-latest-package-1)
     - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations)
     - [Start unicorn and sidekiq](#start-unicorn-and-sidekiq)
-- [Reverting to GitLab 6.6.x or later](#reverting-to-gitlab-6-6-x-or-later)
+- [Reverting to GitLab 6.6.x or later](#reverting-to-gitlab-66x-or-later)
     - [Stop GitLab](#stop-gitlab)
-    - [Downgrade GitLab to 6.x](#downgrade-gitlab-to-6-x)
+    - [Downgrade GitLab to 6.x](#downgrade-gitlab-to-6x)
     - [Prepare GitLab for receiving the backup restore](#prepare-gitlab-for-receiving-the-backup-restore)
-    - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations)
+    - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations-1)
     - [Restore your backup](#restore-your-backup)
     - [Start GitLab](#start-gitlab)
 - [Upgrading from a non-Omnibus installation to an Omnibus installation](#upgrading-from-a-non-omnibus-installation-to-an-omnibus-installation)
-    - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
-    - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-    - [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-6-8)
+  - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
+  - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
+  - [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
 - [RPM 'package is already installed' error](#rpm-package-is-already-installed-error)
 - [Updating GitLab CI via omnibus-gitlab](#updating-gitlab-ci-via-omnibus-gitlab)
-    - [Updating from GitLab CI version prior to 5.4.0 to the latest version](#updating-from-gitlab-ci-version-prior-to-5-4-0-to-the-latest-version)
+  - [Updating from GitLab CI version prior to 5.4.0 to version 7.14](#updating-from-gitlab-ci-version-prior-to-540-to-version-714)
+- [Troubleshooting](#troubleshooting)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -268,13 +268,6 @@ sudo gitlab-ctl restart
 
 Done!
 
-#### Trouble? Check status details
-
-```
-sudo gitlab-ctl status
-sudo gitlab-rake gitlab:check SANITIZE=true
-```
-
 ## Updating from GitLab 6.6.0.pre1 to 6.6.4
 
 First, download the latest package from https://www.gitlab.com/downloads/ to your GitLab server.
@@ -476,6 +469,7 @@ If you are using special features such as LDAP you will have to put your
 settings in gitlab.rb; see the [omnibus-gitlab
 README](/README.md#configuration).
 
+
 ### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 Unlike the previous chapter, the non-Omnibus installation is using MySQL while the Omnibus installation is using PostgreSQL.
 
@@ -529,3 +523,15 @@ gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" =>
 where `url` is the url to the GitLab instance.
 
 Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
+
+## Troubleshooting
+
+Use the following commands to check the status of GitLab services and configuration files.
+
+```
+sudo gitlab-ctl status
+sudo gitlab-rake gitlab:check SANITIZE=true
+```
+
++ Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md) 
++ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](http://doc.gitlab.com/ee/raketasks/maintenance.html#check-gitlab-configuration).
