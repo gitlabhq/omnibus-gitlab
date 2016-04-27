@@ -17,9 +17,9 @@
 #
 
 name "mattermost"
-default_version "v1.2.1"
+default_version "1.2.1"
 
-source url: "https://github.com/mattermost/platform/releases/download/#{version}/mattermost.tar.gz",
+source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
        md5: '0bce907ee9f454499ee501ac274a8508'
 
 build do

@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.2.5
 
 - cacerts to 2016.04.20
+- Change URL for Mattermost to releases.mattermost.com
 
 8.2.4
 
