@@ -16,7 +16,7 @@ run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
 
 ### Tail process logs
 
-See [doc/settings/logs.md.](doc/settings/logs.md)
+See [settings/logs.md.](../settings/logs.md)
 
 ### Starting and stopping
 
