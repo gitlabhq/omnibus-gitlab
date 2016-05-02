@@ -1,5 +1,6 @@
 version: 0.1
 log:
+  level: <%= @log_level %>
   fields:
     service: registry
     environment: production
@@ -20,7 +21,7 @@ health:
     threshold: 3
 auth:
   token:
-    realm: <%= @token_realm %>/api/v3/auth/token
+    realm: <%= @token_realm %>/jwt/auth
     service: docker
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>

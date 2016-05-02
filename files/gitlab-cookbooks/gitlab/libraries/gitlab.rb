@@ -515,29 +515,23 @@ module Gitlab
         Gitlab['gitlab_rails']['registry_enabled'] = true
       end
 
-      Gitlab['gitlab_rails']['registry_internal_host'] ||= "http://127.0.0.1:5000"
-      Gitlab['registry']['registry_http_addr'] ||= Gitlab['gitlab_rails']['registry_internal_host'].gsub(/^https?\:\/\//, '')
+      Gitlab['gitlab_rails']['registry_internal_host'] ||= "localhost"
+      Gitlab['registry']['registry_http_addr'] ||= "#{Gitlab['gitlab_rails']['registry_internal_host']}:5000"
       Gitlab['registry']['token_realm'] ||= external_url
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
-      if Gitlab['gitlab_rails']['gitlab_host'] == uri.host && Gitlab['gitlab_rails']['gitlab_https'] == true
-        # set a section in gitlab-rails nginx config
-        Gitlab['nginx']['registry_enabled'] = true
-        Gitlab['nginx']['registry_external_listen_port'] = uri.port
+      # use a separate nginx config
+      case  uri.scheme
+      when "http"
+        Gitlab['registry']['registry_https'] = false
+      when "https"
+        Gitlab['registry']['registry_https'] = true
+        Gitlab['registry_nginx']['https'] ||= true
+        Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
       else
-        # use a separate nginx config
-        case  uri.scheme
-        when "http"
-          Gitlab['registry']['registry_https'] = false
-        when "https"
-          Gitlab['registry']['registry_https'] = true
-          Gitlab['registry_nginx']['https'] ||= Gitlab['registry']['registry_https']
-          Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
-          Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
-        else
-          raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
-        end
+        raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
 
       unless ["", "/"].include?(uri.path)

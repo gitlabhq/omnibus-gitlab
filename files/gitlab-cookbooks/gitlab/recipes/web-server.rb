@@ -33,7 +33,7 @@ account "Webserver user and group" do
   gid node['gitlab']['web-server']['gid']
   shell node['gitlab']['web-server']['shell']
   home node['gitlab']['web-server']['home']
-  append_to_group true
+  append_to_group append_members
   group_members external_webserver_users
   user_supports manage_home: false
   manage node['gitlab']['manage-accounts']['enable']

@@ -62,7 +62,7 @@ server {
     proxy_set_header  X-Forwarded-Proto $scheme;
     proxy_read_timeout                  900;
 
-    proxy_pass          <%= @registry_internal_host %>;
+    proxy_pass          http://<%= @registry_http_addr %>;
   }
 
   <%= @custom_gitlab_server_config %>
