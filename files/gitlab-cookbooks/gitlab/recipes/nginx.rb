@@ -149,7 +149,8 @@ template gitlab_registry_http_conf do
   variables(registry_nginx_vars.merge(
     {
       registry_internal_host: node['gitlab']['gitlab-rails']['registry_internal_host'],
-      registry_host: node['gitlab']['gitlab-rails']['registry_host']
+      registry_host: node['gitlab']['gitlab-rails']['registry_host'],
+      registry_http_addr: node['gitlab']['registry']['registry_http_addr']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")

@@ -521,12 +521,11 @@ module Gitlab
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
-      # use a separate nginx config
       case  uri.scheme
       when "http"
-        Gitlab['registry']['registry_https'] = false
+        Gitlab['gitlab_rails']['registry_https'] = false
       when "https"
-        Gitlab['registry']['registry_https'] = true
+        Gitlab['gitlab_rails']['registry_https'] = true
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
@@ -538,7 +537,7 @@ module Gitlab
         raise "Unsupported GitLab Registry external URL path: #{uri.path}"
       end
 
-      Gitlab['registry']['registry_port'] = uri.port
+      Gitlab['gitlab_rails']['registry_port'] = uri.port
     end
 
     def parse_registry
