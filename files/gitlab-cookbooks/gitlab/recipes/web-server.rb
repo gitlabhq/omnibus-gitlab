@@ -32,7 +32,6 @@ end
 # Create the group for the GitLab user
 # If external webserver is used, add the external webserver user to
 # GitLab webserver group
-append_members = external_webserver_users.any? && !node['gitlab']['nginx']['enable']
 
 account "Webserver user and group" do
   username webserver_username
@@ -42,7 +41,7 @@ account "Webserver user and group" do
   gid node['gitlab']['web-server']['gid']
   shell node['gitlab']['web-server']['shell']
   home node['gitlab']['web-server']['home']
-  append_to_group append_members
+  append_to_group external_webserver_users.any?
   group_members external_webserver_users
   user_supports manage_home: false
   manage node['gitlab']['manage-accounts']['enable']
