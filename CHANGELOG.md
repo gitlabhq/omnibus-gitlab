@@ -7,6 +7,14 @@ omnibus-gitlab repository.
 
 - Disable Rack Attack throttling if specified in config 631511f8
 
+8.7.3
+
+- Update openssl to 1.0.2h
+
+8.7.2
+
+- No changes
+
 8.7.1
 
 - Package supports Ubuntu 16.04 8a4ce1f5
