@@ -22,10 +22,10 @@ dependency "cacerts"
 dependency "makedepend" unless aix?
 dependency "patch" if solaris2?
 
-default_version "1.0.2g"
+default_version "1.0.2h"
 
 source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz",
-       md5: "f3c710c045cdee5fd114feb69feba7aa"
+       md5: "9392e65072ce4b614c1392eefc1f23d0"
 
 relative_path "openssl-#{version}"
 
