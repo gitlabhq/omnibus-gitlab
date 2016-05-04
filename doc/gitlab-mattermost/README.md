@@ -114,7 +114,9 @@ By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows 
 SMTP configuration depends on SMTP provider used. If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
 
 ```ruby
-mattermost['email_enable_sign_up_with_email'] = true
+mattermost['email_enable_sign_in_with_email'] = false
+mattermost['email_enable_sign_up_with_email'] = false
+mattermost['email_send_email_notifications'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
 mattermost['email_smtp_server'] = "smtp.example.com"
@@ -179,6 +181,12 @@ If you choose to upgrade Mattermost outside of GitLab's omnibus automation, plea
 ### GitLab notifications in Mattermost
 
 There are multiple ways to send notifications depending on how much control you'd like over the messages. 
+
+If you are using the Omnibus edition, enable incoming webhooks from the gitlab.rb file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
+
+```ruby
+mattermost['enable_incoming_webhooks'] = true
+```
 
 #### Setting up Mattermost as a Slack project service integration:
 
