@@ -5,6 +5,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 ## Installation
 
 - [Package downloads page](https://about.gitlab.com/downloads/)
+- [Installation Requirements](http://doc.gitlab.com/ce/install/requirements.html)
 - [GitLab CI](gitlab-ci/README.md) Set up the GitLab CI coordinator that ships with Omnibus GitLab package.
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [Docker](docker/README.md) Set up the GitLab in Docker container.
@@ -74,6 +75,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [gitlab-rake assets:precompile fails with 'Permission denied'](common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 - ['Short read or OOM loading DB' error](common_installation_problems/README.md#short-read-or-oom-loading-db-error).
 - ['pg_dump: aborting because of server version mismatch'](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
+- ['Errno::ENOMEM: Cannot allocate memory' during backup or upgrade](common_installation_problems/README.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)
 
 ## Omnibus GitLab developer documentation
 
