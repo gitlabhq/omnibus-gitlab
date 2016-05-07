@@ -428,6 +428,15 @@ above, and finally restart the container.
     docker restart gitlab
     ```
 
+### Errno::ENOMEM: Cannot allocate memory during backup or upgrade
+
+[GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#memory)
+2GB of available memory to run without errors. Having 2GB of memory installed may
+not be enough depending on the resource usage of other processes on your server.
+If GitLab runs fine when not upgrading or running a backup, then adding more swap
+should solve your problem. If you see the server using swap during normal usage,
+you can add more RAM to improve performance.
+
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
