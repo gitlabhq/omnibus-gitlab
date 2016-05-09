@@ -32,7 +32,6 @@ upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 known_hosts = File.join(ssh_dir, "known_hosts")
-gitlab_app = "gitlab"
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
@@ -195,11 +194,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   owner "root"
   group "root"
   mode "0644"
-  variables(
-    node['gitlab']['gitlab-rails'].to_hash.merge(
-      :app => gitlab_app
-    )
-  )
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
 
   unless node['gitlab']['gitlab-rails']['smtp_enable']
