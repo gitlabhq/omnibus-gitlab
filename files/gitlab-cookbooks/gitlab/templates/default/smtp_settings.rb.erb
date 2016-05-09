@@ -2,16 +2,15 @@
 # erased! To change the contents below, edit /etc/gitlab/gitlab.rb
 # and run `sudo gitlab-ctl reconfigure`.
 
-<% rails_app = @app == 'gitlab' ? 'Gitlab' : 'GitlabCi' %>
-<% container = @app == 'gitlab' ? 'gitlab-rails' : 'gitlab-ci' %>
-
 if Rails.env.production?
-  <%= rails_app %>::Application.config.action_mailer.delivery_method = :smtp
+  Gitlab::Application.config.action_mailer.delivery_method = :smtp
 
   ActionMailer::Base.smtp_settings = {
+    <% unless @smtp_authentication.nil? %>
     authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
+    <% end %>
 <% %w{ address port user_name password domain enable_starttls_auto tls ssl openssl_verify_mode ca_path ca_file }.each do |key| %>
-  <% value = node['gitlab'][container]["smtp_#{key}"] %>
+  <% value = node['gitlab']['gitlab-rails']["smtp_#{key}"] %>
     <%= "#{key}: #{value.inspect}," unless value.nil? %>
 <% end %>
   }
