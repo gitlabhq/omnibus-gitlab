@@ -96,7 +96,10 @@ features.
 
 To upgrade an existing GitLab Community Edition (CE) server, installed using the
 Omnibus packages, to GitLab Enterprise Edition (EE), all you have to do is
-install the **same version** EE package on top of CE.
+install the EE package on top of CE. While upgrading from the same version of
+CE to EE is not explicitly necessary, and any standard upgrade jump (i.e. 8.0
+to 8.7) should work, in the following steps we assume that you are upgrading the
+same versions.
 
 The steps can be summed up to:
 
@@ -172,6 +175,12 @@ The steps can be summed up to:
     ## Reconfigure GitLab
     sudo gitlab-ctl reconfigure
     ```
+
+    > **Note:**
+    If you want to upgrade to EE and at the same time also update GitLab to the
+    latest version, you can omit the version check in the above commands. For
+    Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
+    CentOS/RHEL `sudo yum install gitlab-ee`.
 
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
