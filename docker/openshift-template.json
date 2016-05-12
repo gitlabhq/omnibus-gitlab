@@ -1,0 +1,726 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "gitlab-ce",
+    "annotations": {
+      "description": "Gitlab server. Scaling to more than one replica is not supported",
+      "tags": "gitlab,VCS"
+    }
+  },
+  "labels": {
+    "createdBy": "gitlab-ce-template"
+  },
+  "parameters": [
+    {
+      "description": "The name for the application. The service will be named like the application.",
+      "displayName": "Application name.",
+      "name": "APPLICATION_NAME",
+      "value": "gitlab-ce"
+    },
+    {
+      "description": "Custom hostname for service routes.  Leave blank for default hostname, e.g.: <application-name>.<project>.<default-domain-suffix>",
+      "displayName": "Gitlab instance hostname",
+      "name": "APPLICATION_HOSTNAME",
+      "value": "gitlab.apps.10.2.2.2.xip.io"
+    },
+    {
+      "name": "POSTGRESQL_USER",
+      "displayName": "PostgreSQL User",
+      "description": "Username for PostgreSQL user that will be used for accessing the database.",
+      "generate": "expression",
+      "from": "user[A-Z0-9]{3}",
+      "required": true
+    },
+    {
+      "name": "POSTGRESQL_PASSWORD",
+      "displayName": "PostgreSQL Password",
+      "description": "Password for the PostgreSQL user.",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "POSTGRESQL_DATABASE",
+      "displayName": "PostgreSQL Database Name",
+      "description": "Name of the PostgreSQL database accessed.",
+      "value": "gitlabhq_production",
+      "required": true
+    },
+    {
+      "description": "Volume size for /logs",
+      "displayName": "Logs volume size",
+      "name": "LOGS_VOL_SIZE",
+      "value": "2Gi"
+    },
+    {
+      "description": "Volume size for /etc",
+      "displayName": "/etc volume size",
+      "name": "ETC_VOL_SIZE",
+      "value": "512Mi"
+    },
+    {
+      "description": "Volume size for /opt",
+      "displayName": "/opt volume size",
+      "name": "OPT_VOL_SIZE",
+      "value": "2Gi"
+    },
+    {
+      "description": "Volume size for postgresql data",
+      "displayName": "postgresql volume size",
+      "name": "POSTGRESQL_VOL_SIZE",
+      "value": "5Gi"
+    },
+    {
+      "description": "Volume size for redis data",
+      "displayName": "redis volume size",
+      "name": "REDIS_VOL_SIZE",
+      "value": "1Gi"
+    }
+  ],
+  "objects": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}",
+        "labels": {
+          "app": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "tags": [
+          {
+            "name": "8.7.1",
+            "from": {
+              "kind": "DockerImage",
+              "name": "gitlab/gitlab-ce:8.7.1-ce.1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-redis",
+        "labels": {
+          "app": "${APPLICATION_NAME}-redis"
+        }
+      },
+      "spec": {
+        "tags": [
+          {
+            "name": "2.8",
+            "from": {
+              "kind": "DockerImage",
+              "name": "redis:2.8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}",
+        "labels": {
+          "app": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%",
+            "post": {
+              "failurePolicy": "Abort",
+              "execNewPod": {
+                "containerName": "gitlab-ce",
+                "command": [
+                  "/bin/bash", "-c",
+                  "cd /opt/gitlab/embedded/service/gitlab-rails && ln -s /var/opt/gitlab/gitlab-rails/etc/database.yml config/database.yml && ln -s /var/opt/gitlab/gitlab-rails/etc/gitlab.yml config/gitlab.yml && COUNT=$(PGPASSWORD='${POSTGRESQL_PASSWORD}' psql -h ${APPLICATION_NAME}-postgresql -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -Atw -c 'SELECT count(*) FROM (SELECT 1 FROM users LIMIT 1) AS users;') && if [[ ${COUNT} -eq 0 ]]; then /opt/gitlab/embedded/bin/bundle exec rake db:schema:load db:seed_fu; fi"
+                ],
+                "env": [
+                  { "name": "HOME", "value": "/var/opt/gitlab" },
+                  { "name": "PATH", "value": "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin" },
+                  { "name": "RAILS_ENV", "value": "production" },
+                  { "name": "BUNDLE_GEMFILE", "value": "/opt/gitlab/embedded/service/gitlab-rails/Gemfile" }
+                ],
+                "volumes": [ "gitlab-ce-volume-1", "gitlab-ce-volume-2", "gitlab-ce-volume-3" ]
+              }
+            }
+          },
+          "resources": {}
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "gitlab-ce"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "${APPLICATION_NAME}:8.7.1"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "${APPLICATION_NAME}",
+          "deploymentconfig": "${APPLICATION_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "${APPLICATION_NAME}",
+              "deploymentconfig": "${APPLICATION_NAME}"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "gitlab-ce-volume-1",
+                "persistentVolumeClaim": {
+                  "claimName": "${APPLICATION_NAME}-etc"
+                }
+              },
+              {
+                "name": "gitlab-ce-volume-2",
+                "persistentVolumeClaim": {
+                  "claimName": "${APPLICATION_NAME}-logs"
+                }
+              },
+              {
+                "name": "gitlab-ce-volume-3",
+                "persistentVolumeClaim": {
+                  "claimName": "${APPLICATION_NAME}-opt"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "name": "gitlab-ce",
+                "image": "gitlab-ce",
+                "ports": [
+                  {
+                    "containerPort": 22,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 80,
+                    "protocol": "TCP"
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "GITLAB_OMNIBUS_CONFIG",
+                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis';"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": "500m",
+                    "memory": "1536Mi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "gitlab-ce-volume-1",
+                    "mountPath": "/etc/gitlab"
+                  },
+                  {
+                    "name": "gitlab-ce-volume-2",
+                    "mountPath": "/var/log/gitlab"
+                  },
+                  {
+                    "name": "gitlab-ce-volume-3",
+                    "mountPath": "/var/opt/gitlab"
+                  }
+                ],
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/help",
+                    "port": 80,
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 120,
+                  "timeoutSeconds": 1,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "failureThreshold": 3
+                },
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/help",
+                    "port": 80,
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 20,
+                  "timeoutSeconds": 1,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "failureThreshold": 3
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst"
+          }
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-redis",
+        "labels": {
+          "app": "${APPLICATION_NAME}-redis"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%"
+          },
+          "resources": {}
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "gitlab-ce-redis"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "${APPLICATION_NAME}-redis:2.8"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "${APPLICATION_NAME}-redis",
+          "deploymentconfig": "${APPLICATION_NAME}-redis"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "${APPLICATION_NAME}-redis",
+              "deploymentconfig": "${APPLICATION_NAME}-redis"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "gitlab-ce-volume-5",
+                "persistentVolumeClaim": {
+                  "claimName": "${APPLICATION_NAME}-redis-data"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "name": "gitlab-ce-redis",
+                "image": "gitlab-ce-redis",
+                "ports": [
+                  {
+                    "containerPort": 6379,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  },
+                  "requests": {
+                    "cpu": "500m",
+                    "memory": "300Mi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "gitlab-ce-volume-5",
+                    "mountPath": "/data"
+                  }
+                ],
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst"
+          }
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-postgresql",
+        "labels": {
+          "app": "${APPLICATION_NAME}-postgresql"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%",
+            "post": {
+              "failurePolicy": "Abort",
+              "execNewPod": {
+                "containerName": "gitlab-ce-postgresql",
+                "command": [
+                  "/usr/bin/scl",
+                  "enable",
+                  "rh-postgresql94",
+                  "source $CONTAINER_SCRIPTS_PATH/common.sh; generate_postgresql_config; pg_ctl -w start -o '-h \"\"'; psql -d ${POSTGRESQL_DATABASE} -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'; pg_ctl stop;"
+                ],
+                "env": [
+                  { "name": "HOME", "value": "/var/lib/pgsql" },
+                  { "name": "PGDATA", "value": "/var/lib/pgsql/data/userdata" },
+                  { "name": "CONTAINER_SCRIPTS_PATH", "value": "/usr/share/container-scripts/postgresql" }
+                ],
+                "volumes": ["gitlab-ce-volume-4"]
+              }
+            }
+          },
+          "resources": {}
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "gitlab-ce-postgresql"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "postgresql:9.4",
+                "namespace": "openshift"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "${APPLICATION_NAME}-postgresql",
+          "deploymentconfig": "${APPLICATION_NAME}-postgresql"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "${APPLICATION_NAME}-postgresql",
+              "deploymentconfig": "${APPLICATION_NAME}-postgresql"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "gitlab-ce-volume-4",
+                "persistentVolumeClaim": {
+                  "claimName": "${APPLICATION_NAME}-postgresql"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "name": "gitlab-ce-postgresql",
+                "image": "gitlab-ce-postgresql",
+                "ports": [
+                  {
+                    "containerPort": 5432,
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "timeoutSeconds": 1,
+                  "initialDelaySeconds": 5,
+                  "exec": {
+                    "command": [ "/bin/sh", "-i", "-c", "psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c 'SELECT 1'"]
+                  }
+                },
+                "livenessProbe": {
+                  "timeoutSeconds": 1,
+                  "initialDelaySeconds": 30,
+                  "tcpSocket": {
+                    "port": 5432
+                  }
+                },
+                "env": [
+                  {
+                    "name": "POSTGRESQL_USER",
+                    "value": "${POSTGRESQL_USER}"
+                  },
+                  {
+                    "name": "POSTGRESQL_PASSWORD",
+                    "value": "${POSTGRESQL_PASSWORD}"
+                  },
+                  {
+                    "name": "POSTGRESQL_DATABASE",
+                    "value": "${POSTGRESQL_DATABASE}"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  },
+                  "requests": {
+                    "cpu": "500m",
+                    "memory": "300Mi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "gitlab-ce-volume-4",
+                    "mountPath": "/var/lib/pgsql/data"
+                  }
+                ],
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}",
+        "labels": {
+          "app": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "22-ssh",
+            "protocol": "TCP",
+            "port": 22,
+            "targetPort": 22
+          },
+          {
+            "name": "80-http",
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "selector": {
+          "app": "${APPLICATION_NAME}",
+          "deploymentconfig": "${APPLICATION_NAME}"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-redis",
+        "labels": {
+          "app": "${APPLICATION_NAME}-redis"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "6379-redis",
+            "protocol": "TCP",
+            "port": 6379,
+            "targetPort": 6379
+          }
+        ],
+        "selector": {
+          "app": "${APPLICATION_NAME}-redis",
+          "deploymentconfig": "${APPLICATION_NAME}-redis"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      }
+    },
+    {
+       "kind": "Service",
+       "apiVersion": "v1",
+       "metadata": {
+         "name": "${APPLICATION_NAME}-postgresql",
+         "labels": {
+           "app": "${APPLICATION_NAME}-postgresql"
+         }
+       },
+       "spec": {
+         "ports": [
+           {
+             "name": "5432-postgresql",
+             "protocol": "TCP",
+             "port": 5432,
+             "targetPort": 5432
+           }
+         ],
+         "selector": {
+           "app": "${APPLICATION_NAME}-postgresql",
+           "deploymentconfig": "${APPLICATION_NAME}-postgresql"
+         },
+         "type": "ClusterIP",
+         "sessionAffinity": "None"
+       }
+     },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-redis-data"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${REDIS_VOL_SIZE}"
+          }
+        }
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-etc"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${ETC_VOL_SIZE}"
+          }
+        }
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-logs"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${LOGS_VOL_SIZE}"
+          }
+        }
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-opt"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${OPT_VOL_SIZE}"
+          }
+        }
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}-postgresql"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${POSTGRESQL_VOL_SIZE}"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APPLICATION_NAME}",
+        "labels": {
+          "app": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "host": "${APPLICATION_HOSTNAME}",
+        "to": {
+          "kind": "Service",
+          "name": "${APPLICATION_NAME}"
+        },
+        "port": {
+          "targetPort": "80-http"
+        }
+      }
+    }
+  ]
+}
