@@ -333,12 +333,15 @@ else
 end
 
 default['gitlab']['postgresql']['work_mem'] = "8MB"
+default['gitlab']['postgresql']['maintenance_work_mem'] = "16MB"
 default['gitlab']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
 default['gitlab']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
 default['gitlab']['postgresql']['checkpoint_segments'] = 10
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
+default['gitlab']['postgresql']['wal_buffers'] = "-1"
+
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
 default['gitlab']['postgresql']['wal_level'] = "minimal"
