@@ -425,11 +425,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['shmmax'] =  17179869184 # or 4294967295
 # postgresql['shmall'] =  4194304 # or 1048575
 # postgresql['work_mem'] = "8MB"
+# postgresql['maintenance_work_mem'] = "16MB"
 # postgresql['effective_cache_size'] = "1MB"
 # postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
 # postgresql['checkpoint_completion_target'] = 0.9
 # postgresql['checkpoint_warning'] = "30s"
+# postgresql['wal_buffers'] = "-1"
 
 ## Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"

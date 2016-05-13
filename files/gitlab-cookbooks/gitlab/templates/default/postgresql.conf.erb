@@ -120,7 +120,7 @@ shared_buffers = <%= node['gitlab']['postgresql']['shared_buffers'] %> # min 128
 # It is not advisable to set max_prepared_transactions nonzero unless you
 # actively intend to use prepared transactions.
 work_mem = <%= node['gitlab']['postgresql']['work_mem'] %>				# min 64kB
-#maintenance_work_mem = 16MB    # min 1MB
+maintenance_work_mem = <%= node['gitlab']['postgresql']['maintenance_work_mem'] %> # 16MB    # min 1MB
 #max_stack_depth = 2MB      # min 100kB
 
 # - Kernel Resource Usage -
@@ -166,7 +166,7 @@ wal_level = <%= node['gitlab']['postgresql']['wal_level'] %>
           #   fsync_writethrough
           #   open_sync
 #full_page_writes = on      # recover from partial page writes
-#wal_buffers = -1     # min 32kB, -1 sets based on shared_buffers
+wal_buffers = <%= node['gitlab']['postgresql']['wal_buffers'] %> # -1     # min 32kB, -1 sets based on shared_buffers
           # (change requires restart)
 #wal_writer_delay = 200ms   # 1-10000 milliseconds
 
