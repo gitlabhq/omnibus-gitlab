@@ -111,7 +111,7 @@ module Gitlab
 
     def generate_registry_keypair
       key = OpenSSL::PKey::RSA.new(4096)
-      subject = "/C=USA/O=GitLab/OU=Docker/CN=Registry"
+      subject = "/C=USA/O=GitLab/OU=Container/CN=Registry"
 
       cert = OpenSSL::X509::Certificate.new
       cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
@@ -379,7 +379,7 @@ module Gitlab
       uri = URI(ci_external_url.to_s)
 
       unless uri.host
-        raise "GitLab CI external URL must must include a schema and FQDN, e.g. http://ci.example.com/"
+        raise "GitLab CI external URL must include a schema and FQDN, e.g. http://ci.example.com/"
       end
       Gitlab['gitlab_ci']['gitlab_ci_host'] = uri.host
       Gitlab['gitlab_ci']['gitlab_ci_email_from'] ||= "gitlab-ci@#{uri.host}"
@@ -420,7 +420,7 @@ module Gitlab
       uri = URI(pages_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://pages.example.com/"
+        raise "GitLab Pages external URL must include a schema and FQDN, e.g. http://pages.example.com/"
       end
 
       Gitlab['gitlab_rails']['pages_host'] = uri.host
@@ -466,7 +466,7 @@ module Gitlab
       uri = URI(mattermost_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Mattermost external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
+        raise "GitLab Mattermost external URL must include a schema and FQDN, e.g. http://mattermost.example.com/"
       end
 
       Gitlab['mattermost']['host'] = uri.host
@@ -507,7 +507,7 @@ module Gitlab
       uri = URI(registry_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Registry external URL must must include a schema and FQDN, e.g. https://registry.example.com/"
+        raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
       end
 
       if registry['enable'].nil?
