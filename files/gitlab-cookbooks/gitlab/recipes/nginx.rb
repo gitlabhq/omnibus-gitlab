@@ -110,7 +110,7 @@ template gitlab_rails_http_conf do
       :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
       :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],
       :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https'],
-      :registry_internal_host => node['gitlab']['gitlab-rails']['registry_internal_host']
+      :registry_api_url => node['gitlab']['gitlab-rails']['registry_api_url']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
@@ -148,7 +148,7 @@ template gitlab_registry_http_conf do
   mode "0644"
   variables(registry_nginx_vars.merge(
     {
-      registry_internal_host: node['gitlab']['gitlab-rails']['registry_internal_host'],
+      registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
       registry_host: node['gitlab']['gitlab-rails']['registry_host'],
       registry_http_addr: node['gitlab']['registry']['registry_http_addr']
     }

@@ -22,6 +22,6 @@ health:
 auth:
   token:
     realm: <%= @token_realm %>/jwt/auth
-    service: docker
+    service: container_registry
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>

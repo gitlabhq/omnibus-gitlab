@@ -318,9 +318,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Settings used by GitLab application
 # gitlab_rails['registry_enabled'] = true
 # gitlab_rails['registry_host'] = "registry.gitlab.example.com"
-# gitlab_rails['registry_port'] = "443"
-# gitlab_rails['registry_https'] = true
-# gitlab_rails['registry_internal_host'] = "localhost"
+# gitlab_rails['registry_api_url'] = "http://localhost:5000"
 # gitlab_rails['registry_key_path'] = "/var/opt/gitlab/gitlab-rails/certificate.key"
 # gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
 # gitlab_rails['registry_issuer'] = "omnibus-gitlab-issuer"

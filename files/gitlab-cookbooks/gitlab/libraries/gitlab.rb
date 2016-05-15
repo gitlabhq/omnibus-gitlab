@@ -515,17 +515,14 @@ module Gitlab
         Gitlab['gitlab_rails']['registry_enabled'] = true
       end
 
-      Gitlab['gitlab_rails']['registry_internal_host'] ||= "localhost"
-      Gitlab['registry']['registry_http_addr'] ||= "#{Gitlab['gitlab_rails']['registry_internal_host']}:5000"
+      Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
+      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/,'')
+      Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
       Gitlab['registry']['token_realm'] ||= external_url
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
-      case  uri.scheme
-      when "http"
-        Gitlab['gitlab_rails']['registry_https'] = false
-      when "https"
-        Gitlab['gitlab_rails']['registry_https'] = true
+      if uri.scheme == "https"
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
@@ -537,7 +534,6 @@ module Gitlab
         raise "Unsupported GitLab Registry external URL path: #{uri.path}"
       end
 
-      Gitlab['gitlab_rails']['registry_port'] = uri.port
     end
 
     def parse_registry
