@@ -502,12 +502,31 @@ module Gitlab
     end
 
     def parse_registry_external_url
-      return unless registry_external_url
+      return if registry['enable'] == false
 
-      uri = URI(registry_external_url.to_s)
+      if registry_external_url
+        uri = URI(registry_external_url.to_s)
 
-      unless uri.host
-        raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
+        unless uri.host
+          raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
+        end
+
+        listen_port = uri.port
+      else
+        gitlab_uri = URI(external_url.to_s)
+
+        if gitlab_uri.scheme == "https"
+          uri = gitlab_uri
+          listen_port = 5005
+
+          Gitlab['registry_nginx']['ssl_certificate'] ||= Gitlab['nginx']['ssl_certificate']
+          Gitlab['registry_nginx']['ssl_certificate_key'] ||= Gitlab['nginx']['ssl_certificate_key']
+        else
+          # Registry needs to be on https
+          # so disable the service and exit
+          registry['enable'] = false
+          return
+        end
       end
 
       if registry['enable'].nil?
@@ -520,12 +539,13 @@ module Gitlab
       Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
       Gitlab['registry']['token_realm'] ||= external_url
       Gitlab['gitlab_rails']['registry_host'] = uri.host
-      Gitlab['registry_nginx']['listen_port'] ||= uri.port
+      Gitlab['registry_nginx']['listen_port'] ||= Gitlab['gitlab_rails']['registry_port'] || listen_port
 
       if uri.scheme == "https"
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Gitlab['registry_nginx']['redirect_http_to_https'] = true
       else
         raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
@@ -534,8 +554,8 @@ module Gitlab
         raise "Unsupported GitLab Registry external URL path: #{uri.path}"
       end
 
-      unless [80, 443].include?(uri.port)
-        Gitlab['gitlab_rails']['registry_port'] = uri.port
+      unless [80, 443].include?(listen_port)
+        Gitlab['gitlab_rails']['registry_port'] ||= listen_port
       end
     end
 
