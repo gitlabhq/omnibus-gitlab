@@ -17,7 +17,7 @@
 #
 
 name "registry"
-default_version "v2.3.1"
+default_version "v2.4.0"
 
 source :git => "https://github.com/docker/distribution.git"
 
