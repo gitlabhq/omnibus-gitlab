@@ -120,6 +120,7 @@ default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
 default['gitlab']['gitlab-rails']['registry_enabled'] = false
 default['gitlab']['gitlab-rails']['registry_host'] = nil
+default['gitlab']['gitlab-rails']['registry_port'] = nil
 default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
