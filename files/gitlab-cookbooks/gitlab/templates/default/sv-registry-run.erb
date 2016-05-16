@@ -9,4 +9,4 @@ cd <%= node['gitlab']['registry']['dir'] %>
 exec chpst -P \
   -U <%= node['gitlab']['registry']['username'] %> \
   -u <%= node['gitlab']['registry']['group'] %> \
-  /opt/gitlab/embedded/bin/registry ./config.yml
+  /opt/gitlab/embedded/bin/registry serve ./config.yml
