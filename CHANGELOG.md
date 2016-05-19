@@ -6,7 +6,10 @@ omnibus-gitlab repository.
 8.8.0
 
 - Disable Rack Attack throttling if specified in config 631511f8
-- Update postgresql to 9.2.16 (CVE-2016-2193/CVE-2016-3065) (Takuya Noguchi)
+- Update postgresql to 9.2.16 (CVE-2016-2193/CVE-2016-3065) (Takuya Noguchi) d02125
+- Check mountpoint before starting up pages daemon a53e7a0
+- Add support for Container Registry f74472d
+- Add maintenance_work_mem and wal_buffers Postgresql settings 5675dc
 
 8.7.3
 
