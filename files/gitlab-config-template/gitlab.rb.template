@@ -783,9 +783,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost_nginx['keepalive_timeout'] = 65
 # mattermost_nginx['cache_max_size'] = '5000m'
 
-####################
-# GitLab Pages
-####################
+################
+# GitLab Pages #
+################
 
 ## Define to enable GitLab Pages
 # pages_external_url "http://pages.example.com/"
@@ -799,9 +799,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
 # gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
-####################
+######################
 # GitLab Pages NGINX #
-####################
+######################
 
 # pages_nginx['enable'] = false
 # pages_nginx['redirect_http_to_https'] = false
