@@ -124,6 +124,16 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: <%= @lfs_storage_path %>
 
+  ## Container Registry
+  registry:
+    enabled: <%= @registry_enabled %>
+    host: <%= @registry_host %>
+    port: <%= @registry_port %>
+    api_url: <%= @registry_api_url %> # internal address to the registry, will be used by GitLab to directly communicate with API
+    path: <%= @registry_path %>
+    key: <%= @registry_key_path %>
+    issuer: <%= @registry_issuer %>
+
   ## GitLab Pages (EE only)
   pages:
     enabled: <%= @pages_enabled %>

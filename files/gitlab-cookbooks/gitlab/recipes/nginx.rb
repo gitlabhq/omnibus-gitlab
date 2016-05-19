@@ -43,6 +43,7 @@ nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
 gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
+gitlab_registry_http_conf = File.join(nginx_conf_dir, "gitlab-registry.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
 
 # If the service is enabled, check if we are using internal nginx
@@ -64,6 +65,12 @@ gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
                          false
                        end
 
+gitlab_registry_enabled = if node['gitlab']['registry']['enable']
+                         node['gitlab']['registry-nginx']['enable']
+                       else
+                         false
+                       end
+
 # Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
@@ -77,6 +84,10 @@ nginx_vars = nginx_vars.to_hash.merge!({
 # Include the config file for gitlab pages in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
                                          :gitlab_pages_http_config => gitlab_pages_enabled ? gitlab_pages_http_conf : nil
+                                       })
+
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         :gitlab_registry_http_config => gitlab_registry_enabled ? gitlab_registry_http_conf : nil
                                        })
 
 if nginx_vars['listen_https'].nil?
@@ -98,7 +109,8 @@ template gitlab_rails_http_conf do
       :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
       :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
       :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],
-      :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https']
+      :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https'],
+      :registry_api_url => node['gitlab']['gitlab-rails']['registry_api_url']
     }
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
@@ -126,6 +138,23 @@ template gitlab_pages_http_conf do
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_pages_enabled ? :create : :delete
+end
+
+registry_nginx_vars = node['gitlab']['registry-nginx'].to_hash
+template gitlab_registry_http_conf do
+  source "nginx-gitlab-registry-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(registry_nginx_vars.merge(
+    {
+      registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+      registry_host: node['gitlab']['gitlab-rails']['registry_host'],
+      registry_http_addr: node['gitlab']['registry']['registry_http_addr']
+    }
+  ))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action gitlab_registry_enabled ? :create : :delete
 end
 
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
