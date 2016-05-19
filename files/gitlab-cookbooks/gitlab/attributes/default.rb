@@ -118,6 +118,13 @@ default['gitlab']['gitlab-rails']['pages_host'] = nil
 default['gitlab']['gitlab-rails']['pages_port'] = nil
 default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
+default['gitlab']['gitlab-rails']['registry_enabled'] = false
+default['gitlab']['gitlab-rails']['registry_host'] = nil
+default['gitlab']['gitlab-rails']['registry_port'] = nil
+default['gitlab']['gitlab-rails']['registry_api_url'] = nil
+default['gitlab']['gitlab-rails']['registry_key_path'] = nil
+default['gitlab']['gitlab-rails']['registry_path'] = nil
+default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
 
 ####
 # These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
@@ -333,12 +340,15 @@ else
 end
 
 default['gitlab']['postgresql']['work_mem'] = "8MB"
+default['gitlab']['postgresql']['maintenance_work_mem'] = "16MB"
 default['gitlab']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
 default['gitlab']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
 default['gitlab']['postgresql']['checkpoint_segments'] = 10
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
+default['gitlab']['postgresql']['wal_buffers'] = "-1"
+
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
 default['gitlab']['postgresql']['wal_level'] = "minimal"
@@ -419,6 +429,21 @@ default['gitlab']['gitlab-pages']['redirect_http'] = true
 default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
+
+####
+# Registry
+####
+default['gitlab']['registry']['enable'] = false
+default['gitlab']['registry']['username'] = "registry"
+default['gitlab']['registry']['group'] = "registry"
+default['gitlab']['registry']['uid'] = nil
+default['gitlab']['registry']['gid'] = nil
+default['gitlab']['registry']['dir'] = "/var/opt/gitlab/registry"
+default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
+default['gitlab']['registry']['log_level'] = "info"
+default['gitlab']['registry']['rootcertbundle'] = nil
+
+
 
 ####
 # Nginx
@@ -765,3 +790,9 @@ default['gitlab']['mattermost-nginx']['enable'] = false
 ####
 default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['pages-nginx']['enable'] = true
+
+####
+# GitLab Registry NGINX
+####
+default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['registry-nginx']['enable'] = true

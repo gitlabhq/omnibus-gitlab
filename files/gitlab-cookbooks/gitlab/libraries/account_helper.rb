@@ -78,6 +78,14 @@ class AccountHelper
     node['gitlab']['mattermost']['group']
   end
 
+  def registry_user
+    node['gitlab']['registry']['username']
+  end
+
+  def registry_group
+    node['gitlab']['registry']['group']
+  end
+
   def users
     %W(
         #{gitlab_user}
@@ -87,6 +95,7 @@ class AccountHelper
         #{gitlab_ci_user}
         #{ci_redis_user}
         #{mattermost_user}
+        #{registry_user}
       )
   end
 
@@ -99,7 +108,7 @@ class AccountHelper
         #{gitlab_ci_group}
         #{ci_redis_group}
         #{mattermost_group}
+        #{registry_group}
       )
   end
 end
-

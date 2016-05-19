@@ -44,7 +44,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
 # gitlab_rails['webhook_timeout'] = 10
-# gitlab_rails['trusted_proxies'] = [] 
+# gitlab_rails['trusted_proxies'] = []
 
 ## Reply by email
 # Allow users to comment on issues and merge requests by replying to notification emails.
@@ -309,6 +309,32 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
 # gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
+###############################
+# Container registry settings #
+###############################
+# see  LINK
+#
+
+# Settings used by GitLab application
+# gitlab_rails['registry_enabled'] = true
+# gitlab_rails['registry_host'] = "registry.gitlab.example.com"
+# gitlab_rails['registry_port'] = "7443"
+# gitlab_rails['registry_api_url'] = "http://localhost:5000"
+# gitlab_rails['registry_key_path'] = "/var/opt/gitlab/gitlab-rails/certificate.key"
+# gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
+# gitlab_rails['registry_issuer'] = "omnibus-gitlab-issuer"
+
+# Settings used by Registry application
+# registry['enable'] = true
+# registry['username'] = "registry"
+# registry['group'] = "registry"
+# registry['uid'] = nil
+# registry['gid'] = nil
+# registry['dir'] = "/var/opt/gitlab/registry"
+# registry['log_directory'] = "/var/log/gitlab/registry"
+# registry['log_level'] = "info"
+# registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
+
 ####################
 # GitLab Workhorse #
 ####################
@@ -425,11 +451,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['shmmax'] =  17179869184 # or 4294967295
 # postgresql['shmall'] =  4194304 # or 1048575
 # postgresql['work_mem'] = "8MB"
+# postgresql['maintenance_work_mem'] = "16MB"
 # postgresql['effective_cache_size'] = "1MB"
 # postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
 # postgresql['checkpoint_completion_target'] = 0.9
 # postgresql['checkpoint_warning'] = "30s"
+# postgresql['wal_buffers'] = "-1"
 
 ## Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
