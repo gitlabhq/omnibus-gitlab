@@ -52,6 +52,7 @@ module Gitlab
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
   pages_nginx Mash.new
+  registry_nginx Mash.new
   mailroom Mash.new
   nginx Mash.new
   ci_nginx Mash.new
@@ -63,11 +64,13 @@ module Gitlab
   web_server Mash.new
   mattermost Mash.new
   gitlab_pages Mash.new
+  registry Mash.new
   node nil
   external_url nil
   pages_external_url nil
   ci_external_url nil
   mattermost_external_url nil
+  registry_external_url nil
   git_data_dir nil
 
   class << self
@@ -91,6 +94,11 @@ module Gitlab
                                                  end
       Gitlab['gitlab_ci']['db_key_base'] ||= generate_hex(64)
 
+      Gitlab['registry']['http_secret'] ||= generate_hex(64)
+      gitlab_registry_crt, gitlab_registry_key = generate_registry_keypair
+      Gitlab['registry']['internal_certificate'] ||= gitlab_registry_crt
+      Gitlab['registry']['internal_key'] ||= gitlab_registry_key
+
       Gitlab['mattermost']['email_invite_salt'] ||= generate_hex(16)
       Gitlab['mattermost']['file_public_link_salt'] ||= generate_hex(16)
       Gitlab['mattermost']['email_password_reset_salt'] ||= generate_hex(16)
@@ -99,6 +107,22 @@ module Gitlab
       # Note: Besides the section below, gitlab-secrets.json will also change
       # in CiHelper in libraries/helper.rb
       SecretsHelper.write_to_gitlab_secrets
+    end
+
+    def generate_registry_keypair
+      key = OpenSSL::PKey::RSA.new(4096)
+      subject = "/C=USA/O=GitLab/OU=Container/CN=Registry"
+
+      cert = OpenSSL::X509::Certificate.new
+      cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
+      cert.not_before = Time.now
+      cert.not_after = Time.now + 18250 * 24 * 60 * 60
+      cert.public_key = key.public_key
+      cert.serial = 0x0
+      cert.version = 2
+      cert.sign key, OpenSSL::Digest::SHA256.new
+
+      [cert.to_pem, key.to_pem]
     end
 
     def parse_gitlab_git_http_server
@@ -355,7 +379,7 @@ module Gitlab
       uri = URI(ci_external_url.to_s)
 
       unless uri.host
-        raise "GitLab CI external URL must must include a schema and FQDN, e.g. http://ci.example.com/"
+        raise "GitLab CI external URL must include a schema and FQDN, e.g. http://ci.example.com/"
       end
       Gitlab['gitlab_ci']['gitlab_ci_host'] = uri.host
       Gitlab['gitlab_ci']['gitlab_ci_email_from'] ||= "gitlab-ci@#{uri.host}"
@@ -396,7 +420,7 @@ module Gitlab
       uri = URI(pages_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Pages external URL must must include a schema and FQDN, e.g. http://pages.example.com/"
+        raise "GitLab Pages external URL must include a schema and FQDN, e.g. http://pages.example.com/"
       end
 
       Gitlab['gitlab_rails']['pages_host'] = uri.host
@@ -442,7 +466,7 @@ module Gitlab
       uri = URI(mattermost_external_url.to_s)
 
       unless uri.host
-        raise "GitLab Mattermost external URL must must include a schema and FQDN, e.g. http://mattermost.example.com/"
+        raise "GitLab Mattermost external URL must include a schema and FQDN, e.g. http://mattermost.example.com/"
       end
 
       Gitlab['mattermost']['host'] = uri.host
@@ -477,6 +501,70 @@ module Gitlab
       mailroom['enable'] = true if mailroom['enable'].nil?
     end
 
+    def parse_registry_external_url
+      return if registry['enable'] == false
+
+      if registry_external_url
+        uri = URI(registry_external_url.to_s)
+
+        unless uri.host
+          raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
+        end
+
+        listen_port = uri.port
+      else
+        gitlab_uri = URI(external_url.to_s)
+
+        if gitlab_uri.scheme == "https"
+          uri = gitlab_uri
+          listen_port = 5005
+
+          Gitlab['registry_nginx']['ssl_certificate'] ||= Gitlab['nginx']['ssl_certificate']
+          Gitlab['registry_nginx']['ssl_certificate_key'] ||= Gitlab['nginx']['ssl_certificate_key']
+        else
+          # Registry needs to be on https
+          # so disable the service and exit
+          registry['enable'] = false
+          return
+        end
+      end
+
+      if registry['enable'].nil?
+        registry['enable'] = true
+        Gitlab['gitlab_rails']['registry_enabled'] = true
+      end
+
+      Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
+      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/,'')
+      Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
+      Gitlab['registry']['token_realm'] ||= external_url
+      Gitlab['gitlab_rails']['registry_host'] = uri.host
+      Gitlab['registry_nginx']['listen_port'] ||= Gitlab['gitlab_rails']['registry_port'] || listen_port
+
+      if uri.scheme == "https"
+        Gitlab['registry_nginx']['https'] ||= true
+        Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Gitlab['registry_nginx']['redirect_http_to_https'] = true
+      else
+        raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
+      end
+
+      unless ["", "/"].include?(uri.path)
+        raise "Unsupported GitLab Registry external URL path: #{uri.path}"
+      end
+
+      unless [80, 443].include?(listen_port)
+        Gitlab['gitlab_rails']['registry_port'] ||= listen_port
+      end
+    end
+
+    def parse_registry
+      return unless registry['enable']
+
+      gitlab_rails['registry_path'] = "#{gitlab_rails['shared_path']}/registry" if gitlab_rails['registry_path'].nil?
+    end
+
     def disable_gitlab_rails_services
       if gitlab_rails["enable"] == false
         redis["enable"] = false
@@ -509,6 +597,7 @@ module Gitlab
         "ci_nginx",
         "mattermost_nginx",
         "pages_nginx",
+        "registry_nginx",
         "logging",
         "remote_syslog",
         "logrotate",
@@ -520,7 +609,8 @@ module Gitlab
         "ci_external_url",
         "mattermost_external_url",
         "pages_external_url",
-        "gitlab_pages"
+        "gitlab_pages",
+        "registry"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -547,6 +637,7 @@ module Gitlab
       parse_ci_external_url
       parse_pages_external_url
       parse_mattermost_external_url
+      parse_registry_external_url
       parse_unicorn_listen_address
       parse_nginx_listen_address
       parse_nginx_listen_ports
@@ -555,6 +646,7 @@ module Gitlab
       parse_gitlab_mattermost
       parse_incoming_email
       parse_gitlab_pages_daemon
+      parse_registry
       disable_gitlab_rails_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash

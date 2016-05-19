@@ -264,6 +264,12 @@ class SecretsHelper
                         'secret_key_base' => Gitlab['gitlab_ci']['secret_key_base'],
                         'db_key_base' => Gitlab['gitlab_ci']['db_key_base'],
                       },
+                      'registry' => {
+                        'http_secret' => Gitlab['registry']['http_secret'],
+                        'internal_certificate' => Gitlab['registry']['internal_certificate'],
+                        'internal_key' => Gitlab['registry']['internal_key']
+
+                      },
                       'mattermost' => {
                         'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],
                         'file_public_link_salt' => Gitlab['mattermost']['file_public_link_salt'],
