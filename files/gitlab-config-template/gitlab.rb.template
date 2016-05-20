@@ -515,7 +515,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
 # nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
-# nginx['proxy_read_timeout'] = 300
+# nginx['proxy_read_timeout'] = 3600
 # nginx['proxy_connect_timeout'] = 300
 # nginx['proxy_set_headers'] = {
 #  "Host" => "$http_host",
