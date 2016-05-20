@@ -334,6 +334,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['log_directory'] = "/var/log/gitlab/registry"
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
+# registry['storage_delete_enabled'] = true
 
 ####################
 # GitLab Workhorse #
