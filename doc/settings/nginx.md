@@ -442,7 +442,7 @@ server {
 
     ## https://github.com/gitlabhq/gitlabhq/issues/694
     ## Some requests take more than 30 seconds.
-    proxy_read_timeout      300;
+    proxy_read_timeout      3600;
     proxy_connect_timeout   300;
     proxy_redirect          off;
 
