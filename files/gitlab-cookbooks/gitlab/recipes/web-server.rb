@@ -20,15 +20,6 @@ webserver_username = account_helper.web_server_user
 webserver_group = account_helper.web_server_group
 external_webserver_users = node['gitlab']['web-server']['external_users'].to_a
 
-# This recipe runs before registry recipe so we need to make sure that the
-# registry users is appended to the webserver group as registry requires access
-# to the gitlab-rails/shared folder.
-# Without this check the reconfigure run would fail on the first run and also
-# the group would end up being altered on every reconfigure run
-if node["gitlab"]["registry"]["enable"] && OmnibusHelper.user_exists?(account_helper.registry_user)
-  external_webserver_users << account_helper.registry_user
-end
-
 # Create the group for the GitLab user
 # If external webserver is used, add the external webserver user to
 # GitLab webserver group
