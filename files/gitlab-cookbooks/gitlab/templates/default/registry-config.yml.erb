@@ -9,6 +9,8 @@ storage:
     blobdescriptor: inmemory
   filesystem:
     rootdirectory: <%= @registry_path %>
+  delete:
+    enabled: <%= @storage_delete_enabled %>
 http:
   addr: <%= @registry_http_addr %>
   secret: "<%= @http_secret %>"
