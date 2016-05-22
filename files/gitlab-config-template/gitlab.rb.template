@@ -312,8 +312,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###############################
 # Container registry settings #
 ###############################
-# see http://docs.gitlab.com/ce/administration/container_regitry.html
+# see http://docs.gitlab.com/ce/administration/container_registry.html
 #
+
+# registry_external_url 'https://registry.gitlab.example.com'
 
 # Settings used by GitLab application
 # gitlab_rails['registry_enabled'] = true
@@ -827,6 +829,5 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Registry NGINX #
 ##################
 
-# registry_external_url 'https://registry.gitlab.example.com'
 # registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
 # registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
