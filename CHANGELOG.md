@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.8.1
+
+- No changes
+
 8.8.0
 
 - Disable Rack Attack throttling if specified in config 631511f8
