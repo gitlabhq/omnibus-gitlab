@@ -25,7 +25,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl http2<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% end %>;
 <% end %>
   server_name  <%= @registry_host %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
