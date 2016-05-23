@@ -185,7 +185,7 @@ There are multiple ways to send notifications depending on how much control you'
 If you are using the Omnibus edition, enable incoming webhooks from the gitlab.rb file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
 
 ```ruby
-mattermost['enable_incoming_webhooks'] = true
+mattermost['service_enable_incoming_webhooks'] = true
 ```
 
 #### Setting up Mattermost as a Slack project service integration:
