@@ -510,10 +510,8 @@ module Gitlab
         raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
       end
 
-      if registry['enable'].nil?
-        registry['enable'] = true
-        Gitlab['gitlab_rails']['registry_enabled'] = true
-      end
+      registry['enable'] = true if registry['enable'].nil?
+      Gitlab['gitlab_rails']['registry_enabled'] = true if registry['enable']
 
       Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
       Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/,'')
