@@ -403,8 +403,8 @@ production: &base
     piwik_site_id: <%= single_quote(@extra_piwik_site_id) %>
     <% end %>
 
-    rack_attack:
-      git_basic_auth: <%= @rack_attack_git_basic_auth.to_json if @rack_attack_git_basic_auth %>
+  rack_attack:
+    git_basic_auth: <%= @rack_attack_git_basic_auth.to_json if @rack_attack_git_basic_auth %>
 
 
 development:
