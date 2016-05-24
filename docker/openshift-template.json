@@ -51,31 +51,31 @@
       "description": "Volume size for /logs",
       "displayName": "Logs volume size",
       "name": "LOGS_VOL_SIZE",
-      "value": "2Gi"
+      "value": "1Gi"
     },
     {
       "description": "Volume size for /etc",
-      "displayName": "/etc volume size",
+      "displayName": "/etc/gitlab volume size",
       "name": "ETC_VOL_SIZE",
-      "value": "512Mi"
+      "value": "100Mi"
     },
     {
       "description": "Volume size for /opt",
-      "displayName": "/opt volume size",
+      "displayName": "/var/opt/gitlab volume size",
       "name": "OPT_VOL_SIZE",
-      "value": "2Gi"
+      "value": "5Gi"
     },
     {
       "description": "Volume size for postgresql data",
       "displayName": "postgresql volume size",
       "name": "POSTGRESQL_VOL_SIZE",
-      "value": "5Gi"
+      "value": "2Gi"
     },
     {
       "description": "Volume size for redis data",
       "displayName": "redis volume size",
       "name": "REDIS_VOL_SIZE",
-      "value": "1Gi"
+      "value": "512Mi"
     }
   ],
   "objects": [
@@ -94,7 +94,7 @@
             "name": "8.7.1",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.7.1-ce.1"
+              "name": "gitlab/gitlab-ce:8.8.1-ce.0"
             }
           }
         ]
