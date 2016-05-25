@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.8.2
+
+- Update docker/distribution to 2.4.1 1c01c9c
+
 8.8.1
 
 - No changes
