@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.8.2
 
 - Update docker/distribution to 2.4.1 1c01c9c
+- Update libxml2 to 2.9.4 a3f7d6
 
 8.8.1
 
