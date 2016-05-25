@@ -348,6 +348,17 @@ default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
 default['gitlab']['postgresql']['wal_buffers'] = "-1"
+default['gitlab']['postgresql']['autovacuum'] = "on"
+default['gitlab']['postgresql']['log_autovacuum_min_duration'] = "-1"
+default['gitlab']['postgresql']['autovacuum_max_workers'] = "3"
+default['gitlab']['postgresql']['autovacuum_naptime'] = "1min"
+default['gitlab']['postgresql']['autovacuum_vacuum_threshold'] = "50"
+default['gitlab']['postgresql']['autovacuum_analyze_threshold'] = "50"
+default['gitlab']['postgresql']['autovacuum_vacuum_scale_factor'] = "0.2"
+default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.1"
+default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
+default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
+default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
