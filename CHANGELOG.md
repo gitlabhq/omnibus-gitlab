@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.9.0
 
-- Fix NGINX not starting with long server names by making the bucket size configurable and defaulting it to 64 bytes
+- Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes
 
 8.8.2
 
