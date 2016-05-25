@@ -312,13 +312,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###############################
 # Container registry settings #
 ###############################
-# see  LINK
+# see http://docs.gitlab.com/ce/administration/container_registry.html
 #
+
+# registry_external_url 'https://registry.gitlab.example.com'
 
 # Settings used by GitLab application
 # gitlab_rails['registry_enabled'] = true
 # gitlab_rails['registry_host'] = "registry.gitlab.example.com"
-# gitlab_rails['registry_port'] = "7443"
+# gitlab_rails['registry_port'] = "5005"
 # gitlab_rails['registry_api_url'] = "http://localhost:5000"
 # gitlab_rails['registry_key_path'] = "/var/opt/gitlab/gitlab-rails/certificate.key"
 # gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
@@ -834,3 +836,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Advanced settings
 # pages_nginx['dir'] = "/var/opt/gitlab/nginx"
 # pages_nginx['log_directory'] = "/var/log/gitlab/nginx"
+
+##################
+# Registry NGINX #
+##################
+
+# registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
+# registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
