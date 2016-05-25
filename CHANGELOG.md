@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Update docker/distribution to 2.4.1 1c01c9c
 - Update libxml2 to 2.9.4 a3f7d6
+- Add Postgresql autovacuuming configuration 289c25
 
 8.8.1
 
