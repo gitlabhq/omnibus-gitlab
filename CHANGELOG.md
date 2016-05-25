@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.0
+
+- Fix NGINX not starting with long server names by making the bucket size configurable and defaulting it to 64 bytes
+
 8.8.2
 
 - Update docker/distribution to 2.4.1 1c01c9c
