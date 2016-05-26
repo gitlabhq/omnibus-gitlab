@@ -806,3 +806,4 @@ default['gitlab']['pages-nginx']['enable'] = true
 ####
 default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['registry-nginx']['enable'] = true
+default['gitlab']['registry_nginx']['https'] = false
