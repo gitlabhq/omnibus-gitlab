@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-name "gitlab-ctl"
+name "gitlab-psql"
 
 build do
   block do
