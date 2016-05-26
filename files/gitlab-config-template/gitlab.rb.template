@@ -33,6 +33,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
 # gitlab_rails['gitlab_default_projects_features_snippets'] = false
 # gitlab_rails['gitlab_default_projects_features_builds'] = true
+# gitlab_rails['gitlab_default_projects_features_container_registry'] = true
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
