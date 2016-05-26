@@ -69,27 +69,9 @@ class PgHelper
   end
 
   def psql_cmd(cmd_list)
-    cmd = ["/opt/gitlab/embedded/bin/chpst",
-           "-u #{pg_user}",
-           "/opt/gitlab/embedded/bin/psql",
-           "-h #{pg_host}",
-           "--port #{pg_port}",
-           cmd_list.join(" ")].join(" ")
+    cmd = ["/opt/gitlab/bin/gitlab-psql", cmd_list.join(" ")].join(" ")
     success?(cmd)
   end
-
-  def pg_user
-    node['gitlab']['postgresql']['username']
-  end
-
-  def pg_port
-    node['gitlab']['postgresql']['port']
-  end
-
-  def pg_host
-    node['gitlab']['postgresql']['unix_socket_directory']
-  end
-
 end
 
 class OmnibusHelper
