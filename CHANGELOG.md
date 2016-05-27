@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.9.0
 
 - Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes
+- Add log prefix for pages and registry services
 
 8.8.3
 
