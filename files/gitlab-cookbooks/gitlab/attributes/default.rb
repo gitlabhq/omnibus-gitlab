@@ -84,6 +84,7 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_builds'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_container_registry'] = nil
 default['gitlab']['gitlab-rails']['gitlab_issue_closing_pattern'] = nil
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil

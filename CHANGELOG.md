@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes
 
+8.8.3
+
+ - Add gitlab_default_projects_features_container_registry variable
+
 8.8.2
 
 - Update docker/distribution to 2.4.1 1c01c9c
