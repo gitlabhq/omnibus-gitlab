@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.0
+
+- Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes
+
 8.8.2
 
 - Update docker/distribution to 2.4.1 1c01c9c
