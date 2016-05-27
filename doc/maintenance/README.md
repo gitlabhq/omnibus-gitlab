@@ -84,3 +84,19 @@ sudo gitlab-rails console
 ```
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
+
+### Starting a Postgres superuser psql session
+
+If you need superuser access to the bundled Postgres service you can
+use the `gitlab-psql` command. It takes the same arguments as the
+regular `psql` command.
+
+```shell
+# Superuser psql access to GitLab's database
+sudo gitlab-psql -d gitlabhq_production
+```
+
+This will only work after you have run `gitlab-ctl reconfigure` at
+least once. The `gitlab-psql` command cannot be used to connect to a
+remote Postgres server, nor to connect to a local non-Omnibus Postgres
+server.
