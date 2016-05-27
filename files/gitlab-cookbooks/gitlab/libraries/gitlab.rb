@@ -365,6 +365,34 @@ module Gitlab
       Gitlab['nginx']['proxy_set_headers'] = default_from_attributes
     end
 
+    def parse_registry_nginx_proxy_headers(https)
+      values_from_gitlab_rb = Gitlab['registry_nginx']['proxy_set_headers']
+      default_from_attributes = node['gitlab']['registry_nginx']['proxy_set_headers'].to_hash
+
+      default_from_attributes = if https
+                                  default_from_attributes.merge({
+                                                                 'X-Forwarded-Proto' => "https",
+                                                                 'X-Forwarded-Ssl' => "on"
+                                                               })
+                                else
+                                  default_from_attributes.merge({
+                                                                 "X-Forwarded-Proto" => "http"
+                                                               })
+                                end
+
+      if values_from_gitlab_rb
+        values_from_gitlab_rb.each do |key, value|
+          default_from_attributes.delete(key) if value.nil?
+        end
+
+        default_from_attributes = default_from_attributes.merge(values_from_gitlab_rb.to_hash)
+      end
+
+      Gitlab['registry_nginx']['proxy_set_headers'] = default_from_attributes
+    end
+
+
+
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= node['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
@@ -520,10 +548,15 @@ module Gitlab
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
-      if uri.scheme == "https"
+      case uri.scheme
+      when "http"
+        Gitlab['registry_nginx']['https'] ||= false
+        parse_registry_nginx_proxy_headers(false)
+      when "https"
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        parse_registry_nginx_proxy_headers(true)
       else
         raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
