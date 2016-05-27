@@ -21,7 +21,7 @@ name "gitlab-psql"
 
 # This 'software' is self-contained in this file. Use the file contents
 # to generate a version string.
-version Digest::MD5.file(__FILE__).hexdigest
+default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
   block do
