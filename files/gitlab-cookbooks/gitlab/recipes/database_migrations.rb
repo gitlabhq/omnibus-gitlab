@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'digest'
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 
@@ -21,12 +22,21 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
+connection_attributes = [
+  'db_adapter',
+  'db_database',
+  'db_host',
+  'db_port',
+  'db_socket'
+].collect { |attribute| node['gitlab']['gitlab-rails'][attribute] }
+connection_digest = Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
+
 revision_file = "/opt/gitlab/embedded/service/gitlab-rails/REVISION"
 if ::File.exist?(revision_file)
   revision = IO.read(revision_file).chomp
 end
 upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
-db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{revision}")
+db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
 
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
