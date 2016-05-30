@@ -47,7 +47,7 @@ fi
 . ${gitlab_psql_rc}
 
 if [ "$(id -n -u)" = "${psql_user}" ] ; then
-  privilige_drop=''
+  privilege_drop=''
 else
   privilege_drop="-u ${psql_user}"
 fi
