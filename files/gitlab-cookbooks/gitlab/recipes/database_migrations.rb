@@ -28,13 +28,6 @@ end
 upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
 db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{revision}")
 
-execute "initialize gitlab-rails database" do
-  command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
-  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
-  action :nothing
-  notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
-end
-
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
 # https://github.com/chef/chef/issues/4537
@@ -44,11 +37,12 @@ bash "migrate gitlab-rails database" do
     log_file="/tmp/gitlab-rails-db-migrate-$(date +%s)-$$/output.log"
     umask 077
     mkdir $(dirname ${log_file})
-    /opt/gitlab/bin/gitlab-rake db:migrate 2>& 1 | tee ${log_file}
+    /opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file}
     STATUS=${PIPESTATUS[0]}
     echo $STATUS > #{db_migrate_status_file}
     exit $STATUS
   EOH
+  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
   notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("postgresql") || !node['gitlab']['postgresql']['enable']
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless OmnibusHelper.not_listening?("redis")
   dependent_services.each do |svc|
