@@ -393,9 +393,7 @@ extension.
 1. Access `psql` as superuser:
 
     ```
-    sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql \
-                        -h /var/opt/gitlab/postgresql \
-                        -d gitlabhq_production
+    sudo gitlab-psql -d gitlabhq_production
     ```
 
 1. Enable the extension:
