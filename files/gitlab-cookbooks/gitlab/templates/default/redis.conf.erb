@@ -81,7 +81,7 @@ bind <%= @bind %>
 # you are sure you want clients from other hosts to connect to Redis
 # even if no authentication is configured, nor a specific set of interfaces
 # are explicitly listed using the "bind" directive.
-protected-mode yes
+# protected-mode yes
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
@@ -94,7 +94,7 @@ port <%= @port %>
 # will silently truncate it to the value of /proc/sys/net/core/somaxconn so
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
-tcp-backlog 511
+# tcp-backlog 511
 
 # Unix socket.
 #
@@ -139,7 +139,7 @@ daemonize no
 #                        UPSTART_JOB or NOTIFY_SOCKET environment variables
 # Note: these supervision methods only signal "process is ready."
 #       They do not enable continuous liveness pings back to your supervisor.
-supervised no
+# supervised no
 
 # If a pid file is specified, Redis writes it where specified at startup
 # and removes it at exit.
@@ -332,7 +332,7 @@ slave-read-only yes
 #
 # With slow disks and fast (large bandwidth) networks, diskless replication
 # works better.
-repl-diskless-sync no
+# repl-diskless-sync no
 
 # When diskless replication is enabled, it is possible to configure the delay
 # the server waits in order to spawn the child that transfers the RDB via socket
@@ -344,7 +344,7 @@ repl-diskless-sync no
 #
 # The delay is specified in seconds, and by default is 5 seconds. To disable
 # it entirely just set it to 0 seconds and the transfer will start ASAP.
-repl-diskless-sync-delay 5
+# repl-diskless-sync-delay 5
 
 # Slaves send PINGs to server in a predefined interval. It's possible to change
 # this interval with the repl_ping_slave_period option. The default value is 10
@@ -568,7 +568,7 @@ appendonly no
 
 # The name of the append only file (default: "appendonly.aof")
 
-appendfilename "appendonly.aof"
+# appendfilename "appendonly.aof"
 
 # The fsync() call tells the Operating System to actually write data on disk
 # instead of waiting for more data in the output buffer. Some OS will really flush
@@ -660,7 +660,7 @@ auto-aof-rewrite-min-size 64mb
 # the server will still exit with an error. This option only applies when
 # Redis will try to read more data from the AOF file but not enough bytes
 # will be found.
-aof-load-truncated yes
+# aof-load-truncated yes
 
 ################################ LUA SCRIPTING  ###############################
 
@@ -831,7 +831,7 @@ slowlog-max-len 128
 # impact, that while very small, can be measured under big load. Latency
 # monitoring can easily be enabled at runtime using the command
 # "CONFIG SET latency-monitor-threshold <milliseconds>" if needed.
-latency-monitor-threshold 0
+# latency-monitor-threshold 0
 
 ############################# EVENT NOTIFICATION ##############################
 
@@ -900,7 +900,7 @@ hash-max-ziplist-value 64
 # per list node.
 # The highest performing option is usually -2 (8 Kb size) or -1 (4 Kb size),
 # but if your use case is unique, adjust the settings as necessary.
-list-max-ziplist-size -2
+# list-max-ziplist-size -2
 
 # Lists may also be compressed.
 # Compress depth is the number of quicklist ziplist nodes from *each* side of
@@ -916,7 +916,7 @@ list-max-ziplist-size -2
 #    but compress all nodes between them.
 # 3: [head]->[next]->[next]->node->node->...->node->[prev]->[prev]->[tail]
 # etc.
-list-compress-depth 0
+# list-compress-depth 0
 
 # Sets have a special encoding in just one case: when a set is composed
 # of just strings that happen to be integers in radix 10 in the range
@@ -943,7 +943,7 @@ zset-max-ziplist-value 64
 # which is O(N) with the sparse encoding. The value can be raised to
 # ~ 10000 when CPU is not a concern, but space is, and the data set is
 # composed of many HyperLogLogs with cardinality in the 0 - 15000 range.
-hll-sparse-max-bytes 3000
+# hll-sparse-max-bytes 3000
 
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
