@@ -200,17 +200,18 @@ In the above example the affected table is called `merge_request_diffs`.
 
 ### Connecting to the bundled PostgreSQL database
 
-If you need to connect to the bundled PostgreSQL database and are using the
-default Omnibus GitLab database configuration, you can connect using:
+If you need to connect to the bundled PostgreSQL database and are
+using the default Omnibus GitLab database configuration, you can
+connect as the application user:
 
 ```bash
 sudo gitlab-rails dbconsole
 ```
 
-or use `psql` directly:
+or as a Postgres superuser:
 
 ```bash
-sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql -h /var/opt/gitlab/postgresql -d gitlabhq_production
+sudo gitlab-psql -d gitlabhq_production
 ```
 
 [ee-245]: https://gitlab.com/gitlab-org/gitlab-ee/issues/245 "MySQL collation issue"
