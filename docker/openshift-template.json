@@ -19,7 +19,7 @@
       "value": "gitlab-ce"
     },
     {
-      "description": "Custom hostname for service routes.  Leave blank for default hostname, e.g.: <application-name>.<project>.<default-domain-suffix>",
+      "description": "Custom hostname for service routes. Default works for the openshift all-in-one VM, e.g.: <application-name>.<project>.<default-domain-suffix>",
       "displayName": "Gitlab instance hostname",
       "name": "APPLICATION_HOSTNAME",
       "value": "gitlab.apps.10.2.2.2.xip.io"
@@ -106,7 +106,7 @@
       "metadata": {
         "name": "${APPLICATION_NAME}-redis",
         "labels": {
-          "app": "${APPLICATION_NAME}-redis"
+          "app": "${APPLICATION_NAME}"
         }
       },
       "spec": {
@@ -280,7 +280,7 @@
                   "failureThreshold": 3
                 },
                 "terminationMessagePath": "/dev/termination-log",
-                "imagePullPolicy": "Always"
+                "imagePullPolicy": "IfNotPresent"
               }
             ],
             "restartPolicy": "Always",
@@ -296,7 +296,7 @@
       "metadata": {
         "name": "${APPLICATION_NAME}-redis",
         "labels": {
-          "app": "${APPLICATION_NAME}-redis"
+          "app": "${APPLICATION_NAME}"
         }
       },
       "spec": {
@@ -394,7 +394,7 @@
       "metadata": {
         "name": "${APPLICATION_NAME}-postgresql",
         "labels": {
-          "app": "${APPLICATION_NAME}-postgresql"
+          "app": "${APPLICATION_NAME}"
         }
       },
       "spec": {
@@ -523,7 +523,7 @@
                   }
                 ],
                 "terminationMessagePath": "/dev/termination-log",
-                "imagePullPolicy": "Always"
+                "imagePullPolicy": "IfNotPresent"
               }
             ],
             "restartPolicy": "Always",
@@ -571,7 +571,7 @@
       "metadata": {
         "name": "${APPLICATION_NAME}-redis",
         "labels": {
-          "app": "${APPLICATION_NAME}-redis"
+          "app": "${APPLICATION_NAME}"
         }
       },
       "spec": {
