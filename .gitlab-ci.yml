@@ -90,7 +90,7 @@ Raspberry Pi 2 jessie:
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
   tags:
-  - docker-builder
+  - docker-rpi-builder
   except:
   - tags
 Raspberry Pi 2 wheezy:
@@ -99,7 +99,7 @@ Raspberry Pi 2 wheezy:
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
   tags:
-  - docker-builder
+  - docker-rpi-builder
   except:
   - tags
 
