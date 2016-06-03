@@ -444,7 +444,7 @@ module Gitlab
       end
 
       # FQDN are prepared to be used as regexp: the dot is escaped
-      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.sub('.', '\.')
+      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.gsub('.', '\.')
     end
 
     def parse_gitlab_pages_daemon
