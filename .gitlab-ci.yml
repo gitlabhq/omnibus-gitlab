@@ -8,6 +8,7 @@ before_script:
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache
+  - rm -rf /var/cache/omnibus
   - ln -s "$(pwd)/cache" /var/cache/omnibus
   - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
   - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
