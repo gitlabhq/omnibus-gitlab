@@ -22,6 +22,7 @@ before_script:
   script:
     - ssh -vvT git@dev.gitlab.org
     - make test
+    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
   except:
@@ -32,6 +33,7 @@ before_script:
   script:
     - ssh -vvT git@dev.gitlab.org
     - make do_release
+    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
   except:
@@ -93,6 +95,7 @@ Raspberry Pi 2 jessie:
   stage: package
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+  - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
   except:
@@ -102,6 +105,7 @@ Raspberry Pi 2 wheezy:
   stage: package
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+  - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
   except:
