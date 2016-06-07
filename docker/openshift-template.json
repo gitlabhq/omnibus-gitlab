@@ -236,17 +236,17 @@
                 "env": [
                   {
                     "name": "GITLAB_OMNIBUS_CONFIG",
-                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis';"
+                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis'; unicorn['worker_processes'] = 1;"
                   }
                 ],
                 "resources": {
                   "limits": {
-                    "cpu": "2",
+                    "cpu": "1",
                     "memory": "2Gi"
                   },
                   "requests": {
                     "cpu": "500m",
-                    "memory": "1536Mi"
+                    "memory": "1Gi"
                   }
                 },
                 "volumeMounts": [
