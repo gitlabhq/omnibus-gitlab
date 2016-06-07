@@ -8,6 +8,7 @@ before_script:
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache
+  - ln -s "$(pwd)/cache" /var/cache/omnibus
   - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
   - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
   - chmod -R 0600 ~/.ssh/
@@ -15,13 +16,8 @@ before_script:
   - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
   - bundle install --binstubs --path ~/gems
 
-.prepare_cache_template: &prepare_cache
-  script:
-    - rm -rf /var/cache/omnibus
-    - ln -s "$(pwd)/cache" /var/cache/omnibus
 .branch_template: &branch_build
   stage: package
-  <<: *prepare_cache
   script:
     - ssh -vvT git@dev.gitlab.org
     - make test
@@ -33,7 +29,6 @@ before_script:
 
 .tag_template: &tag_build
   stage: package
-  <<: *prepare_cache
   script:
     - ssh -vvT git@dev.gitlab.org
     - make do_release
