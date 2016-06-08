@@ -13,13 +13,13 @@ before_script:
 .branch_template: &branch_build
   stage: package
   script:
-    - ssh -vvT git@dev.gitlab.org
     - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
     - make test
     - rm -rf /var/cache/omnibus/pkg
   tags:
@@ -30,13 +30,13 @@ before_script:
 .tag_template: &tag_build
   stage: package
   script:
-    - ssh -vvT git@dev.gitlab.org
     - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
     - make do_release
     - rm -rf /var/cache/omnibus/pkg
   tags:
