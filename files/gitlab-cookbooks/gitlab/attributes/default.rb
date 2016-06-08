@@ -360,6 +360,7 @@ default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.01" # 10
 default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
+default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
