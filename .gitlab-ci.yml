@@ -1,135 +1,98 @@
 stages:
-  - notification_start
   - package
-  - notification_fail_pkg
-  - notification_success_pkg
+  - notification_fail
   - extra
-  - notification_fail_extra
-  - notification_success_extra
+  - notification_fail
 
 before_script:
+  - mkdir -p ~/.ssh
+  - mkdir -p ~/.aws
+  - mkdir -p cache
   - bundle install --binstubs --path ~/gems
 
 .branch_template: &branch_build
+  stage: package
   script:
+    - ln -s "$(pwd)/cache" /var/cache/omnibus
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
     - make test
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-builder
+  except:
+  - tags
+
 .tag_template: &tag_build
+  stage: package
   script:
+    - ln -s "$(pwd)/cache" /var/cache/omnibus
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
     - make do_release
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-builder
+  except:
+  - branches
+
+cache:
+  key: "$CI_BUILD_NAME"
+  paths:
+  - cache
 
 Ubuntu 12.04:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
   <<: *tag_build
-  tags:
-  - ubuntu1204
-  except:
-  - branches
 Ubuntu 14.04:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
   <<: *tag_build
-  tags:
-  - ubuntu1404
-  except:
-  - branches
 Ubuntu 16.04:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:xenial"
   <<: *tag_build
-  tags:
-  - ubuntu1604
-  except:
-  - branches
 Debian 7:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
   <<: *tag_build
-  tags:
-  - debian7
-  except:
-  - branches
 Debian 8:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
   <<: *tag_build
-  tags:
-  - debian8
-  except:
-  - branches
 Centos 6:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
   <<: *tag_build
-  tags:
-  - centos6
-  except:
-  - branches
 Centos 7:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
   <<: *tag_build
-  tags:
-  - centos7
-  except:
-  - branches
+
 Ubuntu 12.04 branch:
-  stage: package
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
   <<: *branch_build
-  tags:
-  - ubuntu1204
-  except:
-  - tags
 Ubuntu 14.04 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
   <<: *branch_build
-  tags:
-  - ubuntu1404
-  except:
-  - tags
 Ubuntu 16.04 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:xenial"
   <<: *branch_build
-  tags:
-  - ubuntu1604
-  except:
-  - tags
 Debian 7 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
   <<: *branch_build
-  tags:
-  - debian7
-  except:
-  - tags
 Debian 8 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
   <<: *branch_build
-  tags:
-  - debian8
-  except:
-  - tags
 CentOS 6 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
   <<: *branch_build
-  tags:
-  - centos6
-  except:
-  - tags
 CentOS 7 branch:
-  stage: package
-  script:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
   <<: *branch_build
-  tags:
-  - centos7
-  except:
-  - tags
+
 Raspberry Pi 2 branch:
   stage: extra
   script:
@@ -171,47 +134,11 @@ Docker:
   except:
   - branches
 
-notify:slack-fail-pkg:
-  stage: notification_fail_pkg
+notify:slack-fail:
+  stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+    - ./support/notify_slack.sh "#omnibus-builds" "Build `\$CI_BUILD_NAME\` on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_failure
-  only:
-    - master
-    - tags@gitlab/omnibus-gitlab
-
-notify:slack-fail-extra:
-  stage: notification_fail_extra
-  script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Docker or RPI2 build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
-  when: on_failure
-  only:
-    - master
-    - tags@gitlab/omnibus-gitlab
-
-notify:slack-success-pkg:
-  stage: notification_success_pkg
-  script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Package build on \`$CI_BUILD_REF_NAME\` finished! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
-  when: on_success
-  only:
-    - master
-    - tags@gitlab/omnibus-gitlab
-
-notify:slack-success-extra:
-  stage: notification_success_extra
-  script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Extra packages (Docker, RPI2) built on \`$CI_BUILD_REF_NAME\`! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
-  when: on_success
-  only:
-    - master
-    - tags@gitlab/omnibus-gitlab
-
-notify:slack-tag-start:
-  stage: notification_start
-  script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_BUILD_REF_NAME\` started! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
-  when: always
   only:
     - master
     - tags@gitlab/omnibus-gitlab
