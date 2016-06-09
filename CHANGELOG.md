@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.8.4
+
+ - No changes
+
 8.8.3
 
  - Add gitlab_default_projects_features_container_registry variable
