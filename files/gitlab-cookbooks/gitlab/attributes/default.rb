@@ -459,6 +459,7 @@ default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['gitlab']['registry']['log_level'] = "info"
 default['gitlab']['registry']['rootcertbundle'] = nil
 default['gitlab']['registry']['storage_delete_enabled'] = true
+default['gitlab']['registry']['storage'] = nil
 
 ####
 # Nginx
