@@ -4,7 +4,7 @@
   "metadata": {
     "name": "gitlab-ce",
     "annotations": {
-      "description": "Gitlab server. Scaling to more than one replica is not supported",
+      "description": "Gitlab server",
       "tags": "gitlab,VCS"
     }
   },
@@ -120,10 +120,10 @@
       "spec": {
         "tags": [
           {
-            "name": "2.8",
+            "name": "2.8.22",
             "from": {
               "kind": "DockerImage",
-              "name": "redis:2.8"
+              "name": "redis:2.8.22"
             }
           }
         ]
@@ -332,7 +332,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}-redis:2.8"
+                "name": "${APPLICATION_NAME}-redis:2.8.22"
               }
             }
           }
