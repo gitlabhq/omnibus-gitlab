@@ -489,6 +489,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # redis['enable'] = true
 # redis['username'] = "gitlab-redis"
+# redis['maxclients'] = "10000"
 # redis['uid'] = nil
 # redis['gid'] = nil
 
