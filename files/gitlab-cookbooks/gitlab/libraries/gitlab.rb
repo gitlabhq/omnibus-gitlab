@@ -340,7 +340,7 @@ module Gitlab
     end
 
     def parse_proxy_headers(app, https)
-      values_from_gitlab_rb = Gitlab[application]['proxy_set_headers']
+      values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
       default_from_attributes = node['gitlab'][app]['proxy_set_headers'].to_hash
 
       default_from_attributes = if https

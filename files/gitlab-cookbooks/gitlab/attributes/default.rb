@@ -811,4 +811,5 @@ default['gitlab']['registry_nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+	"X-Forwarded-Proto" => "$scheme"
 }
