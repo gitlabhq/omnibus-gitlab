@@ -1,119 +1,93 @@
 stages:
   - package
+  - notification_fail
   - extra
+  - notification_fail
 
 before_script:
+  - mkdir -p ~/.ssh
+  - mkdir -p ~/.aws
+  - mkdir -p cache
   - bundle install --binstubs --path ~/gems
 
+.branch_template: &branch_build
+  stage: package
+  script:
+    - ln -s "$(pwd)/cache" /var/cache/omnibus
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
+    - make test
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-builder
+  except:
+  - tags
+
+.tag_template: &tag_build
+  stage: package
+  script:
+    - ln -s "$(pwd)/cache" /var/cache/omnibus
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
+    - make do_release
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-builder
+  except:
+  - branches
+
+cache:
+  key: "$CI_BUILD_NAME"
+  paths:
+  - cache
+
 Ubuntu 12.04:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - ubuntu1204
-  except:
-  - branches
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
+  <<: *tag_build
 Ubuntu 14.04:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - ubuntu1404
-  except:
-  - branches
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
+  <<: *tag_build
 Debian 7:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - debian7
-  except:
-  - branches
-Centos 6:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - centos6
-  except:
-  - branches
-Centos 7:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - centos7
-  except:
-  - branches
-Ubuntu 12.04 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - ubuntu1204
-  except:
-  - tags
-Ubuntu 14.04 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - ubuntu1404
-  except:
-  - tags
-Debian 7 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - debian7
-  except:
-  - tags
-CentOS 6 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - centos6
-  except:
-  - tags
-CentOS 7 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - centos7
-  except:
-  - tags
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
+  <<: *tag_build
 Debian 8:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make do_release
-  tags:
-  - debian8
-  except:
-  - branches
-Debian 8 master:
-  stage: package
-  script:
-  - ssh -T git@dev.gitlab.org
-  - make test
-  tags:
-  - debian8
-  except:
-  - tags
-Raspberry Pi 2 master:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
+  <<: *tag_build
+Centos 6:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
+  <<: *tag_build
+Centos 7:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
+  <<: *tag_build
+
+Ubuntu 12.04 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
+  <<: *branch_build
+Ubuntu 14.04 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
+  <<: *branch_build
+Debian 7 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
+  <<: *branch_build
+Debian 8 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
+  <<: *branch_build
+CentOS 6 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
+  <<: *branch_build
+CentOS 7 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
+  <<: *branch_build
+
+Raspberry Pi 2 branch:
   stage: extra
   script:
   - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -146,3 +120,12 @@ Docker:
   - docker-build
   except:
   - branches
+
+notify:slack-fail:
+  stage: notification_fail
+  script:
+    - ./support/notify_slack.sh "#omnibus-builds" "Build `\$CI_BUILD_NAME\` on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+  when: on_failure
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
