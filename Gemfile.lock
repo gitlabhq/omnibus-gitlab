@@ -6,8 +6,8 @@ GIT
     omnibus-software (4.0.0)
 
 GIT
-  remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: 1b336f7474ac953f10df93df3e2f98ed90dc0687
+  remote: https://dev.gitlab.org/gitlab/omnibus.git
+  revision: be6630690f1798c0c9e06261b80ec2f830e3ab64
   branch: gitlab_omnibus
   specs:
     omnibus (4.0.0)
