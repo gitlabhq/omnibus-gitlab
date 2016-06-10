@@ -846,3 +846,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
 # registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
+# registry_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
+# registry_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# registry_nginx['proxy_set_headers'] = {
+#  "Host" => "$http_host",
+#  "X-Real-IP" => "$remote_addr",
+#  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+#  "X-Forwarded-Proto" => "https",
+#  "X-Forwarded-Ssl" => "on"
+# }

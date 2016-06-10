@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add log prefix for pages and registry services 48e29b
 - Change the autovacuum configuration defaults f5ac85
 - Update redis to 3.2.0 (Takuya Noguchi)
+- Add configuration that allows overriding proxy headers for Registry NGINX config (Alexander Zigelski)
 
 8.8.4
 

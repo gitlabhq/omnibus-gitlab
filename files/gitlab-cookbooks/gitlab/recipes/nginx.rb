@@ -141,6 +141,11 @@ template gitlab_pages_http_conf do
 end
 
 registry_nginx_vars = node['gitlab']['registry-nginx'].to_hash
+
+unless registry_nginx_vars['listen_https'].nil?
+  registry_nginx_vars['https'] = registry_nginx_vars['listen_https']
+end
+
 template gitlab_registry_http_conf do
   source "nginx-gitlab-registry-http.conf.erb"
   owner "root"
