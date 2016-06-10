@@ -20,6 +20,9 @@ user = AccountHelper.new(node).gitlab_user
 mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(node['gitlab']['gitlab-rails']['dir'], "etc", "mail_room.yml")
 
+# mail_room reads YAML-embedded ERB files, and this config file loads the GitLab Rails stack.
+# See: https://github.com/tpitale/mail_room/commit/d0cb7d2d9ecfb109f62f673dd907673777e04740
+# It does NOT work as a cookbook template at the moment.
 cookbook_file mail_room_config do
   notifies :restart, 'service[mailroom]'
 end
