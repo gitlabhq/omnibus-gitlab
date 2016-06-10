@@ -84,6 +84,7 @@ default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wiki'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_wall'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_snippets'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_projects_features_builds'] = nil
+default['gitlab']['gitlab-rails']['gitlab_default_projects_features_container_registry'] = nil
 default['gitlab']['gitlab-rails']['gitlab_issue_closing_pattern'] = nil
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
@@ -354,11 +355,12 @@ default['gitlab']['postgresql']['autovacuum_max_workers'] = "3"
 default['gitlab']['postgresql']['autovacuum_naptime'] = "1min"
 default['gitlab']['postgresql']['autovacuum_vacuum_threshold'] = "50"
 default['gitlab']['postgresql']['autovacuum_analyze_threshold'] = "50"
-default['gitlab']['postgresql']['autovacuum_vacuum_scale_factor'] = "0.2"
-default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.1"
+default['gitlab']['postgresql']['autovacuum_vacuum_scale_factor'] = "0.02" # 10x lower than PG defaults
+default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.01" # 10x lower than PG defaults
 default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
+default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
@@ -508,6 +510,7 @@ default['gitlab']['nginx']['proxy_cache'] = 'gitlab'
 default['gitlab']['nginx']['real_ip_trusted_addresses'] = [] # Each entry creates a set_real_ip_from directive
 default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
+default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 
 
 ###

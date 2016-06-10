@@ -414,7 +414,7 @@ log_min_duration_statement = <%= @log_min_duration_statement %>  # -1 is disable
 #track_activities = on
 #track_counts = on
 #track_functions = none     # none, pl, all
-#track_activity_query_size = 1024   # (change requires restart)
+track_activity_query_size = <%= node['gitlab']['postgresql']['track_activity_query_size'] %> # (change requires restart)
 #update_process_title = on
 #stats_temp_directory = 'pg_stat_tmp'
 

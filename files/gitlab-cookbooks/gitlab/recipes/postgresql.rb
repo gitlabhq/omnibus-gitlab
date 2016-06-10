@@ -134,16 +134,23 @@ end
 # Create the database, migrate it, and create the users we need, and grant them
 # privileges.
 ###
+
+# This template is needed to make the gitlab-psql script and PgHelper work
+template "/opt/gitlab/etc/gitlab-psql-rc" do
+  owner 'root'
+  group 'root'
+end
+
 pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
-bin_dir = "/opt/gitlab/embedded/bin"
 database_name = node['gitlab']['gitlab-rails']['db_database']
 gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
 sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
 
+
 if node['gitlab']['gitlab-rails']['enable']
   execute "create #{gitlab_sql_user} database user" do
-    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{gitlab_sql_user}\""
+    command "/opt/gitlab/bin/gitlab-psql -d template1 -c \"CREATE USER #{gitlab_sql_user}\""
     user postgresql_user
     # Added retries to give the service time to start on slower systems
     retries 20
@@ -151,7 +158,7 @@ if node['gitlab']['gitlab-rails']['enable']
   end
 
   execute "create #{database_name} database" do
-    command "#{bin_dir}/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
+    command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
     user postgresql_user
     retries 30
     notifies :run, "execute[initialize gitlab-rails database]", :immediately
@@ -159,7 +166,7 @@ if node['gitlab']['gitlab-rails']['enable']
   end
 
   execute "create #{sql_replication_user} replication user" do
-    command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_replication_user} REPLICATION\""
+    command "/opt/gitlab/bin/gitlab-psql -d template1 -c \"CREATE USER #{sql_replication_user} REPLICATION\""
     user postgresql_user
     # Added retries to give the service time to start on slower systems
     retries 20
@@ -168,7 +175,7 @@ if node['gitlab']['gitlab-rails']['enable']
 end
 
 execute "enable pg_trgm extension" do
-  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
+  command "/opt/gitlab/bin/gitlab-psql -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
   user postgresql_user
   retries 20
   action :nothing

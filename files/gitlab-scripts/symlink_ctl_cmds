@@ -7,6 +7,7 @@ usr_bin_symlinks="\
   ${DEST_DIR}/bin/gitlab-ctl \
   ${DEST_DIR}/bin/gitlab-rake \
   ${DEST_DIR}/bin/gitlab-rails \
+  ${DEST_DIR}/bin/gitlab-psql \
 "
 symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
 

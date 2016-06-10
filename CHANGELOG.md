@@ -3,6 +3,21 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.0
+
+- Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes 7cb488
+- Add log prefix for pages and registry services 48e29b
+- Change the autovacuum configuration defaults f5ac85
+- Update redis to 3.2.0 (Takuya Noguchi)
+
+8.8.4
+
+ - No changes
+
+8.8.3
+
+ - Add gitlab_default_projects_features_container_registry variable
+
 8.8.2
 
 - Update docker/distribution to 2.4.1 1c01c9c

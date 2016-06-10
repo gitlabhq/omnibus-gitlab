@@ -50,7 +50,7 @@ override :rubygems, version: 'v2.5.1'
 override :'chef-gem', version: '12.6.0'
 override :cacerts, version: '2016.04.20', source: { md5: '782dcde8f5d53b1b9e888fdf113c42b9' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
-override :redis, version: '2.8.24', source: { md5: '7b6eb6e4ccc050c351df8ae83c55a035' }
+override :redis, version: '3.2.0', source: { md5: '9ec99ff912f35946fdb56fe273140483' }
 override :postgresql, version: '9.2.16', source: { md5: 'a6ced0ccd4ce3279acfef9bac16a95ee' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
@@ -76,6 +76,7 @@ dependency "gitlab-rails"
 dependency "gitlab-shell"
 dependency "gitlab-workhorse"
 dependency "gitlab-ctl"
+dependency "gitlab-psql"
 dependency "gitlab-cookbooks"
 dependency "gitlab-selinux"
 dependency "gitlab-scripts"

@@ -229,6 +229,8 @@ module Gitlab
         gitlab-workhorse
         mailroom
         mattermost
+        gitlab-pages
+        registry
       }.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{node['hostname']} #{runit_sv}: "
       end
@@ -442,7 +444,7 @@ module Gitlab
       end
 
       # FQDN are prepared to be used as regexp: the dot is escaped
-      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.sub('.', '\.')
+      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.gsub('.', '\.')
     end
 
     def parse_gitlab_pages_daemon
@@ -558,6 +560,9 @@ module Gitlab
     end
 
     def generate_hash
+      # NOTE: If you are adding a new service
+      # and that service has logging, make sure you add the service to
+      # the array in parse_udp_log_shipping.
       results = { "gitlab" => {} }
       [
         "bootstrap",

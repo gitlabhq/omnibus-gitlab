@@ -317,9 +317,9 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/git-data/repositories` | 2770 | git:git | Holds git repositories |
 | `/var/opt/gitlab/gitlab-rails/shared` | 0751 | git:gitlab-www | Holds large object directories |
 | `/var/opt/gitlab/gitlab-rails/shared/artifacts` | 0700 | git:root | Holds CI artifacts |
-| `/var/opt/gitlab/gitlab-rails/shared/lfs` | 0700 | git:root | Holds LFS objects |
+| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects` | 0700 | git:root | Holds LFS objects |
 | `/var/opt/gitlab/gitlab-rails/uploads` | 0700 | git:root | Holds user attachments |
-| `/var/opt/gitlab/gitlab-pages` | 0750 | git:gitlab-www | Holds user pages |
+| `/var/opt/gitlab/gitlab-rails/shared/pages` | 0750 | git:gitlab-www | Holds user pages |
 | `/var/opt/gitlab/gitlab-ci/builds` | 0700 | git:root | Holds CI build logs |
 
 

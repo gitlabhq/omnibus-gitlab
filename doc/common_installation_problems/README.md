@@ -393,9 +393,7 @@ extension.
 1. Access `psql` as superuser:
 
     ```
-    sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql \
-                        -h /var/opt/gitlab/postgresql \
-                        -d gitlabhq_production
+    sudo gitlab-psql -d gitlabhq_production
     ```
 
 1. Enable the extension:
@@ -436,6 +434,18 @@ not be enough depending on the resource usage of other processes on your server.
 If GitLab runs fine when not upgrading or running a backup, then adding more swap
 should solve your problem. If you see the server using swap during normal usage,
 you can add more RAM to improve performance.
+
+### NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
+
+If your external url for GitLab is longer than the default bucket size (64 bytes),
+NGINX may stop working and show this error in the the logs. To allow larger server
+names, double the bucket size in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['server_names_hash_bucket_size'] = 128
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285

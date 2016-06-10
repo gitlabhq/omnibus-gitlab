@@ -33,6 +33,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
 # gitlab_rails['gitlab_default_projects_features_snippets'] = false
 # gitlab_rails['gitlab_default_projects_features_builds'] = true
+# gitlab_rails['gitlab_default_projects_features_container_registry'] = true
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
 # gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
@@ -467,11 +468,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['autovacuum_naptime'] = "1min"
 # postgresql['autovacuum_vacuum_threshold'] = "50"
 # postgresql['autovacuum_analyze_threshold'] = "50"
-# postgresql['autovacuum_vacuum_scale_factor'] = "0.2"
-# postgresql['autovacuum_analyze_scale_factor'] = "0.1"
+# postgresql['autovacuum_vacuum_scale_factor'] = "0.02"
+# postgresql['autovacuum_analyze_scale_factor'] = "0.01"
 # postgresql['autovacuum_freeze_max_age'] = "200000000"
 # postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
 # postgresql['autovacuum_vacuum_cost_limit'] = "-1"
+# postgresql['track_activity_query_size'] = "1024"
 
 ## Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
@@ -561,6 +563,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # nginx['keepalive_timeout'] = 65
 # nginx['cache_max_size'] = '5000m'
+# nginx['server_names_hash_bucket_size'] = 64
 
 
 
