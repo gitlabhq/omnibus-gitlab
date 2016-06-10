@@ -528,7 +528,7 @@ module Gitlab
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
-        parse_proxy_headers('registry_nginx' true)
+        parse_proxy_headers('registry_nginx', true)
       else
         raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
