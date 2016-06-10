@@ -338,6 +338,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['storage_delete_enabled'] = true
+# registry['storage'] = {
+#   's3' => {
+#     'accesskey' => 'AKIAKIAKI'.
+#     'secretkey' => 'secret123',
+#     'bucket' => 'gitlab-registry-bucket-AKIAKIAKI'
+#   }
+# }
 
 ####################
 # GitLab Workhorse #
