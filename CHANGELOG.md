@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Change the autovacuum configuration defaults f5ac85
 - Update redis to 3.2.0 (Takuya Noguchi)
 
+8.8.4
+
+ - No changes
+
 8.8.3
 
  - Add gitlab_default_projects_features_container_registry variable
