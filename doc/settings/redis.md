@@ -26,3 +26,15 @@ managed by omnibus-gitlab reachable via TCP.
 redis['port'] = 6379
 redis['bind'] = '127.0.0.1'
 ```
+
+## Increasing the number of Redis connections beyond the default
+
+By default Redis will only accept 10,000 client connections. If you need
+more that 10,000 connections set the 'maxclients' attribute to suite your needs.
+Be advised that adjusting the maxclients attribute means that you will also need
+to take into account your systems settings for fs.file-max (i.e. "sysctl -w fs.file-max=20000")
+
+```ruby
+redis['maxclients'] = 20000
+```
+
