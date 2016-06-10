@@ -489,6 +489,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # redis['enable'] = true
 # redis['username'] = "gitlab-redis"
+# redis['tcp_timeout'] = "60"
+# redis['tcp_keepalive'] = "0"
 # redis['uid'] = nil
 # redis['gid'] = nil
 

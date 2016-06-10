@@ -26,3 +26,16 @@ managed by omnibus-gitlab reachable via TCP.
 redis['port'] = 6379
 redis['bind'] = '127.0.0.1'
 ```
+
+## Tuning the TCP stack for Redis
+
+The following settings are to enable a more performant Redis server instance. 'tcp_timeout' is
+a value set in seconds that the Redis server waits before terminating an IDLE TCP connection.
+The 'tcp_keepalive' is a tunable setting in seconds to TCP ACKs to clients in absence of 
+communication.
+
+```ruby
+redis['tcp_timeout'] = "60"
+redis['tcp_keepalive'] = "0"
+```
+
