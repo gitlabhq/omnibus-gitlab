@@ -35,7 +35,7 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - echo "{'url':'https://packages.gitlab.com','token':'$PACKAGECLOUD_TOKEN'}" > ~/.packagecloud
+    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
     - make do_release
     - rm -rf /var/cache/omnibus/pkg
