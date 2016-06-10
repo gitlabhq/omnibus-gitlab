@@ -36,5 +36,16 @@ to take into account your systems settings for fs.file-max (i.e. "sysctl -w fs.f
 
 ```ruby
 redis['maxclients'] = 20000
+
+## Tuning the TCP stack for Redis
+
+The following settings are to enable a more performant Redis server instance. 'tcp_timeout' is
+a value set in seconds that the Redis server waits before terminating an IDLE TCP connection.
+The 'tcp_keepalive' is a tunable setting in seconds to TCP ACKs to clients in absence of 
+communication.
+
+```ruby
+redis['tcp_timeout'] = "60"
+redis['tcp_keepalive'] = "0"
 ```
 

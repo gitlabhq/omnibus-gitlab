@@ -106,7 +106,7 @@ unixsocket <%= @unixsocket %>
 unixsocketperm <%= @unixsocketperm %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
-timeout 0
+timeout <%= @tcp_timeout %>
 
 # TCP keepalive.
 #
@@ -122,7 +122,7 @@ timeout 0
 # On other kernels the period depends on the kernel configuration.
 #
 # A reasonable value for this option is 60 seconds.
-tcp-keepalive 0
+tcp-keepalive <%= @tcp_keepalive %>
 
 ################################# GENERAL #####################################
 
