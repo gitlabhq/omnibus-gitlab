@@ -106,7 +106,7 @@ unixsocket <%= @unixsocket %>
 unixsocketperm <%= @unixsocketperm %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
-timeout 0
+timeout <%= @tcp_timeout %>
 
 # TCP keepalive.
 #
@@ -122,7 +122,7 @@ timeout 0
 # On other kernels the period depends on the kernel configuration.
 #
 # A reasonable value for this option is 60 seconds.
-tcp-keepalive 0
+tcp-keepalive <%= @tcp_keepalive %>
 
 ################################# GENERAL #####################################
 
@@ -483,7 +483,7 @@ slave-priority 100
 # Once the limit is reached Redis will close all the new connections sending
 # an error 'max number of clients reached'.
 #
-# maxclients 10000
+maxclients <%= @maxclients %>
 
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
