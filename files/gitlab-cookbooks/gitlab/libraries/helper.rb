@@ -21,8 +21,8 @@ require 'uri'
 
 module ShellOutHelper
 
-  def do_shell_out(cmd)
-    o = Mixlib::ShellOut.new(cmd)
+  def do_shell_out(cmd, user = nil, cwd = nil)
+    o = Mixlib::ShellOut.new(cmd, user: user, cwd: cwd)
     o.run_command
     o
   rescue Errno::EACCES
@@ -359,5 +359,34 @@ class VersionHelper
     else
       nil
     end
+  end
+end
+
+class MattermostHelper
+  extend ShellOutHelper
+
+  def self.version(path, user)
+    cmd = version_cmd(path)
+    result = do_shell_out(cmd, user, "/opt/gitlab/embedded/service/mattermost")
+
+    if result.exitstatus == 0
+      result.stdout
+    else
+      nil
+    end
+  end
+
+  def self.version_cmd(path)
+    "/opt/gitlab/embedded/bin/mattermost -config='#{path}' -version"
+  end
+
+  def self.upgrade_db_30(path, user, team_name)
+    cmd = upgrade_db_30_cmd(path, team_name)
+    result = do_shell_out(cmd, user, "/opt/gitlab/embedded/service/mattermost")
+    [result.exitstatus, result.stdout]
+  end
+
+  def self.upgrade_db_30_cmd(path, team_name)
+    "/opt/gitlab/embedded/bin/mattermost -config='#{path}' -upgrade_db_30 -confirm_backup='YES' -team_name='#{team_name}'"
   end
 end
