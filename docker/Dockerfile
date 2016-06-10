@@ -11,7 +11,7 @@ RUN apt-get update -q \
       vim \
       nano \
       patch \
-      git-annex
+      git-annex && rm -rf /var/lib/apt/lists/*
 
 # Remove MOTD
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic

@@ -360,6 +360,7 @@ default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.01" # 10
 default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
+default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
@@ -808,3 +809,10 @@ default['gitlab']['pages-nginx']['enable'] = true
 ####
 default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['registry-nginx']['enable'] = true
+default['gitlab']['registry_nginx']['https'] = false
+default['gitlab']['registry_nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+	"X-Forwarded-Proto" => "$scheme"
+}
