@@ -5,15 +5,16 @@ omnibus-gitlab repository.
 
 8.8.6
 
- - No changes
+- Update version of pcre
+- Update version of expat
 
 8.8.5
 
- - No changes
+- No changes
 
 8.8.4
 
- - No changes
+- No changes
 
 8.8.3
 

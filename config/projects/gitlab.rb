@@ -54,6 +54,8 @@ override :redis, version: '2.8.24', source: { md5: '7b6eb6e4ccc050c351df8ae83c55
 override :postgresql, version: '9.2.16', source: { md5: 'a6ced0ccd4ce3279acfef9bac16a95ee' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
+override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9' }
+override :expat, version: '2.1.1', source: { md5: '7380a64a8e3a9d66a9887b01d0d7ea81', url: "http://iweb.dl.sourceforge.net/project/expat/expat/2.1.1/expat-2.1.1.tar.bz2" }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
