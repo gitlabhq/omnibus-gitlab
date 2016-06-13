@@ -5,7 +5,8 @@ omnibus-gitlab repository.
 
 8.7.8
 
-- No changes
+- Update version of pcre
+- Update version of expat
 
 8.7.7
 
