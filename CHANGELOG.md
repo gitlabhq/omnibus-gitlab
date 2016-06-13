@@ -10,6 +10,8 @@ omnibus-gitlab repository.
 - Change the autovacuum configuration defaults f5ac85
 - Update redis to 3.2.0 (Takuya Noguchi)
 - Add configuration that allows overriding proxy headers for Registry NGINX config (Alexander Zigelski)
+- Update version of pcre
+- Update version of expat
 
 8.8.4
 
