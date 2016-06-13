@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Add configuration that allows overriding proxy headers for Registry NGINX config (Alexander Zigelski)
 - Update version of pcre
 - Update version of expat
+- Update postgresql to 9.2.17 (Takuya Noguchi)
 
 8.8.4
 
