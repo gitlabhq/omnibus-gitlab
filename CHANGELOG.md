@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Update version of pcre
 - Update version of expat
 - Update postgresql to 9.2.17 (Takuya Noguchi)
+- Add expire_build_artifacts_worker cron config
 
 8.8.4
 
