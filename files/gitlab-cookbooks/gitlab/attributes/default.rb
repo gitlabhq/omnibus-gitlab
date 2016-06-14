@@ -256,7 +256,7 @@ default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or HTTP(S) Git pushes will no longer work.
+  1,
   [
     # Cores + 1 gives good CPU utilization.
     node['cpu']['total'].to_i + 1,
@@ -264,7 +264,7 @@ default['gitlab']['unicorn']['worker_processes'] = [
     # 128000 KB in the numerator to get rounding instead of integer truncation.
     (node['memory']['total'].to_i - 1048576 + 128000) / 358400
   ].min # min because we want to exceed neither CPU nor RAM
-].max # max because we need at least 2 workers
+].max # max because we need at least 1 worker
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
