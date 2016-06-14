@@ -8,11 +8,15 @@ omnibus-gitlab repository.
 - Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes 7cb488
 - Add log prefix for pages and registry services 48e29b
 - Change the autovacuum configuration defaults f5ac85
-- Update redis to 3.2.0 (Takuya Noguchi)
-- Add configuration that allows overriding proxy headers for Registry NGINX config (Alexander Zigelski)
-- Update version of pcre
-- Update version of expat
-- Update postgresql to 9.2.17 (Takuya Noguchi)
+- Update redis to 3.2.0 (Takuya Noguchi) 357263
+- Add configuration that allows overriding proxy headers for Registry NGINX config (Alexander Zigelski) 046c84c
+- Update version of pcre ac72670
+- Update version of expat ac72670
+- Update postgresql to 9.2.17 (Takuya Noguchi) 6e0c0f
+- Make one unicorn new default 0ddd2
+- Trim Docker image size 2aedc2
+- Expose track_activity_query_size setting for Postgresql 5ebd7c
+- Expose maxclients setting for Redis 535540c
 
 8.8.4
 
