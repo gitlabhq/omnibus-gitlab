@@ -261,6 +261,10 @@ omnibus-gitlab repository.
 - Add gitlab-workhorse config for proxy_headers_timeout d3de62c54b5efe1d5f60c2dccef65e786b631c3b
 - Bundle unzip which is required for EE features 56e1fc0b11cd2fb5458fa8a9585d3a1f4faa8d6f
 
+8.3.10
+
+- Build curl dependency without libssh2 17e41f8
+
 8.3.9
 
 - No changes
