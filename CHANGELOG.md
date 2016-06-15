@@ -130,6 +130,10 @@ omnibus-gitlab repository.
 - No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
 - Add configuration option to disable management of storage directories 81a370d3
 
+8.5.13
+
+- Build curl dependency without libssh2 17e41f8
+
 8.5.12
 
 - No changes
