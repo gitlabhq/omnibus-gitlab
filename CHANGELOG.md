@@ -310,6 +310,10 @@ omnibus-gitlab repository.
 - Added support for GitLab Pages aef69fe5fccbd14c9c0112bae58d5ecaa6e680bd
 - Updated Mattermost to v1.3.0 53d8606cf3642949ced4d6e8432d4b45b0541c88
 
+8.2.6
+
+- Build curl dependency without libssh2 17e41f8
+
 8.2.5
 
 - cacerts to 2016.04.20
