@@ -3,6 +3,11 @@
 If you would rather send application email via an SMTP server instead of via
 Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
+
+> :warning: Your `smtp_password` should not contain any String delimiters used in
+Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
+config settings.
+
 There are [example configurations](#examples) at the end of this page.
 
 ```ruby
