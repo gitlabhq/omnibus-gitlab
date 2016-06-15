@@ -196,6 +196,10 @@ omnibus-gitlab repository.
 - Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
 - Added configuration options for new allow_single_sign_on behavior and auto_link_saml_user 96ba41274864857f494e220a684e9e34954c85d1
 
+8.4.11
+
+- Build curl dependency without libssh2 17e41f8
+
 8.4.10
 
 - No changes
