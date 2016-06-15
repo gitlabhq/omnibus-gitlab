@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Trim Docker image size 2aedc2
 - Expose track_activity_query_size setting for Postgresql 5ebd7c
 - Expose maxclients setting for Redis 535540c
+- Add expire_build_artifacts_worker cron config
 
 8.8.4
 
