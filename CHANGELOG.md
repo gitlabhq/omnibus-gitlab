@@ -82,6 +82,10 @@ omnibus-gitlab repository.
 - Add SMTP ssl configuration option (wu0407) 4a377fc2
 - Build curl dependency without libssh2 17e41f8
 
+8.6.9
+
+- Build curl dependency without libssh2 17e41f8
+
 8.6.8
 
 - Update Mattermost download URL from GitHub to releases.mattermost.com
