@@ -19,6 +19,10 @@ omnibus-gitlab repository.
 - Expose maxclients setting for Redis 535540c
 - Add expire_build_artifacts_worker cron config
 
+8.8.5
+
+ - No changes
+
 8.8.4
 
  - No changes
