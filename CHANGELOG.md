@@ -45,6 +45,10 @@ omnibus-gitlab repository.
 - Add support for Container Registry f74472d
 - Add maintenance_work_mem and wal_buffers Postgresql settings 5675dc
 
+8.7.7
+
+- No changes
+
 8.7.3
 
 - Update openssl to 1.0.2h
