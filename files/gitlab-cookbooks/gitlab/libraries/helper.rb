@@ -18,6 +18,7 @@
 
 require 'mixlib/shellout'
 require 'uri'
+require 'digest'
 
 module ShellOutHelper
 
@@ -437,7 +438,7 @@ class CertificateHelper
       when is_x509_certificate?(file)
         move_certificate(file)
       else
-        notify_and_raise(file)
+        raise_msg(file)
       end
     end
   end
@@ -456,9 +457,22 @@ class CertificateHelper
     end
   end
 
-  def notify_and_raise(file)
-    puts "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
-    puts "=====\n"
-    raise
+  def link_certificates
+    Dir.glob(File.join(@trusted_certs_dir, "*")) do |trusted_cert|
+      if is_x509_certificate?(trusted_cert)
+        certificate = OpenSSL::X509::Certificate.new(File.read(trusted_cert))
+        certificate_hash = certificate.subject.hash.to_s(16)
+        ext = Digest::MD5.file(File.realpath(trusted_cert)).hexdigest
+        symlink_path = File.join(@omnibus_certs_dir, "#{certificate_hash}.#{ext}")
+
+        FileUtils.ln_s trusted_cert, symlink_path unless File.exist?(symlink_path)
+      else
+        raise_msg(trusted_cert)
+      end
+    end
+  end
+
+  def raise_msg(file)
+    raise "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
   end
 end

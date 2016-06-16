@@ -37,37 +37,8 @@ end
 
 ruby_block 'create-certificate-symlinks' do
   block do
-    keep_files_array = Array.new
-    keep_files_array << "#{install_dir}/embedded/ssl/certs/cacert.pem"
-    keep_files_array << "#{install_dir}/embedded/ssl/certs/README"
-
-    Dir.glob("#{trusted_certs_dir}/*") do |trusted_cert|
-      if cert_helper.is_x509_certificate?(trusted_cert)
-        certificate = OpenSSL::X509::Certificate.new(File.read(trusted_cert))
-        hash_value = certificate.subject.hash.to_s(16)
-
-        for i in 0..9
-          symlink_path_i = "#{install_dir}/embedded/ssl/certs/#{hash_value}.#{i}"
-          if File.exist?(symlink_path_i) then
-            if File.realpath(symlink_path_i).to_s == trusted_cert.to_s
-              keep_files_array << symlink_path_i
-              break
-            end
-          else
-            keep_files_array << symlink_path_i
-            FileUtils.ln_s trusted_cert, symlink_path_i
-            break
-          end
-        end
-      else
-        cert_helper.notify_and_raise(trusted_certs_dir)
-      end
-    end
-
-    # remove any additional files in dir
-    Dir.glob("#{install_dir}/embedded/ssl/certs/*") do |certs_file|
-      File.delete(certs_file) if not keep_files_array.include? certs_file
-    end
+    puts "\n\Symlinking existing certificates found in #{trusted_certs_dir}\n"
+    cert_helper.link_certificates
   end
   action :create
 end
