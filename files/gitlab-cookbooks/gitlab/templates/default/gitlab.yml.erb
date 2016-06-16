@@ -167,6 +167,16 @@ production: &base
     # Flag stuck CI builds as failed
     stuck_ci_builds_worker:
       cron: <%= @stuck_ci_builds_worker_cron %>
+    # Remove expired build artifacts
+    expire_build_artifacts_worker:
+      cron: <%= @expire_build_artifacts_worker_cron %>
+    # Periodically run 'git fsck' on all repositories. If started more than
+    # once per hour you will have concurrent 'git fsck' jobs.
+    repository_check_worker:
+      cron: <%= @repository_check_worker_cron %>
+    # Send admin emails once a week
+    admin_email_worker:
+      cron: <%= @admin_email_worker_cron %>
 
     # Remove outdated repository archives
     repository_archive_cache_worker:

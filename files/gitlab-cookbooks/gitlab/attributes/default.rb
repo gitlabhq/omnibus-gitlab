@@ -90,6 +90,9 @@ default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['stuck_ci_builds_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['expire_build_artifacts_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['update_all_mirrors_worker_cron'] = nil
@@ -256,7 +259,7 @@ default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or HTTP(S) Git pushes will no longer work.
+  2, # Two is the minimum or web editor will no longer work.
   [
     # Cores + 1 gives good CPU utilization.
     node['cpu']['total'].to_i + 1,
