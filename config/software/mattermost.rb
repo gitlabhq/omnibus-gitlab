@@ -26,10 +26,11 @@ build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./api/templates #{install_dir}/embedded/service/mattermost/api/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./templates #{install_dir}/embedded/service/mattermost/"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./i18n #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/static #{install_dir}/embedded/service/mattermost/web/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/templates #{install_dir}/embedded/service/mattermost/web/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./fonts #{install_dir}/embedded/service/mattermost/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./webapp #{install_dir}/embedded/service/mattermost/"
+
 
   block do
     license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
