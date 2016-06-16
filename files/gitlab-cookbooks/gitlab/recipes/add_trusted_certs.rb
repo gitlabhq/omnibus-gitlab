@@ -1,82 +1,36 @@
-# add_trusted_certs.rb
-
-cert_helper = CertificateHelper.new
-
+#
+# Copyright:: Copyright (c) 2016 GitLab Inc.
+# License:: MIT
+#
 install_dir = node['package']['install-dir']
 trusted_certs_dir = node['gitlab']['gitlab-rails']['trusted_certs_dir']
+ssl_certs_directory =  File.join(install_dir, "embedded/ssl/certs")
+readme_file = File.join(ssl_certs_directory, "README")
+cacert_file = File.join(ssl_certs_directory, "cacert.pem")
 
+cert_helper = CertificateHelper.new(trusted_certs_dir, ssl_certs_directory)
 
-directory "#{trusted_certs_dir}" do
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-  action :create
+[
+  trusted_certs_dir,
+  ssl_certs_directory
+].each do |directory_name|
+   directory directory_name do
+     recursive true
+     mode "0755"
+   end
 end
 
-
-directory "#{install_dir}/embedded/ssl/certs" do
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-  action :create
-end
-
-
-file "#{install_dir}/embedded/ssl/certs/README" do
-  owner "root"
-  group "root"
+file readme_file do
   mode "0644"
-  content "This directory is managed by omnibus-gitlab. Put certificates you want to add to the store in #{trusted_certs_dir}.\n"
-  notifies :run, 'ruby_block[move-existing-certificates]', :before
+  content "This directory is managed by omnibus-gitlab.\n Any file placed in this directory will be ignored\n. Place certificates in #{trusted_certs_dir}.\n"
+  notifies :run, 'ruby_block[copy-existing-certificates]', :before
 end
 
-
-ruby_block 'move-existing-certificates' do
-  # move existing certificate(s) into #{trusted_certs_dir}
+# Copy existing certificate(s) into #{trusted_certs_dir}
+ruby_block 'copy-existing-certificates' do
   block do
-    puts "\nPerform (one time) move of certificates existing in #{install_dir}/embedded/ssl/certs/"
-    # use glob to get Array of all files
-    # - "cacert.pem" -> ignore
-    # - "README" -> ignore
-    # - if symlink:
-    #   - if pointing to #{trusted_certs_dir} -> ignore
-    #   - else
-    #     - if pointing to non certificate file -> fail
-    #     - else
-    #       -> copy certificate to #{trusted_certs_dir}
-    # - else (not symlink)
-    #   - if not valid certifcate -> fail
-    #   - else
-    #     -> copy certificate to #{trusted_certs_dir}
-    Dir.glob("#{install_dir}/embedded/ssl/certs/*") do |file|
-      if file == "#{install_dir}/embedded/ssl/certs/cacert.pem"
-        next
-      elsif file == "#{install_dir}/embedded/ssl/certs/README"
-        next
-      elsif File.symlink?(file)
-        if File.realpath(file).start_with?("#{trusted_certs_dir}")
-          next
-        else
-          if !cert_helper.is_x509_certificate?(file)
-            puts "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
-            puts "=====\n"
-            raise
-          else
-            FileUtils.cp(File.realpath(file), trusted_certs_dir)
-          end
-        end
-      else
-        if !cert_helper.is_x509_certificate?(file)
-          puts "ERROR: Not a certificate: #{file}"
-          puts "=====\n"
-          raise
-        else
-          FileUtils.cp(file, trusted_certs_dir)
-        end
-      end
-    end
+    puts "\n\nMoving existing certificates found in #{ssl_certs_directory}\n"
+    cert_helper.move_existing_certificates
   end
   action :nothing
 end
@@ -88,11 +42,7 @@ ruby_block 'create-certificate-symlinks' do
     keep_files_array << "#{install_dir}/embedded/ssl/certs/README"
 
     Dir.glob("#{trusted_certs_dir}/*") do |trusted_cert|
-      if !cert_helper.is_x509_certificate?(trusted_cert)
-        puts "ERROR: Not a x509 certificate: #{trusted_cert}"
-        puts "=====\n"
-        raise
-      else
+      if cert_helper.is_x509_certificate?(trusted_cert)
         certificate = OpenSSL::X509::Certificate.new(File.read(trusted_cert))
         hash_value = certificate.subject.hash.to_s(16)
 
@@ -109,6 +59,8 @@ ruby_block 'create-certificate-symlinks' do
             break
           end
         end
+      else
+        cert_helper.notify_and_raise(trusted_certs_dir)
       end
     end
 
@@ -119,4 +71,3 @@ ruby_block 'create-certificate-symlinks' do
   end
   action :create
 end
-

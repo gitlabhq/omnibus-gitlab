@@ -393,6 +393,11 @@ end
 
 class CertificateHelper
 
+  def initialize(trusted_cert_dir, omnibus_cert_dir)
+    @trusted_certs_dir = trusted_cert_dir
+    @omnibus_certs_dir = omnibus_cert_dir
+  end
+
   def is_x509_certificate?(file)
     begin
       OpenSSL::X509::Certificate.new(File.read(file)) # DER- or PEM-encoded
@@ -404,5 +409,56 @@ class CertificateHelper
       warn(e.message)
       false
     end
+  end
+
+  def whitelisted_files
+    [
+      File.join(@omnibus_certs_dir, "README"),
+      File.join(@omnibus_certs_dir, "cacert.pem")
+    ]
+  end
+
+  # Get all files in /opt/gitlab/embedded/ssl/certs
+  # - "cacert.pem" -> ignore
+  # - "README" -> ignore
+  # - if valid certificate
+  #   - if symlink
+  #     - ignore if pointing to /etc/gitlab/ssl/trusted-certs
+  #     - copy to trusted-certs dir
+  #   - else
+  #     - copy to trusted-certs dir
+  # - else (not valid)
+  #   raise and error
+  def move_existing_certificates
+    Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
+      case
+      when whitelisted_files.include?(file)
+        next
+      when is_x509_certificate?(file)
+        move_certificate(file)
+      else
+        notify_and_raise(file)
+      end
+    end
+  end
+
+  def move_certificate(file)
+    if File.symlink?(file)
+      real_file_path = File.realpath(file)
+
+      unless real_file_path.start_with?(@trusted_certs_dir)
+        FileUtils.mv(real_file_path, @trusted_certs_dir, force: true)
+        puts "\n Moving #{file}"
+      end
+    else
+      FileUtils.mv(file, @trusted_certs_dir, force: true)
+      puts "\n Moving #{file}"
+    end
+  end
+
+  def notify_and_raise(file)
+    puts "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
+    puts "=====\n"
+    raise
   end
 end
