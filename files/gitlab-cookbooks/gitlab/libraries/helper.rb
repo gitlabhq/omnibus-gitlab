@@ -383,7 +383,7 @@ class MattermostHelper
   def self.upgrade_db_30(path, user, team_name)
     cmd = upgrade_db_30_cmd(path, team_name)
     result = do_shell_out(cmd, user, "/opt/gitlab/embedded/service/mattermost")
-    [result.exitstatus, result.stdout]
+    result.exitstatus
   end
 
   def self.upgrade_db_30_cmd(path, team_name)

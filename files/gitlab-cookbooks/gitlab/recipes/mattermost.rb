@@ -121,30 +121,31 @@ if mattermost_version.nil?
   end
 
   if backup_done && default_team_name_set
-    status, result =  MattermostHelper.upgrade_db_30(config_file_path, mattermost_user, default_team_name_for_v2_upgrade)
-    if status == 0
-      service "mattermost" do
-        action :start
-      end
-    else
-      bash "Show the message of the failed upgrade." do
-        code <<-EOS
-          echo "!!!!Automatic database upgrade failed.!!!\n
-          If you are upgrading from Mattermost v2 to v3
-          make sure that you have backed up your database
-          and then in /etc/gitlab/gitlab.rb set:
+    status =  MattermostHelper.upgrade_db_30(config_file_path, mattermost_user, default_team_name_for_v2_upgrade)
 
-          mattermost['db2_backup_created'] = true
-          mattermost['db2_team_name'] = "TEAMNAME"\n
-
-          where "TEAMNAME" is the name of the default team.
-          Run gitlab-ctl reconfigure again.
-          See LINK for more information.\n
-          " >> #{log_file}
-        EOS
-      end
+    execute "/opt/gitlab/bin/gitlab-ctl start mattermost" do
+      retries 2
+      only_if { status == 0 }
     end
   end
+end
+
+bash "Show the message of the failed upgrade." do
+  code <<-EOS
+    echo "!!!!Automatic database upgrade failed.!!!\n
+    If you are upgrading from Mattermost v2 to v3
+    make sure that you have backed up your database
+    and then in /etc/gitlab/gitlab.rb set:
+
+    mattermost['db2_backup_created'] = true
+    mattermost['db2_team_name'] = "TEAMNAME"\n
+
+    where "TEAMNAME" is the name of the default team.
+    Run gitlab-ctl reconfigure again.
+    See LINK for more information.\n
+    " >> #{log_file}
+  EOS
+  only_if { mattermost_version.nil? && !(backup_done && default_team_name_set) }
 end
 
 ###############
