@@ -259,7 +259,7 @@ default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or HTTP(S) Git pushes will no longer work.
+  2, # Two is the minimum or web editor will no longer work.
   [
     # Cores + 1 gives good CPU utilization.
     node['cpu']['total'].to_i + 1,
