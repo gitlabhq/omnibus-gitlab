@@ -4,7 +4,7 @@
   "metadata": {
     "name": "gitlab-ce",
     "annotations": {
-      "description": "Gitlab server",
+      "description": "GitLab server",
       "tags": "gitlab,VCS"
     }
   },
@@ -19,7 +19,7 @@
       "value": "gitlab-ce"
     },
     {
-      "description": "Custom hostname for service routes. Default works for the openshift all-in-one VM, e.g.: <application-name>.<project>.<default-domain-suffix>",
+      "description": "Custom hostname for service routes. Default works for the OpenShift all-in-one VM, e.g.: <application-name>.<project>.<default-domain-suffix>",
       "displayName": "Gitlab instance hostname",
       "name": "APPLICATION_HOSTNAME",
       "value": "gitlab.apps.10.2.2.2.xip.io"
@@ -99,10 +99,10 @@
       "spec": {
         "tags": [
           {
-            "name": "8.8.3",
+            "name": "8.8.5",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.8.3-ce.0"
+              "name": "gitlab/gitlab-ce:8.8.5-ce.1"
             }
           }
         ]
@@ -180,7 +180,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:8.8.3"
+                "name": "${APPLICATION_NAME}:8.8.5"
               }
             }
           }
