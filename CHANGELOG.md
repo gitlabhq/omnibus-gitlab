@@ -19,6 +19,10 @@ omnibus-gitlab repository.
 - Expose maxclients setting for Redis 535540c
 - Add expire_build_artifacts_worker cron config
 
+8.8.5
+
+ - No changes
+
 8.8.4
 
  - No changes
@@ -44,6 +48,10 @@ omnibus-gitlab repository.
 - Check mountpoint before starting up pages daemon a53e7a0
 - Add support for Container Registry f74472d
 - Add maintenance_work_mem and wal_buffers Postgresql settings 5675dc
+
+8.7.7
+
+- No changes
 
 8.7.3
 
@@ -80,6 +88,10 @@ omnibus-gitlab repository.
 - Add configuration repository_archive_cache_worker_cron 8240ab3a
 - Update the docker update-permissions script 13343b4f
 - Add SMTP ssl configuration option (wu0407) 4a377fc2
+- Build curl dependency without libssh2 17e41f8
+
+8.6.9
+
 - Build curl dependency without libssh2 17e41f8
 
 8.6.8
@@ -129,6 +141,10 @@ omnibus-gitlab repository.
 - Update mattermost to v2.1.0 f555c232
 - No static content delivery via nginx anymore as we have workhorse (Artem Sidorenko) 89b72505
 - Add configuration option to disable management of storage directories 81a370d3
+
+8.5.13
+
+- Build curl dependency without libssh2 17e41f8
 
 8.5.12
 
@@ -196,6 +212,10 @@ omnibus-gitlab repository.
 - Add support for gitlab-pages daemon 0bbaba4d698306f5a2640cdf915129f5e6dd6d80
 - Added configuration options for new allow_single_sign_on behavior and auto_link_saml_user 96ba41274864857f494e220a684e9e34954c85d1
 
+8.4.11
+
+- Build curl dependency without libssh2 17e41f8
+
 8.4.10
 
 - No changes
@@ -261,6 +281,10 @@ omnibus-gitlab repository.
 - Add gitlab-workhorse config for proxy_headers_timeout d3de62c54b5efe1d5f60c2dccef65e786b631c3b
 - Bundle unzip which is required for EE features 56e1fc0b11cd2fb5458fa8a9585d3a1f4faa8d6f
 
+8.3.10
+
+- Build curl dependency without libssh2 17e41f8
+
 8.3.9
 
 - No changes
@@ -309,6 +333,10 @@ omnibus-gitlab repository.
 - Update openssl to 1.0.1q f99fd257a6aa541662095fb72ce8af802c59c3a0
 - Added support for GitLab Pages aef69fe5fccbd14c9c0112bae58d5ecaa6e680bd
 - Updated Mattermost to v1.3.0 53d8606cf3642949ced4d6e8432d4b45b0541c88
+
+8.2.6
+
+- Build curl dependency without libssh2 17e41f8
 
 8.2.5
 

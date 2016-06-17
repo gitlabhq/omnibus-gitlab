@@ -5,6 +5,7 @@
 if Rails.env.production?
   Gitlab::Application.config.action_mailer.delivery_method = :smtp
 
+  ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
     <% unless @smtp_authentication.nil? %>
     authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
