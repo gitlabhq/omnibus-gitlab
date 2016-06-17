@@ -138,11 +138,13 @@ bash "Show the message of the failed upgrade." do
     and then in /etc/gitlab/gitlab.rb set:
 
     mattermost['db2_backup_created'] = true
-    mattermost['db2_team_name'] = "TEAMNAME"\n
+    mattermost['db2_team_name'] = \"TEAMNAME\"\n
 
     where "TEAMNAME" is the name of the default team.
     Run gitlab-ctl reconfigure again.
-    See LINK for more information.\n
+    See: \n
+    http://docs.gitlab.com/omnibus/gitlab-mattermost/#upgrading-gitlab-mattermost-in-gitlab-8.9 \n
+    for more information.\n
     " >> #{log_file}
   EOS
   only_if { mattermost_version.nil? && !(backup_done && default_team_name_set) }
