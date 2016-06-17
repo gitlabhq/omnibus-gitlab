@@ -399,6 +399,13 @@ class CertificateHelper
     @omnibus_certs_dir = omnibus_cert_dir
   end
 
+  def whitelisted_files
+    [
+      File.join(@omnibus_certs_dir, "README"),
+      File.join(@omnibus_certs_dir, "cacert.pem")
+    ]
+  end
+
   def is_x509_certificate?(file)
     begin
       OpenSSL::X509::Certificate.new(File.read(file)) # DER- or PEM-encoded
@@ -412,26 +419,35 @@ class CertificateHelper
     end
   end
 
-  def whitelisted_files
-    [
-      File.join(@omnibus_certs_dir, "README"),
-      File.join(@omnibus_certs_dir, "cacert.pem")
-    ]
+  # If the number of files between the two directories is different
+  # something got added so trigger the run
+  def new_certificate_added?
+    (number_of_files_in_trusted_certs_dir - number_of_files_in_omnibus_certs_dir).nonzero?
+  end
+
+  def number_of_files_in_trusted_certs_dir
+    Dir[File.join(@trusted_certs_dir, "*")].count
+  end
+
+  def number_of_files_in_omnibus_certs_dir
+    Dir[File.join(@omnibus_certs_dir, "*")].count - whitelisted_files.count
   end
 
   # Get all files in /opt/gitlab/embedded/ssl/certs
-  # - "cacert.pem" -> ignore
-  # - "README" -> ignore
+  # - "cacert.pem", "README" -> ignore
   # - if valid certificate
   #   - if symlink
+  #     - remove broken symlinks
   #     - ignore if pointing to /etc/gitlab/ssl/trusted-certs
-  #     - copy to trusted-certs dir
+  #     - ignore because it might be a symlink user created
   #   - else
   #     - copy to trusted-certs dir
   # - else (not valid)
   #   raise and error
   def move_existing_certificates
     Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
+      next unless valid_symlink?(file)
+
       case
       when whitelisted_files.include?(file)
         next
@@ -443,18 +459,22 @@ class CertificateHelper
     end
   end
 
-  def move_certificate(file)
+  def valid_symlink?(file)
     if File.symlink?(file)
-      real_file_path = File.realpath(file)
+      # Check if symlink is pointing to an existing file
+      return true if File.exists?(file)
 
-      unless real_file_path.start_with?(@trusted_certs_dir)
-        FileUtils.mv(real_file_path, @trusted_certs_dir, force: true)
-        puts "\n Moving #{file}"
-      end
-    else
-      FileUtils.mv(file, @trusted_certs_dir, force: true)
-      puts "\n Moving #{file}"
+      # Otherwise, clear the broken symlink
+      FileUtils.rm_f(file)
+      false
     end
+  end
+
+  def move_certificate(file)
+    return if valid_symlink?(file)
+
+    FileUtils.mv(file, @trusted_certs_dir, force: true)
+    puts "\n Moving #{file}"
   end
 
   def link_certificates
@@ -473,6 +493,6 @@ class CertificateHelper
   end
 
   def raise_msg(file)
-    raise "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
+    raise "ERROR: Not a certificate: #{file} / #{File.realpath(file)}"
   end
 end
