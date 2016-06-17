@@ -17,19 +17,20 @@
 #
 
 name "mattermost"
-default_version "2.2.0"
+default_version "3.1.0"
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: '805d06929dfd7f89ac8acdaab87bc291'
+       md5: '7fe30d6221a0cb04c5e40df908e695e5'
 
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./api/templates #{install_dir}/embedded/service/mattermost/api/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./templates #{install_dir}/embedded/service/mattermost/"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./i18n #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/static #{install_dir}/embedded/service/mattermost/web/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./web/templates #{install_dir}/embedded/service/mattermost/web/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./fonts #{install_dir}/embedded/service/mattermost/"
+  command "#{install_dir}/embedded/bin/rsync -a --delete ./webapp #{install_dir}/embedded/service/mattermost/"
+
 
   block do
     license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
