@@ -29,6 +29,25 @@ before_script:
   except:
   - tags
 
+.rpi_branch_template: &rpi_branch_build
+  stage: extra
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
+    - make populate_cache
+    - make restore_cache_bundle
+    - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
+    - make pack_cache_bundle
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-rpi-builder
+  except:
+  - tags
+
 .tag_template: &tag_build
   stage: package
   script:
@@ -45,6 +64,25 @@ before_script:
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
+  except:
+  - branches
+
+.rpi_tag_template: &rpi_tag_build
+  stage: extra
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
+    - ssh -vvT git@dev.gitlab.org
+    - make populate_cache
+    - make restore_cache_bundle
+    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+    - make pack_cache_bundle
+    - rm -rf /var/cache/omnibus/pkg
+  tags:
+  - docker-rpi-builder
   except:
   - branches
 
@@ -125,30 +163,29 @@ CentOS 7 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
   <<: *branch_build
 
-Raspberry Pi 2 branch:
-  stage: extra
-  script:
-  - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
-  tags:
-  - RaspberryPi2-branch
-  except:
-  - tags
-Raspberry Pi 2 wheezy:
-  stage: extra
-  script:
-  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
-  tags:
-  - RaspberryPi2-tag
-  except:
-  - branches
-Raspberry Pi 2 jessie:
-  stage: extra
-  script:
-  - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
-  tags:
-  - RaspberryPi2-jessie-tag
-  except:
-  - branches
+Raspberry Pi 2 Jessie branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-jessie"
+  <<: *rpi_branch_build
+
+Raspberry Pi 2 Wheezy branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-wheezy"
+  <<: *rpi_branch_build
+
+Raspberry Pi 2 Wheezy:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-wheezy"
+  cache:
+    key: "Raspberry Pi 2 Wheezy branch"
+    paths:
+    - cache
+  <<: *rpi_tag_build
+Raspberry Pi 2 Jessie:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-jessie"
+  cache:
+    key: "Raspberry Pi 2 Jessie branch"
+    paths:
+    - cache
+  <<: *rpi_tag_build
+
 Docker master:
   stage: extra
   script:
