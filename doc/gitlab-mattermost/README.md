@@ -153,7 +153,7 @@ For help and support around your GitLab Mattermost deployment please see:
 
 ## Upgrading GitLab Mattermost 
 
-Note: Upgrading to GitLab 8.9, which includes Mattermost 3.1, requires special steps, please see below. 
+Note: When upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1. Please see below for special instructions. 
 
 GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided: 
 
@@ -173,7 +173,7 @@ If this is not the case, there are two options:
 
 ## Upgrading GitLab Mattermost in GitLab 8.9 
 
-Mattermost 3.1 supports multi-team accounts, a highly requested features requiring an object model change and manual steps to complete the upgrade process from GitLab 8.8 or GitLab 8.7. 
+After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
 
 1. Confirm you're starting version is GitLab 8.8. 
 2. Run your GitLab 8.9 upgrade as normal.
