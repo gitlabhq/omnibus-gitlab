@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.10.0
+
+- Update redis to 3.2.1 (Takuya Noguchi)
+
 8.9.1
 
 - Prevent running CREATE EXTENSION in a slave server 7821bbaa
