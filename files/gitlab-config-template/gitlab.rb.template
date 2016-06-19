@@ -506,7 +506,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['username'] = "gitlab-redis"
 # redis['maxclients'] = "10000"
 # redis['tcp_timeout'] = "60"
-# redis['tcp_keepalive'] = "0"
+# redis['tcp_keepalive'] = "300"
 # redis['uid'] = nil
 # redis['gid'] = nil
 

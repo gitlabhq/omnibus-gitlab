@@ -121,7 +121,8 @@ timeout <%= @tcp_timeout %>
 # Note that to close the connection the double of the time is needed.
 # On other kernels the period depends on the kernel configuration.
 #
-# A reasonable value for this option is 60 seconds.
+# A reasonable value for this option is 300 seconds, which is the new
+# Redis default starting with Redis 3.2.1.
 tcp-keepalive <%= @tcp_keepalive %>
 
 ################################# GENERAL #####################################
@@ -150,7 +151,7 @@ daemonize no
 #
 # Creating a pid file is best effort: if Redis is not able to create it
 # nothing bad happens, the server will start and run normally.
-pidfile /var/run/redis.pid
+pidfile /var/run/redis_<%= @port %>.pid
 
 # Specify the server verbosity level.
 # This can be one of:

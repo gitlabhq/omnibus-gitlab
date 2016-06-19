@@ -46,6 +46,6 @@ communication.
 
 ```ruby
 redis['tcp_timeout'] = "60"
-redis['tcp_keepalive'] = "0"
+redis['tcp_keepalive'] = "300"
 ```
 
