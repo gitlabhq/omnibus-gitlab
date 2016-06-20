@@ -175,7 +175,7 @@ If this is not the case, there are two options:
 
 After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
 
-1. Confirm you're starting version is GitLab 8.8. 
+1. Confirm you are starting with version GitLab 8.8. 
 2. Run your GitLab 8.9 upgrade as normal.
      - This installs the Mattermost 3.1 binary, but does not auto-upgrade the database. 
      - You'll see an "Automatic database upgrade failed" error on the command line and the server will not start. 
