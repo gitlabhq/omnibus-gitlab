@@ -239,7 +239,7 @@ port `2289`, use the following `docker run` command:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:8929 --publish 2289:22 \
+	--publish 8929:80 --publish 2289:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
