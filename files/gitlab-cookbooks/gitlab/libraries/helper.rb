@@ -393,10 +393,12 @@ class MattermostHelper
 end
 
 class CertificateHelper
+  include ShellOutHelper
 
   def initialize(trusted_cert_dir, omnibus_cert_dir)
     @trusted_certs_dir = trusted_cert_dir
     @omnibus_certs_dir = omnibus_cert_dir
+    @directory_hash_file = "/var/log/gitlab/reconfigure/ssl-directory-hash"
   end
 
   def whitelisted_files
@@ -422,15 +424,16 @@ class CertificateHelper
   # If the number of files between the two directories is different
   # something got added so trigger the run
   def new_certificate_added?
-    (number_of_files_in_trusted_certs_dir - number_of_files_in_omnibus_certs_dir).nonzero?
+    return true unless File.exists?(@directory_hash_file)
+
+    stored_hash = File.read(@directory_hash_file)
+    trusted_certs_dir_hash != stored_hash
   end
 
-  def number_of_files_in_trusted_certs_dir
-    Dir[File.join(@trusted_certs_dir, "*")].count
-  end
-
-  def number_of_files_in_omnibus_certs_dir
-    Dir[File.join(@omnibus_certs_dir, "*")].count - whitelisted_files.count
+  def trusted_certs_dir_hash
+    files = Dir[File.join(@trusted_certs_dir, "*")]
+    files_modification_time = files.map { |name| File.stat(name).mtime }
+    Digest::SHA1.hexdigest(files_modification_time.join)
   end
 
   # Get all files in /opt/gitlab/embedded/ssl/certs
@@ -478,18 +481,38 @@ class CertificateHelper
   end
 
   def link_certificates
-    Dir.glob(File.join(@trusted_certs_dir, "*")) do |trusted_cert|
-      if is_x509_certificate?(trusted_cert)
-        certificate = OpenSSL::X509::Certificate.new(File.read(trusted_cert))
-        certificate_hash = certificate.subject.hash.to_s(16)
-        ext = Digest::MD5.file(File.realpath(trusted_cert)).hexdigest
-        symlink_path = File.join(@omnibus_certs_dir, "#{certificate_hash}.#{ext}")
+    c_rehash
+    link_to_omnibus_ssl_directory
+    log_directory_hash
+  end
 
-        FileUtils.ln_s trusted_cert, symlink_path unless File.exist?(symlink_path)
+  # c_rehash ran so we now have valid hashed names
+  # Skip all files that are not symlinks
+  # If they are symlinks, make sure they are valid certificates
+  def link_to_omnibus_ssl_directory
+    Dir.glob(File.join(@trusted_certs_dir, "*")) do |trusted_cert|
+      if valid_symlink?(trusted_cert)
+        if is_x509_certificate?(trusted_cert)
+          hash_name = File.basename(trusted_cert)
+          certificate_path = File.realpath(trusted_cert)
+          symlink_path = File.join(@omnibus_certs_dir, hash_name)
+
+          FileUtils.ln_s certificate_path, symlink_path unless File.exist?(symlink_path)
+        end
       else
-        raise_msg(trusted_cert)
+        puts "\n Skipping #{trusted_cert}."
       end
     end
+  end
+
+  def c_rehash
+    cmd = "/opt/gitlab/embedded/bin/c_rehash #{@trusted_certs_dir}"
+    result = do_shell_out(cmd)
+    result.exitstatus
+  end
+
+  def log_directory_hash
+    File.write(@directory_hash_file, trusted_certs_dir_hash)
   end
 
   def raise_msg(file)
