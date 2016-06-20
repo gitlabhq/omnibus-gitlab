@@ -4,7 +4,7 @@
   "metadata": {
     "name": "gitlab-ce",
     "annotations": {
-      "description": "Gitlab server",
+      "description": "GitLab server",
       "tags": "gitlab,VCS"
     }
   },
@@ -19,7 +19,7 @@
       "value": "gitlab-ce"
     },
     {
-      "description": "Custom hostname for service routes. Default works for the openshift all-in-one VM, e.g.: <application-name>.<project>.<default-domain-suffix>",
+      "description": "Custom hostname for service routes. Default works for the OpenShift all-in-one VM, e.g.: <application-name>.<project>.<default-domain-suffix>",
       "displayName": "Gitlab instance hostname",
       "name": "APPLICATION_HOSTNAME",
       "value": "gitlab.apps.10.2.2.2.xip.io"
@@ -99,10 +99,10 @@
       "spec": {
         "tags": [
           {
-            "name": "8.8.3",
+            "name": "8.8.5",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.8.3-ce.0"
+              "name": "gitlab/gitlab-ce:8.8.5-ce.1"
             }
           }
         ]
@@ -180,7 +180,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:8.8.3"
+                "name": "${APPLICATION_NAME}:8.8.5"
               }
             }
           }
@@ -236,7 +236,7 @@
                 "env": [
                   {
                     "name": "GITLAB_OMNIBUS_CONFIG",
-                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis'; unicorn['worker_processes'] = 1;"
+                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis'; unicorn['worker_processes'] = 2;"
                   }
                 ],
                 "resources": {
@@ -386,7 +386,7 @@
                   }
                 ],
                 "terminationMessagePath": "/dev/termination-log",
-                "imagePullPolicy": "Always"
+                "imagePullPolicy": "IfNotPresent"
               }
             ],
             "restartPolicy": "Always",
