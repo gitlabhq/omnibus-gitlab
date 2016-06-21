@@ -414,8 +414,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Only change these settings if you understand well what they mean
 ## see https://about.gitlab.com/2015/06/05/how-gitlab-uses-unicorn-and-unicorn-worker-killer/
 ## and https://github.com/kzk/unicorn-worker-killer
-# unicorn['worker_memory_limit_min'] = "300 * 1 << 20"
-# unicorn['worker_memory_limit_max'] = "350 * 1 << 20"
+# unicorn['worker_memory_limit_min'] = "400 * 1 << 20"
+# unicorn['worker_memory_limit_max'] = "650 * 1 << 20"
 
 
 ##################
