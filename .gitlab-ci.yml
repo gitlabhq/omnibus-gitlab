@@ -44,11 +44,6 @@ before_script:
   except:
   - branches
 
-cache:
-  key: "$CI_BUILD_NAME"
-  paths:
-  - cache
-
 Ubuntu 12.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
   <<: *tag_build
