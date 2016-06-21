@@ -20,8 +20,10 @@ omnibus-gitlab repository.
 - Expose maxclients setting for Redis 535540c
 - Add expire_build_artifacts_worker cron config 3603b
 - Upgrade Mattermost to 3.1 d446f0
-- Add expire_build_artifacts_worker cron config
-- Allow adding custom trusted certificates (Robert Habermann)
+- Add expire_build_artifacts_worker cron config 3603b7
+- Allow adding custom trusted certificates (Robert Habermann) 48e891
+- Increase the Unicorn memory limits to 400-650MB 8f688
+- Add configuration for Registry storage config 545856
 
 8.8.5
 
