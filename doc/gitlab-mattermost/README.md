@@ -193,7 +193,15 @@ After upgrading to GitLab 8.9 additional steps are require before restarting the
      - Your Mattermost database will be upgraded to version 3.1 and the server should start. 
           - If your deployment has multiple teams, and you have users with duplicate accounts on those teams, their accounts are automatically renamed to support the new multi-team accounts feature, and they will receive emails on how to switch over to the new system. 
 
-For any questions, please [visit the GitLab Mattermost troubleshooting forum](https://forum.mattermost.org/t/the-gitlab-mattermost-troubleshooting-forum/134) and share any relevant portions of `mattermost.log` along with the step at which you encountered issues.
+If you experience issues you can run an interactive upgrade using: 
+
+```
+sudo -u mattermost -i bash
+cd /opt/gitlab/embedded/service/mattermost
+/opt/gitlab/embedded/bin/mattermost -config='/var/opt/gitlab/mattermost/config.json' -upgrade_db_30
+```
+
+For any questions, please [visit the GitLab Mattermost troubleshooting forum](https://forum.mattermost.org/t/upgrading-to-gitlab-mattermost-in-gitlab-8-9/1735) and share any relevant portions of `mattermost.log` along with the step at which you encountered issues.
 
 ### Migrating Mattermost outside of GitLab 
 
