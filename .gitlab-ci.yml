@@ -13,7 +13,6 @@ before_script:
 .branch_template: &branch_build
   stage: package
   script:
-    - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -21,6 +20,7 @@ before_script:
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
     - make test
+    - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
@@ -30,7 +30,6 @@ before_script:
 .tag_template: &tag_build
   stage: package
   script:
-    - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -38,11 +37,16 @@ before_script:
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
     - make do_release
+    - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
   except:
   - branches
+
+cache:
+  paths:
+  - cache
 
 Ubuntu 12.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
