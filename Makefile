@@ -26,8 +26,7 @@ populate_cache:
 	bin/omnibus cache populate
 
 restore_cache_bundle:
-	rm -rf /var/cache/omnibus/cache/git_cache/opt/gitlab
-	git clone --mirror cache/${PLATFORM_DIR} /var/cache/omnibus/cache/git_cache/opt/gitlab
+	if test -f cache/${PLATFORM_DIR}; then git clone --mirror cache/${PLATFORM_DIR} /var/cache/omnibus/cache/git_cache/opt/gitlab; fi;
 
 pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags

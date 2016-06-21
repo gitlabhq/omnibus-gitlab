@@ -19,6 +19,7 @@ before_script:
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
+    - make restore_cache_bundle
     - make test
     - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
@@ -36,6 +37,7 @@ before_script:
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
+    - make restore_cache_bundle
     - make do_release
     - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
