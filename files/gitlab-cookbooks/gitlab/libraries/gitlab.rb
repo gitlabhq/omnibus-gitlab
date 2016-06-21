@@ -548,6 +548,14 @@ module Gitlab
       return unless registry['enable']
 
       gitlab_rails['registry_path'] = "#{gitlab_rails['shared_path']}/registry" if gitlab_rails['registry_path'].nil?
+      Gitlab['registry']['storage_delete_enabled'] ||= node['gitlab']['registry']['storage_delete_enabled']
+
+      Gitlab['registry']['storage'] ||= {
+        'filesystem' => { 'rootdirectory' => gitlab_rails['registry_path'] }
+      }
+
+      Gitlab['registry']['storage']['cache'] ||= {'blobdescriptor'=>'inmemory'}
+      Gitlab['registry']['storage']['delete'] ||= {'enabled' => Gitlab['registry']['storage_delete_enabled']}
     end
 
     def disable_gitlab_rails_services
