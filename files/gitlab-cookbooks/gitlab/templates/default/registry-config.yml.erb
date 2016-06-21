@@ -4,13 +4,7 @@ log:
   fields:
     service: registry
     environment: production
-storage:
-  cache:
-    blobdescriptor: inmemory
-  filesystem:
-    rootdirectory: <%= @registry_path %>
-  delete:
-    enabled: <%= @storage_delete_enabled %>
+storage: <%= @storage.to_json %>
 http:
   addr: <%= @registry_http_addr %>
   secret: "<%= @http_secret %>"
