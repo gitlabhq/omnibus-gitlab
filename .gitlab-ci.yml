@@ -47,6 +47,7 @@ before_script:
   - branches
 
 cache:
+  key: "$CI_BUILD_NAME"
   paths:
   - cache
 
