@@ -4,14 +4,15 @@
 #
 install_dir = node['package']['install-dir']
 trusted_certs_dir = node['gitlab']['gitlab-rails']['trusted_certs_dir']
-ssl_certs_directory =  File.join(install_dir, "embedded/ssl/certs")
-readme_file = File.join(ssl_certs_directory, "README")
+ssl_certs_dir =  File.join(install_dir, "embedded/ssl/certs")
+user_dir = node['gitlab']['user']['home']
+readme_file = File.join(ssl_certs_dir, "README")
 
-cert_helper = CertificateHelper.new(trusted_certs_dir, ssl_certs_directory)
+cert_helper = CertificateHelper.new(trusted_certs_dir, ssl_certs_dir, user_dir)
 
 [
   trusted_certs_dir,
-  ssl_certs_directory
+  ssl_certs_dir
 ].each do |directory_name|
    directory directory_name do
      recursive true
@@ -24,9 +25,9 @@ file readme_file do
   content "This directory is managed by omnibus-gitlab.\n Any file placed in this directory will be ignored\n. Place certificates in #{trusted_certs_dir}.\n"
 end
 
-ruby_block "Move existing certs and link to #{ssl_certs_directory}" do
+ruby_block "Move existing certs and link to #{ssl_certs_dir}" do
   block do
-    puts "\n\n  * Moving existing certificates found in #{ssl_certs_directory}\n"
+    puts "\n\n  * Moving existing certificates found in #{ssl_certs_dir}\n"
     cert_helper.move_existing_certificates
     puts "\n  * Symlinking existing certificates found in #{trusted_certs_dir}\n"
     cert_helper.link_certificates

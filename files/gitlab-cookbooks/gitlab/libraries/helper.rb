@@ -395,10 +395,10 @@ end
 class CertificateHelper
   include ShellOutHelper
 
-  def initialize(trusted_cert_dir, omnibus_cert_dir)
+  def initialize(trusted_cert_dir, omnibus_cert_dir, user_dir)
     @trusted_certs_dir = trusted_cert_dir
     @omnibus_certs_dir = omnibus_cert_dir
-    @directory_hash_file = "/var/log/gitlab/reconfigure/ssl-directory-hash"
+    @directory_hash_file = File.join(user_dir, "trusted-certs-directory-hash")
   end
 
   def whitelisted_files
@@ -409,6 +409,8 @@ class CertificateHelper
   end
 
   def is_x509_certificate?(file)
+    return false unless valid?(file)
+
     begin
       OpenSSL::X509::Certificate.new(File.read(file)) # DER- or PEM-encoded
       true
@@ -432,7 +434,7 @@ class CertificateHelper
 
   def trusted_certs_dir_hash
     files = Dir[File.join(@trusted_certs_dir, "*")]
-    files_modification_time = files.map { |name| File.stat(name).mtime }
+    files_modification_time = files.map { |name| File.stat(name).mtime if valid?(name) }
     Digest::SHA1.hexdigest(files_modification_time.join)
   end
 
@@ -449,10 +451,8 @@ class CertificateHelper
   #   raise and error
   def move_existing_certificates
     Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
-      next unless valid_symlink?(file)
-
       case
-      when whitelisted_files.include?(file)
+      when !valid?(file),whitelisted_files.include?(file)
         next
       when is_x509_certificate?(file)
         move_certificate(file)
@@ -462,20 +462,17 @@ class CertificateHelper
     end
   end
 
-  def valid_symlink?(file)
-    if File.symlink?(file)
-      # Check if symlink is pointing to an existing file
-      return true if File.exists?(file)
-
-      # Otherwise, clear the broken symlink
+  def valid?(file)
+    if File.symlink?(file) && !File.exists?(file)
       FileUtils.rm_f(file)
-      false
+      return false
     end
+
+    true
   end
 
   def move_certificate(file)
-    return if valid_symlink?(file)
-
+    return if File.symlink?(file) && File.readlink(file).start_with?(@trusted_certs_dir)
     FileUtils.mv(file, @trusted_certs_dir, force: true)
     puts "\n Moving #{file}"
   end
@@ -491,14 +488,12 @@ class CertificateHelper
   # If they are symlinks, make sure they are valid certificates
   def link_to_omnibus_ssl_directory
     Dir.glob(File.join(@trusted_certs_dir, "*")) do |trusted_cert|
-      if valid_symlink?(trusted_cert)
-        if is_x509_certificate?(trusted_cert)
-          hash_name = File.basename(trusted_cert)
-          certificate_path = File.realpath(trusted_cert)
-          symlink_path = File.join(@omnibus_certs_dir, hash_name)
+      if File.symlink?(trusted_cert) && is_x509_certificate?(trusted_cert)
+        hash_name = File.basename(trusted_cert)
+        certificate_path = File.realpath(trusted_cert)
+        symlink_path = File.join(@omnibus_certs_dir, hash_name)
 
-          FileUtils.ln_s certificate_path, symlink_path unless File.exist?(symlink_path)
-        end
+        FileUtils.ln_s certificate_path, symlink_path unless File.exist?(symlink_path)
       else
         puts "\n Skipping #{trusted_cert}."
       end
