@@ -76,6 +76,9 @@ include_recipe "gitlab::gitlab-ci-proxying"
 
 include_recipe "gitlab::selinux"
 
+# add trusted certs recipe
+include_recipe "gitlab::add_trusted_certs"
+
 # Create dummy unicorn and sidekiq services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
 [
