@@ -153,6 +153,8 @@ For help and support around your GitLab Mattermost deployment please see:
 
 ## Upgrading GitLab Mattermost 
 
+Note: When upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1. Please see below for special instructions. 
+
 GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided: 
 
 1. No major build versions are skipped 
@@ -167,6 +169,39 @@ If this is not the case, there are two options:
 1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`
    This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
 2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below). 
+
+
+## Upgrading GitLab Mattermost from versions prior to 8.9
+
+After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
+
+1. Confirm you are starting with version GitLab 8.8. 
+2. Backup your Mattermost database. 
+     - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions. 
+3. Run your GitLab 8.9 upgrade as normal.
+     - This installs the Mattermost 3.1 binary, but does not auto-upgrade the database. 
+     - You'll see an "Automatic database upgrade failed" error on the command line and the server will not start. 
+4. Configure two settings. 
+     - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
+     - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost. 
+          - If you use only one team in Mattermost, this should be the name of the team. 
+          - If you use multiple teams, this should be the name of the team most commonly used.
+               - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed. 
+               - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account. 
+               - For more information, please review the [Mattermost 3.0 upgrade documentation.](http://www.mattermost.org/upgrade-to-3-0/) 
+5. Run `sudo gitlab reconfigure`.
+     - Your Mattermost database will be upgraded to version 3.1 and the server should start. 
+          - If your deployment has multiple teams, and you have users with duplicate accounts on those teams, their accounts are automatically renamed to support the new multi-team accounts feature, and they will receive emails on how to switch over to the new system. 
+
+If you experience issues you can run an interactive upgrade using: 
+
+```
+sudo -u mattermost -i bash
+cd /opt/gitlab/embedded/service/mattermost
+/opt/gitlab/embedded/bin/mattermost -config='/var/opt/gitlab/mattermost/config.json' -upgrade_db_30
+```
+
+For any questions, please [visit the GitLab Mattermost troubleshooting forum](https://forum.mattermost.org/t/upgrading-to-gitlab-mattermost-in-gitlab-8-9/1735) and share any relevant portions of `mattermost.log` along with the step at which you encountered issues.
 
 ### Migrating Mattermost outside of GitLab 
 
