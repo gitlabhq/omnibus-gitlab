@@ -179,5 +179,5 @@ execute "enable pg_trgm extension" do
   user postgresql_user
   retries 20
   action :nothing
-  not_if { !pg_helper.is_running? }
+  not_if { !pg_helper.is_running? || pg_helper.is_slave? }
 end

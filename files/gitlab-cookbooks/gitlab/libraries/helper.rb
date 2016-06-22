@@ -69,6 +69,12 @@ class PgHelper
               "|grep -x #{db_user}"])
   end
 
+  def is_slave?
+    psql_cmd(["-d 'template1'",
+              "-c 'select pg_is_in_recovery()' -A",
+              "|grep -x t"])
+  end
+
   def psql_cmd(cmd_list)
     cmd = ["/opt/gitlab/bin/gitlab-psql", cmd_list.join(" ")].join(" ")
     success?(cmd)
