@@ -143,7 +143,7 @@ bash "Show the message of the failed upgrade." do
     where "TEAMNAME" is the name of the default team.
     Run gitlab-ctl reconfigure again.
     See: \n
-    http://docs.gitlab.com/omnibus/gitlab-mattermost/#upgrading-gitlab-mattermost-in-gitlab-8.9 \n
+    http://docs.gitlab.com/omnibus/gitlab-mattermost/#upgrading-gitlab-mattermost-from-versions-prior-to-8.9 \n
     for more information.\n
     " >> #{log_file}
   EOS
