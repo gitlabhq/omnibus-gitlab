@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.9.0
 
+- Make default IMAP incoming mailbox "inbox" in case user omits this setting d3c187
 - Make NGINX server_names_hash_bucket_size configurable and default it to 64 bytes 7cb488
 - Add log prefix for pages and registry services 48e29b
 - Add configuration option for the Container Registry storage driver
