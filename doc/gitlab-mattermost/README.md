@@ -151,49 +151,47 @@ For help and support around your GitLab Mattermost deployment please see:
 - [Troubleshooting FAQ](http://docs.mattermost.com/install/troubleshooting.html)
 - [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps
 
-## Upgrading GitLab Mattermost 
+## Upgrading GitLab Mattermost
 
-Note: When upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1. Please see below for special instructions. 
+Note: When upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1. Please see below for special instructions.
 
-GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided: 
+GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided:
 
-1. No major build versions are skipped 
-   (e.g. upgrading GitLab omnibus from 8.2.x to 8.3.x works, but upgrading from 8.2.x to 8.4.x will not) 
+1. No major build versions are skipped
+   (e.g. upgrading GitLab omnibus from 8.2.x to 8.3.x works, but upgrading from 8.2.x to 8.4.x will not)
 2. Mattermost configuration settings have not been changed outside of GitLab
-   That means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`. 
+   That means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
 
-If this is the case, upgrading GitLab using omnibus and running `gitlab-ctl reconfigure` should upgrade GitLab Mattermost to the next version. 
+If this is the case, upgrading GitLab using omnibus and running `gitlab-ctl reconfigure` should upgrade GitLab Mattermost to the next version.
 
-If this is not the case, there are two options: 
+If this is not the case, there are two options:
 
 1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`
    This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
-2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below). 
+2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below).
 
 
 ## Upgrading GitLab Mattermost from versions prior to 8.9
 
 After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
 
-1. Confirm you are starting with version GitLab 8.8. 
-2. Backup your Mattermost database. 
-     - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions. 
-3. Run your GitLab 8.9 upgrade as normal.
-     - This installs the Mattermost 3.1 binary, but does not auto-upgrade the database. 
-     - You'll see an "Automatic database upgrade failed" error on the command line and the server will not start. 
-4. Configure two settings. 
+1. Confirm you are starting with version GitLab 8.8.
+1. Backup your Mattermost database.
+     - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions.
+1. Configure two settings.
      - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
-     - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost. 
-          - If you use only one team in Mattermost, this should be the name of the team. 
+     - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost.
+          - If you use only one team in Mattermost, this should be the name of the team.
           - If you use multiple teams, this should be the name of the team most commonly used.
-               - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed. 
-               - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account. 
-               - For more information, please review the [Mattermost 3.0 upgrade documentation.](http://www.mattermost.org/upgrade-to-3-0/) 
-5. Run `sudo gitlab reconfigure`.
-     - Your Mattermost database will be upgraded to version 3.1 and the server should start. 
-          - If your deployment has multiple teams, and you have users with duplicate accounts on those teams, their accounts are automatically renamed to support the new multi-team accounts feature, and they will receive emails on how to switch over to the new system. 
+               - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed.
+               - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account.
+               - For more information, please review the [Mattermost 3.0 upgrade documentation.](http://www.mattermost.org/upgrade-to-3-0/)
+1. Run your GitLab 8.9 upgrade as normal.
+    - This installs the Mattermost 3.1 binary and will attempt to auto-upgrade the database.
+    - Your Mattermost database will be upgraded to version 3.1 and the server should start.
+    - You'll see an "Automatic database upgrade failed" error on the command line and Mattermost will not start if something goes wrong.
 
-If you experience issues you can run an interactive upgrade using: 
+If you experience issues you can run an interactive upgrade using:
 
 ```
 sudo -u mattermost -i bash
@@ -201,9 +199,11 @@ cd /opt/gitlab/embedded/service/mattermost
 /opt/gitlab/embedded/bin/mattermost -config='/var/opt/gitlab/mattermost/config.json' -upgrade_db_30
 ```
 
+Log in as root or user with super user access and re-run `sudo gitlab-ctl reconfigure`.
+
 For any questions, please [visit the GitLab Mattermost troubleshooting forum](https://forum.mattermost.org/t/upgrading-to-gitlab-mattermost-in-gitlab-8-9/1735) and share any relevant portions of `mattermost.log` along with the step at which you encountered issues.
 
-### Migrating Mattermost outside of GitLab 
+### Migrating Mattermost outside of GitLab
 
 Follow the [Mattermost Migration Guide](http://docs.mattermost.com/administration/migrating.html) to move your Mattermost configuration settings and data to another directory or server independent from GitLab omnibus.
 
@@ -211,11 +211,11 @@ Follow the [Mattermost Migration Guide](http://docs.mattermost.com/administratio
 
 If you choose to upgrade Mattermost outside of GitLab's omnibus automation, please [follow this guide](http://docs.mattermost.com/administration/upgrade-guide.html).
 
-## Administering GitLab Mattermost 
+## Administering GitLab Mattermost
 
 ### GitLab notifications in Mattermost
 
-There are multiple ways to send notifications depending on how much control you'd like over the messages. 
+There are multiple ways to send notifications depending on how much control you'd like over the messages.
 
 If you are using the Omnibus edition, enable incoming webhooks from the gitlab.rb file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
 
@@ -225,10 +225,10 @@ mattermost['service_enable_incoming_webhooks'] = true
 
 #### Setting up Mattermost as a Slack project service integration:
 
-Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's default formatting you can use their project service option to set up Mattermost integration: 
+Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's default formatting you can use their project service option to set up Mattermost integration:
 
 1. In Mattermost, go to **System Console** → **Service Settings** and turn on **Enable Incoming Webhooks**
-1. Go to **Account Settings** → **Integrations** → **Incoming Webhooks** 
+1. Go to **Account Settings** → **Integrations** → **Incoming Webhooks**
 2. Select a channel and click **Add* and copy the `Webhook URL`
 3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** → **Services** → **Slack**
 4. Enter **Username** for how you would like to name the account that posts the notifications
@@ -237,13 +237,13 @@ Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's defau
 
 Any issues, please see the [Mattermost Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150).
 
-#### Setting up GitLab integration service for Mattermost 
+#### Setting up GitLab integration service for Mattermost
 
-You can also set up the [open source integration service](https://github.com/NotSqrt/mattermost-integration-gitlab) to let you configure notifications on GitLab issues, pushes, build events, merge requests and comments to be delivered to selected Mattermost channels. 
+You can also set up the [open source integration service](https://github.com/NotSqrt/mattermost-integration-gitlab) to let you configure notifications on GitLab issues, pushes, build events, merge requests and comments to be delivered to selected Mattermost channels.
 
-This integration lets you completely control how notifications are formatted and, unlike Slack, offers full markdown support. 
+This integration lets you completely control how notifications are formatted and, unlike Slack, offers full markdown support.
 
-The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see: 
+The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see:
 - [Mattermost incoming webhook documentation](http://docs.mattermost.com/developer/webhooks-incoming.html)
 - [GitLab webhook documentation](http://doc.gitlab.com/ce/web_hooks/web_hooks.html)
 
