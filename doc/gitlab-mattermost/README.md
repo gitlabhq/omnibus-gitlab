@@ -171,7 +171,7 @@ If this is not the case, there are two options:
 2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below). 
 
 
-## Upgrading GitLab Mattermost in GitLab 8.9 
+## Upgrading GitLab Mattermost from versions prior to 8.9
 
 After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
 
