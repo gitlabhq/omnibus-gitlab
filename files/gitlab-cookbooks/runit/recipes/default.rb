@@ -16,8 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-if system('/sbin/init --version | grep upstart')
+if File.exist?('/.dockerenv')
+  Chef::Log.warn "Skipped selecting an init system because it looks like we are running in a container"
+elsif system('/sbin/init --version | grep upstart')
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
   include_recipe "runit::upstart"
 elsif system('systemctl | grep "\-\.mount"')
