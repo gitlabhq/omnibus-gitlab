@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.9.1
 
 - Prevent running CREATE EXTENSION in a slave server 7821bbaa
+- Skip choosing an init system recipe when running in a container e229a968
 
 8.9.0
 
