@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.2
+
+- No changes
+
 8.9.1
 
 - Prevent running CREATE EXTENSION in a slave server 7821bbaa
