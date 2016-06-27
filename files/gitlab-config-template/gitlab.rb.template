@@ -718,8 +718,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['log_file_format'] = nil
 
 # mattermost['gitlab_enable'] = false
-# mattermost['gitlab_secret'] = "123456789"
 # mattermost['gitlab_id'] = "12345656"
+# mattermost['gitlab_secret'] = "123456789"
 # mattermost['gitlab_scope'] = ""
 # mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 # mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
