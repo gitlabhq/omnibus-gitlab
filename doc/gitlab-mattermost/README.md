@@ -44,8 +44,8 @@ mattermost_external_url 'http://mattermost.example.com'
 # Tell GitLab Mattermost to integrate with gitlab.example.com
 
 mattermost['gitlab_enable'] = true
-mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_id'] = "12345656"
+mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_scope'] = ""
 mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
@@ -73,8 +73,8 @@ In `gitlab.rb` use the values you've received above:
 
 ```
 mattermost['gitlab_enable'] = true
-mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_id'] = "12345656"
+mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_scope'] = ""
 mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
