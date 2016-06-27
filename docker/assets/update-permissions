@@ -42,3 +42,8 @@ fi
 if id -u gitlab-redis; then
 	chown gitlab-redis:gitlab-redis /var/opt/gitlab/redis
 fi
+
+# Fix registry storage
+if id -u registry; then
+    chown -R registry:registry /var/opt/gitlab/gitlab-rails/shared/registry
+fi
