@@ -13,14 +13,16 @@ before_script:
 .branch_template: &branch_build
   stage: package
   script:
-    - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
+    - make populate_cache
+    - make restore_cache_bundle
     - make test
+    - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
@@ -30,14 +32,16 @@ before_script:
 .tag_template: &tag_build
   stage: package
   script:
-    - ln -s "$(pwd)/cache" /var/cache/omnibus
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - ssh -vvT git@dev.gitlab.org
+    - make populate_cache
+    - make restore_cache_bundle
     - make do_release
+    - make pack_cache_bundle
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
@@ -51,24 +55,52 @@ cache:
 
 Ubuntu 12.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
+  cache:
+    key: "Ubuntu 12.04 branch"
+    paths:
+    - cache
   <<: *tag_build
 Ubuntu 14.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
+  cache:
+    key: "Ubuntu 14.04 branch"
+    paths:
+    - cache
   <<: *tag_build
 Ubuntu 16.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:xenial"
+  cache:
+    key: "Ubuntu 16.04 branch"
+    paths:
+    - cache
   <<: *tag_build
 Debian 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
+  cache:
+    key: "Debian 7 branch"
+    paths:
+    - cache
   <<: *tag_build
 Debian 8:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
+  cache:
+    key: "Debian 8 branch"
+    paths:
+    - cache
   <<: *tag_build
 Centos 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
+  cache:
+    key: "Centos 6 branch"
+    paths:
+    - cache
   <<: *tag_build
 Centos 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
+  cache:
+    key: "Centos 7 branch"
+    paths:
+    - cache
   <<: *tag_build
 
 Ubuntu 12.04 branch:
