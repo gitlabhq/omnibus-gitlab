@@ -81,7 +81,7 @@ download the package and install it manually.
     dpkg -i gitlab-ce-XXX.deb
 
     # CentOS/RHEL
-    rpm -i gitlab-ce-XXX.rpm
+    rpm -Uvh gitlab-ce-XXX.rpm
     ```
 
     If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
