@@ -33,5 +33,5 @@ ruby_block "Move existing certs and link to #{ssl_certs_dir}" do
     cert_helper.link_certificates
   end
   only_if { cert_helper.new_certificate_added? }
-  notifies :restart, "service[unicorn]"
+  notifies :restart, "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 end
