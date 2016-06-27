@@ -178,6 +178,7 @@ After upgrading to GitLab 8.9 additional steps are require before restarting the
 1. Confirm you are starting with version GitLab 8.8.
 1. Backup your Mattermost database.
      - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions.
+     - If you use a default omnibus install you can use this command: `sudo -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > mattermost_dbdump_$(date --rfc-3339=date).sql.gz`
 1. Configure two settings.
      - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
      - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost.
