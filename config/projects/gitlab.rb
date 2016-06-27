@@ -50,7 +50,7 @@ override :rubygems, version: 'v2.5.1'
 override :'chef-gem', version: '12.6.0'
 override :cacerts, version: '2016.04.20', source: { md5: '782dcde8f5d53b1b9e888fdf113c42b9' }
 override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
-override :redis, version: '3.2.0', source: { md5: '9ec99ff912f35946fdb56fe273140483' }
+override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
 override :postgresql, version: '9.2.17', source: { md5: 'a75d4a82eae1edda04eda2e60656e74c' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
