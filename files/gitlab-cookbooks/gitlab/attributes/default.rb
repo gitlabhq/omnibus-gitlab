@@ -250,7 +250,7 @@ default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-
 # Path to directory that contains (ca) certificates that should also be trusted (e.g. on
 # outgoing Webhooks connections). For these certificates symlinks will be created in
 # /opt/gitlab/embedded/ssl/certs/.
-default['gitlab']['gitlab-rails']['trusted_certs_dir'] = "/etc/gitlab/ssl/trusted-certs"
+default['gitlab']['gitlab-rails']['trusted_certs_dir'] = "/etc/gitlab/trusted-certs"
 
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
