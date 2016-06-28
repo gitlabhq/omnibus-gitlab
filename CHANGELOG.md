@@ -7,6 +7,11 @@ omnibus-gitlab repository.
 
 - Update redis to 3.2.1 (Takuya Noguchi)
 
+8.9.2
+
+- Restart unicorn for the adjusted trusted certs if unicorn is running 3748d9
+- Change the default imap timeout to 60 03684d
+
 8.9.1
 
 - Prevent running CREATE EXTENSION in a slave server 7821bbaa
