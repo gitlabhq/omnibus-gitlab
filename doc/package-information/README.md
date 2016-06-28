@@ -3,6 +3,15 @@
 The omnibus-gitlab package is bundled with all dependencies which GitLab
 requires in order to function correctly.
 
+## Defaults
+
+The omnibus-gitlab package requires various configuration to get the
+components in working order.
+If the configuration is not provided, the package will use the default
+values assumed in the package.
+
+These defauts are noted in the package [defaults document](defaults.md).
+
 ## Checking the versions of bundled software
 
 Once the omnibus-gitlab package is installed, all versions of the bundled
