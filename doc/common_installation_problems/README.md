@@ -316,8 +316,8 @@ when GitLab tries to connect with the internal services like gitlab-shell or Git
 #### Install custom certificate authorities:
 
 1. Place your custom (Root CA) or a self-signed certificate in the
-`/etc/gitlab/ssl/trusted-certs/` directory;
-For example, `/etc/gitlab/ssl/trusted-certs/customcacert.pem`.
+`/etc/gitlab/trusted-certs/` directory;
+For example, `/etc/gitlab/trusted-certs/customcacert.pem`.
 **Note**: The certificate must be either **DER- or PEM-encoded**.
 1. Run `gitlab-ctl reconfigure`.
 
@@ -326,7 +326,7 @@ your custom certificate. The symlink name is the subject hash.
 **Warning** Any broken symlink found in `/opt/gitlab/embedded/ssl/certs` will be
 removed and any existing symlink will not be changed.
 If the directory contains valid certificates, they will be automatically moved
-to `/etc/gitlab/ssl/trusted-certs`. If the directory contains any other files,
+to `/etc/gitlab/trusted-certs`. If the directory contains any other files,
 reconfigure run will fail with:
 
 ```
