@@ -7,6 +7,15 @@ omnibus-gitlab repository.
 
 - No changes
 
+8.9.3
+
+- IMPORTANT: Location of the trusted certificate directory has changed e2e7b
+
+8.9.2
+
+- Restart unicorn for the adjusted trusted certs if unicorn is running 3748d9
+- Change the default imap timeout to 60 03684d
+
 8.9.1
 
 - Prevent running CREATE EXTENSION in a slave server 7821bbaa
