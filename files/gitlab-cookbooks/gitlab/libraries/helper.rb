@@ -449,7 +449,7 @@ class CertificateHelper
   # - if valid certificate
   #   - if symlink
   #     - remove broken symlinks
-  #     - ignore if pointing to /etc/gitlab/ssl/trusted-certs
+  #     - ignore if pointing to /etc/gitlab/trusted-certs
   #     - ignore because it might be a symlink user created
   #   - else
   #     - copy to trusted-certs dir
@@ -517,6 +517,6 @@ class CertificateHelper
   end
 
   def raise_msg(file)
-    raise "ERROR: Not a certificate: #{file} / #{File.realpath(file)}"
+    raise "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
   end
 end
