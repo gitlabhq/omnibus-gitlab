@@ -739,6 +739,7 @@ default['gitlab']['mattermost']['sql_trace'] = false
 # default['gitlab']['mattermost']['gitlab'] = {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }
 default['gitlab']['mattermost']['gitlab'] = {}
 
+default['gitlab']['mattermost']['file_max_file_size'] = 52428800
 default['gitlab']['mattermost']['file_driver_name'] = "local"
 default['gitlab']['mattermost']['file_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['file_enable_public_link'] = true
@@ -763,6 +764,9 @@ default['gitlab']['mattermost']['email_enable_sign_in_with_email'] = true
 default['gitlab']['mattermost']['email_enable_sign_in_with_username'] = false
 default['gitlab']['mattermost']['email_send_email_notifications'] = false
 default['gitlab']['mattermost']['email_require_email_verification'] = false
+default['gitlab']['mattermost']['email_feedback_name'] = nil
+default['gitlab']['mattermost']['email_feedback_email'] = nil
+default['gitlab']['mattermost']['email_feedback_organization'] = nil
 default['gitlab']['mattermost']['email_smtp_username'] = nil
 default['gitlab']['mattermost']['email_smtp_password'] = nil
 default['gitlab']['mattermost']['email_smtp_server'] = nil
@@ -770,6 +774,7 @@ default['gitlab']['mattermost']['email_smtp_port'] = nil
 default['gitlab']['mattermost']['email_connection_security'] = nil
 default['gitlab']['mattermost']['email_send_push_notifications'] = false
 default['gitlab']['mattermost']['email_push_notification_server'] = nil
+default['gitlab']['mattermost']['email_push_notification_contents'] = "generic"
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
@@ -780,16 +785,20 @@ default['gitlab']['mattermost']['ratelimit_vary_by_header'] = nil
 default['gitlab']['mattermost']['privacy_show_email_address'] = true
 default['gitlab']['mattermost']['privacy_show_full_name'] = true
 
+default['gitlab']['mattermost']['localization_server_locale'] = "en"
+default['gitlab']['mattermost']['localization_client_locale'] = "en"
+default['gitlab']['mattermost']['localization_available_locales'] = "en,es,fr,ja,pt-BR"
+
 default['gitlab']['mattermost']['team_site_name'] = "GitLab Mattermost"
 default['gitlab']['mattermost']['team_enable_team_creation'] = true
 default['gitlab']['mattermost']['team_enable_user_creation'] = true
+default['gitlab']['mattermost']['team_enable_open_server'] = false
 default['gitlab']['mattermost']['team_max_users_per_team'] = 150
 default['gitlab']['mattermost']['team_allow_public_link'] = true
 default['gitlab']['mattermost']['team_allow_valet_default'] = false
-default['gitlab']['mattermost']['team_default_color'] = '#2389D7'
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 default['gitlab']['mattermost']['team_restrict_team_names'] = true
-default['gitlab']['mattermost']['team_enable_team_listing'] = false
+default['gitlab']['mattermost']['team_restrict_direct_message'] = "any"
 
 default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
 default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
