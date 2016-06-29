@@ -315,6 +315,9 @@ when GitLab tries to connect with the internal services like gitlab-shell or Git
 
 #### Install custom certificate authorities:
 
+Starting from GitLab version *8.9*, the omnibus-gitlab package will handle
+custom certificates.
+
 1. Place your custom (Root CA) or a self-signed certificate in the
 `/etc/gitlab/trusted-certs/` directory;
 For example, `/etc/gitlab/trusted-certs/customcacert.pem`.
@@ -332,6 +335,15 @@ reconfigure run will fail with:
 ```
 ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE -> /opt/gitlab/embedded/ssl/certs/FILE
 ```
+
+Move the files that are not certificates out of `/opt/gitlab/embedded/ssl/certs`
+and run reconfigure once more.
+
+**WARNING** In GitLab version 8.9.0, 8.9.1 and 8.9.2, the directory that was used
+to hold the custom certificates was mistakenly set to `/etc/gitlab/ssl/trusted-certs/`.
+If you **do not** have any files inside of this directory, it is safe to remove it.
+If you do have custom certificates in there, move them to `/etc/gitlab/trusted-certs/`
+and run `sudo gitlab-ctl reconfigure`.
 
 #### Enable self-signed certificates
 
