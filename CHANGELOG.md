@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.4
+
+- No changes
+
 8.9.3
 
 - IMPORTANT: Location of the trusted certificate directory has changed e2e7b
