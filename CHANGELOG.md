@@ -7,6 +7,9 @@ omnibus-gitlab repository.
 
 - No changes
 
+8.9.4
+- Bump chef-zero to 4.7.0 to retain Ruby 2.1 compatibility 8495179
+
 8.9.3
 
 - IMPORTANT: Location of the trusted certificate directory has changed e2e7b
