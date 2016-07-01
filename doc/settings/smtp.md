@@ -217,6 +217,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_ssl'] = true
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
+````
 
 ### More examples are welcome
 
