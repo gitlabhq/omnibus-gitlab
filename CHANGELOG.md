@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.7.9
 
-- No changes
+- Bump chef-zero to 4.7.0 to retain Ruby 2.1 compatibility 8495179
 
 8.7.8
 
