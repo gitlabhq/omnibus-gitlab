@@ -20,7 +20,7 @@
 # When changing this version, make sure that the verbosity went down.
 
 name "chef-zero"
-default_version "4.5.0"
+default_version "4.7.0"
 
 dependency "ruby"
 dependency "rubygems"
