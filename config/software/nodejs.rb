@@ -38,8 +38,14 @@ relative_path "node-v#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  args = if ohai['kernel']['machine'].start_with?('arm')
+           '--without-snapshot'
+         else
+           ''
+         end
+
   command "#{install_dir}/embedded/bin/python ./configure" \
-          " --prefix=#{install_dir}/embedded", env: env
+          " --prefix=#{install_dir}/embedded #{args}", env: env
 
   make "-j #{workers}", env: env
   make "install", env: env
