@@ -8,6 +8,9 @@ omnibus-gitlab repository.
 - Update redis to 3.2.1 (Takuya Noguchi)
 - Updated Chef version to 12.10.24 6e0c66
 
+8.9.5
+- Disable nodejs Snapshot feature on ARM platforms f9a7b4bf
+
 8.9.4
 - Bump chef-zero to 4.7.0 to retain Ruby 2.1 compatibility 8495179
 
