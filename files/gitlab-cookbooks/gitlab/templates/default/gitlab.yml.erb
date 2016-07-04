@@ -352,6 +352,12 @@ production: &base
     path: <%= @satellites_path %>
     timeout: <%= @satellites_timeout %>
 
+  ## Repositories settings
+  repositories:
+    # Paths where repositories can be stored. Give the canonicalized absolute pathname.
+    # NOTE: REPOS PATHS MUST NOT CONTAIN ANY SYMLINK!!!
+    storages: <%= JSON.dump(@repositories_storages) %>
+
   ## Backup settings
   backup:
     path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
@@ -369,9 +375,6 @@ production: &base
   ## GitLab Shell settings
   gitlab_shell:
     path: <%= @gitlab_shell_path %>
-
-    # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: <%= @gitlab_shell_repos_path %>
     hooks_path: <%= @gitlab_shell_hooks_path %>
 
     # Git over HTTP
@@ -435,9 +438,11 @@ test:
     # user: YOUR_USERNAME
   satellites:
     path: tmp/tests/gitlab-satellites/
+  repositories:
+    storages:
+      default: tmp/tests/repositories/
   gitlab_shell:
     path: tmp/tests/gitlab-shell/
-    repos_path: tmp/tests/repositories/
     hooks_path: tmp/tests/gitlab-shell/hooks/
   issues_tracker:
     redmine:

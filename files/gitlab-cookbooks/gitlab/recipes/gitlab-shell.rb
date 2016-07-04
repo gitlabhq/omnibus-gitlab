@@ -21,26 +21,27 @@ git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
-repositories_path = node['gitlab']['gitlab-rails']['gitlab_shell_repos_path']
-git_data_directory = node['gitlab']['gitlab-shell']['git_data_directory']
+git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
+repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = File.join(ssh_dir, "authorized_keys")
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 
 if node['gitlab']['manage-storage-directories']['enable']
-  # Create directories because the git_user does not own its home directory
-  directory repositories_path do
-    owner git_user
-    group git_group
-    mode "2770"
-    recursive true
+  git_data_directories.each do |_name, git_data_directory|
+    directory git_data_directory do
+      owner git_user
+      mode "0700"
+      recursive true
+    end
   end
-
-  directory git_data_directory do
-    owner git_user
-    mode "0700"
-    recursive true
+  repositories_storages.each do |_name, repositories_storage|
+    directory repositories_storage do
+      owner git_user
+      mode "2770"
+      recursive true
+    end
   end
 end
 
@@ -105,7 +106,6 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   variables(
     :user => git_user,
     :api_url => api_url,
-    :repositories_path => repositories_path,
     :authorized_keys => authorized_keys,
     :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
     :redis_port => redis_port,

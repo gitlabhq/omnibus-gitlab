@@ -84,7 +84,7 @@ module Gitlab
   ci_external_url nil
   mattermost_external_url nil
   registry_external_url nil
-  git_data_dir nil
+  git_data_dirs Mash.new
 
   class << self
     # guards against creating secrets on non-bootstrap node
