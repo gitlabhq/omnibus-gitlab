@@ -446,7 +446,7 @@ sudo tee -a /etc/gitlab/gitlab.rb <<'EOF'
 external_url 'http://gitlab.example.com'
 
 # We assume your repositories are in /home/git/repositories (default for source installs)
-git_data_dir '/home/git'
+git_data_dirs { 'default' => '/home/git' }
 
 # Re-use the Postgres that is already running on your system
 postgresql['enable'] = false
@@ -542,5 +542,5 @@ sudo gitlab-ctl status
 sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
-+ Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md) 
++ Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md)
 + Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](http://doc.gitlab.com/ee/raketasks/maintenance.html#check-gitlab-configuration).

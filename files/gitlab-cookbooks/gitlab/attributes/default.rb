@@ -189,7 +189,6 @@ default['gitlab']['gitlab-rails']['backup_encryption'] = nil
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
-default['gitlab']['gitlab-rails']['gitlab_shell_repos_path'] = "/var/opt/gitlab/git-data/repositories"
 # Path to the git hooks used by GitLab Shell
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/hooks/. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/hooks/"
@@ -302,7 +301,12 @@ default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
-default['gitlab']['gitlab-shell']['git_data_directory'] = "/var/opt/gitlab/git-data"
+default['gitlab']['gitlab-shell']['git_data_directories'] = {
+  "default" => "/var/opt/gitlab/git-data"
+}
+default['gitlab']['gitlab-rails']['repositories_storages'] = {
+  "default" => "/var/opt/gitlab/git-data/repositories"
+}
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 

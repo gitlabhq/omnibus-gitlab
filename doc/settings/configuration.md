@@ -135,12 +135,22 @@ the `git-data` parent directory by adding the following line to
 `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-git_data_dir "/mnt/nas/git-data"
+git_data_dirs { "default" => "/mnt/nas/git-data" }
 ```
 
-Note that the target directory and any of its subpaths must not be a symlink.
+Starting from GitLab 8.10 you can also add more than one git data directory by
+adding the following lines to `/etc/gitlab/gitlab.rb` instead.
 
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+```ruby
+git_data_dirs {
+  "default" => "/var/opt/gitlab/git-data",
+  "alternative" => "/mnt/nas/git-data"
+}
+```
+
+Note that the target directories and any of its subpaths must not be a symlink.
+
+Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 If you already have existing Git repositories in `/var/opt/gitlab/git-data` you
 can move them to the new location as follows:
