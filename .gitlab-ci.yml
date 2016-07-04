@@ -169,7 +169,7 @@ Docker:
 notify:slack-fail:
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Build `\$CI_BUILD_NAME\` on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+    - ./support/notify_slack.sh "#omnibus-builds" "Build \`$CI_BUILD_NAME\` on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
   when: on_failure
   only:
     - master
