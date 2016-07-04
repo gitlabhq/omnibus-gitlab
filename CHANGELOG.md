@@ -48,6 +48,15 @@ omnibus-gitlab repository.
 - Increase the Unicorn memory limits to 400-650MB 8f688
 - Add configuration for Registry storage config 545856
 
+8.8.7
+
+- No changes
+
+8.8.6
+
+- Update version of pcre
+- Update version of expat
+
 8.8.5
 
  - No changes
@@ -77,6 +86,15 @@ omnibus-gitlab repository.
 - Check mountpoint before starting up pages daemon a53e7a0
 - Add support for Container Registry f74472d
 - Add maintenance_work_mem and wal_buffers Postgresql settings 5675dc
+
+8.7.9
+
+- No changes
+
+8.7.8
+
+- Update version of pcre
+- Update version of expat
 
 8.7.7
 
