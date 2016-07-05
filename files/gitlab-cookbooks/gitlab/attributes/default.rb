@@ -827,6 +827,15 @@ default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
 ####
 default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['mattermost-nginx']['enable'] = false
+default['gitlab']['mattermost_nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme",
+  "X-Frame-Options" => "SAMEORIGIN",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade"
+}
 
 ####
 # GitLab Pages NGINX
