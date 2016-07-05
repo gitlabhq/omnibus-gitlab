@@ -53,6 +53,8 @@ override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c91771019
 override :redis, version: '2.8.24', source: { md5: '7b6eb6e4ccc050c351df8ae83c55a035' }
 override :postgresql, version: '9.2.15', source: { md5: '235b4fc09eff4569a7972be65c449ecc' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
+override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "https://s3-eu-west-1.amazonaws.com/omnibus-builds/pcre-8.38.tar.gz" }
+override :expat, version: '2.1.1', source: { md5: '7380a64a8e3a9d66a9887b01d0d7ea81', url: "https://s3-eu-west-1.amazonaws.com/omnibus-builds/expat-2.1.1.tar.bz2" }
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
