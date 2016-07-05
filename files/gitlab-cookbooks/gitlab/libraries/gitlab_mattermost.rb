@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative 'nginx.rb'
+
 module GitlabMattermost
   class << self
     def parse_variables
@@ -38,10 +40,12 @@ module GitlabMattermost
       case uri.scheme
       when "http"
         Gitlab['mattermost']['service_use_ssl'] = false
+        Nginx.parse_proxy_headers('mattermost_nginx', false)
       when "https"
         Gitlab['mattermost']['service_use_ssl'] = true
         Gitlab['mattermost_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['mattermost_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Nginx.parse_proxy_headers('mattermost_nginx', true)
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end
