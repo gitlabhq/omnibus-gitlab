@@ -26,9 +26,10 @@
         "MaxUsersPerTeam": <%= @team_max_users_per_team %>,
         "EnableTeamCreation": <%= @team_enable_team_creation %>,
         "EnableUserCreation": <%= @team_enable_user_creation %>,
+        "EnableOpenServer": <%= @team_enable_open_server %>,
         "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>",
         "RestrictTeamNames": <%= @team_restrict_team_names %>,
-        "EnableTeamListing": <%= @team_enable_team_listing %>
+        "RestrictDirectMessage": "<%= @team_restrict_direct_message %>"
     },
     "SqlSettings": {
         "DriverName": "<%= @sql_driver_name %>",
@@ -40,7 +41,7 @@
         "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>"
     },
     "LogSettings": {
-        "ConsoleEnable": <%= @log_console_enable %>,
+        "EnableConsole": <%= @log_console_enable %>,
         "ConsoleLevel": "<%= @log_console_level %>",
         "EnableFile": <%= @log_enable_file %>,
         "FileLevel": "<%= @log_file_level %>",
@@ -48,6 +49,7 @@
         "FileLocation": "<%= @log_file_directory %>/mattermost.log"
     },
     "FileSettings": {
+        "MaxFileSize": <%= @file_max_file_size %>,
         "DriverName": "<%= @file_driver_name %>",
         "Directory": "<%= @file_directory %>",
         "EnablePublicLink": <%= @file_enable_public_link %>,
@@ -69,11 +71,14 @@
         "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>
     },
     "EmailSettings": {
-        "EnableSignUpWithEmail" : <%= @email_enable_sign_up_with_email %>,
+        "EnableSignUpWithEmail": <%= @email_enable_sign_up_with_email %>,
         "EnableSignInWithEmail": <%= @email_enable_sign_in_with_email %>,
         "EnableSignInWithUsername": <%= @email_enable_sign_in_with_username %>,
         "SendEmailNotifications": <%= @email_send_email_notifications %>,
         "RequireEmailVerification": <%= @email_require_email_verification %>,
+        "FeedbackName": "<%= @email_feedback_name %>",
+        "FeedbackEmail": "<%= @email_feedback_email %>",
+        "FeedbackOrganization": "<%= @email_feedback_organization %>",
         "SMTPUsername": "<%= @email_smtp_username %>",
         "SMTPPassword": "<%= @email_smtp_password %>",
         "SMTPServer": "<%= @email_smtp_server %>",
@@ -81,10 +86,9 @@
         "ConnectionSecurity": "<%= @email_connection_security %>",
         "InviteSalt": "<%= @email_invite_salt %>",
         "PasswordResetSalt": "<%= @email_password_reset_salt %>",
-        "FeedbackName": "<%= @email_feedback_name %>",
-        "FeedbackEmail": "<%= @email_feedback_email %>",
         "SendPushNotifications": <%= @email_send_push_notifications %>,
-        "PushNotificationServer": "<%= @email_push_notification_server %>"
+        "PushNotificationServer": "<%= @email_push_notification_server %>",
+        "PushNotificationContents": "<%= @email_push_notification_contents %>"
     },
     "RateLimitSettings": {
         "EnableRateLimiter": <%= @ratelimit_enable_rate_limiter %>,
@@ -113,5 +117,10 @@
         "AuthEndpoint": "<%= @gitlab_auth_endpoint %>",
         "TokenEndpoint": "<%= @gitlab_token_endpoint %>",
         "UserApiEndpoint": "<%= @gitlab_user_api_endpoint %>"
+    },
+    "LocalizationSettings": {
+        "DefaultServerLocale": "<%= @localization_server_locale %>",
+        "DefaultClientLocale": "<%= @localization_client_locale %>",
+        "AvailableLocales": "<%= @localization_available_locales %>"
     }
 }

@@ -696,12 +696,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_max_users_per_team'] = 150
 # mattermost['team_enable_team_creation'] = true
 # mattermost['team_enable_user_creation'] = true
+# mattermost['team_enable_open_server'] = false
 # mattermost['team_allow_public_link'] = true
 # mattermost['team_allow_valet_default'] = false
-# mattermost['team_default_color'] = '#2389D7'
 # mattermost['team_restrict_creation_to_domains'] = "gmail.com"
 # mattermost['team_restrict_team_names'] = true
-# mattermost['team_enable_team_listing'] = false
+# mattermost['team_restrict_direct_message'] = "any"
 
 
 # mattermost['sql_driver_name'] = 'mysql'
@@ -740,9 +740,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_connection_security'] = nil
 # mattermost['email_feedback_name'] = nil
 # mattermost['email_feedback_email'] = nil
+# mattermost['email_feedback_organization'] = nil
 # mattermost['email_send_push_notifications'] = true
 # mattermost['email_push_notification_server'] = ""
+# mattermost['email_push_notification_contents'] = "generic"
 
+# mattermost['file_max_file_size'] = 52428800
 # mattermost['file_driver_name'] = "local"
 # mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
 # mattermost['file_enable_public_link'] = true
@@ -777,6 +780,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['privacy_show_email_address'] = true
 # mattermost['privacy_show_full_name'] = true
 
+# mattermost['localization_server_locale'] = "en"
+# mattermost['localization_client_locale'] = "en"
+# mattermost['localization_available_locales'] = "en,es,fr,ja,pt-BR"
 
 ####################
 # Mattermost NGINX #
