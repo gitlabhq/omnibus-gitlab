@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.12
+
+- Disable nodejs Snapshot feature on ARM platforms
+
 8.9.11
 
 - No changes
