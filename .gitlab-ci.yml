@@ -1,6 +1,7 @@
 stages:
   - package
   - notification_fail
+  - add_to_version_server
   - extra
   - notification_fail
 
@@ -173,4 +174,11 @@ notify:slack-fail:
   when: on_failure
   only:
     - master
+    - tags@gitlab/omnibus-gitlab
+
+add-to-version-server:
+  stage: add_to_version_server
+  script:
+    - ./support/add_to_version_server.sh $CI_BUILD_TAG $VERSION_TOKEN
+  only:
     - tags@gitlab/omnibus-gitlab
