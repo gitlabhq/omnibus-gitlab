@@ -72,7 +72,7 @@ To troubleshoot this error:
 3.  Restart the runit server. On Ubuntu:
 
     ```
-    $ sudo initctl restart gitlab-runsvdir)
+    $ sudo initctl restart gitlab-runsvdir
     ```
 
    On CentOS:
