@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.9.6
 
-- No changes
+- Bump chef-zero to 4.7.1 to squelch debug messages 9eefa12f
 
 8.9.5
 
