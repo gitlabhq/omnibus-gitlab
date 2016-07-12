@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.10.0
 
+- Fix RangeError bignum too big errors on armhf platforms 4ba24bfe
 - Update redis to 3.2.1 (Takuya Noguchi)
 - Updated Chef version to 12.10.24 6e0c66
 - Disable nodejs Snapshot feature on ARM platforms f9a7b4bf
