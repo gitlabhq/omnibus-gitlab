@@ -216,9 +216,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#storing-git-data-in-an-alternative-directory
 ## If you want to use a single non-default directory to store git data use
 ## a path that doesn't contain symlinks.
-# git_data_dirs {
-#   "default" => "/var/opt/gitlab/git-data"
-# }
+# git_data_dirs "default" => "/var/opt/gitlab/git-data"
 
 ## For storing GitLab application uploads, eg. LFS objects, build artifacts
 ## see https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/shared_files.md

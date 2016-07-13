@@ -9,6 +9,10 @@ Make sure you view this guide from the tag (version) of GitLab you would like to
 
 If the highest number stable branch is unclear please check the [GitLab Blog](https://about.gitlab.com/blog/) for installation guide links by version.
 
+## Pre-requisite 
+
+GitLab Mattermost is compiled and manually tested each release on an AMD 64 chipset for Linux. ARM chipsets and operating systems, like Raspberry PI, are not supported. 
+
 ## Getting started
 
 GitLab Mattermost expects to run on its own virtual host. In your DNS you would then
