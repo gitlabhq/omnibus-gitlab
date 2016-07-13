@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'digest'
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 
@@ -21,19 +22,21 @@ dependent_services = []
 dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
 
+connection_attributes = [
+  'db_adapter',
+  'db_database',
+  'db_host',
+  'db_port',
+  'db_socket'
+].collect { |attribute| node['gitlab']['gitlab-rails'][attribute] }
+connection_digest = Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
+
 revision_file = "/opt/gitlab/embedded/service/gitlab-rails/REVISION"
 if ::File.exist?(revision_file)
   revision = IO.read(revision_file).chomp
 end
 upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
-db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{revision}")
-
-execute "initialize gitlab-rails database" do
-  command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
-  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
-  action :nothing
-  notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("posgresql") || !node['gitlab']['postgresql']['enable']
-end
+db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
 
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
@@ -44,11 +47,12 @@ bash "migrate gitlab-rails database" do
     log_file="/tmp/gitlab-rails-db-migrate-$(date +%s)-$$/output.log"
     umask 077
     mkdir $(dirname ${log_file})
-    /opt/gitlab/bin/gitlab-rake db:migrate 2>& 1 | tee ${log_file}
+    /opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file}
     STATUS=${PIPESTATUS[0]}
     echo $STATUS > #{db_migrate_status_file}
     exit $STATUS
   EOH
+  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
   notifies :run, 'execute[enable pg_trgm extension]', :before unless OmnibusHelper.not_listening?("postgresql") || !node['gitlab']['postgresql']['enable']
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless OmnibusHelper.not_listening?("redis")
   dependent_services.each do |svc|
