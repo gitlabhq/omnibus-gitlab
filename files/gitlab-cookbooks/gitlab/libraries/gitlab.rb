@@ -116,7 +116,7 @@ module Gitlab
       cert = OpenSSL::X509::Certificate.new
       cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
       cert.not_before = Time.now
-      cert.not_after = Time.now + 18250 * 24 * 60 * 60
+      cert.not_after = (DateTime.now + 365 * 50).to_time
       cert.public_key = key.public_key
       cert.serial = 0x0
       cert.version = 2

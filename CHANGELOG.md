@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.9.12
 
+- Fix RangeError bignum too big errors on armhf platform
 - Disable nodejs Snapshot feature on ARM platforms
 
 8.9.11
