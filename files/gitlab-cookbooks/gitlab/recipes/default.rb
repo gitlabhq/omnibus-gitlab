@@ -96,10 +96,21 @@ end
 # Install our runit instance
 include_recipe "runit"
 
-# Configure Services
+# Configure DB Services
 [
   "redis",
-  "postgresql", # Postgresql depends on Redis because of `rake db:seed_fu`
+  "postgresql" # Postgresql depends on Redis because of `rake db:seed_fu`
+].each do |service|
+  if node["gitlab"][service]["enable"]
+    include_recipe "gitlab::#{service}"
+  else
+    include_recipe "gitlab::#{service}_disable"
+  end
+end
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable']
+
+# Configure Services
+[
   "unicorn",
   "sidekiq",
   "gitlab-workhorse",
@@ -123,5 +134,3 @@ end
 runit_service "gitlab-git-http-server" do
   action :disable
 end
-
-include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable']
