@@ -109,6 +109,10 @@ include_recipe "runit"
 end
 include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable']
 
+# Always create logrotate folders and configs, even if the service is not enabled.
+# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
+include_recipe "gitlab::logrotate_folders_and_configs"
+
 # Configure Services
 [
   "unicorn",
