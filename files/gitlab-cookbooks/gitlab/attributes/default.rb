@@ -514,7 +514,8 @@ default['gitlab']['nginx']['custom_nginx_config'] = nil
 default['gitlab']['nginx']['proxy_read_timeout'] = 3600
 default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 default['gitlab']['nginx']['proxy_set_headers'] = {
-  "Host" => "$http_host",
+  "Host" => node['fqdn'],
+  "X-Forwarded-Host" => '""',
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
 }
@@ -703,6 +704,7 @@ default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 
 default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
 default['gitlab']['mattermost']['log_console_enable'] = true
+default['gitlab']['mattermost']['log_enable_webhook_debugging'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
 default['gitlab']['mattermost']['log_enable_file'] = true
 default['gitlab']['mattermost']['log_file_level'] = 'ERROR'
@@ -724,6 +726,7 @@ default['gitlab']['mattermost']['service_enable_insecure_outgoing_connections'] 
 default['gitlab']['mattermost']['service_allow_cors_from'] = nil
 default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = false
 default['gitlab']['mattermost']['service_enable_commands'] = false
+default['gitlab']['mattermost']['service_enable_custom_emoji'] = false
 default['gitlab']['mattermost']['service_enable_only_admin_integrations'] = true
 default['gitlab']['mattermost']['service_enable_oauth_service_provider'] = false
 default['gitlab']['mattermost']['service_enable_developer'] = false
@@ -791,7 +794,7 @@ default['gitlab']['mattermost']['privacy_show_full_name'] = true
 
 default['gitlab']['mattermost']['localization_server_locale'] = "en"
 default['gitlab']['mattermost']['localization_client_locale'] = "en"
-default['gitlab']['mattermost']['localization_available_locales'] = "en,es,fr,ja,pt-BR"
+default['gitlab']['mattermost']['localization_available_locales'] = ""
 
 default['gitlab']['mattermost']['team_site_name'] = "GitLab Mattermost"
 default['gitlab']['mattermost']['team_enable_team_creation'] = true
@@ -837,7 +840,8 @@ default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['registry-nginx']['enable'] = true
 default['gitlab']['registry_nginx']['https'] = false
 default['gitlab']['registry_nginx']['proxy_set_headers'] = {
-  "Host" => "$http_host",
+  "Host" => node['fqdn'],
+  "X-Forwarded-Host" => '""',
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
 	"X-Forwarded-Proto" => "$scheme"
