@@ -44,6 +44,8 @@ module GitlabRails
       Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
       Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"
+      Gitlab['nginx']['proxy_set_headers'] ||= Hash.new
+      Gitlab['nginx']['proxy_set_headers']['Host'] ||= uri.host
 
       case uri.scheme
       when "http"
