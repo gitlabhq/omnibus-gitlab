@@ -458,7 +458,7 @@ class CertificateHelper
   def move_existing_certificates
     Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
       case
-      when !valid?(file),whitelisted_files.include?(file)
+      when !valid?(file),whitelisted_files.include?(File.realpath(file))
         next
       when is_x509_certificate?(file)
         move_certificate(file)
@@ -479,8 +479,17 @@ class CertificateHelper
 
   def move_certificate(file)
     return if File.symlink?(file) && File.readlink(file).start_with?(@trusted_certs_dir)
-    FileUtils.mv(file, @trusted_certs_dir, force: true)
-    puts "\n Moving #{file}"
+
+    # Move the certs to the trusted certs directory if it is located within our managed certs directory
+    # Otherwise copy the cert to the trusted certs directory
+    if File.realpath(file).start_with?(@omnibus_certs_dir)
+      FileUtils.mv(File.realpath(file), @trusted_certs_dir, force: true)
+    else
+      FileUtils.cp(File.realpath(file), @trusted_certs_dir)
+    end
+
+    FileUtils.rm_f(file) if File.symlink?(file)
+    puts "\n Moving #{File.realpath(file)}"
   end
 
   def link_certificates
