@@ -36,3 +36,10 @@ Legend:
 * `Communicates via` - How the component talks with the other components.
 * `Alternative` - If it is possible to configure the component to use different type of communication. The type is listed with default port used in that case.
 * `Connection port` - Port on which the component communicates.
+
+GitLab also expects a filesystem to be ready for the storage of git repositories
+and various other files.
+
+Note that if you are using NFS (Network File System), files will be carried
+over a network which will require, based on implementation, ports `111` and
+`2049` to be open.
