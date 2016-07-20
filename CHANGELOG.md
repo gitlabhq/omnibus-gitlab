@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Update redis to 3.2.1 (Takuya Noguchi) 144bf
 - Updated Chef version to 12.10.24 6e0c66
 - Disable nodejs Snapshot feature on ARM platforms f9a7b4bf
+- Update the trusted certs recipe to copy in certs that were linked in from external folders
 - Overwrite Host and X-Forwarded-Host headers in NGINX 9ac08
 - Use gitlab:db:configure to seed and migrate the database 047cfd
 - Update Mattermost to 3.2 28cf3
