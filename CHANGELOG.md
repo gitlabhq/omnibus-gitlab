@@ -12,6 +12,8 @@ omnibus-gitlab repository.
 - Overwrite Host and X-Forwarded-Host headers in NGINX 9ac08
 - Use gitlab:db:configure to seed and migrate the database 047cfd
 - Update Mattermost to 3.2 28cf3
+- Lower expiry date of registry internal certificate b269b4
+- Add personal access token to rack attack whitelist 21abc
 
 8.9.6
 
