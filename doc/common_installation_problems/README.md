@@ -53,6 +53,34 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
+If you uninstall and reinstall GitLab, it's possible that the process
+supervisor (runit) may not be in the proper state if it continued to run.
+To troubleshoot this error:
+
+1. First check that the runit directory exists:
+
+    ```sh
+    $ ls -al /opt/gitlab/sv/redis/supervise
+    ```
+
+2. If you see the message, continue to the next step:
+
+    ```
+    ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
+    ```
+
+3.  Restart the runit server. On Ubuntu:
+
+    ```
+    $ sudo initctl restart gitlab-runsvdir
+    ```
+
+   On CentOS:
+
+    ```
+    $ systemctl restart gitlab-runsvdir.service
+    ```
+
 *Note* This should be resolved starting from 7.13 omnibus-gitlab packages.
 
 During the first `gitlab-ctl reconfigure` run, omnibus-gitlab needs to figure
