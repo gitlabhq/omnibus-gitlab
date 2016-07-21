@@ -32,4 +32,5 @@ build do
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
       " --no-ri --no-rdoc", env: env
+  patch source: 'chef-zero-2.7.1-log-level-rest-base.patch', target: '/opt/gitlab/embedded/lib/ruby/gems/2.1.0/gems/chef-zero-4.7.1/lib/chef_zero/rest_base.rb'
 end
