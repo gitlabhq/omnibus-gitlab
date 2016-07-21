@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.11.0
+
+- Upgrade krb5 lib to 1.14.2
+
 8.10.0
 
 - Fix RangeError bignum too big errors on armhf platforms 4ba24bfe
