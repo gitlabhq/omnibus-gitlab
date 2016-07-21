@@ -58,6 +58,9 @@ file authorized_keys do
   mode "0600"
 end
 
+# All repositories under GitLab share one hooks directory under
+# /opt/gitlab. Git-Annex wants write access to this hook directory, but
+# this directory is owned by root in the package.
 directory hooks_directory do
   owner git_user
   group git_group
