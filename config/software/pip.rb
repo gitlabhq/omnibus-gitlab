@@ -15,12 +15,12 @@
 #
 
 name "pip"
-default_version "1.3"
+default_version "7.1.2"
 
 dependency "setuptools"
 
 source url: "https://pypi.python.org/packages/source/p/pip/pip-#{version}.tar.gz",
-       md5: '918559b784e2aca9559d498050bb86e7'
+       md5: '3823d2343d9f3aaab21cf9c917710196'
 
 relative_path "pip-#{version}"
 
