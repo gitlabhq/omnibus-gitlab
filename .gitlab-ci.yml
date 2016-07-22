@@ -6,7 +6,7 @@ stages:
   - notification_fail
 
 before_script:
-  - mkdir -p /home/git
+  - mkdir -p /home/git/repositories
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache
