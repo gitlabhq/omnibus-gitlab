@@ -5,7 +5,7 @@
 CI_BUILD_TAG=$1
 VERSION_TOKEN=$2
 
-VERSION=$(echo $CI_BUILD_TAG | grep -o -v "+rc" | grep -o -E "^[0-9]+\.[0-9]+\.[0-9]+")
+VERSION=$(echo $CI_BUILD_TAG | grep -v "+rc" | grep -o -E "^[0-9]+\.[0-9]+\.[0-9]+")
 if [ -z "$CI_BUILD_TAG" ] || [ -z "$VERSION_TOKEN" ]; then
     echo "Missing one of the arguments! (options: CI_BUILD_TAG, VERSION_TOKEN)"
     exit 1
