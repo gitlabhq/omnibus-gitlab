@@ -56,21 +56,15 @@
       "required": true
     },
     {
-      "description": "Volume size for /logs",
-      "displayName": "Logs volume size",
-      "name": "LOGS_VOL_SIZE",
-      "value": "1Gi"
-    },
-    {
       "description": "Volume size for /etc",
       "displayName": "/etc/gitlab volume size",
       "name": "ETC_VOL_SIZE",
       "value": "100Mi"
     },
     {
-      "description": "Volume size for /opt",
-      "displayName": "/var/opt/gitlab volume size",
-      "name": "OPT_VOL_SIZE",
+      "description": "Volume size for GitLab data",
+      "displayName": "GitLab data volume size",
+      "name": "GITLAB_DATA_VOL_SIZE",
       "value": "5Gi"
     },
     {
@@ -99,10 +93,10 @@
       "spec": {
         "tags": [
           {
-            "name": "8.9.6",
+            "name": "8.10.0",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.9.6-ce.0"
+              "name": "gitlab/gitlab-ce:8.10.0-ce.1"
             }
           }
         ]
@@ -146,24 +140,7 @@
             "intervalSeconds": 1,
             "timeoutSeconds": 600,
             "maxUnavailable": "25%",
-            "maxSurge": "25%",
-            "post": {
-              "failurePolicy": "Abort",
-              "execNewPod": {
-                "containerName": "gitlab-ce",
-                "command": [
-                  "/bin/bash", "-c",
-                  "cd /opt/gitlab/embedded/service/gitlab-rails && ln -s /var/opt/gitlab/gitlab-rails/etc/database.yml config/database.yml && ln -s /var/opt/gitlab/gitlab-rails/etc/gitlab.yml config/gitlab.yml && COUNT=$(PGPASSWORD='${POSTGRESQL_PASSWORD}' psql -h ${APPLICATION_NAME}-postgresql -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -Atw -c 'SELECT count(*) FROM (SELECT 1 FROM users LIMIT 1) AS users;') && if [[ ${COUNT} -eq 0 ]]; then /opt/gitlab/embedded/bin/bundle exec rake db:schema:load db:seed_fu; fi"
-                ],
-                "env": [
-                  { "name": "HOME", "value": "/var/opt/gitlab" },
-                  { "name": "PATH", "value": "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin" },
-                  { "name": "RAILS_ENV", "value": "production" },
-                  { "name": "BUNDLE_GEMFILE", "value": "/opt/gitlab/embedded/service/gitlab-rails/Gemfile" }
-                ],
-                "volumes": [ "gitlab-ce-volume-1", "gitlab-ce-volume-2", "gitlab-ce-volume-3" ]
-              }
-            }
+            "maxSurge": "25%"
           },
           "resources": {}
         },
@@ -180,7 +157,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:8.9.6"
+                "name": "${APPLICATION_NAME}:8.10.0"
               }
             }
           }
@@ -209,13 +186,7 @@
               {
                 "name": "gitlab-ce-volume-2",
                 "persistentVolumeClaim": {
-                  "claimName": "${APPLICATION_NAME}-logs"
-                }
-              },
-              {
-                "name": "gitlab-ce-volume-3",
-                "persistentVolumeClaim": {
-                  "claimName": "${APPLICATION_NAME}-opt"
+                  "claimName": "${APPLICATION_NAME}-data"
                 }
               }
             ],
@@ -236,7 +207,7 @@
                 "env": [
                   {
                     "name": "GITLAB_OMNIBUS_CONFIG",
-                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis'; unicorn['worker_processes'] = 2;"
+                    "value": "external_url 'http://${APPLICATION_HOSTNAME}/'; postgresql['enable']=false; gitlab_rails['db_host'] = '${APPLICATION_NAME}-postgresql'; gitlab_rails['db_password']='${POSTGRESQL_PASSWORD}'; gitlab_rails['db_username']='${POSTGRESQL_USER}'; gitlab_rails['db_database']='${POSTGRESQL_DATABASE}'; redis['enable'] = false; gitlab_rails['redis_host']='${APPLICATION_NAME}-redis'; unicorn['worker_processes'] = 2; manage_accounts['enable'] = true; user['home'] = '/gitlab-data/home'; git_data_dir '/gitlab-data/git-data'; gitlab_rails['shared_path'] = '/gitlab-data/shared'; gitlab_rails['uploads_directory'] = '/gitlab-data/uploads'; gitlab_ci['builds_directory'] = '/gitlab-data/builds';"
                   }
                 ],
                 "resources": {
@@ -256,11 +227,7 @@
                   },
                   {
                     "name": "gitlab-ce-volume-2",
-                    "mountPath": "/var/log/gitlab"
-                  },
-                  {
-                    "name": "gitlab-ce-volume-3",
-                    "mountPath": "/var/opt/gitlab"
+                    "mountPath": "/gitlab-data"
                   }
                 ],
                 "livenessProbe": {
@@ -353,7 +320,7 @@
           "spec": {
             "volumes": [
               {
-                "name": "gitlab-ce-volume-5",
+                "name": "gitlab-ce-volume-4",
                 "persistentVolumeClaim": {
                   "claimName": "${APPLICATION_NAME}-redis-data"
                 }
@@ -381,7 +348,7 @@
                 },
                 "volumeMounts": [
                   {
-                    "name": "gitlab-ce-volume-5",
+                    "name": "gitlab-ce-volume-4",
                     "mountPath": "/data"
                   }
                 ],
@@ -429,7 +396,7 @@
                   { "name": "PGDATA", "value": "/var/lib/pgsql/data/userdata" },
                   { "name": "CONTAINER_SCRIPTS_PATH", "value": "/usr/share/container-scripts/postgresql" }
                 ],
-                "volumes": ["gitlab-ce-volume-4"]
+                "volumes": ["gitlab-ce-volume-3"]
               }
             }
           },
@@ -470,7 +437,7 @@
           "spec": {
             "volumes": [
               {
-                "name": "gitlab-ce-volume-4",
+                "name": "gitlab-ce-volume-3",
                 "persistentVolumeClaim": {
                   "claimName": "${APPLICATION_NAME}-postgresql"
                 }
@@ -530,7 +497,7 @@
                 },
                 "volumeMounts": [
                   {
-                    "name": "gitlab-ce-volume-4",
+                    "name": "gitlab-ce-volume-3",
                     "mountPath": "/var/lib/pgsql/data"
                   }
                 ],
@@ -667,7 +634,7 @@
       "kind": "PersistentVolumeClaim",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${APPLICATION_NAME}-logs"
+        "name": "${APPLICATION_NAME}-data"
       },
       "spec": {
         "accessModes": [
@@ -675,24 +642,7 @@
         ],
         "resources": {
           "requests": {
-            "storage": "${LOGS_VOL_SIZE}"
-          }
-        }
-      }
-    },
-    {
-      "kind": "PersistentVolumeClaim",
-      "apiVersion": "v1",
-      "metadata": {
-        "name": "${APPLICATION_NAME}-opt"
-      },
-      "spec": {
-        "accessModes": [
-          "ReadWriteOnce"
-        ],
-        "resources": {
-          "requests": {
-            "storage": "${OPT_VOL_SIZE}"
+            "storage": "${GITLAB_DATA_VOL_SIZE}"
           }
         }
       }
