@@ -20,10 +20,9 @@ name "python-docutils"
 
 default_version "0.11"
 
-dependency "pip"
-dependency "python"
+dependency "python3"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  command "#{install_dir}/embedded/bin/pip install --compile --build #{Time.now.to_i} docutils==#{version}", env: env
+  command "#{install_dir}/embedded/bin/pip3 install --compile docutils==#{version}", env: env
 end
