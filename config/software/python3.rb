@@ -17,7 +17,7 @@
 #
 
 name "python3"
-default_version "3.4.3"
+default_version "3.4.5"
 
 dependency "readline"
 dependency "ncurses"
@@ -26,7 +26,7 @@ dependency "openssl"
 dependency "bzip2"
 
 source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       :md5 => '4281ff86778db65892c05151d5de738d'
+       :md5 => '5f2ef90b1adef35a64df14d4bb7af733'
 
 relative_path "Python-#{version}"
 
@@ -41,12 +41,10 @@ build do
   command ["./configure",
            "--prefix=#{install_dir}/embedded",
            "--enable-shared",
-           "--disable-sqlite3",
            "--with-dbmliborder="].join(" "), env: env
   make env: env
   make "install", env: env
 
-  # There exists no configure flag to tell Python to not compile readline support :(
   block do
     FileUtils.rm_f(Dir.glob("#{install_dir}/lib/python3.4/lib-dynload/dbm.*"))
   end
