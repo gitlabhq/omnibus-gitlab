@@ -7,6 +7,9 @@ omnibus-gitlab repository.
 
 - Upgrade krb5 lib to 1.14.2
 
+8.10.1
+- Fix custom HTTP/HTTPS external ports ddcf302f
+
 8.10.0
 
 - Fix RangeError bignum too big errors on armhf platforms 4ba24bfe
