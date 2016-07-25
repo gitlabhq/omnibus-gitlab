@@ -15,35 +15,6 @@
 # limitations under the License.
 #
 
-logrotate_dir = node['gitlab']['logrotate']['dir']
-logrotate_log_dir = node['gitlab']['logrotate']['log_directory']
-logrotate_d_dir = File.join(logrotate_dir, 'logrotate.d')
-
-[
-  logrotate_dir,
-  logrotate_d_dir,
-  logrotate_log_dir
-].each do |dir|
-  directory dir do
-    mode "0700"
-  end
-end
-
-template File.join(logrotate_dir, "logrotate.conf") do
-  mode "0644"
-  variables(node['gitlab']['logrotate'].to_hash)
-end
-
-node['gitlab']['logrotate']['services'].each do |svc|
-  template File.join(logrotate_d_dir, svc) do
-    source 'logrotate-service.erb'
-    variables(
-      log_directory: node['gitlab'][svc]['log_directory'],
-      options: node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
-    )
-  end
-end
-
 runit_service "logrotate" do
   down node['gitlab']['logrotate']['ha']
   control ['t']
