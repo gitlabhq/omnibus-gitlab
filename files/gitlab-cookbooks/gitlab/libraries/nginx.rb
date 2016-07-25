@@ -82,9 +82,9 @@ module Nginx
 
       case uri.scheme
       when "http"
-        header << ":#{uri.port}" if uri.port != 80
+        header << ":#{uri.port}" unless uri.port == 80
       when "https"
-        header << ":#{uri.port}" if uri.port != 443
+        header << ":#{uri.port}" unless uri.port == 443
       end
 
       header
