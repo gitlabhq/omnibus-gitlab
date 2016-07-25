@@ -17,6 +17,9 @@
 name "ohai"
 default_version "8.15.1"
 
+license "Apache-2.0"
+license_file "LICENSE"
+
 dependency "ruby"
 dependency "rubygems"
 

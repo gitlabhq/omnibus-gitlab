@@ -20,6 +20,8 @@ name "python-docutils"
 
 default_version "0.11"
 
+license "BSD-2-Clause"
+
 dependency "python3"
 
 build do

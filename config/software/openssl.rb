@@ -17,6 +17,9 @@
 
 name "openssl"
 
+license "OpenSSL"
+license_file "LICENSE"
+
 dependency "zlib"
 dependency "cacerts"
 dependency "makedepend" unless aix?

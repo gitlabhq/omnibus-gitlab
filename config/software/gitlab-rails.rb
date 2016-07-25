@@ -21,6 +21,9 @@ version = Gitlab::Version.new("VERSION")
 name "gitlab-rails"
 default_version version.print
 
+license "MIT"
+license_file "LICENSE"
+
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"

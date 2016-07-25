@@ -34,8 +34,8 @@ build do
   patch source: 'disable-keyutils.patch', target: 'src/configure'
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
+           " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
 
-  command "make -j #{workers}", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
-  command "make install", cwd: "#{Omnibus::Config.source_dir}/krb5-#{version}/src"
+  command "make -j #{workers}", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
+  command "make install", cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
 end

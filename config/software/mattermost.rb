@@ -22,6 +22,10 @@ default_version "3.2.0"
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
        md5: '4cdc51e5793b44e9e69919d747a7f947'
 
+relative_path "mattermost"
+
+license "MIT with Trademark Protection"
+
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 

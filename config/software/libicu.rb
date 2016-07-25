@@ -24,6 +24,9 @@ source :url => "http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.
 
 relative_path 'icu/source'
 
+license "MIT"
+license_file "license.html"
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"

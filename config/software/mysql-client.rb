@@ -18,6 +18,9 @@
 name "mysql-client"
 default_version "5.5.37"
 
+license "GPL-2"
+license_file "COPYING"
+
 dependency "openssl"
 dependency "zlib"
 dependency "ncurses"
