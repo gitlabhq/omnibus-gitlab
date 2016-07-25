@@ -17,8 +17,6 @@
 name "nodejs"
 default_version "0.10.35"
 
-dependency "python"
-
 version "0.10.10" do
   source md5: "a47a9141567dd591eec486db05b09e1c"
 end
@@ -44,7 +42,7 @@ build do
            ''
          end
 
-  command "#{install_dir}/embedded/bin/python ./configure" \
+  command "python ./configure" \
           " --prefix=#{install_dir}/embedded #{args}", env: env
 
   make "-j #{workers}", env: env
