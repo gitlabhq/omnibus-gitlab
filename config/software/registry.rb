@@ -22,17 +22,18 @@ default_version "v2.4.1"
 license "Apache-2.0"
 license_file "https://github.com/docker/distribution/blob/#{version}/LICENSE"
 
-source :git => "https://github.com/docker/distribution.git"
+source git: "https://github.com/docker/distribution.git"
 
-relative_path "github.com/docker/distribution"
+relative_path "src/github.com/docker/distribution"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  env = { 'GOPATH' => "#{Omnibus::Config.base_dir}"}
-  cwd = "#{Omnibus::Config.source_dir}/github.com/docker/distribution"
+  env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/registry"}
+  registry_source_dir = "#{Omnibus::Config.source_dir}/registry"
+  cwd = "#{registry_source_dir}/src/github.com/docker/distribution"
 
   command "go get github.com/tools/godep", env: env, cwd: cwd
-  command "$GOPATH/bin/godep restore", env: env, cwd: cwd
+  command "#{registry_source_dir}/bin/godep restore", env: env, cwd: cwd
   make "build PREFIX=#{install_dir}/embedded", env: env, cwd: cwd
   make "binaries PREFIX=#{install_dir}/embedded", env: env, cwd: cwd
 end
