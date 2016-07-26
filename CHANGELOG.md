@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.10.2
+
+- Exclude standard ports from Host header
+
 8.10.1
 
 - Fix custom HTTP/HTTPS external ports ddcf302f
