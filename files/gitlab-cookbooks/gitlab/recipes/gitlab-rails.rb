@@ -51,7 +51,7 @@ end
 if node['gitlab']['manage-storage-directories']['enable']
   # We create shared_path with 751 allowing other users to enter into the directories
   # It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
-  directory node['gitlab']['gitlab-rails']['shared_path'] do
+  storage_directory node['gitlab']['gitlab-rails']['shared_path'] do
     owner gitlab_user
     group account_helper.web_server_group
     mode '0751'
@@ -64,14 +64,14 @@ if node['gitlab']['manage-storage-directories']['enable']
     gitlab_rails_public_uploads_dir,
     gitlab_ci_builds_dir
   ].compact.each do |dir_name|
-    directory dir_name do
+    storage_directory dir_name do
       owner gitlab_user
       mode '0700'
       recursive true
     end
   end
 
-  directory node['gitlab']['gitlab-rails']['pages_path'] do
+  storage_directory node['gitlab']['gitlab-rails']['pages_path'] do
     owner gitlab_user
     group account_helper.web_server_group
     mode '0750'

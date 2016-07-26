@@ -31,14 +31,14 @@ gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
 if node['gitlab']['manage-storage-directories']['enable']
   git_data_directories.each do |_name, git_data_directory|
-    directory git_data_directory do
+    storage_directory git_data_directory do
       owner git_user
       mode "0700"
       recursive true
     end
   end
   repositories_storages.each do |_name, repositories_storage|
-    directory repositories_storage do
+    storage_directory repositories_storage do
       owner git_user
       mode "2770"
       recursive true
@@ -50,7 +50,7 @@ end
   ssh_dir,
   File.dirname(authorized_keys)
 ].uniq.each do |dir|
-  directory dir do
+  storage_directory dir do
     owner git_user
     group git_group
     mode "0700"
