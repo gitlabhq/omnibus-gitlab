@@ -207,6 +207,7 @@ Docker:
 
 notify:slack-fail:
   before_script: # Nothing
+    - ls -l
   image: "alpine"
   stage: notification_fail
   script:
@@ -218,6 +219,7 @@ notify:slack-fail:
 
 add-to-version-server:
   before_script: # Nothing
+    - ls -l
   image: "alpine"
   stage: add_to_version_server
   script:

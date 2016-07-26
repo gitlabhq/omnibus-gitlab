@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Set version to version.gitlab.com
 # Variable VERSION_TOKEN and CI_BUILD_TAG need to be set
 
