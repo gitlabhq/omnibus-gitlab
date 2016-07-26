@@ -206,6 +206,9 @@ Docker:
   - branches
 
 notify:slack-fail:
+  before_script: # Nothing
+    - ls -l
+  image: "alpine"
   stage: notification_fail
   script:
     - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline)\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
@@ -215,6 +218,9 @@ notify:slack-fail:
     - tags@gitlab/omnibus-gitlab
 
 add-to-version-server:
+  before_script: # Nothing
+    - ls -l
+  image: "alpine"
   stage: add_to_version_server
   script:
     - ./support/add_to_version_server.sh $CI_BUILD_TAG $VERSION_TOKEN
