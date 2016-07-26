@@ -89,10 +89,10 @@ symbolic links to your non-packaged PostgreSQL:
     the non-packaged versions:
 
     ```bash
-    cd /opt/gitlab/bin
+    cd /opt/gitlab/embedded/bin/
     mv psql psql_moved
     mv pg_dump pg_dump_moved
-    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
+    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/embedded/bin/
     ```
 
 1.  Re-check the versions:
