@@ -45,7 +45,7 @@ module Registry
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
       Gitlab['registry_nginx']['proxy_set_headers'] ||= Hash.new
-      Gitlab['registry_nginx']['proxy_set_headers']['Host'] ||= "#{uri.host}:#{uri.port}"
+      Gitlab['registry_nginx']['proxy_set_headers']['Host'] ||= Nginx.generate_host_header(uri)
 
       case uri.scheme
       when "http"
