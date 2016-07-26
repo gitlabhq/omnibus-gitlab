@@ -207,7 +207,7 @@ Docker:
 
 notify:slack-fail:
   before_script: # Nothing
-    - ls -l
+    - apk update && apk add git
   image: "alpine"
   stage: notification_fail
   script:
