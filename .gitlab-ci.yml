@@ -219,7 +219,7 @@ notify:slack-fail:
 
 add-to-version-server:
   before_script: # Nothing
-    - ls -l
+    - apk update && apk add curl
   image: "alpine"
   stage: add_to_version_server
   script:
