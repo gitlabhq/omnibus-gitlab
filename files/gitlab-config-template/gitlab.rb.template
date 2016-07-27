@@ -296,6 +296,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_database'] = 0
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
+# Sentinel support
+# gitlab-rails['redis_sentinels'] = [
+#   {'host' => '127.0.0.1', 'port' => 26379},
+# ]
+
 ################################
 # GitLab email server settings #
 ################################
