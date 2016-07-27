@@ -68,7 +68,8 @@ build do
   assets_precompile_env = {
     "RAILS_ENV" => "production",
     "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
-    "USE_DB" => "false"
+    "USE_DB" => "false",
+    "SKIP_STORAGE_VALIDATION" => "true"
   }
   bundle "exec rake assets:precompile", :env => assets_precompile_env
 
