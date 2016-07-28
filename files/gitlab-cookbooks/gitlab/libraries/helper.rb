@@ -372,14 +372,24 @@ end
 class MattermostHelper
   extend ShellOutHelper
 
-  def self.version(path, user)
-    cmd = version_cmd(path)
-    result = do_shell_out(cmd, user, "/opt/gitlab/embedded/service/mattermost")
+  def initialize(node, mattermost_user, mattermost_home)
+    @node = node
+    @mattermost_user = mattermost_user
+    @mattermost_home = mattermost_home
+    @config_file_path = File.join(@mattermost_home, 'config.json')
+    @status = {}
+  end
+
+  def version
+    return @status[:version] if @status.key?(:version)
+
+    cmd = self.class.version_cmd(@config_file_path)
+    result = self.class.do_shell_out(cmd, @mattermost_user, "/opt/gitlab/embedded/service/mattermost")
 
     if result.exitstatus == 0
-      result.stdout
+      @status[:version] = result.stdout
     else
-      nil
+      @status[:version] = nil
     end
   end
 

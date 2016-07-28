@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 8.10.4
 
 - Revert Host and X-Forwarded-Host headers in NGINX 9ac08
+- Fix issue where mattermost log file is created by the root user
 
 8.10.3
 

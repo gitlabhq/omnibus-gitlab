@@ -109,24 +109,20 @@ backup_done = node['gitlab']['mattermost']['db2_backup_created']
 default_team_name_for_v2_upgrade = node['gitlab']['mattermost']['db2_team_name']
 default_team_name_set = !default_team_name_for_v2_upgrade.nil?
 log_file = File.join(mattermost_log_dir, "mattermost.log")
+mattermost_helper = MattermostHelper.new(node, mattermost_user, mattermost_home)
 
 # If mattermost version returns exit status different than 0, database
 # migration most likely is not possible
-mattermost_version = MattermostHelper.version(config_file_path, mattermost_user)
+# stop the running service, something went wrong
+execute "/opt/gitlab/bin/gitlab-ctl stop mattermost" do
+  retries 20
+  only_if { mattermost_helper.version.nil? }
+end
 
-if mattermost_version.nil?
-  # stop the running service, something went wrong
-  execute "/opt/gitlab/bin/gitlab-ctl stop mattermost" do
-    retries 20
-  end
-
-  if backup_done && default_team_name_set
-    status =  MattermostHelper.upgrade_db_30(config_file_path, mattermost_user, default_team_name_for_v2_upgrade)
-
-    execute "/opt/gitlab/bin/gitlab-ctl start mattermost" do
-      retries 2
-      only_if { status == 0 }
-    end
+if backup_done && default_team_name_set
+  execute "/opt/gitlab/bin/gitlab-ctl start mattermost" do
+    retries 2
+    only_if { mattermost_helper.version.nil? && MattermostHelper.upgrade_db_30(config_file_path, mattermost_user, default_team_name_for_v2_upgrade) == 0 }
   end
 end
 
@@ -147,7 +143,8 @@ bash "Show the message of the failed upgrade." do
     for more information.\n
     " >> #{log_file}
   EOS
-  only_if { mattermost_version.nil? && !(backup_done && default_team_name_set) }
+  user mattermost_user
+  only_if { mattermost_helper.version.nil? && !(backup_done && default_team_name_set) }
 end
 
 ###############
