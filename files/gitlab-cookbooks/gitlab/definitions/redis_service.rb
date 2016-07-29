@@ -37,11 +37,13 @@ define :redis_service, :socket_group => nil do
     owner redis_user
     group params[:socket_group]
     mode "0750"
+    action :create
   end
 
   directory redis_log_dir do
     owner redis_user
     mode "0700"
+    action :create
   end
 
   redis_config = File.join(redis_dir, "redis.conf")
