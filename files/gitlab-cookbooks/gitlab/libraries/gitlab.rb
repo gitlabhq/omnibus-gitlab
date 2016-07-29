@@ -41,6 +41,7 @@ require_relative 'logging.rb'
 require_relative 'nginx.rb'
 require_relative 'postgresql.rb'
 require_relative 'redis.rb'
+require_relative 'redis_service.rb'
 require_relative 'registry.rb'
 require_relative 'unicorn.rb'
 
@@ -175,6 +176,7 @@ module Gitlab
       GitlabRails.parse_variables
       Logging.parse_variables
       Redis.parse_variables
+      RedisService.parse_variables
       Postgresql.parse_variables
       Unicorn.parse_variables
       GitlabCi.parse_variables

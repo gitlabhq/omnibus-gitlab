@@ -85,7 +85,7 @@ bind <%= @bind %>
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
-port <%= @port %>
+port <%= @port || 0 %>
 
 # TCP listen() backlog.
 #
@@ -102,7 +102,7 @@ port <%= @port %>
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-unixsocket <%= @unixsocket %>
+<%= "unixsocket #{@unixsocket}" if @unixsocket %>
 unixsocketperm <%= @unixsocketperm %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
