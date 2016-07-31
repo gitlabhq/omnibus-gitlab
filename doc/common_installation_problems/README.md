@@ -69,13 +69,14 @@ To troubleshoot this error:
     ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
     ```
 
-3.  Restart the runit server. On Ubuntu:
+3.  Restart the runit server.  
+    On Ubuntu:
 
     ```
     $ sudo initctl restart gitlab-runsvdir
     ```
 
-   On CentOS:
+    On CentOS:
 
     ```
     $ systemctl restart gitlab-runsvdir.service
