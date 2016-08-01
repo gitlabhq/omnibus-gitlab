@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Exclude standard ports from Host header
 
 8.10.1
+
 - Fix custom HTTP/HTTPS external ports ddcf302f
 
 8.10.0
