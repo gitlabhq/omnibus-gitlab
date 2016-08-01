@@ -44,8 +44,6 @@ module Registry
       Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
-      Gitlab['registry_nginx']['proxy_set_headers'] ||= Hash.new
-      Gitlab['registry_nginx']['proxy_set_headers']['Host'] ||= uri.host
 
       case uri.scheme
       when "http"
