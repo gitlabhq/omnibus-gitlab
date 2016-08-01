@@ -7,3 +7,8 @@ gem 'package_cloud'
 gem 'thor', '0.18.1' # This specific version is required by package_cloud
 gem 'json'
 gem 'rspec'
+
+group :test do
+  gem 'byebug'
+  gem 'chefspec'
+end
