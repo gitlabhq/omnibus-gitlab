@@ -8,6 +8,10 @@ omnibus-gitlab repository.
 - Upgrade krb5 lib to 1.14.2
 - Create logrotate folders and configs even when the service is disabled
 
+8.10.4
+
+- Revert Host and X-Forwarded-Host headers in NGINX 9ac08
+
 8.10.3
 
 - No changes
