@@ -318,6 +318,25 @@ First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Th
 
 After the change run `sudo gitlab-ctl reconfigure`.
 
+## Enable 2-way SSL Client Authentication
+
+To require web clients to authenticate with a trusted certificate, you can enable 2-way SSL by adding to `gitlab.rb`:
+
+```ruby
+  nginx['ssl_verify_client'] = "on"
+```
+
+and running reconfigure.
+
+These additional options NGINX supports for configuring SSL client authentication can also be configured:
+
+```ruby
+  nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
+  nginx['ssl_verify_depth'] = "2"
+```
+
+After making the changes run `sudo gitlab-ctl reconfigure`.
+
 ## Inserting custom NGINX settings into the GitLab server block
 
 If you need to add custom settings into the NGINX `server` block for GitLab for

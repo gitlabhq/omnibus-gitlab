@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade krb5 lib to 1.14.2
 - Create logrotate folders and configs even when the service is disabled
+- Added nginx options to enable 2-way SSL client authentication
 
 8.10.2
 
