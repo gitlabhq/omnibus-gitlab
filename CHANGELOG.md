@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.10.3
+
+- No changes
+
 8.10.2
 
 - Exclude standard ports from Host header
