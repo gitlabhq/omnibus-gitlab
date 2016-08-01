@@ -1,1 +1,2 @@
 CHANGELOG merge=union
+*.rb.template gitlab-language=ruby
