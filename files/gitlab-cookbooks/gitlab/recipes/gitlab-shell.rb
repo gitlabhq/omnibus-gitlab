@@ -52,22 +52,10 @@ directory ssh_dir do
   recursive true
 end
 
-file authorized_keys do
-  owner git_user
-  group git_group
-  mode "0600"
-end
-
 directory hooks_directory do
   owner git_user
   group git_group
   mode "0755"
-end
-
-# gitlab-shell 1.9.4 uses a lock file in the gitlab-shell root
-file File.join(gitlab_shell_dir, "authorized_keys.lock") do
-  owner git_user
-  group git_group
 end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
