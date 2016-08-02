@@ -76,18 +76,5 @@ module Nginx
 
       Gitlab[app]['proxy_set_headers'] = default_from_attributes
     end
-
-    def generate_host_header(uri)
-      header = uri.host.dup
-
-      case uri.scheme
-      when "http"
-        header << ":#{uri.port}" unless uri.port == 80
-      when "https"
-        header << ":#{uri.port}" unless uri.port == 443
-      end
-
-      header
-    end
   end
 end
