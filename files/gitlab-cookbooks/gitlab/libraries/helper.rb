@@ -458,7 +458,7 @@ class CertificateHelper
   def move_existing_certificates
     Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
       case
-      when !valid?(file),whitelisted_files.include?(File.realpath(file))
+      when !valid?(file),whitelisted?(file)
         next
       when is_x509_certificate?(file)
         move_certificate(file)
@@ -466,6 +466,10 @@ class CertificateHelper
         raise_msg(file)
       end
     end
+  end
+
+  def whitelisted?(file)
+    whitelisted_files.include?(file) || whitelisted_files.include?(File.realpath(file))
   end
 
   def valid?(file)
