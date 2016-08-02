@@ -72,18 +72,10 @@ server {
     proxy_connect_timeout   <%= @proxy_connect_timeout %>;
     proxy_redirect          off;
 
-    proxy_set_header   X-Forwarded-Proto <%= @https ? "https" : "http" %>;
-    proxy_set_header   Host              $http_host;
-    proxy_set_header   X-Real-IP         $remote_addr;
-    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-    proxy_set_header   X-Frame-Options   SAMEORIGIN;
-
-    <% if @https %>
-    proxy_set_header   X-Forwarded-Ssl     on;
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
     <% end %>
-
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection $connection_upgrade;
 
     proxy_pass http://gitlab_mattermost;
   }
