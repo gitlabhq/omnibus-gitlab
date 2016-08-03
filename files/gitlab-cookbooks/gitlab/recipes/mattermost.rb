@@ -26,6 +26,7 @@ postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
 config_file_path = File.join(mattermost_home, "config.json")
+mattermost_log_file = File.join(mattermost_log_dir, 'mattermost.log')
 
 ###
 # Create group and user that will be running mattermost
@@ -54,6 +55,12 @@ end
     owner mattermost_user
     recursive true
   end
+end
+
+# Fix an issue where GitLab 8.9 would create the log file as root on error
+file mattermost_log_file do
+  owner mattermost_user
+  only_if { File.exist? mattermost_log_file }
 end
 
 ###
