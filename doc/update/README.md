@@ -10,6 +10,8 @@ This document will help you update Omnibus GitLab.
 - [Updating using the official repositories](#updating-using-the-official-repositories)
 - [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages)
 - [From Community Edition to Enterprise Edition](#from-community-edition-to-enterprise-edition)
+- [Updating from GitLab 8.10 and lower to 8.11 or newer](#updating-from-gitlab-810-and-lower-to-811-or-newer)
+  - [Migrating legacy secrets](#migrating-legacy-secrets)
 - [Updating from GitLab 6.6 and higher to 7.10 or newer](#updating-from-gitlab-66-and-higher-to-710-or-newer)
 - [Updating from GitLab 6.6 and higher to the latest version](#updating-from-gitlab-66-and-higher-to-the-latest-version)
     - [Stop services but leave postgresql running for the database migrations and create a backup](#stop-services-but-leave-postgresql-running-for-the-database-migrations-and-create-a-backup)
@@ -210,6 +212,37 @@ version follow the section on
 If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
 step to find the current GitLab version and then follow the steps in
 [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages).
+
+## Updating from GitLab 8.10 and lower to 8.11 or newer
+
+GitLab 8.11 introduces new key names for several secrets, to match the GitLab
+Rails app and clarify the use of the secrets. For most installations, this
+process should be transparent as the 8.11 and higher packages will try to
+migrate the existing secrets to the new key names.
+
+### Migrating legacy secrets
+
+These keys have been migrated from old names:
+
+- `Gitlab['gitlab_rails']['otp_key_base']` is used for encrypting the OTP
+  secrets in the database. Changing this secret will stop two-factor auth from
+  working for all users. Previously called
+  `Gitlab['gitlab_rails']['secret_token']`
+- `Gitlab['gitlab_rails']['db_key_base']` is used for encrypting import
+  credentials and CI secret variables. Previously called
+  `Gitlab['gitlab_ci']['db_key_base']`; **note** that
+  `Gitlab['gitlab_rails']['db_key_base']` was not previously used for this -
+  setting it would have no effect
+- `Gitlab['gitlab_rails'][secret_key_base']` is used for password reset links,
+  and other 'standard' auth features. Previously called
+  `Gitlab['gitlab_ci']['db_key_base']`; **note** that
+  `Gitlab['gitlab_rails']['secret_token']` was not previously used for this,
+  despite the name
+
+These keys were not used any more, and have simply been removed:
+
+- `Gitlab['gitlab_ci']['secret_token']`
+- `Gitlab['gitlab_ci']['secret_key_base']`
 
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
