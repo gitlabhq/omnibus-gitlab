@@ -1,10 +1,23 @@
 require 'chefspec'
+require 'ohai'
 
 RSpec.configure do |config|
+  ohai_data = Ohai::System.new.tap { |ohai| ohai.all_plugins(['platform']) }.data
+  platform, version = *ohai_data.values_at('platform', 'platform_version')
+
+  begin
+    Fauxhai.mock(platform: platform, version: version)
+  rescue Fauxhai::Exception::InvalidPlatform
+    puts "Platform #{platform} #{version} not supported. Falling back to ubuntu 14.04"
+    platform = 'ubuntu'
+    version = '14.04'
+  end
+
+  config.platform = platform
+  config.version = version
+
   config.cookbook_path = ['spec/chef/fixture/', 'files/gitlab-cookbooks/']
   config.log_level = :error
-  config.platform = 'ubuntu'
-  config.version = '14.04'
 
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
