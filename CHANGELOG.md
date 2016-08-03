@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Revert Host and X-Forwarded-Host headers in NGINX 9ac08
 - Better handle the ssl certs whitelisted files when the directory has been symlinked
+- Fix issue where mattermost log file is created by the root user
 
 8.10.3
 
