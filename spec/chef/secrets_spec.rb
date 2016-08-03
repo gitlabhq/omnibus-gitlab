@@ -69,7 +69,7 @@ describe 'secrets' do
 
       context 'when secrets are only partially present' do
         before do
-          stub_gitlab_secrets_json(gitlab_rails: { db_key_base: 'json_rails_db_key_base' })
+          stub_gitlab_secrets_json(gitlab_ci: { db_key_base: 'json_ci_db_key_base' })
           chef_run
         end
 
@@ -78,7 +78,7 @@ describe 'secrets' do
         end
 
         it 'falls back further to generating new secrets' do
-          expect(new_secrets['gitlab_rails']['secret_key_base']).to match(/\h{128}/)
+          expect(new_secrets['gitlab_rails']['otp_key_base']).to match(/\h{128}/)
         end
       end
 
@@ -128,11 +128,11 @@ describe 'secrets' do
         end
 
         it 'uses secrets from /etc/gitlab/gitlab.rb when available' do
-          expect(new_secrets['gitlab_rails']['db_key_base']).to eq('rb_ci_key_base')
+          expect(new_secrets['gitlab_rails']['db_key_base']).to eq('rb_ci_db_key_base')
         end
 
         it 'falls back to secrets from /etc/gitlab/gitlab-secrets.json' do
-          expect(new_secrets['gitlab_rails']['secret_key_base']).to eq('json_rails_secret_token')
+          expect(new_secrets['gitlab_rails']['otp_key_base']).to eq('json_rails_secret_token')
         end
 
         it 'falls back further to generating new secrets' do
@@ -196,13 +196,6 @@ describe 'secrets' do
           expect { chef_run }.to raise_error(/db_key_base/)
         end
 
-        it 'fails when gitlab_rails.otp_key_base exists and gitlab_rails.secret_key_base does not' do
-          stub_gitlab_rb(gitlab_rails: { otp_key_base: 'rb_rails_otp_key_base' })
-
-          expect(File).not_to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w')
-          expect { chef_run }.to raise_error(/secret_token/)
-        end
-
         it 'fails when the secret file does not match gitlab_rails.otp_key_base' do
           secret_file = '/var/opt/gitlab/gitlab-rails/etc/secret'
 
@@ -212,7 +205,7 @@ describe 'secrets' do
           allow(File).to receive(:exists?).with(secret_file).and_return(true)
           allow(File).to receive(:read).with(secret_file).and_return('secret_key_base')
 
-          expect { chef_run }.to raise_error(/secret_token/)
+          expect { chef_run }.to raise_error(/otp_key_base/)
         end
       end
     end
