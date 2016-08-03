@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.10.4
 
 - Revert Host and X-Forwarded-Host headers in NGINX 9ac08
+- Better handle the ssl certs whitelisted files when the directory has been symlinked
 
 8.10.3
 
