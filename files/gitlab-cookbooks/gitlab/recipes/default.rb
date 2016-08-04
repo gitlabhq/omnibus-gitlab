@@ -33,7 +33,7 @@ directory "/etc/gitlab" do
   owner "root"
   group "root"
   mode "0775"
-  only_if { node['gitlab']['manage-storage-directories']['manage_config_directory'] }
+  not_if { node['gitlab']['manage-storage-directories']['root_squash_safe'] }
 end
 
 if File.exists?("/var/opt/gitlab/bootstrapped")

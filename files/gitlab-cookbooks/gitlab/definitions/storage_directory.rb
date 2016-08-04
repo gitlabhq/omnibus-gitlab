@@ -16,26 +16,32 @@
 
 define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil, recursive: false do
   params[:path] ||= params[:name]
-  params[:recursive] = false if File.exist?(params[:path])
 
-  execute "mkdir -p #{params[:path]}" do
-    user params[:owner]
-    group params[:group] if params[:group]
-    not_if { params[:path].nil? }
-  end
+  # Manage the storage directory as the owner user instead of root when root_squash_safe is true
+  # Otherwise run the directory resource like normal
+  if node['gitlab']['manage-storage-directories']['root_squash_safe']
+    group_ownership = ":#{params[:group]}" unless params[:group].nil?
+    mode_flag = "-m #{params[:mode]} " unless params[:mode].nil?
+    chmod_cmd = "chmod #{params[:mode]} #{params[:path]}" unless params[:mode].nil?
 
-  execute "chmod #{params[:recursive] ? '-R' : ''} #{params[:mode]} #{params[:path]}" do
-    user params[:owner]
-    group params[:group] if params[:group]
-    not_if { params[:mode].nil? }
-  end
-
-  # Ensure directory is in expected state
-  directory params[:path] do
-    owner params[:owner]
-    group params[:group] if params[:group]
-    mode params[:mode] if params[:mode]
-    recursive params[:recursive]
-    only_if { node['gitlab']['manage-storage-directories']['check_expected_state'] }
+    bash "directory resource: #{params[:path]}" do
+      code <<-EOS
+        if [ -d "#{params[:path]}" ]; then
+          chown #{params[:owner]}#{group_ownership} #{params[:path]}
+          #{chmod_cmd}
+        else
+          mkdir #{mode_flag}-p #{params[:path]}
+        fi
+      EOS
+      user params[:owner]
+      group params[:group] if params[:group]
+    end
+  else
+    directory params[:path] do
+      owner params[:owner]
+      group params[:group] if params[:group]
+      mode params[:mode] if params[:mode]
+      recursive params[:recursive]
+    end
   end
 end
