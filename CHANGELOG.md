@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Create logrotate folders and configs even when the service is disabled (Gennady Trafimenkov) eae7c9
 - Added nginx options to enable 2-way SSL client authentication (Oliver Hernandez) c51085
 - Upgrade Nginx to 1.10.1 67a0bd0
+- Allow configuration of the authorized_keys file location used by gitlab-shell
 - Upgrade omnibus to 5.4.0 7bac2
 - Add configuration that allows disabling of db migrations (Jason Plum) a50d09
 - Initial support for Redis Sentinel 267ace

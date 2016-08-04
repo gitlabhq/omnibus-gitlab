@@ -11,6 +11,7 @@ AllowUsers git
 PrintMotd no
 PrintLastLog no
 PubkeyAuthentication yes
+AuthorizedKeysFile %h/.ssh/authorized_keys /gitlab-data/authorized_keys
 
 # Fix: User username not allowed because account is locked
 # With "UsePAM yes" the "!" is seen as a password disabled account and not fully locked so ssh public key login works

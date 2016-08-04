@@ -187,6 +187,7 @@ module Gitlab
     def generate_config(node_name)
       generate_secrets(node_name)
       GitlabWorkhorse.parse_variables
+      GitlabShell.parse_variables
       GitlabRails.parse_variables
       Logging.parse_variables
       Redis.parse_variables
