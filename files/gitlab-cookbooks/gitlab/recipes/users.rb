@@ -20,12 +20,9 @@ account_helper = AccountHelper.new(node)
 gitlab_username = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
 gitlab_home = node['gitlab']['user']['home']
-default_home = gitlab_home == '/var/opt/gitlab'
 
-storage_directory gitlab_home  do
+directory gitlab_home do
   recursive true
-  group 'gitlab-config'
-  mode '0775'
 end
 
 account "GitLab user and group" do
@@ -40,10 +37,10 @@ account "GitLab user and group" do
 end
 
 # Configure Git settings for the GitLab user
-storage_template File.join(gitlab_home, ".gitconfig") do
+template File.join(gitlab_home, ".gitconfig") do
   source "gitconfig.erb"
   owner gitlab_username
-  group 'gitlab-config'
+  group gitlab_group
   mode "0644"
   variables(node['gitlab']['user'].to_hash)
 end

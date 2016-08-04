@@ -189,6 +189,7 @@ module Gitlab
       GitlabWorkhorse.parse_variables
       GitlabShell.parse_variables
       GitlabRails.parse_variables
+      GitlabShell.parse_variables
       Logging.parse_variables
       Redis.parse_variables
       Postgresql.parse_variables

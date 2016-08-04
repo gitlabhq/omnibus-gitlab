@@ -63,12 +63,6 @@ template "#{install_dir}/embedded/etc/gitconfig" do
   variables gitconfig: node['gitlab']['omnibus-gitconfig']['system']
 end
 
-group 'gitlab-config' do
-  system true
-  append true
-  members ['root']
-end
-
 # This recipe needs to run before gitlab-rails
 # because we add `gitlab-www` user to some groups created by that recipe
 include_recipe "gitlab::web-server"
