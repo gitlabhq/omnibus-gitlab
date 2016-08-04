@@ -231,7 +231,7 @@ These keys have been migrated from old names:
   secret variables. Previously called `gitlab_ci['db_key_base']`; **note** that
   `gitlab_rails['db_key_base']` was not previously used for this - setting it
   would have no effect
-- `gitlab_rails[secret_key_base']` is used for password reset links, and other
+- `gitlab_rails['secret_key_base']` is used for password reset links, and other
   'standard' auth features. Previously called `gitlab_ci['db_key_base']`;
   **note** that `gitlab_rails['secret_token']` was not previously used for this,
   despite the name
