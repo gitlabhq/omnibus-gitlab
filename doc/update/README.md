@@ -224,25 +224,22 @@ migrate the existing secrets to the new key names.
 
 These keys have been migrated from old names:
 
-- `Gitlab['gitlab_rails']['otp_key_base']` is used for encrypting the OTP
-  secrets in the database. Changing this secret will stop two-factor auth from
-  working for all users. Previously called
-  `Gitlab['gitlab_rails']['secret_token']`
-- `Gitlab['gitlab_rails']['db_key_base']` is used for encrypting import
-  credentials and CI secret variables. Previously called
-  `Gitlab['gitlab_ci']['db_key_base']`; **note** that
-  `Gitlab['gitlab_rails']['db_key_base']` was not previously used for this -
-  setting it would have no effect
-- `Gitlab['gitlab_rails'][secret_key_base']` is used for password reset links,
-  and other 'standard' auth features. Previously called
-  `Gitlab['gitlab_ci']['db_key_base']`; **note** that
-  `Gitlab['gitlab_rails']['secret_token']` was not previously used for this,
+- `gitlab_rails['otp_key_base']` is used for encrypting the OTP secrets in the
+  database. Changing this secret will stop two-factor auth from working for all
+  users. Previously called `gitlab_rails['secret_token']`
+- `gitlab_rails['db_key_base']` is used for encrypting import credentials and CI
+  secret variables. Previously called `gitlab_ci['db_key_base']`; **note** that
+  `gitlab_rails['db_key_base']` was not previously used for this - setting it
+  would have no effect
+- `gitlab_rails[secret_key_base']` is used for password reset links, and other
+  'standard' auth features. Previously called `gitlab_ci['db_key_base']`;
+  **note** that `gitlab_rails['secret_token']` was not previously used for this,
   despite the name
 
 These keys were not used any more, and have simply been removed:
 
-- `Gitlab['gitlab_ci']['secret_token']`
-- `Gitlab['gitlab_ci']['secret_key_base']`
+- `gitlab_ci['secret_token']`
+- `gitlab_ci['secret_key_base']`
 
 ## Updating from GitLab 6.6 and higher to 7.10 or newer
 
