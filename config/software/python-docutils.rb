@@ -20,7 +20,8 @@ name "python-docutils"
 
 default_version "0.11"
 
-license "BSD-2-Clause"
+license "Public Domain"
+license_file "http://docutils.sourceforge.net/COPYING.txt"
 
 dependency "python3"
 

@@ -19,6 +19,9 @@ name "krb5"
 
 default_version "1.14.2"
 
+license "MIT"
+license_file "NOTICE"
+
 source url: "http://web.mit.edu/kerberos/dist/krb5/#{version.rpartition('.').first}/krb5-#{version}.tar.gz",
        md5: '2e35f0af0344d68aba99cef616d3a64f'
 

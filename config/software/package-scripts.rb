@@ -18,6 +18,8 @@
 
 name "package-scripts"
 
+license "Apache-2.0"
+
 # Help omnibus-ruby to cache the build product of this software. This is a
 # workaround for the deprecation of `always_build true`. What happens now is
 # that we build only if the contents of the specified directory have changed

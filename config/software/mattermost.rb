@@ -24,7 +24,11 @@ source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{versio
 
 relative_path "mattermost"
 
+license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
+license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
+
 license "MIT with Trademark Protection"
+license_file license_path
 
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
@@ -37,9 +41,6 @@ build do
 
 
   block do
-    license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
-    license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
-
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
   end
 end

@@ -20,7 +20,7 @@ name "registry"
 default_version "v2.4.1"
 
 license "Apache-2.0"
-license_file "https://github.com/docker/distribution/blob/#{version}/LICENSE"
+license_file "https://raw.githubusercontent.com/docker/distribution/blob/#{version}/LICENSE"
 
 source git: "https://github.com/docker/distribution.git"
 

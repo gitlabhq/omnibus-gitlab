@@ -20,6 +20,7 @@ name "gitlab-gem-licenses"
 combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
 gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.1.0/gems/"
 
+license "Apache-2.0"
 license_file combined_licenses_file
 
 build do

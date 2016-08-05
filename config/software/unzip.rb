@@ -19,6 +19,9 @@
 name "unzip"
 default_version "6.0"
 
+license "Info-ZIP"
+license_file "LICENSE"
+
 source :url => "http://vorboss.dl.sourceforge.net/project/infozip/UnZip%206.x%20%28latest%29/UnZip%206.0/unzip60.tar.gz",
        :md5 => "62b490407489521db863b523a7f86375"
 

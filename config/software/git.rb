@@ -19,7 +19,7 @@
 name "git"
 default_version "2.7.4"
 
-license "GPL-2"
+license "GPL-2.0"
 license_file "COPYING"
 
 dependency "zlib"

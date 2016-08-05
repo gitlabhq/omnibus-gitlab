@@ -23,7 +23,7 @@ name "chef-zero"
 default_version "4.8.0"
 
 license "Apache-2.0"
-license_file "https://github.com/chef/chef-zero/blob/v#{version}/LICENSE"
+license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"
 
 dependency "ruby"
 dependency "rubygems"

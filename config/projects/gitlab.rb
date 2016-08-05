@@ -36,6 +36,7 @@ end
 
 maintainer "GitLab Inc. <support@gitlab.com>"
 homepage "https://about.gitlab.com/"
+license "MIT"
 
 # Replace older omnibus-gitlab packages
 replace         "gitlab"
