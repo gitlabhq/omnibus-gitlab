@@ -22,9 +22,12 @@ gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.1.0/gems/"
 
 license_file combined_licenses_file
 
-erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
-  source: "gem_license_generator.erb"
-  mode: 0755
-  vars: {install_dir: install_dir, license_file: combined_licenses_file, gems_directory: gems_directory}
+build do
+  erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
+    source: "gem_license_generator.erb",
+    mode: 0755,
+    vars: {install_dir: install_dir, license_file: combined_licenses_file, gems_directory: gems_directory}
 
-command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
+  command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
+  delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
+end
