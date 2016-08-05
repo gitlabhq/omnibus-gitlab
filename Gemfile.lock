@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: f0de110b280a1b6a70493c984565dc56cce9a1e7
+  revision: a016c14ad4ddf7bc41a1a4b1a53392130ae25006
   branch: master
   specs:
     omnibus-software (4.0.0)
@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: b69cc0204a0706be60f1e518a26f53933eb2cd26
+  revision: e7e8c6d61e19153203cfe0f6bad3eeda49760f02
   branch: omnibus-5-4-0
   specs:
     omnibus (5.4.0)
@@ -26,12 +26,12 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-sdk (2.4.0)
-      aws-sdk-resources (= 2.4.0)
-    aws-sdk-core (2.4.0)
+    aws-sdk (2.5.1)
+      aws-sdk-resources (= 2.5.1)
+    aws-sdk-core (2.5.1)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.4.0)
-      aws-sdk-core (= 2.4.0)
+    aws-sdk-resources (2.5.1)
+      aws-sdk-core (= 2.5.1)
     chef-config (12.12.15)
       fuzzyurl (~> 0.8.0)
       mixlib-config (~> 2.0)
@@ -40,7 +40,7 @@ GEM
     cleanroom (1.0.0)
     diff-lcs (1.2.5)
     ffi (1.9.14)
-    ffi-yajl (2.2.3)
+    ffi-yajl (2.3.0)
       libyajl2 (~> 1.2)
     fuzzyurl (0.8.0)
     highline (1.6.20)
@@ -54,10 +54,10 @@ GEM
     mime-types-data (3.2016.0521)
     mixlib-cli (1.7.0)
     mixlib-config (2.2.1)
-    mixlib-log (1.6.0)
+    mixlib-log (1.7.0)
     mixlib-shellout (2.2.6)
     mixlib-versioning (1.1.0)
-    ohai (8.17.1)
+    ohai (8.18.0)
       chef-config (>= 12.5.0.alpha.1, < 13)
       ffi (~> 1.9)
       ffi-yajl (~> 2.2)
