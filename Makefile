@@ -13,7 +13,7 @@ else
 RELEASE_PACKAGE=gitlab-ce
 TAG_MATCH='*[+.]ce.*'
 endif
-RELEASE_VERSION?=$(shell git describe | tr '+' '-')
+RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
 LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
 LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
 ifdef NIGHTLY
@@ -46,7 +46,17 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
-test: no_changes purge test_build move_to_platform_dir sync
+test: no_changes purge
+
+# Avoid timestamps in the nightly test builds
+ifdef NIGHTLY
+test: build
+else
+test: test_build
+endif
+test: move_to_platform_dir sync
+
+# Push the nightly test builds up to package cloud
 ifdef NIGHTLY
 test: PACKAGECLOUD_REPO=nightly-builds
 test: packagecloud
