@@ -87,7 +87,6 @@ dependency "mattermost"
 
 # version manifest file
 dependency "version-manifest"
-dependency "gitlab-gem-licenses"
 
 exclude "\.git*"
 exclude "bundler\/git"

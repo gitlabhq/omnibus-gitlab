@@ -21,8 +21,12 @@ version = Gitlab::Version.new("VERSION")
 name "gitlab-rails"
 default_version version.print
 
+combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
+gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.1.0/gems/"
+
 license "MIT"
 license_file "LICENSE"
+license_file combined_licenses_file
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -109,4 +113,13 @@ build do
     :source => "bundle_exec_wrapper.erb",
     :mode => 0755,
     :vars => {:command => 'rails "$@"', :install_dir => install_dir}
+
+  # Generate the combined license file for all gems GitLab is using
+  erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
+    source: "gem_license_generator.erb",
+    mode: 0755,
+    vars: {install_dir: install_dir, license_file: combined_licenses_file, gems_directory: gems_directory}
+
+  command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
+  delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
 end
