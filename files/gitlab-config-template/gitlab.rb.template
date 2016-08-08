@@ -264,6 +264,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # won't yield any change.
 # gitlab_rails['initial_root_password'] = "password"
 
+# Enable or disable automatic database migrations
+# gitlab_rails['auto_migrate'] = true
+
 ############################
 # GitLab database settings #
 ############################
