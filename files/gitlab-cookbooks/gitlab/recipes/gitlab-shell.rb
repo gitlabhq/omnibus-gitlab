@@ -24,9 +24,9 @@ gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
 repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
-authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
+gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
 if node['gitlab']['manage-storage-directories']['enable']
   git_data_directories.each do |_name, git_data_directory|
@@ -97,7 +97,7 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   variables(
     :user => git_user,
     :api_url => api_url,
-    :authorized_keys => authorized_keys,
+    :authorized_keys => node['gitlab']['gitlab-shell']['auth_file'],
     :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
     :redis_port => redis_port,
     :redis_socket => redis_socket,
@@ -118,4 +118,9 @@ template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-shell'].to_hash)
+end
+
+execute "#{gitlab_shell_keys_check} check-permissions" do
+  user git_user
+  group git_group
 end
