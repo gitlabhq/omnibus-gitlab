@@ -32,7 +32,7 @@ pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags
 
 build:
-	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
+	bin/omnibus build ${PROJECT} --log-level info
 
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
