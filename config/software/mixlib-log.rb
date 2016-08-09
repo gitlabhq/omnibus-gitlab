@@ -14,13 +14,11 @@
 # limitations under the License.
 #
 
-# We are pinning chef-zero because version 4.6.0 intorduced very verbose
-# output in info log level.
-# Introduced by https://github.com/chef/chef-zero/pull/199
-# When changing this version, make sure that the verbosity went down.
+# We are pinning to 1.6 because 1.7 wasn't compatible with our version of chef,
+# and our chef-gem dependency will pull anything in 1.x range for mixlib-log
 
-name "chef-zero"
-default_version "4.8.0"
+name "mixlib-log"
+default_version "1.6.0"
 
 dependency "ruby"
 dependency "rubygems"
@@ -28,7 +26,7 @@ dependency "rubygems"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem "install chef-zero" \
+  gem "install mixlib-log" \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
       " --no-ri --no-rdoc", env: env
