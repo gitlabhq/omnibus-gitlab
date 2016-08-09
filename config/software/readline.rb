@@ -27,8 +27,8 @@ dependency "ncurses"
 license "GPL-3.0"
 license_file "COPYING"
 
-source :url => "ftp://ftp.cwru.edu/pub/bash/readline-6.2.tar.gz",
-       :md5 => "67948acb2ca081f23359d0256e9a271c"
+source url: "ftp://ftp.cwru.edu/pub/bash/readline-6.2.tar.gz",
+       md5: "67948acb2ca081f23359d0256e9a271c"
 
 relative_path "#{name}-#{version}"
 
@@ -44,8 +44,8 @@ build do
       "--prefix=#{install_dir}/embedded"
   ].join(" ")
 
-  patch :source => "readline-6.2-curses-link.patch" , :plevel => 1
+  patch source: "readline-6.2-curses-link.patch", plevel: 1
   command configure_command, :env => env
-  command "make", :env => env
-  command "make install", :env => env
+  make " -j #{workers}", env: env
+  make "install", env: env
 end

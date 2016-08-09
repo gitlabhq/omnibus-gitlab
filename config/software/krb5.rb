@@ -23,12 +23,13 @@ license "MIT"
 license_file "NOTICE"
 
 source url: "http://web.mit.edu/kerberos/dist/krb5/#{version.rpartition('.').first}/krb5-#{version}.tar.gz",
-       md5: '2e35f0af0344d68aba99cef616d3a64f'
+       sha256: '6bcad7e6778d1965e4ce4af21d2efdc15b274c5ce5c69031c58e4c954cda8b27'
 
 relative_path "krb5-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  cwd = "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
 
   # 'configure' will detect libkeyutils and set up the krb5 build
   # to link against it. This gives us trouble during the Omnibus 'health
@@ -37,8 +38,8 @@ build do
   patch source: 'disable-keyutils.patch', target: 'src/configure'
 
   command "./configure" \
-           " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
+           " --prefix=#{install_dir}/embedded --without-system-verto", env: env, cwd: cwd
 
-  command "make -j #{workers}", env: env, cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
-  command "make install", cwd: "#{Omnibus::Config.source_dir}/krb5/krb5-#{version}/src"
+  make " -j #{workers}", env: env, cwd: cwd
+  make "install", env: env, cwd: cwd
 end

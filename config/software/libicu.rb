@@ -19,10 +19,8 @@
 name "libicu"
 default_version "56.1"
 
-source :url => "http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.tgz",
-       :md5 => "c4a2d71ff56aec5ebfab2a3f059be99d"
-
-relative_path 'icu/source'
+source url: "http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.tgz",
+       sha256: "3a64e9105c734dcf631c0b3ed60404531bce6c0f5a64bfe1a6402a4cc2314816"
 
 license "MIT"
 license_file "license.html"
@@ -30,6 +28,7 @@ license_file "license.html"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"
+  cwd = "#{Omnibus::Config.source_dir}/icu/source"
 
   command ["./runConfigureICU",
            "Linux/gcc",
@@ -37,8 +36,8 @@ build do
            "--with-data-packaging=files",
            "--enable-shared",
            "--without-samples"
-     ].join(" "), :env => env
+     ].join(" "), env: env, cwd: cwd
 
-  command "make -j #{workers}", :env => env
-  command "make install"
+  make "-j #{workers}", env: env, cwd: cwd
+  make "install", env: env, cwd: cwd
 end
