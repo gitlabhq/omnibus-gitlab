@@ -28,7 +28,7 @@ license_file "license.html"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"
-  cwd = "#{Omnibus::Config.source_dir}/icu/source"
+  cwd = "#{Omnibus::Config.source_dir}/libicu/icu/source"
 
   command ["./runConfigureICU",
            "Linux/gcc",
