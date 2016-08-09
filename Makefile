@@ -13,7 +13,7 @@ else
 RELEASE_PACKAGE=gitlab-ce
 TAG_MATCH='*[+.]ce.*'
 endif
-RELEASE_VERSION?=$(shell git describe | tr '+' '-')
+RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
 LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
 LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
 ifdef NIGHTLY
@@ -34,10 +34,6 @@ pack_cache_bundle:
 build:
 	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
 
-# No need to suppress timestamps on the test builds
-test_build:
-	bin/omnibus build ${PROJECT} --log-level info
-
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
@@ -46,7 +42,7 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
-test: no_changes purge test_build move_to_platform_dir sync
+test: no_changes purge build move_to_platform_dir sync
 ifdef NIGHTLY
 test: PACKAGECLOUD_REPO=nightly-builds
 test: packagecloud
@@ -55,7 +51,7 @@ endif
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
 do_rpi2_release: PACKAGECLOUD_REPO=raspberry-pi2
-do_rpi2_release: no_changes purge test_build move_to_platform_dir sync packagecloud
+do_rpi2_release: no_changes purge build move_to_platform_dir sync packagecloud
 
 no_changes:
 	git diff --quiet HEAD
