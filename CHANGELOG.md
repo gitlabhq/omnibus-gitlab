@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Added nginx options to enable 2-way SSL client authentication
 - Upgrade Nginx to 1.10.1
 
+8.10.5
+
+- Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure
+
 8.10.4
 
 - Revert Host and X-Forwarded-Host headers in NGINX 9ac08
