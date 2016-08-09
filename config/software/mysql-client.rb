@@ -48,6 +48,7 @@ build do
             "-DCMAKE_SKIP_RPATH=YES",
             "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded",
             "-DWITH_SSL=system",
+            "-DWITH_READLINE=1",
             "-DOPENSSL_INCLUDE_DIR:PATH=#{install_dir}/embedded/include",
             "-DOPENSSL_LIBRARIES:FILEPATH=#{install_dir}/embedded/lib/libssl.so",
             "-DWITH_ZLIB=system",

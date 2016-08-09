@@ -7,9 +7,14 @@ omnibus-gitlab repository.
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize)
 - Upgrade krb5 lib to 1.14.2
+- Upgrade chef-zero to 4.8.0
 - Create logrotate folders and configs even when the service is disabled
 - Added nginx options to enable 2-way SSL client authentication
 - Upgrade Nginx to 1.10.1
+
+8.10.5
+
+- Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure
 
 8.10.4
 
