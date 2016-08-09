@@ -24,6 +24,7 @@ gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
 repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
+authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
@@ -61,12 +62,6 @@ directory hooks_directory do
   mode "0755"
 end
 
-# If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
-# git_user is valid.
-execute "chcon --recursive --type ssh_home_t #{ssh_dir}" do
-  only_if "id -Z"
-end
-
 [
   log_directory,
   gitlab_shell_var_dir
@@ -97,7 +92,7 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   variables(
     :user => git_user,
     :api_url => api_url,
-    :authorized_keys => node['gitlab']['gitlab-shell']['auth_file'],
+    :authorized_keys => authorized_keys,
     :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
     :redis_port => redis_port,
     :redis_socket => redis_socket,
@@ -118,6 +113,23 @@ template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-shell'].to_hash)
+end
+
+execute "create managed authorized_keys file" do
+  command "#{gitlab_shell_keys_check} clear"
+  user git_user
+  group git_group
+  not_if { File.exist? authorized_keys }
+end
+
+# If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
+# git_user is valid.
+bash "Set proper security context on ssh files for selinux" do
+  code <<-EOS
+    chcon --recursive --type ssh_home_t #{ssh_dir}
+    chcon --type sshd_key_t #{authorized_keys}
+  EOS
+  only_if "id -Z"
 end
 
 execute "#{gitlab_shell_keys_check} check-permissions" do
