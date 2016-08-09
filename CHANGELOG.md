@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.9.12
 
+- Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure
 - Fix RangeError bignum too big errors on armhf platform
 - Disable nodejs Snapshot feature on ARM platforms
 
