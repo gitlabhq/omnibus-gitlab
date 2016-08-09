@@ -138,7 +138,7 @@ s3_sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
 	# empty line for aws status crud
 	# Download URLS:
-	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
+	find pkg -type f | sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|"
 
 packagecloud:
 	# - We set LC_ALL below because package_cloud is picky about the locale
