@@ -50,7 +50,7 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.1.8', source: { md5: '091b62f0a9796a3c55de2a228a0e6ef3' }
 override :rubygems, version: '2.6.6'
-override :'chef-gem', version: '12.10.24'
+override :'chef-gem', version: '12.12.15'
 override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
 override :postgresql, version: '9.2.17', source: { md5: 'a75d4a82eae1edda04eda2e60656e74c' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }

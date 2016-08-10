@@ -88,8 +88,8 @@ end
   upgrade_status_dir,
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
-  directory dir_name do
-    owner gitlab_user
+  directory "create #{dir_name}" do
+    path dir_name
     mode '0700'
     recursive true
   end
