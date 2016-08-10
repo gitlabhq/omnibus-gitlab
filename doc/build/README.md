@@ -154,7 +154,5 @@ and write `buildfrombranch:my-feature`
 1. Commit and push the omnibus-gitlab branch to `dev.gitlab.org`
 
 This will trigger a build of the custom package, and if the build is
-successful, you will see a link where you get fetch the custom package.
-
->**Note** The link is not URL encoded so you will need to replace any `+`
-character with `%2B` in order not to get `403 forbidden` error.
+successful, you will see a link at the bottom of the build trace with which you
+will be able to download the custom package.

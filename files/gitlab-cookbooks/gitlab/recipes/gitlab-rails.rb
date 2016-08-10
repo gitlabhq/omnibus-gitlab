@@ -152,6 +152,8 @@ else
   redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
 end
 
+redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
+
 gitlab_rails = if node['gitlab']['gitlab-ci']['db_key_base']
                  node['gitlab']['gitlab-rails'].to_hash.merge!({ db_key_base: node['gitlab']['gitlab-ci']['db_key_base'] })
                else
@@ -175,7 +177,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   owner "root"
   group "root"
   mode "0644"
-  variables(:redis_url => redis_url)
+  variables(:redis_url => redis_url, :redis_sentinels => redis_sentinels)
   restarts dependent_services
 end
 

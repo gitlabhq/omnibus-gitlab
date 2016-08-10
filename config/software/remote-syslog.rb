@@ -19,6 +19,9 @@
 name "remote-syslog"
 default_version "1.6.15"
 
+license "MIT"
+license_file "https://raw.githubusercontent.com/papertrail/remote_syslog/#{version}/LICENSE"
+
 dependency "ruby"
 dependency "rubygems"
 

@@ -183,6 +183,27 @@ If you want to specify a password for the default `root` user, specify the
 gitlab_rails['initial_root_password'] = 'nonstandardpassword'
 ```
 
+## Disabling automatic database migration
+
+If you have multiple GitLab servers sharing a database, you will want limit the
+number of nodes that are performing the migration steps during reconfiguration.
+
+Edit `/etc/gitlab/gitlab.rb`:
+
+```ruby
+# Enable or disable automatic database migrations
+gitlab_rails['auto_migrate'] = false
+```
+
+Don't forget to remove the `#` comment characters at the beginning of this
+line.
+
+**Note:**
+`/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
+plain-text passwords.
+
+The next time a reconfigure is triggered, the migration steps will not be performed.
+
 ## Troubleshooting
 
 ### Set MySQL collation to UTF-8

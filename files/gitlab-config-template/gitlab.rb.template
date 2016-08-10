@@ -264,6 +264,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # won't yield any change.
 # gitlab_rails['initial_root_password'] = "password"
 
+# Enable or disable automatic database migrations
+# gitlab_rails['auto_migrate'] = true
+
 ############################
 # GitLab database settings #
 ############################
@@ -290,11 +293,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/redis.md#redis-settings
 ## Connect to your own redis instance.
 
+## Redis TCP connection
 # gitlab_rails['redis_host'] = "127.0.0.1"
-# gitlab_rails['redis_port'] = nil
+# gitlab_rails['redis_port'] = 6379
 # gitlab_rails['redis_password'] = nil
 # gitlab_rails['redis_database'] = 0
+
+## Redis local UNIX socket (will be disabled if TCP method is used)
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+
+## Sentinel support
+## To have sentinel working, you must enable Redis TCP connection support
+## above ## and define a few sentinel hosts below (to get a reliable setup
+## at least 3 hosts).
+## You don't need to list every sentinel host, but the ones unlisted will
+## not be used in a fail-over situation to query for the new master.
+# gitlab-rails['redis_sentinels'] = [
+#   {'host' => '127.0.0.1', 'port' => 26379},
+# ]
 
 ################################
 # GitLab email server settings #
@@ -508,6 +524,23 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['tcp_keepalive'] = "300"
 # redis['uid'] = nil
 # redis['gid'] = nil
+
+## Redis Sentinel support
+## You need a master slave redis replication to be able to do failover
+## Please read the documentation before enabling it to understand the
+## caveats: https://docs.gitlab.com/ce/administration/high_availability/redis.html
+
+## Redis TCP support (will disable UNIX socket transport)
+# redis['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
+# redis['port'] = 6379
+
+## Master redis instance (if this will act as a master instance uncomment and fill below)
+# redis['password'] = '<huge password string here>' # Only define this in the master instance
+
+## Slave redis instance (if this will act as a slave / standby redis instance uncomment and fill below)
+# redis['master_ip'] = nil
+# redis['master_port'] = nil
+# redis['master_password'] = nil
 
 
 #####################

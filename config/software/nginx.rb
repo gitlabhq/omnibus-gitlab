@@ -19,6 +19,9 @@
 name "nginx"
 default_version "1.10.1"
 
+license "BSD-2-Clause"
+license_file "LICENSE"
+
 dependency "pcre"
 dependency "openssl"
 

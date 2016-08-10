@@ -67,6 +67,7 @@ default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
+default['gitlab']['gitlab-rails']['auto_migrate'] = true
 
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
@@ -230,6 +231,7 @@ default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
 default['gitlab']['gitlab-rails']['redis_password'] = nil
 default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['gitlab-rails']['redis_sentinels'] = []
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil
@@ -395,13 +397,16 @@ default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['bind'] = '127.0.0.1'
-default['gitlab']['redis']['port'] = 0
+default['gitlab']['redis']['port'] = nil
 default['gitlab']['redis']['maxclients'] = "10000"
 default['gitlab']['redis']['tcp_timeout'] = 60
 default['gitlab']['redis']['tcp_keepalive'] = 300
 default['gitlab']['redis']['password'] = nil
 default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['redis']['unixsocketperm'] = "777"
+default['gitlab']['redis']['master_ip'] = nil
+default['gitlab']['redis']['master_port'] = nil
+default['gitlab']['redis']['master_password'] = nil
 
 ####
 # Web server

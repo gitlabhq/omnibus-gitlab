@@ -59,4 +59,5 @@ bash "migrate gitlab-rails database" do
     notifies :restart, svc, :immediately
   end
   not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
+  only_if { node['gitlab']['gitlab-rails']['auto_migrate'] }
 end

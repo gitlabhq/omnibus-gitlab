@@ -37,6 +37,9 @@ end
 maintainer "GitLab Inc. <support@gitlab.com>"
 homepage "https://about.gitlab.com/"
 
+license "MIT"
+license_compiled_output true
+
 # Replace older omnibus-gitlab packages
 replace         "gitlab"
 conflict        "gitlab"
@@ -46,10 +49,8 @@ build_version   Omnibus::BuildVersion.new.semver
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.1.8', source: { md5: '091b62f0a9796a3c55de2a228a0e6ef3' }
-override :rubygems, version: 'v2.5.1'
+override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.10.24'
-override :cacerts, version: '2016.04.20', source: { md5: '782dcde8f5d53b1b9e888fdf113c42b9' }
-override :pip, version: '7.1.2', source: { md5: '3823d2343d9f3aaab21cf9c917710196' }
 override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
 override :postgresql, version: '9.2.17', source: { md5: 'a75d4a82eae1edda04eda2e60656e74c' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }

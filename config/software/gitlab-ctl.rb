@@ -18,6 +18,8 @@
 
 name "gitlab-ctl"
 
+license "Apache-2.0"
+
 dependency "rsync"
 dependency "omnibus-ctl"
 

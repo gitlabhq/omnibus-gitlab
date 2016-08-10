@@ -22,6 +22,14 @@ default_version "3.2.0"
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
        md5: '4cdc51e5793b44e9e69919d747a7f947'
 
+relative_path "mattermost"
+
+license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
+license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
+
+license "MIT with Trademark Protection"
+license_file license_path
+
 build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
@@ -33,9 +41,6 @@ build do
 
 
   block do
-    license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
-    license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
-
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
   end
 end
