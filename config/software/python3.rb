@@ -45,7 +45,6 @@ build do
   make env: env
   make "install", env: env
 
-  block do
-    FileUtils.rm_f(Dir.glob("#{install_dir}/lib/python3.4/lib-dynload/dbm.*"))
-  end
+  delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/_sqlite3.*")
 end

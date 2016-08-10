@@ -39,6 +39,15 @@ module Redis
         Chef::Log.warn "gitlab-rails and gitlab-ci are configured to connect to "\
                        "the same Redis instance. This is not recommended."
       end
+
+      # Redis daemon
+      if Gitlab['redis']['bind'] && Gitlab['redis']['port']
+        Chef::Log.debug 'Ignoring redis unixsocket: '\
+                        "'#{Gitlab['redis']['unixsocket']}' to use TCP instead"
+
+        # The user wants Redis to listen via TCP instead of unix socket.
+        Gitlab['redis']['unixsocket'] = false
+      end
     end
   end
 end

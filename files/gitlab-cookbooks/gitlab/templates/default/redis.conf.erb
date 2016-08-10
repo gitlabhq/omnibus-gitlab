@@ -85,7 +85,7 @@ bind <%= @bind %>
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
-port <%= @port %>
+port <%= @port || 0 %>
 
 # TCP listen() backlog.
 #
@@ -102,7 +102,7 @@ port <%= @port %>
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-unixsocket <%= @unixsocket %>
+<%= "unixsocket #{@unixsocket}" if @unixsocket %>
 unixsocketperm <%= @unixsocketperm %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
@@ -267,6 +267,7 @@ dir <%= @dir %>
 #    and resynchronize with them.
 #
 # slaveof <masterip> <masterport>
+<%= "slaveof #{@master_ip} #{@master_port}" if @master_ip && @master_port %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -274,6 +275,7 @@ dir <%= @dir %>
 # refuse the slave request.
 #
 # masterauth <master-password>
+<%= %Q(masterauth "#{@master_password}") if @master_password %>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -452,7 +454,7 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-<%= "requirepass #{@password}" if @password %>
+<%= %Q(requirepass "#{@password}") if @password %>
 
 # Command renaming.
 #
