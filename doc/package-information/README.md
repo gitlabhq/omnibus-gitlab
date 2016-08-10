@@ -3,6 +3,17 @@
 The omnibus-gitlab package is bundled with all dependencies which GitLab
 requires in order to function correctly.
 
+## Licenses
+
+Starting from version 8.11, the omnibus-gitlab package contains license
+information of all software that is bundled within the package.
+
+After installing the package, licenses for each individual bundled library
+can be be found in `/opt/gitlab/LICENSES` directory.
+
+There is also one `LICENSE` file which contains all licenses compiled together.
+This compiled license can be found in `/opt/gitlab/LICENSE` file.
+
 ## Defaults
 
 The omnibus-gitlab package requires various configuration to get the
