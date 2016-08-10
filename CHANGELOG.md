@@ -5,22 +5,27 @@ omnibus-gitlab repository.
 
 8.11.0
 
-- Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize)
-- Upgrade krb5 lib to 1.14.2
-- Upgrade chef-zero to 4.8.0
-- Create logrotate folders and configs even when the service is disabled
-- Added nginx options to enable 2-way SSL client authentication
-- Upgrade Nginx to 1.10.1
+- Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
+- Upgrade krb5 lib to 1.14.2 3670e5
+- Upgrade chef-zero to 4.8.0 e390cd
+- Create logrotate folders and configs even when the service is disabled (Gennady Trafimenkov) eae7c9
+- Added nginx options to enable 2-way SSL client authentication (Oliver Hernandez) c51085
+- Upgrade Nginx to 1.10.1 67a0bd0
+- Upgrade omnibus to 5.4.0 7bac2
+- Add configuration that allows disabling of db migrations (Jason Plum) a50d09
+- Initial support for Redis Sentinel 267ace
+- Do not manage authorized keys anymore 7dc1d6
+
 
 8.10.5
 
-- Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure
+- Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure 7345d
 
 8.10.4
 
 - Revert Host and X-Forwarded-Host headers in NGINX 9ac08
-- Better handle the ssl certs whitelisted files when the directory has been symlinked
-- Fix issue where mattermost log file is created by the root user
+- Better handle the ssl certs whitelisted files when the directory has been symlinked 97493919d
+- Fix issue where mattermost log file is created by the root user 581fa
 
 8.10.3
 
