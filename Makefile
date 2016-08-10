@@ -114,6 +114,7 @@ docker_push_latest:
 
 do_docker_master:
 ifdef NIGHTLY
+do_docker_master: PACKAGECLOUD_REPO=nightly-builds
 do_docker_master: docker_build docker_push
 endif
 
