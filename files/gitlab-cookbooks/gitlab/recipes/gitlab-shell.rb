@@ -115,11 +115,9 @@ template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
   variables(node['gitlab']['gitlab-shell'].to_hash)
 end
 
-execute "create managed authorized_keys file" do
-  command "#{gitlab_shell_keys_check} clear"
+execute "#{gitlab_shell_keys_check} check-permissions" do
   user git_user
   group git_group
-  not_if { File.exist? authorized_keys }
 end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
@@ -130,9 +128,4 @@ bash "Set proper security context on ssh files for selinux" do
     chcon --type sshd_key_t #{authorized_keys}
   EOS
   only_if "id -Z"
-end
-
-execute "#{gitlab_shell_keys_check} check-permissions" do
-  user git_user
-  group git_group
 end
