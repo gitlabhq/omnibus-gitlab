@@ -21,6 +21,9 @@ version = Gitlab::Version.new("GITLAB_SHELL_VERSION")
 name "gitlab-shell"
 default_version version.print
 
+license "MIT"
+license_file "LICENSE"
+
 dependency "ruby"
 dependency "rsync"
 

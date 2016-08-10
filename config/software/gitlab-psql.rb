@@ -19,6 +19,7 @@ require 'digest'
 
 name "gitlab-psql"
 
+license "Apache-2.0"
 # This 'software' is self-contained in this file. Use the file contents
 # to generate a version string.
 default_version Digest::MD5.file(__FILE__).hexdigest

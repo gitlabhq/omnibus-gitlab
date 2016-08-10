@@ -18,6 +18,8 @@
 
 name "gitlab-cookbooks"
 
+license "Apache-2.0"
+
 dependency "rsync"
 
 source :path => File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)

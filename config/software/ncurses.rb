@@ -17,6 +17,10 @@
 name "ncurses"
 default_version "5.9"
 
+license "MIT"
+license_file "http://invisible-island.net/ncurses/ncurses-license.html"
+license_file "http://invisible-island.net/ncurses/ncurses.faq.html"
+
 dependency "libtool" if aix?
 dependency "patch" if solaris2?
 

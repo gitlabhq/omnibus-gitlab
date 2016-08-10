@@ -20,6 +20,8 @@ version = Gitlab::Version.new("GITLAB_PAGES_VERSION")
 name "gitlab-pages"
 default_version version.print
 
+license "MIT"
+
 source :git => version.remote
 
 build do

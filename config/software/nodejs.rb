@@ -17,6 +17,9 @@
 name "nodejs"
 default_version "0.10.35"
 
+license "MIT"
+license_file "LICENSE"
+
 version "0.10.10" do
   source md5: "a47a9141567dd591eec486db05b09e1c"
 end

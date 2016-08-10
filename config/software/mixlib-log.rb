@@ -20,6 +20,9 @@
 name "mixlib-log"
 default_version "1.6.0"
 
+license "Apache-2.0"
+license_file "https://raw.githubusercontent.com/chef/mixlib-log/master/LICENSE"
+
 dependency "ruby"
 dependency "rubygems"
 
