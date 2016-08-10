@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'uri'
 
 module Redis
   class << self
@@ -48,6 +49,21 @@ module Redis
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
       end
+    end
+
+    def redis_url
+      if Gitlab['redis']['unixsocket']
+        uri = URI('unix:/')
+        uri.path = Gitlab['redis']['unixsocket']
+      else
+        uri = URI('redis:/')
+        uri.host = Gitlab['gitlab_rails']['redis_host']
+        uri.port = Gitlab['gitlab_rails']['redis_port']
+        uri.password = Gitlab['gitlab_rails']['redis_password']
+        uri.path = "/#{Gitlab['gitlab_rails']['redis_database']}"
+      end
+
+      uri
     end
   end
 end
