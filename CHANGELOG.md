@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Add configuration that allows disabling of db migrations (Jason Plum) a50d09
 - Initial support for Redis Sentinel 267ace
 - Do not manage authorized keys anymore 7dc1d6
+- Upgrade to Chef 12.12.15
 
 
 8.10.5
