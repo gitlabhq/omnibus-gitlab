@@ -17,6 +17,8 @@
 
 name "gitlab-config-template"
 
+license "Apache-2.0"
+
 dependency "rsync"
 
 source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)

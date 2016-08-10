@@ -17,6 +17,8 @@
 
 name "gitlab-scripts"
 
+license "Apache-2.0"
+
 source :path => File.expand_path("files/gitlab-scripts", Omnibus::Config.project_root)
 
 build do

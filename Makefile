@@ -32,7 +32,7 @@ pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags
 
 build:
-	bin/omnibus build ${PROJECT} --override append_timestamp:false --log-level info
+	bin/omnibus build ${PROJECT} --log-level info
 
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
@@ -114,6 +114,7 @@ docker_push_latest:
 
 do_docker_master:
 ifdef NIGHTLY
+do_docker_master: PACKAGECLOUD_REPO=nightly-builds
 do_docker_master: docker_build docker_push
 endif
 
@@ -133,8 +134,9 @@ md5:
 s3_sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
 	# empty line for aws status crud
+	# Replace FQDN in URL and deal with URL encoding
+	find pkg -type f | sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|"
 	# Download URLS:
-	find pkg -type f | sed "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|"
 
 packagecloud:
 	# - We set LC_ALL below because package_cloud is picky about the locale

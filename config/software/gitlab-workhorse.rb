@@ -20,6 +20,9 @@ version = Gitlab::Version.new("GITLAB_WORKHORSE_VERSION")
 name "gitlab-workhorse"
 default_version version.print
 
+license "MIT"
+license_file "LICENSE"
+
 source :git => version.remote
 
 
