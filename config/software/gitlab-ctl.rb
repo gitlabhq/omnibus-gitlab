@@ -20,7 +20,6 @@ name "gitlab-ctl"
 
 license "Apache-2.0"
 
-dependency "rsync"
 dependency "omnibus-ctl"
 
 source :path => File.expand_path("files/gitlab-ctl-commands", Omnibus::Config.project_root)
@@ -71,5 +70,5 @@ export SVWAIT=30
   command "chmod 755 #{install_dir}/bin/gitlab-ctl"
 
   # additional omnibus-ctl commands
-  command "#{install_dir}/embedded/bin/rsync -a ./ #{install_dir}/embedded/service/omnibus-ctl/"
+  sync "./", "#{install_dir}/embedded/service/omnibus-ctl/"
 end

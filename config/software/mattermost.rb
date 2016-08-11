@@ -34,10 +34,10 @@ build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./templates #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./i18n #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./fonts #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./webapp #{install_dir}/embedded/service/mattermost/"
+  sync "./templates", "#{install_dir}/embedded/service/mattermost/"
+  sync "./i18n", "#{install_dir}/embedded/service/mattermost/"
+  sync "./fonts", "#{install_dir}/embedded/service/mattermost/"
+  sync "./webapp",  "#{install_dir}/embedded/service/mattermost/"
 
 
   block do
