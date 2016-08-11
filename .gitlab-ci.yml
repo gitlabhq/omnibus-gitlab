@@ -1,5 +1,4 @@
 stages:
-  - spec
   - package
   - notification_fail
   - add_to_version_server
@@ -11,12 +10,7 @@ before_script:
   - mkdir -p ~/.aws
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
-
-spec:
-  stage: spec
-  image: "ruby:2.1"
-  script:
-    - bundle exec rspec -f documentation
+  - bundle exec rspec -f documentation
 
 .branch_template: &branch_build
   stage: package
