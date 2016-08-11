@@ -57,6 +57,7 @@ override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7add
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
 override :expat, version: '2.1.1', source: { md5: '7380a64a8e3a9d66a9887b01d0d7ea81', url: "http://downloads.sourceforge.net/project/expat/expat/2.1.1/expat-2.1.1.tar.bz2" }
+override :rsync, version: '3.1.2'
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"
