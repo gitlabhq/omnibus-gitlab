@@ -30,7 +30,7 @@ source :git => version.remote
 
 build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
-  sync "./", "#{install_dir}/embedded/service/gitlab-shell/", { exclude: [".git/***", ".gitignore"]}
+  sync "./", "#{install_dir}/embedded/service/gitlab-shell/", { exclude: [".git", ".gitignore"]}
 
   block do
     env_shebang = "#!/usr/bin/env ruby"

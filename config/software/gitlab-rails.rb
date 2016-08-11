@@ -100,7 +100,7 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git/***", ".gitignore"]}
+  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore"]}
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
