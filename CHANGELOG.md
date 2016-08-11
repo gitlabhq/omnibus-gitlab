@@ -16,7 +16,7 @@ omnibus-gitlab repository.
 - Initial support for Redis Sentinel 267ace
 - Do not manage authorized keys anymore 7dc1d6
 - Upgrade to Chef 12.12.15
-
+- Tidy up key names for secrets to match GitLab Rails app
 
 8.10.5
 
