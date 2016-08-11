@@ -10,7 +10,7 @@ before_script:
   - mkdir -p ~/.aws
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
-  - bundle exec rspec -f documentation
+  - bundle exec rspec -f progress
 
 .branch_template: &branch_build
   stage: package
