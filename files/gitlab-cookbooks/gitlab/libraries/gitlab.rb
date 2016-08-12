@@ -95,16 +95,31 @@ module Gitlab
     def generate_secrets(node_name)
       SecretsHelper.read_gitlab_secrets
 
-      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
-      Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
-      Gitlab['gitlab_rails']['secret_token'] ||= generate_hex(64)
+      # Blow up when the existing configuration is ambiguous, so we don't accidentally throw away important secrets
+      ci_db_key_base = Gitlab['gitlab_ci']['db_key_base']
+      rails_db_key_base = Gitlab['gitlab_rails']['db_key_base']
 
-      Gitlab['gitlab_ci']['secret_key_base'] ||= if Gitlab['gitlab_ci']['secret_token']
-                                                   Gitlab['gitlab_ci']['secret_token']
-                                                 else
-                                                   generate_hex(64)
-                                                 end
-      Gitlab['gitlab_ci']['db_key_base'] ||= generate_hex(64)
+      if ci_db_key_base && rails_db_key_base && ci_db_key_base != rails_db_key_base
+        message = [
+          "The value of Gitlab['gitlab_ci']['db_key_base'] (#{ci_db_key_base}) does not match the value of Gitlab['gitlab_rails']['db_key_base'] (#{rails_db_key_base}).",
+          "Please back up both secrets, set Gitlab['gitlab_rails']['db_key_base'] to the value of Gitlab['gitlab_ci']['db_key_base'], and try again.",
+          "For more information, see <https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/update/README.md#migrating-legacy-secrets>"
+        ]
+
+        raise message.join("\n\n")
+      end
+
+      # Transform legacy key names to new key names
+      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base']
+      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base']
+      Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
+
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
+      Gitlab['gitlab_rails']['db_key_base'] ||= generate_hex(64)
+      Gitlab['gitlab_rails']['secret_key_base'] ||= generate_hex(64)
+      Gitlab['gitlab_rails']['otp_key_base'] ||= generate_hex(64)
+
+      Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
 
       Gitlab['registry']['http_secret'] ||= generate_hex(64)
       gitlab_registry_crt, gitlab_registry_key = Registry.generate_registry_keypair

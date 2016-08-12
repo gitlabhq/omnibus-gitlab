@@ -9,7 +9,8 @@ before_script:
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache
-  - bundle install --binstubs --path ~/gems
+  - bundle install -j $(nproc) --binstubs --path gems
+  - bundle exec rspec -f progress
 
 .branch_template: &branch_build
   stage: package
@@ -19,7 +20,6 @@ before_script:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
-    - ssh -vvT git@dev.gitlab.org
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -38,7 +38,6 @@ before_script:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
-    - ssh -vvT git@dev.gitlab.org
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -57,7 +56,6 @@ before_script:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
-    - ssh -vvT git@dev.gitlab.org
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -76,7 +74,6 @@ before_script:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
-    - ssh -vvT git@dev.gitlab.org
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
@@ -93,6 +90,7 @@ Ubuntu 12.04:
     key: "Ubuntu 12.04 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Ubuntu 14.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
@@ -100,6 +98,7 @@ Ubuntu 14.04:
     key: "Ubuntu 14.04 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Ubuntu 16.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:xenial"
@@ -107,6 +106,7 @@ Ubuntu 16.04:
     key: "Ubuntu 16.04 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Debian 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
@@ -114,6 +114,7 @@ Debian 7:
     key: "Debian 7 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Debian 8:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
@@ -121,6 +122,7 @@ Debian 8:
     key: "Debian 8 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Centos 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
@@ -128,6 +130,7 @@ Centos 6:
     key: "Centos 6 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 Centos 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
@@ -135,6 +138,7 @@ Centos 7:
     key: "Centos 7 branch"
     paths:
     - cache
+    - gems
   <<: *tag_build
 
 Ubuntu 12.04 branch:
@@ -143,6 +147,7 @@ Ubuntu 12.04 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:trusty"
@@ -150,6 +155,7 @@ Ubuntu 14.04 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 Ubuntu 16.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:xenial"
@@ -157,6 +163,7 @@ Ubuntu 16.04 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 Debian 7 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:wheezy"
@@ -164,6 +171,7 @@ Debian 7 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 Debian 8 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie"
@@ -171,6 +179,7 @@ Debian 8 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 CentOS 6 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos6"
@@ -178,6 +187,7 @@ CentOS 6 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 CentOS 7 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos7"
@@ -185,6 +195,7 @@ CentOS 7 branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *branch_build
 
 Raspberry Pi 2 Jessie branch:
@@ -193,6 +204,7 @@ Raspberry Pi 2 Jessie branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *rpi_branch_build
 
 Raspberry Pi 2 Wheezy branch:
@@ -201,6 +213,7 @@ Raspberry Pi 2 Wheezy branch:
     key: "$CI_BUILD_NAME"
     paths:
     - cache
+    - gems
   <<: *rpi_branch_build
 
 Raspberry Pi 2 Wheezy:
@@ -209,6 +222,7 @@ Raspberry Pi 2 Wheezy:
     key: "Raspberry Pi 2 Wheezy branch"
     paths:
     - cache
+    - gems
   <<: *rpi_tag_build
 Raspberry Pi 2 Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-jessie"
@@ -216,6 +230,7 @@ Raspberry Pi 2 Jessie:
     key: "Raspberry Pi 2 Jessie branch"
     paths:
     - cache
+    - gems
   <<: *rpi_tag_build
 
 Docker master:

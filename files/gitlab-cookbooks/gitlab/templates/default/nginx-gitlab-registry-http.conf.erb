@@ -65,6 +65,7 @@ server {
     <% end %>
 
     proxy_read_timeout                  900;
+    proxy_cache off;
 
     proxy_pass          http://<%= @registry_http_addr %>;
   }

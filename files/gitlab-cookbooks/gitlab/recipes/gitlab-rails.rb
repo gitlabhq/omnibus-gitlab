@@ -88,8 +88,8 @@ end
   upgrade_status_dir,
   gitlab_rails_log_dir
 ].compact.each do |dir_name|
-  directory dir_name do
-    owner gitlab_user
+  directory "create #{dir_name}" do
+    path dir_name
     mode '0700'
     recursive true
   end
@@ -124,14 +124,26 @@ dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable'
 redis_not_listening = OmnibusHelper.not_listening?("redis")
 postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
 
-template_symlink File.join(gitlab_rails_etc_dir, "secret") do
-  link_from File.join(gitlab_rails_source_dir, ".secret")
-  source "secret_token.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
-  restarts dependent_services
+secret_file = File.join(gitlab_rails_etc_dir, "secret")
+secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
+otp_key_base = node['gitlab']['gitlab-rails']['otp_key_base']
+
+if File.exists?(secret_file) && File.read(secret_file).chomp != otp_key_base
+  message = [
+    "The contents of #{secret_file} don't match the value of Gitlab['gitlab_rails']['otp_key_base'] (#{otp_key_base})",
+    "Changing the value of the otp_key_base secret will stop two-factor auth working. Please back up #{secret_file} before continuing",
+    "For more information, see <https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/update/README.md#migrating-legacy-secrets>"
+  ]
+
+  raise message.join("\n\n")
+end
+
+file secret_symlink do
+  action :delete
+end
+
+file secret_file do
+  action :delete
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
@@ -154,19 +166,13 @@ end
 
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 
-gitlab_rails = if node['gitlab']['gitlab-ci']['db_key_base']
-                 node['gitlab']['gitlab-rails'].to_hash.merge!({ db_key_base: node['gitlab']['gitlab-ci']['db_key_base'] })
-               else
-                 node['gitlab']['gitlab-rails']
-               end
-
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
   source "secrets.yml.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(gitlab_rails.to_hash)
+  variables(node['gitlab']['gitlab-rails'].to_hash)
   helpers SingleQuoteHelper
   restarts dependent_services
 end
