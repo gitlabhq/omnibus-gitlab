@@ -7,12 +7,6 @@ describe 'secrets' do
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
   end
 
-  def stub_gitlab_rb(config)
-    config.each do |key, value|
-      allow(Gitlab).to receive(:[]).with(key.to_s).and_return(Mash.from_hash(value))
-    end
-  end
-
   before do
     allow(File).to receive(:directory?).and_call_original
     allow(File).to receive(:exists?).and_call_original
