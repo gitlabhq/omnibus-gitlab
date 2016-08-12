@@ -246,12 +246,9 @@ class SecretsHelper
                         'secret_token' => Gitlab['gitlab_shell']['secret_token'],
                       },
                       'gitlab_rails' => {
-                        'secret_token' => Gitlab['gitlab_rails']['secret_token'],
-                      },
-                      'gitlab_ci' => {
-                        'secret_token' => Gitlab['gitlab_ci']['secret_token'],
-                        'secret_key_base' => Gitlab['gitlab_ci']['secret_key_base'],
-                        'db_key_base' => Gitlab['gitlab_ci']['db_key_base'],
+                        'secret_key_base' => Gitlab['gitlab_rails']['secret_key_base'],
+                        'db_key_base' => Gitlab['gitlab_rails']['db_key_base'],
+                        'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base']
                       },
                       'registry' => {
                         'http_secret' => Gitlab['registry']['http_secret'],

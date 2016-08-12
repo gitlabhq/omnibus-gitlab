@@ -1,3 +1,17 @@
+
+# Development process
+
+## Testing
+
+Any change in the internal cookbook also requires specs.
+It would be greatly appreciated if with any MR submitted, apart from testing
+the specific feature/bug, more tests are written to increase the test coverage.
+
+When in rush to fix something (eg. security issue, bug blocking the release),
+writing specs can be skipped. However, an issue to implement the tests
+*must be created and assigned* to the person that originally wrote the code.
+
+
 # Development setup
 
 To avoid building the packages for every change you do during development, it

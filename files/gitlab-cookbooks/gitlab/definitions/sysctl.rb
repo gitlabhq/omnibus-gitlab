@@ -19,16 +19,18 @@ define :sysctl, value: nil do
   name = params[:name]
   value = params[:value]
 
-  directory "/etc/sysctl.d" do
+  directory "create /etc/sysctl.d for #{name}" do
+    path "/etc/sysctl.d"
     mode "0755"
     recursive true
   end
 
   conf_name = "90-omnibus-gitlab-#{name}.conf"
 
-  file "/opt/gitlab/embedded/etc/#{conf_name}" do
+  file "create /opt/gitlab/embedded/etc/#{conf_name} #{name}" do
+    path "/opt/gitlab/embedded/etc/#{conf_name}"
     content "#{name} = #{value}\n"
-    notifies :run, 'execute[load sysctl conf]', :immediately
+    notifies :run, "execute[load sysctl conf #{name}]", :immediately
   end
 
   link "/etc/sysctl.d/#{conf_name}" do
@@ -42,16 +44,16 @@ define :sysctl, value: nil do
     "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf",
     "/etc/sysctl.d/90-omnibus-gitlab.conf"
   ].each do |conf|
-    file conf do
+    file "delete #{conf} #{name}" do
+      path conf
       action :delete
       only_if { File.exists?(conf) }
     end
   end
 
   # Load the settings right away
-  execute "load sysctl conf" do
+  execute "load sysctl conf #{name}" do
     command "cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -"
     action :nothing
   end
 end
-

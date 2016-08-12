@@ -37,10 +37,11 @@ end
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))
 
 if File.exists?("/var/opt/gitlab/bootstrapped")
-	node.set['gitlab']['bootstrap']['enable'] = false
+	node.default['gitlab']['bootstrap']['enable'] = false
 end
 
-directory "/var/opt/gitlab" do
+directory "Create /var/opt/gitlab" do
+  path "/var/opt/gitlab"
   owner "root"
   group "root"
   mode "0755"
@@ -88,7 +89,8 @@ include_recipe "gitlab::add_trusted_certs"
   "ci-sidekiq",
   "mailroom"
 ].each do |dummy|
-  service dummy do
+  service "create a temporary #{dummy} service" do
+    service_name dummy
     supports []
   end
 end
