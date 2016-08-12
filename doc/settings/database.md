@@ -239,5 +239,5 @@ sudo gitlab-psql -d gitlabhq_production
 [rake-backup]: http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
 [Reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
 [rake-restore]: http://doc.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
-[mysql-install]: http://doc.gitlab.com/ce/install/installation.html#database "MySQL documentation"
+[mysql-install]: http://docs.gitlab.com/ce/install/database_mysql.html "MySQL documentation"
 [database requirements document]: http://doc.gitlab.com/ce/install/requirements.html#database
