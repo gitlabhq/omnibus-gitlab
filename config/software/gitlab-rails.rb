@@ -22,7 +22,7 @@ name "gitlab-rails"
 default_version version.print
 
 combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
-gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.1.0/gems/"
+gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems/"
 
 license "MIT"
 license_file "LICENSE"
