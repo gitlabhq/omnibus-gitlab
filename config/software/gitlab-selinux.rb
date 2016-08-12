@@ -19,11 +19,9 @@ name "gitlab-selinux"
 
 license "Apache-2.0"
 
-dependency "rsync"
-
 source :path => File.expand_path("files/gitlab-selinux", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/selinux"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/selinux/"
+  sync "./", "#{install_dir}/embedded/selinux/"
 end
