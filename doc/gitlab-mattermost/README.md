@@ -115,7 +115,9 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows team creation and account signup using email and password. This should be `false` if you're using only an external authentication source such as GitLab.
 
-SMTP configuration depends on SMTP provider used. If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
+SMTP configuration depends on SMTP provider used.  Note that the configuration keys used are not the same as the ones that the main GitLab application uses, for example the SMTP user in Mattermost is `email_smtp_username` and not `smtp_user_name`.
+
+If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
 
 ```ruby
 mattermost['email_enable_sign_in_with_email'] = false
