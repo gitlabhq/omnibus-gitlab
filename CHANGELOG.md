@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Upgrade chef-zero to 4.8.0 e390cd
 - Create logrotate folders and configs even when the service is disabled (Gennady Trafimenkov) eae7c9
 - Added nginx options to enable 2-way SSL client authentication (Oliver Hernandez) c51085
+- Upgrade libicu to 57.1 f58a4b15
 - Upgrade Nginx to 1.10.1 67a0bd0
 - Upgrade omnibus to 5.4.0 7bac2
 - Add configuration that allows disabling of db migrations (Jason Plum) a50d09
