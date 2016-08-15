@@ -40,4 +40,6 @@ build do
 
   make "-j #{workers}", env: env, cwd: cwd
   make "install", env: env, cwd: cwd
+
+  link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current"
 end
