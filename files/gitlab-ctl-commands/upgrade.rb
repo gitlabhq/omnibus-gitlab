@@ -42,6 +42,10 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     run_sv_command_for_service('start', sv_name)
   end
 
+  # in case of downgrades, it might be necessary to remove the redis dump
+  redis_dump = '/var/opt/gitlab/redis/dump.rdb'
+  try_redis_restart = File.exist? redis_dump
+
   SERVICE_WAIT = 30
   MIGRATION_SERVICES.each do |sv_name|
     status = -1
@@ -50,7 +54,21 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
       break if status.zero?
       sleep 1
     end
-    abort "Failed to start #{sv_name} for migrations" unless status.zero?
+
+    next if status.zero?
+
+    if sv_name == 'redis' && try_redis_restart
+      try_redis_restart = false
+      log "Failed starting Redis; retrying after removing #{redis_dump}"
+      status = run_sv_command_for_service('stop', 'redis')
+      abort "Failed trying to put Redis in a down state" unless status.zero?
+      sleep 1 # hack necessary, o/wise runit won't try to start the service
+      File.delete redis_dump
+      run_sv_command_for_service('start', 'redis')
+      redo
+    end
+
+    abort "Failed to start #{sv_name} for migrations"
   end
 
   # Do not show "WARN: Cookbook 'local-mode-cache' is empty or entirely chefignored at /opt/gitlab/embedded/cookbooks/local-mode-cache"
