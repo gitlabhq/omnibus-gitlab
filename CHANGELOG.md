@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
 - Upgrade krb5 lib to 1.14.2 3670e5
+- Set ICU_DATA to the right path to make Charlock Holmes and libicu work properly 60e8061d
 - Upgrade chef-zero to 4.8.0 e390cd
 - Create logrotate folders and configs even when the service is disabled (Gennady Trafimenkov) eae7c9
 - Added nginx options to enable 2-way SSL client authentication (Oliver Hernandez) c51085
