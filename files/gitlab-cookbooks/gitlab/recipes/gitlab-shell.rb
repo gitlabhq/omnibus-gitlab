@@ -46,11 +46,16 @@ if node['gitlab']['manage-storage-directories']['enable']
   end
 end
 
-directory ssh_dir do
-  owner git_user
-  group git_group
-  mode "0700"
-  recursive true
+[
+  ssh_dir,
+  File.dirname(authorized_keys)
+].uniq.each do |dir|
+  directory dir do
+    owner git_user
+    group git_group
+    mode "0700"
+    recursive true
+  end
 end
 
 # All repositories under GitLab share one hooks directory under
