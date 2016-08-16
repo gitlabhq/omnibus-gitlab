@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.7
+
+- No changes
+
 8.9.6
 
 - Bump chef-zero to 4.7.1 to squelch debug messages 9eefa12f
