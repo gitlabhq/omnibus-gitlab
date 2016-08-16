@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.10.6
+
+- No changes
+
 8.10.5
 
 - Pin mixlib-log to version 1.6.0 in order to keep the log open for writes during reconfigure
