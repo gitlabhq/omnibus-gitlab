@@ -67,6 +67,69 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'when root_squash_safe directory management is disabled' do
+    before do
+      stub_gitlab_rb({
+        git_data_dir: '/tmp/user/git-data',
+        manage_storage_directories: { 'enable' => true, 'root_squash_safe' => false }
+      })
+    end
+
+    it 'creates the git data directories with the correct permissions' do
+      expect(chef_run).to create_directory('/tmp/user/git-data').with(
+        user: 'git',
+        mode: '0700'
+      )
+    end
+
+    it 'creates the git storage directories with the correct permissions' do
+      expect(chef_run).to create_directory('/tmp/user/git-data/repositories').with(
+        user: 'git',
+        mode: '2770'
+      )
+    end
+  end
+
+  context 'when root_squash_safe directory management is enabled' do
+    before do
+      stub_gitlab_rb({
+        git_data_dir: '/tmp/user/git-data',
+        manage_storage_directories: { 'enable' => true, 'root_squash_safe' => true }
+      })
+    end
+
+    it 'creates the git data directories with the correct permissions' do
+      expect(chef_run).to run_bash('directory resource: /tmp/user/git-data').with(
+        user: 'git',
+        code: /chmod 0700/
+      )
+    end
+
+    it 'creates the git storage directories with the correct permissions' do
+      expect(chef_run).to run_bash('directory resource: /tmp/user/git-data/repositories').with(
+        user: 'git',
+        code: /chmod 2770/
+      )
+    end
+
+    it 'creates the ssh dir in the user\'s home directory' do
+      expect(chef_run).to run_bash('directory resource: /var/opt/gitlab/.ssh').with(
+        user: 'git',
+        group: 'git',
+        code: /chmod 0700/
+      )
+    end
+
+    it 'creates the auth_file\'s parent directory with the correct permissions' do
+      stub_gitlab_rb(gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' })
+
+      expect(chef_run).to run_bash('directory resource: /tmp/ssh').with(
+        user: 'git',
+        group: 'git',
+        code: /chmod 0700/
+      )
+    end
+  end
   context 'with redis settings' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
