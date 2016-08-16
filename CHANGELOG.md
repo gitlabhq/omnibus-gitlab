@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Upgrade ruby to 2.3.1 58a13
 - Change config_guess to a private mirror 1b197
 - Remove Redis dump.rdb on downgrades for furuture packages (Gustavo Lopez) 824530
+- Update postgresql to 9.2.18 (Takuya Noguchi)
 
 8.10.5
 
