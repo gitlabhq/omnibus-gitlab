@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Upgrade Nginx to 1.10.1 67a0bd0
 - Allow configuration of the authorized_keys file location used by gitlab-shell
 - Upgrade omnibus to 5.4.0 7bac2
+- Add support for using NFS root_squash for storage directories
 - Add configuration that allows disabling of db migrations (Jason Plum) a50d09
 - Initial support for Redis Sentinel 267ace
 - Do not manage authorized keys anymore 7dc1d6
