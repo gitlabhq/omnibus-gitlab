@@ -314,6 +314,7 @@ default['gitlab']['gitlab-rails']['repositories_storages'] = {
 }
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
+default['gitlab']['gitlab-shell']['auth_file'] = nil
 
 
 ###

@@ -456,6 +456,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # For CentOS: sudo yum install epel-release && sudo yum install git-annex
 # gitlab_shell['git_annex_enabled'] = false
 
+# gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
+
+
 #####################
 # GitLab PostgreSQL #
 #####################

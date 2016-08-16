@@ -26,7 +26,6 @@ module GitlabRails
     end
 
     def parse_directories
-      parse_git_data_dirs
       parse_shared_dir
       parse_artifacts_dir
       parse_lfs_objects_dir
@@ -66,29 +65,6 @@ module GitlabRails
       end
 
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port
-    end
-
-    def parse_git_data_dirs
-      git_data_dirs = Gitlab['git_data_dirs']
-      git_data_dir = Gitlab['git_data_dir']
-      return unless git_data_dirs.any? || git_data_dir
-
-      Gitlab['gitlab_shell']['git_data_directories'] ||=
-        if git_data_dirs.any?
-          git_data_dirs
-        else
-          { 'default' => git_data_dir }
-        end
-
-      Gitlab['gitlab_rails']['repositories_storages'] ||=
-        Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, path|
-          [name, File.join(path, 'repositories')]
-        end]
-
-      # Important: keep the satellites.path setting until GitLab 9.0 at
-      # least. This setting is fed to 'rm -rf' in
-      # db/migrate/20151023144219_remove_satellites.rb
-      Gitlab['gitlab_rails']['satellites_path'] ||= File.join(Gitlab['gitlab_shell']['git_data_directories']['default'], "gitlab-satellites")
     end
 
     def parse_shared_dir
