@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.8.8
+
+- No changes
+
 8.8.7
 
 - Bump chef-zero to 4.7.0 to retain Ruby 2.1 compatibility 8495179
