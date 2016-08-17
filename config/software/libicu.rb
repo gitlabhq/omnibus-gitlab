@@ -17,10 +17,10 @@
 #
 
 name "libicu"
-default_version "56.1"
+default_version "57.1"
 
-source url: "http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.tgz",
-       sha256: "3a64e9105c734dcf631c0b3ed60404531bce6c0f5a64bfe1a6402a4cc2314816"
+source url: "http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz",
+       sha256: "ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581"
 
 license "MIT"
 license_file "license.html"
@@ -40,4 +40,6 @@ build do
 
   make "-j #{workers}", env: env, cwd: cwd
   make "install", env: env, cwd: cwd
+
+  link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current", force: true
 end

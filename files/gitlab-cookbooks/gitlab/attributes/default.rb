@@ -60,7 +60,10 @@ default['gitlab']['gitlab-rails']['env'] = {
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
   # PATH to set on the environment
   # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
+  # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
+  'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current"
 }
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
@@ -311,6 +314,7 @@ default['gitlab']['gitlab-rails']['repositories_storages'] = {
 }
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
+default['gitlab']['gitlab-shell']['auth_file'] = nil
 
 
 ###
@@ -397,7 +401,7 @@ default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/nologin"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['bind'] = '127.0.0.1'
-default['gitlab']['redis']['port'] = nil
+default['gitlab']['redis']['port'] = 0
 default['gitlab']['redis']['maxclients'] = "10000"
 default['gitlab']['redis']['tcp_timeout'] = 60
 default['gitlab']['redis']['tcp_keepalive'] = 300

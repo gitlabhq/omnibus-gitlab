@@ -19,11 +19,9 @@ name "gitlab-config-template"
 
 license "Apache-2.0"
 
-dependency "rsync"
-
 source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/etc"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/etc/"
+  sync "./", "#{install_dir}/etc/"
 end

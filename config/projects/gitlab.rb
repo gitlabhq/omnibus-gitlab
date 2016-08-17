@@ -48,7 +48,7 @@ install_dir     "/opt/gitlab"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
-override :ruby, version: '2.1.8', source: { md5: '091b62f0a9796a3c55de2a228a0e6ef3' }
+override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
 override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
@@ -57,7 +57,8 @@ override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7add
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
 override :expat, version: '2.1.1', source: { md5: '7380a64a8e3a9d66a9887b01d0d7ea81', url: "http://downloads.sourceforge.net/project/expat/expat/2.1.1/expat-2.1.1.tar.bz2" }
-override :config_guess, source: {git: "git@dev.gitlab.org:omnibus-mirror/config_guess.git" } # Original git://git.sv.gnu.org/config.git is failing intermittently
+override :config_guess, source: { git: "git@dev.gitlab.org:omnibus-mirror/config_guess.git" } # Original git://git.sv.gnu.org/config.git is failing intermittently
+override :rsync, version: '3.1.2'
 
 # Openssh needs to be installed
 runtime_dependency "openssh-server"

@@ -90,6 +90,7 @@ end
 ].compact.each do |dir_name|
   directory "create #{dir_name}" do
     path dir_name
+    owner gitlab_user
     mode '0700'
     recursive true
   end
@@ -310,7 +311,7 @@ end
 # reload until restarted
 file File.join(gitlab_rails_dir, "RUBY_VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
-  notifies :restart, "service[unicorn]"
+  notifies :restart, "service[unicorn]" if OmnibusHelper.should_notify?('unicorn')
 end
 
 # We shipped packages with 'chown -R git' below for quite some time. That chown

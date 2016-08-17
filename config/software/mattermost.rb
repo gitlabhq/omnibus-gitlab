@@ -17,10 +17,10 @@
 #
 
 name "mattermost"
-default_version "3.2.0"
+default_version "3.3.0"
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: '4cdc51e5793b44e9e69919d747a7f947'
+       md5: 'acfa431b0a9ce80c36e3be9ec3acb7f8'
 
 relative_path "mattermost"
 
@@ -34,11 +34,10 @@ build do
   move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./templates #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./i18n #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./fonts #{install_dir}/embedded/service/mattermost/"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./webapp #{install_dir}/embedded/service/mattermost/"
-
+  copy "templates", "#{install_dir}/embedded/service/mattermost/templates"
+  copy "i18n", "#{install_dir}/embedded/service/mattermost/i18n"
+  copy "fonts", "#{install_dir}/embedded/service/mattermost/fonts"
+  copy "webapp",  "#{install_dir}/embedded/service/mattermost/webapp"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }

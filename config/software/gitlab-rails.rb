@@ -22,7 +22,7 @@ name "gitlab-rails"
 default_version version.print
 
 combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
-gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.1.0/gems/"
+gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems/"
 
 license "MIT"
 license_file "LICENSE"
@@ -54,7 +54,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   # GitLab assumes it can extract the Git revision of the currently version
-  # from the Git repo the code lives in at boot. Because of our rsync later on,
+  # from the Git repo the code lives in at boot. Because of our sync later on,
   # this assumption does not hold. The sed command below patches the GitLab
   # source code to include the Git revision of the code included in the omnibus
   # build.
@@ -100,7 +100,7 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/gitlab-rails/"
+  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore"]}
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",

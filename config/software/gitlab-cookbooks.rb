@@ -20,13 +20,11 @@ name "gitlab-cookbooks"
 
 license "Apache-2.0"
 
-dependency "rsync"
-
 source :path => File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)
 
 build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/cookbooks/"
+  sync "./", "#{install_dir}/embedded/cookbooks/"
 
   # Create a package cookbook.
   command "mkdir -p #{install_dir}/embedded/cookbooks/package/attributes"

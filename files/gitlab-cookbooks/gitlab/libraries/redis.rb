@@ -41,7 +41,7 @@ module Redis
       end
 
       # Redis daemon
-      if Gitlab['redis']['bind'] && Gitlab['redis']['port']
+      if Gitlab['redis']['bind'] && Gitlab['redis']['port'] != 0
         Chef::Log.debug 'Ignoring redis unixsocket: '\
                         "'#{Gitlab['redis']['unixsocket']}' to use TCP instead"
 
