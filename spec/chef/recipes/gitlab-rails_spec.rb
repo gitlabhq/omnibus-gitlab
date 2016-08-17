@@ -3,7 +3,10 @@ require 'chef_helper'
 describe 'gitlab::gitlab-rails' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    allow(StorageDirectoryHelper).to receive(:writable?).and_return(true)
+  end
 
   context 'when manage-storage-directories is disabled' do
     before do

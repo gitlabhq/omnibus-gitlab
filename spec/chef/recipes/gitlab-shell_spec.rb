@@ -3,7 +3,10 @@ require 'chef_helper'
 describe 'gitlab::gitlab-shell' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    allow(StorageDirectoryHelper).to receive(:writable?).and_return(true)
+  end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
     expect(chef_run).to run_execute('/opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-keys check-permissions')

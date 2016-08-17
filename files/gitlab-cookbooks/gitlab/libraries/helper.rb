@@ -537,3 +537,18 @@ class CertificateHelper
     raise "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
   end
 end
+
+class StorageDirectoryHelper
+  extend ShellOutHelper
+
+  def self.writable?(user, path)
+    group ||= user
+
+    result = do_shell_out("test -w #{path}", user)
+    if result.exitstatus == 0
+      true
+    else
+      false
+    end
+  end
+end unless defined?(StorageDirectoryHelper)
