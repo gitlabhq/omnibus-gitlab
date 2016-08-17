@@ -7,12 +7,6 @@ describe 'secrets' do
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
   end
 
-  def stub_gitlab_rb(config)
-    config.each do |key, value|
-      allow(Gitlab).to receive(:[]).with(key.to_s).and_return(Mash.from_hash(value))
-    end
-  end
-
   before do
     allow(File).to receive(:directory?).and_call_original
     allow(File).to receive(:exists?).and_call_original
@@ -193,7 +187,7 @@ describe 'secrets' do
           )
 
           expect(File).not_to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w')
-          expect { chef_run }.to raise_error(/db_key_base/)
+          expect { chef_run }.to raise_error(RuntimeError, /db_key_base/)
         end
 
         it 'fails when the secret file does not match gitlab_rails.otp_key_base' do
@@ -205,7 +199,7 @@ describe 'secrets' do
           allow(File).to receive(:exists?).with(secret_file).and_return(true)
           allow(File).to receive(:read).with(secret_file).and_return('secret_key_base')
 
-          expect { chef_run }.to raise_error(/otp_key_base/)
+          expect { chef_run }.to raise_error(RuntimeError, /otp_key_base/)
         end
       end
     end

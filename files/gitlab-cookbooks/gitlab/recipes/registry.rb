@@ -21,7 +21,8 @@ registry_gid = node['gitlab']['registry']['gid']
 working_dir = node['gitlab']['registry']['dir']
 log_directory = node['gitlab']['registry']['log_directory']
 
-directory working_dir do
+directory "create #{working_dir}" do
+  path working_dir
   recursive true
 end
 
@@ -40,7 +41,8 @@ end
   working_dir,
   log_directory,
 ].each do |dir|
-  directory dir do
+  directory "create #{dir} and set the owner" do
+    path dir
     owner account_helper.registry_user
     mode '0700'
     recursive true

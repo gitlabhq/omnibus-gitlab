@@ -7,16 +7,27 @@ omnibus-gitlab repository.
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
 - Upgrade krb5 lib to 1.14.2 3670e5
+- Set ICU_DATA to the right path to make Charlock Holmes and libicu work properly 60e8061d
 - Upgrade chef-zero to 4.8.0 e390cd
 - Create logrotate folders and configs even when the service is disabled (Gennady Trafimenkov) eae7c9
 - Added nginx options to enable 2-way SSL client authentication (Oliver Hernandez) c51085
+- Upgrade libicu to 57.1 f58a4b15
 - Upgrade Nginx to 1.10.1 67a0bd0
+- Allow configuration of the authorized_keys file location used by gitlab-shell
 - Upgrade omnibus to 5.4.0 7bac2
 - Add configuration that allows disabling of db migrations (Jason Plum) a50d09
 - Initial support for Redis Sentinel 267ace
 - Do not manage authorized keys anymore 7dc1d6
-- Upgrade to Chef 12.12.15
+- Upgrade to Chef 12.12.15 c930fbd4
 - Tidy up key names for secrets to match GitLab Rails app
+- Update rsync to 3.1.2 8cc078
+- Upgrade ruby to 2.3.1 58a13
+- Change config_guess to a private mirror 1b197
+- Remove Redis dump.rdb on downgrades for furuture packages (Gustavo Lopez) 824530
+
+8.10.6
+
+- No changes
 
 8.10.5
 
@@ -51,6 +62,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 3.2 28cf3
 - Lower expiry date of registry internal certificate b269b4
 - Add personal access token to rack attack whitelist 21abc
+
+8.9.7
+
+- No changes
 
 8.9.6
 
@@ -101,6 +116,10 @@ omnibus-gitlab repository.
 - Allow adding custom trusted certificates (Robert Habermann) 48e891
 - Increase the Unicorn memory limits to 400-650MB 8f688
 - Add configuration for Registry storage config 545856
+
+8.8.8
+
+- No changes
 
 8.8.7
 

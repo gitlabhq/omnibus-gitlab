@@ -24,9 +24,10 @@ gitlab_shell_var_dir = "/var/opt/gitlab/gitlab-shell"
 git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
 repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
-authorized_keys = File.join(ssh_dir, "authorized_keys")
+authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
+gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
 if node['gitlab']['manage-storage-directories']['enable']
   git_data_directories.each do |_name, git_data_directory|
@@ -45,11 +46,16 @@ if node['gitlab']['manage-storage-directories']['enable']
   end
 end
 
-directory ssh_dir do
-  owner git_user
-  group git_group
-  mode "0700"
-  recursive true
+[
+  ssh_dir,
+  File.dirname(authorized_keys)
+].uniq.each do |dir|
+  directory dir do
+    owner git_user
+    group git_group
+    mode "0700"
+    recursive true
+  end
 end
 
 # All repositories under GitLab share one hooks directory under
@@ -59,12 +65,6 @@ directory hooks_directory do
   owner git_user
   group git_group
   mode "0755"
-end
-
-# If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory of the
-# git_user is valid.
-execute "chcon --recursive --type ssh_home_t #{ssh_dir}" do
-  only_if "id -Z"
 end
 
 [
@@ -118,4 +118,19 @@ template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-shell'].to_hash)
+end
+
+execute "#{gitlab_shell_keys_check} check-permissions" do
+  user git_user
+  group git_group
+end
+
+# If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
+# git_user is valid.
+bash "Set proper security context on ssh files for selinux" do
+  code <<-EOS
+    chcon --recursive --type ssh_home_t #{ssh_dir}
+    chcon --type sshd_key_t #{authorized_keys}
+  EOS
+  only_if "id -Z"
 end
