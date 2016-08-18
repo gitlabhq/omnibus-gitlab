@@ -9,7 +9,7 @@ describe 'gitlab::default' do
 
     # Prevent chef converge from reloading the helper library, which would override our helper stub
     allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(/gitlab\/libraries\/helper/).and_return(true)
+    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/helper}).and_return(true)
   end
 
   it 'creates the user config directory' do

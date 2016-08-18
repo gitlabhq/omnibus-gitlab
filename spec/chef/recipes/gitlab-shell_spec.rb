@@ -9,7 +9,7 @@ describe 'gitlab::gitlab-shell' do
 
     # Prevent chef converge from reloading the helper library, which would override our helper stub
     allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(/gitlab\/libraries\/helper/).and_return(true)
+    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/helper}).and_return(true)
   end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
