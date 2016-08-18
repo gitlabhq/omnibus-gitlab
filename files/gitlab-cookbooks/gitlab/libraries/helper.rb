@@ -551,4 +551,4 @@ class StorageDirectoryHelper
       false
     end
   end
-end unless defined?(StorageDirectoryHelper)
+end
