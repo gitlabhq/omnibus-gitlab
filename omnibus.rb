@@ -6,4 +6,4 @@ s3_region ENV['CACHE_AWS_S3_REGION']
 
 build_retries 2
 fetcher_retries 5
-append_timestamp true
+append_timestamp false
