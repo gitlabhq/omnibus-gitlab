@@ -32,6 +32,12 @@ redis:
 <% end %>
   database: <%= @redis_database %>
   namespace: resque:gitlab
+  <% unless @redis_sentinels.empty? %>
+  sentinels:
+    <% @redis_sentinels.each do |sentinel| %>
+      - <%= sentinel.to_json %>
+    <% end %>
+  <% end %>
 
 # Log file.
 # Default is gitlab-shell.log in the root directory.
