@@ -14,36 +14,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Manage the storage directory as the owner user instead of root when root_squash_safe is true
-# if the owner user has write access to the directory
-# Otherwise run the directory resource like normal
+# Manage the storage directory as the target owner user instead of the running
+# user in order to work with root_squash directories on NFS mounts. It will
+# fallback to using root if the target owner user doesn't have enough access
 define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil do
   params[:path] ||= params[:name]
-  storage_helper = StorageDirectoryHelper.new(params[:path], params[:owner], params[:group], params[:mode])
+  storage_helper = StorageDirectoryHelper.new(params[:owner], params[:group], params[:mode])
 
   ruby_block "directory resource: #{params[:path]}" do
     block do
       # Ensure the directory exists
-      storage_helper.run_command("mkdir -p #{params[:path]}", use_euid: storage_helper.writable?('..'))
+      storage_helper.ensure_directory_exists(params[:path])
 
-      # Check the owner, and chown if needed
-      if params[:owner] != storage_helper.run_command("stat --printf='%U' #{params[:path]}", use_euid: true).stdout
-        begin
-          FileUtils.chown(params[:owner], params[:group], params[:path])
-        rescue Errno::EPERM
-          Chef::Log.warn("Root cannot chown #{params[:path]}. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.")
-          raise
-        end
-      end
+      # Ensure the permissions are set
+      storage_helper.ensure_permissions_set(params[:path])
 
-      # Update the remaining directory permissions
-      is_writable = storage_helper.writable?
-      storage_helper.run_command("chmod #{params[:mode]} #{params[:path]}", use_euid: is_writable) if params[:mode]
-      storage_helper.run_command("chgrp #{params[:group]} #{params[:path]}", use_euid: is_writable) if params[:group]
-
-      # Test that directory is in expected state and error if not
-      storage_helper.run_command(storage_helper.test_stat_cmd, use_euid: true)
+      # Error out if we have not achieved the target permissions
+      storage_helper.validate!(params[:path])
     end
-    not_if storage_helper.test_stat_cmd, user: params[:owner], group: params[:group]
+    not_if { storage_helper.validate(params[:path]) }
   end
 end
