@@ -45,7 +45,17 @@ replace         "gitlab"
 conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
-build_version   Omnibus::BuildVersion.new.semver
+
+# This is a hack to make a distinction between nightly versions
+# See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1500
+#
+# This will be resolved as part of
+# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1007
+if ENV['NIGHTLY'] && ENV['CI_PIPELINE_ID']
+  build_version "#{Omnibus::BuildVersion.new.semver}.#{ENV['CI_PIPELINE_ID']}"
+else
+  build_version Omnibus::BuildVersion.new.semver
+end
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
