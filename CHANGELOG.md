@@ -27,6 +27,10 @@ omnibus-gitlab repository.
 - Update postgresql to 9.2.18 (Takuya Noguchi)
 - Update expat to 2.2.0 (Takuya Noguchi)
 
+8.10.7
+
+- No changes
+
 8.10.6
 
 - No changes
@@ -64,6 +68,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 3.2 28cf3
 - Lower expiry date of registry internal certificate b269b4
 - Add personal access token to rack attack whitelist 21abc
+
+8.9.8
+
+- No changes
 
 8.9.7
 
@@ -118,6 +126,10 @@ omnibus-gitlab repository.
 - Allow adding custom trusted certificates (Robert Habermann) 48e891
 - Increase the Unicorn memory limits to 400-650MB 8f688
 - Add configuration for Registry storage config 545856
+
+8.8.9
+
+- No changes
 
 8.8.8
 
