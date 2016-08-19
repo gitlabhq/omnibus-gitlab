@@ -17,32 +17,49 @@
 # Manage the storage directory as the owner user instead of root when root_squash_safe is true
 # if the owner user has write access to the directory
 # Otherwise run the directory resource like normal
-define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil, recursive: false do
+define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil do
   params[:path] ||= params[:name]
+  guard_command = StorageDirectoryHelper.test_stat_cmd(params[:path], params[:owner], params[:group], params[:mode])
 
-  group_ownership = ":#{params[:group]}" unless params[:group].nil?
-  mode_flag = "-m #{params[:mode]} " unless params[:mode].nil?
-  chmod_cmd = "chmod #{params[:mode]} #{params[:path]}" unless params[:mode].nil?
+  ruby_block "directory resource: #{params[:path]}" do
+    block do
+      owner_parent_writable = StorageDirectoryHelper.writable?(params[:owner], File.dirname(params[:path]))
 
-  bash "directory resource: #{params[:path]}" do
-    code <<-EOS
-      if [ -d "#{params[:path]}" ]; then
-        chown #{params[:owner]}#{group_ownership} #{params[:path]}
-        #{chmod_cmd}
-      else
-        mkdir #{mode_flag}-p #{params[:path]}
-      fi
-    EOS
-    user params[:owner]
-    group params[:group] if params[:group]
-    only_if { node['gitlab']['manage-storage-directories']['root_squash_safe'] && StorageDirectoryHelper.writable?(params[:owner], File.dirname(params[:path])) }
-  end
+      StorageDirectoryHelper.run_command(
+        "mkdir -p #{params[:path]}",
+        user: (params[:owner] if owner_parent_writable),
+        group: (params[:group] if owner_parent_writable)
+      )
 
-  directory params[:path] do
-    owner params[:owner]
-    group params[:group] if params[:group]
-    mode params[:mode] if params[:mode]
-    recursive params[:recursive]
-    not_if { node['gitlab']['manage-storage-directories']['root_squash_safe'] && StorageDirectoryHelper.writable?(params[:owner], File.dirname(params[:path])) }
+      current_owner = StorageDirectoryHelper.run_command(
+        "stat --printf='%U' #{params[:path]}",
+        user: params[:owner],
+        group: params[:group]
+      ).stdout
+
+      begin
+        FileUtils.chown(params[:owner], params[:group], params[:path])
+      rescue Errno::EPERM
+        Chef::Log.warn("Root cannot chown #{params[:path]}. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.")
+        raise
+      end if current_owner != params[:owner]
+
+      owner_writable = StorageDirectoryHelper.writable?(params[:owner], params[:path])
+
+      StorageDirectoryHelper.run_command(
+        "chmod #{params[:mode]} #{params[:path]}",
+        user: (params[:owner] if owner_writable),
+        group: (params[:group] if owner_writable)
+      ) if params[:mode]
+
+      StorageDirectoryHelper.run_command(
+        "chgrp #{params[:group]} #{params[:path]}",
+        user: (params[:owner] if owner_writable),
+        group: (params[:group] if owner_writable)
+      ) if params[:group]
+
+      StorageDirectoryHelper.run_command(guard_command, user: params[:owner], group: params[:group])
+    end
+    not_if guard_command, user: params[:owner], group: params[:group]
   end
 end

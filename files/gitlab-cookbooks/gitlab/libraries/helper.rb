@@ -551,4 +551,28 @@ class StorageDirectoryHelper
       false
     end
   end
+
+  def self.run_command(*args)
+    run_shell = Mixlib::ShellOut.new(*args)
+    run_shell.run_command
+    run_shell.error!
+    run_shell
+  end
+
+  def self.test_stat_cmd(path, owner, group, mode)
+    format_string = '%F %U'
+    expect_string = "directory #{owner}"
+
+    if group
+      format_string << ':%G'
+      expect_string << ":#{group}"
+    end
+
+    if mode
+      format_string << ' %04a'
+      expect_string << " #{mode}"
+    end
+
+    "test \"$(stat --printf='#{format_string}' #{path})\" = '#{expect_string}'"
+  end
 end

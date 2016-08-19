@@ -45,8 +45,8 @@ describe 'gitlab::default' do
     )
   end
 
-  context 'when root_squash_safe directory management is enabled' do
-    before { stub_gitlab_rb(manage_storage_directories: { enable: true, root_squash_safe: true } ) }
+  context 'when manage_etc directory management is disabled' do
+    before { stub_gitlab_rb(manage_storage_directories: { enable: true, manage_etc: false } ) }
 
     it 'does not create the user config directory' do
       expect(chef_run).to_not create_directory('/etc/gitlab')

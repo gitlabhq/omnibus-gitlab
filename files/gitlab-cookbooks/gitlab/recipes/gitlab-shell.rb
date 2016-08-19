@@ -34,14 +34,12 @@ if node['gitlab']['manage-storage-directories']['enable']
     storage_directory git_data_directory do
       owner git_user
       mode "0700"
-      recursive true
     end
   end
   repositories_storages.each do |_name, repositories_storage|
     storage_directory repositories_storage do
       owner git_user
       mode "2770"
-      recursive true
     end
   end
 end
@@ -54,7 +52,6 @@ end
     owner git_user
     group git_group
     mode "0700"
-    recursive true
   end
 end
 

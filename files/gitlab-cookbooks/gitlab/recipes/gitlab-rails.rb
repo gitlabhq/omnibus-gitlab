@@ -55,7 +55,6 @@ if node['gitlab']['manage-storage-directories']['enable']
     owner gitlab_user
     group account_helper.web_server_group
     mode '0751'
-    recursive true
   end
 
   [
@@ -67,7 +66,6 @@ if node['gitlab']['manage-storage-directories']['enable']
     storage_directory dir_name do
       owner gitlab_user
       mode '0700'
-      recursive true
     end
   end
 
@@ -75,7 +73,6 @@ if node['gitlab']['manage-storage-directories']['enable']
     owner gitlab_user
     group account_helper.web_server_group
     mode '0750'
-    recursive true
   end
 end
 
