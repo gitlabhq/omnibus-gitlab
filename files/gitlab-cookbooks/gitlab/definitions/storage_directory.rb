@@ -18,6 +18,8 @@
 # user in order to work with root_squash directories on NFS mounts. It will
 # fallback to using root if the target owner user doesn't have enough access
 define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil do
+  next unless node['gitlab']['manage-storage-directories']['enable']
+
   params[:path] ||= params[:name]
   storage_helper = StorageDirectoryHelper.new(params[:owner], params[:group], params[:mode])
 

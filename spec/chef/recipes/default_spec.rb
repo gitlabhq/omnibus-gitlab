@@ -5,11 +5,6 @@ describe 'gitlab::default' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow(StorageDirectoryHelper).to receive(:writable?).with(any_args).and_return(true)
-
-    # Prevent chef converge from reloading the helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/helper}).and_return(true)
   end
 
   it 'creates the user config directory' do
