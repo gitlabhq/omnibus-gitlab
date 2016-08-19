@@ -77,6 +77,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - ['pg_dump: aborting because of server version mismatch'](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
 - ['Errno::ENOMEM: Cannot allocate memory' during backup or upgrade](common_installation_problems/README.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)
 - [NGINX error: 'could not build server_names_hash'](common_installation_problems/README.md#nginx-error-could-not-build-server_names_hash-you-should-increase-server_names_hash_bucket_size)
+- [Reconfigure fails due to "'root' cannot chown" with NFS root_squash](common_installation_problems/README.md#reconfigure-fails-due-to-root-cannot-chown-with-nfs-root_squash)
 
 ## Omnibus GitLab developer documentation
 

@@ -39,13 +39,13 @@ class StorageDirectoryHelper
   def ensure_directory_exists(path)
     # Ensure the directory exists, create using the euid if the parent directory
     # is writable by the target_owner
-    run_command("mkdir -p #{path}", use_euid: writable?(File.join(path, '..')))
+    run_command("mkdir -p #{path}", use_euid: writable?(File.expand_path('..', path)))
   end
 
   def ensure_permissions_set(path)
     # If the owner doesn't match the expected owner, we need to chown.
     # Manual user intervention will be required if it fails. (enabling no_root_squash)
-    run_chown(path) if @target_group != get_owner(path)
+    run_chown(path) if @target_owner != get_owner(path)
 
     # Set the correct mode on the directory, run using the euid if target_owner
     # has write access, otherwise use root
