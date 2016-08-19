@@ -19,47 +19,31 @@
 # Otherwise run the directory resource like normal
 define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil do
   params[:path] ||= params[:name]
-  guard_command = StorageDirectoryHelper.test_stat_cmd(params[:path], params[:owner], params[:group], params[:mode])
+  storage_helper = StorageDirectoryHelper.new(params[:path], params[:owner], params[:group], params[:mode])
 
   ruby_block "directory resource: #{params[:path]}" do
     block do
-      owner_parent_writable = StorageDirectoryHelper.writable?(params[:owner], File.dirname(params[:path]))
+      # Ensure the directory exists
+      storage_helper.run_command("mkdir -p #{params[:path]}", use_euid: storage_helper.writable?('..'))
 
-      StorageDirectoryHelper.run_command(
-        "mkdir -p #{params[:path]}",
-        user: (params[:owner] if owner_parent_writable),
-        group: (params[:group] if owner_parent_writable)
-      )
+      # Check the owner, and chown if needed
+      if params[:owner] != storage_helper.run_command("stat --printf='%U' #{params[:path]}", use_euid: true).stdout
+        begin
+          FileUtils.chown(params[:owner], params[:group], params[:path])
+        rescue Errno::EPERM
+          Chef::Log.warn("Root cannot chown #{params[:path]}. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.")
+          raise
+        end
+      end
 
-      current_owner = StorageDirectoryHelper.run_command(
-        "stat --printf='%U' #{params[:path]}",
-        user: params[:owner],
-        group: params[:group]
-      ).stdout
+      # Update the remaining directory permissions
+      is_writable = storage_helper.writable?
+      storage_helper.run_command("chmod #{params[:mode]} #{params[:path]}", use_euid: is_writable) if params[:mode]
+      storage_helper.run_command("chgrp #{params[:group]} #{params[:path]}", use_euid: is_writable) if params[:group]
 
-      begin
-        FileUtils.chown(params[:owner], params[:group], params[:path])
-      rescue Errno::EPERM
-        Chef::Log.warn("Root cannot chown #{params[:path]}. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.")
-        raise
-      end if current_owner != params[:owner]
-
-      owner_writable = StorageDirectoryHelper.writable?(params[:owner], params[:path])
-
-      StorageDirectoryHelper.run_command(
-        "chmod #{params[:mode]} #{params[:path]}",
-        user: (params[:owner] if owner_writable),
-        group: (params[:group] if owner_writable)
-      ) if params[:mode]
-
-      StorageDirectoryHelper.run_command(
-        "chgrp #{params[:group]} #{params[:path]}",
-        user: (params[:owner] if owner_writable),
-        group: (params[:group] if owner_writable)
-      ) if params[:group]
-
-      StorageDirectoryHelper.run_command(guard_command, user: params[:owner], group: params[:group])
+      # Test that directory is in expected state and error if not
+      storage_helper.run_command(storage_helper.test_stat_cmd, use_euid: true)
     end
-    not_if guard_command, user: params[:owner], group: params[:group]
+    not_if storage_helper.test_stat_cmd, user: params[:owner], group: params[:group]
   end
 end

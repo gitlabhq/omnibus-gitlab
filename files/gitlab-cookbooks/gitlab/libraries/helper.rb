@@ -539,40 +539,40 @@ class CertificateHelper
 end
 
 class StorageDirectoryHelper
-  extend ShellOutHelper
+  include ShellOutHelper
 
-  def self.writable?(user, path)
-    group ||= user
-
-    result = do_shell_out("test -w #{path}", user)
-    if result.exitstatus == 0
-      true
-    else
-      false
-    end
+  def initialize(base_path, owner, group, mode)
+    @base_path = base_path
+    @target_owner = owner
+    @target_group = group
+    @target_mode = mode
   end
 
-  def self.run_command(*args)
-    run_shell = Mixlib::ShellOut.new(*args)
+  def writable?(path = '')
+    do_shell_out("test -w #{File.join(@base_path, path)}", @target_owner).exitstatus == 0
+  end
+
+  def run_command(cmd, use_euid: false, throw_error: true)
+    run_shell = Mixlib::ShellOut.new(cmd, user: (@target_owner if use_euid),  group: (@target_group if use_euid))
     run_shell.run_command
-    run_shell.error!
+    run_shell.error! if throw_error
     run_shell
   end
 
-  def self.test_stat_cmd(path, owner, group, mode)
+  def test_stat_cmd
     format_string = '%F %U'
-    expect_string = "directory #{owner}"
+    expect_string = "directory #{@target_owner}"
 
-    if group
+    if @target_group
       format_string << ':%G'
-      expect_string << ":#{group}"
+      expect_string << ":#{@target_group}"
     end
 
-    if mode
+    if @target_mode
       format_string << ' %04a'
-      expect_string << " #{mode}"
+      expect_string << " #{@target_mode}"
     end
 
-    "test \"$(stat --printf='#{format_string}' #{path})\" = '#{expect_string}'"
+    "test \"$(stat --printf='#{format_string}' #{@base_path})\" = '#{expect_string}'"
   end
 end
