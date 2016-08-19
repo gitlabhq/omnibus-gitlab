@@ -518,7 +518,7 @@ $ gitlab-ctl reconfigure
 This can happen if you have directories mounted using NFS and configured in `root_squash`
 mode. Reconfigure is not able to properly set the ownership of your directories. You
 will need to switch to using `no_root_squash` in your NFS exports on the NFS server, or
-[disable storage directory management](settings/configuration.html#disable-storage-directories-management)
+[disable storage directory management](doc/settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
 [CAcert.org]: http://www.cacert.org/
