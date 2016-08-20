@@ -45,18 +45,30 @@ replace         "gitlab"
 conflict        "gitlab"
 
 install_dir     "/opt/gitlab"
-build_version   Omnibus::BuildVersion.new.semver
+
+# This is a hack to make a distinction between nightly versions
+# See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1500
+#
+# This will be resolved as part of
+# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1007
+#
+# Also check support/release_version.rb for Docker version forming
+if ENV['NIGHTLY'] && ENV['CI_PIPELINE_ID']
+  build_version "#{Omnibus::BuildVersion.new.semver}.#{ENV['CI_PIPELINE_ID']}"
+else
+  build_version Omnibus::BuildVersion.new.semver
+end
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
 override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
-override :postgresql, version: '9.2.17', source: { md5: 'a75d4a82eae1edda04eda2e60656e74c' }
+override :postgresql, version: '9.2.18', source: { md5: 'fd175eb5f29557c6ef2eeaf340330f9a' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
-override :expat, version: '2.1.1', source: { md5: '7380a64a8e3a9d66a9887b01d0d7ea81', url: "http://downloads.sourceforge.net/project/expat/expat/2.1.1/expat-2.1.1.tar.bz2" }
+override :expat, version: '2.2.0', source: { md5: '2f47841c829facb346eb6e3fab5212e2', url: "http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2" }
 override :config_guess, source: { git: "git@dev.gitlab.org:omnibus-mirror/config_guess.git" } # Original git://git.sv.gnu.org/config.git is failing intermittently
 override :rsync, version: '3.1.2'
 

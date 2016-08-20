@@ -4,8 +4,9 @@
   "metadata": {
     "name": "gitlab-ce",
     "annotations": {
-      "description": "GitLab server",
-      "tags": "gitlab,VCS"
+      "iconClass": "fa fa-git",
+      "description": "GitLab. Collaboration and source control management: code, test, and deploy together!",
+      "tags": "instant-app,gitlab,VCS"
     }
   },
   "labels": {
@@ -114,10 +115,10 @@
       "spec": {
         "tags": [
           {
-            "name": "2.8.22",
+            "name": "3.2.3",
             "from": {
               "kind": "DockerImage",
-              "name": "redis:2.8.22"
+              "name": "redis:3.2.3-alpine"
             }
           }
         ]
@@ -299,7 +300,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}-redis:2.8.22"
+                "name": "${APPLICATION_NAME}-redis:3.2.3"
               }
             }
           }
@@ -353,7 +354,11 @@
                   }
                 ],
                 "terminationMessagePath": "/dev/termination-log",
-                "imagePullPolicy": "IfNotPresent"
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "privileged": false,
+                  "runAsUser": 997
+                }
               }
             ],
             "restartPolicy": "Always",

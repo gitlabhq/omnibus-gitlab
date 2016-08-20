@@ -308,7 +308,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## at least 3 hosts).
 ## You don't need to list every sentinel host, but the ones unlisted will
 ## not be used in a fail-over situation to query for the new master.
-# gitlab-rails['redis_sentinels'] = [
+# gitlab_rails['redis_sentinels'] = [
 #   {'host' => '127.0.0.1', 'port' => 26379},
 # ]
 
