@@ -6,6 +6,7 @@ stages:
   - notification_fail
 
 before_script:
+  - echo $NIGHTLY
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache

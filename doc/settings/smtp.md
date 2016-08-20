@@ -246,6 +246,19 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ````
 
+### UD Media
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.udXX.udmedia.de" # Replace XX, see smtp server information: https://www.udmedia.de/login/mail/
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "login"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
