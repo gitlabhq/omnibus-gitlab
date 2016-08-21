@@ -7,15 +7,9 @@
 #
 
 paths_to_be_protected = [
-  "#{Rails.application.config.relative_url_root}/users/password",
-  "#{Rails.application.config.relative_url_root}/users/sign_in",
-  "#{Rails.application.config.relative_url_root}/api/#{API::API.version}/session.json",
-  "#{Rails.application.config.relative_url_root}/api/#{API::API.version}/session",
-  "#{Rails.application.config.relative_url_root}/users",
-  "#{Rails.application.config.relative_url_root}/users/confirmation",
-  "#{Rails.application.config.relative_url_root}/unsubscribes/",
-  "#{Rails.application.config.relative_url_root}/import/github/personal_access_token"
-
+  <% @rack_attack_paths_to_be_protected.each do |path| %>
+  "#{Rails.application.config.relative_url_root}<%= path %>",
+  <% end %>
 ]
 
 # Create one big regular expression that matches strings starting with any of

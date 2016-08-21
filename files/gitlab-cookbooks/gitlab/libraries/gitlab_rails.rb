@@ -23,6 +23,7 @@ module GitlabRails
       parse_external_url
       parse_directories
       parse_gitlab_trusted_proxies
+      parse_rack_attack_paths_to_be_protected
     end
 
     def parse_directories
@@ -89,6 +90,13 @@ module GitlabRails
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
+    end
+
+    def parse_rack_attack_paths_to_be_protected
+      return unless Gitlab['gitlab_rails']['rack_attack_paths_to_be_protected']
+      Gitlab['gitlab_rails']['rack_attack_paths_to_be_protected'].map! do |path|
+        path.start_with?('/') ? path : '/' + path
+      end
     end
 
     def disable_gitlab_rails_services
