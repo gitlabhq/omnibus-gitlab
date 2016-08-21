@@ -52,6 +52,10 @@ See [doc/settings/configuration.md](doc/settings/configuration.md#storing-git-da
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#changing-the-name-of-the-git-user-group).
 
+##### Configuring Rake attack
+
+See [doc/settings/configuration.md](doc/settings/configuration.md#enablingdisabling-rake-attack-and-setting-up-basic-auth-throttling).
+
 ##### Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](doc/settings/ldap.md).

@@ -362,7 +362,7 @@ Next configuration settings control rake attack:
 
 ```ruby
 gitlab_rails['rack_attack_git_basic_auth'] = {
-  'enabled' => true, # Enable/Disable rake
+  'enabled' => true, # Enable/Disable rake attack
   'ip_whitelist' => ["127.0.0.1"], # Whitelisted urls
   'maxretry' => 10, # Limit the number of Git HTTP authentication attempts per IP
   'findtime' => 60, # Reset the auth attempt counter per IP after 60 seconds
@@ -390,13 +390,14 @@ gitlab_rails['rack_attack_paths_to_be_protected'] = [
 ]
 ```
 
-_**Note:** All paths are relative to the gitlab `external_url`._
+_**Note:** All paths are relative to the gitlab url._
 
 **Warning** If path contains variable/s which need to be
 interpolated by rails(ex "#{API::API.version}")
 then you need to escape curly brackets or use single quated string.
 
-Use next options to control throttling 'limit' and 'period' for protected paths:
+### Setting up throttling for 'paths to be protected' 
+Use next options to control throttling 'limit' and 'period':
 
 ```ruby
 gitlab_rails['rate_limit_requests_per_period'] = 10
