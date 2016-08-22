@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.11.1
+
+- Fix reconfigure when existing secrets file contains a `gitlab_ci:gitlab_server` key
+
 8.11.0
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
