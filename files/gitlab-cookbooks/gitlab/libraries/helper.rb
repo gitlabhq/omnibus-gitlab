@@ -265,14 +265,12 @@ class SecretsHelper
                     }
 
     if Gitlab['gitlab_ci']['gitlab_server']
-      ci_auth = {
-                  'gitlab_server' => {
-                    'url' => Gitlab['gitlab_ci']['gitlab_server']['url'],
-                    'app_id' => Gitlab['gitlab_ci']['gitlab_server']['app_id'],
-                    'app_secret' => Gitlab['gitlab_ci']['gitlab_server']['app_secret']
-                  }
-                }
-      secret_tokens['gitlab_ci'].merge!(ci_auth)
+      warning = [
+        "Legacy config value gitlab_ci['gitlab_server'] found; value will be REMOVED. For reference, it was:",
+        Gitlab['gitlab_ci']['gitlab_server'].to_json
+      ]
+
+      warn(warning.join("\n\n"))
     end
 
     if Gitlab['mattermost']['gitlab_enable']
