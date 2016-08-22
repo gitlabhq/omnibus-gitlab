@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Remove Redis dump.rdb on downgrades for furuture packages (Gustavo Lopez) 824530
 - Update postgresql to 9.2.18 (Takuya Noguchi)
 - Update expat to 2.2.0 (Takuya Noguchi)
+- Ignore and don't write `gitlab_ci:gitlab_server` key in gitlab-secrets file 10bcb
 
 8.10.7
 

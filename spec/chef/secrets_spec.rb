@@ -177,6 +177,29 @@ describe 'secrets' do
         end
       end
 
+      context 'when there is a legacy CI gitlab_server key' do
+        before do
+          stub_gitlab_secrets_json(gitlab_ci: { gitlab_server: { url: 'json_ci_gitlab_server' } })
+          allow_any_instance_of(Object).to receive(:warn)
+        end
+
+        it 'warns that this value is no longer used, and prints the value' do
+          expect_any_instance_of(Object).to receive(:warn) do |value|
+            expect(value).to include('gitlab_server')
+            expect(value).to include('json_ci_gitlab_server')
+          end
+
+          chef_run
+        end
+
+        it 'does not write the value to the new file' do
+          chef_run
+
+          expect(new_secrets).not_to have_key('gitlab_ci')
+          expect(new_secrets.to_json).not_to include('json_ci_gitlab_server')
+        end
+      end
+
       context 'when secrets are ambiguous and cannot be migrated automatically' do
         before { stub_gitlab_secrets_json({}) }
 
