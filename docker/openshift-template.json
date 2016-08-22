@@ -94,10 +94,10 @@
       "spec": {
         "tags": [
           {
-            "name": "8.10.0",
+            "name": "8.11.0",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.10.0-ce.1"
+              "name": "gitlab/gitlab-ce:8.11.0-ce.1"
             }
           }
         ]
@@ -158,7 +158,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:8.10.0"
+                "name": "${APPLICATION_NAME}:8.11.0"
               }
             }
           }
