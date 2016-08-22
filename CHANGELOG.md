@@ -3,10 +3,6 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.11.1
-
-- Fix reconfigure when existing secrets file contains a `gitlab_ci:gitlab_server` key
-
 8.11.0
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
@@ -30,6 +26,7 @@ omnibus-gitlab repository.
 - Remove Redis dump.rdb on downgrades for furuture packages (Gustavo Lopez) 824530
 - Update postgresql to 9.2.18 (Takuya Noguchi)
 - Update expat to 2.2.0 (Takuya Noguchi)
+- Ignore and don't write `gitlab_ci:gitlab_server` key in gitlab-secrets file 10bcb
 
 8.10.7
 
