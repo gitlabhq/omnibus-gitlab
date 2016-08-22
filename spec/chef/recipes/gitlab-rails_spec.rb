@@ -45,7 +45,7 @@ describe 'gitlab::gitlab-rails' do
 
   context 'when manage-storage-directories is enabled' do
     before do
-      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' }, manage_storage_directories: { enable: true } )
+      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' } )
     end
 
     it 'creates the shared directory' do

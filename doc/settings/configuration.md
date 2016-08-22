@@ -308,7 +308,7 @@ Some types of mounts won't allow automatic creation of directories by root user
  (default user for initial setup), eg. NFS with `root_squash` enabled on the
 share. To work around this the omnibus-gitlab package will attempt to create
 these directories using the directory's owner user, but if you are mounting these
-directories individually, you should disable the management storage directories.
+directories individually, you should disable the management of storage directories.
 
 In order to disable management of these directories,
 in `/etc/gitlab/gitlab.rb` set:
