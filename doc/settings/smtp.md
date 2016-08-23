@@ -259,6 +259,17 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Microsoft Exchange (No authentication)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "example.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = false
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
