@@ -35,6 +35,29 @@ For example, if you take a look at the `8-6-stable` branch, you can conclude tha
 8.6 packages were running [ruby 2.1.8]. Or, that 8.5 packages were bundled
 with [nginx 1.9.0].
 
+## Init system detection
+
+The omnibus-gitlab will attempt to query the underlaying system in order to
+check which init system it uses.
+This manifests itself as a `WARNING` during the `sudo gitlab-ctl reconfigure`
+run.
+
+Depending on the init system, this `WARNING` can be one of:
+
+```
+/sbin/init: unrecognized option '--version'
+```
+
+when the underlying init system *IS NOT* upstart.
+
+```
+  -.mount loaded active mounted   /
+```
+
+when the underlying init system *IS* systemd.
+
+These warnings _can be safely ignored_. They are not suppressed because this
+allows everyone to debug possible detection issues faster.
 
 [source repository]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master
 [config directory]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config
