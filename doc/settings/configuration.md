@@ -370,15 +370,16 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 }
 ```
 
-### Setting up paths to be protected
+### Setting up paths to be protected by rake attack
 
-If you want to change default paths to be protected
-set `gitlab_rails['rack_attack_paths_to_be_protected']` in config file.
+If you want to change default protected paths 
+set `gitlab_rails['rack_attack_protected_paths']` in config file. 
 
-Default list is:
+**Warning** This action will overwrite 
+list provided by omnibus-gitlab:
 
 ```ruby
-gitlab_rails['rack_attack_paths_to_be_protected'] = [
+gitlab_rails['rack_attack_protected_paths'] = [
   '/users/password',
   '/users/sign_in',
   '/api/#{API::API.version}/session.json',
@@ -391,10 +392,13 @@ gitlab_rails['rack_attack_paths_to_be_protected'] = [
 ```
 
 _**Note:** All paths are relative to the gitlab url._
+Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
 
-**Warning** If path contains variable/s which need to be
-interpolated by rails(ex "#{API::API.version}")
-then you need to escape curly brackets or use single quated string.
+**Warning** If path contains variables which need to be
+interpolated by rails(ex. `#{API::API.version}`)
+then you need to escape curly brackets or use single quoted string.
+For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
+
 
 ### Setting up throttling for 'paths to be protected' 
 Use next options to control throttling 'limit' and 'period':

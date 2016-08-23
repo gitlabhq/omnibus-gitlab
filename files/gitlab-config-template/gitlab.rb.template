@@ -247,7 +247,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'bantime' => 3600
 # }
 
-# gitlab_rails['rack_attack_paths_to_be_protected'] = [
+# gitlab_rails['rack_attack_protected_paths'] = [
 #   '/users/password',
 #   '/users/sign_in',
 #   '/api/#{API::API.version}/session.json',

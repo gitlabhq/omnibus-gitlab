@@ -208,7 +208,7 @@ default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
-default['gitlab']['gitlab-rails']['rack_attack_paths_to_be_protected'] = [
+default['gitlab']['gitlab-rails']['rack_attack_protected_paths'] = [
   '/users/password',
   '/users/sign_in',
   '/api/#{API::API.version}/session.json',
