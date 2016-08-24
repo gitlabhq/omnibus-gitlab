@@ -667,6 +667,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Set only if the select directories are created manually
 ## See: http://doc.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
 # manage_storage_directories['enable'] = false
+# manage_storage_directories['manage_etc'] = false
 
 #######
 # Git #
