@@ -8,7 +8,7 @@ if Gitlab::IncomingEmail.enabled?
   redis_config_file = "/opt/gitlab/embedded/service/gitlab-rails/config/resque.yml"
   redis_url = 
     if File.exists?(redis_config_file)
-      YAML.load_file(redis_config_file)[Rails.env]
+      YAML.load_file(redis_config_file)[Rails.env]['url']
     else
       "redis://localhost:6379"
     end
