@@ -5,6 +5,8 @@ Both GitLab CE and EE are in Docker Hub:
 - [GitLab CE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ce/)
 - [GitLab EE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ee/)
 
+The GitLab docker images are monolithic images of GitLab running all the necessary services on a single container.
+
 You can also deploy to Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose):
 
 [![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/gitlabhq/omnibus-gitlab/tree/master/docker)
