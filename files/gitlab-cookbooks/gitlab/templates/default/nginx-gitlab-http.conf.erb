@@ -117,7 +117,9 @@ server {
     proxy_read_timeout      <%= @proxy_read_timeout %>;
     proxy_connect_timeout   <%= @proxy_connect_timeout %>;
     proxy_redirect          off;
-
+    <% if @errors %>
+    proxy_intercept_errors on;
+    <% end %>
     proxy_http_version 1.1;
 
     <% @proxy_set_headers.each do |header| %>
@@ -128,12 +130,20 @@ server {
     proxy_pass http://gitlab-workhorse;
   }
 
-  error_page 404 /404.html;
-  error_page 422 /422.html;
-  error_page 500 /500.html;
-  error_page 502 /502.html;
-  location ~ ^/(404|422|500|502)\.html$ {
-    root /opt/gitlab/embedded/service/gitlab-rails/public;
+  <%# Define an empty errors if none is provided %>
+  <% @errors = {} unless @errors %>
+  <%# At the least, provide error pages for 404, 402, 500, 502 errors %>
+  <% @required = %w(404 422 500 502) %>
+  <% @required.each do |err| %>
+    <% unless @errors.key?(err) %>
+  error_page <%= err %> /<%= err %>.html;
+    <% end %>
+  <% end %>
+  <% @errors.each_key do |err| %>
+  error_page <%= err %> /<%= @errors[err] ? "#{err}-custom.html" : "#{err}.html" %>;
+  <% end %>
+  location ~ ^/(<%= (@required | @errors.keys).join('|') %>)(-custom)?\.html$ {
+    root <%= node['gitlab']['gitlab-rails']['public_path'] %>;
     internal;
   }
 
