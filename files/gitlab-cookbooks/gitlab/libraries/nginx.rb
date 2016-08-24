@@ -53,7 +53,7 @@ module Nginx
 
     def parse_proxy_headers(app, https)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
-      default_from_attributes = Gitlab['node']['gitlab'][app]['proxy_set_headers'].to_hash
+      default_from_attributes = Gitlab['node']['gitlab'][app.gsub('_', '-')]['proxy_set_headers'].to_hash
 
       default_from_attributes = if https
                                   default_from_attributes.merge({

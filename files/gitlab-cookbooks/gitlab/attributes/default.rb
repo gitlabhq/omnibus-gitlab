@@ -836,7 +836,7 @@ default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
 ####
 default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['mattermost-nginx']['enable'] = false
-default['gitlab']['mattermost_nginx']['proxy_set_headers'] = {
+default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
@@ -857,8 +857,8 @@ default['gitlab']['pages-nginx']['enable'] = true
 ####
 default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['registry-nginx']['enable'] = true
-default['gitlab']['registry_nginx']['https'] = false
-default['gitlab']['registry_nginx']['proxy_set_headers'] = {
+default['gitlab']['registry-nginx']['https'] = false
+default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",

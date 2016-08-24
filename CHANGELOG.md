@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.11.1
+ - Fixed a regression where the default container registry and mattermost nginx proxy headers were not being set
+
 8.11.0
 
 - Add configuration that allows overriding proxy headers for Mattermost NGINX config (Cody Mize) 4985ca
