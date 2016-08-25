@@ -167,7 +167,7 @@ sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
 sudo gitlab-ctl reconfigure
 
 # Double-check directory layout in /mnt/nas/git-data. Expected output:
-# gitlab-satellites  repositories
+# repositories
 sudo ls /mnt/nas/git-data/
 
 # Done! Start GitLab and verify that you can browse through the repositories in
