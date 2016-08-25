@@ -2,8 +2,10 @@
 
 Both GitLab CE and EE are in Docker Hub:
 
-- [GitLab CE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ce/)
-- [GitLab EE docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ee/)
+- [GitLab CE Docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ce/)
+- [GitLab EE Docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ee/)
+
+The GitLab Docker images are monolithic images of GitLab running all the necessary services on a single container.
 
 You can also deploy to Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose):
 
@@ -53,7 +55,7 @@ sudo docker run --detach \
 	gitlab/gitlab-ce:latest
 ```
 
-This will ensure that the docker process has enough permissions to create the
+This will ensure that the Docker process has enough permissions to create the
 config files in the mounted volumes.
 
 ## Where is the data stored?
@@ -91,7 +93,7 @@ Once you open `/etc/gitlab/gitlab.rb` make sure to set the `external_url` to
 point to a valid URL.
 
 To receive e-mails from GitLab you have to configure the
-[SMTP settings](../settings/smtp.md) because the GitLab docker image doesn't
+[SMTP settings](../settings/smtp.md) because the GitLab Docker image doesn't
 have an SMTP server installed.
 
 You may also be interested in [Enabling HTTPS](../settings/nginx.md#enable-https).
@@ -110,7 +112,7 @@ For more options about configuring GitLab please check the
 
 ### Pre-configure Docker container
 
-You can pre-configure the GitLab docker image by adding the environment
+You can pre-configure the GitLab Docker image by adding the environment
 variable `GITLAB_OMNIBUS_CONFIG` to docker run command. This variable can
 contain any `gitlab.rb` setting and will be evaluated before loading the
 container's `gitlab.rb` file. That way you can easily configure GitLab's
@@ -144,7 +146,7 @@ They are documented in the [environment variables section of the GitLab document
 
 After starting a container you can visit <http://localhost/> or
 <http://192.168.59.103> if you use boot2docker. It might take a while before
-the docker container starts to respond to queries.
+the Docker container starts to respond to queries.
 
 Login to GitLab with the following credentials:
 
@@ -195,7 +197,7 @@ On the first run, GitLab will reconfigure and update itself.
 
 ### Use tagged versions of GitLab
 
-We provide tagged versions of GitLab docker images.
+We provide tagged versions of GitLab Docker images.
 
 To see all available tags check:
 
@@ -353,7 +355,7 @@ download a new release and upgrade your GitLab instance.
 
 ### 500 Internal Error
 
-When updating the docker image you may encounter an issue where all paths
+When updating the Docker image you may encounter an issue where all paths
 display the infamous **500** page. If this occurs, try to run
 `sudo docker restart gitlab` to restart the container and rectify the issue.
 
