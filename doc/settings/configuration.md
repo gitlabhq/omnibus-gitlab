@@ -305,8 +305,21 @@ Some of these directories will hold large amount of data so in certain setups,
 these directories will most likely be mounted on a NFS (or some other) share.
 
 Some types of mounts won't allow automatic creation of directories by root user
- (default user for initial setup), eg. NFS with `no_root_squash` enabled on the
-share.
+ (default user for initial setup), eg. NFS with `root_squash` enabled on the
+share. To work around this the omnibus-gitlab package will attempt to create
+these directories using the directory's owner user.
+
+If you have the `/etc/gitlab` directory mounted, you can turn off management of
+that directory.
+
+In `/etc/gitlab/gitlab.rb` set:
+
+```ruby
+manage_storage_directories['manage_etc'] = false
+```
+
+If you are mounting all GitLab's storage directories, each on a seperate mount,
+you should completely disable the management of storage directories.
 
 In order to disable management of these directories,
 in `/etc/gitlab/gitlab.rb` set:

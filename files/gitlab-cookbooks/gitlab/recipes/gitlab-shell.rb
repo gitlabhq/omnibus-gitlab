@@ -29,20 +29,17 @@ log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
-if node['gitlab']['manage-storage-directories']['enable']
-  git_data_directories.each do |_name, git_data_directory|
-    directory git_data_directory do
-      owner git_user
-      mode "0700"
-      recursive true
-    end
+git_data_directories.each do |_name, git_data_directory|
+  storage_directory git_data_directory do
+    owner git_user
+    mode "0700"
   end
-  repositories_storages.each do |_name, repositories_storage|
-    directory repositories_storage do
-      owner git_user
-      mode "2770"
-      recursive true
-    end
+end
+
+repositories_storages.each do |_name, repositories_storage|
+  storage_directory repositories_storage do
+    owner git_user
+    mode "2770"
   end
 end
 
@@ -50,11 +47,10 @@ end
   ssh_dir,
   File.dirname(authorized_keys)
 ].uniq.each do |dir|
-  directory dir do
+  storage_directory dir do
     owner git_user
     group git_group
     mode "0700"
-    recursive true
   end
 end
 

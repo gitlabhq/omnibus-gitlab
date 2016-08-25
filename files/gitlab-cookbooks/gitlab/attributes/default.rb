@@ -29,6 +29,7 @@ default['gitlab']['manage-accounts']['enable'] = true
 
 # Create directories with correct permissions and ownership required by the pkg
 default['gitlab']['manage-storage-directories']['enable'] = true
+default['gitlab']['manage-storage-directories']['manage_etc'] = true
 
 ####
 # The Git User that services run as
@@ -44,7 +45,6 @@ default['gitlab']['user']['shell'] = "/bin/sh"
 default['gitlab']['user']['home'] = "/var/opt/gitlab"
 default['gitlab']['user']['git_user_name'] = "GitLab"
 default['gitlab']['user']['git_user_email'] = "gitlab@#{node['fqdn']}"
-
 
 ####
 # GitLab Rails app

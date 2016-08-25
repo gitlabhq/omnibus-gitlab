@@ -3,7 +3,13 @@ require 'chef_helper'
 describe 'gitlab::gitlab-shell' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+
+    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
+    allow(Kernel).to receive(:load).and_call_original
+    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
+  end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
     expect(chef_run).to run_execute('/opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-keys check-permissions')
@@ -29,11 +35,7 @@ describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to create_directory('/tmp/user/.ssh').with(
-        user: 'git',
-        group: 'git',
-        mode: '0700'
-      )
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/.ssh')
     end
 
     it 'creates the config file with the auth_file within user\'s ssh directory' do
@@ -46,19 +48,11 @@ describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to create_directory('/tmp/user/.ssh').with(
-        user: 'git',
-        group: 'git',
-        mode: '0700'
-      )
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/.ssh')
     end
 
-    it 'creates the auth_file\'s parent directory with the correct permissions' do
-      expect(chef_run).to create_directory('/tmp/ssh').with(
-        user: 'git',
-        group: 'git',
-        mode: '0700'
-      )
+    it 'creates the auth_file\'s parent directory' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
     end
 
     it 'creates the config file with the auth_file at the specified location' do
@@ -67,6 +61,26 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'when git_data_dir is moved' do
+    before { stub_gitlab_rb({git_data_dir: '/tmp/user/git-data'}) }
+
+    it 'creates the git data directories' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/git-data')
+    end
+
+    it 'creates the git storage directories' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/git-data/repositories')
+    end
+
+    it 'creates the ssh dir in the user\'s home directory' do
+      expect(chef_run).to run_ruby_block('directory resource: /var/opt/gitlab/.ssh')
+    end
+
+    it 'creates the auth_file\'s parent directory' do
+      stub_gitlab_rb(gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' })
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
+    end
+  end
   context 'with redis settings' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do

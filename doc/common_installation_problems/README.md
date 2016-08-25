@@ -501,6 +501,26 @@ nginx['server_names_hash_bucket_size'] = 128
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Reconfigure fails due to "'root' cannot chown" with NFS root_squash
+
+```
+$ gitlab-ctl reconfigure
+    ================================================================================
+    Error executing action `run` on resource 'ruby_block[directory resource: /gitlab-data/git-data]'
+    ================================================================================
+
+    Errno::EPERM
+    ------------
+    'root' cannot chown /gitlab-data/git-data. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.
+    Operation not permitted @ chown_internal - /gitlab-data/git-data
+```
+
+This can happen if you have directories mounted using NFS and configured in `root_squash`
+mode. Reconfigure is not able to properly set the ownership of your directories. You
+will need to switch to using `no_root_squash` in your NFS exports on the NFS server, or
+[disable storage directory management](doc/settings/configuration.md#disable-storage-directories-management)
+ and manage the permissions yourself.
+
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
