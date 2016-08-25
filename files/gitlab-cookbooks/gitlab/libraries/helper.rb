@@ -242,6 +242,9 @@ class SecretsHelper
 
   def self.write_to_gitlab_secrets
     secret_tokens = {
+                      'gitlab_workhorse' => {
+                        'secret_token' => Gitlab['gitlab_workhorse']['secret_token'],
+                      },
                       'gitlab_shell' => {
                         'secret_token' => Gitlab['gitlab_shell']['secret_token'],
                       },
