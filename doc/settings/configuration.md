@@ -360,6 +360,69 @@ high_availability['mountpoint'] = '/var/opt/gitlab'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+## Configuring Rake attack
+
+To prevent abusive clients doing damage GitLab uses rack-attack gem.
+Check [this page](https://gitlab.com/help/security/rack_attack.md)
+for more information.
+
+File `config/initializers/rack_attack.rb` is managed by omnibus-gitlab
+and must be configured in `/etc/gitlab/gitlab.rb`.
+
+### Enabling/Disabling Rake attack and setting up basic auth throttling
+
+Next configuration settings control rake attack:
+
+```ruby
+gitlab_rails['rack_attack_git_basic_auth'] = {
+  'enabled' => true, # Enable/Disable rake attack
+  'ip_whitelist' => ["127.0.0.1"], # Whitelisted urls
+  'maxretry' => 10, # Limit the number of Git HTTP authentication attempts per IP
+  'findtime' => 60, # Reset the auth attempt counter per IP after 60 seconds
+  'bantime' => 3600 # Ban an IP for one hour (3600s) after too many auth attempts
+}
+```
+
+### Setting up paths to be protected by rake attack
+
+If you want to change default protected paths 
+set `gitlab_rails['rack_attack_protected_paths']` in config file. 
+
+**Warning** This action will overwrite 
+list provided by omnibus-gitlab:
+
+```ruby
+gitlab_rails['rack_attack_protected_paths'] = [
+  '/users/password',
+  '/users/sign_in',
+  '/api/#{API::API.version}/session.json',
+  '/api/#{API::API.version}/session',
+  '/users',
+  '/users/confirmation',
+  '/unsubscribes/',
+  '/import/github/personal_access_token'
+]
+```
+
+_**Note:** All paths are relative to the gitlab url._
+Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
+
+**Warning** If path contains variables which need to be
+interpolated by rails(ex. `#{API::API.version}`)
+then you need to escape curly brackets or use single quoted string.
+For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
+
+
+### Setting up throttling for 'paths to be protected' 
+Use next options to control throttling 'limit' and 'period':
+
+```ruby
+gitlab_rails['rate_limit_requests_per_period'] = 10
+gitlab_rails['rate_limit_period'] = 60
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ## Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](ldap.md).
