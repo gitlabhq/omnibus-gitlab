@@ -202,7 +202,7 @@ end
 
 if nginx_vars.key?('errors')
   nginx_vars['errors'].each_key do |code|
-    template "#{node['gitlab']['gitlab-rails']['public_path']}/#{code}-custom.html" do
+    template "#{GitlabRails.public_path}/#{code}-custom.html" do
       source "gitlab-rails-error.html.erb"
       owner "root"
       group "root"

@@ -66,7 +66,6 @@ default['gitlab']['gitlab-rails']['env'] = {
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current"
 }
 
-default['gitlab']['gitlab-rails']['public_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-rails/public"
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10

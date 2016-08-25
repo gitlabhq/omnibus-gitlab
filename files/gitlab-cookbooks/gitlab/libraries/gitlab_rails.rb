@@ -99,5 +99,9 @@ module GitlabRails
         Gitlab['gitlab_workhorse']["enable"] = false
       end
     end
+
+    def public_path
+      "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
+    end
   end
 end

@@ -129,21 +129,12 @@ server {
 
     proxy_pass http://gitlab-workhorse;
   }
-
-  <%# Define an empty errors if none is provided %>
-  <% @errors = {} unless @errors %>
-  <%# At the least, provide error pages for 404, 402, 500, 502 errors %>
-  <% @required = %w(404 422 500 502) %>
-  <% @required.each do |err| %>
-    <% unless @errors.key?(err) %>
-  error_page <%= err %> /<%= err %>.html;
-    <% end %>
+  <% errors = Nginx.parse_error_pages %>
+  <% errors.each do |err, location| %>
+  error_page <%= err %> /<%= location %>;
   <% end %>
-  <% @errors.each_key do |err| %>
-  error_page <%= err %> /<%= @errors[err] ? "#{err}-custom.html" : "#{err}.html" %>;
-  <% end %>
-  location ~ ^/(<%= (@required | @errors.keys).join('|') %>)(-custom)?\.html$ {
-    root <%= node['gitlab']['gitlab-rails']['public_path'] %>;
+  location ~ ^/(<%= errors.keys.join('|') %>)(-custom)?\.html$ {
+    root <%= GitlabRails.public_path %>;
     internal;
   }
 
