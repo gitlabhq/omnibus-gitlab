@@ -31,6 +31,7 @@ fi
 # Fix nginx buffering directory permission
 if id -u gitlab-www; then
 	chown -R gitlab-www:gitlab-www /var/opt/gitlab/nginx/*_temp
+	chown -R gitlab-www:gitlab-www /var/opt/gitlab/nginx/*_cache
 fi
 
 # Fix database storage
