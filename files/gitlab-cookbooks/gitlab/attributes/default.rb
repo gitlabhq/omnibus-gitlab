@@ -350,6 +350,8 @@ default['gitlab']['postgresql']['sql_user'] = "gitlab"
 default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['gitlab']['postgresql']['port'] = 5432
+# Postgres allow multi listen_address, comma-separated values.
+# If used, first address from the list will be use for connection
 default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
 default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []

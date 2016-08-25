@@ -11,6 +11,35 @@ describe 'gitlab::gitlab-rails' do
     allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
+  context 'when multiple postgresql listen_address is used' do
+    before do
+      stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1,1.1.1.1" })
+    end
+
+    it 'creates the postgres configuration file with multi listen_address and database.yml file with one host' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
+    end
+  end
+
+  context 'when no postgresql listen_address is used' do
+    it 'creates the postgres configuration file with empty listen_address and database.yml file with default one' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '\/var\/opt\/gitlab\/postgresql'/)
+      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
+    end
+  end
+
+  context 'when one postgresql listen_address is used' do
+    before do
+      stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
+    end
+
+    it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
+    end
+  end
+
   context 'when manage-storage-directories is disabled' do
     before do
       stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' }, manage_storage_directories: { enable: false })
