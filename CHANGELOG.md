@@ -7,6 +7,9 @@ omnibus-gitlab repository.
 - Add support for using NFS root_squash for storage directories d5cf0d1d
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
 
+8.11.3
+ - Patch docutils to work with Python3 to restore .RST rendering 70ee88c2
+
 8.11.1
  - Fixed a regression where the default container registry and mattermost nginx proxy headers were not being set
 
