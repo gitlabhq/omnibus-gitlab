@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.11.3
+ - Patch docutils to work with Python3 to restore .RST rendering 70ee88c2
+
 8.11.1
  - Fixed a regression where the default container registry and mattermost nginx proxy headers were not being set
 
