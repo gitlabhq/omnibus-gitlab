@@ -22,7 +22,7 @@ name "gitlab-rails"
 default_version version.print
 
 combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
-gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems/"
+gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems"
 
 license "MIT"
 license_file "LICENSE"
@@ -65,6 +65,11 @@ build do
   bundle_without << "mysql" unless EE
   bundle "config build.rugged --no-use-system-libraries", :env => env
   bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers} --retry 5", :env => env
+
+  # This patch makes the github-markup gem use and be compatible with Python3
+  # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
+  patch source: 'github-markup_gem-markups.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/markups.rb"
+  patch source: 'github-markup_gem-rest2html.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/commands/rest2html" 
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
