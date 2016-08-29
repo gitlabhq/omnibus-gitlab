@@ -264,9 +264,8 @@ gitlab_workhorse_services += 'gitlab-workhorse' if OmnibusHelper.should_notify?(
 template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
   source "secret_token.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner gitlab_user
+  mode "0600"
   variables(secret_token: node['gitlab']['gitlab-workhorse']['secret_token'])
   restarts gitlab_workhorse_services
 end
