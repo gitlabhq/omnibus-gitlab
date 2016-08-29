@@ -163,8 +163,9 @@ sudo gitlab-ctl stop
 # slash behind 'git-data'.
 sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
 
-# Fix permissions if necessary
-sudo gitlab-ctl reconfigure
+# Start the necessary processes and run reconfigure to fix permissions
+# if necessary
+sudo gitlab-ctl upgrade
 
 # Double-check directory layout in /mnt/nas/git-data. Expected output:
 # repositories
