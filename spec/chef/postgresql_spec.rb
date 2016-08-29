@@ -5,18 +5,11 @@ describe 'postgresql' do
 
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
-  context 'when shared_preload_libraries is nil' do
-    before do
-      stub_gitlab_rb(
-        "postgresql" => { shared_preload_libraries: nil}
-      )
-    end
-
-    it 'correctly sets the shared_preload_libraries setting' do
+  context 'when shared_preload_libraries is not configured' do
+    it 'correctly sets the shared_preload_libraries default setting' do
       expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])
         .to be_nil
     end
-
   end
 
   context 'when shared_preload_libraries is pg_stat_statements' do
@@ -30,7 +23,5 @@ describe 'postgresql' do
       expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])
         .to eql('pg_stat_statements')
     end
-
   end
-
 end
