@@ -78,7 +78,7 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-sync: move_to_secret_dir md5 s3_sync
+sync: move_to_secret_dir s3_sync
 
 move_to_secret_dir:
 	if support/is_gitlab_ee.sh ; then \
@@ -127,9 +127,6 @@ endif
 ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
 do_docker_release: docker_push_latest
 endif
-
-md5:
-	find pkg -name '*.json' -exec cat {} \;
 
 s3_sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
