@@ -22,4 +22,4 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
     -proxyHeadersTimeout <%= node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
     <% end %>
-    -secretFile /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret
+    -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret
