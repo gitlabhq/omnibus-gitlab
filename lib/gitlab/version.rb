@@ -1,13 +1,39 @@
+require 'yaml'
+
 module Gitlab
   class Version
 
-    def initialize(filename)
-      @filename = filename
-      filepath = File.expand_path(@filename, Omnibus::Config.project_root)
-      @read_version = File.read(filepath).chomp
+    def initialize(software_name, version)
+      @software = software_name
+
+      @read_version = if version
+                        version
+                      else
+                        read_version_from_file
+                      end
+    end
+
+    def read_version_from_file
+      filepath = File.expand_path(version_file, Omnibus::Config.project_root)
+      File.read(filepath).chomp
     rescue Errno::ENOENT
       # Didn't find the file
       @read_version = ""
+    end
+
+    def version_file
+      case @software
+      when "gitlab-rails" || "gitlab-rails-ee"
+        "VERSION"
+      when "gitlab-shell"
+        "GITLAB_SHELL_VERSION"
+      when "gitlab-workhorse"
+        "GITLAB_WORKHORSE_VERSION"
+      when "gitlab-pages"
+        "GITLAB_PAGES_VERSION"
+      else
+        nil
+      end
     end
 
     def print
@@ -23,22 +49,8 @@ module Gitlab
     end
 
     def remote
-      case @filename
-      when "VERSION"
-        if @read_version.include?('-ee')
-          "git@dev.gitlab.org:gitlab/gitlab-ee.git"
-        else
-          "git@dev.gitlab.org:gitlab/gitlabhq.git"
-        end
-      when "GITLAB_SHELL_VERSION"
-        "git@dev.gitlab.org:gitlab/gitlab-shell.git"
-      when "GITLAB_WORKHORSE_VERSION"
-        "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
-      when "GITLAB_PAGES_VERSION"
-        "https://gitlab.com/gitlab-org/gitlab-pages.git"
-      else
-        nil
-      end
+      filepath = File.expand_path(".custom_sources.yml", Omnibus::Config.project_root)
+      YAML.load_file(filepath)[@software]['remote']
     end
   end
 end

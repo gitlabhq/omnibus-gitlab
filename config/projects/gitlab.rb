@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -60,6 +61,10 @@ else
 end
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
+# Overrides for remote URLs of the software
+# Original git://git.sv.gnu.org/config.git is failing intermittently
+config_guess_remote =  Gitlab::Version.new('config_guess').remote
+
 override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
@@ -69,7 +74,7 @@ override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7add
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
 override :expat, version: '2.2.0', source: { md5: '2f47841c829facb346eb6e3fab5212e2', url: "http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2" }
-override :config_guess, source: { git: "git@dev.gitlab.org:omnibus-mirror/config_guess.git" } # Original git://git.sv.gnu.org/config.git is failing intermittently
+override :config_guess, source: { git: config_guess_remote }
 override :rsync, version: '3.1.2'
 
 # Openssh needs to be installed

@@ -16,7 +16,7 @@
 ##
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("GITLAB_SHELL_VERSION")
+version = Gitlab::Version.new("gitlab-shell")
 
 name "gitlab-shell"
 default_version version.print
@@ -26,7 +26,7 @@ license_file "LICENSE"
 
 dependency "ruby"
 
-source :git => version.remote
+source git: version.remote
 
 build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
