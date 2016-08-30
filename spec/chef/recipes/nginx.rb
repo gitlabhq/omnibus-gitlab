@@ -20,12 +20,13 @@ describe 'gitlab::nginx' do
         'message' => 'TEST MESSAGE'
       }
     }
+    @http_conf = '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
   end
 
   it 'creates a custom error_page entry when a custom error is defined' do
     allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors})
 
-    expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf').with_content { |content|
+    expect(chef_run).to render_file(@http_conf).with_content { |content|
       expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
     }
   end
@@ -41,6 +42,20 @@ describe 'gitlab::nginx' do
   it 'creates a standard error_page entry when no custom error is defined' do
     expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf').with_content { |content|
       expect(content).to include("error_page 404 /404.html;")
+    }
+  end
+
+  it 'enables the proxy_intercept_errors option when custom_error_pages is defined' do
+    chef_run.node.normal['gitlab']['nginx']['custom_error_pages'] = @nginx_errors
+    chef_run.converge('gitlab::nginx')
+    expect(chef_run).to render_file(@http_conf).with_content { |content|
+      expect(content).to include("proxy_intercept_errors on")
+    }
+  end
+
+  it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
+    expect(chef_run).to render_file(@http_conf).with_content { |content|
+      expect(content).not_to include("proxy_intercept_errors")
     }
   end
 end
