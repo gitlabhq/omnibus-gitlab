@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative 'helper'
+
 class CertificateHelper
   include ShellOutHelper
 
