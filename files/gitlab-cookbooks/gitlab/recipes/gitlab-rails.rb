@@ -259,7 +259,7 @@ link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
 end
 
 gitlab_workhorse_services = dependent_services
-gitlab_workhorse_services += 'gitlab-workhorse' if OmnibusHelper.should_notify?('gitlab-workhorse')
+gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.should_notify?('gitlab-workhorse')
 
 template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
