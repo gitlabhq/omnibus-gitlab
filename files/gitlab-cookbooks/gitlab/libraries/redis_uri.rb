@@ -22,6 +22,10 @@ module URI
       CUSTOM_COMPONENT
     end
 
+    def userinfo
+      @password.nil? ? nil : ':' + @password
+    end
+
     protected
 
      def check_password(value)
