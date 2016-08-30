@@ -1,4 +1,5 @@
 require_relative '../../lib/gitlab/build_iteration.rb'
+require 'chef_helper'
 
 describe Gitlab::BuildIteration do
   describe :build_iteration do

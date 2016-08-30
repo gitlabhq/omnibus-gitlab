@@ -3,7 +3,7 @@ require 'yaml'
 module Gitlab
   class Version
 
-    def initialize(software_name, version)
+    def initialize(software_name, version = nil)
       @software = software_name
 
       @read_version = if version
@@ -14,8 +14,13 @@ module Gitlab
     end
 
     def read_version_from_file
-      filepath = File.expand_path(version_file, Omnibus::Config.project_root)
-      File.read(filepath).chomp
+      path_to_version_file = version_file
+      if path_to_version_file
+        filepath = File.expand_path(path_to_version_file, Omnibus::Config.project_root)
+        File.read(filepath).chomp
+      else
+        ""
+      end
     rescue Errno::ENOENT
       # Didn't find the file
       @read_version = ""
@@ -23,7 +28,7 @@ module Gitlab
 
     def version_file
       case @software
-      when "gitlab-rails" || "gitlab-rails-ee"
+      when "gitlab-rails", "gitlab-rails-ee"
         "VERSION"
       when "gitlab-shell"
         "GITLAB_SHELL_VERSION"
@@ -50,7 +55,13 @@ module Gitlab
 
     def remote
       filepath = File.expand_path(".custom_sources.yml", Omnibus::Config.project_root)
-      YAML.load_file(filepath)[@software]['remote']
+      software = YAML.load_file(filepath)[@software]
+
+      if software
+        software['remote']
+      else
+        ""
+      end
     end
   end
 end
