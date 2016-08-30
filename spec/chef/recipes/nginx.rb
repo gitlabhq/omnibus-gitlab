@@ -23,7 +23,7 @@ describe 'gitlab::nginx' do
   end
 
   it 'creates a custom error_page entry when a custom error is defined' do
-    allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'errors' => @nginx_errors})
+    allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors})
 
     expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf').with_content { |content|
       expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
@@ -31,7 +31,7 @@ describe 'gitlab::nginx' do
   end
 
   it 'renders an error template when a custom error is defined' do
-    chef_run.node.normal['gitlab']['nginx']['errors'] = @nginx_errors
+    chef_run.node.normal['gitlab']['nginx']['custom_error_pages'] = @nginx_errors
     chef_run.converge('gitlab::nginx')
     expect(chef_run).to render_file("/opt/gitlab/embedded/service/gitlab-rails/public/#{@code}-custom.html").with_content {|content|
       expect(content).to include("TEST MESSAGE")

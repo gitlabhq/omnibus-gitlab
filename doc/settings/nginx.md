@@ -368,7 +368,7 @@ NGINX.
 If you want to print out custom HTTP error messages, create a setting like the following.
 
 ```ruby
-nginx['errors'] = {
+nginx['custom_error_pages'] = {
   '404' => {
     'title' => 'Example title',
     'header' => 'Example header',
