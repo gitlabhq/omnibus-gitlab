@@ -237,7 +237,7 @@ Raspberry Pi 2 Jessie:
 Docker master:
   stage: extra
   script:
-  - if ! ./support/is_gitlab_ee.sh; then make do_docker_master; fi
+  - make do_docker_master
   tags:
   - docker-build
   except:
