@@ -1,4 +1,5 @@
 stages:
+  - tests
   - package
   - notification_fail
   - add_to_version_server
@@ -11,8 +12,17 @@ before_script:
   - mkdir -p ~/.aws
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
-  - bundle exec rspec -f progress
 
+# Runs on GitLab.com only
+.spec_template: &run_rspec
+  stage: tests
+  script:
+    - bundle exec rspec -f progress
+  only:
+    - tags@gitlab-org/omnibus-gitlab
+    - branches@gitlab-org/omnibus-gitlab
+
+# Runs on dev.gitlab.org
 .branch_template: &branch_build
   stage: package
   script:
@@ -30,6 +40,7 @@ before_script:
   - docker-builder
   except:
   - tags
+  - branches@gitlab-org/omnibus-gitlab
 
 .rpi_branch_template: &rpi_branch_build
   stage: extra
@@ -48,6 +59,7 @@ before_script:
   - docker-rpi-builder
   except:
   - tags
+  - branches@gitlab-org/omnibus-gitlab
 
 .tag_template: &tag_build
   stage: package
@@ -66,6 +78,7 @@ before_script:
   - docker-builder
   except:
   - branches
+  - tags@gitlab-org/omnibus-gitlab
 
 .rpi_tag_template: &rpi_tag_build
   stage: extra
@@ -84,7 +97,53 @@ before_script:
   - docker-rpi-builder
   except:
   - branches
+  - tags@gitlab-org/omnibus-gitlab
 
+# GitLab.com only
+Ubuntu 12.04:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Ubuntu 14.04:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Ubuntu 16.04:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Debian 7:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Debian 8:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Centos 6:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+Centos 7:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  cache:
+    paths:
+    -
+  <<: *run_rspec
+
+# dev.gitlab.org only
 Ubuntu 12.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
   cache:
