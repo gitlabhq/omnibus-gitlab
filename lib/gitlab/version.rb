@@ -11,12 +11,13 @@ module Gitlab
                       else
                         read_version_from_file
                       end
+      @project_root = File.join(File.dirname(__dir__), '../')
     end
 
     def read_version_from_file
       path_to_version_file = version_file
       if path_to_version_file
-        filepath = File.expand_path(path_to_version_file, Omnibus::Config.project_root)
+        filepath = File.expand_path(path_to_version_file, @project_root)
         File.read(filepath).chomp
       else
         ""
@@ -41,7 +42,7 @@ module Gitlab
       end
     end
 
-    def print
+    def print(prepend_version = true)
       if @read_version.include?('.pre') || @read_version == "master"
         "master"
       elsif @read_version.start_with?('buildfrombranch:')
@@ -49,12 +50,16 @@ module Gitlab
       elsif @read_version.empty?
         nil
       else
-        "v#{@read_version}"
+        v = "v" if prepend_version
+        [
+          v,
+          @read_version
+        ].join
       end
     end
 
     def remote
-      filepath = File.expand_path(".custom_sources.yml", Omnibus::Config.project_root)
+      filepath = File.expand_path(".custom_sources.yml", @project_root)
       software = YAML.load_file(filepath)[@software]
 
       if software

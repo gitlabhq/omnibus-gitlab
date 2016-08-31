@@ -10,3 +10,5 @@ gitlab-pages:
   remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
+omnibus:
+  remote: "https://dev.gitlab.org/gitlab/omnibus.git"

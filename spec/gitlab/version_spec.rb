@@ -1,6 +1,5 @@
 require_relative '../../lib/gitlab/version.rb'
 require 'chef_helper'
-require 'omnibus'
 
 describe Gitlab::Version do
   describe :remote do
@@ -41,6 +40,19 @@ describe Gitlab::Version do
 
       it 'outputs an empty string' do
         expect(subject.print).to eq(nil)
+      end
+    end
+
+    context 'with a valid software name and a version' do
+      let(:software) { 'ruby' }
+      let(:version) { '2.3.1' }
+
+      it 'adds a v prefix' do
+        expect(subject.print).to eq("v2.3.1")
+      end
+
+      it 'does not add a v prefix if explicitly set' do
+        expect(subject.print(false)).to eq("2.3.1")
       end
     end
   end
