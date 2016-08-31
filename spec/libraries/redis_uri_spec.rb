@@ -5,6 +5,14 @@ describe URI::Redis do
 
   it { is_expected.to be_a(described_class) }
 
+  context '.parse' do
+    it 'delegates to URI.parse' do
+      expect(URI).to receive(:parse).with('redis://localhost')
+
+      described_class.parse('redis://localhost')
+    end
+  end
+
   context 'port' do
     it 'has a default port' do
       expect(subject.default_port).to eq 6379

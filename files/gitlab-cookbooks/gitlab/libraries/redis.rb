@@ -56,7 +56,7 @@ module Redis
         uri = URI('unix:/')
         uri.path = Gitlab['redis']['unixsocket']
       else
-        uri = URI.parse('redis:/')
+        uri = URI::Redis.parse('redis:/')
         uri.host = Gitlab['gitlab_rails']['redis_host']
         uri.port = Gitlab['gitlab_rails']['redis_port']
         uri.password = Gitlab['gitlab_rails']['redis_password']
