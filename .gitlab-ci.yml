@@ -114,43 +114,43 @@ Docker:
     - tags@gitlab/omnibus-gitlab
 
 # GitLab.com only
-Ubuntu 12.04:
+Ubuntu 12.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
   cache:
     paths:
     -
   <<: *run_rspec
-Ubuntu 14.04:
+Ubuntu 14.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
     paths:
     -
   <<: *run_rspec
-Ubuntu 16.04:
+Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
   cache:
     paths:
     -
   <<: *run_rspec
-Debian 7:
+Debian 7 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
   cache:
     paths:
     -
   <<: *run_rspec
-Debian 8:
+Debian 8 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
   cache:
     paths:
     -
   <<: *run_rspec
-Centos 6:
+Centos 6 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
   cache:
     paths:
     -
   <<: *run_rspec
-Centos 7:
+Centos 7 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
   cache:
     paths:
