@@ -118,43 +118,43 @@ Ubuntu 12.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Ubuntu 14.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Debian 7 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Debian 8 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Centos 6 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 Centos 7 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
   cache:
     paths:
-    -
+    - gems
   <<: *run_rspec
 
 # dev.gitlab.org only
