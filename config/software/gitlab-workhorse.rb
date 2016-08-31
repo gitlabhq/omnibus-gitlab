@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("GITLAB_WORKHORSE_VERSION")
+version = Gitlab::Version.new("gitlab-workhorse")
 
 name "gitlab-workhorse"
 default_version version.print

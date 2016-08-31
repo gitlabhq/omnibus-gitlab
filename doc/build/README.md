@@ -41,6 +41,10 @@ code from internal dev.gitlab.org server. The internal server hosts the same
 copy of the source code available elsewhere. Alternative source location is
 necessary in case of an unforeseen circumstances.
 
+All repositories used for building the packages that are not publicly reachable,
+have their remotes listed in  `.custom_sources.yml` file in the root of this
+project.
+
 If you are using these tools to build your own packages, you will have to
 adjust them to your needs.
 

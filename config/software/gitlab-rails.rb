@@ -16,10 +16,16 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("VERSION")
+
+EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
+
+software_name = EE ? "gitlab-rails-ee":"gitlab-rails"
+version = Gitlab::Version.new(software_name)
 
 name "gitlab-rails"
+
 default_version version.print
+source git: version.remote
 
 combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
 gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems"
@@ -27,8 +33,6 @@ gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems"
 license "MIT"
 license_file "LICENSE"
 license_file combined_licenses_file
-
-EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 dependency "ruby"
 dependency "bundler"
@@ -48,7 +52,6 @@ if EE
   dependency "gitlab-pages"
 end
 
-source :git => version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -69,7 +72,7 @@ build do
   # This patch makes the github-markup gem use and be compatible with Python3
   # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
   patch source: 'github-markup_gem-markups.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/markups.rb"
-  patch source: 'github-markup_gem-rest2html.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/commands/rest2html" 
+  patch source: 'github-markup_gem-rest2html.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/commands/rest2html"
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.

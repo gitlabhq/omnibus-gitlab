@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'omnibus', git: 'https://dev.gitlab.org/gitlab/omnibus.git', branch: 'omnibus-5-4-0'
+require_relative "lib/gitlab/version"
+
+omnibus_gem_version =  Gitlab::Version.new('omnibus', "omnibus-5-4-0")
+
+gem 'omnibus', git: omnibus_gem_version.remote, branch: omnibus_gem_version.print(false)
 gem 'omnibus-software', :git => 'git://github.com/opscode/omnibus-software.git', :branch => 'master'
 gem 'ohai'
 gem 'package_cloud'

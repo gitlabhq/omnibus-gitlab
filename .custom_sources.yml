@@ -1,0 +1,14 @@
+gitlab-rails:
+  remote: "git@dev.gitlab.org:gitlab/gitlabhq.git"
+gitlab-rails-ee:
+  remote: "git@dev.gitlab.org:gitlab/gitlab-ee.git"
+gitlab-shell:
+  remote: "git@dev.gitlab.org:gitlab/gitlab-shell.git"
+gitlab-workhorse:
+  remote: "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
+gitlab-pages:
+  remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
+config_guess:
+  remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
+omnibus:
+  remote: "https://dev.gitlab.org/gitlab/omnibus.git"
