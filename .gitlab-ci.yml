@@ -30,7 +30,6 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -48,7 +47,6 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -66,7 +64,6 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -84,7 +81,6 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - echo "{\"url\":\"https://packages.gitlab.com\",\"token\":\"$PACKAGECLOUD_TOKEN\"}" > ~/.packagecloud
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
