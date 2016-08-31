@@ -38,9 +38,8 @@ before_script:
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
-  except:
-  - tags
-  - branches@gitlab-org/omnibus-gitlab
+  only:
+    - branches@gitlab/omnibus-gitlab
 
 .rpi_branch_template: &rpi_branch_build
   stage: extra
@@ -57,9 +56,8 @@ before_script:
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
-  except:
-  - tags
-  - branches@gitlab-org/omnibus-gitlab
+  only:
+  - branches@gitlab/omnibus-gitlab
 
 .tag_template: &tag_build
   stage: package
@@ -76,9 +74,8 @@ before_script:
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
-  except:
-  - branches
-  - tags@gitlab-org/omnibus-gitlab
+  only:
+    - tags@gitlab/omnibus-gitlab
 
 .rpi_tag_template: &rpi_tag_build
   stage: extra
@@ -95,9 +92,26 @@ before_script:
     - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
-  except:
-  - branches
-  - tags@gitlab-org/omnibus-gitlab
+  only:
+    - tags@gitlab/omnibus-gitlab
+
+Docker master:
+  stage: extra
+  script:
+  - make do_docker_master
+  tags:
+  - docker-build
+  only:
+    - branches@gitlab/omnibus-gitlab
+
+Docker:
+  stage: extra
+  script:
+  - make do_docker_release
+  tags:
+  - docker-build
+  only:
+    - tags@gitlab/omnibus-gitlab
 
 # GitLab.com only
 Ubuntu 12.04:
@@ -292,23 +306,6 @@ Raspberry Pi 2 Jessie:
     - cache
     - gems
   <<: *rpi_tag_build
-
-Docker master:
-  stage: extra
-  script:
-  - make do_docker_master
-  tags:
-  - docker-build
-  except:
-  - tags
-Docker:
-  stage: extra
-  script:
-  - make do_docker_release
-  tags:
-  - docker-build
-  except:
-  - branches
 
 notify:slack-fail:
   before_script: # Nothing
