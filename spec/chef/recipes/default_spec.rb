@@ -33,9 +33,15 @@ describe 'gitlab::default' do
       mode: '0755'
     )
 
+    gitconfig_hash = {
+      "receive" => ["fsckObjects = true"],
+      "pack" => ["threads = 2"],
+      "repack" => ["writeBitmaps = true"],
+    }
+
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
       source: 'gitconfig-system.erb',
-      variables: { gitconfig:  { "receive" => ["fsckObjects = true"], "pack" => ["threads = 2"] } },
+      variables: { gitconfig: gitconfig_hash },
       mode: 0755
     )
   end
