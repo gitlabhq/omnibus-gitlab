@@ -17,7 +17,7 @@ before_script:
 .spec_template: &run_rspec
   stage: tests
   script:
-    - bundle exec rspec -f progress
+    - bundle exec rspec -f documentation
   only:
     - tags@gitlab-org/omnibus-gitlab
     - branches@gitlab-org/omnibus-gitlab
