@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.11.4
+
+- Fix missing Logrotate directory
+
 8.11.3
 
 - Patch docutils to work with Python3 to restore .RST rendering 70ee88c2
