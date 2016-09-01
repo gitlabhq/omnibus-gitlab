@@ -378,7 +378,7 @@ log_min_duration_statement = <%= @log_min_duration_statement %>  # -1 is disable
 #log_duration = off
 #log_error_verbosity = default    # terse, default, or verbose messages
 #log_hostname = off
-#log_line_prefix = ''     # special values:
+log_line_prefix = '<%= node['gitlab']['postgresql']['log_line_prefix'] %>' # default '', special values:
           #   %a = application name
           #   %u = user name
           #   %d = database name
