@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - Set read permissions on the trusted certificates in case they are restricted  
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
 
+8.11.4
+
+- Fix missing Logrotate directory
+
 8.11.3
 
 - Patch docutils to work with Python3 to restore .RST rendering 70ee88c2

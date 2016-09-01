@@ -46,6 +46,18 @@ describe 'gitlab::default' do
     )
   end
 
+  context 'with logrotate' do
+    it 'runs logrotate directory and configuration recipe by default' do
+       expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
+    end
+
+    it 'runs logrotate directory and configuration recipe when logrotate is disabled' do
+      stub_gitlab_rb(logrotate: { enable: false })
+
+      expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
+    end
+  end
+
   context 'when manage_etc directory management is disabled' do
     before { stub_gitlab_rb(manage_storage_directories: { enable: true, manage_etc: false } ) }
 
