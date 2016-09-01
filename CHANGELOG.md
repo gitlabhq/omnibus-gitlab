@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 8.11.4
 
 - Fix missing Logrotate directory
+- Expose shared_preload_libraries Postresql settings
 
 8.11.3
 
