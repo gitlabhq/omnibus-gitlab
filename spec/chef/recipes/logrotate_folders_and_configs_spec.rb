@@ -76,6 +76,7 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
       expect(chef_run).to_not render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/dateext/)
     end
+
     it 'populates configuration template with custom values when logrotate is disabled' do
       stub_gitlab_rb(logging:
         { logrotate_frequency: "weekly",

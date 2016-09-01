@@ -10,7 +10,7 @@ describe 'gitlab::logrotate' do
   context 'when logrotate is enabled' do
     let(:config_template) { chef_run.template('/var/log/gitlab/logrotate/config') }
 
-    it_behaves_like "runit service", "logrotate", "root", "root"
+    it_behaves_like "enabled runit service", "logrotate", "root", "root"
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload logrotate svlogd configuration]')
@@ -37,6 +37,18 @@ describe 'gitlab::logrotate' do
 
     it 'executes start command' do
       expect(chef_run).to run_execute('/opt/gitlab/bin/gitlab-ctl start logrotate').with(retries: 20)
+    end
+  end
+
+  context 'when logrotate is disabled' do
+    before do
+      stub_gitlab_rb(logrotate: { enable: false })
+    end
+
+    it_behaves_like "disabled runit service", "logrotate"
+
+    it 'does not execute the start command' do
+      expect(chef_run).to_not run_execute('/opt/gitlab/bin/gitlab-ctl start logrotate').with(retries: 20)
     end
   end
 end
