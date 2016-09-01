@@ -517,6 +517,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
 # postgresql['autovacuum_vacuum_cost_limit'] = "-1"
 # postgresql['statement_timeout'] = "0"
+# postgresql['log_line_prefix'] = "%a"
 # postgresql['track_activity_query_size'] = "1024"
 # postgresql['shared_preload_libraries'] = nil
 

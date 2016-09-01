@@ -390,6 +390,7 @@ default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
 default['gitlab']['postgresql']['statement_timeout'] = "0"
+default['gitlab']['postgresql']['log_line_prefix'] = nil
 default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 default['gitlab']['postgresql']['shared_preload_libraries'] = nil
 
