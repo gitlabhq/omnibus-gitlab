@@ -381,6 +381,7 @@ default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
 default['gitlab']['postgresql']['statement_timeout'] = "0"
 default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
+default['gitlab']['postgresql']['shared_preload_libraries'] = nil
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
