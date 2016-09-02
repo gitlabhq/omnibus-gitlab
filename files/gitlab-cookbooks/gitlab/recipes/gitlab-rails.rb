@@ -153,7 +153,13 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   restarts dependent_services
 end
 
-redis_url = Redis.redis_url
+if node['gitlab']['gitlab-rails']['redis_port']
+  redis_auth = ":#{node['gitlab']['gitlab-rails']['redis_password']}@" if node['gitlab']['gitlab-rails']['redis_password']
+  redis_url = "redis://#{redis_auth}#{node['gitlab']['gitlab-rails']['redis_host']}:#{node['gitlab']['gitlab-rails']['redis_port']}"
+else
+  redis_url = "unix:#{node['gitlab']['gitlab-rails']['redis_socket']}"
+end
+
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do

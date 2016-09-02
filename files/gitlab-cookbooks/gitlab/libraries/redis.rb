@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require_relative 'redis_uri.rb'
 
 module Redis
   class << self
@@ -50,21 +49,5 @@ module Redis
         Gitlab['redis']['unixsocket'] = false
       end
     end
-
-    def redis_url
-      if Gitlab['redis']['unixsocket']
-        uri = URI('unix:/')
-        uri.path = Gitlab['redis']['unixsocket']
-      else
-        uri = URI::Redis.parse('redis:/')
-        uri.host = Gitlab['gitlab_rails']['redis_host']
-        uri.port = Gitlab['gitlab_rails']['redis_port']
-        uri.password = Gitlab['gitlab_rails']['redis_password']
-        uri.path = "/#{Gitlab['gitlab_rails']['redis_database']}"
-      end
-
-      uri
-    end
   end
 end
-
