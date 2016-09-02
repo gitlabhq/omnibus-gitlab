@@ -108,13 +108,8 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
   )
 end
 
-template_symlink File.join(gitlab_shell_var_dir, "gitlab_shell_secret") do
-  link_from File.join(gitlab_shell_dir, ".gitlab_shell_secret")
-  source "secret_token.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['gitlab-shell'].to_hash)
+link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
+  to File.join("/opt/gitlab/embedded/service/gitlab-rails/.gitlab_shell_secret")
 end
 
 execute "#{gitlab_shell_keys_check} check-permissions" do

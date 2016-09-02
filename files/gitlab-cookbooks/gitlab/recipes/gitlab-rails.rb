@@ -270,6 +270,16 @@ template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   restarts gitlab_workhorse_services
 end
 
+template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
+  link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
+  restarts dependent_services
+end
+
 env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
   variables(
     {
