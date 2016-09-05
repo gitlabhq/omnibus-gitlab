@@ -280,12 +280,18 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   restarts dependent_services
 end
 
+rails_env = {
+  'HOME' => node['gitlab']['user']['home'],
+  'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
+}
+
+if node['gitlab']['gitlab-rails']['enable_jemalloc']
+  rails_env.merge!({'LD_PRELOAD' => "/opt/gitlab/embedded/lib/libjemalloc.so"})
+end
+
 env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
   variables(
-    {
-      'HOME' => node['gitlab']['user']['home'],
-      'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
-    }.merge(node['gitlab']['gitlab-rails']['env'])
+    rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
   restarts dependent_services
 end
