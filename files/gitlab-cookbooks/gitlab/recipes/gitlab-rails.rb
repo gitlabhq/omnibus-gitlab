@@ -153,7 +153,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   restarts dependent_services
 end
 
-redis_url = Redis.redis_url
+redis_url = RedisHelper.new(node).redis_url
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do

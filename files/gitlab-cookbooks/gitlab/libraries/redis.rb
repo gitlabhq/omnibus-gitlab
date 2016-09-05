@@ -50,22 +50,5 @@ module Redis
         Gitlab['redis']['unixsocket'] = false
       end
     end
-
-    def redis_url
-      node = Gitlab[:node]['gitlab']
-
-      if node['redis']['unixsocket']
-        uri = URI('unix:/')
-        uri.path = node['redis']['unixsocket']
-      else
-        uri = URI::Redis.parse('redis:/')
-        uri.host = node['gitlab_rails']['redis_host']
-        uri.port = node['gitlab_rails']['redis_port']
-        uri.password = node['gitlab_rails']['redis_password']
-        uri.path = "/#{node['gitlab_rails']['redis_database']}"
-      end
-
-      uri
-    end
   end
 end
