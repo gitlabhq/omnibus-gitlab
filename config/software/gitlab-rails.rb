@@ -45,7 +45,6 @@ dependency "postgresql"
 dependency "python-docutils"
 dependency "krb5"
 dependency "registry"
-dependency "jemalloc"
 
 if EE
   dependency "mysql-client"

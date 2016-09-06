@@ -86,6 +86,7 @@ dependency "preparation"
 dependency "package-scripts"
 
 dependency "git"
+dependency "jemalloc"
 dependency "redis"
 dependency "nginx"
 dependency "mixlib-log"

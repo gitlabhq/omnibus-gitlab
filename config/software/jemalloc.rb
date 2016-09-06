@@ -27,7 +27,10 @@ relative_path "jemalloc-#{version}"
 
 build do
   command ["./configure",
-           "--prefix=#{install_dir}/embedded"].join(" "), env: env
+            "--with-lg-quantum=3",
+            " --enable-cc-silence",
+            " --with-jemalloc-prefix=je_",
+            "--prefix=#{install_dir}/embedded"].join(" "), env: env
   make "-j #{workers}", env: env
   make "install", env: env
 end
