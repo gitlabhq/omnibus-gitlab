@@ -6,15 +6,17 @@ class RedisHelper
   end
 
   def redis_url
-    if @node['gitlab']['redis']['unixsocket']
+    gitlab_rails = @node['gitlab']['gitlab-rails']
+
+    if gitlab_rails['redis_socket']
       uri = URI('unix:/')
-      uri.path = @node['gitlab']['redis']['unixsocket']
+      uri.path = gitlab_rails['redis_socket']
     else
       uri = URI::Redis.parse('redis:/')
-      uri.host = @node['gitlab']['gitlab_rails']['redis_host']
-      uri.port = @node['gitlab']['gitlab_rails']['redis_port']
-      uri.password = @node['gitlab']['gitlab_rails']['redis_password']
-      uri.path = "/#{@node['gitlab']['gitlab_rails']['redis_database']}"
+      uri.host = gitlab_rails['redis_host']
+      uri.port = gitlab_rails['redis_port']
+      uri.password = gitlab_rails['redis_password']
+      uri.path = "/#{gitlab_rails['redis_database']}"
     end
 
     uri

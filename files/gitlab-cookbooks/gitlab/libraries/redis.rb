@@ -29,6 +29,7 @@ module Redis
         # that gitlab-rails should connect to Redis via TCP instead of a Unix
         # domain socket.
         Gitlab['gitlab_rails']['redis_port'] ||= 6379
+        Gitlab['gitlab_rails']['redis_socket'] = false
       end
 
       if Gitlab['gitlab_ci']['redis_host']
