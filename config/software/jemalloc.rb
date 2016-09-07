@@ -16,10 +16,10 @@
 #
 
 name "jemalloc"
-default_version "4.2.1"
+default_version "3.6.0"
 
 source url: "https://github.com/jemalloc/jemalloc/releases/download/#{version}/jemalloc-#{version}.tar.bz2",
-       sha256: '5630650d5c1caab95d2f0898de4fe5ab8519dc680b04963b38bb425ef6a42d57'
+       sha256: 'e16c2159dd3c81ca2dc3b5c9ef0d43e1f2f45b04548f42db12e7c12d7bdf84fe'
 
 env = with_standard_compiler_flags(with_embedded_path)
 
