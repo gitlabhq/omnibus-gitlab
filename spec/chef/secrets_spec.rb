@@ -1,4 +1,5 @@
 require 'chef_helper'
+require 'base64'
 
 describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
@@ -50,6 +51,11 @@ describe 'secrets' do
 
       it 'does not write legacy keys' do
         expect(new_secrets).not_to have_key('gitlab_ci')
+      end
+
+      it 'generates an appropriate secret for gitlab-workhorse' do
+        workhorse_secret = new_secrets['gitlab_workhorse']['secret_token']
+        expect(Base64.strict_decode64(workhorse_secret).length).to eq(32)
       end
     end
 

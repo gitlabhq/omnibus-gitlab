@@ -121,6 +121,9 @@ module Gitlab
 
       Gitlab['gitlab_shell']['secret_token'] ||= generate_hex(64)
 
+      # gitlab-workhorse expects exactly 32 bytes, encoded with base64
+      Gitlab['gitlab_workhorse']['secret_token'] ||= SecureRandom.base64(32)
+
       Gitlab['registry']['http_secret'] ||= generate_hex(64)
       gitlab_registry_crt, gitlab_registry_key = Registry.generate_registry_keypair
       Gitlab['registry']['internal_certificate'] ||= gitlab_registry_crt
