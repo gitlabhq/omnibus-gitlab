@@ -109,7 +109,7 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
 end
 
 link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
-  to File.join("/opt/gitlab/embedded/service/gitlab-rails/.gitlab_shell_secret")
+  to "/opt/gitlab/embedded/service/gitlab-rails/.gitlab_shell_secret"
 end
 
 execute "#{gitlab_shell_keys_check} check-permissions" do
