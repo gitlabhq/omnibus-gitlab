@@ -85,4 +85,37 @@ describe 'gitlab::gitlab-rails' do
         .with_content('abc123-gitlab-workhorse')
     end
   end
+
+  context 'with environment variables' do
+    context 'by default' do
+      it_behaves_like "enabled gitlab-rails env", "HOME", '\/var\/opt\/gitlab'
+      it_behaves_like "enabled gitlab-rails env", "RAILS_ENV", 'production'
+      it_behaves_like "enabled gitlab-rails env", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '1000000'
+      it_behaves_like "enabled gitlab-rails env", "BUNDLE_GEMFILE", '\/opt\/gitlab\/embedded\/service\/gitlab-rails\/Gemfile'
+      it_behaves_like "enabled gitlab-rails env", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
+      it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
+      it_behaves_like "enabled gitlab-rails env", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
+
+      it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+
+      context 'when a custom env variable is specified' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { env: { 'IAM' => 'CUSTOMVAR'}})
+        end
+
+        it_behaves_like "enabled gitlab-rails env", "IAM", 'CUSTOMVAR'
+        it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
+
+        it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      end
+    end
+
+    context 'when jemalloc is enabled' do
+      before do
+        stub_gitlab_rb(gitlab_rails: { enable_jemalloc: true })
+      end
+
+      it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+    end
+  end
 end
