@@ -8,12 +8,19 @@ omnibus-gitlab repository.
 - Add support for using NFS root_squash for storage directories d5cf0d1d
 - Set read permissions on the trusted certificates in case they are restricted  
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
+- Render gitlab-workhorse token c50c85
+- Enable git packfile bitmap creation 2a07f08
+- Localise all custom sources in .custom_sources.yml 5bcbd4f
+- Update the mode of the certificate files when using trusted certificates b00cd4
+- Allow configuring Rack Attack endpoints (Dmitry Ivanov) 7aee63
+- Bundle jemalloc and allow optional enable 1381ba
+
 
 8.11.4
 
-- Fix missing Logrotate directory
-- Expose shared_preload_libraries Postresql settings
-- Expose log_line_prefix Postresql settings
+- Fix missing Logrotate directory 453ea
+- Expose shared_preload_libraries Postresql settings f0557
+- Expose log_line_prefix Postresql settings cae662
 
 8.11.3
 
