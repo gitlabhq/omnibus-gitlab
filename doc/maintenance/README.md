@@ -109,3 +109,79 @@ could not change directory to "/root"
 ```
 
 This is normal behavior and it can be ignored.
+
+### Container registry garbage collection
+
+Container registry can use considerable amounts of disk space. To clear up
+some unused layers, registry includes a garbage collect command.
+
+There are a couple of considerations you need to note before running the
+built in command:
+
+* The built in command will stop the registry before it starts garbage collect
+* The garbage collect command takes some time to complete, depending on the
+amount of data that exists
+* If you changed the location of registry configuration file, you will need to
+specify the path
+* After the garbage collect is done, registry should start up
+
+**Warning** The command below will cause Container registry downtime.
+
+If you did not change the default location of the configuration file, to do
+garbage collection:
+
+```
+sudo gitlab-ctl registry garbage-collect
+```
+
+
+If you changed the location of the Container registry config.yml:
+
+```
+sudo gitlab-ctl registry garbage-collect /path/to/config.yml
+```
+
+#### Doing garbage collect without downtime
+
+You can do a garbage collect without stopping the Container registry by setting
+it into a read only mode. During this time, you will be able to pull from
+the Container registry but you will not be able to push.
+
+These are the steps you need to take in order to complete the garbage collection:
+
+In `/etc/gitlab/gitlab.rb` specify the read only mode:
+
+```ruby
+registry['storage'] = {
+  'maintenance' => {
+    'readonly' => {
+      'enabled' => 'true'
+    }
+  }
+}
+```
+
+Save and run `sudo gitlab-ctl reconfigure`. This will set the Container registry
+into the read only mode.
+
+Next, trigger the garbage collect command:
+
+```
+/opt/gitlab/embedded/bin/registry garbage-collect /var/opt/gitlab/registry/config.yml
+```
+
+This will start the garbage collection. The command will take some time to complete.
+
+Once done, in `/etc/gitlab/gitlab.rb` change the configuration to:
+
+```ruby
+registry['storage'] = {
+  'maintenance' => {
+    'readonly' => {
+      'enabled' => 'false'
+    }
+  }
+}
+```
+
+and run `sudo gitlab-ctl reconfigure`.
