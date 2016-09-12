@@ -363,6 +363,23 @@ nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
+## Inserting custom error messages
+
+If you want to print out custom HTTP error messages, create a setting like the following.
+
+```ruby
+nginx['custom_error_pages'] = {
+  '404' => {
+    'title' => 'Example title',
+    'header' => 'Example header',
+    'message' => 'Example message'
+  }
+}
+```
+
+Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
+NGINX.
+
 ## Using an existing Passenger/Nginx installation
 
 In some cases you may want to host GitLab using an existing Passenger/Nginx
