@@ -15,36 +15,31 @@
 # limitations under the License.
 #
 
-add_command_under_category 'registry', 'container-registry',  'Container registry commands', 2 do |cmd_name, command, path|
+add_command_under_category 'registry-garbage-collect', 'container-registry',  'Run Container Registry garbage collection.', 2 do |cmd_name, path|
   service_name = "registry"
-  return "Container registry is not enabled, exiting..." unless service_enabled?(service_name)
 
-  if path.nil?
-    default_registry_config_file = "/var/opt/gitlab/registry/config.yml"
-
-    unless File.exists?(default_registry_config_file)
-      log "Didn't find #{default_registry_config_file}, please supply the path to registry config.yml file, eg: gitlab-ctl registry COMMAND /path/to/config.yml ."
-      exit! 1
-    end
+  unless service_enabled?(service_name)
+    log "Container registry is not enabled, exiting..."
+    exit! 1
   end
 
-  config_file_path = path || default_registry_config_file
+  config_file_path = path || '/var/opt/gitlab/registry/config.yml'
 
-  case command
-  when 'garbage-collect'
-    run_sv_command_for_service('stop', service_name)
-    log "Running garbage-collect using configuration from #{config_file_path}, this might take a while...\n"
-    status = run_command("/opt/gitlab/embedded/bin/registry garbage-collect #{config_file_path}")
+  unless File.exists?(config_file_path)
+    log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry COMMAND /path/to/config.yml"
+    exit! 1
+  end
 
-    if status.exitstatus == 0
-      run_sv_command_for_service('start', service_name)
-      exit! 0
-    else
-      log "\nFailed to run garbage-collect command, starting registry service."
-      run_sv_command_for_service('start', service_name)
-      exit! 1
-    end
+  run_sv_command_for_service('stop', service_name)
+  log "Running garbage-collect using configuration from #{config_file_path}, this might take a while...\n"
+  status = run_command("/opt/gitlab/embedded/bin/registry garbage-collect #{config_file_path}")
+
+  if status.exitstatus == 0
+    run_sv_command_for_service('start', service_name)
+    exit! 0
   else
-    puts "\nUsage: #{cmd_name} garbage-collect"
+    log "\nFailed to run garbage-collect command, starting registry service."
+    run_sv_command_for_service('start', service_name)
+    exit! 1
   end
 end

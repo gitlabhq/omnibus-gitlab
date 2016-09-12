@@ -123,7 +123,7 @@ built in command:
 amount of data that exists
 * If you changed the location of registry configuration file, you will need to
 specify the path
-* After the garbage collect is done, registry should start up
+* After the garbage collect is done, registry should start up automatically
 
 **Warning** The command below will cause Container registry downtime.
 
@@ -131,14 +131,16 @@ If you did not change the default location of the configuration file, to do
 garbage collection:
 
 ```
-sudo gitlab-ctl registry garbage-collect
+sudo gitlab-ctl registry-garbage-collect
 ```
 
+This command will take some time to complete, depending on the amount of
+layers you have stored.
 
 If you changed the location of the Container registry config.yml:
 
 ```
-sudo gitlab-ctl registry garbage-collect /path/to/config.yml
+sudo gitlab-ctl registry-garbage-collect /path/to/config.yml
 ```
 
 #### Doing garbage collect without downtime
@@ -167,7 +169,7 @@ into the read only mode.
 Next, trigger the garbage collect command:
 
 ```
-/opt/gitlab/embedded/bin/registry garbage-collect /var/opt/gitlab/registry/config.yml
+sudo /opt/gitlab/embedded/bin/registry garbage-collect /var/opt/gitlab/registry/config.yml
 ```
 
 This will start the garbage collection. The command will take some time to complete.
