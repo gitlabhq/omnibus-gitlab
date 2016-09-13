@@ -28,12 +28,13 @@ relative_path "src/github.com/docker/distribution"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/registry"}
+  env = {
+    'GOPATH' => "#{Omnibus::Config.source_dir}/registry",
+    'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory
+  }
   registry_source_dir = "#{Omnibus::Config.source_dir}/registry"
   cwd = "#{registry_source_dir}/src/github.com/docker/distribution"
 
-  command "go get github.com/tools/godep", env: env, cwd: cwd
-  command "#{registry_source_dir}/bin/godep restore", env: env, cwd: cwd
   make "build PREFIX=#{install_dir}/embedded", env: env, cwd: cwd
   make "binaries PREFIX=#{install_dir}/embedded", env: env, cwd: cwd
 end
