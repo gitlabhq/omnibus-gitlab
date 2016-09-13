@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Update the mode of the certificate files when using trusted certificates b00cd4
 - Allow configuring Rack Attack endpoints (Dmitry Ivanov) 7aee63
 - Bundle jemalloc and allow optional enable 1381ba
+- Use single db_host when multi postgresql::listen_adresses
 
 
 8.11.4

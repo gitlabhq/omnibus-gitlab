@@ -48,8 +48,12 @@ sure that PostgreSQL is set up according to the [database requirements document]
     lines.
     
     **Note:**
-    `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
+    - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
     plain-text passwords.
+    - Postgresql allows to listen on multiple adresses. See [Postgresql Connection Config#listen_addresses](https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html#listen_addresses)
+      
+        If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
+
     
 1.  [Reconfigure GitLab][] for the changes to take effect.
 
