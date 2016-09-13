@@ -26,7 +26,7 @@ add_command_under_category 'registry-garbage-collect', 'container-registry',  'R
   config_file_path = path || '/var/opt/gitlab/registry/config.yml'
 
   unless File.exists?(config_file_path)
-    log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry COMMAND /path/to/config.yml"
+    log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry-garbage-collect /path/to/config.yml"
     exit! 1
   end
 
