@@ -36,7 +36,8 @@ define :template_symlink, :link_from => nil, :source => nil, :owner => nil, :gro
     action params[:action]
   end
 
-  link params[:link_from] do
+  link "Link #{params[:link_from]} to #{params[:name]}" do
+    target_file params[:link_from]
     to params[:name]
     action params[:action]
   end
