@@ -113,6 +113,15 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
         .with_content('abc123-gitlab-workhorse')
     end
+
+    it 'uses the correct owner and permissions' do
+      expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+        .with(
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+        )
+    end
   end
 
   context 'with environment variables' do
