@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Use single db_host when multi postgresql::listen_adresses
 - Add gitlab-ctl registry-garbage-collect command
 - Update curl to version 7.50.3
+- Add default HOME variable to workhorse
 
 8.11.4
 
