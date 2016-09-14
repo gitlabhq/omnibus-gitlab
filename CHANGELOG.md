@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Bundle jemalloc and allow optional enable 1381ba
 - Use single db_host when multi postgresql::listen_adresses
 - Add gitlab-ctl registry-garbage-collect command
+- Update curl to version 7.50.3
 
 8.11.4
 
