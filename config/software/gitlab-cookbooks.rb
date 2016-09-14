@@ -34,6 +34,7 @@ build do
   # If EE package, use a different master cookbook
   if EE
     cookbook_name = 'gitlab-ee'
+  else
     delete "#{install_dir}/embedded/cookbooks/gitlab-ee"
   end
 
