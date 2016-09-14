@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.9.9
+
+- Fix registry build by enabling vendor feature
+
 8.9.8
 
 - No changes
