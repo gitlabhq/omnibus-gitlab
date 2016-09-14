@@ -22,7 +22,14 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
   config_path = params[:config_path]
 
   sentinel_service_name = "sentinel"
+  sentinel_dir = sentinel['dir']
   sentinel_log_dir = sentinel['log_directory']
+
+  directory sentinel_dir do
+    owner redis['username']
+    group redis['group']
+    mode "0750"
+  end
 
   directory sentinel_log_dir do
     owner redis['username']

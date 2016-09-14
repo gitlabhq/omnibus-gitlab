@@ -425,6 +425,7 @@ default['gitlab']['redis']['tcp_keepalive'] = 300
 default['gitlab']['redis']['password'] = nil
 default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['redis']['unixsocketperm'] = "777"
+default['gitlab']['redis']['master_name'] = nil
 default['gitlab']['redis']['master_ip'] = nil
 default['gitlab']['redis']['master_port'] = nil
 default['gitlab']['redis']['master_password'] = nil
