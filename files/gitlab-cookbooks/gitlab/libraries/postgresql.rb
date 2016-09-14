@@ -19,6 +19,7 @@ module Postgresql
   class << self
     def parse_variables
       parse_postgresql_settings
+      parse_multi_db_host_addresses
       parse_mattermost_postgresql_settings
     end
 
@@ -46,6 +47,22 @@ module Postgresql
         better_value_from_gitlab_rb = Gitlab[right.first][right.last]
         default_from_attributes = Gitlab['node']['gitlab'][right.first.gsub('_', '-')][right.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
+      end
+    end
+
+    def parse_multi_db_host_addresses
+      # Postgres allow multiple listen addresses, comma-separated values
+      # In case of multi listen_address, will use the first address from list
+      db_host = Gitlab['gitlab_rails']['db_host']
+      return if db_host.nil?
+
+      if db_host.include?(',')
+        Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
+        warning = [
+          "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
+          "First listen_address '#{Gitlab['gitlab_rails']['db_host']}' will be used."
+        ].join("\n  ")
+        warn(warning)
       end
     end
 

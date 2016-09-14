@@ -90,8 +90,8 @@ class StorageDirectoryHelper
   end
 
   def test_stat_cmd(path)
-    format_string = '%F %U'
-    expect_string = "directory #{@target_owner}"
+    format_string = '%U'
+    expect_string = "#{@target_owner}"
 
     if @target_group
       format_string << ':%G'
@@ -103,6 +103,6 @@ class StorageDirectoryHelper
       expect_string << " #{@target_mode}"
     end
 
-    "test \"$(stat --printf='#{format_string}' #{path})\" = '#{expect_string}'"
+    "test -d \"#{path}\" -a \"$(stat --printf='#{format_string}' #{path})\" = '#{expect_string}'"
   end
 end

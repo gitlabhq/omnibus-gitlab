@@ -17,6 +17,10 @@ instead of GitLab CE, replace the image name to `gitlab/gitlab-ee:latest`.
 If you want to use the latest RC image, use `gitlab/gitlab-ce:rc` or
 `gitlab/gitlab-ee:rc` for GitLab CE and GitLab EE respectively.
 
+## Prerequisites
+
+Docker installation is required, see the [official installation docs](https://docs.docker.com/engine/installation/).
+
 ## Run the image
 
 Run the image:
