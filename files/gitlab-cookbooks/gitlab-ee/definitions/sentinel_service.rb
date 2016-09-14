@@ -36,6 +36,19 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
     mode "0700"
   end
 
+  runit_service sentinel_service_name do
+    down redis['ha']
+    template_name sentinel_service_name
+    options(
+      {
+        user: redis['username'],
+        config_path: config_path,
+        log_directory: sentinel_log_dir
+      }.merge(params)
+    )
+    log_options redis.to_hash.merge(logging.to_hash)
+  end
+
   template config_path do
     source "sentinel.conf.erb"
     owner redis['username']
@@ -48,18 +61,5 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
     )
     notifies :restart, "service[sentinel]", :immediately if OmnibusHelper.should_notify?('redis')
     only_if { config_path }
-  end
-
-  runit_service sentinel_service_name do
-    down redis['ha']
-    template_name sentinel_service_name
-    options(
-      {
-        user: redis['username'],
-        config_path: config_path,
-        log_directory: sentinel_log_dir
-      }.merge(params)
-    )
-    log_options redis.to_hash.merge(logging.to_hash)
   end
 end

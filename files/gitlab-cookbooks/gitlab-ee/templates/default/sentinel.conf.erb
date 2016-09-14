@@ -71,7 +71,7 @@ sentinel monitor <%= @redis['master_name'] %> <%= @redis['master_ip'] %> <%= @re
 #
 # Example:
 #
-# sentinel auth-pass mymaster MySUPER--secret-0123passw0rd
+sentinel auth-pass <%= @redis['master_name'] %> <%= @redis['master_password'] %>
 
 # sentinel down-after-milliseconds <master-name> <milliseconds>
 #
@@ -81,7 +81,7 @@ sentinel monitor <%= @redis['master_name'] %> <%= @redis['master_ip'] %> <%= @re
 # Down).
 #
 # Default is 30 seconds.
-sentinel down-after-milliseconds <%= @redis['master_ip'] %> <%= @sentinel['down-after-milliseconds'] %>
+sentinel down-after-milliseconds <%= @redis['master_name'] %> <%= @sentinel['down-after-milliseconds'] %>
 
 # sentinel parallel-syncs <master-name> <numslaves>
 #
@@ -89,7 +89,7 @@ sentinel down-after-milliseconds <%= @redis['master_ip'] %> <%= @sentinel['down-
 # during the failover. Use a low number if you use the slaves to serve query
 # to avoid that all the slaves will be unreachable at about the same
 # time while performing the synchronization with the master.
-sentinel parallel-syncs localhost 1
+# sentinel parallel-syncs localhost 1
 
 # sentinel failover-timeout <master-name> <milliseconds>
 #
@@ -114,7 +114,7 @@ sentinel parallel-syncs localhost 1
 #   the exact parallel-syncs progression as specified.
 #
 # Default is 3 minutes.
-sentinel failover-timeout <%= @redis['master_ip'] %> <%= @sentinel['failover-timeout'] %>
+sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover-timeout'] %>
 
 # SCRIPTS EXECUTION
 #
