@@ -200,6 +200,24 @@ template nginx_config do
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
 end
 
+if nginx_vars.key?('custom_error_pages')
+  nginx_vars['custom_error_pages'].each_key do |code|
+    template "#{GitlabRails.public_path}/#{code}-custom.html" do
+      source "gitlab-rails-error.html.erb"
+      owner "root"
+      group "root"
+      mode "0644"
+      variables(
+        :code => code,
+        :title => nginx_vars['custom_error_pages'][code]['title'],
+        :header => nginx_vars['custom_error_pages'][code]['header'],
+        :message => nginx_vars['custom_error_pages'][code]['message']
+      )
+      notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+    end
+  end
+end
+
 runit_service "nginx" do
   down node['gitlab']['nginx']['ha']
   options({

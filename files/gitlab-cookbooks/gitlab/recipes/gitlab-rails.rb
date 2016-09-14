@@ -264,8 +264,9 @@ gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.shou
 template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
   source "secret_token.erb"
-  owner gitlab_user
-  mode "0600"
+  owner "root"
+  group "root"
+  mode "0644"
   variables(secret_token: node['gitlab']['gitlab-workhorse']['secret_token'])
   restarts gitlab_workhorse_services
 end
@@ -280,12 +281,18 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   restarts dependent_services
 end
 
+rails_env = {
+  'HOME' => node['gitlab']['user']['home'],
+  'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
+}
+
+if node['gitlab']['gitlab-rails']['enable_jemalloc']
+  rails_env.merge!({'LD_PRELOAD' => "/opt/gitlab/embedded/lib/libjemalloc.so"})
+end
+
 env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
   variables(
-    {
-      'HOME' => node['gitlab']['user']['home'],
-      'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
-    }.merge(node['gitlab']['gitlab-rails']['env'])
+    rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
   restarts dependent_services
 end

@@ -67,6 +67,7 @@ default['gitlab']['gitlab-rails']['env'] = {
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
   'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages"
 }
+default['gitlab']['gitlab-rails']['enable_jemalloc'] = false
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
@@ -349,6 +350,8 @@ default['gitlab']['postgresql']['sql_user'] = "gitlab"
 default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['gitlab']['postgresql']['port'] = 5432
+# Postgres allow multi listen_address, comma-separated values.
+# If used, first address from the list will be use for connection
 default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
 default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []

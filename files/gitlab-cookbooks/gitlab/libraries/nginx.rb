@@ -76,5 +76,16 @@ module Nginx
 
       Gitlab[app]['proxy_set_headers'] = default_from_attributes
     end
+
+    def parse_error_pages
+      # At the least, provide error pages for 404, 402, 500, 502 errors
+      errors = Hash[%w(404 422 500 502).map {|x| [x, "#{x}.html"]}]
+      if Gitlab['nginx'].key?('custom_error_pages')
+        Gitlab['nginx']['custom_error_pages'].each_key do |err|
+          errors[err] = "#{err}-custom.html"
+        end
+      end
+      errors
+    end
   end
 end
