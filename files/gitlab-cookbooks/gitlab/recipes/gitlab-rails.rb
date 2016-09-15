@@ -254,10 +254,6 @@ template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   restarts dependent_services
 end
 
-link File.join(gitlab_rails_source_dir, ".gitlab_shell_secret") do
-  to File.join(gitlab_shell_source_dir, ".gitlab_shell_secret")
-end
-
 gitlab_workhorse_services = dependent_services
 gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.should_notify?('gitlab-workhorse')
 
