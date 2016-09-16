@@ -515,6 +515,53 @@ server {
 }
 ```
 
+### Enabling/Disabling nginx_status
+
+By default you will have an nginx health-check endpoint configured at 127.0.0.1:8060/nginx_status to monitor your Nginx server status.
+
+#### The following information will be displayed:
+
+```
+Active connections: 1
+server accepts handled requests
+ 18 18 36
+Reading: 0 Writing: 1 Waiting: 0
+```
+* Active connections – Open connections in total.
+* 3 figures are shown.
+ * All accepted connections.
+ * All handled connections.
+ * Total number of handled requests.
+* Reading: Nginx reads request headers
+* Writing: Nginx reads request bodies, processes requests, or writes responses to a client
+* Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
+
+## Configuration
+
+`/etc/gitlab/gitlab.rb`
+
+```Ruby
+nginx['status']['listen_addresses'] = ['*']
+nginx['status']['fqdn'] = node['fqdn']
+nginx['status']['port'] = 8060
+nginx['status']['options'] = { # nginx_status location block options
+    "stub_status" => "on", # Turn on stats
+    "access_log" => "off", # Disable logs for stats
+    "allow" => "127.0.0.1", # Only allow access from localhost
+    "deny" => "all", # Deny access to anyone else
+}
+```
+
+If you don't find this service useful for your current infrastructure you can disable it with:
+
+```ruby
+nginx['status']['enable'] = false
+```
+
+Make sure you run sudo gitlab-ctl reconfigure for the changes to take effect.
+
+
+
 #### Warning
 
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)

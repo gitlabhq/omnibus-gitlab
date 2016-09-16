@@ -561,6 +561,19 @@ default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 
+###
+# Nginx status
+###
+default['gitlab']['nginx']['status']['enable'] = true
+default['gitlab']['nginx']['status']['listen_addresses'] = ['*']
+default['gitlab']['nginx']['status']['fqdn'] = node['fqdn']
+default['gitlab']['nginx']['status']['port'] = 8060
+default['gitlab']['nginx']['status']['options'] = {
+  "stub_status" => "on",
+  "access_log" => "off",
+  "allow" => "127.0.0.1",
+  "deny" => "all",
+}
 
 ###
 # Logging

@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add support for configuring workhorse's api limiting
 - Support specifying a post reconfigure script to run in the docker container
 - Updated cacerts.pem to 2016-09-14 version
+- Add support for nginx status
 
 8.12.4
 
