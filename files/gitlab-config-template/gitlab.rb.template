@@ -520,6 +520,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_line_prefix'] = "%a"
 # postgresql['track_activity_query_size'] = "1024"
 # postgresql['shared_preload_libraries'] = nil
+# postgresql['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
+
 
 ## Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
