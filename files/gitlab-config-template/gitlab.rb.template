@@ -559,14 +559,36 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
 # redis['port'] = 6379
 
-## Master redis instance (if this will act as a master instance uncomment and fill below)
+## Replication support
+##
+
+# redis['master'] = true # To make it a slave change to false
 # redis['password'] = '<huge password string here>' # Only define this in the master instance
 
-## Slave redis instance (if this will act as a slave / standby redis instance uncomment and fill below)
+## Slave and Sentinel shared configuration
+## Both need to point to the master redis instance to get replication and heartbeat monitoring
+
+# redis['master_name'] = nil
 # redis['master_ip'] = nil
 # redis['master_port'] = nil
-# redis['master_password'] = nil
+# redis['master_password'] = nil # the same value defined in redis['password'] in the master instance
 
+########################
+# GitLab Sentinel (EE) #
+########################
+
+## Make sure you configured all redis['master_*'] keys above before continuing.
+
+# sentinel['enable'] = false
+# sentinel['port'] = 26379
+
+## Quorum must reflect the amount of voting sentinels it take to start a failover.
+# sentinel['quorum'] = 1
+
+## Consider unresponsive server down after x amount of ms.
+# sentinel['down-after-milliseconds'] = 10000
+
+# sentinel['failover-timeout'] = 60000
 
 #####################
 # GitLab Web server #
