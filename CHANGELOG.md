@@ -6,7 +6,8 @@ omnibus-gitlab repository.
 8.12.0
 
 - Add support for using NFS root_squash for storage directories d5cf0d1d
-- Set read permissions on the trusted certificates in case they are restricted  
+- Add `gitlab-ctl deploy-page status` command b8ffd251
+- Set read permissions on the trusted certificates in case they are restricted
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
 - Render gitlab-workhorse token c50c85
 - Enable git packfile bitmap creation 2a07f08
