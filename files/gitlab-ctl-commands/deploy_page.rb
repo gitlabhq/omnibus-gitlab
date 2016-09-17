@@ -25,7 +25,10 @@ add_command 'deploy-page', 'Put up the deploy page', 2 do |cmd_name, state|
     FileUtils.cp(deploy, index, verbose: true)
   when 'down'
     FileUtils.rm_f(index, verbose: true)
+  when 'status'
+    status = File.exist?(index) ? 'up' : 'down'
+    puts "Deploy page is #{status}"
   else
-    puts "Usage: #{cmd_name} up|down"
+    puts "Usage: #{cmd_name} up|down|status"
   end
 end
