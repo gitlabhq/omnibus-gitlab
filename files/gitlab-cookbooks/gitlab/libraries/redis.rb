@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require_relative 'redis_uri.rb'
 
 module Redis
   class << self
@@ -22,32 +23,42 @@ module Redis
     end
 
     def parse_redis_settings
-      if Gitlab['gitlab_rails']['redis_host']
-        # The user wants to connect to a non-bundled Redis instance via TCP.
-        # Override the gitlab-rails default redis_port value (nil) to signal
-        # that gitlab-rails should connect to Redis via TCP instead of a Unix
-        # domain socket.
-        Gitlab['gitlab_rails']['redis_port'] ||= 6379
-      end
-
-      if Gitlab['gitlab_ci']['redis_host']
-        Gitlab['gitlab_ci']['redis_port'] ||= 6379
-      end
-
-      if Gitlab['gitlab_rails']['redis_host'] &&
-        Gitlab['gitlab_rails'].values_at('redis_host', 'redis_port') == Gitlab['gitlab_ci'].values_at('redis_host', 'redis_port')
-        Chef::Log.warn "gitlab-rails and gitlab-ci are configured to connect to "\
-                       "the same Redis instance. This is not recommended."
-      end
-
-      # Redis daemon
-      if Gitlab['redis']['bind'] && Gitlab['redis']['port'] != 0
-        Chef::Log.debug 'Ignoring redis unixsocket: '\
-                        "'#{Gitlab['redis']['unixsocket']}' to use TCP instead"
-
+      if is_redis_tcp?
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
+
+        # Try to discover gitlab_rails redis connection params
+        # based on redis daemon definition if not defined
+        Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['bind']
+        Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+
+        if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['bind']
+          Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance."
+        end
+
+        if Gitlab['gitlab_rails']['redis_port'] != Gitlab['redis']['port']
+          Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance."
+        end
       end
+
+      if is_gitlab_rails_redis_tcp?
+        # The user wants to connect to a Redis instance via TCP.
+        # It can be either a non-bundled instance or a Sentinel based one.
+        # Overriding redis_socket to false signals that gitlab-rails
+        # should connect to Redis via TCP instead of a Unix domain socket.
+        Gitlab['gitlab_rails']['redis_port'] ||= 6379
+        Gitlab['gitlab_rails']['redis_socket'] = false
+      end
+    end
+
+    private
+
+    def is_redis_tcp?
+      Gitlab['redis']['bind'] && Gitlab['redis']['port'] != 0
+    end
+
+    def is_gitlab_rails_redis_tcp?
+      Gitlab['gitlab_rails']['redis_host']
     end
   end
 end

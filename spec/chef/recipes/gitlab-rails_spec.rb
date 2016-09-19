@@ -104,6 +104,35 @@ describe 'gitlab::gitlab-rails' do
     end
   end
 
+  context 'with redis settings' do
+    let(:config_file) { '/var/opt/gitlab/gitlab-rails/etc/resque.yml' }
+
+    context 'and default configuration' do
+      it 'creates the config file with the required redis settings' do
+        expect(chef_run).to render_file(config_file)
+                              .with_content(%r{url: unix:/var/opt/gitlab/redis/redis.socket})
+      end
+    end
+
+    context 'and custom configuration' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_host: 'redis.example.com',
+            redis_port: 8888,
+            redis_database: 2,
+            redis_password: 'mypass'
+          }
+        )
+      end
+
+      it 'creates the config file with custom host, port, password and database' do
+        expect(chef_run).to render_file(config_file)
+                              .with_content(%r{url: redis://:mypass@redis.example.com:8888/2})
+      end
+    end
+  end
+
   context 'gitlab_workhorse_secret' do
     before do
       stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
