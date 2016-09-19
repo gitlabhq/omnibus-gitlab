@@ -49,16 +49,6 @@ module Redis
         Gitlab['gitlab_rails']['redis_port'] ||= 6379
         Gitlab['gitlab_rails']['redis_socket'] = false
       end
-
-      if Gitlab['gitlab_ci']['redis_host']
-        Gitlab['gitlab_ci']['redis_port'] ||= 6379
-      end
-
-      if is_gitlab_rails_redis_tcp? &&
-        Gitlab['gitlab_rails'].values_at('redis_host', 'redis_port') == Gitlab['gitlab_ci'].values_at('redis_host', 'redis_port')
-        Chef::Log.warn "gitlab-rails and gitlab-ci are configured to connect to "\
-                       "the same Redis instance. This is not recommended."
-      end
     end
 
     private
