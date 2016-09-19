@@ -28,9 +28,16 @@ module Redis
         Gitlab['redis']['unixsocket'] = false
 
         # Try to discover gitlab_rails redis connection params
-        # based on redis daemon definition if not defined
-        Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['bind']
-        Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+        # based on redis daemon definition or sentinels
+        if is_redis_sentinel?
+          # Redis sentinel requires the url to point to the 'master_name' instead of
+          # an IP or a valid host. We are hardcodding port just to keep url clean.
+          Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['master_name']
+          Gitlab['gitlab_rails']['redis_port'] = 6379
+        else
+          Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['bind']
+          Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+        end
 
         if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['bind']
           Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance."
@@ -59,6 +66,10 @@ module Redis
 
     def is_gitlab_rails_redis_tcp?
       Gitlab['gitlab_rails']['redis_host']
+    end
+
+    def is_redis_sentinel?
+      Gitlab['gitlab_rails']['redis_sentinels']
     end
   end
 end
