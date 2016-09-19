@@ -6,7 +6,7 @@ omnibus-gitlab repository.
 8.12.0
 
 - Add support for using NFS root_squash for storage directories d5cf0d1d
-- Add `gitlab-ctl deploy-page status` command b8ffd251
+- Add `gitlab-ctl deploy-page status` command 4ff2df5df
 - Set read permissions on the trusted certificates in case they are restricted
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
 - Render gitlab-workhorse token c50c85
@@ -15,10 +15,11 @@ omnibus-gitlab repository.
 - Update the mode of the certificate files when using trusted certificates b00cd4
 - Allow configuring Rack Attack endpoints (Dmitry Ivanov) 7aee63
 - Bundle jemalloc and allow optional enable 1381ba
-- Use single db_host when multi postgresql::listen_adresses
-- Add gitlab-ctl registry-garbage-collect command
-- Update curl to version 7.50.3
-- Add default HOME variable to workhorse
+- Use single db_host when multi postgresql::listen_adresses (Julien Garcia Gonzalez) 717dc269
+- Add gitlab-ctl registry-garbage-collect command  5f5526d3
+- Update curl to version 7.50.3 7848b550
+- Add default HOME variable to workhorse fcfa3672
+- Show GitLab ascii art after installation (Luis Sagastume) 17ed6cb
 
 8.11.6
 
@@ -70,7 +71,6 @@ omnibus-gitlab repository.
 - Update postgresql to 9.2.18 (Takuya Noguchi)
 - Update expat to 2.2.0 (Takuya Noguchi)
 - Ignore and don't write `gitlab_ci:gitlab_server` key in gitlab-secrets file 10bcb
-- Configure Rake attack (Dmitry Ivanov)
 
 8.10.9
 
