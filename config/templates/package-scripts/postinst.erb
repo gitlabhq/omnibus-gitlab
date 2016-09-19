@@ -11,6 +11,39 @@ notify()
   echo "gitlab: $1"
 }
 
+tanuki_ascii()
+{
+  echo "       *.                  *."
+  echo "      ***                 ***"
+  echo "     *****               *****"
+  echo "    .******             *******"
+  echo "    ********            ********"
+  echo "   ,,,,,,,,,***********,,,,,,,,,"
+  echo "  ,,,,,,,,,,,*********,,,,,,,,,,,"
+  echo "  .,,,,,,,,,,,*******,,,,,,,,,,,,"
+  echo "      ,,,,,,,,,*****,,,,,,,,,."
+  echo "         ,,,,,,,****,,,,,,"
+  echo "            .,,,***,,,,"
+  echo "                ,*,."
+}
+
+gitlab_ascii()
+{
+  echo "     _______ __  __          __"
+  echo "    / ____(_) /_/ /   ____ _/ /_"
+  echo "   / / __/ / __/ /   / __ \`/ __ \\"
+  echo "  / /_/ / / /_/ /___/ /_/ / /_/ /"
+  echo "  \____/_/\__/_____/\__,_/_.___/"
+}
+
+print_banner()
+{
+    echo ""
+    echo "\033[0;33m$(tanuki_ascii)\033[0m"
+    echo "\033[0;31m$(gitlab_ascii)\033[0m"
+    echo ""
+}
+
 create_config_template()
 {
   # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
@@ -41,6 +74,7 @@ fi
 
 print_welcome()
 {
+  print_banner
   notify "Thank you for installing GitLab!"
   notify "To configure and start GitLab, RUN THE FOLLOWING COMMAND:"
   echo ""
