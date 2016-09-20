@@ -179,3 +179,4 @@ sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover-t
 # Example:
 #
 # sentinel client-reconfig-script mymaster /var/redis/reconfig.sh
+<%= "sentinel myid #{@sentinel['myid']}" if @sentinel['myid'] %>

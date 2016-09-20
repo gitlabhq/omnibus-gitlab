@@ -23,3 +23,4 @@ default['gitlab']['sentinel']['port'] = 26379
 default['gitlab']['sentinel']['quorum'] = 1
 default['gitlab']['sentinel']['down-after-milliseconds'] = 10000
 default['gitlab']['sentinel']['failover-timeout'] = 60000
+default['gitlab']['sentinel']['myid'] = nil

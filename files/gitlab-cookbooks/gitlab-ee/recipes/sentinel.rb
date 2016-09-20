@@ -15,9 +15,12 @@
 # limitations under the License.
 #
 
+sentinel_helper = SentinelHelper.new(node['gitlab']['sentinel'])
+sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge({ 'myid' => sentinel_helper.myid })
+
 sentinel_service 'redis' do
   config_path File.join(node['gitlab']['sentinel']['dir'], 'sentinel.conf')
   redis_configuration node['gitlab']['redis']
-  sentinel_configuration node['gitlab']['sentinel']
+  sentinel_configuration sentinel_cfg
   logging_configuration node['gitlab']['logging']
 end
