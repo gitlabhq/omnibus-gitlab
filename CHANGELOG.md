@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.0
+
+- Add support for registry debug addr configuration
+
 8.12.0
 
 - Add support for using NFS root_squash for storage directories d5cf0d1d
