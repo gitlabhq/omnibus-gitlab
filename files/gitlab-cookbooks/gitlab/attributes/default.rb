@@ -737,11 +737,13 @@ default['gitlab']['mattermost']['log_console_level'] = 'INFO'
 default['gitlab']['mattermost']['log_enable_file'] = true
 default['gitlab']['mattermost']['log_file_level'] = 'ERROR'
 default['gitlab']['mattermost']['log_file_format'] = nil
+default['gitlab']['mattermost']['log_enable_diagnostics'] = true
 
 default['gitlab']['mattermost']['service_use_ssl'] = false
 default['gitlab']['mattermost']['service_address'] = "127.0.0.1"
 default['gitlab']['mattermost']['service_port'] = "8065"
 
+default['gitlab']['mattermost']['service_site_url'] = nil
 default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
 default['gitlab']['mattermost']['service_segment_developer_key'] = nil
 default['gitlab']['mattermost']['service_google_developer_key'] = nil
@@ -810,6 +812,9 @@ default['gitlab']['mattermost']['email_connection_security'] = nil
 default['gitlab']['mattermost']['email_send_push_notifications'] = false
 default['gitlab']['mattermost']['email_push_notification_server'] = nil
 default['gitlab']['mattermost']['email_push_notification_contents'] = "generic"
+default['gitlab']['mattermost']['email_enable_batching'] = false
+default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
+default['gitlab']['mattermost']['email_batching_interval'] = 30
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
