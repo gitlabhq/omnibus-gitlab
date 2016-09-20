@@ -369,6 +369,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['log_directory'] = "/var/log/gitlab/registry"
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
+# registry['debug_addr'] = "localhost:5001"
 # registry['storage_delete_enabled'] = true
 # # Registry backend storage, see http://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
 # registry['storage'] = {
