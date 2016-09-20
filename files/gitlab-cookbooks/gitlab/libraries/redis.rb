@@ -31,8 +31,8 @@ module Redis
         # based on redis daemon definition or sentinels
         if is_redis_sentinel?
           # Redis sentinel requires the url to point to the 'master_name' instead of
-          # an IP or a valid host. We are hardcodding port just to keep url clean.
-          Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['master_name']
+          # an IP or a valid host. We are also hard-coding port just to keep url clean.
+          Gitlab['gitlab_rails']['redis_host'] = Gitlab['redis']['master_name']
           Gitlab['gitlab_rails']['redis_port'] = 6379
         else
           Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['bind']
