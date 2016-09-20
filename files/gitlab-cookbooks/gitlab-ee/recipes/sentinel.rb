@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-sentinel_helper = SentinelHelper.new(node['gitlab']['sentinel'])
+sentinel_helper = SentinelHelper.new(node)
 sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge({ 'myid' => sentinel_helper.myid })
 
 sentinel_service 'redis' do

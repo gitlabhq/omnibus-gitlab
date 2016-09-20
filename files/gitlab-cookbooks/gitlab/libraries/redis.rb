@@ -35,7 +35,7 @@ module Redis
           if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['master_name']
             Chef::Log.warn "gitlab-rails 'redis_host' will be ignored as sentinel is defined."
           end
-          
+
           Gitlab['gitlab_rails']['redis_host'] = Gitlab['redis']['master_name']
           Gitlab['gitlab_rails']['redis_port'] = 6379
         else
