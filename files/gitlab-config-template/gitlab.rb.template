@@ -723,6 +723,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_address'] = "127.0.0.1"
 # mattermost['service_port'] = "8065"
 
+# mattermost['service_site_url'] = nil
 # mattermost['service_maximum_login_attempts'] = 10
 # mattermost['service_segment_developer_key'] = nil
 # mattermost['service_google_developer_key'] = nil
@@ -768,6 +769,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['log_enable_file'] = false
 # mattermost['log_file_level'] = 'INFO'
 # mattermost['log_file_format'] = nil
+# mattermost['log_enable_diagnostics'] = true
 
 # mattermost['gitlab_enable'] = false
 # mattermost['gitlab_id'] = "12345656"
@@ -795,6 +797,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_send_push_notifications'] = true
 # mattermost['email_push_notification_server'] = ""
 # mattermost['email_push_notification_contents'] = "generic"
+# mattermost['email_enable_batching'] = false
+# mattermost['email_batching_buffer_size'] = 256
+# mattermost['email_batching_interval'] = 30
 
 # mattermost['file_max_file_size'] = 52428800
 # mattermost['file_driver_name'] = "local"
