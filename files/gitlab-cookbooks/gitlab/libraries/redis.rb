@@ -32,6 +32,10 @@ module Redis
         if is_redis_sentinel?
           # Redis sentinel requires the url to point to the 'master_name' instead of
           # an IP or a valid host. We are also hard-coding port just to keep url clean.
+          if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['master_name']
+            Chef::Log.warn "gitlab-rails 'redis_host' will be ignored as sentinel is defined."
+          end
+          
           Gitlab['gitlab_rails']['redis_host'] = Gitlab['redis']['master_name']
           Gitlab['gitlab_rails']['redis_port'] = 6379
         else
