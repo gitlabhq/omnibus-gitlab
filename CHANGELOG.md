@@ -25,6 +25,10 @@ omnibus-gitlab repository.
 - Update curl to version 7.50.3
 - Add default HOME variable to workhorse
 
+8.11.7
+
+- No changes
+
 8.11.6
 
 - Fix registry build by enabling vendor feature
@@ -77,6 +81,10 @@ omnibus-gitlab repository.
 - Ignore and don't write `gitlab_ci:gitlab_server` key in gitlab-secrets file 10bcb
 - Configure Rake attack (Dmitry Ivanov)
 
+8.10.10
+
+- No changes
+
 8.10.9
 
 - Fix registry build by enabling vendor feature
@@ -126,6 +134,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 3.2 28cf3
 - Lower expiry date of registry internal certificate b269b4
 - Add personal access token to rack attack whitelist 21abc
+
+8.9.10
+
+- No changes
 
 8.9.9
 
