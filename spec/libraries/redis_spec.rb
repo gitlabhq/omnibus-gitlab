@@ -61,12 +61,14 @@ describe 'Redis' do
 
       context 'when using sentinels' do
         let(:master_name) { 'gitlabredis' }
+        let(:master_pass) { 'hugepasswordhere' }
         before do
           stub_gitlab_rb(
             redis: {
               bind: redis_host,
               port: redis_port,
-              master_name: master_name
+              master_name: master_name,
+              master_password: master_pass
             },
             gitlab_rails: {
               redis_sentinels: [
@@ -93,6 +95,10 @@ describe 'Redis' do
           expect(Gitlab['gitlab_rails']['redis_port']).to eq 6379
 
           subject.parse_redis_settings
+        end
+
+        it 'expects redis_password to match master_password value from redis' do
+          expect(Gitlab['gitlab_rails']['redis_password']).to eq master_pass
         end
       end
     end

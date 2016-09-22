@@ -26,15 +26,15 @@ module Redis
       node = Gitlab[:node]['gitlab']
 
       if is_redis_tcp?
+        master_name = Gitlab['redis']['master_name'] || node['redis']['master_name']
+        redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
+
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
 
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon definition or sentinels
         if has_sentinels?
-          master_name = Gitlab['redis']['master_name'] || node['redis']['master_name']
-          redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
-
           # Redis sentinel requires the url to point to the 'master_name' instead of
           # an IP or a valid host. We are also hard-coding port just to keep url clean.
           if Gitlab['gitlab_rails']['redis_host'] != master_name
@@ -43,6 +43,7 @@ module Redis
 
           Gitlab['gitlab_rails']['redis_host'] = master_name
           Gitlab['gitlab_rails']['redis_port'] = 6379
+          Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
         else
           Gitlab['gitlab_rails']['redis_host'] ||= redis_bind
           Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']

@@ -559,11 +559,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
 # redis['port'] = 6379
 
+##
 ## Replication support
 ##
 
-# redis['master'] = true # To make it a slave change to false
+## Master redis instance
 # redis['password'] = '<huge password string here>' # Only define this in the master instance
+
+## Slave redis instance
+# redis['master'] = false
 
 ## Slave and Sentinel shared configuration
 ## Both need to point to the master redis instance to get replication and heartbeat monitoring
