@@ -24,7 +24,7 @@ describe 'Redis' do
     end
 
     context 'within redis host and port synchronization with gitlab_rails' do
-      let(:redis_host) { '0.0.0.0' }
+      let(:redis_host) { '1.2.3.4' }
       let(:redis_port) { 6370 }
 
       context 'when not using sentinels' do
@@ -58,16 +58,17 @@ describe 'Redis' do
       end
 
       context 'when using sentinels' do
+        let(:master_name) { 'gitlabredis' }
         before do
           stub_gitlab_rb(
             redis: {
               bind: redis_host,
               port: redis_port,
-              master_name: 'gitlabredis'
+              master_name: master_name
             },
             gitlab_rails: {
               redis_sentinels: [
-                { host: '0.0.0.0', port: '26379' }
+                { host: '1.2.3.4', port: '26379' }
               ]
             }
           )
@@ -80,13 +81,13 @@ describe 'Redis' do
           subject.parse_redis_settings
         end
 
-        it 'expects redis_host to match master-name value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_host']).to eq 'gitlabredis'
+        it 'expects redis_host to match bind value from redis' do
+          expect(Gitlab['gitlab_rails']['redis_host']).to eq master_name
 
           subject.parse_redis_settings
         end
 
-        it 'expects redis_port to match default port value' do
+        it 'expects redis_port to match default port value from redis' do
           expect(Gitlab['gitlab_rails']['redis_port']).to eq 6379
 
           subject.parse_redis_settings
@@ -95,7 +96,7 @@ describe 'Redis' do
     end
 
     context 'within gitlab-rails redis values' do
-      let(:redis_host) { '0.0.0.0' }
+      let(:redis_host) { '1.2.3.4' }
 
       before do
         stub_gitlab_rb(

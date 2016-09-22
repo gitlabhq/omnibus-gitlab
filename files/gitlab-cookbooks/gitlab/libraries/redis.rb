@@ -29,7 +29,7 @@ module Redis
 
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon definition or sentinels
-        if is_redis_sentinel?
+        if has_sentinels?
           # Redis sentinel requires the url to point to the 'master_name' instead of
           # an IP or a valid host. We are also hard-coding port just to keep url clean.
           if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['master_name']
@@ -41,6 +41,12 @@ module Redis
         else
           Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['bind']
           Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+        end
+
+        if sentinel_daemon_enabled? || is_redis_slave?
+          fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
+          fail "redis 'master_port' is not defined" unless Gitlab['redis']['master_port']
+          fail "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
         end
 
         if Gitlab['gitlab_rails']['redis_host'] != Gitlab['redis']['bind']
@@ -68,11 +74,19 @@ module Redis
       Gitlab['redis']['bind'] && Gitlab['redis']['port'] != 0
     end
 
+    def is_redis_slave?
+      Gitlab['redis']['master'] == false
+    end
+
+    def sentinel_daemon_enabled?
+      Gitlab['sentinel']['enable']
+    end
+
     def is_gitlab_rails_redis_tcp?
       Gitlab['gitlab_rails']['redis_host']
     end
 
-    def is_redis_sentinel?
+    def has_sentinels?
       Gitlab['gitlab_rails']['redis_sentinels']
     end
   end
