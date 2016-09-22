@@ -16,6 +16,8 @@ describe 'Redis' do
 
   context '.parse_redis_settings' do
     context 'when no customization is made' do
+      before { Gitlab[:node] = node }
+
       it 'keeps unixsocket' do
         expect(Gitlab['gitlab_rails']['unixsocket']).not_to eq false
 
@@ -35,7 +37,7 @@ describe 'Redis' do
               port: redis_port
             }
           )
-          node
+          Gitlab[:node] = node
         end
 
         it 'disables unix socket when redis tcp params are defined' do
@@ -72,7 +74,7 @@ describe 'Redis' do
               ]
             }
           )
-          node
+          Gitlab[:node] = node
         end
 
         it 'disables unix socket when sentinel params are defined' do
@@ -104,7 +106,7 @@ describe 'Redis' do
             redis_host: redis_host
           }
         )
-        node
+        Gitlab[:node] = node
       end
 
       it 'disables unix socket when gitlab-rails tcp params are defined' do
