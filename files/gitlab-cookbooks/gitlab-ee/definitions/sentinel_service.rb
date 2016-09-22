@@ -15,51 +15,69 @@
 # limitations under the License.
 #
 
-define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_configuration: {}, logging_configuration: {}  do
+define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_configuration: {}, logging_configuration: {}, action: :enable do
   redis = params[:redis_configuration]
   sentinel = params[:sentinel_configuration]
   logging = params[:logging_configuration]
   config_path = params[:config_path]
 
-  sentinel_service_name = "sentinel"
+  sentinel_service_name = 'sentinel'
   sentinel_dir = sentinel['dir']
   sentinel_log_dir = sentinel['log_directory']
 
-  directory sentinel_dir do
-    owner redis['username']
-    group redis['group']
-    mode "0750"
-  end
 
-  directory sentinel_log_dir do
-    owner redis['username']
-    mode "0700"
-  end
+  case params[:action]
+  when :enable
 
-  runit_service sentinel_service_name do
-    down redis['ha']
-    template_name sentinel_service_name
-    options(
-      {
-        user: redis['username'],
-        config_path: config_path,
-        log_directory: sentinel_log_dir
-      }.merge(params)
-    )
-    log_options redis.to_hash.merge(logging.to_hash)
-  end
+    directory sentinel_dir do
+      owner redis['username']
+      group redis['group']
+      mode '0750'
+    end
 
-  template config_path do
-    source "sentinel.conf.erb"
-    owner redis['username']
-    mode "0644"
-    variables(
-      {
-        redis: redis.to_hash,
-        sentinel: sentinel.to_hash
-      }
-    )
-    notifies :restart, "service[sentinel]", :immediately if OmnibusHelper.should_notify?('redis')
-    only_if { config_path }
+    directory sentinel_log_dir do
+      owner redis['username']
+      mode '0700'
+    end
+
+    runit_service sentinel_service_name do
+      down redis['ha']
+      template_name sentinel_service_name
+      options(
+        {
+          user: redis['username'],
+          config_path: config_path,
+          log_directory: sentinel_log_dir
+        }.merge(params)
+      )
+      log_options redis.to_hash.merge(logging.to_hash)
+    end
+
+    template config_path do
+      source 'sentinel.conf.erb'
+      owner redis['username']
+      mode '0644'
+      variables(
+        {
+          redis: redis.to_hash,
+          sentinel: sentinel.to_hash
+        }
+      )
+      notifies :restart, 'service[sentinel]', :immediately if OmnibusHelper.should_notify?('redis')
+      only_if { config_path }
+    end
+
+  when :disable
+    runit_service sentinel_service_name do
+      action :disable
+    end
+
+    file config_path do
+      action :delete
+    end
+
+    directory sentinel['dir'] do
+      action :delete
+    end
   end
 end

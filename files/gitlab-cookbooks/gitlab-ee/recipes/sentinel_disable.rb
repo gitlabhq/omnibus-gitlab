@@ -15,10 +15,10 @@
 # limitations under the License.
 #
 
-include_recipe 'gitlab::default'
-
-if node['gitlab']['sentinel']['enable']
-  include_recipe 'gitlab-ee::sentinel'
-else
-  include_recipe 'gitlab-ee::sentinel_disable'
+sentinel_service 'redis' do
+  config_path File.join(node['gitlab']['sentinel']['dir'], 'sentinel.conf')
+  redis_configuration node['gitlab']['redis']
+  sentinel_configuration node['gitlab']['sentinel']
+  logging_configuration node['gitlab']['logging']
+  action :disable
 end
