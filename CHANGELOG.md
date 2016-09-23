@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.12.1
+
+- Fix gitlab-workhorse Runit template bug #1595 !1005
+
 8.12.0
 
 - Add support for using NFS root_squash for storage directories d5cf0d1d
