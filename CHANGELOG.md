@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.13.0
 
 - Add support for registry debug addr configuration
+- Enable jemalloc by default 0a7799d2
 
 8.12.0
 
