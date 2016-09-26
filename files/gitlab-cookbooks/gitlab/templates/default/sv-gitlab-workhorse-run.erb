@@ -20,6 +20,8 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     -documentRoot /opt/gitlab/embedded/service/gitlab-rails/public \
     -pprofListenAddr <%= node['gitlab']['gitlab-workhorse']['pprof_listen_addr'] %>\
     <% if node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
-    -proxyHeadersTimeout <%= node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
+    -proxyHeadersTimeout <%= node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %> \
     <% end %>
-    -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret
+    -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
+
+# Do not remove this line; it prevents trouble with the trailing backslashes above.

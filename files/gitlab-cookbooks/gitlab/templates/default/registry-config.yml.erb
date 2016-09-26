@@ -10,6 +10,10 @@ http:
   secret: "<%= @http_secret %>"
   headers:
     X-Content-Type-Options: [nosniff]
+  <% if @debug_addr %>
+  debug:
+    addr: <%= @debug_addr %>
+  <% end %>
 health:
   storagedriver:
     enabled: true

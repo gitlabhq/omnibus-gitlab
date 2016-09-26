@@ -3,10 +3,19 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.0
+
+- Add support for registry debug addr configuration
+
+8.12.1
+
+- Fix gitlab-workhorse Runit template bug #1595 !1005
+
 8.12.0
 
 - Add support for using NFS root_squash for storage directories d5cf0d1d
-- Add `gitlab-ctl deploy-page status` command 4ff2df5df
+- Update mattermost to 3.4 6857c902
+- Add `gitlab-ctl deploy-page status` command b8ffd251
 - Set read permissions on the trusted certificates in case they are restricted
 - Fix permissions for nginx proxy_cache directory (Charles Blaxland) 4eb85976
 - Render gitlab-workhorse token c50c85
@@ -20,6 +29,10 @@ omnibus-gitlab repository.
 - Update curl to version 7.50.3 7848b550
 - Add default HOME variable to workhorse fcfa3672
 - Show GitLab ascii art after installation (Luis Sagastume) 17ed6cb
+
+8.11.7
+
+- No changes
 
 8.11.6
 
@@ -72,6 +85,10 @@ omnibus-gitlab repository.
 - Update expat to 2.2.0 (Takuya Noguchi)
 - Ignore and don't write `gitlab_ci:gitlab_server` key in gitlab-secrets file 10bcb
 
+8.10.10
+
+- No changes
+
 8.10.9
 
 - Fix registry build by enabling vendor feature
@@ -121,6 +138,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 3.2 28cf3
 - Lower expiry date of registry internal certificate b269b4
 - Add personal access token to rack attack whitelist 21abc
+
+8.9.10
+
+- No changes
 
 8.9.9
 
