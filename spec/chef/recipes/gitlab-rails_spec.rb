@@ -163,7 +163,7 @@ describe 'gitlab::gitlab-rails' do
       it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
       it_behaves_like "enabled gitlab-rails env", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
 
-      it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
 
       context 'when a custom env variable is specified' do
         before do
@@ -173,16 +173,16 @@ describe 'gitlab::gitlab-rails' do
         it_behaves_like "enabled gitlab-rails env", "IAM", 'CUSTOMVAR'
         it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
 
-        it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+        it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
       end
     end
 
-    context 'when jemalloc is enabled' do
+    context 'when jemalloc is disabled' do
       before do
-        stub_gitlab_rb(gitlab_rails: { enable_jemalloc: true })
+        stub_gitlab_rb(gitlab_rails: { enable_jemalloc: false })
       end
 
-      it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
     end
   end
 end
