@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Add support for registry debug addr configuration
 
+8.12.2
+
+- Update openssl to 1.0.2j
+
 8.12.1
 
 - Fix gitlab-workhorse Runit template bug #1595 !1005
