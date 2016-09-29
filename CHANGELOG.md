@@ -3,9 +3,8 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-8.13.0
+8.12.3
 
-- Add support for registry debug addr configuration
 - Updated cacerts.pem to 2016-09-14 version
 
 8.12.2
