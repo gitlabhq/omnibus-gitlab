@@ -860,7 +860,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
 # mattermost_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
 # mattermost_nginx['custom_gitlab_mattermost_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
-# mattermost_nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
 # mattermost_nginx['proxy_set_headers'] = {
 #   "Host" => "$http_host",
 #   "X-Real-IP" => "$remote_addr",
