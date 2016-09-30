@@ -61,7 +61,7 @@ gitlab_rails['enable'] = false
 
 where `Secret` and `Id` are `application secret` and `application id` received when creating new `Application` authorization in GitLab admin section.
 
-Optionally, you can set `mattermost['email_enable_sign_up_with_email'] = false` to force all users to sign-up with GitLab only. See Mattermost [documentation on GitLab SSO](https://github.com/mattermost/platform/blob/master/doc/integrations/Single-Sign-On/Gitlab.md).
+Optionally, you can set `mattermost['email_enable_sign_up_with_email'] = false` to force all users to sign-up with GitLab only. See Mattermost [documentation on GitLab SSO](https://docs.mattermost.com/deployment/sso-gitlab.html).
 
 ## Manually (re)authorising GitLab Mattermost with GitLab
 
