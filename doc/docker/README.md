@@ -152,14 +152,9 @@ After starting a container you can visit <http://localhost/> or
 <http://192.168.59.103> if you use boot2docker. It might take a while before
 the Docker container starts to respond to queries.
 
-Login to GitLab with the following credentials:
-
-```
-username: `root`
-password: `5iveL!fe`
-```
-
-Next time, you can just use docker start and stop to run the container.
+The very first time you visit GitLab, you will be asked to set up the admin
+password. After you change it, you can login with username `root` and the
+password you set up.
 
 ## Upgrade GitLab to newer version
 
@@ -236,16 +231,32 @@ You can then access your GitLab instance at `http://1.1.1.1/` and `https://1.1.1
 
 ### Expose GitLab on different ports
 
-If you want to use a different port than `80` (HTTP) or `443` (HTTPS), you need
-to add a separate `--publish` directive to the `docker run` command.
+GitLab will occupy by default the following ports inside the container:
 
-For example, to expose the web interface on port `8929` and the SSH service on
+- `80` (HTTP)
+- `443` (if you configure HTTPS)
+- `8080` (used by Unicorn)
+- `22` (used by the SSH daemon)
+
+> **Note:**
+The format for publishing ports is `hostPort:containerPort`. Read more in
+Docker's documentation about [exposing incoming ports][docker-ports].
+
+> **Warning:**
+Do NOT use port `8080` otherwise there will be conflicts. This port is already
+used by Unicorn that runs internally in the container.
+
+If you want to use a different port than `80` (HTTP) or `443` (HTTPS) for the
+container, you need to add a separate `--publish` directive to the `docker run`
+command.
+
+For example, to expose the web interface on port `8929`, and the SSH service on
 port `2289`, use the following `docker run` command:
 
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:80 --publish 2289:22 \
+	--publish 8929:8929 --publish 2289:2289 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -262,15 +273,25 @@ You then need to appropriately configure `gitlab.rb`:
     # For HTTP
     external_url "http://gitlab.example.com:8929"
 
-    # For HTTPS
+    or
+
+    # For HTTPS (notice the https)
     external_url "https://gitlab.example.com:8929"
     ```
+
+    For more information see the [NGINX documentation](../settings/nginx.md).
 
 2. Set `gitlab_shell_ssh_port`:
 
     ```
     gitlab_rails['gitlab_shell_ssh_port'] = 2289
     ```
+
+Following the above example you will be able to reach GitLab from your
+web browser under `<hostIP>:8929` and push using SSH under the port `2289`.
+
+A `docker-compose.yml` example that uses different ports can be found in the
+[docker-compose](#install-gitlab-using-docker-compose) section.
 
 ## Diagnose potential problems
 
@@ -338,16 +359,14 @@ web:
       gitlab_rails['gitlab_shell_ssh_port'] = 2224
   ports:
     - '9090:9090'
-    - '2224:22'
+    - '2224:2224'
   volumes:
     - '/srv/gitlab/config:/etc/gitlab'
     - '/srv/gitlab/logs:/var/log/gitlab'
     - '/srv/gitlab/data:/var/opt/gitlab'
 ```
 
-[docker compose]: https://docs.docker.com/compose/
-[install-compose]: https://docs.docker.com/compose/install/
-[down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
+This is the same as using `--publish 9090:9090 --publish 2224:2224`.
 
 ## Update GitLab using Docker compose
 
@@ -376,3 +395,8 @@ container afterwards:
 sudo docker exec gitlab update-permissions
 sudo docker restart gitlab
 ```
+
+[docker compose]: https://docs.docker.com/compose/
+[install-compose]: https://docs.docker.com/compose/install/
+[down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
+[docker-ports]: https://docs.docker.com/engine/reference/run/#/expose-incoming-ports
