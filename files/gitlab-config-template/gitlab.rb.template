@@ -101,7 +101,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## For setting up LDAP
 ## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#setting-up-ldap-sign-in
-## Be careful not to break the identation in the ldap_servers block. It is in
+## Be careful not to break the indentation in the ldap_servers block. It is in
 ## yaml format and the spaces must be retained. Using tabs will not work.
 
 # gitlab_rails['ldap_enabled'] = false
