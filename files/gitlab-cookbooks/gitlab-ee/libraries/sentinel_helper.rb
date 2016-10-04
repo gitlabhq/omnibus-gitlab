@@ -1,42 +1,56 @@
 class SentinelHelper
   MYID_PATTERN = /^[0-9a-f]{40}$/
-  JSON_FILE = '/etc/gitlab/gitlab-sentinel.json'
+  JSON_FILE = '/etc/gitlab/gitlab-sentinel.json'.freeze
 
   def initialize(node)
     @node = node
   end
 
   def myid
-    sentinel = @node['gitlab']['sentinel']
-
     if sentinel['myid']
-      unless MYID_PATTERN =~ sentinel['myid']
-        Chef::Log.warn 'Sentinel myid must be exactly 40 hex-characters lowercase'
-      end
-
-      sentinel['myid']
+      restore_from_node
     else
-      existing_data = load
-      if existing_data && existing_data['myid']
-        existing_data['myid']
-      else
-        myid = generate_myid
-        save({'myid' => myid})
-
-        myid
-      end
+      restore_or_generate_from_file
     end
   end
 
   private
 
-  def load
+  # Restore from node definition (gitlab.rb)
+  def restore_from_node
+    unless MYID_PATTERN =~ sentinel['myid']
+      Chef::Log.warn 'Sentinel myid must be exactly 40 hex-characters lowercase'
+    end
+
+    sentinel['myid']
+  end
+
+  # Restore from local JSON file or create a new myid
+  def restore_or_generate_from_file
+    existing_data = load_from_file
+    if existing_data && existing_data['myid']
+      existing_data['myid']
+    else
+      myid = generate_myid
+      save_to_file({'myid' => myid})
+
+      myid
+    end
+  end
+
+  def sentinel
+    @node['gitlab']['sentinel']
+  end
+
+  # Load from local JSON file
+  def load_from_file
     if File.exists?(JSON_FILE)
       Chef::JSONCompat.from_json(File.read(JSON_FILE))
     end
   end
 
-  def save(data)
+  # Save to local JSON file
+  def save_to_file(data)
     if File.directory?('/etc/gitlab')
       File.open(JSON_FILE, 'w') do |f|
         f.puts(
