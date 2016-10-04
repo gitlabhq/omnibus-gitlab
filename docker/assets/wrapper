@@ -79,6 +79,11 @@ echo "Configuring GitLab package..."
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
+if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
+  echo "Runnning Post Reconfigure Script..."
+  eval ${GITLAB_POST_RECONFIGURE_SCRIPT}
+fi
+
 # Tail all logs
 gitlab-ctl tail &
 
