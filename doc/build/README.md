@@ -48,6 +48,26 @@ project.
 If you are using these tools to build your own packages, you will have to
 adjust them to your needs.
 
+At the time of writing, an example of a fully public config for `.custom_sources.yml`
+would look like this:
+
+```
+gitlab-rails:
+  remote: "https://gitlab.com/gitlab-org/gitlab-ce.git"
+gitlab-rails-ee:
+  remote: "https://gitlab.com/gitlab-org/gitlab-ee.git"
+gitlab-shell:
+  remote: "https://gitlab.com/gitlab-org/gitlab-shell.git"
+gitlab-workhorse:
+  remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+gitlab-pages:
+  remote: "https://gitlab.com/gitlab-org/gitlab-pages"
+config_guess:
+  remote: "git://git.savannah.gnu.org/config.git"
+omnibus:
+  remote: "https://gitlab.com/gitlab-org/omnibus.git"
+```
+
 ### Build
 
 You create a platform-specific package using the `build` command:
