@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.12.4
+
+- No changes
+
 8.12.3
 
 - Updated cacerts.pem to 2016-09-14 version
