@@ -62,6 +62,7 @@ describe 'Redis' do
       context 'when using sentinels' do
         let(:master_name) { 'gitlabredis' }
         let(:master_pass) { 'hugepasswordhere' }
+
         before do
           stub_gitlab_rb(
             redis: {
