@@ -397,7 +397,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
 # gitlab_workhorse['proxy_headers_timeout'] = "1m0s"
 # gitlab_workhorse['api_limit'] = 0 # limit number of concurrent API requests, defaults to 0 which is unlimited
-# gitlab_workhorse['api_queue_limit'] = 0 # limit number of API requests allowed to be queued, defaults to the api_limit
+# gitlab_workhorse['api_queue_limit'] = 0 # limit number of API requests allowed to be queued, defaults to 0 which disables queuing
 # gitlab_workhorse['api_queue_duration'] = "30s" # duration after which we timeout requests if they sit too long in the queue
 # gitlab_workhorse['env'] = {
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
