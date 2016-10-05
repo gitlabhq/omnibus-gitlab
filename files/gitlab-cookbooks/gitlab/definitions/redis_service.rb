@@ -45,12 +45,15 @@ define :redis_service, :socket_group => nil do
   end
 
   redis_config = File.join(redis_dir, "redis.conf")
+  is_slave = node['gitlab'][svc]['master_ip'] &&
+             node['gitlab'][svc]['master_port'] &&
+             !node['gitlab'][svc]['master']
 
   template redis_config do
     source "redis.conf.erb"
     owner redis_user
     mode "0644"
-    variables(node['gitlab'][svc].to_hash)
+    variables(node['gitlab'][svc].to_hash.merge({is_slave: is_slave}))
     notifies :restart, "service[#{svc}]", :immediately if OmnibusHelper.should_notify?(svc)
   end
 
