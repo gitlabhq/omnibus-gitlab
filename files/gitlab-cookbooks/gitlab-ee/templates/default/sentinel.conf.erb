@@ -81,7 +81,7 @@ sentinel auth-pass <%= @redis['master_name'] %> <%= @redis['master_password'] %>
 # Down).
 #
 # Default is 30 seconds.
-sentinel down-after-milliseconds <%= @redis['master_name'] %> <%= @sentinel['down-after-milliseconds'] %>
+sentinel down-after-milliseconds <%= @redis['master_name'] %> <%= @sentinel['down_after_milliseconds'] %>
 
 # sentinel parallel-syncs <master-name> <numslaves>
 #
@@ -114,7 +114,7 @@ sentinel down-after-milliseconds <%= @redis['master_name'] %> <%= @sentinel['dow
 #   the exact parallel-syncs progression as specified.
 #
 # Default is 3 minutes.
-sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover-timeout'] %>
+sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover_timeout'] %>
 
 # SCRIPTS EXECUTION
 #

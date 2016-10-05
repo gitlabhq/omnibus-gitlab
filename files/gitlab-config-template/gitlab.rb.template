@@ -590,9 +590,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sentinel['quorum'] = 1
 
 ## Consider unresponsive server down after x amount of ms.
-# sentinel['down-after-milliseconds'] = 10000
+# sentinel['down_after_milliseconds'] = 10000
 
-# sentinel['failover-timeout'] = 60000
+# sentinel['failover_timeout'] = 60000
 
 #####################
 # GitLab Web server #

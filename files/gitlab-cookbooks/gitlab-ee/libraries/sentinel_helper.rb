@@ -32,7 +32,7 @@ class SentinelHelper
       existing_data['myid']
     else
       myid = generate_myid
-      save_to_file({'myid' => myid})
+      save_to_file({ 'myid' => myid })
 
       myid
     end
