@@ -22,6 +22,15 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
     -proxyHeadersTimeout <%= node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %> \
     <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['api_limit'] %>
+    -apiLimit <%= node['gitlab']['gitlab-workhorse']['api_limit'] %> \
+    <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['api_queue_duration'] %>
+    -apiQueueDuration <%= node['gitlab']['gitlab-workhorse']['api_queue_duration'] %> \
+    <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['api_queue_limit'] %>
+    -apiQueueLimit <%= node['gitlab']['gitlab-workhorse']['api_queue_limit'] %> \
+    <% end %>
     -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.
