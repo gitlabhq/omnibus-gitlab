@@ -52,11 +52,9 @@ class SentinelHelper
   # Save to local JSON file
   def save_to_file(data)
     if File.directory?('/etc/gitlab')
-      File.open(JSON_FILE, 'w') do |f|
-        f.puts(
-          Chef::JSONCompat.to_json_pretty(data)
-        )
-        system("chmod 0600 #{JSON_FILE}")
+      File.open(JSON_FILE, 'w', 0600) do |f|
+        f.puts(Chef::JSONCompat.to_json_pretty(data))
+        f.chmod(0600) # update existing file
       end
     end
   end
