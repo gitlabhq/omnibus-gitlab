@@ -27,19 +27,23 @@ module Redis
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
 
-        if sentinel_daemon_enabled? || is_redis_slave?
-          fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
-          fail "redis 'master_port' is not defined" unless Gitlab['redis']['master_port']
-          fail "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
-        end
-
         # Try to discover gitlab_rails redis connection params
-        # based on redis daemon or sentinels node data
-        if has_sentinels?
-          parse_sentinels!
-        else
+        # based on redis daemon
+        unless has_sentinels?
           parse_redis_daemon!
         end
+      end
+
+      if sentinel_daemon_enabled? || is_redis_slave?
+        fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
+        fail "redis 'master_port' is not defined" unless Gitlab['redis']['master_port']
+        fail "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
+      end
+
+      # Try to discover gitlab_rails redis connection params
+      # based on sentinels node data
+      if has_sentinels?
+        parse_sentinels!
       end
 
       if is_gitlab_rails_redis_tcp?
@@ -87,6 +91,7 @@ module Redis
 
       Gitlab['gitlab_rails']['redis_host'] ||= redis_bind
       Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+      Gitlab['gitlab_rails']['redis_password'] ||= Gitlab['redis']['master_password']
 
       if Gitlab['gitlab_rails']['redis_host'] != redis_bind
         Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance."
@@ -94,6 +99,10 @@ module Redis
 
       if Gitlab['gitlab_rails']['redis_port'] != Gitlab['redis']['port']
         Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance."
+      end
+
+      if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
+        Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance."
       end
     end
 
