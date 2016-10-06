@@ -31,8 +31,9 @@ describe 'secrets' do
     before do
       allow(SecretsHelper).to receive(:system)
       allow(File).to receive(:directory?).with('/etc/gitlab').and_return(true)
-      allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w').and_yield(file).once
+      allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w', 0600).and_yield(file).once
       allow(file).to receive(:puts) { |json| @new_secrets = JSON.parse(json) }
+      allow(file).to receive(:chmod).and_return(true)
     end
 
     context 'when there are no existing secrets' do
