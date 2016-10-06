@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.13.0
 
 - Add support for registry debug addr configuration
+- Add support for configuring workhorse's api limiting
 - Support specifying a post reconfigure script to run in the docker container
 - Updated cacerts.pem to 2016-09-14 version
 

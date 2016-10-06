@@ -25,4 +25,24 @@ describe 'gitlab::gitlab-workhorse' do
       end
     end
   end
+
+  context 'without api rate limiting' do
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiLimit/)
+      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueDuration/)
+      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit/)
+    end
+  end
+
+  context 'with api rate limiting' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { api_limit: 3, api_queue_limit: 6, api_queue_duration: '1m' })
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiLimit 3 \\/)
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueDuration 1m \\/)
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit 6 \\/)
+    end
+  end
 end
