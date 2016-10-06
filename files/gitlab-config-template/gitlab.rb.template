@@ -637,7 +637,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
 
-
+## Nginx status
+# nginx['status']['enable'] = true
+# nginx['status']['listen_addresses'] = ['*']
+# nginx['status']['fqdn'] = node['fqdn']
+# nginx['status']['port'] = 8060
+# nginx['status']['options'] = { # nginx_status location block options
+#   "stub_status" => "on", # Turn on stats
+#   "access_log" => "off", # Disable logs for stats
+#   "allow" => "127.0.0.1", # Only allow access from localhost
+#   "deny" => "all", # Deny access to anyone else
+# }
 
 ##################
 # GitLab Logging #

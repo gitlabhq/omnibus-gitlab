@@ -2,6 +2,7 @@ require 'chef_helper'
 
 describe 'nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:nginx_status_config) { /include \/var\/opt\/gitlab\/nginx\/conf\/nginx-status\.conf;/ }
 
   let(:basic_nginx_headers) do
     {
@@ -87,6 +88,59 @@ describe 'nginx' do
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
+    end
+  end
+
+  context 'when is enabled' do
+    it 'enables nginx status by default' do
+      expect(chef_run.node['gitlab']['nginx']['status']).to eql({
+        "enable" => true,
+        "listen_addresses" => ["*"],
+        "fqdn" => chef_run.node["fqdn"],
+        "port" => 8060,
+        "options" => {
+          "stub_status" => "on",
+          "access_log" => "off",
+          "allow" => "127.0.0.1",
+          "deny" => "all"
+        }
+      })
+      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
+    end
+
+    it "supports overrading nginx status default configuration" do
+      custom_nginx_status_config = {
+        "enable" => true,
+        "listen_addresses" => ["127.0.0.1"],
+        "fqdn" => "dev.example.com",
+        "port" => 9999,
+        "options" => {
+          "stub_status" => "on",
+          "access_log" => "on",
+          "allow" => "127.0.0.1",
+          "deny" => "all"
+        }
+      }
+
+      stub_gitlab_rb("nginx" => {
+        "status" => custom_nginx_status_config
+      })
+
+      chef_run.converge('gitlab::default')
+
+      expect(chef_run.node['gitlab']['nginx']['status']).to eql(custom_nginx_status_config)
+    end
+
+    it "will not load the nginx status config if nginx status is disabled" do
+      stub_gitlab_rb("nginx" => { "status" => { "enable" => false } })
+      expect(chef_run).to_not render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
+    end
+  end
+
+  context 'when is disabled' do
+    it 'should not add the nginx status config' do
+      stub_gitlab_rb("nginx" => { "enable" => false })
+      expect(chef_run).to_not render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
     end
   end
 

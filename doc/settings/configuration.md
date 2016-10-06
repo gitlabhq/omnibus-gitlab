@@ -486,3 +486,7 @@ See [doc/settings/nginx.md](nginx.md).
 ## Inserting custom settings into the NGINX config
 
 See [doc/settings/nginx.md](nginx.md).
+
+## Enable nginx_status
+
+See [doc/settings/nginx.md](nginx.md).

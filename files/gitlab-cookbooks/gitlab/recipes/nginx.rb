@@ -45,6 +45,7 @@ gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
 gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
 gitlab_registry_http_conf = File.join(nginx_conf_dir, "gitlab-registry.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
+nginx_status_conf = File.join(nginx_conf_dir, "nginx-status.conf")
 
 # If the service is enabled, check if we are using internal nginx
 gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
@@ -71,6 +72,8 @@ gitlab_registry_enabled = if node['gitlab']['registry']['enable']
                          false
                        end
 
+nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
+
 # Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
@@ -89,6 +92,12 @@ nginx_vars = nginx_vars.to_hash.merge!({
 nginx_vars = nginx_vars.to_hash.merge!({
                                          :gitlab_registry_http_config => gitlab_registry_enabled ? gitlab_registry_http_conf : nil
                                        })
+
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         :nginx_status_config => nginx_status_enabled ? nginx_status_conf : nil
+                                       })
+
+
 
 if nginx_vars['listen_https'].nil?
   nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
@@ -185,6 +194,21 @@ template gitlab_mattermost_http_conf do
   ))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
   action gitlab_mattermost_enabled ? :create : :delete
+end
+
+template nginx_status_conf do
+  source "nginx-status.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables ({
+    :listen_addresses => nginx_vars['status']['listen_addresses'],
+    :fqdn => nginx_vars['status']['fqdn'],
+    :port => nginx_vars['status']['port'],
+    :options => nginx_vars['status']['options']
+  })
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+  action nginx_status_enabled ? :create : :delete
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']

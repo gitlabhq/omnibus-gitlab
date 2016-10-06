@@ -1,0 +1,11 @@
+server  {
+    <% @listen_addresses.each do |listen_address| %>
+    listen <%= listen_address %>:<%= @port %>;
+    <% end %>
+    server_name <%= @fqdn %>;
+    location /nginx_status {
+    <% @options.each do |key, value| %>
+      <%= key %> <%= value %>;
+    <% end %>
+    }
+}
