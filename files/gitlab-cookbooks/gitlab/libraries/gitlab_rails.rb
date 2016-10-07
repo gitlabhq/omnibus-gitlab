@@ -104,7 +104,7 @@ module GitlabRails
       # append urls to the list but without relative_url
       if Gitlab['gitlab_rails']['gitlab_relative_url']
         paths_without_relative_url = []
-        Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path| 
+        Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path|
           if path.start_with?(Gitlab['gitlab_rails']['gitlab_relative_url'] + '/')
             stripped_path = path.sub(Gitlab['gitlab_rails']['gitlab_relative_url'], '')
             paths_without_relative_url.push(stripped_path)
@@ -117,7 +117,6 @@ module GitlabRails
 
     def disable_gitlab_rails_services
       if Gitlab['gitlab_rails']["enable"] == false
-        Gitlab['redis']["enable"] = false
         Gitlab['unicorn']["enable"] = false
         Gitlab['sidekiq']["enable"] = false
         Gitlab['gitlab_workhorse']["enable"] = false
