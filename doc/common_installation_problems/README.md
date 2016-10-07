@@ -70,13 +70,13 @@ To troubleshoot this error:
     ```
 
 3.  Restart the runit server.  
-    On Ubuntu:
+    Using upstart (Ubuntu <= 14.04):
 
     ```
     $ sudo initctl restart gitlab-runsvdir
     ```
 
-    On CentOS:
+    Using systemd (CentOS, Ubuntu >= 16.04):
 
     ```
     $ systemctl restart gitlab-runsvdir.service
