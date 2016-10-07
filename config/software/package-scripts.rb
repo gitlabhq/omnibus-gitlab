@@ -19,6 +19,7 @@
 name "package-scripts"
 
 license "Apache-2.0"
+license_file "LICENSE"
 
 # Help omnibus-ruby to cache the build product of this software. This is a
 # workaround for the deprecation of `always_build true`. What happens now is
@@ -27,6 +28,9 @@ license "Apache-2.0"
 default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`
 
 build do
+  # Copy in the Omnibus project's LICENSE, since this carries the same license as the source tree.
+  copy File.join(Omnibus::Config.project_root, "LICENSE"),
+       File.join(Omnibus::Config.source_dir, "#{name}/LICENSE")
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
   command "mkdir -p #{install_dir}/.package_util/package-scripts"
 

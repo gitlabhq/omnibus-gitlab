@@ -18,10 +18,15 @@
 name "gitlab-config-template"
 
 license "Apache-2.0"
+license_file "LICENSE"
 
 source :path => File.expand_path("files/gitlab-config-template", Omnibus::Config.project_root)
 
 build do
+  # Copy in the Omnibus project's LICENSE, since this carries the same license as the source tree.
+  copy File.join(Omnibus::Config.project_root, "LICENSE"),
+       File.join(Omnibus::Config.source_dir, "#{name}/LICENSE")
+
   command "mkdir -p #{install_dir}/etc"
   sync "./", "#{install_dir}/etc/"
 end
