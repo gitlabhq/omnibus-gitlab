@@ -85,9 +85,11 @@ describe 'registry recipe' do
   end
   context 'when registry port is specified' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { registry_http_addr: 'localhost:5001' }) }
-    it 'creates registry config.yml template with specified value' do
+    it 'creates registry and rails configs with specified value' do
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/addr: localhost:5001/)
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
+        .with_content(/api_url: http:\/\/localhost:5001/)
     end
   end
 end
