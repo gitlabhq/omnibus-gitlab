@@ -25,6 +25,18 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
   sentinel_dir = sentinel['dir']
   sentinel_log_dir = sentinel['log_directory']
 
+  redis_user = AccountHelper.new(node).redis_user
+
+  account 'Redis user and group' do
+    username redis_user
+    uid node['gitlab']['redis']['uid']
+    ugid redis_user
+    groupname redis_user
+    gid node['gitlab']['redis']['gid']
+    shell  node['gitlab']['redis']['shell']
+    home node['gitlab']['redis']['home']
+    manage node['gitlab']['manage-accounts']['enable']
+  end
 
   case params[:action]
   when :enable
