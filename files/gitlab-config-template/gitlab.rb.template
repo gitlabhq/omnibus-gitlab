@@ -583,7 +583,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## Make sure you configured all redis['master_*'] keys above before continuing.
 
-# sentinel['enable'] = false
+# sentinel['enable'] = true
+# sentinel['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
 # sentinel['port'] = 26379
 
 ## Quorum must reflect the amount of voting sentinels it take to start a failover.
