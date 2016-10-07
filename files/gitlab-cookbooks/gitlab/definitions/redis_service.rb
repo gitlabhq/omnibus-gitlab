@@ -33,6 +33,11 @@ define :redis_service, :socket_group => nil do
     manage node['gitlab']['manage-accounts']['enable']
   end
 
+  group 'Socket group' do
+    append true # we need this so we don't remove members
+    group_name params[:socket_group]
+  end
+
   directory redis_dir do
     owner redis_user
     group params[:socket_group]
