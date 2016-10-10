@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Updated cacerts.pem to 2016-09-14 version
 - Add support for nginx status
 - Enable jemalloc by default 0a7799d2
+- Move database migration log to a persisted location
 
 8.12.4
 
