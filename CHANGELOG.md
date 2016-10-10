@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.12.5
+
+- Update the storage directory helper to check permissions for symlink targets
+
 8.12.4
 
 - No changes
