@@ -26,7 +26,7 @@ class StorageDirectoryHelper
   end
 
   def writable?(path)
-    do_shell_out("test -w #{path}", @target_owner).exitstatus == 0
+    do_shell_out("test -w #{path} -a -w $(readlink -f #{path})", @target_owner).exitstatus == 0
   end
 
   def run_command(cmd, use_euid: false, throw_error: true)
@@ -60,13 +60,14 @@ class StorageDirectoryHelper
     # Use stat to return the owner. The root user may not have execute permissions
     # to the directory, but the target_owner will in the success case, so always
     # use the euid to run the command
-    run_command("stat --printf='%U' #{path}", use_euid: true).stdout
+    run_command("stat --printf='%U' $(readlink -f #{path})", use_euid: true).stdout
   end
 
   def run_chown(path)
     # Chown will not work if it's in a root_squash directory, so the only workarounds
     # will be for the admin to manually chown on the nfs server, or use
     # 'no_root_squash' mode in their exports and re-run reconfigure
+    path = File.realpath(path)
     FileUtils.chown(@target_owner, @target_group, path)
   rescue Errno::EPERM => e
     raise(
@@ -103,6 +104,6 @@ class StorageDirectoryHelper
       expect_string << " #{@target_mode}"
     end
 
-    "test -d \"#{path}\" -a \"$(stat --printf='#{format_string}' #{path})\" = '#{expect_string}'"
+    "test -d \"#{path}\" -a \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" = '#{expect_string}'"
   end
 end
