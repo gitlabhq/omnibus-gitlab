@@ -19,16 +19,13 @@
 name "gitlab-ctl"
 
 license "Apache-2.0"
-license_file "LICENSE"
+license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
 
 dependency "omnibus-ctl"
 
 source :path => File.expand_path("files/gitlab-ctl-commands", Omnibus::Config.project_root)
 
 build do
-  # Copy in the Omnibus project's LICENSE, since this carries the same license as the source tree.
-  copy File.join(Omnibus::Config.project_root, "LICENSE"),
-       File.join(Omnibus::Config.source_dir, "#{name}/LICENSE")
   block do
     open("#{install_dir}/bin/gitlab-ctl", "w") do |file|
       file.print <<-EOH
