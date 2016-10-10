@@ -74,6 +74,8 @@ describe 'registry recipe' do
         .with_content(/version: 0.1/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/realm: \/jwt\/auth/)
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(/addr: localhost:5000/)
     end
 
     it 'creates a default VERSION file' do
@@ -82,6 +84,12 @@ describe 'registry recipe' do
         group: nil
       )
     end
+
+    it 'creates gitlab-rails config with default values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
+        .with_content(/api_url: http:\/\/localhost:5000/)
+    end
+
   end
   context 'when registry port is specified' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { registry_http_addr: 'localhost:5001' }) }
