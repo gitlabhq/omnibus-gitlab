@@ -67,7 +67,7 @@ default['gitlab']['gitlab-rails']['env'] = {
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
   'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages"
 }
-default['gitlab']['gitlab-rails']['enable_jemalloc'] = false
+default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
