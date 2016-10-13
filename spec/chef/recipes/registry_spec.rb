@@ -76,6 +76,8 @@ describe 'registry recipe' do
         .with_content(/realm: \/jwt\/auth/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/addr: localhost:5000/)
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
     end
 
     it 'creates a default VERSION file' do

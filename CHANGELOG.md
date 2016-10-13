@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add support for registry debug addr configuration
 - Add support for configuring workhorse's api limiting
+- Fixed a bug with disabling registry storage deletion
 - Support specifying a post reconfigure script to run in the docker container
 - Updated cacerts.pem to 2016-09-14 version
 - Add support for nginx status
