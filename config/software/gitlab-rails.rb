@@ -71,8 +71,7 @@ build do
 
   # This patch makes the github-markup gem use and be compatible with Python3
   # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
-  patch source: 'github-markup_gem-markups.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/markups.rb"
-  patch source: 'github-markup_gem-rest2html.patch', target: "#{gems_directory}/github-markup-1.4.0/lib/github/commands/rest2html"
+  patch source: 'gitlab-markup_gem-markups.patch', target: "#{gems_directory}/gitlab-markup-1.5.0/lib/github/markups.rb"
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
