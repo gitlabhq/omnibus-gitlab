@@ -37,6 +37,11 @@ module GitlabMattermost
 
       Gitlab['mattermost']['host'] = uri.host
 
+      gitlab_url = Gitlab['external_url'].chomp("/")
+      Gitlab['mattermost']['gitlab_auth_endpoint'] = "#{gitlab_url}/oauth/authorize"
+      Gitlab['mattermost']['gitlab_token_endpoint'] = "#{gitlab_url}/oauth/token"
+      Gitlab['mattermost']['gitlab_user_api_endpoint'] = "#{gitlab_url}/api/v3/user"
+
       case uri.scheme
       when "http"
         Gitlab['mattermost']['service_use_ssl'] = false
