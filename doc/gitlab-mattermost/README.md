@@ -267,3 +267,11 @@ mattermost['gid'] = 1234
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+### OAuth2 Sequence Diagram
+
+The following image is a sequence diagram for how GitLab works as an OAuth2
+provider for Mattermost. It may be useful to use this to troubleshoot errors
+in getting the integration to work:
+
+![sequence diagram](img/gitlab-mattermost.png)
