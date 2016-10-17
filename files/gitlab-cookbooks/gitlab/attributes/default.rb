@@ -961,3 +961,18 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
   "X-Forwarded-Proto" => "$scheme"
 }
+
+####
+# Prometheus Node Exporter
+####
+default['gitlab']['node-exporter']['enable'] = true
+default['gitlab']['node-exporter']['username'] = "node-exporter"
+default['gitlab']['node-exporter']['uid'] = nil
+default['gitlab']['node-exporter']['gid'] = nil
+default['gitlab']['node-exporter']['shell'] = "/bin/sh"
+default['gitlab']['node-exporter']['home'] = "/var/opt/gitlab/node-exporter"
+default['gitlab']['node-exporter']['log_directory'] = "/var/log/gitlab/node-exporter"
+default['gitlab']['node-exporter']['flags'] = {
+   'collector.textfile.directory' => node['gitlab']['node-exporter']['home'] + '/textfile_collector'
+}
+

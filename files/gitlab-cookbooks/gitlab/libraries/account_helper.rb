@@ -86,6 +86,14 @@ class AccountHelper
     node['gitlab']['registry']['group']
   end
 
+  def node_exporter_user
+    node['gitlab']['node-exporter']['username']
+  end
+
+  def node_exporter_group
+    node['gitlab']['node-exporter']['group']
+  end
+
   def users
     %W(
         #{gitlab_user}
@@ -96,6 +104,7 @@ class AccountHelper
         #{ci_redis_user}
         #{mattermost_user}
         #{registry_user}
+        #{node_exporter_user}
       )
   end
 
@@ -109,6 +118,7 @@ class AccountHelper
         #{ci_redis_group}
         #{mattermost_group}
         #{registry_group}
+        #{node_exporter_group}
       )
   end
 end

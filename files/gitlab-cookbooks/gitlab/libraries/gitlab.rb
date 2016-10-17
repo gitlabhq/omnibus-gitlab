@@ -80,6 +80,7 @@ module Gitlab
   mattermost Mash.new
   gitlab_pages Mash.new
   registry Mash.new
+  node_exporter Mash.new
   sentinel Mash.new
   node nil
   external_url nil
@@ -197,6 +198,7 @@ module Gitlab
         "registry",
         "sentinel",
         "gitaly"
+        "node_exporter"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
