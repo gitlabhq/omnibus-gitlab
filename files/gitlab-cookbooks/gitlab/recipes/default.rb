@@ -125,7 +125,8 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   "mattermost",
   "gitlab-pages",
   "registry",
-  "node-exporter"
+  "node-exporter",
+  "prometheus"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"

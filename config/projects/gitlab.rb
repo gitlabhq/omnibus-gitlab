@@ -115,6 +115,7 @@ dependency "gitlab-scripts"
 dependency "gitlab-config-template"
 dependency "mattermost"
 dependency "node-exporter"
+dependency "prometheus"
 
 # version manifest file
 dependency "version-manifest"

@@ -93,6 +93,13 @@ class AccountHelper
   def node_exporter_group
     node['gitlab']['node-exporter']['group']
   end
+  def prometheus_user
+    node['gitlab']['prometheus']['username']
+  end
+
+  def prometheus_group
+    node['gitlab']['prometheus']['group']
+  end
 
   def users
     %W(
@@ -105,6 +112,7 @@ class AccountHelper
         #{mattermost_user}
         #{registry_user}
         #{node_exporter_user}
+        #{prometheus_user}
       )
   end
 
@@ -119,6 +127,7 @@ class AccountHelper
         #{mattermost_group}
         #{registry_group}
         #{node_exporter_group}
+        #{prometheus_group}
       )
   end
 end
