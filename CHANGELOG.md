@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.12.7
+
+- Use forked gitlab-markup gem (forked from github-markup)
+
+8.12.6
+
+- No changes
+
 8.12.5
 
 - Update the storage directory helper to check permissions for symlink targets
