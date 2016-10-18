@@ -19,6 +19,7 @@
 name "gitlab-cookbooks"
 
 license "Apache-2.0"
+license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
 
 source :path => File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)
 

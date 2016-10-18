@@ -13,6 +13,14 @@ omnibus-gitlab repository.
 - Enable jemalloc by default 0a7799d2
 - Move database migration log to a persisted location
 
+8.12.7
+
+- Use forked gitlab-markup gem (forked from github-markup)
+
+8.12.6
+
+- No changes
+
 8.12.5
 
 - Update the storage directory helper to check permissions for symlink targets
