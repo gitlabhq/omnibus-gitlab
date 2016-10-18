@@ -29,8 +29,8 @@ class StorageDirectoryHelper
     do_shell_out("test -w #{path} -a -w $(readlink -f #{path})", @target_owner).exitstatus == 0
   end
 
-  def run_command(cmd, input: nil, use_euid: false, throw_error: true)
-    run_shell = Mixlib::ShellOut.new(cmd, input: input, user: (@target_owner if use_euid),  group: (@target_group if use_euid))
+  def run_command(cmd, use_euid: false, throw_error: true)
+    run_shell = Mixlib::ShellOut.new(cmd, user: (@target_owner if use_euid),  group: (@target_group if use_euid))
     run_shell.run_command
     run_shell.error! if throw_error
     run_shell
@@ -88,7 +88,7 @@ class StorageDirectoryHelper
   end
 
   def validate(path, throw_error: false)
-    commands      = ["[[ -d \"#{path}\" ]]"]
+    commands      = ["[ -d \"#{path}\" ]"]
     commands_info = ["Failed expecting \"#{path}\" to be a directory."]
 
     format_string = '%U'
@@ -99,13 +99,11 @@ class StorageDirectoryHelper
       expect_string << ":#{@target_group}"
     end
 
-    commands      << "[[ \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" = '#{expect_string}' ]]"
+    commands      << "[ \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" = '#{expect_string}' ]"
     commands_info << "Failed asserting that ownership of \"#{path}\" was #{expect_string}"
 
     if @target_mode
-      format_string = '%04a'
-      expect_string = "^.{#{4 - @target_mode.length}}#{@target_mode}$"
-      commands      << "[[ \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" =~ #{expect_string} ]]"
+      commands      << "[ \"$(stat --printf='%04a' $(readlink -f #{path}) | grep -Po '.{#{@target_mode.length}}$')\" = '#{@target_mode}' ]"
       commands_info << "Failed asserting that mode permissions on \"#{path}\" is #{@target_mode}"
     end
 
@@ -122,7 +120,7 @@ class StorageDirectoryHelper
     # Test that directory is in expected state. The root user may not have
     # execute permissions to the directory, but the target_owner will in the
     # success case, so always use the euid to run the command, and use a custom error message
-    cmd = run_command('bash', input: "set -x && #{cmd}", use_euid: true, throw_error: false)
+    cmd = run_command("set -x && #{cmd}", use_euid: true, throw_error: false)
     cmd.invalid!(error_message) if cmd.exitstatus != 0 && throw_error
     cmd.exitstatus == 0
   end
