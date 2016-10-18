@@ -17,6 +17,11 @@ else
     echo "Checking licenses via the contents of '$install_dir/LICENSE'"
 fi
 
+if [ ! -f "$install_dir/LICENSE" ]; then
+    echo "Unable to open '$install_dir/LICENSE'!"
+    exit 1;
+fi
+
 # grep out each piece of software, version, licensefrom $install_dir/LICENSE
 declare -A SOFTWARE
 declare -A LICENSE
