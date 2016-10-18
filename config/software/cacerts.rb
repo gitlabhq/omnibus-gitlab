@@ -16,6 +16,9 @@
 
 name "cacerts"
 
+license "MPL-2.0"
+license_file "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"
+
 # Date of the file is in a comment at the start, or in the changelog
 default_version "2016.09.14"
 

@@ -123,6 +123,8 @@ container's `gitlab.rb` file. That way you can easily configure GitLab's
 external URL, make any database configuration or any other option from the
 [Omnibus GitLab template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
+_Note: The settings contained in `GITLAB_OMNIBUS_CONFIG` will not be written to the `gitlab.rb` configuration file, they're evaluated on load._
+
 Here's an example that sets the external URL and enables LFS while starting
 the container:
 

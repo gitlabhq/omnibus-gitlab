@@ -25,7 +25,7 @@ dependency "zlib"
 dependency "openssl"
 dependency "bzip2"
 
-license "PSFL"
+license "Python-2.0"
 license_file "LICENSE"
 
 source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",

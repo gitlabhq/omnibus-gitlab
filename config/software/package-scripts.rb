@@ -19,6 +19,7 @@
 name "package-scripts"
 
 license "Apache-2.0"
+license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
 
 # Help omnibus-ruby to cache the build product of this software. This is a
 # workaround for the deprecation of `always_build true`. What happens now is

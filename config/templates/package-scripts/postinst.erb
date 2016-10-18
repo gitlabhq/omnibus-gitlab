@@ -38,9 +38,27 @@ gitlab_ascii()
 
 print_banner()
 {
+    # Check if we have colors enabled
+    tput=$(which tput)
+    if [ -n "$tput" ]; then
+      ncolors=$($tput colors)
+      if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+        RED="$(tput setaf 1)"
+        YELLOW="$(tput setaf 3)"
+        NOCOLOR="$(tput sgr0)"
+      else
+        RED=""
+        YELLOW=""
+        NOCOLOR=""
+      fi
+    fi
+
     echo ""
-    echo "\033[0;33m$(tanuki_ascii)\033[0m"
-    echo "\033[0;31m$(gitlab_ascii)\033[0m"
+    echo "$YELLOW"
+    echo "$(tanuki_ascii)"
+    echo "$RED"
+    echo "$(gitlab_ascii)"
+    echo "$NOCOLOR"
     echo ""
 }
 
