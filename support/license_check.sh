@@ -8,6 +8,8 @@
 GOODLIST=('^MIT' '^LGPL' '^Apache' '^Ruby' '^BSD-[23]{1}' '^ISC' )
 BADLIST=('^GPL' '^AGPL' )
 
+echo "###### BEGIN LICENSE CHECK ######"
+
 # fetch install_dir from config/projects/gitlab.rb and verify the output.
 install_dir="$(grep -B0 -A0 -C1 -e '^install_dir' config/projects/gitlab.rb | cut -d'"' -f2)"
 if [ ! -d $install_dir ]; then
@@ -78,3 +80,5 @@ for x in `seq 0 "$(( ${#SOFTWARE[*]} - 1 ))"`; do
     # if we've made it here, we're unsure of the state of the reported license
     echo "Unknown? ${SOFTWARE[$x]} uses ${LICENSE[$x]}"
 done
+
+echo "###### END LICENSE CHECK ######"
