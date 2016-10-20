@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.0
+
+- Made IPv6 a default setting for NGINX
+
 8.13.0
 
 - Add support for registry debug addr configuration
