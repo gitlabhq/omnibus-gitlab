@@ -49,7 +49,11 @@ class StorageDirectoryHelper
 
     # Set the correct mode on the directory, run using the euid if target_owner
     # has write access, otherwise use root
-    run_command("chmod #{@target_mode} #{path}", use_euid: writable?(path)) if @target_mode
+    if @target_mode
+      # Prepend a 0 to force an octal set when 4 bits have been passed in. eg: 2755 or 0700
+      mode = @target_mode.length == 4 ? "0#{@target_mode}" : @target_mode
+      run_command("chmod #{mode} #{path}", use_euid: writable?(path))
+    end
 
     # Set the group on the directory, run using the euid if target_owner has
     # write access, otherwise use root
@@ -84,13 +88,9 @@ class StorageDirectoryHelper
   end
 
   def validate(path, throw_error: false)
-    # Test that directory is in expected state. The root user may not have
-    # execute permissions to the directory, but the target_owner will in the
-    # success case, so always use the euid to run the command
-    run_command(test_stat_cmd(path), use_euid: true, throw_error: throw_error).exitstatus == 0
-  end
+    commands      = ["[ -d \"#{path}\" ]"]
+    commands_info = ["Failed expecting \"#{path}\" to be a directory."]
 
-  def test_stat_cmd(path)
     format_string = '%U'
     expect_string = "#{@target_owner}"
 
@@ -99,11 +99,29 @@ class StorageDirectoryHelper
       expect_string << ":#{@target_group}"
     end
 
+    commands      << "[ \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" = '#{expect_string}' ]"
+    commands_info << "Failed asserting that ownership of \"#{path}\" was #{expect_string}"
+
     if @target_mode
-      format_string << ' %04a'
-      expect_string << " #{@target_mode}"
+      commands      << "[ \"$(stat --printf='%04a' $(readlink -f #{path}) | grep -Po '.{#{@target_mode.length}}$')\" = '#{@target_mode}' ]"
+      commands_info << "Failed asserting that mode permissions on \"#{path}\" is #{@target_mode}"
     end
 
-    "test -d \"#{path}\" -a \"$(stat --printf='#{format_string}' $(readlink -f #{path}))\" = '#{expect_string}'"
+    result = true
+    commands.each_index do |index|
+      result = result && validate_command(commands[index], throw_error: throw_error, error_message: commands_info[index])
+      break unless result
+    end
+
+    result
+  end
+
+  def validate_command(cmd, throw_error: false, error_message: nil)
+    # Test that directory is in expected state. The root user may not have
+    # execute permissions to the directory, but the target_owner will in the
+    # success case, so always use the euid to run the command, and use a custom error message
+    cmd = run_command("set -x && #{cmd}", use_euid: true, throw_error: false)
+    cmd.invalid!(error_message) if cmd.exitstatus != 0 && throw_error
+    cmd.exitstatus == 0
   end
 end
