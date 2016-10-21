@@ -7,17 +7,7 @@ exec 2>&1
 exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
   -U <%= @options[:user] %> -u <%= @options[:user] %> \
   /opt/gitlab/embedded/bin/bundle exec sidekiq \
-    -q post_receive \
-    -q mailers \
-    -q archive_repo \
-    -q system_hook \
-    -q project_web_hook \
-    -q gitlab_shell \
-    -q incoming_email \
-    -q common \
-    -q pages \
-    -q elasticsearch \
-    -q default \
+    -C /opt/gitlab/embedded/service/<%= @options[:rails_app] %>/config/sidekiq_queues.yml \
     -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
     -t <%= @options[:shutdown_timeout] %> \
