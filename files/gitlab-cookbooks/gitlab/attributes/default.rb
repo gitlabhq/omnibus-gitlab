@@ -500,7 +500,7 @@ default['gitlab']['registry']['dir'] = "/var/opt/gitlab/registry"
 default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['gitlab']['registry']['log_level'] = "info"
 default['gitlab']['registry']['rootcertbundle'] = nil
-default['gitlab']['registry']['storage_delete_enabled'] = true
+default['gitlab']['registry']['storage_delete_enabled'] = nil
 default['gitlab']['registry']['storage'] = nil
 default['gitlab']['registry']['debug_addr'] = nil
 

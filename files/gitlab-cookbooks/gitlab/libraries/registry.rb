@@ -71,7 +71,7 @@ module Registry
       return unless Gitlab['registry']['enable']
 
       Gitlab['gitlab_rails']['registry_path'] = "#{Gitlab['gitlab_rails']['shared_path']}/registry" if Gitlab['gitlab_rails']['registry_path'].nil?
-      Gitlab['registry']['storage_delete_enabled'] ||= Gitlab['node']['gitlab']['registry']['storage_delete_enabled']
+      Gitlab['registry']['storage_delete_enabled'] = true if Gitlab['registry']['storage_delete_enabled'].nil?
 
       Gitlab['registry']['storage'] ||= {
         'filesystem' => { 'rootdirectory' => Gitlab['gitlab_rails']['registry_path'] }
