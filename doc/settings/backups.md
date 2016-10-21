@@ -44,7 +44,7 @@ about the cron table. Note:
 
 - The empty line after the command
 - The escaped percent character:  \%
- 
+
 You can extract the .tar file as follows.
 
 ```shell
@@ -71,7 +71,7 @@ in the SQL database:
 - GitLab CI 'secure variables'
 
 If you separate your configuration backup from your application data backup,
-you reduce the chance that your encrypted application date will be 
+you reduce the chance that your encrypted application date will be
 lost/leaked/stolen together with the keys needed to decrypt it.
 
 ### Creating an application backup
@@ -88,6 +88,22 @@ reconfigure`:
 ```ruby
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
+
+### Creating backups for GitLab instances in Docker containers
+
+Backups can scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
+
+Backup application:
+```shell
+docker exec -t <your container name> gitlab-rake gitlab:backup:create
+```
+Backup configuration and secrets:
+```shell
+docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
+```
+
+*Note* that you need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
+in order to have these backups persisted outside the cotnainer
 
 ### Restoring an application backup
 
