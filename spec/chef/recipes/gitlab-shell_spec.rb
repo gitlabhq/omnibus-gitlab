@@ -31,6 +31,15 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'with default settings' do
+    it 'populates the default values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/git_trace_log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell-git-trace.log"/)
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell.log"/)
+    end
+  end
+
   context 'when using the default auth_file location' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
@@ -44,7 +53,7 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
-  context 'when using a different location' do
+  context 'when using a different location for auth_file' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
@@ -81,6 +90,7 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
     end
   end
+
   context 'with redis settings' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
