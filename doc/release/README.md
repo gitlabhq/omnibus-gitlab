@@ -17,7 +17,7 @@ Both types are built on the same infrastructure.
 ## Infrastructure
 
 Each package is built on the platform it is intended for (CentOS 6 packages are
-built on CentOS6 servers, Debian 8 packages on Debian 8 servers and so on).
+built on CentOS 6 servers, Debian 8 packages on Debian 8 servers and so on).
 The number of build servers varies but there is always at least one build
 server per platform.
 

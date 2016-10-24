@@ -58,7 +58,7 @@ To update to a newer GitLab version, all you have to do is:
 sudo apt-get update
 sudo apt-get install gitlab-ce
 
-# Centos/RHEL
+# CentOS/RHEL
 sudo yum install gitlab-ce
 ```
 
