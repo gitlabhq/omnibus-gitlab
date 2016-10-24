@@ -96,7 +96,7 @@ describe 'nginx' do
       expect(chef_run.node['gitlab']['nginx']['status']).to eql({
         "enable" => true,
         "listen_addresses" => ["*"],
-        "fqdn" => chef_run.node["fqdn"],
+        "fqdn" => "localhost",
         "port" => 8060,
         "options" => {
           "stub_status" => "on",
