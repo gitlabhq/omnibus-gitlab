@@ -100,6 +100,7 @@ describe 'nginx' do
         "port" => 8060,
         "options" => {
           "stub_status" => "on",
+          "server_tokens" => "off",
           "access_log" => "off",
           "allow" => "127.0.0.1",
           "deny" => "all"
@@ -116,6 +117,7 @@ describe 'nginx' do
         "port" => 9999,
         "options" => {
           "stub_status" => "on",
+          "server_tokens" => "off",
           "access_log" => "on",
           "allow" => "127.0.0.1",
           "deny" => "all"

@@ -642,15 +642,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['server_names_hash_bucket_size'] = 64
 
 ## Nginx status
-# nginx['status']['enable'] = true
-# nginx['status']['listen_addresses'] = ['*']
-# nginx['status']['fqdn'] = node['fqdn']
-# nginx['status']['port'] = 8060
-# nginx['status']['options'] = { # nginx_status location block options
-#   "stub_status" => "on", # Turn on stats
-#   "access_log" => "off", # Disable logs for stats
-#   "allow" => "127.0.0.1", # Only allow access from localhost
-#   "deny" => "all", # Deny access to anyone else
+# nginx['status'] = {
+#  "listen_addresses" => ["127.0.0.1"],
+#  "fqdn" => "dev.example.com",
+#  "port" => 9999,
+#  "options" => {
+#    "stub_status" => "on", # Turn on stats
+#    "server_tokens" => "off", # Don't show the version of NGINX
+#    "access_log" => "on", # Disable logs for stats
+#    "allow" => "127.0.0.1", # Only allow access from localhost
+#    "deny" => "all" # Deny access to anyone else
+#  }
 # }
 
 ##################
