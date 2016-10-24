@@ -159,14 +159,18 @@ For help and support around your GitLab Mattermost deployment please see:
 
 ## Upgrading GitLab Mattermost
 
-Note: When upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1. Please see below for special instructions.
+Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).  
+  
+| GitLab Version | Mattermost Version |
+|----------------|--------------------|
+| 8.9            | v3.1.0             |
+| 8.10           | v3.2.0             |
+| 8.11           | v3.3.0             |
+| 8.12           | v3.4.0             |  
+  
+It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12. 
 
-GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided:
-
-1. No major build versions are skipped
-   (e.g. upgrading GitLab omnibus from 8.2.x to 8.3.x works, but upgrading from 8.2.x to 8.4.x will not)
-2. Mattermost configuration settings have not been changed outside of GitLab
-   That means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
+GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided Mattermost configuration settings have not been changed outside of GitLab. This means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
 
 If this is the case, upgrading GitLab using omnibus and running `gitlab-ctl reconfigure` should upgrade GitLab Mattermost to the next version.
 
@@ -175,6 +179,17 @@ If this is not the case, there are two options:
 1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`
    This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
 2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below).
+
+**Special Considerations**
+
+Consider these notes when upgrading GitLab Mattermost:
+
+1. If public links are enabled, upgrading to Mattermost v3.4 will invalidate existing public links due to a security upgrade allowing admins to invalidate links by resetting a public link salt from the System Console.
+2. Upgrading from v3.2 to v3.4 will be incomplete due to a migration code not being run properly. You can either:
+    - Upgrade from v3.2 to v3.3 and then from v3.3 to v3.4, or
+    - Upgrade from v3.2 to v3.4, then run the following SQL query to make Mattermost rerun upgrade steps that were not properly completed: `UPDATE Systems SET Value = '3.1.0' WHERE Name = 'Version';`
+3. RHEL6 and Ubuntu installations must verify the line `limit nofile 50000 50000` is included in `/etc/init/mattermost.conf` file. See the [installation guide](https://docs.mattermost.com/guides/administrator.html#install-guides) for your operating system for more details.
+4. RHEL7 and Debian installations must verify the line `LimitNOFILE=49152` is included in the `/etc/systemd/system/mattermost.service` file. See the [installation guide](https://docs.mattermost.com/guides/administrator.html#install-guides) for your operating system for more details.
 
 
 ## Upgrading GitLab Mattermost from versions prior to 8.9
