@@ -94,16 +94,20 @@ gitlab_rails['backup_path'] = '/mnt/backups'
 Backups can scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
 
 Backup application:
+
 ```shell
 docker exec -t <your container name> gitlab-rake gitlab:backup:create
 ```
+
 Backup configuration and secrets:
+
 ```shell
 docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
 ```
 
-*Note* that you need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
-in order to have these backups persisted outside the cotnainer
+>**Note:**
+You need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
+in order to have these backups persisted outside the container.
 
 ### Restoring an application backup
 
