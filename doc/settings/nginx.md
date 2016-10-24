@@ -538,24 +538,28 @@ Reading: 0 Writing: 1 Waiting: 0
 
 ## Configuration
 
-`/etc/gitlab/gitlab.rb`
+Edit `/etc/gitlab/gitlab.rb`:
 
 ```Ruby
-nginx['status']['listen_addresses'] = ['*']
-nginx['status']['fqdn'] = node['fqdn']
-nginx['status']['port'] = 8060
-nginx['status']['options'] = { # nginx_status location block options
+nginx['status'] = {
+  "listen_addresses" => ["127.0.0.1"],
+  "fqdn" => "dev.example.com",
+  "port" => 9999,
+  "options" => {
     "stub_status" => "on", # Turn on stats
-    "access_log" => "off", # Disable logs for stats
+    "access_log" => "on", # Disable logs for stats
     "allow" => "127.0.0.1", # Only allow access from localhost
-    "deny" => "all", # Deny access to anyone else
+    "deny" => "all" # Deny access to anyone else
+  }
 }
 ```
 
 If you don't find this service useful for your current infrastructure you can disable it with:
 
 ```ruby
-nginx['status']['enable'] = false
+nginx['status'] = {
+  'enable' => false
+}
 ```
 
 Make sure you run sudo gitlab-ctl reconfigure for the changes to take effect.
