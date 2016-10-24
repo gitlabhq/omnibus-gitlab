@@ -16,7 +16,7 @@ declare -A OS
 
 OS[0]="${PACKAGECLOUD_OS}"
 if [ "${PACKAGECLOUD_OS}" == "el" ]; then
-    OS[1]="sl"
+    OS[1]="scientific"
     OS[2]="ol"
 fi
 
