@@ -643,6 +643,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## Nginx status
 # nginx['status'] = {
+#  "enable" => true,
 #  "listen_addresses" => ["127.0.0.1"],
 #  "fqdn" => "dev.example.com",
 #  "port" => 9999,
