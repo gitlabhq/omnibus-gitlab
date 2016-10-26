@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.0
+
+
+8.13.1
+
+- Update docs for nginx status, fix the default server for status config
+
 8.13.0
 
 - Add support for registry debug addr configuration
