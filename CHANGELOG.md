@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 8.14.0
 
+- Switch the redis user's shell to /bin/false
 
 8.13.1
 
