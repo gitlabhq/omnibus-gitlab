@@ -133,6 +133,21 @@ You can track the progress of package building on [dev.gitlab.org].
 They are pushed to [packagecloud repositories] automatically after
 successful builds.
 
+### Updating cloud images
+
+The cloud image release process is documented here: [https://about.gitlab.com/cloud-images/.](https://about.gitlab.com/cloud-images/)
+
+New image are released when:
+
+1. There is a new monthly release of GitLab
+2. A security vulnerability has been fixed in a patch release
+3. There is a patch that fixes a critical issue impacting the image
+
+New images should be released within 3 business days of the package release.
+
+Image specific release documentation:
+ - OpenShift: [doc/release/openshift.md.](doc/release/openshift.md)
+
 [dev.gitlab.org]: https://dev.gitlab.org/gitlab/omnibus-gitlab/builds
 [release-tools project]: https://gitlab.com/gitlab-org/release-tools/tree/master
 [gitlab runner]: https://gitlab.com/gitlab-org/gitlab-ci-multi-runner

@@ -45,3 +45,7 @@ sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/c
 
 Now you can do the changes in the omnibus-gitlab repository, try the changes
 right away and contribute back to omnibus-gitlab.
+
+## OpenShift Development Setup
+
+See See [doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
