@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Switch the redis user's shell to /bin/false
 - NGINX listen on IPv6 by default (George Gooden)
+- Update Redis to 3.2.5 (Takuya Noguchi)
 
 8.13.2
 - Move mail_room queue from incoming_email to email_receiver
