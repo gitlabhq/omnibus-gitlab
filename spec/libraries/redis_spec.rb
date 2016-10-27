@@ -16,10 +16,8 @@ describe 'Redis' do
 
   context '.parse_redis_settings' do
     context 'when no customization is made' do
-      before { Gitlab[:node] = node }
-
       it 'keeps unixsocket' do
-        expect(Gitlab['gitlab_rails']['unixsocket']).not_to eq false
+        expect(node['gitlab']['gitlab-rails']['unixsocket']).not_to eq false
 
         subject.parse_redis_settings
       end
@@ -37,23 +35,22 @@ describe 'Redis' do
               port: redis_port
             }
           )
-          Gitlab[:node] = node
         end
 
         it 'disables unix socket when redis tcp params are defined' do
-          expect(Gitlab['redis']['unixsocket']).to eq false
+          expect(node['gitlab']['redis']['unixsocket']).to eq false
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_host to match bind value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_host']).to eq redis_host
+          expect(node['gitlab']['gitlab-rails']['redis_host']).to eq redis_host
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_port to match port value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_port']).to eq redis_port
+          expect(node['gitlab']['gitlab-rails']['redis_port']).to eq redis_port
 
           subject.parse_redis_settings
         end
@@ -77,29 +74,28 @@ describe 'Redis' do
               ]
             }
           )
-          Gitlab[:node] = node
         end
 
         it 'disables unix socket when sentinel params are defined' do
-          expect(Gitlab['redis']['unixsocket']).to eq false
+          expect(node['gitlab']['redis']['unixsocket']).to eq false
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_host to match bind value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_host']).to eq master_name
+          expect(node['gitlab']['gitlab-rails']['redis_host']).to eq master_name
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_port to match default port value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_port']).to eq 6379
+          expect(node['gitlab']['gitlab-rails']['redis_port']).to eq 6379
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_password to match master_password value from redis' do
-          expect(Gitlab['gitlab_rails']['redis_password']).to eq master_pass
+          expect(node['gitlab']['gitlab-rails']['redis_password']).to eq master_pass
         end
       end
     end
@@ -113,15 +109,14 @@ describe 'Redis' do
             redis_host: redis_host
           }
         )
-        Gitlab[:node] = node
       end
 
       it 'disables unix socket when gitlab-rails tcp params are defined' do
-        expect(Gitlab['gitlab_rails']['redis_socket']).to eq false
+        expect(node['gitlab']['gitlab-rails']['redis_socket']).to eq false
       end
 
       it 'defaults port to 6379' do
-        expect(Gitlab['gitlab_rails']['redis_port']).to eq 6379
+        expect(node['gitlab']['gitlab-rails']['redis_port']).to eq 6379
       end
     end
   end

@@ -64,7 +64,7 @@ module Redis
     # an IP or a valid host. We also need to ignore port and make sure we use
     # correct password
     def parse_sentinels!
-      master_name = Gitlab['redis']['master_name'] || node['redis']['master_name']
+      master_name = Gitlab['redis']['master_name'] || node['gitlab']['redis']['master_name']
 
       if Gitlab['gitlab_rails']['redis_host'] != master_name
         Gitlab['gitlab_rails']['redis_host'] = master_name
@@ -87,7 +87,7 @@ module Redis
 
     def parse_redis_daemon!
       return unless redis_managed?
-      redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
+      redis_bind = Gitlab['redis']['bind'] || node['gitlab']['redis']['bind']
 
       Gitlab['gitlab_rails']['redis_host'] ||= redis_bind
       Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
@@ -107,7 +107,7 @@ module Redis
     end
 
     def node
-      Gitlab[:node]['gitlab']
+      Gitlab[:node]
     end
 
     def is_redis_tcp?
@@ -131,7 +131,7 @@ module Redis
     end
 
     def redis_managed?
-      Gitlab['redis']['enable'].nil? ? node['redis']['enable'] : Gitlab['redis']['enable']
+      Gitlab['redis']['enable'].nil? ? node['gitlab']['redis']['enable'] : Gitlab['redis']['enable']
     end
   end
 end
