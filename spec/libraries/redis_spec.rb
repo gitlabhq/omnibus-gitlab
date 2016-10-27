@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'Redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
   let(:node) { chef_run.node }
   subject { ::Redis }
   before { allow(Gitlab).to receive(:[]).and_call_original }

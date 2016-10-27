@@ -23,11 +23,7 @@ require 'openssl'
 install_dir = node['package']['install-dir']
 ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
-Gitlab[:node] = node
-if File.exists?("/etc/gitlab/gitlab.rb")
-  Gitlab.from_file("/etc/gitlab/gitlab.rb")
-end
-node.consume_attributes(Gitlab.generate_config(node['fqdn']))
+include_recipe 'gitlab::config'
 
 directory "/etc/gitlab" do
   owner "root"
