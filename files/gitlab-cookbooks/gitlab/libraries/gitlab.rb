@@ -92,7 +92,7 @@ module Gitlab
   redis_master_role Mash.new
   redis_slave_role Mash.new
 
-  ROLES = [
+  ROLES ||= [
     'redis_sentinel',
     'redis_master',
     'redis_slave'
