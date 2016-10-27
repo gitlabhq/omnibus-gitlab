@@ -144,12 +144,12 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/database.yml")
+  link_to File.join(gitlab_rails_etc_dir, "database.yml")
   source "database.yml.erb"
   owner "root"
   group "root"
   mode "0644"
   variables node['gitlab']['gitlab-rails'].to_hash
-  helpers SingleQuoteHelper
   restarts dependent_services
 end
 
@@ -158,17 +158,18 @@ redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 
 template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
+  link_to File.join(gitlab_rails_etc_dir, "secrets.yml")
   source "secrets.yml.erb"
   owner "root"
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  helpers SingleQuoteHelper
   restarts dependent_services
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/resque.yml")
+  link_to File.join(gitlab_rails_etc_dir, "resque.yml")
   source "resque.yml.erb"
   owner "root"
   group "root"
@@ -179,6 +180,7 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "aws.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/aws.yml")
+  link_to File.join(gitlab_rails_etc_dir, "aws.yml")
   owner "root"
   group "root"
   mode "0644"
@@ -192,6 +194,7 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
+  link_to File.join(gitlab_rails_etc_dir, "smtp_settings.rb")
   owner "root"
   group "root"
   mode "0644"
@@ -205,11 +208,12 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "relative_url.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/relative_url.rb")
+  link_to File.join(gitlab_rails_etc_dir, "relative_url.rb")
   owner "root"
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  notifies :run, 'bash[generate assets]'
+  notifies [:run, 'bash[generate assets]']
   restarts dependent_services
 
   unless node['gitlab']['gitlab-rails']['gitlab_relative_url']
@@ -219,8 +223,8 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
+  link_to File.join(gitlab_rails_etc_dir, "gitlab.yml")
   source "gitlab.yml.erb"
-  helpers SingleQuoteHelper
   owner "root"
   group "root"
   mode "0644"
@@ -235,11 +239,12 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
     )
   )
   restarts dependent_services
-  notifies :run, 'execute[clear the gitlab-rails cache]' unless redis_not_listening
+  notifies [:run, 'execute[clear the gitlab-rails cache]'] unless redis_not_listening
 end
 
 template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/rack_attack.rb")
+  link_to File.join(gitlab_rails_etc_dir, "rack_attack.rb")
   source "rack_attack.rb.erb"
   owner "root"
   group "root"
@@ -253,6 +258,7 @@ gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.shou
 
 template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
+  link_to File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret')
   source "secret_token.erb"
   owner "root"
   group "root"
@@ -263,6 +269,7 @@ end
 
 template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
+  link_to File.join(gitlab_rails_etc_dir, "gitlab_shell_secret")
   source "secret_token.erb"
   owner "root"
   group "root"
