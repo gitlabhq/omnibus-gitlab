@@ -30,7 +30,7 @@ if Gitlab::IncomingEmail.enabled?
     :delivery_options:
       :redis_url: <%= redis_url.to_json %>
       :namespace: resque:gitlab
-      :queue: incoming_email
+      :queue: email_receiver
       :worker: EmailReceiverWorker
 
     :arbitration_method: redis
