@@ -94,15 +94,15 @@ module Redis
       Gitlab['gitlab_rails']['redis_password'] ||= Gitlab['redis']['master_password']
 
       if Gitlab['gitlab_rails']['redis_host'] != redis_bind
-        Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance."
+        Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?"
       end
 
       if Gitlab['gitlab_rails']['redis_port'] != Gitlab['redis']['port']
-        Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance."
+        Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?"
       end
 
       if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
-        Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance."
+        Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?"
       end
     end
 
@@ -131,7 +131,7 @@ module Redis
     end
 
     def redis_managed?
-      Gitlab['redis']['enable'].nil? ? node['redis']['bind'] : Gitlab['redis']['enable']
+      Gitlab['redis']['enable'].nil? ? node['redis']['enable'] : Gitlab['redis']['enable']
     end
   end
 end
