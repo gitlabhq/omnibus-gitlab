@@ -474,6 +474,7 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_directory'] = "/var/log/gitlab/mailroom"
+default['gitlab']['mailroom']['idle_timeout'] = 60
 
 ####
 # GitLab Pages Daemon
