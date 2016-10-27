@@ -17,8 +17,8 @@
 
 Gitlab[:node] = node
 
-if File.exists?("/etc/gitlab/gitlab.rb")
-  Gitlab.from_file("/etc/gitlab/gitlab.rb")
+if File.exists?('/etc/gitlab/gitlab.rb')
+  Gitlab.from_file('/etc/gitlab/gitlab.rb')
 end
 
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))

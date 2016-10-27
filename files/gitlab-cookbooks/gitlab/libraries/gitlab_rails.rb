@@ -115,16 +115,63 @@ module GitlabRails
 
     end
 
-    def disable_gitlab_rails_services
-      if Gitlab['gitlab_rails']["enable"] == false
-        Gitlab['unicorn']["enable"] = false
-        Gitlab['sidekiq']["enable"] = false
-        Gitlab['gitlab_workhorse']["enable"] = false
-      end
+    def disable_services
+      disable_services_roles if any_role_defined?
+
+      disable_gitlab_rails_services
     end
 
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
+    end
+
+    private
+
+    def any_role_defined?
+      Gitlab::ROLES.any? { |role| Gitlab["#{role}_role"]['enable'] }
+    end
+
+    def disable_services_roles
+      if Gitlab['redis_sentinel_role']['enable']
+        disable_other_services
+        Gitlab['sentinel']['enable'] = true
+      else
+        Gitlab['sentinel']['enable'] = false
+      end
+
+      if Gitlab['redis_master_role']['enable']
+        disable_other_services
+        Gitlab['redis']['enable'] = true
+      end
+
+      if Gitlab['redis_slave_role']['enable']
+        disable_other_services
+        Gitlab['redis']['enable'] = true
+      end
+
+      if Gitlab['redis_master_role']['enable'] && Gitlab['redis_slave_role']['enable']
+        fail 'Cannot define both redis_master_role and redis_slave_role in the same machine.'
+      elsif Gitlab['redis_master_role']['enable'] || Gitlab['redis_slave_role']['enable']
+        disable_other_services
+      else
+        Gitlab['redis']['enable'] = false
+      end
+    end
+
+    def disable_gitlab_rails_services
+      if Gitlab['gitlab_rails']['enable'] == false
+        Gitlab['unicorn']['enable'] = false
+        Gitlab['sidekiq']['enable'] = false
+        Gitlab['gitlab_workhorse']['enable'] = false
+      end
+    end
+
+    def disable_other_services
+      Gitlab['gitlab_rails']['enable'] = false
+      Gitlab['bootstrap']['enable'] = false
+      Gitlab['nginx']['enable'] = false
+      Gitlab['postgresql']['enable'] = false
+      Gitlab['mailroom']['enable'] = false
     end
   end
 end

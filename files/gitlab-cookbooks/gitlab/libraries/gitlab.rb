@@ -87,6 +87,17 @@ module Gitlab
   registry_external_url nil
   git_data_dirs Mash.new
 
+  # roles
+  redis_sentinel_role Mash.new
+  redis_master_role Mash.new
+  redis_slave_role Mash.new
+
+  ROLES = [
+    'redis_sentinel',
+    'redis_master',
+    'redis_slave'
+  ].freeze
+
   class << self
     # guards against creating secrets on non-bootstrap node
     def generate_hex(chars)
@@ -186,6 +197,12 @@ module Gitlab
         results['gitlab'][rkey] = Gitlab[key]
       end
 
+      results['roles'] = {}
+      ROLES.each do |key|
+        rkey = key.gsub('_', '-')
+        results['roles'][rkey] = Gitlab["#{key}_role"]
+      end
+
       results
     end
 
@@ -206,7 +223,7 @@ module Gitlab
       # Parse nginx variables last because we want all external_url to be
       # parsed first
       Nginx.parse_variables
-      GitlabRails.disable_gitlab_rails_services
+      GitlabRails.disable_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
