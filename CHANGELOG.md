@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.2
+
+- Move mail_room queue from incoming_email to email_receiver
+
 8.13.1
 
 - Update docs for nginx status, fix the default server for status config
