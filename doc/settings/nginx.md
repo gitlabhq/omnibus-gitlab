@@ -42,7 +42,7 @@ sudo ufw allow https
 # lokkit example (RedHat, CentOS 6)
 sudo lokkit -s https
 
-# firewall-cmd (RedHat, CentOS 7)
+# firewall-cmd (RedHat, Centos 7)
 sudo firewall-cmd --permanent --add-service=https
 sudo systemctl reload firewalld
 ```
