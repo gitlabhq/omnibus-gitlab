@@ -1,7 +1,6 @@
 stages:
   - package
   - notification_fail
-  - add_to_version_server
   - extra
   - notification_fail
 
@@ -216,12 +215,3 @@ notify:slack-fail:
     - master
     - tags@gitlab/omnibus-gitlab
 
-add-to-version-server:
-  before_script: # Nothing
-    - apk update && apk add curl
-  image: "alpine"
-  stage: add_to_version_server
-  script:
-    - ./support/add_to_version_server.sh $CI_BUILD_TAG $VERSION_TOKEN
-  only:
-    - tags@gitlab/omnibus-gitlab
