@@ -26,6 +26,7 @@ What happens here is that we forget about `production: &base`, and join
 Note that not all `gitlab.yml` settings can be changed via `gitlab.rb` yet; see
 the [gitlab.yml ERB template][gitlab.yml.erb].  If you think an attribute is
 missing please create a merge request on the omnibus-gitlab repository.
+Merge request also need to update the [default attributes file][gitlab.yml.erb], and the [gitlab.rb template][gitlab.yml.example] in order to be able to set this value from gitlab.rb
 
 Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 
