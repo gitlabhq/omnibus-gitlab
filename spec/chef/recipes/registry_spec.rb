@@ -111,4 +111,14 @@ describe 'registry recipe' do
         .with_content(/debug:\n\s*addr: localhost:5005/)
     end
   end
+  
+  context 'when user and group are specified' do
+    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { username: 'registryuser', group: 'registrygroup'}) }
+    it 'make registry run file start registry under correct user' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/registry/run')
+        .with_content(/-U registryuser:registrygroup/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/registry/run')
+        .with_content(/-u registryuser:registrygroup/)
+    end
+  end
 end

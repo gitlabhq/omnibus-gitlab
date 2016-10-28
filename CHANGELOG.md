@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.0
+- Fix registry run user and group
+
 8.14.0
 
 - Switch the redis user's shell to /bin/false
