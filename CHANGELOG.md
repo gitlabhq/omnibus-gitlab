@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.4
+
+- Add support for configurable email subject suffix (Fu Xu)
+
 8.13.3
 
 - No changes
