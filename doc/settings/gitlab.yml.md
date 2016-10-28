@@ -1,4 +1,4 @@
-# Changing gitlab.yml settings
+# Changing gitlab.yml and application.yml settings
 
 Some of GitLab's features can be customized through
 [gitlab.yml][gitlab.yml.example]. If you want to change a `gitlab.yml` setting
@@ -36,7 +36,7 @@ since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
 Don't forget to update the following 3 files when adding a new setting:
 
-- the [gitlab.rb.template] file to allow the setting to be set via Omnibus
+- the [gitlab.rb.template] file to expose the setting to the end user via `/etc/gitlab/gitlab.rb`
 - the [default.rb] file to provide a sane default for the new setting
 - the [gitlab.yml.example] file to actually use the setting's value from `gitlab.rb`
 
