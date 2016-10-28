@@ -15,14 +15,15 @@ PACKAGECLOUD_OS=$3
 declare -A OS
 
 OS[0]="${PACKAGECLOUD_OS}"
-if [[ "${PACKAGECLOUD_OS}" =~ "el/" ]]; then
-    OS[1]="${OS[0]/el/scientific}"
-    OS[2]="${OS[0]/el/ol}"
+if [ "${PACKAGECLOUD_OS}" == "el" ]; then
+    OS[1]="scientific"
+    OS[2]="ol"
 fi
+
 
 for x in ${OS[@]} ; do
     # this bin is assumed to be at the root of the omnibus-gitlab checkout.
     bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} \
-        $(find pkg -name '*.rpm' -or -name '*.deb') \
+        $(shell find pkg -name '*.rpm' -or -name '*.deb') \
         --url=https://packages.gitlab.com 
 done;
