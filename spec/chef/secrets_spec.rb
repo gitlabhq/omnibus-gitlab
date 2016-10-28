@@ -2,7 +2,7 @@ require 'chef_helper'
 require 'base64'
 
 describe 'secrets' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   def stub_gitlab_secrets_json(secrets)
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
