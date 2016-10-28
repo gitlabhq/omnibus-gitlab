@@ -275,7 +275,7 @@ dir <%= @dir %>
 # refuse the slave request.
 #
 # masterauth <master-password>
-<%= %Q(masterauth "#{@master_password}") if @master_password && @is_slave %>
+<%= %Q(masterauth "#{@master_password}") if @master_password%>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:

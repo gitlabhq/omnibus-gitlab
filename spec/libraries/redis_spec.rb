@@ -98,6 +98,25 @@ describe 'Redis' do
           expect(node['gitlab']['gitlab-rails']['redis_password']).to eq master_pass
         end
       end
+
+      context 'when with redis_slave_role enabled' do
+        before do
+          stub_gitlab_rb(
+            redis_slave_role: {
+              enable: true
+            },
+            redis: {
+              master_ip: '10.0.0.0',
+              master_port: 6379,
+              master_password: 'PASSWORD'
+            }
+          )
+        end
+
+        it 'defined redis master as false' do
+          expect(node['gitlab']['redis']['master']).to eq false
+        end
+      end
     end
 
     context 'within gitlab-rails redis values' do

@@ -34,6 +34,10 @@ module Redis
         end
       end
 
+      if Gitlab['redis_slave_role']['enable']
+        Gitlab['redis']['master'] = false
+      end
+
       if sentinel_daemon_enabled? || is_redis_slave?
         fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
         fail "redis 'master_port' is not defined" unless Gitlab['redis']['master_port']
