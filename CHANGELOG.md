@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 
 8.13.2
 - Move mail_room queue from incoming_email to email_receiver
+- Add support for configurable email subject suffix (Fu Xu)
 
 8.13.1
 
