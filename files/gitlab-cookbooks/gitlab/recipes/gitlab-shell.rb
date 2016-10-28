@@ -87,7 +87,7 @@ else
   redis_socket = node['gitlab']['gitlab-rails']['redis_socket']
 end
 
-templatesymlink File.join(gitlab_shell_var_dir, "config.yml") do
+templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
   link_to File.join(gitlab_shell_var_dir, "config.yml")
   source "gitlab-shell-config.yml.erb"
