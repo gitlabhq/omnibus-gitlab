@@ -142,7 +142,7 @@ file secret_file do
   action :delete
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "database.yml") do
+templatesymlink File.join(gitlab_rails_etc_dir, "database.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/database.yml")
   link_to File.join(gitlab_rails_etc_dir, "database.yml")
   source "database.yml.erb"
@@ -156,7 +156,7 @@ end
 redis_url = RedisHelper.new(node).redis_url
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 
-template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
+templatesymlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
   link_to File.join(gitlab_rails_etc_dir, "secrets.yml")
   source "secrets.yml.erb"
@@ -167,7 +167,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "secrets.yml") do
   restarts dependent_services
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
+templatesymlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/resque.yml")
   link_to File.join(gitlab_rails_etc_dir, "resque.yml")
   source "resque.yml.erb"
@@ -178,7 +178,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "resque.yml") do
   restarts dependent_services
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "aws.yml") do
+templatesymlink File.join(gitlab_rails_etc_dir, "aws.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/aws.yml")
   link_to File.join(gitlab_rails_etc_dir, "aws.yml")
   owner "root"
@@ -192,7 +192,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "aws.yml") do
   end
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
+templatesymlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
   link_to File.join(gitlab_rails_etc_dir, "smtp_settings.rb")
   owner "root"
@@ -206,7 +206,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "smtp_settings.rb") do
   end
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "relative_url.rb") do
+templatesymlink File.join(gitlab_rails_etc_dir, "relative_url.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/relative_url.rb")
   link_to File.join(gitlab_rails_etc_dir, "relative_url.rb")
   owner "root"
@@ -221,7 +221,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "relative_url.rb") do
   end
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
+templatesymlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   link_to File.join(gitlab_rails_etc_dir, "gitlab.yml")
   source "gitlab.yml.erb"
@@ -242,7 +242,7 @@ template_symlink File.join(gitlab_rails_etc_dir, "gitlab.yml") do
   notifies [:run, 'execute[clear the gitlab-rails cache]'] unless redis_not_listening
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
+templatesymlink File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/rack_attack.rb")
   link_to File.join(gitlab_rails_etc_dir, "rack_attack.rb")
   source "rack_attack.rb.erb"
@@ -256,7 +256,7 @@ end
 gitlab_workhorse_services = dependent_services
 gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.should_notify?('gitlab-workhorse')
 
-template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
+templatesymlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
   link_to File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret')
   source "secret_token.erb"
@@ -267,7 +267,7 @@ template_symlink File.join(gitlab_rails_etc_dir, 'gitlab_workhorse_secret') do
   restarts gitlab_workhorse_services
 end
 
-template_symlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
+templatesymlink File.join(gitlab_rails_etc_dir, "gitlab_shell_secret") do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
   link_to File.join(gitlab_rails_etc_dir, "gitlab_shell_secret")
   source "secret_token.erb"

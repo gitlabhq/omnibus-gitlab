@@ -1,5 +1,5 @@
 if defined?(ChefSpec)
-  def create_template_symlink(message)
-    ChefSpec::Matchers::ResourceMatcher.new(:gitlab_template_symlink, :create, message)
+  def create_templatesymlink(message)
+    ChefSpec::Matchers::ResourceMatcher.new(:templatesymlink, :create, message)
   end
 end

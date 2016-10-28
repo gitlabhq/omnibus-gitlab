@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-resource_name :template_symlink
-provides :template_symlink
+resource_name :templatesymlink
+provides :templatesymlink
 
 actions :create, :delete
 default_action :create
@@ -33,11 +33,10 @@ property :restarts, Array, default: []
 
 
 action :create do
-
   template link_to do
     source new_resource.source
-    owner owner
-    group group
+    owner new_resource.owner
+    group new_resource.group
     mode new_resource.mode
     variables new_resource.variables
     helpers new_resource.helpers

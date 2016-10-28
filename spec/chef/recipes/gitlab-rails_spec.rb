@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -133,26 +133,6 @@ describe 'gitlab::gitlab-rails' do
     end
   end
 
-  context 'gitlab_workhorse_secret' do
-    before do
-      stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
-    end
-
-    it 'renders the correct node attribute' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-        .with_content('abc123-gitlab-workhorse')
-    end
-
-    it 'uses the correct owner and permissions' do
-      expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-        .with(
-          owner: 'root',
-          group: 'root',
-          mode: '0644',
-        )
-    end
-  end
-
   context 'with environment variables' do
     context 'by default' do
       it_behaves_like "enabled gitlab-rails env", "HOME", '\/var\/opt\/gitlab'
@@ -183,6 +163,79 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+    end
+  end
+
+  describe "with symlinked templates" do
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+    let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret') }
+    let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret") }
+
+    before do
+      %w(unicorn sidekiq gitlab-workhorse postgresql redis nginx logrotate).map { |svc| stub_should_notify?(svc, true)}
+    end
+
+    context 'by default' do
+      it 'creates the template' do
+        expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+          .with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+          )
+      end
+
+      it 'template triggers notifications' do
+        expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
+        expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+        expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+      end
+
+      it 'creates the symlink' do
+        expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
+      end
+
+      it 'linking triggers notifications' do
+        expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
+        expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+        expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+      end
+    end
+
+    context 'with specific gitlab_workhorse_secret' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
+      end
+
+      it 'renders the correct node attribute' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+          .with_content('abc123-gitlab-workhorse')
+      end
+
+      it 'uses the correct owner and permissions' do
+        expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+          .with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+          )
+      end
+
+      it 'template triggers notifications' do
+        expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
+        expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+        expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+      end
+
+      it 'creates the symlink' do
+        expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
+      end
+
+      it 'linking triggers notifications' do
+        expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
+        expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+        expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+      end
     end
   end
 end
