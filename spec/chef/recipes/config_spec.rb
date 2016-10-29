@@ -52,6 +52,11 @@ describe 'gitlab::config' do
             },
             redis_slave_role: {
               enable: true
+            },
+            redis: {
+              master_ip: '10.0.0.0',
+              master_port: 6379,
+              master_password: 'PASSWORD'
             }
           )
         end
@@ -87,6 +92,11 @@ describe 'gitlab::config' do
         stub_gitlab_rb(
           redis_slave_role: {
             enable: true
+          },
+          redis: {
+            master_ip: '10.0.0.0',
+            master_port: 6379,
+            master_password: 'PASSWORD'
           }
         )
       end
@@ -107,6 +117,11 @@ describe 'gitlab::config' do
           },
           redis_slave_role: {
             enable: true
+          },
+          redis: {
+            master_ip: '10.0.0.0',
+            master_port: 6379,
+            master_password: 'PASSWORD'
           }
         )
       end
