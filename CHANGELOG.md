@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - NGINX listen on IPv6 by default (George Gooden)
 - Update Redis to 3.2.5 (Takuya Noguchi)
 
+8.13.3
+
+ - Fix executable file mode for the Docker image update-permissions command
+
 8.13.2
 
 - Move mail_room queue from incoming_email to email_receiver
