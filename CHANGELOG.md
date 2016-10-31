@@ -10,8 +10,8 @@ omnibus-gitlab repository.
 - Update Redis to 3.2.5 (Takuya Noguchi)
 
 8.13.2
+
 - Move mail_room queue from incoming_email to email_receiver
-- Add support for configurable email subject suffix (Fu Xu)
 
 8.13.1
 
