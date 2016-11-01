@@ -187,3 +187,25 @@ registry['storage'] = {
 ```
 
 and run `sudo gitlab-ctl reconfigure`.
+
+#### Upgrade postgresql database
+
+Currently GitLab Omnibus runs PostgreSQL 9.2.18 by default. Version 9.6.0 is included as an option for users to manually upgrade. The next major release will ship with a newer PostgresQL by default, and will upgrade existing omnibus installations when they are upgraded.
+
+
+Please note:
+1. This upgrade does require downtime as the database must be down whkle the upgrade is being performed. The length of time entirely depends on the size of your database.
+1. You will need to have sufficient disk space for two copies of your database. Do not attempt to upgrade unless you have enough free space available.
+
+To perform the ugprade, run the command:
+
+```
+sudo gitlab-ctl upgrade-db
+```
+
+Once this is complete, verify everything is working as expected. If so, you can remove the old database with:
+
+```
+sudo rm -rf /var/opt/gitlab/postgresl/gitlab.9.2.18
+```
+
