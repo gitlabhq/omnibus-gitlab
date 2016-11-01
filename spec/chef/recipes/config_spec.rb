@@ -141,7 +141,7 @@ describe 'gitlab::config' do
       end
 
       it 'fails with an error' do
-        expect { chef_run }.to raise_error
+        expect { chef_run }.to raise_error RuntimeError
       end
     end
   end
