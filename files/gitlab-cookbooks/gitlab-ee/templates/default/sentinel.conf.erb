@@ -50,7 +50,7 @@ port <%= @sentinel['port'] %>
 # For Redis Sentinel to chdir to /tmp at startup is the simplest thing
 # for the process to don't interfere with administrative tasks such as
 # unmounting filesystems.
-dir <%= @sentinel['dir'] %>
+dir <%= %Q("#{@sentinel['dir']}") %>
 
 # sentinel monitor <master-name> <ip> <redis-port> <quorum>
 #
@@ -88,7 +88,7 @@ sentinel monitor <%= @redis['master_name'] %> <%= @redis['master_ip'] %> <%= @re
 #
 # Example:
 #
-sentinel auth-pass <%= @redis['master_name'] %> <%= @redis['master_password'] %>
+sentinel auth-pass <%= @redis['master_name'] %> <%= %Q("#{@redis['master_password']}") %>
 
 # sentinel down-after-milliseconds <master-name> <milliseconds>
 #

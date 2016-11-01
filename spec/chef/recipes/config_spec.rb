@@ -8,6 +8,19 @@ describe 'gitlab::config' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  shared_examples 'regular services are disabled' do
+    it 'disables regular services' do
+      expect(node['gitlab']['gitlab-rails']['enable']).to eq false
+      expect(node['gitlab']['unicorn']['enable']).to eq false
+      expect(node['gitlab']['sidekiq']['enable']).to eq false
+      expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
+      expect(node['gitlab']['bootstrap']['enable']).to eq false
+      expect(node['gitlab']['nginx']['enable']).to eq false
+      expect(node['gitlab']['postgresql']['enable']).to eq false
+      expect(node['gitlab']['mailroom']['enable']).to eq false
+    end
+  end
+
   context 'with roles' do
     context 'when redis_sentinel_role is enabled' do
       before do
@@ -18,8 +31,9 @@ describe 'gitlab::config' do
         )
       end
 
-      it 'disable other services' do
-        disable_regular_services
+      it_behaves_like 'regular services are disabled'
+
+      it 'only sentinel is enabled' do
         expect(node['gitlab']['sentinel']['enable']).to eq true
         expect(node['gitlab']['redis']['enable']).to eq false
       end
@@ -36,9 +50,9 @@ describe 'gitlab::config' do
           )
         end
 
-        it 'disable other services except redis' do
-          disable_regular_services
+        it_behaves_like 'regular services are disabled'
 
+        it 'redis and sentinel are enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['gitlab']['redis']['enable']).to eq true
         end
@@ -61,9 +75,9 @@ describe 'gitlab::config' do
           )
         end
 
-        it 'disable other services except redis' do
-          disable_regular_services
+        it_behaves_like 'regular services are disabled'
 
+        it 'only redis is enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['gitlab']['redis']['enable']).to eq true
         end
@@ -79,9 +93,9 @@ describe 'gitlab::config' do
         )
       end
 
-      it 'disable other services except redis' do
-        disable_regular_services
+      it_behaves_like 'regular services are disabled'
 
+      it 'only redis is enabled' do
         expect(node['gitlab']['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
       end
@@ -101,9 +115,9 @@ describe 'gitlab::config' do
         )
       end
 
-      it 'disable other services except redis' do
-        disable_regular_services
+      it_behaves_like 'regular services are disabled'
 
+      it 'only redis is enabled' do
         expect(node['gitlab']['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
       end
@@ -130,16 +144,5 @@ describe 'gitlab::config' do
         expect { chef_run }.to raise_error
       end
     end
-  end
-
-  def disable_regular_services
-    expect(node['gitlab']['gitlab-rails']['enable']).to eq false
-    expect(node['gitlab']['unicorn']['enable']).to eq false
-    expect(node['gitlab']['sidekiq']['enable']).to eq false
-    expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
-    expect(node['gitlab']['bootstrap']['enable']).to eq false
-    expect(node['gitlab']['nginx']['enable']).to eq false
-    expect(node['gitlab']['postgresql']['enable']).to eq false
-    expect(node['gitlab']['mailroom']['enable']).to eq false
   end
 end
