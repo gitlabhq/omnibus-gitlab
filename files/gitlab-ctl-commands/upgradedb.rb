@@ -20,7 +20,7 @@ require 'mixlib/shellout'
 CURRENT_VERSION = '9.2.18'
 NEW_VERSION = '9.6.0'
 DATA_DIR = '/var/opt/gitlab/postgresql/data'
-INST_DIR = '/opt/gitlab/embedded/postgresql'
+INST_DIR = "#{base_path}/embedded/postgresql"
 
 add_command 'upgrade-db',
             'Upgrade the PostGres DB to the latest supported version',
@@ -63,7 +63,7 @@ add_command 'upgrade-db',
     die "#{DATA_DIR} is a symlink to another directory. Will not proceed"
   end
   Dir.glob("#{INST_DIR}/#{CURRENT_VERSION}/bin/*").each do |bin_file|
-    link = "/opt/gitlab/embedded/bin/#{File.basename(bin_file)}"
+    link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
     unless File.symlink?(link) && File.readlink(link).eql?(bin_file)
       die "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
     end
@@ -82,17 +82,23 @@ add_command 'upgrade-db',
   end
 
   log 'Initialize the new database'
-  run_pg_command("/opt/gitlab/embedded/bin/initdb -D #{DATA_DIR} --locale C --encoding UTF8")
+  run_pg_command("#{base_path}/embedded/bin/initdb -D #{DATA_DIR} --locale C --encoding UTF8")
   results = run_pg_command(
-    "/opt/gitlab/embedded/bin/pg_upgrade -b /opt/gitlab/embedded/postgresql/9.2.18/bin " \
-      "-d #{DATA_DIR}.#{current_version} -D #{DATA_DIR} -B /opt/gitlab/embedded/bin"
+    "#{base_path}/embedded/bin/pg_upgrade -b #{base_path}/embedded/postgresql/9.2.18/bin " \
+      "-d #{DATA_DIR}.#{current_version} -D #{DATA_DIR} -B #{base_path}/embedded/bin"
   )
   log "Upgrade is complete, check output if anything else is needed: #{results}"
   log 'Run the sql scripts if needed'
   log 'Starting the db'
   run_sv_command_for_service('start', 'postgresql')
-  log 'Upgrade is complete. Please verify everything is working and run the following if so'
-  log "rm -rf #{DATA_DIR}/#{CURRENT_VERSION}"
+  status = run_chef("#{base_path}/embedded/cookbooks/dna.json")
+  if status.success?
+    log 'Upgrade is complete. Please verify everything is working and run the following if so'
+    log "rm -rf #{DATA_DIR}/#{CURRENT_VERSION}"
+    exit! 0
+  else
+    die 'Something went wrong during final reconfiguration, please check the logs'
+  end
 end
 
 class ExecutionError < StandardError; end
@@ -117,12 +123,12 @@ def run_pg_command(command)
 end
 
 def db_version
-  get_command_output('/opt/gitlab/embedded/bin/pg_ctl --version').split.last
+  get_command_output("#{base_path}/embedded/bin/pg_ctl --version").split.last
 end
 
 def create_links(version)
   Dir.glob("#{INST_DIR}/#{version}/bin/*").each do |bin_file|
-    destination = "/opt/gitlab/embedded/bin/#{File.basename(bin_file)}"
+    destination = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
     get_command_output("ln -sf #{bin_file} #{destination}")
   end
 end

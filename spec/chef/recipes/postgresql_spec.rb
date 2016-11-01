@@ -1,7 +1,11 @@
 require 'chef_helper'
 
-describe 'postgresql' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+describe 'postgresql 9.2' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new do |node|
+      node.normal['gitlab']['postgresql']['version'] = '9.2.18'
+    end.converge('gitlab::default')
+  end
 
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
@@ -46,5 +50,61 @@ describe 'postgresql' do
       expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf')
         .with_content(/log_line_prefix = '%a'/)
     end
+  end
+
+  it 'sets unix_socket_directory' do
+    expect(chef_run.node['gitlab']['postgresql']['unix_socket_directory'])
+      .to eq('/var/opt/gitlab/postgresql')
+    expect(chef_run.node['gitlab']['postgresql']['unix_socket_directories'])
+      .to eq(nil)
+    expect(chef_run).to render_file(
+      '/var/opt/gitlab/postgresql/data/postgresql.conf'
+    ).with_content { |content|
+      expect(content).to match(
+        /unix_socket_directory = '\/var\/opt\/gitlab\/postgresql'/
+      )
+      expect(content).not_to match(
+        /unix_socket_directories = '\/var\/opt\/gitlab\/postgresql'/
+      )
+    }
+  end
+
+  it 'sets checkpoint_segments' do
+    expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
+      .to eq(10)
+    expect(chef_run).to render_file(
+      '/var/opt/gitlab/postgresql/data/postgresql.conf'
+    ).with_content(/checkpoint_segments = 10/)
+  end
+end
+
+describe 'postgresl 9.6' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new do |node|
+      node.normal['gitlab']['postgresql']['version'] = '9.6.0'
+    end.converge('gitlab::default')
+  end
+
+  before { allow(Gitlab).to receive(:[]).and_call_original }
+
+  it 'sets unix_socket_directories' do
+    expect(chef_run.node['gitlab']['postgresql']['unix_socket_directory'])
+      .to eq('/var/opt/gitlab/postgresql')
+    expect(chef_run).to render_file(
+      '/var/opt/gitlab/postgresql/data/postgresql.conf'
+    ).with_content { |content|
+      expect(content).to match(
+        /unix_socket_directories = '\/var\/opt\/gitlab\/postgresql'/
+      )
+      expect(content).not_to match(
+        /unix_socket_directory = '\/var\/opt\/gitlab\/postgresql'/
+      )
+    }
+  end
+
+  it 'does not set checkpoint_segments' do
+    expect(chef_run).not_to render_file(
+      '/var/opt/gitlab/postgresql/data/postgresql.conf'
+    ).with_content(/checkpoint_segments = 10/)
   end
 end
