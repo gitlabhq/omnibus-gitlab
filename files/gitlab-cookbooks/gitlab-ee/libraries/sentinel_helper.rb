@@ -19,7 +19,7 @@ class SentinelHelper
   # Restore from node definition (gitlab.rb)
   def restore_from_node
     unless MYID_PATTERN =~ sentinel['myid']
-      Chef::Log.warn 'Sentinel myid must be exactly 40 hex-characters lowercase'
+      fail 'Sentinel myid must be exactly 40 hex-characters lowercase'
     end
 
     sentinel['myid']
