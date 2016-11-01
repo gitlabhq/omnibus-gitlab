@@ -27,7 +27,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
 
   redis_user = AccountHelper.new(node).redis_user
 
-  account 'Redis user and group' do
+  account 'user and group for sentinel' do
     username redis_user
     uid node['gitlab']['redis']['uid']
     ugid redis_user

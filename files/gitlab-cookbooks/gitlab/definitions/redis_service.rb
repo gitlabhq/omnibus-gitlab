@@ -22,7 +22,7 @@ define :redis_service, :socket_group => nil do
   redis_log_dir = node['gitlab'][svc]['log_directory']
   redis_user = AccountHelper.new(node).redis_user
 
-  account "Redis user and group" do
+  account 'user and group for redis' do
     username redis_user
     uid node['gitlab'][svc]['uid']
     ugid redis_user
