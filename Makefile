@@ -44,13 +44,13 @@ do_release: no_changes on_tag purge build move_to_platform_dir sync packagecloud
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge build move_to_platform_dir sync
 ifdef NIGHTLY
-test: PACKAGECLOUD_REPO=nightly-builds
+test: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 test: packagecloud
 endif
 
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
-do_rpi2_release: PACKAGECLOUD_REPO=raspberry-pi2
+do_rpi2_release: RASPBERRY_REPO=raspberry-pi2 PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_rpi2_release: no_changes purge build move_to_platform_dir sync packagecloud
 
 no_changes:
@@ -114,7 +114,7 @@ docker_push_latest:
 
 do_docker_master:
 ifdef NIGHTLY
-do_docker_master: PACKAGECLOUD_REPO=nightly-builds
+do_docker_master: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_docker_master: docker_build docker_push
 endif
 
