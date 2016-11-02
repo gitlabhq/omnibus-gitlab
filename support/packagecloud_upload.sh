@@ -22,7 +22,15 @@ fi
 
 for distro in "${OS[@]}" ; do
     location="${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${distro}"
+    # Here we loop on the output of find, in the off chance that we accidentally
+    # get more than one file. This _should_ never be the case, but in the off
+    # chance that it occurs, we'll output a warning, and then attempt upload anyways
+    count=0
     for package in `find pkg -name '*.rpm' -o -name '*.deb'`; do
+        count=$count+1
+        if [ $count -gt 1 ]; then
+            echo "WARNING: multiple packages detected!"
+        fi
         echo "Uploading '$package' to packagecloud at '$location'"
         bin/package_cloud push $location $package --url=https://packages.gitlab.com
     done;
