@@ -964,3 +964,4 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Forwarded-Proto" => "https",
 #  "X-Forwarded-Ssl" => "on"
 # }
+# registry_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
