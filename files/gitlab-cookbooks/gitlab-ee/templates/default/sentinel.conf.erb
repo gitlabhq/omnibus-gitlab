@@ -52,6 +52,13 @@ port <%= @sentinel['port'] %>
 # unmounting filesystems.
 dir <%= %Q("#{@sentinel['dir']}") %>
 
+# sentinel myid <id>
+#
+# Unique 40 hex-characters long identification of the instance in the cluster
+# This value is spread across all sentinels and each instance keep a list of
+# "known" instances to calculate majority in a failover consensus voting.
+<%= "sentinel myid #{@sentinel['myid']}" if @sentinel['myid'] %>
+
 # sentinel monitor <master-name> <ip> <redis-port> <quorum>
 #
 # Tells Sentinel to monitor this master, and to consider it in O_DOWN
@@ -70,25 +77,6 @@ dir <%= %Q("#{@sentinel['dir']}") %>
 # Note: master name should not include special characters or spaces.
 # The valid charset is A-z 0-9 and the three characters ".-_".
 sentinel monitor <%= @redis['master_name'] %> <%= @redis['master_ip'] %> <%= @redis['master_port'] %> <%= @sentinel['quorum'] %>
-
-# sentinel auth-pass <master-name> <password>
-#
-# Set the password to use to authenticate with the master and slaves.
-# Useful if there is a password set in the Redis instances to monitor.
-#
-# Note that the master password is also used for slaves, so it is not
-# possible to set a different password in masters and slaves instances
-# if you want to be able to monitor these instances with Sentinel.
-#
-# However you can have Redis instances without the authentication enabled
-# mixed with Redis instances requiring the authentication (as long as the
-# password set is the same for all the instances requiring the password) as
-# the AUTH command will have no effect in Redis instances with authentication
-# switched off.
-#
-# Example:
-#
-sentinel auth-pass <%= @redis['master_name'] %> <%= %Q("#{@redis['master_password']}") %>
 
 # sentinel down-after-milliseconds <master-name> <milliseconds>
 #
@@ -132,6 +120,25 @@ sentinel down-after-milliseconds <%= @redis['master_name'] %> <%= @sentinel['dow
 #
 # Default is 3 minutes.
 sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover_timeout'] %>
+
+# sentinel auth-pass <master-name> <password>
+#
+# Set the password to use to authenticate with the master and slaves.
+# Useful if there is a password set in the Redis instances to monitor.
+#
+# Note that the master password is also used for slaves, so it is not
+# possible to set a different password in masters and slaves instances
+# if you want to be able to monitor these instances with Sentinel.
+#
+# However you can have Redis instances without the authentication enabled
+# mixed with Redis instances requiring the authentication (as long as the
+# password set is the same for all the instances requiring the password) as
+# the AUTH command will have no effect in Redis instances with authentication
+# switched off.
+#
+# Example:
+#
+sentinel auth-pass <%= @redis['master_name'] %> <%= @redis['master_password'] %>
 
 # SCRIPTS EXECUTION
 #
@@ -196,4 +203,3 @@ sentinel failover-timeout <%= @redis['master_name'] %> <%= @sentinel['failover_t
 # Example:
 #
 # sentinel client-reconfig-script mymaster /var/redis/reconfig.sh
-<%= "sentinel myid #{@sentinel['myid']}" if @sentinel['myid'] %>
