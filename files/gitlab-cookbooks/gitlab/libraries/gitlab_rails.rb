@@ -133,26 +133,26 @@ module GitlabRails
 
     def disable_services_roles
       if Gitlab['redis_sentinel_role']['enable']
-        disable_other_services
+        disable_non_redis_services
         Gitlab['sentinel']['enable'] = true
       else
         Gitlab['sentinel']['enable'] = false
       end
 
       if Gitlab['redis_master_role']['enable']
-        disable_other_services
+        disable_non_redis_services
         Gitlab['redis']['enable'] = true
       end
 
       if Gitlab['redis_slave_role']['enable']
-        disable_other_services
+        disable_non_redis_services
         Gitlab['redis']['enable'] = true
       end
 
       if Gitlab['redis_master_role']['enable'] && Gitlab['redis_slave_role']['enable']
         fail 'Cannot define both redis_master_role and redis_slave_role in the same machine.'
       elsif Gitlab['redis_master_role']['enable'] || Gitlab['redis_slave_role']['enable']
-        disable_other_services
+        disable_non_redis_services
       else
         Gitlab['redis']['enable'] = false
       end
@@ -166,7 +166,7 @@ module GitlabRails
       end
     end
 
-    def disable_other_services
+    def disable_non_redis_services
       Gitlab['gitlab_rails']['enable'] = false
       Gitlab['bootstrap']['enable'] = false
       Gitlab['nginx']['enable'] = false

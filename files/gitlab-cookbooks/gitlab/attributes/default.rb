@@ -428,7 +428,7 @@ default['gitlab']['redis']['unixsocketperm'] = "777"
 default['gitlab']['redis']['master'] = true
 default['gitlab']['redis']['master_name'] = 'gitlab-redis'
 default['gitlab']['redis']['master_ip'] = nil
-default['gitlab']['redis']['master_port'] = nil
+default['gitlab']['redis']['master_port'] = 6379
 default['gitlab']['redis']['master_password'] = nil
 
 ####

@@ -572,8 +572,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # redis['master_name'] = 'gitlab-redis'
 # redis['master_ip'] = nil
-# redis['master_port'] = nil
-# redis['master_password'] = 'redis-password-goes-here' # the same value defined in redis['password']
+# redis['master_port'] = 6379
+
+## Master password should have the same value defined in redis['password']
+## to enable the instance to transition to/from master/slave in a failover event.
+# redis['master_password'] = 'redis-password-goes-here'
 
 ########################
 # GitLab Sentinel (EE) #
