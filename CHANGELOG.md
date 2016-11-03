@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add support for configurable email subject suffix (Fu Xu)
 - Fix executable file mode for the Docker image update-permissions command
+- Update curl to 7.51.0 to get the latest security patches
 
 8.13.3
 
