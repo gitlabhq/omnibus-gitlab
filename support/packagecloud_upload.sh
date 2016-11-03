@@ -27,7 +27,7 @@ for distro in "${OS[@]}" ; do
     # chance that it occurs, we'll output a warning, and then attempt upload anyways
     count=0
     for package in `find pkg -name '*.rpm' -o -name '*.deb'`; do
-        count=$count+1
+        count=$(expr $count+1)
         if [ $count -gt 1 ]; then
             echo "WARNING: multiple packages detected!"
         fi
