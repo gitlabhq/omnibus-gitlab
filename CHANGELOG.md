@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.3
+
+- No changes
+
 8.13.2
 
 - Move mail_room queue from incoming_email to email_receiver
