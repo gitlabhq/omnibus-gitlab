@@ -20,7 +20,11 @@ license "MPL-2.0"
 license_file "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version "2016.09.14"
+default_version "2016.11.02"
+
+version "2016.11.02" do
+  source md5: "11713bf9b8c10aca2fb4708f1ba01072"
+end
 
 version "2016.09.14" do
   source md5: "8d35a5cef6ce28da07867a0712558067"
