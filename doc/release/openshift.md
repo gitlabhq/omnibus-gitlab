@@ -1,18 +1,73 @@
 ## Release Process
 
-...
+New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](doc/release/README.md#updating-cloud-images)
+
+### Update the template to latest GitLab release
+
+Within the template we reference our Docker image. Go to https://hub.docker.com/r/gitlab/gitlab-ce/tags/
+and find the newest decriptive tag. e.g. `8.13.3-ce.0`
+
+Then update the image stream in the template with the name and tag:
+
+```
+{
+  "kind": "ImageStream",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "${APPLICATION_NAME}",
+    "labels": {
+      "app": "${APPLICATION_NAME}"
+    }
+  },
+  "spec": {
+    "tags": [
+      {
+        "name": "8.13.3", /* <-- Change this */
+        "from": {
+          "kind": "DockerImage",
+          "name": "gitlab/gitlab-ce:8.13.3-ce.0" <-- Change this */
+        }
+      }
+    ]
+  }
+},
+```
+
+And then also update the GitLab Deployment config to use the new tag in it's ImageChange trigger:
+
+```
+{
+  "type": "ImageChange",
+  "imageChangeParams": {
+    "automatic": true,
+    "containerNames": [
+      "gitlab-ce"
+    ],
+    "from": {
+      "kind": "ImageStreamTag",
+      "name": "${APPLICATION_NAME}:8.13.3" <-- Change this */
+    }
+  }
+}
+```
 
 ### Test
 
 For setting up a OpenShift Origin development environment for testing see
 [doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
 
-...
+Setup a new GitLab install using the updated template. Smoke test the install:
 
-### Commit
+1. Login works
+2. Create project succeeds
+3. Readme can be created through the UI
+4. Repo can be clone and pushed to over http
 
-...
+### Submit new Merge Request
+
+Push your updated template into a New Merge request on GitLab.com against the master branch
 
 ### Notify
 
-...
+Once the Merge Request has been accepted, alert the #gitlab-openshift slack channel that a new
+version has been pushed to master. Effectivly handing off the template to OpenShift for inclusion in the all-in-one.
