@@ -174,6 +174,17 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
+### Amen.fr / Securemail.pro
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp-fr.securemail.pro"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_tls'] = true
+```
+
 ### 1&1
 
 ```ruby
