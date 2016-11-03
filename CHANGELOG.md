@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 8.13.4
 
 - Update curl to 7.51.0 to get the latest security patches
+- Fix executable file mode for the Docker image update-permissions command
 
 8.13.2
 
