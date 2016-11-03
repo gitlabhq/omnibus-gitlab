@@ -32,6 +32,8 @@ version '9.2.18' do
   source md5: 'fd175eb5f29557c6ef2eeaf340330f9a'
 end
 
+source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
+
 relative_path "postgresql-#{version}"
 
 build do
