@@ -188,8 +188,6 @@ Consider these notes when upgrading GitLab Mattermost:
 2. Upgrading from v3.2 to v3.4 will be incomplete due to a migration code not being run properly. You can either:
     - Upgrade from v3.2 to v3.3 and then from v3.3 to v3.4, or
     - Upgrade from v3.2 to v3.4, then run the following SQL query to make Mattermost rerun upgrade steps that were not properly completed: `UPDATE Systems SET Value = '3.1.0' WHERE Name = 'Version';`
-3. RHEL6 and Ubuntu installations must verify the line `limit nofile 50000 50000` is included in `/etc/init/mattermost.conf` file. See the [installation guide](https://docs.mattermost.com/guides/administrator.html#install-guides) for your operating system for more details.
-4. RHEL7 and Debian installations must verify the line `LimitNOFILE=49152` is included in the `/etc/systemd/system/mattermost.service` file. See the [installation guide](https://docs.mattermost.com/guides/administrator.html#install-guides) for your operating system for more details.
 
 
 ## Upgrading GitLab Mattermost from versions prior to 8.9
