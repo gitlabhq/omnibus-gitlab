@@ -79,7 +79,12 @@ override :config_guess, version: config_guess_version.print, source: { git: conf
 override :rsync, version: '3.1.2'
 
 # Openssh needs to be installed
-runtime_dependency "openssh-server"
+
+if suse?
+  runtime_dependency "openssh"
+else
+  runtime_dependency "openssh-server"
+end
 
 # creates required build directories
 dependency "preparation"
