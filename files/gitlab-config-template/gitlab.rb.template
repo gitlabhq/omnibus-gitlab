@@ -550,6 +550,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['uid'] = nil
 # redis['gid'] = nil
 
+## To enable only redis service in this machine, uncomment
+## one of the lines below (choose master or slave instance types).
+##
+## For more details please see:
+## https://docs.gitlab.com/ce/administration/high_availability/redis.html
+# redis_master_role['enable'] = true
+# redis_slave_role['enable'] = true
+
 ## Redis Sentinel support
 ## You need a master slave redis replication to be able to do failover
 ## Please read the documentation before enabling it to understand the
@@ -583,6 +591,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ########################
 
 ## Make sure you configured all redis['master_*'] keys above before continuing.
+
+## To enable sentinel and disable all other services in this machine,
+## uncomment the line below (if you've enabled Redis role, it will keep it).
+##
+## For more details please see:
+## https://docs.gitlab.com/ce/administration/high_availability/redis.html
+# redis_sentinel_role['enable'] = true
 
 # sentinel['enable'] = true
 # sentinel['bind'] = '0.0.0.0' # bind to all interfaces, uncomment to specify an IP and bind to a single one
