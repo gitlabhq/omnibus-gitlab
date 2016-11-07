@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Upgrade Nginx to 1.10.2
 - Update Redis to 3.2.5 (Takuya Noguchi)
 - Updarted cacerts.pem to 2016-11-02 version
+- Add git-trace logging for gitlab-shell
 
 8.13.4
 
