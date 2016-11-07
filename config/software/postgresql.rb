@@ -50,7 +50,9 @@ build do
   make "world -j #{workers}", env: env
   make "install-world", env: env
 
-  Dir.glob("#{prefix}/bin/*").each do |bin_file|
-    link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+  block 'link bin files' do
+    Dir.glob("#{prefix}/bin/*").each do |bin_file|
+      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+    end
   end
 end

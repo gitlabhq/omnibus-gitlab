@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-name "postgresql96"
+name "postgresql_new"
 default_version "9.6.0"
 
 license "PostgreSQL"
