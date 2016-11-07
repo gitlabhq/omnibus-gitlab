@@ -331,7 +331,7 @@ notify:slack-fail:
     - tags@gitlab/omnibus-gitlab
 
 # Trigger docs build
-# https://gitlab.com/gitlab-com/doc-gitlab-com/blob/master/README.md#deployment-process
+# https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
 trigger_docs:
   stage: package
   image: "alpine"
@@ -342,6 +342,6 @@ trigger_docs:
   cache: {}
   artifacts: {}
   script:
-    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/38069/trigger/builds"
+    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/1794617/trigger/builds"
   only:
     - master@gitlab-org/omnibus-gitlab
