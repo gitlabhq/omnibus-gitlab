@@ -536,6 +536,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['wal_keep_segments'] = 10
 # postgresql['hot_standby'] = "off"
 
+## Available in PostgreSQL 9.6 and later
+# postgresql['min_wal_size'] = 80MB
+# postgresql['max_wal_size'] = 1GB
+
 ################
 # GitLab Redis #
 ################

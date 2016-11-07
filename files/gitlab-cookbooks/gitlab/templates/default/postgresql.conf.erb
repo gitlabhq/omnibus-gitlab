@@ -180,6 +180,9 @@ wal_buffers = <%= node['gitlab']['postgresql']['wal_buffers'] %> # -1     # min 
 # - Checkpoints -
 <% if node['gitlab']['postgresql']['version'] == "9.2.18" %>
 checkpoint_segments = <%= node['gitlab']['postgresql']['checkpoint_segments'] %>		# in logfile segments, min 1, 16MB each, default 3
+<% else %>
+min_wal_size = <%= node['gitlab']['postgresql']['min_wal_size'] %>
+max_wal_size = <%= node['gitlab']['postgresql']['max_wal_size'] %>
 <% end %>
 checkpoint_timeout = <%= node['gitlab']['postgresql']['checkpoint_timeout'] %>		# range 30s-1h, default 5min
 checkpoint_completion_target = <%= node['gitlab']['postgresql']['checkpoint_completion_target'] %>	# checkpoint target duration, 0.0 - 1.0, default 0.5
