@@ -103,7 +103,7 @@ class StorageDirectoryHelper
     commands_info << "Failed asserting that ownership of \"#{path}\" was #{expect_string}"
 
     if @target_mode
-      commands      << "[ \"$(stat --printf='%04a' $(readlink -f #{path}) | grep -Po '.{#{@target_mode.length}}$')\" = '#{@target_mode}' ]"
+      commands      << "[ \"$(stat --printf='%04a' $(readlink -f #{path}) | grep -o '#{'.' * @target_mode.length}$')\" = '#{@target_mode}' ]"
       commands_info << "Failed asserting that mode permissions on \"#{path}\" is #{@target_mode}"
     end
 
