@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Update Redis to 3.2.5 (Takuya Noguchi)
 - Updarted cacerts.pem to 2016-11-02 version
 - Stopped using PCRE in the storage directory helper
+- Add git-trace logging for gitlab-shell
 
 8.13.4
 
