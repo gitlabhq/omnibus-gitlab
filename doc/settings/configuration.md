@@ -361,7 +361,7 @@ high_availability['mountpoint'] = '/var/opt/gitlab'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Configuring Rake attack
+## Configuring Rack Attack
 
 To prevent abusive clients doing damage GitLab uses rack-attack gem.
 Check [this page](https://gitlab.com/help/security/rack_attack.md)
@@ -370,13 +370,13 @@ for more information.
 File `config/initializers/rack_attack.rb` is managed by omnibus-gitlab
 and must be configured in `/etc/gitlab/gitlab.rb`.
 
-### Enabling/Disabling Rake attack and setting up basic auth throttling
+### Enabling/Disabling Rack Attack and setting up basic auth throttling
 
-Next configuration settings control rake attack:
+Next configuration settings control Rack Attack:
 
 ```ruby
 gitlab_rails['rack_attack_git_basic_auth'] = {
-  'enabled' => true, # Enable/Disable rake attack
+  'enabled' => true, # Enable/Disable Rack Attack
   'ip_whitelist' => ["127.0.0.1"], # Whitelisted urls
   'maxretry' => 10, # Limit the number of Git HTTP authentication attempts per IP
   'findtime' => 60, # Reset the auth attempt counter per IP after 60 seconds
@@ -384,7 +384,7 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 }
 ```
 
-### Setting up paths to be protected by rake attack
+### Setting up paths to be protected by Rack Attack
 
 If you want to change default protected paths 
 set `gitlab_rails['rack_attack_protected_paths']` in config file. 

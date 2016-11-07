@@ -34,8 +34,8 @@ pack_cache_bundle:
 build:
 	bin/omnibus build ${PROJECT} --log-level info
 
-# license_check should be run after `build`, but because build calls omnibus which 
-# does a rebuild every call, we're not setting that specific dependency for when 
+# license_check should be run after `build`, but because build calls omnibus which
+# does a rebuild every call, we're not setting that specific dependency for when
 # working on changes to support/license_check.sh. See the order of `test`.
 license_check:
 	bash support/license_check.sh
@@ -49,13 +49,13 @@ do_release: no_changes on_tag purge build license_check move_to_platform_dir syn
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge build license_check move_to_platform_dir sync
 ifdef NIGHTLY
-test: PACKAGECLOUD_REPO=nightly-builds
+test: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 test: packagecloud
 endif
 
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
-do_rpi2_release: PACKAGECLOUD_REPO=raspberry-pi2
+do_rpi2_release: RASPBERRY_REPO=raspberry-pi2 PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_rpi2_release: no_changes purge build license_check move_to_platform_dir sync packagecloud
 
 no_changes:
@@ -119,7 +119,7 @@ docker_push_latest:
 
 do_docker_master:
 ifdef NIGHTLY
-do_docker_master: PACKAGECLOUD_REPO=nightly-builds
+do_docker_master: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_docker_master: docker_build docker_push
 endif
 
@@ -140,5 +140,4 @@ s3_sync:
 	echo "Download URLS:" && find pkg -type f | sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|"
 
 packagecloud:
-	# - We set LC_ALL below because package_cloud is picky about the locale
-	LC_ALL='en_US.UTF-8' bin/package_cloud push ${PACKAGECLOUD_USER}/${PACKAGECLOUD_REPO}/${PACKAGECLOUD_OS} $(shell find pkg -name '*.rpm' -or -name '*.deb') --url=https://packages.gitlab.com
+	bash support/packagecloud_upload.sh ${PACKAGECLOUD_USER} ${PACKAGECLOUD_REPO} ${PACKAGECLOUD_OS}

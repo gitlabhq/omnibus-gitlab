@@ -3,6 +3,29 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.0
+
+- Switch the redis user's shell to /bin/false
+- NGINX listen on IPv6 by default (George Gooden)
+- Upgrade Nginx to 1.10.2
+- Update Redis to 3.2.5 (Takuya Noguchi)
+- Updarted cacerts.pem to 2016-11-02 version
+- Stopped using PCRE in the storage directory helper
+- Add git-trace logging for gitlab-shell
+
+8.13.4
+
+- Update curl to 7.51.0 to get the latest security patches
+- Fix executable file mode for the Docker image update-permissions command
+
+8.13.2
+
+- Move mail_room queue from incoming_email to email_receiver
+
+8.13.1
+
+- Update docs for nginx status, fix the default server for status config
+
 8.13.0
 
 - Add support for registry debug addr configuration

@@ -87,10 +87,11 @@ else
   redis_socket = node['gitlab']['gitlab-rails']['redis_socket']
 end
 
-template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
+templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
+  link_to File.join(gitlab_shell_var_dir, "config.yml")
   source "gitlab-shell-config.yml.erb"
-  variables(
+  variables({
     :user => git_user,
     :api_url => api_url,
     :authorized_keys => authorized_keys,
@@ -104,8 +105,9 @@ template_symlink File.join(gitlab_shell_var_dir, "config.yml") do
     :log_level => node['gitlab']['gitlab-shell']['log_level'],
     :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames'],
     :http_settings => node['gitlab']['gitlab-shell']['http_settings'],
-    :git_annex_enabled => node['gitlab']['gitlab-shell']['git_annex_enabled']
-  )
+    :git_annex_enabled => node['gitlab']['gitlab-shell']['git_annex_enabled'],
+    :git_trace_log_file => File.join(log_directory, 'gitlab-shell-git-trace.log')
+  })
 end
 
 link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do

@@ -2,7 +2,6 @@ stages:
   - tests
   - package
   - notification_fail
-  - add_to_version_server
   - extra
   - notification_fail
 
@@ -210,6 +209,14 @@ Centos 7:
     - cache
     - gems
   <<: *tag_build
+OpenSUSE 13.2:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2"
+  cache:
+    key: "OpenSUSE 13.2 branch"
+    paths:
+    - cache
+    - gems
+  <<: *tag_build
 
 Ubuntu 12.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
@@ -267,6 +274,14 @@ CentOS 7 branch:
     - cache
     - gems
   <<: *branch_build
+OpenSUSE 13.2 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2"
+  cache:
+    key: "$CI_BUILD_NAME"
+    paths:
+    - cache
+    - gems
+  <<: *branch_build
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:raspbian-jessie"
@@ -315,18 +330,8 @@ notify:slack-fail:
     - master
     - tags@gitlab/omnibus-gitlab
 
-add-to-version-server:
-  before_script: # Nothing
-    - apk update && apk add curl
-  image: "alpine"
-  stage: add_to_version_server
-  script:
-    - ./support/add_to_version_server.sh $CI_BUILD_TAG $VERSION_TOKEN
-  only:
-    - tags@gitlab/omnibus-gitlab
-
 # Trigger docs build
-# https://gitlab.com/gitlab-com/doc-gitlab-com/blob/master/README.md#deployment-process
+# https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
 trigger_docs:
   stage: package
   image: "alpine"
@@ -337,6 +342,6 @@ trigger_docs:
   cache: {}
   artifacts: {}
   script:
-    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/38069/trigger/builds"
+    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/1794617/trigger/builds"
   only:
     - master@gitlab-org/omnibus-gitlab

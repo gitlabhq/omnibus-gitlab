@@ -69,7 +69,7 @@ config_guess_version =  Gitlab::Version.new('config_guess', "master")
 override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
-override :redis, version: '3.2.1', source: { md5: 'b311d4332326f1e6f86a461b4025636d' }
+override :redis, version: '3.2.5', source: { md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
@@ -78,7 +78,12 @@ override :config_guess, version: config_guess_version.print, source: { git: conf
 override :rsync, version: '3.1.2'
 
 # Openssh needs to be installed
-runtime_dependency "openssh-server"
+
+if suse?
+  runtime_dependency "openssh"
+else
+  runtime_dependency "openssh-server"
+end
 
 # creates required build directories
 dependency "preparation"

@@ -174,6 +174,17 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
+### Amen.fr / Securemail.pro
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp-fr.securemail.pro"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_tls'] = true
+```
+
 ### 1&1
 
 ```ruby
@@ -204,7 +215,7 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### QQ exmail
+### QQ exmail (腾讯企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -213,9 +224,9 @@ gitlab_rails['smtp_port'] = 465
 gitlab_rails['smtp_user_name'] = "xxxx@xx.com"
 gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_ssl'] = true
 gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 ````
 
 ### Sendgrid

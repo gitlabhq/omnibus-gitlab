@@ -6,5 +6,10 @@ module GitlabSpec
         allow(Gitlab).to receive(:[]).with(key.to_s).and_return(value)
       end
     end
+
+    def stub_should_notify?(service, value)
+      allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(value)
+      allow(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(value)
+    end
   end
 end
