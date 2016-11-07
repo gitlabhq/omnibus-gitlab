@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - NGINX listen on IPv6 by default (George Gooden)
 - Update Redis to 3.2.5 (Takuya Noguchi)
 - Updarted cacerts.pem to 2016-11-02 version
+- Stopped using PCRE in the storage directory helper
 
 8.13.4
 
