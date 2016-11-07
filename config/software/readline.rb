@@ -27,7 +27,7 @@ dependency "ncurses"
 license "GPL-3.0"
 license_file "COPYING"
 
-source url: "ftp://ftp.cwru.edu/pub/bash/readline-6.2.tar.gz",
+source url: "ftp://ftp.gnu.org/gnu/readline/readline-#{version}.tar.gz",
        md5: "67948acb2ca081f23359d0256e9a271c"
 
 relative_path "#{name}-#{version}"
