@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - NGINX listen on IPv6 by default (George Gooden)
 - Update Redis to 3.2.5 (Takuya Noguchi)
 - Updarted cacerts.pem to 2016-11-02 version
+- Add git-trace logging for gitlab-shell
 
 8.13.4
 
