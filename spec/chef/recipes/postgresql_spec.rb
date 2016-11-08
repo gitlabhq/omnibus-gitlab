@@ -1,13 +1,13 @@
 require 'chef_helper'
 
 describe 'postgresql 9.2' do
-  let(:chef_run) do
-    ChefSpec::SoloRunner.new do |node|
-      node.normal['gitlab']['postgresql']['version'] = '9.2.18'
-    end.converge('gitlab::default')
-  end
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    mock_file_load(%r{gitlab/libraries/helper})
+    allow_any_instance_of(PgHelper).to receive(:version).and_return("9.2.18")
+  end
 
   context 'with default settings' do
     it 'correctly sets the shared_preload_libraries default setting' do
@@ -79,13 +79,12 @@ describe 'postgresql 9.2' do
 end
 
 describe 'postgresl 9.6' do
-  let(:chef_run) do
-    ChefSpec::SoloRunner.new do |node|
-      node.normal['gitlab']['postgresql']['version'] = '9.6.0'
-    end.converge('gitlab::default')
-  end
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    mock_file_load(%r{gitlab/libraries/helper})
+  end
 
   it 'sets unix_socket_directories' do
     expect(chef_run.node['gitlab']['postgresql']['unix_socket_directory'])

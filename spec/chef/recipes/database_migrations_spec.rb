@@ -11,6 +11,7 @@ describe 'gitlab::database-migrations' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when migration should run' do
