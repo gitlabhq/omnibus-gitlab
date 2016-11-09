@@ -13,6 +13,10 @@ omnibus-gitlab repository.
 - Stopped using PCRE in the storage directory helper
 - Add git-trace logging for gitlab-shell
 
+8.13.5
+
+- No changes
+
 8.13.4
 
 - Update curl to 7.51.0 to get the latest security patches
@@ -37,6 +41,14 @@ omnibus-gitlab repository.
 - Add support for nginx status
 - Enable jemalloc by default 0a7799d2
 - Move database migration log to a persisted location
+
+8.12.9
+
+- No changes
+
+8.12.8
+
+- No changes
 
 8.12.7
 
@@ -84,6 +96,22 @@ omnibus-gitlab repository.
 - Update curl to version 7.50.3 7848b550
 - Add default HOME variable to workhorse fcfa3672
 - Show GitLab ascii art after installation (Luis Sagastume) 17ed6cb
+
+8.11.11
+
+- No changes
+
+8.11.10
+
+- No changes
+
+8.11.9
+
+- No changes
+
+8.11.8
+
+- No changes
 
 8.11.7
 
