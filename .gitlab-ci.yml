@@ -11,6 +11,7 @@ before_script:
   - mkdir -p ~/.aws
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
+  - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
 
 # Runs on GitLab.com only
 .spec_template: &run_rspec
@@ -29,6 +30,7 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -46,6 +48,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export RASPBERRY_REPO=raspberry-pi2
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -63,6 +67,7 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -80,6 +85,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export RASPBERRY_REPO=raspberry-pi2
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
@@ -93,6 +100,7 @@ before_script:
 Docker master:
   stage: extra
   script:
+  - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - make do_docker_master
   tags:
   - docker-build
@@ -102,6 +110,7 @@ Docker master:
 Docker:
   stage: extra
   script:
+  - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - make do_docker_release
   tags:
   - docker-build
