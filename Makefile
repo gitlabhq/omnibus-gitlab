@@ -4,7 +4,6 @@ RELEASE_BUCKET_REGION=eu-west-1
 SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
-PACKAGECLOUD_REPO:=$(shell support/repo_name.sh)
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 ifeq ($(shell support/is_gitlab_ee.sh; echo $$?), 0)
 RELEASE_PACKAGE=gitlab-ee
@@ -49,13 +48,11 @@ do_release: no_changes on_tag purge build license_check move_to_platform_dir syn
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge build license_check move_to_platform_dir sync
 ifdef NIGHTLY
-test: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 test: packagecloud
 endif
 
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
-do_rpi2_release: RASPBERRY_REPO=raspberry-pi2 PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_rpi2_release: no_changes purge build license_check move_to_platform_dir sync packagecloud
 
 no_changes:
@@ -119,7 +116,6 @@ docker_push_latest:
 
 do_docker_master:
 ifdef NIGHTLY
-do_docker_master: NIGHTLY_REPO=nightly-builds PACKAGECLOUD_REPO=$(shell support/repo_name.sh)
 do_docker_master: docker_build docker_push
 endif
 
