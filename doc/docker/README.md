@@ -203,7 +203,7 @@ We provide tagged versions of GitLab Docker images.
 To see all available tags check:
 
 - [GitLab-CE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/) and
-- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/)
+- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ee/tags/)
 
 To use a specific tagged version, replace `gitlab/gitlab-ce:latest` with
 the GitLab version you want to run, for example `gitlab/gitlab-ce:8.4.3`.
