@@ -118,11 +118,7 @@ describe 'gitlab::gitlab-shell' do
             redis_host: 'redis.example.com',
             redis_port: 8888,
             redis_database: 1,
-            redis_password: "PASSWORD!",
-            redis_sentinels: [
-              {'host' => 'redis1.sentinel', 'port' => 26370},
-              {'host' => 'redis2.sentinel', 'port' => 26371}
-            ]
+            redis_password: 'PASSWORD!'
           }
         )
       }
@@ -136,6 +132,38 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/port: 8888/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/database: 1/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/namespace: resque:gitlab/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/pass: PASSWORD!/)
+        expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
+      end
+    end
+
+    context 'with sentinels configured' do
+      before {
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              {'host' => 'redis1.sentinel', 'port' => 26370},
+              {'host' => 'redis2.sentinel', 'port' => 26371}
+            ]
+          },
+          redis: {
+            master_name: 'sentinel-master',
+            master_password: 'PASSWORD!'
+          }
+        )
+      }
+
+      it 'creates the config file with the required redis settings' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/bin: \/opt\/gitlab\/embedded\/bin\/redis-cli/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/host: sentinel-master/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/port: 6379/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/namespace: resque:gitlab/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')

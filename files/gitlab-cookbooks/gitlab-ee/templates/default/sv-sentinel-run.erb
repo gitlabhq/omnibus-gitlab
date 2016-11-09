@@ -1,0 +1,7 @@
+#!/bin/sh
+exec 2>&1
+<%= render('mount_point_check.erb', cookbook: 'gitlab') %>
+umask 077
+
+<% user = @options[:user] %>
+exec chpst -P -U <%= user %> -u <%= user %> /opt/gitlab/embedded/bin/redis-sentinel <%= @options[:config_path] %>

@@ -289,12 +289,10 @@ class SecretsHelper
       secret_tokens['mattermost'].merge!(gitlab_oauth)
     end
 
-    if File.directory?("/etc/gitlab")
-      File.open("/etc/gitlab/gitlab-secrets.json", "w") do |f|
-        f.puts(
-          Chef::JSONCompat.to_json_pretty(secret_tokens)
-        )
-        system("chmod 0600 /etc/gitlab/gitlab-secrets.json")
+    if File.directory?('/etc/gitlab')
+      File.open('/etc/gitlab/gitlab-secrets.json', 'w', 0600) do |f|
+        f.puts(Chef::JSONCompat.to_json_pretty(secret_tokens))
+        f.chmod(0600)
       end
     end
   end

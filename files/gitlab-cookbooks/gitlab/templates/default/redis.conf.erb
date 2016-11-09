@@ -151,7 +151,7 @@ daemonize no
 #
 # Creating a pid file is best effort: if Redis is not able to create it
 # nothing bad happens, the server will start and run normally.
-pidfile /var/run/redis_<%= @port %>.pid
+pidfile "/var/run/redis_<%= @port %>.pid"
 
 # Specify the server verbosity level.
 # This can be one of:
@@ -238,7 +238,7 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump.rdb
+dbfilename "dump.rdb"
 
 # The working directory.
 #
@@ -248,7 +248,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir <%= @dir %>
+dir <%= %Q("#{@dir}") %>
 
 ################################# REPLICATION #################################
 
@@ -267,7 +267,7 @@ dir <%= @dir %>
 #    and resynchronize with them.
 #
 # slaveof <masterip> <masterport>
-<%= "slaveof #{@master_ip} #{@master_port}" if @master_ip && @master_port %>
+<%= "slaveof #{@master_ip} #{@master_port}" if @is_slave %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -275,7 +275,7 @@ dir <%= @dir %>
 # refuse the slave request.
 #
 # masterauth <master-password>
-<%= %Q(masterauth "#{@master_password}") if @master_password %>
+<%= %Q(masterauth "#{@master_password}") if @master_password%>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:

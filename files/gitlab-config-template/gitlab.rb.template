@@ -549,6 +549,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['uid'] = nil
 # redis['gid'] = nil
 
+## To enable only redis service in this machine, uncomment
+## one of the lines below (choose master or slave instance types).
+##
+## For more details please see:
+## https://docs.gitlab.com/ce/administration/high_availability/redis.html
+# redis_master_role['enable'] = true
+# redis_slave_role['enable'] = true
+
 ## Redis Sentinel support
 ## You need a master slave redis replication to be able to do failover
 ## Please read the documentation before enabling it to understand the
@@ -557,15 +565,79 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Redis TCP support (will disable UNIX socket transport)
 # redis['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
 # redis['port'] = 6379
+# redis['password'] = 'redis-password-goes-here'
 
-## Master redis instance (if this will act as a master instance uncomment and fill below)
-# redis['password'] = '<huge password string here>' # Only define this in the master instance
+##
+## Replication support
+##
 
-## Slave redis instance (if this will act as a slave / standby redis instance uncomment and fill below)
+## Slave redis instance
+# redis['master'] = false # by default this is true
+
+## Slave and Sentinel shared configuration
+## Both need to point to the master redis instance to get replication and heartbeat monitoring
+
+# redis['master_name'] = 'gitlab-redis'
 # redis['master_ip'] = nil
-# redis['master_port'] = nil
-# redis['master_password'] = nil
+# redis['master_port'] = 6379
 
+## Master password should have the same value defined in redis['password']
+## to enable the instance to transition to/from master/slave in a failover event.
+# redis['master_password'] = 'redis-password-goes-here'
+
+########################
+# GitLab Sentinel (EE) #
+########################
+
+## Make sure you configured all redis['master_*'] keys above before continuing.
+
+## To enable sentinel and disable all other services in this machine,
+## uncomment the line below (if you've enabled Redis role, it will keep it).
+##
+## For more details please see:
+## https://docs.gitlab.com/ce/administration/high_availability/redis.html
+# redis_sentinel_role['enable'] = true
+
+# sentinel['enable'] = true
+# sentinel['bind'] = '0.0.0.0' # bind to all interfaces, uncomment to specify an IP and bind to a single one
+# sentinel['port'] = 26379 # uncomment to change default port
+
+## Quorum must reflect the amount of voting sentinels it take to start a failover.
+## Value must NOT be greater then the ammount of sentinels.
+##
+## The quorum can be used to tune Sentinel in two ways:
+## 1. If a the quorum is set to a value smaller than the majority of Sentinels
+##    we deploy, we are basically making Sentinel more sensible to master failures,
+##    triggering a failover as soon as even just a minority of Sentinels is no longer
+##    able to talk with the master.
+## 1. If a quorum is set to a value greater than the majority of Sentinels, we are
+##    making Sentinel able to failover only when there are a very large number (larger
+##    than majority) of well connected Sentinels which agree about the master being down.s
+# sentinel['quorum'] = 1
+
+## Consider unresponsive server down after x amount of ms.
+# sentinel['down_after_milliseconds'] = 10000
+
+## Specifies the failover timeout in milliseconds. It is used in many ways:
+##
+## - The time needed to re-start a failover after a previous failover was
+##   already tried against the same master by a given Sentinel, is two
+##   times the failover timeout.
+##
+## - The time needed for a slave replicating to a wrong master according
+##   to a Sentinel current configuration, to be forced to replicate
+##   with the right master, is exactly the failover timeout (counting since
+##   the moment a Sentinel detected the misconfiguration).
+##
+## - The time needed to cancel a failover that is already in progress but
+##   did not produced any configuration change (SLAVEOF NO ONE yet not
+##   acknowledged by the promoted slave).
+##
+## - The maximum time a failover in progress waits for all the slaves to be
+##   reconfigured as slaves of the new master. However even after this time
+##   the slaves will be reconfigured by the Sentinels anyway, but not with
+##   the exact parallel-syncs progression as specified.
+# sentinel['failover_timeout'] = 60000
 
 #####################
 # GitLab Web server #
