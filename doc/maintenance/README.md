@@ -194,18 +194,25 @@ Currently GitLab Omnibus runs PostgreSQL 9.2.18 by default. Version 9.6.0 is inc
 
 
 Please note:
-1. This upgrade does require downtime as the database must be down whkle the upgrade is being performed. The length of time entirely depends on the size of your database.
-1. You will need to have sufficient disk space for two copies of your database. Do not attempt to upgrade unless you have enough free space available.
+1. This upgrade does require downtime as the database must be down while the upgrade is being performed. The length of time entirely depends on the size of your database.
+1. You will need to have sufficient disk space for two copies of your database. Do not attempt to upgrade unless you have enough free space available. If the partition where the database resides does not have enough space (default location is `/var/opt/gitlab/postgresql/data`), you can pass the argument `--tmp-dir $DIR` to the command.
 
 To perform the ugprade, run the command:
 
 ```
-sudo gitlab-ctl upgrade-db
+sudo gitlab-ctl pg-upgrade
 ```
 
 Once this is complete, verify everything is working as expected. If so, you can remove the old database with:
 
 ```
-sudo rm -rf /var/opt/gitlab/postgresl/gitlab.9.2.18
+sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 ```
 
+If you run into an issue, and wish to downgrade the version of PostgreSQL, run:
+
+```
+sudo gitlab-ctl revert-pg-upgrade
+```
+Please note:
+This will revert your database and data to what was there before you upgraded the database. Any changes you have made since the ugprade will be lost.
