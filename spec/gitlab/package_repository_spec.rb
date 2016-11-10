@@ -13,7 +13,7 @@ describe PackageRepository do
         allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(true)
       end
 
-      it { expect(repo.is_rc?).to eq true }
+      it { expect(repo.is_rc?).to eq 'unstable' }
     end
 
     context 'on stable branch' do
@@ -24,7 +24,7 @@ describe PackageRepository do
         allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(false)
       end
 
-      it { expect(repo.is_rc?).to eq false }
+      it { expect(repo.is_rc?).to eq nil }
     end
   end
 
@@ -55,8 +55,7 @@ describe PackageRepository do
         end
 
         it 'uses the override repository' do
-           expect(STDOUT).to receive(:puts).with('super-stable-1234')
-           repo.target
+           expect(repo.target).to eq('super-stable-1234')
         end
       end
     end
@@ -68,8 +67,7 @@ describe PackageRepository do
         end
 
         it 'uses the nightly repository' do
-           expect(STDOUT).to receive(:puts).with('nightly-builds')
-           repo.target
+           expect(repo.target).to eq('nightly-builds')
         end
       end
     end
@@ -81,8 +79,7 @@ describe PackageRepository do
         end
 
         it 'uses the raspberry pi repository' do
-           expect(STDOUT).to receive(:puts).with('raspi')
-           repo.target
+           expect(repo.target).to eq('raspi')
         end
       end
     end
@@ -93,8 +90,7 @@ describe PackageRepository do
       end
 
       it 'prints unstable' do
-        expect(STDOUT).to receive(:puts).with('unstable')
-        repo.target
+        expect(repo.target).to eq('unstable')
       end
 
       it_behaves_like 'with an override repository'
@@ -113,8 +109,7 @@ describe PackageRepository do
         end
 
         it 'prints gitlab-ee' do
-          expect(STDOUT).to receive(:puts).with('gitlab-ee')
-          repo.target
+          expect(repo.target).to eq('gitlab-ee')
         end
 
         it_behaves_like 'with an override repository'
@@ -128,8 +123,7 @@ describe PackageRepository do
         end
 
         it 'prints gitlab-ce' do
-          expect(STDOUT).to receive(:puts).with('gitlab-ce')
-          repo.target
+          expect(repo.target).to eq('gitlab-ce')
         end
 
         it_behaves_like 'with an override repository'
