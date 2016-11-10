@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Updarted cacerts.pem to 2016-11-02 version
 - Stopped using PCRE in the storage directory helper
 - Add git-trace logging for gitlab-shell
+- Add support for OpenSUSE 13.2 and 42.1
 
 8.13.5
 
