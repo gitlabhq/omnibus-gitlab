@@ -173,6 +173,26 @@ describe 'Redis' do
           expect(node['gitlab']['redis']['master_password']).to eq redis_password
         end
       end
+
+      context 'when both password and master_password are present' do
+        let(:master_password) { 'anotherPASSWORD' }
+        before do
+          stub_gitlab_rb(
+            redis_slave_role: {
+              enable: true
+            },
+            redis: {
+              password: redis_password,
+              master_ip: '10.0.0.0',
+              master_password: master_password
+            }
+          )
+        end
+
+        it 'keeps user specified master_password' do
+          expect(node['gitlab']['redis']['master_password']).to eq master_password
+        end
+      end
     end
 
     context 'within gitlab-rails redis values' do
