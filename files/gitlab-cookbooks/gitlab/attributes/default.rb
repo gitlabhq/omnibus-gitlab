@@ -116,6 +116,7 @@ default['gitlab']['gitlab-rails']['incoming_email_start_tls'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_email'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_password'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_mailbox_name'] = "inbox"
+default['gitlab']['gitlab-rails']['incoming_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_enabled'] = nil
@@ -474,7 +475,6 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_directory'] = "/var/log/gitlab/mailroom"
-default['gitlab']['mailroom']['idle_timeout'] = 60
 
 ####
 # GitLab Pages Daemon
