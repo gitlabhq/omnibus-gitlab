@@ -48,8 +48,7 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export RASPBERRY_REPO=raspberry-pi2
-    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -85,8 +84,7 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export RASPBERRY_REPO=raspberry-pi2
-    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi

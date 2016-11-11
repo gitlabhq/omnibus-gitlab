@@ -4,7 +4,7 @@ require 'chef_helper'
 describe PackageRepository do
   let(:repo) { PackageRepository.new }
 
-  describe :is_rc? do
+  describe :repository_for_rc do
     context 'on master' do
       # Example:
       # on non stable branch: 8.1.0+rc1.ce.0-1685-gd2a2c51
@@ -13,7 +13,7 @@ describe PackageRepository do
         allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(true)
       end
 
-      it { expect(repo.is_rc?).to eq 'unstable' }
+      it { expect(repo.repository_for_rc).to eq 'unstable' }
     end
 
     context 'on stable branch' do
@@ -24,17 +24,17 @@ describe PackageRepository do
         allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(false)
       end
 
-      it { expect(repo.is_rc?).to eq nil }
+      it { expect(repo.repository_for_rc).to eq nil }
     end
   end
 
-  describe :fetch_from_version do
+  describe :repository_for_edition do
     context 'when EE' do
       before do
         allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
       end
 
-      it { expect(repo.fetch_from_version).to eq 'gitlab-ee' }
+      it { expect(repo.repository_for_edition).to eq 'gitlab-ee' }
     end
 
     context 'when CE' do
@@ -42,7 +42,7 @@ describe PackageRepository do
         allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
       end
 
-      it { expect(repo.fetch_from_version).to eq 'gitlab-ce' }
+      it { expect(repo.repository_for_edition).to eq 'gitlab-ce' }
     end
   end
 

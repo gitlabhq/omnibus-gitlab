@@ -7,11 +7,11 @@ namespace :repository do
     puts PackageRepository.new.target
   end
 
-  task :is_rc do
-    puts PackageRepository.new.is_rc?
+  task :rc do
+    puts PackageRepository.new.repository_for_rc
   end
 
-  task :is_ee do
-    puts  PackageRepository.new.fetch_from_version
+  task :gitlab_edition do
+    puts  PackageRepository.new.repository_for_edition
   end
 end
