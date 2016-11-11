@@ -140,12 +140,13 @@ add_command_under_category 'pg-upgrade', 'database',
     die "Error moving #{TMP_DATA_DIR}.#{upgrade_version} to #{DATA_DIR}"
   end
 
-  log "Upgrade is complete, check output if anything else is needed: #{results}"
-  log 'Run the sql scripts if needed'
-  log 'Starting the db'
-  run_sv_command_for_service('start', 'postgresql')
+  log "Upgrade is complete: #{results}"
+  log 'Running reconfigure'
   if run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
-    log 'Upgrade is complete. Please verify everything is working and run the following if so'
+    log 'Database upgrade is complete, running analyze_new_cluster.sh'
+    run_pg_command("#{DATA_DIR}/../analyze_new_cluster.sh")
+    log '==== Upgrade has completed ===='
+    log 'Please verify everything is working and run the following if so'
     log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
     exit! 0
   else
