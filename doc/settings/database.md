@@ -189,7 +189,7 @@ gitlab_rails['initial_root_password'] = 'nonstandardpassword'
 
 ## Disabling automatic database migration
 
-If you have multiple GitLab servers sharing a database, you will want limit the
+If you have multiple GitLab servers sharing a database, you will want to limit the
 number of nodes that are performing the migration steps during reconfiguration.
 
 Edit `/etc/gitlab/gitlab.rb`:
