@@ -36,6 +36,7 @@ to take into account your systems settings for fs.file-max (i.e. "sysctl -w fs.f
 
 ```ruby
 redis['maxclients'] = 20000
+```
 
 ## Tuning the TCP stack for Redis
 
