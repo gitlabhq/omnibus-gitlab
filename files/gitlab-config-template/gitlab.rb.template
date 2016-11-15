@@ -5,9 +5,9 @@
 ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
 
 
-## Url on which GitLab will be reachable.
+## URL on which GitLab will be reachable.
 ## For more details on configuring external_url see:
-## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/configuration.md#configuring-the-external-url-for-gitlab
+## https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab
 external_url 'GENERATED_EXTERNAL_URL'
 
 
@@ -28,7 +28,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 # gitlab_rails['gitlab_default_theme'] = 2
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
-# See http://doc.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
+# See https://doc.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)"
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
@@ -40,7 +40,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
 # gitlab_rails['stuck_ci_builds_worker_cron'] = "0 0 * * *"
 
-# See http://docs.gitlab.com/ce/ci/yaml/README.html#artifacts:expire_in
+# See https://docs.gitlab.com/ce/ci/yaml/README.html#artifacts:expire_in
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
@@ -56,7 +56,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## Reply by email
 # Allow users to comment on issues and merge requests by replying to notification emails.
-# For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
+# For documentation on how to set this up, see https://doc.gitlab.com/ce/incoming_email/README.html
 # gitlab_rails['incoming_email_enabled'] = true
 #
 # # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
@@ -101,7 +101,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['pages_path'] = "/mnt/storage/pages"
 
 ## For setting up LDAP
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#setting-up-ldap-sign-in
+## see https://docs.gitlab.com/omnibus/settings/ldap.html
 ## Be careful not to break the indentation in the ldap_servers block. It is in
 ## yaml format and the spaces must be retained. Using tabs will not work.
 
@@ -157,7 +157,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # EOS
 
 ## Setting up Kerberos (EE only)
-## See http://doc.gitlab.com/ee/integration/kerberos.html#http-git-access
+## See https://doc.gitlab.com/ee/integration/kerberos.html#http-git-access
 # gitlab_rails['kerberos_enabled'] = true
 # gitlab_rails['kerberos_keytab'] = /etc/http.keytab
 # gitlab_rails['kerberos_service_principal_name'] = HTTP/gitlab.example.com@EXAMPLE.COM
@@ -166,7 +166,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['kerberos_https'] = true
 
 ## For setting up omniauth
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#omniauth-google-twitter-github-login
+## see https://docs.gitlab.com/ce/integration/omniauth.html
 
 # gitlab_rails['omniauth_enabled'] = false
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
@@ -184,9 +184,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 #
-# If you setup bitbucket importer under omniauth providers you will need to add the keys
-# which will allow connection between bitbucket and gitlab.
-# For details see http://doc.gitlab.com/ce/integration/bitbucket.html
+# If you setup Bitbucket importer under omniauth providers you will need to add the keys
+# which will allow connection between Bitbucket and GitLab.
+# For details see https://doc.gitlab.com/ce/integration/bitbucket.html
 # gitlab_rails['bitbucket'] = {
 #  'known_hosts_key' => 'bitbucket.org,207.223.240.182 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==',
 #  'private_key' => '-----BEGIN RSA PRIVATE KEY-----
@@ -196,11 +196,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ## For setting up backups
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#backups
+## see https://docs.gitlab.com/omnibus/settings/backups.html
 
 # gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
-# gitlab_rails['backup_archive_permissions'] = 0644 # See: http://doc.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
+# gitlab_rails['backup_archive_permissions'] = 0644 # See: https://doc.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_pg_schema'] = 'public'
 # gitlab_rails['backup_keep_time'] = 604800
 # gitlab_rails['backup_upload_connection'] = {
@@ -214,13 +214,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256' # Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for backups
 
 ## For setting up different data storing directory
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md#storing-git-data-in-an-alternative-directory
+## see https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ## If you want to use a single non-default directory to store git data use
 ## a path that doesn't contain symlinks.
 # git_data_dirs({"default" => "/var/opt/gitlab/git-data"})
 
 ## For storing GitLab application uploads, eg. LFS objects, build artifacts
-## see https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/shared_files.md
+## see https://docs.gitlab.com/ce/development/shared_files.html
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
 # DEPRECATED: gitlab_rails['satellites_timeout'] = 30
@@ -272,7 +272,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['rate_limit_period'] = 60
 
 # Change the initial default admin password.
-# Only applicable on inital setup, changing this setting after database is created and seeded
+# Only applicable on initial setup, changing this setting after database is created and seeded
 # won't yield any change.
 # gitlab_rails['initial_root_password'] = "password"
 
@@ -282,7 +282,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ############################
 # GitLab database settings #
 ############################
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/database.md#database-settings
+## see https://docs.gitlab.com/omnibus/settings/database.html
 ## Only needed if you use an external database.
 
 # gitlab_rails['db_adapter'] = "postgresql"
@@ -300,10 +300,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 
 #########################
-# GitLab redis settings #
+# GitLab Redis settings #
 #########################
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/redis.md#redis-settings
-## Connect to your own redis instance.
+## see https://docs.gitlab.com/omnibus/settings/redis.html
+## Connect to your own Redis instance
 
 ## Redis TCP connection
 # gitlab_rails['redis_host'] = "127.0.0.1"
@@ -315,8 +315,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
 ## Sentinel support
-## To have sentinel working, you must enable Redis TCP connection support
-## above ## and define a few sentinel hosts below (to get a reliable setup
+## To have Sentinel working, you must enable Redis TCP connection support
+## above ## and define a few Sentinel hosts below (to get a reliable setup
 ## at least 3 hosts).
 ## You don't need to list every sentinel host, but the ones unlisted will
 ## not be used in a fail-over situation to query for the new master.
@@ -327,7 +327,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################
 # GitLab email server settings #
 ################################
-# see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/smtp.md#smtp-settings
+# see https://docs.gitlab.com/omnibus/settings/smtp.html
 # Use smtp instead of sendmail/postfix.
 
 # gitlab_rails['smtp_enable'] = true
@@ -376,7 +376,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['storage_delete_enabled'] = true
-# # Registry backend storage, see http://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
+# # Registry backend storage, see https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
 # registry['storage'] = {
 #   's3' => {
 #     'accesskey' => 'AKIAKIAKI',
@@ -411,7 +411,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###############
 # GitLab user #
 ###############
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#changing-the-name-of-the-git-user-group
+## see https://docs.gitlab.com/omnibus/settings/configuration.html#changing-the-name-of-the-git-user-group
 ## Modify default git user.
 
 
@@ -471,7 +471,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['http_settings'] = { user: 'username', password: 'password', ca_file: '/etc/ssl/cert.pem', ca_path: '/etc/pki/tls/certs', self_signed_cert: false}
 # gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 
-## If enabled, git-annex needs to be installed on the server where gitlab is setup
+## If enabled, git-annex needs to be installed on the server where GitLab is setup
 # For Debian and Ubuntu systems this can be done with: sudo apt-get install git-annex
 # For CentOS: sudo yum install epel-release && sudo yum install git-annex
 # gitlab_shell['git_annex_enabled'] = false
@@ -539,7 +539,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################
 # GitLab Redis #
 ################
-## Can be disabled if you are using your own redis instance.
+## Can be disabled if you are using your own Redis instance.
 
 # redis['enable'] = true
 # redis['username'] = "gitlab-redis"
@@ -549,16 +549,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['uid'] = nil
 # redis['gid'] = nil
 
-## To enable only redis service in this machine, uncomment
+## To enable only Redis service in this machine, uncomment
 ## one of the lines below (choose master or slave instance types).
 ##
 ## For more details please see:
-## https://docs.gitlab.com/ce/administration/high_availability/redis.html
+## https://docs.gitlab.com/ce/administration/high_availability/redis.html and
+## https://docs.gitlab.com/omnibus/settings/redis.html
 # redis_master_role['enable'] = true
 # redis_slave_role['enable'] = true
 
 ## Redis Sentinel support
-## You need a master slave redis replication to be able to do failover
+## You need a master slave Redis replication to be able to do failover
 ## Please read the documentation before enabling it to understand the
 ## caveats: https://docs.gitlab.com/ce/administration/high_availability/redis.html
 
@@ -571,11 +572,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Replication support
 ##
 
-## Slave redis instance
+## Slave Redis instance
 # redis['master'] = false # by default this is true
 
 ## Slave and Sentinel shared configuration
-## Both need to point to the master redis instance to get replication and heartbeat monitoring
+## Both need to point to the master Redis instance to get replication and heartbeat monitoring
 
 # redis['master_name'] = 'gitlab-redis'
 # redis['master_ip'] = nil
@@ -603,7 +604,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sentinel['port'] = 26379 # uncomment to change default port
 
 ## Quorum must reflect the amount of voting sentinels it take to start a failover.
-## Value must NOT be greater then the ammount of sentinels.
+## Value must NOT be greater then the amount of sentinels.
 ##
 ## The quorum can be used to tune Sentinel in two ways:
 ## 1. If a the quorum is set to a value smaller than the majority of Sentinels
@@ -612,7 +613,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##    able to talk with the master.
 ## 1. If a quorum is set to a value greater than the majority of Sentinels, we are
 ##    making Sentinel able to failover only when there are a very large number (larger
-##    than majority) of well connected Sentinels which agree about the master being down.s
+##    than majority) of well connected Sentinels which agree about the master being down.
 # sentinel['quorum'] = 1
 
 ## Consider unresponsive server down after x amount of ms.
@@ -642,7 +643,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #####################
 # GitLab Web server #
 #####################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/doc/settings/nginx.md#using-a-non-bundled-web-server
+## see: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server
 ## When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.
 
 # web_server['external_users'] = []
@@ -657,7 +658,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################
 # GitLab Nginx #
 ################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/doc/settings/nginx.md
+## see: https://docs.gitlab.com/omnibus/settings/nginx.html
 
 # nginx['enable'] = true
 # nginx['client_max_body_size'] = '250m'
@@ -671,12 +672,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # nginx['ssl_prefer_server_ciphers'] = "on"
 # nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-# nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# nginx['ssl_session_timeout'] = "5m" # default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
 # nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
 # nginx['listen_addresses'] = ['*', '[::]']
-# nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
-# nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# nginx['listen_port'] = nil # override only if you use a reverse proxy: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
+# nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
 # nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/example.conf;"
 # nginx['proxy_read_timeout'] = 3600
@@ -731,7 +732,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##################
 # GitLab Logging #
 ##################
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#logs
+## see: https://docs.gitlab.com/omnibus/settings/logs.html
 
 # logging['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
 # logging['svlogd_num'] = 30 # keep 30 rotated log files
@@ -753,7 +754,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############
 # Logrotate #
 #############
-## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/README.md#logrotate
+## see: hhttps://docs.gitlab.com/omnibus/settings/logs.html#logrotate
 ## You can disable built in logrotate feature.
 
 # logrotate['enable'] = true
@@ -763,7 +764,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############################
 ## Disable management of users and groups accounts.
 ## Set only if creating accounts manually
-## See: http://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
+## See: https://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
 # manage_accounts['enable'] = false
 
 #######################
@@ -771,7 +772,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #######################
 ## Disable managing storage directories
 ## Set only if the select directories are created manually
-## See: http://doc.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
+## See: https://doc.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
 # manage_storage_directories['enable'] = false
 # manage_storage_directories['manage_etc'] = false
 
@@ -787,7 +788,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############
 # GitLab CI #
 #############
-## see https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/gitlab-ci/README.md
+## see https://docs.gitlab.com/omnibus/gitlab-ci/README.html
 
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
 # gitlab_ci['gitlab_ci_add_pusher'] = true
@@ -945,12 +946,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # mattermost_nginx['ssl_prefer_server_ciphers'] = "on"
 # mattermost_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-# mattermost_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# mattermost_nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# mattermost_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# mattermost_nginx['ssl_session_timeout'] = "5m" # default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
 # mattermost_nginx['ssl_dhparam'] = nil # Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
 # mattermost_nginx['listen_addresses'] = ['*', '[::]']
-# mattermost_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
-# mattermost_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# mattermost_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
+# mattermost_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
 # mattermost_nginx['custom_gitlab_mattermost_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # mattermost_nginx['proxy_set_headers'] = {
 #   "Host" => "$http_host",
@@ -1008,12 +1009,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pages_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # pages_nginx['ssl_prefer_server_ciphers'] = "on"
 # pages_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-# pages_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# pages_nginx['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# pages_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# pages_nginx['ssl_session_timeout'] = "5m" # default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
 # pages_nginx['ssl_dhparam'] = nil # Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
 # pages_nginx['listen_addresses'] = ['*', '[::]']
-# pages_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
-# pages_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# pages_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
+# pages_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
 # pages_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 
 ## Advanced settings
@@ -1026,8 +1027,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
 # registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
-# registry_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#setting-the-nginx-listen-port
-# registry_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md#supporting-proxied-ssl
+# registry_nginx['listen_port'] = nil # override only if you use a reverse proxy: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
+# registry_nginx['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
 # registry_nginx['proxy_set_headers'] = {
 #  "Host" => "$http_host",
 #  "X-Real-IP" => "$remote_addr",
