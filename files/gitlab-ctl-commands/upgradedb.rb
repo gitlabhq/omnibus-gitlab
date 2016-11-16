@@ -33,7 +33,9 @@ TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : DATA_DIR
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            1 do |_cmd_name|
-  if fetch_running_version == default_version
+  if progress_message('Checking if we need to downgrade') do
+    fetch_running_version == default_version
+  end
     log "Already running #{default_version}"
     exit! 1
   end
@@ -62,98 +64,121 @@ add_command_under_category 'pg-upgrade', 'database',
                            1 do |_cmd_name|
   running_version = fetch_running_version
 
-  log 'Checking for an omnibus managed postgresql'
-  if running_version.nil?
-    log 'No currently installed postgresql in the omnibus instance found.' \
-        'Nothing to do'
+  unless progress_message(
+    'Checking for an omnibus managed postgresql') do
+      !running_version.nil? && \
+      get_all_services.member?('postgresql')
+    end
+    $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     exit! 1
   end
 
-  unless running_version == default_version
+  unless progress_message('Checking version of running PostgreSQL') do
+    running_version == default_version
+  end
     log "psql reports #{running_version}, we're expecting " \
-        "#{default_version}, not sure how to proceed"
+    "#{default_version}, cannot proceed"
     exit! 1
   end
 
-  if upgrade_version.nil?
-    log "No new version of PostgreSQL installed, nothing to upgrade to"
+  if progress_message(
+    'Checking for a newer version of PostgreSQL to install') do
+      upgrade_version.nil?
+      Dir.exist?("#{INST_DIR}/#{upgrade_version}")
+    end
+    log "Upgrading PostgreSQL to #{upgrade_version}"
+  else
+    $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     exit! 1
   end
 
-  unless Dir.exist?("#{INST_DIR}/#{upgrade_version}")
-    log "#{upgrade_version} is not installed, cannot upgrade"
-    exit! 1
+  unless progress_message('Checking if existing PostgreSQL instances needs to be upgraded') do
+    running_version != upgrade_version
   end
-
-  unless get_all_services.member?('postgresql')
-    log "No postgresql instance found, assuming you're running your own and " \
-      'doing nothing'
-    exit! 0
-  end
-
-  log 'Found PostgreSQL instance, does it need to ugprade?'
-  if running_version == upgrade_version
     log "Already at #{upgrade_version}, nothing to do"
     exit! 0
   end
 
   # In case someone altered the db outside of the recommended parameters,
   # make sure everything is as we expect
-  if File.symlink?(DATA_DIR)
+  unless progress_message(
+    'Checking if the PostgreSQL directory has been symlinked elsewhere'
+  ) do
+    !File.symlink?(DATA_DIR)
+  end
     die "#{DATA_DIR} is a symlink to another directory. Will not proceed"
   end
 
-  Dir.glob("#{INST_DIR}/#{default_version}/bin/*").each do |bin_file|
-    link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
-    unless File.symlink?(link) && File.readlink(link).eql?(bin_file)
-      die "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
+  unless progress_message(
+    'Checking if PostgreSQL bin files are symlinked to the expected location'
+  ) do
+    Dir.glob("#{INST_DIR}/#{default_version}/bin/*").each do |bin_file|
+      link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
+      File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
+  end
+    die "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
   end
 
   # Get the existing locale before we move on
   locale, encoding = fetch_lc_collate.strip.split('.')
-  log 'Stopping the database'
-  run_sv_command_for_service('stop', 'postgresql')
-  log 'Update the symlinks'
-  create_links(upgrade_version)
+  progress_message('Stopping the database') do
+    run_sv_command_for_service('stop', 'postgresql')
+  end
 
-  unless run_command("install -d -o gitlab-psql #{TMP_DATA_DIR}.#{upgrade_version}")
+  progress_message('Update the symlinks') do
+    create_links(upgrade_version)
+  end
+
+  unless progress_message('Creating temporary data directory') do
+    run_command("install -d -o gitlab-psql #{TMP_DATA_DIR}.#{upgrade_version}")
+  end
     die 'Error creating new directory'
   end
 
-  log 'Initializing the new database'
-  run_pg_command(
-    "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} --locale #{locale} " \
-    "--encoding #{encoding} --lc-collate=#{locale}.#{encoding} " \
-    "--lc-ctype=#{locale}.#{encoding}"
-  )
-  results = run_pg_command(
-    "#{base_path}/embedded/bin/pg_upgrade -b #{base_path}/embedded/postgresql/#{default_version}/bin " \
-    "-d #{DATA_DIR} -D #{TMP_DATA_DIR}.#{upgrade_version} -B #{base_path}/embedded/bin"
-  )
+  unless progress_message('Initializing the new database') do
+    run_pg_command(
+      "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} " \
+      "--locale #{locale} --encoding #{encoding} --lc-collate=#{locale}.#{encoding} " \
+      "--lc-ctype=#{locale}.#{encoding}"
+    )
+  end
+    die 'Error initializing new database'
+  end
 
-  log 'Move the old data directory out of the way'
-  unless run_command("mv #{DATA_DIR} #{TMP_DATA_DIR}.#{default_version}")
+  unless progress_message('Upgrading the data') do
+    run_pg_command(
+      "#{base_path}/embedded/bin/pg_upgrade -b #{base_path}/embedded/postgresql/#{default_version}/bin " \
+      "-d #{DATA_DIR} -D #{TMP_DATA_DIR}.#{upgrade_version} -B #{base_path}/embedded/bin"
+    )
+  end
+    die 'Error upgrading the database'
+  end
+
+  unless progress_message('Move the old data directory out of the way') do
+    run_command("mv #{DATA_DIR} #{TMP_DATA_DIR}.#{default_version}")
+  end
     die 'Error moving data for older version, '
   end
 
-  log 'Rename the new data directory'
-  unless run_command("mv #{TMP_DATA_DIR}.#{upgrade_version} #{DATA_DIR}")
+  unless progress_message('Rename the new data directory') do
+    run_command("mv #{TMP_DATA_DIR}.#{upgrade_version} #{DATA_DIR}")
+  end
     die "Error moving #{TMP_DATA_DIR}.#{upgrade_version} to #{DATA_DIR}"
   end
 
-  log "Upgrade is complete: #{results}"
-  log 'Running reconfigure'
-  if run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
-    log 'Database upgrade is complete, running analyze_new_cluster.sh'
-    run_pg_command("#{DATA_DIR}/../analyze_new_cluster.sh")
-    log '==== Upgrade has completed ===='
-    log 'Please verify everything is working and run the following if so'
-    log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
-    exit! 0
-  else
+  log 'Upgrade is complete, doing post configuration steps'
+  unless progress_message('Running reconfigure') do
+    run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
+  end
     die 'Something went wrong during final reconfiguration, please check the output'
   end
+  log 'Database upgrade is complete, running analyze_new_cluster.sh'
+  run_pg_command("#{DATA_DIR}/../analyze_new_cluster.sh")
+  log '==== Upgrade has completed ===='
+  log 'Please verify everything is working and run the following if so'
+  log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
+  exit! 0
 end
 
 class ExecutionError < StandardError
@@ -241,4 +266,15 @@ def die(message)
   revert
   log "== Reverted to #{default_version}. Please check output for what went wrong =="
   exit 1
+end
+
+def progress_message(message, &block)
+  $stdout.print "\r#{message}:"
+  results = block.call
+  if results
+    $stdout.print "\r#{message}: \e[32mOK\e[0m\n"
+  else
+    $stdout.print "\r#{message}: \e[31mNOT OK\e[0m\n"
+  end
+  results
 end
