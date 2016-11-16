@@ -5,7 +5,6 @@ describe 'registry recipe' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when registry is enabled' do
@@ -121,7 +120,6 @@ describe 'registry' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when registry is enabled' do

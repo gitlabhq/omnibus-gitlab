@@ -5,10 +5,6 @@ describe RedisHelper do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   subject { described_class.new(chef_run.node) }
 
-  before do
-    mock_file_load(%r{gitlab/libraries/helper})
-  end
-
   context '#redis_url' do
     context 'with default configuration' do
       it 'returns a unix socket' do

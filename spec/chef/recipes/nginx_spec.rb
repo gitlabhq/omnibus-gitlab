@@ -11,8 +11,6 @@ describe 'gitlab::nginx' do
       }
     })
 
-    mock_file_load(%r{gitlab/libraries/helper})
-
     # generate a random number to use as error code
     @code = rand(1000)
     @nginx_errors = {
@@ -77,7 +75,6 @@ describe 'nginx' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when http external urls are being used' do

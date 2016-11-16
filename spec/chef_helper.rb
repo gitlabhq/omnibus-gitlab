@@ -48,5 +48,8 @@ RSpec.configure do |config|
     allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version').and_return('fake_psql_version')
     allow_any_instance_of(Chef::Recipe).to receive(:system).with('/sbin/init --version | grep upstart')
     allow_any_instance_of(Chef::Recipe).to receive(:system).with('systemctl | grep "\-\.mount"')
+    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
+    mock_file_load(%r{gitlab/libraries/storage_directory_helper})
+    mock_file_load(%r{gitlab/libraries/helper})
   end
 end

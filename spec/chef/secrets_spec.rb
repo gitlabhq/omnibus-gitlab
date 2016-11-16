@@ -13,7 +13,6 @@ describe 'secrets' do
     allow(File).to receive(:exists?).and_call_original
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:open).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when /etc/gitlab does not exist' do

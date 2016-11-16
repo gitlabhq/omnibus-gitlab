@@ -6,7 +6,6 @@ describe PgHelper do
 
   before do
     allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version').and_return("YYYYYYYY XXXXXXX")
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   it 'returns a valid version' do

@@ -33,19 +33,21 @@ TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : DATA_DIR
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            1 do |_cmd_name|
-  running_version = fetch_running_version
-  if running_version == default_version
+  if fetch_running_version == default_version
     log "Already running #{default_version}"
     exit! 1
   end
 
   unless Dir.exist?("#{TMP_DATA_DIR}.#{default_version}")
     log "#{TMP_DATA_DIR}.#{default_version} does not exist, cannot revert data"
-    log 'Will proceed with reverting the running program version only,  unless you interrupt'
+    log 'Will proceed with reverting the running program version only, unless you interrupt'
   end
 
   log "Reverting database to #{default_version} in 5 seconds"
+  log '=== WARNING ==='
+  log 'This will revert the database to what it was before you upgraded, including the data.'
   log "Please hit Ctrl-C now if this isn't what you were looking for"
+  log '=== WARNING ==='
   begin
     sleep 5
   rescue Interrupt
@@ -60,7 +62,7 @@ add_command_under_category 'pg-upgrade', 'database',
                            1 do |_cmd_name|
   running_version = fetch_running_version
 
-  log 'Is an omnibus managed postgresql running and upgradable?'
+  log 'Checking for an omnibus managed postgresql'
   if running_version.nil?
     log 'No currently installed postgresql in the omnibus instance found.' \
         'Nothing to do'
@@ -89,7 +91,7 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 0
   end
 
-  log 'Do we need to ugprade?'
+  log 'Found PostgreSQL instance, does it need to ugprade?'
   if running_version == upgrade_version
     log "Already at #{upgrade_version}, nothing to do"
     exit! 0
@@ -119,7 +121,7 @@ add_command_under_category 'pg-upgrade', 'database',
     die 'Error creating new directory'
   end
 
-  log 'Initialize the new database'
+  log 'Initializing the new database'
   run_pg_command(
     "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} --locale #{locale} " \
     "--encoding #{encoding} --lc-collate=#{locale}.#{encoding} " \

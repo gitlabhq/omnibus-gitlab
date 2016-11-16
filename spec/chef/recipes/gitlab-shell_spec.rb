@@ -5,10 +5,6 @@ describe 'gitlab::gitlab-shell' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
-    mock_file_load(%r{gitlab/libraries/storage_directory_helper})
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
@@ -156,7 +152,6 @@ describe 'gitlab_shell::git_data_dir' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   context 'when git_data_dir is set as a single directory' do

@@ -5,7 +5,6 @@ describe 'postgresql 9.2' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
     allow_any_instance_of(PgHelper).to receive(:version).and_return("9.2.18")
   end
 
@@ -83,7 +82,6 @@ describe 'postgresl 9.6' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    mock_file_load(%r{gitlab/libraries/helper})
   end
 
   it 'sets unix_socket_directories' do
