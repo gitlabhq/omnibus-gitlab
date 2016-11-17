@@ -33,6 +33,7 @@ TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : DATA_DIR
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            1 do |_cmd_name|
+  maintenance_mode('enable')
   if progress_message('Checking if we need to downgrade') do
     fetch_running_version == default_version
   end
@@ -57,6 +58,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     exit! 0
   end
   revert
+  maintenance_mode('disable')
 end
 
 add_command_under_category 'pg-upgrade', 'database',
@@ -106,7 +108,8 @@ add_command_under_category 'pg-upgrade', 'database',
   ) do
     !File.symlink?(DATA_DIR)
   end
-    die "#{DATA_DIR} is a symlink to another directory. Will not proceed"
+    log "#{DATA_DIR} is a symlink to another directory. Will not proceed"
+    exit! 1
   end
 
   unless progress_message(
@@ -117,8 +120,12 @@ add_command_under_category 'pg-upgrade', 'database',
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
   end
-    die "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
+    log "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
+    exit! 1
   end
+
+  # All tests have passed, this should be an upgradable instance.
+  maintenance_mode('enable')
 
   # Get the existing locale before we move on
   locale, encoding = fetch_lc_collate.strip.split('.')
@@ -178,6 +185,7 @@ add_command_under_category 'pg-upgrade', 'database',
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
+  maintenance_mode('disable')
   exit! 0
 end
 
@@ -265,6 +273,7 @@ def die(message)
   log message
   revert
   log "== Reverted to #{default_version}. Please check output for what went wrong =="
+  maintenance_mode('disable')
   exit 1
 end
 
@@ -277,4 +286,28 @@ def progress_message(message, &block)
     $stdout.print "\r#{message}: \e[31mNOT OK\e[0m\n"
   end
   results
+end
+
+def maintenance_mode(command)
+  # In order for the deploy page to work, we need nginx, unicorn, redis, and
+  # gitlab-workhorse running
+  # We'll manage postgresql during the ugprade process
+  omit_services = %w(postgresql nginx unicorn redis gitlab-workhorse)
+  if command.eql?('enable')
+    dp_cmd = 'up'
+    sv_cmd = 'stop'
+  elsif command.eql?('disable')
+    dp_cmd = 'down'
+    sv_cmd = 'start'
+  else
+    raise StandardError("Cannot handle command #{command}")
+  end
+  progress_message('Toggling deploy page') do
+    run_command("#{base_path}/bin/gitlab-ctl deploy-page #{dp_cmd}")
+  end
+  progress_message('Toggling services') do
+    get_all_services.select { |x| !omit_services.include?(x) }.each do |svc|
+      run_sv_command_for_service(sv_cmd, svc)
+    end
+  end
 end

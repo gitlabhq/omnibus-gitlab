@@ -192,10 +192,14 @@ and run `sudo gitlab-ctl reconfigure`.
 
 Currently GitLab Omnibus runs PostgreSQL 9.2.18 by default. Version 9.6.1 is included as an option for users to manually upgrade. The next major release will ship with a newer PostgresQL by default, and will upgrade existing omnibus installations when they are upgraded.
 
+In order to be able to manually upgrade, please check the folowing:
+* You're currently running the latest version of GitLab and it is working. If you recently upgraded, make sure that `gitlab-ctl reconfigure` has successfully run before you proceed.
+* You're using the bundled version of PostgreSQL. Look for `postgresql['enable']` to be `true`, commented out, or absent from `/etc/gitlab/gitlab.rb`
+* You haven't already upgraded. Running `/opt/gitlab/embedded/bin/psql --version` should print `psql (PostgreSQL) 9.2.18`
+* You will need to have sufficient disk space for two copies of your database. Do not attempt to upgrade unless you have enough free space available. If the partition where the database resides does not have enough space (default location is `/var/opt/gitlab/postgresql/data`), you can pass the argument `--tmp-dir $DIR` to the command.
 
 Please note:
-1. This upgrade does require downtime as the database must be down while the upgrade is being performed. The length of time entirely depends on the size of your database.
-1. You will need to have sufficient disk space for two copies of your database. Do not attempt to upgrade unless you have enough free space available. If the partition where the database resides does not have enough space (default location is `/var/opt/gitlab/postgresql/data`), you can pass the argument `--tmp-dir $DIR` to the command.
+* This upgrade does require downtime as the database must be down while the upgrade is being performed. The length of time entirely depends on the size of your database.
 
 To perform the ugprade, run the command:
 
