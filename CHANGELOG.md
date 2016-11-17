@@ -14,6 +14,10 @@ omnibus-gitlab repository.
 - Add git-trace logging for gitlab-shell
 - Add support for OpenSUSE 13.2 and 42.1
 
+8.13.6
+
+- No changes
+
 8.13.5
 
 - No changes
