@@ -113,6 +113,8 @@ production: &base
 
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: <%= single_quote(@incoming_email_mailbox_name) %>
+    # The IDLE command timeout.
+    idle_timeout: <%= @incoming_email_idle_timeout %>
 
   ## Build Artifacts
   artifacts:
