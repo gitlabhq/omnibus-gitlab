@@ -56,16 +56,18 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
 
     # If you wish to use Redis authentication (recommended)
     redis['password'] = 'Redis Password'
+    gitlab_rails['redis_password'] = 'Redis Password'
     
     # Disable automatic database migrations
     #   Only the primary GitLab application server should handle migrations
     gitlab_rails['auto_migrate'] = false
     ```
+    
+    > **Note:** The `redis_master_role['enable']` option is only available as of
+    GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
+    to understand which services are automatically disabled via that option.
 
 1. Run `sudo gitlab-ctl reconfigure` to install and configure Redis.
-
-    > **Note**: This `reconfigure` step will result in some errors.
-      That's OK - don't be alarmed.
 
 ## Increasing the number of Redis connections beyond the default
 
