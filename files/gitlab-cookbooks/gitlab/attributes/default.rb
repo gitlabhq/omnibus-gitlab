@@ -784,6 +784,14 @@ default['gitlab']['mattermost']['service_session_length_web_in_days'] = 30
 default['gitlab']['mattermost']['service_session_length_mobile_in_days'] = 30
 default['gitlab']['mattermost']['service_session_length_sso_in_days'] = 30
 default['gitlab']['mattermost']['service_session_cache_in_minutes'] = 10
+default['gitlab']['mattermost']['service_connection_security'] = nil
+default['gitlab']['mattermost']['service_tls_cert_file'] = nil
+default['gitlab']['mattermost']['service_tls_key_file'] = nil
+default['gitlab']['mattermost']['service_use_lets_encrypt'] = false
+default['gitlab']['mattermost']['service_lets_encrypt_cert_cache_file'] = "./config/letsencrypt.cache"
+default['gitlab']['mattermost']['service_forward_80_to_443'] = false
+default['gitlab']['mattermost']['service_read_timeout'] = 300
+default['gitlab']['mattermost']['service_write_timeout'] = 300
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
@@ -815,6 +823,7 @@ default['gitlab']['mattermost']["file_amazon_s3_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_bucket_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_location_constraint"] = false
 default['gitlab']['mattermost']["file_amazon_s3_lowercase_bucket"] = false
+default['gitlab']['mattermost']["file_amazon_s3_ssl"] = true
 
 default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
 default['gitlab']['mattermost']['email_enable_sign_in_with_email'] = true
@@ -836,11 +845,12 @@ default['gitlab']['mattermost']['email_enable_batching'] = false
 default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
 default['gitlab']['mattermost']['email_batching_interval'] = 30
 
-default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
+default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
 default['gitlab']['mattermost']['ratelimit_memory_store_size'] = 10000
 default['gitlab']['mattermost']['ratelimit_vary_by_remote_addr'] = true
 default['gitlab']['mattermost']['ratelimit_vary_by_header'] = nil
+default['gitlab']['mattermost']['ratelimit_max_burst'] = 100
 
 default['gitlab']['mattermost']['privacy_show_email_address'] = true
 default['gitlab']['mattermost']['privacy_show_full_name'] = true
@@ -859,6 +869,7 @@ default['gitlab']['mattermost']['team_allow_valet_default'] = false
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 default['gitlab']['mattermost']['team_restrict_team_names'] = true
 default['gitlab']['mattermost']['team_restrict_direct_message'] = "any"
+default['gitlab']['mattermost']['team_max_channels_per_team'] = 2000
 
 default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
 default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
@@ -873,6 +884,15 @@ default['gitlab']['mattermost']['gitlab_scope'] = nil
 default['gitlab']['mattermost']['gitlab_auth_endpoint'] = nil
 default['gitlab']['mattermost']['gitlab_token_endpoint'] = nil
 default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
+
+default['gitlab']['mattermost']['webrtc_enable'] = false
+default['gitlab']['mattermost']['webrtc_gateway_websocket_url'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_admin_url'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_admin_secret'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_stun_uri'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_uri'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_username'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_shared_key'] = nil
 
 ####
 # Mattermost NGINX

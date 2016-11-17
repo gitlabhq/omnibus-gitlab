@@ -37,6 +37,7 @@ omnibus-gitlab repository.
 - Add support for configuring workhorse's api limiting
 - Fix unsetting the sticky bit for storage directory permissions and improved error messages
 - Fixed a bug with disabling registry storage deletion
+- Update mattermost to 3.5
 - Support specifying a post reconfigure script to run in the docker container
 - Updated cacerts.pem to 2016-09-14 version
 - Add support for nginx status
