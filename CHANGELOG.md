@@ -5,14 +5,18 @@ omnibus-gitlab repository.
 
 8.14.0
 
-- Switch the redis user's shell to /bin/false
-- NGINX listen on IPv6 by default (George Gooden)
-- Upgrade Nginx to 1.10.2
-- Update Redis to 3.2.5 (Takuya Noguchi)
-- Updarted cacerts.pem to 2016-11-02 version
-- Stopped using PCRE in the storage directory helper
-- Add git-trace logging for gitlab-shell
-- Add support for OpenSUSE 13.2 and 42.1
+- Switch the redis user's shell to /bin/false 9d60ee4
+- NGINX listen on IPv6 by default (George Gooden) 34e28112
+- Upgrade Nginx to 1.10.2 085bf610
+- Update Redis to 3.2.5 (Takuya Noguchi) edf0575c1
+- Updarted cacerts.pem to 2016-11-02 version aca2f5e88
+- Stopped using PCRE in the storage directory helper 0e06490
+- Add git-trace logging for gitlab-shell 1dab1c
+- Update mattermost to 3.5 7ecf31
+- Add support for OpenSUSE 13.2 and 42.1 82b7345 6ea9e2
+- Support Redis Sentinel daemon (EE only) 457c4764
+- Separate package repositories for OL and SL e37eaae
+- Add mailroom idle timeout configuration 0488f3de
 
 8.13.5
 
@@ -20,29 +24,27 @@ omnibus-gitlab repository.
 
 8.13.4
 
-- Update curl to 7.51.0 to get the latest security patches
-- Fix executable file mode for the Docker image update-permissions command
+- Update curl to 7.51.0 to get the latest security patches fc32c83
+- Fix executable file mode for the Docker image update-permissions command 6c80205
 
 8.13.2
 
-- Move mail_room queue from incoming_email to email_receiver
+- Move mail_room queue from incoming_email to email_receiver 373609c
 
 8.13.1
 
-- Update docs for nginx status, fix the default server for status config
+- Update docs for nginx status, fix the default server for status config b49fb1
 
 8.13.0
 
-- Add support for registry debug addr configuration
-- Add support for configuring workhorse's api limiting
-- Fix unsetting the sticky bit for storage directory permissions and improved error messages
-- Fixed a bug with disabling registry storage deletion
-- Update mattermost to 3.5
-- Support specifying a post reconfigure script to run in the docker container
-- Updated cacerts.pem to 2016-09-14 version
-- Add support for nginx status
+- Add support for registry debug addr configuration 87b7a780
+- Add support for configuring workhorse's api limiting 1b6c85d4
+- Fix unsetting the sticky bit for storage directory permissions and improved error messages 7467b51
+- Fixed a bug with disabling registry storage deletion be305d40
+- Support specifying a post reconfigure script to run in the docker container aa8bec5
+- Add support for nginx status (Luis Sagastume) 3cd7b36
 - Enable jemalloc by default 0a7799d2
-- Move database migration log to a persisted location
+- Move database migration log to a persisted location b368c46c
 
 8.12.9
 
@@ -54,7 +56,7 @@ omnibus-gitlab repository.
 
 8.12.7
 
-- Use forked gitlab-markup gem (forked from github-markup)
+- Use forked gitlab-markup gem (forked from github-markup) 422d9bf20
 
 8.12.6
 
@@ -70,15 +72,15 @@ omnibus-gitlab repository.
 
 8.12.3
 
-- Updated cacerts.pem to 2016-09-14 version
+- Updated cacerts.pem to 2016-09-14 version 9bc1fec
 
 8.12.2
 
-- Update openssl to 1.0.2j
+- Update openssl to 1.0.2j 527d02
 
 8.12.1
 
-- Fix gitlab-workhorse Runit template bug #1595 !1005
+- Fix gitlab-workhorse Runit template bug e20e5ff
 
 8.12.0
 
