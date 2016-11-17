@@ -2,6 +2,14 @@
     "ServiceSettings": {
         "SiteURL": "<%= @service_site_url %>",
         "ListenAddress": "<%= @service_address %>:<%= @service_port %>",
+        "ConnectionSecurity": "<%= @service_connection_security %>",
+        "TLSCertFile": "<%= @service_tls_cert_file %>",
+        "TLSKeyFile": "<%= @service_tls_key_file %>",
+        "UseLetsEncrypt": <%= @service_use_lets_encrypt %>,
+        "LetsEncryptCertificateCacheFile": "<%= @service_lets_encrypt_cert_cache_file %>",
+        "Forward80To443": <%= @service_forward_80_to_443 %>,
+        "ReadTimeout": <%= @service_read_timeout %>,
+        "WriteTimeout": <%= @service_write_timeout %>,
         "MaximumLoginAttempts": <%= @service_maximum_login_attempts %>,
         "SegmentDeveloperKey": "<%= @service_segment_developer_key %>",
         "GoogleDeveloperKey": "<%= @service_google_developer_key %>",
@@ -31,7 +39,8 @@
         "EnableOpenServer": <%= @team_enable_open_server %>,
         "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>",
         "RestrictTeamNames": <%= @team_restrict_team_names %>,
-        "RestrictDirectMessage": "<%= @team_restrict_direct_message %>"
+        "RestrictDirectMessage": "<%= @team_restrict_direct_message %>",
+        "MaxChannelsPerTeam": <%= @team_max_channels_per_team %>
     },
     "SqlSettings": {
         "DriverName": "<%= @sql_driver_name %>",
@@ -72,7 +81,8 @@
         "AmazonS3Endpoint": "<%= @file_amazon_s3_endpoint %>",
         "AmazonS3BucketEndpoint": "<%= @file_amazon_s3_bucket_endpoint %>",
         "AmazonS3LocationConstraint": <%= @file_amazon_s3_location_constraint %>,
-        "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>
+        "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>,
+        "AmazonS3SSL": <%= @file_amazon_s3_ssl %>
     },
     "EmailSettings": {
         "EnableSignUpWithEmail": <%= @email_enable_sign_up_with_email %>,
@@ -98,8 +108,9 @@
         "EmailBatchingInterval": <%= @email_batching_interval %>
     },
     "RateLimitSettings": {
-        "EnableRateLimiter": <%= @ratelimit_enable_rate_limiter %>,
+        "Enable": <%= @ratelimit_enable_rate_limiter %>,
         "PerSec": <%= @ratelimit_per_sec %>,
+        "MaxBurst": <%= @ratelimit_max_burst %>,
         "MemoryStoreSize": <%= @ratelimit_memory_store_size %>,
         "VaryByRemoteAddr": <%= @ratelimit_vary_by_remote_addr %>,
         "VaryByHeader": "<%= @ratelimit_vary_by_header %>"
@@ -129,5 +140,15 @@
         "DefaultServerLocale": "<%= @localization_server_locale %>",
         "DefaultClientLocale": "<%= @localization_client_locale %>",
         "AvailableLocales": "<%= @localization_available_locales %>"
+    },
+    "WebrtcSettings": {
+        "Enable": <%= @webrtc_enable %>,
+        "GatewayWebsocketUrl": "<%= @webrtc_gateway_websocket_url %>",
+        "GatewayAdminUrl": "<%= @webrtc_gateway_admin_url %>",
+        "GatewayAdminSecret": "<%= @webrtc_gateway_admin_secret %>",
+        "StunURI": "<%= @webrtc_gateway_stun_uri %>",
+        "TurnURI": "<%= @webrtc_gateway_turn_uri %>",
+        "TurnUsername": "<%= @webrtc_gateway_turn_username %>",
+        "TurnSharedKey": "<%= @webrtc_gateway_turn_shared_key %>"
     }
 }

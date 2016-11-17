@@ -828,6 +828,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_allow_cors_from'] = ""
 # mattermost['service_enable_outgoing_webhooks'] = true
 # mattermost['service_enable_commands'] = false
+# mattermost['service_enable_custom_emoji'] = false
 # mattermost['service_enable_only_admin_integrations'] = true
 # mattermost['service_enable_oauth_service_provider'] = false
 # mattermost['service_enable_developer'] = false
@@ -835,6 +836,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_session_length_mobile_in_days'] = 30
 # mattermost['service_session_length_sso_in_days'] = 30
 # mattermost['service_session_cache_in_minutes'] = 10
+# mattermost['service_connection_security'] = nil
+# mattermost['service_tls_cert_file'] = nil
+# mattermost['service_tls_key_file'] = nil
+# mattermost['service_use_lets_encrypt'] = false
+# mattermost['service_lets_encrypt_cert_cache_file'] = "./config/letsencrypt.cache"
+# mattermost['service_forward_80_to_443'] = false
+# mattermost['service_read_timeout'] = 300
+# mattermost['service_write_timeout'] = 300
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -846,6 +855,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_restrict_creation_to_domains'] = "gmail.com"
 # mattermost['team_restrict_team_names'] = true
 # mattermost['team_restrict_direct_message'] = "any"
+# mattermost['team_max_channels_per_team'] = 2000
 
 
 # mattermost['sql_driver_name'] = 'mysql'
@@ -912,12 +922,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost["file_amazon_s3_bucket_endpoint"] = nil
 # mattermost["file_amazon_s3_location_constraint"] = false
 # mattermost["file_amazon_s3_lowercase_bucket"] = false
+# mattermost["file_amazon_s3_ssl"] = true
 
-# mattermost['ratelimit_enable_rate_limiter'] = true
+# mattermost['ratelimit_enable_rate_limiter'] = false
 # mattermost['ratelimit_per_sec'] = 10
 # mattermost['ratelimit_memory_store_size'] = 10000
 # mattermost['ratelimit_vary_by_remote_addr'] = true
 # mattermost['ratelimit_vary_by_header'] = nil
+# mattermost['ratelimit_max_burst'] = 100
 
 # mattermost['support_terms_of_service_link'] = "/static/help/terms.html"
 # mattermost['support_privacy_policy_link'] = "/static/help/privacy.html"
@@ -931,6 +943,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['localization_server_locale'] = "en"
 # mattermost['localization_client_locale'] = "en"
 # mattermost['localization_available_locales'] = "en,es,fr,ja,pt-BR"
+
+# mattermost['webrtc_enable'] = false
+# mattermost['webrtc_gateway_websocket_url'] = nil
+# mattermost['webrtc_gateway_admin_url'] = nil
+# mattermost['webrtc_gateway_admin_secret'] = nil
+# mattermost['webrtc_gateway_stun_uri'] = nil
+# mattermost['webrtc_gateway_turn_uri'] = nil
+# mattermost['webrtc_gateway_turn_username'] = nil
+# mattermost['webrtc_gateway_turn_shared_key'] = ni
 
 ####################
 # Mattermost NGINX #
