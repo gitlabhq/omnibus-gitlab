@@ -91,21 +91,26 @@ end
 ###
 # Populate mattermost configuration options
 ###
-# Try connecting to GitLab only if it is enabled
-database_ready = pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database'])
-
 unless node['gitlab']['mattermost']['gitlab_enable']
-  if node['gitlab']['gitlab-rails']['enable'] && database_ready
-    MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
+  ruby_block "authorize mattermost with gitlab" do
+    block do
+      MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
+    end
+    # Try connecting to GitLab only if it is enabled
+    only_if { node['gitlab']['gitlab-rails']['enable'] && pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database']) }
   end
 end
 
-node.consume_attributes(Gitlab.generate_hash)
+ruby_block "populate mattermost configuration options" do
+  block do
+    node.consume_attributes(Gitlab.generate_hash)
+  end
+end
 
 template config_file_path do
   source "config.json.erb"
   owner mattermost_user
-  variables node['gitlab']['mattermost'].to_hash.merge(node['gitlab']['postgresql']).to_hash
+  variables lazy { node['gitlab']['mattermost'].to_hash.merge(node['gitlab']['postgresql']).to_hash }
   mode "0644"
   notifies :restart, "service[mattermost]"
 end
