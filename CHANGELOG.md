@@ -18,6 +18,10 @@ omnibus-gitlab repository.
 - Separate package repositories for OL and SL e37eaae
 - Add mailroom idle timeout configuration 0488f3de
 
+8.13.6
+
+- No changes
+
 8.13.5
 
 - No changes
