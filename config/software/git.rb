@@ -17,7 +17,7 @@
 #
 
 name "git"
-default_version "2.7.4"
+default_version "2.8.4"
 
 license "GPL-2.0"
 license_file "COPYING"
@@ -26,8 +26,8 @@ dependency "zlib"
 dependency "openssl"
 dependency "curl"
 
-source :url => "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       :md5 => "c64012d491e24c7d65cd389f75383d91"
+source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
+       sha256: "626e319f8a24fc0866167ea5f6bf3e2f38f69d6cb2e59e150f13709ca3ebf301"
 
 relative_path "git-#{version}"
 

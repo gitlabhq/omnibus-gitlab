@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.15.0
+
+- Update git to 2.8.4
+
 8.14.0
 
 - Switch the redis user's shell to /bin/false 9d60ee4
