@@ -5,10 +5,6 @@ describe 'gitlab::gitlab-rails' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
   context 'when manage-storage-directories is disabled' do

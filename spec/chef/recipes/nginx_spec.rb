@@ -73,7 +73,9 @@ describe 'nginx' do
     }
   end
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   context 'when http external urls are being used' do
     before do

@@ -79,6 +79,10 @@ class PgHelper
     cmd = ["/opt/gitlab/bin/gitlab-psql", cmd_list.join(" ")].join(" ")
     success?(cmd)
   end
+
+  def version
+    VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last
+  end
 end
 
 class OmnibusHelper
