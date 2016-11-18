@@ -695,6 +695,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['real_ip_trusted_addresses'] = []
 # nginx['real_ip_header'] = nil
 # nginx['real_ip_recursive'] = nil
+# nginx['custom_error_pages'] = {
+#   '404' => {
+#     'title' => 'Example title',
+#     'header' => 'Example header',
+#     'message' => 'Example message'
+#   }
+# }
 
 ## Advanced settings
 # nginx['dir'] = "/var/opt/gitlab/nginx"

@@ -363,9 +363,12 @@ nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
-## Inserting custom error messages
+## Custom error pages
 
-If you want to print out custom HTTP error messages, create a setting like the following.
+You can use `custom_error_pages` to modify text on the default GitLab error page.
+This can be used for any valid HTTP error code; e.g 404, 502.
+
+As an example the following would modify the default 404 error page.
 
 ```ruby
 nginx['custom_error_pages'] = {
@@ -376,6 +379,10 @@ nginx['custom_error_pages'] = {
   }
 }
 ```
+
+This would result in the 404 error page below.
+
+![custom 404 error page](img/error_page_example.png)
 
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
