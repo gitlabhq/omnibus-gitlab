@@ -71,7 +71,7 @@ in the SQL database:
 - GitLab CI 'secure variables'
 
 If you separate your configuration backup from your application data backup,
-you reduce the chance that your encrypted application date will be
+you reduce the chance that your encrypted application data will be
 lost/leaked/stolen together with the keys needed to decrypt it.
 
 ### Creating an application backup
