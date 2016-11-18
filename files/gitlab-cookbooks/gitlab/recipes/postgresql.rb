@@ -25,6 +25,7 @@ postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_user = account_helper.postgresgl_user
 
 pg_helper = PgHelper.new(node)
+pg_version = pg_helper.database_version
 
 account "Postgresql user and group" do
   username postgresql_user
@@ -81,6 +82,12 @@ sem += "#{node['gitlab']['postgresql']['semopm']} "
 sem += "#{node['gitlab']['postgresql']['semmni']}"
 sysctl "kernel.sem" do
   value sem
+end
+
+pg_helper.bin_files(pg_version).each do |pg_bin|
+  link "/opt/gitlab/embedded/bin/#{pg_bin}" do
+    to "/opt/gitlab/embedded/postgresql/#{pg_version}/bin/#{pg_bin}"
+  end
 end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
