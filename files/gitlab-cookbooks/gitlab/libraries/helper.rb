@@ -88,18 +88,10 @@ class PgHelper
     major_version = File.read(
       "#{@node['gitlab']['postgresql']['data_dir']}/PG_VERSION"
     ).chomp
-    installed_versions = Dir.glob("#{@node['package']['install_dir']}/embedded/postgresql/*").map do |x|
+    installed_versions = Dir.glob("#{@node['package']['install-dir']}/embedded/postgresql/*").map do |x|
       File.basename x
     end
-    candidates = installed_versions.select { |x| x.start_with?(major_version) }
-    minor_version = candidates.map { |x| x.split('.').last.to_i }.max
-    "#{major_version}.#{minor_version}"
-  end
-
-  def bin_files(version)
-    Dir.glob("#{@node['package']['install_dir']}/embedded/postgresql/#{version}/bin/*").map do |x|
-      File.basename(x)
-    end
+    installed_versions.select { |x| x.start_with?(major_version) }.first
   end
 end
 

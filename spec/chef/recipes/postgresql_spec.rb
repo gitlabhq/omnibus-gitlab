@@ -8,12 +8,13 @@ describe 'postgresql 9.2' do
     version = '9.2.18'
     allow_any_instance_of(PgHelper).to receive(:version).and_return(version)
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return(version)
-    allow_any_instance_of(PgHelper).to receive(:bin_files).with(version).and_return(
+    allow(Dir).to receive(:glob).and_call_original
+    allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/#{version}/bin/*").and_return(
       %w(
         foo_one
         foo_two
         foo_three
-      %)
+      )
     )
   end
 
@@ -96,7 +97,7 @@ describe 'postgresql 9.2' do
   end
 end
 
-describe 'postgresl 9.6' do
+describe 'postgresql 9.6' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
@@ -104,14 +105,14 @@ describe 'postgresl 9.6' do
     version = '9.6.1'
     allow_any_instance_of(PgHelper).to receive(:version).and_return(version)
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return(version)
-    allow_any_instance_of(PgHelper).to receive(:bin_files).with(version).and_return(
+    allow(Dir).to receive(:glob).and_call_original
+    allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/#{version}/bin/*").and_return(
       %w(
         foo_one
         foo_two
         foo_three
-      %)
+      )
     )
-
   end
 
   context 'version specific settings' do

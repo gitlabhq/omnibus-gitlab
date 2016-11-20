@@ -84,9 +84,10 @@ sysctl "kernel.sem" do
   value sem
 end
 
-pg_helper.bin_files(pg_version).each do |pg_bin|
-  link "/opt/gitlab/embedded/bin/#{pg_bin}" do
-    to "/opt/gitlab/embedded/postgresql/#{pg_version}/bin/#{pg_bin}"
+Dir.glob("#{node['package']['install-dir']}/embedded/postgresql/#{pg_version}/bin/*").each do |pg_bin|
+  base = File.basename(pg_bin)
+  link "#{node['package']['install-dir']}/embedded/bin/#{base}" do
+    to "#{node['package']['install-dir']}/embedded/postgresql/#{pg_version}/bin/#{base}"
   end
 end
 
