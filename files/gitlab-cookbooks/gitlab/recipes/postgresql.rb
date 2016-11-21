@@ -22,10 +22,10 @@ postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
+postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
 postgresql_user = account_helper.postgresgl_user
 
 pg_helper = PgHelper.new(node)
-pg_version = pg_helper.database_version
 
 account "Postgresql user and group" do
   username postgresql_user
@@ -84,11 +84,17 @@ sysctl "kernel.sem" do
   value sem
 end
 
-Dir.glob("#{node['package']['install-dir']}/embedded/postgresql/#{pg_version}/bin/*").each do |pg_bin|
-  base = File.basename(pg_bin)
-  link "#{node['package']['install-dir']}/embedded/bin/#{base}" do
-    to "#{node['package']['install-dir']}/embedded/postgresql/#{pg_version}/bin/#{base}"
+ruby_block "Link postgresql bin files to the correct version" do
+  block do
+    pg_path = Dir.glob("#{postgresql_install_dir}/#{pg_helper.database_version}*").first
+    Dir.glob("#{pg_path}/bin/*").each do |pg_bin|
+      File.symlink(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
+    end
   end
+  only_if do
+    File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) && pg_helper.version !~ /^#{pg_helper.database_version}/
+  end
+  notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
@@ -98,12 +104,11 @@ end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 
-node.default['gitlab']['postgresql']['version'] = pg_helper.version
-
 template postgresql_config do
   source "postgresql.conf.erb"
   owner postgresql_user
   mode "0644"
+  helper(:pg_helper) { pg_helper }
   variables(node['gitlab']['postgresql'].to_hash)
   notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end

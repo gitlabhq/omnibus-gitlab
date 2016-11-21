@@ -30,6 +30,6 @@ describe PgHelper do
     ).and_return(['111.222.18', '222.333.11'])
     # We mock this in chef_helper.rb. Overide the mock to call the original
     allow_any_instance_of(PgHelper).to receive(:database_version).and_call_original
-    expect(@helper.database_version).to eq('111.222.18')
+    expect(@helper.database_version).to eq('111.222')
   end
 end

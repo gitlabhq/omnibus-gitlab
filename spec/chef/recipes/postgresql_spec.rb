@@ -5,17 +5,8 @@ describe 'postgresql 9.2' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    version = '9.2.18'
-    allow_any_instance_of(PgHelper).to receive(:version).and_return(version)
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(version)
-    allow(Dir).to receive(:glob).and_call_original
-    allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/#{version}/bin/*").and_return(
-      %w(
-        foo_one
-        foo_two
-        foo_three
-      )
-    )
+    allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
   end
 
   context 'with default settings' do
@@ -87,11 +78,33 @@ describe 'postgresql 9.2' do
       ).with_content(/checkpoint_segments = 10/)
     end
 
-    it 'points symlinks to the correct location' do
-      %w(foo_one foo_two foo_three).each do |pg_bin|
-        expect(chef_run).to create_link(
-          "/opt/gitlab/embedded/bin/#{pg_bin}"
-        ).with(to: "/opt/gitlab/embedded/postgresql/9.2.18/bin/#{pg_bin}")
+    context 'running version differs from data version' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
+        allow(File).to receive(:exists?).and_call_original
+        allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
+        allow(Dir).to receive(:glob).and_call_original
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return(
+          ['/opt/gitlab/embedded/postgresql/9.2.18']
+        )
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2.18/bin/*").and_return(
+          %w(
+            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_three
+          )
+        )
+      end
+
+      it 'corrects symlinks to the correct location' do
+        allow(File).to receive(:symlink).and_return(true)
+        %w(foo_one foo_two foo_three).each do |pg_bin|
+          expect(File).to receive(:symlink).with(
+            "/opt/gitlab/embedded/postgresql/9.2.18/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/bin/#{pg_bin}"
+          )
+        end
+        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
       end
     end
   end
@@ -102,17 +115,8 @@ describe 'postgresql 9.6' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    version = '9.6.1'
-    allow_any_instance_of(PgHelper).to receive(:version).and_return(version)
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(version)
-    allow(Dir).to receive(:glob).and_call_original
-    allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/#{version}/bin/*").and_return(
-      %w(
-        foo_one
-        foo_two
-        foo_three
-      )
-    )
+    allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.6')
   end
 
   context 'version specific settings' do
@@ -137,11 +141,33 @@ describe 'postgresql 9.6' do
       ).with_content(/checkpoint_segments = 10/)
     end
 
-    it 'points symlinks to the correct location ' do
-      %w(foo_one foo_two foo_three).each do |pg_bin|
-        expect(chef_run).to create_link(
-          "/opt/gitlab/embedded/bin/#{pg_bin}"
-        ).with(to: "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}")
+    context 'running version differs from data version' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+        allow(File).to receive(:exists?).and_call_original
+        allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
+        allow(Dir).to receive(:glob).and_call_original
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return(
+          ['/opt/gitlab/embedded/postgresql/9.6.1']
+        )
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
+          %w(
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_three
+          )
+        )
+      end
+
+      it 'corrects symlinks to the correct location' do
+        allow(File).to receive(:symlink).and_return(true)
+        %w(foo_one foo_two foo_three).each do |pg_bin|
+          expect(File).to receive(:symlink).with(
+            "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/bin/#{pg_bin}"
+          )
+        end
+        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
       end
     end
   end
