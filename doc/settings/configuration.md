@@ -23,7 +23,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 _**Note:** Relative URL support in Omnibus GitLab is **experimental** and was
 [introduced][590] in version 8.5. For source installations there is a
-[separate document](http://doc.gitlab.com/ce/install/relative_url.html)._
+[separate document](https://docs.gitlab.com/ce/install/relative_url.html)._
 
 ---
 
@@ -469,7 +469,7 @@ See [doc/settings/smtp.md](smtp.md).
 ## Omniauth (Google, Twitter, GitHub login)
 
 Omniauth configuration is documented in
-[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
+[docs.gitlab.com](https://docs.gitlab.com/ce/integration/omniauth.html).
 
 ## Adjusting Unicorn settings
 

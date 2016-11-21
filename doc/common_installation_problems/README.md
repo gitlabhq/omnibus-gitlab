@@ -247,7 +247,7 @@ Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, omnibus-gitlab will create the required Unix
 accounts during 'gitlab-ctl reconfigure' but that behavior can be
-[disabled](http://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
+[disabled](https://docs.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
 
 In principle omnibus-gitlab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
@@ -310,7 +310,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ### 'Short read or OOM loading DB' error
 
-Try cleaning the old redis session by following the [documentation here.](http://doc.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
+Try cleaning the old redis session by following the [documentation here.](https://docs.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
 
 ### Apt error 'The requested URL returned error: 403'
 
@@ -423,7 +423,7 @@ how to override the default headers.
 
 ### Extension missing pg_trgm
 
-Starting from GitLab 8.6, [GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#postgresql-requirements)
+Starting from GitLab 8.6, [GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
 If you are using omnibus-gitlab package with the bundled database, the extension
 should be automatically enabled when you upgrade.
@@ -482,7 +482,7 @@ above, and finally restart the container.
 
 ### Errno::ENOMEM: Cannot allocate memory during backup or upgrade
 
-[GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#memory)
+[GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#memory)
 2GB of available memory to run without errors. Having 2GB of memory installed may
 not be enough depending on the resource usage of other processes on your server.
 If GitLab runs fine when not upgrading or running a backup, then adding more swap
@@ -526,4 +526,4 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
 [Change the default proxy headers section of nginx doc]: doc/settings/nginx.md
-[reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
+[reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
