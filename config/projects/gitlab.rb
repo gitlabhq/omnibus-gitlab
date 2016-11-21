@@ -116,6 +116,7 @@ dependency "gitlab-config-template"
 dependency "mattermost"
 dependency "node-exporter"
 dependency "prometheus"
+dependency "redis-exporter"
 
 # version manifest file
 dependency "version-manifest"

@@ -1180,6 +1180,21 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['listen_address'] = 'localhost:9100'
 
 ################################################################################
+# Prometheus Redis exporter
+################################################################################
+
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+
+#default['gitlab']['redis-exporter']['enable'] = false
+#default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+#default['gitlab']['redis-exporter']['flags'] = {
+#  'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
+#}
+
+##! Advanced settings. Should be changed only if absolutely needed.
+# redis_exporter['listen_address'] = 'localhost:9121'
+
+################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##
 ################################################################################

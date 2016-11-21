@@ -992,3 +992,13 @@ default['gitlab']['node-exporter']['flags'] = {
   'collector.textfile.directory' => File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
 }
 default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
+
+####
+# Redis exporter
+###
+default['gitlab']['redis-exporter']['enable'] = false
+default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['gitlab']['redis-exporter']['flags'] = {
+  'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
+}
+default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'

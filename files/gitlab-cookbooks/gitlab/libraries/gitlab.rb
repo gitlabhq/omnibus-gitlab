@@ -82,6 +82,7 @@ module Gitlab
   registry Mash.new
   node_exporter Mash.new
   prometheus Mash.new
+  redis_exporter Mash.new
   sentinel Mash.new
   node nil
   external_url nil
@@ -197,10 +198,11 @@ module Gitlab
         "pages_external_url",
         "gitlab_pages",
         "registry",
-        "sentinel",
         "gitaly",
         "node_exporter",
-        "prometheus"
+        "prometheus",
+        "redis_exporter",
+        "sentinel"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]

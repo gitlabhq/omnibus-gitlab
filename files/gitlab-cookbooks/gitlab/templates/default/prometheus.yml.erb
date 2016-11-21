@@ -11,3 +11,8 @@ scrape_configs:
     static_configs:
       - targets: ['<%= node['gitlab']['node-exporter']['listen_address'] %>']
 <% end -%>
+<% if node['gitlab']['redis-exporter']['enable'] %>
+  - job_name: redis
+    static_configs:
+      - targets: ['<%= node['gitlab']['redis-exporter']['listen_address'] %>']
+<% end -%>
