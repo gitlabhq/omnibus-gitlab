@@ -1,51 +1,80 @@
+# Setting up your development environment
 
-# Development process
+Development of Omnibus GitLab maybe done using an existing package available
+from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
+a build environment to build these packages and use them, please read [Setting
+up a Build Environment](doc/build/prepare-build-environment.md).
 
-## Testing
+ 1. Setup a VM
 
-Any change in the internal cookbook also requires specs.
-It would be greatly appreciated if with any MR submitted, apart from testing
-the specific feature/bug, more tests are written to increase the test coverage.
+    To provide isolation and to prevent rebuilding of the package for each and
+    every change, it is preferred to use a Virtual Machine for development. The
+    following example uses docker on a Debian host with a Debian Jessie image.
+    The steps are similar for other OSs; only the commands differ.
+    1. Installing docker
 
-When in rush to fix something (eg. security issue, bug blocking the release),
-writing specs can be skipped. However, an issue to implement the tests
-*must be created and assigned* to the person that originally wrote the code.
+        ```
+        sudo apt-get install docker
+        ```
 
+    2. Pulling a Debian Jessie image
 
-# Development setup
+        ```
+        docker pull debian:jessie
+        ```
 
-To avoid building the packages for every change you do during development, it
-is useful to setup a VM on which you can develop.
+    3. Running docker image with a shell prompt
 
-Once you get the VM running, download the package from
-`https://about.gitlab.com/downloads/` and using the directions there finish the
-package installation.
+        ```
+        docker run -it debian:jessie bash
+        ```
+    This will cause the docker to run the jessie image and you will fall into a
+    bash prompt, where the following steps are applied to.
 
-Once the package is installed, navigate to `/opt/gitlab/embedded/cookbooks` and
-rename the `gitlab` directory which holds the internal omnibus-gitlab cookbook.
+ 2. Install basic necessary tools
 
-```
-sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
-```
+    Basic tools used for developing Omnibus GitLab may be installed using the
+    following command
 
-Clone the omnibus-gitlab repository from
-`https://gitlab.com/gitlab-org/omnibus-gitlab.git` to a known location, for
-example your home directory.
+    ```
+    sudo apt-get install git
+    ```
 
-```
-git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
-```
+ 3. Getting GitLab CE nightly package and installing it
 
-Once the repository is cloned symlink the cookbook in the omnibus-gitlab
-repository, for example:
+    Get the latest GitLab CE nightly package (of the OS you are using) from
+    [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
+    and install it using the instructions given on that page. Once you configure
+    and start gitlab. Check if you can access it from your host browser on
+    \<ip address of host>
 
-```
-sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
-```
+ 4. Getting source of Omnibus GitLab
 
-Now you can do the changes in the omnibus-gitlab repository, try the changes
-right away and contribute back to omnibus-gitlab.
+    Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
+
+    ```
+    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
+    ```
+
+    We will be doing the development inside the `~/omnibus-gitlab` directory.
+
+ 5. Instructing GitLab to apply the changes we make to the cookbooks.
+
+    During development, we need the changes we make to the cookbooks to be
+    applied immediately to the running GitLab instance. So, we have to instruct
+    GitLab to use those cookbooks instead of the ones shipped during
+    installation. This involves backing up of the existing cookbooks directory
+    and symlinking the directory where we make modifications to its location.
+
+    ```
+    sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
+    sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
+    ```
+
+Now, you can make necessary changes in the
+`~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
+for those changes to take effect.
 
 ## Openshift GitLab Development Setup
 
-See See [doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
+See [doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
