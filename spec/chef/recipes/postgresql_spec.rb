@@ -97,9 +97,9 @@ describe 'postgresql 9.2' do
       end
 
       it 'corrects symlinks to the correct location' do
-        allow(File).to receive(:symlink).and_return(true)
+        allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
-          expect(File).to receive(:symlink).with(
+          expect(FileUtils).to receive(:ln_sf).with(
             "/opt/gitlab/embedded/postgresql/9.2.18/bin/#{pg_bin}",
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
@@ -160,9 +160,9 @@ describe 'postgresql 9.6' do
       end
 
       it 'corrects symlinks to the correct location' do
-        allow(File).to receive(:symlink).and_return(true)
+        allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
-          expect(File).to receive(:symlink).with(
+          expect(FileUtils).to receive(:ln_sf).with(
             "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}",
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )

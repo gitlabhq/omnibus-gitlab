@@ -88,7 +88,7 @@ ruby_block "Link postgresql bin files to the correct version" do
   block do
     pg_path = Dir.glob("#{postgresql_install_dir}/#{pg_helper.database_version}*").first
     Dir.glob("#{pg_path}/bin/*").each do |pg_bin|
-      File.symlink(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
+      FileUtils.ln_sf(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
     end
   end
   only_if do
