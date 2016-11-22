@@ -64,4 +64,6 @@ git_annex_enabled: <%= @git_annex_enabled %>
 # See https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging for documentation
 # An absolute path starting with / – the trace output will be appended to that file.
 # It needs to exist so we can check permissions and avoid to throwing warnings to the users.
+<% if @git_trace_log_file %>
 git_trace_log_file: "<%= @git_trace_log_file %>"
+<% end %>
