@@ -576,4 +576,4 @@ sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
 + Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md)
-+ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](http://doc.gitlab.com/ee/raketasks/maintenance.html#check-gitlab-configuration).
++ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/maintenance.html#check-gitlab-configuration).

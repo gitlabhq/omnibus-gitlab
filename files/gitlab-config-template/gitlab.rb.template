@@ -28,7 +28,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 # gitlab_rails['gitlab_default_theme'] = 2
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
-# See https://doc.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
+# See https://docs.gitlab.com/ce/customization/issue_closing.html for more information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)"
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
@@ -56,7 +56,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## Reply by email
 # Allow users to comment on issues and merge requests by replying to notification emails.
-# For documentation on how to set this up, see https://doc.gitlab.com/ce/incoming_email/README.html
+# For documentation on how to set this up, see https://docs.gitlab.com/ce/administration/reply_by_email.html
 # gitlab_rails['incoming_email_enabled'] = true
 #
 # # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
@@ -157,7 +157,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # EOS
 
 ## Setting up Kerberos (EE only)
-## See https://doc.gitlab.com/ee/integration/kerberos.html#http-git-access
+## See https://docs.gitlab.com/ee/integration/kerberos.html#http-git-access
 # gitlab_rails['kerberos_enabled'] = true
 # gitlab_rails['kerberos_keytab'] = /etc/http.keytab
 # gitlab_rails['kerberos_service_principal_name'] = HTTP/gitlab.example.com@EXAMPLE.COM
@@ -186,7 +186,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # If you setup Bitbucket importer under omniauth providers you will need to add the keys
 # which will allow connection between Bitbucket and GitLab.
-# For details see https://doc.gitlab.com/ce/integration/bitbucket.html
+# For details see https://docs.gitlab.com/ce/integration/bitbucket.html
 # gitlab_rails['bitbucket'] = {
 #  'known_hosts_key' => 'bitbucket.org,207.223.240.182 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==',
 #  'private_key' => '-----BEGIN RSA PRIVATE KEY-----
@@ -200,7 +200,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
-# gitlab_rails['backup_archive_permissions'] = 0644 # See: https://doc.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
+# gitlab_rails['backup_archive_permissions'] = 0644 # See: https://docs.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_pg_schema'] = 'public'
 # gitlab_rails['backup_keep_time'] = 604800
 # gitlab_rails['backup_upload_connection'] = {
@@ -782,7 +782,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############################
 ## Disable management of users and groups accounts.
 ## Set only if creating accounts manually
-## See: https://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
+## See: https://docs.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
 # manage_accounts['enable'] = false
 
 #######################
@@ -790,7 +790,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #######################
 ## Disable managing storage directories
 ## Set only if the select directories are created manually
-## See: https://doc.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
+## See: https://docs.gitlab.com/omnibus/settings/configuration.html#disable-storage-directories-management
 # manage_storage_directories['enable'] = false
 # manage_storage_directories['manage_etc'] = false
 

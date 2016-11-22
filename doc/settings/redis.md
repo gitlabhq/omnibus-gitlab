@@ -94,4 +94,4 @@ redis['tcp_keepalive'] = "300"
 
 ## Using a Redis HA setup
 
-See http://docs.gitlab.com/ce/administration/high_availability/redis.html.
+See <https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
