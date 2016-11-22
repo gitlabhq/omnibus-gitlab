@@ -106,7 +106,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
     :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames'],
     :http_settings => node['gitlab']['gitlab-shell']['http_settings'],
     :git_annex_enabled => node['gitlab']['gitlab-shell']['git_annex_enabled'],
-    :git_trace_log_file => File.join(log_directory, 'gitlab-shell-git-trace.log')
+    :git_trace_log_file => node['gitlab']['gitlab-shell']['git_trace_log_file']
   })
 end
 
