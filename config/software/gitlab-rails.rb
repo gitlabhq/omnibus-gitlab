@@ -68,7 +68,6 @@ build do
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
   bundle "config build.rugged --no-use-system-libraries", :env => env
-  bundle "config build.pg --with-pg-config=#{install_dir}/embedded/postgresql/9.2.18/bin/pg_config"
   bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers} --retry 5", :env => env
 
   # This patch makes the github-markup gem use and be compatible with Python3

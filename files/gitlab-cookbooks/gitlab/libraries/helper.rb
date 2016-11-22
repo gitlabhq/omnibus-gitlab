@@ -86,7 +86,11 @@ class PgHelper
 
   def database_version
     version_file = "#{@node['gitlab']['postgresql']['data_dir']}/PG_VERSION"
-    File.read(version_file).chomp if File.exist?(version_file)
+    if File.exist?(version_file)
+      File.read(version_file).chomp
+    else
+      nil
+    end
   end
 end
 

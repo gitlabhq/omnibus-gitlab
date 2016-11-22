@@ -32,8 +32,20 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   log 'Shutting down all GitLab services except those needed for migrations'
   get_all_services.each do |sv_name|
-    next if sv_name == 'postgresql'
     run_sv_command_for_service('stop', sv_name)
+  end
+
+  unless progress_message('Checking PostgreSQL executables') do
+    command = %W( chef-client
+                  -z
+                  -c #{base_path}/embedded/cookbooks/solo.rb
+                  -o recipe[gitlab::postgresql-bin]
+               )
+
+    status = run_command(command.join(" "))
+    status.success?
+  end
+    log 'Could not update PostgreSQL executables.'
   end
 
   MIGRATION_SERVICES = %w{postgresql redis}
