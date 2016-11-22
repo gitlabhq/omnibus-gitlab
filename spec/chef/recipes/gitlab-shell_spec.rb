@@ -5,10 +5,6 @@ describe 'gitlab::gitlab-shell' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
@@ -182,7 +178,9 @@ end
 describe 'gitlab_shell::git_data_dir' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   context 'when git_data_dir is set as a single directory' do
     before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
