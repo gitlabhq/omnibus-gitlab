@@ -189,7 +189,7 @@ gitlab_rails['initial_root_password'] = 'nonstandardpassword'
 
 ## Disabling automatic database migration
 
-If you have multiple GitLab servers sharing a database, you will want limit the
+If you have multiple GitLab servers sharing a database, you will want to limit the
 number of nodes that are performing the migration steps during reconfiguration.
 
 Edit `/etc/gitlab/gitlab.rb`:
@@ -240,8 +240,8 @@ sudo gitlab-psql -d gitlabhq_production
 ```
 
 [ee-245]: https://gitlab.com/gitlab-org/gitlab-ee/issues/245 "MySQL collation issue"
-[rake-backup]: http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
-[Reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
-[rake-restore]: http://doc.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
-[mysql-install]: http://docs.gitlab.com/ce/install/database_mysql.html "MySQL documentation"
-[database requirements document]: http://doc.gitlab.com/ce/install/requirements.html#database
+[rake-backup]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
+[Reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
+[rake-restore]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
+[mysql-install]: https://docs.gitlab.com/ce/install/database_mysql.html "MySQL documentation"
+[database requirements document]: https://docs.gitlab.com/ce/install/requirements.html#database

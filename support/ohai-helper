@@ -38,8 +38,8 @@ def repo_string
     when /^7\./
       version = '7'
     end
-  when 'opensuse'
-    os = ohai['platform']
+  when 'opensuse', 'opensuseleap'
+    os = 'opensuse'
     version = ohai['platform_version']
   end
 

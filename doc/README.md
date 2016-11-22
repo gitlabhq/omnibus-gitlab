@@ -5,7 +5,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 ## Installation
 
 - [Package downloads page](https://about.gitlab.com/downloads/)
-- [Installation Requirements](http://doc.gitlab.com/ce/install/requirements.html)
+- [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
 - [GitLab CI](gitlab-ci/README.md) Set up the GitLab CI coordinator that ships with Omnibus GitLab package.
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [Docker](docker/README.md) Set up the GitLab in Docker container.
@@ -35,11 +35,11 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)
-- [Reply by email](http://doc.gitlab.com/ce/incoming_email/README.html)
+- [Reply by email](https://docs.gitlab.com/ce/incoming_email/README.html)
 - [Environment variables](settings/environment-variables.md)
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
-- [Pages (EE-only)](http://doc.gitlab.com/ee/pages/administration.html)
+- [Pages (EE-only)](https://docs.gitlab.com/ee/pages/administration.html)
 
 ## Updating
 

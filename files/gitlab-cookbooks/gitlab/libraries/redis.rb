@@ -38,9 +38,12 @@ module Redis
         Gitlab['redis']['master'] = false
       end
 
+      if redis_managed? && (sentinel_daemon_enabled? || is_redis_slave? || Gitlab['redis_master_role']['enable'])
+        Gitlab['redis']['master_password'] ||= Gitlab['redis']['password']
+      end
+
       if sentinel_daemon_enabled? || is_redis_slave?
         fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
-        fail "redis 'master_port' is not defined" unless Gitlab['redis']['master_port']
         fail "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
       end
 

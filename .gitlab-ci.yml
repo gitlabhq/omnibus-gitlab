@@ -11,6 +11,7 @@ before_script:
   - mkdir -p ~/.aws
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
+  - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
 
 # Runs on GitLab.com only
 .spec_template: &run_rspec
@@ -29,6 +30,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -46,6 +49,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
+    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -63,6 +68,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -80,6 +87,8 @@ before_script:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
+    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
@@ -93,6 +102,8 @@ before_script:
 Docker master:
   stage: extra
   script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
   - make do_docker_master
   tags:
   - docker-build
@@ -102,6 +113,8 @@ Docker master:
 Docker:
   stage: extra
   script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
   - make do_docker_release
   tags:
   - docker-build
@@ -147,6 +160,18 @@ Centos 6 specs:
   <<: *run_rspec
 Centos 7 specs:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  cache:
+    paths:
+    - gems
+  <<: *run_rspec
+OpenSUSE 13.2 specs:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse13.2"
+  cache:
+    paths:
+    - gems
+  <<: *run_rspec
+OpenSUSE 42.1 specs:
+  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
   cache:
     paths:
     - gems
@@ -217,6 +242,14 @@ OpenSUSE 13.2:
     - cache
     - gems
   <<: *tag_build
+OpenSUSE 42.1:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse42.1"
+  cache:
+    key: "OpenSUSE 42.1 branch"
+    paths:
+    - cache
+    - gems
+  <<: *tag_build
 
 Ubuntu 12.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
@@ -276,6 +309,14 @@ CentOS 7 branch:
   <<: *branch_build
 OpenSUSE 13.2 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2"
+  cache:
+    key: "$CI_BUILD_NAME"
+    paths:
+    - cache
+    - gems
+  <<: *branch_build
+OpenSUSE 42.1 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse42.1"
   cache:
     key: "$CI_BUILD_NAME"
     paths:

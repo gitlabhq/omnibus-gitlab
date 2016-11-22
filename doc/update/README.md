@@ -271,6 +271,9 @@ your GitLab instance:
 sudo touch /etc/gitlab/skip-auto-migrations
 ```
 
+Alternatively if you just want to prevent DB migrations add `gitlab_rails['auto_migrate'] = false`
+to your `gitlab.rb` file.
+
 ## Updating from GitLab 6.6 and higher to the latest version
 
 The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
@@ -573,4 +576,4 @@ sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
 + Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md)
-+ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](http://doc.gitlab.com/ee/raketasks/maintenance.html#check-gitlab-configuration).
++ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/maintenance.html#check-gitlab-configuration).
