@@ -44,7 +44,7 @@ db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connectio
 bash "migrate gitlab-rails database" do
   code <<-EOH
     set -e
-    log_file="#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate-$(date +%s)-$$.log"
+    log_file="#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate-$(date +%Y-%m-%d_%H-%M-%S).log"
     umask 077
     /opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file}
     STATUS=${PIPESTATUS[0]}
