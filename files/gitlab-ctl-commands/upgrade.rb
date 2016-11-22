@@ -32,6 +32,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   log 'Shutting down all GitLab services except those needed for migrations'
   get_all_services.each do |sv_name|
+    next if sv_name == 'postgresql'
     run_sv_command_for_service('stop', sv_name)
   end
 
