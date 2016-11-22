@@ -24,6 +24,7 @@ postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
 postgresql_user = account_helper.postgresgl_user
+default_database_version = '9.2'
 
 pg_helper = PgHelper.new(node)
 
@@ -86,13 +87,14 @@ end
 
 ruby_block "Link postgresql bin files to the correct version" do
   block do
-    pg_path = Dir.glob("#{postgresql_install_dir}/#{pg_helper.database_version}*").first
+    major_version = pg_helper.database_version || default_database_version
+    pg_path = Dir.glob("#{postgresql_install_dir}/#{major_version}*").first
     Dir.glob("#{pg_path}/bin/*").each do |pg_bin|
       FileUtils.ln_sf(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
     end
   end
   only_if do
-    File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) && pg_helper.version !~ /^#{pg_helper.database_version}/
+    !File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) || pg_helper.version !~ /^#{pg_helper.database_version}/
   end
   notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
 end
