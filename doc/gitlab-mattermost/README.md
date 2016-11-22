@@ -265,7 +265,7 @@ This integration lets you completely control how notifications are formatted and
 
 The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see:
 - [Mattermost incoming webhook documentation](http://docs.mattermost.com/developer/webhooks-incoming.html)
-- [GitLab webhook documentation](http://doc.gitlab.com/ce/web_hooks/web_hooks.html)
+- [GitLab webhook documentation](https://docs.gitlab.com/ce/web_hooks/web_hooks.html)
 
 ![webhooks](https://gitlab.com/gitlab-org/omnibus-gitlab/uploads/677b0aa055693c4dcabad0ee580c61b8/730_gitlab_feature_request.png)
 

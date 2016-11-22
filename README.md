@@ -100,7 +100,7 @@ See [doc/settings/smtp.md](doc/settings/smtp.md).
 ##### Omniauth (Google, Twitter, GitHub login)
 
 Omniauth configuration is documented in
-[doc.gitlab.com](http://doc.gitlab.com/ce/integration/omniauth.html).
+[docs.gitlab.com](https://docs.gitlab.com/ce/integration/omniauth.html).
 
 ##### Adjusting Unicorn settings
 
@@ -224,7 +224,7 @@ See [doc/settings/backups.md](doc/settings/backups.md#creating-an-application-ba
 
 ### Restoring an application backup
 
-See [backup restore documentation](http://doc.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
+See [backup restore documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
 
 ### Backup and restore using non-packaged database
 

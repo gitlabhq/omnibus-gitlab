@@ -146,7 +146,7 @@ the `GITLAB_OMNIBUS_CONFIG` option. The content of `GITLAB_OMNIBUS_CONFIG` is
 _not_ preserved between subsequent runs.
 
 There are also a limited number of environment variables to configure GitLab.
-They are documented in the [environment variables section of the GitLab documentation](http://doc.gitlab.com/ce/administration/environment_variables.html).
+They are documented in the [environment variables section of the GitLab documentation](https://docs.gitlab.com/ce/administration/environment_variables.html).
 
 ## After starting a container
 
@@ -203,7 +203,7 @@ We provide tagged versions of GitLab Docker images.
 To see all available tags check:
 
 - [GitLab-CE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/) and
-- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/)
+- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ee/tags/)
 
 To use a specific tagged version, replace `gitlab/gitlab-ce:latest` with
 the GitLab version you want to run, for example `gitlab/gitlab-ce:8.4.3`.

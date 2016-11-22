@@ -138,6 +138,7 @@ GEM
     proxifier (1.0.3)
     rack (1.6.4)
     rainbow (2.1.0)
+    rake (10.4.2)
     rest-client (1.6.9)
       mime-types (~> 1.16)
     rspec (3.5.0)
@@ -188,5 +189,6 @@ DEPENDENCIES
   omnibus!
   omnibus-software!
   package_cloud
+  rake
   rspec
   thor (= 0.18.1)
