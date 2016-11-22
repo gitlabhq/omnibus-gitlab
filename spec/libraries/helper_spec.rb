@@ -21,6 +21,10 @@ describe PgHelper do
   end
 
   it 'returns a valid database_version' do
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with(
+      '/fakedir/PG_VERSION'
+    ).and_return(true)
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:read).with(
       '/fakedir/PG_VERSION'
