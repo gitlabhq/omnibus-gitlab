@@ -4,7 +4,9 @@ describe 'add_trusted_certs recipe' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:cert_helper) { CertificateHelper.new('/etc/gitlab/trusted-certs', '/opt/gitlab/embedded/ssl/certs', '/var/opt/gitlab') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   it 'creates the certificate directories' do
     expect(chef_run).to create_directory('/opt/gitlab/embedded/ssl/certs').with(mode: '0755')

@@ -4,7 +4,9 @@ describe 'Redis' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
   let(:node) { chef_run.node }
   subject { ::Redis }
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   context '.parse_variables' do
     it 'delegates to parse_redis_settings' do

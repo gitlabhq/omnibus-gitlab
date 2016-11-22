@@ -70,7 +70,6 @@ override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
 override :redis, version: '3.2.5', source: { md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08' }
-override :postgresql, version: '9.2.18', source: { md5: 'fd175eb5f29557c6ef2eeaf340330f9a' }
 override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
 override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
 override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
