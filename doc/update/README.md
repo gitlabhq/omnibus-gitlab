@@ -2,45 +2,6 @@
 
 This document will help you update Omnibus GitLab.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Documentation version](#documentation-version)
-- [Updating using the official repositories](#updating-using-the-official-repositories)
-- [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages)
-- [From Community Edition to Enterprise Edition](#from-community-edition-to-enterprise-edition)
-- [Updating from GitLab 8.10 and lower to 8.11 or newer](#updating-from-gitlab-810-and-lower-to-811-or-newer)
-  - [Migrating legacy secrets](#migrating-legacy-secrets)
-- [Updating from GitLab 6.6 and higher to 7.10 or newer](#updating-from-gitlab-66-and-higher-to-710-or-newer)
-- [Updating from GitLab 6.6 and higher to the latest version](#updating-from-gitlab-66-and-higher-to-the-latest-version)
-    - [Stop services but leave postgresql running for the database migrations and create a backup](#stop-services-but-leave-postgresql-running-for-the-database-migrations-and-create-a-backup)
-    - [Install the latest package](#install-the-latest-package)
-    - [Reconfigure GitLab (includes running database migrations) and restart all services](#reconfigure-gitlab-includes-running-database-migrations-and-restart-all-services)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](#updating-from-gitlab-660pre1-to-664)
-    - [Stop unicorn and sidekiq so we can do database migrations](#stop-unicorn-and-sidekiq-so-we-can-do-database-migrations)
-    - [One-time migration because we changed some directories since 6.6.0.pre1](#one-time-migration-because-we-changed-some-directories-since-660pre1)
-    - [Install the latest package](#install-the-latest-package-1)
-    - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations)
-    - [Start unicorn and sidekiq](#start-unicorn-and-sidekiq)
-- [Reverting to GitLab 6.6.x or later](#reverting-to-gitlab-66x-or-later)
-    - [Stop GitLab](#stop-gitlab)
-    - [Downgrade GitLab to 6.x](#downgrade-gitlab-to-6x)
-    - [Prepare GitLab for receiving the backup restore](#prepare-gitlab-for-receiving-the-backup-restore)
-    - [Reconfigure GitLab (includes database migrations)](#reconfigure-gitlab-includes-database-migrations-1)
-    - [Restore your backup](#restore-your-backup)
-    - [Start GitLab](#start-gitlab)
-- [Upgrading from a non-Omnibus installation to an Omnibus installation](#upgrading-from-a-non-omnibus-installation-to-an-omnibus-installation)
-  - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
-  - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-  - [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
-- [RPM 'package is already installed' error](#rpm-package-is-already-installed-error)
-- [Updating GitLab CI via omnibus-gitlab](#updating-gitlab-ci-via-omnibus-gitlab)
-  - [Updating from GitLab CI version prior to 5.4.0 to version 7.14](#updating-from-gitlab-ci-version-prior-to-540-to-version-714)
-- [Troubleshooting](#troubleshooting)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 ## Documentation version
 
 Please make sure you are viewing this file on the master branch.
@@ -576,4 +537,4 @@ sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
 + Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md)
-+ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](http://doc.gitlab.com/ee/raketasks/maintenance.html#check-gitlab-configuration).
++ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/maintenance.html#check-gitlab-configuration).

@@ -5,10 +5,6 @@ describe 'gitlab::gitlab-shell' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
@@ -34,9 +30,23 @@ describe 'gitlab::gitlab-shell' do
   context 'with default settings' do
     it 'populates the default values' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(/git_trace_log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell-git-trace.log"/)
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
         .with_content(/log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell.log"/)
+    end
+  end
+
+  context 'with a non-default log directory' do
+    before do
+      stub_gitlab_rb(gitlab_shell: {
+        log_directory: '/tmp/log',
+        git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
+      })
+    end
+
+    it 'populates the correct values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/git_trace_log_file: "\/tmp\/log\/gitlab-shell-git-trace.log"/)
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/log_file: "\/tmp\/log\/gitlab-shell.log"/)
     end
   end
 
@@ -182,7 +192,9 @@ end
 describe 'gitlab_shell::git_data_dir' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   context 'when git_data_dir is set as a single directory' do
     before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }

@@ -5,7 +5,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 ## Installation
 
 - [Package downloads page](https://about.gitlab.com/downloads/)
-- [Installation Requirements](http://doc.gitlab.com/ce/install/requirements.html)
+- [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
 - [GitLab CI](gitlab-ci/README.md) Set up the GitLab CI coordinator that ships with Omnibus GitLab package.
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [Docker](docker/README.md) Set up the GitLab in Docker container.
@@ -35,23 +35,23 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)
-- [Reply by email](http://doc.gitlab.com/ce/incoming_email/README.html)
+- [Reply by email](https://docs.gitlab.com/ce/incoming_email/README.html)
 - [Environment variables](settings/environment-variables.md)
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
-- [Pages (EE-only)](http://doc.gitlab.com/ee/pages/administration.html)
+- [Pages (EE-only)](https://docs.gitlab.com/ee/pages/administration.html)
 
 ## Updating
 
 - [Upgrade from Community Edition to Enterprise Edition](update/README.md#from-community-edition-to-enterprise-edition)
-- [Note about updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
 - [Updating to the latest version](update/README.md#updating-from-gitlab-66-and-higher-to-the-latest-version)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-660pre1-to-664)
 - [Downgrading to an earlier version](update/README.md#reverting-to-gitlab-66x-or-later)
 - [Upgrading from a non-Omnibus installation to an Omnibus installation using a backup](update/README.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
 - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/README.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
 - [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/README.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
 - [RPM error: 'package is already installed' ](update/README.md#rpm-package-is-already-installed-error)
+- [Note about updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
+- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-660pre1-to-664)
 - [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-from-gitlab-ci-version-prior-to-540-to-the-latest-version)
 
 ## Package information

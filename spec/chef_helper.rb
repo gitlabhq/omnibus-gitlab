@@ -8,6 +8,11 @@ Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab/libraries/*.rb')].each 
 Dir[File.join(__dir__, 'support/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
+  def mock_file_load(file)
+    allow(Kernel).to receive(:load).and_call_original
+    allow(Kernel).to receive(:load).with(file).and_return(true)
+  end
+
   ohai_data = Ohai::System.new.tap { |ohai| ohai.all_plugins(['platform']) }.data
   platform, version = *ohai_data.values_at('platform', 'platform_version')
 
@@ -38,7 +43,13 @@ RSpec.configure do |config|
     stub_command("semodule -l | grep '^#gitlab-7.2.0-ssh-keygen\\s'").and_return(true)
     stub_command(%r{set \-x \&\& \[ \-d "[^"]\" \]}).and_return(false)
     stub_command(%r{set \-x \&\& \[ "\$\(stat \-\-printf='[^']*' \$\(readlink -f /[^\)]*\)\) }).and_return(false)
+    stub_command('/opt/gitlab/embedded/bin/psql --version').and_return("fake_version")
+    allow(VersionHelper).to receive(:version).and_call_original
+    allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version').and_return('fake_psql_version')
     allow_any_instance_of(Chef::Recipe).to receive(:system).with('/sbin/init --version | grep upstart')
     allow_any_instance_of(Chef::Recipe).to receive(:system).with('systemctl | grep "\-\.mount"')
+    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
+    mock_file_load(%r{gitlab/libraries/storage_directory_helper})
+    mock_file_load(%r{gitlab/libraries/helper})
   end
 end

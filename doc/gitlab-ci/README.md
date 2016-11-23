@@ -18,7 +18,7 @@ version.
 
 Starting with GitLab 8.0, GitLab CI is integrated into GitLab.
 
-To see how to configure your project with GitLab CI, see the [GitLab CI quickstart documentation](http://doc.gitlab.com/ce/ci/quick_start/README.html).
+To see how to configure your project with GitLab CI, see the [GitLab CI quickstart documentation](https://docs.gitlab.com/ce/ci/quick_start/README.html).
 
 ## Running GitLab CI on its own server
 

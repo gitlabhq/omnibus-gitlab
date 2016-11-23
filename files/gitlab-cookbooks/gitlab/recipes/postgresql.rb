@@ -24,6 +24,8 @@ postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_user = account_helper.postgresgl_user
 
+pg_helper = PgHelper.new(node)
+
 account "Postgresql user and group" do
   username postgresql_user
   uid node['gitlab']['postgresql']['uid']
@@ -88,6 +90,8 @@ end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 
+node.default['gitlab']['postgresql']['version'] = pg_helper.version
+
 template postgresql_config do
   source "postgresql.conf.erb"
   owner postgresql_user
@@ -141,7 +145,6 @@ template "/opt/gitlab/etc/gitlab-psql-rc" do
   group 'root'
 end
 
-pg_helper = PgHelper.new(node)
 pg_port = node['gitlab']['postgresql']['port']
 database_name = node['gitlab']['gitlab-rails']['db_database']
 gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
