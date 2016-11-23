@@ -21,7 +21,7 @@ describe 'gitlab::database-migrations' do
       # is causing issues with chefspec.
 
       it 'in a default location' do
-        path = %Q(/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-)
+        path = Regexp.escape("/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")
         expect(bash_block.code).to match(/#{path}/)
       end
 
