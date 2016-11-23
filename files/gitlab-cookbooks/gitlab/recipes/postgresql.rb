@@ -85,6 +85,8 @@ sysctl "kernel.sem" do
   value sem
 end
 
+include_recipe 'gitlab::postgresql-bin'
+
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
   not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
@@ -115,7 +117,7 @@ template File.join(postgresql_data_dir, "pg_ident.conf") do
   owner postgresql_user
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately  if OmnibusHelper.should_notify?("postgresql")
 end
 
 should_notify = OmnibusHelper.should_notify?("postgresql")

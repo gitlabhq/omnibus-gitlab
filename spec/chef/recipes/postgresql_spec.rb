@@ -9,6 +9,10 @@ describe 'postgresql 9.2' do
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
   end
 
+  it 'includes the postgresql-bin recipe' do
+    expect(chef_run).to include_recipe('gitlab::postgresql-bin')
+  end
+
   context 'with default settings' do
     it 'correctly sets the shared_preload_libraries default setting' do
       expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])

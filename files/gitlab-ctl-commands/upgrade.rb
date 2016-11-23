@@ -39,6 +39,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     command = %W( chef-client
                   -z
                   -c #{base_path}/embedded/cookbooks/solo.rb
+                  -o recipe[gitlab::config]
                   -o recipe[gitlab::postgresql-bin]
                )
 

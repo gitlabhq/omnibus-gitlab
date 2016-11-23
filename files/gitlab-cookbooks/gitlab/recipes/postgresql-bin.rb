@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'gitlab::config'
-
 pg_helper = PgHelper.new(node)
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
