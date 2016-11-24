@@ -22,9 +22,7 @@ postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
-postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
 postgresql_user = account_helper.postgresgl_user
-default_database_version = '9.2'
 
 pg_helper = PgHelper.new(node)
 
@@ -85,14 +83,13 @@ sysctl "kernel.sem" do
   value sem
 end
 
-include_recipe 'gitlab::postgresql-bin'
-
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
   not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
 end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
+should_notify = OmnibusHelper.should_notify?("postgresql")
 
 template postgresql_config do
   source "postgresql.conf.erb"
@@ -100,7 +97,7 @@ template postgresql_config do
   mode "0644"
   helper(:pg_helper) { pg_helper }
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately if should_notify
 end
 
 pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
@@ -110,17 +107,15 @@ template pg_hba_config do
   owner postgresql_user
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]', :immediately if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately if should_notify
 end
 
 template File.join(postgresql_data_dir, "pg_ident.conf") do
   owner postgresql_user
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]', :immediately  if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'service[postgresql]', :immediately  if should_notify
 end
-
-should_notify = OmnibusHelper.should_notify?("postgresql")
 
 runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
@@ -130,6 +125,13 @@ runit_service "postgresql" do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['postgresql'].to_hash)
 end
+
+# This recipe must be ran BEFORE any calls to the binaries are made
+# and AFTER the service has been defined
+# to ensure the correct running version of PostgreSQL
+# Only exception to this rule is "initdb" call few lines up because this should
+# run only on new installation at which point we expect to have correct binaries.
+include_recipe 'gitlab::postgresql-bin'
 
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start postgresql" do
