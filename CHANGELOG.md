@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.15.0
 
 - Update git to 2.8.4
+- Clean up apt lists to reduce the Docker image size
 
 8.14.0
 
