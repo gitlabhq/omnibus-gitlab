@@ -5,8 +5,9 @@ omnibus-gitlab repository.
 
 8.15.0
 
-- Update git to 2.8.4
-- Clean up apt lists to reduce the Docker image size
+- Update git to 2.8.4 381c0b9d
+- Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
+- Enable Mattermost slash commands by default 2b3406
 
 8.14.0
 
