@@ -2,8 +2,15 @@
 
 ### Setup OpenShift Origin
 
-First you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
-on a cloud machine, or use the all-in-one VM on your local machine (uses vagrant and virtualbox).
+The first thing you need to interact with OpenShift Origin, are the `oc` client tools for your terminal:
+
+1. Download and install the OpenShift Origin Client Tools onto your path if you don't already have them.
+   - Found here: https://github.com/openshift/origin/releases
+   - Example: https://github.com/openshift/origin/releases/download/v1.3.1/openshift-origin-client-tools-v1.3.1-dad658de7465ba8a234a4fb40b5b446a45a4cee1-linux-64bit.tar.gz
+
+Next you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
+on a cloud machine, use the all-in-one VM on your local machine (uses vagrant and virtualbox), or setup an instance
+using docker for the master, and your own machine as the slave using `oc cluster up`
 
 #### All-in-One VM
 
@@ -20,6 +27,39 @@ Installation instructions for the all-in-one vm can be found at [www.openshift.o
 
 4. You can now login to the UI at https://10.2.2.2:8443/console and create a new project
 
+#### Docker oc cluster up
+
+If you have Docker installed, you can setup OpenShift Origin on your local machine: https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md
+
+1. On your terminal call `oc cluster up  --host-data-dir='/srv/openshift'`
+   - Note that oc cluster needs access to port 80 on your host, so you may need to stop any webserver while using OpenShift
+
+2. In order to make the permissions of your install match those on the all-in-one you need to edit the anyuid security context:
+   - `oc edit scc anyuid`
+   - and add `system:authenticated` OR the service user for your project to the `groups` array
+
+3. Create some Persistent Volumes for GitLab to use.
+   - Create 4 files with the following, but iterate the name and path
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0001
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /srv/openshift-gitlab/pv0001
+  persistentVolumeReclaimPolicy: Recycle
+```
+   - run `oc create -f <filename>` for each file to add them to the cluster
+
+4. Create each of the host paths on your own machine and ensure they have a `777` filemode
+
+5. You can now login to the UI at https://localhost:8443/console/ and create a new project
+
 #### Production Installer
 
 You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. The docs are here:
@@ -27,20 +67,24 @@ https://docs.openshift.org/latest/install_config/install/advanced_install.html a
 
 After setting it all up, you will need to make sure you deploy the registry and router mentioned in the `what's next` section: https://docs.openshift.org/latest/install_config/install/advanced_install.html#what-s-next
 
-In order to make the permissions of your install match those on the all-in-one you need to edit the anyuid security context:
-
- - `oc edit scc anyuid`
- - and add `system:authenticated` OR the service user for your project to the `groups` array
+In order to finish setting up the cluster, you need to add allow your project's service account to run as anyuid,
+And you need to setup persistent volumes.
 
 
 ### Add the GitLab template to OpenShift
 
-1. Download and install the OpenShift Origin Client Tools onto your path if you don't already have them.
-   - Found here: https://github.com/openshift/origin/releases
-
-2. Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required)
-   - `oc login https://10.2.2.2:8443` username: `admin` password: `admin` for the all-in-one vm. (different for other installation methods)
+Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required)
+   - `oc login https://10.2.2.2:8443` username: `admin` password: `admin` for the all-in-one vm.
+   - `oc login -u system:admin` for the docker cluster up
    - From the root of your omnibus-gitlab repo, `oc create -f docker/openshift-template.json -n openshift`
+
+### Install GitLab
+
+After having setup the template:
+
+1. Go to the web console for OpenShift
+2. Create a new project or use an existing one that doesn't already have GitLab
+3. Add to Project, and add the GitLab-Ce template
 
 ### Removing the GitLab template
 
@@ -53,7 +97,7 @@ In case you want to upload a new version of it:
  There is an issue with the all-in-one VM where it's networking isn't properly setup when OpenShift starts.
  This results in the GitLab app not able to communicate with redis or postgres, and the postgres post-hook fails
  during setup. The current solution is to issue `vagrant ssh` into the box, then `sudo shutdown -r now` and once
- it comes back up you will neeed to deploy the failed deployments.
+ it comes back up you will need to deploy the failed deployments.
 
 ## Releasing a New Version
 
