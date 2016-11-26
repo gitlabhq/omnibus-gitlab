@@ -10,6 +10,7 @@ echo "deb https://packages.gitlab.com/gitlab/${PACKAGECLOUD_REPO}/ubuntu/ ${DIST
 wget -q -O - https://packages.gitlab.com/gpg.key | apt-key add -
 apt-get update
 apt-get install -yq --no-install-recommends ${RELEASE_PACKAGE}=${RELEASE_VERSION}
+rm -rf /var/lib/apt/lists/*
 
 # Create sshd daemon
 mkdir -p /opt/gitlab/sv/sshd/supervise /opt/gitlab/sv/sshd/log/supervise

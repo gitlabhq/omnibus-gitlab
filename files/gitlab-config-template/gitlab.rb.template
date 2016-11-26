@@ -772,7 +772,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #############
 # Logrotate #
 #############
-## see: hhttps://docs.gitlab.com/omnibus/settings/logs.html#logrotate
+## see: https://docs.gitlab.com/omnibus/settings/logs.html#logrotate
 ## You can disable built in logrotate feature.
 
 # logrotate['enable'] = true
@@ -846,7 +846,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_insecure_outgoing_connections'] = false
 # mattermost['service_allow_cors_from'] = ""
 # mattermost['service_enable_outgoing_webhooks'] = true
-# mattermost['service_enable_commands'] = false
+# mattermost['service_enable_commands'] = true
 # mattermost['service_enable_custom_emoji'] = false
 # mattermost['service_enable_only_admin_integrations'] = true
 # mattermost['service_enable_oauth_service_provider'] = false
