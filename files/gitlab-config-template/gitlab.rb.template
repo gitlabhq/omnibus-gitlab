@@ -1204,12 +1204,21 @@ external_url 'GENERATED_EXTERNAL_URL'
 #default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 #default['gitlab']['postgres-exporter']['flags'] = {
 #}
-#default['gitlab']['postgres-exporter']['env'] = {
-#  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=template1"
-#}
+# postgres_exporter['listen_address'] = 'localhost:9187'
+
+################################################################################
+# Gitlab monitor
+################################################################################
+
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+
+#default['gitlab']['gitlab-monitor']['enable'] = false
+#default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
+#default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
-# postgres_exporter['listen_address'] = 'localhost:9187'
+# gitlab_monitor['listen_address'] = 'localhost:4567'
+
 
 ################################################################################
 ################################################################################

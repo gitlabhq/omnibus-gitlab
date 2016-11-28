@@ -118,6 +118,7 @@ dependency "node-exporter"
 dependency "prometheus"
 dependency "redis-exporter"
 dependency "postgres-exporter"
+dependency "gitlab-monitor"
 
 # version manifest file
 dependency "version-manifest"

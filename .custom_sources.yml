@@ -8,6 +8,8 @@ gitlab-workhorse:
   remote: "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
 gitlab-pages:
   remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
+gitlab-monitor:
+  remote: "git@dev.gitlab.org:gitlab-org/gitlab-monitor.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
 omnibus:

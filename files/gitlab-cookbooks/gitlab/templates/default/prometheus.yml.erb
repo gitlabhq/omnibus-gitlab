@@ -21,3 +21,17 @@ scrape_configs:
     static_configs:
       - targets: ['<%= node['gitlab']['postgres-exporter']['listen_address'] %>']
 <% end -%>
+<% if node['gitlab']['gitlab-monitor']['enable'] %>
+  - job_name: gitlab_monitor_database
+    metrics_path: /database
+    static_configs:
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+  - job_name: gitlab_monitor_sidekiq
+    metrics_path: /sidekiq
+    static_configs:
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+  - job_name: gitlab_monitor_process
+    metrics_path: /process
+    static_configs:
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+<% end -%>

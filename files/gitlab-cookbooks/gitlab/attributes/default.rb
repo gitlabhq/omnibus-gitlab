@@ -1014,3 +1014,11 @@ default['gitlab']['postgres-exporter']['env'] = {
   'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=template1"
 }
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
+
+####
+# Gitlab monitor
+###
+default['gitlab']['gitlab-monitor']['enable'] = false
+default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
+default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
+default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost:4567'
