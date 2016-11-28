@@ -83,6 +83,7 @@ module Gitlab
   node_exporter Mash.new
   prometheus Mash.new
   redis_exporter Mash.new
+  postgres_exporter Mash.new
   sentinel Mash.new
   node nil
   external_url nil
@@ -202,6 +203,7 @@ module Gitlab
         "node_exporter",
         "prometheus",
         "redis_exporter",
+        "postgres_exporter",
         "sentinel"
       ].each do |key|
         rkey = key.gsub('_', '-')

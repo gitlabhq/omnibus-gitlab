@@ -46,11 +46,11 @@ class AccountHelper
     node['gitlab']['redis']['username']
   end
 
-  def postgresgl_user
+  def postgresql_user
     node['gitlab']['postgresql']['username']
   end
 
-  def postgresgl_group
+  def postgresql_group
     node['gitlab']['postgresql']['username']
   end
 

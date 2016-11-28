@@ -1002,3 +1002,15 @@ default['gitlab']['redis-exporter']['flags'] = {
   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
 }
 default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
+
+####
+# Postgres exporter
+###
+default['gitlab']['postgres-exporter']['enable'] = false
+default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
+default['gitlab']['postgres-exporter']['flags'] = {
+}
+default['gitlab']['postgres-exporter']['env'] = {
+  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=template1"
+}
+default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
