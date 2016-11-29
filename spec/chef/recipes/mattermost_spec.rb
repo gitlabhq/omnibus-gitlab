@@ -11,13 +11,30 @@ describe 'gitlab::mattermost' do
   end
 
   it 'authorizes mattermost with gitlab' do
+    stub_gitlab_rb(external_url: 'http://external.url')
+    allow(MattermostHelper).to receive(:authorize_with_gitlab)
+
     expect(chef_run).to run_ruby_block('authorize mattermost with gitlab')
       .at_converge_time
+    expect(MattermostHelper).to receive(:authorize_with_gitlab)
+      .with 'http://external.url'
+
+    chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
   end
 
   it 'populates mattermost configuration options to node attributes' do
+    stub_gitlab_rb(mattermost: { enable: true, gitlab_id: 'old' })
+    allow(MattermostHelper).to receive(:authorize_with_gitlab) do |url|
+      Gitlab['mattermost']['gitlab_id'] = 'new'
+    end
+
     expect(chef_run).to run_ruby_block('populate mattermost configuration options')
       .at_converge_time
+
+    chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
+    chef_run.ruby_block('populate mattermost configuration options').old_run_action(:run)
+
+    expect(chef_run.node['gitlab']['mattermost']['gitlab_id']).to eq 'new'
   end
 
   it 'creates mattermost configuration file with gitlab settings' do
@@ -53,7 +70,7 @@ describe 'gitlab::mattermost' do
   end
 
   context 'when gitlab authentication parameters are specified explicitly' do
-    before { stub_gitlab_rb(mattermost: { gitlab_enable: true }) }
+    before { stub_gitlab_rb(mattermost: { enable: true, gitlab_enable: true }) }
 
     it_behaves_like 'no gitlab authorization performed'
   end
