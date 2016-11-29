@@ -9,6 +9,14 @@ omnibus-gitlab repository.
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
 
+8.14.2
+
+- Revert 34e28112 so we don't listen on IPv6 by default
+
+8.14.1
+
+- No changes
+
 8.14.0
 
 - Switch the redis user's shell to /bin/false 9d60ee4
@@ -23,6 +31,10 @@ omnibus-gitlab repository.
 - Support Redis Sentinel daemon (EE only) 457c4764
 - Separate package repositories for OL and SL e37eaae
 - Add mailroom idle timeout configuration 0488f3de
+
+8.13.7
+
+- No changes
 
 8.13.6
 
@@ -55,6 +67,10 @@ omnibus-gitlab repository.
 - Add support for nginx status (Luis Sagastume) 3cd7b36
 - Enable jemalloc by default 0a7799d2
 - Move database migration log to a persisted location b368c46c
+
+8.12.10
+
+- No changes
 
 8.12.9
 
