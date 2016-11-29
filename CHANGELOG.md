@@ -32,6 +32,10 @@ omnibus-gitlab repository.
 - Separate package repositories for OL and SL e37eaae
 - Add mailroom idle timeout configuration 0488f3de
 
+8.13.7
+
+- No changes
+
 8.13.6
 
 - No changes
@@ -63,6 +67,10 @@ omnibus-gitlab repository.
 - Add support for nginx status (Luis Sagastume) 3cd7b36
 - Enable jemalloc by default 0a7799d2
 - Move database migration log to a persisted location b368c46c
+
+8.12.10
+
+- No changes
 
 8.12.9
 
