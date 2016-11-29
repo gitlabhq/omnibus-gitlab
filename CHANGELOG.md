@@ -9,6 +9,14 @@ omnibus-gitlab repository.
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
 
+8.14.2
+
+- Revert 34e28112 so we don't listen on IPv6 by default
+
+8.14.1
+
+- No changes
+
 8.14.0
 
 - Switch the redis user's shell to /bin/false 9d60ee4
