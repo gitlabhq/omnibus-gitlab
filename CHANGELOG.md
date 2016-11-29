@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.2
+
+- Revert 34e28112 so we don't listen on IPv6 by default
+
+8.14.1
+
+- No changes
+
 8.14.0
 
 - Switch the redis user's shell to /bin/false 9d60ee4
