@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Update git to 2.8.4 381c0b9d
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
+- Fix Mattermost authorization with Gitlab
 
 8.14.2
 
