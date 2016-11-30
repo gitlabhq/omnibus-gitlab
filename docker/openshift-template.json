@@ -99,10 +99,10 @@
       "spec": {
         "tags": [
           {
-            "name": "8.13.3",
+            "name": "8.14.1",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:8.13.3-ce.0"
+              "name": "gitlab/gitlab-ce:8.14.1-ce.1"
             }
           }
         ]
@@ -140,14 +140,8 @@
       },
       "spec": {
         "strategy": {
-          "type": "Rolling",
-          "rollingParams": {
-            "updatePeriodSeconds": 1,
-            "intervalSeconds": 1,
-            "timeoutSeconds": 600,
-            "maxUnavailable": "25%",
-            "maxSurge": "25%"
-          },
+          "type": "Recreate",
+          "recreateParams": {},
           "resources": {}
         },
         "triggers": [
@@ -163,7 +157,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:8.13.3"
+                "name": "${APPLICATION_NAME}:8.14.1"
               }
             }
           }
@@ -282,14 +276,8 @@
       },
       "spec": {
         "strategy": {
-          "type": "Rolling",
-          "rollingParams": {
-            "updatePeriodSeconds": 1,
-            "intervalSeconds": 1,
-            "timeoutSeconds": 600,
-            "maxUnavailable": "25%",
-            "maxSurge": "25%"
-          },
+          "type": "Recreate",
+          "recreateParams": {},
           "resources": {}
         },
         "triggers": [
@@ -384,13 +372,8 @@
       },
       "spec": {
         "strategy": {
-          "type": "Rolling",
-          "rollingParams": {
-            "updatePeriodSeconds": 1,
-            "intervalSeconds": 1,
-            "timeoutSeconds": 600,
-            "maxUnavailable": "25%",
-            "maxSurge": "25%",
+          "type": "Recreate",
+          "recreateParams": {
             "post": {
               "failurePolicy": "Abort",
               "execNewPod": {
@@ -405,8 +388,7 @@
                   { "name": "HOME", "value": "/var/lib/pgsql" },
                   { "name": "PGDATA", "value": "/var/lib/pgsql/data/userdata" },
                   { "name": "CONTAINER_SCRIPTS_PATH", "value": "/usr/share/container-scripts/postgresql" }
-                ],
-                "volumes": ["gitlab-ce-volume-3"]
+                ]
               }
             }
           },
