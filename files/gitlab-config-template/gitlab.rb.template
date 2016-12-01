@@ -398,6 +398,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['auth_backend'] = "http://localhost:8080"
 # gitlab_workhorse['auth_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
 # gitlab_workhorse['pprof_listen_addr'] = "''" # put an empty string on the command line
+# gitlab_workhorse['prometheus_listen_addr'] = "''" # default is empty string
 # gitlab_workhorse['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 # gitlab_workhorse['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
 # gitlab_workhorse['proxy_headers_timeout'] = "1m0s"
