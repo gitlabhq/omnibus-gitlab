@@ -41,4 +41,24 @@ describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit 6 \\/)
     end
   end
+
+  context 'without prometheus listen address' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: {})
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr/)
+    end
+  end
+
+  context 'with prometheus listen address' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9100'})
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr :9100 \\/)
+    end
+  end
 end
