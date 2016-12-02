@@ -17,11 +17,9 @@ describe 'gitlab::database-migrations' do
     let(:bash_block) { chef_run.bash('migrate gitlab-rails database') }
 
     context 'places the log file' do
-      # Testing only path as escaping the file name "$(date +%s)-$$.log"
-      # is causing issues with chefspec.
 
       it 'in a default location' do
-        path = %Q(/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-)
+        path = Regexp.escape("/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")
         expect(bash_block.code).to match(/#{path}/)
       end
 
