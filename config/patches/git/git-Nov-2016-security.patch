@@ -1,0 +1,288 @@
+diff --git a/http-walker.c b/http-walker.c
+index 2c721f0..82113b1 100644
+--- a/http-walker.c
++++ b/http-walker.c
+@@ -290,9 +290,8 @@ static void process_alternates_response(void *callback_data)
+ 				struct strbuf target = STRBUF_INIT;
+ 				strbuf_add(&target, base, serverlen);
+ 				strbuf_add(&target, data + i, posn - i - 7);
+-				if (walker->get_verbosely)
+-					fprintf(stderr, "Also look at %s\n",
+-						target.buf);
++				warning("adding alternate object store: %s",
++	              target.buf);
+ 				newalt = xmalloc(sizeof(*newalt));
+ 				newalt->next = NULL;
+ 				newalt->base = strbuf_detach(&target, NULL);
+@@ -318,6 +317,9 @@ static void fetch_alternates(struct walker *walker, const char *base)
+ 	struct alternates_request alt_req;
+ 	struct walker_data *cdata = walker->data;
+
++	if (http_follow_config != HTTP_FOLLOW_ALWAYS)
++        return;
++
+ 	/*
+ 	 * If another request has already started fetching alternates,
+ 	 * wait for them to arrive and return to processing this request's
+@@ -488,25 +490,34 @@ static int fetch_object(struct walker *walker, struct alt_base *repo, unsigned c
+ 		req->localfile = -1;
+ 	}
+
+-	if (obj_req->state == ABORTED) {
+-		ret = error("Request for %s aborted", hex);
+-	} else if (req->curl_result != CURLE_OK &&
+-		   req->http_code != 416) {
+-		if (missing_target(req))
+-			ret = -1; /* Be silent, it is probably in a pack. */
+-		else
+-			ret = error("%s (curl_result = %d, http_code = %ld, sha1 = %s)",
+-				    req->errorstr, req->curl_result,
+-				    req->http_code, hex);
+-	} else if (req->zret != Z_STREAM_END) {
+-		walker->corrupt_object_found++;
+-		ret = error("File %s (%s) corrupt", hex, req->url);
+-	} else if (hashcmp(obj_req->sha1, req->real_sha1)) {
+-		ret = error("File %s has bad hash", hex);
+-	} else if (req->rename < 0) {
+-		ret = error("unable to write sha1 filename %s",
+-			    sha1_file_name(req->sha1));
+-	}
++	if (req->http_code >= 300 && req->curl_result == CURLE_OK &&
++                        (starts_with(req->url, "http://") ||
++                         starts_with(req->url, "https://"))) {
++                req->curl_result = CURLE_HTTP_RETURNED_ERROR;
++								xsnprintf(req->errorstr, sizeof(req->errorstr),
++                          "HTTP request failed");
++        }
++
++        if (obj_req->state == ABORTED) {
++                ret = error("Request for %s aborted", hex);
++        } else if (req->curl_result != CURLE_OK &&
++                   req->http_code != 416) {
++                if (missing_target(req))
++                        ret = -1; /* Be silent, it is probably in a pack. */
++                else
++                        ret = error("%s (curl_result = %d, http_code = %ld, sha1 = %s)",
++                                    req->errorstr, req->curl_result,
++                                    req->http_code, hex);
++        } else if (req->zret != Z_STREAM_END) {
++                walker->corrupt_object_found++;
++                ret = error("File %s (%s) corrupt", hex, req->url);
++        } else if (hashcmp(obj_req->sha1, req->real_sha1)) {
++                ret = error("File %s has bad hash", hex);
++        } else if (req->rename < 0) {
++                ret = error("unable to write sha1 filename %s",
++                            sha1_file_name(req->sha1));
++        }
++
+
+ 	release_http_object_request(req);
+ 	release_object_request(obj_req);
+diff --git a/http.c b/http.c
+index 0da9e66..a5e6c29 100644
+--- a/http.c
++++ b/http.c
+@@ -68,6 +68,8 @@ struct credential http_auth = CREDENTIAL_INIT;
+ static int http_proactive_auth;
+ static const char *user_agent;
+
++enum http_follow_config http_follow_config = HTTP_FOLLOW_INITIAL;
++
+ #if LIBCURL_VERSION_NUM >= 0x071700
+ /* Use CURLOPT_KEYPASSWD as is */
+ #elif LIBCURL_VERSION_NUM >= 0x070903
+@@ -202,6 +204,15 @@ static int http_options(const char *var, const char *value, void *cb)
+ 		curl_ssl_verify = git_config_bool(var, value);
+ 		return 0;
+ 	}
++	if (!strcmp("http.followredirects", var)) {
++    if (value && !strcmp(value, "initial"))
++            http_follow_config = HTTP_FOLLOW_INITIAL;
++    else if (git_config_bool(var, value))
++            http_follow_config = HTTP_FOLLOW_ALWAYS;
++    else
++            http_follow_config = HTTP_FOLLOW_NONE;
++    return 0;
++  }
+ 	if (!strcmp("http.sslcipherlist", var))
+ 		return git_config_string(&ssl_cipherlist, var, value);
+ 	if (!strcmp("http.sslversion", var))
+@@ -425,7 +436,7 @@ static CURL *get_curl_handle(void)
+ 				 curl_low_speed_time);
+ 	}
+
+-	curl_easy_setopt(result, CURLOPT_FOLLOWLOCATION, 1);
++
+ 	curl_easy_setopt(result, CURLOPT_MAXREDIRS, 20);
+ #if LIBCURL_VERSION_NUM >= 0x071301
+ 	curl_easy_setopt(result, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+@@ -442,6 +453,7 @@ static CURL *get_curl_handle(void)
+ 	if (is_transport_allowed("ftps"))
+ 		allowed_protocols |= CURLPROTO_FTPS;
+ 	curl_easy_setopt(result, CURLOPT_REDIR_PROTOCOLS, allowed_protocols);
++	curl_easy_setopt(result, CURLOPT_PROTOCOLS, allowed_protocols);
+ #else
+ 	if (transport_restrict_protocols())
+ 		warning("protocol restrictions not applied to curl redirects because\n"
+@@ -692,6 +704,17 @@ struct active_request_slot *get_active_slot(void)
+ 	curl_easy_setopt(slot->curl, CURLOPT_HTTPGET, 1);
+ 	curl_easy_setopt(slot->curl, CURLOPT_FAILONERROR, 1);
+ 	curl_easy_setopt(slot->curl, CURLOPT_RANGE, NULL);
++
++/*
++	 * Default following to off unless "ALWAYS" is configured; this gives
++	 * callers a sane starting point, and they can tweak for individual
++	 * HTTP_FOLLOW_* cases themselves.
++	 */
++	if (http_follow_config == HTTP_FOLLOW_ALWAYS)
++	        curl_easy_setopt(slot->curl, CURLOPT_FOLLOWLOCATION, 1);
++	else
++	        curl_easy_setopt(slot->curl, CURLOPT_FOLLOWLOCATION, 0);
++
+ #ifdef LIBCURL_CAN_HANDLE_AUTH_ANY
+ 	curl_easy_setopt(slot->curl, CURLOPT_HTTPAUTH, http_auth_methods);
+ #endif
+@@ -929,9 +952,12 @@ static int handle_curl_result(struct slot_results *results)
+ 	 * If we see a failing http code with CURLE_OK, we have turned off
+ 	 * FAILONERROR (to keep the server's custom error response), and should
+ 	 * translate the code into failure here.
++	 *
++   * Likewise, if we see a redirect (30x code), that means we turned off
++   * redirect-following, and we should treat the result as an error.
+ 	 */
+ 	if (results->curl_result == CURLE_OK &&
+-	    results->http_code >= 400) {
++	    results->http_code >= 300) {
+ 		results->curl_result = CURLE_HTTP_RETURNED_ERROR;
+ 		/*
+ 		 * Normally curl will already have put the "reason phrase"
+@@ -1236,6 +1262,9 @@ static int http_request(const char *url,
+ 		strbuf_addstr(&buf, " no-cache");
+ 	if (options && options->keep_error)
+ 		curl_easy_setopt(slot->curl, CURLOPT_FAILONERROR, 0);
++		if (options && options->initial_request &&
++        http_follow_config == HTTP_FOLLOW_INITIAL)
++            curl_easy_setopt(slot->curl, CURLOPT_FOLLOWLOCATION, 1);
+
+ 	headers = curl_slist_append(headers, buf.buf);
+
+@@ -1284,16 +1313,16 @@ static int http_request(const char *url,
+  *
+  * Note that this assumes a sane redirect scheme. It's entirely possible
+  * in the example above to end up at a URL that does not even end in
+- * "info/refs".  In such a case we simply punt, as there is not much we can
+- * do (and such a scheme is unlikely to represent a real git repository,
+- * which means we are likely about to abort anyway).
++ * "info/refs".  In such a case we die. There's not much we can do, such a
++ * scheme is unlikely to represent a real git repository, and failing to
++ * rewrite the base opens options for malicious redirects to do funny things.
+  */
+ static int update_url_from_redirect(struct strbuf *base,
+ 				    const char *asked,
+ 				    const struct strbuf *got)
+ {
+ 	const char *tail;
+-	size_t tail_len;
++	size_t new_len;
+
+ 	if (!strcmp(asked, got->buf))
+ 		return 0;
+@@ -1302,14 +1331,16 @@ static int update_url_from_redirect(struct strbuf *base,
+ 		die("BUG: update_url_from_redirect: %s is not a superset of %s",
+ 		    asked, base->buf);
+
+-	tail_len = strlen(tail);
+-
+-	if (got->len < tail_len ||
+-	    strcmp(tail, got->buf + got->len - tail_len))
+-		return 0; /* insane redirect scheme */
++		new_len = got->len;
++		if (!strip_suffix_mem(got->buf, &new_len, tail))
++		  die(_("unable to update url base from redirection:\n"
++                      "  asked for: %s\n"
++                      "   redirect: %s"),
++                    asked, got->buf);
+
+ 	strbuf_reset(base);
+-	strbuf_add(base, got->buf, got->len - tail_len);
++	strbuf_add(base, got->buf, new_len);
++
+ 	return 1;
+ }
+
+diff --git a/http.h b/http.h
+index 4f97b60..ac6d325 100644
+--- a/http.h
++++ b/http.h
+@@ -113,6 +113,13 @@ extern struct credential http_auth;
+
+ extern char curl_errorstr[CURL_ERROR_SIZE];
+
++enum http_follow_config {
++        HTTP_FOLLOW_NONE,
++        HTTP_FOLLOW_ALWAYS,
++        HTTP_FOLLOW_INITIAL
++};
++extern enum http_follow_config http_follow_config;
++
+ static inline int missing__target(int code, int result)
+ {
+ 	return	/* file:// URL -- do we ever use one??? */
+@@ -136,7 +143,8 @@ extern char *get_remote_object_url(const char *url, const char *hex,
+ /* Options for http_get_*() */
+ struct http_get_options {
+ 	unsigned no_cache:1,
+-		 keep_error:1;
++	  keep_error:1,
++    initial_request:1;
+
+ 	/* If non-NULL, returns the content-type of the response. */
+ 	struct strbuf *content_type;
+diff --git a/remote-curl.c b/remote-curl.c
+index e65ea59..1cd0a4b 100644
+--- a/remote-curl.c
++++ b/remote-curl.c
+@@ -241,7 +241,7 @@ static struct discovery *discover_refs(const char *service, int for_push)
+ 	struct strbuf effective_url = STRBUF_INIT;
+ 	struct discovery *last = last_discovery;
+ 	int http_ret, maybe_smart = 0;
+-	struct http_get_options options;
++	struct http_get_options http_options;
+
+ 	if (last && !strcmp(service, last->service))
+ 		return last;
+@@ -258,15 +258,16 @@ static struct discovery *discover_refs(const char *service, int for_push)
+ 		strbuf_addf(&refs_url, "service=%s", service);
+ 	}
+
+-	memset(&options, 0, sizeof(options));
+-	options.content_type = &type;
+-	options.charset = &charset;
+-	options.effective_url = &effective_url;
+-	options.base_url = &url;
+-	options.no_cache = 1;
+-	options.keep_error = 1;
++	memset(&http_options, 0, sizeof(http_options));
++  http_options.content_type = &type;
++  http_options.charset = &charset;
++  http_options.effective_url = &effective_url;
++  http_options.base_url = &url;
++	http_options.initial_request = 1;
++  http_options.no_cache = 1;
++  http_options.keep_error = 1;
+
+-	http_ret = http_get_strbuf(refs_url.buf, &buffer, &options);
++	http_ret = http_get_strbuf(refs_url.buf, &buffer, &http_options);
+ 	switch (http_ret) {
+ 	case HTTP_OK:
+ 		break;
+@@ -281,6 +282,9 @@ static struct discovery *discover_refs(const char *service, int for_push)
+ 		die("unable to access '%s': %s", url.buf, curl_errorstr);
+ 	}
+
++	if (options.verbosity && !starts_with(refs_url.buf, url.buf))
++    warning(_("redirecting to %s"), url.buf);
++
+ 	last= xcalloc(1, sizeof(*last_discovery));
+ 	last->service = service;
+ 	last->buf_alloc = strbuf_detach(&buffer, &last->len);
