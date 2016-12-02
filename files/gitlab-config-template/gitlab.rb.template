@@ -485,6 +485,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # It needs to exist so we can check permissions and avoid to throwing warnings to the users.
 # gitlab_shell['git_trace_log_file'] = "/var/log/gitlab/gitlab-shell/gitlab-shell-git-trace.log"
 
+# We do not recommend changing these directories.
+# gitlab_shell['dir'] = "/var/opt/gitlab/gitlab-shell"
+
 #####################
 # GitLab PostgreSQL #
 #####################
