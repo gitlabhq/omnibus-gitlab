@@ -48,6 +48,7 @@ describe 'gitlab::gitlab-workhorse' do
     end
 
     it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run")
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr/)
     end
   end
