@@ -317,6 +317,7 @@ default['gitlab']['sidekiq']['concurrency'] = 25
 ###
 # gitlab-shell
 ###
+default['gitlab']['gitlab-shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
