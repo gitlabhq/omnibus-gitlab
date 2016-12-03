@@ -4,7 +4,7 @@ New GitLab templates for OpenShift are prepared as part of our our [cloud image 
 
 ### Update the template to latest GitLab release
 
-Within the template we reference our Docker image. Go to https://hub.docker.com/r/gitlab/gitlab-ce/tags/
+Within the template we reference our Docker image. Go to https://store.docker.com/community/images/gitlab/gitlab-ce/tags
 and find the newest decriptive tag. e.g. `8.13.3-ce.0`
 
 Then update the image stream in the template with the name and tag:
@@ -25,7 +25,7 @@ Then update the image stream in the template with the name and tag:
         "name": "8.13.3", /* <-- Change this */
         "from": {
           "kind": "DockerImage",
-          "name": "gitlab/gitlab-ce:8.13.3-ce.0" <-- Change this */
+          "name": "gitlab/gitlab-ce:8.13.3-ce.0" /* <-- Change this */
         }
       }
     ]
@@ -45,7 +45,7 @@ And then also update the GitLab Deployment config to use the new tag in it's Ima
     ],
     "from": {
       "kind": "ImageStreamTag",
-      "name": "${APPLICATION_NAME}:8.13.3" <-- Change this */
+      "name": "${APPLICATION_NAME}:8.13.3" /* <-- Change this */
     }
   }
 }

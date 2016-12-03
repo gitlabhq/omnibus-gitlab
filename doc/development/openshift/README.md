@@ -1,5 +1,19 @@
 ## Development Setup
 
+### Requirements
+
+An all-in-one install of OpenShift will require at least 5Gb of free RAM on your
+computer in order to test GitLab.
+
+ - We are currently compatible with OpenShift Origin 1.3.x. Anything lower will not work.
+ - For the VirtualBox based setup you need either:
+   - VirtualBox 5.0 with Vagrant 1.8.4
+   - VirtualBox 5.1 with Vagrant 1.8.7
+ - For the Docker based setup you need Docker >= 1.10
+ - For the Ansible based setup you need to be on a RHEL compatible host
+   - RHEL/CentOS/Fedora/Atomic
+
+
 ### Setup OpenShift Origin
 
 The first thing you need to interact with OpenShift Origin, are the `oc` client tools for your terminal:
@@ -60,15 +74,22 @@ spec:
 
 5. You can now login to the UI at https://localhost:8443/console/ and create a new project
 
-#### Production Installer
+#### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. The docs are here:
-https://docs.openshift.org/latest/install_config/install/advanced_install.html and the Ansible playbooks are here: https://github.com/openshift/openshift-ansible
+You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. Follow the [advanded install docs](https://docs.openshift.org/latest/install_config/install/advanced_install.html).
 
-After setting it all up, you will need to make sure you deploy the registry and router mentioned in the `what's next` section: https://docs.openshift.org/latest/install_config/install/advanced_install.html#what-s-next
+You can find the Ansible playbooks at: https://github.com/openshift/openshift-ansible
 
-In order to finish setting up the cluster, you need to add allow your project's service account to run as anyuid,
-And you need to setup persistent volumes.
+After setting it all up, you will need to make sure you deploy the registry and router mentioned in the [what's next section](https://docs.openshift.org/latest/install_config/install/advanced_install.html#what-s-next)
+
+In order to finish setting up the cluster, you need to create a project and allow your project's service account to run as anyuid.
+
+```
+oc new-project <your_project_name>
+oc policy add-role-to-user anyuid system:serviceaccount:<your_project_name>:default
+```
+
+And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker_oc_cluster_up)
 
 
 ### Add the GitLab template to OpenShift
