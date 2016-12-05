@@ -34,6 +34,17 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'with a non-default directory' do
+    before do
+      stub_gitlab_rb(gitlab_shell: {
+        dir: '/export/gitlab/gitlab-shell',
+      })
+    end
+    it 'creates config file in specified location' do
+      expect(chef_run).to render_file('/export/gitlab/gitlab-shell/config.yml')
+    end
+  end
+
   context 'with a non-default log directory' do
     before do
       stub_gitlab_rb(gitlab_shell: {
