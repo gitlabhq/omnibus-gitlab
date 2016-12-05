@@ -555,7 +555,9 @@ default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 default['gitlab']['nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
-  "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade"
 }
 default['gitlab']['nginx']['http2_enabled'] = true
 # Cache up to 1GB of HTTP responses from GitLab on disk

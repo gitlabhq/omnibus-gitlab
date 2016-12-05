@@ -698,7 +698,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Real-IP" => "$remote_addr",
 #  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
 #  "X-Forwarded-Proto" => "https",
-#  "X-Forwarded-Ssl" => "on"
+#  "X-Forwarded-Ssl" => "on",
+#  "Upgrade" => "$http_upgrade",
+#  "Connection" => "$connection_upgrade"
 # }
 # nginx['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
 # nginx['proxy_cache'] = 'gitlab'
@@ -998,7 +1000,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
 #   "X-Frame-Options" => "SAMEORIGIN",
 #   "X-Forwarded-Proto" => "https",
-#   "X-Forwarded-Ssl" => "on"
+#   "X-Forwarded-Ssl" => "on",
+#   "Upgrade" => "$http_upgrade",
+#   "Connection" => "$connection_upgrade"
 # }
 # mattermost_nginx['real_ip_trusted_addresses'] = []
 # mattermost_nginx['real_ip_header'] = nil
