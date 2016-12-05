@@ -10,7 +10,7 @@ omnibus-gitlab repository.
 - Enable Mattermost slash commands by default 2b3406
 - Fix Mattermost authorization with Gitlab
 
-8.14.3
+8.14.4
 
 - Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
 
