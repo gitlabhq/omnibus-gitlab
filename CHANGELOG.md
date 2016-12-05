@@ -9,7 +9,8 @@ omnibus-gitlab repository.
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
 - Fix Mattermost authorization with Gitlab
-- Add `prometheusListenAddr` config setting for gitlab-workhorse 12bb9df2
+- Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
+- Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 
 8.14.2
 
