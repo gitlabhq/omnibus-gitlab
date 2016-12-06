@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Fix Mattermost authorization with Gitlab
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
+- Bump ruby version to 2.3.3 9f5fe2c2
 
 8.14.2
 
