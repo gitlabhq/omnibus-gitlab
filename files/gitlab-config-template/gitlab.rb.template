@@ -601,6 +601,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## to enable the instance to transition to/from master/slave in a failover event.
 # redis['master_password'] = 'redis-password-goes-here'
 
+## Increase these values when your slaves can't catch up with master
+# redis['client_output_buffer_limit_slave'] = '256mb 64mb 60'
+
 ########################
 # GitLab Sentinel (EE) #
 ########################

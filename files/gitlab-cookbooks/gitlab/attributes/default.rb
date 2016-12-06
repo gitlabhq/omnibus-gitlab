@@ -435,6 +435,7 @@ default['gitlab']['redis']['master_name'] = 'gitlab-redis'
 default['gitlab']['redis']['master_ip'] = nil
 default['gitlab']['redis']['master_port'] = 6379
 default['gitlab']['redis']['master_password'] = nil
+default['gitlab']['redis']['client_output_buffer_limit_slave'] = "256mb 64mb 60"
 
 ####
 # Web server
