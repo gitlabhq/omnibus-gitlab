@@ -16,6 +16,8 @@ up a Build Environment](doc/build/prepare-build-environment.md).
         ```
         sudo apt-get install docker
         ```
+    For information about installing Docker on other OSs, visit
+    [official Docker installation docs](https://docs.docker.com/engine/installation).
 
     2. Pulling a Debian Jessie image
 
