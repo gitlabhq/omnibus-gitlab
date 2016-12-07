@@ -130,6 +130,13 @@
       }
     },
     {
+      "kind": "ServiceAccount",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "${APPLICATION_NAME}-user"
+        }
+    },
+    {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
@@ -260,7 +267,8 @@
             ],
             "restartPolicy": "Always",
             "terminationGracePeriodSeconds": 30,
-            "dnsPolicy": "ClusterFirst"
+            "dnsPolicy": "ClusterFirst",
+            "serviceAccount": "${APPLICATION_NAME}-user"
           }
         }
       }
@@ -324,6 +332,8 @@
               {
                 "name": "gitlab-ce-redis",
                 "image": "gitlab-ce-redis",
+                "command": ["/bin/sh", "-ec"],
+                "args": ["exec redis-server"],
                 "ports": [
                   {
                     "containerPort": 6379,
@@ -347,11 +357,7 @@
                   }
                 ],
                 "terminationMessagePath": "/dev/termination-log",
-                "imagePullPolicy": "IfNotPresent",
-                "securityContext": {
-                  "privileged": false,
-                  "runAsUser": 997
-                }
+                "imagePullPolicy": "IfNotPresent"
               }
             ],
             "restartPolicy": "Always",
