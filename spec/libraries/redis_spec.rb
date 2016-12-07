@@ -25,12 +25,6 @@ describe 'Redis' do
 
         subject.parse_redis_settings
       end
-
-      it 'expects client_output_buffer_limit_slave to match default value' do
-        expect(node['gitlab']['redis']['client_output_buffer_limit_slave']).to eq '256b 64mb 60'
-
-        subject.parse_redis_settings
-      end
     end
 
     context 'within redis host and port synchronization with gitlab_rails' do
