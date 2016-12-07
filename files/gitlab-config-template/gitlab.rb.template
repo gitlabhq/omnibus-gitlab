@@ -602,7 +602,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['master_password'] = 'redis-password-goes-here'
 
 ## Increase these values when your slaves can't catch up with master
+# redis['client_output_buffer_limit_normal'] = '0 0 0'
 # redis['client_output_buffer_limit_slave'] = '256mb 64mb 60'
+# redis['client_output_buffer_limit_pubsub'] = '32mb 8mb 60'
 
 ########################
 # GitLab Sentinel (EE) #

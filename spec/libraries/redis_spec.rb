@@ -1,3 +1,5 @@
+# This spec is to test the Redis helper and whether the values parsed
+# are the ones we expect
 require 'chef_helper'
 
 describe 'Redis' do
@@ -20,6 +22,12 @@ describe 'Redis' do
     context 'when no customization is made' do
       it 'keeps unixsocket' do
         expect(node['gitlab']['gitlab-rails']['unixsocket']).not_to eq false
+
+        subject.parse_redis_settings
+      end
+
+      it 'expects client_output_buffer_limit_slave to match default value' do
+        expect(node['gitlab']['redis']['client_output_buffer_limit_slave']).to eq '256b 64mb 60'
 
         subject.parse_redis_settings
       end
@@ -80,12 +88,6 @@ describe 'Redis' do
 
         it 'disables unix socket when sentinel params are defined' do
           expect(node['gitlab']['redis']['unixsocket']).to eq false
-
-          subject.parse_redis_settings
-        end
-
-        it 'expects client_output_buffer_limit_slave to match default value' do
-          expect(node['gitlab']['redis']['client_output_buffer_limit_slave']).to eq '256mb 64mb 60'
 
           subject.parse_redis_settings
         end
