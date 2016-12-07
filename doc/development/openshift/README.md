@@ -48,11 +48,14 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 1. On your terminal call `oc cluster up  --host-data-dir='/srv/openshift'`
    - Note that oc cluster needs access to port 80 on your host, so you may need to stop any webserver while using OpenShift
 
-2. In order to make the permissions of your install match those on the all-in-one you need to edit the anyuid security context:
-   - `oc edit scc anyuid`
-   - and add `system:authenticated` OR the service user for your project to the `groups` array
+2. Create a new namespace to assign storage and permissions to.
+   - `oc new-project <namespace>`
 
-3. Create some Persistent Volumes for GitLab to use.
+3. In order to allow the GitLab pod to run as root you need to edit the anyuid security context:
+   - `oc edit scc anyuid`
+   - and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
+
+4. Create some Persistent Volumes for GitLab to use.
    - Create 4 files with the following, but iterate the name and path
 ```
 apiVersion: v1
@@ -70,9 +73,9 @@ spec:
 ```
    - run `oc create -f <filename>` for each file to add them to the cluster
 
-4. Create each of the host paths on your own machine and ensure they have a `777` filemode
+5. Create each of the host paths on your own machine and ensure they have a `777` filemode
 
-5. You can now login to the UI at https://localhost:8443/console/ and create a new project
+6. You can now login to the UI at https://localhost:8443/console/ and create a new project
 
 #### Production Ansible Installer
 
@@ -84,10 +87,8 @@ After setting it all up, you will need to make sure you deploy the registry and 
 
 In order to finish setting up the cluster, you need to create a project and allow your project's service account to run as anyuid.
 
-```
-oc new-project <your_project_name>
-oc policy add-role-to-user anyuid system:serviceaccount:<your_project_name>:default
-```
+ - `oc new-project <your_project_name>``
+ - `oc edit scc anyuid` and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
 
 And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker_oc_cluster_up)
 
