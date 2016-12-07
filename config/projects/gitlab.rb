@@ -66,7 +66,7 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 # Original git://git.sv.gnu.org/config.git is failing intermittently
 config_guess_version =  Gitlab::Version.new('config_guess', "master")
 
-override :ruby, version: '2.3.1', source: { md5: '0d896c2e7fd54f722b399f407e48a4c6' }
+override :ruby, version: '2.3.3', source: { md5: 'e485f3a55649eb24a1e2e1a40bc120df' }
 override :rubygems, version: '2.6.6'
 override :'chef-gem', version: '12.12.15'
 override :redis, version: '3.2.5', source: { md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08' }
