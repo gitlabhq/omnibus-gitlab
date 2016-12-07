@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
+- Expose client_output_buffer_limit redis settings
 
 8.14.2
 
