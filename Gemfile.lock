@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: 8ac71b82727f963b8ea69fe2ab40006dee8bfac7
+  revision: a07663531cd734f123f069affc1a7245d971b80c
   branch: omnibus-5-4-0
   specs:
     omnibus (5.4.0)
@@ -26,12 +26,14 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-sdk (2.5.2)
-      aws-sdk-resources (= 2.5.2)
-    aws-sdk-core (2.5.2)
+    aws-sdk (2.6.33)
+      aws-sdk-resources (= 2.6.33)
+    aws-sdk-core (2.6.33)
+      aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.5.2)
-      aws-sdk-core (= 2.5.2)
+    aws-sdk-resources (2.6.33)
+      aws-sdk-core (= 2.6.33)
+    aws-sigv4 (1.0.0)
     builder (3.2.2)
     byebug (9.0.5)
     chef (12.13.30)
@@ -100,9 +102,9 @@ GEM
     mixlib-authentication (1.4.1)
       mixlib-log
     mixlib-cli (1.7.0)
-    mixlib-config (2.2.1)
-    mixlib-log (1.7.0)
-    mixlib-shellout (2.2.6)
+    mixlib-config (2.2.4)
+    mixlib-log (1.7.1)
+    mixlib-shellout (2.2.7)
     mixlib-versioning (1.1.0)
     multi_json (1.12.1)
     net-scp (1.2.1)
@@ -116,14 +118,14 @@ GEM
       net-ssh (>= 2.6.5)
       net-ssh-gateway (>= 1.2.0)
     net-telnet (0.1.1)
-    ohai (8.18.0)
+    ohai (8.22.0)
       chef-config (>= 12.5.0.alpha.1, < 13)
       ffi (~> 1.9)
       ffi-yajl (~> 2.2)
       ipaddress
       mixlib-cli
       mixlib-config (~> 2.0)
-      mixlib-log
+      mixlib-log (>= 1.7.1, < 2.0)
       mixlib-shellout (~> 2.0)
       plist (~> 3.1)
       systemu (~> 2.6.4)
