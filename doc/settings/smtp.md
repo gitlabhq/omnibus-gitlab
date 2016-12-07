@@ -279,6 +279,25 @@ gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_domain'] = "example.com"
 gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
+
+
+
+### Strato.de
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.strato.de"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@stratodomain.de"
+gitlab_rails['smtp_password'] = "strato_email_password"
+gitlab_rails['smtp_domain'] = "strato.de"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+
+
+
 ```
 
 ### Rackspace
