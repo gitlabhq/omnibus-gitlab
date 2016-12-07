@@ -27,6 +27,8 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
 
   redis_user = AccountHelper.new(node).redis_user
 
+  omnibus_helper = OmnibusHelper.new(node)
+
   account 'user and group for sentinel' do
     username redis_user
     uid node['gitlab']['redis']['uid']
@@ -75,7 +77,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
           sentinel: sentinel.to_hash
         }
       )
-      notifies :restart, 'service[sentinel]', :immediately if OmnibusHelper.should_notify?('redis')
+      notifies :restart, 'service[sentinel]', :immediately if omnibus_helper.should_notify?('redis')
       only_if { config_path }
     end
 

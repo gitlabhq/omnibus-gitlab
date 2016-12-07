@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_shell_source_dir = "/opt/gitlab/embedded/service/gitlab-shell"
@@ -113,12 +114,12 @@ end
 template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 
 dependent_services = []
-dependent_services << "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
-dependent_services << "service[sidekiq]" if OmnibusHelper.should_notify?("sidekiq")
+dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
+dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable']
 
-redis_not_listening = OmnibusHelper.not_listening?("redis")
-postgresql_not_listening = OmnibusHelper.not_listening?("postgresql")
+redis_not_listening = omnibus_helper.not_listening?("redis")
+postgresql_not_listening = omnibus_helper.not_listening?("postgresql")
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
@@ -254,7 +255,7 @@ templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
 end
 
 gitlab_workhorse_services = dependent_services
-gitlab_workhorse_services += ['service[gitlab-workhorse]'] if OmnibusHelper.should_notify?('gitlab-workhorse')
+gitlab_workhorse_services += ['service[gitlab-workhorse]'] if omnibus_helper.should_notify?('gitlab-workhorse')
 
 templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
@@ -332,7 +333,7 @@ end
 # reload until restarted
 file File.join(gitlab_rails_dir, "RUBY_VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
-  notifies :restart, "service[unicorn]" if OmnibusHelper.should_notify?('unicorn')
+  notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 end
 
 # We shipped packages with 'chown -R git' below for quite some time. That chown

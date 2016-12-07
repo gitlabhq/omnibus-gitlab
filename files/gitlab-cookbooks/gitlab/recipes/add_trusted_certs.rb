@@ -2,6 +2,7 @@
 # Copyright:: Copyright (c) 2016 GitLab Inc.
 # License:: MIT
 #
+omnibus_helper = OmnibusHelper.new(node)
 install_dir = node['package']['install-dir']
 trusted_certs_dir = node['gitlab']['gitlab-rails']['trusted_certs_dir']
 ssl_certs_dir =  File.join(install_dir, "embedded/ssl/certs")
@@ -33,5 +34,5 @@ ruby_block "Move existing certs and link to #{ssl_certs_dir}" do
     cert_helper.link_certificates
   end
   only_if { cert_helper.new_certificate_added? }
-  notifies :restart, "service[unicorn]" if OmnibusHelper.should_notify?("unicorn")
+  notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
 end

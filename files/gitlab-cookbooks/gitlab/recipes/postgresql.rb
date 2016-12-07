@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 postgresql_dir = node['gitlab']['postgresql']['dir']
 postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
@@ -89,7 +90,7 @@ execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
 end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
-should_notify = OmnibusHelper.should_notify?("postgresql")
+should_notify = omnibus_helper.should_notify?("postgresql")
 
 template postgresql_config do
   source "postgresql.conf.erb"
