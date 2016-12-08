@@ -51,5 +51,6 @@ RSpec.configure do |config|
     # Prevent chef converge from reloading the storage helper library, which would override our helper stub
     mock_file_load(%r{gitlab/libraries/storage_directory_helper})
     mock_file_load(%r{gitlab/libraries/helper})
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return("9.2")
   end
 end
