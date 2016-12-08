@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.9
+
+- No changes
+
+8.13.8
+
+- Patch Git 2.7.4 for security vulnerabilities 2d7cf04a
+
 8.13.7
 
 - No changes
