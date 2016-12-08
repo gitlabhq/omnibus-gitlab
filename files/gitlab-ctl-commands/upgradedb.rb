@@ -128,7 +128,9 @@ add_command_under_category 'pg-upgrade', 'database',
   maintenance_mode('enable')
 
   # Get the existing locale before we move on
-  locale, encoding = fetch_lc_collate.strip.split('.')
+  locale = fetch_lc_collate
+  encoding = fetch_server_encoding
+
   progress_message('Stopping the database') do
     run_sv_command_for_service('stop', 'postgresql')
   end
@@ -146,8 +148,10 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message('Initializing the new database') do
     run_pg_command(
       "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} " \
-      "--locale #{locale} --encoding #{encoding} --lc-collate=#{locale}.#{encoding} " \
-      "--lc-ctype=#{locale}.#{encoding}"
+      "--locale #{locale} " \
+      "--encoding #{encoding} " \
+      " --lc-collate=#{locale} " \
+      "--lc-ctype=#{locale}"
     )
   end
     die 'Error initializing new database'
@@ -243,10 +247,18 @@ def upgrade_version
   version_from_manifest('postgresql_new')
 end
 
-def fetch_lc_collate
+def run_query(query)
   run_pg_command(
-    "#{base_path}/embedded/bin/psql -h #{DATA_DIR}/.. -d postgres -c 'SHOW LC_COLLATE' -q -t"
-  )
+    "#{base_path}/embedded/bin/psql -h #{DATA_DIR}/.. -d postgres -c '#{query}' -q -t"
+  ).strip
+end
+
+def fetch_lc_collate
+  run_query('SHOW LC_COLLATE')
+end
+
+def fetch_server_encoding
+  run_query('SHOW SERVER_ENCODING')
 end
 
 def create_links(version)
