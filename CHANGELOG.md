@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.4
+
+- No changes
+
+8.14.3
+
+- Patch Git 2.7.4 for security vulnerabilities 568753c3
+
 8.14.2
 
 - Revert 34e28112 so we don't listen on IPv6 by default
