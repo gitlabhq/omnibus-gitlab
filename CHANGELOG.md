@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Update git to 2.8.4 381c0b9d
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
+- Enable overriding of username and profile picture for webhook on Mattermost by default
 - Fix Mattermost authorization with Gitlab
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
