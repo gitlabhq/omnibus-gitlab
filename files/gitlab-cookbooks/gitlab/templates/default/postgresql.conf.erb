@@ -69,7 +69,7 @@ max_connections = <%= node['gitlab']['postgresql']['max_connections'] %>      # 
 # Note:  Increasing max_connections costs ~400 bytes of shared memory per
 # connection slot, plus lock space (see max_locks_per_transaction).
 #superuser_reserved_connections = 3 # (change requires restart)
-<% if node['gitlab']['postgresql']['version'] == "9.2.18" %>
+<% if pg_helper.database_version == "9.2" %>
 unix_socket_directory = '<%= node['gitlab']['postgresql']['unix_socket_directory'] %>'   # (change requires restart)
 <% else %>
 unix_socket_directories = '<%= node['gitlab']['postgresql']['unix_socket_directory'] %>'   # (change requires restart)
@@ -178,7 +178,7 @@ wal_buffers = <%= node['gitlab']['postgresql']['wal_buffers'] %> # -1     # min 
 #commit_siblings = 5      # range 1-1000
 
 # - Checkpoints -
-<% if node['gitlab']['postgresql']['version'] == "9.2.18" %>
+<% if pg_helper.database_version == "9.2" %>
 checkpoint_segments = <%= node['gitlab']['postgresql']['checkpoint_segments'] %>		# in logfile segments, min 1, 16MB each, default 3
 <% else %>
 min_wal_size = <%= node['gitlab']['postgresql']['min_wal_size'] %>

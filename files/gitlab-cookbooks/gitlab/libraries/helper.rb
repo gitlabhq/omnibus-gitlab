@@ -83,6 +83,15 @@ class PgHelper
   def version
     VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last
   end
+
+  def database_version
+    version_file = "#{@node['gitlab']['postgresql']['data_dir']}/PG_VERSION"
+    if File.exist?(version_file)
+      File.read(version_file).chomp
+    else
+      nil
+    end
+  end
 end
 
 class OmnibusHelper

@@ -35,6 +35,20 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     run_sv_command_for_service('stop', sv_name)
   end
 
+  unless progress_message('Checking PostgreSQL executables') do
+    command = %W( chef-client
+                  -z
+                  -c #{base_path}/embedded/cookbooks/solo.rb
+                  -o recipe[gitlab::config]
+                  -o recipe[gitlab::postgresql-bin]
+               )
+
+    status = run_command(command.join(" "))
+    status.success?
+  end
+    log 'Could not update PostgreSQL executables.'
+  end
+
   MIGRATION_SERVICES = %w{postgresql redis}
   MIGRATION_SERVICES.each do |sv_name|
     # If the service is disabled, e.g. because we are using an external

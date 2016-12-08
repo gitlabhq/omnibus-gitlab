@@ -15,11 +15,7 @@
 # limitations under the License.
 #
 
-Gitlab[:node] = node
-if File.exists?("/etc/gitlab/gitlab.rb")
-  Gitlab.from_file("/etc/gitlab/gitlab.rb")
-end
-node.consume_attributes(Gitlab.generate_config(node['fqdn']))
+include_recipe 'gitlab::config'
 
 account_helper = AccountHelper.new(node)
 
@@ -42,4 +38,3 @@ groups.each do |group|
     manage node['gitlab']['manage-accounts']['enable']
   end
 end
-
