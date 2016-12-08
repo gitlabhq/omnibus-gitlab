@@ -331,7 +331,7 @@ default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
-
+default['gitlab']['gitlab-shell']['hook_dir'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/hooks"
 
 ###
 # PostgreSQL
@@ -931,5 +931,5 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
-	"X-Forwarded-Proto" => "$scheme"
+  "X-Forwarded-Proto" => "$scheme"
 }

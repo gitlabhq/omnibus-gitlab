@@ -29,8 +29,10 @@ describe 'gitlab::gitlab-shell' do
 
   context 'with default settings' do
     it 'populates the default values' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(/log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell.log"/)
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content { |content|
+        expect(content).to match(/log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell.log"/)
+        expect(content).to match(/gitlab_hooks: "\/opt\/gitlab\/embedded\/service\/gitlab-shell\/hooks"/)
+      }
     end
   end
 
@@ -196,6 +198,19 @@ describe 'gitlab::gitlab-shell' do
         expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
       end
+    end
+  end
+  context 'with non-default gitlab_hooks setting' do
+    before do
+      stub_gitlab_rb(
+        gitlab_shell: {
+          hook_dir: '/fake/dir'
+        }
+      )
+    end
+
+    it 'populates with custom values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content(/gitlab_hooks: "\/fake\/dir"/)
     end
   end
 end
