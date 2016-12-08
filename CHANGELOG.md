@@ -13,6 +13,10 @@ omnibus-gitlab repository.
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
 
+8.14.4
+
+- Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
+
 8.14.2
 
 - Revert 34e28112 so we don't listen on IPv6 by default
