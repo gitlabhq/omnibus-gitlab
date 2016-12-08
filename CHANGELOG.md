@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 8.14.4
 
-- No changes
+- Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
 
 8.14.3
 
