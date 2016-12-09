@@ -41,7 +41,7 @@ fi
 
 # Fix redis storage
 if id -u gitlab-redis; then
-	chown gitlab-redis:gitlab-redis /var/opt/gitlab/redis
+	chown -R gitlab-redis:gitlab-redis /var/opt/gitlab/redis
 fi
 
 # Fix registry storage
