@@ -1,3 +1,5 @@
+# This spec is to test the Redis helper and whether the values parsed
+# are the ones we expect
 require 'chef_helper'
 
 describe 'Redis' do
