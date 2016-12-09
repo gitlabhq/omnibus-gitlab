@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.5
+- Expose client_output_buffer_limit redis settings
+
 8.14.4
 
 - Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
