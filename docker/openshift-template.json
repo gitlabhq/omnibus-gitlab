@@ -22,7 +22,8 @@
     {
       "description": "Hostname for service routes. Set this in order to have the GitLab display the correct clone urls.",
       "displayName": "Gitlab instance hostname",
-      "name": "APPLICATION_HOSTNAME"
+      "name": "APPLICATION_HOSTNAME",
+      "required": true
     },
     {
       "name": "GITLAB_ROOT_PASSWORD",
