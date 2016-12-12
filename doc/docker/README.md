@@ -260,7 +260,7 @@ port `2289`, use the following `docker run` command:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:8929 --publish 2289:2289 \
+	--publish 8929:8929 --publish 2289:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -363,14 +363,14 @@ web:
       gitlab_rails['gitlab_shell_ssh_port'] = 2224
   ports:
     - '9090:9090'
-    - '2224:2224'
+    - '2224:22'
   volumes:
     - '/srv/gitlab/config:/etc/gitlab'
     - '/srv/gitlab/logs:/var/log/gitlab'
     - '/srv/gitlab/data:/var/opt/gitlab'
 ```
 
-This is the same as using `--publish 9090:9090 --publish 2224:2224`.
+This is the same as using `--publish 9090:9090 --publish 2224:22`.
 
 ## Update GitLab using Docker compose
 
