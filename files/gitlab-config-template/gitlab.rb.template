@@ -810,7 +810,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## For multiple options under one header use array of comma separated values, eg.
 ## { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
 
-# omnibus_gitconfig['system'] = { "receive" => ["fsckObjects = true"] }
+# omnibus_gitconfig['system'] = {
+#  "pack" => ["threads = 1"],
+#  "receive" => ["fsckObjects = true"],
+#  "repack" => ["writeBitmaps = true"],
+#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+# }
 
 #############
 # GitLab CI #
