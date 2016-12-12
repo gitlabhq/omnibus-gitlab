@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Bump ruby version to 2.3.3 9f5fe2c2
 - Expose client_output_buffer_limit redis settings
 - Add configuration that allows overriding proxy headers for GitLab Pages NGINX (BruXy) c2722f1e
+- Make hideRefs option of git default in omnibus installations e7484a9b
 
 8.14.4
 
