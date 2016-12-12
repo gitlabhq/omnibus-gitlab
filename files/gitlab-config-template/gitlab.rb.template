@@ -848,8 +848,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_segment_developer_key'] = nil
 # mattermost['service_google_developer_key'] = nil
 # mattermost['service_enable_incoming_webhooks'] = true
-# mattermost['service_enable_post_username_override'] = false
-# mattermost['service_enable_post_icon_override'] = false
+# mattermost['service_enable_post_username_override'] = true
+# mattermost['service_enable_post_icon_override'] = true
 # mattermost['service_enable_testing'] = false
 # mattermost['service_enable_security_fix_alert'] = true
 # mattermost['service_enable_insecure_outgoing_connections'] = false
