@@ -100,6 +100,16 @@ describe 'gitlab::gitlab-rails' do
     end
   end
 
+  context 'creating gitlab.yml' do
+    it 'exposes the mattermost host' do
+      stub_gitlab_rb(mattermost: { enable: true },
+                     mattermost_external_url: 'http://mattermost.domain.com')
+
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+        with_content("host: http://mattermost.domain.com")
+    end
+  end
+
   context 'with environment variables' do
     context 'by default' do
       it_behaves_like "enabled gitlab-rails env", "HOME", '\/var\/opt\/gitlab'
