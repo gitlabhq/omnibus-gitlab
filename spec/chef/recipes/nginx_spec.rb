@@ -94,6 +94,7 @@ describe 'nginx' do
         "Upgrade" => "$http_upgrade",
         "Connection" => "$connection_upgrade"
       }))
+      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
     end
 
     it 'supports overriding default nginx headers' do
@@ -137,6 +138,11 @@ describe 'nginx' do
         "Upgrade" => "$http_upgrade",
         "Connection" => "$connection_upgrade"
       }))
+
+      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to eql(nginx_headers({
+        "X-Forwarded-Proto" => "https",
+        "X-Forwarded-Ssl" => "on"
+      }))
     end
 
     it 'supports overriding default nginx headers' do
@@ -144,12 +150,14 @@ describe 'nginx' do
       stub_gitlab_rb(
         "nginx" => { proxy_set_headers: { "Host" => "nohost.example.com",  "X-Forwarded-Proto" => "ftp" } },
         "mattermost_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com",  "X-Forwarded-Proto" => "ftp" } },
-        "registry_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com",  "X-Forwarded-Proto" => "ftp" } }
+        "registry_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com",  "X-Forwarded-Proto" => "ftp" } },
+        "pages_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com",  "X-Forwarded-Proto" => "ftp" } }
       )
 
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to include(expect_headers)
     end
   end
 

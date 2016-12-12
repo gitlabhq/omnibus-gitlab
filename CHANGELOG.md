@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
 - Expose client_output_buffer_limit redis settings
+- Add configuration that allows overriding proxy headers for GitLab Pages NGINX (BruXy) c2722f1e
 
 8.14.4
 

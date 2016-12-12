@@ -923,6 +923,12 @@ default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
 ####
 default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['pages-nginx']['enable'] = true
+default['gitlab']['pages-nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme"
+}
 
 ####
 # GitLab Registry NGINX
@@ -934,5 +940,5 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
-	"X-Forwarded-Proto" => "$scheme"
+  "X-Forwarded-Proto" => "$scheme"
 }
