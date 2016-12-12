@@ -32,9 +32,9 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
         .with_content { |content|
           expect(content).to match(
-            /log_file: "\/var\/log\/gitlab\/gitlab-shell\/gitlab-shell.log"/
+            %r{log_file: "/var/log/gitlab/gitlab-shell/gitlab-shell.log"}
           )
-          expect(content).not_to match(/^custom_hook_dir: /)
+          expect(content).not_to match(/^custom_hooks_dir: /)
         }
     end
   end
@@ -207,14 +207,14 @@ describe 'gitlab::gitlab-shell' do
     before do
       stub_gitlab_rb(
         gitlab_shell: {
-          custom_hook_dir: '/fake/dir'
+          custom_hooks_dir: '/fake/dir'
         }
       )
     end
 
     it 'populates with custom values' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(%r{custom_hook_dir: "\/fake\/dir"})
+        .with_content(%r{custom_hooks_dir: "/fake/dir"})
     end
   end
 end
