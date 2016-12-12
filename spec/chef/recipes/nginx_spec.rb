@@ -82,7 +82,8 @@ describe 'nginx' do
       stub_gitlab_rb(
         external_url: 'http://localhost',
         mattermost_external_url: 'http://mattermost.localhost',
-        registry_external_url: 'http://registry.localhost'
+        registry_external_url: 'http://registry.localhost',
+        pages_external_url: 'http://pages.localhost'
       )
     end
 
@@ -116,7 +117,8 @@ describe 'nginx' do
       stub_gitlab_rb(
         external_url: 'https://localhost',
         mattermost_external_url: 'https://mattermost.localhost',
-        registry_external_url: 'https://registry.localhost'
+        registry_external_url: 'https://registry.localhost',
+        pages_external_url: 'https://pages.localhost'
       )
     end
 

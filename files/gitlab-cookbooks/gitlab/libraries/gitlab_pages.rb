@@ -40,10 +40,12 @@ module GitlabPages
       case uri.scheme
       when "http"
         Gitlab['gitlab_rails']['pages_https'] = false
+        Nginx.parse_proxy_headers('pages_nginx', false)
       when "https"
         Gitlab['gitlab_rails']['pages_https'] = true
         Gitlab['pages_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['pages_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Nginx.parse_proxy_headers('pages_nginx', true)
       else
         raise "Unsupported GitLab Pages external URL scheme: #{uri.scheme}"
       end
