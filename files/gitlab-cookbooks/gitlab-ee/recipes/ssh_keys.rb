@@ -15,12 +15,17 @@
 # limitations under the License.
 #
 
-include_recipe 'gitlab::default'
+account_helper = AccountHelper.new(node)
 
-if node['gitlab']['sentinel']['enable']
-  include_recipe 'gitlab-ee::sentinel'
-else
-  include_recipe 'gitlab-ee::sentinel_disable'
+gitlab_username = account_helper.gitlab_user
+gitlab_group = account_helper.gitlab_group
+gitlab_home = node['gitlab']['user']['home']
+
+ssh_key_path = File.join(gitlab_home, '.ssh', 'id_rsa')
+
+ssh_keygen ssh_key_path do
+  action :create
+  owner gitlab_username
+  group gitlab_group
+  secure_directory true
 end
-
-include_recipe 'gitlab-ee::ssh_keys'
