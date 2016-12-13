@@ -208,7 +208,7 @@ plain-text passwords.
 
 The next time a reconfigure is triggered, the migration steps will not be performed.
 
-#### Upgrade packaged PostgreSQL server
+## Upgrade packaged PostgreSQL server
 
 Currently Omnibus GitLab package runs PostgreSQL 9.2.18 by default.
 Version 9.6.1 is included as an option for users to manually upgrade.
@@ -216,7 +216,7 @@ The next major release will ship with a newer PostgreSQL by default, at which
 point reconfigure will not be run until the database is upgraded so please
 plan ahead.
 
-_**Note:**
+**Note:**
 * Please fully read this section before running any commands.
 * Please plan ahead as upgrade involves downtime.
 * If you encounter any problems during upgrade, please raise an issue

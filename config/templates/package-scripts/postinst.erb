@@ -107,6 +107,24 @@ print_welcome()
   notify
 }
 
+print_upgrade_info()
+{
+  local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null)
+  local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
+  if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
+  then
+    echo
+    notify "GitLab now ships with a newer version of PostgreSQL (${new_version}), but it is not yet "
+    notify "enabled by default. To upgrade, RUN THE FOLLOWING COMMAND:"
+    echo
+    echo "sudo gitlab-ctl pg-upgrade"
+    echo
+    notify "For more details, please see:"
+    notify "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
+    notify
+  fi
+}
+
 check_if_ec2()
 {
   if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` = 'ec2' ]; then
@@ -149,6 +167,7 @@ ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
 create_config_template
 fix_directory_permissions
 print_welcome
+print_upgrade_info
 
 case "$1" in
   configure)
