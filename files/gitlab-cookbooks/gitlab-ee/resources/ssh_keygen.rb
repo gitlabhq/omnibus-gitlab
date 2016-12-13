@@ -32,10 +32,6 @@ property :secure_directory, TrueClass, default: true
 
 action_class do
   include SSHKeygen::Helper
-
-  def key_exists?
-    ::File.exist?(new_resource.path)
-  end
 end
 
 action :create do

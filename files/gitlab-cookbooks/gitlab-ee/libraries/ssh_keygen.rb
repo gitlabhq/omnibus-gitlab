@@ -125,5 +125,9 @@ module SSHKeygen
         end
       end
     end
+
+    def key_exists?
+      ::File.exist?(new_resource.path)
+    end
   end
 end
