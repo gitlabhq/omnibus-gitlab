@@ -27,8 +27,8 @@ property :group, String, default: lazy { owner }
 property :strength, equal_to: [2048, 4096], default: 2048
 property :type, equal_to: ['rsa'], default: 'rsa'
 property :comment, String, default: lazy { "#{owner}@#{node['hostname']}" }
-property :passphrase, String, default: nil
-property :secure_directory, TrueClass, default: nil
+property :passphrase, String, default: ''
+property :secure_directory, TrueClass, default: true
 
 action_class do
   include SSHKeygen::Helper
