@@ -109,7 +109,7 @@ print_welcome()
 
 print_upgrade_info()
 {
-  local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null)
+  local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null || true)
   local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
   if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
   then
