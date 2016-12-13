@@ -22,6 +22,17 @@ describe 'gitlab::default' do
       group: 'root',
       mode: '0755'
     )
+
+    gitconfig_hash = {
+      "receive" => ["fsckObjects = true"],
+      "pack" => ["threads = 1"],
+      "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+    }
+
+    expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
+      variables: { gitconfig: gitconfig_hash },
+    )
   end
 
   it 'creates the system gitconfig directory and file' do
@@ -37,6 +48,7 @@ describe 'gitlab::default' do
       "receive" => ["fsckObjects = true"],
       "pack" => ["threads = 2"],
       "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
