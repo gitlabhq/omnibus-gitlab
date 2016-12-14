@@ -74,7 +74,71 @@ module SSHKeygen
     end
   end
 
-  # provider functions for the SSHKeygen Chef resoruce provider class
+  # Public SSH key Reader
+  # Based on http://stackoverflow.com/a/3162593/230526
+  # License: cc by-sa 3.0 - Jim Flood (http://stackoverflow.com/users/233596/jim-flood)
+  class PublicKeyReader
+    attr_reader :public_key, :type, :encoded, :comment
+
+    def initialize(public_key)
+      @public_key = public_key
+      @type, @encoded, @comment = public_key.split(' ')
+    end
+
+    def key
+      @key ||= begin
+        e, n = decode_key(encoded)
+        rsa = OpenSSL::PKey::RSA.new
+        rsa.e = e
+        rsa.n = n
+
+        rsa
+      end
+    end
+
+    # Fingerprint (SHA1 digest, colon delimited)
+    def key_fingerprint
+      OpenSSL::Digest::SHA1.hexdigest(key.to_der).scan(/../).join(':')
+    end
+
+    private
+
+    def read_length(decoded)
+      # four bytes, big-endian
+      decoded[0..3].unpack('N')[0]
+    end
+
+    def read_integer(decoded, length)
+      # shift all bytes into one integer
+      decoded[4..3 + length].unpack('C*').inject { |n, b| (n << 8) + b }
+    end
+
+    def cut(decoded, length)
+      decoded[4 + length..-1]
+    end
+
+    def decode_key(encoded_public_key)
+      # the second field is the Base64 piece needed
+      decoded = Base64.decode64(encoded_public_key)
+
+      # first field reading "ssh-rsa" is ignored
+      i = read_length(decoded)
+      decoded = cut(decoded, i)
+
+      # public exponent e
+      i = read_length(decoded)
+      e = read_integer(decoded, i)
+      decoded = cut(decoded, i)
+
+      # modulus n
+      i = read_length(decoded)
+      n = read_integer(decoded, i)
+
+      [e, n]
+    end
+  end
+
+  # provider functions for the SSHKeygen Chef resource provider class
   module Helper
     def create_key
       converge_by("Create SSH #{new_resource.type} #{new_resource.strength}-bit key (#{new_resource.comment})") do

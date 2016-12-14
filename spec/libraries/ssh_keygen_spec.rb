@@ -15,13 +15,13 @@ describe SSHKeygen::Generator do
       expect(key.ssh_public_key).to match(%r{^ssh-rsa [a-zA-Z0-9=/+]+ test@rspec})
     end
 
-    # it 'has a valid public key for the private key' do
-    #   generator_key_digest = key.key_fingerprint
-    #   public_key = key.ssh_public_key.split(' ')[1]
-    #   public_key_digest = create_fingerprint_from_key(Base64.strict_decode64(public_key))
-    #
-    #   expect(generator_key_digest).to eq(public_key_digest)
-    # end
+    it 'has a valid public key for the private key' do
+      generator_key_digest = key.key_fingerprint
+      public_key = key.ssh_public_key
+      public_key_digest = create_fingerprint_from_public_key(public_key)
+
+      expect(generator_key_digest).to eq(public_key_digest)
+    end
   end
 
   context 'with passphrase and a bit strength of 2048' do
@@ -38,12 +38,12 @@ describe SSHKeygen::Generator do
       expect(key.ssh_public_key).to match(%r{^ssh-rsa [a-zA-Z0-9=/+]+ test@rspec})
     end
 
-    # it 'has a valid public key for the private key' do
-    #   generator_key_digest = key.key_fingerprint
-    #   public_key = key.ssh_public_key.split(' ')[1]
-    #   public_key_digest = create_fingerprint_from_key(Base64.strict_decode64(public_key))
-    #
-    #   expect(generator_key_digest).to eq(public_key_digest)
-    # end
+    it 'has a valid public key for the private key' do
+      generator_key_digest = key.key_fingerprint
+      public_key = key.ssh_public_key
+      public_key_digest = create_fingerprint_from_public_key(public_key)
+
+      expect(generator_key_digest).to eq(public_key_digest)
+    end
   end
 end

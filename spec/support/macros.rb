@@ -25,5 +25,9 @@ module GitlabSpec
       new_key_digest = OpenSSL::Digest::SHA1.new(new_key.public_key.to_der).to_s.scan(/../).join(':')
       new_key_digest
     end
+
+    def create_fingerprint_from_public_key(public_key)
+      ::SSHKeygen::PublicKeyReader.new(public_key).key_fingerprint
+    end
   end
 end
