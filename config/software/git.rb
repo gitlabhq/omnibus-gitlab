@@ -22,6 +22,7 @@ default_version "2.8.4"
 license "GPL-2.0"
 license_file "COPYING"
 
+# Runtime dependency
 dependency "zlib"
 dependency "openssl"
 dependency "curl"
