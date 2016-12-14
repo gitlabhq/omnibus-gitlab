@@ -12,7 +12,8 @@ omnibus-gitlab repository.
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
-
+- Adding attribute for gitlab-shell custom hooks f753e1f0
+ 
 8.14.4
 
 - Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
