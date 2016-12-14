@@ -1,7 +1,6 @@
 PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
-SECRET_DIR:=$(shell openssl rand -hex 20)
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_REPO:=$(shell support/repo_name.sh)
@@ -78,15 +77,6 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-sync: move_to_secret_dir s3_sync
-
-move_to_secret_dir:
-	if support/is_gitlab_ee.sh ; then \
-	  mv pkg ${SECRET_DIR} \
-	  && mkdir pkg \
-	  && mv ${SECRET_DIR} pkg/ \
-	  ; fi
-
 docker_cleanup:
 	-docker ps -q -a | xargs docker rm -v
 	-docker images -f dangling=true -q | xargs docker rmi
@@ -128,7 +118,7 @@ ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/nul
 do_docker_release: docker_push_latest
 endif
 
-s3_sync:
+sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
 	# empty line for aws status crud
 	# Replace FQDN in URL and deal with URL encoding
