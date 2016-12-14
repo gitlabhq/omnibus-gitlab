@@ -114,8 +114,8 @@ print_upgrade_info()
   if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
   then
     echo
-    notify "GitLab now ships with a newer version of PostgreSQL (${new_version}), but it is not yet "
-    notify "enabled by default. To upgrade, RUN THE FOLLOWING COMMAND:"
+    notify "GitLab now ships with a newer version of PostgreSQL (${new_version}), and will be used"
+    notify "as the default in the next major relase. To upgrade, RUN THE FOLLOWING COMMANDS:"
     echo
     echo "sudo gitlab-ctl pg-upgrade"
     echo
