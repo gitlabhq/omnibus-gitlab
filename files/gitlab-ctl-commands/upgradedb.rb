@@ -127,13 +127,6 @@ add_command_under_category 'pg-upgrade', 'database',
   # All tests have passed, this should be an upgradable instance.
   maintenance_mode('enable')
 
-  # Run reconfigure first to make sure everything is configured as expected
-  unless progress_message('Running reconfigure') do
-    run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
-  end
-    die 'Something went wrong during initial reconfiguration, please check the output'
-  end
-
   # Get the existing locale before we move on
   locale = fetch_lc_collate
   encoding = fetch_server_encoding
