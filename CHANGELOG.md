@@ -18,9 +18,18 @@ omnibus-gitlab repository.
 - Make hideRefs option of git default in omnibus installations e7484a9b
 - Use internal GitLab mirrors of rb-readline and registry as cache 2d137543
 
+8.14.5
+
+- Expose client_output_buffer_limit redis settings
+
 8.14.4
 
 - Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
+- Update symlinks of postgres on both upgrade and reconfigure 484a3d8a
+
+8.14.3
+
+- Patch Git 2.7.4 for security vulnerabilities 568753c3
 
 8.14.2
 
@@ -44,6 +53,18 @@ omnibus-gitlab repository.
 - Support Redis Sentinel daemon (EE only) 457c4764
 - Separate package repositories for OL and SL e37eaae
 - Add mailroom idle timeout configuration 0488f3de
+
+8.13.10
+
+- No changes
+
+8.13.9
+
+- No changes
+
+8.13.8
+
+- Patch Git 2.7.4 for security vulnerabilities 2d7cf04a
 
 8.13.7
 
@@ -80,6 +101,18 @@ omnibus-gitlab repository.
 - Add support for nginx status (Luis Sagastume) 3cd7b36
 - Enable jemalloc by default 0a7799d2
 - Move database migration log to a persisted location b368c46c
+
+8.12.13
+
+- No changes
+
+8.12.12
+
+- No changes
+
+8.12.11
+
+- Patch Git 2.7.4 for security vulnerabilities 564cfddf
 
 8.12.10
 
