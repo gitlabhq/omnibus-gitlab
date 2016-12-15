@@ -27,8 +27,8 @@ name "gitlab-rails"
 default_version version.print
 source git: version.remote
 
-combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
-gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems"
+combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
+gemdir_cmd = "#{install_dir}/embedded/bin/gem environment gemdir"
 
 license "MIT"
 license_file "LICENSE"
@@ -67,12 +67,20 @@ build do
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
-  bundle "config build.rugged --no-use-system-libraries", :env => env
-  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers} --retry 5", :env => env
+  bundle "config build.rugged --no-use-system-libraries", env: env
+  bundle "install --without #{bundle_without.join(" ")} --jobs #{workers} --retry 5", env: env
 
   # This patch makes the github-markup gem use and be compatible with Python3
   # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
-  patch source: 'gitlab-markup_gem-markups.patch', target: "#{gems_directory}/gitlab-markup-1.5.0/lib/github/markups.rb"
+  patch_file_path = File.join(
+    Omnibus::Config.project_root,
+    "config",
+    "patches",
+    "gitlab-rails",
+    "gitlab-markup_gem-markups.patch"
+  )
+  # Not using the patch DSL as we need the path to the gems directory
+  command "cat #{patch_file_path} | patch -p1 \"$(#{gemdir_cmd})/gems/gitlab-markup-1.5.0/lib/github/markups.rb\""
 
   # In order to precompile the assets, we need to get to a state where rake can
   # load the Rails environment.
@@ -102,6 +110,12 @@ build do
   delete 'tmp'
   delete 'public/uploads'
 
+  # Cleanup after bundle
+  # Delete all .gem archives
+  command "find #{install_dir} -name '*.gem' -type f -delete"
+  # Delete all docs
+  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -exec rm -rf {} +"
+
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
   # mysql-postgresql-converter.)
@@ -126,7 +140,7 @@ build do
   erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
     source: "gem_license_generator.erb",
     mode: 0755,
-    vars: {install_dir: install_dir, license_file: combined_licenses_file, gems_directory: gems_directory}
+    vars: {install_dir: install_dir, license_file: combined_licenses_file}
 
   command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
