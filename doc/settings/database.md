@@ -221,7 +221,7 @@ plan ahead.
 * Please plan ahead as upgrade involves downtime.
 * If you encounter any problems during upgrade, please raise an issue
 with a full description at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
-* Docker image database upgrade is not supported at the moment._
+* Docker image database upgrade is not supported at the moment.
 
 
 Before upgrading, please check the following:
