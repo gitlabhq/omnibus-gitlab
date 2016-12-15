@@ -17,3 +17,5 @@ production:
   sslrootcert: <%= single_quote(@db_sslrootcert) || single_quote(@db_sslca) %>
   sslca: <%= single_quote(@db_sslca) || single_quote(@db_sslrootcert) %>
   load_balancing: <%= @db_load_balancing.to_json %>
+  prepared_statements: <%= @db_prepared_statements %>
+  statements_limit: <%= @db_statements_limit %>
