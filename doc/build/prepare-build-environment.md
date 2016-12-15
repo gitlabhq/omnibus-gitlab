@@ -68,6 +68,10 @@ follows
       remote: "git://git.savannah.gnu.org/config.git"
     omnibus:
       remote: "https://gitlab.com/gitlab-org/omnibus.git"
+    registry:
+      remote: "https://github.com/docker/distribution.git"
+    rb-readline:
+      remote: "https://github.com/ConnorAtherton/rb-readline.git"
     ```
 7. Install the dependencies and generate binaries
 

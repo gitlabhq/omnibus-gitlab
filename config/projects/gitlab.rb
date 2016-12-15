@@ -65,6 +65,7 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 #
 # Original git://git.sv.gnu.org/config.git is failing intermittently
 config_guess_version =  Gitlab::Version.new('config_guess', "master")
+rb_readline_version = Gitlab::Version.new('rb-readline', "master")
 
 override :ruby, version: '2.3.3', source: { md5: 'e485f3a55649eb24a1e2e1a40bc120df' }
 override :rubygems, version: '2.6.6'
@@ -76,6 +77,7 @@ override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d
 override :expat, version: '2.2.0', source: { md5: '2f47841c829facb346eb6e3fab5212e2', url: "http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2" }
 override :config_guess, version: config_guess_version.print, source: { git: config_guess_version.remote }
 override :rsync, version: '3.1.2'
+override :'rb-readline' , version: rb_readline_version.print, source: { git: rb_readline_version.remote }
 
 # Openssh needs to be installed
 

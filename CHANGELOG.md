@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Expose client_output_buffer_limit redis settings
 - Add configuration that allows overriding proxy headers for GitLab Pages NGINX (BruXy) c2722f1e
 - Make hideRefs option of git default in omnibus installations e7484a9b
+- Use internal GitLab mirrors of rb-readline and registry as cache 2d137543
 
 8.14.4
 
