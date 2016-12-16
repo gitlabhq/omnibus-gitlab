@@ -112,9 +112,9 @@ build do
 
   # Cleanup after bundle
   # Delete all .gem archives
-  command "find #{install_dir} -name '*.gem' -type f -delete"
+  command "find #{install_dir} -name '*.gem' -type f -print -delete"
   # Delete all docs
-  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -exec rm -rf {} +"
+  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -print -exec rm -r {} +"
 
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
@@ -122,7 +122,7 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore"]}
+  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore", "spec", "features"] }
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
