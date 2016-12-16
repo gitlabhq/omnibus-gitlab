@@ -48,7 +48,7 @@ build do
     " --with-ossp-uuid", env: env
 
   make "world -j #{workers}", env: env
-  make "install-world", env: env
+  make "install", env: env
 
   block 'link bin files' do
     Dir.glob("#{prefix}/bin/*").each do |bin_file|
