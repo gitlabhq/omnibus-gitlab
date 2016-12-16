@@ -43,6 +43,9 @@ repositories_storages.each do |_name, repositories_storage|
   end
 end
 
+# Creates `.ssh` directory to hold authorized_keys
+# IMPORTANT: the `.ssh` directory is also managed by the `ssh_keygen` resource
+# in the EE package.
 [
   ssh_dir,
   File.dirname(authorized_keys)
