@@ -23,11 +23,12 @@ The omnibus-gitlab package is made up of many pieces of software, comprising cod
 that is covered by many different licenses. Those licenses are provided and
 compiled as stated above.
 
-Starting with version 8.13, GitLab has placed an additional step into the omnibus-gitlab.
-The `license_check` step calls `support/license_check.sh`, which checks the compiled
-`LICENSE` file against the current list of approved and questionable licenses as
-denoted in the arrays at the top of the script. This script will output one of
-`Good`, `Unknown` or `Check` for each piece of software that is a part of the
+Starting with version 8.13, GitLab has placed an additional step into the
+omnibus-gitlab.  The `license_check` step calls
+`lib/gitlab/tasks/license_check.rake`, which checks the compiled `LICENSE` file
+against the current list of approved and questionable licenses as denoted in the
+arrays at the top of the script. This script will output one of `Good`,
+`Unknown` or `Check` for each piece of software that is a part of the
 omnibus-gitlab package.
 
 - `Good`: denotes a license that is approved for all usage types, within GitLab and

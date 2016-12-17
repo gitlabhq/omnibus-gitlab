@@ -32,11 +32,11 @@ pack_cache_bundle:
 build:
 	bin/omnibus build ${PROJECT} --log-level info
 
-# license_check should be run after `build`, but because build calls omnibus which
-# does a rebuild every call, we're not setting that specific dependency for when
-# working on changes to support/license_check.sh. See the order of `test`.
+# license_check should be run after `build` only. This is because otherwise 
+# entire package will be built everytime lib/gitlab/tasks/license_check.rake
+# is invoked. This will be troublesome while modifying the license_check task.
 license_check:
-	bash support/license_check.sh
+	bundle exec rake license_check
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
@@ -61,17 +61,7 @@ on_tag:
 	git describe --exact-match
 
 purge:
-	# Force a new clone of gitlab-rails because we change remotes for CE/EE
-	rm -rf /var/cache/omnibus/src/gitlab-rails
-	# Avoid mysterious GitFetcher omnibus errors
-	rm -rf /var/cache/omnibus/src/gitlab-shell /var/cache/omnibus/src/gitlab-workhorse
-	# Force a new download of Curl's certificate bundle because it gets updated
-	# upstream silently once every while
-	rm -rf /var/cache/omnibus/cache/cacert.pem
-	# Clear out old packages to prevent uploading them a second time to S3
-	rm -rf /var/cache/omnibus/pkg
-	mkdir -p pkg
-	(cd pkg && find . -delete)
+	bundle exec rake purge
 
 # Instead of pkg/gitlab-xxx.deb, put all files in pkg/ubuntu/gitlab-xxx.deb
 move_to_platform_dir:
