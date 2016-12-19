@@ -22,6 +22,8 @@ define :runit_service, :directory => nil, :only_if => false, :finish_script => f
 
   include_recipe "runit"
 
+  omnibus_helper = OmnibusHelper.new(node)
+
   params[:directory] ||= node[:runit][:sv_dir]
   params[:active_directory] ||= node[:runit][:service_dir]
   params[:template_name] ||= params[:name]
@@ -199,7 +201,7 @@ define :runit_service, :directory => nil, :only_if => false, :finish_script => f
       stop_command "#{control_cmd} #{params[:stop_command]} #{service_dir_name}"
       restart_command "#{control_cmd} #{params[:restart_command]} #{service_dir_name}"
       status_command "#{control_cmd} #{params[:status_command]} #{service_dir_name}"
-      if params[:run_restart] && OmnibusHelper.should_notify?(params[:name])
+      if params[:run_restart] && omnibus_helper.should_notify?(params[:name])
         subscribes :restart, resources(:template => "#{sv_dir_name}/run"), :delayed
       end
       action :nothing

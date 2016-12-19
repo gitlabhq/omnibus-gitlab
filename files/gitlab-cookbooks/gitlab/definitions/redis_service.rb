@@ -21,6 +21,7 @@ define :redis_service, :socket_group => nil do
   redis_dir = node['gitlab'][svc]['dir']
   redis_log_dir = node['gitlab'][svc]['log_directory']
   redis_user = AccountHelper.new(node).redis_user
+  omnibus_helper = OmnibusHelper.new(node)
 
   account 'user and group for redis' do
     username redis_user
@@ -59,7 +60,7 @@ define :redis_service, :socket_group => nil do
     owner redis_user
     mode "0644"
     variables(node['gitlab'][svc].to_hash.merge({is_slave: is_slave}))
-    notifies :restart, "service[#{svc}]", :immediately if OmnibusHelper.should_notify?(svc)
+    notifies :restart, "service[#{svc}]", :immediately if omnibus_helper.should_notify?(svc)
   end
 
   runit_service svc do

@@ -54,7 +54,7 @@ class PgHelper
   end
 
   def is_running?
-    OmnibusHelper.service_up?("postgresql")
+    OmnibusHelper.new(node).service_up?("postgresql")
   end
 
   def database_exists?(db_name)
@@ -91,30 +91,6 @@ class PgHelper
     else
       nil
     end
-  end
-end
-
-class OmnibusHelper
-  extend ShellOutHelper
-
-  def self.should_notify?(service_name)
-    File.symlink?("/opt/gitlab/service/#{service_name}") && service_up?(service_name)
-  end
-
-  def self.not_listening?(service_name)
-    File.exists?("/opt/gitlab/service/#{service_name}/down") && service_down?(service_name)
-  end
-
-  def self.service_up?(service_name)
-    success?("/opt/gitlab/embedded/bin/sv status #{service_name}")
-  end
-
-  def self.service_down?(service_name)
-    failure?("/opt/gitlab/embedded/bin/sv status #{service_name}")
-  end
-
-  def self.user_exists?(username)
-    success?("id -u #{username}")
   end
 end
 
