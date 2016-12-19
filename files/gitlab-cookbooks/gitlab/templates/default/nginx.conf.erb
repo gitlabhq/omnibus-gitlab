@@ -37,6 +37,11 @@ http {
   proxy_cache_path <%= @proxy_cache_path %>;
   proxy_cache <%= @proxy_cache %>;
 
+  map $http_upgrade $connection_upgrade {
+      default upgrade;
+      ''      close;
+  }
+
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
   <% end %>

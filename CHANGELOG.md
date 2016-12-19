@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Make hideRefs option of git default in omnibus installations e7484a9b
 - Use internal GitLab mirrors of rb-readline and registry as cache 2d137543
 - Adding attribute for gitlab-shell custom hooks f753e1f0
+- Pass websockets through to workhorse for terminal support
 
 8.14.5
 
