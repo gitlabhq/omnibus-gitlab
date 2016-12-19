@@ -88,7 +88,10 @@ describe 'nginx' do
     end
 
     it 'properly sets the default nginx proxy headers' do
-      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
+      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+        "Upgrade" => "$http_upgrade",
+        "Connection" => "$connection_upgrade"
+      }))
       expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
       expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to eql(nginx_headers({
         "X-Frame-Options" => "SAMEORIGIN",
@@ -125,7 +128,9 @@ describe 'nginx' do
     it 'properly sets the default nginx proxy ssl forward headers' do
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(nginx_headers({
         "X-Forwarded-Proto" => "https",
-        "X-Forwarded-Ssl" => "on"
+        "X-Forwarded-Ssl" => "on",
+        "Upgrade" => "$http_upgrade",
+        "Connection" => "$connection_upgrade"
       }))
 
       expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to eql(nginx_headers({
