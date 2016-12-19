@@ -45,6 +45,8 @@ build do
   prefix = "#{install_dir}/embedded/postgresql/#{version}"
   update_config_guess(target: "config")
 
+  patch source: 'no_docs.patch', target: 'GNUmakefile.in'
+
   command "./configure" \
           " --prefix=#{prefix}" \
           " --with-libedit-preferred" \
@@ -52,5 +54,5 @@ build do
           " --with-ossp-uuid", env: env
 
   make "world -j #{workers}", env: env
-  make "install", env: env
+  make "install-world", env: env
 end
