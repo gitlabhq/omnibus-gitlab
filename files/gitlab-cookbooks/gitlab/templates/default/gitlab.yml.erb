@@ -138,6 +138,10 @@ production: &base
     key: <%= @registry_key_path %>
     issuer: <%= @registry_issuer %>
 
+  mattermost:
+    enabled: <%= @mattermost_enabled %>
+    host: <%= @mattermost_host %>
+
   ## GitLab Pages (EE only)
   pages:
     enabled: <%= @pages_enabled %>

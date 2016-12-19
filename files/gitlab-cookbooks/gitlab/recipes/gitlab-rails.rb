@@ -236,7 +236,9 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       builds_directory: gitlab_ci_builds_dir,
       git_annex_enabled: node['gitlab']['gitlab-shell']['git_annex_enabled'],
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
-      pages_external_https: node['gitlab']['gitlab-pages']['external_https']
+      pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
+      mattermost_host: Gitlab['mattermost_external_url'],
+      mattermost_enabled: node['gitlab']['mattermost']['enable']
     )
   )
   restarts dependent_services
