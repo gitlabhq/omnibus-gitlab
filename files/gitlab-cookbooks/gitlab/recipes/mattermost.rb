@@ -71,7 +71,7 @@ end
 pg_helper = PgHelper.new(node)
 bin_dir = "/opt/gitlab/embedded/bin"
 
-mysql_adapter = node['gitlab']['mattermost']['sql_driver_name'] == 'mysql' ? true:false
+mysql_adapter = node['gitlab']['mattermost']['sql_driver_name'] == 'mysql' ? true : false
 db_name = node['gitlab']['mattermost']['database_name']
 sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
 

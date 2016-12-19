@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Enable Mattermost slash commands by default 2b3406
 - Enable overriding of username and profile picture for webhook on Mattermost by default
 - Fix Mattermost authorization with Gitlab
+- Expose Mattermost url in gitlab.yml 4d90c7fa
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
