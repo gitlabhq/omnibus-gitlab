@@ -238,7 +238,9 @@ Before upgrading, please check the following:
 Please note:
 
 **This upgrade requires downtime as the database must be down while the upgrade is being performed.
-The length of time entirely depends on the size of your database.**
+The length of time depends on the size of your database.
+If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](http://www.slony.info/).
+Please see our [guide](http://docs.gitlab.com/ce/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
 
 Once you have confirmed that the the above checklist is satisfied,
 you can proceed.
@@ -250,13 +252,14 @@ sudo gitlab-ctl pg-upgrade
 
 This command performs the following steps:
 1. Checks to ensure the database is in a known good state
-1. Shuts down the existing database
+1. Shuts down the existing database, any unnecessary services, and enables the gitlab deploy page.
 1. Changes the symlinks in `/opt/gitlab/embedded/bin/` for PostgreSQL to point to the newer version of the database
 1. Creates a new directory containing a new, empty database with a locale matching the existing database
 1. Uses the `pg_upgrade` tool to copy the data from the old database to the new database
 1. Moves the old database out of the way
 1. Moves the new database to the expected location
 1. Calls `sudo gitlab-ctl reconfigure` to do the required configuration changes, and start the new database server.
+1. Start the remaining services, and remove the deploy page.
 1. If any errors are detected during this process, it should immediately revert to the old version of the database.
 
 Once this step is complete, verify everything is working as expected.
@@ -276,6 +279,7 @@ you can remove the old database with:
 ```
 sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 ```
+
 
 ## Troubleshooting
 
