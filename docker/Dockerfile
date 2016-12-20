@@ -11,7 +11,9 @@ RUN apt-get update -q \
       vim \
       nano \
       patch \
-      git-annex && rm -rf /var/lib/apt/lists/*
+      git-annex \
+    && rm -rf /var/lib/apt/lists/* \
+    && sed 's/session\s*required\s*pam_loginuid.so/session optional pam_loginuid.so/g' -i /etc/pam.d/sshd
 
 # Remove MOTD
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic
