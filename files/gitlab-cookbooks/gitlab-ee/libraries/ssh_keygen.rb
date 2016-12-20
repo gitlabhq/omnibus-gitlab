@@ -31,7 +31,7 @@ module SSHKeygen
       when 'rsa'
         @key = ::OpenSSL::PKey::RSA.new(bits)
       else
-        fail "Invalid key type #{new_resource.type}"
+        Chef::Log.warn "Invalid key type #{new_resource.type}"
       end
     end
 
@@ -51,7 +51,7 @@ module SSHKeygen
       when 'rsa'
         enc_pubkey = openssh_rsa_public_key
       else
-        fail "Invalid key type #{new_resource.type} found in ssh_public_key method - serious error!"
+        Chef::Log.warn "Invalid key type #{new_resource.type} found in ssh_public_key method - serious error!"
       end
       "ssh-#{@type} #{enc_pubkey} #{@comment}\n"
     end
