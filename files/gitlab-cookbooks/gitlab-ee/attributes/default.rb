@@ -25,3 +25,12 @@ default['gitlab']['sentinel']['quorum'] = 1
 default['gitlab']['sentinel']['down_after_milliseconds'] = 10000
 default['gitlab']['sentinel']['failover_timeout'] = 60000
 default['gitlab']['sentinel']['myid'] = nil
+
+####
+# Sidekiq Cluster
+####
+default['gitlab']['sidekiq-cluster']['enable'] = false
+default['gitlab']['sidekiq-cluster']['ha'] = false
+default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
+default['gitlab']['sidekiq-cluster']['interval'] = nil
+default['gitlab']['sidekiq-cluster']['queues'] = []

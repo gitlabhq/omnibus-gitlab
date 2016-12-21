@@ -61,6 +61,7 @@ module Gitlab
   unicorn Mash.new
   ci_unicorn Mash.new
   sidekiq Mash.new
+  sidekiq_cluster Mash.new
   ci_sidekiq Mash.new
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
@@ -170,6 +171,7 @@ module Gitlab
         "unicorn",
         "ci_unicorn",
         "sidekiq",
+        "sidekiq-cluster",
         "ci_sidekiq",
         "gitlab_workhorse",
         "mailroom",
@@ -190,8 +192,7 @@ module Gitlab
         "mattermost_external_url",
         "pages_external_url",
         "gitlab_pages",
-        "registry",
-        "sentinel"
+        "registry"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]

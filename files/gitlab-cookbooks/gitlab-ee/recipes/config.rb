@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2016 GitLab Inc.
+# Copyright:: Copyright (c) 2016 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,4 @@
 # limitations under the License.
 #
 
-include_recipe 'gitlab::default'
-include_recipe 'gitlab-ee::config'
-
-[
-  "sentinel",
-  "sidekiq-cluster"
-].each do |service|
-  if node["gitlab"][service]["enable"]
-    include_recipe "gitlab-ee::#{service}"
-  else
-    include_recipe "gitlab-ee::#{service}_disable"
-  end
-end
-
-include_recipe 'gitlab-ee::ssh_keys'
+node.consume_attributes(GitlabEE.generate_config)

@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Adding attribute for gitlab-shell custom hooks f753e1f0
 - Pass websockets through to workhorse for terminal support
 - Add notification for new PostgreSQL version 05dbb3ec
+- Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
 
 8.14.5
 

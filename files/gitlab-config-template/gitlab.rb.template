@@ -463,6 +463,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['concurrency'] = 25
 
 
+###############################
+# GitLab Sidekiq Cluster (EE) #
+###############################
+
+# GitLab Enterprise Edition allows one to start an extra set of Sidekiq processes
+# besides the default one. These processes can be used to consume a dedicated set
+# of queues. This can be used to ensure certain queues always have dedicated
+# workers, no matter the amount of jobs that need to be processed.
+
+# sidekiq_cluster['enable'] = false
+# sidekiq_cluster['ha'] = false
+# sidekiq_cluster['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
+# sidekiq_cluster['interval'] = 5 # The number of seconds to wait between worker checks
+
+# Each entry in the queue_groups array denotes a group of queues that have to be processed by a
+# Sidekiq process. Multiple queues can be processed by the same process by
+# separating them with a comma within the group entry
+
+# sidekiq_cluster['queue_groups'] = [
+#   "process_commit,post_receive",
+#   "gitlab_shell"
+# ]
+
+
 ################
 # gitlab-shell #
 ################

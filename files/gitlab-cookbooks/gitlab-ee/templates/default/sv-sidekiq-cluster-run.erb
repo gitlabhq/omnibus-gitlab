@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
+
+exec 2>&1
+<%= render("mount_point_check.erb", cookbook: 'gitlab') %>
+exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
+  -U <%= @options[:user] %> -u <%= @options[:user] %> \
+  /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
+    -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
+    <% if node['gitlab']['sidekiq-cluster']['interval'] %>
+    -i <%= node['gitlab']['sidekiq-cluster']['interval'] %> \
+    <% end %>
+    <% node['gitlab']['sidekiq-cluster']['queue_groups'].each do |queue| %>
+      <%= queue %> \
+    <% end %>
+
+# Do not remove this line; it prevents trouble with the trailing backslashes above.
