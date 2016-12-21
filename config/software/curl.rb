@@ -15,7 +15,7 @@
 #
 
 name "curl"
-default_version "7.51.0"
+default_version "7.52.0"
 
 dependency "zlib"
 dependency "openssl"
@@ -33,6 +33,10 @@ end
 
 version "7.51.0" do
   source sha256: "65b5216a6fbfa72f547eb7706ca5902d7400db9868269017a8888aa91d87977c"
+end
+
+version "7.52.0" do
+  source sha256: "7ee327ca55e95ea16b27929449ba290c3881cbb24901c57dd571849741c8f2d0"
 end
 
 source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz"
