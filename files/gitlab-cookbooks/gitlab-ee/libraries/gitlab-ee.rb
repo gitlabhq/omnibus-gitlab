@@ -25,8 +25,7 @@ module GitlabEE
       # the array in parse_udp_log_shipping.
       results = { "gitlab" => {} }
       [
-        "sidekiq_cluster",
-        "sentinel"
+        "sidekiq_cluster"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
