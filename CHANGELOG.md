@@ -8,24 +8,24 @@ omnibus-gitlab repository.
 - Update git to 2.8.4 381c0b9d
 - Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
 - Enable Mattermost slash commands by default 2b3406
-- Enable overriding of username and profile picture for webhook on Mattermost by default
-- Fix Mattermost authorization with Gitlab
+- Enable overriding of username and profile picture for webhook on Mattermost by default 8528864
+- Fix Mattermost authorization with Gitlab (Tyranron) d704d3
 - Expose Mattermost url in gitlab.yml 4d90c7fa
 - Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
 - Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
 - Bump ruby version to 2.3.3 9f5fe2c2
-- Expose client_output_buffer_limit redis settings
 - Add configuration that allows overriding proxy headers for GitLab Pages NGINX (BruXy) c2722f1e
 - Make hideRefs option of git default in omnibus installations e7484a9b
 - Use internal GitLab mirrors of rb-readline and registry as cache 2d137543
 - Adding attribute for gitlab-shell custom hooks f753e1f0
-- Pass websockets through to workhorse for terminal support
+- Pass websockets through to workhorse for terminal support 849ffc
 - Add notification for new PostgreSQL version 05dbb3ec
+- Update libcurl to 7.52.0 ea11a83
 - Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
 
 8.14.5
 
-- Expose client_output_buffer_limit redis settings
+- Expose client_output_buffer_limit redis settings 5f1503
 
 8.14.4
 
