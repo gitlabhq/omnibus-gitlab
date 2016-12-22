@@ -40,4 +40,4 @@ VOLUME ["/etc/gitlab", "/var/opt/gitlab", "/var/log/gitlab"]
 CMD ["/assets/wrapper"]
 
 HEALTHCHECK --interval=60s --timeout=30s --retries=5 \
-CMD curl --fail http://localhost/help
+CMD /opt/gitlab/bin/healthcheck --fail
