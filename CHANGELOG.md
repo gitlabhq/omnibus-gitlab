@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Pass websockets through to workhorse for terminal support 849ffc
 - Add notification for new PostgreSQL version 05dbb3ec
 - Update libcurl to 7.52.0 ea11a83
+- Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
 
 8.14.5
 
