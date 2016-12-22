@@ -36,9 +36,6 @@ before_script:
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json'
-    - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json.bak
-    - rm -f knapsack/*.json
-    - mv knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json.bak knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json
   only:
     - tags@gitlab-org/omnibus-gitlab
     - branches@gitlab-org/omnibus-gitlab
@@ -64,6 +61,9 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
     - export CI_NODE_TOTAL=${JOB_NAME[4]}
     - export KNAPSACK_REPORT_PATH=knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_node_${CI_NODE_INDEX}_${CI_NODE_TOTAL}_report.json
     - export KNAPSACK_GENERATE_REPORT=true
+    # To prevent current OS providing empty/old reports of other OSs as an
+    # artifact. If not, they may overwrite the valid/new reports from those
+    # corresponding OSs. So, removing everything except current OS's report.
     - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
