@@ -1,6 +1,8 @@
 FROM ubuntu:16.04
 MAINTAINER Kamil Trzciński <kamil@gitlab.com>
 
+SHELL ["/bin/sh", "-c"],
+
 # Install required packages
 RUN apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
@@ -36,3 +38,6 @@ VOLUME ["/etc/gitlab", "/var/opt/gitlab", "/var/log/gitlab"]
 
 # Wrapper to handle signal, trigger runit and reconfigure GitLab
 CMD ["/assets/wrapper"]
+
+HEALTHCHECK --interval=60s --timeout=30s --retries=5 \
+CMD curl --fail http://localhost/help
