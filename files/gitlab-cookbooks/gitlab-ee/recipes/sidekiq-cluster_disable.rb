@@ -15,18 +15,6 @@
 # limitations under the License.
 #
 
-include_recipe 'gitlab::default'
-include_recipe 'gitlab-ee::config'
-
-[
-  "sentinel",
-  "sidekiq-cluster"
-].each do |service|
-  if node["gitlab"][service]["enable"]
-    include_recipe "gitlab-ee::#{service}"
-  else
-    include_recipe "gitlab-ee::#{service}_disable"
-  end
+runit_service "sidekiq-cluster" do
+  action :disable
 end
-
-include_recipe 'gitlab-ee::ssh_keys'
