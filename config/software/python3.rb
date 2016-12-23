@@ -50,4 +50,6 @@ build do
 
   delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/dbm.*")
   delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.4/test")
+  command "find #{install_dir}/embedded/lib/python3.4 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
