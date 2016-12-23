@@ -35,7 +35,7 @@ before_script:
     - export DISTRO_NAME=${JOB_NAME[0]}
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
-    - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json'
+    - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
   only:
     - tags@gitlab-org/omnibus-gitlab
     - branches@gitlab-org/omnibus-gitlab
@@ -64,7 +64,7 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
     # To prevent current OS providing empty/old reports of other OSs as an
     # artifact. If not, they may overwrite the valid/new reports from those
     # corresponding OSs. So, removing everything except current OS's report.
-    - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
+    - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake knapsack:rspec
@@ -76,31 +76,17 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
     paths:
     - knapsack/
 
-.update-knapsack: &update_knapsack
+update-knapsack:
   <<: *knapsack-state
   stage: post-test
   before_script: []
   script:
-    - JOB_NAME=( $CI_BUILD_NAME )
-    - export DISTRO_NAME=${JOB_NAME[0]}
-    - export DISTRO_VERSION=${JOB_NAME[1]}
-    - support/merge-reports knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_node_*.json
-    - mv knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json.bak
-    - rm -f knapsack/*.json
-    - mv knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json.bak knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_report.json
+    - support/merge-reports knapsack
+    - rm -f knapsack/*node*
   only:
     - tags@gitlab-org/omnibus-gitlab
     - branches@gitlab-org/omnibus-gitlab
 
-Centos 6 update-knapsack: *update_knapsack
-Centos 7 update-knapsack: *update_knapsack
-Debian 7 update-knapsack: *update_knapsack
-Debian 8 update-knapsack: *update_knapsack
-OpenSUSE 13.2 update-knapsack: *update_knapsack
-OpenSUSE 42.1 update-knapsack: *update_knapsack
-Ubuntu 12.04 update-knapsack: *update_knapsack
-Ubuntu 14.04 update-knapsack: *update_knapsack
-Ubuntu 16.04 update-knapsack: *update_knapsack
 
 # Runs on dev.gitlab.org
 .branch_template: &branch_build
