@@ -16,17 +16,18 @@
 # limitations under the License.
 #
 name "mysql-client"
-default_version "5.5.37"
+default_version "5.5.54"
 
 license "GPL-2.0"
 license_file "COPYING"
 
+# Runtime dependecies
 dependency "openssl"
 dependency "zlib"
 dependency "ncurses"
 
-source  :url => "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.37.tar.gz",
-        :md5 => "bf1d80c66d4822ec6036300399a33c03"
+source  url: "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-#{version}.tar.gz",
+        md5: "358b596e62699397aeee3dfb469f5823"
 
 relative_path "mysql-#{version}"
 
@@ -59,9 +60,9 @@ build do
             "-DZLIB_LIBRARY:FILEPATH=#{install_dir}/embedded/lib/libz.so",
             "-DCRYPTO_LIBRARY:FILEPATH=#{install_dir}/embedded/lib/libcrypto.so",
             ".",
-           ].join(" "), :env => env
+          ].join(" "), env: env
 
   %w{libmysql client include}.each do |target|
-    command "make -j #{workers} install", :env => env, :cwd => "#{project_dir}/#{target}"
+    command "make -j #{workers} install", env: env, cwd: "#{project_dir}/#{target}"
   end
 end

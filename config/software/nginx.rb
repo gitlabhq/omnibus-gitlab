@@ -22,7 +22,10 @@ default_version "1.10.2"
 license "BSD-2-Clause"
 license_file "LICENSE"
 
+# From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
+# Runtime dependencies
 dependency "pcre"
+dependency "zlib"
 dependency "openssl"
 
 version "1.10.1" do

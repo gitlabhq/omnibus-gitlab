@@ -17,6 +17,7 @@
 name "curl"
 default_version "7.52.0"
 
+# Runtime dependency
 dependency "zlib"
 dependency "openssl"
 
