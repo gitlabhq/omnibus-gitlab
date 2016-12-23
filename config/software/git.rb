@@ -57,7 +57,7 @@ NO_INSTALL_HARDLINKS=YesPlease
   end
 
   # Patch for git vulnerabilities
-  patch source: 'git-dec-2016-security-full.patch'
+  patch source: 'git-dec-2016-security.patch'
 
   command "make -j #{workers}", :env => env
   command "make install"
