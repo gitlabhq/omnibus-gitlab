@@ -16,14 +16,16 @@
 #
 
 server_host = node['gitlab']['nginx']['enable'] ? 'localhost' : Gitlab['gitlab_rails']['gitlab_host']
-server_schema = node['gitlab']['gitlab_rails']['gitlab_https'] ? 'https' : 'http'
+server_schema = node['gitlab']['gitlab-rails']['gitlab_https'] ? 'https' : 'http'
 
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   owner 'root'
   group 'root'
-  variables {
-    host: "#{server_schema}://#{server_host}"
-    port: node['gitlab']['nginx']['listen_port']
-    path: "#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
-  }
+  variables (
+    {
+      host: "#{server_schema}://#{server_host}"
+      port: node['gitlab']['nginx']['listen_port']
+      path: "#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
+    }
+  )
 end
