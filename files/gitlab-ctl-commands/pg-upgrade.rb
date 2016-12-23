@@ -18,11 +18,17 @@
 require 'mixlib/shellout'
 require 'optparse'
 
-options = {}
+options = {
+  wait: true
+}
 
 OptionParser.new do |opts|
   opts.on('-tDIR', '--tmp-dir=DIR', 'Storage location for temporary data') do |t|
     options[:tmp_dir] = t
+  end
+
+  opts.on('-w', '--no-wait', 'Do not wait before starting the upgrade process') do
+    options[:wait] = false
   end
 end.parse!(ARGV)
 
@@ -126,6 +132,10 @@ add_command_under_category 'pg-upgrade', 'database',
 
   # All tests have passed, this should be an upgradable instance.
   maintenance_mode('enable')
+
+  # Wait for processes to settle, and give use one last chance to change their
+  # mind
+  delay_for(30) if options[:wait]
 
   # Get the existing locale before we move on
   locale = fetch_lc_collate
@@ -322,4 +332,17 @@ def maintenance_mode(command)
       run_sv_command_for_service(sv_cmd, svc)
     end
   end
+end
+
+def delay_for(seconds)
+  log "Waiting #{seconds} seconds to ensure tasks complete before PostgreSQL upgrade"
+  log 'Please hit Ctrl-C now if you want to cancel the upgrade'
+  seconds.times do
+    $stdout.print '.'
+    sleep 1
+  end
+rescue Interrupt
+  log "\nInterrupt received, cancelling upgrade"
+  maintenance_mode('disable')
+  exit! 0
 end
