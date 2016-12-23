@@ -419,3 +419,9 @@ Docker Toolbox's boot2docker.
 [install-compose]: https://docs.docker.com/compose/install/
 [down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
 [docker-ports]: https://docs.docker.com/engine/reference/run/#/expose-incoming-ports
+
+### Getting help
+
+If your problem is not listed here please see [getting help](https://about.gitlab.com/getting-help/) for the support channels.
+
+These docker images are officially supported by GitLab Inc. and should always be up to date.
