@@ -17,6 +17,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Latest options are listed at:
 ##! https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
 
 ##! **Configuration settings below are optional.**
 ##! **The values currently assigned are only examples and ARE NOT the default
