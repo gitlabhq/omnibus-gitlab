@@ -27,7 +27,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Only start omnibus-gitlab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
 - [Disable user and group account management](settings/configuration.html#disable-user-and-group-account-management)
 - [Disable storage directory management](settings/configuration.html#disable-storage-directories-management)
-- [Configuring Rake attack](doc/settings/configuration.md#configuring-rake-attack)
+- [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
