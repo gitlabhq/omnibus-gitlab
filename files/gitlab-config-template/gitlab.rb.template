@@ -434,7 +434,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['auth_socket'] = "''"
 
 ##! put an empty string on the command line
-# gitlab_workhorse['pprof_listen_addr'] = "''" 
+# gitlab_workhorse['pprof_listen_addr'] = "''"
 
 ##! put an empty string on the command line
 # gitlab_workhorse['prometheus_listen_addr'] = "''"
@@ -1088,6 +1088,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Registry NGINX
 ################################################################################
 
+# registry_nginx['enable'] = false
+# registry_nginx['redirect_http_to_https'] = false
+# registry_nginx['redirect_http_to_https_port'] = 80
+# registry_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
+# registry_nginx['ssl_prefer_server_ciphers'] = "on"
 # registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
 # registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
 
@@ -1106,6 +1111,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Forwarded-Proto" => "https",
 #  "X-Forwarded-Ssl" => "on"
 # }
+
+##! Recommended by : https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+##!                  https://cipherli.st/
+# registry_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
+
+##! Recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# registry_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
+
+##! Default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# registry_nginx['ssl_session_timeout'] = "5m"
+
+##! Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
+# registry_nginx['ssl_dhparam'] = nil
+
+# registry_nginx['listen_addresses'] = ['*', '[::]']
+
+### Advanced settings
+# registry_nginx['log_directory'] = "/var/log/gitlab/nginx"
 
 # registry_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 
