@@ -13,16 +13,28 @@ namespace :docker do
     RELEASE_PACKAGE = args['RELEASE_PACKAGE']
     containers = Docker::Container.all
     containers.each do |container|
-      container.delete(:force => true, :v => true)
+      begin
+        container.delete(:v => true)
+      rescue
+        next
+      end
     end
     dangling_images = Docker::Image.all(:filters => '{"dangling":[ "true" ]}')
     dangling_images.each do |image|
-      image.remove
+      begin
+        image.remove
+      rescue
+        next
+      end
     end
     images = Docker::Image.all
     images.each do |image|
       if image.info["RepoTags"][0].include?(RELEASE_PACKAGE)
-        image.remove
+        begin
+          image.remove
+        rescue
+          next
+        end
       end
     end
   end
