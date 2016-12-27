@@ -31,7 +31,7 @@ namespace :docker do
     images.each do |image|
       if image.info["RepoTags"][0].include?(RELEASE_PACKAGE)
         begin
-          image.remove
+          image.remove(:force => true)
         rescue
           next
         end
