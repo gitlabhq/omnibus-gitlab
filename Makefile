@@ -70,15 +70,13 @@ move_to_platform_dir:
 	mv ${PLATFORM_DIR} pkg/
 
 docker_cleanup:
-	-docker ps -q -a | xargs docker rm -v
-	-docker images -f dangling=true -q | xargs docker rmi
-	-docker images | grep $(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi -f
+	-bundle exec rake docker:clean[$(RELEASE_VERSION)]
 
 docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	docker build --pull -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
+	bundle exec rake docker:build[$(RELEASE_VERSION)]
 
 docker_push:
 	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
