@@ -1,9 +1,17 @@
+class Build
+  class << self
+    def exec(project, log_level)
+      sh "bundle exec omnibus build #{project} --log-level #{log_level}"
+    end
+  end
+end
+
 namespace :build do
   task :package, :log_level do |_t, args|
     args.with_defaults(
       log_level: 'info'
     )
-    sh %( bundle exec omnibus build gitlab --log-level #{args[:log_level]} )
+    Build.exec('gitlab', args[:log_level])
   end
 end
 
