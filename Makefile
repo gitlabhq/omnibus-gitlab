@@ -79,18 +79,15 @@ docker_build: docker_cleanup
 	bundle exec rake docker:build[$(RELEASE_VERSION)]
 
 docker_push:
-	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
-	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
+	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push[$(RELEASE_PACKAGE)]
 
 docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
-	docker push gitlab/$(RELEASE_PACKAGE):rc
+	DOCKER_TAG=rc bundle exec rake docker:push[$(RELEASE_PACKAGE)]
 
 docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
-	docker push gitlab/$(RELEASE_PACKAGE):latest
+	DOCKER_TAG=latest bundle exec rake docker:push[$(RELEASE_PACKAGE)]
 
 do_docker_master:
 ifdef NIGHTLY
