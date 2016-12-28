@@ -195,7 +195,7 @@ add_command_under_category 'pg-upgrade', 'database',
     die 'Something went wrong during final reconfiguration, please check the output'
   end
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
-  run_pg_command("#{DATA_DIR}/../analyze_new_cluster.sh")
+  run_pg_command("/bin/sh #{DATA_DIR}/../analyze_new_cluster.sh")
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
