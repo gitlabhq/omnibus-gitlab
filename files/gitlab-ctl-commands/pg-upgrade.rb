@@ -258,8 +258,8 @@ def upgrade_version
 end
 
 def run_query(query)
-  run_pg_command(
-    "#{base_path}/embedded/bin/psql -h #{DATA_DIR}/.. -d postgres -c '#{query}' -q -t"
+  get_command_output(
+    "#{base_path}/bin/gitlab-psql -d postgres -c '#{query}' -q -t"
   ).strip
 end
 
