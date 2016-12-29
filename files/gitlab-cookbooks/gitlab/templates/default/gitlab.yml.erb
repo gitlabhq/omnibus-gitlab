@@ -193,27 +193,37 @@ production: &base
     # GitLab EE only jobs:
 
     # Snapshot active users statistics
+    <% unless @historical_data_worker_cron.nil? %>
     historical_data_worker:
       cron: <%= @historical_data_worker_cron %>
+    <% end %>
 
     # Update mirrored repositories
+    <% unless @update_all_mirrors_worker_cron.nil? %>
     update_all_mirrors_worker:
       cron: <%= @update_all_mirrors_worker_cron %>
+    <% end %>
 
     # Update remote mirrors
+    <% unless @update_all_remote_mirrors_worker_cron.nil? %>
     update_all_remote_mirrors_worker:
       cron: <%= @update_all_remote_mirrors_worker_cron %>
+    <% end %>
 
     # In addition to refreshing users when they log in,
     # periodically refresh LDAP users membership.
     # NOTE: This will only take effect if LDAP is enabled
+    <% unless @ldap_sync_worker.nil? %>
     ldap_sync_worker:
       cron: <%= @ldap_sync_worker_cron %>
+    <% end %>
 
     # Gitlab Geo nodes notification worker
     # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_bulk_notify_worker.nil? %>
     geo_bulk_notify_worker:
       cron: <%= @geo_bulk_notify_worker_cron %>
+    <% end %>
 
   #
   # 2. GitLab CI settings
