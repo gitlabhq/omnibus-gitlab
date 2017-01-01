@@ -119,6 +119,22 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    # NOTE: Test if we pass proper notifications to other resources
+    context 'rails cache management' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+      end
+
+      it 'should notify execute[clear the gitlab-rails cache] resource' do
+        expect(chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root')).to notify('execute[clear the gitlab-rails cache]')
+      end
+
+      it 'should not notify execute[clear the gitlab-rails cache] resource when disabled' do
+        stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+        expect(chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root')).to not_notify('execute[clear the gitlab-rails cache]')
+      end
+    end
   end
 
   context 'with environment variables' do

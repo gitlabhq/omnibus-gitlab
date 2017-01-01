@@ -55,7 +55,7 @@ bash "migrate gitlab-rails database" do
   EOH
   environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
   notifies :run, 'execute[enable pg_trgm extension]', :before unless omnibus_helper.not_listening?("postgresql") || !node['gitlab']['postgresql']['enable']
-  notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless omnibus_helper.not_listening?("redis")
+  notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless omnibus_helper.not_listening?("redis") || !node['gitlab']['gitlab-rails']['rake_cache_clear']
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end
