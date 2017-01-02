@@ -14,6 +14,8 @@ describe 'gitlab::rails-cache-clear' do
 
   context 'test clear cache execution' do
     let(:clear_cache_exec) { chef_run.execute('clear the gitlab-rails cache') }
+    let (:gilab_yml_temp) { chef_run.find_resource(:templatesymlink,
+         'Create a gitlab.yml and create a symlink to Rails root') }
 
     it 'check rake_cache_clear default attribute value set to true' do
       expect(chef_run.node['gitlab']['gitlab-rails']['rake_cache_clear'])
@@ -33,7 +35,8 @@ describe 'gitlab::rails-cache-clear' do
     end
 
     it 'check command used to clear cache' do
-      expect(clear_cache_exec.command).to match('/opt/gitlab/bin/gitlab-rake cache:clear')
+      expect(clear_cache_exec.command).to match(
+        '/opt/gitlab/bin/gitlab-rake cache:clear')
       expect(clear_cache_exec).to do_nothing
     end
   end

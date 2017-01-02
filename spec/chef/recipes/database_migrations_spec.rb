@@ -41,13 +41,15 @@ describe 'gitlab::database-migrations' do
     end
 
     # NOTE: Test if we pass proper notifications to other resources
-    it 'should notify execute[clear the gitlab-rails cache] resource' do
-      expect(chef_run.bash('migrate gitlab-rails database')).to notify('execute[clear the gitlab-rails cache]')
+    it 'should notify rails cache clear resource' do
+      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
+        'execute[clear the gitlab-rails cache]')
     end
 
-    it 'should not notify execute[clear the gitlab-rails cache] resource when disabled' do
+    it 'should not notify rails cache clear resource if disabled' do
       stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
-      expect(chef_run.bash('migrate gitlab-rails database')).not_to notify('execute[clear the gitlab-rails cache]')
+      expect(chef_run.bash('migrate gitlab-rails database')).not_to notify(
+        'execute[clear the gitlab-rails cache]')
     end
   end
 end
