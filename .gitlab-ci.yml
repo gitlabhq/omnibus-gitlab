@@ -61,6 +61,7 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
     - export CI_NODE_TOTAL=${JOB_NAME[4]}
     - export KNAPSACK_REPORT_PATH=knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_node_${CI_NODE_INDEX}_${CI_NODE_TOTAL}_report.json
     - export KNAPSACK_GENERATE_REPORT=true
+    - export USE_KNAPSACK=true
     # To prevent current OS providing empty/old reports of other OSs as an
     # artifact. If not, they may overwrite the valid/new reports from those
     # corresponding OSs. So, removing everything except current OS's report.

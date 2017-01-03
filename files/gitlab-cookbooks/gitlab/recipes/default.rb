@@ -115,6 +115,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 [
   "unicorn",
   "sidekiq",
+  "gitaly",
   "gitlab-workhorse",
   "mailroom",
   "nginx",

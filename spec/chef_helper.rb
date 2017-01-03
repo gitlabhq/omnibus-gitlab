@@ -4,7 +4,7 @@ require 'ohai'
 
 require 'knapsack'
 
-Knapsack::Adapters::RSpecAdapter.bind
+Knapsack::Adapters::RSpecAdapter.bind if ENV['USE_KNAPSACK']
 
 # Load our cookbook libraries so we can stub them in our tests
 Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab/libraries/*.rb')].each { |f| require f }
