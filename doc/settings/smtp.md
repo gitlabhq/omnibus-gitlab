@@ -227,6 +227,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
+gitlab_rails['smtp_domain'] = "exmail.qq.com"
 ````
 
 ### Sendgrid
