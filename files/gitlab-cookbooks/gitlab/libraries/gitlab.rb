@@ -43,6 +43,7 @@ require_relative 'postgresql.rb'
 require_relative 'redis.rb'
 require_relative 'registry.rb'
 require_relative 'unicorn.rb'
+require_relative 'gitaly.rb'
 
 module Gitlab
   extend(Mixlib::Config)
@@ -224,6 +225,7 @@ module Gitlab
       GitlabMattermost.parse_variables
       GitlabPages.parse_variables
       Registry.parse_variables
+      Gitaly.parse_variables
       # Parse nginx variables last because we want all external_url to be
       # parsed first
       Nginx.parse_variables
