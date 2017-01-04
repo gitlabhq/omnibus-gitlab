@@ -22,7 +22,7 @@ env_directory = node['gitlab']['gitaly']['env_directory']
 
 directory working_dir do
   owner account_helper.gitlab_user
-  mode '0750'
+  mode '0700'
   recursive true
 end
 
