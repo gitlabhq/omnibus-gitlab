@@ -15,7 +15,6 @@
 #
 
 name "ruby"
-
 license "BSD-2-Clause"
 license_file "BSDL"
 license_file "COPYING"
@@ -25,7 +24,7 @@ license_file "LEGAL"
 #   https://bugs.ruby-lang.org/issues/11869
 # - the current status of 2.3.x is that it downloads but fails to compile.
 # - verify that all ffi libs are available for your version on all platforms.
-default_version "2.1.8"
+default_version "2.3.3"
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
@@ -41,6 +40,7 @@ dependency "libyaml"
 # and that's the only one we will ever use.
 dependency "libiconv"
 
+version("2.3.3")      { source md5: "e485f3a55649eb24a1e2e1a40bc120df" }
 version("2.3.0")      { source md5: "e81740ac7b14a9f837e9573601db3162" }
 
 version("2.2.5")      { source md5: "bd8e349d4fb2c75d90817649674f94be" }

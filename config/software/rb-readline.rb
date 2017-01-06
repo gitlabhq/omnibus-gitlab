@@ -14,7 +14,10 @@
 # limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name "rb-readline"
+version = Gitlab::Version.new('rb-readline', "master")
 default_version "master"
 
 license "BSD-3-Clause"
@@ -23,7 +26,7 @@ license_file "LICENSE"
 dependency "ruby"
 dependency "rubygems"
 
-source git: "https://github.com/ConnorAtherton/rb-readline.git"
+source git: version.remote
 
 build do
   env = with_embedded_path

@@ -15,7 +15,11 @@
 #
 
 name "zlib"
-default_version "1.2.8"
+default_version "1.2.10"
+
+version "1.2.10" do
+  source sha256: "8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017"
+end
 
 version "1.2.8" do
   source md5: "44d667c142d7cda120332623eab69f40"

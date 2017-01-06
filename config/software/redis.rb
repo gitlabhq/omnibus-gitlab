@@ -20,7 +20,11 @@ license "BSD-3-Clause"
 license_file "COPYING"
 
 dependency "config_guess"
-default_version "3.0.4"
+default_version "3.2.5"
+
+version "3.2.5" do
+  source md5: "d3d2b4dd4b2a3e07ee6f63c526b66b08"
+end
 
 version "3.0.7" do
   source md5: "84ed3f486e7a6f0ebada6917370f3532"

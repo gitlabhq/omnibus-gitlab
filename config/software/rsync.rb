@@ -15,7 +15,7 @@
 #
 
 name "rsync"
-default_version "3.1.1"
+default_version "3.1.2"
 
 license "GPL v3"
 license_file "COPYING"
