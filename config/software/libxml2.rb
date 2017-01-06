@@ -29,10 +29,6 @@ version "2.9.4" do
   source md5: "ae249165c173b1ff386ee8ad676815f5"
 end
 
-version "2.9.3" do
-  source md5: "daece17e045f1c107610e137ab50c179"
-end
-
 source url: "ftp://xmlsoft.org/libxml2/libxml2-#{version}.tar.gz"
 
 relative_path "libxml2-#{version}"

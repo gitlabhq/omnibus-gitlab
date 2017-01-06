@@ -23,9 +23,6 @@ license_file "COPYING"
 dependency "ncurses"
 dependency "config_guess"
 
-version("20150325-3.1") { source md5: "43cdb5df3061d78b5e9d59109871b4f6" }
-version("20141030-3.1") { source md5: "5f18e63346d31b877cdf36b5c59b810b" }
-version("20130712-3.1") { source md5: "0891336c697362727a1fa7e60c5cb96c" }
 version("20120601-3.0") { source md5: "e50f6a7afb4de00c81650f7b1a0f5aea" }
 
 source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"

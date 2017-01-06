@@ -17,10 +17,6 @@
 name "xproto"
 default_version "7.0.25"
 
-version "7.0.28" do
-  source md5: "0b42843b99aee3e4f6a9cc7710143f86"
-end
-
 version "7.0.25" do
   source md5: "a47db46cb117805bd6947aa5928a7436"
 end

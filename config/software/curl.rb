@@ -24,18 +24,6 @@ dependency "openssl"
 license "MIT"
 license_file "COPYING"
 
-version "7.47.1" do
-  source md5: "3f9d1be7bf33ca4b8c8602820525302b"
-end
-
-version "7.50.3" do
-  source sha256: "3991c2234986178af3b3f693e5afa35d49da2ab4ba61292e3817222446dca7e1"
-end
-
-version "7.51.0" do
-  source sha256: "65b5216a6fbfa72f547eb7706ca5902d7400db9868269017a8888aa91d87977c"
-end
-
 version "7.52.0" do
   source sha256: "7ee327ca55e95ea16b27929449ba290c3881cbb24901c57dd571849741c8f2d0"
 end

@@ -21,13 +21,6 @@ version "1.2.10" do
   source sha256: "8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017"
 end
 
-version "1.2.8" do
-  source md5: "44d667c142d7cda120332623eab69f40"
-end
-version "1.2.6" do
-  source md5: "618e944d7c7cd6521551e30b32322f4a"
-end
-
 source url: "http://downloads.sourceforge.net/project/libpng/zlib/#{version}/zlib-#{version}.tar.gz"
 
 license "Zlib"

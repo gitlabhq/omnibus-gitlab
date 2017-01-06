@@ -20,9 +20,6 @@ default_version "2.1.1"
 license "BSD-3-Clause"
 license_file "../package/COPYING"
 
-version "2.1.2" do
-  source md5: "6c985fbfe3a34608eb3c53dc719172c4"
-end
 version "2.1.1" do
   source md5: "8fa53ea8f71d88da9503f62793336bc3"
 end
