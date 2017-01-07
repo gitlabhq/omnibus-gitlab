@@ -128,6 +128,8 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "gitlab@mydomain.com"
 gitlab_rails['smtp_password'] = "mypassword"
 gitlab_rails['smtp_domain'] = "smtp.zoho.com"
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
 ### OVH
