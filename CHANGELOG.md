@@ -356,6 +356,7 @@ omnibus-gitlab repository.
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
+- Add `announce-ip` and `announce-port` options for Redis and Sentinel (Borja Aparicio)
 - Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration

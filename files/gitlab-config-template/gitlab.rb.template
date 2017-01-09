@@ -821,6 +821,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['master_ip'] = nil
 # redis['master_port'] = 6379
 
+#### Support to run redis slaves in a Docker or NAT environment
+####! Docs: https://redis.io/topics/replication#configuring-replication-in-docker-and-nat
+# redis['announce_ip'] = nil
+# redis['announce_port'] = nil
+
 ####! **Master password should have the same value defined in
 ####!   redis['password'] to enable the instance to transition to/from
 ####!   master/slave in a failover event.**
@@ -1553,6 +1558,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Uncomment to change default port
 # sentinel['port'] = 26379
+
+#### Support to run sentinels in a Docker or NAT environment
+#####! Docs: https://redis.io/topics/sentinel#sentinel-docker-nat-and-possible-issues
+# In an standard case, Sentinel will run in the same network service as Redis, so the same IP will be announce for Redis and Sentinel
+# Only define these values if it is needed to announce for Sentinel a differen IP service than Redis
+# sentinel['announce_ip'] = nil # If not defined, its value will be taken from redis['announce_ip'] or nil if not present
+# sentinel['announce_port'] = nil # If not defined, its value will be taken from sentinel['port'] or nil if redis['announce_ip'] not present
 
 ##! Quorum must reflect the amount of voting sentinels it take to start a
 ##! failover.
