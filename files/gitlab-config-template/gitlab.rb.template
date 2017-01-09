@@ -43,7 +43,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 # gitlab_rails['gitlab_email_subject_suffix'] = ''
 
-### GitLab user privilages
+### GitLab user privileges
 # gitlab_rails['gitlab_default_can_create_group'] = true
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 
