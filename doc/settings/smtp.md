@@ -318,6 +318,21 @@ gitlab_rails['gitlab_email_from'] = 'username@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'username@domain.com'
 ```
 
+### DomainFactory (df.eu)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "sslout.df.eu"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
