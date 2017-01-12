@@ -19,7 +19,6 @@ DOCKER_TAG:=nightly
 else
 DOCKER_TAG:=$(RELEASE_VERSION)
 endif
-LOG_LEVEL="info"
 
 populate_cache:
 	bin/omnibus cache populate
@@ -31,7 +30,7 @@ pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags
 
 build:
-	bundle exec rake build[${LOG_LEVEL}]
+	bin/omnibus build ${PROJECT} --log-level info
 
 # license_check should be run after `build`, but because build calls omnibus which
 # does a rebuild every call, we're not setting that specific dependency for when
