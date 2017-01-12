@@ -147,6 +147,10 @@ shell and the `passwd` command for non-superusers requires entering the current
 password prior to a new password. The user cannot enter a password that will
 match `'*'` and therefore the account remains password-less.
 
+Keep in mind that the git user must have access to the system so please review 
+your security settings at `/etc/security/access.conf` and make sure the git user 
+is not blocked.
+
 ### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
 The packaged Postgres instance will try to allocate 25% of total memory as
