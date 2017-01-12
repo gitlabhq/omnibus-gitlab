@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.16.0
 
 - Update git to 2.10.2 27cde301
+- Convert build make task to a rake task, with log level option 5f65794d
 
 8.15.0
 
