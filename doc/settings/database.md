@@ -68,8 +68,8 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 `psql`:
 
 ```bash
-/opt/gitlab/bin/pg_dump --version
-/opt/gitlab/bin/psql -- version
+/opt/gitlab/embedded/bin/pg_dump --version
+/opt/gitlab/embedded/bin/psql --version
 ```
 
 If these versions are different from your non-packaged external PostgreSQL
