@@ -13,6 +13,13 @@ describe 'gitlab::gitaly' do
     end
 
     it_behaves_like "enabled runit service", "gitaly", "root", "root"
+
+    it 'creates expected directories with correct permissions' do
+      expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
+      expect(chef_run).to create_directory('/var/log/gitlab/gitaly').with(user: 'git', mode: '0700')
+      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly')
+      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/PATH')
+    end
   end
 
   context 'when gitaly is disabled' do
@@ -21,5 +28,11 @@ describe 'gitlab::gitaly' do
     end
 
     it_behaves_like "disabled runit service", "gitaly"
+
+    it 'does not create the gitaly directories' do
+      expect(chef_run).to_not create_directory('/var/opt/gitlab/gitaly')
+      expect(chef_run).to_not create_directory('/var/log/gitlab/gitaly')
+      expect(chef_run).to_not create_directory('/opt/gitlab/etc/gitaly')
+    end
   end
 end
