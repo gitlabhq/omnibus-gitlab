@@ -118,6 +118,15 @@ describe 'gitlab::gitlab-rails' do
             with_content(/mattermost:\s+enabled: false\s+host:\s+/)
         end
       end
+
+      context 'mattermost on another server' do
+        it 'sets the mattermost host' do
+          stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
+
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+            with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
+        end
+      end
     end
   end
 

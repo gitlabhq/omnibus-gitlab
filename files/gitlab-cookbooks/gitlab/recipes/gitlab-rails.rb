@@ -229,6 +229,9 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
+
+  mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab-rails']['mattermost_host']
+
   variables(
     node['gitlab']['gitlab-rails'].to_hash.merge(
       gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
@@ -237,8 +240,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       git_annex_enabled: node['gitlab']['gitlab-shell']['git_annex_enabled'],
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
-      mattermost_host: Gitlab['mattermost_external_url'],
-      mattermost_enabled: node['gitlab']['mattermost']['enable']
+      mattermost_host: mattermost_host,
+      mattermost_enabled: node['gitlab']['mattermost']['enable'] || !mattermost_host.nil?
     )
   )
   restarts dependent_services
