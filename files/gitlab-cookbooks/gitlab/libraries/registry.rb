@@ -82,7 +82,7 @@ module Registry
     end
 
     def generate_registry_keypair
-      key = OpenSSL::PKey::RSA.new(4096)
+      key = SecretsHelper.generate_rsa(4096)
       subject = "/C=USA/O=GitLab/OU=Container/CN=Registry"
 
       cert = OpenSSL::X509::Certificate.new
