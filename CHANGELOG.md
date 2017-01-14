@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.16.0
 
 - Update git to 2.10.2 27cde301
+- Allow users to specify an initial shared runner registration token
 
 8.15.0
 

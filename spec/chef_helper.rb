@@ -44,7 +44,7 @@ RSpec.configure do |config|
   config.before do
     stub_command('id -Z').and_return(false)
     stub_command("grep 'CS:123456:respawn:/opt/gitlab/embedded/bin/runsvdir-start' /etc/inittab").and_return('')
-    stub_command(%r{\(test -f /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+-\) && \(cat /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+- | grep -Fx 0\)}).and_return('')
+    stub_command(%r{\(test -f /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+-\) && \(cat /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+- | grep -Fx 0\)}).and_return(false)
     stub_command("getenforce | grep Disabled").and_return(true)
     stub_command("semodule -l | grep '^#gitlab-7.2.0-ssh-keygen\\s'").and_return(true)
     stub_command(%r{set \-x \&\& \[ \-d "[^"]\" \]}).and_return(false)
