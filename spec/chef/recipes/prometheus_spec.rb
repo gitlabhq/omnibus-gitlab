@@ -46,7 +46,7 @@ describe 'gitlab::prometheus' do
     before do
       stub_gitlab_rb(
         prometheus: {
-          flags: { 'storage.local.path': 'foo' },
+          flags: { 'storage.local.path' => 'foo' },
           enable: true
         }
       )
