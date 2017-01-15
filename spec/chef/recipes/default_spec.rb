@@ -77,4 +77,19 @@ describe 'gitlab::default' do
       expect(chef_run).to_not create_directory('/etc/gitlab')
     end
   end
+
+  context 'prometheus is disabled default' do
+    it 'includes the prometheus_disable recipe' do
+      expect(chef_run).to include_recipe('gitlab::prometheus_disable')
+      expect(chef_run).to_not include_recipe('gitlab::prometheus')
+    end
+  end
+
+  context 'with prometheus enabled' do
+    before { stub_gitlab_rb(prometheus: { enable: true }) }
+    it 'includes the prometheus recipe' do
+      expect(chef_run).to include_recipe('gitlab::prometheus')
+      expect(chef_run).to_not include_recipe('gitlab::prometheus_disable')
+    end
+  end
 end

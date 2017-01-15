@@ -1,7 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2016 GitLab Inc.
-# License:: Apache License, Version 2.0
+# Copyright:: Copyright (c) 2017 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +14,6 @@
 # limitations under the License.
 #
 
-runit_service "prometheus" do
+runit_service 'prometheus' do
   action :disable
 end

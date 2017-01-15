@@ -963,32 +963,30 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 }
 
 ####
-# Prometheus Node Exporter
+# Prometheus server
 ####
-default['gitlab']['node-exporter']['enable'] = true
-default['gitlab']['node-exporter']['username'] = "gitlab-node-exporter"
-default['gitlab']['node-exporter']['uid'] = nil
-default['gitlab']['node-exporter']['gid'] = nil
-default['gitlab']['node-exporter']['shell'] = "/bin/sh"
-default['gitlab']['node-exporter']['home'] = "/var/opt/gitlab/node-exporter"
-default['gitlab']['node-exporter']['log_directory'] = "/var/log/gitlab/node-exporter"
-default['gitlab']['node-exporter']['flags'] = {
-   'collector.textfile.directory' => File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
+default['gitlab']['prometheus']['enable'] = false
+default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
+default['gitlab']['prometheus']['uid'] = nil
+default['gitlab']['prometheus']['gid'] = nil
+default['gitlab']['prometheus']['shell'] = '/bin/sh'
+default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
+default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
+default['gitlab']['prometheus']['scrape_interval'] = 15
+default['gitlab']['prometheus']['scrape_timeout'] = 15
+default['gitlab']['prometheus']['flags'] = {
+  'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
+  'storage.local.memory-chunks' => '50000',
+  'storage.local.max-chunks-to-persist' => '40000',
+  'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
 }
 
 ####
-# Prometheus server
+# Prometheus Node Exporter
 ####
-default['gitlab']['prometheus']['enable'] = true
-default['gitlab']['prometheus']['username'] = "gitlab-prometheus"
-default['gitlab']['prometheus']['uid'] = nil
-default['gitlab']['prometheus']['gid'] = nil
-default['gitlab']['prometheus']['shell'] = "/bin/sh"
-default['gitlab']['prometheus']['home'] = "/var/opt/gitlab/prometheus"
-default['gitlab']['prometheus']['log_directory'] = "/var/log/gitlab/prometheus"
-default['gitlab']['prometheus']['flags'] = {
-  'storage.local.path' => File.join(node['gitlab']['prometheus']['home'], 'data'),
-  'storage.local.memory-chunks' => '50000',
-  'storage.local.max-chunks-to-persist' => '40000',
-  'config.file' => File.join(node['gitlab']['prometheus']['home'], 'prometheus.yml'),
+default['gitlab']['node-exporter']['enable'] = false
+default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
+default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['gitlab']['node-exporter']['flags'] = {
+  'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
 }

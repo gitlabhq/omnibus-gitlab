@@ -86,13 +86,6 @@ class AccountHelper
     node['gitlab']['registry']['group']
   end
 
-  def node_exporter_user
-    node['gitlab']['node-exporter']['username']
-  end
-
-  def node_exporter_group
-    node['gitlab']['node-exporter']['group']
-  end
   def prometheus_user
     node['gitlab']['prometheus']['username']
   end

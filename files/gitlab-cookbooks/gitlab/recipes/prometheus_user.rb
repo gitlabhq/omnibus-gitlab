@@ -14,17 +14,20 @@
 # limitations under the License.
 #
 
-module PrometheusHelper
-  class << self
-    def flags_for(node, service)
-      config = []
+account_helper = AccountHelper.new(node)
+prometheus_user = account_helper.prometheus_user
+prometheus_dir = node['gitlab']['prometheus']['home']
 
-      node['gitlab'][service]['flags'].each do |flag_key, flag_value|
-        next if flag_value.empty?
-        config << "-#{flag_key}=#{flag_value}"
-      end
-
-      config.join(" ")
-    end
-  end
+account "Prometheus user and group" do
+  username prometheus_user
+  uid node['gitlab']['prometheus']['uid']
+  ugid prometheus_user
+  groupname prometheus_user
+  home prometheus_dir
+  gid node['gitlab']['prometheus']['gid']
+  shell node['gitlab']['prometheus']['shell']
+  manage node['gitlab']['manage-accounts']['enable']
 end
+
+
+

@@ -16,37 +16,31 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-node_exporter_user = account_helper.node_exporter_user
+node_exporter_user = account_helper.prometheus_user
 node_exporter_log_dir = node['gitlab']['node-exporter']['log_directory']
-node_exporter_home = node['gitlab']['node-exporter']['home']
 textfile_dir = node['gitlab']['node-exporter']['flags']['collector.textfile.directory']
 
-account "Node exporter user and group" do
-  username node_exporter_user
-  uid node['gitlab']['node-exporter']['uid']
-  ugid node_exporter_user
-  groupname node_exporter_user
-  gid node['gitlab']['node-exporter']['gid']
-  shell node['gitlab']['node-exporter']['shell']
-  manage node['gitlab']['manage-accounts']['enable']
-end
+# node-exporter runs under the prometheus user account. If prometheus is
+# disabled, it's up to this recipe to create the account
+include_recipe 'gitlab::prometheus_user'
 
 directory node_exporter_log_dir do
   owner node_exporter_user
-  mode "0700"
+  mode '0700'
   recursive true
 end
 
-directory textfile_dir  do
+directory textfile_dir do
   owner node_exporter_user
-  mode "0755"
+  mode '0755'
   recursive true
 end
 
-runit_service "node-exporter" do
+runit_service 'node-exporter' do
   options({
-    :log_directory => node_exporter_log_dir
+    log_directory: node_exporter_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['node-exporter'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(
+    node['gitlab']['node-exporter'].to_hash
+  )
 end
-
