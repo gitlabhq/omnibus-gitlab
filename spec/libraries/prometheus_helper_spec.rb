@@ -21,11 +21,11 @@ describe PrometheusHelper do
   let(:chef_run) { ChefSpec::SoloRunner.new }
   subject { described_class.new(chef_run.node) }
 
-  context 'flags_for' do
+  context 'flags for prometheus' do
     context 'with default options' do
       it 'returns the correct default config string' do
         chef_run.converge('gitlab::default')
-        expect(PrometheusHelper.flags_for(chef_run.node, 'prometheus')).to eq(
+        expect(subject.flags('prometheus')).to eq(
           '-storage.local.path=/var/opt/gitlab/prometheus/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/var/opt/gitlab/prometheus/prometheus.yml')
       end
     end
@@ -37,7 +37,7 @@ describe PrometheusHelper do
         chef_run.node.set['gitlab']['prometheus']['home'] = '/fake/dir'
         chef_run.converge('gitlab::default')
 
-        expect(PrometheusHelper.flags_for(chef_run.node, 'prometheus')).to eq(
+        expect(subject.flags('prometheus')).to eq(
           '-storage.local.path=/fake/dir/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/fake/dir/prometheus.yml')
       end
     end
