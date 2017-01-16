@@ -33,18 +33,22 @@ directory prometheus_log_dir do
   recursive true
 end
 
-template "#{prometheus_dir}/prometheus.yml" do
+template 'Prometheus template' do
+  path "#{prometheus_dir}/prometheus.yml"
   source 'prometheus.yml.erb'
   owner prometheus_user
   mode '0644'
+  variables node['gitlab']['prometheus'].to_hash
   notifies :restart, 'service[prometheus]'
 end
 
+runtime_flags = PrometheusHelper.new(node).flags('prometheus')
 runit_service 'prometheus' do
   options({
-    log_directory: prometheus_log_dir
+    log_directory: prometheus_log_dir,
+    flags: runtime_flags
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['gitlab']['registry'].to_hash
+    node['gitlab']['prometheus'].to_hash
   )
 end

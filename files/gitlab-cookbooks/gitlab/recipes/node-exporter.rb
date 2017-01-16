@@ -36,9 +36,11 @@ directory textfile_dir do
   recursive true
 end
 
+runtime_flags = PrometheusHelper.new(node).flags('node-exporter')
 runit_service 'node-exporter' do
   options({
-    log_directory: node_exporter_log_dir
+    log_directory: node_exporter_log_dir,
+    flags: runtime_flags
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['node-exporter'].to_hash

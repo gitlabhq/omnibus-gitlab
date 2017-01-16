@@ -974,6 +974,7 @@ default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
 default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
+default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
 default['gitlab']['prometheus']['flags'] = {
   'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
   'storage.local.memory-chunks' => '50000',
@@ -990,3 +991,4 @@ default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-expo
 default['gitlab']['node-exporter']['flags'] = {
   'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
 }
+default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
