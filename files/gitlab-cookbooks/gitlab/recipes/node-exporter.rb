@@ -16,22 +16,22 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-node_exporter_user = account_helper.prometheus_user
+prometheus_user = account_helper.prometheus_user
 node_exporter_log_dir = node['gitlab']['node-exporter']['log_directory']
-textfile_dir = node['gitlab']['node-exporter']['flags']['collector.textfile.directory']
+textfile_dir = File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
 
 # node-exporter runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
 include_recipe 'gitlab::prometheus_user'
 
 directory node_exporter_log_dir do
-  owner node_exporter_user
+  owner prometheus_user
   mode '0700'
   recursive true
 end
 
 directory textfile_dir do
-  owner node_exporter_user
+  owner prometheus_user
   mode '0755'
   recursive true
 end

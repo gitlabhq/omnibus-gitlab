@@ -5,9 +5,6 @@ describe 'gitlab::node-exporter' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      node_exporter: { enable: true }
-    )
   end
 
   context 'when node-exporter is enabled' do
@@ -33,6 +30,19 @@ describe 'gitlab::node-exporter' do
 
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/node-exporter/)
+    end
+
+    it 'creates default set of directories' do
+      expect(chef_run).to create_directory('/var/log/gitlab/node-exporter').with(
+        owner: 'gitlab-prometheus',
+        group: nil,
+        mode: '0700'
+      )
+      expect(chef_run).to create_directory('/var/opt/gitlab/node-exporter/textfile_collector').with(
+        owner: 'gitlab-prometheus',
+        group: nil,
+        mode: '0755'
+      )
     end
   end
 

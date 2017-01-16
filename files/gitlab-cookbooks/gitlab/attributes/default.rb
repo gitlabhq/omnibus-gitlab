@@ -976,10 +976,10 @@ default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
 default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
 default['gitlab']['prometheus']['flags'] = {
-  'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
+  'storage.local.path' => File.join(node['gitlab']['prometheus']['home'], 'data'),
   'storage.local.memory-chunks' => '50000',
   'storage.local.max-chunks-to-persist' => '40000',
-  'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
+  'config.file' => File.join(node['gitlab']['prometheus']['home'], 'prometheus.yml')
 }
 
 ####
@@ -989,6 +989,6 @@ default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
 default['gitlab']['node-exporter']['flags'] = {
-  'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
+  'collector.textfile.directory' => File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
 }
 default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'

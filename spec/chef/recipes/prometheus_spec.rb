@@ -5,15 +5,18 @@ describe 'gitlab::prometheus' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      prometheus: {
-        enable: true
-      }
-    )
   end
 
   context 'when prometheus is enabled' do
     let(:config_template) { chef_run.template('/var/log/gitlab/prometheus/config') }
+
+    before do
+      stub_gitlab_rb(
+        prometheus: {
+          enable: true
+        }
+      )
+    end
 
     it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root'
 
@@ -35,6 +38,19 @@ describe 'gitlab::prometheus' do
 
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/prometheus/)
+    end
+
+    it 'creates default set of directories' do
+      expect(chef_run).to create_directory('/var/log/gitlab/prometheus').with(
+        owner: 'gitlab-prometheus',
+        group: nil,
+        mode: '0700'
+      )
+      expect(chef_run).to create_directory('/var/opt/gitlab/prometheus').with(
+        owner: 'gitlab-prometheus',
+        group: nil,
+        mode: '0750'
+      )
     end
 
     it 'should create a gitlab-prometheus user account' do
@@ -78,6 +94,7 @@ describe 'gitlab::prometheus' do
       stub_gitlab_rb(
         prometheus: {
           scrape_timeout: 8888,
+          scrape_interval: 11,
           enable: true
         }
       )
@@ -86,6 +103,8 @@ describe 'gitlab::prometheus' do
     it 'renders prometheus.yml with the non-default value' do
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(/scrape_timeout: 8888s/)
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(/scrape_interval: 11/)
     end
   end
 end

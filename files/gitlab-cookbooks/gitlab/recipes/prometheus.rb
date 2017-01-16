@@ -23,7 +23,7 @@ include_recipe 'gitlab::prometheus_user'
 
 directory prometheus_dir do
   owner prometheus_user
-  mode '0755'
+  mode '0750'
   recursive true
 end
 
@@ -34,7 +34,7 @@ directory prometheus_log_dir do
 end
 
 template 'Prometheus template' do
-  path "#{prometheus_dir}/prometheus.yml"
+  path File.join(prometheus_dir, 'prometheus.yml')
   source 'prometheus.yml.erb'
   owner prometheus_user
   mode '0644'
