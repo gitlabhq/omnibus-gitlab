@@ -104,7 +104,6 @@ class AccountHelper
         #{ci_redis_user}
         #{mattermost_user}
         #{registry_user}
-        #{node_exporter_user}
         #{prometheus_user}
       )
   end
@@ -119,7 +118,6 @@ class AccountHelper
         #{ci_redis_group}
         #{mattermost_group}
         #{registry_group}
-        #{node_exporter_group}
         #{prometheus_group}
       )
   end
