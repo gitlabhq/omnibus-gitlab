@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +15,14 @@
 # limitations under the License.
 #
 
-account_helper = AccountHelper.new(node)
-prometheus_user = account_helper.prometheus_user
-prometheus_dir = node['gitlab']['prometheus']['home']
-
-account "Prometheus user and group" do
-  username prometheus_user
-  uid node['gitlab']['prometheus']['uid']
-  ugid prometheus_user
-  groupname prometheus_user
-  home prometheus_dir
-  gid node['gitlab']['prometheus']['gid']
-  shell node['gitlab']['prometheus']['shell']
-  manage node['gitlab']['manage-accounts']['enable']
+# Configure Prometheus Services
+[
+  "prometheus",
+  "node-exporter"
+].each do |service|
+  if node["gitlab"][service]["enable"]
+    include_recipe "gitlab::#{service}"
+  else
+    include_recipe "gitlab::#{service}_disable"
+  end
 end
