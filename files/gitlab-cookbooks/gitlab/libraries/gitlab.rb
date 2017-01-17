@@ -43,6 +43,7 @@ require_relative 'postgresql.rb'
 require_relative 'redis.rb'
 require_relative 'registry.rb'
 require_relative 'unicorn.rb'
+require_relative 'gitaly.rb'
 
 module Gitlab
   extend(Mixlib::Config)
@@ -79,6 +80,8 @@ module Gitlab
   mattermost Mash.new
   gitlab_pages Mash.new
   registry Mash.new
+  node_exporter Mash.new
+  prometheus Mash.new
   sentinel Mash.new
   node nil
   external_url nil
@@ -87,6 +90,7 @@ module Gitlab
   mattermost_external_url nil
   registry_external_url nil
   git_data_dirs Mash.new
+  gitaly Mash.new
 
   # roles
   redis_sentinel_role Mash.new
@@ -193,7 +197,10 @@ module Gitlab
         "pages_external_url",
         "gitlab_pages",
         "registry",
-        "sentinel"
+        "sentinel",
+        "gitaly",
+        "node_exporter",
+        "prometheus"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -222,6 +229,7 @@ module Gitlab
       GitlabMattermost.parse_variables
       GitlabPages.parse_variables
       Registry.parse_variables
+      Gitaly.parse_variables
       # Parse nginx variables last because we want all external_url to be
       # parsed first
       Nginx.parse_variables

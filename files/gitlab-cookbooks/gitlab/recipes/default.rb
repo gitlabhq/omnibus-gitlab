@@ -115,6 +115,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 [
   "unicorn",
   "sidekiq",
+  "gitaly",
   "gitlab-workhorse",
   "mailroom",
   "nginx",
@@ -131,6 +132,9 @@ include_recipe "gitlab::logrotate_folders_and_configs"
     include_recipe "gitlab::#{service}_disable"
   end
 end
+
+# Recipe which handles all prometheus related services
+include_recipe "gitlab::gitlab-prometheus"
 
 # Deprecated in favor of gitlab-workhorse since 8.2
 runit_service "gitlab-git-http-server" do

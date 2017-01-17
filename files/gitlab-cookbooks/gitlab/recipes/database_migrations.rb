@@ -19,6 +19,7 @@ require 'digest'
 omnibus_helper = OmnibusHelper.new(node)
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
+initial_runner_token  = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
 
 dependent_services = []
 dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
@@ -40,6 +41,10 @@ end
 upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
 db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
 
+env_variables = {}
+env_variables['GITLAB_ROOT_PASSWORD'] = initial_root_password if initial_root_password
+env_variables['GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN'] = initial_runner_token if initial_runner_token
+
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
 # https://github.com/chef/chef/issues/4537
@@ -53,7 +58,7 @@ bash "migrate gitlab-rails database" do
     echo $STATUS > #{db_migrate_status_file}
     exit $STATUS
   EOH
-  environment ({'GITLAB_ROOT_PASSWORD' => initial_root_password }) if initial_root_password
+  environment env_variables unless env_variables.empty?
   notifies :run, 'execute[enable pg_trgm extension]', :before unless omnibus_helper.not_listening?("postgresql") || !node['gitlab']['postgresql']['enable']
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately unless omnibus_helper.not_listening?("redis")
   dependent_services.each do |svc|

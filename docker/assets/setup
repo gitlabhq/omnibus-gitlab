@@ -34,6 +34,7 @@ groupadd -g 996 gitlab-psql
 # groupadd -g 995 gitlab-ci
 groupadd -g 994 mattermost
 groupadd -g 993 registry
+groupadd -g 992 gitlab-prometheus
 
 # Create accounts
 useradd -m -u 998 -g git -m -s /bin/sh -d /var/opt/gitlab git
@@ -43,3 +44,4 @@ useradd -m -u 996 -g gitlab-psql -m -s /bin/sh -d /var/opt/gitlab/postgresql git
 # useradd -m -u 995 -g gitlab-ci -m -s /bin/sh -d /var/opt/gitlab/gitlab-ci gitlab-ci
 useradd -m -u 994 -g mattermost -m -s /bin/sh -d /var/opt/gitlab/mattermost mattermost
 useradd -m -u 993 -g registry -m -s /bin/sh -d /var/opt/gitlab/registry registry
+useradd -m -u 992 -g gitlab-prometheus -m -s /bin/sh -d /var/opt/gitlab/prometheus gitlab-prometheus

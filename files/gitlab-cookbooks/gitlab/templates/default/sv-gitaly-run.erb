@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e # fail on errors
+
+# Redirect stderr -> stdout
+exec 2>&1
+
+<%= render("mount_point_check.erb") %>
+
+cd <%= node['gitlab']['gitaly']['dir'] %>
+
+exec chpst -e <%= node['gitlab']['gitaly']['env_directory'] %> -P \
+  -U <%= node['gitlab']['user']['username'] %> \
+  -u <%= node['gitlab']['user']['username'] %> \
+  <%= node['gitlab']['gitaly']['bin_path'] %>

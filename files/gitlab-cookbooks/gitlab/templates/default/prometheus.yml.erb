@@ -1,0 +1,13 @@
+global:
+  scrape_interval: <%= @scrape_interval %>s
+  scrape_timeout: <%= @scrape_timeout %>s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['<%= @listen_address %>']
+<% if node['gitlab']['node-exporter']['enable'] %>
+  - job_name: node
+    static_configs:
+      - targets: ['<%= node['gitlab']['node-exporter']['listen_address'] %>']
+<% end -%>

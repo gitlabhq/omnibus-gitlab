@@ -8,8 +8,6 @@ if [ x$2 = x15 ] ; then
   exit 0
 fi
 
-# If the user runs 'gitlab-ctl restart mailroom' during this sleep
-# they may get a timeout, unfortunately.
-wait=30
+wait=5
 echo "Runit: waiting ${wait} seconds before restarting mail_room"
 sleep ${wait}

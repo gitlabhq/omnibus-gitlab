@@ -147,6 +147,10 @@ shell and the `passwd` command for non-superusers requires entering the current
 password prior to a new password. The user cannot enter a password that will
 match `'*'` and therefore the account remains password-less.
 
+Keep in mind that the git user must have access to the system so please review 
+your security settings at `/etc/security/access.conf` and make sure the git user 
+is not blocked.
+
 ### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
 The packaged Postgres instance will try to allocate 25% of total memory as
@@ -214,6 +218,30 @@ or container doesn't have access to kernel parameters.
 Try enabling the module on which sysctl errored out, on how to enable the module see example [here](http://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
+
+Another variation of this error reports the file system is read-only and shows following stack trace:
+
+```
+ * execute[load sysctl conf] action run
+    [execute] sysctl: setting key "kernel.shmall": Read-only file system
+              sysctl: setting key "kernel.shmmax": Read-only file system
+
+    ================================================================================
+    Error executing action `run` on resource 'execute[load sysctl conf]'
+    ================================================================================
+
+    Mixlib::ShellOut::ShellCommandFailed
+    ------------------------------------
+    Expected process to exit with [0], but received '255'
+    ---- Begin output of cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ----
+    STDOUT:
+    STDERR: sysctl: setting key "kernel.shmall": Read-only file system
+    sysctl: setting key "kernel.shmmax": Read-only file system
+    ---- End output of cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ----
+    Ran cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - returned 255
+```
+
+This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
 
 ### I am unable to install omnibus-gitlab without root access
 
