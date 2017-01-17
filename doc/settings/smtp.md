@@ -128,6 +128,8 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "gitlab@mydomain.com"
 gitlab_rails['smtp_password'] = "mypassword"
 gitlab_rails['smtp_domain'] = "smtp.zoho.com"
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
 ### OVH
@@ -295,9 +297,6 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
-
-
-
 ```
 
 ### Rackspace
@@ -316,6 +315,21 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 
 gitlab_rails['gitlab_email_from'] = 'username@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'username@domain.com'
+```
+
+### DomainFactory (df.eu)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "sslout.df.eu"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
 ### More examples are welcome

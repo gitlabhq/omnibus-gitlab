@@ -305,10 +305,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['rate_limit_requests_per_period'] = 10
 # gitlab_rails['rate_limit_period'] = 60
 
-#### Change the initial default admin password.
-####! **Only applicable on initial setup, changing this setting after database
+#### Change the initial default admin password and shared runner registraion tokens.
+####! **Only applicable on initial setup, changing these settings after database
 ####!   is created and seeded won't yield any change.**
 # gitlab_rails['initial_root_password'] = "password"
+# gitlab_rails['initial_shared_runners_registration_token'] = "token"
 
 #### Enable or disable automatic database migrations
 # gitlab_rails['auto_migrate'] = true
@@ -1132,6 +1133,46 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # registry_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 
+################################################################################
+## Prometheus
+################################################################################
+
+##! Docs: https://docs.gitlab.com/omnibus/gitlab-prometheus/prometheus.html
+
+# prometheus['enable'] = false
+# prometheus['username'] = 'gitlab-prometheus'
+# prometheus['uid'] = nil
+# prometheus['gid'] = nil
+# prometheus['shell'] = '/bin/sh'
+# prometheus['home'] = '/var/opt/gitlab/prometheus'
+# prometheus['log_directory'] = '/var/log/gitlab/prometheus'
+# prometheus['scrape_interval'] = 15
+# prometheus['scrape_timeout'] = 15
+# prometheus['flags'] = {
+  'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
+  'storage.local.memory-chunks' => '50000',
+  'storage.local.max-chunks-to-persist' => '40000',
+  'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
+}
+
+##! Advanced settings. Should be changed only if absolutely needed.
+# prometheus['listen_address'] = 'localhost:9090'
+
+################################################################################
+## Prometheus Node Exporter
+################################################################################
+
+##! Docs: https://docs.gitlab.com/omnibus/gitlab-prometheus/node-exporter.html
+
+# node_exporter['enable'] = false
+# node_exporter['home'] = '/var/opt/gitlab/node-exporter'
+# node_exporter['log_directory'] = '/var/log/gitlab/node-exporter'
+# node_exporter['flags'] = {
+  'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
+}
+
+##! Advanced settings. Should be changed only if absolutely needed.
+# node_exporter['listen_address'] = 'localhost:9100'
 
 ################################################################################
 ################################################################################

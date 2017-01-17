@@ -104,6 +104,7 @@ build do
   # Remove auto-generated files
   delete '.secret'
   delete '.gitlab_shell_secret'
+  delete '.gitlab_workhorse_secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'
