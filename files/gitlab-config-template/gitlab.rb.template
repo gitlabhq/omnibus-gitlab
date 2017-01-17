@@ -1154,11 +1154,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
 # prometheus['flags'] = {
-  'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
-  'storage.local.memory-chunks' => '50000',
-  'storage.local.max-chunks-to-persist' => '40000',
-  'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
-}
+#   'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
+#   'storage.local.memory-chunks' => '50000',
+#   'storage.local.max-chunks-to-persist' => '40000',
+#   'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
+# }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # prometheus['listen_address'] = 'localhost:9090'
@@ -1173,8 +1173,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['home'] = '/var/opt/gitlab/node-exporter'
 # node_exporter['log_directory'] = '/var/log/gitlab/node-exporter'
 # node_exporter['flags'] = {
-  'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
-}
+#   'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
+# }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # node_exporter['listen_address'] = 'localhost:9100'
