@@ -137,6 +137,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
 
+### GitLab Mattermost
+###! These settings are void if Mattermost is installed on the same omnibus
+###! install
+# gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
+
 ### LDAP Settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/ldap.html
 ###! **Be careful not to break the indentation in the ldap_servers block. It is
