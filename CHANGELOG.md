@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Allow users to specify an initial shared runner registration token
 - Update Mattermost to version 3.6
 - Include Prometheus and Node Exporter, off by default
+- Let uses expose Mattermost host if installed on other server
 
 8.15.0
 
