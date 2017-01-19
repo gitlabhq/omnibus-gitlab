@@ -187,6 +187,14 @@ If you want to specify a password for the default `root` user, specify the
 gitlab_rails['initial_root_password'] = 'nonstandardpassword'
 ```
 
+If you want to specify the initial registration token for shared GitLab Runners,
+specify the `initial_shared_runners_registration_token` setting in `/etc/gitlab/gitlab.rb`
+before running the `gitlab:setup` command:
+
+```ruby
+gitlab_rails['initial_shared_runners_registration_token'] = 'token'
+```
+
 ## Disabling automatic database migration
 
 If you have multiple GitLab servers sharing a database, you will want to limit the

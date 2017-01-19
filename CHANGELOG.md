@@ -6,7 +6,8 @@ omnibus-gitlab repository.
 8.16.0
 
 - Update git to 2.10.2 27cde301
-- Convert build make task to a rake task, with log level option 5f65794d
+- Allow users to specify an initial shared runner registration token
+- Include Prometheus and Node Exporter, off by default
 
 8.15.0
 
