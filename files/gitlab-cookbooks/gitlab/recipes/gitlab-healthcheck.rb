@@ -23,8 +23,8 @@ template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   group 'root'
   variables (
     {
-      host: "#{server_schema}://#{server_host}"
-      port: node['gitlab']['nginx']['listen_port']
+      host: "#{server_schema}://#{server_host}",
+      port: node['gitlab']['nginx']['listen_port'],
       path: "#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
     }
   )
