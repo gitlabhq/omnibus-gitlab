@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Update git to 2.10.2 27cde301
 - Allow users to specify an initial shared runner registration token
 - Include Prometheus and Node Exporter, off by default
+- Let uses expose Mattermost host if installed on other server
 
 8.15.0
 

@@ -118,6 +118,26 @@ describe 'gitlab::gitlab-rails' do
             with_content(/mattermost:\s+enabled: false\s+host:\s+/)
         end
       end
+
+      context 'mattermost on another server' do
+        it 'sets the mattermost host' do
+          stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
+
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+            with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
+        end
+
+        context 'values set twice' do
+          it 'sets the mattermost external url' do
+            stub_gitlab_rb(mattermost: { enable: true },
+                           mattermost_external_url: 'http://my.url.com',
+                           gitlab_rails: { mattermost_host: 'http://do.not/setme' })
+
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+              with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
+          end
+        end
+      end
     end
   end
 
@@ -169,10 +189,10 @@ describe 'gitlab::gitlab-rails' do
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
             .with(
-              owner: 'root',
-              group: 'root',
-              mode: '0644',
-            )
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
         end
@@ -255,10 +275,10 @@ describe 'gitlab::gitlab-rails' do
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
             .with(
-              owner: 'root',
-              group: 'root',
-              mode: '0644',
-            )
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
         end
 
         it 'template triggers notifications' do
@@ -291,10 +311,10 @@ describe 'gitlab::gitlab-rails' do
         it 'uses the correct owner and permissions' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
             .with(
-              owner: 'root',
-              group: 'root',
-              mode: '0644',
-            )
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
         end
 
         it 'template triggers notifications' do
