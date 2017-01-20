@@ -11,3 +11,5 @@ node_exporter['enable'] = true
 ```
 
 After saving the changes, run `sudo gitlab-ctl reconfigure`.
+
+Node Exporter by default will listen on `TCP port 9100`.
