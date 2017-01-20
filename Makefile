@@ -91,17 +91,17 @@ docker_build: docker_cleanup
 	docker build --pull -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
 
 docker_push:
-	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
 docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
 	docker push gitlab/$(RELEASE_PACKAGE):rc
 
 docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	docker tag -f $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
 	docker push gitlab/$(RELEASE_PACKAGE):latest
 
 do_docker_master:
