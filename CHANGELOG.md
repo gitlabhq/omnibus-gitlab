@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.7
+
+- No changes
+
+8.14.6
+
+- No changes
+
 8.14.5
 - Expose client_output_buffer_limit redis settings
 
