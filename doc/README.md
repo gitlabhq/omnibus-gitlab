@@ -85,7 +85,7 @@ monitoring included in the Omnibus GitLab package.
 ## Omnibus GitLab developer documentation
 
 - [Development Setup](development/README.md)
-- [Omnibus GitLab Architecture](doc/architecture/README.md)
+- [Omnibus GitLab Architecture](architecture/README.md)
 - [Creating patches](development/creating-patches.md)
 - [Release process](release/README.md)
 - [Building your own package](build/README.md)
