@@ -1142,7 +1142,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Prometheus
 ################################################################################
 
-##! Docs: https://docs.gitlab.com/omnibus/gitlab-prometheus/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
 
 # prometheus['enable'] = false
 # prometheus['username'] = 'gitlab-prometheus'
@@ -1167,7 +1167,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Prometheus Node Exporter
 ################################################################################
 
-##! Docs: https://docs.gitlab.com/omnibus/gitlab-prometheus/node-exporter.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
 
 # node_exporter['enable'] = false
 # node_exporter['home'] = '/var/opt/gitlab/node-exporter'
