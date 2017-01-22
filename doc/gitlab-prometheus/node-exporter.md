@@ -10,6 +10,4 @@ uncomment and edit the following line:
 node_exporter['enable'] = true
 ```
 
-After saving the changes, run `sudo gitlab-ctl reconfigure`.
-
-Node Exporter by default will listen on `TCP port 9100`.
+After saving the changes, run `sudo gitlab-ctl reconfigure`. If [Prometheus](prometheus.md) has been enabled, it will automatically begin collecting performance data from Node Exporter.
