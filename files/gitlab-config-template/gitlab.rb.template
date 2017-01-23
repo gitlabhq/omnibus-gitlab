@@ -490,6 +490,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # unicorn['worker_timeout'] = 60
+###! Minimum worker_processes is 2 at this moment
+###! See https://gitlab.com/gitlab-org/gitlab-ce/issues/18771
 # unicorn['worker_processes'] = 2
 
 ### Advanced settings
