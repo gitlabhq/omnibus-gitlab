@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2015 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,28 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "omnibus-ctl"
+default_version "0.3.6"
 
-license "MIT"
-license_file "LICENSE"
+license "Apache-2.0"
+license_file "https://github.com/chef/omnibus-ctl/blob/master/LICENSE"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
+dependency "ruby"
+dependency "rubygems"
+dependency "bundler"
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source git: "https://github.com/chef/omnibus-ctl.git"
 
-relative_path "node-v#{version}"
+relative_path "omnibus-ctl"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  # Remove existing built gems in case they exist in the current dir
+  delete "omnibus-ctl-*.gem"
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  gem "build omnibus-ctl.gemspec", env: env
+  gem "install omnibus-ctl-*.gem --no-rdoc --no-ri", env: env
 
-  make "-j #{workers}", env: env
-  make "install", env: env
+  touch "#{install_dir}/embedded/service/omnibus-ctl/.gitkeep"
 end

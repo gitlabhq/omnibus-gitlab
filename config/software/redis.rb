@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +14,28 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "redis"
 
-license "MIT"
-license_file "LICENSE"
+license "BSD-3-Clause"
+license_file "COPYING"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
+dependency "config_guess"
+default_version "3.2.5"
+
+version "3.2.5" do
+  source md5: "d3d2b4dd4b2a3e07ee6f63c526b66b08"
 end
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
 
-relative_path "node-v#{version}"
+relative_path "redis-#{version}"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_standard_compiler_flags(with_embedded_path).merge(
+    "PREFIX" => "#{install_dir}/embedded"
+  )
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
-
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  update_config_guess
 
   make "-j #{workers}", env: env
   make "install", env: env

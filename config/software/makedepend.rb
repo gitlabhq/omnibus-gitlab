@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2014 Chef, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,30 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "makedepend"
+default_version "1.0.5"
 
 license "MIT"
-license_file "LICENSE"
+license_file "COPYING"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
+source url: "https://www.x.org/releases/individual/util/makedepend-1.0.5.tar.gz",
+       md5: "efb2d7c7e22840947863efaedc175747"
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+relative_path "makedepend-1.0.5"
 
-relative_path "node-v#{version}"
+dependency "xproto"
+dependency "util-macros"
+dependency "pkg-config-lite"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  if solaris_10?
+    env["PKG_CONFIG"] = "#{install_dir}/embedded/bin/pkg-config"
+  end
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  command "./configure --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make "-j #{workers} install", env: env
 end

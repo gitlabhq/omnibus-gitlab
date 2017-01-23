@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,34 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "libtool"
+default_version "2.4"
 
-license "MIT"
-license_file "LICENSE"
+license "GPL-2.0"
+license_file "COPYING"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
+dependency "config_guess"
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+# NOTE: 2.4.6 2.4.2 do not compile on solaris2 yet
+version("2.4")   { source md5: "b32b04148ecdd7344abc6fe8bd1bb021" }
 
-relative_path "node-v#{version}"
+source url: "https://ftp.gnu.org/gnu/libtool/libtool-#{version}.tar.gz"
+
+relative_path "libtool-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  update_config_guess
+  update_config_guess(target: "libltdl/config")
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  if aix?
+    env["M4"] = "/opt/freeware/bin/m4"
+  end
 
-  make "-j #{workers}", env: env
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded", env: env
+
+  make env: env
   make "install", env: env
 end

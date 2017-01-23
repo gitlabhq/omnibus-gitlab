@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +14,32 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "popt"
+default_version "1.16"
 
 license "MIT"
-license_file "LICENSE"
+license_file "COPYING"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
+dependency "config_guess"
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "http://rpm5.org/files/popt/popt-#{version}.tar.gz",
+       md5: "3743beefa3dd6247a73f8f7a32c14c33"
 
-relative_path "node-v#{version}"
+relative_path "popt-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  update_config_guess
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  if version == "1.7.10.1" && (ppc64? || ppc64le?)
+    patch source: "v1.7.10.1.ppc64le-configure.patch", plevel: 1
+  end
+
+  # --disable-nls => Disable localization support.
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded" \
+          " --disable-nls", env: env
 
   make "-j #{workers}", env: env
   make "install", env: env

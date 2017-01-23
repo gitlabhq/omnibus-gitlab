@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2016 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,20 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "bundler"
 
 license "MIT"
-license_file "LICENSE"
+license_file "https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
-
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
-
-relative_path "node-v#{version}"
+dependency "rubygems"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
-
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
-
-  make "-j #{workers}", env: env
-  make "install", env: env
+  v_opts = "--version '#{version}'" unless version.nil?
+  gem [
+    "install bundler",
+    v_opts,
+    "--no-ri --no-rdoc",
+  ].compact.join(" "), env: env
 end

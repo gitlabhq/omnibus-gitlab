@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/opscode/omnibus-software.git
-  revision: dee0513e5234d5e42e9d0bdac90b1ba2d7876e7a
-  branch: master
-  specs:
-    omnibus-software (4.0.0)
-      chef-sugar (>= 3.4.0)
-      omnibus (>= 5.2.0)
-
-GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
   revision: a07663531cd734f123f069affc1a7245d971b80c
   branch: omnibus-5-4-0
@@ -194,7 +185,6 @@ DEPENDENCIES
   knapsack
   ohai
   omnibus!
-  omnibus-software!
   package_cloud
   rake
   rspec

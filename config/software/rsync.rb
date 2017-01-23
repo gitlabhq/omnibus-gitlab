@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +14,28 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "rsync"
+default_version "3.1.2"
 
-license "MIT"
-license_file "LICENSE"
+license "GPL v3"
+license_file "COPYING"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
+dependency "popt"
+
+version "3.1.2" do
+  source md5: "0f758d7e000c0f7f7d3792610fad70cb"
 end
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"
 
-relative_path "node-v#{version}"
+relative_path "rsync-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
-
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded" \
+          " --disable-iconv", env: env
 
   make "-j #{workers}", env: env
   make "install", env: env

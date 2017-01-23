@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +14,26 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "expat"
+default_version "2.2.0"
+
+relative_path "expat-#{version}"
+dependency "config_guess"
 
 license "MIT"
-license_file "LICENSE"
+license_file "COPYING"
+skip_transitive_dependency_licensing true
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
-
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
-
-relative_path "node-v#{version}"
+source url: "http://downloads.sourceforge.net/project/expat/expat/#{version}/expat-#{version}.tar.bz2",
+       md5: "2f47841c829facb346eb6e3fab5212e2"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  update_config_guess(target: "conftools")
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
   make "install", env: env

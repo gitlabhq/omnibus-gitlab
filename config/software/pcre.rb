@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +14,35 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "pcre"
+default_version "8.38"
 
-license "MIT"
-license_file "LICENSE"
+license "BSD-2-Clause"
+license_file "LICENCE"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
+dependency "libedit"
+dependency "ncurses"
+dependency "config_guess"
+
+version "8.38" do
+  source md5: "8a353fe1450216b6655dfcf3561716d9"
 end
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "http://downloads.sourceforge.net/project/pcre/pcre/#{version}/pcre-#{version}.tar.gz"
 
-relative_path "node-v#{version}"
+relative_path "pcre-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  update_config_guess
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded" \
+          " --disable-cpp" \
+          " --enable-utf" \
+          " --enable-unicode-properties" \
+          " --enable-pcretest-libedit", env: env
 
   make "-j #{workers}", env: env
   make "install", env: env

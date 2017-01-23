@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2012-2015 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,32 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "libyaml"
+default_version "0.1.6"
 
 license "MIT"
 license_file "LICENSE"
 
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
-end
+dependency "config_guess"
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz",
+       md5: "5fe00cda18ca5daeb43762b80c38e06e"
 
-relative_path "node-v#{version}"
+relative_path "yaml-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
+  update_config_guess(target: "config")
 
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  configure "--enable-shared", env: env
+
+  # Windows had worse automake/libtool version issues.
+  # Just patch the output instead.
+  if version == "0.1.6" && windows?
+    patch source: "v0.1.6.windows-configure.patch", plevel: 1, env: env
+  end
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make "-j #{workers} install", env: env
 end

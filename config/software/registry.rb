@@ -16,6 +16,8 @@
 ##
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name "registry"
 version = Gitlab::Version.new("registry", "2.4.1")
 

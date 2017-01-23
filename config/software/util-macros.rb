@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2014 Chef Software, Inc.
+# Copyright 2014 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,26 @@
 # limitations under the License.
 #
 
-name "nodejs"
-default_version "0.10.35"
+name "util-macros"
+default_version "1.18.0"
 
-license "MIT"
-license_file "LICENSE"
-
-version "0.10.35" do
-  source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
+version "1.18.0" do
+  source md5: "fd0ba21b3179703c071bbb4c3e5fb0f4"
 end
 
-source url: "https://nodejs.org/dist/v#{version}/node-v#{version}.tar.gz"
+source url: "https://www.x.org/releases/individual/util/util-macros-#{version}.tar.gz"
 
-relative_path "node-v#{version}"
+license "MIT"
+license_file "COPYING"
+
+relative_path "util-macros-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  args = if ohai['kernel']['machine'].start_with?('arm')
-           '--without-snapshot'
-         else
-           ''
-         end
-
-  command "python ./configure" \
-          " --prefix=#{install_dir}/embedded #{args}", env: env
+  command "./configure" \
+          " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make "-j #{workers} install", env: env
 end
