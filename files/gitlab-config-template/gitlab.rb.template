@@ -1,4 +1,10 @@
 ## GitLab configuration settings
+##! This file is generated during initial installation and **is not** modified
+##! during upgrades.
+##! Check out the latest version of this file to know about the different 
+##! settings that can be configured by this file, which may be found at:
+##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
+
 
 ## GitLab URL
 ##! URL on which GitLab will be reachable.
@@ -14,9 +20,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! ##! More information - Description, Docs, Links, Issues etc.
 ##! Configuration settings have a single # followed by a single space at the
 ##! beginning; Remove them to enable the setting.
-
-##! Latest options are listed at:
-##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
 
 ##! **Configuration settings below are optional.**
 ##! **The values currently assigned are only examples and ARE NOT the default
