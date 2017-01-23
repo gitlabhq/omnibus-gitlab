@@ -32,7 +32,15 @@ OptionParser.new do |opts|
   end
 end.parse!(ARGV)
 
-DATA_DIR = "#{data_path}/postgresql/data".freeze
+# Try to fetch the data_directory from the running database. Use the default
+# otherwise.
+begin
+  DATA_DIR = run_query('show data_directory').freeze
+rescue ExecutionError
+  log 'Error fetching data_directory from running database, using default value.'
+  DATA_DIR = "#{data_path}/postgresql/data".freeze
+end
+
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
 TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : DATA_DIR
 
