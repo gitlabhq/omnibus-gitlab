@@ -14,6 +14,7 @@ gem 'rake'
 gem 'knapsack'
 gem 'rubocop'
 gem 'docker-api'
+gem 'aws-sdk'
 
 group :test do
   gem 'byebug'
