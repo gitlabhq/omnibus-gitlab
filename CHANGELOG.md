@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.0
+
+- Remove deprecated Elasticsearch configuration options
+
 8.16.1
 
 - No changes
