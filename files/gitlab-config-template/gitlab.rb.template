@@ -1197,14 +1197,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
 
 ################################################################################
-## ElasticSearch (EE Only)
-##! Docs: http://docs.gitlab.com/ee/integration/elasticsearch.html
-################################################################################
-# gitlab_rails['elasticsearch_enabled'] = false
-# gitlab_rails['elasticsearch_host'] = "localhost"
-# gitlab_rails['elasticsearch_port'] = 9200
-
-################################################################################
 ## GitLab Pages (EE Only)
 ##! Docs: https://docs.gitlab.com/ee/pages/administration.html
 ################################################################################
