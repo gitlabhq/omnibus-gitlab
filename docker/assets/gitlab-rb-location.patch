@@ -1,6 +1,6 @@
 --- etc/gitlab.rb.template.bak	2015-09-22 20:55:42.088202003 +0000
 +++ etc/gitlab.rb.template	2015-09-22 20:55:50.888202003 +0000
-@@ -4,7 +4,7 @@
+@@ -10,7 +10,7 @@
  ##! URL on which GitLab will be reachable.
  ##! For more details on configuring external_url see:
  ##! https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab
