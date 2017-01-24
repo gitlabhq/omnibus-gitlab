@@ -111,7 +111,9 @@ mattermost['service_use_ssl'] = true
 where `mattermost-nginx.crt` and `mattermost-nginx.key` are ssl cert and key, respectively.
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Setting up SMTP for GitLab Mattermost
+## Email Notifications
+
+### Setting up SMTP for GitLab Mattermost
 
 By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows team creation and account signup using email and password. This should be `false` if you're using only an external authentication source such as GitLab.
 
