@@ -147,6 +147,15 @@ mattermost['email_feedback_email'] = "email@example.com"
 
 `email_connection_security` depends on your SMTP provider so you need to verify which of `TLS` or `STARTTLS` is valid for your provider.
 
+### Email Batching
+
+Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
+
+```ruby
+mattermost['service_site_url'] = 'https://mattermost.example.com:443'
+mattermost['email_enable_batching'] = true
+```
+
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 ## Community Support Resources
