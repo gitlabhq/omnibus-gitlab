@@ -35,14 +35,11 @@ action_class do
 end
 
 action :create do
-  notifying_block do
-    unless key_exists?
-      create_key
-      save_private_key
-      save_public_key
-      update_directory_permissions
+  update_directory_permissions
 
-      new_resource.updated_by_last_action(true)
-    end
+  unless key_exists?
+    create_key
+    save_private_key
+    save_public_key
   end
 end

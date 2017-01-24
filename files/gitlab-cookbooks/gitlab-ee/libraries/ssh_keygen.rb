@@ -180,13 +180,12 @@ module SSHKeygen
 
     def update_directory_permissions
       return false unless new_resource.secure_directory
-      converge_by("Update directory permissions at #{File.dirname(new_resource.path)}") do
-        directory ::File.dirname(new_resource.path) do
-          action :create
-          owner new_resource.owner
-          group new_resource.group
-          mode 0700
-        end
+
+      directory ::File.dirname(new_resource.path) do
+        action :create
+        owner new_resource.owner
+        group new_resource.group
+        mode 0700
       end
     end
 
