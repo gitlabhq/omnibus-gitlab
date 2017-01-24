@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.16.2
+
+- Upgrade zlib to 1.2.11 cfa4e3c0
+
 8.16.1
 
 - No changes
