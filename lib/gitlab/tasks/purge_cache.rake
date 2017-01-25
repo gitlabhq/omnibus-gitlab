@@ -11,10 +11,6 @@ namespace :build do
       "/var/cache/omnibus/src/gitlab-shell",
       "/var/cache/omnibus/src/gitlab-workhorse",
 
-      # Force a new download of Curl's certificate bundle because it gets updated
-      # upstream silently once every while
-      "/var/cache/omnibus/cache/cacert.pem",
-
       # Clear out old packages to prevent uploading them a second time to S3
       "/var/cache/omnibus/pkg"
     ].each do |path|
