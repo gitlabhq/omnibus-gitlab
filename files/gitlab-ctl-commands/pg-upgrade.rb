@@ -15,8 +15,15 @@
 # limitations under the License.
 #
 
-require 'mixlib/shellout'
 require 'optparse'
+
+# Testing needs require_relative line, but since this file is actually eval'd
+# that won't work in the wild. So we require by full path.
+begin
+  require_relative 'lib/gitlab_ctl'
+rescue LoadError
+  require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
+end
 
 options = {
   wait: true
@@ -32,11 +39,12 @@ OptionParser.new do |opts|
   end
 end.parse!(ARGV)
 
+db_worker = GitlabCtl::PgUpgrade.new(base_path)
 # Try to fetch the data_directory from the running database. Use the default
 # otherwise.
 begin
-  DATA_DIR = run_query('show data_directory').freeze
-rescue ExecutionError
+  DATA_DIR = db_worker.run_query('show data_directory').freeze
+rescue GitlabCtl::Errors::ExecutionError
   log 'Error fetching data_directory from running database, using default value.'
   DATA_DIR = "#{data_path}/postgresql/data".freeze
 end
@@ -49,7 +57,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
                            1 do |_cmd_name|
   maintenance_mode('enable')
   if progress_message('Checking if we need to downgrade') do
-    fetch_running_version == default_version
+    db_worker.fetch_running_version == default_version
   end
     log "Already running #{default_version}"
     exit! 1
@@ -78,7 +86,7 @@ end
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            1 do |_cmd_name|
-  running_version = fetch_running_version
+  running_version = db_worker.fetch_running_version
 
   unless progress_message(
     'Checking for an omnibus managed postgresql') do
@@ -146,8 +154,8 @@ add_command_under_category 'pg-upgrade', 'database',
   delay_for(30) if options[:wait]
 
   # Get the existing locale before we move on
-  locale = fetch_lc_collate
-  encoding = fetch_server_encoding
+  locale = db_worker.fetch_lc_collate
+  encoding = db_worker.fetch_server_encoding
 
   progress_message('Stopping the database') do
     run_sv_command_for_service('stop', 'postgresql')
@@ -164,22 +172,36 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   unless progress_message('Initializing the new database') do
-    run_pg_command(
-      "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} " \
-      "--locale #{locale} " \
-      "--encoding #{encoding} " \
-      " --lc-collate=#{locale} " \
-      "--lc-ctype=#{locale}"
-    )
+    begin
+      db_worker.run_pg_command(
+        "#{base_path}/embedded/bin/initdb -D #{TMP_DATA_DIR}.#{upgrade_version} " \
+        "--locale #{locale} " \
+        "--encoding #{encoding} " \
+        " --lc-collate=#{locale} " \
+        "--lc-ctype=#{locale}"
+      )
+    rescue GitlabCtl::Errors::ExecutionError => ee
+      log "Error initializing database for #{upgrade_version}"
+      log "STDOUT: #{ee.stdout}"
+      log "STDERR: #{ee.stderr}"
+      die 'Please check the output and try again'
+    end
   end
     die 'Error initializing new database'
   end
 
   unless progress_message('Upgrading the data') do
-    run_pg_command(
-      "#{base_path}/embedded/bin/pg_upgrade -b #{base_path}/embedded/postgresql/#{default_version}/bin " \
-      "-d #{DATA_DIR} -D #{TMP_DATA_DIR}.#{upgrade_version} -B #{base_path}/embedded/bin"
-    )
+    begin
+      db_worker.run_pg_command(
+        "#{base_path}/embedded/bin/pg_upgrade " \
+        "-b #{base_path}/embedded/postgresql/#{default_version}/bin " \
+        "-d #{DATA_DIR} " \
+        "-D #{TMP_DATA_DIR}.#{upgrade_version} " \
+        "-B #{base_path}/embedded/bin"
+      )
+    rescue GitlabCTL::Errors::ExecutionError
+      false
+    end
   end
     die 'Error upgrading the database'
   end
@@ -203,48 +225,23 @@ add_command_under_category 'pg-upgrade', 'database',
     die 'Something went wrong during final reconfiguration, please check the output'
   end
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
-  run_pg_command("/bin/sh #{DATA_DIR}/../analyze_new_cluster.sh")
+  analyze_script = File.join(DATA_DIR, '../analyze_new_cluster.sh')
+  begin
+    db_worker.run_pg_command("/bin/sh #{analyze_script}")
+  rescue GitlabCTL::Errors::ExecutionError => ee
+    log 'Error running analyze_new_cluster.sh'
+    log "STDOUT: #{ee.stdout}"
+    log "STDERR: #{ee.stderr}"
+    log 'Please check the output, and rerun the command if needed:'
+    log "/bin/sh #{analyze_script}"
+    log 'If the error persists, please open an issue at: '
+    log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
+  end
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{TMP_DATA_DIR}.#{default_version}"
   maintenance_mode('disable')
   exit! 0
-end
-
-class ExecutionError < StandardError
-  attr_accessor :command, :stdout, :stderr
-  def initialize(command, stdout, stderr)
-    @command = command
-    @stdout = stdout
-    @stderr = stderr
-  end
-end
-
-def get_command_output(command)
-  shell_out = Mixlib::ShellOut.new(command)
-  shell_out.run_command
-  begin
-    shell_out.error!
-  rescue Mixlib::ShellOut::ShellCommandFailed
-    raise ExecutionError.new(command, shell_out.stdout, shell_out.stderr)
-  end
-  shell_out.stdout
-end
-
-def run_pg_command(command)
-  begin
-    results = get_command_output("su - gitlab-psql -c \"#{command}\"")
-  rescue ExecutionError => e
-    log "Could not run: #{command}"
-    log "STDOUT: #{e.stdout}"
-    log "STDERR: #{e.stderr}"
-    die 'Please check the output and try again'
-  end
-  results
-end
-
-def fetch_running_version
-  get_command_output("#{base_path}/embedded/bin/pg_ctl --version").split.last
 end
 
 def version_from_manifest(software)
@@ -265,24 +262,10 @@ def upgrade_version
   version_from_manifest('postgresql_new')
 end
 
-def run_query(query)
-  get_command_output(
-    "#{base_path}/bin/gitlab-psql -d postgres -c '#{query}' -q -t"
-  ).strip
-end
-
-def fetch_lc_collate
-  run_query('SHOW LC_COLLATE')
-end
-
-def fetch_server_encoding
-  run_query('SHOW SERVER_ENCODING')
-end
-
 def create_links(version)
   Dir.glob("#{INST_DIR}/#{version}/bin/*").each do |bin_file|
     destination = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
-    get_command_output("ln -sf #{bin_file} #{destination}")
+    GitlabCtl::Util.get_command_output("ln -sf #{bin_file} #{destination}")
   end
 end
 

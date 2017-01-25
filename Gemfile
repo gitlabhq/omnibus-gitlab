@@ -17,4 +17,5 @@ gem 'knapsack'
 group :test do
   gem 'byebug'
   gem 'chefspec'
+  gem 'omnibus-ctl'
 end

@@ -133,6 +133,7 @@ GEM
       plist (~> 3.1)
       systemu (~> 2.6.4)
       wmi-lite (~> 1.0)
+    omnibus-ctl (0.5.0)
     package_cloud (0.2.35)
       highline (= 1.6.20)
       json_pure (= 1.8.1)
@@ -194,6 +195,7 @@ DEPENDENCIES
   knapsack
   ohai
   omnibus!
+  omnibus-ctl
   omnibus-software!
   package_cloud
   rake
