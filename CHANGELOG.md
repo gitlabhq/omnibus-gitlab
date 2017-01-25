@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.15.6
+- Update Mattermost to 3.5.2 to patch a XSS vulnerability
+
 8.15.5
 
 - No changes
