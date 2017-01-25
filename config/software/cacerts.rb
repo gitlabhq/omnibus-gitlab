@@ -20,27 +20,27 @@ license "MPL-2.0"
 license_file "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version "2016.11.02"
+default_version "2017.01.18"
 
-version "2016.11.02" do
-  source md5: "11713bf9b8c10aca2fb4708f1ba01072"
+version "2017.01.18" do
+  source md5: "38cd779c9429ab6e2e5ae3437b763238"
 end
 
-source url: "https://curl.haxx.se/ca/cacert.pem"
-
-relative_path "cacerts-#{version}"
+# Source URL looks like https://curl.haxx.se/ca/cacert-2017-01-18.pem. The
+# version part has periods replaced with dashes.
+source url: "https://curl.haxx.se/ca/cacert-#{version.gsub('.', '-')}.pem"
 
 build do
   mkdir "#{install_dir}/embedded/ssl/certs"
 
   # Append the 1024bit Verisign certs so that S3 continues to work
   block do
-    unless File.foreach("#{project_dir}/cacert.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
-      File.open("#{project_dir}/cacert.pem", "a") { |fd| fd.write(VERISIGN_CERTS) }
+    unless File.foreach("#{project_dir}/cacert-#{version.gsub('.', '-')}.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
+      File.open("#{project_dir}/cacert-#{version.gsub('.', '-')}.pem", "a") { |fd| fd.write(VERISIGN_CERTS) }
     end
   end
 
-  copy "#{project_dir}/cacert.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"
+  copy "#{project_dir}/cacert-#{version.gsub('.', '-')}.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"
 
   # Windows does not support symlinks
   unless windows?
