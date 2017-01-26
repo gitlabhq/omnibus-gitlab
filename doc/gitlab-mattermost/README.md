@@ -111,7 +111,9 @@ mattermost['service_use_ssl'] = true
 where `mattermost-nginx.crt` and `mattermost-nginx.key` are ssl cert and key, respectively.
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-## Setting up SMTP for GitLab Mattermost
+## Email Notifications
+
+### Setting up SMTP for GitLab Mattermost
 
 By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows team creation and account signup using email and password. This should be `false` if you're using only an external authentication source such as GitLab.
 
@@ -146,6 +148,15 @@ mattermost['email_feedback_email'] = "email@example.com"
 ```
 
 `email_connection_security` depends on your SMTP provider so you need to verify which of `TLS` or `STARTTLS` is valid for your provider.
+
+### Email Batching
+
+Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
+
+```ruby
+mattermost['service_site_url'] = 'https://mattermost.example.com:443'
+mattermost['email_enable_batching'] = true
+```
 
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
