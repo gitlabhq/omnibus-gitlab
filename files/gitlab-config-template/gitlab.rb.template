@@ -322,6 +322,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Enable or disable automatic database migrations
 # gitlab_rails['auto_migrate'] = true
 
+#### This is advanced feature used by large gitlab deployments where loading
+#### whole RAILS env takes a lot of time.
+# gitlab_rails['rake_cache_clear'] = true
+
 ### GitLab database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
 ###! **Only needed if you use an external database.**

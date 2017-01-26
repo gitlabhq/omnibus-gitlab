@@ -101,20 +101,21 @@ describe 'gitlab::gitlab-rails' do
   end
 
   context 'creating gitlab.yml' do
+    gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
     context 'mattermost settings' do
       context 'mattermost is configured' do
         it 'exposes the mattermost host' do
           stub_gitlab_rb(mattermost: { enable: true },
                          mattermost_external_url: 'http://mattermost.domain.com')
 
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+          expect(chef_run).to render_file(gitlab_yml_path).
             with_content("host: http://mattermost.domain.com")
         end
       end
 
       context 'mattermost is not configured' do
         it 'has empty values' do
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+          expect(chef_run).to render_file(gitlab_yml_path).
             with_content(/mattermost:\s+enabled: false\s+host:\s+/)
         end
       end
@@ -136,6 +137,28 @@ describe 'gitlab::gitlab-rails' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
               with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
           end
+        end
+      end
+    end
+
+    context 'creating gitlab.yml' do
+      let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
+      # NOTE: Test if we pass proper notifications to other resources
+      context 'rails cache management' do
+        before do
+          allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).
+            and_return(false)
+        end
+
+        it 'should notify rails cache clear resource' do
+          expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
+        end
+
+        it 'should not notify rails cache clear resource if disabled' do
+          stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+
+          expect(gitlab_yml).not_to notify(
+            'execute[clear the gitlab-rails cache]')
         end
       end
     end
