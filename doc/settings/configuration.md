@@ -372,8 +372,9 @@ and must be configured in `/etc/gitlab/gitlab.rb`.
 
 ## Disabling automatic cache cleaning during installation
 
-If you have large gitlab installation, you might not want to run `rake cache:cleaner` task.
-As it can take long time to finish. Default `rake_cache_clear` is true.
+If you have large gitlab installation, you might not want to run `rake cache:clean` task.
+As it can take long time to finish. By default, cache clear task will run automatically
+during reconfigure.
 
 Edit `/etc/gitlab/gitlab.rb`:
 
