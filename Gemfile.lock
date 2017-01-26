@@ -77,6 +77,9 @@ GEM
       json
     erubis (2.7.0)
     excon (0.54.0)
+    fantaskspec (0.9.10)
+      rake (~> 10.0)
+      rspec (~> 3.0)
     fauxhai (3.9.0)
       net-ssh
     ffi (1.9.14)
@@ -186,6 +189,7 @@ DEPENDENCIES
   byebug
   chefspec
   docker-api
+  fantaskspec
   json
   knapsack
   ohai

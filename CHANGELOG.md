@@ -7,6 +7,14 @@ omnibus-gitlab repository.
 
 - Remove deprecated Elasticsearch configuration options
 
+8.16.3
+
+- Upgrade zlib to 1.2.11 cfa4e3c0
+
+8.16.2
+
+- No changes
+
 8.16.1
 
 - No changes

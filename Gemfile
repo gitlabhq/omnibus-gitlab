@@ -17,4 +17,5 @@ gem 'docker-api'
 group :test do
   gem 'byebug'
   gem 'chefspec'
+  gem 'fantaskspec'
 end

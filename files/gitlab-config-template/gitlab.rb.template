@@ -322,6 +322,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Enable or disable automatic database migrations
 # gitlab_rails['auto_migrate'] = true
 
+#### This is advanced feature used by large gitlab deployments where loading
+#### whole RAILS env takes a lot of time.
+# gitlab_rails['rake_cache_clear'] = true
+
 ### GitLab database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
 ###! **Only needed if you use an external database.**
@@ -493,6 +497,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # unicorn['worker_timeout'] = 60
+###! Minimum worker_processes is 2 at this moment
+###! See https://gitlab.com/gitlab-org/gitlab-ce/issues/18771
 # unicorn['worker_processes'] = 2
 
 ### Advanced settings
@@ -809,13 +815,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
 # logging['logrotate_postrotate'] = nil # no postrotate command by default
 # logging['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
-
-### EE only
-###! remote host to ship log messages to via UDP
-# logging['udp_log_shipping_host'] = nil
-
-###! remote port to ship log messages to via UDP
-# logging['udp_log_shipping_port'] = 514
 
 ################################################################################
 ## Logrotate

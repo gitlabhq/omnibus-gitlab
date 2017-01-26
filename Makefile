@@ -19,6 +19,7 @@ DOCKER_TAG:=nightly
 else
 DOCKER_TAG:=$(RELEASE_VERSION)
 endif
+LOG_LEVEL="info"
 
 populate_cache:
 	bin/omnibus cache populate
@@ -30,13 +31,13 @@ pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags
 
 build:
-	bin/omnibus build ${PROJECT} --log-level info
+	bundle exec rake build[${LOG_LEVEL}]
 
 # license_check should be run after `build` only. This is because otherwise 
 # entire package will be built everytime lib/gitlab/tasks/license_check.rake
 # is invoked. This will be troublesome while modifying the license_check task.
 license_check:
-	bundle exec rake license_check
+	bundle exec rake license:check
 # If this task were called 'release', running 'make release' would confuse Make
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
@@ -61,7 +62,7 @@ on_tag:
 	git describe --exact-match
 
 purge:
-	bundle exec rake purge
+	bundle exec rake build:purge_cache
 
 # Instead of pkg/gitlab-xxx.deb, put all files in pkg/ubuntu/gitlab-xxx.deb
 move_to_platform_dir:

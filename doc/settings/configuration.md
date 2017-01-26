@@ -370,6 +370,23 @@ for more information.
 File `config/initializers/rack_attack.rb` is managed by omnibus-gitlab
 and must be configured in `/etc/gitlab/gitlab.rb`.
 
+## Disabling automatic cache cleaning during installation
+
+If you have large gitlab installation, you might not want to run `rake cache:clean` task.
+As it can take long time to finish. By default, cache clear task will run automatically
+during reconfigure.
+
+Edit `/etc/gitlab/gitlab.rb`:
+
+```ruby
+# This is advanced feature used by large gitlab deployments where loading
+# whole RAILS env takes a lot of time.
+gitlab_rails['rake_cache_clear'] = false
+```
+
+Don't forget to remove the `#` comment characters at the beginning of this
+line.
+
 ### Enabling/Disabling Rack Attack and setting up basic auth throttling
 
 Next configuration settings control Rack Attack:
@@ -386,10 +403,10 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 
 ### Setting up paths to be protected by Rack Attack
 
-If you want to change default protected paths 
-set `gitlab_rails['rack_attack_protected_paths']` in config file. 
+If you want to change default protected paths
+set `gitlab_rails['rack_attack_protected_paths']` in config file.
 
-**Warning** This action will overwrite 
+**Warning** This action will overwrite
 list provided by omnibus-gitlab:
 
 ```ruby
@@ -414,7 +431,7 @@ then you need to escape curly brackets or use single quoted string.
 For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
 
 
-### Setting up throttling for 'paths to be protected' 
+### Setting up throttling for 'paths to be protected'
 Use next options to control throttling 'limit' and 'period':
 
 ```ruby

@@ -48,34 +48,78 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 1. On your terminal call `oc cluster up  --host-data-dir='/srv/openshift'`
    - Note that oc cluster needs access to port 80 on your host, so you may need to stop any webserver while using OpenShift
 
-2. Create a new namespace to assign storage and permissions to.
+1. Create a new namespace to assign storage and permissions to.
    - `oc new-project <namespace>`
 
-3. In order to allow the GitLab pod to run as root you need to edit the anyuid security context:
-   - `oc edit scc anyuid`
-   - and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
+1. Login as system admin
+   - `oc login -u system:admin`
 
-4. Create some Persistent Volumes for GitLab to use.
-   - Create 4 files with the following, but iterate the name and path
-```
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv0001
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-  - ReadWriteOnce
-  hostPath:
-    path: /srv/openshift-gitlab/pv0001
-  persistentVolumeReclaimPolicy: Recycle
-```
+1. In order to allow the GitLab pod to run as root you need to edit the anyuid security context:
+   - `oc adm policy add-scc-to-user anyuid system:serviceaccount:<namespace>:<gitlab-app-name>-user`
+   - (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
+
+1. Create some Persistent Volumes for GitLab to use.
+   - Create a file with the following:
+
+    ```
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv0001
+    spec:
+      capacity:
+        storage: 5Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /srv/openshift-gitlab/pv0001
+      persistentVolumeReclaimPolicy: Recycle
+    ---
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv0002
+    spec:
+      capacity:
+        storage: 5Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /srv/openshift-gitlab/pv0002
+      persistentVolumeReclaimPolicy: Recycle
+    ---
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv0003
+    spec:
+      capacity:
+        storage: 5Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /srv/openshift-gitlab/pv0003
+      persistentVolumeReclaimPolicy: Recycle
+    ---
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv0004
+    spec:
+      capacity:
+        storage: 5Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /srv/openshift-gitlab/pv0004
+      persistentVolumeReclaimPolicy: Recycle
+    ```
+
    - run `oc create -f <filename>` for each file to add them to the cluster
 
-5. Create each of the host paths on your own machine and ensure they have a `777` filemode
+1. Create each of the host paths on your own machine and ensure they have a `777` filemode
 
-6. You can now login to the UI at https://localhost:8443/console/ and create a new project
+1. You can now login to the UI at https://localhost:8443/console/
 
 #### Production Ansible Installer
 
