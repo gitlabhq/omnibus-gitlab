@@ -61,25 +61,6 @@ else
 end
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
-# Overrides for remote URLs of the software
-#
-# Original git://git.sv.gnu.org/config.git is failing intermittently
-config_guess_version =  Gitlab::Version.new('config_guess', "master")
-rb_readline_version = Gitlab::Version.new('rb-readline', "master")
-
-override :ruby, version: '2.3.3', source: { md5: 'e485f3a55649eb24a1e2e1a40bc120df' }
-override :rubygems, version: '2.6.6'
-override :'chef-gem', version: '12.12.15'
-override :redis, version: '3.2.5', source: { md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08' }
-override :liblzma, version: '5.2.2', source: { md5: '7cf6a8544a7dae8e8106fdf7addfa28c' }
-override :libxml2, version: '2.9.4', source: { md5: 'ae249165c173b1ff386ee8ad676815f5' }
-override :pcre, version: '8.38', source: { md5: '8a353fe1450216b6655dfcf3561716d9', url: "http://downloads.sourceforge.net/project/pcre/pcre/8.38/pcre-8.38.tar.gz" }
-override :expat, version: '2.2.0', source: { md5: '2f47841c829facb346eb6e3fab5212e2', url: "http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2" }
-override :config_guess, version: config_guess_version.print, source: { git: config_guess_version.remote }
-override :rsync, version: '3.1.2'
-override :'rb-readline' , version: rb_readline_version.print, source: { git: rb_readline_version.remote }
-override :zlib, version: '1.2.10', source: { sha256: '8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017' }
-
 # Openssh needs to be installed
 
 if suse?

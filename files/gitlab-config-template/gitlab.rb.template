@@ -1,4 +1,10 @@
 ## GitLab configuration settings
+##! This file is generated during initial installation and **is not** modified
+##! during upgrades.
+##! Check out the latest version of this file to know about the different 
+##! settings that can be configured by this file, which may be found at:
+##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
+
 
 ## GitLab URL
 ##! URL on which GitLab will be reachable.
@@ -14,9 +20,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! ##! More information - Description, Docs, Links, Issues etc.
 ##! Configuration settings have a single # followed by a single space at the
 ##! beginning; Remove them to enable the setting.
-
-##! Latest options are listed at:
-##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
 
 ##! **Configuration settings below are optional.**
 ##! **The values currently assigned are only examples and ARE NOT the default
@@ -319,6 +322,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Enable or disable automatic database migrations
 # gitlab_rails['auto_migrate'] = true
 
+#### This is advanced feature used by large gitlab deployments where loading
+#### whole RAILS env takes a lot of time.
+# gitlab_rails['rake_cache_clear'] = true
+
 ### GitLab database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
 ###! **Only needed if you use an external database.**
@@ -490,6 +497,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # unicorn['worker_timeout'] = 60
+###! Minimum worker_processes is 2 at this moment
+###! See https://gitlab.com/gitlab-org/gitlab-ce/issues/18771
 # unicorn['worker_processes'] = 2
 
 ### Advanced settings
@@ -806,13 +815,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['logrotate_method'] = "copytruncate" # see 'man logrotate'
 # logging['logrotate_postrotate'] = nil # no postrotate command by default
 # logging['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
-
-### EE only
-###! remote host to ship log messages to via UDP
-# logging['udp_log_shipping_host'] = nil
-
-###! remote port to ship log messages to via UDP
-# logging['udp_log_shipping_port'] = 514
 
 ################################################################################
 ## Logrotate
@@ -1195,14 +1197,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['update_all_remote_mirrors_worker_cron'] = "30 * * * *"
 # gitlab_rails['update_all_mirrors_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
-
-################################################################################
-## ElasticSearch (EE Only)
-##! Docs: http://docs.gitlab.com/ee/integration/elasticsearch.html
-################################################################################
-# gitlab_rails['elasticsearch_enabled'] = false
-# gitlab_rails['elasticsearch_host'] = "localhost"
-# gitlab_rails['elasticsearch_port'] = 9200
 
 ################################################################################
 ## GitLab Pages (EE Only)

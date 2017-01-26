@@ -3,6 +3,22 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.0
+
+- Remove deprecated Elasticsearch configuration options
+
+8.16.3
+
+- Upgrade zlib to 1.2.11 cfa4e3c0
+
+8.16.2
+
+- No changes
+
+8.16.1
+
+- No changes
+
 8.16.0
 
 - Update git to 2.10.2 27cde301
@@ -10,6 +26,26 @@ omnibus-gitlab repository.
 - Update Mattermost to version 3.6
 - Include Prometheus and Node Exporter, off by default
 - Let uses expose Mattermost host if installed on other server
+
+8.15.5
+
+- No changes
+
+8.15.4
+
+- No changes
+
+8.15.3
+
+- No changes
+
+8.15.2
+
+- No changes
+
+8.15.1
+
+- No changes
 
 8.15.0
 
@@ -30,6 +66,14 @@ omnibus-gitlab repository.
 - Add notification for new PostgreSQL version 05dbb3ec
 - Update libcurl to 7.52.0 ea11a83
 - Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
+
+8.14.7
+
+- No changes
+
+8.14.6
+
+- No changes
 
 8.14.5
 
@@ -66,6 +110,14 @@ omnibus-gitlab repository.
 - Support Redis Sentinel daemon (EE only) 457c4764
 - Separate package repositories for OL and SL e37eaae
 - Add mailroom idle timeout configuration 0488f3de
+
+8.13.12
+
+- No changes
+
+8.13.11
+
+- No changes
 
 8.13.10
 

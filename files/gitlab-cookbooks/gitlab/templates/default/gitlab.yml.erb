@@ -152,14 +152,6 @@ production: &base
     external_http: <%= @pages_external_http %>
     external_https: <%= @pages_external_https %>
 
-  ## Elasticsearch (EE only)
-  # Enable it if you are going to use elasticsearch instead of
-  # regular database search
-  elasticsearch:
-    enabled: <%= @elasticsearch_enabled %>
-    host: <%= @elasticsearch_host %>
-    port: <%= @elasticsearch_port %>
-
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ce/customization/libravatar.html
   gravatar:

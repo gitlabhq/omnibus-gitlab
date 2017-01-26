@@ -1,6 +1,6 @@
 require 'chefspec'
 require 'ohai'
-
+require 'fantaskspec'
 
 require 'knapsack'
 

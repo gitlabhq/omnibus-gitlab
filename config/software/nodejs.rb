@@ -20,14 +20,6 @@ default_version "0.10.35"
 license "MIT"
 license_file "LICENSE"
 
-version "0.10.10" do
-  source md5: "a47a9141567dd591eec486db05b09e1c"
-end
-
-version "0.10.26" do
-  source md5: "15e9018dadc63a2046f61eb13dfd7bd6"
-end
-
 version "0.10.35" do
   source md5: "2c00d8cf243753996eecdc4f6e2a2d11"
 end
