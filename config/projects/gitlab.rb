@@ -78,7 +78,7 @@ override :expat, version: '2.2.0', source: { md5: '2f47841c829facb346eb6e3fab521
 override :config_guess, version: config_guess_version.print, source: { git: config_guess_version.remote }
 override :rsync, version: '3.1.2'
 override :'rb-readline' , version: rb_readline_version.print, source: { git: rb_readline_version.remote }
-override :zlib, version: '1.2.10', source: { sha256: '8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017' }
+override :zlib, version: '1.2.11', source: { sha256: 'c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1' }
 
 # Openssh needs to be installed
 
