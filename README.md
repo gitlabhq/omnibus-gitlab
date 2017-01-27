@@ -201,7 +201,7 @@ See [doc/common_installation_problems/README.md](doc/common_installation_problem
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
 
-##### gitlab-rake assets:precompile fails with 'Permission denied'
+##### gitlab-rake assets:precompile or gitlab:assets:compile fails with 'Permission denied'
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 

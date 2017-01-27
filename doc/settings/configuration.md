@@ -34,14 +34,6 @@ be installed under a relative URL, for example `https://example.com/gitlab`.
 Note that by changing the URL, all remote URLS will change, so you'll have to
 manually edit them in any local repository that points to your GitLab instance.
 
-### Relative URL requirements
-
-The Omnibus GitLab package is shipped with pre-compiled assets (CSS, JavaScript,
-fonts, etc.). If you configure Omnibus with a relative URL, the assets will
-need to be recompiled, which is a task which consumes a lot of CPU and memory
-resources. To avoid out-of-memory errors, you should have at least 2GB of RAM
-available on your system, while we recommend 4GB RAM, and 4 or 8 CPU cores.
-
 ### Enable relative URL in GitLab
 
 Follow the steps below to enable relative URL in GitLab:
@@ -90,23 +82,6 @@ sudo gitlab-ctl restart unicorn
 
 If you stumble upon any issues, see the [troubleshooting section]
 (#relative-url-troubleshooting).
-
-### Relative URL troubleshooting
-
-If for some reason the asset compilation fails (i.e. the server runs out of memory),
-you can execute the task manually after you addressed the issue (e.g. add swap):
-
-```shell
-sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
-sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
-```
-
-User and path might be different if you changed the defaults of
-`user['username']`, `user['group']` and `gitlab_rails['dir']` in `gitlab.rb`.
-In that case, make sure that the `chown` command above is run with the right
-username and group.
-
-[590]: https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/590 "Merge request - Relative url support for omnibus installations"
 
 ## Loading external configuration file from non-root user
 

@@ -75,7 +75,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Reconfigure fails to create the git user](common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 - [Failed to modify kernel parameters with sysctl](common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
 - [I am unable to install omnibus-gitlab without root access](common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
-- [gitlab-rake assets:precompile fails with 'Permission denied'](common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
+- [gitlab-rake gitlab:assets:compile fails with 'Permission denied'](common_installation_problems/README.md#gitlab-rake-gitlabassetscompile-fails-with-permission-denied).
 - ['Short read or OOM loading DB' error](common_installation_problems/README.md#short-read-or-oom-loading-db-error).
 - ['pg_dump: aborting because of server version mismatch'](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
 - ['Errno::ENOMEM: Cannot allocate memory' during backup or upgrade](common_installation_problems/README.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)

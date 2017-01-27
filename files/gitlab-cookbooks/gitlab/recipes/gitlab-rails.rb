@@ -214,7 +214,6 @@ templatesymlink "Create a relative_url.rb and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  notifies [:run, 'bash[generate assets]']
   restarts dependent_services
 
   unless node['gitlab']['gitlab-rails']['gitlab_relative_url']
@@ -331,7 +330,6 @@ end
 # Or migration failed for some reason
 remote_file File.join(gitlab_rails_dir, 'REVISION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/REVISION"
-  notifies :run, 'bash[generate assets]' if node['gitlab']['gitlab-rails']['gitlab_relative_url']
 end
 
 # If a version of ruby changes restart unicorn. If not, unicorn will fail to
@@ -351,20 +349,6 @@ execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
 
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
-  action :nothing
-end
-
-bash "generate assets" do
-  code <<-EOS
-    set -e
-    /opt/gitlab/bin/gitlab-rake assets:clean assets:precompile
-    chown -R #{gitlab_user}:#{gitlab_group} #{gitlab_rails_tmp_dir}/cache
-  EOS
-  # We have to precompile assets as root because of permissions and ownership of files
-  environment ({ 'NO_PRIVILEGE_DROP' => 'true', 'USE_DB' => 'false' })
-  dependent_services.each do |sv|
-    notifies :restart, sv
-  end
   action :nothing
 end
 
