@@ -976,6 +976,7 @@ default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
 default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
 default['gitlab']['prometheus']['flags'] = {
+  'web.listen-address' => node['gitlab']['prometheus']['listen_address'],
   'storage.local.path' => File.join(node['gitlab']['prometheus']['home'], 'data'),
   'storage.local.memory-chunks' => '50000',
   'storage.local.max-chunks-to-persist' => '40000',
@@ -988,10 +989,11 @@ default['gitlab']['prometheus']['flags'] = {
 default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 default['gitlab']['node-exporter']['flags'] = {
+  'web.listen-address' => node['gitlab']['node-exporter']['listen_address'],
   'collector.textfile.directory' => File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
 }
-default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 
 ####
 # Redis exporter

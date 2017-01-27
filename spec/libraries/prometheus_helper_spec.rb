@@ -26,7 +26,7 @@ describe PrometheusHelper do
       it 'returns the correct default config string' do
         chef_run.converge('gitlab::default')
         expect(subject.flags('prometheus')).to eq(
-          '-storage.local.path=/var/opt/gitlab/prometheus/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/var/opt/gitlab/prometheus/prometheus.yml')
+          '-web.listen-address=localhost:9090 -storage.local.path=/var/opt/gitlab/prometheus/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/var/opt/gitlab/prometheus/prometheus.yml')
       end
     end
 
@@ -38,7 +38,7 @@ describe PrometheusHelper do
         chef_run.converge('gitlab::default')
 
         expect(subject.flags('prometheus')).to eq(
-          '-storage.local.path=/fake/dir/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/fake/dir/prometheus.yml')
+          '-web.listen-address=localhost:9090 -storage.local.path=/fake/dir/data -storage.local.memory-chunks=50000 -storage.local.max-chunks-to-persist=40000 -config.file=/fake/dir/prometheus.yml')
       end
     end
   end
