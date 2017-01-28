@@ -89,14 +89,17 @@ build do
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
   assets_compile_env = {
+    "NODE_ENV" => "production",
     "RAILS_ENV" => "production",
     "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
     "USE_DB" => "false",
     "SKIP_STORAGE_VALIDATION" => "true"
   }
+  command "npm install --production"
   bundle "exec rake gitlab:assets:compile", :env => assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
+  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'
