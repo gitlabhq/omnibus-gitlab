@@ -6,9 +6,6 @@ omnibus-gitlab repository.
 8.16.3
 
 - Pin bundler to version 1.13.7 0ec1b67f
-
-8.16.3
-
 - Upgrade zlib to 1.2.11 cfa4e3c0
 
 8.16.2
