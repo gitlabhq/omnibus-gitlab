@@ -84,7 +84,6 @@ dependency "chef-gem"
 dependency "remote-syslog" if ee
 dependency "logrotate"
 dependency "runit"
-dependency "nodejs"
 dependency "gitlab-rails"
 dependency "gitlab-shell"
 dependency "gitlab-workhorse"
