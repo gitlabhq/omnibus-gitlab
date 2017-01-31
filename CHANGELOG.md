@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.17.0
 
 - Remove deprecated Elasticsearch configuration options
+- Add HealthCheck support to our Docker image
 
 8.16.3
 
