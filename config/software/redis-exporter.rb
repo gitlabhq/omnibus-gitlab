@@ -31,6 +31,7 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/redis-exporter",
     'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory
   }
+  command 'go get github.com/Masterminds/glide', env: env
   command 'go install github.com/Masterminds/glide', env: env
   command '../../../../bin/glide install ', env: env
   command 'go build', env: env
