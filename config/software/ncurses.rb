@@ -25,9 +25,6 @@ dependency "libtool" if aix?
 dependency "patch" if solaris2?
 
 version("5.9") { source md5: "8cb9c412e5f2d96bc6f459aa8c6282a1", url: "http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz" }
-version("5.9-20150530") { source md5: "bb2cbe1d788d3ab0138fc2734e446b43", url: "ftp://invisible-island.net/ncurses/current/ncurses-5.9-20150530.tgz" }
-version("6.0-20150613") { source md5: "0c6a0389d004c78f4a995bc61884a563", url: "ftp://invisible-island.net/ncurses/current/ncurses-6.0-20150613.tgz" }
-version("6.0-20150810") { source md5: "78bfcb4634a87b4cda390956586f8f1f", url: "ftp://invisible-island.net/ncurses/current/ncurses-6.0-20150810.tgz" }
 
 relative_path "ncurses-#{version}"
 

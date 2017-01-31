@@ -214,7 +214,6 @@ templatesymlink "Create a relative_url.rb and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  notifies [:run, 'bash[generate assets]']
   restarts dependent_services
 
   unless node['gitlab']['gitlab-rails']['gitlab_relative_url']
@@ -229,6 +228,9 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
+
+  mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab-rails']['mattermost_host']
+
   variables(
     node['gitlab']['gitlab-rails'].to_hash.merge(
       gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
@@ -237,12 +239,12 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       git_annex_enabled: node['gitlab']['gitlab-shell']['git_annex_enabled'],
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
-      mattermost_host: Gitlab['mattermost_external_url'],
-      mattermost_enabled: node['gitlab']['mattermost']['enable']
+      mattermost_host: mattermost_host,
+      mattermost_enabled: node['gitlab']['mattermost']['enable'] || !mattermost_host.nil?
     )
   )
   restarts dependent_services
-  notifies [:run, 'execute[clear the gitlab-rails cache]'] unless redis_not_listening
+  notifies [:run, 'execute[clear the gitlab-rails cache]'] unless redis_not_listening || !node['gitlab']['gitlab-rails']['rake_cache_clear']
 end
 
 templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
@@ -328,7 +330,6 @@ end
 # Or migration failed for some reason
 remote_file File.join(gitlab_rails_dir, 'REVISION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/REVISION"
-  notifies :run, 'bash[generate assets]' if node['gitlab']['gitlab-rails']['gitlab_relative_url']
 end
 
 # If a version of ruby changes restart unicorn. If not, unicorn will fail to
@@ -348,20 +349,6 @@ execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
 
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
-  action :nothing
-end
-
-bash "generate assets" do
-  code <<-EOS
-    set -e
-    /opt/gitlab/bin/gitlab-rake assets:clean assets:precompile
-    chown -R #{gitlab_user}:#{gitlab_group} #{gitlab_rails_tmp_dir}/cache
-  EOS
-  # We have to precompile assets as root because of permissions and ownership of files
-  environment ({ 'NO_PRIVILEGE_DROP' => 'true', 'USE_DB' => 'false' })
-  dependent_services.each do |sv|
-    notifies :restart, sv
-  end
   action :nothing
 end
 

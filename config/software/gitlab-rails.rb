@@ -82,21 +82,24 @@ build do
   # Not using the patch DSL as we need the path to the gems directory
   command "cat #{patch_file_path} | patch -p1 \"$(#{gemdir_cmd})/gems/gitlab-markup-1.5.1/lib/github/markups.rb\""
 
-  # In order to precompile the assets, we need to get to a state where rake can
+  # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
   copy 'config/gitlab.yml.example', 'config/gitlab.yml'
   copy 'config/database.yml.postgresql', 'config/database.yml'
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
-  assets_precompile_env = {
+  assets_compile_env = {
+    "NODE_ENV" => "production",
     "RAILS_ENV" => "production",
     "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
     "USE_DB" => "false",
     "SKIP_STORAGE_VALIDATION" => "true"
   }
-  bundle "exec rake assets:precompile", :env => assets_precompile_env
+  command "npm install --production"
+  bundle "exec rake gitlab:assets:compile", :env => assets_compile_env
 
-  # Tear down now that the assets:precompile is done.
+  # Tear down now that gitlab:assets:compile is done.
+  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'

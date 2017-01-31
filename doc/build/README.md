@@ -1,6 +1,6 @@
 # Preparing a build environment
 
-See [Preparing a Build Environment page](doc/build/prepare-build-environment.md)
+See [Preparing a Build Environment page](prepare-build-environment.md)
 for instructions on how to prepare build environment using Docker.
 
 ## Usage

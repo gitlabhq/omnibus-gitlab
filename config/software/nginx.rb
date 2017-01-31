@@ -28,10 +28,6 @@ dependency "pcre"
 dependency "zlib"
 dependency "openssl"
 
-version "1.10.1" do
-  source md5: "088292d9caf6059ef328aa7dda332e44"
-end
-
 version "1.10.2" do
   source md5: "e8f5f4beed041e63eb97f9f4f55f3085"
 end

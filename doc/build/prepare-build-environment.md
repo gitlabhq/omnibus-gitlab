@@ -47,10 +47,10 @@ follows
     ```
 
 6. Omnibus GitLab is optimized to use the internal repositories from
-   dev.gitlab.org. This is specified in the `.custom_sources.yaml` file in the
+   dev.gitlab.org. This is specified in the `.custom_sources.yml` file in the
    root of the source tree and these repositories are not publicly usable. So,
    for personal builds, you have to use public alternatives of these repos.
-   An example `.custom_sources.yaml` file would be as follows. Edit the file
+   An example `.custom_sources.yml` file would be as follows. Edit the file
    and make necessary changes.
 
     ```

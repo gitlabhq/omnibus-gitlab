@@ -147,8 +147,8 @@ shell and the `passwd` command for non-superusers requires entering the current
 password prior to a new password. The user cannot enter a password that will
 match `'*'` and therefore the account remains password-less.
 
-Keep in mind that the git user must have access to the system so please review 
-your security settings at `/etc/security/access.conf` and make sure the git user 
+Keep in mind that the git user must have access to the system so please review
+your security settings at `/etc/security/access.conf` and make sure the git user
 is not blocked.
 
 ### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
@@ -311,9 +311,9 @@ When you install GitLab from source (which was the only way to do it before we
 had omnibus packages) you need to convert the assets on your GitLab server
 every time you update GitLab. People used to overlook this step and there are
 still posts, comments and mails out there on the internet where users recommend
-each other to run `rake assets:precompile`. With the omnibus packages things
-are different: when we build the package [we convert the assets for
-you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
+each other to run `rake assets:precompile` (which has now been renamed
+`gitlab:assets:compile`). With the omnibus packages things are different: when
+we build the package [we compile the assets for you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
 When you install GitLab with an omnibus package, the converted assets are
 already there! That is why you do not need to run `rake assets:precompile` when
 you install GitLab from a package.
@@ -327,10 +327,10 @@ If you want to run GitLab with custom JavaScript or CSS code you are probably
 better off running GitLab from source, or building your own packages.
 
 If you really know what you are doing,
-you can execute `gitlab-rake assets:precompile` like this
+you can execute `gitlab-rake gitlab:assets:compile` like this:
 
 ```shell
-sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
+sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake gitlab:assets:clean gitlab:assets:compile
 # user and path might be different if you changed the defaults of
 # user['username'], user['group'] and gitlab_rails['dir'] in gitlab.rb
 sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache

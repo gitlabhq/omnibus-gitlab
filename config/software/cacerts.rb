@@ -20,67 +20,27 @@ license "MPL-2.0"
 license_file "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version "2016.11.02"
+default_version "2017.01.18"
 
-version "2016.11.02" do
-  source md5: "11713bf9b8c10aca2fb4708f1ba01072"
+version "2017.01.18" do
+  source md5: "38cd779c9429ab6e2e5ae3437b763238"
 end
 
-version "2016.09.14" do
-  source md5: "8d35a5cef6ce28da07867a0712558067"
-end
-
-version "2016.04.20" do
-  source md5: "782dcde8f5d53b1b9e888fdf113c42b9"
-end
-
-version "2015.09.02" do
-  source md5: "3e0e6f302bd4f5b94040b8bcee0ffe15"
-end
-
-version "2015.04.22" do
-  source md5: "380df856e8f789c1af97d0da9a243769"
-end
-
-version "2015.02.25" do
-  source md5: "19e7f27540ee694308729fd677163649"
-end
-
-version "2014.09.03" do
-  source md5: "d7f7dd7e3ede3e323fc0e09381f16caf"
-end
-
-version "2014.08.20" do
-  source md5: "c9f4f7f4d6a5ef6633e893577a09865e"
-end
-
-version "2014.07.15" do
-  source md5: "fd48275847fa10a8007008379ee902f1"
-end
-
-version "2014.04.22" do
-  source md5: "9f92a0d9f605e227ae068e605f4c86fa"
-end
-
-version "2014.01.28" do
-  source md5: "5d108f8ab86afacc6663aafca8604dd3"
-end
-
-source url: "https://curl.haxx.se/ca/cacert.pem"
-
-relative_path "cacerts-#{version}"
+# Source URL looks like https://curl.haxx.se/ca/cacert-2017-01-18.pem. The
+# version part has periods replaced with dashes.
+source url: "https://curl.haxx.se/ca/cacert-#{version.gsub('.', '-')}.pem"
 
 build do
   mkdir "#{install_dir}/embedded/ssl/certs"
 
   # Append the 1024bit Verisign certs so that S3 continues to work
   block do
-    unless File.foreach("#{project_dir}/cacert.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
-      File.open("#{project_dir}/cacert.pem", "a") { |fd| fd.write(VERISIGN_CERTS) }
+    unless File.foreach("#{project_dir}/cacert-#{version.gsub('.', '-')}.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
+      File.open("#{project_dir}/cacert-#{version.gsub('.', '-')}.pem", "a") { |fd| fd.write(VERISIGN_CERTS) }
     end
   end
 
-  copy "#{project_dir}/cacert.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"
+  copy "#{project_dir}/cacert-#{version.gsub('.', '-')}.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"
 
   # Windows does not support symlinks
   unless windows?

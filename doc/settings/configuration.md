@@ -36,11 +36,14 @@ manually edit them in any local repository that points to your GitLab instance.
 
 ### Relative URL requirements
 
+_Starting with 8.17 packages, there is **no need to recompile assets**._
+
 The Omnibus GitLab package is shipped with pre-compiled assets (CSS, JavaScript,
-fonts, etc.). If you configure Omnibus with a relative URL, the assets will
-need to be recompiled, which is a task which consumes a lot of CPU and memory
-resources. To avoid out-of-memory errors, you should have at least 2GB of RAM
-available on your system, while we recommend 4GB RAM, and 4 or 8 CPU cores.
+fonts, etc.). If you are running a package _prior to 8.17_ and you configure
+Omnibus with a relative URL, the assets will need to be recompiled, which is a
+task which consumes a lot of CPU and memory resources. To avoid out-of-memory
+errors, you should have at least 2GB of RAM available on your system, while we
+recommend 4GB RAM, and 4 or 8 CPU cores.
 
 ### Enable relative URL in GitLab
 
@@ -93,8 +96,14 @@ If you stumble upon any issues, see the [troubleshooting section]
 
 ### Relative URL troubleshooting
 
-If for some reason the asset compilation fails (i.e. the server runs out of memory),
-you can execute the task manually after you addressed the issue (e.g. add swap):
+If you notice any issues with gitlab assets appearing broken after moving to a
+relative url configuration (like missing images or unresponsive components)
+please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce)
+with the `Frontend` label.
+
+If you are running a version _prior to 8.17_ and for some reason the asset
+compilation step fails (i.e. the server runs out of memory), you can execute
+the task manually after you addressed the issue (e.g. add swap):
 
 ```shell
 sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
@@ -370,6 +379,23 @@ for more information.
 File `config/initializers/rack_attack.rb` is managed by omnibus-gitlab
 and must be configured in `/etc/gitlab/gitlab.rb`.
 
+## Disabling automatic cache cleaning during installation
+
+If you have large gitlab installation, you might not want to run `rake cache:clean` task.
+As it can take long time to finish. By default, cache clear task will run automatically
+during reconfigure.
+
+Edit `/etc/gitlab/gitlab.rb`:
+
+```ruby
+# This is advanced feature used by large gitlab deployments where loading
+# whole RAILS env takes a lot of time.
+gitlab_rails['rake_cache_clear'] = false
+```
+
+Don't forget to remove the `#` comment characters at the beginning of this
+line.
+
 ### Enabling/Disabling Rack Attack and setting up basic auth throttling
 
 Next configuration settings control Rack Attack:
@@ -386,10 +412,10 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 
 ### Setting up paths to be protected by Rack Attack
 
-If you want to change default protected paths 
-set `gitlab_rails['rack_attack_protected_paths']` in config file. 
+If you want to change default protected paths
+set `gitlab_rails['rack_attack_protected_paths']` in config file.
 
-**Warning** This action will overwrite 
+**Warning** This action will overwrite
 list provided by omnibus-gitlab:
 
 ```ruby
@@ -414,7 +440,7 @@ then you need to escape curly brackets or use single quoted string.
 For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
 
 
-### Setting up throttling for 'paths to be protected' 
+### Setting up throttling for 'paths to be protected'
 Use next options to control throttling 'limit' and 'period':
 
 ```ruby

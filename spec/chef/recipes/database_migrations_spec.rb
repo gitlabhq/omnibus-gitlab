@@ -14,6 +14,11 @@ describe 'gitlab::database-migrations' do
   end
 
   context 'when migration should run' do
+
+    before do
+      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+    end
+
     let(:bash_block) { chef_run.bash('migrate gitlab-rails database') }
 
     it 'runs the migrations' do
@@ -64,6 +69,18 @@ describe 'gitlab::database-migrations' do
     it 'triggers the gitlab:db:configure task' do
       migrate = %Q(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
       expect(bash_block.code).to match(/#{migrate}/)
+    end
+
+    # NOTE: Test if we pass proper notifications to other resources
+    it 'should notify rails cache clear resource' do
+      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
+        'execute[clear the gitlab-rails cache]')
+    end
+
+    it 'should not notify rails cache clear resource if disabled' do
+      stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+      expect(chef_run.bash('migrate gitlab-rails database')).not_to notify(
+        'execute[clear the gitlab-rails cache]')
     end
   end
 end

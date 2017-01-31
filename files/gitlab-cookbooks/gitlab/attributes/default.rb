@@ -66,7 +66,9 @@ default['gitlab']['gitlab-rails']['env'] = {
   # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
   # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
-  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages"
+  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages",
+  # Prevent ExecJS from complaining that Node is not installed in production
+  'EXECJS_RUNTIME' => 'Disabled',
 }
 default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 
@@ -75,6 +77,7 @@ default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['auto_migrate'] = true
+default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
 
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
@@ -122,9 +125,6 @@ default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_enabled'] = nil
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
-default['gitlab']['gitlab-rails']['elasticsearch_enabled'] = false
-default['gitlab']['gitlab-rails']['elasticsearch_host'] = nil
-default['gitlab']['gitlab-rails']['elasticsearch_port'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
