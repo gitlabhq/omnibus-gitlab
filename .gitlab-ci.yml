@@ -540,7 +540,7 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline | sed 's|\"|\\\\\"|g')\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/builds>"
+    - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline | sed 's|\"|\\\\\"|g')\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/pipelines>"
   when: on_failure
   only:
     - master
