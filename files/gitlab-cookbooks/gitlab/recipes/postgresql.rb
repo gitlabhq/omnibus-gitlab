@@ -23,7 +23,7 @@ postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
-postgresql_user = account_helper.postgresgl_user
+postgresql_user = account_helper.postgresql_user
 
 pg_helper = PgHelper.new(node)
 

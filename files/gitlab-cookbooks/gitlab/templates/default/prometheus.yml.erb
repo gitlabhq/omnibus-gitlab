@@ -16,3 +16,8 @@ scrape_configs:
     static_configs:
       - targets: ['<%= node['gitlab']['redis-exporter']['listen_address'] %>']
 <% end -%>
+<% if node['gitlab']['postgres-exporter']['enable'] %>
+  - job_name: postgres
+    static_configs:
+      - targets: ['<%= node['gitlab']['postgres-exporter']['listen_address'] %>']
+<% end -%>

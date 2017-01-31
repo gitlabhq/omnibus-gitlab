@@ -98,6 +98,7 @@ dependency "mattermost"
 dependency "node-exporter"
 dependency "prometheus"
 dependency "redis-exporter"
+dependency "postgres-exporter"
 
 # version manifest file
 dependency "version-manifest"
