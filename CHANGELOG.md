@@ -5,8 +5,12 @@ omnibus-gitlab repository.
 
 8.17.0
 
-- Remove deprecated Elasticsearch configuration options
-- Add HealthCheck support to our Docker image
+- Remove deprecated Elasticsearch configuration options ab660c56
+- Add HealthCheck support to our Docker image 845b52b2
+- Remove Nodejs dependency 7d22e0a8
+- Add an option to skip cache:clear task (Adam Hamsik) e4ba9913
+- Include Redis exporter, off by default 3bd03d2d
+- Include Postgres exporter, off by default e8755757
 
 8.16.3
 
@@ -24,10 +28,11 @@ omnibus-gitlab repository.
 8.16.0
 
 - Update git to 2.10.2 27cde301
-- Allow users to specify an initial shared runner registration token
-- Update Mattermost to version 3.6
-- Include Prometheus and Node Exporter, off by default
-- Let uses expose Mattermost host if installed on other server
+- Allow users to specify an initial shared runner registration token 11de915b
+- Update Mattermost to version 3.6  4fcdc632
+- Include Prometheus and Node Exporter, off by default  bef79732
+- Let users expose Mattermost host if installed on other server  2aec8f66
+- Make gitlab.rb template file scraping friendly 92e5eedf
 
 8.15.5
 
