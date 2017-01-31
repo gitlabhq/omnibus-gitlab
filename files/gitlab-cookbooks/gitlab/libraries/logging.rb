@@ -52,6 +52,7 @@ module Logging
         registry
         node_exporter
         prometheus
+        redis_exporter
       }.each do |runit_sv|
         Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
       end
