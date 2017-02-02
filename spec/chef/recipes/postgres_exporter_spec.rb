@@ -23,7 +23,7 @@ describe 'gitlab::postgres-exporter' do
 
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
         .with_content { |content|
-          expect(content).to match(/exec chpst -P/)
+          expect(content).to match(/exec chpst /)
           expect(content).to match(/\/opt\/gitlab\/embedded\/bin\/postgres_exporter/)
         }
 
