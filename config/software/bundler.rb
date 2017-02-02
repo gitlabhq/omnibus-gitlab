@@ -15,6 +15,8 @@
 #
 
 name "bundler"
+# Pin the bundler version to avoid breaking changes in later versions
+default_version "1.13.7"
 
 license "MIT"
 license_file "https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md"
