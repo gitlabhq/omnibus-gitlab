@@ -61,7 +61,7 @@ gitlab_rails['enable'] = false
 
 where `Secret` and `Id` are `application secret` and `application id` received when creating new `Application` authorization in GitLab admin section.
 
-To enable integrations on the GitLab Server:
+To enable integrations with GitLab, add the following on the GitLab Server:
 ```ruby
 gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
 ```
