@@ -27,8 +27,8 @@ name "gitlab-rails"
 default_version version.print
 source git: version.remote
 
-combined_licenses_file = "#{install_dir}/embedded/service/gem/gitlab-gem-licenses"
-gems_directory = "#{install_dir}/embedded/service/gem/ruby/2.3.0/gems"
+combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
+gemdir_cmd = "#{install_dir}/embedded/bin/gem environment gemdir"
 
 license "MIT"
 license_file "LICENSE"
@@ -42,6 +42,7 @@ dependency "curl"
 dependency "rsync"
 dependency "libicu"
 dependency "postgresql"
+dependency "postgresql_new"
 dependency "python-docutils"
 dependency "krb5"
 dependency "registry"
@@ -66,28 +67,39 @@ build do
 
   bundle_without = %w{development test}
   bundle_without << "mysql" unless EE
-  bundle "config build.rugged --no-use-system-libraries", :env => env
-  bundle "install --without #{bundle_without.join(" ")} --path=#{install_dir}/embedded/service/gem --jobs #{workers} --retry 5", :env => env
+  bundle "config build.rugged --no-use-system-libraries", env: env
+  bundle "install --without #{bundle_without.join(" ")} --jobs #{workers} --retry 5", env: env
 
   # This patch makes the github-markup gem use and be compatible with Python3
   # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
-  patch source: 'gitlab-markup_gem-markups.patch', target: "#{gems_directory}/gitlab-markup-1.5.0/lib/github/markups.rb"
+  patch_file_path = File.join(
+    Omnibus::Config.project_root,
+    "config",
+    "patches",
+    "gitlab-rails",
+    "gitlab-markup_gem-markups.patch"
+  )
+  # Not using the patch DSL as we need the path to the gems directory
+  command "cat #{patch_file_path} | patch -p1 \"$(#{gemdir_cmd})/gems/gitlab-markup-1.5.1/lib/github/markups.rb\""
 
-  # In order to precompile the assets, we need to get to a state where rake can
+  # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
   copy 'config/gitlab.yml.example', 'config/gitlab.yml'
   copy 'config/database.yml.postgresql', 'config/database.yml'
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
-  assets_precompile_env = {
+  assets_compile_env = {
+    "NODE_ENV" => "production",
     "RAILS_ENV" => "production",
     "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
     "USE_DB" => "false",
     "SKIP_STORAGE_VALIDATION" => "true"
   }
-  bundle "exec rake assets:precompile", :env => assets_precompile_env
+  command "npm install --production"
+  bundle "exec rake gitlab:assets:compile", :env => assets_compile_env
 
-  # Tear down now that the assets:precompile is done.
+  # Tear down now that gitlab:assets:compile is done.
+  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'
@@ -95,11 +107,18 @@ build do
   # Remove auto-generated files
   delete '.secret'
   delete '.gitlab_shell_secret'
+  delete '.gitlab_workhorse_secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'
   delete 'tmp'
   delete 'public/uploads'
+
+  # Cleanup after bundle
+  # Delete all .gem archives
+  command "find #{install_dir} -name '*.gem' -type f -print -delete"
+  # Delete all docs
+  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -print -exec rm -r {} +"
 
   # Because db/schema.rb is modified by `rake db:migrate` after installation,
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
@@ -107,7 +126,7 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore"]}
+  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore", "spec", "features"] }
 
   # Create a wrapper for the rake tasks of the Rails app
   erb :dest => "#{install_dir}/bin/gitlab-rake",
@@ -125,8 +144,11 @@ build do
   erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
     source: "gem_license_generator.erb",
     mode: 0755,
-    vars: {install_dir: install_dir, license_file: combined_licenses_file, gems_directory: gems_directory}
+    vars: {install_dir: install_dir, license_file: combined_licenses_file}
 
   command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
+  # According to https://github.com/ruby/ruby/commit/9bd24907851e390607d0d85365d0f00ed47a2a16#diff-3b3a6ec97232deb43dc14319a73872c1
+  # it is safe to remove. With Ruby 2.4, this will be done by ruby build itself.
+  delete "#{install_dir}/embedded/lib/libruby-static.a"
 end

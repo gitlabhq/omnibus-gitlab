@@ -61,10 +61,11 @@ server {
 
   # Pass everything to pages daemon
   location / {
-    proxy_set_header    Host                $http_host;
-    proxy_set_header    X-Real-IP           $remote_addr;
-    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
-    proxy_set_header    X-Forwarded-Proto   $scheme;
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
     proxy_pass          http://<%= @pages_listen_proxy %>;
   }
 

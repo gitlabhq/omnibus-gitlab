@@ -31,6 +31,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['api_queue_limit'] %>
     -apiQueueLimit <%= node['gitlab']['gitlab-workhorse']['api_queue_limit'] %> \
     <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %>
+    -prometheusListenAddr <%= node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %> \
+    <% end %>
     -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.

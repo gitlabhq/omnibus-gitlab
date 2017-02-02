@@ -1,72 +1,9 @@
 # Preparing a build environment
 
-See
-https://gitlab.com/gitlab-org/gitlab-omnibus-builder/blob/master/README.md#recipe-default
-for instructions on how to prepare a build box using Chef. After running the
-cookbook you can perform builds as the `gitlab_ci_multi_runner` user.
-
-```shell
-# Ubuntu/Debian only: ensure you have proper locale available
-sudo locale-gen en_US.UTF-8
-
-# Login as build user
-sudo su - gitlab_ci_multi_runner
-
-# Set git author
-git config --global user.email "email@example.com"
-git config --global user.name "Example name"
-
-# Ensure you have proper locale in the environment
-export LC_ALL=en_US.UTF-8
-
-# Clone the omnibus repo
-git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git
-
-# Install gem dependencies for omnibus-ruby
-cd omnibus-gitlab
-bundle install --path .bundle --binstubs
-
-# Do a build
-bin/omnibus build gitlab
-```
+See [Preparing a Build Environment page](prepare-build-environment.md)
+for instructions on how to prepare build environment using Docker.
 
 ## Usage
-
-*Important note* omnibus-gitlab project is used to build official GitLab
-packages. These packages are also used to deploy GitLab.com.
-
-The build tools are optimised for internal GitLab Inc infrastructure.
-For example, omnibus-gitlab project will pull GitLab and dependent projects
-code from internal dev.gitlab.org server. The internal server hosts the same
-copy of the source code available elsewhere. Alternative source location is
-necessary in case of an unforeseen circumstances.
-
-All repositories used for building the packages that are not publicly reachable,
-have their remotes listed in  `.custom_sources.yml` file in the root of this
-project.
-
-If you are using these tools to build your own packages, you will have to
-adjust them to your needs.
-
-At the time of writing, an example of a fully public config for `.custom_sources.yml`
-would look like this:
-
-```
-gitlab-rails:
-  remote: "https://gitlab.com/gitlab-org/gitlab-ce.git"
-gitlab-rails-ee:
-  remote: "https://gitlab.com/gitlab-org/gitlab-ee.git"
-gitlab-shell:
-  remote: "https://gitlab.com/gitlab-org/gitlab-shell.git"
-gitlab-workhorse:
-  remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
-gitlab-pages:
-  remote: "https://gitlab.com/gitlab-org/gitlab-pages"
-config_guess:
-  remote: "git://git.savannah.gnu.org/config.git"
-omnibus:
-  remote: "https://gitlab.com/gitlab-org/omnibus.git"
-```
 
 ### Build
 

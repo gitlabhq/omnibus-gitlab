@@ -21,8 +21,9 @@ define :redis_service, :socket_group => nil do
   redis_dir = node['gitlab'][svc]['dir']
   redis_log_dir = node['gitlab'][svc]['log_directory']
   redis_user = AccountHelper.new(node).redis_user
+  omnibus_helper = OmnibusHelper.new(node)
 
-  account "Redis user and group" do
+  account 'user and group for redis' do
     username redis_user
     uid node['gitlab'][svc]['uid']
     ugid redis_user
@@ -31,6 +32,11 @@ define :redis_service, :socket_group => nil do
     shell  node['gitlab'][svc]['shell']
     home node['gitlab'][svc]['home']
     manage node['gitlab']['manage-accounts']['enable']
+  end
+
+  group 'Socket group' do
+    append true # we need this so we don't remove members
+    group_name params[:socket_group]
   end
 
   directory redis_dir do
@@ -45,13 +51,16 @@ define :redis_service, :socket_group => nil do
   end
 
   redis_config = File.join(redis_dir, "redis.conf")
+  is_slave = node['gitlab'][svc]['master_ip'] &&
+             node['gitlab'][svc]['master_port'] &&
+             !node['gitlab'][svc]['master']
 
   template redis_config do
     source "redis.conf.erb"
     owner redis_user
     mode "0644"
-    variables(node['gitlab'][svc].to_hash)
-    notifies :restart, "service[#{svc}]", :immediately if OmnibusHelper.should_notify?(svc)
+    variables(node['gitlab'][svc].to_hash.merge({is_slave: is_slave}))
+    notifies :restart, "service[#{svc}]", :immediately if omnibus_helper.should_notify?(svc)
   end
 
   runit_service svc do

@@ -17,6 +17,11 @@ by default:
 | Unicorn          | Yes           | Socket           | Port (8080) | X                                      |
 | GitLab Workhorse | Yes           | Socket           | Port (8181) | X                                      |
 | Nginx status     | Yes           | Port             | X           | 8060                                   |
+| Node exporter    | No           | Port             | X           | 9100                                   |
+| Prometheus       | No           | Port             | X           | 9090                                   |
+| Redis exporter    | No           | Port             | X           | 9121                                   |
+| Postgres exporter | No           | Port             | X           | 9187                                   |
+| Redis Sentinel   | No            | Port             | X           | 26379                                  |
 | Incoming email   | No            | Port             | X           | 143                                    |
 | Elastic search   | No            | Port             | X           | 9200                                   |
 | GitLab Pages     | No            | Port             | X           | 80 or 443                              |

@@ -16,13 +16,17 @@
 ##
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name "registry"
-default_version "v2.4.1"
+version = Gitlab::Version.new("registry", "2.4.1")
+
+default_version version.print
 
 license "Apache-2.0"
-license_file "https://raw.githubusercontent.com/docker/distribution/#{version}/LICENSE"
+license_file "https://raw.githubusercontent.com/docker/distribution/#{version.print}/LICENSE"
 
-source git: "https://github.com/docker/distribution.git"
+source git: version.remote
 
 relative_path "src/github.com/docker/distribution"
 

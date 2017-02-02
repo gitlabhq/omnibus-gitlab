@@ -1,7 +1,7 @@
 These are the contributing guidelines for omnibus-gitlab issues and merge
 requests.
 
-## General guidelines
+## General issue guidelines
 
 If you are experiencing problems during GitLab package installation or have issues with package configuration please create an issue that includes the following:
 
@@ -15,12 +15,6 @@ If you are experiencing problems during GitLab package installation or have issu
 #### For problems not related to package installation and configuration check ways to get help [at GitLab website.](https://about.gitlab.com/getting-help/)
 
 This can be the case when installation and `gitlab-ctl reconfigure` run went without issues but your GitLab instance is still giving 500 error page with an error in the log.
-
-## Merge request guidelines
-
-- Please add a CHANGELOG entry for your contribution
-- Have a look at the [development tips and tricks](doc/development/README.md)
-
 
 ## Maintainer documentation
 
@@ -63,3 +57,43 @@ problem is fixed or is no longer valid. If you still experience the same problem
 try upgrading to the latest version. If the issue persists, reopen this issue
 with the relevant information.
 ```
+
+## Developer Guidelines
+
+### Setting up development environment
+
+Check [setting up development environment docs](doc/development/README.md) for
+instructions on setting up a environment for local development.
+
+### Writing tests
+
+Any change in the internal cookbook also requires specs. Apart from testing the
+specific feature/bug, it would be greatly appreciated if the submitted Merge
+Request includes more tests. This is to ensure that the test coverage grows with
+development.
+
+When in rush to fix something (eg. security issue, bug blocking the release),
+writing specs can be skipped. However, an issue to implement the tests 
+**must be** created and assigned to the person who originally wrote the code.
+
+### Merge Request Guidelines
+
+If you are working on a new feature or an issue which doesn't have an entry on
+Omnibus GitLab's issue tracker, it is always a better idea to create an issue
+and mention that you will be working on it as this will help to prevent
+duplication of work. Also, others may be able to provide input regarding the
+issue, which can help you in your task.
+
+It is preferred to make your changes in a branch named \<issue
+number>-\<description> so that merging the request will automatically close the
+specified issue.
+
+A good Merge Request is expected to have the following components, based on
+their applicability:
+
+ 1. Full Merge Request description explaining why this change was needed
+ 2. Code for implementing feature/bugfix
+ 3. Tests, as explained in [Writing Tests](#writing-tests)
+ 4. Documentation explaining the change
+ 5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](files/gitlab-config-template/gitlab.rb.template)
+ 6. Changelog entry to inform about the change, if necessary.

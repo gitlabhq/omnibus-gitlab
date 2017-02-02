@@ -21,6 +21,8 @@ define :unicorn_service, :rails_app => nil, :user => nil do
   svc = params[:name]
   user = params[:user]
 
+  omnibus_helper = OmnibusHelper.new(node)
+
   unicorn_etc_dir = File.join(rails_home, "etc")
   unicorn_working_dir = File.join(rails_home, "working")
 
@@ -82,7 +84,7 @@ define :unicorn_service, :rails_app => nil, :user => nil do
     owner "root"
     group "root"
     mode "0644"
-    notifies :restart, "service[#{svc}]" if OmnibusHelper.should_notify?(svc)
+    notifies :restart, "service[#{svc}]" if omnibus_helper.should_notify?(svc)
   end
 
   runit_service svc do

@@ -1,14 +1,10 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-shell' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
   it 'calls into check permissions to create and validate the authorized_keys' do
@@ -31,6 +27,45 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'with default settings' do
+    it 'populates the default values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content { |content|
+          expect(content).to match(
+            %r{log_file: "/var/log/gitlab/gitlab-shell/gitlab-shell.log"}
+          )
+          expect(content).not_to match(/^custom_hooks_dir: /)
+        }
+    end
+  end
+
+  context 'with a non-default directory' do
+    before do
+      stub_gitlab_rb(gitlab_shell: {
+        dir: '/export/gitlab/gitlab-shell',
+      })
+    end
+    it 'creates config file in specified location' do
+      expect(chef_run).to render_file('/export/gitlab/gitlab-shell/config.yml')
+    end
+  end
+
+  context 'with a non-default log directory' do
+    before do
+      stub_gitlab_rb(gitlab_shell: {
+        log_directory: '/tmp/log',
+        git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
+      })
+    end
+
+    it 'populates the correct values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/git_trace_log_file: "\/tmp\/log\/gitlab-shell-git-trace.log"/)
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(/log_file: "\/tmp\/log\/gitlab-shell.log"/)
+    end
+  end
+
   context 'when using the default auth_file location' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
@@ -44,7 +79,7 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
-  context 'when using a different location' do
+  context 'when using a different location for auth_file' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
@@ -81,6 +116,7 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
     end
   end
+
   context 'with redis settings' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
@@ -108,11 +144,7 @@ describe 'gitlab::gitlab-shell' do
             redis_host: 'redis.example.com',
             redis_port: 8888,
             redis_database: 1,
-            redis_password: "PASSWORD!",
-            redis_sentinels: [
-              {'host' => 'redis1.sentinel', 'port' => 26370},
-              {'host' => 'redis2.sentinel', 'port' => 26371}
-            ]
+            redis_password: 'PASSWORD!'
           }
         )
       }
@@ -130,6 +162,38 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/namespace: resque:gitlab/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/pass: PASSWORD!/)
+        expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
+      end
+    end
+
+    context 'with sentinels configured' do
+      before {
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              {'host' => 'redis1.sentinel', 'port' => 26370},
+              {'host' => 'redis2.sentinel', 'port' => 26371}
+            ]
+          },
+          redis: {
+            master_name: 'sentinel-master',
+            master_password: 'PASSWORD!'
+          }
+        )
+      }
+
+      it 'creates the config file with the required redis settings' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/bin: \/opt\/gitlab\/embedded\/bin\/redis-cli/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/host: sentinel-master/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/port: 6379/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/namespace: resque:gitlab/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+          .with_content(/pass: PASSWORD!/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/- {"host":"redis1.sentinel","port":26370}/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
@@ -138,5 +202,73 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
       end
     end
+  end
+  context 'with non-default gitlab_hooks setting' do
+    before do
+      stub_gitlab_rb(
+        gitlab_shell: {
+          custom_hooks_dir: '/fake/dir'
+        }
+      )
+    end
+
+    it 'populates with custom values' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(%r{custom_hooks_dir: "/fake/dir"})
+    end
+  end
+end
+
+describe 'gitlab_shell::git_data_dir' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when git_data_dir is set as a single directory' do
+    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
+
+    it 'correctly sets the shell git data directories' do
+      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories'])
+        .to eql('default' => '/tmp/user/git-data')
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => '/tmp/user/git-data/repositories')
+    end
+  end
+
+  context 'when git_data_dirs is set to multiple directories' do
+    before do
+      stub_gitlab_rb({
+        git_data_dirs: { 'default' => '/tmp/default/git-data', 'overflow' => '/tmp/other/git-overflow-data' }
+      })
+    end
+
+    it 'correctly sets the shell git data directories' do
+      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
+        'default' => '/tmp/default/git-data',
+        'overflow' => '/tmp/other/git-overflow-data'
+      })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+        'default' => '/tmp/default/git-data/repositories',
+        'overflow' => '/tmp/other/git-overflow-data/repositories'
+      })
+    end
+  end
+
+  it 'defaults the auth_file to be within the user\'s home directory' do
+    stub_gitlab_rb(user: { home: '/tmp/user' })
+    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
+  end
+
+  it 'uses custom auth_files set in gitlab.rb' do
+    stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
+    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
   end
 end

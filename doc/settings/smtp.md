@@ -128,6 +128,8 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "gitlab@mydomain.com"
 gitlab_rails['smtp_password'] = "mypassword"
 gitlab_rails['smtp_domain'] = "smtp.zoho.com"
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
 ### OVH
@@ -174,6 +176,17 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
+### Amen.fr / Securemail.pro
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp-fr.securemail.pro"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_tls'] = true
+```
+
 ### 1&1
 
 ```ruby
@@ -204,7 +217,7 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### QQ exmail
+### QQ exmail (腾讯企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -213,9 +226,9 @@ gitlab_rails['smtp_port'] = 465
 gitlab_rails['smtp_user_name'] = "xxxx@xx.com"
 gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_ssl'] = true
 gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 ````
 
 ### Sendgrid
@@ -270,7 +283,67 @@ gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+
+### Strato.de
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.strato.de"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@stratodomain.de"
+gitlab_rails['smtp_password'] = "strato_email_password"
+gitlab_rails['smtp_domain'] = "strato.de"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
+### Rackspace
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "secure.emailsrvr.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+
+gitlab_rails['gitlab_email_from'] = 'username@domain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'username@domain.com'
+```
+
+### DomainFactory (df.eu)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "sslout.df.eu"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
 Request to save other people time.
+
+## Testing the SMTP configuration
+
+You can verify GitLab's ability to send emails properly using the Rails console. 
+On the GitLab server, execute `gitlab-rails console` to enter the console. Then,
+you can enter the following command at the console prompt to cause GitLab to
+send a test email:
+
+```
+irb(main):003:0> Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
+```

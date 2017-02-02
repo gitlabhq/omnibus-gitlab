@@ -23,7 +23,8 @@ define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil
   username = params[:username]
 
   if manage && groupname
-    group groupname do
+    group params[:name] do
+      group_name groupname
       gid params[:gid]
       system params[:system]
       if params[:append_to_group]
@@ -35,7 +36,8 @@ define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil
   end
 
   if manage && username
-    user username do
+    user params[:name] do
+      username username
       shell params[:shell]
       home params[:home]
       uid params[:uid]

@@ -109,7 +109,7 @@ in `/etc/gitlab/gitlab.rb`:
  }
 ```
 
-Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
@@ -139,7 +139,7 @@ By default, omnibus-gitlab will use the IP addresses in `real_ip_trusted_address
 as GitLab's trusted proxies, which will keep users from being listed as signed
 in from those IPs.
 
-Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 ## Configuring HTTP2 protocol
@@ -168,7 +168,7 @@ specifying in `/etc/gitlab/gitlab.rb`:
 nginx['http2_enabled'] = false
 ```
 
-Save the file and [reconfigure GitLab](http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 ## Using a non-bundled web-server
@@ -363,9 +363,12 @@ nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
-## Inserting custom error messages
+## Custom error pages
 
-If you want to print out custom HTTP error messages, create a setting like the following.
+You can use `custom_error_pages` to modify text on the default GitLab error page.
+This can be used for any valid HTTP error code; e.g 404, 502.
+
+As an example the following would modify the default 404 error page.
 
 ```ruby
 nginx['custom_error_pages'] = {
@@ -376,6 +379,10 @@ nginx['custom_error_pages'] = {
   }
 }
 ```
+
+This would result in the 404 error page below.
+
+![custom 404 error page](img/error_page_example.png)
 
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
@@ -538,24 +545,28 @@ Reading: 0 Writing: 1 Waiting: 0
 
 ## Configuration
 
-`/etc/gitlab/gitlab.rb`
+Edit `/etc/gitlab/gitlab.rb`:
 
 ```Ruby
-nginx['status']['listen_addresses'] = ['*']
-nginx['status']['fqdn'] = node['fqdn']
-nginx['status']['port'] = 8060
-nginx['status']['options'] = { # nginx_status location block options
+nginx['status'] = {
+  "listen_addresses" => ["127.0.0.1"],
+  "fqdn" => "dev.example.com",
+  "port" => 9999,
+  "options" => {
     "stub_status" => "on", # Turn on stats
-    "access_log" => "off", # Disable logs for stats
+    "access_log" => "on", # Disable logs for stats
     "allow" => "127.0.0.1", # Only allow access from localhost
-    "deny" => "all", # Deny access to anyone else
+    "deny" => "all" # Deny access to anyone else
+  }
 }
 ```
 
 If you don't find this service useful for your current infrastructure you can disable it with:
 
 ```ruby
-nginx['status']['enable'] = false
+nginx['status'] = {
+  'enable' => false
+}
 ```
 
 Make sure you run sudo gitlab-ctl reconfigure for the changes to take effect.

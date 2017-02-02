@@ -3,15 +3,209 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.0
+
+- Remove deprecated Elasticsearch configuration options ab660c56
+- Add HealthCheck support to our Docker image 845b52b2
+- Remove Nodejs dependency 7d22e0a8
+- Add an option to skip cache:clear task (Adam Hamsik) e4ba9913
+- Include Redis exporter, off by default 3bd03d2d
+- Include Postgres exporter, off by default e8755757
+- Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea 
+
+8.16.3
+
+- Pin bundler to version 1.13.7 0ec1b67f
+- Upgrade zlib to 1.2.11 cfa4e3c0
+
+8.16.2
+
+- No changes
+
+8.16.1
+
+- No changes
+
+8.16.0
+
+- Update git to 2.10.2 27cde301
+- Allow users to specify an initial shared runner registration token 11de915b
+- Update Mattermost to version 3.6  4fcdc632
+- Include Prometheus and Node Exporter, off by default  bef79732
+- Let users expose Mattermost host if installed on other server  2aec8f66
+- Make gitlab.rb template file scraping friendly 92e5eedf
+
+8.15.5
+
+- No changes
+
+8.15.4
+
+- No changes
+
+8.15.3
+
+- No changes
+
+8.15.2
+
+- No changes
+
+8.15.1
+
+- No changes
+
+8.15.0
+
+- Update git to 2.8.4 381c0b9d
+- Clean up apt lists to reduce the Docker image size (Tao Wang) 7e796c5f
+- Enable Mattermost slash commands by default 2b3406
+- Enable overriding of username and profile picture for webhook on Mattermost by default 8528864
+- Fix Mattermost authorization with Gitlab (Tyranron) d704d3
+- Expose Mattermost url in gitlab.yml 4d90c7fa
+- Add prometheusListenAddr config setting for gitlab-workhorse 12bb9df2
+- Fix Mattermost service file not respecting `mattermost['home']` option ca96b4e
+- Bump ruby version to 2.3.3 9f5fe2c2
+- Add configuration that allows overriding proxy headers for GitLab Pages NGINX (BruXy) c2722f1e
+- Make hideRefs option of git default in omnibus installations e7484a9b
+- Use internal GitLab mirrors of rb-readline and registry as cache 2d137543
+- Adding attribute for gitlab-shell custom hooks f753e1f0
+- Pass websockets through to workhorse for terminal support 849ffc
+- Add notification for new PostgreSQL version 05dbb3ec
+- Update libcurl to 7.52.0 ea11a83
+- Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
+
+8.14.7
+
+- No changes
+
+8.14.6
+
+- No changes
+
+8.14.5
+
+- Expose client_output_buffer_limit redis settings 5f1503
+
+8.14.4
+
+- Fix gitlab-ctl pg-upgrade to properly handle database encodings 46e71561
+- Update symlinks of postgres on both upgrade and reconfigure 484a3d8a
+
+8.14.3
+
+- Patch Git 2.7.4 for security vulnerabilities 568753c3
+
+8.14.2
+
+- Revert 34e28112 so we don't listen on IPv6 by default
+
+8.14.1
+
+- No changes
+
+8.14.0
+
+- Switch the redis user's shell to /bin/false 9d60ee4
+- NGINX listen on IPv6 by default (George Gooden) 34e28112
+- Upgrade Nginx to 1.10.2 085bf610
+- Update Redis to 3.2.5 (Takuya Noguchi) edf0575c1
+- Updarted cacerts.pem to 2016-11-02 version aca2f5e88
+- Stopped using PCRE in the storage directory helper 0e06490
+- Add git-trace logging for gitlab-shell 1dab1c
+- Update mattermost to 3.5 7ecf31
+- Add support for OpenSUSE 13.2 and 42.1 82b7345 6ea9e2
+- Support Redis Sentinel daemon (EE only) 457c4764
+- Separate package repositories for OL and SL e37eaae
+- Add mailroom idle timeout configuration 0488f3de
+
+8.13.12
+
+- No changes
+
+8.13.11
+
+- No changes
+
+8.13.10
+
+- No changes
+
+8.13.9
+
+- No changes
+
+8.13.8
+
+- Patch Git 2.7.4 for security vulnerabilities 2d7cf04a
+
+8.13.7
+
+- No changes
+
+8.13.6
+
+- No changes
+
+8.13.5
+
+- No changes
+
+8.13.4
+
+- Update curl to 7.51.0 to get the latest security patches fc32c83
+- Fix executable file mode for the Docker image update-permissions command 6c80205
+
+8.13.2
+
+- Move mail_room queue from incoming_email to email_receiver 373609c
+
+8.13.1
+
+- Update docs for nginx status, fix the default server for status config b49fb1
+
 8.13.0
 
-- Add support for registry debug addr configuration
-- Add support for configuring workhorse's api limiting
-- Support specifying a post reconfigure script to run in the docker container
-- Updated cacerts.pem to 2016-09-14 version
-- Add support for nginx status
+- Add support for registry debug addr configuration 87b7a780
+- Add support for configuring workhorse's api limiting 1b6c85d4
+- Fix unsetting the sticky bit for storage directory permissions and improved error messages 7467b51
+- Fixed a bug with disabling registry storage deletion be305d40
+- Support specifying a post reconfigure script to run in the docker container aa8bec5
+- Add support for nginx status (Luis Sagastume) 3cd7b36
 - Enable jemalloc by default 0a7799d2
-- Move database migration log to a persisted location
+- Move database migration log to a persisted location b368c46c
+
+8.12.13
+
+- No changes
+
+8.12.12
+
+- No changes
+
+8.12.11
+
+- Patch Git 2.7.4 for security vulnerabilities 564cfddf
+
+8.12.10
+
+- No changes
+
+8.12.9
+
+- No changes
+
+8.12.8
+
+- No changes
+
+8.12.7
+
+- Use forked gitlab-markup gem (forked from github-markup) 422d9bf20
+
+8.12.6
+
+- No changes
 
 8.12.5
 
@@ -23,15 +217,15 @@ omnibus-gitlab repository.
 
 8.12.3
 
-- Updated cacerts.pem to 2016-09-14 version
+- Updated cacerts.pem to 2016-09-14 version 9bc1fec
 
 8.12.2
 
-- Update openssl to 1.0.2j
+- Update openssl to 1.0.2j 527d02
 
 8.12.1
 
-- Fix gitlab-workhorse Runit template bug #1595 !1005
+- Fix gitlab-workhorse Runit template bug e20e5ff
 
 8.12.0
 
@@ -51,6 +245,22 @@ omnibus-gitlab repository.
 - Update curl to version 7.50.3 7848b550
 - Add default HOME variable to workhorse fcfa3672
 - Show GitLab ascii art after installation (Luis Sagastume) 17ed6cb
+
+8.11.11
+
+- No changes
+
+8.11.10
+
+- No changes
+
+8.11.9
+
+- No changes
+
+8.11.8
+
+- No changes
 
 8.11.7
 

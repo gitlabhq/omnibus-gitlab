@@ -1,40 +1,48 @@
 :mailboxes:
-<%
-require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+  <%
+    require "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/mail_room" unless defined?(Gitlab::MailRoom)
+    config = Gitlab::MailRoom.config
 
-if Gitlab::IncomingEmail.enabled? 
-  config = Gitlab::IncomingEmail.config
-
-  redis_config_file = "/opt/gitlab/embedded/service/gitlab-rails/config/resque.yml"
-  redis_url = 
-    if File.exists?(redis_config_file)
-      YAML.load_file(redis_config_file)[Rails.env]['url']
-    else
-      "redis://localhost:6379"
-    end
+    if Gitlab::MailRoom.enabled?
   %>
   -
-    :host: <%= config.host.to_json %>
-    :port: <%= config.port.to_json %>
-    :ssl: <%= config.ssl.to_json %>
-    :start_tls: <%= config.start_tls.to_json %>
-    :email: <%= config.user.to_json %>
-    :password: <%= config.password.to_json %>
-    :idle_timeout: 60
+    :host: <%= config[:host].to_json %>
+    :port: <%= config[:port].to_json %>
+    :ssl: <%= config[:ssl].to_json %>
+    :start_tls: <%= config[:start_tls].to_json %>
+    :email: <%= config[:user].to_json %>
+    :password: <%= config[:password].to_json %>
+    :idle_timeout: <%= config[:idle_timeout].to_json %>
 
-    :name: <%= config.mailbox.to_json %>
+    :name: <%= config[:mailbox].to_json %>
 
     :delete_after_delivery: true
 
     :delivery_method: sidekiq
     :delivery_options:
-      :redis_url: <%= redis_url.to_json %>
-      :namespace: resque:gitlab
-      :queue: incoming_email
+      :redis_url: <%= config[:redis_url].to_json %>
+      :namespace: <%= Gitlab::Redis::SIDEKIQ_NAMESPACE %>
+      :queue: email_receiver
       :worker: EmailReceiverWorker
+      <% if config[:sentinels] %>
+      :sentinels:
+        <% config[:sentinels].each do |sentinel| %>
+        -
+          :host: <%= sentinel[:host] %>
+          :port: <%= sentinel[:port] %>
+        <% end %>
+      <% end %>
 
     :arbitration_method: redis
     :arbitration_options:
-      :redis_url: <%= redis_url.to_json %>
-      :namespace: mail_room:gitlab
-<% end %>
+      :redis_url: <%= config[:redis_url].to_json %>
+      :namespace: <%= Gitlab::Redis::MAILROOM_NAMESPACE %>
+      <% if config[:sentinels] %>
+      :sentinels:
+        <% config[:sentinels].each do |sentinel| %>
+        -
+          :host: <%= sentinel[:host] %>
+          :port: <%= sentinel[:port] %>
+        <% end %>
+      <% end %>
+  <% end %>

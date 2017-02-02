@@ -24,6 +24,7 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true"],
   "repack" => ["writeBitmaps = true"],
+  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
  }
 # Create users and groups needed for the package
 default['gitlab']['manage-accounts']['enable'] = true
@@ -65,7 +66,9 @@ default['gitlab']['gitlab-rails']['env'] = {
   # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
   # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
-  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages"
+  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages",
+  # Prevent ExecJS from complaining that Node is not installed in production
+  'EXECJS_RUNTIME' => 'Disabled',
 }
 default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 
@@ -74,6 +77,7 @@ default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['auto_migrate'] = true
+default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
 
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
@@ -82,6 +86,7 @@ default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_display_name'] = nil
+default['gitlab']['gitlab-rails']['gitlab_email_subject_suffix'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil
@@ -115,13 +120,11 @@ default['gitlab']['gitlab-rails']['incoming_email_start_tls'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_email'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_password'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_mailbox_name'] = "inbox"
+default['gitlab']['gitlab-rails']['incoming_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_enabled'] = nil
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
-default['gitlab']['gitlab-rails']['elasticsearch_enabled'] = false
-default['gitlab']['gitlab-rails']['elasticsearch_host'] = nil
-default['gitlab']['gitlab-rails']['elasticsearch_port'] = nil
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
@@ -271,6 +274,7 @@ default['gitlab']['gitlab-rails']['trusted_certs_dir'] = "/etc/gitlab/trusted-ce
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
+default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
 default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
 ####
@@ -315,6 +319,7 @@ default['gitlab']['sidekiq']['concurrency'] = 25
 ###
 # gitlab-shell
 ###
+default['gitlab']['gitlab-shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
@@ -327,7 +332,8 @@ default['gitlab']['gitlab-rails']['repositories_storages'] = {
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
-
+default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
+default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
 
 ###
 # PostgreSQL
@@ -377,6 +383,8 @@ default['gitlab']['postgresql']['maintenance_work_mem'] = "16MB"
 default['gitlab']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
 default['gitlab']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
 default['gitlab']['postgresql']['checkpoint_segments'] = 10
+default['gitlab']['postgresql']['min_wal_size'] = '80MB'
+default['gitlab']['postgresql']['max_wal_size'] = '1GB'
 default['gitlab']['postgresql']['checkpoint_timeout'] = "5min"
 default['gitlab']['postgresql']['checkpoint_completion_target'] = 0.9
 default['gitlab']['postgresql']['checkpoint_warning'] = "30s"
@@ -414,7 +422,7 @@ default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
 default['gitlab']['redis']['username'] = "gitlab-redis"
 default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
-default['gitlab']['redis']['shell'] = "/bin/nologin"
+default['gitlab']['redis']['shell'] = "/bin/false"
 default['gitlab']['redis']['home'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['bind'] = '127.0.0.1'
 default['gitlab']['redis']['port'] = 0
@@ -424,9 +432,14 @@ default['gitlab']['redis']['tcp_keepalive'] = 300
 default['gitlab']['redis']['password'] = nil
 default['gitlab']['redis']['unixsocket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['redis']['unixsocketperm'] = "777"
+default['gitlab']['redis']['master'] = true
+default['gitlab']['redis']['master_name'] = 'gitlab-redis'
 default['gitlab']['redis']['master_ip'] = nil
-default['gitlab']['redis']['master_port'] = nil
+default['gitlab']['redis']['master_port'] = 6379
 default['gitlab']['redis']['master_password'] = nil
+default['gitlab']['redis']['client_output_buffer_limit_normal'] = "0 0 0"
+default['gitlab']['redis']['client_output_buffer_limit_slave'] = "256mb 64mb 60"
+default['gitlab']['redis']['client_output_buffer_limit_pubsub'] = "32mb 8mb 60"
 
 ####
 # Web server
@@ -441,6 +454,21 @@ default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
 default['gitlab']['web-server']['external_users'] = []
 
+
+####
+# gitaly
+####
+default['gitlab']['gitaly']['enable'] = false
+default['gitlab']['gitaly']['ha'] = false
+default['gitlab']['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
+default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
+default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
+default['gitlab']['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
+default['gitlab']['gitaly']['env'] = {
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  'HOME' => node['gitlab']['user']['home']
+}
+
 ####
 # gitlab-workhorse
 ####
@@ -453,6 +481,7 @@ default['gitlab']['gitlab-workhorse']['listen_addr'] = "/var/opt/gitlab/gitlab-w
 default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
 default['gitlab']['gitlab-workhorse']['auth_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
+default['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] = nil # default value is nil
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
 default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
@@ -500,7 +529,7 @@ default['gitlab']['registry']['dir'] = "/var/opt/gitlab/registry"
 default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['gitlab']['registry']['log_level'] = "info"
 default['gitlab']['registry']['rootcertbundle'] = nil
-default['gitlab']['registry']['storage_delete_enabled'] = true
+default['gitlab']['registry']['storage_delete_enabled'] = nil
 default['gitlab']['registry']['storage'] = nil
 default['gitlab']['registry']['debug_addr'] = nil
 
@@ -548,7 +577,9 @@ default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 default['gitlab']['nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
-  "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade"
 }
 default['gitlab']['nginx']['http2_enabled'] = true
 # Cache up to 1GB of HTTP responses from GitLab on disk
@@ -566,10 +597,11 @@ default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 ###
 default['gitlab']['nginx']['status']['enable'] = true
 default['gitlab']['nginx']['status']['listen_addresses'] = ['*']
-default['gitlab']['nginx']['status']['fqdn'] = node['fqdn']
+default['gitlab']['nginx']['status']['fqdn'] = "localhost"
 default['gitlab']['nginx']['status']['port'] = 8060
 default['gitlab']['nginx']['status']['options'] = {
   "stub_status" => "on",
+  "server_tokens" => "off",
   "access_log" => "off",
   "allow" => "127.0.0.1",
   "deny" => "all",
@@ -764,14 +796,14 @@ default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
 default['gitlab']['mattermost']['service_segment_developer_key'] = nil
 default['gitlab']['mattermost']['service_google_developer_key'] = nil
 default['gitlab']['mattermost']['service_enable_incoming_webhooks'] = false
-default['gitlab']['mattermost']['service_enable_post_username_override'] = false
-default['gitlab']['mattermost']['service_enable_post_icon_override'] = false
+default['gitlab']['mattermost']['service_enable_post_username_override'] = true
+default['gitlab']['mattermost']['service_enable_post_icon_override'] = true
 default['gitlab']['mattermost']['service_enable_testing'] = false
 default['gitlab']['mattermost']['service_enable_security_fix_alert'] = true
 default['gitlab']['mattermost']['service_enable_insecure_outgoing_connections'] = false
 default['gitlab']['mattermost']['service_allow_cors_from'] = nil
 default['gitlab']['mattermost']['service_enable_outgoing_webhooks'] = false
-default['gitlab']['mattermost']['service_enable_commands'] = false
+default['gitlab']['mattermost']['service_enable_commands'] = true
 default['gitlab']['mattermost']['service_enable_custom_emoji'] = false
 default['gitlab']['mattermost']['service_enable_only_admin_integrations'] = true
 default['gitlab']['mattermost']['service_enable_oauth_service_provider'] = false
@@ -780,6 +812,14 @@ default['gitlab']['mattermost']['service_session_length_web_in_days'] = 30
 default['gitlab']['mattermost']['service_session_length_mobile_in_days'] = 30
 default['gitlab']['mattermost']['service_session_length_sso_in_days'] = 30
 default['gitlab']['mattermost']['service_session_cache_in_minutes'] = 10
+default['gitlab']['mattermost']['service_connection_security'] = nil
+default['gitlab']['mattermost']['service_tls_cert_file'] = nil
+default['gitlab']['mattermost']['service_tls_key_file'] = nil
+default['gitlab']['mattermost']['service_use_lets_encrypt'] = false
+default['gitlab']['mattermost']['service_lets_encrypt_cert_cache_file'] = "./config/letsencrypt.cache"
+default['gitlab']['mattermost']['service_forward_80_to_443'] = false
+default['gitlab']['mattermost']['service_read_timeout'] = 300
+default['gitlab']['mattermost']['service_write_timeout'] = 300
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
@@ -811,6 +851,7 @@ default['gitlab']['mattermost']["file_amazon_s3_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_bucket_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_location_constraint"] = false
 default['gitlab']['mattermost']["file_amazon_s3_lowercase_bucket"] = false
+default['gitlab']['mattermost']["file_amazon_s3_ssl"] = true
 
 default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
 default['gitlab']['mattermost']['email_enable_sign_in_with_email'] = true
@@ -832,11 +873,12 @@ default['gitlab']['mattermost']['email_enable_batching'] = false
 default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
 default['gitlab']['mattermost']['email_batching_interval'] = 30
 
-default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = true
+default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
 default['gitlab']['mattermost']['ratelimit_memory_store_size'] = 10000
 default['gitlab']['mattermost']['ratelimit_vary_by_remote_addr'] = true
 default['gitlab']['mattermost']['ratelimit_vary_by_header'] = nil
+default['gitlab']['mattermost']['ratelimit_max_burst'] = 100
 
 default['gitlab']['mattermost']['privacy_show_email_address'] = true
 default['gitlab']['mattermost']['privacy_show_full_name'] = true
@@ -855,6 +897,7 @@ default['gitlab']['mattermost']['team_allow_valet_default'] = false
 default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 default['gitlab']['mattermost']['team_restrict_team_names'] = true
 default['gitlab']['mattermost']['team_restrict_direct_message'] = "any"
+default['gitlab']['mattermost']['team_max_channels_per_team'] = 2000
 
 default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
 default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
@@ -869,6 +912,15 @@ default['gitlab']['mattermost']['gitlab_scope'] = nil
 default['gitlab']['mattermost']['gitlab_auth_endpoint'] = nil
 default['gitlab']['mattermost']['gitlab_token_endpoint'] = nil
 default['gitlab']['mattermost']['gitlab_user_api_endpoint'] = nil
+
+default['gitlab']['mattermost']['webrtc_enable'] = false
+default['gitlab']['mattermost']['webrtc_gateway_websocket_url'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_admin_url'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_admin_secret'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_stun_uri'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_uri'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_username'] = nil
+default['gitlab']['mattermost']['webrtc_gateway_turn_shared_key'] = nil
 
 ####
 # Mattermost NGINX
@@ -890,6 +942,12 @@ default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
 ####
 default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['pages-nginx']['enable'] = true
+default['gitlab']['pages-nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme"
+}
 
 ####
 # GitLab Registry NGINX
@@ -901,5 +959,58 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
-	"X-Forwarded-Proto" => "$scheme"
+  "X-Forwarded-Proto" => "$scheme"
 }
+
+####
+# Prometheus server
+####
+default['gitlab']['prometheus']['enable'] = false
+default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
+default['gitlab']['prometheus']['uid'] = nil
+default['gitlab']['prometheus']['gid'] = nil
+default['gitlab']['prometheus']['shell'] = '/bin/sh'
+default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
+default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
+default['gitlab']['prometheus']['scrape_interval'] = 15
+default['gitlab']['prometheus']['scrape_timeout'] = 15
+default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
+default['gitlab']['prometheus']['flags'] = {
+  'storage.local.path' => File.join(node['gitlab']['prometheus']['home'], 'data'),
+  'storage.local.memory-chunks' => '50000',
+  'storage.local.max-chunks-to-persist' => '40000',
+  'config.file' => File.join(node['gitlab']['prometheus']['home'], 'prometheus.yml')
+}
+
+####
+# Prometheus Node Exporter
+####
+default['gitlab']['node-exporter']['enable'] = false
+default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
+default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['gitlab']['node-exporter']['flags'] = {
+  'collector.textfile.directory' => File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
+}
+default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
+
+####
+# Redis exporter
+###
+default['gitlab']['redis-exporter']['enable'] = false
+default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['gitlab']['redis-exporter']['flags'] = {
+  'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
+}
+default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
+
+####
+# Postgres exporter
+###
+default['gitlab']['postgres-exporter']['enable'] = false
+default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
+default['gitlab']['postgres-exporter']['flags'] = {
+}
+default['gitlab']['postgres-exporter']['env'] = {
+  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=template1"
+}
+default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'

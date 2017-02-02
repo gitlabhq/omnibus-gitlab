@@ -23,11 +23,7 @@ require 'openssl'
 install_dir = node['package']['install-dir']
 ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
-Gitlab[:node] = node
-if File.exists?("/etc/gitlab/gitlab.rb")
-  Gitlab.from_file("/etc/gitlab/gitlab.rb")
-end
-node.consume_attributes(Gitlab.generate_config(node['fqdn']))
+include_recipe 'gitlab::config'
 
 directory "/etc/gitlab" do
   owner "root"
@@ -119,6 +115,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 [
   "unicorn",
   "sidekiq",
+  "gitaly",
   "gitlab-workhorse",
   "mailroom",
   "nginx",
@@ -135,6 +132,12 @@ include_recipe "gitlab::logrotate_folders_and_configs"
     include_recipe "gitlab::#{service}_disable"
   end
 end
+
+# Configure healthcheck if we have the external_url set
+include_recipe "gitlab::gitlab-healthcheck" if Gitlab['external_url']
+
+# Recipe which handles all prometheus related services
+include_recipe "gitlab::gitlab-prometheus"
 
 # Deprecated in favor of gitlab-workhorse since 8.2
 runit_service "gitlab-git-http-server" do

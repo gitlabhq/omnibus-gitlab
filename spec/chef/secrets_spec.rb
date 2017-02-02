@@ -2,7 +2,7 @@ require 'chef_helper'
 require 'base64'
 
 describe 'secrets' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   def stub_gitlab_secrets_json(secrets)
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
@@ -31,8 +31,9 @@ describe 'secrets' do
     before do
       allow(SecretsHelper).to receive(:system)
       allow(File).to receive(:directory?).with('/etc/gitlab').and_return(true)
-      allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w').and_yield(file).once
+      allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w', 0600).and_yield(file).once
       allow(file).to receive(:puts) { |json| @new_secrets = JSON.parse(json) }
+      allow(file).to receive(:chmod).and_return(true)
     end
 
     context 'when there are no existing secrets' do

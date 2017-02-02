@@ -151,7 +151,7 @@ daemonize no
 #
 # Creating a pid file is best effort: if Redis is not able to create it
 # nothing bad happens, the server will start and run normally.
-pidfile /var/run/redis_<%= @port %>.pid
+pidfile "/var/run/redis_<%= @port %>.pid"
 
 # Specify the server verbosity level.
 # This can be one of:
@@ -238,7 +238,7 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump.rdb
+dbfilename "dump.rdb"
 
 # The working directory.
 #
@@ -248,7 +248,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir <%= @dir %>
+dir <%= %Q("#{@dir}") %>
 
 ################################# REPLICATION #################################
 
@@ -267,7 +267,7 @@ dir <%= @dir %>
 #    and resynchronize with them.
 #
 # slaveof <masterip> <masterport>
-<%= "slaveof #{@master_ip} #{@master_port}" if @master_ip && @master_port %>
+<%= "slaveof #{@master_ip} #{@master_port}" if @is_slave %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -275,7 +275,7 @@ dir <%= @dir %>
 # refuse the slave request.
 #
 # masterauth <master-password>
-<%= %Q(masterauth "#{@master_password}") if @master_password %>
+<%= %Q(masterauth "#{@master_password}") if @master_password%>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -440,6 +440,35 @@ slave-priority 100
 #
 # By default min-slaves-to-write is set to 0 (feature disabled) and
 # min-slaves-max-lag is set to 10.
+
+# A Redis master is able to list the address and port of the attached
+# slaves in different ways. For example the "INFO replication" section
+# offers this information, which is used, among other tools, by
+# Redis Sentinel in order to discover slave instances.
+# Another place where this info is available is in the output of the
+# "ROLE" command of a masteer.
+#
+# The listed IP and address normally reported by a slave is obtained
+# in the following way:
+#
+#   IP: The address is auto detected by checking the peer address
+#   of the socket used by the slave to connect with the master.
+#
+#   Port: The port is communicated by the slave during the replication
+#   handshake, and is normally the port that the slave is using to
+#   list for connections.
+#
+# However when port forwarding or Network Address Translation (NAT) is
+# used, the slave may be actually reachable via different IP and port
+# pairs. The following two options can be used by a slave in order to
+# report to its master a specific set of IP and port, so that both INFO
+# and ROLE will report those values.
+#
+# There is no need to use both the options if you need to override just
+# the port or the IP address.
+#
+# slave-announce-ip 5.5.5.5
+# slave-announce-port 1234
 
 ################################## SECURITY ###################################
 
@@ -1001,9 +1030,9 @@ activerehashing yes
 # subscribers and slaves receive data in a push fashion.
 #
 # Both the hard or the soft limit can be disabled by setting them to zero.
-client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
-client-output-buffer-limit pubsub 32mb 8mb 60
+client-output-buffer-limit normal <%= @client_output_buffer_limit_normal %>
+client-output-buffer-limit slave <%= @client_output_buffer_limit_slave %>
+client-output-buffer-limit pubsub <%= @client_output_buffer_limit_pubsub %>
 
 # Redis calls an internal function to perform many background tasks, like
 # closing connections of clients in timeout, purging expired keys that are

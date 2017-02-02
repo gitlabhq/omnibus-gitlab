@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+omnibus_helper = OmnibusHelper.new(node)
 ci_nginx_vars = node['gitlab']['ci-nginx'].to_hash
 
 if ci_nginx_vars['listen_https'].nil?
@@ -41,7 +42,7 @@ if node["gitlab"]['gitlab-ci']['gitlab_ci_host']
         :gitlab_fqdn => CiHelper.gitlab_server_fqdn
       }
     ))
-    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+    notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   end
 
   node.override["gitlab"]['nginx']["gitlab_ci_http_config"] = gitlab_ci_http_config

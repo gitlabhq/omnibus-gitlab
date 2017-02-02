@@ -22,6 +22,17 @@ describe 'gitlab::default' do
       group: 'root',
       mode: '0755'
     )
+
+    gitconfig_hash = {
+      "receive" => ["fsckObjects = true"],
+      "pack" => ["threads = 1"],
+      "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+    }
+
+    expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
+      variables: { gitconfig: gitconfig_hash },
+    )
   end
 
   it 'creates the system gitconfig directory and file' do
@@ -37,6 +48,7 @@ describe 'gitlab::default' do
       "receive" => ["fsckObjects = true"],
       "pack" => ["threads = 2"],
       "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
@@ -63,6 +75,21 @@ describe 'gitlab::default' do
 
     it 'does not create the user config directory' do
       expect(chef_run).to_not create_directory('/etc/gitlab')
+    end
+  end
+
+  context 'prometheus is disabled default' do
+    it 'includes the prometheus_disable recipe' do
+      expect(chef_run).to include_recipe('gitlab::prometheus_disable')
+      expect(chef_run).to_not include_recipe('gitlab::prometheus')
+    end
+  end
+
+  context 'with prometheus enabled' do
+    before { stub_gitlab_rb(prometheus: { enable: true }) }
+    it 'includes the prometheus recipe' do
+      expect(chef_run).to include_recipe('gitlab::prometheus')
+      expect(chef_run).to_not include_recipe('gitlab::prometheus_disable')
     end
   end
 end

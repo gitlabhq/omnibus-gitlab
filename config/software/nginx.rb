@@ -17,16 +17,22 @@
 #
 
 name "nginx"
-default_version "1.10.1"
+default_version "1.10.2"
 
 license "BSD-2-Clause"
 license_file "LICENSE"
 
+# From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
+# Runtime dependencies
 dependency "pcre"
+dependency "zlib"
 dependency "openssl"
 
-source url: "http://nginx.org/download/nginx-#{version}.tar.gz",
-       md5: "088292d9caf6059ef328aa7dda332e44"
+version "1.10.2" do
+  source md5: "e8f5f4beed041e63eb97f9f4f55f3085"
+end
+
+source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 
 relative_path "nginx-#{version}"
 

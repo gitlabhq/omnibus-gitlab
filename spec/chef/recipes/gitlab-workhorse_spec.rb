@@ -5,10 +5,6 @@ describe 'gitlab::gitlab-workhorse' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
   end
 
   context 'with environment variables' do
@@ -43,6 +39,27 @@ describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiLimit 3 \\/)
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueDuration 1m \\/)
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit 6 \\/)
+    end
+  end
+
+  context 'without prometheus listen address' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: {})
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run")
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr/)
+    end
+  end
+
+  context 'with prometheus listen address' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9100'})
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr :9100 \\/)
     end
   end
 end

@@ -17,17 +17,18 @@
 #
 
 name "git"
-default_version "2.7.4"
+default_version "2.10.2"
 
 license "GPL-2.0"
 license_file "COPYING"
 
+# Runtime dependency
 dependency "zlib"
 dependency "openssl"
 dependency "curl"
 
-source :url => "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       :md5 => "c64012d491e24c7d65cd389f75383d91"
+source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
+       sha256: "3d7ef275d80b97aaa61f3b6be9d3dc516202e6f6f5d885f2c09b59eba592dcc4"
 
 relative_path "git-#{version}"
 
@@ -54,6 +55,9 @@ NO_INSTALL_HARDLINKS=YesPlease
       EOH
     end
   end
+
+  # Patch for git vulnerabilities
+  patch source: 'git-dec-2016-security.patch'
 
   command "make -j #{workers}", :env => env
   command "make install"

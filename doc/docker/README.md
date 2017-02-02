@@ -21,6 +21,8 @@ If you want to use the latest RC image, use `gitlab/gitlab-ce:rc` or
 
 Docker installation is required, see the [official installation docs](https://docs.docker.com/engine/installation/).
 
+**Note:** Using a native Docker install instead of Docker Toolbox is recommended in order to use the persisted volumes
+
 ## Run the image
 
 Run the image:
@@ -123,13 +125,15 @@ container's `gitlab.rb` file. That way you can easily configure GitLab's
 external URL, make any database configuration or any other option from the
 [Omnibus GitLab template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
+_Note: The settings contained in `GITLAB_OMNIBUS_CONFIG` will not be written to the `gitlab.rb` configuration file, they're evaluated on load._
+
 Here's an example that sets the external URL and enables LFS while starting
 the container:
 
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/'; gitlab_rails['lfs_enabled'] = true;"
+	--env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/'; gitlab_rails['lfs_enabled'] = true;" \
 	--publish 443:443 --publish 80:80 --publish 22:22 \
 	--name gitlab \
 	--restart always \
@@ -144,7 +148,7 @@ the `GITLAB_OMNIBUS_CONFIG` option. The content of `GITLAB_OMNIBUS_CONFIG` is
 _not_ preserved between subsequent runs.
 
 There are also a limited number of environment variables to configure GitLab.
-They are documented in the [environment variables section of the GitLab documentation](http://doc.gitlab.com/ce/administration/environment_variables.html).
+They are documented in the [environment variables section of the GitLab documentation](https://docs.gitlab.com/ce/administration/environment_variables.html).
 
 ## After starting a container
 
@@ -201,7 +205,7 @@ We provide tagged versions of GitLab Docker images.
 To see all available tags check:
 
 - [GitLab-CE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/) and
-- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/)
+- [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ee/tags/)
 
 To use a specific tagged version, replace `gitlab/gitlab-ce:latest` with
 the GitLab version you want to run, for example `gitlab/gitlab-ce:8.4.3`.
@@ -256,7 +260,7 @@ port `2289`, use the following `docker run` command:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:8929 --publish 2289:2289 \
+	--publish 8929:80 --publish 2289:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -359,14 +363,14 @@ web:
       gitlab_rails['gitlab_shell_ssh_port'] = 2224
   ports:
     - '9090:9090'
-    - '2224:2224'
+    - '2224:22'
   volumes:
     - '/srv/gitlab/config:/etc/gitlab'
     - '/srv/gitlab/logs:/var/log/gitlab'
     - '/srv/gitlab/data:/var/opt/gitlab'
 ```
 
-This is the same as using `--publish 9090:9090 --publish 2224:2224`.
+This is the same as using `--publish 9090:9090 --publish 2224:22`.
 
 ## Update GitLab using Docker compose
 
@@ -396,7 +400,28 @@ sudo docker exec gitlab update-permissions
 sudo docker restart gitlab
 ```
 
+### Windows/Mac: Error executing action run on resource ruby_block[directory resource: /data/GitLab]
+
+This error occurs when using Docker Toolbox with VirtualBox on Windows or Mac,
+and making use of Docker volumes. The /c/Users volume is mounted as a
+VirtualBox Shared Folder, and does not support the all POSIX filesystem features.
+The directory ownership and permissions cannot be changed without remounting, and
+GitLab fails.
+
+Our recommendation is to switch to using the native Docker install for your
+platform, instead of using Docker Toolbox.
+
+If you cannot use the native Docker install (Windows 10 Home Edition, or Windows < 10),
+then an alternative solution is to setup NFS mounts instead of VirtualBox shares for
+Docker Toolbox's boot2docker.
+
 [docker compose]: https://docs.docker.com/compose/
 [install-compose]: https://docs.docker.com/compose/install/
 [down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
 [docker-ports]: https://docs.docker.com/engine/reference/run/#/expose-incoming-ports
+
+### Getting help
+
+If your problem is not listed here please see [getting help](https://about.gitlab.com/getting-help/) for the support channels.
+
+These docker images are officially supported by GitLab Inc. and should always be up to date.

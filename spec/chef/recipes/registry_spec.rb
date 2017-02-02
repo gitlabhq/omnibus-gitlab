@@ -1,9 +1,11 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
-  before { allow(Gitlab).to receive(:[]).and_call_original }
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
 
   context 'when registry is enabled' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
@@ -76,6 +78,8 @@ describe 'registry recipe' do
         .with_content(/realm: \/jwt\/auth/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/addr: localhost:5000/)
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
     end
 
     it 'creates a default VERSION file' do
@@ -89,8 +93,8 @@ describe 'registry recipe' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
         .with_content(/api_url: http:\/\/localhost:5000/)
     end
-
   end
+
   context 'when registry port is specified' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { registry_http_addr: 'localhost:5001' }) }
     it 'creates registry and rails configs with specified value' do
@@ -98,6 +102,79 @@ describe 'registry recipe' do
         .with_content(/addr: localhost:5001/)
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
         .with_content(/api_url: http:\/\/localhost:5001/)
+    end
+  end
+
+  context 'when a debug addr is specified' do
+    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { debug_addr: 'localhost:5005' }) }
+
+    it 'creates the registry config with the specified debug value' do
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(/debug:\n\s*addr: localhost:5005/)
+    end
+  end
+end
+
+describe 'registry' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when registry is enabled' do
+    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
+
+    it 'sets default storage options' do
+      expect(chef_run.node['gitlab']['registry']['storage']['filesystem'])
+        .to eql('rootdirectory' => '/var/opt/gitlab/gitlab-rails/shared/registry')
+      expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+        .to eql('blobdescriptor'=>'inmemory')
+      expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+        .to eql('enabled' => true)
+    end
+
+    context 'when custom storage parameters are specified' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            storage: {
+              s3: { accesskey: 'awsaccesskey', secretkey: 'awssecretkey', bucketname: 'bucketname' }
+            }
+          }
+        )
+      end
+
+      it 'uses custom storage instead of the default rootdirectory' do
+        expect(chef_run.node['gitlab']['registry']['storage'])
+          .to include(s3: { accesskey: 'awsaccesskey', secretkey: 'awssecretkey', bucketname: 'bucketname' })
+        expect(chef_run.node['gitlab']['registry']['storage'])
+          .not_to include('rootdirectory' => '/var/opt/gitlab/gitlab-rails/shared/registry')
+      end
+
+      it 'uses the default cache and delete settings if not overridden' do
+        expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+          .to eql('blobdescriptor'=>'inmemory')
+        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+          .to eql('enabled' => true)
+      end
+
+      it 'allows the cache and delete settings to be overridden' do
+        stub_gitlab_rb(registry: { storage: {cache: 'somewhere-else', delete: { enabled: false } } })
+        expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+          .to eql('somewhere-else')
+        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+          .to eql('enabled' => false)
+      end
+    end
+
+    context 'when storage_delete_enabled is false' do
+      before { stub_gitlab_rb(registry: { storage_delete_enabled: false }) }
+
+      it 'sets the delete enabled field on the storage object' do
+        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+          .to eql('enabled' => false)
+      end
     end
   end
 end

@@ -147,6 +147,10 @@ shell and the `passwd` command for non-superusers requires entering the current
 password prior to a new password. The user cannot enter a password that will
 match `'*'` and therefore the account remains password-less.
 
+Keep in mind that the git user must have access to the system so please review
+your security settings at `/etc/security/access.conf` and make sure the git user
+is not blocked.
+
 ### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
 The packaged Postgres instance will try to allocate 25% of total memory as
@@ -215,6 +219,30 @@ Try enabling the module on which sysctl errored out, on how to enable the module
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
+Another variation of this error reports the file system is read-only and shows following stack trace:
+
+```
+ * execute[load sysctl conf] action run
+    [execute] sysctl: setting key "kernel.shmall": Read-only file system
+              sysctl: setting key "kernel.shmmax": Read-only file system
+
+    ================================================================================
+    Error executing action `run` on resource 'execute[load sysctl conf]'
+    ================================================================================
+
+    Mixlib::ShellOut::ShellCommandFailed
+    ------------------------------------
+    Expected process to exit with [0], but received '255'
+    ---- Begin output of cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ----
+    STDOUT:
+    STDERR: sysctl: setting key "kernel.shmall": Read-only file system
+    sysctl: setting key "kernel.shmmax": Read-only file system
+    ---- End output of cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ----
+    Ran cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - returned 255
+```
+
+This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
+
 ### I am unable to install omnibus-gitlab without root access
 
 Occasionally people ask if they can install GitLab without root access.
@@ -247,7 +275,7 @@ Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, omnibus-gitlab will create the required Unix
 accounts during 'gitlab-ctl reconfigure' but that behavior can be
-[disabled](http://doc.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
+[disabled](https://docs.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
 
 In principle omnibus-gitlab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
@@ -283,9 +311,9 @@ When you install GitLab from source (which was the only way to do it before we
 had omnibus packages) you need to convert the assets on your GitLab server
 every time you update GitLab. People used to overlook this step and there are
 still posts, comments and mails out there on the internet where users recommend
-each other to run `rake assets:precompile`. With the omnibus packages things
-are different: when we build the package [we convert the assets for
-you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
+each other to run `rake assets:precompile` (which has now been renamed
+`gitlab:assets:compile`). With the omnibus packages things are different: when
+we build the package [we compile the assets for you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
 When you install GitLab with an omnibus package, the converted assets are
 already there! That is why you do not need to run `rake assets:precompile` when
 you install GitLab from a package.
@@ -299,10 +327,10 @@ If you want to run GitLab with custom JavaScript or CSS code you are probably
 better off running GitLab from source, or building your own packages.
 
 If you really know what you are doing,
-you can execute `gitlab-rake assets:precompile` like this
+you can execute `gitlab-rake gitlab:assets:compile` like this:
 
 ```shell
-sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake assets:clean assets:precompile
+sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake gitlab:assets:clean gitlab:assets:compile
 # user and path might be different if you changed the defaults of
 # user['username'], user['group'] and gitlab_rails['dir'] in gitlab.rb
 sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
@@ -310,7 +338,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ### 'Short read or OOM loading DB' error
 
-Try cleaning the old redis session by following the [documentation here.](http://doc.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
+Try cleaning the old redis session by following the [documentation here.](https://docs.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
 
 ### Apt error 'The requested URL returned error: 403'
 
@@ -423,7 +451,7 @@ how to override the default headers.
 
 ### Extension missing pg_trgm
 
-Starting from GitLab 8.6, [GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#postgresql-requirements)
+Starting from GitLab 8.6, [GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
 If you are using omnibus-gitlab package with the bundled database, the extension
 should be automatically enabled when you upgrade.
@@ -482,7 +510,7 @@ above, and finally restart the container.
 
 ### Errno::ENOMEM: Cannot allocate memory during backup or upgrade
 
-[GitLab requires](http://doc.gitlab.com/ce/install/requirements.html#memory)
+[GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#memory)
 2GB of available memory to run without errors. Having 2GB of memory installed may
 not be enough depending on the resource usage of other processes on your server.
 If GitLab runs fine when not upgrading or running a backup, then adding more swap
@@ -526,4 +554,4 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
 [Change the default proxy headers section of nginx doc]: doc/settings/nginx.md
-[reconfigure GitLab]: http://doc.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
+[reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure

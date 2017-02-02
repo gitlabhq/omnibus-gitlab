@@ -46,11 +46,11 @@ class AccountHelper
     node['gitlab']['redis']['username']
   end
 
-  def postgresgl_user
+  def postgresql_user
     node['gitlab']['postgresql']['username']
   end
 
-  def postgresgl_group
+  def postgresql_group
     node['gitlab']['postgresql']['username']
   end
 
@@ -86,6 +86,14 @@ class AccountHelper
     node['gitlab']['registry']['group']
   end
 
+  def prometheus_user
+    node['gitlab']['prometheus']['username']
+  end
+
+  def prometheus_group
+    node['gitlab']['prometheus']['group']
+  end
+
   def users
     %W(
         #{gitlab_user}
@@ -96,6 +104,7 @@ class AccountHelper
         #{ci_redis_user}
         #{mattermost_user}
         #{registry_user}
+        #{prometheus_user}
       )
   end
 
@@ -109,6 +118,7 @@ class AccountHelper
         #{ci_redis_group}
         #{mattermost_group}
         #{registry_group}
+        #{prometheus_group}
       )
   end
 end

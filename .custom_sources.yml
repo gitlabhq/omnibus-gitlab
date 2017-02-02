@@ -12,3 +12,7 @@ config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
 omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
+registry:
+  remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
+rb-readline:
+  remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"

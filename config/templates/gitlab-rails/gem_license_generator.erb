@@ -1,7 +1,8 @@
 #!/opt/gitlab/embedded/bin/ruby
 require 'find'
 
-gems_directory = "<%= gems_directory %>"
+gem_dir = `<%= install_dir %>/embedded/bin/gem environment gemdir`
+gems_directory = File.join(gem_dir.chomp, 'gems')
 compiled_licenses_file = "<%= license_file %>"
 
 license_path_list = []

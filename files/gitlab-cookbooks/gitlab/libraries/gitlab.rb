@@ -43,6 +43,7 @@ require_relative 'postgresql.rb'
 require_relative 'redis.rb'
 require_relative 'registry.rb'
 require_relative 'unicorn.rb'
+require_relative 'gitaly.rb'
 
 module Gitlab
   extend(Mixlib::Config)
@@ -61,6 +62,7 @@ module Gitlab
   unicorn Mash.new
   ci_unicorn Mash.new
   sidekiq Mash.new
+  sidekiq_cluster Mash.new
   ci_sidekiq Mash.new
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
@@ -78,6 +80,11 @@ module Gitlab
   mattermost Mash.new
   gitlab_pages Mash.new
   registry Mash.new
+  node_exporter Mash.new
+  prometheus Mash.new
+  redis_exporter Mash.new
+  postgres_exporter Mash.new
+  sentinel Mash.new
   node nil
   external_url nil
   pages_external_url nil
@@ -85,6 +92,18 @@ module Gitlab
   mattermost_external_url nil
   registry_external_url nil
   git_data_dirs Mash.new
+  gitaly Mash.new
+
+  # roles
+  redis_sentinel_role Mash.new
+  redis_master_role Mash.new
+  redis_slave_role Mash.new
+
+  ROLES ||= [
+    'redis_sentinel',
+    'redis_master',
+    'redis_slave'
+  ].freeze
 
   class << self
     # guards against creating secrets on non-bootstrap node
@@ -158,6 +177,7 @@ module Gitlab
         "unicorn",
         "ci_unicorn",
         "sidekiq",
+        "sidekiq-cluster",
         "ci_sidekiq",
         "gitlab_workhorse",
         "mailroom",
@@ -178,10 +198,22 @@ module Gitlab
         "mattermost_external_url",
         "pages_external_url",
         "gitlab_pages",
-        "registry"
+        "registry",
+        "gitaly",
+        "node_exporter",
+        "prometheus",
+        "redis_exporter",
+        "postgres_exporter",
+        "sentinel"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
+      end
+
+      results['roles'] = {}
+      ROLES.each do |key|
+        rkey = key.gsub('_', '-')
+        results['roles'][rkey] = Gitlab["#{key}_role"]
       end
 
       results
@@ -201,10 +233,11 @@ module Gitlab
       GitlabMattermost.parse_variables
       GitlabPages.parse_variables
       Registry.parse_variables
+      Gitaly.parse_variables
       # Parse nginx variables last because we want all external_url to be
       # parsed first
       Nginx.parse_variables
-      GitlabRails.disable_gitlab_rails_services
+      GitlabRails.disable_services
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end

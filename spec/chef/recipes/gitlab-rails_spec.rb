@@ -1,43 +1,10 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-
-    # Prevent chef converge from reloading the helper library, which would override our helper stub
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(%r{gitlab/libraries/storage_directory_helper}).and_return(true)
-  end
-
-  context 'when multiple postgresql listen_address is used' do
-    before do
-      stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1,1.1.1.1" })
-    end
-
-    it 'creates the postgres configuration file with multi listen_address and database.yml file with one host' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
-      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
-    end
-  end
-
-  context 'when no postgresql listen_address is used' do
-    it 'creates the postgres configuration file with empty listen_address and database.yml file with default one' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '\/var\/opt\/gitlab\/postgresql'/)
-      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
-    end
-  end
-
-  context 'when one postgresql listen_address is used' do
-    before do
-      stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
-    end
-
-    it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
-      expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
-    end
   end
 
   context 'when manage-storage-directories is disabled' do
@@ -133,23 +100,67 @@ describe 'gitlab::gitlab-rails' do
     end
   end
 
-  context 'gitlab_workhorse_secret' do
-    before do
-      stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
+  context 'creating gitlab.yml' do
+    gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
+    context 'mattermost settings' do
+      context 'mattermost is configured' do
+        it 'exposes the mattermost host' do
+          stub_gitlab_rb(mattermost: { enable: true },
+                         mattermost_external_url: 'http://mattermost.domain.com')
+
+          expect(chef_run).to render_file(gitlab_yml_path).
+            with_content("host: http://mattermost.domain.com")
+        end
+      end
+
+      context 'mattermost is not configured' do
+        it 'has empty values' do
+          expect(chef_run).to render_file(gitlab_yml_path).
+            with_content(/mattermost:\s+enabled: false\s+host:\s+/)
+        end
+      end
+
+      context 'mattermost on another server' do
+        it 'sets the mattermost host' do
+          stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
+
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+            with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
+        end
+
+        context 'values set twice' do
+          it 'sets the mattermost external url' do
+            stub_gitlab_rb(mattermost: { enable: true },
+                           mattermost_external_url: 'http://my.url.com',
+                           gitlab_rails: { mattermost_host: 'http://do.not/setme' })
+
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+              with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
+          end
+        end
+      end
     end
 
-    it 'renders the correct node attribute' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-        .with_content('abc123-gitlab-workhorse')
-    end
+    context 'creating gitlab.yml' do
+      let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
+      # NOTE: Test if we pass proper notifications to other resources
+      context 'rails cache management' do
+        before do
+          allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).
+            and_return(false)
+        end
 
-    it 'uses the correct owner and permissions' do
-      expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-        .with(
-          owner: 'root',
-          group: 'root',
-          mode: '0644',
-        )
+        it 'should notify rails cache clear resource' do
+          expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
+        end
+
+        it 'should not notify rails cache clear resource if disabled' do
+          stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+
+          expect(gitlab_yml).not_to notify(
+            'execute[clear the gitlab-rails cache]')
+        end
+      end
     end
   end
 
@@ -183,6 +194,168 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+    end
+  end
+
+  describe "with symlinked templates" do
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+
+    before do
+      %w(unicorn sidekiq gitlab-workhorse postgresql redis nginx logrotate).map { |svc| stub_should_notify?(svc, true)}
+    end
+
+    describe 'database.yml' do
+      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database.yml') }
+      let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml") }
+
+      context 'by default' do
+        it 'creates the template' do
+          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
+            .with(
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink_template).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_template).to_not notify('service[nginx]').to(:restart).delayed
+        end
+
+        it 'creates the symlink' do
+          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml")
+        end
+
+        it 'linking triggers notifications' do
+          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink_link).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_link).to_not notify('service[nginx]').to(:restart).delayed
+        end
+      end
+
+      context 'with specific database settings' do
+        context 'when multiple postgresql listen_address is used' do
+          before do
+            stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1,1.1.1.1" })
+          end
+
+          it 'creates the postgres configuration file with multi listen_address and database.yml file with one host' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
+          end
+        end
+
+        context 'when no postgresql listen_address is used' do
+          it 'creates the postgres configuration file with empty listen_address and database.yml file with default one' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '\/var\/opt\/gitlab\/postgresql'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
+          end
+        end
+
+        context 'when one postgresql listen_address is used' do
+          before do
+            stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
+          end
+
+          it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
+          end
+
+          it 'template triggers notifications' do
+            expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+            expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink_template).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink_template).to_not notify('service[nginx]').to(:restart).delayed
+          end
+
+          it 'creates the symlink' do
+            expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml")
+          end
+
+          it 'linking triggers notifications' do
+            expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+            expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink_link).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink_link).to_not notify('service[nginx]').to(:restart).delayed
+          end
+        end
+      end
+    end
+
+
+    describe 'gitlab_workhorse_secret' do
+      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret') }
+      let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret") }
+
+      context 'by default' do
+        it 'creates the template' do
+          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+            .with(
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+        end
+
+        it 'creates the symlink' do
+          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
+        end
+
+        it 'linking triggers notifications' do
+          expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'with specific gitlab_workhorse_secret' do
+        before do
+          stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
+        end
+
+        it 'renders the correct node attribute' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+            .with_content('abc123-gitlab-workhorse')
+        end
+
+        it 'uses the correct owner and permissions' do
+          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
+            .with(
+          owner: 'root',
+          group: 'root',
+          mode: '0644',
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+        end
+
+        it 'creates the symlink' do
+          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
+        end
+
+        it 'linking triggers notifications' do
+          expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+        end
+      end
     end
   end
 end
