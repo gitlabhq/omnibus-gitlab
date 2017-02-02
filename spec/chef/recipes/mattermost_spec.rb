@@ -5,19 +5,18 @@ describe 'gitlab::mattermost' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(mattermost: { enable: true })
+    stub_gitlab_rb(external_url: 'http://gitlab.example.com', mattermost_external_url: 'http://mattermost.example.com')
     allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
   end
 
   it 'authorizes mattermost with gitlab' do
-    stub_gitlab_rb(external_url: 'http://external.url')
     allow(MattermostHelper).to receive(:authorize_with_gitlab)
 
     expect(chef_run).to run_ruby_block('authorize mattermost with gitlab')
       .at_converge_time
     expect(MattermostHelper).to receive(:authorize_with_gitlab)
-      .with 'http://external.url'
+      .with 'http://gitlab.example.com'
 
     chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
   end
@@ -44,9 +43,6 @@ describe 'gitlab::mattermost' do
       gitlab_id: 'gitlab_id',
       gitlab_secret: 'gitlab_secret',
       gitlab_scope: 'scope',
-      gitlab_auth_endpoint: 'http://example.com/auth/endpoint',
-      gitlab_token_endpoint: 'http://example.com/token/endpoint',
-      gitlab_user_api_endpoint: 'http://example.com/user/api/endpoint',
     })
 
     expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
@@ -57,9 +53,9 @@ describe 'gitlab::mattermost' do
         expect(config['GitLabSettings']['Secret']).to eq 'gitlab_secret'
         expect(config['GitLabSettings']['Id']).to eq 'gitlab_id'
         expect(config['GitLabSettings']['Scope']).to eq 'scope'
-        expect(config['GitLabSettings']['AuthEndpoint']).to eq 'http://example.com/auth/endpoint'
-        expect(config['GitLabSettings']['TokenEndpoint']).to eq 'http://example.com/token/endpoint'
-        expect(config['GitLabSettings']['UserApiEndpoint']).to eq 'http://example.com/user/api/endpoint'
+        expect(config['GitLabSettings']['AuthEndpoint']).to eq 'http://gitlab.example.com/oauth/authorize'
+        expect(config['GitLabSettings']['TokenEndpoint']).to eq 'http://gitlab.example.com/oauth/token'
+        expect(config['GitLabSettings']['UserApiEndpoint']).to eq 'http://gitlab.example.com/api/v3/user'
       }
   end
 

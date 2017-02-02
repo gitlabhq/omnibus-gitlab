@@ -9,9 +9,10 @@ omnibus-gitlab repository.
 - Add HealthCheck support to our Docker image 845b52b2
 - Remove Nodejs dependency 7d22e0a8
 - Add an option to skip cache:clear task (Adam Hamsik) e4ba9913
+- Update Mattermost OAuth2 endpoints when GitLab's url changes
 - Include Redis exporter, off by default 3bd03d2d
 - Include Postgres exporter, off by default e8755757
-- Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea 
+- Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea
 
 8.16.3
 
