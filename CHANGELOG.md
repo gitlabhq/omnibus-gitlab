@@ -4,6 +4,7 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 8.15.6
+- Pin bundler version to 1.13.7 to avoid breaking changes
 - Update Mattermost to 3.5.2 to patch a XSS vulnerability
 
 8.15.5
@@ -45,7 +46,7 @@ omnibus-gitlab repository.
 - Pass websockets through to workhorse for terminal support 849ffc
 - Add notification for new PostgreSQL version 05dbb3ec
 - Update libcurl to 7.52.0 ea11a83
-- Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes 8ea7e2
+- Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes 8ea7e2d
 
 8.14.5
 
