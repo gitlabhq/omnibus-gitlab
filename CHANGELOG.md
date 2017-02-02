@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Add an option to skip cache:clear task (Adam Hamsik) e4ba9913
 - Include Redis exporter, off by default 3bd03d2d
 - Include Postgres exporter, off by default e8755757
+- Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea 
 
 8.16.3
 
