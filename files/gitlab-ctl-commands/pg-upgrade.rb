@@ -16,14 +16,7 @@
 #
 
 require 'optparse'
-
-# Testing needs require_relative line, but since this file is actually eval'd
-# that won't work in the wild. So we require by full path.
-begin
-  require_relative 'lib/gitlab_ctl'
-rescue LoadError
-  require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-end
+require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
 options = {
   wait: true
@@ -39,22 +32,13 @@ OptionParser.new do |opts|
   end
 end.parse!(ARGV)
 
-db_worker = GitlabCtl::PgUpgrade.new(base_path)
-# Try to fetch the data_directory from the running database. Use the default
-# otherwise.
-begin
-  DATA_DIR = db_worker.run_query('show data_directory').freeze
-rescue GitlabCtl::Errors::ExecutionError
-  log 'Error fetching data_directory from running database, using default value.'
-  DATA_DIR = "#{data_path}/postgresql/data".freeze
-end
-
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
-TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : DATA_DIR
 
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            1 do |_cmd_name|
+  db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path)
+  TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : db_worker.data_dir
   maintenance_mode('enable')
   if progress_message('Checking if we need to downgrade') do
     db_worker.fetch_running_version == default_version
@@ -86,6 +70,8 @@ end
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            1 do |_cmd_name|
+  db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path)
+  TMP_DATA_DIR = options.key?(:tmp_dir) ? "#{options[:tmp_dir]}/data" : db_worker.data_dir
   running_version = db_worker.fetch_running_version
 
   unless progress_message(
@@ -128,9 +114,9 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking if the PostgreSQL directory has been symlinked elsewhere'
   ) do
-    !File.symlink?(DATA_DIR)
+    !File.symlink?(db_worker.data_dir)
   end
-    log "#{DATA_DIR} is a symlink to another directory. Will not proceed"
+    log "#{db_worker.data_dir} is a symlink to another directory. Will not proceed"
     exit! 1
   end
 
@@ -195,7 +181,7 @@ add_command_under_category 'pg-upgrade', 'database',
       db_worker.run_pg_command(
         "#{base_path}/embedded/bin/pg_upgrade " \
         "-b #{base_path}/embedded/postgresql/#{default_version}/bin " \
-        "-d #{DATA_DIR} " \
+        "-d #{db_worker.data_dir} " \
         "-D #{TMP_DATA_DIR}.#{upgrade_version} " \
         "-B #{base_path}/embedded/bin"
       )
@@ -207,15 +193,15 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   unless progress_message('Move the old data directory out of the way') do
-    run_command("mv #{DATA_DIR} #{TMP_DATA_DIR}.#{default_version}")
+    run_command("mv #{db_worker.data_dir} #{TMP_DATA_DIR}.#{default_version}")
   end
     die 'Error moving data for older version, '
   end
 
   unless progress_message('Rename the new data directory') do
-    run_command("mv #{TMP_DATA_DIR}.#{upgrade_version} #{DATA_DIR}")
+    run_command("mv #{TMP_DATA_DIR}.#{upgrade_version} #{db_worker.data_dir}")
   end
-    die "Error moving #{TMP_DATA_DIR}.#{upgrade_version} to #{DATA_DIR}"
+    die "Error moving #{TMP_DATA_DIR}.#{upgrade_version} to #{db_worker.data_dir}"
   end
 
   log 'Upgrade is complete, doing post configuration steps'
@@ -225,7 +211,7 @@ add_command_under_category 'pg-upgrade', 'database',
     die 'Something went wrong during final reconfiguration, please check the output'
   end
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
-  analyze_script = File.join(DATA_DIR, '../analyze_new_cluster.sh')
+  analyze_script = File.join(db_worker.data_dir, '../analyze_new_cluster.sh')
   begin
     db_worker.run_pg_command("/bin/sh #{analyze_script}")
   rescue GitlabCTL::Errors::ExecutionError => ee
@@ -273,8 +259,8 @@ def revert
   log '== Reverting =='
   run_sv_command_for_service('stop', 'postgresql')
   if Dir.exist?("#{TMP_DATA_DIR}.#{default_version}")
-    run_command("rm -rf #{DATA_DIR}")
-    run_command("mv #{TMP_DATA_DIR}.#{default_version} #{DATA_DIR}")
+    run_command("rm -rf #{db_worker.data_dir}")
+    run_command("mv #{TMP_DATA_DIR}.#{default_version} #{db_worker.data_dir}")
   end
   create_links(default_version)
   run_sv_command_for_service('start', 'postgresql')

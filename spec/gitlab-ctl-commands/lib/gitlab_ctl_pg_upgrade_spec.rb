@@ -6,7 +6,7 @@ require 'gitlab_ctl'
 
 describe GitlabCtl::PgUpgrade do
   before(:all) do
-    @dbw = GitlabCtl::PgUpgrade.new('/fakedir')
+    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fakedatadir')
   end
 
   it 'should create a new object' do
@@ -14,7 +14,7 @@ describe GitlabCtl::PgUpgrade do
   end
 
   it 'should allow for a custom base directory' do
-    expect(@dbw.base_path).to eq('/fakedir')
+    expect(@dbw.base_path).to eq('/fakebasedir')
   end
 
   it 'should call gitlab-psql with the appropriate command' do
