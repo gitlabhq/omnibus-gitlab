@@ -28,6 +28,32 @@ For example, if you take a look at the `8-6-stable` branch, you can conclude tha
 8.6 packages were running [ruby 2.1.8]. Or, that 8.5 packages were bundled
 with [nginx 1.9.0].
 
+## Checking for newer configuration options on upgrade
+
+Configuration file in `/etc/gitlab/gitlab.rb` is created on initial installation
+of the omnibus-gitlab package. On subsequent package upgrades, the configuration
+file is not updated with new configuration. This is done in order to avoid
+accidental overwrite of user configuration provided in `/etc/gitlab/gitlab.rb`.
+
+New configuration options are noted in the
+[gitlab.rb.template file](https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template).
+
+The omnibus-gitlab package also provides convenience command which will
+compare the existing user configuration with the latest version of the
+template contained in the package.
+
+To view a diff between your configuration file and the latest version, run:
+
+```
+sudo gitlab-ctl diff-config
+
+```
+_**Note:** This command is available from GitLab 8.17_
+
+**Important:** If you are copy-pasting the output of this command into your
+`/etc/gitlab/gitlab.rb` configuration file, make sure to omit leading `+` and `-`
+on each line.
+
 ## Init system detection
 
 The omnibus-gitlab will attempt to query the underlaying system in order to
