@@ -29,7 +29,7 @@ add_command 'diff-config', 'Compare the user configuration with package availabl
     exit! 1
   end
 
-  command = %W( /opt/gitlab/embedded/bin/git
+  command = %W( #{base_path}/embedded/bin/git
                 diff
                 #{user_config_file}
                 #{config_template_file}
