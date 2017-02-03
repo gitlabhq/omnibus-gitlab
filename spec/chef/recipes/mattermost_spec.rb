@@ -59,6 +59,26 @@ describe 'gitlab::mattermost' do
       }
   end
 
+  it 'allows overrides to the mattermost settings regarding GitLab endpoints' do
+    stub_gitlab_rb(mattermost: {
+      enable: true,
+      gitlab_enable: true,
+      gitlab_auth_endpoint: 'https://test-endpoint.example.com/test/auth',
+      gitlab_token_endpoint: 'https://test-endpoint.example.com/test/token',
+      gitlab_user_api_endpoint: 'https://test-endpoint.example.com/test/user/api'
+    })
+
+    expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+      .with_content { |content|
+        config = JSON.parse(content)
+        expect(config).to have_key 'GitLabSettings'
+        expect(config['GitLabSettings']['Enable']).to be true
+        expect(config['GitLabSettings']['AuthEndpoint']).to eq 'https://test-endpoint.example.com/test/auth'
+        expect(config['GitLabSettings']['TokenEndpoint']).to eq 'https://test-endpoint.example.com/test/token'
+        expect(config['GitLabSettings']['UserApiEndpoint']).to eq 'https://test-endpoint.example.com/test/user/api'
+      }
+  end
+
   it 'creates mattermost configuration file in specified home folder' do
     stub_gitlab_rb(mattermost: {
       enable: true,
