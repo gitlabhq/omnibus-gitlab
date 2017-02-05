@@ -110,6 +110,7 @@ mattermost_external_url 'https://mattermost.gitlab.example'
 mattermost_nginx['redirect_http_to_https'] = true
 mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/mattermost-nginx.crt"
 mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/mattermost-nginx.key"
+mattermost['service_site_url'] = "https://mattermost.gitlab.example"
 mattermost['service_use_ssl'] = true
 ```
 
