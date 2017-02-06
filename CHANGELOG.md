@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 8.17.0
 
 - Remove deprecated Elasticsearch configuration options ab660c56
+- Include GitLab Pages in the Community Edition
 - Add HealthCheck support to our Docker image 845b52b2
 - Remove Nodejs dependency 7d22e0a8
 - Add an option to skip cache:clear task (Adam Hamsik) e4ba9913
