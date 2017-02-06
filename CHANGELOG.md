@@ -14,6 +14,10 @@ omnibus-gitlab repository.
 - Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea
 - Introduce gitlab-ctl diff-config command to compare existing and new configuration
 
+8.16.4
+
+- No changes
+
 8.16.3
 
 - Pin bundler to version 1.13.7 0ec1b67f
