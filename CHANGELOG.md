@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.13.13
+
+- Pin bundler version to 1.13.7 to avoid breaking changes
+
 8.13.12
 
 - No changes
