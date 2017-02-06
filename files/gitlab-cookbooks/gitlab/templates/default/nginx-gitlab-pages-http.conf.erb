@@ -42,6 +42,10 @@ server {
   <% if @ssl_client_certificate %>
   ssl_client_certificate <%= @ssl_client_certificate%>;
   <% end %>
+  <% if @ssl_verify_client %>
+  ssl_verify_client <%= @ssl_verify_client%>;
+  ssl_verify_depth <%= @ssl_verify_depth%>;
+  <% end %>
 
   # GitLab needs backwards compatible ciphers to retain compatibility with Java IDEs
   ssl_ciphers '<%= @ssl_ciphers %>';
