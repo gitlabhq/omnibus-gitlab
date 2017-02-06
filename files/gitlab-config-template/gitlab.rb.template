@@ -1,7 +1,7 @@
 ## GitLab configuration settings
 ##! This file is generated during initial installation and **is not** modified
 ##! during upgrades.
-##! Check out the latest version of this file to know about the different 
+##! Check out the latest version of this file to know about the different
 ##! settings that can be configured by this file, which may be found at:
 ##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
 
@@ -860,6 +860,27 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ################################################################################
+## GitLab Pages
+##! Docs: https://docs.gitlab.com/ce/pages/administration.html
+################################################################################
+
+##! Define to enable GitLab Pages
+# pages_external_url "http://pages.example.com/"
+# gitlab_pages['enable'] = false
+
+##! Configure to expose GitLab Pages on external IP address, serving the HTTP
+# gitlab_pages['external_http'] = nil
+
+##! Configure to expose GitLab Pages on external IP address, serving the HTTPS
+# gitlab_pages['external_https'] = nil
+
+# gitlab_pages['listen_proxy'] = "localhost:8090"
+# gitlab_pages['redirect_http'] = true
+# gitlab_pages['use_http2'] = true
+# gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
+# gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
+
+################################################################################
 ## GitLab CI
 ##! Docs: https://docs.gitlab.com/omnibus/gitlab-ci/README.html
 ################################################################################
@@ -1229,27 +1250,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['update_all_remote_mirrors_worker_cron'] = "30 * * * *"
 # gitlab_rails['update_all_mirrors_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
-
-################################################################################
-## GitLab Pages (EE Only)
-##! Docs: https://docs.gitlab.com/ee/pages/administration.html
-################################################################################
-
-##! Define to enable GitLab Pages
-# pages_external_url "http://pages.example.com/"
-# gitlab_pages['enable'] = false
-
-##! Configure to expose GitLab Pages on external IP address, serving the HTTP
-# gitlab_pages['external_http'] = nil
-
-##! Configure to expose GitLab Pages on external IP address, serving the HTTPS
-# gitlab_pages['external_https'] = nil
-
-# gitlab_pages['listen_proxy'] = "localhost:8090"
-# gitlab_pages['redirect_http'] = true
-# gitlab_pages['use_http2'] = true
-# gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
-# gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
 ################################################################################
 ## GitLab Pages NGINX (EE Only)

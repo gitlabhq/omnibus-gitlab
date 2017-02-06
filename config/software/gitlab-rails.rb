@@ -46,11 +46,11 @@ dependency "postgresql_new"
 dependency "python-docutils"
 dependency "krb5"
 dependency "registry"
+dependency "gitlab-pages"
 
 if EE
   dependency "mysql-client"
   dependency "unzip"
-  dependency "gitlab-pages"
 end
 
 
