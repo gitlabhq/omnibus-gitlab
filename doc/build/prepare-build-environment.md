@@ -66,14 +66,14 @@ follows
       remote: "https://gitlab.com/gitlab-org/gitlab-pages"
     gitlab-monitor:
       remote: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
-    config_guess:
-      remote: "git://git.savannah.gnu.org/config.git"
     omnibus:
       remote: "https://gitlab.com/gitlab-org/omnibus.git"
+    config_guess:
+      remote: "https://gitlab.com/omnibus-mirror/config_guess.git"
     registry:
-      remote: "https://github.com/docker/distribution.git"
+      remote: "https://gitlab.com/omnibus-mirror/distribution.git"
     rb-readline:
-      remote: "https://github.com/ConnorAtherton/rb-readline.git"
+      remote: "https://gitlab.com/omnibus-mirror/rb-readline.git"
     ```
 7. Install the dependencies and generate binaries
 
