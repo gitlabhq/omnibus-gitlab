@@ -1021,4 +1021,4 @@ default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['gitlab-monitor']['enable'] = false
 default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
-default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost:4567'
+default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost:9168'

@@ -1283,7 +1283,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
-# gitlab_monitor['listen_address'] = 'localhost:4567'
+# gitlab_monitor['listen_address'] = 'localhost:9168'
 
 
 ################################################################################
