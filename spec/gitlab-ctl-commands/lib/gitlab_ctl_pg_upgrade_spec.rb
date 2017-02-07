@@ -24,4 +24,9 @@ describe GitlabCtl::PgUpgrade do
     ).with('su - gitlab-psql -c "fake command"')
     @dbw.run_pg_command('fake command')
   end
+
+  it 'should set tmp_data_dir to data_dir if tmp_dir is nil on initialization' do
+    db_worker = GitlabCtl::PgUpgrade.new('/fake/base', '/fake/data')
+    expect(db_worker.tmp_data_dir).to eq("#{db_worker.data_dir}")
+  end
 end
