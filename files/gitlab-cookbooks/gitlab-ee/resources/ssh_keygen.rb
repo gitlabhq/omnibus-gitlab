@@ -35,11 +35,13 @@ action_class do
 end
 
 action :create do
-  update_directory_permissions
+  if user_and_group_exists?
+    update_directory_permissions
 
-  unless key_exists?
-    create_key
-    save_private_key
-    save_public_key
+    unless key_exists?
+      create_key
+      save_private_key
+      save_public_key
+    end
   end
 end

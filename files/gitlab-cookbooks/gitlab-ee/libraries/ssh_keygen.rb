@@ -192,5 +192,10 @@ module SSHKeygen
     def key_exists?
       ::File.exist?(new_resource.path)
     end
+
+    def user_and_group_exists?
+      h = OmnibusHelper.new(nil)
+      h.user_exists?(new_resource.owner) && h.group_exists?(new_resource.group)
+    end
   end
 end

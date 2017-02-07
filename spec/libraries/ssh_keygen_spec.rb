@@ -47,3 +47,33 @@ describe SSHKeygen::Generator do
     end
   end
 end
+
+describe SSHKeygen::Helper do
+  subject { (Class.new { include SSHKeygen::Helper }).new }
+
+  describe '#key_exists?' do
+    let(:keypath) { '/var/opt/gitlab/.ssh/id_rsa' }
+
+    before do
+      allow(subject).to receive_message_chain(:new_resource, :path) { keypath }
+    end
+
+    it 'returns true when file exists' do
+      allow(::File).to receive(:exists?).with(keypath) { true }
+    end
+  end
+
+  describe '#user_and_group_exists?' do
+    before do
+      allow(subject).to receive_message_chain(:new_resource, :owner) { 'git' }
+      allow(subject).to receive_message_chain(:new_resource, :group) { 'gitlab' }
+    end
+
+    it 'delegates check to user_exists? and group_exists?' do
+      expect_any_instance_of(OmnibusHelper).to receive(:user_exists?) { true }
+      expect_any_instance_of(OmnibusHelper).to receive(:group_exists?) { true }
+
+      expect(subject.user_and_group_exists?).to be_truthy
+    end
+  end
+end
