@@ -1,0 +1,29 @@
+probes:
+  database:
+    multiple: true
+    dead_tuples_count:
+      class_name: Database::DeadTuplesProber
+      methods:
+        - probe_db
+      opts:
+        connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %>
+  process:
+    methods:
+      - probe_memory
+      - probe_age
+      - probe_count
+    opts:
+      - pid_or_pattern: "sidekiq .* \\[.*?\\]"
+        name: sidekiq
+      - pid_or_pattern: "unicorn worker\\[.*?\\]"
+        name: unicorn
+      - pid_or_pattern: "git-upload-pack --stateless-rpc"
+        name: git_upload_pack
+        quantiles: true
+  sidekiq:
+    methods:
+      - probe_queues
+      - probe_workers
+      - probe_retries
+    opts:
+      redis_url: "<%= @redis_url %>"

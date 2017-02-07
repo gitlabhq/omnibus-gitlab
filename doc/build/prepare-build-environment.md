@@ -64,6 +64,8 @@ follows
       remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
     gitlab-pages:
       remote: "https://gitlab.com/gitlab-org/gitlab-pages"
+    gitlab-monitor:
+      remote: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
     config_guess:
       remote: "git://git.savannah.gnu.org/config.git"
     omnibus:

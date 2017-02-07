@@ -1,5 +1,6 @@
 #
-# Copyright:: Copyright (c) 2017 GitLab Inc.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2016 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +16,6 @@
 # limitations under the License.
 #
 
-# Configure Prometheus Services
-[
-  "prometheus",
-  "node-exporter",
-  "redis-exporter",
-  "postgres-exporter",
-  "gitlab-monitor"
-].each do |service|
-  if node["gitlab"][service]["enable"]
-    include_recipe "gitlab::#{service}"
-  else
-    include_recipe "gitlab::#{service}_disable"
-  end
+runit_service "gitlab-monitor" do
+  action :disable
 end
