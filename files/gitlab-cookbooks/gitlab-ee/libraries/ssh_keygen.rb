@@ -197,5 +197,5 @@ module SSHKeygen
       h = OmnibusHelper.new(nil)
       h.user_exists?(new_resource.owner) && h.group_exists?(new_resource.group)
     end
-  end
+  end unless defined?(Helper) # Prevent reloading during converge, so we can test
 end
