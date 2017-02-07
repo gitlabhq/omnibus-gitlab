@@ -190,18 +190,6 @@ production: &base
       cron: <%= @historical_data_worker_cron %>
     <% end %>
 
-    # Update mirrored repositories
-    <% unless @update_all_mirrors_worker_cron.nil? %>
-    update_all_mirrors_worker:
-      cron: <%= @update_all_mirrors_worker_cron %>
-    <% end %>
-
-    # Update remote mirrors
-    <% unless @update_all_remote_mirrors_worker_cron.nil? %>
-    update_all_remote_mirrors_worker:
-      cron: <%= @update_all_remote_mirrors_worker_cron %>
-    <% end %>
-
     # In addition to refreshing users when they log in,
     # periodically refresh LDAP users membership.
     # NOTE: This will only take effect if LDAP is enabled
