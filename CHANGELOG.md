@@ -16,6 +16,10 @@ omnibus-gitlab repository.
 - Introduce gitlab-ctl diff-config command to compare existing and new configuration bb0bd
 - Remove update_all_mirrors_worker_cron and update_all_remote_mirrors_worker_cron settings 49706b
 
+8.16.5
+
+- EE: Make sure `ssh_keygen` creates the directory first e5483177
+
 8.16.4
 
 - No changes

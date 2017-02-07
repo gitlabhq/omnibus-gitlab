@@ -32,4 +32,8 @@ class OmnibusHelper
   def user_exists?(username)
     success?("id -u #{username}")
   end
+
+  def group_exists?(group)
+    success?("getent group #{group}")
+  end
 end
