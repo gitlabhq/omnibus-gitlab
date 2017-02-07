@@ -180,18 +180,22 @@ module SSHKeygen
 
     def update_directory_permissions
       return false unless new_resource.secure_directory
-      converge_by("Update directory permissions at #{File.dirname(new_resource.path)}") do
-        directory ::File.dirname(new_resource.path) do
-          action :create
-          owner new_resource.owner
-          group new_resource.group
-          mode 0700
-        end
+
+      directory ::File.dirname(new_resource.path) do
+        action :create
+        owner new_resource.owner
+        group new_resource.group
+        mode 0700
       end
     end
 
     def key_exists?
       ::File.exist?(new_resource.path)
     end
-  end
+
+    def user_and_group_exists?
+      h = OmnibusHelper.new(nil)
+      h.user_exists?(new_resource.owner) && h.group_exists?(new_resource.group)
+    end
+  end unless defined?(Helper) # Prevent reloading during converge, so we can test
 end

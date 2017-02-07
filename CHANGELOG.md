@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.16.6
+
+- EE: Make sure `ssh_keygen` creates the directory first e5483177
+
+8.16.5
+
+- Resolve hashie warnings
+
 8.16.4
 
 - No changes

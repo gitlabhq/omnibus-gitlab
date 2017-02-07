@@ -35,14 +35,13 @@ action_class do
 end
 
 action :create do
-  notifying_block do
+  if user_and_group_exists?
+    update_directory_permissions
+
     unless key_exists?
       create_key
       save_private_key
       save_public_key
-      update_directory_permissions
-
-      new_resource.updated_by_last_action(true)
     end
   end
 end
