@@ -13,7 +13,8 @@ omnibus-gitlab repository.
 - Include Redis exporter, off by default 3bd03d2d
 - Include Postgres exporter, off by default e8755757
 - Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea
-- Introduce gitlab-ctl diff-config command to compare existing and new configuration
+- Introduce gitlab-ctl diff-config command to compare existing and new configuration bb0bd
+- Remove update_all_mirrors_worker_cron and update_all_remote_mirrors_worker_cron settings 49706b
 
 8.16.4
 
