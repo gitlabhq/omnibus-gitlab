@@ -24,7 +24,9 @@ mkdir -p /var/run/sshd
 rm -f /etc/gitlab/gitlab.rb
 
 # Patch omnibus package
-patch -p0 -d /opt/gitlab < /assets/gitlab-rb-location.patch
+sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/# external_url 'GENERATED_EXTERNAL_URL'/" /opt/gitlab/etc/gitlab.rb.template
+sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/cookbooks/gitlab/recipes/show_config.rb
+sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/cookbooks/gitlab/recipes/config.rb
 
 # Create groups
 groupadd -g 998 git
