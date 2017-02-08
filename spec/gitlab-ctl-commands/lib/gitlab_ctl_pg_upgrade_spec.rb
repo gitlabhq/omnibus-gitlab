@@ -26,7 +26,11 @@ describe GitlabCtl::PgUpgrade do
   end
 
   it 'should set tmp_data_dir to data_dir if tmp_dir is nil on initialization' do
+    fake_default_dir = '/fake/data/postgresql/data'
+    allow(File).to receive(:realpath).with(
+      fake_default_dir
+    ).and_return(fake_default_dir)
     db_worker = GitlabCtl::PgUpgrade.new('/fake/base', '/fake/data')
-    expect(db_worker.tmp_data_dir).to eq("#{db_worker.data_dir}")
+    expect(db_worker.tmp_data_dir).to eq(db_worker.data_dir)
   end
 end

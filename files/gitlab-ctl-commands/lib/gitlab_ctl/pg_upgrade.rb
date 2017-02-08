@@ -19,11 +19,7 @@ module GitlabCtl
     def data_dir
       return @data_dir if @data_dir
 
-      @data_dir = if File.symlink?(default_data_dir)
-                    File.readlink(default_data_dir)
-                  else
-                    default_data_dir
-                  end
+      @data_dir = File.realpath(default_data_dir)
     end
 
     def tmp_data_dir
