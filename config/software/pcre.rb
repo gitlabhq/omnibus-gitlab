@@ -15,7 +15,7 @@
 #
 
 name "pcre"
-default_version "8.38"
+default_version "8.40"
 
 license "BSD-2-Clause"
 license_file "LICENCE"
@@ -24,8 +24,8 @@ dependency "libedit"
 dependency "ncurses"
 dependency "config_guess"
 
-version "8.38" do
-  source md5: "8a353fe1450216b6655dfcf3561716d9"
+version "8.40" do
+  source md5: "890c808122bd90f398e6bc40ec862102"
 end
 
 source url: "http://downloads.sourceforge.net/project/pcre/pcre/#{version}/pcre-#{version}.tar.gz"
