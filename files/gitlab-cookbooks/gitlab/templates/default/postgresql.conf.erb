@@ -221,10 +221,10 @@ wal_keep_segments = <%= node['gitlab']['postgresql']['wal_keep_segments'] %>
 
 hot_standby = <%= node['gitlab']['postgresql']['hot_standby'] %>
           # (change requires restart)
-#max_standby_archive_delay = 30s  # max delay before canceling queries
+max_standby_archive_delay = <%= node['gitlab']['postgresql']['max_standby_archive_delay'] %> # max delay before canceling queries
           # when reading WAL from archive;
           # -1 allows indefinite delay
-#max_standby_streaming_delay = 30s  # max delay before canceling queries
+max_standby_streaming_delay = <%= node['gitlab']['postgresql']['max_standby_streaming_delay'] %> # max delay before canceling queries
           # when reading streaming WAL;
           # -1 allows indefinite delay
 #wal_receiver_status_interval = 10s # send replies at least this often

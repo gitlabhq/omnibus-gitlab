@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Make pam_loginuid.so optional for SSH in our Docker image (Martin von Gagern) eb73ecea
 - Introduce gitlab-ctl diff-config command to compare existing and new configuration bb0bd
 - Remove update_all_mirrors_worker_cron and update_all_remote_mirrors_worker_cron settings 49706b
+- Expose max_standby_archive_delay and max_standby_streaming_delay Postgresql settings
 
 8.16.5
 
