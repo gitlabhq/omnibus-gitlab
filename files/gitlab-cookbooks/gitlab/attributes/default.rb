@@ -1000,22 +1000,24 @@ default['gitlab']['node-exporter']['flags'] = {
 ###
 default['gitlab']['redis-exporter']['enable'] = false
 default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 default['gitlab']['redis-exporter']['flags'] = {
+  'web.listen-address' => node['gitlab']['redis-exporter']['listen_address'],
   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
 }
-default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 
 ####
 # Postgres exporter
 ###
 default['gitlab']['postgres-exporter']['enable'] = false
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
+default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['postgres-exporter']['flags'] = {
+  'web.listen-address' => node['gitlab']['postgres-exporter']['listen_address'],
 }
 default['gitlab']['postgres-exporter']['env'] = {
   'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=template1"
 }
-default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 
 ####
 # Gitlab monitor
