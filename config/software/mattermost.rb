@@ -16,35 +16,35 @@
 ##
 #
 
-name "mattermost"
-default_version "3.6.2"
+name 'mattermost'
+default_version '3.6.2'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
        md5: 'e54073ddb246a3865645c1a5cfe08883'
 
-relative_path "mattermost"
+relative_path 'mattermost'
 
-license_name = "GITLAB-MATTERMOST-COMPILED-LICENSE.txt"
-license_path = File.join(install_dir, "embedded/service/mattermost", license_name)
+license_name = 'GITLAB-MATTERMOST-COMPILED-LICENSE.txt'
+license_path = File.join(install_dir, 'embedded/service/mattermost', license_name)
 
-license "MIT with Trademark Protection"
+license 'MIT with Trademark Protection'
 license_file license_path
 
 build do
-  move "bin/platform", "#{install_dir}/embedded/bin/mattermost"
+  move 'bin/platform', "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
-  copy "templates", "#{install_dir}/embedded/service/mattermost/templates"
-  copy "i18n", "#{install_dir}/embedded/service/mattermost/i18n"
-  copy "fonts", "#{install_dir}/embedded/service/mattermost/fonts"
-  copy "webapp",  "#{install_dir}/embedded/service/mattermost/webapp"
+  copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
+  copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
+  copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
+  copy 'webapp', "#{install_dir}/embedded/service/mattermost/webapp"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
   end
 end
 
-GITLAB_MATTERMOST_COMPILED_LICENSE = <<-EOH
+GITLAB_MATTERMOST_COMPILED_LICENSE = <<-EOH.freeze
 
 GitLab Mattermost Compiled License
 (MIT with Trademark Protection)

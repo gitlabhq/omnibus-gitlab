@@ -15,18 +15,18 @@
 # limitations under the License.
 #
 
-name "postgresql_new"
-default_version "9.6.1"
+name 'postgresql_new'
+default_version '9.6.1'
 
-license "PostgreSQL"
-license_file "COPYRIGHT"
+license 'PostgreSQL'
+license_file 'COPYRIGHT'
 
-dependency "zlib"
-dependency "openssl"
-dependency "libedit"
-dependency "ncurses"
-dependency "libossp-uuid"
-dependency "config_guess"
+dependency 'zlib'
+dependency 'openssl'
+dependency 'libedit'
+dependency 'ncurses'
+dependency 'libossp-uuid'
+dependency 'config_guess'
 
 version '9.6.1' do
   source sha256: 'e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd'
@@ -39,16 +39,16 @@ relative_path "postgresql-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   prefix = "#{install_dir}/embedded/postgresql/#{version}"
-  update_config_guess(target: "config")
+  update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{prefix}" \
-          " --with-libedit-preferred" \
-          " --with-openssl" \
-          " --with-ossp-uuid", env: env
+          ' --with-libedit-preferred' \
+          ' --with-openssl' \
+          ' --with-ossp-uuid', env: env
 
   make "world -j #{workers}", env: env
-  make "install-world", env: env
+  make 'install-world', env: env
 end

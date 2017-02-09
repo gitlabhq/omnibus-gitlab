@@ -14,20 +14,20 @@
 # limitations under the License.
 #
 
-name "ohai"
-default_version "8.15.1"
+name 'ohai'
+default_version '8.15.1'
 
-license "Apache-2.0"
+license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/chef/ohai/v#{version}/LICENSE"
 
-dependency "ruby"
-dependency "rubygems"
+dependency 'ruby'
+dependency 'rubygems'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem "install ohai" \
+  gem 'install ohai' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      ' --no-ri --no-rdoc', env: env
 end

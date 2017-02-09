@@ -15,18 +15,18 @@
 # limitations under the License.
 #
 
-name "postgresql"
+name 'postgresql'
 default_version '9.2.18'
 
-license "PostgreSQL"
-license_file "COPYRIGHT"
+license 'PostgreSQL'
+license_file 'COPYRIGHT'
 
-dependency "zlib"
-dependency "openssl"
-dependency "libedit"
-dependency "ncurses"
-dependency "libossp-uuid"
-dependency "config_guess"
+dependency 'zlib'
+dependency 'openssl'
+dependency 'libedit'
+dependency 'ncurses'
+dependency 'libossp-uuid'
+dependency 'config_guess'
 
 version '9.2.18' do
   source md5: 'fd175eb5f29557c6ef2eeaf340330f9a'
@@ -39,18 +39,18 @@ relative_path "postgresql-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   prefix = "#{install_dir}/embedded/postgresql/#{version}"
-  update_config_guess(target: "config")
+  update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
 
-  command "./configure" \
+  command './configure' \
     " --prefix=#{prefix}" \
-    " --with-libedit-preferred" \
-    " --with-openssl" \
-    " --with-ossp-uuid", env: env
+    ' --with-libedit-preferred' \
+    ' --with-openssl' \
+    ' --with-ossp-uuid', env: env
 
   make "world -j #{workers}", env: env
-  make "install-world", env: env
+  make 'install-world', env: env
 
   block 'link bin files' do
     Dir.glob("#{prefix}/bin/*").each do |bin_file|

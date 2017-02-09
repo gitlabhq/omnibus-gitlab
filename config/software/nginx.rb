@@ -16,20 +16,20 @@
 # limitations under the License.
 #
 
-name "nginx"
-default_version "1.10.2"
+name 'nginx'
+default_version '1.10.2'
 
-license "BSD-2-Clause"
-license_file "LICENSE"
+license 'BSD-2-Clause'
+license_file 'LICENSE'
 
 # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
 # Runtime dependencies
-dependency "pcre"
-dependency "zlib"
-dependency "openssl"
+dependency 'pcre'
+dependency 'zlib'
+dependency 'openssl'
 
-version "1.10.2" do
-  source md5: "e8f5f4beed041e63eb97f9f4f55f3085"
+version '1.10.2' do
+  source md5: 'e8f5f4beed041e63eb97f9f4f55f3085'
 end
 
 source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
@@ -37,17 +37,17 @@ source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 relative_path "nginx-#{version}"
 
 build do
-  command ["./configure",
+  command ['./configure',
            "--prefix=#{install_dir}/embedded",
-           "--with-http_ssl_module",
-           "--with-http_stub_status_module",
-           "--with-http_gzip_static_module",
-           "--with-http_v2_module",
-           "--with-http_realip_module",
-           "--with-ipv6",
-           "--with-debug",
+           '--with-http_ssl_module',
+           '--with-http_stub_status_module',
+           '--with-http_gzip_static_module',
+           '--with-http_v2_module',
+           '--with-http_realip_module',
+           '--with-ipv6',
+           '--with-debug',
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
-           "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(" ")
-  command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
-  command "make install"
+           "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' ')
+  command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }
+  command 'make install'
 end

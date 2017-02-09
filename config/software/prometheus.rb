@@ -16,18 +16,17 @@
 ##
 #
 
-name "prometheus"
-default_version "v1.4.1"
+name 'prometheus'
+default_version 'v1.4.1'
 
-license "APACHE-2.0"
-license_file "LICENSE"
+license 'APACHE-2.0'
+license_file 'LICENSE'
 
-source git: "https://github.com/prometheus/prometheus.git"
+source git: 'https://github.com/prometheus/prometheus.git'
 
-relative_path "src/github.com/prometheus/prometheus"
+relative_path 'src/github.com/prometheus/prometheus'
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/prometheus",
     'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory
@@ -35,6 +34,6 @@ build do
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
   cwd = "#{exporter_source_dir}/src/github.com/prometheus/prometheus"
 
-  command "go build ./cmd/prometheus", env: env, cwd: cwd
-  copy "prometheus", "#{install_dir}/embedded/bin/"
+  command 'go build ./cmd/prometheus', env: env, cwd: cwd
+  copy 'prometheus', "#{install_dir}/embedded/bin/"
 end

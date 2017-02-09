@@ -14,13 +14,13 @@
 # limitations under the License.
 #
 
-name "rubygems"
-default_version "2.6.6"
+name 'rubygems'
+default_version '2.6.6'
 
-license "MIT"
-license_file "https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE.txt"
+license 'MIT'
+license_file 'https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE.txt'
 
-dependency "ruby"
+dependency 'ruby'
 
 if version && !source
   # NOTE: 2.1.11 is the last version of rubygems before the 2.2.x change to native gem install location
@@ -31,26 +31,26 @@ if version && !source
   # We have switched from tarballs to just `gem update --system`, but for backcompat
   # we pin the previously known tarballs.
   known_tarballs = {
-    "2.1.11" => "b561b7aaa70d387e230688066e46e448",
-    "2.2.1" => "1f0017af0ad3d3ed52665132f80e7443",
-    "2.4.1" => "7e39c31806bbf9268296d03bd97ce718",
-    "2.4.4" => "440a89ad6a3b1b7a69b034233cc4658e",
-    "2.4.5" => "5918319a439c33ac75fbbad7fd60749d",
-    "2.4.8" => "dc77b51449dffe5b31776bff826bf559",
+    '2.1.11' => 'b561b7aaa70d387e230688066e46e448',
+    '2.2.1' => '1f0017af0ad3d3ed52665132f80e7443',
+    '2.4.1' => '7e39c31806bbf9268296d03bd97ce718',
+    '2.4.4' => '440a89ad6a3b1b7a69b034233cc4658e',
+    '2.4.5' => '5918319a439c33ac75fbbad7fd60749d',
+    '2.4.8' => 'dc77b51449dffe5b31776bff826bf559'
   }
   known_tarballs.each do |version, md5|
-    self.version version do
+    version version do
       source md5: md5, url: "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz"
       relative_path "rubygems-#{version}"
     end
   end
 
-  version("v2.4.4_plus_debug") { source git: "https://github.com/danielsdeleo/rubygems.git" }
-  version("2.4.4.debug.1")     { source git: "https://github.com/danielsdeleo/rubygems.git" }
+  version('v2.4.4_plus_debug') { source git: 'https://github.com/danielsdeleo/rubygems.git' }
+  version('2.4.4.debug.1')     { source git: 'https://github.com/danielsdeleo/rubygems.git' }
   # This is the 2.4.8 release with a fix for
   # windows so things like `gem install "pry"` still
   # work
-  version("jdm/2.4.8-patched") { source git: "https://github.com/jaym/rubygems.git" }
+  version('jdm/2.4.8-patched') { source git: 'https://github.com/jaym/rubygems.git' }
 end
 
 # If we still don't have a source (if it's a tarball) grab from ruby ...
@@ -60,21 +60,19 @@ if version && !source
   begin
     Gem::Version.new(version)
   rescue ArgumentError
-    source git: "https://github.com/rubygems/rubygems.git"
+    source git: 'https://github.com/rubygems/rubygems.git'
   end
 end
 
 # git repo is always expanded to "rubygems"
-if source && source.include?(:git)
-  relative_path "rubygems"
-end
+relative_path 'rubygems' if source && source.include?(:git)
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   if source
     # Building from source:
-    ruby "setup.rb --no-ri --no-rdoc", env: env
+    ruby 'setup.rb --no-ri --no-rdoc', env: env
   else
     # Installing direct from rubygems:
     # If there is no version, this will get latest.

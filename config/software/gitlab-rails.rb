@@ -19,10 +19,10 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
-software_name = EE ? "gitlab-rails-ee":"gitlab-rails"
+software_name = EE ? 'gitlab-rails-ee' : 'gitlab-rails'
 version = Gitlab::Version.new(software_name)
 
-name "gitlab-rails"
+name 'gitlab-rails'
 
 default_version version.print
 source git: version.remote
@@ -30,29 +30,28 @@ source git: version.remote
 combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
 gemdir_cmd = "#{install_dir}/embedded/bin/gem environment gemdir"
 
-license "MIT"
-license_file "LICENSE"
+license 'MIT'
+license_file 'LICENSE'
 license_file combined_licenses_file
 
-dependency "ruby"
-dependency "bundler"
-dependency "libxml2"
-dependency "libxslt"
-dependency "curl"
-dependency "rsync"
-dependency "libicu"
-dependency "postgresql"
-dependency "postgresql_new"
-dependency "python-docutils"
-dependency "krb5"
-dependency "registry"
-dependency "gitlab-pages"
+dependency 'ruby'
+dependency 'bundler'
+dependency 'libxml2'
+dependency 'libxslt'
+dependency 'curl'
+dependency 'rsync'
+dependency 'libicu'
+dependency 'postgresql'
+dependency 'postgresql_new'
+dependency 'python-docutils'
+dependency 'krb5'
+dependency 'registry'
+dependency 'gitlab-pages'
 
 if EE
-  dependency "mysql-client"
-  dependency "unzip"
+  dependency 'mysql-client'
+  dependency 'unzip'
 end
-
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -65,19 +64,19 @@ build do
   command "sed -i \"s/.*REVISION.*/REVISION = '$(git log --pretty=format:'%h' -n 1)'/\" config/initializers/2_app.rb"
   command "echo $(git log --pretty=format:'%h' -n 1) > REVISION"
 
-  bundle_without = %w{development test}
-  bundle_without << "mysql" unless EE
-  bundle "config build.rugged --no-use-system-libraries", env: env
-  bundle "install --without #{bundle_without.join(" ")} --jobs #{workers} --retry 5", env: env
+  bundle_without = %w(development test)
+  bundle_without << 'mysql' unless EE
+  bundle 'config build.rugged --no-use-system-libraries', env: env
+  bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   # This patch makes the github-markup gem use and be compatible with Python3
   # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
   patch_file_path = File.join(
     Omnibus::Config.project_root,
-    "config",
-    "patches",
-    "gitlab-rails",
-    "gitlab-markup_gem-markups.patch"
+    'config',
+    'patches',
+    'gitlab-rails',
+    'gitlab-markup_gem-markups.patch'
   )
   # Not using the patch DSL as we need the path to the gems directory
   command "cat #{patch_file_path} | patch -p1 \"$(#{gemdir_cmd})/gems/gitlab-markup-1.5.1/lib/github/markups.rb\""
@@ -89,14 +88,14 @@ build do
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
   assets_compile_env = {
-    "NODE_ENV" => "production",
-    "RAILS_ENV" => "production",
-    "PATH" => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
-    "USE_DB" => "false",
-    "SKIP_STORAGE_VALIDATION" => "true"
+    'NODE_ENV' => 'production',
+    'RAILS_ENV' => 'production',
+    'PATH' => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
+    'USE_DB' => 'false',
+    'SKIP_STORAGE_VALIDATION' => 'true'
   }
-  command "npm install --production"
-  bundle "exec rake gitlab:assets:compile", :env => assets_compile_env
+  command 'npm install --production'
+  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
@@ -126,25 +125,25 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync "./", "#{install_dir}/embedded/service/gitlab-rails/", { exclude: [".git", ".gitignore", "spec", "features"] }
+  sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features']
 
   # Create a wrapper for the rake tasks of the Rails app
-  erb :dest => "#{install_dir}/bin/gitlab-rake",
-    :source => "bundle_exec_wrapper.erb",
-    :mode => 0755,
-    :vars => {:command => 'rake "$@"', :install_dir => install_dir}
+  erb dest: "#{install_dir}/bin/gitlab-rake",
+      source: 'bundle_exec_wrapper.erb',
+      mode: 0755,
+      vars: { command: 'rake "$@"', install_dir: install_dir }
 
   # Create a wrapper for the rails command, useful for e.g. `rails console`
-  erb :dest => "#{install_dir}/bin/gitlab-rails",
-    :source => "bundle_exec_wrapper.erb",
-    :mode => 0755,
-    :vars => {:command => 'rails "$@"', :install_dir => install_dir}
+  erb dest: "#{install_dir}/bin/gitlab-rails",
+      source: 'bundle_exec_wrapper.erb',
+      mode: 0755,
+      vars: { command: 'rails "$@"', install_dir: install_dir }
 
   # Generate the combined license file for all gems GitLab is using
   erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
-    source: "gem_license_generator.erb",
-    mode: 0755,
-    vars: {install_dir: install_dir, license_file: combined_licenses_file}
+      source: 'gem_license_generator.erb',
+      mode: 0755,
+      vars: { install_dir: install_dir, license_file: combined_licenses_file }
 
   command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"

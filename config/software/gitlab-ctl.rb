@@ -16,18 +16,18 @@
 # limitations under the License.
 #
 
-name "gitlab-ctl"
+name 'gitlab-ctl'
 
-license "Apache-2.0"
-license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
-dependency "omnibus-ctl"
+dependency 'omnibus-ctl'
 
-source :path => File.expand_path("files/gitlab-ctl-commands", Omnibus::Config.project_root)
+source path: File.expand_path('files/gitlab-ctl-commands', Omnibus::Config.project_root)
 
 build do
   block do
-    open("#{install_dir}/bin/gitlab-ctl", "w") do |file|
+    open("#{install_dir}/bin/gitlab-ctl", 'w') do |file|
       file.print <<-EOH
 #!/bin/bash
 #
@@ -71,5 +71,5 @@ export SVWAIT=30
   command "chmod 755 #{install_dir}/bin/gitlab-ctl"
 
   # additional omnibus-ctl commands
-  sync "./", "#{install_dir}/embedded/service/omnibus-ctl/"
+  sync './', "#{install_dir}/embedded/service/omnibus-ctl/"
 end

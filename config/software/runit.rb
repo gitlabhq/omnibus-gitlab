@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-name "runit"
-default_version "2.1.1"
+name 'runit'
+default_version '2.1.1'
 
-license "BSD-3-Clause"
-license_file "../package/COPYING"
+license 'BSD-3-Clause'
+license_file '../package/COPYING'
 
-version "2.1.1" do
-  source md5: "8fa53ea8f71d88da9503f62793336bc3"
+version '2.1.1' do
+  source md5: '8fa53ea8f71d88da9503f62793336bc3'
 end
 
 source url: "http://smarden.org/runit/runit-#{version}.tar.gz"
@@ -32,14 +32,14 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   # Put runit where we want it, not where they tell us to
-  command 'sed -i -e "s/^char\ \*varservice\ \=\"\/service\/\";$/char\ \*varservice\ \=\"' + install_dir.gsub("/", "\\/") + '\/service\/\";/" sv.c', env: env
+  command 'sed -i -e "s/^char\ \*varservice\ \=\"\/service\/\";$/char\ \*varservice\ \=\"' + install_dir.gsub('/', '\\/') + '\/service\/\";/" sv.c', env: env
 
   # TODO: the following is not idempotent
-  command "sed -i -e s:-static:: Makefile", env: env
+  command 'sed -i -e s:-static:: Makefile', env: env
 
   # Build it
   make env: env
-  make "check", env: env
+  make 'check', env: env
 
   # Move it
   mkdir "#{install_dir}/embedded/bin"
@@ -53,7 +53,7 @@ build do
   copy "#{project_dir}/svlogd",     "#{install_dir}/embedded/bin"
   copy "#{project_dir}/utmpset",    "#{install_dir}/embedded/bin"
 
-  erb source: "runsvdir-start.erb",
+  erb source: 'runsvdir-start.erb',
       dest: "#{install_dir}/embedded/bin/runsvdir-start",
       mode: 0755,
       vars: { install_dir: install_dir }

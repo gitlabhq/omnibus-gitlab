@@ -14,16 +14,16 @@
 # limitations under the License.
 #
 
-name "libossp-uuid"
-default_version "1.6.2"
+name 'libossp-uuid'
+default_version '1.6.2'
 
-license "MIT"
-license_file "README"
+license 'MIT'
+license_file 'README'
 
-dependency "config_guess"
+dependency 'config_guess'
 
-version "1.6.2" do
-  source md5: "5db0d43a9022a6ebbbc25337ae28942f"
+version '1.6.2' do
+  source md5: '5db0d43a9022a6ebbbc25337ae28942f'
 end
 
 # ftp on ftp.ossp.org is unavaiable so we must use another mirror site.
@@ -36,9 +36,9 @@ build do
 
   update_config_guess
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make 'install', env: env
 end

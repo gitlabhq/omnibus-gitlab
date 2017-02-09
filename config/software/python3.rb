@@ -16,37 +16,37 @@
 # limitations under the License.
 #
 
-name "python3"
-default_version "3.4.5"
+name 'python3'
+default_version '3.4.5'
 
-dependency "readline"
-dependency "ncurses"
-dependency "zlib"
-dependency "openssl"
-dependency "bzip2"
+dependency 'readline'
+dependency 'ncurses'
+dependency 'zlib'
+dependency 'openssl'
+dependency 'bzip2'
 
-license "Python-2.0"
-license_file "LICENSE"
+license 'Python-2.0'
+license_file 'LICENSE'
 
-source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       :md5 => '5f2ef90b1adef35a64df14d4bb7af733'
+source url: "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
+       md5: '5f2ef90b1adef35a64df14d4bb7af733'
 
 relative_path "Python-#{version}"
 
-LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/embedded/libexec #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec)
+LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/embedded/libexec #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec).freeze
 
 env = {
-  "CFLAGS" => "-I#{install_dir}/embedded/include -O3 -g -pipe",
-  "LDFLAGS" => "-Wl,-rpath,#{LIB_PATH.join(',-rpath,')} -L#{LIB_PATH.join(' -L')} -I#{install_dir}/embedded/include"
+  'CFLAGS' => "-I#{install_dir}/embedded/include -O3 -g -pipe",
+  'LDFLAGS' => "-Wl,-rpath,#{LIB_PATH.join(',-rpath,')} -L#{LIB_PATH.join(' -L')} -I#{install_dir}/embedded/include"
 }
 
 build do
-  command ["./configure",
+  command ['./configure',
            "--prefix=#{install_dir}/embedded",
-           "--enable-shared",
-           "--with-dbmliborder="].join(" "), env: env
+           '--enable-shared',
+           '--with-dbmliborder='].join(' '), env: env
   make env: env
-  make "install", env: env
+  make 'install', env: env
 
   delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/dbm.*")
   delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/_sqlite3.*")

@@ -14,18 +14,18 @@
 # limitations under the License.
 #
 
-name "pcre"
-default_version "8.40"
+name 'pcre'
+default_version '8.40'
 
-license "BSD-2-Clause"
-license_file "LICENCE"
+license 'BSD-2-Clause'
+license_file 'LICENCE'
 
-dependency "libedit"
-dependency "ncurses"
-dependency "config_guess"
+dependency 'libedit'
+dependency 'ncurses'
+dependency 'config_guess'
 
-version "8.40" do
-  source md5: "890c808122bd90f398e6bc40ec862102"
+version '8.40' do
+  source md5: '890c808122bd90f398e6bc40ec862102'
 end
 
 source url: "http://downloads.sourceforge.net/project/pcre/pcre/#{version}/pcre-#{version}.tar.gz"
@@ -37,13 +37,13 @@ build do
 
   update_config_guess
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded" \
-          " --disable-cpp" \
-          " --enable-utf" \
-          " --enable-unicode-properties" \
-          " --enable-pcretest-libedit", env: env
+          ' --disable-cpp' \
+          ' --enable-utf' \
+          ' --enable-unicode-properties' \
+          ' --enable-pcretest-libedit', env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make 'install', env: env
 end

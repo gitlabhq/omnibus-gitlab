@@ -7,7 +7,7 @@ namespace :license do
 
     puts "###### BEGIN LICENSE CHECK ######"
 
-    install_dir = File.open('config/projects/gitlab.rb').grep(/install_dir *"/)[0].match(/install_dir[ \t]*"(?<install_dir>.*)"/)['install_dir']
+    install_dir = File.open('config/projects/gitlab.rb').grep(/install_dir *'/)[0].match(/install_dir[ \t]*'(?<install_dir>.*)'/)['install_dir']
 
     if File.exists?(install_dir)
       puts "Checking licenses via the contents of '#{install_dir}/LICENSE'"

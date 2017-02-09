@@ -18,20 +18,19 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
-name "registry"
-version = Gitlab::Version.new("registry", "2.4.1")
+name 'registry'
+version = Gitlab::Version.new('registry', '2.4.1')
 
 default_version version.print
 
-license "Apache-2.0"
+license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/docker/distribution/#{version.print}/LICENSE"
 
 source git: version.remote
 
-relative_path "src/github.com/docker/distribution"
+relative_path 'src/github.com/docker/distribution'
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/registry",
     'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory

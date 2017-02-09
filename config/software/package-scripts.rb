@@ -16,10 +16,10 @@
 # limitations under the License.
 #
 
-name "package-scripts"
+name 'package-scripts'
 
-license "Apache-2.0"
-license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
 # Help omnibus-ruby to cache the build product of this software. This is a
 # workaround for the deprecation of `always_build true`. What happens now is
@@ -34,9 +34,9 @@ build do
   # Render the package script erb files
   Dir.glob(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/*.erb')).each do |package_script|
     script = File.basename(package_script, '.*')
-    erb :dest => "#{install_dir}/.package_util/package-scripts/#{script}",
-        :source => File.basename(package_script),
-        :mode => 0755,
-        :vars => { :install_dir => project.install_dir }
+    erb dest: "#{install_dir}/.package_util/package-scripts/#{script}",
+        source: File.basename(package_script),
+        mode: 0755,
+        vars: { install_dir: project.install_dir }
   end
 end

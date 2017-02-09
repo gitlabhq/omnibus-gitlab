@@ -16,17 +16,17 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
-name "config_guess"
-version =  Gitlab::Version.new('config_guess', "master")
-default_version "master"
+name 'config_guess'
+version = Gitlab::Version.new('config_guess', 'master')
+default_version 'master'
 
 # occasionally http protocol downloads get 500s, so we use git://
 source git: version.remote
 
 # http://savannah.gnu.org/projects/config
-license "GPL-3.0 (with exception)"
-license_file "config.guess"
-license_file "config.sub"
+license 'GPL-3.0 (with exception)'
+license_file 'config.guess'
+license_file 'config.sub'
 
 relative_path "config_guess-#{version.print}"
 

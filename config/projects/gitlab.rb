@@ -22,30 +22,30 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 if ee
-  name "gitlab-ee"
-  description "GitLab Enterprise Edition and GitLab CI "\
-    "(including NGINX, Postgres, Redis)"
-  replace        "gitlab-ce"
-  conflict        "gitlab-ce"
+  name 'gitlab-ee'
+  description 'GitLab Enterprise Edition and GitLab CI '\
+    '(including NGINX, Postgres, Redis)'
+  replace 'gitlab-ce'
+  conflict 'gitlab-ce'
 else
-  name "gitlab-ce"
-  description "GitLab Community Edition and GitLab CI "\
-    "(including NGINX, Postgres, Redis)"
-  replace        "gitlab-ee"
-  conflict        "gitlab-ee"
+  name 'gitlab-ce'
+  description 'GitLab Community Edition and GitLab CI '\
+    '(including NGINX, Postgres, Redis)'
+  replace 'gitlab-ee'
+  conflict 'gitlab-ee'
 end
 
-maintainer "GitLab Inc. <support@gitlab.com>"
-homepage "https://about.gitlab.com/"
+maintainer 'GitLab Inc. <support@gitlab.com>'
+homepage 'https://about.gitlab.com/'
 
-license "MIT"
+license 'MIT'
 license_compiled_output true
 
 # Replace older omnibus-gitlab packages
-replace         "gitlab"
-conflict        "gitlab"
+replace         'gitlab'
+conflict        'gitlab'
 
-install_dir     "/opt/gitlab"
+install_dir     '/opt/gitlab'
 
 # This is a hack to make a distinction between nightly versions
 # See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1500
@@ -64,45 +64,45 @@ build_iteration Gitlab::BuildIteration.new.build_iteration
 # Openssh needs to be installed
 
 if suse?
-  runtime_dependency "openssh"
+  runtime_dependency 'openssh'
 else
-  runtime_dependency "openssh-server"
+  runtime_dependency 'openssh-server'
 end
 
 # creates required build directories
-dependency "preparation"
-dependency "package-scripts"
+dependency 'preparation'
+dependency 'package-scripts'
 
-dependency "git"
-dependency "jemalloc"
-dependency "redis"
-dependency "nginx"
-dependency "mixlib-log"
-dependency "chef-zero"
-dependency "ohai"
-dependency "chef-gem"
-dependency "remote-syslog" if ee
-dependency "logrotate"
-dependency "runit"
-dependency "gitlab-rails"
-dependency "gitlab-shell"
-dependency "gitlab-workhorse"
-dependency "gitlab-ctl"
-dependency "gitlab-psql"
-dependency "gitlab-healthcheck"
-dependency "gitlab-cookbooks"
-dependency "gitlab-selinux"
-dependency "gitlab-scripts"
-dependency "gitlab-config-template"
-dependency "mattermost"
-dependency "node-exporter"
-dependency "prometheus"
-dependency "redis-exporter"
-dependency "postgres-exporter"
-dependency "gitlab-monitor"
+dependency 'git'
+dependency 'jemalloc'
+dependency 'redis'
+dependency 'nginx'
+dependency 'mixlib-log'
+dependency 'chef-zero'
+dependency 'ohai'
+dependency 'chef-gem'
+dependency 'remote-syslog' if ee
+dependency 'logrotate'
+dependency 'runit'
+dependency 'gitlab-rails'
+dependency 'gitlab-shell'
+dependency 'gitlab-workhorse'
+dependency 'gitlab-ctl'
+dependency 'gitlab-psql'
+dependency 'gitlab-healthcheck'
+dependency 'gitlab-cookbooks'
+dependency 'gitlab-selinux'
+dependency 'gitlab-scripts'
+dependency 'gitlab-config-template'
+dependency 'mattermost'
+dependency 'node-exporter'
+dependency 'prometheus'
+dependency 'redis-exporter'
+dependency 'postgres-exporter'
+dependency 'gitlab-monitor'
 
 # version manifest file
-dependency "version-manifest"
+dependency 'version-manifest'
 
 exclude "\.git*"
 exclude "bundler\/git"

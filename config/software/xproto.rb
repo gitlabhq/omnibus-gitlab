@@ -14,24 +14,24 @@
 # limitations under the License.
 #
 
-name "xproto"
-default_version "7.0.25"
+name 'xproto'
+default_version '7.0.25'
 
-version "7.0.25" do
-  source md5: "a47db46cb117805bd6947aa5928a7436"
+version '7.0.25' do
+  source md5: 'a47db46cb117805bd6947aa5928a7436'
 end
 
 source url: "https://www.x.org/releases/individual/proto/xproto-#{version}.tar.gz"
 
-license "MIT"
-license_file "COPYING"
+license 'MIT'
+license_file 'COPYING'
 
 relative_path "xproto-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env

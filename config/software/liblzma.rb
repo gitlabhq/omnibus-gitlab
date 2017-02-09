@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-name "liblzma"
-default_version "5.2.2"
+name 'liblzma'
+default_version '5.2.2'
 
-license "Public-Domain"
-license_file "COPYING"
+license 'Public-Domain'
+license_file 'COPYING'
 
 source url: "http://tukaani.org/xz/xz-#{version}.tar.gz",
-       md5: "7cf6a8544a7dae8e8106fdf7addfa28c"
+       md5: '7cf6a8544a7dae8e8106fdf7addfa28c'
 
 relative_path "xz-#{version}"
 
@@ -30,17 +30,17 @@ build do
   # liblzma properly uses CFLAGS for C compilation and CPPFLAGS for common
   # flags used across tools such as windres.  Don't put anything in it
   # that can be misinterpreted by windres.
-  env["CPPFLAGS"] = "-I#{install_dir}/embedded/include" if windows?
+  env['CPPFLAGS'] = "-I#{install_dir}/embedded/include" if windows?
 
   config_command = [
-    "--disable-debug",
-    "--disable-dependency-tracking",
-    "--disable-doc",
-    "--disable-scripts",
+    '--disable-debug',
+    '--disable-dependency-tracking',
+    '--disable-doc',
+    '--disable-scripts'
   ]
-  config_command << "--disable-nls" if windows?
+  config_command << '--disable-nls' if windows?
 
   configure(*config_command, env: env)
 
-  make "install", env: env
+  make 'install', env: env
 end

@@ -16,34 +16,34 @@
 ##
 #
 
-name "git"
-default_version "2.10.2"
+name 'git'
+default_version '2.10.2'
 
-license "GPL-2.0"
-license_file "COPYING"
+license 'GPL-2.0'
+license_file 'COPYING'
 
 # Runtime dependency
-dependency "zlib"
-dependency "openssl"
-dependency "curl"
+dependency 'zlib'
+dependency 'openssl'
+dependency 'curl'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: "3d7ef275d80b97aaa61f3b6be9d3dc516202e6f6f5d885f2c09b59eba592dcc4"
+       sha256: '3d7ef275d80b97aaa61f3b6be9d3dc516202e6f6f5d885f2c09b59eba592dcc4'
 
 relative_path "git-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command ["./configure",
+  command ['./configure',
            "--prefix=#{install_dir}/embedded",
            "--with-curl=#{install_dir}/embedded",
            "--with-ssl=#{install_dir}/embedded",
-           "--with-zlib=#{install_dir}/embedded"].join(" "), :env => env
+           "--with-zlib=#{install_dir}/embedded"].join(' '), env: env
 
   # Ugly hack because ./configure does not pick these up from the env
   block do
-    open(File.join(project_dir, "config.mak.autogen"), "a") do |file|
+    open(File.join(project_dir, 'config.mak.autogen'), 'a') do |file|
       file.print <<-EOH
 # Added by Omnibus git software definition git.rb
 NO_PERL=YesPlease
@@ -59,6 +59,6 @@ NO_INSTALL_HARDLINKS=YesPlease
   # Patch for git vulnerabilities
   patch source: 'git-dec-2016-security.patch'
 
-  command "make -j #{workers}", :env => env
-  command "make install"
+  command "make -j #{workers}", env: env
+  command 'make install'
 end
