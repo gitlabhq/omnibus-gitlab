@@ -58,7 +58,7 @@ class CertificateHelper
   end
 
   def trusted_certs_dir_hash
-    files = Dir[File.join(@trusted_certs_dir, "*")]
+    files = Dir[File.join(@trusted_certs_dir, "*"), File.join(@omnibus_certs_dir, "*")]
     files_modification_time = files.map { |name| File.stat(name).mtime if valid?(name) }
     Digest::SHA1.hexdigest(files_modification_time.join)
   end
