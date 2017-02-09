@@ -1208,7 +1208,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/
 ################################################################################
 
 # prometheus['enable'] = false
@@ -1232,7 +1232,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Node Exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
 ################################################################################
 
 # node_exporter['enable'] = false
@@ -1247,7 +1247,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Redis exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/redis_exporter.html
 ################################################################################
 
 # redis_exporter['enable'] = false
@@ -1261,7 +1261,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Postgres exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/postgres_exporter.html
 ################################################################################
 
 # postgres_exporter['enable'] = false
@@ -1271,7 +1271,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Gitlab monitor
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_monitor_exporter.html
 ################################################################################
 
 
