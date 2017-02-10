@@ -80,6 +80,11 @@ define :unicorn_service, :rails_app => nil, :user => nil do
         rescue Errno::ENOENT, Errno::ESRCH
         end
       end
+
+      ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord::Base)
+    EOS
+    after_fork <<-'EOS'
+      ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
     EOS
     owner "root"
     group "root"
