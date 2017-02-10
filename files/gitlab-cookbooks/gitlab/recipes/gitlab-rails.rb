@@ -352,41 +352,6 @@ execute "clear the gitlab-rails cache" do
   action :nothing
 end
 
-bitbucket_keys = node['gitlab']['gitlab-rails']['bitbucket']
-
-unless bitbucket_keys.nil?
-  execute 'trust bitbucket.org fingerprint' do
-    command "echo '#{bitbucket_keys['known_hosts_key']}' >> #{known_hosts}"
-    user gitlab_user
-    group gitlab_group
-    not_if "grep '#{bitbucket_keys['known_hosts_key']}' #{known_hosts}"
-  end
-
-  file File.join(ssh_dir, 'bitbucket_rsa') do
-    content "#{bitbucket_keys['private_key']}\n"
-    owner gitlab_user
-    group gitlab_group
-    mode 0600
-  end
-
-  ssh_config_file = File.join(ssh_dir, 'config')
-  bitbucket_host_config = "Host bitbucket.org\n  IdentityFile ~/.ssh/bitbucket_rsa\n  User #{node['gitlab']['user']['username']}"
-
-  execute 'manage config for bitbucket import key' do
-    command "echo '#{bitbucket_host_config}' >> #{ssh_config_file}"
-    user gitlab_user
-    group gitlab_group
-    not_if "grep 'IdentityFile ~/.ssh/bitbucket_rsa' #{ssh_config_file}"
-  end
-
-  file File.join(ssh_dir, 'bitbucket_rsa.pub') do
-    content "#{bitbucket_keys['public_key']}\n"
-    owner gitlab_user
-    group gitlab_group
-    mode 0644
-  end
-end
-
 #
 # Up to release 8.6 default config.ru was replaced with omnibus-based one.
 # After 8.6 this is not necessery. We can remove this file.
