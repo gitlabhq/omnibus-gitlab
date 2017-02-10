@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.1
+
+- Disconnect and reconnect database connections when forking in Unicorn a7b35aaf
+
 8.17.0
 
 - Remove deprecated Elasticsearch configuration options ab660c56
