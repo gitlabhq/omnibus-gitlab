@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Introduce gitlab-ctl diff-config command to compare existing and new configuration bb0bd
 - Remove update_all_mirrors_worker_cron and update_all_remote_mirrors_worker_cron settings 49706b
 - Expose max_standby_archive_delay and max_standby_streaming_delay Postgresql settings
+- Disconnect and reconnect database connections when forking in Unicorn a7b35aaf
 
 8.16.5
 
