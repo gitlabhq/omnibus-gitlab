@@ -221,17 +221,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 
-###! **If you setup Bitbucket importer under omniauth providers you will need to
-###!   add the keys which will allow connection between Bitbucket and GitLab.**
-###! Docs: https://docs.gitlab.com/ce/integration/bitbucket.html
-# gitlab_rails['bitbucket'] = {
-#  'known_hosts_key' => 'bitbucket.org,207.223.240.182 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==',
-#  'private_key' => '-----BEGIN RSA PRIVATE KEY-----
-#   MIIEowIBAAKCAQEAyXxYHwz2KjcwSjTREwlhYHqrf/8U0UM8ej3cqQ551gE4Wo3t
-#   -----END RSA PRIVATE KEY-----',
-#  'public_key' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDJfFgfDPYqN git@gitlab.example.com'
-# }
-
 ### Backup Settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/backups.html
 

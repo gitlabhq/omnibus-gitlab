@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0
+- Remove Bitbucket from templates as it does not require special settings anymore
+
 8.17.0
 
 - Remove deprecated Elasticsearch configuration options ab660c56
