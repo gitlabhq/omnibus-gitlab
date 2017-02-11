@@ -128,8 +128,15 @@ add_command_under_category 'pg-upgrade', 'database',
   delay_for(30) if options[:wait]
 
   # Get the existing locale before we move on
-  locale = @db_worker.fetch_lc_collate
-  encoding = @db_worker.fetch_server_encoding
+  begin
+    locale = @db_worker.fetch_lc_collate
+    encoding = @db_worker.fetch_server_encoding
+  rescue GitlabCtl::Errors::ExecutionError => ee
+    log 'There wasn an error fetching locale and encoding information from the database'
+    log 'Please ensure the database is running and functional before running pg-upgrade'
+    log "STDOUT: #{ee.stdout}"
+    log "STDERR: #{ee.stderr}"
+  end
 
   # Ensure tmp_data_dir and data_dir are set before the database is stopped
   @db_worker.tmp_data_dir
