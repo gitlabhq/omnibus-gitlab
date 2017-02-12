@@ -50,31 +50,10 @@ follows
    dev.gitlab.org. This is specified in the `.custom_sources.yml` file in the
    root of the source tree and these repositories are not publicly usable. So,
    for personal builds, you have to use public alternatives of these repos.
-   An example `.custom_sources.yml` file would be as follows. Edit the file
-   and make necessary changes.
+   The alternatives are provided as [comments in the `.custom_sources.yml`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml#L25-44)
+   file.  So, you can simply uncomment those lines and delete the initially
+   active options.
 
-    ```
-    gitlab-rails:
-      remote: "https://gitlab.com/gitlab-org/gitlab-ce.git"
-    gitlab-rails-ee:
-      remote: "https://gitlab.com/gitlab-org/gitlab-ee.git"
-    gitlab-shell:
-      remote: "https://gitlab.com/gitlab-org/gitlab-shell.git"
-    gitlab-workhorse:
-      remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
-    gitlab-pages:
-      remote: "https://gitlab.com/gitlab-org/gitlab-pages"
-    gitlab-monitor:
-      remote: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
-    omnibus:
-      remote: "https://gitlab.com/gitlab-org/omnibus.git"
-    config_guess:
-      remote: "https://gitlab.com/omnibus-mirror/config_guess.git"
-    registry:
-      remote: "https://gitlab.com/omnibus-mirror/distribution.git"
-    rb-readline:
-      remote: "https://gitlab.com/omnibus-mirror/rb-readline.git"
-    ```
 7. Install the dependencies and generate binaries
 
 
