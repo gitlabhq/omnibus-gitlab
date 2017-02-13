@@ -16,20 +16,20 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
-name "rb-readline"
-version = Gitlab::Version.new('rb-readline', "master")
-default_version "master"
+name 'rb-readline'
+version = Gitlab::Version.new('rb-readline', 'master')
+default_version 'master'
 
-license "BSD-3-Clause"
-license_file "LICENSE"
+license 'BSD-3-Clause'
+license_file 'LICENSE'
 
-dependency "ruby"
-dependency "rubygems"
+dependency 'ruby'
+dependency 'rubygems'
 
 source git: version.remote
 
 build do
   env = with_embedded_path
 
-  ruby "setup.rb", env: env
+  ruby 'setup.rb', env: env
 end

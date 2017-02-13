@@ -15,12 +15,12 @@
 # limitations under the License.
 #
 
-name "gitlab-scripts"
+name 'gitlab-scripts'
 
-license "Apache-2.0"
-license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
-source :path => File.expand_path("files/gitlab-scripts", Omnibus::Config.project_root)
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
+source path: File.expand_path('files/gitlab-scripts', Omnibus::Config.project_root)
 
 build do
-  copy "*", "#{install_dir}/embedded/bin/"
+  copy '*', "#{install_dir}/embedded/bin/"
 end

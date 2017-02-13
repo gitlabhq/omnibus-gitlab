@@ -14,18 +14,18 @@
 # limitations under the License.
 #
 
-name "curl"
-default_version "7.52.0"
+name 'curl'
+default_version '7.52.0'
 
 # Runtime dependency
-dependency "zlib"
-dependency "openssl"
+dependency 'zlib'
+dependency 'openssl'
 
-license "MIT"
-license_file "COPYING"
+license 'MIT'
+license_file 'COPYING'
 
-version "7.52.0" do
-  source sha256: "7ee327ca55e95ea16b27929449ba290c3881cbb24901c57dd571849741c8f2d0"
+version '7.52.0' do
+  source sha256: '7ee327ca55e95ea16b27929449ba290c3881cbb24901c57dd571849741c8f2d0'
 end
 
 source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz"
@@ -37,7 +37,7 @@ build do
 
   if freebsd?
     # from freebsd ports - IPv6 Hostcheck patch
-    patch source: "curl-freebsd-hostcheck.patch", plevel: 1
+    patch source: 'curl-freebsd-hostcheck.patch', plevel: 1
   end
 
   delete "#{project_dir}/src/tool_hugehelp.c"
@@ -45,31 +45,31 @@ build do
   if aix?
     # otherwise gawk will die during ./configure with variations on the theme of:
     # "/opt/omnibus-toolchain/embedded/lib/libiconv.a(shr4.o) could not be loaded"
-    env["LIBPATH"] = "/usr/lib:/lib"
+    env['LIBPATH'] = '/usr/lib:/lib'
   end
 
   configure_command = [
-    "./configure",
+    './configure',
     "--prefix=#{install_dir}/embedded",
-    "--disable-manual",
-    "--disable-debug",
-    "--enable-optimize",
-    "--disable-ldap",
-    "--disable-ldaps",
-    "--disable-rtsp",
-    "--enable-proxy",
-    "--disable-dependency-tracking",
-    "--enable-ipv6",
-    "--without-libidn",
-    "--without-gnutls",
-    "--without-librtmp",
-    "--without-libssh2",
+    '--disable-manual',
+    '--disable-debug',
+    '--enable-optimize',
+    '--disable-ldap',
+    '--disable-ldaps',
+    '--disable-rtsp',
+    '--enable-proxy',
+    '--disable-dependency-tracking',
+    '--enable-ipv6',
+    '--without-libidn',
+    '--without-gnutls',
+    '--without-librtmp',
+    '--without-libssh2',
     "--with-ssl=#{install_dir}/embedded",
-    "--with-zlib=#{install_dir}/embedded",
+    "--with-zlib=#{install_dir}/embedded"
   ]
 
-  command configure_command.join(" "), env: env
+  command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make 'install', env: env
 end

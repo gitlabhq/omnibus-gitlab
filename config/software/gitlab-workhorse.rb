@@ -15,16 +15,15 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("gitlab-workhorse")
+version = Gitlab::Version.new('gitlab-workhorse')
 
-name "gitlab-workhorse"
+name 'gitlab-workhorse'
 default_version version.print
 
-license "MIT"
-license_file "LICENSE"
+license 'MIT'
+license_file 'LICENSE'
 
-source :git => version.remote
-
+source git: version.remote
 
 build do
   make "install PREFIX=#{install_dir}/embedded"

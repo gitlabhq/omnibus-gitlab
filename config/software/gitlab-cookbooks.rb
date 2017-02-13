@@ -16,20 +16,20 @@
 # limitations under the License.
 #
 
-name "gitlab-cookbooks"
+name 'gitlab-cookbooks'
 
-license "Apache-2.0"
-license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
-source path: File.expand_path("files/gitlab-cookbooks", Omnibus::Config.project_root)
+source path: File.expand_path('files/gitlab-cookbooks', Omnibus::Config.project_root)
 
 build do
   cookbook_name = 'gitlab'
 
   command "mkdir -p #{install_dir}/embedded/cookbooks"
-  sync "./", "#{install_dir}/embedded/cookbooks/"
+  sync './', "#{install_dir}/embedded/cookbooks/"
 
   # If EE package, use a different master cookbook
   if EE
@@ -40,13 +40,13 @@ build do
 
   # Create a package cookbook.
   command "mkdir -p #{install_dir}/embedded/cookbooks/package/attributes"
-  erb :dest => "#{install_dir}/embedded/cookbooks/package/attributes/default.rb",
-      :source => "cookbook_packages_default.erb",
-      :mode => 0755,
-      :vars => { :install_dir => project.install_dir }
+  erb dest: "#{install_dir}/embedded/cookbooks/package/attributes/default.rb",
+      source: 'cookbook_packages_default.erb',
+      mode: 0755,
+      vars: { install_dir: project.install_dir }
 
-  erb :dest => "#{install_dir}/embedded/cookbooks/dna.json",
-      :source => "dna.json.erb",
-      :mode => 0644,
-      :vars => { :master_cookbook => cookbook_name }
+  erb dest: "#{install_dir}/embedded/cookbooks/dna.json",
+      source: 'dna.json.erb',
+      mode: 0644,
+      vars: { master_cookbook: cookbook_name }
 end

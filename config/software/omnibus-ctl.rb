@@ -14,28 +14,28 @@
 # limitations under the License.
 #
 
-name "omnibus-ctl"
-default_version "0.3.6"
+name 'omnibus-ctl'
+default_version '0.3.6'
 
-license "Apache-2.0"
-license_file "https://github.com/chef/omnibus-ctl/blob/master/LICENSE"
+license 'Apache-2.0'
+license_file 'https://github.com/chef/omnibus-ctl/blob/master/LICENSE'
 
-dependency "ruby"
-dependency "rubygems"
-dependency "bundler"
+dependency 'ruby'
+dependency 'rubygems'
+dependency 'bundler'
 
-source git: "https://github.com/chef/omnibus-ctl.git"
+source git: 'https://github.com/chef/omnibus-ctl.git'
 
-relative_path "omnibus-ctl"
+relative_path 'omnibus-ctl'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   # Remove existing built gems in case they exist in the current dir
-  delete "omnibus-ctl-*.gem"
+  delete 'omnibus-ctl-*.gem'
 
-  gem "build omnibus-ctl.gemspec", env: env
-  gem "install omnibus-ctl-*.gem --no-rdoc --no-ri", env: env
+  gem 'build omnibus-ctl.gemspec', env: env
+  gem 'install omnibus-ctl-*.gem --no-rdoc --no-ri', env: env
 
   touch "#{install_dir}/embedded/service/omnibus-ctl/.gitkeep"
 end

@@ -14,16 +14,16 @@
 # limitations under the License.
 #
 
-name "redis"
+name 'redis'
 
-license "BSD-3-Clause"
-license_file "COPYING"
+license 'BSD-3-Clause'
+license_file 'COPYING'
 
-dependency "config_guess"
-default_version "3.2.5"
+dependency 'config_guess'
+default_version '3.2.5'
 
-version "3.2.5" do
-  source md5: "d3d2b4dd4b2a3e07ee6f63c526b66b08"
+version '3.2.5' do
+  source md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08'
 end
 
 source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
@@ -32,11 +32,11 @@ relative_path "redis-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
-    "PREFIX" => "#{install_dir}/embedded"
+    'PREFIX' => "#{install_dir}/embedded"
   )
 
   update_config_guess
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make 'install', env: env
 end

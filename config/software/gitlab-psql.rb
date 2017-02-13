@@ -17,17 +17,17 @@
 
 require 'digest'
 
-name "gitlab-psql"
+name 'gitlab-psql'
 
-license "Apache-2.0"
-license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 # This 'software' is self-contained in this file. Use the file contents
 # to generate a version string.
 default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
   block do
-    open("#{install_dir}/bin/gitlab-psql", "w") do |file|
+    open("#{install_dir}/bin/gitlab-psql", 'w') do |file|
       file.print <<-EOH
 #!/bin/sh
 

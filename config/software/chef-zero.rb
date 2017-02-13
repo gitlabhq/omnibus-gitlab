@@ -19,20 +19,20 @@
 # Introduced by https://github.com/chef/chef-zero/pull/199
 # When changing this version, make sure that the verbosity went down.
 
-name "chef-zero"
-default_version "4.8.0"
+name 'chef-zero'
+default_version '4.8.0'
 
-license "Apache-2.0"
+license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"
 
-dependency "ruby"
-dependency "rubygems"
+dependency 'ruby'
+dependency 'rubygems'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem "install chef-zero" \
+  gem 'install chef-zero' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      ' --no-ri --no-rdoc', env: env
 end

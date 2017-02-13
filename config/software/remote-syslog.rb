@@ -16,14 +16,14 @@
 ##
 #
 
-name "remote-syslog"
-default_version "1.6.15"
+name 'remote-syslog'
+default_version '1.6.15'
 
-license "MIT"
+license 'MIT'
 license_file "https://raw.githubusercontent.com/papertrail/remote_syslog/#{version}/LICENSE"
 
-dependency "ruby"
-dependency "rubygems"
+dependency 'ruby'
+dependency 'rubygems'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

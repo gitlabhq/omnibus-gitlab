@@ -14,17 +14,17 @@
 # limitations under the License.
 #
 
-name "zlib"
-default_version "1.2.11"
+name 'zlib'
+default_version '1.2.11'
 
-version "1.2.11" do
-  source sha256: "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1"
+version '1.2.11' do
+  source sha256: 'c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1'
 end
 
 source url: "http://downloads.sourceforge.net/project/libpng/zlib/#{version}/zlib-#{version}.tar.gz"
 
-license "Zlib"
-license_file "README"
+license 'Zlib'
+license_file 'README'
 
 relative_path "zlib-#{version}"
 
@@ -32,19 +32,19 @@ build do
   if windows?
     env = with_standard_compiler_flags(with_embedded_path)
 
-    patch source: "zlib-windows-relocate.patch", env: env
+    patch source: 'zlib-windows-relocate.patch', env: env
 
     # We can't use the top-level Makefile. Instead, the developers have made
     # an organic, artisanal, hand-crafted Makefile.gcc for us which takes a few
     # variables.
-    env["BINARY_PATH"] = "/bin"
-    env["LIBRARY_PATH"] = "/lib"
-    env["INCLUDE_PATH"] = "/include"
-    env["DESTDIR"] = "#{install_dir}/embedded"
+    env['BINARY_PATH'] = '/bin'
+    env['LIBRARY_PATH'] = '/lib'
+    env['INCLUDE_PATH'] = '/include'
+    env['DESTDIR'] = "#{install_dir}/embedded"
 
     make_args = [
-      "-fwin32/Makefile.gcc",
-      "SHARED_MODE=1",
+      '-fwin32/Makefile.gcc',
+      'SHARED_MODE=1',
       "CFLAGS=\"#{env['CFLAGS']} -Wall\"",
       "ASFLAGS=\"#{env['CFLAGS']} -Wall\"",
       "LDFLAGS=\"#{env['LDFLAGS']}\"",
@@ -55,11 +55,11 @@ build do
       # make will attempt to link example_d.exe and minigzip_d.exe in parallel
       # with the strip step - causing gcc to freak out when a source file is
       # rewritten part way through the linking stage.
-      #"-j #{workers}",
+      # "-j #{workers}",
     ]
 
     make(*make_args, env: env)
-    make("install", *make_args, env: env)
+    make('install', *make_args, env: env)
   else
     # We omit the omnibus path here because it breaks mac_os_x builds by picking
     # up the embedded libtool instead of the system libtool which the zlib
@@ -68,11 +68,11 @@ build do
     env = with_standard_compiler_flags
     if solaris_10?
       # For some reason zlib needs this flag on solaris (cargocult warning?)
-      env["CFLAGS"] << " -DNO_VIZ"
+      env['CFLAGS'] << ' -DNO_VIZ'
     elsif freebsd?
       # FreeBSD 10+ gets cranky if zlib is not compiled in a
       # position-independent way.
-      env["CFLAGS"] << " -fPIC"
+      env['CFLAGS'] << ' -fPIC'
     end
 
     configure env: env

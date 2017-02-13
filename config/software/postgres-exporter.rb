@@ -31,8 +31,6 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/postgres-exporter",
     'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory
   }
-  exporter_source_dir = "#{Omnibus::Config.source_dir}/postgres-exporter"
-
   command 'go build', env: env
   copy 'postgres_exporter', "#{install_dir}/embedded/bin/"
 end

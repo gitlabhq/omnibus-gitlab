@@ -16,30 +16,30 @@
 ##
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("gitlab-shell")
+version = Gitlab::Version.new('gitlab-shell')
 
-name "gitlab-shell"
+name 'gitlab-shell'
 default_version version.print
 
-license "MIT"
-license_file "LICENSE"
+license 'MIT'
+license_file 'LICENSE'
 
-dependency "ruby"
+dependency 'ruby'
 
 source git: version.remote
 
 build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
-  sync "./", "#{install_dir}/embedded/service/gitlab-shell/", { exclude: [".git", ".gitignore"]}
+  sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.git', '.gitignore']
 
   block do
-    env_shebang = "#!/usr/bin/env ruby"
+    env_shebang = '#!/usr/bin/env ruby'
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       script = File.read(ruby_script)
-      erb :dest => ruby_script.sub(project_dir, "#{install_dir}/embedded/service/gitlab-shell"),
-        :source => "ruby_script_wrapper.erb",
-        :mode => 0755,
-        :vars => {:script => script, :install_dir => install_dir}
+      erb dest: ruby_script.sub(project_dir, "#{install_dir}/embedded/service/gitlab-shell"),
+          source: 'ruby_script_wrapper.erb',
+          mode: 0755,
+          vars: { script: script, install_dir: install_dir }
     end
   end
 end

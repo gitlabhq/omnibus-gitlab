@@ -14,27 +14,27 @@
 # limitations under the License.
 #
 
-name "expat"
-default_version "2.2.0"
+name 'expat'
+default_version '2.2.0'
 
 relative_path "expat-#{version}"
-dependency "config_guess"
+dependency 'config_guess'
 
-license "MIT"
-license_file "COPYING"
+license 'MIT'
+license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 source url: "http://downloads.sourceforge.net/project/expat/expat/#{version}/expat-#{version}.tar.bz2",
-       md5: "2f47841c829facb346eb6e3fab5212e2"
+       md5: '2f47841c829facb346eb6e3fab5212e2'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  update_config_guess(target: "conftools")
+  update_config_guess(target: 'conftools')
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
-  make "install", env: env
+  make 'install', env: env
 end

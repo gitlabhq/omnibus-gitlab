@@ -14,16 +14,16 @@
 # limitations under the License.
 #
 
-name "libtool"
-default_version "2.4"
+name 'libtool'
+default_version '2.4'
 
-license "GPL-2.0"
-license_file "COPYING"
+license 'GPL-2.0'
+license_file 'COPYING'
 
-dependency "config_guess"
+dependency 'config_guess'
 
 # NOTE: 2.4.6 2.4.2 do not compile on solaris2 yet
-version("2.4")   { source md5: "b32b04148ecdd7344abc6fe8bd1bb021" }
+version('2.4') { source md5: 'b32b04148ecdd7344abc6fe8bd1bb021' }
 
 source url: "https://ftp.gnu.org/gnu/libtool/libtool-#{version}.tar.gz"
 
@@ -33,15 +33,13 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   update_config_guess
-  update_config_guess(target: "libltdl/config")
+  update_config_guess(target: 'libltdl/config')
 
-  if aix?
-    env["M4"] = "/opt/freeware/bin/m4"
-  end
+  env['M4'] = '/opt/freeware/bin/m4' if aix?
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make env: env
-  make "install", env: env
+  make 'install', env: env
 end

@@ -16,30 +16,29 @@
 ##
 #
 
-name "libicu"
-default_version "57.1"
+name 'libicu'
+default_version '57.1'
 
-source url: "http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz",
-       sha256: "ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581"
+source url: 'http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz',
+       sha256: 'ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581'
 
-license "MIT"
-license_file "icu/LICENSE"
+license 'MIT'
+license_file 'icu/LICENSE'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"
   cwd = "#{Omnibus::Config.source_dir}/libicu/icu/source"
 
-  command ["./runConfigureICU",
-           "Linux/gcc",
+  command ['./runConfigureICU',
+           'Linux/gcc',
            "--prefix=#{install_dir}/embedded",
-           "--with-data-packaging=files",
-           "--enable-shared",
-           "--without-samples"
-     ].join(" "), env: env, cwd: cwd
+           '--with-data-packaging=files',
+           '--enable-shared',
+           '--without-samples'].join(' '), env: env, cwd: cwd
 
   make "-j #{workers}", env: env, cwd: cwd
-  make "install", env: env, cwd: cwd
+  make 'install', env: env, cwd: cwd
 
   link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current", force: true
 end

@@ -17,20 +17,20 @@
 # We are pinning to 1.6 because 1.7 wasn't compatible with our version of chef,
 # and our chef-gem dependency will pull anything in 1.x range for mixlib-log
 
-name "mixlib-log"
-default_version "1.6.0"
+name 'mixlib-log'
+default_version '1.6.0'
 
-license "Apache-2.0"
-license_file "https://raw.githubusercontent.com/chef/mixlib-log/master/LICENSE"
+license 'Apache-2.0'
+license_file 'https://raw.githubusercontent.com/chef/mixlib-log/master/LICENSE'
 
-dependency "ruby"
-dependency "rubygems"
+dependency 'ruby'
+dependency 'rubygems'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem "install mixlib-log" \
+  gem 'install mixlib-log' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      ' --no-ri --no-rdoc', env: env
 end

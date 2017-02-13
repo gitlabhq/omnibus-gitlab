@@ -14,27 +14,25 @@
 # limitations under the License.
 #
 
-name "makedepend"
-default_version "1.0.5"
+name 'makedepend'
+default_version '1.0.5'
 
-license "MIT"
-license_file "COPYING"
+license 'MIT'
+license_file 'COPYING'
 
-source url: "https://www.x.org/releases/individual/util/makedepend-1.0.5.tar.gz",
-       md5: "efb2d7c7e22840947863efaedc175747"
+source url: 'https://www.x.org/releases/individual/util/makedepend-1.0.5.tar.gz',
+       md5: 'efb2d7c7e22840947863efaedc175747'
 
-relative_path "makedepend-1.0.5"
+relative_path 'makedepend-1.0.5'
 
-dependency "xproto"
-dependency "util-macros"
-dependency "pkg-config-lite"
+dependency 'xproto'
+dependency 'util-macros'
+dependency 'pkg-config-lite'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  if solaris_10?
-    env["PKG_CONFIG"] = "#{install_dir}/embedded/bin/pkg-config"
-  end
+  env['PKG_CONFIG'] = "#{install_dir}/embedded/bin/pkg-config" if solaris_10?
 
   command "./configure --prefix=#{install_dir}/embedded", env: env
 

@@ -19,7 +19,7 @@
 # Introduced by https://github.com/chef/gitlab-monitor/pull/199
 # When changing this version, make sure that the verbosity went down.
 
-version = Gitlab::Version.new("gitlab-monitor", "0.0.16")
+version = Gitlab::Version.new('gitlab-monitor', '0.0.16')
 
 default_version version.print
 
@@ -35,7 +35,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'build gitlab-monitor.gemspec', env: env
-  gem "install gitlab-monitor" \
+  gem 'install gitlab-monitor' \
       " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      ' --no-ri --no-rdoc', env: env
 end

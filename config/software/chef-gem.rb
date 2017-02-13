@@ -14,22 +14,22 @@
 # limitations under the License.
 #
 
-name "chef-gem"
-default_version "12.12.15"
+name 'chef-gem'
+default_version '12.12.15'
 
-license "Apache-2.0"
-license_file "https://github.com/chef/chef/blob/master/LICENSE"
+license 'Apache-2.0'
+license_file 'https://github.com/chef/chef/blob/master/LICENSE'
 
-dependency "ruby"
-dependency "rubygems"
-dependency "libffi"
-dependency "rb-readline"
+dependency 'ruby'
+dependency 'rubygems'
+dependency 'libffi'
+dependency 'rb-readline'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem "install chef" \
+  gem 'install chef' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      ' --no-ri --no-rdoc', env: env
 end

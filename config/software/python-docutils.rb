@@ -16,14 +16,14 @@
 ##
 #
 
-name "python-docutils"
+name 'python-docutils'
 
-default_version "0.11"
+default_version '0.11'
 
-license "Public-Domain"
-license_file "http://docutils.sourceforge.net/COPYING.txt"
+license 'Public-Domain'
+license_file 'http://docutils.sourceforge.net/COPYING.txt'
 
-dependency "python3"
+dependency 'python3'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

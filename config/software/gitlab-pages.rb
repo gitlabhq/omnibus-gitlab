@@ -15,20 +15,20 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new("gitlab-pages")
+version = Gitlab::Version.new('gitlab-pages')
 
-name "gitlab-pages"
+name 'gitlab-pages'
 default_version version.print
 
-license "MIT"
+license 'MIT'
 
-source :git => version.remote
+source git: version.remote
 
 build do
   # We use the `base_dir`, because the sources are put in `src/gitlab-pages`
   # This is required for GO15VENDOREXPERIMENT=1 to work properly,
   # since it requires the package to be in $GOPATH/src/package
-  env = { 'GOPATH' => "#{Omnibus::Config.base_dir}"}
-  make "gitlab-pages", env: env
-  move "gitlab-pages", "#{install_dir}/embedded/bin/gitlab-pages"
+  env = { 'GOPATH' => Omnibus::Config.base_dir }
+  make 'gitlab-pages', env: env
+  move 'gitlab-pages', "#{install_dir}/embedded/bin/gitlab-pages"
 end

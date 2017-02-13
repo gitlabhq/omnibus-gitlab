@@ -14,22 +14,22 @@
 # limitations under the License.
 #
 
-name "libedit"
-default_version "20120601-3.0"
+name 'libedit'
+default_version '20120601-3.0'
 
-license "BSD-3-Clause"
-license_file "COPYING"
+license 'BSD-3-Clause'
+license_file 'COPYING'
 
-dependency "ncurses"
-dependency "config_guess"
+dependency 'ncurses'
+dependency 'config_guess'
 
-version("20120601-3.0") { source md5: "e50f6a7afb4de00c81650f7b1a0f5aea" }
+version('20120601-3.0') { source md5: 'e50f6a7afb4de00c81650f7b1a0f5aea' }
 
 source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
 
-if version == "20141030-3.1"
+if version == '20141030-3.1'
   # released tar file has name discrepency in folder name for this version
-  relative_path "libedit-20141029-3.1"
+  relative_path 'libedit-20141029-3.1'
 else
   relative_path "libedit-#{version}"
 end
@@ -39,17 +39,15 @@ build do
 
   # The patch is from the FreeBSD ports tree and is for GCC compatibility.
   # http://svnweb.freebsd.org/ports/head/devel/libedit/files/patch-vi.c?annotate=300896
-  if version.to_i < 20150325 && (freebsd? || openbsd?)
-    patch source: "freebsd-vi-fix.patch", env: env
+  if version.to_i < 20_150_325 && (freebsd? || openbsd?)
+    patch source: 'freebsd-vi-fix.patch', env: env
   end
 
-  if openbsd?
-    patch source: "openbsd-weak-alias-fix.patch", plevel: 1, env: env
-  end
+  patch source: 'openbsd-weak-alias-fix.patch', plevel: 1, env: env if openbsd?
 
   update_config_guess
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env

@@ -14,24 +14,24 @@
 # limitations under the License.
 #
 
-name "util-macros"
-default_version "1.18.0"
+name 'util-macros'
+default_version '1.18.0'
 
-version "1.18.0" do
-  source md5: "fd0ba21b3179703c071bbb4c3e5fb0f4"
+version '1.18.0' do
+  source md5: 'fd0ba21b3179703c071bbb4c3e5fb0f4'
 end
 
 source url: "https://www.x.org/releases/individual/util/util-macros-#{version}.tar.gz"
 
-license "MIT"
-license_file "COPYING"
+license 'MIT'
+license_file 'COPYING'
 
 relative_path "util-macros-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command "./configure" \
+  command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 
   make "-j #{workers}", env: env
