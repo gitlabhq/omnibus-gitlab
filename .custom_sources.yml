@@ -18,3 +18,27 @@ registry:
   remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
+
+# For local builds, use the public repositories given below. They are mirrord
+# from the internal repositories that GitLab uses.
+
+#gitlab-rails:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-ce.git"
+#gitlab-rails-ee:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-ee.git"
+#gitlab-shell:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-shell.git"
+#gitlab-workhorse:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+#gitlab-pages:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-pages.git"
+#gitlab-monitor:
+  #remote: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
+#omnibus:
+  #remote: "https://gitlab.com/gitlab-org/omnibus.git"
+#config_guess:
+  #remote: "https://gitlab.com/omnibus-mirror/config_guess.git"
+#registry:
+  #remote: "https://gitlab.com/omnibus-mirror/distribution.git"
+#rb-readline:
+  #remote: "https://gitlab.com/omnibus-mirror/rb-readline.git"
