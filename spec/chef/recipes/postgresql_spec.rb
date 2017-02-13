@@ -91,6 +91,15 @@ describe 'postgresql 9.2' do
       ).with_content(/max_standby_streaming_delay = 30s/)
     end
 
+    it 'sets the max_replication_slots setting' do
+      expect(chef_run.node['gitlab']['postgresql']['max_replication_slots'])
+        .to eq(0)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_replication_slots = 0/)
+    end
+
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')

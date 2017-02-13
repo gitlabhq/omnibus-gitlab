@@ -410,6 +410,7 @@ default['gitlab']['postgresql']['wal_keep_segments'] = 10
 default['gitlab']['postgresql']['hot_standby'] = "off"
 default['gitlab']['postgresql']['max_standby_archive_delay'] = "30s"
 default['gitlab']['postgresql']['max_standby_streaming_delay'] = "30s"
+default['gitlab']['postgresql']['max_replication_slots'] = 0
 
 ####
 # Redis
