@@ -503,7 +503,6 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 ####
 # mailroom
 ####
-
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_directory'] = "/var/log/gitlab/mailroom"
@@ -515,6 +514,7 @@ default['gitlab']['gitlab-pages']['enable'] = false
 default['gitlab']['gitlab-pages']['external_http'] = nil
 default['gitlab']['gitlab-pages']['external_https'] = nil
 default['gitlab']['gitlab-pages']['listen_proxy'] = "localhost:8090"
+default['gitlab']['gitlab-pages']['metrics_address'] = nil
 default['gitlab']['gitlab-pages']['pages_path'] = nil
 default['gitlab']['gitlab-pages']['domain'] = nil
 default['gitlab']['gitlab-pages']['cert'] = nil
