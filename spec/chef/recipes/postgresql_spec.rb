@@ -30,6 +30,15 @@ describe 'postgresql 9.2' do
         .with_content(/log_line_prefix = ''/)
     end
 
+    it 'sets the max_replication_slots setting' do
+      expect(chef_run.node['gitlab']['postgresql']['max_replication_slots'])
+        .to eq(0)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_replication_slots = 0/)
+    end
+
     it 'sets checkpoint_segments' do
       expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
         .to eq(10)
@@ -69,7 +78,8 @@ describe 'postgresql 9.2' do
         max_standby_streaming_delay: '120s',
         archive_mode: 'on',
         archive_command: 'command',
-        archive_timeout: '120'
+        archive_timeout: '120',
+        max_replication_slots: 2
         })
     end
 
@@ -96,6 +106,15 @@ describe 'postgresql 9.2' do
       expect(chef_run).to render_file(
         '/var/opt/gitlab/postgresql/data/postgresql.conf'
       ).with_content(/max_standby_streaming_delay = 120s/)
+    end
+
+    it 'sets the max_replication_slots setting' do
+      expect(chef_run.node['gitlab']['postgresql']['max_replication_slots'])
+        .to eq(2)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_replication_slots = 2/)
     end
 
     it 'sets archive settings' do

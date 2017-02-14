@@ -610,6 +610,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['hot_standby'] = "off"
 # postgresql['max_standby_archive_delay'] = "30s"
 # postgresql['max_standby_streaming_delay'] = "30s"
+# postgresql['max_replication_slots'] = 0
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
