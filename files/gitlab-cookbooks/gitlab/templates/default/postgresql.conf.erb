@@ -215,6 +215,9 @@ wal_keep_segments = <%= node['gitlab']['postgresql']['wal_keep_segments'] %>
         # comma-separated list of application_name
         # from standby(s); '*' = all
 
+# The number of replication slots to reserve.
+max_replication_slots = <%= node['gitlab']['postgresql']['max_replication_slots'] %>
+
 # - Standby Servers -
 
 # These settings are ignored on a master server
