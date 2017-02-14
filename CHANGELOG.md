@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Expose max_standby_archive_delay and max_standby_streaming_delay Postgresql settings
 - Disconnect and reconnect database connections when forking in Unicorn a7b35aaf
 - Add support for the PostgreSQL max_replication_slots setting
+- Allow exposing prometheus metrics on gitlab-pages
 
 8.16.5
 
