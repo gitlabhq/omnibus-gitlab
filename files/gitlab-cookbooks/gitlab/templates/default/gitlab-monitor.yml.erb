@@ -6,7 +6,7 @@ probes:
       methods:
         - probe_db
       opts:
-        connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %>
+        connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %> host=<%= node['gitlab']['postgresql']['dir'] %>
   process:
     methods:
       - probe_memory
