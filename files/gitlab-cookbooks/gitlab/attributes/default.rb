@@ -412,6 +412,12 @@ default['gitlab']['postgresql']['hot_standby'] = "off"
 default['gitlab']['postgresql']['max_standby_archive_delay'] = "30s"
 default['gitlab']['postgresql']['max_standby_streaming_delay'] = "30s"
 
+# Backup/Archive settings
+default['gitlab']['postgresql']['archive_mode'] = "off"
+default['gitlab']['postgresql']['archive_command'] = nil
+default['gitlab']['postgresql']['archive_timeout'] = "60"
+
+
 ####
 # Redis
 ####

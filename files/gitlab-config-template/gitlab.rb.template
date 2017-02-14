@@ -622,6 +622,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_standby_archive_delay'] = "30s"
 # postgresql['max_standby_streaming_delay'] = "30s"
 
+# Backup/Archive settings
+# default['gitlab']['postgresql']['archive_mode'] = "off"
+# default['gitlab']['postgresql']['archive_command'] = nil
+# default['gitlab']['postgresql']['archive_timeout'] = "60"
+
 ### Available in PostgreSQL 9.6 and later
 # postgresql['min_wal_size'] = 80MB
 # postgresql['max_wal_size'] = 1GB

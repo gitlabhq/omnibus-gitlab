@@ -20,6 +20,31 @@ Thus you have three options for database servers to use with Omnibus GitLab:
 If you are planning to use MySQL/MariaDB, make sure to read the [MySQL special notes]
 (#omnibus-mysql-special-notes) before proceeding.
 
+## Enabling PostgreSQL WAL (Write Ahead Log) Archiving
+
+By default WAL archiving of the packaged PostgreSQL is not enabled. Please consider the following when 
+seeking to enable WAL archiving: 
+
+- The WAL level needs to be 'replica' or higher (9.6+ options are `minimal`, `replica`, or `logical`)
+- Increasing the WAL level will increase the amount of storage consumed in regular operations
+
+To enable WAL Archiving:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+    ```ruby
+    # Replication settings
+    default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
+    default['gitlab']['postgresql']['wal_level'] = "replica"
+        ...
+        ...
+    # Backup/Archive settings
+    default['gitlab']['postgresql']['archive_mode'] = "on"
+    default['gitlab']['postgresql']['archive_command'] = "/your/wal/archiver/here"
+    default['gitlab']['postgresql']['archive_timeout'] = "60"
+    ```
+
+1.  [Reconfigure GitLab][] for the changes to take effect. This will result in a database restart.
+
 ## Using a non-packaged PostgreSQL database management server
 
 By default, GitLab is configured to use the PostgreSQL server that is included
