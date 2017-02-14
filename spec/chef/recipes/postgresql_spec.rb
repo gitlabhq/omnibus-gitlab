@@ -29,13 +29,47 @@ describe 'postgresql 9.2' do
       expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf')
         .with_content(/log_line_prefix = ''/)
     end
+
+    it 'sets checkpoint_segments' do
+      expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
+        .to eq(10)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/checkpoint_segments = 10/)
+    end
+
+    it 'sets max_standby settings' do
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_standby_archive_delay = 30s/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_standby_streaming_delay = 30s/)
+    end
+
+    it 'sets archive settings' do
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_mode = off/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_command = ''/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_timeout = 60/)
+    end
   end
 
   context 'when user settings are set' do
     before do
       stub_gitlab_rb(postgresql: {
         shared_preload_libraries: 'pg_stat_statements',
-        log_line_prefix: '%a'
+        log_line_prefix: '%a',
+        max_standby_archive_delay: '60s',
+        max_standby_streaming_delay: '120s',
+        archive_mode: 'on',
+        archive_command: 'command',
+        archive_timeout: '120'
         })
     end
 
@@ -53,6 +87,27 @@ describe 'postgresql 9.2' do
 
       expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf')
         .with_content(/log_line_prefix = '%a'/)
+    end
+
+    it 'sets max_standby settings' do
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_standby_archive_delay = 60s/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_standby_streaming_delay = 120s/)
+    end
+
+    it 'sets archive settings' do
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_mode = on/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_command = 'command'/)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/archive_timeout = 120/)
     end
   end
 
@@ -72,23 +127,6 @@ describe 'postgresql 9.2' do
           /unix_socket_directories = '\/var\/opt\/gitlab\/postgresql'/
         )
       }
-    end
-
-    it 'sets checkpoint_segments' do
-      expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
-        .to eq(10)
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/postgresql/data/postgresql.conf'
-      ).with_content(/checkpoint_segments = 10/)
-    end
-
-    it 'sets max_standby settings' do
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/postgresql/data/postgresql.conf'
-      ).with_content(/max_standby_archive_delay = 30s/)
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/postgresql/data/postgresql.conf'
-      ).with_content(/max_standby_streaming_delay = 30s/)
     end
 
     context 'running version differs from data version' do
