@@ -20,6 +20,9 @@ exec /opt/gitlab/embedded/bin/gitlab-pages \
     -root-cert "<%= node['gitlab']['gitlab-pages']['cert'] %>" \
     -root-key  "<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
     <% end %>
+    <% if node['gitlab']['gitlab-pages']['metrics_address'] %>
+    -metrics-address "<%= node['gitlab']['gitlab-pages']['metrics_address'] %>" \
+    <% end %>
     -daemon-uid "$(id -u "<%= node['gitlab']['user']['username'] %>")" \
     -daemon-gid "$(id -g "<%= node['gitlab']['user']['username'] %>")" \
     \
