@@ -614,7 +614,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
 # default['gitlab']['postgresql']['archive_command'] = nil
-# default['gitlab']['postgresql']['archive_timeout'] = "60"]
+# default['gitlab']['postgresql']['archive_timeout'] = "60"
 
 ### Available in PostgreSQL 9.6 and later
 # postgresql['min_wal_size'] = 80MB
