@@ -1,11 +1,11 @@
 ## Release Process
 
-New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](doc/release/README.md#updating-cloud-images)
+New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](../README.md#updating-cloud-images)
 
 ### Update the template to latest GitLab release
 
 Within the template we reference our Docker image. Go to https://store.docker.com/community/images/gitlab/gitlab-ce/tags
-and find the newest decriptive tag. e.g. `8.13.3-ce.0`
+and find the newest descriptive tag. e.g. `8.13.3-ce.0`
 
 Then update the image stream in the template with the name and tag:
 
@@ -54,7 +54,7 @@ And then also update the GitLab Deployment config to use the new tag in it's Ima
 ### Test
 
 For setting up a OpenShift Origin development environment for testing see
-[doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
+[doc/development/openshift/README.md.](../development/openshift/README.md#development-setup)
 
 Setup a new GitLab install using the updated template. Smoke test the install:
 
@@ -70,4 +70,4 @@ Push your updated template into a New Merge request on GitLab.com against the ma
 ### Notify
 
 Once the Merge Request has been accepted, alert the #gitlab-openshift slack channel that a new
-version has been pushed to master. Effectivly handing off the template to OpenShift for inclusion in the all-in-one.
+version has been pushed to master. Effectively handing off the template to OpenShift for inclusion in the all-in-one.

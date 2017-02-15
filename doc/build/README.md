@@ -72,7 +72,7 @@ make docker_push_latest RELEASE_PACKAGE=gitlab-ce
 ## Building a package from a custom branch
 
 >**Note** For a description on how the official omnibus-gitlab package is built,
-see the [release process](doc/release/README.md) document.
+see the [release process](../release/README.md) document.
 
 If you are working on implementing a feature in one of the GitLab components,
 you might need to build a package from your custom branch in order to test the

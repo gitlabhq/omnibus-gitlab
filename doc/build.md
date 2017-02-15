@@ -1,19 +1,19 @@
 #### Preparing a build environment
 
-See [doc/build/README.md.](doc/build/README.md#preparing-a-build-environment)
+See [doc/build/README.md.](build/README.md#preparing-a-build-environment)
 
 #### Usage
 
-See [doc/build/README.md.](doc/build/README.md#usage)
+See [doc/build/README.md.](build/README.md#usage)
 
 #### Build
 
-See [doc/build/README.md.](doc/build/README.md#build)
+See [doc/build/README.md.](build/README.md#build)
 
 #### Clean
 
-See [doc/build/README.md.](doc/build/README.md#clean)
+See [doc/build/README.md.](build/README.md#clean)
 
 #### Help
 
-See [doc/build/README.md.](doc/build/README.md#help)
+See [doc/build/README.md.](build/README.md#help)

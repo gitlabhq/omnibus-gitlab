@@ -1,3 +1,1 @@
-# Development setup
-
-Moved to [doc/development/README.md.](doc/development/README.md)
+This document was moved to [development/README.md.](development/README.md)

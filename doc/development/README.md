@@ -3,7 +3,7 @@
 Development of Omnibus GitLab maybe done using an existing package available
 from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
 a build environment to build these packages and use them, please read [Setting
-up a Build Environment](doc/build/prepare-build-environment.md).
+up a Build Environment](../build/prepare-build-environment.md).
 
  1. Setup a VM
 
@@ -79,4 +79,4 @@ for those changes to take effect.
 
 ## Openshift GitLab Development Setup
 
-See [doc/development/openshift/README.md.](doc/development/openshift/README.md#development-setup)
+See [openshift/README.md.](openshift/README.md#development-setup)

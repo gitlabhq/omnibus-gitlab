@@ -167,4 +167,4 @@ In case you want to upload a new version of it:
 
 ## Releasing a New Version
 
-See [doc/release/openshift.md.](doc/release/openshift.md)
+See [release/openshift.md.](../../release/openshift.md)

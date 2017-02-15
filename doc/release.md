@@ -1,11 +1,11 @@
 #### Omnibus-gitlab release process
 
-Moved to [doc/release/README.md.](doc/release/README.md)
+Moved to [release/README.md.](release/README.md)
 
 #### On your development machine
 
-See [doc/release/README.md.](doc/release/README.md#on-your-development-machine)
+See [release/README.md.](release/README.md#on-your-development-machine)
 
 #### Publishing the packages
 
-See [doc/release/README.md.](doc/release/README.md#publishing-the-packages)
+See [release/README.md.](release/README.md#publishing-the-packages)
