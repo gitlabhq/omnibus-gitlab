@@ -23,12 +23,13 @@ default_version version.print
 license 'MIT'
 
 source git: version.remote
+relative_path "src/gitlab.com/gitlab-org/gitlab-pages"
 
 build do
-  # We use the `base_dir`, because the sources are put in `src/gitlab-pages`
   # This is required for GO15VENDOREXPERIMENT=1 to work properly,
   # since it requires the package to be in $GOPATH/src/package
-  env = { 'GOPATH' => Omnibus::Config.base_dir }
+  env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/gitlab-pages" }
+
   make 'gitlab-pages', env: env
   move 'gitlab-pages', "#{install_dir}/embedded/bin/gitlab-pages"
 end
