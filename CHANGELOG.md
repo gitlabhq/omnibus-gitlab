@@ -27,6 +27,7 @@ omnibus-gitlab repository.
 
 8.16.5
 
+- Upgrade Mattermost to 3.6.2 2c7dab9f
 - EE: Make sure `ssh_keygen` creates the directory first e5483177
 
 8.16.4
