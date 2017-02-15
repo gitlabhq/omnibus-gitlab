@@ -587,7 +587,7 @@ sudo usermod -aG gitlab-www www-data
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to :
 
-- [bundled Gitlab Nginx configuration](files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
+- [bundled Gitlab Nginx configuration][nginx-cookbook]
 
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
@@ -597,3 +597,4 @@ systems `sudo service nginx restart`).
 [http2 protocol]: https://tools.ietf.org/html/rfc7540
 [http2 whitepaper]: https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744
 [http2 cipher blacklist]: https://tools.ietf.org/html/rfc7540#appendix-A
+[nginx-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb

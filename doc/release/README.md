@@ -146,7 +146,7 @@ New image are released when:
 New images should be released within 3 business days of the package release.
 
 Image specific release documentation:
- - OpenShift: [doc/release/openshift.md.](doc/release/openshift.md)
+ - OpenShift: [openshift.md.](openshift.md)
 
 [dev.gitlab.org]: https://dev.gitlab.org/gitlab/omnibus-gitlab/builds
 [release-tools project]: https://gitlab.com/gitlab-org/release-tools/tree/master

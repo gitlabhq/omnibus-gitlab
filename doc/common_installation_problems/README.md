@@ -91,7 +91,7 @@ makes the wrong decision, it will later hang at
 `ruby_block[supervise_redis_sleep] action run`.
 
 The choice of init system is currently made in [the embedded Runit
-cookbook](files/gitlab-cookbooks/runit/recipes/default.rb) by essentially
+cookbook][runit-cookbook]  by essentially
 looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
 can make the wrong decision in situations such as:
 
@@ -125,8 +125,7 @@ postgresql['port'] = 2345
 unicorn['port'] = 3456
 ```
 
-For Nginx port changes please see
-[doc/settings/nginx.md](doc/settings/nginx.md).
+For Nginx port changes please see [settings/nginx.md](../settings/nginx.md).
 
 ### Git user does not have SSH access
 #### SELinux-enabled systems
@@ -275,7 +274,7 @@ Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, omnibus-gitlab will create the required Unix
 accounts during 'gitlab-ctl reconfigure' but that behavior can be
-[disabled](https://docs.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management).
+[disabled](../settings/configuration.html#disable-user-and-group-account-management).
 
 In principle omnibus-gitlab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
@@ -546,12 +545,13 @@ $ gitlab-ctl reconfigure
 This can happen if you have directories mounted using NFS and configured in `root_squash`
 mode. Reconfigure is not able to properly set the ownership of your directories. You
 will need to switch to using `no_root_squash` in your NFS exports on the NFS server, or
-[disable storage directory management](doc/settings/configuration.md#disable-storage-directories-management)
+[disable storage directory management](../settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
 [CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
-[Change the default proxy headers section of nginx doc]: doc/settings/nginx.md
+[Change the default proxy headers section of nginx doc]: ../settings/nginx.md
 [reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
+[runit-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/runit/recipes/default.rb

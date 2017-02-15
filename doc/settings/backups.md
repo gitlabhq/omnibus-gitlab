@@ -115,7 +115,7 @@ See [backup restore documentation](https://docs.gitlab.com/ce/raketasks/backup_r
 
 ### Backup and restore using non-packaged database
 
-If you are using non-packaged database see [documentation on using non-packaged database](doc/settings/database.md#using-a-non-packaged-postgresql-database-management-server).
+If you are using non-packaged database see [documentation on using non-packaged database](database.md#using-a-non-packaged-postgresql-database-management-server).
 
 ### Upload backups to remote (cloud) storage
 
