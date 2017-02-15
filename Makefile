@@ -77,7 +77,7 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	bundle exec rake docker:build[$(RELEASE_VERSION)]
+	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
 
 docker_push:
 	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push[$(RELEASE_PACKAGE)]
