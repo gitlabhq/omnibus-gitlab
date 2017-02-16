@@ -16,13 +16,16 @@
 ##
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name 'prometheus'
-default_version 'v1.4.1'
+version = Gitlab::Version.new('prometheus', '1.4.1')
+default_version version.print
 
 license 'APACHE-2.0'
 license_file 'LICENSE'
 
-source git: 'https://github.com/prometheus/prometheus.git'
+source git: version.remote
 
 relative_path 'src/github.com/prometheus/prometheus'
 

@@ -14,13 +14,16 @@
 # limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name 'node-exporter'
-default_version 'v0.13.0'
+version = Gitlab::Version.new('node-exporter', '0.13.0')
+default_version version.print
 
 license 'APACHE-2.0'
 license_file 'LICENSE'
 
-source git: 'https://github.com/prometheus/node_exporter.git'
+source git: version.remote
 
 relative_path 'src/github.com/prometheus/node_exporter'
 

@@ -16,13 +16,16 @@
 ##
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+
 name 'redis-exporter'
-default_version 'v0.10.6'
+version = Gitlab::Version.new('redis-exporter', '0.10.6')
+default_version version.print
 
 license 'MIT'
 license_file 'LICENSE'
 
-source git: 'https://github.com/oliver006/redis_exporter.git'
+source git: version.remote
 
 relative_path 'src/github.com/oliver006/redis_exporter'
 
