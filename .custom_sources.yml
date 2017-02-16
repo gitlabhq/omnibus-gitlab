@@ -18,6 +18,14 @@ registry:
   remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
+prometheus:
+  remote: "git@dev.gitlab.org:omnibus-mirror/prometheus.git"
+node-exporter:
+  remote: "git@dev.gitlab.org:omnibus-mirror/node_exporter.git"
+postgres-exporter:
+  remote: "git@dev.gitlab.org:omnibus-mirror/postgres_exporter.git"
+redis-exporter:
+  remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
 
 # For local builds, use the public repositories given below. They are mirrord
 # from the internal repositories that GitLab uses.
@@ -42,3 +50,11 @@ rb-readline:
   #remote: "https://gitlab.com/omnibus-mirror/distribution.git"
 #rb-readline:
   #remote: "https://gitlab.com/omnibus-mirror/rb-readline.git"
+#prometheus:
+  #remote: "https://gitlab.com/omnibus-mirror/prometheus.git"
+#node-exporter:
+  #remote: "https://gitlab.com/omnibus-mirror/node_exporter.git"
+#postgres-exporter:
+  #remote: "https://gitlab.com/omnibus-mirror/postgres_exporter.git"
+#redis-exporter:
+  #remote: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
