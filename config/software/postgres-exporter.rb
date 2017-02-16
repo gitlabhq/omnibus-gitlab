@@ -23,7 +23,7 @@ version = Gitlab::Version.new('postgres-exporter', '0.1.1')
 default_version version.print
 
 license 'Apache-2.0'
-license_file "https://raw.githubusercontent.com/wrouesnel/postgres_exporter/#{version}/LICENSE"
+license_file "LICENSE"
 
 source git: version.remote
 
