@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.14.10
+- Update Mattermost to 3.5.3 to patch a security vulnerability
+
 8.14.9
 - Pin bundler version to 1.13.7 to avoid breaking changes
 
