@@ -58,7 +58,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 
 ## Package information
 
-- [Checking the versions of bundled software](package-information/#README.md#checking-the-versions-of-bundled-software)
+- [Checking the versions of bundled software](package-information/README.md#checking-the-versions-of-bundled-software)
 
 ## Troubleshooting
 
