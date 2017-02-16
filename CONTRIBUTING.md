@@ -76,6 +76,12 @@ When in rush to fix something (eg. security issue, bug blocking the release),
 writing specs can be skipped. However, an issue to implement the tests 
 **must be** created and assigned to the person who originally wrote the code.
 
+To run tests, execute the following command (you may have to run `bundle install` before running it)
+
+```
+bundle exec rspec
+```
+
 ### Merge Request Guidelines
 
 If you are working on a new feature or an issue which doesn't have an entry on
@@ -97,3 +103,5 @@ their applicability:
  4. Documentation explaining the change
  5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](files/gitlab-config-template/gitlab.rb.template)
  6. Changelog entry to inform about the change, if necessary.
+
+**`Note:`** CI jobs that run the tests are restricted to the [original omnibus-gitlab repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and hence, they will not be run on its forks. Contributors who develop on their own forks should configure the CI jobs (refer `.gitlab-ci.yml` file for details) themselves.
