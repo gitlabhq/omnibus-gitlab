@@ -16,23 +16,12 @@
 #
 
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
-  auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
-  if File.exists?(auto_migrations_skip_file)
-    log "Found #{auto_migrations_skip_file}, exiting..."
-    exit! 0
-  end
-
   service_statuses = `#{base_path}/bin/gitlab-ctl status`
 
   if /: runsv not running/.match(service_statuses) || service_statuses.empty? then
     log 'It looks like GitLab has not been configured yet; skipping the upgrade '\
       'script.'
     exit! 0
-  end
-
-  log 'Shutting down all GitLab services except those needed for migrations'
-  get_all_services.each do |sv_name|
-    run_sv_command_for_service('stop', sv_name)
   end
 
   unless progress_message('Checking PostgreSQL executables') do
@@ -47,6 +36,17 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     status.success?
   end
     log 'Could not update PostgreSQL executables.'
+  end
+
+  auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
+  if File.exists?(auto_migrations_skip_file)
+    log "Found #{auto_migrations_skip_file}, exiting..."
+    exit! 0
+  end
+
+  log 'Shutting down all GitLab services except those needed for migrations'
+  get_all_services.each do |sv_name|
+    run_sv_command_for_service('stop', sv_name)
   end
 
   MIGRATION_SERVICES = %w{postgresql redis}
