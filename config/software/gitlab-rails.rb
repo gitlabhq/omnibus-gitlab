@@ -94,7 +94,7 @@ build do
     'USE_DB' => 'false',
     'SKIP_STORAGE_VALIDATION' => 'true'
   }
-  command 'npm install --production'
+  command 'yarn install --pure-lockfile --production'
   bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
