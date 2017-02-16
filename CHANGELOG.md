@@ -56,6 +56,13 @@ omnibus-gitlab repository.
 - Let users expose Mattermost host if installed on other server  2aec8f66
 - Make gitlab.rb template file scraping friendly 92e5eedf
 
+8.15.7
+- Update Mattermost to 3.5.3 to patch a security vulnerability
+
+8.15.6
+- Pin bundler version to 1.13.7 to avoid breaking changes
+- Update Mattermost to 3.5.2 to patch a XSS vulnerability
+
 8.15.5
 
 - No changes
@@ -95,6 +102,15 @@ omnibus-gitlab repository.
 - Add notification for new PostgreSQL version 05dbb3ec
 - Update libcurl to 7.52.0 ea11a83
 - Add EE sidekiq_cluster configurable for setting up extra Sidekiq processes
+
+8.14.10
+- Update Mattermost to 3.5.3 to patch a security vulnerability
+
+8.14.9
+- Pin bundler version to 1.13.7 to avoid breaking changes
+
+8.14.8
+- Update Mattermost to 3.5.2 to patch a XSS vulnerability
 
 8.14.7
 
