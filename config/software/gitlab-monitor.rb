@@ -14,17 +14,11 @@
 # limitations under the License.
 #
 
-# We are pinning gitlab-monitor because version 4.6.0 intorduced very verbose
-# output in info log level.
-# Introduced by https://github.com/chef/gitlab-monitor/pull/199
-# When changing this version, make sure that the verbosity went down.
-
-version = Gitlab::Version.new('gitlab-monitor', '0.0.16')
+version = Gitlab::Version.new('gitlab-monitor', '1.1.0')
 
 default_version version.print
 
 name 'gitlab-monitor'
-default_version 'v0.0.16'
 
 dependency 'ruby'
 dependency 'rubygems'
