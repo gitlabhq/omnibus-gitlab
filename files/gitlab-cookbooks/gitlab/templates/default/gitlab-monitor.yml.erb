@@ -23,6 +23,7 @@ probes:
   sidekiq:
     methods:
       - probe_queues
+      - probe_jobs
       - probe_workers
       - probe_retries
     opts:
