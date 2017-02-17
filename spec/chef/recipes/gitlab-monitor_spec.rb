@@ -31,6 +31,7 @@ describe 'gitlab::gitlab-monitor' do
         .with_content { |content|
           expect(content).to match(/dead_tuples_count/)
           expect(content).to match(/git-upload-pack/)
+          expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-monitor/log/run')
