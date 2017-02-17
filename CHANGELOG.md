@@ -27,6 +27,10 @@ are not the same (O Schwede) 62b5cc
 - Add support for the PostgreSQL max_replication_slots setting
 - Allow exposing prometheus metrics on gitlab-pages
 
+8.16.6
+
+- EE: Make sure `ssh_keygen` creates the directory first e5483177
+
 8.16.5
 
 - Upgrade Mattermost to 3.6.2 2c7dab9f
