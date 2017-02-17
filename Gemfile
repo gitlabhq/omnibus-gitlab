@@ -12,7 +12,6 @@ gem 'json'
 gem 'rspec'
 gem 'rake'
 gem 'knapsack'
-gem 'docker-api'
 
 group :test do
   gem 'byebug'

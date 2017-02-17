@@ -71,24 +71,29 @@ move_to_platform_dir:
 	mv ${PLATFORM_DIR} pkg/
 
 docker_cleanup:
-	-bundle exec rake docker:clean[$(RELEASE_VERSION)]
+	-docker ps -q -a | xargs docker rm -v
+	-docker images -f dangling=true -q | xargs docker rmi
+	-docker images | grep $(RELEASE_PACKAGE) | awk '{print $$3}' | xargs docker rmi -f
 
 docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
+	docker build --pull -t $(RELEASE_PACKAGE):latest -f docker/Dockerfile docker/
 
 docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push[$(RELEASE_PACKAGE)]
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
+	docker push gitlab/$(RELEASE_PACKAGE):$(DOCKER_TAG)
 
 docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push[$(RELEASE_PACKAGE)]
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):rc
+	docker push gitlab/$(RELEASE_PACKAGE):rc
 
 docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push[$(RELEASE_PACKAGE)]
+	docker tag $(RELEASE_PACKAGE):latest gitlab/$(RELEASE_PACKAGE):latest
+	docker push gitlab/$(RELEASE_PACKAGE):latest
 
 do_docker_master:
 ifdef NIGHTLY
