@@ -129,6 +129,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Incoming Mailbox Settings
 ####! The mailbox where incoming mail will end up. Usually "inbox".
 # gitlab_rails['incoming_email_mailbox_name'] = "inbox"
+####! The IDLE command timeout.
+# gitlab_rails['incoming_email_idle_timeout'] = 60
 ####! The location where incoming mails will be logged.
 # gitlab_rails['incoming_email_log_directory'] = "/var/log/gitlab/mailroom"
 
