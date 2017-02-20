@@ -79,7 +79,14 @@ add_command_under_category 'pg-upgrade', 'database',
       get_all_services.member?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
-    exit! 1
+    exit! 0
+  end
+
+  unless progress_message('Checking if we already upgraded') do
+    running_version == upgrade_version
+  end
+    $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
+    exit! 0
   end
 
   unless progress_message('Checking version of running PostgreSQL') do
@@ -99,13 +106,6 @@ add_command_under_category 'pg-upgrade', 'database',
   else
     $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     exit! 1
-  end
-
-  unless progress_message('Checking if existing PostgreSQL instances needs to be upgraded') do
-    running_version != upgrade_version
-  end
-    log "Already at #{upgrade_version}, nothing to do"
-    exit! 0
   end
 
   unless progress_message(
