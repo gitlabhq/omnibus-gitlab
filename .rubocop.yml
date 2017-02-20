@@ -2,3 +2,7 @@ Metrics/LineLength:
   Enabled: false
 FileName:
   Enabled: false
+Style/NumericLiteralPrefix:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false

@@ -12,6 +12,7 @@ gem 'json'
 gem 'rspec'
 gem 'rake'
 gem 'knapsack'
+gem 'rubocop'
 
 group :test do
   gem 'byebug'

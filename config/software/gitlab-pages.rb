@@ -23,7 +23,7 @@ default_version version.print
 license 'MIT'
 
 source git: version.remote
-relative_path "src/gitlab.com/gitlab-org/gitlab-pages"
+relative_path 'src/gitlab.com/gitlab-org/gitlab-pages'
 
 build do
   # This is required for GO15VENDOREXPERIMENT=1 to work properly,
