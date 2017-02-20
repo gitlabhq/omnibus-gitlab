@@ -1,10 +1,13 @@
 # Configuration options
 
 GitLab and GitLab CI are configured by setting their relevant options in
-`/etc/gitlab/gitlab.rb`. For a complete list of available options, visit the
-[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+`/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md) 
+for a list of default settings and visit the
+[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+for a complete list of available options.
 New installations starting from GitLab 7.6, will have
-all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
+all the options of the template as of installation listed in 
+`/etc/gitlab/gitlab.rb` by default.
 
 ## Configuring the external URL for GitLab
 
