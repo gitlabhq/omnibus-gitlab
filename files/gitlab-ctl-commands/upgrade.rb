@@ -24,6 +24,15 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
+  unless progress_message('Ensuring PostgreSQL is updated') do
+    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade)
+    status = run_command(command.join(' '))
+    status.success?
+  end
+    log 'Error ensuring PostgreSQL is updated. Please check the logs'
+    exit! 1
+  end
+
   unless progress_message('Checking PostgreSQL executables') do
     command = %W( chef-client
                   -z

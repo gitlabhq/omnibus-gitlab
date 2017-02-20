@@ -107,12 +107,6 @@ print_welcome()
   notify
 }
 
-upgrade_db()
-{
-  notify 'Ensuring the database is at the latest version'
-  ${DEST_DIR}/bin/gitlab-ctl pg-upgrade -w
-}
-
 check_if_ec2()
 {
   if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` = 'ec2' ]; then
@@ -155,7 +149,6 @@ ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
 create_config_template
 fix_directory_permissions
 print_welcome
-upgrade_db
 
 case "$1" in
   configure)
