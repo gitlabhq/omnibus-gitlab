@@ -38,6 +38,13 @@ describe 'gitlab::redis-exporter' do
         mode: '0700'
       )
     end
+
+    it 'sets default flags' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(/web.listen-address=localhost:9121/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(%r{redis.addr=unix:///var/opt/gitlab/redis/redis.socket})
+    end
   end
 
   context 'when log dir is changed' do
@@ -53,6 +60,27 @@ describe 'gitlab::redis-exporter' do
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/log/run')
         .with_content(/exec svlogd -tt foo/)
+    end
+  end
+
+  context 'with user provided settings' do
+    before do
+      stub_gitlab_rb(
+        redis_exporter: {
+          flags: {
+            'redis.addr' => '/tmp/socket'
+          },
+          listen_address: 'localhost:9900',
+          enable: true
+        }
+      )
+    end
+
+    it 'populates the files with expected configuration' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(/web.listen-address=localhost:9900/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(%r{redis.addr=/tmp/socket})
     end
   end
 end
