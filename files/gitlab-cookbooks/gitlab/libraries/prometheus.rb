@@ -33,7 +33,7 @@ module Prometheus
       user_config = Gitlab['prometheus']
 
       home_directory = user_config['home'] || default_config['home']
-      listen_address = user_config['listen_address'] ||  default_config['listen_address']
+      listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
         'storage.local.path' => File.join(home_directory, 'data'),
@@ -54,7 +54,7 @@ module Prometheus
       user_config = Gitlab['node_exporter']
 
       home_directory = user_config['home'] || default_config['home']
-      listen_address = user_config['listen_address'] ||  default_config['listen_address']
+      listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
         'collector.textfile.directory' => File.join(home_directory, 'textfile_collector')
@@ -71,7 +71,7 @@ module Prometheus
       default_config = Gitlab['node']['gitlab']['redis-exporter'].to_hash
       user_config = Gitlab['redis_exporter']
 
-      listen_address = user_config['listen_address'] ||  default_config['listen_address']
+      listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
         'redis.addr' => "unix://#{Gitlab['node']['gitlab']['gitlab-rails']['redis_socket']}"
@@ -88,7 +88,7 @@ module Prometheus
       default_config = Gitlab['node']['gitlab']['postgres-exporter'].to_hash
       user_config = Gitlab['postgres_exporter']
 
-      listen_address = user_config['listen_address'] ||  default_config['listen_address']
+      listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
       }
