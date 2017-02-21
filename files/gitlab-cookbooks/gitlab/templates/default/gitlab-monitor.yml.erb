@@ -1,8 +1,12 @@
+server:
+  listen_address: <%= node['gitlab']['gitlab-monitor']['listen_address'] %>
+  listen_port: <%= node['gitlab']['gitlab-monitor']['listen_port'] %>
+
 probes:
   database:
     multiple: true
     dead_tuples_count:
-      class_name: Database::DeadTuplesProber
+      class_name: Database::TuplesProber
       methods:
         - probe_db
       opts:
