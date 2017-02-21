@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql_new'
-default_version '9.6.1'
+name 'postgresql'
+default_version '9.2.18'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -28,8 +28,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '9.6.1' do
-  source sha256: 'e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd'
+version '9.2.18' do
+  source md5: 'fd175eb5f29557c6ef2eeaf340330f9a'
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -44,17 +44,11 @@ build do
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
 
   command './configure' \
-          " --prefix=#{prefix}" \
-          ' --with-libedit-preferred' \
-          ' --with-openssl' \
-          ' --with-ossp-uuid', env: env
+    " --prefix=#{prefix}" \
+    ' --with-libedit-preferred' \
+    ' --with-openssl' \
+    ' --with-ossp-uuid', env: env
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
-
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
 end
