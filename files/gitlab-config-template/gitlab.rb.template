@@ -880,7 +880,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
-# gitlab_pages['metrics_address'] = "localhost:1234"
+# gitlab_pages['metrics_address'] = ":9235"
 
 ################################################################################
 ## GitLab Pages NGINX
