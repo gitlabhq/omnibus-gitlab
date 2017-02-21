@@ -38,6 +38,11 @@ describe 'gitlab::postgres-exporter' do
         mode: '0700'
       )
     end
+
+    it 'sets default flags' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
+        .with_content(/web.listen-address=localhost:9187/)
+    end
   end
 
   context 'when log dir is changed' do
@@ -53,6 +58,27 @@ describe 'gitlab::postgres-exporter' do
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/log/run')
         .with_content(/exec svlogd -tt foo/)
+    end
+  end
+
+  context 'with user provided settings' do
+    before do
+      stub_gitlab_rb(
+        postgres_exporter: {
+          flags: {
+            'some.flag' => 'foo'
+          },
+          listen_address: 'localhost:9700',
+          enable: true
+        }
+      )
+    end
+
+    it 'populates the files with expected configuration' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
+        .with_content(/web.listen-address=localhost:9700/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
+        .with_content(/some.flag=foo/)
     end
   end
 end
