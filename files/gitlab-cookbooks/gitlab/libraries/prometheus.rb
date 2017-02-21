@@ -42,9 +42,7 @@ module Prometheus
         'config.file' => File.join(home_directory, 'prometheus.yml')
       }
 
-      if user_config.keys.include?('flags')
-        default_config['flags'].merge!(user_config['flags'])
-      end
+      default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['prometheus']['flags'] = default_config['flags']
     end
@@ -60,9 +58,7 @@ module Prometheus
         'collector.textfile.directory' => File.join(home_directory, 'textfile_collector')
       }
 
-      if user_config.keys.include?('flags')
-        default_config['flags'].merge!(user_config['flags'])
-      end
+      default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['node_exporter']['flags'] = default_config['flags']
     end
@@ -77,9 +73,7 @@ module Prometheus
         'redis.addr' => "unix://#{Gitlab['node']['gitlab']['gitlab-rails']['redis_socket']}"
       }
 
-      if user_config.keys.include?('flags')
-        default_config['flags'].merge!(user_config['flags'])
-      end
+      default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['redis_exporter']['flags'] = default_config['flags']
     end
@@ -93,9 +87,7 @@ module Prometheus
         'web.listen-address' => listen_address,
       }
 
-      if user_config.keys.include?('flags')
-        default_config['flags'].merge!(user_config['flags'])
-      end
+      default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['postgres_exporter']['flags'] = default_config['flags']
     end
