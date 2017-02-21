@@ -161,7 +161,8 @@ shared_preload_libraries = '<%= node['gitlab']['postgresql']['shared_preload_lib
 wal_level = <%= node['gitlab']['postgresql']['wal_level'] %>
           # (change requires restart)
 #fsync = on       # turns forced synchronization on or off
-#synchronous_commit = on    # synchronization level; on, off, or local
+synchronous_commit = <%= node['gitlab']['postgresql']['synchronous_commit'] %> # synchronization level; on, off, or local
+synchronous_standby_names = '<%= node['gitlab']['postgresql']['synchronous_standby_names'] %>'
 #wal_sync_method = fsync    # the default is the first option
           # supported by the operating system:
           #   open_datasync

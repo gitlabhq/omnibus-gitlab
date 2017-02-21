@@ -209,6 +209,24 @@ describe 'postgresql 9.6' do
       ).with_content(/max_replication_slots = 0/)
     end
 
+    it 'sets the synchronous_commit setting' do
+      expect(chef_run.node['gitlab']['postgresql']['synchronous_commit'])
+        .to eq('on')
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/synchronous_commit = on/)
+    end
+
+    it 'sets the synchronous_commit setting' do
+      expect(chef_run.node['gitlab']['postgresql']['synchronous_standby_names'])
+        .to eq('')
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/synchronous_standby_names = ''/)
+    end
+
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
