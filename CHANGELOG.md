@@ -17,9 +17,12 @@ omnibus-gitlab repository.
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
 
-9.1.0
+9.1.2
 
 - Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
+
+9.1.0
+
 - Remove deprecated satellites configuration f88ba40b
 - Add configuration file for Gitaly 7c7c728
 - Add support for Gitaly address per shard 2096928

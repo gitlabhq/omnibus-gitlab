@@ -643,6 +643,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_temp_files'] = -1
 # postgresql['log_checkpoints'] = 'off'
 
+
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
 # default['gitlab']['postgresql']['archive_command'] = nil
@@ -1539,3 +1540,45 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['ha'] = false
 # geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
 # geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
+#
+################################################################################
+# Pgbouncer (EE only)
+# See [GitLab PgBouncer documentation](http://docs.gitlab.com/omnibus/settings/database.html#enabling-pgbouncer-ee-only)
+# See the [PgBouncer page](https://pgbouncer.github.io/config.html) for details
+################################################################################
+# pgbouncer['enable'] = false
+# pgbouncer['log_directory'] = '/var/log/gitlab/pgbouncer'
+# pgbouncer['data_directory'] = '/var/opt/gitlab/pgbouncer'
+# pgbouncer['listen_addr'] = '0.0.0.0'
+# pgbouncer['listen_port'] = '6432'
+# pgbouncer['pool_mode'] = 'session'
+# pgbouncer['server_reset_query'] = 'DISCARD ALL'
+# pgbouncer['max_client_conn'] = '100'
+# pgbouncer['default_pool_size'] = '20'
+# pgbouncer['min_pool_size'] = '0'
+# pgbouncer['reserve_pool_size'] = '0'
+# pgbouncer['reserve_pool_timeout'] = '5.0'
+# pgbouncer['server_round_robin'] = '0'
+# pgbouncer['log_connections'] = '0'
+# pgbouncer['server_idle_timeout'] = '600.0'
+# pgbouncer['dns_max_ttl'] = '15.0'
+# pgbouncer['dns_zone_check_period'] = '0'
+# pgbouncer['dns_nxdomain_ttl'] = '15.0'
+# pgbouncer['admin_users'] = %w(gitlab-psql postgres pgbouncer)
+# pgbouncer['stats_users'] = %w(gitlab-psql postgres pgbouncer)
+# pgbouncer['ignore_startup_parameters'] = 'extra_float_digits'
+# pgbouncer['databases'] = {
+#   DATABASE_NAME: {
+#     host: HOSTNAME,
+#     port: PORT
+#     user: USERNAME,
+#     password: PASSWORD
+###! generate this with `echo -n '$password + $username' | md5sum`
+#   }
+#   ...
+# }
+# pgbouncer['auth_type'] = 'md5'
+# pgbouncer['auth_hba_file'] = nil
+# pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
+# postgresql['pgbouncer_user'] = nil
+# postgresql['pgbouncer_user_password'] = nil

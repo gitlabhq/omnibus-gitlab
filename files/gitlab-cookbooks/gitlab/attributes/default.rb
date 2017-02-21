@@ -351,6 +351,7 @@ default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 # defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
 default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
+default['gitlab']['postgresql']['sql_user_password'] = nil
 default['gitlab']['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['gitlab']['postgresql']['port'] = 5432
 # Postgres allow multi listen_address, comma-separated values.

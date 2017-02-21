@@ -101,7 +101,9 @@ include_recipe "runit"
     include_recipe "gitlab::#{service}_disable"
   end
 end
-include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable']
+if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
+  include_recipe "gitlab::database_migrations"
+end
 
 # Always create logrotate folders and configs, even if the service is not enabled.
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508

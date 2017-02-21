@@ -75,10 +75,9 @@ mysql_adapter = node['gitlab']['mattermost']['sql_driver_name'] == 'mysql' ? tru
 db_name = node['gitlab']['mattermost']['database_name']
 sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
 
-execute "create #{sql_user} database user" do
-  command "#{bin_dir}/psql --port #{pg_port} -h #{postgresql_socket_dir} -d template1 -c \"CREATE USER #{sql_user}\""
-  user pg_user
-  not_if { mysql_adapter || !pg_helper.is_running? || pg_helper.user_exists?(sql_user) }
+postgresql_user sql_user do
+  action :create
+  not_if { mysql_adapter }
 end
 
 execute "create #{db_name} database" do
