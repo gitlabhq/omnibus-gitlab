@@ -44,6 +44,11 @@ describe 'gitlab::node-exporter' do
         mode: '0755'
       )
     end
+
+    it 'sets a default listen address' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
+        .with_content(/web.listen-address=localhost:9100/)
+    end
   end
 
   context 'when node-exporter is enabled and prometheus is disabled' do
@@ -71,6 +76,27 @@ describe 'gitlab::node-exporter' do
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/log/run')
         .with_content(/exec svlogd -tt foo/)
+    end
+  end
+
+  context 'with user provided settings' do
+    before do
+      stub_gitlab_rb(
+        node_exporter: {
+          flags: {
+            'collector.textfile.directory' => '/tmp'
+          },
+          listen_address: 'localhost:9899',
+          enable: true
+        }
+      )
+    end
+
+    it 'populates the files with expected configuration' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
+        .with_content(/web.listen-address=localhost:9899/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
+        .with_content(/collector.textfile.directory=\/tmp/)
     end
   end
 end

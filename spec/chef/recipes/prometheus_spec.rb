@@ -56,48 +56,40 @@ describe 'gitlab::prometheus' do
     it 'should create a gitlab-prometheus user account' do
       expect(chef_run).to create_user('gitlab-prometheus')
     end
+
+    it 'sets a default listen address' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+        .with_content(/web.listen-address=localhost:9090/)
+    end
   end
 
-  context 'when storage path is changed' do
+  context 'with user provided settings' do
     before do
       stub_gitlab_rb(
         prometheus: {
-          flags: { 'storage.local.path' => 'foo' },
+          flags: {
+            'storage.local.path' => 'foo'
+          },
+          listen_address: 'localhost:9898',
+          scrape_interval: 11,
+          scrape_timeout: 8888,
           enable: true
         }
       )
     end
+
     it 'populates the files with expected configuration' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+        .with_content(/web.listen-address=localhost:9898/)
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content(/storage.local.path=foo/)
     end
-  end
 
-  context 'when scrape_interval is changed' do
-    before do
-      stub_gitlab_rb(
-        prometheus: {
-          scrape_interval: 9999,
-          enable: true
-        }
-      )
-    end
-
-    it 'renders prometheus.yml with the non-default value' do
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(/scrape_interval: 9999s/)
-    end
-  end
-
-  context 'when scrape_timeout is changed' do
-    before do
-      stub_gitlab_rb(
-        prometheus: {
-          scrape_timeout: 8888,
-          scrape_interval: 11,
-          enable: true
-        }
-      )
+    it 'keeps the defaults that the user did not override' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+        .with_content(/storage.local.memory-chunks=5000/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+        .with_content(/storage.local.path=foo/)
     end
 
     it 'renders prometheus.yml with the non-default value' do
