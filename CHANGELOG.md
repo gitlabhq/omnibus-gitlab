@@ -5,6 +5,8 @@ omnibus-gitlab repository.
 
 8.17.0
 
+- Add support for setting PostgreSQL's synchronous_commit and
+  synchronous_standby_names settings
 - Remove deprecated Elasticsearch configuration options ab660c56
 - Include GitLab Pages in the Community Edition
 - Add HealthCheck support to our Docker image 845b52b2

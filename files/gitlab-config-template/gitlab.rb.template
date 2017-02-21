@@ -622,6 +622,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_standby_archive_delay'] = "30s"
 # postgresql['max_standby_streaming_delay'] = "30s"
 # postgresql['max_replication_slots'] = 0
+# postgresql['synchronous_commit'] = on
+# postgresql['synchronous_standby_names'] = ''
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
