@@ -25,7 +25,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   unless progress_message('Ensuring PostgreSQL is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade)
+    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
     status = run_command(command.join(' '))
     status.success?
   end
