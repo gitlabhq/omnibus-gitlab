@@ -41,7 +41,6 @@
 
 # MAPNAME       SYSTEM-USERNAME         PG-USERNAME
 gitlab  <%= node['gitlab']['user']['username'] %>  <%= node['gitlab']['postgresql']['sql_user'] %>
-gitlab  <%= node['gitlab']['gitlab-ci']['username'] %>  <%= node['gitlab']['postgresql']['sql_ci_user'] %>
 gitlab  <%= node['gitlab']['mattermost']['username'] %>  <%= node['gitlab']['postgresql']['sql_mattermost_user'] %>
 # Default to a 1-1 mapping between system usernames and Postgres usernames
 gitlab  /^(.*)$  \1

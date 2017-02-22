@@ -23,13 +23,13 @@ ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 if ee
   name 'gitlab-ee'
-  description 'GitLab Enterprise Edition and GitLab CI '\
+  description 'GitLab Enterprise Edition '\
     '(including NGINX, Postgres, Redis)'
   replace 'gitlab-ce'
   conflict 'gitlab-ce'
 else
   name 'gitlab-ce'
-  description 'GitLab Community Edition and GitLab CI '\
+  description 'GitLab Community Edition '\
     '(including NGINX, Postgres, Redis)'
   replace 'gitlab-ee'
   conflict 'gitlab-ee'

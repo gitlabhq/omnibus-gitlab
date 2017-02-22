@@ -31,7 +31,6 @@ require 'chef/mixin/deep_merge'
 require 'securerandom'
 require 'uri'
 
-require_relative 'gitlab_ci.rb'
 require_relative 'gitlab_mattermost.rb'
 require_relative 'gitlab_pages.rb'
 require_relative 'gitlab_rails.rb'
@@ -56,22 +55,18 @@ module Gitlab
   user Mash.new
   postgresql Mash.new
   redis Mash.new
-  ci_redis Mash.new
   gitlab_rails Mash.new
   gitlab_ci Mash.new
   gitlab_shell Mash.new
   unicorn Mash.new
-  ci_unicorn Mash.new
   sidekiq Mash.new
   sidekiq_cluster Mash.new
-  ci_sidekiq Mash.new
   gitlab_workhorse Mash.new
   gitlab_git_http_server Mash.new # legacy from GitLab 7.14, 8.0, 8.1
   pages_nginx Mash.new
   registry_nginx Mash.new
   mailroom Mash.new
   nginx Mash.new
-  ci_nginx Mash.new
   mattermost_nginx Mash.new
   logging Mash.new
   remote_syslog Mash.new
@@ -90,7 +85,6 @@ module Gitlab
   node nil
   external_url nil
   pages_external_url nil
-  ci_external_url nil
   mattermost_external_url nil
   registry_external_url nil
   git_data_dirs Mash.new
@@ -131,8 +125,8 @@ module Gitlab
       end
 
       # Transform legacy key names to new key names
-      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base']
-      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base']
+      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
+      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
       Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
 
       # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
@@ -155,8 +149,6 @@ module Gitlab
       Gitlab['mattermost']['email_password_reset_salt'] ||= generate_hex(16)
       Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= generate_hex(16)
 
-      # Note: Besides the section below, gitlab-secrets.json will also change
-      # in CiHelper in libraries/helper.rb
       SecretsHelper.write_to_gitlab_secrets
     end
 
@@ -172,19 +164,15 @@ module Gitlab
         "manage_storage_directories",
         "user",
         "redis",
-        "ci_redis",
         "gitlab_rails",
         "gitlab_ci",
         "gitlab_shell",
         "unicorn",
-        "ci_unicorn",
         "sidekiq",
         "sidekiq-cluster",
-        "ci_sidekiq",
         "gitlab_workhorse",
         "mailroom",
         "nginx",
-        "ci_nginx",
         "mattermost_nginx",
         "pages_nginx",
         "registry_nginx",
@@ -196,7 +184,6 @@ module Gitlab
         "web_server",
         "mattermost",
         "external_url",
-        "ci_external_url",
         "mattermost_external_url",
         "pages_external_url",
         "gitlab_pages",
@@ -231,7 +218,6 @@ module Gitlab
       Redis.parse_variables
       Postgresql.parse_variables
       Unicorn.parse_variables
-      GitlabCi.parse_variables
       IncomingEmail.parse_variables
       GitlabMattermost.parse_variables
       GitlabPages.parse_variables

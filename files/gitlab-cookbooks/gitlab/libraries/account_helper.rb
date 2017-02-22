@@ -54,22 +54,6 @@ class AccountHelper
     node['gitlab']['postgresql']['username']
   end
 
-  def gitlab_ci_user
-    node['gitlab']['gitlab-ci']['username']
-  end
-
-  def gitlab_ci_group
-    node['gitlab']['gitlab-ci']['username']
-  end
-
-  def ci_redis_user
-    node['gitlab']['ci-redis']['username']
-  end
-
-  def ci_redis_group
-    node['gitlab']['ci-redis']['username']
-  end
-
   def mattermost_user
     node['gitlab']['mattermost']['username']
   end
@@ -100,8 +84,6 @@ class AccountHelper
         #{web_server_user}
         #{redis_user}
         #{postgresgl_user}
-        #{gitlab_ci_user}
-        #{ci_redis_user}
         #{mattermost_user}
         #{registry_user}
         #{prometheus_user}
@@ -114,8 +96,6 @@ class AccountHelper
         #{web_server_group}
         #{redis_group}
         #{postgresgl_group}
-        #{gitlab_ci_group}
-        #{ci_redis_group}
         #{mattermost_group}
         #{registry_group}
         #{prometheus_group}

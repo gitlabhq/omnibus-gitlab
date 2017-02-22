@@ -160,10 +160,6 @@ See [doc/common_installation_problems/README.md](doc/common_installation_problem
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 
-##### GitLab CI shows GitLab login page
-
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-ci-shows-gitlab-login-page).
-
 ##### Emails are not being delivered
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#emails-are-not-being-delivered).

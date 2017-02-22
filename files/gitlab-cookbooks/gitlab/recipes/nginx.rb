@@ -213,7 +213,6 @@ template nginx_status_conf do
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
-nginx_vars['gitlab_ci_access_log_format'] = node['gitlab']['ci-nginx']['log_format']
 nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
 
 template nginx_config do

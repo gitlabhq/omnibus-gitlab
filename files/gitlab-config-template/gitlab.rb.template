@@ -572,7 +572,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['home'] = "/var/opt/gitlab/postgresql"
 # postgresql['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 # postgresql['sql_user'] = "gitlab"
-# postgresql['sql_ci_user'] = "gitlab_ci"
 # postgresql['max_connections'] = 200
 # postgresql['md5_auth_cidr_addresses'] = []
 # postgresql['trust_auth_cidr_addresses'] = []
@@ -927,14 +926,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab CI
-##! Docs: https://docs.gitlab.com/omnibus/gitlab-ci/README.html
+##! Docs: https://docs.gitlab.com/ce/ci/quick_start/README.html
 ################################################################################
 
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
 # gitlab_ci['gitlab_ci_add_pusher'] = true
 # gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
-
-### DEPRECATED: ci_external_url 'http://ci.example.com'
 
 ################################################################################
 ## GitLab Mattermost

@@ -6,7 +6,6 @@ Omnibus is a way to package different services and tools required to run GitLab,
 
 - [Package downloads page](https://about.gitlab.com/downloads/)
 - [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
-- [GitLab CI](gitlab-ci/README.md) Set up the GitLab CI coordinator that ships with Omnibus GitLab package.
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [GitLab Prometheus](https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html) Set up the Prometheus
   monitoring included in the Omnibus GitLab package.
@@ -66,7 +65,6 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Hash Sum mismatch when installing packages](common_installation_problems/README.md#hash-sum-mismatch-when-installing-packages)
 - [Apt error: 'The requested URL returned error: 403'](common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 - [GitLab is unreachable in my browser](common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
-- [GitLab CI shows GitLab login page](common_installation_problems/README.md#gitlab-ci-shows-gitlab-login-page).
 - [Emails are not being delivered](common_installation_problems/README.md#emails-are-not-being-delivered).
 - [Reconfigure freezes at ruby_block[supervise_redis_sleep] action run](common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 - [TCP ports for GitLab services are already taken](common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
