@@ -89,14 +89,6 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 0
   end
 
-  unless progress_message('Checking version of running PostgreSQL') do
-    running_version == default_version
-  end
-    log "psql reports #{running_version}, we're expecting " \
-    "#{default_version}, cannot proceed"
-    exit! 1
-  end
-
   if progress_message(
     'Checking for a newer version of PostgreSQL to install') do
       upgrade_version.nil?
@@ -111,7 +103,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
   ) do
-    Dir.glob("#{INST_DIR}/#{default_version}/bin/*").each do |bin_file|
+    Dir.glob("#{INST_DIR}/#{running_version}/bin/*").each do |bin_file|
       link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
