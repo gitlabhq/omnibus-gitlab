@@ -1,4 +1,5 @@
 stages:
+  - check
   - prepare
   - tests
   - post-test
@@ -14,6 +15,17 @@ before_script:
   - mkdir -p cache
   - bundle install -j $(nproc) --binstubs --path gems
   - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
+
+rubocop:
+  stage: check
+  image: ruby:2.3.3
+  script:
+    - bundle exec rubocop -D config
+  tags:
+    - docker
+  only:
+    - tags@gitlab-org/omnibus-gitlab
+    - branches@gitlab-org/omnibus-gitlab
 
 .knapsack-state: &knapsack-state
   services: []
