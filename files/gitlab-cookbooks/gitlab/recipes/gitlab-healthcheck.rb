@@ -15,17 +15,30 @@
 # limitations under the License.
 #
 
-server_host = node['gitlab']['nginx']['enable'] ? 'localhost' : Gitlab['gitlab_rails']['gitlab_host']
-server_schema = node['gitlab']['gitlab-rails']['gitlab_https'] ? 'https' : 'http'
+# If nginx is disabled we will use workhorse for the healthcheck
+if node['gitlab']['nginx']['enable']
+  listen_https = node['gitlab']['nginx']['listen_https']
+  # Fallback to the setting derived from external_url
+  listen_https = node['gitlab']['gitlab-rails']['gitlab_https'] if listen_https.nil?
+  schema = listen_https ? 'https' : 'http'
+  # Only check on the local network
+  host = "localhost:#{node['gitlab']['nginx']['listen_port']}"
+else
+  # Always use http for workhorse
+  schema = 'http'
+  use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
+  host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
+end
+
 
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   owner 'root'
   group 'root'
   variables (
     {
-      host: "#{server_schema}://#{server_host}",
-      port: node['gitlab']['nginx']['listen_port'],
-      path: "#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
+      use_socket: use_socket,
+      socket_path: use_socket ? node['gitlab']['gitlab-workhorse']['listen_addr'] : '',
+      url: "#{schema}://#{host}#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
     }
   )
 end

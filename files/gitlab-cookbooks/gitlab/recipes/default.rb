@@ -129,8 +129,8 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   end
 end
 
-# Configure healthcheck if we have the external_url set
-include_recipe "gitlab::gitlab-healthcheck" if Gitlab['external_url']
+# Configure healthcheck if we have nginx or workhorse enabled
+include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab-workhorse"]["enable"]
 
 # Recipe which handles all prometheus related services
 include_recipe "gitlab::gitlab-prometheus"
