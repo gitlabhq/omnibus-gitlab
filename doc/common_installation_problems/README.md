@@ -33,10 +33,6 @@ Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
-### GitLab CI shows GitLab login page
-
-This section is deprecated for GitLab 8.0 and later versions.
-
 ### Emails are not being delivered
 
 To test email delivery you can create a new GitLab account for an email that is
@@ -367,7 +363,7 @@ If you are installing GitLab in an isolated network with custom certificate auth
 Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed)
 ```
 
-when GitLab tries to connect with the internal services like gitlab-shell or GitLab CI.
+when GitLab tries to connect with the internal services like gitlab-shell.
 
 #### Install custom certificate authorities:
 
@@ -404,12 +400,6 @@ and run `sudo gitlab-ctl reconfigure`.
 #### Enable self-signed certificates
 
 If you are using self-signed certificate do not forget to set `self_signed_cert: true` for gitlab-shell, see [gitlab.rb.template][] for more details.
-
-### Error executing action create on resource cron[gitlab-ci schedule builds]
-
-1. Double check if you have cron package installed: For Debian like systems `sudo apt-get install cron` or RHEL-like systems `sudo yum install cronie`
-1. Check if user `gitlab-ci` is in `/etc/cron.deny` and if yes remove it. You can add the `gitlab-ci` user to `/etc/cron.allow``.
-1. Check if you have PAM enabled and if gitlab-ci user is allowed to access crontab. If yes, try changing your `/etc/security/access.conf` to allow the user access to the resource, for example `+:gitlab-ci:ALL`.
 
 ### error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 

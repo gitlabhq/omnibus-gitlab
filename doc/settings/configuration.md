@@ -1,6 +1,6 @@
 # Configuration options
 
-GitLab and GitLab CI are configured by setting their relevant options in
+GitLab is configured by setting the relevant options in
 `/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md) 
 for a list of default settings and visit the
 [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
@@ -306,7 +306,7 @@ redis['username'] = "redis-gitlab"
 redis['shell'] = "/bin/false"
 redis['home'] = "/var/opt/redis-gitlab"
 
-# And so on for users/groups for GitLab CI GitLab Mattermost
+# And so on for users/groups for GitLab Mattermost
 ```
 
 ## Disable storage directories management

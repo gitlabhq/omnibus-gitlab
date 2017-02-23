@@ -11,10 +11,4 @@ example:
 gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
 ```
 
-For GitLab CI, use `gitlab_ci['env']`:
-
-```ruby
-gitlab_ci['env'] = {"my_var" => "my value"}
-```
-
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.

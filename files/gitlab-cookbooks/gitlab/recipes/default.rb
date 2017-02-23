@@ -69,8 +69,6 @@ if node['gitlab']['gitlab-rails']['enable']
   include_recipe "gitlab::gitlab-rails"
 end
 
-include_recipe "gitlab::gitlab-ci-proxying"
-
 include_recipe "gitlab::selinux"
 
 # add trusted certs recipe
@@ -80,9 +78,7 @@ include_recipe "gitlab::add_trusted_certs"
 # the corresponding service recipe is not loaded below.
 [
   "unicorn",
-  "ci-unicorn",
   "sidekiq",
-  "ci-sidekiq",
   "mailroom"
 ].each do |dummy|
   service "create a temporary #{dummy} service" do

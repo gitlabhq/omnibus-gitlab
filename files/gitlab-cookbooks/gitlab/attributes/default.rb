@@ -350,7 +350,6 @@ default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
 # defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
 default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['gitlab']['postgresql']['sql_user'] = "gitlab"
-default['gitlab']['postgresql']['sql_ci_user'] = "gitlab_ci"
 default['gitlab']['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['gitlab']['postgresql']['port'] = 5432
 # Postgres allow multi listen_address, comma-separated values.
@@ -664,115 +663,13 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 ####
 # GitLab CI Rails app
 ####
-default['gitlab']['gitlab-ci']['enable'] = false
 default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
-default['gitlab']['gitlab-ci']['log_directory'] = "/var/log/gitlab/gitlab-ci"
 default['gitlab']['gitlab-ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
-default['gitlab']['gitlab-ci']['environment'] = 'production'
-default['gitlab']['gitlab-ci']['env'] = {
-  # Path the the GitLab CI Gemfile
-  # defaults to /opt/gitlab/embedded/service/gitlab-ci/Gemfile. The install-dir path is set at build time
-  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-ci/Gemfile",
-  # Path variable set in the environment for the GitLab CI processes
-  # defaults to /opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin"
-}
+
 default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
 
-default['gitlab']['gitlab-ci']['username'] = "gitlab-ci"
-default['gitlab']['gitlab-ci']['uid'] = nil
-default['gitlab']['gitlab-ci']['gid'] = nil
-default['gitlab']['gitlab-ci']['shell'] = "/bin/false"
-
-# application.yml top-level settings
-default['gitlab']['gitlab-ci']['gitlab_server'] = nil
-
-# application.yml, gitlab_ci section
-default['gitlab']['gitlab-ci']['gitlab_ci_host'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_port'] = 80
-default['gitlab']['gitlab-ci']['gitlab_ci_https'] = false
-default['gitlab']['gitlab-ci']['gitlab_ci_email_from'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_support_email'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
 default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
-
-default['gitlab']['gitlab-ci']['gitlab_ci_add_committer'] = nil # Deprecated, will be removed in the next release
-
-# application.yml, gravatar section
-default['gitlab']['gitlab-ci']['gravatar_enabled'] = true
-default['gitlab']['gitlab-ci']['gravatar_plain_url'] = nil
-default['gitlab']['gitlab-ci']['gravatar_ssl_url'] = nil
-
-# application.yml, backup section
-default['gitlab']['gitlab-ci']['backup_path'] = "/var/opt/gitlab/ci-backups"
-default['gitlab']['gitlab-ci']['backup_keep_time'] = nil
-default['gitlab']['gitlab-ci']['backup_upload_connection'] = nil
-default['gitlab']['gitlab-ci']['backup_upload_remote_directory'] = nil
-default['gitlab']['gitlab-ci']['backup_multipart_chunk_size'] = nil
-
-# database.yml settings
-default['gitlab']['gitlab-ci']['db_adapter'] = "postgresql"
-default['gitlab']['gitlab-ci']['db_encoding'] = "unicode"
-default['gitlab']['gitlab-ci']['db_database'] = "gitlab_ci_production"
-default['gitlab']['gitlab-ci']['db_pool'] = 10
-default['gitlab']['gitlab-ci']['db_username'] = "gitlab_ci"
-default['gitlab']['gitlab-ci']['db_password'] = nil
-# Path to postgresql socket directory
-default['gitlab']['gitlab-ci']['db_host'] = "/var/opt/gitlab/postgresql"
-default['gitlab']['gitlab-ci']['db_port'] = 5432
-default['gitlab']['gitlab-ci']['db_socket'] = nil
-
-# resque.yml settings
-default['gitlab']['gitlab-ci']['redis_host'] = "127.0.0.1"
-default['gitlab']['gitlab-ci']['redis_port'] = nil
-default['gitlab']['gitlab-ci']['redis_socket'] = "/var/opt/gitlab/ci-redis/redis.socket"
-
-# config/initializers/smtp_settings.rb settings
-default['gitlab']['gitlab-ci']['smtp_enable'] = false
-default['gitlab']['gitlab-ci']['smtp_address'] = nil
-default['gitlab']['gitlab-ci']['smtp_port'] = nil
-default['gitlab']['gitlab-ci']['smtp_user_name'] = nil
-default['gitlab']['gitlab-ci']['smtp_password'] = nil
-default['gitlab']['gitlab-ci']['smtp_domain'] = nil
-default['gitlab']['gitlab-ci']['smtp_authentication'] = nil
-default['gitlab']['gitlab-ci']['smtp_enable_starttls_auto'] = nil
-default['gitlab']['gitlab-ci']['smtp_tls'] = nil
-default['gitlab']['gitlab-ci']['smtp_openssl_verify_mode'] = nil
-
-####
-# CI Unicorn
-####
-default['gitlab']['ci-unicorn'] = default['gitlab']['unicorn'].dup
-default['gitlab']['ci-unicorn']['enable'] = false
-default['gitlab']['ci-unicorn']['log_directory'] = "/var/log/gitlab/ci-unicorn"
-default['gitlab']['ci-unicorn']['port'] = 8181
-default['gitlab']['ci-unicorn']['socket'] = '/var/opt/gitlab/gitlab-ci/sockets/gitlab.socket'
-# Path to the GitLab CI's Unicorn Process ID file
-# defaults to /opt/gitlab/var/ci-unicorn/unicorn.pid. The install-dir path is set at build time
-default['gitlab']['ci-unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/ci-unicorn/unicorn.pid"
-
-####
-# CI Sidekiq
-####
-default['gitlab']['ci-sidekiq'] = default['gitlab']['sidekiq'].dup
-default['gitlab']['ci-sidekiq']['enable'] = false
-default['gitlab']['ci-sidekiq']['log_directory'] = "/var/log/gitlab/ci-sidekiq"
-
-####
-# CI Redis
-####
-default['gitlab']['ci-redis'] = default['gitlab']['redis'].dup
-default['gitlab']['ci-redis']['enable'] = false
-default['gitlab']['ci-redis']['dir'] = "/var/opt/gitlab/ci-redis"
-default['gitlab']['ci-redis']['log_directory'] = "/var/log/gitlab/ci-redis"
-default['gitlab']['ci-redis']['unixsocket'] = "/var/opt/gitlab/ci-redis/redis.socket"
-
-####
-# CI NGINX
-####
-default['gitlab']['ci-nginx'] = default['gitlab']['nginx'].dup
-default['gitlab']['ci-nginx']['enable'] = false
-default['gitlab']['ci-nginx']['resolver'] = "8.8.8.8 8.8.4.4"
 
 ####
 # Mattermost

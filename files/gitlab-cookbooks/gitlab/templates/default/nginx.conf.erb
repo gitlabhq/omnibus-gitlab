@@ -15,7 +15,6 @@ events {
 
 http {
   log_format gitlab_access '<%= @gitlab_access_log_format %>';
-  log_format gitlab_ci_access '<%= @gitlab_ci_access_log_format %>';
   log_format gitlab_mattermost_access '<%= @gitlab_mattermost_access_log_format %>';
 
   server_names_hash_bucket_size <%= @server_names_hash_bucket_size %>;
@@ -44,10 +43,6 @@ http {
 
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
-  <% end %>
-
-  <% if @gitlab_ci_http_config %>
-  include <%= @gitlab_ci_http_config %>;
   <% end %>
 
   <% if @gitlab_pages_http_config %>

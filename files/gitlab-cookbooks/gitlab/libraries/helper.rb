@@ -134,49 +134,6 @@ module AuthorizeHelper
   end
 end
 
-class CiHelper
-  extend ShellOutHelper
-  extend AuthorizeHelper
-
-  def self.authorize_with_gitlab(gitlab_external_url)
-    redirect_uri = "#{Gitlab['ci_external_url']}/user_sessions/callback"
-    app_name = "GitLab CI"
-
-    o = query_gitlab_rails(redirect_uri, app_name)
-
-    app_id, app_secret = nil
-    if o.exitstatus == 0
-      app_id, app_secret = o.stdout.chomp.split(" ")
-
-      Gitlab['gitlab_ci']['gitlab_server'] = { 'url' => gitlab_external_url,
-                                                 'app_id' => app_id,
-                                                 'app_secret' => app_secret
-                                               }
-
-      SecretsHelper.write_to_gitlab_secrets
-      info("Updated the gitlab-secrets.json file.")
-    else
-      warn("Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.")
-    end
-
-    { 'url' => gitlab_external_url, 'app_id' => app_id, 'app_secret' => app_secret }
-  end
-
-  def self.gitlab_server
-    return unless Gitlab['gitlab_ci']['gitlab_server']
-    Gitlab['gitlab_ci']['gitlab_server']
-  end
-
-  def self.gitlab_server_fqdn
-    if gitlab_server && gitlab_server['url']
-      uri = URI(gitlab_server['url'].to_s)
-      uri.host
-    else
-      Gitlab['gitlab_rails']['gitlab_host']
-    end
-  end
-end
-
 class MattermostHelper
   extend ShellOutHelper
   extend AuthorizeHelper
@@ -251,15 +208,6 @@ class SecretsHelper
                         'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key']
                       }
                     }
-
-    if Gitlab['gitlab_ci']['gitlab_server']
-      warning = [
-        "Legacy config value gitlab_ci['gitlab_server'] found; value will be REMOVED. For reference, it was:",
-        Gitlab['gitlab_ci']['gitlab_server'].to_json
-      ]
-
-      warn(warning.join("\n\n"))
-    end
 
     if Gitlab['mattermost']['gitlab_enable']
       gitlab_oauth = {

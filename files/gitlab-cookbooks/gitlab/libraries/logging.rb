@@ -37,12 +37,9 @@ module Logging
 
       %w{
         redis
-        ci-redis
         nginx
         sidekiq
-        ci-sidekiq
         unicorn
-        ci-unicorn
         postgresql
         remote-syslog
         gitlab-workhorse
