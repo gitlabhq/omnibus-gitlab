@@ -47,11 +47,9 @@ dependency 'python-docutils'
 dependency 'krb5'
 dependency 'registry'
 dependency 'gitlab-pages'
+dependency 'unzip'
 
-if EE
-  dependency 'mysql-client'
-  dependency 'unzip'
-end
+dependency 'mysql-client' if EE
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
