@@ -34,24 +34,22 @@ license "MIT"
 license_file "LICENSE"
 license_file combined_licenses_file
 
-dependency "ruby"
-dependency "bundler"
-dependency "libxml2"
-dependency "libxslt"
-dependency "curl"
-dependency "rsync"
-dependency "libicu"
-dependency "postgresql"
-dependency "postgresql_new"
-dependency "python-docutils"
-dependency "krb5"
-dependency "registry"
-dependency "gitlab-pages"
+dependency 'ruby'
+dependency 'bundler'
+dependency 'libxml2'
+dependency 'libxslt'
+dependency 'curl'
+dependency 'rsync'
+dependency 'libicu'
+dependency 'postgresql'
+dependency 'postgresql_new'
+dependency 'python-docutils'
+dependency 'krb5'
+dependency 'registry'
+dependency 'gitlab-pages'
+dependency 'unzip'
 
-if EE
-  dependency "mysql-client"
-  dependency "unzip"
-end
+dependency 'mysql-client' if EE
 
 
 build do
