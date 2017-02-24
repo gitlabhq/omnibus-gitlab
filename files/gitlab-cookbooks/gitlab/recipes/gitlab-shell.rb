@@ -57,15 +57,6 @@ end
   end
 end
 
-# All repositories under GitLab share one hooks directory under
-# /opt/gitlab. Git-Annex wants write access to this hook directory, but
-# this directory is owned by root in the package.
-directory hooks_directory do
-  owner git_user
-  group git_group
-  mode "0755"
-end
-
 [
   log_directory,
   gitlab_shell_var_dir
@@ -108,7 +99,6 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
     :log_level => node['gitlab']['gitlab-shell']['log_level'],
     :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames'],
     :http_settings => node['gitlab']['gitlab-shell']['http_settings'],
-    :git_annex_enabled => node['gitlab']['gitlab-shell']['git_annex_enabled'],
     :git_trace_log_file => node['gitlab']['gitlab-shell']['git_trace_log_file'],
     :custom_hooks_dir => node['gitlab']['gitlab-shell']['custom_hooks_dir']
   })

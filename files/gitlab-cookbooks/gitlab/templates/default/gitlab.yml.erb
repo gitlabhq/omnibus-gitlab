@@ -381,11 +381,6 @@ production: &base
     # If you use non-standard ssh port you need to specify it
     ssh_port: <%= @gitlab_shell_ssh_port %>
 
-    # git-annex support (EE only)
-    # If this setting is set to true, the same setting in config.yml of
-    # gitlab-shell needs to be set to true
-    git_annex_enabled: <%= @git_annex_enabled %>
-
   ## Git settings
   # CAUTION!
   # Use the default values unless you really know what you are doing
