@@ -10,24 +10,24 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
 exec /opt/gitlab/embedded/bin/gitlab-pages \
     <% if node['gitlab']['pages-nginx']['enable'] && node['gitlab']['gitlab-pages']['listen_proxy'] %>
-    -listen-proxy "<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
+    -listen-proxy="<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
     <% end %>
     <% if node['gitlab']['gitlab-pages']['external_http'] %>
-    -listen-http  "<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
+    -listen-http="<%= node['gitlab']['gitlab-pages']['external_http'] %>" \
     <% end %>
     <% if node['gitlab']['gitlab-pages']['external_https'] %>
-    -listen-https "<%= node['gitlab']['gitlab-pages']['external_https'] %>" \
-    -root-cert "<%= node['gitlab']['gitlab-pages']['cert'] %>" \
-    -root-key  "<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
+    -listen-https="<%= node['gitlab']['gitlab-pages']['external_https'] %>" \
+    -root-cert="<%= node['gitlab']['gitlab-pages']['cert'] %>" \
+    -root-key="<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
     <% end %>
     <% if node['gitlab']['gitlab-pages']['metrics_address'] %>
-    -metrics-address "<%= node['gitlab']['gitlab-pages']['metrics_address'] %>" \
+    -metrics-address="<%= node['gitlab']['gitlab-pages']['metrics_address'] %>" \
     <% end %>
-    -daemon-uid "$(id -u "<%= node['gitlab']['user']['username'] %>")" \
-    -daemon-gid "$(id -g "<%= node['gitlab']['user']['username'] %>")" \
+    -daemon-uid="$(id -u "<%= node['gitlab']['user']['username'] %>")" \
+    -daemon-gid="$(id -g "<%= node['gitlab']['user']['username'] %>")" \
     \
-    -pages-domain "<%= node['gitlab']['gitlab-pages']['domain'] %>" \
-    -pages-root "<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
+    -pages-domain="<%= node['gitlab']['gitlab-pages']['domain'] %>" \
+    -pages-root="<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
     \
-    -redirect-http <%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
-    -use-http2 <%= node['gitlab']['gitlab-pages']['use_http2'] %> \
+    -redirect-http=<%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
+    -use-http2=<%= node['gitlab']['gitlab-pages']['use_http2'] %> \
