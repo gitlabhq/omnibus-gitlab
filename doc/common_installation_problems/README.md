@@ -27,6 +27,34 @@ curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gi
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
 
+### Reconfigure shows an error: NoMethodError - undefined method '[]=' for nil:NilClass
+
+You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
+reconfigure which produced error similar to:
+
+```
+================================================================================
+Recipe Compile Error in /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb
+================================================================================
+
+NoMethodError
+-------------
+undefined method `[]=' for nil:NilClass
+
+Cookbook Trace:
+---------------
+  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/config.rb:21:in `from_file'
+  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb:26:in `from_file'
+
+Relevant File Content:
+```
+
+This error is thrown when `/etc/gitlab/gitlab.rb` configuration file contains
+configuration that is invalid or unsupported. Double check that there are no
+typos or that the configuration file does not contain obsolete configuration.
+
+You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [gitlab.rb.template][].
+
 ### GitLab is unreachable in my browser
 
 Try [specifying](#configuring-the-external-url-for-gitlab) an `external_url` in
