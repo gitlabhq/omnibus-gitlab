@@ -94,6 +94,12 @@ To troubleshoot this error:
     ```
 
 3.  Restart the runit server.  
+    Using systemctl (Debian => 9 - Stretch):
+
+    ```
+    $ sudo systemctl restart gitlab-runsvdir
+    ```
+    
     Using upstart (Ubuntu <= 14.04):
 
     ```
