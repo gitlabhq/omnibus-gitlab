@@ -13,6 +13,7 @@ gem 'rspec'
 gem 'rake'
 gem 'knapsack'
 gem 'rubocop'
+gem 'docker-api'
 
 group :test do
   gem 'byebug'
