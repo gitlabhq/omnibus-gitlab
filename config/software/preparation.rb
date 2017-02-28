@@ -11,12 +11,12 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
+# limitations under the Licens  e.
 #
 
 name "preparation"
 description "the steps required to preprare the build"
-default_version "1.0.0"
+default_version "1.0.1"
 
 license :project_license
 
