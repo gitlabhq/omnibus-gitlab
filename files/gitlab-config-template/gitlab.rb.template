@@ -245,6 +245,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   backups**
 # gitlab_rails['backup_encryption'] = 'AES256'
 
+###! **Specifies Amazon S3 storage class to use for backups. Valid values
+###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and 
+###!   'REDUCED_REDUNDANCY'**
+# gitlab_rails['backup_storage_class'] = 'STANDARD'
+
 ### For setting up different data storing directory
 ###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ###! **If you want to use a single non-default directory to store git data use a
