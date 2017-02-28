@@ -82,6 +82,13 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 1
   end
 
+  unless progress_message("Checking if we've upgraded already") do
+    running_version != upgrade_version
+  end
+    log "Already running #{upgrade_version}, nothing to do"
+    exit! 0
+  end
+
   unless progress_message('Checking version of running PostgreSQL') do
     running_version == default_version
   end
