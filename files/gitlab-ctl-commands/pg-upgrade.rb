@@ -150,11 +150,20 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   unless progress_message('Creating temporary data directory') do
-    run_command(
-      "install -d -o gitlab-psql #{@db_worker.tmp_data_dir}.#{upgrade_version}"
-    )
+    begin
+      @db_worker.run_pg_command(
+        "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version}"
+      )
+    rescue GitlabCtl::Errors::ExecutionError => ee
+      false
+    else
+      true
+    end
   end
-    die 'Error creating new directory'
+    log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version}"
+    log "STDOUT: #{ee.stdout}"
+    log "STDERR: #{ee.stderr}"
+    die 'Please check the output'
   end
 
   unless progress_message('Initializing the new database') do
