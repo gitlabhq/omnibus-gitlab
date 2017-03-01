@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.2
+
+- No changes
+
+8.17.1
+
+- No changes
+
 8.17.0
 
 - Add support for setting PostgreSQL's synchronous_commit and
