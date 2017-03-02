@@ -113,6 +113,14 @@ server {
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
 
+  if ($http_host = "") {
+    set $http_host_with_default "<%= @fqdn %>";
+  }
+
+  if ($http_host != "") {
+    set $http_host_with_default $http_host;
+  }
+
   ## If you use HTTPS make sure you disable gzip compression
   ## to be safe against BREACH attack.
   <%= 'gzip off;' if @https %>
