@@ -155,14 +155,14 @@ add_command_under_category 'pg-upgrade', 'database',
         "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version}"
       )
     rescue GitlabCtl::Errors::ExecutionError => ee
+      log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version}"
+      log "STDOUT: #{ee.stdout}"
+      log "STDERR: #{ee.stderr}"
       false
     else
       true
     end
   end
-    log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version}"
-    log "STDOUT: #{ee.stdout}"
-    log "STDERR: #{ee.stderr}"
     die 'Please check the output'
   end
 
