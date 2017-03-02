@@ -113,3 +113,15 @@ sync:
 
 packagecloud:
 	bash support/packagecloud_upload.sh ${PACKAGECLOUD_USER} ${PACKAGECLOUD_REPO} ${PACKAGECLOUD_OS}
+
+do_aws_latest:
+	bundle exec rake aws:process
+
+do_aws_not_latest:
+	echo "Not latest version. Nothing to do"
+
+ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
+aws: do_aws_latest
+else
+aws: do_aws_not_latest
+endif

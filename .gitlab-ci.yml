@@ -7,6 +7,8 @@ stages:
   - notification_fail
   - extra
   - notification_fail
+  - cloud
+  - notification_fail
 
 before_script:
   - echo $NIGHTLY
@@ -195,6 +197,17 @@ Docker:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
   - make do_docker_release
+  tags:
+  - docker-build
+  only:
+    - tags@gitlab/omnibus-gitlab
+
+AWS:
+  stage: cloud
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer"
+  script:
+  - make aws
+  allow_failure: true
   tags:
   - docker-build
   only:

@@ -1,0 +1,27 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "version": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-east-1",
+    "source_ami": "ami-6edd3078",
+    "instance_type": "m3.medium",
+    "ssh_username": "ubuntu",
+    "ami_name": "GitLab CE {{user `version`}}",
+    "ami_groups": ["all"],
+    "tags": {
+        "Type": "GitLab Community Edition",
+        "Version": "{{user `version`}}"
+    },
+    "ami_regions": ["ap-south-1", "eu-west-2", "eu-west-1", "ap-northeast-2", "ap-northeast-1", "sa-east-1", "ca-central-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-east-2", "us-west-1", "us-west-2"]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "script": "update-script-ce.sh"
+  }]
+}

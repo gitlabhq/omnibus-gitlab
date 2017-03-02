@@ -198,6 +198,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk
   byebug
   chefspec
   docker-api
