@@ -11,6 +11,9 @@ omnibus-gitlab repository.
 
 - No changes
 
+8.17.3
+- Changing call to create tmp dir as the database user 7b54cd76
+
 8.17.0
 
 - Add support for setting PostgreSQL's synchronous_commit and
