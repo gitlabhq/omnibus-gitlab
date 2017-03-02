@@ -498,8 +498,10 @@ server {
       return 418;
   }
 
+  # For protocol upgrades from HTTP/1.0 to HTTP/1.1 we need to provide Host header if its missing
   if ($http_host = "") {
-    set $http_host_with_default "localhost";
+  # use one of values defined in server_name
+    set $http_host_with_default "git.example.com";
   }
 
   if ($http_host != "") {

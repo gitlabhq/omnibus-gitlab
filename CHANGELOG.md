@@ -27,6 +27,7 @@ are not the same (O Schwede) c4e83c5
 - Remove deprecated git-annex configuration 527b942
 - Expose GitLab Workhorse configuration file 835144e
 - EE: Add a tracking database for GitLab Geo f1077d10
+- Provide default Host header for requests that do not have one
 
 8.17.3
 
