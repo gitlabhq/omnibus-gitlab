@@ -8,6 +8,9 @@ omnibus-gitlab repository.
 - Fix the issue that prevents registry from starting when user and group
 are not the same (O Schwede) 62b5cc
 
+8.17.3
+- Changing call to create tmp dir as the database user 7b54cd76
+
 8.17.0
 
 - Add support for setting PostgreSQL's synchronous_commit and
