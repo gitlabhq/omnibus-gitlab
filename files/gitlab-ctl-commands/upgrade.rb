@@ -24,15 +24,6 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
-  unless progress_message('Ensuring PostgreSQL is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
-    status = run_command(command.join(' '))
-    status.success?
-  end
-    log 'Error ensuring PostgreSQL is updated. Please check the logs'
-    exit! 1
-  end
-
   unless progress_message('Checking PostgreSQL executables') do
     command = %W( chef-client
                   -z
@@ -45,6 +36,15 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     status.success?
   end
     log 'Could not update PostgreSQL executables.'
+  end
+
+  unless progress_message('Ensuring PostgreSQL is updated') do
+    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
+    status = run_command(command.join(' '))
+    status.success?
+  end
+    log 'Error ensuring PostgreSQL is updated. Please check the logs'
+    exit! 1
   end
 
   auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
