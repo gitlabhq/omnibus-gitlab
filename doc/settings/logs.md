@@ -16,6 +16,22 @@ sudo gitlab-ctl tail gitlab-rails
 sudo gitlab-ctl tail nginx/gitlab_error.log
 ```
 
+### Configure default log directories
+
+In your `/etc/gitlab/gitlab.rb` file, there are many `log_directory` keys for
+the various types of logs. Uncomment and update the values for all the logs
+you want to place elsewhere:
+
+```ruby
+# For example:
+gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
+unicorn['log_directory'] = "/var/log/gitlab/unicorn"
+registry['log_directory'] = "/var/log/gitlab/registry"
+...
+```
+
+Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings.
+
 ### Runit logs
 
 The Runit-managed services in omnibus-gitlab generate log data using
