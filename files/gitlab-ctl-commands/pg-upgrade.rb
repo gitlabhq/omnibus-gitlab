@@ -82,8 +82,8 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 0
   end
 
-  unless progress_message('Checking if we already upgraded') do
-    running_version != upgrade_version
+  if progress_message('Checking if we already upgraded') do
+    running_version == upgrade_version
   end
     $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
     exit! 0
