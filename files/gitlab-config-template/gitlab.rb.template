@@ -727,6 +727,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
 # nginx['listen_addresses'] = ['*', '[::]']
 
+##! **Defaults to forcing web browsers to always communicate using only HTTPS**
+##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
+# nginx['hsts']['max_age'] = 31536000
+# nginx['hsts']['include_subdomains'] = false
+
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
 # nginx['listen_port'] = nil
