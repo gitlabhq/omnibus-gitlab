@@ -62,4 +62,20 @@ describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr :9100 \\/)
     end
   end
+
+  context 'without api ci long polling duration defined' do
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiCiLongPollingDuration/)
+    end
+  end
+
+  context 'with api ci long polling duration defined' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { api_ci_long_polling_duration: "60s" })
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiCiLongPollingDuration 60s/)
+    end
+  end
 end

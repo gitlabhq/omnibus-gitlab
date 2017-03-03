@@ -455,6 +455,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! duration after which we timeout requests if they sit too long in the queue
 # gitlab_workhorse['api_queue_duration'] = "30s"
 
+##! Long polling duration for job requesting for runners
+# gitlab_workhorse['api_ci_long_polling_duration'] = "60s"
+
 # gitlab_workhorse['env'] = {
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 # }
