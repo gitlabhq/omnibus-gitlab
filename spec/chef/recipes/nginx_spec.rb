@@ -2,6 +2,7 @@ require 'chef_helper'
 
 describe 'gitlab::nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::nginx') }
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
 
   before :each do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -20,13 +21,12 @@ describe 'gitlab::nginx' do
         'message' => 'TEST MESSAGE'
       }
     }
-    @http_conf = '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
   end
 
   it 'creates a custom error_page entry when a custom error is defined' do
     allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors})
 
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
     }
   end
@@ -40,7 +40,7 @@ describe 'gitlab::nginx' do
   end
 
   it 'creates a standard error_page entry when no custom error is defined' do
-    expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf').with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("error_page 404 /404.html;")
     }
   end
@@ -48,13 +48,13 @@ describe 'gitlab::nginx' do
   it 'enables the proxy_intercept_errors option when custom_error_pages is defined' do
     chef_run.node.normal['gitlab']['nginx']['custom_error_pages'] = @nginx_errors
     chef_run.converge('gitlab::nginx')
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("proxy_intercept_errors on")
     }
   end
 
   it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).not_to include("proxy_intercept_errors")
     }
   end
@@ -62,6 +62,9 @@ end
 
 describe 'nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  subject { chef_run }
+
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
   let(:nginx_status_config) { /include \/var\/opt\/gitlab\/nginx\/conf\/nginx-status\.conf;/ }
 
   let(:basic_nginx_headers) do
@@ -221,6 +224,31 @@ describe 'nginx' do
       stub_gitlab_rb("nginx" => { "enable" => false })
       expect(chef_run).to_not render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
     end
+  end
+
+  context 'when hsts is disabled' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { max_age: 0 } })
+    end
+    it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security/) }
+  end
+
+  it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000";/) }
+
+  context 'when include_subdomains is enabled' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { include_subdomains: true } })
+    end
+
+    it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";/) }
+  end
+
+  context 'when max-age is set to 10' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { max_age: 10 } })
+    end
+
+    it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
   end
 
   def nginx_headers(additional_headers)
