@@ -902,6 +902,15 @@ default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
 default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
 default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
+default['gitlab']['prometheus']['chunk_encoding_version'] = 2
+default['gitlab']['prometheus']['memory_chunks'] = (
+  # Use 10k + 2% of total memory for chunk buffers.
+  10_000 + (node['memory']['total'].to_i * 0.02)
+).to_i
+default['gitlab']['prometheus']['max_chunks_to_persist'] = (
+  # Use 5k + 1% of total memory for max dirty chunks. (half of total chunks)
+  5_000 + (node['memory']['total'].to_i * 0.01)
+).to_i
 
 ####
 # Prometheus Node Exporter

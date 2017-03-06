@@ -54,11 +54,15 @@ module Prometheus
 
       home_directory = user_config['home'] || default_config['home']
       listen_address = user_config['listen_address'] || default_config['listen_address']
+      chunk_encoding_version = user_config['chunk_encoding_version'] || default_config['chunk_encoding_version']
+      memory_chunks = user_config['memory_chunks'] || default_config['memory_chunks']
+      max_chunks_to_persist = user_config['max_chunks_to_persist'] || default_config['max_chunks_to_persist']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
         'storage.local.path' => File.join(home_directory, 'data'),
-        'storage.local.memory-chunks' => '50000',
-        'storage.local.max-chunks-to-persist' => '40000',
+        'storage.local.chunk-encoding-version' => chunk_encoding_version.to_s,
+        'storage.local.memory-chunks' => memory_chunks.to_s,
+        'storage.local.max-chunks-to-persist' => max_chunks_to_persist.to_s,
         'config.file' => File.join(home_directory, 'prometheus.yml')
       }
 
