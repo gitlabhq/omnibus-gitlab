@@ -37,6 +37,8 @@ module Gitlab
         "GITLAB_WORKHORSE_VERSION"
       when "gitlab-pages"
         "GITLAB_PAGES_VERSION"
+      when 'gitaly'
+        'GITALY_VERSION'
       else
         nil
       end
