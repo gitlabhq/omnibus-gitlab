@@ -22,7 +22,7 @@ license_file 'COPYING'
 
 dependency 'popt'
 
-version_path = version.gsub('.', '-')
+version_path = version.tr('.', '-')
 source url: "https://github.com/logrotate/logrotate/archive/r#{version_path}.tar.gz"
 
 version '3.8.5' do
