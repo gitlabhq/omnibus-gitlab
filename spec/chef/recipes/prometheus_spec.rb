@@ -14,7 +14,10 @@ describe 'gitlab::prometheus' do
       stub_gitlab_rb(
         prometheus: {
           enable: true
-        }
+        },
+        gitlab_monitor: {
+          enable: true
+        },
       )
     end
 
@@ -34,6 +37,7 @@ describe 'gitlab::prometheus' do
         .with_content { |content|
           expect(content).to match(/scrape_interval: 15s/)
           expect(content).to match(/scrape_timeout: 15s/)
+          expect(content).to match(/localhost:9168/)
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/log/run')

@@ -25,13 +25,13 @@ scrape_configs:
   - job_name: gitlab_monitor_database
     metrics_path: /database
     static_configs:
-      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] + ":" + node['gitlab']['gitlab-monitor']['listen_port'] %>']
   - job_name: gitlab_monitor_sidekiq
     metrics_path: /sidekiq
     static_configs:
-      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] + ":" + node['gitlab']['gitlab-monitor']['listen_port'] %>']
   - job_name: gitlab_monitor_process
     metrics_path: /process
     static_configs:
-      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] %>']
+      - targets: ['<%= node['gitlab']['gitlab-monitor']['listen_address'] + ":" + node['gitlab']['gitlab-monitor']['listen_port'] %>']
 <% end -%>

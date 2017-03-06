@@ -34,24 +34,22 @@ license "MIT"
 license_file "LICENSE"
 license_file combined_licenses_file
 
-dependency "ruby"
-dependency "bundler"
-dependency "libxml2"
-dependency "libxslt"
-dependency "curl"
-dependency "rsync"
-dependency "libicu"
-dependency "postgresql"
-dependency "postgresql_new"
-dependency "python-docutils"
-dependency "krb5"
-dependency "registry"
-dependency "gitlab-pages"
+dependency 'ruby'
+dependency 'bundler'
+dependency 'libxml2'
+dependency 'libxslt'
+dependency 'curl'
+dependency 'rsync'
+dependency 'libicu'
+dependency 'postgresql'
+dependency 'postgresql_new'
+dependency 'python-docutils'
+dependency 'krb5'
+dependency 'registry'
+dependency 'gitlab-pages'
+dependency 'unzip'
 
-if EE
-  dependency "mysql-client"
-  dependency "unzip"
-end
+dependency 'mysql-client' if EE
 
 
 build do
@@ -95,8 +93,9 @@ build do
     "USE_DB" => "false",
     "SKIP_STORAGE_VALIDATION" => "true"
   }
-  command "npm install --production"
-  bundle "exec rake gitlab:assets:compile", :env => assets_compile_env
+
+  command 'yarn install --pure-lockfile --production'
+  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'

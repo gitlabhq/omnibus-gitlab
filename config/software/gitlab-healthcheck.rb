@@ -43,13 +43,7 @@ fi
 
 . ${gitlab_healthcheck_rc}
 
-if [ "$(id -n -u)" = "${psql_user}" ] ; then
-  privilege_drop=''
-else
-  privilege_drop="-u ${psql_user}"
-fi
-
-exec /opt/gitlab/embedded/bin/curl $@ ${host}:${port}${path}
+exec /opt/gitlab/embedded/bin/curl $@ ${flags} ${url}
        EOH
     end
   end
