@@ -22,14 +22,14 @@ license_file 'COPYING'
 
 dependency 'popt'
 
-source url: "https://github.com/logrotate/logrotate/archive/#{version}.tar.gz"
+version_path = version.gsub('.', '-')
+source url: "https://github.com/logrotate/logrotate/archive/r#{version_path}.tar.gz"
 
 version '3.8.5' do
-  source md5: 'd3c13e2a963a55c584cfaa83e96b173d',
-         url: "https://fedorahosted.org/releases/l/o/logrotate/logrotate-#{version}.tar.gz"
+  source md5: '5078b2b10d7669a6b97cbb632730c994'
 end
 
-relative_path "logrotate-#{version}"
+relative_path "logrotate-r#{version_path}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
