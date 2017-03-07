@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Remove Bitbucket from templates as it does not require special settings anymore
 - Fix the issue that prevents registry from starting when user and group
 are not the same (O Schwede) 62b5cc
+- Update curl to 7.53.0
 - Setup RSA private key for OpenID Connect
 - Update directory configuration structure to allow multiple settings per data directory
 
