@@ -368,6 +368,7 @@ production: &base
       remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
       encryption: <%= @backup_encryption %>
+      storage_class: <%= @backup_storage_class %>
 
   ## GitLab Shell settings
   gitlab_shell:

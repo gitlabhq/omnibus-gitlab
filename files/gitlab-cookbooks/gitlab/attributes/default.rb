@@ -193,6 +193,7 @@ default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
 default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
+default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
