@@ -19,6 +19,7 @@
 require 'mixlib/shellout'
 require 'uri'
 require 'digest'
+require 'openssl'
 
 module ShellOutHelper
 
@@ -162,6 +163,13 @@ class MattermostHelper
 end
 
 class SecretsHelper
+  def self.generate_hex(chars)
+    SecureRandom.hex(chars)
+  end
+
+  def self.generate_rsa(bits)
+    OpenSSL::PKey::RSA.new(bits)
+  end
 
   def self.read_gitlab_secrets
     existing_secrets ||= Hash.new
@@ -193,7 +201,8 @@ class SecretsHelper
                       'gitlab_rails' => {
                         'secret_key_base' => Gitlab['gitlab_rails']['secret_key_base'],
                         'db_key_base' => Gitlab['gitlab_rails']['db_key_base'],
-                        'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base']
+                        'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base'],
+                        'jws_private_key' => Gitlab['gitlab_rails']['jws_private_key']
                       },
                       'registry' => {
                         'http_secret' => Gitlab['registry']['http_secret'],

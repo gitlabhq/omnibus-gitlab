@@ -4,6 +4,9 @@ require 'base64'
 describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
+  HEX_KEY = /\h{128}/.freeze
+  RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
+
   def stub_gitlab_secrets_json(secrets)
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
   end
@@ -44,10 +47,13 @@ describe 'secrets' do
       end
 
       it 'writes new secrets to the file, with different values for each' do
-        rails_keys = new_secrets['gitlab_rails'].values_at('db_key_base', 'otp_key_base', 'secret_key_base')
+        rails_keys = new_secrets['gitlab_rails']
+        hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base')
+        rsa_keys = rails_keys.values_at('jws_private_key')
 
-        expect(rails_keys).to all(match(/\h{128}/))
-        expect(rails_keys.uniq).to eq(rails_keys)
+        expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
+        expect(hex_keys).to all(match(HEX_KEY))
+        expect(rsa_keys).to all(match(RSA_KEY))
       end
 
       it 'does not write legacy keys' do
@@ -79,7 +85,7 @@ describe 'secrets' do
         end
 
         it 'falls back further to generating new secrets' do
-          expect(new_secrets['gitlab_rails']['otp_key_base']).to match(/\h{128}/)
+          expect(new_secrets['gitlab_rails']['otp_key_base']).to match(HEX_KEY)
         end
       end
 
@@ -137,7 +143,7 @@ describe 'secrets' do
         end
 
         it 'falls back further to generating new secrets' do
-          expect(new_secrets['gitlab_shell']['secret_token']).to match(/\h{128}/)
+          expect(new_secrets['gitlab_shell']['secret_token']).to match(HEX_KEY)
         end
       end
 
