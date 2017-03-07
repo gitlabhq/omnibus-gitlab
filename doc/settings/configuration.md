@@ -1,12 +1,12 @@
 # Configuration options
 
 GitLab is configured by setting the relevant options in
-`/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md) 
+`/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md)
 for a list of default settings and visit the
 [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 for a complete list of available options.
 New installations starting from GitLab 7.6, will have
-all the options of the template as of installation listed in 
+all the options of the template as of installation listed in
 `/etc/gitlab/gitlab.rb` by default.
 
 ## Configuring the external URL for GitLab
@@ -147,7 +147,7 @@ the `git-data` parent directory by adding the following line to
 `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-git_data_dirs({"default" => "/mnt/nas/git-data"})
+git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
 ```
 
 Starting from GitLab 8.10 you can also add more than one git data directory by
@@ -155,8 +155,8 @@ adding the following lines to `/etc/gitlab/gitlab.rb` instead.
 
 ```ruby
 git_data_dirs({
-  "default" => "/var/opt/gitlab/git-data",
-  "alternative" => "/mnt/nas/git-data"
+  "default" => { "path" => "/var/opt/gitlab/git-data" },
+  "alternative" => { "path" => "/mnt/nas/git-data" }
 })
 ```
 

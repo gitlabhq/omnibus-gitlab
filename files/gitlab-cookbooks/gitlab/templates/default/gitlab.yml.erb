@@ -438,7 +438,7 @@ test:
     path: tmp/tests/gitlab-satellites/
   repositories:
     storages:
-      default: tmp/tests/repositories/
+      default: { "path": "tmp/tests/repositories/" }
   gitlab_shell:
     path: tmp/tests/gitlab-shell/
     hooks_path: tmp/tests/gitlab-shell/hooks/

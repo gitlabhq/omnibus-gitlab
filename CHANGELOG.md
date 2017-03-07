@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Fix the issue that prevents registry from starting when user and group
 are not the same (O Schwede) 62b5cc
 - Setup RSA private key for OpenID Connect
+- Update directory configuration structure to allow multiple settings per data directory
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76
