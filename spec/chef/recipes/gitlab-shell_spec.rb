@@ -231,33 +231,64 @@ describe 'gitlab_shell::git_data_dir' do
 
     it 'correctly sets the shell git data directories' do
       expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories'])
-        .to eql('default' => '/tmp/user/git-data')
+        .to eql('default' => { 'path' => '/tmp/user/git-data' })
     end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => '/tmp/user/git-data/repositories')
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories' })
     end
   end
 
   context 'when git_data_dirs is set to multiple directories' do
     before do
       stub_gitlab_rb({
-        git_data_dirs: { 'default' => '/tmp/default/git-data', 'overflow' => '/tmp/other/git-overflow-data' }
+        git_data_dirs: {
+          'default' => { 'path' => '/tmp/default/git-data' },
+          'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+        }
       })
     end
 
     it 'correctly sets the shell git data directories' do
       expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-        'default' => '/tmp/default/git-data',
-        'overflow' => '/tmp/other/git-overflow-data'
+        'default' => { 'path' => '/tmp/default/git-data' },
+        'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
       })
     end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-        'default' => '/tmp/default/git-data/repositories',
-        'overflow' => '/tmp/other/git-overflow-data/repositories'
+        'default' => { 'path' => '/tmp/default/git-data/repositories' },
+        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
+      })
+    end
+  end
+
+  context 'when git_data_dirs is set with deprecated settings structure' do
+    before do
+      stub_gitlab_rb({
+        git_data_dirs: {
+          'default' => '/tmp/default/git-data',
+          'overflow' => '/tmp/other/git-overflow-data'
+        }
+      })
+    end
+
+    it 'correctly sets the shell git data directories' do
+      # Allow warn to be called for other messages without failing the test
+      allow(Chef::Log).to receive(:warn)
+      expect(Chef::Log).to receive(:warn).with("Your git_data_dirs settings are deprecated. Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.")
+      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
+        'default' => { 'path' => '/tmp/default/git-data' },
+        'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+      })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+        'default' => { 'path' => '/tmp/default/git-data/repositories' },
+        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
       })
     end
   end
