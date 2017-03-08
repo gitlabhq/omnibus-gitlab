@@ -4,10 +4,14 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 9.0
+
 - Remove Bitbucket from templates as it does not require special settings anymore
 - Fix the issue that prevents registry from starting when user and group
 are not the same (O Schwede) 62b5cc
 - Add configuration options for GitLab container registry to support notification endpoints to template
+- Update curl to 7.53.0
+- Setup RSA private key for OpenID Connect
+- Update directory configuration structure to allow multiple settings per data directory
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76

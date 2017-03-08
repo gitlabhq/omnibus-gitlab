@@ -440,7 +440,7 @@ sudo tee -a /etc/gitlab/gitlab.rb <<'EOF'
 external_url 'http://gitlab.example.com'
 
 # We assume your repositories are in /home/git/repositories (default for source installs)
-git_data_dirs({ 'default' => '/home/git' })
+git_data_dirs({ 'default' => { 'path' => '/home/git' } })
 
 # Re-use the Postgres that is already running on your system
 postgresql['enable'] = false

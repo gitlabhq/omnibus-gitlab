@@ -30,14 +30,14 @@ hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
 git_data_directories.each do |_name, git_data_directory|
-  storage_directory git_data_directory do
+  storage_directory git_data_directory['path'] do
     owner git_user
     mode "0700"
   end
 end
 
 repositories_storages.each do |_name, repositories_storage|
-  storage_directory repositories_storage do
+  storage_directory repositories_storage['path'] do
     owner git_user
     mode "2770"
   end
