@@ -75,7 +75,7 @@ describe 'registry recipe' do
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/version: 0.1/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/realm: \/jwt\/auth/)
+        .with_content(/realm: .*\/jwt\/auth/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/addr: localhost:5000/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -184,6 +184,162 @@ describe 'registry' do
       it 'sets the delete enabled field on the storage object' do
         expect(chef_run.node['gitlab']['registry']['storage']['delete'])
           .to eql('enabled' => false)
+      end
+    end
+
+    context 'when registry notification endpoint is configured with the minimum required' do
+      before { stub_gitlab_rb(
+        registry: {
+          notifications: [
+            name: 'test_endpoint',
+            url: 'https://registry.example.com/notify'
+          ]
+        }
+      )}
+
+      it 'creates the registry config with the specified endpoint config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"url":"https:\/\/registry.example.com\/notify"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"500ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":5/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"1s"/)
+      end
+    end
+
+    context 'when the default values are overridden' do
+      before { stub_gitlab_rb(
+        registry: {
+          notifications: [
+            name: 'test_endpoint',
+            url: 'https://registry.example.com/notify'
+          ],
+          default_notifications_timeout: '5000ms',
+          default_notifications_threshold: 10,
+          default_notifications_backoff: '50s',
+          default_notifications_headers: {
+            "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN1", "AUTHORIZATION_EXAMPLE_TOKEN2"] 
+          }
+        }
+      )}
+
+      it 'creates the registry config overriding the values not set with the new defaults' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"url":"https:\/\/registry.example.com\/notify"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"5000ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":10/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"50s"/)
+      end
+    end
+    
+    context 'when registry notification endpoint is configured with all the available variables' do
+      before { stub_gitlab_rb(
+        registry: {
+          notifications:[
+            {
+              'name' => 'test_endpoint',
+              'url' => 'https://registry.example.com/notify',
+              'timeout' => '500ms',
+              'threshold' => 5,
+              'backoff' => '1s',
+              'headers' => {
+                "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+              }
+            }
+          ]
+        }
+      )}
+
+      it 'creates the registry config with the specified endpoint config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"url":"https:\/\/registry.example.com\/notify"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"500ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":5/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"1s"/)
+      end
+    end
+
+    context 'when 3 registry notification endpoints are configured' do
+      before { stub_gitlab_rb(
+        registry: {
+          notifications: [
+            {
+              'name' => 'test_endpoint',
+              'url' => 'https://registry.example.com/notify'
+            },
+            {
+              'name' => 'test_endpoint2',
+              'url' => 'https://registry.example.com/notify2',
+              'timeout' => '100ms',
+              'threshold' => 2,
+              'backoff' => '4s',
+              'headers' => {
+                "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+              }
+            },
+            {
+              'name' => 'test_endpoint3',
+              'url' => 'https://registry.example.com/notify3'
+            }
+          ]
+        }
+      )}
+
+      it 'creates the registry config with the specified endpoint config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/\"url\":\"https:\/\/registry.example.com\/notify\"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"500ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":5/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"1s"/)
+        # Second endpoint
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint2"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"url":"https:\/\/registry.example.com\/notify2"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"100ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":2/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"4s"/)
+        # Third endpoint
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint3"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"url":"https:\/\/registry.example.com\/notify3"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"timeout":"500ms"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":5/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"backoff":"1s"/)
+      end
+    end
+
+    context 'when registry notification endpoint is not configured' do
+      it 'creates the registry config without the endpoint config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content('notifications:')
       end
     end
   end
