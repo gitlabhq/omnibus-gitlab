@@ -1,6 +1,6 @@
 class SentinelHelper
-  MYID_PATTERN = /^[0-9a-f]{40}$/
-  JSON_FILE = '/etc/gitlab/gitlab-sentinel.json'.freeze
+  MYID_PATTERN ||= /^[0-9a-f]{40}$/
+  JSON_FILE ||= '/etc/gitlab/gitlab-sentinel.json'.freeze
 
   def initialize(node)
     @node = node
