@@ -78,4 +78,120 @@ describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiCiLongPollingDuration 60s/)
     end
   end
+
+  context 'with default value for working directory' do
+    it 'should generate config file in the correct directory' do
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml")
+    end
+  end
+
+  context 'with working directory specified' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { dir: "/home/random/dir" })
+    end
+    it 'should generate config file in the correct directory' do
+      expect(chef_run).to render_file("/home/random/dir/config.toml")
+    end
+  end
+
+  context 'with default values for redis' do
+    it 'should generate config file' do
+      content_url = 'URL = "unix:/var/opt/gitlab/redis/redis.socket"'
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/Sentinel/)
+    end
+
+    it 'should pass config file to workhorse' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-config config.toml/)
+    end
+  end
+
+  context 'with host/port/password values for redis specified and socket disabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_host: "10.0.15.1",
+          redis_port: "1234",
+          redis_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should generate config file with the specified values' do
+      content_url = 'URL = "tcp://10.0.15.1:1234/"'
+      content_password = 'Password = "examplepassword"'
+      content_sentinel = 'Sentinel'
+      content_sentinel_master = 'SentinelMaster'
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
+      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel)
+      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+    end
+  end
+
+  context 'with socket for redis specified' do
+    before do
+      stub_gitlab_rb(gitlab_rails: { redis_socket: "/home/random/path.socket", redis_password: 'examplepassword' })
+    end
+
+    it 'should generate config file with the specified values' do
+      content_url = 'URL = "unix:/home/random/path.socket"'
+      content_password = 'Password = "examplepassword"'
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
+      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/Sentinel/)
+      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/SentinelMaster/)
+    end
+  end
+
+  context 'with Sentinels specified with default master' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            {'host' => '127.0.0.1', 'port' => 2637},
+            {'host' => '127.0.8.1', 'port' => 1234}
+          ]
+        }
+      )
+    end
+
+    it 'should generate config file with the specified values' do
+      content = 'Sentinel = ["tcp://127.0.0.1:2637", "tcp://127.0.8.1:1234"]'
+      content_url = 'URL ='
+      content_sentinel_master = 'SentinelMaster = "gitlab-redis"'
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+    end
+  end
+
+  context 'with Sentinels and master specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            {'host' => '127.0.0.1', 'port' => 26379},
+            {'host' => '127.0.8.1', 'port' => 12345}
+          ]
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should generate config file with the specified values' do
+      content = 'Sentinel = ["tcp://127.0.0.1:26379", "tcp://127.0.8.1:12345"]'
+      content_sentinel_master = 'SentinelMaster = "examplemaster"'
+      content_sentinel_password = 'Password = "examplepassword"'
+      content_url = 'URL ='
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+    end
+  end
+
 end
