@@ -246,7 +246,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256'
 
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
-###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and 
+###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and
 ###!   'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
@@ -892,10 +892,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['enable'] = false
 
 ##! Configure to expose GitLab Pages on external IP address, serving the HTTP
-# gitlab_pages['external_http'] = nil
+# gitlab_pages['external_http'] = []
 
 ##! Configure to expose GitLab Pages on external IP address, serving the HTTPS
-# gitlab_pages['external_https'] = nil
+# gitlab_pages['external_https'] = []
 
 # gitlab_pages['listen_proxy'] = "localhost:8090"
 # gitlab_pages['redirect_http'] = true

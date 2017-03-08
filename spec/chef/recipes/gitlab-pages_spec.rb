@@ -34,9 +34,10 @@ describe 'gitlab::gitlab-pages' do
       stub_gitlab_rb(
         pages_external_url: 'https://pages.example.com',
         gitlab_pages: {
+          external_http: ['external_pages.example.com', 'localhost:9000'],
+          external_https: ['external_pages.example.com', 'localhost:9001'],
           metrics_address: 'localhost:1234',
           redirect_http: false,
-          external_https: 'external_pages.example.com',
           cert: '/etc/gitlab/pages.crt'
         }
       )
@@ -52,7 +53,10 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-metrics-address="localhost:1234"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-cert="\/etc\/gitlab\/pages.crt"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http="external_pages.example.com"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http="localhost:9000"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="external_pages.example.com"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="localhost:9001"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
     end
   end
