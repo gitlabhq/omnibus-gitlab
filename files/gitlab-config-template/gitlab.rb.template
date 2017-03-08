@@ -556,14 +556,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 # gitlab_shell['custom_hooks_dir'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks"
 
-##! **If enabled, git-annex needs to be installed on the server where GitLab is
-##!   setup.
-##!   For Debian and Ubuntu systems this can be done with:
-##!   `sudo apt-get install git-annex`.
-##!   For CentOS:
-##!   `sudo yum install epel-release && sudo yum install git-annex`**
-# gitlab_shell['git_annex_enabled'] = false
-
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
 ### Git trace log file.
