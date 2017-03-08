@@ -1,0 +1,9 @@
+[redis]
+<% if @sentinels.empty? %>
+URL = "<%= @redis_url %>"
+Password = "<%= @password %>"
+<% else %>
+Sentinel = <%= @sentinels.map{ |sentinel| "tcp://#{sentinel['host']}:#{sentinel['port']}" }.to_s %>
+SentinelMaster = "<%= @sentinel_master %>"
+Password = "<%= @master_password %>"
+<% end %>
