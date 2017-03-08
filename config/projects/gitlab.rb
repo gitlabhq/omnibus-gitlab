@@ -89,6 +89,7 @@ dependency 'gitlab-shell'
 dependency 'gitlab-workhorse'
 dependency 'gitlab-ctl'
 dependency 'gitlab-psql'
+dependency 'gitlab-geo-psql' if ee
 dependency 'gitlab-healthcheck'
 dependency 'gitlab-cookbooks'
 dependency 'gitlab-selinux'

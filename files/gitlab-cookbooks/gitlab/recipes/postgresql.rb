@@ -93,9 +93,9 @@ postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 should_notify = omnibus_helper.should_notify?("postgresql")
 
 template postgresql_config do
-  source "postgresql.conf.erb"
+  source 'postgresql.conf.erb'
   owner postgresql_user
-  mode "0644"
+  mode '0644'
   helper(:pg_helper) { pg_helper }
   variables(node['gitlab']['postgresql'].to_hash)
   notifies :restart, 'service[postgresql]', :immediately if should_notify
@@ -104,14 +104,14 @@ end
 pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
 
 template pg_hba_config do
-  source "pg_hba.conf.erb"
+  source 'pg_hba.conf.erb'
   owner postgresql_user
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
   notifies :restart, 'service[postgresql]', :immediately if should_notify
 end
 
-template File.join(postgresql_data_dir, "pg_ident.conf") do
+template File.join(postgresql_data_dir, 'pg_ident.conf') do
   owner postgresql_user
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
@@ -187,5 +187,5 @@ execute "enable pg_trgm extension" do
   user postgresql_user
   retries 20
   action :nothing
-  not_if { !pg_helper.is_running? || pg_helper.is_slave? }
+  not_if { !pg_helper.is_running? || pg_helper.is_slave? || pg_helper.extension_enabled?('pg_trgm', database_name) }
 end

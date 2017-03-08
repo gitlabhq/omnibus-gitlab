@@ -69,12 +69,14 @@
 # "local" is for Unix domain socket connections only
 local   all         all                               peer map=gitlab
 
-<% node['gitlab']['postgresql']['trust_auth_cidr_addresses'].each do |cidr| %>
+<% @trust_auth_cidr_addresses.each do |cidr| %>
 host    all         all         <%= cidr %>           trust
 <% end %>
 
-<% node['gitlab']['postgresql']['md5_auth_cidr_addresses'].each do |cidr| %>
+<% @md5_auth_cidr_addresses.each do |cidr| %>
 host    all         all         <%= cidr %>           md5
-host    replication <%= node['gitlab']['postgresql']['sql_replication_user'] %> <%= cidr %>     md5
+  <% if @sql_replication_user %>
+host    replication <%= @sql_replication_user %> <%= cidr %>     md5
+  <% end %>
 <% end %>
 

@@ -89,6 +89,7 @@ module Gitlab
   registry_external_url nil
   git_data_dirs Mash.new
   gitaly Mash.new
+  geo_postgresql Mash.new
 
   # roles
   redis_sentinel_role Mash.new
@@ -191,7 +192,8 @@ module Gitlab
         "redis_exporter",
         "postgres_exporter",
         "gitlab_monitor",
-        "sentinel"
+        "sentinel",
+        "geo_postgresql",
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
