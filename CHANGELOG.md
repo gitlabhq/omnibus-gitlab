@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 - Remove Bitbucket from templates as it does not require special settings anymore
 - Fix the issue that prevents registry from starting when user and group
 are not the same (O Schwede) 62b5cc
+- Add configuration options for GitLab container registry to support notification endpoints to template
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76

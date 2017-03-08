@@ -543,6 +543,15 @@ default['gitlab']['registry']['storage'] = nil
 default['gitlab']['registry']['debug_addr'] = nil
 
 ####
+# Registry Notifications
+####
+default['gitlab']['registry']['notifications'] = nil
+default['gitlab']['registry']['default_notifications_timeout'] = "500ms"
+default['gitlab']['registry']['default_notifications_threshold'] = 5
+default['gitlab']['registry']['default_notifications_backoff'] = "1s"
+default['gitlab']['registry']['default_notifications_headers'] = {}
+
+####
 # Nginx
 ####
 default['gitlab']['nginx']['enable'] = true
