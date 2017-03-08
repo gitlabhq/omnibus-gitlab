@@ -38,6 +38,12 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log 'Could not update PostgreSQL executables.'
   end
 
+  auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
+  if File.exists?(auto_migrations_skip_file)
+    log "Found #{auto_migrations_skip_file}, exiting..."
+    exit! 0
+  end
+
   unless progress_message('Ensuring PostgreSQL is updated') do
     command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
     status = run_command(command.join(' '))
@@ -45,12 +51,6 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
     log 'Error ensuring PostgreSQL is updated. Please check the logs'
     exit! 1
-  end
-
-  auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
-  if File.exists?(auto_migrations_skip_file)
-    log "Found #{auto_migrations_skip_file}, exiting..."
-    exit! 0
   end
 
   log 'Shutting down all GitLab services except those needed for migrations'
