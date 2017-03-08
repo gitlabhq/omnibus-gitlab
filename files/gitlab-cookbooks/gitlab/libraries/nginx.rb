@@ -22,6 +22,18 @@ module Nginx
       parse_nginx_listen_ports
     end
 
+    def generate_host_header(fqdn, port, is_https)
+      header = fqdn.dup
+
+      if is_https
+        header << ":#{port}" unless port == 443
+      else
+        header << ":#{port}" unless port == 80
+      end
+
+      header
+    end
+
     def parse_nginx_listen_address
       return unless Gitlab['nginx']['listen_address']
 

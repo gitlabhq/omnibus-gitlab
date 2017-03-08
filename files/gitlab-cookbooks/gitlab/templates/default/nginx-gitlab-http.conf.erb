@@ -114,7 +114,8 @@ server {
   error_log   <%= @log_directory %>/gitlab_error.log;
 
   if ($http_host = "") {
-    set $http_host_with_default "<%= @fqdn %>";
+    <% default_host = Nginx.generate_host_header(@fqdn, @port, @https) %>
+    set $http_host_with_default "<%= default_host %>";
   }
 
   if ($http_host != "") {
