@@ -30,14 +30,6 @@ describe 'postgresql 9.2' do
         .with_content(/log_line_prefix = ''/)
     end
 
-    it 'sets checkpoint_segments' do
-      expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
-        .to eq(10)
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/postgresql/data/postgresql.conf'
-      ).with_content(/checkpoint_segments = 10/)
-    end
-
     it 'sets max_standby settings' do
       expect(chef_run).to render_file(
         '/var/opt/gitlab/postgresql/data/postgresql.conf'
@@ -57,14 +49,6 @@ describe 'postgresql 9.2' do
       expect(chef_run).to render_file(
         '/var/opt/gitlab/postgresql/data/postgresql.conf'
       ).with_content(/archive_timeout = 60/)
-    end
-
-    it 'does not set the max_replication_slots setting' do
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/postgresql/data/postgresql.conf'
-      ).with_content { |content|
-        expect(content).to_not match(/max_replication_slots = /)
-      }
     end
   end
 
@@ -134,6 +118,22 @@ describe 'postgresql 9.2' do
         expect(content).not_to match(
           /unix_socket_directories = '\/var\/opt\/gitlab\/postgresql'/
         )
+      }
+    end
+
+    it 'sets checkpoint_segments' do
+      expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
+        .to eq(10)
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/checkpoint_segments = 10/)
+    end
+
+    it 'does not set the max_replication_slots setting' do
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content { |content|
+        expect(content).to_not match(/max_replication_slots = /)
       }
     end
 

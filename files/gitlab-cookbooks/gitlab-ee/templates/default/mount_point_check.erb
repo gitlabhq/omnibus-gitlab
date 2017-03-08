@@ -1,0 +1,6 @@
+<% [node['gitlab']['high-availability']['mountpoint']].flatten.compact.each do |mountpoint| %>
+if ! mountpoint -q '<%= mountpoint %>' ; then
+  echo 'Refusing to start because <%= mountpoint %> is not a mountpoint.'
+  exit 1
+fi
+<% end %>
