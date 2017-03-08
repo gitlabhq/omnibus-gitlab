@@ -12,7 +12,6 @@ RUN apt-get update -q \
       apt-transport-https \
       vim \
       nano \
-      git-annex \
     && rm -rf /var/lib/apt/lists/* \
     && sed 's/session\s*required\s*pam_loginuid.so/session optional pam_loginuid.so/g' -i /etc/pam.d/sshd
 
