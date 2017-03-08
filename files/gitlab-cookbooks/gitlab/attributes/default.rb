@@ -328,7 +328,6 @@ default['gitlab']['gitlab-rails']['repositories_storages'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data/repositories" }
 }
 default['gitlab']['gitlab-shell']['http_settings'] = nil
-default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
