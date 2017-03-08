@@ -25,3 +25,8 @@ auth:
     service: container_registry
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>
+
+<% if @notifications %>
+notifications:
+  endpoints: <%= @notifications.to_json %>
+<% end %>
