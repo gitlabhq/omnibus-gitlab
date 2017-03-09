@@ -81,7 +81,7 @@ if [ "$1" = "--ee" ] ; then
 fi
 
 
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -n "$4" ]; then
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
   warn "Usage: $0 GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF"
   exit 1
 fi
