@@ -12,6 +12,23 @@ are not the same (O Schwede) 62b5cc
 - Update curl to 7.53.0
 - Setup RSA private key for OpenID Connect
 - Update directory configuration structure to allow multiple settings per data directory
+- Remove mailroom configuration template, reuse the default from GitLab 5511b246
+- Remove deprecated standalone GitLab CI configuration ad126ba
+- Expose configuration for HSTS which was removed from GitLab Rails f5919f
+- Expose KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to Prometheus for k8s 8a4e7d
+- Disable Nginx caching except for assets 6c1cdd8
+- Update Prometheus to 1.5.2 0edcf58
+- Update GitLab Monitor to 1.2.0 0edcf58
+- Update Postgres-exporter to 0.1.2 0edcf58
+- Update Redis-exporter to 0.10.7 0edcf58
+- Expose apiCiLongPollingDuration for GitLab Workhorse f88ae849
+- Add storage class configuration option for S3 backups (Jon Keys) 1e4a6ac4
+- Generate RSA private key for doorkeeper-openid_connect (Markus Koller) a447c41
+- Change default syntax for git_data_dirs ee831d9
+- Remove deprecated git-annex configuration 527b942
+- Expose GitLab Workhorse configuration file 835144e
+- Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
+- EE: Add a tracking database for GitLab Geo f1077d10
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76
