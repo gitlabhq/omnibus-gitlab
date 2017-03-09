@@ -26,6 +26,7 @@ are not the same (O Schwede) c4e83c5
 - Change default syntax for git_data_dirs ee831d9
 - Remove deprecated git-annex configuration 527b942
 - Expose GitLab Workhorse configuration file 835144e
+- Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
 - EE: Add a tracking database for GitLab Geo f1077d10
 
 8.17.3
