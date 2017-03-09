@@ -205,6 +205,20 @@ production: &base
       cron: <%= @geo_bulk_notify_worker_cron %>
     <% end %>
 
+    # GitLab Geo backfill worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_backfill_worker_cron.nil? %>
+    geo_backfill_worker:
+      cron: <%= @geo_backfill_worker_cron %>
+    <% end %>
+
+    # GitLab Geo file download worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_download_dispatch_worker_cron.nil? %>
+    geo_download_dispatch_worker:
+      cron: <%= @geo_download_dispatch_worker_cron %>
+    <% end %>
+
   #
   # 2. GitLab CI settings
   # ==========================
