@@ -95,7 +95,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 1. Commit the new version to the release branch:
 
     ```shell
-    git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_VERSION
+    git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
     git commit
     ```
 

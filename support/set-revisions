@@ -27,7 +27,7 @@ main() {
   set_source_and_version $gitlab_rails_ref VERSION
   set_source_and_version $gitlab_shell_ref GITLAB_SHELL_VERSION
   set_source_and_version $gitlab_workhorse_ref GITLAB_WORKHORSE_VERSION
-  set_source_and_version $gitaly_ref GITALY_VERSION
+  set_source_and_version $gitaly_ref GITALY_SERVER_VERSION
 }
 
 # set_source_and_version foo_ref file
