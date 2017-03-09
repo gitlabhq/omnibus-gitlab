@@ -102,6 +102,7 @@ describe 'gitlab::gitlab-rails' do
 
   context 'creating gitlab.yml' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
+
     context 'mattermost settings' do
       context 'mattermost is configured' do
         it 'exposes the mattermost host' do
@@ -137,6 +138,42 @@ describe 'gitlab::gitlab-rails' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
               with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
           end
+        end
+      end
+    end
+
+    context 'GitLab Geo settings' do
+      context 'when backfill worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path).
+            with_content(/geo_backfill_worker:\s+cron:\s+1 2 3 4 5/)
+        end
+      end
+
+      context 'when backfill worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('geo_backfill_worker')
+          }
+        end
+      end
+
+      context 'when file download worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_download_dispatch_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path).
+            with_content(/geo_download_dispatch_worker:\s+cron:\s+1 2 3 4 5/)
+        end
+      end
+
+      context 'when file download worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('geo_download_dispatch_worker')
+          }
         end
       end
     end
