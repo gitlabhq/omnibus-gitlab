@@ -15,21 +15,15 @@
 #
 
 name 'logrotate'
-default_version '3.8.5'
+version = Gitlab::Version.new(name, 'r3-8-5')
+default_version version.print(prepend_version=false)
 
 license 'GPL-2.0'
 license_file 'COPYING'
 
 dependency 'popt'
 
-version_path = version.tr('.', '-')
-source url: "https://github.com/logrotate/logrotate/archive/r#{version_path}.tar.gz"
-
-version '3.8.5' do
-  source md5: '5078b2b10d7669a6b97cbb632730c994'
-end
-
-relative_path "logrotate-r#{version_path}"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
