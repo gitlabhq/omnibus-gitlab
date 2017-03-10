@@ -23,7 +23,7 @@ def repo_string
       version = 'xenial'
     end
   when 'debian', 'raspbian'
-    os = ohai['platform']
+    os = verify_platform
     case ohai['platform_version']
     when /^7\./
       version = 'wheezy'
@@ -54,6 +54,19 @@ def ohai
   @ohai ||= Ohai::System.new.tap do |oh|
     oh.all_plugins(['platform'])
   end.data
+end
+
+def verify_platform
+  # We have no way to verify whether we are building for RPI
+  # as the builder machine will report that it is Debian.
+  # Since we don't officially release  arm packages, it should be safe to
+  # assume that if we are on a Debian machine on arm, we are building for
+  # Raspbian.
+  if ohai['kernel']['machine'] =~ /armv/
+    'raspbian'
+  else
+    ohai['platform']
+  end
 end
 
 case ARGV.first
