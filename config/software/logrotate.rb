@@ -16,7 +16,7 @@
 
 name 'logrotate'
 version = Gitlab::Version.new(name, 'r3-8-5')
-default_version version.print(prepend_version=false)
+default_version version.print(false)
 
 license 'GPL-2.0'
 license_file 'COPYING'
