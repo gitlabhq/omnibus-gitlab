@@ -99,6 +99,7 @@ describe 'nginx' do
 
     it 'properly sets the default nginx proxy headers' do
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+        "Host" => "$http_host_with_default",
         "Upgrade" => "$http_upgrade",
         "Connection" => "$connection_upgrade"
       }))
@@ -137,6 +138,7 @@ describe 'nginx' do
 
     it 'properly sets the default nginx proxy ssl forward headers' do
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+        "Host" => "$http_host_with_default",
         "X-Forwarded-Proto" => "https",
         "X-Forwarded-Ssl" => "on",
         "Upgrade" => "$http_upgrade",

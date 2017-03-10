@@ -29,6 +29,7 @@ are not the same (O Schwede) 62b5cc
 - Expose GitLab Workhorse configuration file 835144e
 - Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
 - EE: Add a tracking database for GitLab Geo f1077d10
+- Provide default Host header for requests that do not have one
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76
