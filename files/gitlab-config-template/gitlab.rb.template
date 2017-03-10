@@ -57,7 +57,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_issues'] = true
 # gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
 # gitlab_rails['gitlab_default_projects_features_wiki'] = true
-# gitlab_rails['gitlab_default_projects_features_snippets'] = false
+# gitlab_rails['gitlab_default_projects_features_snippets'] = true
 # gitlab_rails['gitlab_default_projects_features_builds'] = true
 # gitlab_rails['gitlab_default_projects_features_container_registry'] = true
 
