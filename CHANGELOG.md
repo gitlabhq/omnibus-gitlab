@@ -28,6 +28,7 @@ are not the same (O Schwede) 62b5cc
 - Remove deprecated git-annex configuration 527b942
 - Expose GitLab Workhorse configuration file 835144e
 - Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
+- Rename stuck_ci_builds_worker to stuck_ci_jobs_worker in the gitlab_rails config
 - EE: Add a tracking database for GitLab Geo f1077d10
 - Provide default Host header for requests that do not have one
 
