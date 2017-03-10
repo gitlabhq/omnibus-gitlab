@@ -164,8 +164,8 @@ production: &base
   # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
   cron_jobs:
     # Flag stuck CI builds as failed
-    stuck_ci_builds_worker:
-      cron: <%= @stuck_ci_builds_worker_cron %>
+    stuck_ci_jobs_worker:
+      cron: <%= @stuck_ci_jobs_worker_cron %>
     # Remove expired build artifacts
     expire_build_artifacts_worker:
       cron: <%= @expire_build_artifacts_worker_cron %>
