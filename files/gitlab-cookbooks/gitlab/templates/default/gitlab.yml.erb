@@ -349,6 +349,18 @@ production: &base
   shared:
     path: <%= @shared_path %>
 
+<% if @gitaly_socket %>
+  # Gitaly settings
+  gitaly:
+    socket_path: <%= @gitaly_socket %>
+    # The socket_path setting is optional and obsolete. When this is set
+    # GitLab assumes it can reach a Gitaly services via a Unix socket at
+    # this path. When this is commented out GitLab will not use Gitaly.
+    #
+    # This setting is obsolete because we expect it to be moved under
+    # repositories/storages in GitLab 9.1.
+    #
+<% end %>
 
   #
   # 4. Advanced settings
