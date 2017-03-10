@@ -80,7 +80,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! synchronizations, etc.
 ###! Docs: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
 ###!       https://docs.gitlab.com/ce/ci/yaml/README.html#artifacts:expire_in
-# gitlab_rails['stuck_ci_builds_worker_cron'] = "0 0 * * *"
+# gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
