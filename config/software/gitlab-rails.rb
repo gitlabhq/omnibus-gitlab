@@ -79,7 +79,7 @@ build do
 
     # Workaround for bug where grpc puts it's extension in the wrong folder when compiled
     # See: https://github.com/grpc/grpc/issues/9998
-    grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env).stdout
+    grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env).stdout.strip
     lib_dir = File.join(grpc_path, 'src/ruby/lib/grpc')
     bin_dir = File.join(grpc_path, 'src/ruby/bin/grpc')
     if File.exist?(File.join(bin_dir, 'grpc_c.so')) && !File.exist?(File.join(lib_dir, 'grpc_c.so'))
