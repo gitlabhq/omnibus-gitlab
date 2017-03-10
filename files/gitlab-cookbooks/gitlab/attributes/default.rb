@@ -109,6 +109,8 @@ default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_backfill_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
 default['gitlab']['gitlab-rails']['incoming_email_address'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_host'] = nil
@@ -193,6 +195,7 @@ default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
 default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
+default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
@@ -321,13 +324,12 @@ default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-she
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
 default['gitlab']['gitlab-shell']['git_data_directories'] = {
-  "default" => "/var/opt/gitlab/git-data"
+  "default" => { "path" => "/var/opt/gitlab/git-data" }
 }
 default['gitlab']['gitlab-rails']['repositories_storages'] = {
-  "default" => "/var/opt/gitlab/git-data/repositories"
+  "default" => { "path" => "/var/opt/gitlab/git-data/repositories" }
 }
 default['gitlab']['gitlab-shell']['http_settings'] = nil
-default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
@@ -495,6 +497,7 @@ default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
 default['gitlab']['gitlab-workhorse']['api_limit'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_duration'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_limit'] = nil
+default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'HOME' => node['gitlab']['user']['home']
@@ -539,6 +542,15 @@ default['gitlab']['registry']['rootcertbundle'] = nil
 default['gitlab']['registry']['storage_delete_enabled'] = nil
 default['gitlab']['registry']['storage'] = nil
 default['gitlab']['registry']['debug_addr'] = nil
+
+####
+# Registry Notifications
+####
+default['gitlab']['registry']['notifications'] = nil
+default['gitlab']['registry']['default_notifications_timeout'] = "500ms"
+default['gitlab']['registry']['default_notifications_threshold'] = 5
+default['gitlab']['registry']['default_notifications_backoff'] = "1s"
+default['gitlab']['registry']['default_notifications_headers'] = {}
 
 ####
 # Nginx
@@ -598,6 +610,9 @@ default['gitlab']['nginx']['real_ip_trusted_addresses'] = [] # Each entry create
 default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
+# HSTS
+default['gitlab']['nginx']['hsts']['max_age'] = 31536000
+default['gitlab']['nginx']['hsts']['include_subdomains'] = false
 
 ###
 # Nginx status

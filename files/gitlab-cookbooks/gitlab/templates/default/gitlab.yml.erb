@@ -205,6 +205,20 @@ production: &base
       cron: <%= @geo_bulk_notify_worker_cron %>
     <% end %>
 
+    # GitLab Geo backfill worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_backfill_worker_cron.nil? %>
+    geo_backfill_worker:
+      cron: <%= @geo_backfill_worker_cron %>
+    <% end %>
+
+    # GitLab Geo file download worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_download_dispatch_worker_cron.nil? %>
+    geo_download_dispatch_worker:
+      cron: <%= @geo_download_dispatch_worker_cron %>
+    <% end %>
+
   #
   # 2. GitLab CI settings
   # ==========================
@@ -368,6 +382,7 @@ production: &base
       remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
       encryption: <%= @backup_encryption %>
+      storage_class: <%= @backup_storage_class %>
 
   ## GitLab Shell settings
   gitlab_shell:
@@ -380,11 +395,6 @@ production: &base
 
     # If you use non-standard ssh port you need to specify it
     ssh_port: <%= @gitlab_shell_ssh_port %>
-
-    # git-annex support (EE only)
-    # If this setting is set to true, the same setting in config.yml of
-    # gitlab-shell needs to be set to true
-    git_annex_enabled: <%= @git_annex_enabled %>
 
   ## Git settings
   # CAUTION!
@@ -437,7 +447,7 @@ test:
     path: tmp/tests/gitlab-satellites/
   repositories:
     storages:
-      default: tmp/tests/repositories/
+      default: { "path": "tmp/tests/repositories/" }
   gitlab_shell:
     path: tmp/tests/gitlab-shell/
     hooks_path: tmp/tests/gitlab-shell/hooks/

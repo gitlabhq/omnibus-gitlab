@@ -42,6 +42,10 @@ server {
   <% if @ssl_client_certificate %>
   ssl_client_certificate <%= @ssl_client_certificate%>;
   <% end %>
+  <% if @ssl_verify_client %>
+  ssl_verify_client <%= @ssl_verify_client%>;
+  ssl_verify_depth <%= @ssl_verify_depth%>;
+  <% end %>
 
   ssl_ciphers '<%= @ssl_ciphers %>';
   ssl_protocols  <%= @ssl_protocols %>;

@@ -102,33 +102,47 @@ server {
   set_real_ip_from <%= trusted_address %>;
   <% end %>
 
+  ## HSTS Config
+  ## https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+  <% unless @hsts['max_age'].nil? || @hsts['max_age'] <= 0 %>
+  add_header Strict-Transport-Security "max-age=<%= @hsts['max_age'] -%>
+<% if @hsts['include_subdomains'] %>; includeSubdomains<% end %>";
+  <% end %>
+
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
 
+  ## If you use HTTPS make sure you disable gzip compression
+  ## to be safe against BREACH attack.
+  <%= 'gzip off;' if @https %>
+
+  ## https://github.com/gitlabhq/gitlabhq/issues/694
+  ## Some requests take more than 30 seconds.
+  proxy_read_timeout      <%= @proxy_read_timeout %>;
+  proxy_connect_timeout   <%= @proxy_connect_timeout %>;
+  proxy_redirect          off;
+  <% if @custom_error_pages %>
+  proxy_intercept_errors on;
+  <% end %>
+  proxy_http_version 1.1;
+
+  <% @proxy_set_headers.each do |header| %>
+  <% next if header[1].nil? %>
+  proxy_set_header <%= header[0] %> <%= header[1] %>;
+  <% end %>
+
   <% path = @relative_url ? @relative_url : "/" %>
   location <%= path %> {
-    ## If you use HTTPS make sure you disable gzip compression
-    ## to be safe against BREACH attack.
-    <%= 'gzip off;' if @https %>
-
-    ## https://github.com/gitlabhq/gitlabhq/issues/694
-    ## Some requests take more than 30 seconds.
-    proxy_read_timeout      <%= @proxy_read_timeout %>;
-    proxy_connect_timeout   <%= @proxy_connect_timeout %>;
-    proxy_redirect          off;
-    <% if @custom_error_pages %>
-    proxy_intercept_errors on;
-    <% end %>
-    proxy_http_version 1.1;
-
-    <% @proxy_set_headers.each do |header| %>
-    <% next if header[1].nil? %>
-    proxy_set_header <%= header[0] %> <%= header[1] %>;
-    <% end %>
-
-    proxy_pass http://gitlab-workhorse;
+    proxy_cache off;
+    proxy_pass  http://gitlab-workhorse;
   }
+
+  location <%= File.join(path, 'assets') %> {
+    proxy_cache <%= @proxy_cache %>;
+    proxy_pass  http://gitlab-workhorse;
+  }
+
   <% errors = Nginx.parse_error_pages %>
   <% errors.each do |err, location| %>
   error_page <%= err %> /<%= location %>;

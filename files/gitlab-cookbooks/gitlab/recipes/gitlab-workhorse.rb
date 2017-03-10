@@ -56,3 +56,17 @@ file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
   notifies :restart, "service[gitlab-workhorse]"
 end
+
+redis_url = RedisHelper.new(node).redis_url(true).to_s
+redis_password = node['gitlab']['gitlab-rails']['redis_password']
+redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
+redis_sentinel_master = node['gitlab']['redis']['master_name']
+redis_sentinel_master_password = node['gitlab']['redis']['master_password']
+config_file_path = File.join(working_dir, "config.toml")
+
+template config_file_path do
+  source "workhorse-config.toml.erb"
+  owner account_helper.gitlab_user
+  variables(:redis_url => redis_url, :password => redis_password, :sentinels => redis_sentinels, :sentinel_master => redis_sentinel_master, :master_password => redis_sentinel_master_password)
+  notifies :restart, "service[gitlab-workhorse]"
+end

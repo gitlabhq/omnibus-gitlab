@@ -296,6 +296,23 @@ you forget this step. For more information, see:
 * http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
 * https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
 
+## Setting HTTP Strict Transport Security
+
+By default GitLab enables Strict Transport Security which informs browsers that
+they should only contact the website using HTTPS. When browser visits
+GitLab instance even once it will remember to no longer attempt insecure connections
+even when user is explicitly entering `http://` url. Such url will be automatically redirected by the browser to `https://` variant.
+
+```ruby
+nginx['hsts']['max_age'] = 31536000
+nginx['hsts']['include_subdomains'] = false
+```
+
+By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS. 
+Setting `max_age` to 0 will disable this feature. For more information see:
+
+* https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+
 ## Using custom SSL ciphers
 
 By default GitLab is using SSL ciphers that are combination of testing on gitlab.com and various best practices contributed by the GitLab community.

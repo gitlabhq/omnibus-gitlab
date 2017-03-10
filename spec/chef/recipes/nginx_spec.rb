@@ -2,6 +2,7 @@ require 'chef_helper'
 
 describe 'gitlab::nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::nginx') }
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
 
   before :each do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -20,13 +21,12 @@ describe 'gitlab::nginx' do
         'message' => 'TEST MESSAGE'
       }
     }
-    @http_conf = '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
   end
 
   it 'creates a custom error_page entry when a custom error is defined' do
     allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors})
 
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
     }
   end
@@ -40,7 +40,7 @@ describe 'gitlab::nginx' do
   end
 
   it 'creates a standard error_page entry when no custom error is defined' do
-    expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf').with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("error_page 404 /404.html;")
     }
   end
@@ -48,13 +48,13 @@ describe 'gitlab::nginx' do
   it 'enables the proxy_intercept_errors option when custom_error_pages is defined' do
     chef_run.node.normal['gitlab']['nginx']['custom_error_pages'] = @nginx_errors
     chef_run.converge('gitlab::nginx')
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).to include("proxy_intercept_errors on")
     }
   end
 
   it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
-    expect(chef_run).to render_file(@http_conf).with_content { |content|
+    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
       expect(content).not_to include("proxy_intercept_errors")
     }
   end
@@ -62,6 +62,9 @@ end
 
 describe 'nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  subject { chef_run }
+
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
   let(:nginx_status_config) { /include \/var\/opt\/gitlab\/nginx\/conf\/nginx-status\.conf;/ }
 
   let(:basic_nginx_headers) do
@@ -72,6 +75,13 @@ describe 'nginx' do
       "X-Forwarded-For" => "$proxy_add_x_forwarded_for"
     }
   end
+
+  let(:http_conf) {{
+    "gitlab" => "/var/opt/gitlab/nginx/conf/gitlab-http.conf",
+    "mattermost" => "/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf",
+    "registry" => "/var/opt/gitlab/nginx/conf/gitlab-registry.conf",
+    "pages" => "/var/opt/gitlab/nginx/conf/gitlab-pages.conf",
+  }}
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -166,6 +176,102 @@ describe 'nginx' do
       expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to include(expect_headers)
     end
+
+    it 'does not set ssl_client_certificate by default' do
+      http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).not_to include("ssl_client_certificate")
+        }
+      end
+    end
+
+    it 'does not set ssl_verify_client by default' do
+      http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).not_to include("ssl_verify_client")
+        }
+      end
+    end
+
+    it 'does not set ssl_verify_depth by default' do
+      http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).not_to include("ssl_verify_depth")
+        }
+      end
+    end
+
+    it 'sets the default ssl_verify_depth when ssl_verify_client is defined' do
+      verify_client = { "ssl_verify_client" => "on" }
+      stub_gitlab_rb(
+        "nginx" => verify_client,
+        "mattermost_nginx" => verify_client,
+        "registry_nginx" => verify_client,
+        "pages_nginx" => verify_client,
+      )
+      chef_run.converge('gitlab::default')
+      http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).to include("ssl_verify_depth 1")
+        }
+      end
+    end
+
+    it 'applies nginx verify client settings to gitlab-http' do
+      stub_gitlab_rb("nginx" => {
+        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-http-ca.crt",
+        "ssl_verify_client" => "on",
+        "ssl_verify_depth" => "2",
+      })
+      chef_run.converge('gitlab::default')
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-http-ca.crt")
+        expect(content).to include("ssl_verify_client on")
+        expect(content).to include("ssl_verify_depth 2")
+      }
+    end
+
+    it 'applies mattermost_nginx verify client settings to gitlab-mattermost-http' do
+      stub_gitlab_rb("mattermost_nginx" => {
+        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-mattermost-http-ca.crt",
+        "ssl_verify_client" => "on",
+        "ssl_verify_depth" => "3",
+      })
+      chef_run.converge('gitlab::default')
+      expect(chef_run).to render_file(http_conf['mattermost']).with_content { |content|
+        expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-mattermost-http-ca.crt")
+        expect(content).to include("ssl_verify_client on")
+        expect(content).to include("ssl_verify_depth 3")
+      }
+    end
+
+    it 'applies registry_nginx verify client settings to gitlab-registry' do
+      stub_gitlab_rb("registry_nginx" => {
+        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-registry-ca.crt",
+        "ssl_verify_client" => "off",
+        "ssl_verify_depth" => "5",
+      })
+      chef_run.converge('gitlab::default')
+      expect(chef_run).to render_file(http_conf['registry']).with_content { |content|
+        expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-registry-ca.crt")
+        expect(content).to include("ssl_verify_client off")
+        expect(content).to include("ssl_verify_depth 5")
+      }
+    end
+
+    it 'applies pages_nginx verify client settings to gitlab-pages' do
+      stub_gitlab_rb("pages_nginx" => {
+        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-pages-ca.crt",
+        "ssl_verify_client" => "on",
+        "ssl_verify_depth" => "7",
+      })
+      chef_run.converge('gitlab::default')
+      expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
+        expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-pages-ca.crt")
+        expect(content).to include("ssl_verify_client on")
+        expect(content).to include("ssl_verify_depth 7")
+      }
+    end
   end
 
   context 'when is enabled' do
@@ -221,6 +327,31 @@ describe 'nginx' do
       stub_gitlab_rb("nginx" => { "enable" => false })
       expect(chef_run).to_not render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
     end
+  end
+
+  context 'when hsts is disabled' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { max_age: 0 } })
+    end
+    it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security/) }
+  end
+
+  it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000";/) }
+
+  context 'when include_subdomains is enabled' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { include_subdomains: true } })
+    end
+
+    it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";/) }
+  end
+
+  context 'when max-age is set to 10' do
+    before do
+      stub_gitlab_rb(nginx: { hsts: { max_age: 10 } })
+    end
+
+    it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
   end
 
   def nginx_headers(additional_headers)

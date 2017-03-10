@@ -35,5 +35,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     -prometheusListenAddr <%= node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %> \
     <% end %>
     -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
+    <% if node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %>
+    -apiCiLongPollingDuration <%= node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %> \
+    <% end %>
+    -config config.toml \
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.

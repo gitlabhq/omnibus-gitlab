@@ -245,11 +245,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   backups**
 # gitlab_rails['backup_encryption'] = 'AES256'
 
+###! **Specifies Amazon S3 storage class to use for backups. Valid values
+###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and 
+###!   'REDUCED_REDUNDANCY'**
+# gitlab_rails['backup_storage_class'] = 'STANDARD'
+
 ### For setting up different data storing directory
 ###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ###! **If you want to use a single non-default directory to store git data use a
 ###!   path that doesn't contain symlinks.**
-# git_data_dirs({"default" => "/var/opt/gitlab/git-data"})
+# git_data_dirs({ "default" => { "path" => "/var/opt/gitlab/git-data" } })
 
 ### For storing GitLab application uploads, eg. LFS objects, build artifacts
 ###! Docs: https://docs.gitlab.com/ce/development/shared_files.html
@@ -419,6 +424,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 
+### Registry notifications endpoints
+# registry['notifications'] = [
+#   {
+#     'name' => 'test_endpoint',
+#     'url' => 'https://gitlab.example.com/notify2',
+#     'timeout' => '500ms',
+#     'threshold' => 5,
+#     'backoff' => '1s',
+#     'headers' => {
+#       "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+#     }
+#   }
+# ]
+### Default registry notifications
+# registry['default_notifications_timeout'] = "500ms"
+# registry['default_notifications_threshold'] = 5
+# registry['default_notifications_backoff'] = "1s"
+# registry['default_notifications_headers'] = {}
+
+
 
 ################################################################################
 ## GitLab Workhorse
@@ -454,6 +479,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! duration after which we timeout requests if they sit too long in the queue
 # gitlab_workhorse['api_queue_duration'] = "30s"
+
+##! Long polling duration for job requesting for runners
+# gitlab_workhorse['api_ci_long_polling_duration'] = "60s"
 
 # gitlab_workhorse['env'] = {
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
@@ -527,14 +555,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['http_settings'] = { user: 'username', password: 'password', ca_file: '/etc/ssl/cert.pem', ca_path: '/etc/pki/tls/certs', self_signed_cert: false}
 # gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 # gitlab_shell['custom_hooks_dir'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks"
-
-##! **If enabled, git-annex needs to be installed on the server where GitLab is
-##!   setup.
-##!   For Debian and Ubuntu systems this can be done with:
-##!   `sudo apt-get install git-annex`.
-##!   For CentOS:
-##!   `sudo yum install epel-release && sudo yum install git-annex`**
-# gitlab_shell['git_annex_enabled'] = false
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
@@ -727,6 +747,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
 # nginx['listen_addresses'] = ['*', '[::]']
 
+##! **Defaults to forcing web browsers to always communicate using only HTTPS**
+##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
+# nginx['hsts']['max_age'] = 31536000
+# nginx['hsts']['include_subdomains'] = false
+
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
 # nginx['listen_port'] = nil
@@ -890,6 +915,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pages_nginx['redirect_http_to_https_port'] = 80
 # pages_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 # pages_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+# pages_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
+# pages_nginx['ssl_verify_client'] = "off"
+# pages_nginx['ssl_verify_depth'] = "1"
 # pages_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # pages_nginx['ssl_prefer_server_ciphers'] = "on"
 
@@ -1098,6 +1126,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost_nginx['redirect_http_to_https_port'] = 80
 # mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 # mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
+# mattermost_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
+# mattermost_nginx['ssl_verify_client'] = "off"
+# mattermost_nginx['ssl_verify_depth'] = "1"
 # mattermost_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
 # mattermost_nginx['ssl_prefer_server_ciphers'] = "on"
 
@@ -1166,6 +1197,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry_nginx['ssl_prefer_server_ciphers'] = "on"
 # registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
 # registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
+# registry_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
+# registry_nginx['ssl_verify_client'] = "off"
+# registry_nginx['ssl_verify_depth'] = "1"
 
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
@@ -1292,6 +1326,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 #
 # gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
+# gitlab_rails['geo_backfill_worker_cron'] = "*/5 * * * *"
+# gitlab_rails['geo_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
 
