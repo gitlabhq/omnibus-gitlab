@@ -28,6 +28,9 @@ redis-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
 gitaly:
   remote: 'git@dev.gitlab.org:gitlab/gitaly'
+logrotate:
+  remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
+
 
 # For local builds, use the public repositories given below. They are mirrord
 # from the internal repositories that GitLab uses.
@@ -62,3 +65,5 @@ gitaly:
   #remote: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
 #gitaly:
   #remote: 'https://gitlab.com/gitlab-org/gitaly'
+#logrotate:
+  #remote: "https://gitlab.com/omnibus-mirror/logrotate.git"
