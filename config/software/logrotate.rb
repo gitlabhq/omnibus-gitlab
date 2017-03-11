@@ -15,21 +15,15 @@
 #
 
 name 'logrotate'
-default_version '3.8.5'
+version = Gitlab::Version.new(name, 'r3-8-5')
+default_version version.print(false)
 
 license 'GPL-2.0'
 license_file 'COPYING'
 
 dependency 'popt'
 
-source url: "https://github.com/logrotate/logrotate/archive/#{version}.tar.gz"
-
-version '3.8.5' do
-  source md5: 'd3c13e2a963a55c584cfaa83e96b173d',
-         url: "https://fedorahosted.org/releases/l/o/logrotate/logrotate-#{version}.tar.gz"
-end
-
-relative_path "logrotate-#{version}"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
