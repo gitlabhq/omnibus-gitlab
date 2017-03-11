@@ -26,6 +26,8 @@ postgres-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/postgres_exporter.git"
 redis-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
+gitaly:
+  remote: 'git@dev.gitlab.org:gitlab/gitaly'
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
 
@@ -61,5 +63,7 @@ logrotate:
   #remote: "https://gitlab.com/omnibus-mirror/postgres_exporter.git"
 #redis-exporter:
   #remote: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
+#gitaly:
+  #remote: 'https://gitlab.com/gitlab-org/gitaly'
 #logrotate:
   #remote: "https://gitlab.com/omnibus-mirror/logrotate.git"

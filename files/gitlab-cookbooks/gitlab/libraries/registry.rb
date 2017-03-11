@@ -24,6 +24,8 @@ module Registry
       parse_registry_external_url
       # before this gitlab_rails[registry_path] needs to be parsed
       parse_registry
+      # parsing the registry notifications
+      parse_registry_notifications
     end
 
     def parse_registry_external_url
@@ -81,8 +83,31 @@ module Registry
       Gitlab['registry']['storage']['delete'] ||= {'enabled' => Gitlab['registry']['storage_delete_enabled']}
     end
 
+    def parse_registry_notifications
+      return unless Gitlab['registry']['notifications']
+
+      user_configuration = Gitlab['registry']
+      gitlab_configuration = Gitlab['node']['gitlab']['registry']
+
+      # Use the registry defaults configured by the user but use the defaults from gitlab if they were not set
+      user_configuration['default_notifications_timeout'] ||=  gitlab_configuration['default_notifications_timeout']
+      user_configuration['default_notifications_threshold'] ||=  gitlab_configuration['default_notifications_threshold']
+      user_configuration['default_notifications_backoff'] ||=  gitlab_configuration['default_notifications_backoff']
+      user_configuration['default_notifications_headers'] ||=  gitlab_configuration['default_notifications_headers']
+
+      Gitlab['registry']['notifications'].each do |endpoint|
+        # Get the values from default if they are not set
+        endpoint['timeout'] ||= user_configuration['default_notifications_timeout']
+        endpoint['threshold'] ||= user_configuration['default_notifications_threshold']
+        endpoint['backoff'] ||= user_configuration['default_notifications_backoff']
+
+        # And merge the default headers with the ones specific to this endpoint
+        endpoint['headers'] = user_configuration['default_notifications_headers'].merge(endpoint['headers'] || {})
+      end
+    end
+
     def generate_registry_keypair
-      key = OpenSSL::PKey::RSA.new(4096)
+      key = SecretsHelper.generate_rsa(4096)
       subject = "/C=USA/O=GitLab/OU=Container/CN=Registry"
 
       cert = OpenSSL::X509::Certificate.new

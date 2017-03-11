@@ -498,6 +498,16 @@ server {
       return 418;
   }
 
+  # For protocol upgrades from HTTP/1.0 to HTTP/1.1 we need to provide Host header if its missing
+  if ($http_host = "") {
+  # use one of values defined in server_name
+    set $http_host_with_default "git.example.com";
+  }
+
+  if ($http_host != "") {
+    set $http_host_with_default $http_host;
+  }
+
   location @gitlab-workhorse {
 
     ## https://github.com/gitlabhq/gitlabhq/issues/694
@@ -509,7 +519,7 @@ server {
     # Do not buffer Git HTTP responses
     proxy_buffering off;
 
-    proxy_set_header    Host                $http_host;
+    proxy_set_header    Host                $http_host_with_default;
     proxy_set_header    X-Real-IP           $remote_addr;
     proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
     proxy_set_header    X-Forwarded-Proto   $scheme;

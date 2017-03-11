@@ -4,11 +4,35 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 9.0
-- Remove Bitbucket from templates as it does not require special settings anymore
+
+- Remove Bitbucket from templates as it does not require special settings anymore b87ae1f
 - Fix the issue that prevents registry from starting when user and group
-are not the same (O Schwede) 62b5cc
+are not the same (O Schwede) c4e83c5
+- Add configuration options for GitLab container registry to support notification endpoints to template (Alexandre Gomes) ef9b0f255
+- Update curl to 7.53.0 38aea7179
+- Update directory configuration structure to allow multiple settings per data directory
+- Remove mailroom configuration template, reuse the default from GitLab 5511b246
+- Remove deprecated standalone GitLab CI configuration ad126ba
+- Expose configuration for HSTS which was removed from GitLab Rails f5919f
+- Expose KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to Prometheus for k8s 8a4e7d
+- Disable Nginx caching except for assets 6c1cdd8
+- Update Prometheus to 1.5.2 0edcf58
+- Update GitLab Monitor to 1.2.0 0edcf58
+- Update Postgres-exporter to 0.1.2 0edcf58
+- Update Redis-exporter to 0.10.7 0edcf58
+- Expose apiCiLongPollingDuration for GitLab Workhorse f88ae849
+- Add storage class configuration option for S3 backups (Jon Keys) 1e4a6ac4
+- Generate RSA private key for doorkeeper-openid_connect (Markus Koller) a447c41
+- Change default syntax for git_data_dirs ee831d9
+- Remove deprecated git-annex configuration 527b942
+- Expose GitLab Workhorse configuration file 835144e
+- Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
+- Rename stuck_ci_builds_worker to stuck_ci_jobs_worker in the gitlab_rails config
+- EE: Add a tracking database for GitLab Geo f1077d10
+- Provide default Host header for requests that do not have one
 
 8.17.3
+
 - Changing call to create tmp dir as the database user 7b54cd76
 
 8.17.0

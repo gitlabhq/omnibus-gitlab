@@ -101,7 +101,7 @@ default['gitlab']['gitlab-rails']['gitlab_issue_closing_pattern'] = nil
 default['gitlab']['gitlab-rails']['gitlab_repository_downloads_path'] = nil
 default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
-default['gitlab']['gitlab-rails']['stuck_ci_builds_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['stuck_ci_jobs_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['expire_build_artifacts_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
@@ -109,6 +109,8 @@ default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_backfill_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
 default['gitlab']['gitlab-rails']['incoming_email_address'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_host'] = nil
@@ -193,6 +195,7 @@ default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
 default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
+default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['gitlab_shell_path'] = "#{node['package']['install-dir']}/embedded/service/gitlab-shell/"
@@ -321,13 +324,12 @@ default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-she
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
 default['gitlab']['gitlab-shell']['git_data_directories'] = {
-  "default" => "/var/opt/gitlab/git-data"
+  "default" => { "path" => "/var/opt/gitlab/git-data" }
 }
 default['gitlab']['gitlab-rails']['repositories_storages'] = {
-  "default" => "/var/opt/gitlab/git-data/repositories"
+  "default" => { "path" => "/var/opt/gitlab/git-data/repositories" }
 }
 default['gitlab']['gitlab-shell']['http_settings'] = nil
-default['gitlab']['gitlab-shell']['git_annex_enabled'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
@@ -542,6 +544,15 @@ default['gitlab']['registry']['storage'] = nil
 default['gitlab']['registry']['debug_addr'] = nil
 
 ####
+# Registry Notifications
+####
+default['gitlab']['registry']['notifications'] = nil
+default['gitlab']['registry']['default_notifications_timeout'] = "500ms"
+default['gitlab']['registry']['default_notifications_threshold'] = 5
+default['gitlab']['registry']['default_notifications_backoff'] = "1s"
+default['gitlab']['registry']['default_notifications_headers'] = {}
+
+####
 # Nginx
 ####
 default['gitlab']['nginx']['enable'] = true
@@ -583,7 +594,7 @@ default['gitlab']['nginx']['custom_nginx_config'] = nil
 default['gitlab']['nginx']['proxy_read_timeout'] = 3600
 default['gitlab']['nginx']['proxy_connect_timeout'] = 300
 default['gitlab']['nginx']['proxy_set_headers'] = {
-  "Host" => "$http_host",
+  "Host" => "$http_host_with_default",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
   "Upgrade" => "$http_upgrade",
@@ -875,6 +886,7 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 # Prometheus server
 ####
 default['gitlab']['prometheus']['enable'] = false
+default['gitlab']['prometheus']['monitor_kubernetes'] = false
 default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
 default['gitlab']['prometheus']['uid'] = nil
 default['gitlab']['prometheus']['gid'] = nil
