@@ -29,7 +29,8 @@ are not the same (O Schwede) c4e83c5
 - Add option to verify clients with an SSL certificate to Mattermost, Registry and GitLab Pages
 - Rename stuck_ci_builds_worker to stuck_ci_jobs_worker in the gitlab_rails config
 - EE: Add a tracking database for GitLab Geo f1077d10
-- Provide default Host header for requests that do not have one
+- Provide default Host header for requests that do not have one 14f77c
+- Gitaly service on by default
 
 8.17.3
 

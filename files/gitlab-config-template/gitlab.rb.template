@@ -246,7 +246,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256'
 
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
-###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and 
+###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and
 ###!   'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
@@ -1313,6 +1313,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # gitlab_monitor['listen_address'] = 'localhost:9168'
+
+################################################################################
+## Gitaly
+##! Docs:
+################################################################################
+
+
+# gitaly['enable'] = false
+# gitaly['dir'] = "/var/opt/gitlab/gitaly"
+# gitaly['log_directory'] = "/var/log/gitlab/gitaly"
+# gitaly['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
+# gitaly['env_directory'] = "/opt/gitlab/etc/gitaly"
+# gitaly['env'] = {
+#  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
+#  'HOME' => '/var/opt/gitlab',
+#  'GITALY_SOCKET_PATH' => "/var/opt/gitlab/gitaly/gitaly.socket"
+# }
+
 
 
 ################################################################################
