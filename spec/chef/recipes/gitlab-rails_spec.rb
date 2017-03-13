@@ -102,6 +102,26 @@ describe 'gitlab::gitlab-rails' do
 
   context 'creating gitlab.yml' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
+    let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
+
+    # NOTE: Test if we pass proper notifications to other resources
+    context 'rails cache management' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).
+          and_return(false)
+      end
+
+      it 'should notify rails cache clear resource' do
+        expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
+      end
+
+      it 'should not notify rails cache clear resource if disabled' do
+        stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+
+        expect(gitlab_yml).not_to notify(
+          'execute[clear the gitlab-rails cache]')
+      end
+    end
 
     context 'mattermost settings' do
       context 'mattermost is configured' do
@@ -125,7 +145,7 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the mattermost host' do
           stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
 
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+          expect(chef_run).to render_file(gitlab_yml_path).
             with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
         end
 
@@ -135,7 +155,7 @@ describe 'gitlab::gitlab-rails' do
                            mattermost_external_url: 'http://my.url.com',
                            gitlab_rails: { mattermost_host: 'http://do.not/setme' })
 
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml').
+            expect(chef_run).to render_file(gitlab_yml_path).
               with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
           end
         end
@@ -178,24 +198,29 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'creating gitlab.yml' do
-      let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
-      # NOTE: Test if we pass proper notifications to other resources
-      context 'rails cache management' do
-        before do
-          allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).
-            and_return(false)
+    context 'Gitaly settings' do
+      context 'by default' do
+        it 'sets the path to socket' do
+          expect(chef_run).to render_file(gitlab_yml_path).
+            with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
         end
 
-        it 'should notify rails cache clear resource' do
-          expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
+        context 'when socket path is changed' do
+
+          it 'sets the path to socket' do
+            stub_gitlab_rb(gitaly: { env: { 'GITALY_SOCKET_PATH' => '/tmp/socket'} })
+            expect(chef_run).to render_file(gitlab_yml_path).
+              with_content(%r{gitaly:\s+socket_path:\s+/tmp/socket})
+          end
         end
+      end
 
-        it 'should not notify rails cache clear resource if disabled' do
-          stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
+      context 'when gitaly is disabled' do
+        it 'sets the mattermost host' do
+          stub_gitlab_rb(gitaly: { enable: false })
 
-          expect(gitlab_yml).not_to notify(
-            'execute[clear the gitlab-rails cache]')
+          expect(chef_run).to_not render_file(gitlab_yml_path).
+            with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
         end
       end
     end
@@ -220,7 +245,6 @@ describe 'gitlab::gitlab-rails' do
 
         it_behaves_like "enabled gitlab-rails env", "IAM", 'CUSTOMVAR'
         it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
-
         it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
       end
     end
@@ -238,7 +262,7 @@ describe 'gitlab::gitlab-rails' do
     let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
     before do
-      %w(unicorn sidekiq gitlab-workhorse postgresql redis nginx logrotate).map { |svc| stub_should_notify?(svc, true)}
+      %w(unicorn sidekiq gitlab-workhorse postgresql redis nginx logrotate gitaly).map { |svc| stub_should_notify?(svc, true)}
     end
 
     describe 'database.yml' do

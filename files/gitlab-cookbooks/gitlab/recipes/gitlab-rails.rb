@@ -226,6 +226,8 @@ templatesymlink "Create a relative_url.rb and create a symlink to Rails root" do
   end
 end
 
+gitaly_socket =  node['gitlab']['gitaly']['env']['GITALY_SOCKET_PATH'] if node['gitlab']['gitaly']['enable']
+
 templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   link_to File.join(gitlab_rails_etc_dir, "gitlab.yml")
@@ -244,7 +246,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
       mattermost_host: mattermost_host,
-      mattermost_enabled: node['gitlab']['mattermost']['enable'] || !mattermost_host.nil?
+      mattermost_enabled: node['gitlab']['mattermost']['enable'] || !mattermost_host.nil?,
+      gitaly_socket: gitaly_socket
     )
   )
   restarts dependent_services
