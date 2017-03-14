@@ -1242,7 +1242,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/
 ################################################################################
 
-# prometheus['enable'] = false
+# prometheus['enable'] = true
 # prometheus['monitor_kubernetes'] = false
 # prometheus['username'] = 'gitlab-prometheus'
 # prometheus['uid'] = nil
@@ -1267,7 +1267,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
 ################################################################################
 
-# node_exporter['enable'] = false
+# node_exporter['enable'] = true
 # node_exporter['home'] = '/var/opt/gitlab/node-exporter'
 # node_exporter['log_directory'] = '/var/log/gitlab/node-exporter'
 # node_exporter['flags'] = {
@@ -1282,7 +1282,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/redis_exporter.html
 ################################################################################
 
-# redis_exporter['enable'] = false
+# redis_exporter['enable'] = true
 # redis_exporter['log_directory'] = "/var/log/gitlab/redis-exporter"
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
@@ -1292,27 +1292,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis_exporter['listen_address'] = 'localhost:9121'
 
 ################################################################################
-## Postgres exporter
+## Prometheus Postgres exporter
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/postgres_exporter.html
 ################################################################################
 
-# postgres_exporter['enable'] = false
+# postgres_exporter['enable'] = true
 # postgres_exporter['log_directory'] = "/var/log/gitlab/postgres-exporter"
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
 
 ################################################################################
-## Gitlab monitor
+## Prometheus Gitlab monitor
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_monitor_exporter.html
 ################################################################################
 
 
-# gitlab_monitor['enable'] = false
+# gitlab_monitor['enable'] = true
 # gitlab_monitor['log_directory'] = "/var/log/gitlab/gitlab-monitor"
 # gitlab_monitor['home'] = "/var/opt/gitlab/gitlab-monitor"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # gitlab_monitor['listen_address'] = 'localhost:9168'
+
+# To completely disable prometheus, and all of it's exporters, set to false
+# prometheus_monitoring['enable'] = true
 
 ################################################################################
 ## Gitaly
@@ -1330,7 +1333,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'HOME' => '/var/opt/gitlab',
 #  'GITALY_SOCKET_PATH' => "/var/opt/gitlab/gitaly/gitaly.socket"
 # }
-
 
 
 ################################################################################
