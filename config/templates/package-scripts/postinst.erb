@@ -107,24 +107,6 @@ print_welcome()
   notify
 }
 
-print_upgrade_info()
-{
-  local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null || true)
-  local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
-  if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
-  then
-    echo
-    notify "GitLab now ships with a newer version of PostgreSQL (${new_version}), and will be used"
-    notify "as the default in the next major release. To upgrade, RUN THE FOLLOWING COMMANDS:"
-    echo
-    echo "sudo gitlab-ctl pg-upgrade"
-    echo
-    notify "For more details, please see:"
-    notify "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
-    notify
-  fi
-}
-
 check_if_ec2()
 {
   if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` = 'ec2' ]; then
@@ -149,6 +131,34 @@ get_ec2_hostname()
   fqdn=$(/opt/gitlab/embedded/bin/curl -s http://169.254.169.254/latest/meta-data/public-hostname)
   if [ -n "${fqdn}" ]; then
     EXTERNAL_URL="http://${fqdn}"
+  fi
+}
+
+print_upgrade_info()
+{
+  # As of 9.0, we're updating PostgreSQL by default.
+  # But, if /etc/gitlab/skip-auto-migrations exists we won't do anything.
+  # Here we'll warn users with out of date databases.
+  if [ -e "/etc/gitlab/skip-auto-migrations" ]
+  then
+    local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null || true)
+    local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
+    if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
+    then
+      echo
+      notify "WARNING:"
+      notify "GitLab now ships with a newer version of PostgreSQL (${new_version}) by default"
+      notify "We did not upgrade since /etc/gitlab/skip-automigrations exists"
+      notify "To manuall upgrade, RUN THE FOLLOWING COMMAND:"
+      echo
+      echo "sudo gitlab-ctl pg-upgrade"
+      echo
+      notify "In the future, we will be removing old versions of PostgreSQL from the omnibus package"
+      notify "Hosts which have not upgraded to the new version will begin to fail then"
+      notify "For more details, please see:"
+      notify "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
+      notify
+    fi
   fi
 }
 

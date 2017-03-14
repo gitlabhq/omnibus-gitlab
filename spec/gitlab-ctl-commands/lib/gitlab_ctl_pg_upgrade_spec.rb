@@ -5,8 +5,12 @@ $: << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 require 'gitlab_ctl'
 
 describe GitlabCtl::PgUpgrade do
-  before(:all) do
-    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fakedatadir')
+  before(:each) do
+    @fake_default_dir = '/fake/data/postgresql/data'
+    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data')
+    allow(File).to receive(:realpath).with(
+      @fake_default_dir
+    ).and_return(@fake_default_dir)
   end
 
   it 'should create a new object' do
@@ -26,11 +30,13 @@ describe GitlabCtl::PgUpgrade do
   end
 
   it 'should set tmp_data_dir to data_dir if tmp_dir is nil on initialization' do
-    fake_default_dir = '/fake/data/postgresql/data'
-    allow(File).to receive(:realpath).with(
-      fake_default_dir
-    ).and_return(fake_default_dir)
-    db_worker = GitlabCtl::PgUpgrade.new('/fake/base', '/fake/data')
-    expect(db_worker.tmp_data_dir).to eq(db_worker.data_dir)
+    expect(@dbw.tmp_data_dir).to eq(@dbw.data_dir)
+  end
+
+  it 'should return the appropriate data version' do
+    allow(File).to receive(:read).with(
+      File.join(@fake_default_dir, 'PG_VERSION')
+    ).and_return("99.99\n")
+    expect(@dbw.fetch_data_version).to eq('99.99')
   end
 end
