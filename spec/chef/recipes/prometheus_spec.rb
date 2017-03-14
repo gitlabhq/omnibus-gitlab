@@ -103,4 +103,30 @@ describe 'gitlab::prometheus' do
         .with_content(/scrape_interval: 11/)
     end
   end
+
+  context 'with default configuration' do
+    it 'prometheus and all exporters are enabled' do
+      expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be true
+      Prometheus.services.each do |service|
+        expect(chef_run).to include_recipe("gitlab::#{service}")
+      end
+    end
+
+    context 'with user provided settings' do
+      before do
+        stub_gitlab_rb(
+          prometheus_monitoring: {
+            enable: false
+          }
+        )
+      end
+
+      it 'disables prometheus and all exporters' do
+        expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be false
+        Prometheus.services.each do |service|
+          expect(chef_run).to include_recipe("gitlab::#{service}_disable")
+        end
+      end
+    end
+  end
 end
