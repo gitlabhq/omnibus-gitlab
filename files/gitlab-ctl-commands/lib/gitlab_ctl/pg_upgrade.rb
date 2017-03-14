@@ -50,5 +50,9 @@ module GitlabCtl
     def fetch_server_encoding
       run_query('SHOW SERVER_ENCODING')
     end
+
+    def fetch_data_version
+      File.read("#{data_dir}/PG_VERSION").strip
+    end
   end
 end
