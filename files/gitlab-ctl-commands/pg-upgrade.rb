@@ -79,7 +79,6 @@ add_command_under_category 'pg-upgrade', 'database',
       get_all_services.member?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
-    exit! 1
   end
 
   unless progress_message("Checking if we've upgraded already") do
@@ -89,12 +88,11 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 0
   end
 
-  unless progress_message('Checking version of running PostgreSQL') do
-    running_version == default_version
+  if progress_message('Checking if we already upgraded') do
+    running_version == upgrade_version
   end
-    log "psql reports #{running_version}, we're expecting " \
-    "#{default_version}, cannot proceed"
-    exit! 1
+    $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
+    exit! 0
   end
 
   if progress_message(
@@ -108,17 +106,10 @@ add_command_under_category 'pg-upgrade', 'database',
     exit! 1
   end
 
-  unless progress_message('Checking if existing PostgreSQL instances needs to be upgraded') do
-    running_version != upgrade_version
-  end
-    log "Already at #{upgrade_version}, nothing to do"
-    exit! 0
-  end
-
   unless progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
   ) do
-    Dir.glob("#{INST_DIR}/#{default_version}/bin/*").each do |bin_file|
+    Dir.glob("#{INST_DIR}/#{running_version}/bin/*").each do |bin_file|
       link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
