@@ -620,6 +620,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_line_prefix'] = "%a"
 # postgresql['track_activity_query_size'] = "1024"
 # postgresql['shared_preload_libraries'] = nil
+# postgresql['dynamic_shared_memory_type'] = nil
 
 ### Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"

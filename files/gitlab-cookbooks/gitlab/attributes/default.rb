@@ -402,6 +402,7 @@ default['gitlab']['postgresql']['statement_timeout'] = "0"
 default['gitlab']['postgresql']['log_line_prefix'] = nil
 default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 default['gitlab']['postgresql']['shared_preload_libraries'] = nil
+default['gitlab']['postgresql']['dynamic_shared_memory_type'] = nil
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
