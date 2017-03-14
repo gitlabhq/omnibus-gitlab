@@ -31,7 +31,8 @@ are not the same (O Schwede) 62b5cc
 - Rename stuck_ci_builds_worker to stuck_ci_jobs_worker in the gitlab_rails config
 - EE: Add a tracking database for GitLab Geo f1077d10
 - Provide default Host header for requests that do not have one 14f77c
-- Gitaly service on by default
+- Gitaly service on by default 350dea
+- Update Nginx to 1.10.3
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76
