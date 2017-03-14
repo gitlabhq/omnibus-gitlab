@@ -90,6 +90,7 @@ module Gitlab
   git_data_dirs Mash.new
   gitaly Mash.new
   geo_postgresql Mash.new
+  prometheus_monitoring Mash.new
 
   # roles
   redis_sentinel_role Mash.new
@@ -194,6 +195,7 @@ module Gitlab
         "gitlab_monitor",
         "sentinel",
         "geo_postgresql",
+        'prometheus_monitoring'
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]

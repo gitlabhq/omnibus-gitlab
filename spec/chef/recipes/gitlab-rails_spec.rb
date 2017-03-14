@@ -5,6 +5,7 @@ describe 'gitlab::gitlab-rails' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(File).to receive(:symlink?).and_call_original
   end
 
   context 'when manage-storage-directories is disabled' do
@@ -262,7 +263,21 @@ describe 'gitlab::gitlab-rails' do
     let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
     before do
-      %w(unicorn sidekiq gitlab-workhorse postgresql redis nginx logrotate gitaly).map { |svc| stub_should_notify?(svc, true)}
+      %w(
+        gitlab-monitor
+        gitlab-workhorse
+        logrotate
+        nginx
+        node-exporter
+        postgres-exporter
+        postgresql
+        prometheus
+        redis
+        redis-exporter
+        sidekiq
+        unicorn
+        gitaly
+      ).map { |svc| stub_should_notify?(svc, true) }
     end
 
     describe 'database.yml' do

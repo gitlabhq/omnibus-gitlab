@@ -17,6 +17,16 @@
 
 module Prometheus
   class << self
+    def services
+      %w(
+        prometheus
+        node-exporter
+        redis-exporter
+        postgres-exporter
+        gitlab-monitor
+      )
+    end
+
     def parse_variables
       parse_flags
     end

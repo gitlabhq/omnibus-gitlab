@@ -77,17 +77,35 @@ end
 describe OmnibusHelper do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
+  let(:services) {
+    %w(
+      unicorn
+      sidekiq
+      gitlab-workhorse
+      postgresql
+      redis
+      nginx
+      logrotate
+      prometheus
+      node-exporter
+      redis-exporter
+      postgres-exporter
+      gitlab-monitor
+      gitaly
+    ).freeze
+  }
+
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'service is currently enabled, bootstrapped and is running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(true)
       end
-      stub_gitlab_rb(nginx: {enable: true})
+      stub_gitlab_rb(nginx: { enable: true })
     end
 
     it 'notifies the service' do
@@ -97,11 +115,11 @@ describe OmnibusHelper do
 
   context 'disabling a service that was bootstrapped and is currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(true)
       end
-     stub_gitlab_rb(nginx: {enable: false})
+      stub_gitlab_rb(nginx: { enable: false })
     end
 
     it 'does not notify the service' do
@@ -111,11 +129,11 @@ describe OmnibusHelper do
 
   context 'enabling a service that was bootstrapped but not currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(false)
       end
-     stub_gitlab_rb(nginx: {enable: true})
+      stub_gitlab_rb(nginx: { enable: true })
     end
 
     it 'does not notify the service' do
@@ -125,11 +143,11 @@ describe OmnibusHelper do
 
   context 'disabling a service that was bootstrapped but not currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(false)
       end
-     stub_gitlab_rb(nginx: {enable: false})
+      stub_gitlab_rb(nginx: { enable: false })
     end
 
     it 'does not notify the service' do
@@ -139,11 +157,11 @@ describe OmnibusHelper do
 
   context 'enabling a service that was disabled but currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(true)
       end
-     stub_gitlab_rb(nginx: {enable: true})
+      stub_gitlab_rb(nginx: { enable: true })
     end
 
     it 'does not notify the service' do
@@ -153,11 +171,11 @@ describe OmnibusHelper do
 
   context 'disabling a service that was disabled but currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(true)
       end
-     stub_gitlab_rb(nginx: {enable: false})
+      stub_gitlab_rb(nginx: { enable: false })
     end
 
     it 'does not notify the service' do
@@ -167,11 +185,11 @@ describe OmnibusHelper do
 
   context 'enabling a service that was disabled and not currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(false)
       end
-     stub_gitlab_rb(nginx: {enable: true})
+      stub_gitlab_rb(nginx: { enable: true })
     end
 
     it 'does not notify the service' do
@@ -181,11 +199,11 @@ describe OmnibusHelper do
 
   context 'disabling a service that was disabled and not currently running' do
     before do
-      ["unicorn", "sidekiq", "gitlab-workhorse", "postgresql", "redis", "nginx", "logrotate", "gitaly"].each do |service|
+      services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
         allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/embedded/bin/sv status #{service}").and_return(false)
       end
-     stub_gitlab_rb(nginx: {enable: false})
+      stub_gitlab_rb(nginx: { enable: false })
     end
 
     it 'does not notify the service' do
