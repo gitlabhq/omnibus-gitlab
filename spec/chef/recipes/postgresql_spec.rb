@@ -227,6 +227,28 @@ describe 'postgresql 9.6' do
       ).with_content(/synchronous_standby_names = ''/)
     end
 
+    it 'does not set dynamic_shared_memory_type by default' do
+      expect(chef_run).not_to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/^dynamic_shared_memory_type = /)
+    end
+
+    context 'when dynamic_shared_memory_type is none' do
+      before do
+        stub_gitlab_rb({
+          postgresql: {
+            dynamic_shared_memory_type: 'none'
+          }
+        })
+      end
+
+      it 'sets the dynamic_shared_memory_type' do
+        expect(chef_run).to render_file(
+          '/var/opt/gitlab/postgresql/data/postgresql.conf'
+        ).with_content(/^dynamic_shared_memory_type = none/)
+      end
+    end
+
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')

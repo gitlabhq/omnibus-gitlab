@@ -203,6 +203,18 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+### Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
+By default, Postgres will try to detect the shared memory type to use. If you don't
+have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
+To fix this, you can disable postgresql's shared memory detection. Set the 
+following value in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+postgresql['dynamic_shared_memory_type'] = 'none'
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
 ### Reconfigure complains about the GLIBC version
 
 ```
