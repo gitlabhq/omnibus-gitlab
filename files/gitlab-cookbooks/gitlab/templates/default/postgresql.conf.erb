@@ -187,6 +187,12 @@ max_wal_size = <%= @max_wal_size %>
 
 # The number of replication slots to reserve.
 max_replication_slots = <%= @max_replication_slots %>
+
+<%# If we don't specify a value for dynamic_shared_memory_type it autodetects, which we want. %>
+<%# So only add a value if one is specified %>
+<% if @dynamic_shared_memory_type %>
+dynamic_shared_memory_type = <%= @dynamic_shared_memory_type %>
+<% end %>
 <% end %>
 checkpoint_timeout = <%= @checkpoint_timeout %>		# range 30s-1h, default 5min
 checkpoint_completion_target = <%= @checkpoint_completion_target %>	# checkpoint target duration, 0.0 - 1.0, default 0.5
