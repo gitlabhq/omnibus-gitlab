@@ -45,11 +45,6 @@ module GitlabShell
         Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, data_directory|
           [name, { 'path' => File.join(data_directory['path'], 'repositories') }]
         end]
-
-      # Important: keep the satellites.path setting until GitLab 9.0 at
-      # least. This setting is fed to 'rm -rf' in
-      # db/migrate/20151023144219_remove_satellites.rb
-      Gitlab['gitlab_rails']['satellites_path'] ||= File.join(Gitlab['gitlab_shell']['git_data_directories']['default']['path'], "gitlab-satellites")
     end
 
     def parse_auth_file

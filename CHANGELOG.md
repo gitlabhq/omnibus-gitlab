@@ -31,7 +31,8 @@ are not the same (O Schwede) c4e83c5
 - EE: Add a tracking database for GitLab Geo f1077d10
 - Provide default Host header for requests that do not have one 14f77c
 - Gitaly service on by default 350dea
-- Update Nginx to 1.10.3
+- Update Nginx to 1.10.3 211a89fb6
+- Remove deprecated satellites configuration
 
 8.17.3
 
