@@ -1,5 +1,4 @@
 class PackageRepository
-
   def target
     return ENV['PACKAGECLOUD_REPO'] if ENV['PACKAGECLOUD_REPO'] && !ENV['PACKAGECLOUD_REPO'].empty?
     return ENV['RASPBERRY_REPO'] if ENV['RASPBERRY_REPO'] && !ENV['RASPBERRY_REPO'].empty?
@@ -14,9 +13,7 @@ class PackageRepository
   end
 
   def repository_for_rc
-    if system('git describe | grep -q -e rc')
-      "unstable"
-    end
+    "unstable" if system('git describe | grep -q -e rc')
   end
 
   def repository_for_edition

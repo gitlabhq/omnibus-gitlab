@@ -2,7 +2,6 @@ require 'yaml'
 
 module Gitlab
   class Version
-
     def initialize(software_name, version = nil)
       @software = software_name
 
@@ -37,10 +36,8 @@ module Gitlab
         "GITLAB_WORKHORSE_VERSION"
       when "gitlab-pages"
         "GITLAB_PAGES_VERSION"
-      when 'gitaly'
-        'GITALY_SERVER_VERSION'
-      else
-        nil
+      when "gitaly"
+        "GITALY_SERVER_VERSION"
       end
     end
 
@@ -48,7 +45,7 @@ module Gitlab
       if @read_version.include?('.pre') || @read_version == "master"
         "master"
       elsif @read_version.start_with?('buildfrombranch:')
-        @read_version.gsub(/^buildfrombranch:/,'').strip
+        @read_version.gsub(/^buildfrombranch:/, '').strip
       elsif @read_version.empty?
         nil
       else

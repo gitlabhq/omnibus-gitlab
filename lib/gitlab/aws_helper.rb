@@ -1,7 +1,6 @@
 require 'aws-sdk'
 
 class AWSHelper
-
   VERSION_REGEX = /\A(?<version>\d+\.\d+\.\d+)-?(?<type>(ee|ce))?\z/
 
   def initialize(version, type)
@@ -42,7 +41,7 @@ class AWSHelper
     # AWS API mandatorily requires a region to be set for every client. Hence
     # using us-east-1 as a default region
     client = ec2_client('us-east-1')
-    client.describe_regions.regions.map { |region| region.region_name }
+    client.describe_regions.regions.map(&:region_name)
   end
 
   def category
@@ -56,18 +55,17 @@ class AWSHelper
   end
 
   def delete_smaller(region)
-    client = ec2_client(region)
+    # client = ec2_client(region)
     images = list_images(region)
     images.each do |image|
-      if Gem::Version.new(image_version(image)) < Gem::Version.new(@version)
-        puts "\t#{image.image_id} - #{image.name} - #{image_version(image)}"
+      next unless Gem::Version.new(image_version(image)) < Gem::Version.new(@version)
+      puts "\t#{image.image_id} - #{image.name} - #{image_version(image)}"
 
-        # Commenting out actual deregister code temporarily for first few releases
-        #client.deregister_image({
-        #  dry_run: false,
-        #  image_id: image.image_id
-        #})
-      end
+      # Commenting out actual deregister code temporarily for first few releases
+      # client.deregister_image({
+      #  dry_run: false,
+      #  image_id: image.image_id
+      # })
     end
   end
 

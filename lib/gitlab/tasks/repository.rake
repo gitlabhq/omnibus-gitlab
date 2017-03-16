@@ -12,6 +12,6 @@ namespace :repository do
   end
 
   task :gitlab_edition do
-    puts  PackageRepository.new.repository_for_edition
+    puts PackageRepository.new.repository_for_edition
   end
 end

@@ -6,7 +6,7 @@ class DockerOperations
     containers = Docker::Container.all
     containers.each do |container|
       begin
-        container.delete(:v => true)
+        container.delete(v: true)
       rescue
         next
       end
@@ -15,7 +15,7 @@ class DockerOperations
 
   def self.remove_dangling_images
     puts 'Removing dangling images'
-    dangling_images = Docker::Image.all(:filters => '{"dangling":[ "true" ]}')
+    dangling_images = Docker::Image.all(filters: '{"dangling":[ "true" ]}')
     dangling_images.each do |image|
       begin
         image.remove
@@ -29,12 +29,11 @@ class DockerOperations
     puts 'Removing existing images'
     images = Docker::Image.all
     images.each do |image|
-      if image.info["RepoTags"][0].include?(release_package)
-        begin
-          image.remove(:force => true)
-        rescue
-          next
-        end
+      next unless image.info["RepoTags"][0].include?(release_package)
+      begin
+        image.remove(force: true)
+      rescue
+        next
       end
     end
   end
