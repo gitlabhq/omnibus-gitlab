@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 require_relative "lib/gitlab/version"
 
-omnibus_gem_version =  Gitlab::Version.new('omnibus', "omnibus-5-4-0")
+omnibus_gem_version = Gitlab::Version.new('omnibus', "omnibus-5-4-0")
 
 gem 'omnibus', git: omnibus_gem_version.remote, branch: omnibus_gem_version.print(false)
 gem 'ohai'
@@ -15,6 +15,7 @@ gem 'knapsack'
 gem 'rubocop'
 gem 'docker-api'
 gem 'aws-sdk'
+gem 'rubocop-rspec'
 
 group :test do
   gem 'byebug'

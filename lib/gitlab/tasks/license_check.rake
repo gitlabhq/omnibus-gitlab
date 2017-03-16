@@ -1,21 +1,16 @@
 desc "Check licenses of bundled softwares"
 namespace :license do
   task :check do
-
     good = Regexp.union([/^MIT/, /^LGPL/, /^Apache/, /^Ruby/, /^BSD-[23]{1}/, /^ISO/])
     bad = Regexp.union([/^GPL/, /^AGPL/])
 
     puts "###### BEGIN LICENSE CHECK ######"
 
     install_dir = File.open('config/projects/gitlab.rb').grep(/install_dir *'/)[0].match(/install_dir[ \t]*'(?<install_dir>.*)'/)['install_dir']
+    raise StandardError, "Unable to retrieve install_dir, thus unable to check #{install_dir}/LICENSE" unless File.exist?(install_dir)
+    puts "Checking licenses via the contents of '#{install_dir}/LICENSE'"
 
-    if File.exists?(install_dir)
-      puts "Checking licenses via the contents of '#{install_dir}/LICENSE'"
-    else
-      raise StandardError, "Unable to retrieve install_dir, thus unable to check #{install_dir}/LICENSE"
-    end
-
-    unless File.exists?("#{install_dir}/LICENSE")
+    unless File.exist?("#{install_dir}/LICENSE")
 
       raise StandardError, "Unable to open #{install_dir}/LICENSE"
     end

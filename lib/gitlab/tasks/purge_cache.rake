@@ -14,9 +14,9 @@ namespace :build do
       # Clear out old packages to prevent uploading them a second time to S3
       "/var/cache/omnibus/pkg"
     ].each do |path|
-      FileUtils.rm_r path, :force => true, :secure => true
+      FileUtils.rm_r path, force: true, secure: true
     end
-    FileUtils.rm_r 'pkg', :force => true, :secure => true
+    FileUtils.rm_r 'pkg', force: true, secure: true
     FileUtils.mkdir_p 'pkg'
   end
 end

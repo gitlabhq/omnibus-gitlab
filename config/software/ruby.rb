@@ -88,7 +88,7 @@ elsif windows?
   env['CPPFLAGS'] << ' -DFD_SETSIZE=2048'
 else # including linux
   env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
-                      rhel? && platform_version.satisfies?('< 6.0')
+      rhel? && platform_version.satisfies?('< 6.0')
                      ' -O2 -g -pipe'
                    else
                      ' -O3 -g -pipe'
@@ -135,8 +135,8 @@ build do
   # in Ruby trunk and expected to be included in future point releases.
   # https://redmine.ruby-lang.org/issues/11602
   if rhel? &&
-     platform_version.satisfies?('< 6') &&
-     (version == '2.1.7' || version == '2.2.3')
+      platform_version.satisfies?('< 6') &&
+      (version == '2.1.7' || version == '2.2.3')
 
     patch source: 'ruby-fix-reserve-stack-segfault.patch', plevel: 1, env: patch_env
   end

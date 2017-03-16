@@ -1,7 +1,6 @@
 require_relative '../aws_helper.rb'
 
 namespace :aws do
-
   desc "Perform operations related to AWS AMI"
   task :process do
     content = File.read('VERSION').chomp
