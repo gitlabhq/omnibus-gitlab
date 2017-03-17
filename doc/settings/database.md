@@ -22,8 +22,8 @@ If you are planning to use MySQL/MariaDB, make sure to read the [MySQL special n
 
 ## Enabling PostgreSQL WAL (Write Ahead Log) Archiving
 
-By default WAL archiving of the packaged PostgreSQL is not enabled. Please consider the following when 
-seeking to enable WAL archiving: 
+By default WAL archiving of the packaged PostgreSQL is not enabled. Please consider the following when
+seeking to enable WAL archiving:
 
 - The WAL level needs to be 'replica' or higher (9.6+ options are `minimal`, `replica`, or `logical`)
 - Increasing the WAL level will increase the amount of storage consumed in regular operations
@@ -243,15 +243,18 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ## Upgrade packaged PostgreSQL server
 
-Currently Omnibus GitLab package runs PostgreSQL 9.2.18 by default.
-Version 9.6.1 is included as an option for users to manually upgrade.
-The next major release will ship with a newer PostgreSQL by default, at which
-point reconfigure will not be run until the database is upgraded so please
-plan ahead.
+**As of GitLab 9.0, PostgreSQL 9.6.1 is the default database version in GitLab.**
 
-A check is performed while installing/upgrading the GitLab omnibus package.
-If you're using the bundled PostgreSQL version, you should receive a notice on the
-command line if a newer version of PostgreSQL is available.
+If you're still running on 9.2.18, when you upgrade to GitLab 9.0, it will attempt to upgrade your installation.
+If there are any issues, it will automatically revert you to 9.2.18 and continue with the GitLab upgrade. If this
+occurs, please raise an issue at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab). And
+include any messages you may have received.
+
+If you need to postpone the database upgrade, or would rather run it separately, run the following before you upgrade GitLab:
+```
+sudo touch /etc/gitlab/skip-automigrations
+```
+Later,  you can follow these directions to upgrade to 9.6.1:
 
 **Note:**
 * Please fully read this section before running any commands.
@@ -297,6 +300,19 @@ This command performs the following steps:
 
 Once this step is complete, verify everything is working as expected.
 
+**Once you have verified that your GitLab instance is running correctly**,
+you can remove the old database with:
+
+```
+sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
+```
+
+## Downgrade packaged PostgreSQL server
+
+As of GitLab 9.0, the default version of PostgreSQL is 9.6.1, but 9.2.18 is still shipped in the package.
+
+### If you need to downgrade a previously upgraded database
+
 If you run into an issue, and wish to downgrade the version of PostgreSQL, run:
 
 ```
@@ -306,13 +322,28 @@ Please note:
 This will revert your database and data to what was there before you upgraded
 the database. Any changes you might have made since the upgrade will be lost.
 
-**Once you have verified that your GitLab instance is running correctly**,
-you can remove the old database with:
+### If you need to downgrade a fresh install of GitLab
+**Please note that PostgreSQL 9.2 is end of life in [September 2017](https://www.postgresql.org/support/versioning/) and will be removed from
+a future version of GitLab.**
 
 ```
-sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
+sudo gitlab-ctl revert-pg-upgrade
+sudo mv /var/opt/gitlab/postgresql/data{,.9.6.1}
+sudo gitlab-ctl reconfigure
 ```
 
+At this point the server should be using 9.2.18, you can copy a backup from another instance,
+and use `gitlab-rake` to restore
+
+```
+sudo gitlab-rake gitlab:backup:restore BACKUP=timestamp
+```
+
+If everything looks ok, remove the backup copy of the data directory we created:
+
+```
+sudo rm -rf /var/opt/gitlab/postgresql/data.9.6.1
+```
 
 ## Troubleshooting
 
