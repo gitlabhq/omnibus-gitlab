@@ -46,7 +46,7 @@ scrape_configs:
     - role: node
     relabel_configs:
     - action: labelmap
-    regex: __meta_kubernetes_node_label_(.+)
+      regex: __meta_kubernetes_node_label_(.+)
     metric_relabel_configs:
     - source_labels: [pod_name]
       target_label: environment
