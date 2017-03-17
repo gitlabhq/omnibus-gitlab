@@ -104,6 +104,21 @@ module Gitlab
   ].freeze
 
   class << self
+    def method_missing(method_name, *arguments)
+      # Give better message for NilClass errors
+      # If there are no arguements passed, this is a 'GET' call, and if
+      # there is no matching key in the configuration, then it has not been set (not even to nil)
+      # and we will output a nicer error above the exception
+      if arguments.length == 0 && !configuration.has_key?(method_name)
+        message = "Encountered unsupported config key '#{method_name}' in /etc/gitlab/gitlab.rb."
+        puts "\n  *ERROR*: #{message}\n"
+        Chef::Log.error(message)
+      end
+
+      # Parent method_missing takes care of setting values for missing methods
+      super
+    end
+
     # guards against creating secrets on non-bootstrap node
     def generate_secrets(node_name)
       SecretsHelper.read_gitlab_secrets
