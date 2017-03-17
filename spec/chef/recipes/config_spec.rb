@@ -21,6 +21,20 @@ describe 'gitlab::config' do
     end
   end
 
+  it 'ignores unsupported top level variables' do
+    Gitlab.instance_eval('abc="top-level"')
+
+    expect(node['gitlab']['abc']).to be_nil
+  end
+
+  it 'errors on unsupported nested variables' do
+    expect {
+      Gitlab.instance_eval('abc["def"]["hij"] = "top-level"')
+    }.to raise_error(NoMethodError).and(
+      output(/\*ERROR\*: Encountered unsupported config key/).to_stdout
+    )
+  end
+
   context 'with roles' do
     context 'when redis_sentinel_role is enabled' do
       before do
