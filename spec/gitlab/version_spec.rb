@@ -55,5 +55,23 @@ describe Gitlab::Version do
         expect(subject.print(false)).to eq("2.3.1")
       end
     end
+
+    context 'with a valid software name and a branch' do
+      let(:software) { 'ruby' }
+      let(:version) { 'my-feature-branch' }
+
+      it 'identifies the branch name correctly' do
+        expect(subject.print).to eq("my-feature-branch")
+      end
+    end
+
+    context 'with a valid software name and a sha' do
+      let(:software) { 'ruby' }
+      let(:version) { '0e413954de03e6a79219103ed897c1ff7bed7653' }
+
+      it 'identifies the SHA and doesn\'t append v' do
+        expect(subject.print).to eq("0e413954de03e6a79219103ed897c1ff7bed7653")
+      end
+    end
   end
 end
