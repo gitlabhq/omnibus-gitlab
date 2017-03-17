@@ -149,8 +149,8 @@ production: &base
     host: <%= @pages_host %>
     port: <%= @pages_port %>
     https: <%= @pages_https %>
-    external_http: <%= @pages_external_http %>
-    external_https: <%= @pages_external_https %>
+    external_http: <%= @pages_external_http.inspect %>
+    external_https: <%= @pages_external_https.inspect %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ce/customization/libravatar.html
