@@ -1115,7 +1115,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['webrtc_gateway_stun_uri'] = nil
 # mattermost['webrtc_gateway_turn_uri'] = nil
 # mattermost['webrtc_gateway_turn_username'] = nil
-# mattermost['webrtc_gateway_turn_shared_key'] = ni
+# mattermost['webrtc_gateway_turn_shared_key'] = nil
 
 ################################################################################
 ## Mattermost NGINX
