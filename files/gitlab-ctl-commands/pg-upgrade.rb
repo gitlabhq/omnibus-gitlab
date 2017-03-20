@@ -81,8 +81,6 @@ add_command_under_category 'pg-upgrade', 'database',
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
   end
 
-  unless progress_message("Checking if we've upgraded already") do
-    running_version != upgrade_version
   end
     log "Already running #{upgrade_version}, nothing to do"
     exit! 0

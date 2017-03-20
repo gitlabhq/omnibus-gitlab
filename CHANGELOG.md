@@ -12,6 +12,7 @@ are not the same (O Schwede) 62b5cc
 - Update curl to 7.53.0
 - Setup RSA private key for OpenID Connect
 - Update directory configuration structure to allow multiple settings per data directory
+- Setup RSA private key for OpenID Connect
 - Remove mailroom configuration template, reuse the default from GitLab 5511b246
 - Remove deprecated standalone GitLab CI configuration ad126ba
 - Expose configuration for HSTS which was removed from GitLab Rails f5919f
@@ -33,6 +34,7 @@ are not the same (O Schwede) 62b5cc
 - Provide default Host header for requests that do not have one 14f77c
 - Gitaly service on by default 350dea
 - Update Nginx to 1.10.3
+- Added support for configuring hosts for database load balancing
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76

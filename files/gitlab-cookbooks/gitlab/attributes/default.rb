@@ -237,6 +237,7 @@ default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
 default['gitlab']['gitlab-rails']['db_pool'] = 10
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
+default['gitlab']['gitlab-rails']['db_load_balancing'] = { 'hosts' => [] }
 # Path to postgresql socket directory
 default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
@@ -889,7 +890,7 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 ####
 
 default['gitlab']['prometheus']['enable'] = true
-default['gitlab']['prometheus']['monitor_kubernetes'] = false
+default['gitlab']['prometheus']['monitor_kubernetes'] = true
 default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
 default['gitlab']['prometheus']['uid'] = nil
 default['gitlab']['prometheus']['gid'] = nil

@@ -1244,7 +1244,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # prometheus['enable'] = true
-# prometheus['monitor_kubernetes'] = false
+# prometheus['monitor_kubernetes'] = true
 # prometheus['username'] = 'gitlab-prometheus'
 # prometheus['uid'] = nil
 # prometheus['gid'] = nil
@@ -1458,3 +1458,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   "process_commit,post_receive",
 #   "gitlab_shell"
 # ]
+#
+
+################################################################################
+# Additional Database Settings (EE only)
+################################################################################
+# gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }

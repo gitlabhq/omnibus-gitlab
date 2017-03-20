@@ -294,6 +294,7 @@ describe 'gitlab::gitlab-rails' do
           )
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
         end
 
         it 'template triggers notifications' do
@@ -360,6 +361,16 @@ describe 'gitlab::gitlab-rails' do
             expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
             expect(templatesymlink_link).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
             expect(templatesymlink_link).to_not notify('service[nginx]').to(:restart).delayed
+          end
+        end
+
+        context 'when load balancers are specified' do
+          before do
+            stub_gitlab_rb(gitlab_rails: { db_load_balancing: { 'hosts' => ['primary.example.com', 'secondary.example.com']} })
+          end
+
+          it 'uses provided value in database.yml' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\["primary.example.com","secondary.example.com"\]}/)
           end
         end
       end
