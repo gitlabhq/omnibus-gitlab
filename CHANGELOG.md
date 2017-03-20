@@ -32,6 +32,7 @@ are not the same (O Schwede) c4e83c5
 - Provide default Host header for requests that do not have one 14f77c
 - Gitaly service on by default 350dea
 - Update Nginx to 1.10.3
+- Added support for configuring hosts for database load balancing
 
 8.17.3
 
