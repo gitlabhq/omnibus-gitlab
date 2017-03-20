@@ -34,6 +34,7 @@ are not the same (O Schwede) 62b5cc
 - Provide default Host header for requests that do not have one 14f77c
 - Gitaly service on by default 350dea
 - Update Nginx to 1.10.3
+- Added support for configuring hosts for database load balancing
 
 8.17.3
 - Changing call to create tmp dir as the database user 7b54cd76
