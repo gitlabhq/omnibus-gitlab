@@ -186,7 +186,10 @@ add_command_under_category 'pg-upgrade', 'database',
         "-D #{@db_worker.tmp_data_dir}.#{upgrade_version} " \
         "-B #{base_path}/embedded/bin"
       )
-    rescue GitlabCtl::Errors::ExecutionError
+    rescue GitlabCtl::Errors::ExecutionError => ee
+      log "Error upgrading the data to version #{upgrade_version}"
+      log "STDOUT: #{ee.stdout}"
+      log "STDERR: #{ee.stderr}"
       false
     end
   end
