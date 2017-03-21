@@ -233,6 +233,15 @@ describe 'postgresql 9.6' do
       ).with_content(/^dynamic_shared_memory_type = /)
     end
 
+    it 'sets the hot_standby_feedback setting' do
+      expect(chef_run.node['gitlab']['postgresql']['hot_standby_feedback'])
+        .to eq('off')
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/hot_standby_feedback = off/)
+    end
+
     context 'when dynamic_shared_memory_type is none' do
       before do
         stub_gitlab_rb({
