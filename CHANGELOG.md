@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.1
+
+- Allow configuration of prepared statement caching in Rails 169891c2
+
 9.0
 
 - Remove Bitbucket from templates as it does not require special settings anymore b87ae1f
@@ -11,7 +15,6 @@ are not the same (O Schwede) c4e83c5
 - Add configuration options for GitLab container registry to support notification endpoints to template (Alexandre Gomes) ef9b0f255
 - Update curl to 7.53.0 38aea7179
 - Update directory configuration structure to allow multiple settings per data directory
-<<<<<<< HEAD
 - Remove mailroom configuration template, reuse the default from GitLab 5511b246
 - Remove deprecated standalone GitLab CI configuration ad126ba
 - Expose configuration for HSTS which was removed from GitLab Rails f5919f
@@ -34,7 +37,6 @@ are not the same (O Schwede) c4e83c5
 - Gitaly service on by default 350dea
 - Update Nginx to 1.10.3
 - Added support for configuring hosts for database load balancing
-- Allow configuration of prepared statement caching in Rails
 
 8.17.3
 
