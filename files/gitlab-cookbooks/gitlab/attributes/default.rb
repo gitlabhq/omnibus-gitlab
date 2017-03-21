@@ -245,6 +245,8 @@ default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
 default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
+default['gitlab']['gitlab-rails']['db_prepared_statements'] = true
+default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil

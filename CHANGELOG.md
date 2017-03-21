@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.1
+
+- Allow configuration of prepared statement caching in Rails 169891c2
+
 9.0
 
 - Remove Bitbucket from templates as it does not require special settings anymore
