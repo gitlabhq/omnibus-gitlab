@@ -41,6 +41,14 @@ def repo_string
   when 'opensuse', 'opensuseleap'
     os = 'opensuse'
     version = ohai['platform_version']
+  when 'suse'
+    os = 'sles'
+    case ohai['platform_version']
+    when /^12\./
+      version = '12.2'
+    when /^11\./
+      version = '11.4'
+    end
   end
 
   if os == :unknown or version == :unknown

@@ -450,6 +450,20 @@ OpenSUSE 42.1:
     - cache
     - gems
   <<: *tag_build
+SLES 12:
+  stage: extra
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
+    - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
+  only:
+    - tags@gitlab/omnibus-gitlab
+  allow_failure: true
+  tags:
+  - SLES12
 
 Ubuntu 12.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:precise"
@@ -523,6 +537,20 @@ OpenSUSE 42.1 branch:
     - cache
     - gems
   <<: *branch_build
+SLES 12 branch:
+  stage: extra
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
+    - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
+  only:
+    - branches@gitlab/omnibus-gitlab
+  allow_failure: true
+  tags:
+  - SLES12
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_jessie"
