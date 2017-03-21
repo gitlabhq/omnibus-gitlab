@@ -117,3 +117,7 @@ and write `buildfrombranch:my-feature`
 This will trigger a build of the custom package, and if the build is
 successful, you will see a link at the bottom of the build trace with which you
 will be able to download the custom package.
+
+You can also change the verbosity of the build output using the CI build infrastructure.
+In CI/CD variables on the omnibus-gitlab project settings (on dev.gitlab.org), add
+`BUILD_LOG_LEVEL` variable with `debug` and run the pipeline.

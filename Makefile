@@ -19,7 +19,6 @@ DOCKER_TAG:=nightly
 else
 DOCKER_TAG:=$(RELEASE_VERSION)
 endif
-LOG_LEVEL="info"
 
 populate_cache:
 	bin/omnibus cache populate
@@ -31,9 +30,9 @@ pack_cache_bundle:
 	git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/${PLATFORM_DIR} --tags
 
 build:
-	bundle exec rake build[${LOG_LEVEL}]
+	bundle exec rake build:project
 
-# license_check should be run after `build` only. This is because otherwise 
+# license_check should be run after `build` only. This is because otherwise
 # entire package will be built everytime lib/gitlab/tasks/license_check.rake
 # is invoked. This will be troublesome while modifying the license_check task.
 license_check:

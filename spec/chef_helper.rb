@@ -1,7 +1,6 @@
 require 'chefspec'
 require 'ohai'
 require 'fantaskspec'
-
 require 'knapsack'
 
 Knapsack::Adapters::RSpecAdapter.bind if ENV['USE_KNAPSACK']

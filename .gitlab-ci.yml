@@ -117,11 +117,14 @@ update-knapsack:
     - make restore_cache_bundle
     - make test
     - make pack_cache_bundle
-    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
 .rpi_branch_template: &rpi_branch_build
   stage: extra
@@ -136,11 +139,15 @@ update-knapsack:
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
     - make pack_cache_bundle
-    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
   only:
   - branches@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  dependencies: []
 
 .tag_template: &tag_build
   stage: package
@@ -155,11 +162,14 @@ update-knapsack:
     - make restore_cache_bundle
     - make do_release
     - make pack_cache_bundle
-    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-builder
   only:
     - tags@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
 .rpi_tag_template: &rpi_tag_build
   stage: extra
@@ -174,11 +184,15 @@ update-knapsack:
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
     - make pack_cache_bundle
-    - rm -rf /var/cache/omnibus/pkg
   tags:
   - docker-rpi-builder
   only:
     - tags@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  dependencies: []
 
 Docker master:
   stage: extra
@@ -190,6 +204,7 @@ Docker master:
   - docker-build
   only:
     - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
 Docker:
   stage: extra
@@ -201,6 +216,7 @@ Docker:
   - docker-build
   only:
     - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 AWS:
   stage: cloud
@@ -212,6 +228,7 @@ AWS:
   - docker-build
   only:
     - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 # GitLab.com only
 Ubuntu 12.04 specs 0 3:
