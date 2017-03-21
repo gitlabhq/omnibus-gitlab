@@ -42,18 +42,18 @@ module Gitlab
     end
 
     def print(prepend_version = true)
-      return nil if @read_version.empty?
-      begin
-        Gem::Version.new(@read_version)
+      if @read_version.include?('.pre') || @read_version == "master"
+        "master"
+      elsif @read_version.start_with?('buildfrombranch:')
+        @read_version.gsub(/^buildfrombranch:/, '').strip
+      elsif @read_version.empty?
+        nil
+      else
         v = "v" if prepend_version
         [
           v,
           @read_version
         ].join
-      rescue ArgumentError
-        # An exception will be raised if @read_version is not a proper version
-        # string - i.e. if it is a branch name or a commit SHA.
-        @read_version
       end
     end
 
