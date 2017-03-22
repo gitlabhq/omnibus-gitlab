@@ -25,7 +25,7 @@ license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 # workaround for the deprecation of `always_build true`. What happens now is
 # that we build only if the contents of the specified directory have changed
 # according to git.
-default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`
+default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`.strip
 
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
