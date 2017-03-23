@@ -83,5 +83,9 @@ module Postgresql
         Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
       end
     end
+
+    def postgresql_managed?
+      Gitlab['postgresql']['enable'].nil? ? Gitlab['node']['gitlab']['postgresql']['enable'] : Gitlab['postgresql']['enable']
+    end
   end
 end

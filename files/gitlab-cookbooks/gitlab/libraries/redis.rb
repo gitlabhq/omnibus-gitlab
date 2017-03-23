@@ -63,6 +63,10 @@ module Redis
       end
     end
 
+    def redis_managed?
+      Gitlab['redis']['enable'].nil? ? node['gitlab']['redis']['enable'] : Gitlab['redis']['enable']
+    end
+
     private
 
     # Parses sentinel specific meta-data to fill gitlab_rails
@@ -135,10 +139,6 @@ module Redis
 
     def has_sentinels?
       Gitlab['gitlab_rails']['redis_sentinels'] && !Gitlab['gitlab_rails']['redis_sentinels'].empty?
-    end
-
-    def redis_managed?
-      Gitlab['redis']['enable'].nil? ? node['gitlab']['redis']['enable'] : Gitlab['redis']['enable']
     end
   end
 end
