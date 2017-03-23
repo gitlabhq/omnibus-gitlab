@@ -304,8 +304,8 @@ GitLab instance even once it will remember to no longer attempt insecure connect
 even when user is explicitly entering `http://` url. Such url will be automatically redirected by the browser to `https://` variant.
 
 ```ruby
-nginx['hsts']['max_age'] = 31536000
-nginx['hsts']['include_subdomains'] = false
+nginx['hsts_max_age'] = 31536000
+nginx['hsts_include_subdomains'] = false
 ```
 
 By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS. 

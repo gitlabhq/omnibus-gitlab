@@ -616,8 +616,8 @@ default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 # HSTS
-default['gitlab']['nginx']['hsts']['max_age'] = 31536000
-default['gitlab']['nginx']['hsts']['include_subdomains'] = false
+default['gitlab']['nginx']['hsts_max_age'] = 31536000
+default['gitlab']['nginx']['hsts_include_subdomains'] = false
 
 ###
 # Nginx status

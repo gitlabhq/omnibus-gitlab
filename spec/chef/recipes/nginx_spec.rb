@@ -333,7 +333,7 @@ describe 'nginx' do
 
   context 'when hsts is disabled' do
     before do
-      stub_gitlab_rb(nginx: { hsts: { max_age: 0 } })
+      stub_gitlab_rb(nginx: { hsts_max_age: 0  })
     end
     it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security/) }
   end
@@ -342,7 +342,7 @@ describe 'nginx' do
 
   context 'when include_subdomains is enabled' do
     before do
-      stub_gitlab_rb(nginx: { hsts: { include_subdomains: true } })
+      stub_gitlab_rb(nginx: { hsts_include_subdomains: true })
     end
 
     it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";/) }
@@ -350,7 +350,7 @@ describe 'nginx' do
 
   context 'when max-age is set to 10' do
     before do
-      stub_gitlab_rb(nginx: { hsts: { max_age: 10 } })
+      stub_gitlab_rb(nginx: { hsts_max_age: 10 })
     end
 
     it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
