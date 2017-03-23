@@ -2,9 +2,29 @@ require 'chef_helper'
 
 describe 'gitlab::postgres-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:node) { chef_run.node }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when postgres is disabled locally' do
+    before do
+      stub_gitlab_rb(
+        postgresql: { enable: false }
+      )
+    end
+
+    it 'defaults the postgres-exporter to being disabled' do
+
+      expect(node['gitlab']['postgres-exporter']['enable']).to eq false
+    end
+
+    it 'allows postgres-exporter to be explicitly enabled' do
+      stub_gitlab_rb(postgres_exporter: { enable: true })
+
+      expect(node['gitlab']['postgres-exporter']['enable']).to eq true
+    end
   end
 
   context 'when postgres-exporter is enabled' do

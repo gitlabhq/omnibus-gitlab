@@ -6,6 +6,8 @@ omnibus-gitlab repository.
 9.0.1
 
 - Allow configuration of prepared statement caching in Rails 169891c2
+- Default redis promethues exporter to off if redis is not managed locally
+- Default postgres promethues exporter to off if postgres is not managed locally
 
 9.0
 
