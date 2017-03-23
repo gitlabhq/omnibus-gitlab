@@ -2,9 +2,29 @@ require 'chef_helper'
 
 describe 'gitlab::redis-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:node) { chef_run.node }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when redis is disabled locally' do
+    before do
+      stub_gitlab_rb(
+        redis: { enable: false }
+      )
+    end
+
+    it 'defaults the redis-exporter to being disabled' do
+
+      expect(node['gitlab']['redis-exporter']['enable']).to eq false
+    end
+
+    it 'allows redis-exporter to be explicitly enabled' do
+      stub_gitlab_rb(redis_exporter: { enable: true })
+
+      expect(node['gitlab']['redis-exporter']['enable']).to eq true
+    end
   end
 
   context 'when redis-exporter is enabled' do
