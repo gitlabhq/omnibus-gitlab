@@ -44,15 +44,6 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     exit! 0
   end
 
-  unless progress_message('Ensuring PostgreSQL is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
-    status = run_command(command.join(' '))
-    status.success?
-  end
-    log 'Error ensuring PostgreSQL is updated. Please check the logs'
-    exit! 1
-  end
-
   log 'Shutting down all GitLab services except those needed for migrations'
   get_all_services.each do |sv_name|
     run_sv_command_for_service('stop', sv_name)
@@ -106,6 +97,15 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     if /^run: #{sv_name}:/.match(service_statuses)
       run_sv_command_for_service('start', sv_name)
     end
+  end
+
+  unless progress_message('Ensuring PostgreSQL is updated') do
+    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
+    status = run_command(command.join(' '))
+    status.success?
+  end
+    log 'Error ensuring PostgreSQL is updated. Please check the logs'
+    exit! 1
   end
 
   log <<EOS
