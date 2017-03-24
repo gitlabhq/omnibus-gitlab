@@ -36,7 +36,8 @@ describe 'gitlab::gitlab-pages' do
         gitlab_pages: {
           external_https: 'external_pages.example.com',
           metrics_address: 'localhost:1234',
-          redirect_http: true
+          redirect_http: true,
+          cert: '/etc/gitlab/pages.crt'
         }
       )
     end
