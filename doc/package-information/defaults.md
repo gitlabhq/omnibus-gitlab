@@ -17,12 +17,12 @@ by default:
 | Unicorn          | Yes           | Socket           | Port (8080) | X                                      |
 | GitLab Workhorse | Yes           | Socket           | Port (8181) | X                                      |
 | Nginx status     | Yes           | Port             | X           | 8060                                   |
+| Prometheus       | Yes           | Port             | X           | 9090                                   |
+| Node exporter    | Yes           | Port             | X           | 9100                                   |
+| Redis exporter   | Yes           | Port             | X           | 9121                                   |
+| Postgres exporter| Yes           | Port             | X           | 9187                                   |
+| Gitlab monitor   | Yes           | Port             | X           | 9168                                   |
 | Geo PostgreSQL   | No            | Socket           | Port (5431) | X                                      |
-| Node exporter    | No            | Port             | X           | 9100                                   |
-| Prometheus       | No            | Port             | X           | 9090                                   |
-| Redis exporter   | No            | Port             | X           | 9121                                   |
-| Postgres exporter| No            | Port             | X           | 9187                                   |
-| Gitlab monitor   | No            | Port             | X           | 9168                                   |
 | Redis Sentinel   | No            | Port             | X           | 26379                                  |
 | Incoming email   | No            | Port             | X           | 143                                    |
 | Elastic search   | No            | Port             | X           | 9200                                   |
