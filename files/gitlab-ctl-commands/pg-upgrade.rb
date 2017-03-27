@@ -79,6 +79,7 @@ add_command_under_category 'pg-upgrade', 'database',
       get_all_services.member?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
+    exit! 0
   end
 
   if progress_message('Checking if we already upgraded') do

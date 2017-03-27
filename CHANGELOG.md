@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.1
+
+- Allow configuration of prepared statement caching in Rails 169891c2
+- Default redis promethues exporter to off if redis is not managed locally 63056441
+- Default postgres promethues exporter to off if postgres is not managed locally 63056441
+- Default pages http to https redirect to off 1ece2480
+- Make HSTS easier to configure, and the docs on it accurate 4ba90ff8
+- Move the automatic PG Upgrade to happen after migrations have run 8cf38d43
+
 9.0
 
 - Remove Bitbucket from templates as it does not require special settings anymore

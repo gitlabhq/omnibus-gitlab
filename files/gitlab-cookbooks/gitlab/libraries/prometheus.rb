@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 
+require_relative 'postgresql.rb'
+require_relative 'redis.rb'
+
 module Prometheus
   class << self
     def services
@@ -28,7 +31,14 @@ module Prometheus
     end
 
     def parse_variables
+      parse_exporter_enabled
       parse_flags
+    end
+
+    def parse_exporter_enabled
+      # Disable exporters by default if their service is not managed on this node
+      Gitlab['postgres_exporter']['enable'] ||= Postgresql.postgresql_managed?
+      Gitlab['redis_exporter']['enable'] ||= Redis.redis_managed?
     end
 
     def parse_flags

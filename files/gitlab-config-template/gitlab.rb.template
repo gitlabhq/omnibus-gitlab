@@ -335,6 +335,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_socket'] = nil
 # gitlab_rails['db_sslmode'] = nil
 # gitlab_rails['db_sslrootcert'] = nil
+# gitlab_rails['db_prepared_statements'] = true
+# gitlab_rails['db_statements_limit'] = 1000
 
 
 ### GitLab Redis settings
@@ -750,8 +752,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! **Defaults to forcing web browsers to always communicate using only HTTPS**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
-# nginx['hsts']['max_age'] = 31536000
-# nginx['hsts']['include_subdomains'] = false
+# nginx['hsts_max_age'] = 31536000
+# nginx['hsts_include_subdomains'] = false
 
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port

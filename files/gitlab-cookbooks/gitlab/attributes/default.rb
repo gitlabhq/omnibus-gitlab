@@ -245,6 +245,8 @@ default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
 default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
+default['gitlab']['gitlab-rails']['db_prepared_statements'] = true
+default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
@@ -525,7 +527,7 @@ default['gitlab']['gitlab-pages']['pages_path'] = nil
 default['gitlab']['gitlab-pages']['domain'] = nil
 default['gitlab']['gitlab-pages']['cert'] = nil
 default['gitlab']['gitlab-pages']['cert_key'] = nil
-default['gitlab']['gitlab-pages']['redirect_http'] = true
+default['gitlab']['gitlab-pages']['redirect_http'] = false
 default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
@@ -614,8 +616,8 @@ default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 # HSTS
-default['gitlab']['nginx']['hsts']['max_age'] = 31536000
-default['gitlab']['nginx']['hsts']['include_subdomains'] = false
+default['gitlab']['nginx']['hsts_max_age'] = 31536000
+default['gitlab']['nginx']['hsts_include_subdomains'] = false
 
 ###
 # Nginx status

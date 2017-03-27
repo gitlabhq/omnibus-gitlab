@@ -295,6 +295,8 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: true/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 1000/)
         end
 
         it 'template triggers notifications' do
@@ -371,6 +373,28 @@ describe 'gitlab::gitlab-rails' do
 
           it 'uses provided value in database.yml' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\["primary.example.com","secondary.example.com"\]}/)
+          end
+        end
+
+        context 'when prepared_statements are disabled' do
+          before do
+            stub_gitlab_rb(gitlab_rails: { db_prepared_statements: false })
+          end
+
+          it 'uses provided value in database.yml' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 1000/)
+          end
+        end
+
+        context 'when limit for prepared_statements are specified' do
+          before do
+            stub_gitlab_rb(gitlab_rails: { db_statements_limit: 12345 })
+          end
+
+          it 'uses provided value in database.yml' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 12345/)
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: true/)
           end
         end
       end
