@@ -984,7 +984,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
 # mattermost['service_maximum_login_attempts'] = 10
-# mattermost['service_segment_developer_key'] = nil
 # mattermost['service_google_developer_key'] = nil
 # mattermost['service_enable_incoming_webhooks'] = true
 # mattermost['service_enable_post_username_override'] = true
@@ -1011,6 +1010,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_forward_80_to_443'] = false
 # mattermost['service_read_timeout'] = 300
 # mattermost['service_write_timeout'] = 300
+# mattermost['service_time_between_user_typing_updates_milliseconds'] = 5000
+# mattermost['service_enable_link_previews'] = false
+# mattermost['service_enable_user_typing_messages'] = true
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150

@@ -11,7 +11,6 @@
         "ReadTimeout": <%= @service_read_timeout %>,
         "WriteTimeout": <%= @service_write_timeout %>,
         "MaximumLoginAttempts": <%= @service_maximum_login_attempts %>,
-        "SegmentDeveloperKey": "<%= @service_segment_developer_key %>",
         "GoogleDeveloperKey": "<%= @service_google_developer_key %>",
         "EnableOAuthServiceProvider": <%= @service_enable_oauth_service_provider %>,
         "EnableIncomingWebhooks": <%= @service_enable_incoming_webhooks %>,
@@ -29,7 +28,10 @@
         "SessionLengthWebInDays" : <%= @service_session_length_web_in_days %>,
         "SessionLengthMobileInDays" : <%= @service_session_length_mobile_in_days %>,
         "SessionLengthSSOInDays" : <%= @service_session_length_sso_in_days %>,
-        "SessionCacheInMinutes" : <%= @service_session_cache_in_minutes %>
+        "SessionCacheInMinutes" : <%= @service_session_cache_in_minutes %>,
+        "TimeBetweenUserTypingUpdatesMilliseconds" : <%= @service_time_between_user_typing_updates_milliseconds %>,
+        "EnableUserTypingMessages" : <%= @service_enable_link_previews %>,
+        "EnableLinkPreviews" : <%= @service_enable_user_typing_messages %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
