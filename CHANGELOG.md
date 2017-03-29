@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.2
+
+- No changes
+
 9.0.1
 
 - Allow configuration of prepared statement caching in Rails 169891c2
