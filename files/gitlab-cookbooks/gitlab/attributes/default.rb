@@ -179,13 +179,6 @@ default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 
 default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
 
-# Important: keep the satellites.path setting until GitLab 9.0 at
-# least. This setting is fed to 'rm -rf' in
-# db/migrate/20151023144219_remove_satellites.rb
-default['gitlab']['gitlab-rails']['satellites_path'] = "/var/opt/gitlab/git-data/gitlab-satellites"
-default['gitlab']['gitlab-rails']['satellites_timeout'] = nil
-#
-
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['manage_backup_path'] = true
 default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil

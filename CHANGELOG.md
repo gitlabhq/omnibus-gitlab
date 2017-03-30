@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.1.0
+
+- Remove deprecated satellites configuration
+
 9.0.2
 
 - No changes
@@ -44,8 +48,7 @@ are not the same (O Schwede) c4e83c5
 - EE: Add a tracking database for GitLab Geo f1077d10
 - Provide default Host header for requests that do not have one 14f77c
 - Gitaly service on by default 350dea
-- Update Nginx to 1.10.3
-- Added support for configuring hosts for database load balancing
+- Update Nginx to 1.10.3 211a89fb6
 
 8.17.3
 
