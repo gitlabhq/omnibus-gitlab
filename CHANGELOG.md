@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Remove deprecated satellites configuration
 
+9.0.3
+
+- Added support for managing PostgreSQL's hot_standby_feedback option
+
 9.0.2
 
 - No changes

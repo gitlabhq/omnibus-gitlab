@@ -411,6 +411,7 @@ default['gitlab']['postgresql']['max_standby_streaming_delay'] = "30s"
 default['gitlab']['postgresql']['max_replication_slots'] = 0
 default['gitlab']['postgresql']['synchronous_commit'] = 'on'
 default['gitlab']['postgresql']['synchronous_standby_names'] = ''
+default['gitlab']['postgresql']['hot_standby_feedback'] = 'off'
 
 # Backup/Archive settings
 default['gitlab']['postgresql']['archive_mode'] = "off"
