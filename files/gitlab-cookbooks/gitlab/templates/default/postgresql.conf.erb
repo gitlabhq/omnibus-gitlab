@@ -239,7 +239,7 @@ max_standby_streaming_delay = <%= @max_standby_streaming_delay %> # max delay be
           # -1 allows indefinite delay
 #wal_receiver_status_interval = 10s # send replies at least this often
           # 0 disables
-#hot_standby_feedback = off   # send info from standby to prevent
+hot_standby_feedback = <%= @hot_standby_feedback %>   # send info from standby to prevent
           # query conflicts
 
 
