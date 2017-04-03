@@ -1,5 +1,6 @@
 stages:
   - check
+  - qa-image
   - prepare
   - tests
   - post-test
@@ -229,6 +230,26 @@ AWS:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+
+QA Master:
+  stage: qa-image
+  script:
+    - make do_qa_docker_master
+  allow_failure: true
+  tags:
+  - docker-build
+  only:
+    - branches@gitlab/omnibus-gitlab
+
+QA Tag:
+  stage: qa-image
+  script:
+    - make do_qa_docker_release
+  allow_failure: true
+  tags:
+  - docker-build
+  only:
+    - tags@gitlab/omnibus-gitlab
 
 # GitLab.com only
 Ubuntu 12.04 specs 0 3:
