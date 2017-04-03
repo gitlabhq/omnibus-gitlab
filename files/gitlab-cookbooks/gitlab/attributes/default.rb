@@ -418,6 +418,7 @@ default['gitlab']['postgresql']['max_standby_streaming_delay'] = "30s"
 default['gitlab']['postgresql']['max_replication_slots'] = 0
 default['gitlab']['postgresql']['synchronous_commit'] = 'on'
 default['gitlab']['postgresql']['synchronous_standby_names'] = ''
+default['gitlab']['postgresql']['hot_standby_feedback'] = 'off'
 
 # Backup/Archive settings
 default['gitlab']['postgresql']['archive_mode'] = "off"
@@ -718,7 +719,6 @@ default['gitlab']['mattermost']['service_port'] = "8065"
 
 default['gitlab']['mattermost']['service_site_url'] = nil
 default['gitlab']['mattermost']['service_maximum_login_attempts'] = 10
-default['gitlab']['mattermost']['service_segment_developer_key'] = nil
 default['gitlab']['mattermost']['service_google_developer_key'] = nil
 default['gitlab']['mattermost']['service_enable_incoming_webhooks'] = false
 default['gitlab']['mattermost']['service_enable_post_username_override'] = true
@@ -745,6 +745,9 @@ default['gitlab']['mattermost']['service_lets_encrypt_cert_cache_file'] = "./con
 default['gitlab']['mattermost']['service_forward_80_to_443'] = false
 default['gitlab']['mattermost']['service_read_timeout'] = 300
 default['gitlab']['mattermost']['service_write_timeout'] = 300
+default['gitlab']['mattermost']['service_time_between_user_typing_updates_milliseconds'] = 5000
+default['gitlab']['mattermost']['service_enable_link_previews'] = false
+default['gitlab']['mattermost']['service_enable_user_typing_messages'] = true
 
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
