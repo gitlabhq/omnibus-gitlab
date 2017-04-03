@@ -112,6 +112,50 @@ describe 'gitlab::prometheus' do
       end
     end
 
+    context 'when redis and postgres are disabled' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            enable: false
+          },
+          redis: {
+            enable: false
+          }
+        )
+      end
+
+      context 'and user did not enable the exporter' do
+        it 'postgres exporter is disabled' do
+          expect(chef_run).to_not include_recipe('gitlab::postgres-exporter')
+        end
+
+        it 'redis exporter is disabled' do
+          expect(chef_run).to_not include_recipe('gitlab::redis-exporter')
+        end
+      end
+
+      context 'and user enabled the exporter' do
+        before do
+          stub_gitlab_rb(
+            postgres_exporter: {
+              enable: true
+            },
+            redis_exporter: {
+              enable: true
+            }
+          )
+        end
+
+        it 'postgres exporter is enabled' do
+          expect(chef_run).to include_recipe('gitlab::postgres-exporter')
+        end
+
+        it 'redis exporter is enabled' do
+          expect(chef_run).to include_recipe('gitlab::redis-exporter')
+        end
+      end
+    end
+
     context 'with user provided settings' do
       before do
         stub_gitlab_rb(
