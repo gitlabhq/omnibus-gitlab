@@ -7,6 +7,8 @@ omnibus-gitlab repository.
 
 - Added support for managing PostgreSQL's hot_standby_feedback option 8971a5e0
 - Add configuration support for new Mattermost 3.7 settings (Robin Naundorf) 3c9d6936
+- Fix 'template1 being accessed by other users' error c8633b8b
+- Fix ability to disable postgres and redis exporters 04eaf7f6
 
 9.0.2
 
