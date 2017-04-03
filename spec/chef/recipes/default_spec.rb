@@ -31,7 +31,7 @@ describe 'gitlab::default' do
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
-      variables: { gitconfig: gitconfig_hash },
+      variables: { gitconfig: gitconfig_hash }
     )
   end
 
@@ -60,7 +60,7 @@ describe 'gitlab::default' do
 
   context 'with logrotate' do
     it 'runs logrotate directory and configuration recipe by default' do
-       expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
+      expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
     end
 
     it 'runs logrotate directory and configuration recipe when logrotate is disabled' do
@@ -71,17 +71,17 @@ describe 'gitlab::default' do
   end
 
   context 'when manage_etc directory management is disabled' do
-    before { stub_gitlab_rb(manage_storage_directories: { enable: true, manage_etc: false } ) }
+    before { stub_gitlab_rb(manage_storage_directories: { enable: true, manage_etc: false }) }
 
     it 'does not create the user config directory' do
-      expect(chef_run).to_not create_directory('/etc/gitlab')
+      expect(chef_run).not_to create_directory('/etc/gitlab')
     end
   end
 
   context 'prometheus is enabled by default' do
     it 'includes the prometheus recipe' do
       expect(chef_run).to include_recipe('gitlab::prometheus')
-      expect(chef_run).to_not include_recipe('gitlab::prometheus_disable')
+      expect(chef_run).not_to include_recipe('gitlab::prometheus_disable')
     end
   end
 
@@ -89,7 +89,7 @@ describe 'gitlab::default' do
     before { stub_gitlab_rb(prometheus: { enable: false }) }
     it 'includes the prometheus_disable recipe' do
       expect(chef_run).to include_recipe('gitlab::prometheus_disable')
-      expect(chef_run).to_not include_recipe('gitlab::prometheus')
+      expect(chef_run).not_to include_recipe('gitlab::prometheus')
     end
   end
 end

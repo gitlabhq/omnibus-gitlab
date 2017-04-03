@@ -16,7 +16,6 @@ describe 'gitlab::redis-exporter' do
     end
 
     it 'defaults the redis-exporter to being disabled' do
-
       expect(node['gitlab']['redis-exporter']['enable']).to eq false
     end
 

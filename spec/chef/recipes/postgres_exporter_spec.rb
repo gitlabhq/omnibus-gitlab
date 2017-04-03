@@ -16,7 +16,6 @@ describe 'gitlab::postgres-exporter' do
     end
 
     it 'defaults the postgres-exporter to being disabled' do
-
       expect(node['gitlab']['postgres-exporter']['enable']).to eq false
     end
 

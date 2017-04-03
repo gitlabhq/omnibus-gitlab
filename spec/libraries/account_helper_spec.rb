@@ -14,5 +14,4 @@ describe AccountHelper do
       %w(git gitlab-www gitlab-redis gitlab-psql mattermost registry)
     )
   end
-
 end

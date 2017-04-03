@@ -48,7 +48,7 @@ describe 'gitlab::logrotate' do
     it_behaves_like "disabled runit service", "logrotate"
 
     it 'does not execute the start command' do
-      expect(chef_run).to_not run_execute('/opt/gitlab/bin/gitlab-ctl start logrotate').with(retries: 20)
+      expect(chef_run).not_to run_execute('/opt/gitlab/bin/gitlab-ctl start logrotate').with(retries: 20)
     end
   end
 end

@@ -113,9 +113,9 @@ describe 'registry recipe' do
         .with_content(/debug:\n\s*addr: localhost:5005/)
     end
   end
-  
+
   context 'when user and group are specified' do
-    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { username: 'registryuser', group: 'registrygroup'}) }
+    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { username: 'registryuser', group: 'registrygroup' }) }
     it 'make registry run file start registry under correct user' do
       expect(chef_run).to render_file('/opt/gitlab/sv/registry/run')
         .with_content(/-U registryuser:registrygroup/)
@@ -139,7 +139,7 @@ describe 'registry' do
       expect(chef_run.node['gitlab']['registry']['storage']['filesystem'])
         .to eql('rootdirectory' => '/var/opt/gitlab/gitlab-rails/shared/registry')
       expect(chef_run.node['gitlab']['registry']['storage']['cache'])
-        .to eql('blobdescriptor'=>'inmemory')
+        .to eql('blobdescriptor' => 'inmemory')
       expect(chef_run.node['gitlab']['registry']['storage']['delete'])
         .to eql('enabled' => true)
     end
@@ -164,13 +164,13 @@ describe 'registry' do
 
       it 'uses the default cache and delete settings if not overridden' do
         expect(chef_run.node['gitlab']['registry']['storage']['cache'])
-          .to eql('blobdescriptor'=>'inmemory')
+          .to eql('blobdescriptor' => 'inmemory')
         expect(chef_run.node['gitlab']['registry']['storage']['delete'])
           .to eql('enabled' => true)
       end
 
       it 'allows the cache and delete settings to be overridden' do
-        stub_gitlab_rb(registry: { storage: {cache: 'somewhere-else', delete: { enabled: false } } })
+        stub_gitlab_rb(registry: { storage: { cache: 'somewhere-else', delete: { enabled: false } } })
         expect(chef_run.node['gitlab']['registry']['storage']['cache'])
           .to eql('somewhere-else')
         expect(chef_run.node['gitlab']['registry']['storage']['delete'])
@@ -188,14 +188,16 @@ describe 'registry' do
     end
 
     context 'when registry notification endpoint is configured with the minimum required' do
-      before { stub_gitlab_rb(
-        registry: {
-          notifications: [
-            name: 'test_endpoint',
-            url: 'https://registry.example.com/notify'
-          ]
-        }
-      )}
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              name: 'test_endpoint',
+              url: 'https://registry.example.com/notify'
+            ]
+          }
+        )
+      end
 
       it 'creates the registry config with the specified endpoint config' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -212,20 +214,22 @@ describe 'registry' do
     end
 
     context 'when the default values are overridden' do
-      before { stub_gitlab_rb(
-        registry: {
-          notifications: [
-            name: 'test_endpoint',
-            url: 'https://registry.example.com/notify'
-          ],
-          default_notifications_timeout: '5000ms',
-          default_notifications_threshold: 10,
-          default_notifications_backoff: '50s',
-          default_notifications_headers: {
-            "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN1", "AUTHORIZATION_EXAMPLE_TOKEN2"] 
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              name: 'test_endpoint',
+              url: 'https://registry.example.com/notify'
+            ],
+            default_notifications_timeout: '5000ms',
+            default_notifications_threshold: 10,
+            default_notifications_backoff: '50s',
+            default_notifications_headers: {
+              "Authorization" => %w(AUTHORIZATION_EXAMPLE_TOKEN1 AUTHORIZATION_EXAMPLE_TOKEN2)
+            }
           }
-        }
-      )}
+        )
+      end
 
       it 'creates the registry config overriding the values not set with the new defaults' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -240,24 +244,26 @@ describe 'registry' do
           .with_content(/"backoff":"50s"/)
       end
     end
-    
+
     context 'when registry notification endpoint is configured with all the available variables' do
-      before { stub_gitlab_rb(
-        registry: {
-          notifications:[
-            {
-              'name' => 'test_endpoint',
-              'url' => 'https://registry.example.com/notify',
-              'timeout' => '500ms',
-              'threshold' => 5,
-              'backoff' => '1s',
-              'headers' => {
-                "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              {
+                'name' => 'test_endpoint',
+                'url' => 'https://registry.example.com/notify',
+                'timeout' => '500ms',
+                'threshold' => 5,
+                'backoff' => '1s',
+                'headers' => {
+                  "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+                }
               }
-            }
-          ]
-        }
-      )}
+            ]
+          }
+        )
+      end
 
       it 'creates the registry config with the specified endpoint config' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -274,30 +280,32 @@ describe 'registry' do
     end
 
     context 'when 3 registry notification endpoints are configured' do
-      before { stub_gitlab_rb(
-        registry: {
-          notifications: [
-            {
-              'name' => 'test_endpoint',
-              'url' => 'https://registry.example.com/notify'
-            },
-            {
-              'name' => 'test_endpoint2',
-              'url' => 'https://registry.example.com/notify2',
-              'timeout' => '100ms',
-              'threshold' => 2,
-              'backoff' => '4s',
-              'headers' => {
-                "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              {
+                'name' => 'test_endpoint',
+                'url' => 'https://registry.example.com/notify'
+              },
+              {
+                'name' => 'test_endpoint2',
+                'url' => 'https://registry.example.com/notify2',
+                'timeout' => '100ms',
+                'threshold' => 2,
+                'backoff' => '4s',
+                'headers' => {
+                  "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+                }
+              },
+              {
+                'name' => 'test_endpoint3',
+                'url' => 'https://registry.example.com/notify3'
               }
-            },
-            {
-              'name' => 'test_endpoint3',
-              'url' => 'https://registry.example.com/notify3'
-            }
-          ]
-        }
-      )}
+            ]
+          }
+        )
+      end
 
       it 'creates the registry config with the specified endpoint config' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')

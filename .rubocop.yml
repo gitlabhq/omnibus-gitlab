@@ -942,6 +942,9 @@ Rails/Validation:
 RSpec/AnyInstance:
   Enabled: false
 
+RSpec/BeforeAfterAll:
+  Enabled: false
+
 # Check for expectations where `be(...)` can replace `eql(...)`.
 RSpec/BeEql:
   Enabled: true

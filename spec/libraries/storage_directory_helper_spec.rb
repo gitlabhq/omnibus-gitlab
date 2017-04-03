@@ -28,7 +28,7 @@ describe StorageDirectoryHelper do
 
       it 'fails when path is not a directory' do
         expect(subject).to receive(:run_command).with("set -x && [ -d \"/tmp/validate\" ]", any_args).and_return(fail_shell)
-        expect(subject).to_not receive(:run_command)
+        expect(subject).not_to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%U' $(readlink -f /tmp/validate))\" = 'git' ]", any_args)
         expect(subject.validate('/tmp/validate')).to eq(false)
       end
@@ -53,7 +53,7 @@ describe StorageDirectoryHelper do
 
       it 'fails when path is not a directory' do
         expect(subject).to receive(:run_command).with("set -x && [ -d \"/tmp/validate\" ]", any_args).and_return(fail_shell)
-        expect(subject).to_not receive(:run_command)
+        expect(subject).not_to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%U:%G' $(readlink -f /tmp/validate))\" = 'git:root' ]", any_args)
         expect(subject.validate('/tmp/validate')).to eq(false)
       end
@@ -80,9 +80,9 @@ describe StorageDirectoryHelper do
 
       it 'fails when path is not a directory' do
         expect(subject).to receive(:run_command).with("set -x && [ -d \"/tmp/validate\" ]", any_args).and_return(fail_shell)
-        expect(subject).to_not receive(:run_command)
+        expect(subject).not_to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%U:%G' $(readlink -f /tmp/validate))\" = 'git:root' ]", any_args)
-        expect(subject).to_not receive(:run_command)
+        expect(subject).not_to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%04a' $(readlink -f /tmp/validate) | grep -o '...$')\" = '700' ]", any_args)
         expect(subject.validate('/tmp/validate')).to eq(false)
       end
@@ -91,7 +91,7 @@ describe StorageDirectoryHelper do
         expect(subject).to receive(:run_command).with("set -x && [ -d \"/tmp/validate\" ]", any_args).and_return(success_shell)
         expect(subject).to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%U' $(readlink -f /tmp/validate))\" = 'git' ]", any_args).and_return(fail_shell)
-        expect(subject).to_not receive(:run_command)
+        expect(subject).not_to receive(:run_command)
           .with("set -x && [ \"$(stat --printf='%04a' $(readlink -f /tmp/validate) | grep -o '...$')\" = '700' ]", any_args)
         expect(subject.validate('/tmp/validate')).to eq(false)
       end

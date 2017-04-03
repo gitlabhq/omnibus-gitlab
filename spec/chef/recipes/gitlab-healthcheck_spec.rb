@@ -59,7 +59,7 @@ describe 'gitlab::gitlab-healthcheck' do
 
     it 'does not render the healthcheck-rc file when workhorse workhorse is disabled' do
       stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
-      expect(chef_run).to_not render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
+      expect(chef_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
     end
   end
 end

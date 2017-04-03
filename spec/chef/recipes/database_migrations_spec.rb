@@ -14,7 +14,6 @@ describe 'gitlab::database-migrations' do
   end
 
   context 'when migration should run' do
-
     before do
       allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
     end
@@ -26,15 +25,14 @@ describe 'gitlab::database-migrations' do
     end
 
     context 'places the log file' do
-
       it 'in a default location' do
         path = Regexp.escape("/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")
         expect(bash_block.code).to match(/#{path}/)
       end
 
       it 'in a custom location' do
-        stub_gitlab_rb(gitlab_rails: { log_directory: "/tmp"})
-        path = %Q(/tmp/gitlab-rails-db-migrate-)
+        stub_gitlab_rb(gitlab_rails: { log_directory: "/tmp" })
+        path = %(/tmp/gitlab-rails-db-migrate-)
         expect(bash_block.code).to match(/#{path}/)
       end
     end
@@ -43,7 +41,7 @@ describe 'gitlab::database-migrations' do
       before { stub_gitlab_rb(gitlab_rails: { auto_migrate: false }) }
 
       it 'skips running the migrations' do
-        expect(chef_run).to_not run_bash('migrate gitlab-rails database')
+        expect(chef_run).not_to run_bash('migrate gitlab-rails database')
       end
     end
 
@@ -67,7 +65,7 @@ describe 'gitlab::database-migrations' do
     end
 
     it 'triggers the gitlab:db:configure task' do
-      migrate = %Q(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
+      migrate = %(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
       expect(bash_block.code).to match(/#{migrate}/)
     end
 

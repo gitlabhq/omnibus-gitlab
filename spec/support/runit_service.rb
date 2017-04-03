@@ -46,15 +46,15 @@ end
 
 shared_examples 'disabled runit service' do |svc_name|
   it 'does not creat directories' do
-    expect(chef_run).to_not create_directory("/opt/gitlab/sv/#{svc_name}")
-    expect(chef_run).to_not create_directory("/opt/gitlab/sv/#{svc_name}/log")
-    expect(chef_run).to_not create_directory("/opt/gitlab/sv/#{svc_name}/log/main")
+    expect(chef_run).not_to create_directory("/opt/gitlab/sv/#{svc_name}")
+    expect(chef_run).not_to create_directory("/opt/gitlab/sv/#{svc_name}/log")
+    expect(chef_run).not_to create_directory("/opt/gitlab/sv/#{svc_name}/log/main")
   end
 
   it 'does not create files' do
-    expect(chef_run).to_not create_template("/opt/gitlab/sv/#{svc_name}/run")
-    expect(chef_run).to_not create_template("/opt/gitlab/sv/#{svc_name}/log/run")
-    expect(chef_run).to_not create_template("/var/log/gitlab/#{svc_name}/config")
+    expect(chef_run).not_to create_template("/opt/gitlab/sv/#{svc_name}/run")
+    expect(chef_run).not_to create_template("/opt/gitlab/sv/#{svc_name}/log/run")
+    expect(chef_run).not_to create_template("/var/log/gitlab/#{svc_name}/config")
   end
 
   it 'removes the symlink to the service directory' do

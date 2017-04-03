@@ -5,7 +5,7 @@ describe 'license:check', type: :rake do
     Rake.application.rake_require 'gitlab/tasks/license_check'
   end
 
-  before :each do
+  before do
     Rake::Task['license:check'].reenable
   end
 
@@ -42,7 +42,6 @@ Details:
     allow(File).to receive(:exist?).and_return(true)
     allow(File).to receive(:read).and_return(string)
     expect { Rake::Task['license:check'].invoke }.to output(/Unknown.*foo 4.8.0.*jargon/).to_stdout
-
   end
 
   it 'should detect weird line-breaks' do
@@ -58,7 +57,6 @@ Details:
     allow(File).to receive(:exist?).and_return(true)
     allow(File).to receive(:read).and_return(string)
     expect { Rake::Task['license:check'].invoke }.to output(/Good.*chef-zero 4.8.0.*Apache-2.0/).to_stdout
-
   end
 
   it 'should detect if install directory not found' do

@@ -71,9 +71,9 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
         .with_content(/copytruncate/)
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/postrotate/)
-      expect(chef_run).to_not render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
+      expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/size/)
-      expect(chef_run).to_not render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
+      expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/dateext/)
     end
 
@@ -85,8 +85,7 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
           logrotate_compress: "nocompress",
           logrotate_method: "copy",
           logrotate_postrotate: "/usr/bin/killall -HUP nginx",
-          logrotate_dateformat: "-%Y-%m-%d",
-        },logrotate: { enable: false })
+          logrotate_dateformat: "-%Y-%m-%d", }, logrotate: { enable: false })
 
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/weekly/)

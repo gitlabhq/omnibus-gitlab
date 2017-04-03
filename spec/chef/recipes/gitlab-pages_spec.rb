@@ -21,11 +21,11 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-redirect-http=false})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
 
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-cert})
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-metrics-address})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-cert})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-metrics-address})
     end
   end
 

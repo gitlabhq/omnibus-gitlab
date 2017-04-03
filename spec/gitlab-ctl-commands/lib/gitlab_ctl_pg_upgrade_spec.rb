@@ -1,11 +1,11 @@
 require 'chef_helper'
 
-$: << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
+$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
 
 describe GitlabCtl::PgUpgrade do
-  before(:each) do
+  before do
     @fake_default_dir = '/fake/data/postgresql/data'
     @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data')
     allow(File).to receive(:realpath).with(

@@ -4,8 +4,8 @@ require 'base64'
 describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
-  HEX_KEY = /\h{128}/.freeze
-  RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
+  HEX_KEY = /\h{128}/
+  RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m
 
   def stub_gitlab_secrets_json(secrets)
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))
@@ -174,7 +174,7 @@ describe 'secrets' do
 
         it 'writes the correct data to secrets.yml' do
           yaml_secrets = lambda do |yaml|
-            secrets = YAML.load(yaml)['production']
+            secrets = YAML.safe_load(yaml)['production']
 
             expect(secrets).to include('db_key_base' => 'rb_ci_db_key_base')
             expect(secrets).to include('otp_key_base' => 'json_rails_secret_token')

@@ -25,7 +25,7 @@ describe 'gitlab::redis' do
           client_output_buffer_limit_normal: "5 5 5",
           client_output_buffer_limit_slave: "512mb 128mb 120",
           client_output_buffer_limit_pubsub: "64mb 16mb 120"
-        },
+        }
       )
     end
 
