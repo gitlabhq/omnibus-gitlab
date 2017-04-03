@@ -5,7 +5,8 @@ omnibus-gitlab repository.
 
 9.0.3
 
-- Added support for managing PostgreSQL's hot_standby_feedback option
+- Added support for managing PostgreSQL's hot_standby_feedback option 8971a5e0
+- Add configuration support for new Mattermost 3.7 settings (Robin Naundorf) 3c9d6936
 
 9.0.2
 
