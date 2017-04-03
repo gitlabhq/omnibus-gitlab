@@ -37,8 +37,8 @@ module Prometheus
 
     def parse_exporter_enabled
       # Disable exporters by default if their service is not managed on this node
-      Gitlab['postgres_exporter']['enable'] ||= Postgresql.postgresql_managed?
-      Gitlab['redis_exporter']['enable'] ||= Redis.redis_managed?
+      Gitlab['postgres_exporter']['enable'] = Postgresql.postgresql_managed? if Gitlab['postgres_exporter']['enable'].nil?
+      Gitlab['redis_exporter']['enable'] = Redis.redis_managed? if Gitlab['redis_exporter']['enable'].nil?
     end
 
     def parse_flags
