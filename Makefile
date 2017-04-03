@@ -124,3 +124,36 @@ aws: do_aws_latest
 else
 aws: do_aws_not_latest
 endif
+
+## QA related stuff
+qa_docker_cleanup:
+	-bundle exec rake docker:clean_qa[$(RELEASE_VERSION)]
+
+qa_docker_build: qa_docker_cleanup
+	bundle exec rake docker:build_qa[$(RELEASE_PACKAGE)]
+
+qa_docker_push:
+	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+
+qa_docker_push_rc:
+	# push as :rc tag, the :rc is always the latest tagged release
+	DOCKER_TAG=rc bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+
+qa_docker_push_latest:
+	# push as :latest tag, the :latest is always the latest stable release
+	DOCKER_TAG=latest bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+
+do_qa_docker_master: qa_docker_build
+ifdef NIGHTLY
+do_qa_docker_master: qa_docker_build qa_docker_push
+endif
+
+do_qa_docker_release: no_changes on_tag qa_docker_build qa_docker_push
+# The rc should always be the latest tag, stable or upcoming release
+ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} > /dev/null 2>&1; echo $$?), 0)
+do_qa_docker_release: qa_docker_push_rc
+endif
+# The lastest tag is alwasy the latest stable
+ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
+do_qa_docker_release: qa_docker_push_latest
+endif

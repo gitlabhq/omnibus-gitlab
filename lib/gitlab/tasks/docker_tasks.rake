@@ -1,17 +1,30 @@
 require 'docker'
 require_relative '../docker_operations.rb'
 
+# To use PROCESS_ID instead of $$ to randomize the target directory for cloning
+# GitLab repository. Rubocop requirement to increase readability.
+require 'English'
+
 namespace :docker do
   desc "Build Docker image"
   task :build, [:RELEASE_PACKAGE] do |_t, args|
     release_package = args['RELEASE_PACKAGE']
     location = File.absolute_path(File.join(File.dirname(File.expand_path(__FILE__)), "../../../docker"))
-    Docker.options[:read_timeout] = 600
-    Docker::Image.build_from_dir(location.to_s, { t: "#{release_package}:latest", pull: true }) do |chunk|
-      if (log = JSON.parse(chunk)) && log.key?("stream")
-        puts log["stream"]
-      end
-    end
+    DockerOperations.build(location, release_package, "latest")
+  end
+
+  desc "Build QA Docker image"
+  task :build_qa, [:RELEASE_PACKAGE] do |_t, args|
+    repo = args['RELEASE_PACKAGE'] == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
+    type = args['RELEASE_PACKAGE'].gsub("gitlab-", "").strip
+
+    # PROCESS_ID is appended to ensure randomness in the directory name
+    # to avoid possible conflicts that may arise if the clone's destination
+    # directory already exists.
+    system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
+    location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
+    DockerOperations.build(location, "gitlab-qa", "#{type}-latest")
+    FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
   end
 
   desc "Clean Docker stuff"
@@ -21,18 +34,24 @@ namespace :docker do
     DockerOperations.remove_existing_images(args['RELEASE_PACKAGE'])
   end
 
+  desc "Clean QA Docker stuff"
+  task :clean_qa, [:RELEASE_PACKAGE] do |_t, args|
+    DockerOperations.remove_containers
+    DockerOperations.remove_dangling_images
+    DockerOperations.remove_existing_images("gitlab-qa")
+  end
+
   desc "Push Docker Image to Registry"
   task :push, [:RELEASE_PACKAGE] do |_t, args|
     docker_tag = ENV["DOCKER_TAG"]
     release_package = args['RELEASE_PACKAGE']
-    image = Docker::Image.get("#{release_package}:latest")
+    DockerOperations.push(release_package, "latest", docker_tag)
+  end
 
-    image.info["RepoTags"].pop
-    image.tag(repo: "gitlab/#{release_package}", tag: docker_tag.to_s, force: true)
-    puts image.info["RepoTags"]
-    Docker.authenticate!(username: ENV['DOCKERHUB_USERNAME'], password: ENV['DOCKERHUB_PASSWORD'], email: ENV['DOCKERHUB_EMAIL'])
-    image.push(Docker.creds, repo_tag: "gitlab/#{release_package}:#{docker_tag}") do |chunk|
-      puts chunk
-    end
+  desc "Push QA Docker Image to Registry"
+  task :push_qa, [:RELEASE_PACKAGE] do |_t, args|
+    docker_tag = ENV["DOCKER_TAG"]
+    type = args['RELEASE_PACKAGE'].gsub("gitlab-", "").strip
+    DockerOperations.push("gitlab-qa", "#{type}-latest", "#{type}-#{docker_tag}")
   end
 end
