@@ -47,7 +47,6 @@ describe PackageRepository do
   end
 
   describe :target do
-
     shared_examples 'with an override repository' do
       context 'with repository override' do
         before do
@@ -55,7 +54,7 @@ describe PackageRepository do
         end
 
         it 'uses the override repository' do
-           expect(repo.target).to eq('super-stable-1234')
+          expect(repo.target).to eq('super-stable-1234')
         end
       end
     end
@@ -67,7 +66,7 @@ describe PackageRepository do
         end
 
         it 'uses the nightly repository' do
-           expect(repo.target).to eq('nightly-builds')
+          expect(repo.target).to eq('nightly-builds')
         end
       end
     end
@@ -79,7 +78,7 @@ describe PackageRepository do
         end
 
         it 'uses the raspberry pi repository' do
-           expect(repo.target).to eq('raspi')
+          expect(repo.target).to eq('raspi')
         end
       end
     end

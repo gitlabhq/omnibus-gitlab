@@ -55,14 +55,14 @@ describe 'postgresql 9.2' do
   context 'when user settings are set' do
     before do
       stub_gitlab_rb(postgresql: {
-        shared_preload_libraries: 'pg_stat_statements',
-        log_line_prefix: '%a',
-        max_standby_archive_delay: '60s',
-        max_standby_streaming_delay: '120s',
-        archive_mode: 'on',
-        archive_command: 'command',
-        archive_timeout: '120',
-        })
+                       shared_preload_libraries: 'pg_stat_statements',
+                       log_line_prefix: '%a',
+                       max_standby_archive_delay: '60s',
+                       max_standby_streaming_delay: '120s',
+                       archive_mode: 'on',
+                       archive_command: 'command',
+                       archive_timeout: '120',
+                     })
     end
 
     it 'correctly sets the shared_preload_libraries setting' do
@@ -133,7 +133,7 @@ describe 'postgresql 9.2' do
       expect(chef_run).to render_file(
         '/var/opt/gitlab/postgresql/data/postgresql.conf'
       ).with_content { |content|
-        expect(content).to_not match(/max_replication_slots = /)
+        expect(content).not_to match(/max_replication_slots = /)
       }
     end
 
@@ -245,10 +245,10 @@ describe 'postgresql 9.6' do
     context 'when dynamic_shared_memory_type is none' do
       before do
         stub_gitlab_rb({
-          postgresql: {
-            dynamic_shared_memory_type: 'none'
-          }
-        })
+                         postgresql: {
+                           dynamic_shared_memory_type: 'none'
+                         }
+                       })
       end
 
       it 'sets the dynamic_shared_memory_type' do

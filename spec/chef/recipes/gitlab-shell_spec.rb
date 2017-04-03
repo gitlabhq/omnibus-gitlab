@@ -15,7 +15,7 @@ describe 'gitlab::gitlab-shell' do
     before { stub_command('id -Z').and_return(false) }
 
     it 'should not run the chcon bash command' do
-      expect(chef_run).to_not run_bash('Set proper security context on ssh files for selinux')
+      expect(chef_run).not_to run_bash('Set proper security context on ssh files for selinux')
     end
   end
 
@@ -42,8 +42,8 @@ describe 'gitlab::gitlab-shell' do
   context 'with a non-default directory' do
     before do
       stub_gitlab_rb(gitlab_shell: {
-        dir: '/export/gitlab/gitlab-shell',
-      })
+                       dir: '/export/gitlab/gitlab-shell',
+                     })
     end
     it 'creates config file in specified location' do
       expect(chef_run).to render_file('/export/gitlab/gitlab-shell/config.yml')
@@ -53,9 +53,9 @@ describe 'gitlab::gitlab-shell' do
   context 'with a non-default log directory' do
     before do
       stub_gitlab_rb(gitlab_shell: {
-        log_directory: '/tmp/log',
-        git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
-      })
+                       log_directory: '/tmp/log',
+                       git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
+                     })
     end
 
     it 'populates the correct values' do
@@ -97,7 +97,7 @@ describe 'gitlab::gitlab-shell' do
   end
 
   context 'when git_data_dir is moved' do
-    before { stub_gitlab_rb({git_data_dir: '/tmp/user/git-data'}) }
+    before { stub_gitlab_rb({ git_data_dir: '/tmp/user/git-data' }) }
 
     it 'creates the git data directories' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/user/git-data')
@@ -132,13 +132,13 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/database: /)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/namespace: resque:gitlab/)
-        expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/sentinels: /)
       end
     end
 
     context 'and custom configuration' do
-      before {
+      before do
         stub_gitlab_rb(
           gitlab_rails: {
             redis_host: 'redis.example.com',
@@ -147,7 +147,7 @@ describe 'gitlab::gitlab-shell' do
             redis_password: 'PASSWORD!'
           }
         )
-      }
+      end
 
       it 'creates the config file with the required redis settings' do
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
@@ -162,18 +162,18 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/namespace: resque:gitlab/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/pass: PASSWORD!/)
-        expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
       end
     end
 
     context 'with sentinels configured' do
-      before {
+      before do
         stub_gitlab_rb(
           gitlab_rails: {
             redis_sentinels: [
-              {'host' => 'redis1.sentinel', 'port' => 26370},
-              {'host' => 'redis2.sentinel', 'port' => 26371}
+              { 'host' => 'redis1.sentinel', 'port' => 26370 },
+              { 'host' => 'redis2.sentinel', 'port' => 26371 }
             ]
           },
           redis: {
@@ -181,7 +181,7 @@ describe 'gitlab::gitlab-shell' do
             master_password: 'PASSWORD!'
           }
         )
-      }
+      end
 
       it 'creates the config file with the required redis settings' do
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
@@ -198,7 +198,7 @@ describe 'gitlab::gitlab-shell' do
           .with_content(/- {"host":"redis1.sentinel","port":26370}/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/- {"host":"redis2.sentinel","port":26371}/)
-        expect(chef_run).to_not render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/socket: \/var\/opt\/gitlab\/redis\/redis.socket/)
       end
     end
@@ -243,36 +243,36 @@ describe 'gitlab_shell::git_data_dir' do
   context 'when git_data_dirs is set to multiple directories' do
     before do
       stub_gitlab_rb({
-        git_data_dirs: {
-          'default' => { 'path' => '/tmp/default/git-data' },
-          'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-        }
-      })
+                       git_data_dirs: {
+                         'default' => { 'path' => '/tmp/default/git-data' },
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+                       }
+                     })
     end
 
     it 'correctly sets the shell git data directories' do
       expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-        'default' => { 'path' => '/tmp/default/git-data' },
-        'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-      })
+                                                                                       'default' => { 'path' => '/tmp/default/git-data' },
+                                                                                       'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+                                                                                     })
     end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-        'default' => { 'path' => '/tmp/default/git-data/repositories' },
-        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
-      })
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
+                                                                                      })
     end
   end
 
   context 'when git_data_dirs is set with deprecated settings structure' do
     before do
       stub_gitlab_rb({
-        git_data_dirs: {
-          'default' => '/tmp/default/git-data',
-          'overflow' => '/tmp/other/git-overflow-data'
-        }
-      })
+                       git_data_dirs: {
+                         'default' => '/tmp/default/git-data',
+                         'overflow' => '/tmp/other/git-overflow-data'
+                       }
+                     })
     end
 
     it 'correctly sets the shell git data directories' do
@@ -280,16 +280,16 @@ describe 'gitlab_shell::git_data_dir' do
       allow(Chef::Log).to receive(:warn)
       expect(Chef::Log).to receive(:warn).with("Your git_data_dirs settings are deprecated. Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.")
       expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-        'default' => { 'path' => '/tmp/default/git-data' },
-        'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-      })
+                                                                                       'default' => { 'path' => '/tmp/default/git-data' },
+                                                                                       'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+                                                                                     })
     end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-        'default' => { 'path' => '/tmp/default/git-data/repositories' },
-        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
-      })
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
+                                                                                      })
     end
   end
 

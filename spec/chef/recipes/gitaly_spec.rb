@@ -30,9 +30,9 @@ describe 'gitlab::gitaly' do
     it_behaves_like "disabled runit service", "gitaly"
 
     it 'does not create the gitaly directories' do
-      expect(chef_run).to_not create_directory('/var/opt/gitlab/gitaly')
-      expect(chef_run).to_not create_directory('/var/log/gitlab/gitaly')
-      expect(chef_run).to_not create_directory('/opt/gitlab/etc/gitaly')
+      expect(chef_run).not_to create_directory('/var/opt/gitlab/gitaly')
+      expect(chef_run).not_to create_directory('/var/log/gitlab/gitaly')
+      expect(chef_run).not_to create_directory('/opt/gitlab/etc/gitaly')
     end
   end
 end

@@ -45,7 +45,6 @@ describe Gitlab::BuildIteration do
       end
     end
 
-
     context 'with an invalid git tag' do
       let(:git_describe) { '1.2.3+' }
 

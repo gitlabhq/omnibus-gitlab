@@ -28,9 +28,9 @@ describe 'gitlab::config' do
   end
 
   it 'errors on unsupported nested variables' do
-    expect {
+    expect do
       Gitlab.instance_eval('abc["def"]["hij"] = "top-level"')
-    }.to raise_error(NoMethodError).and(
+    end.to raise_error(NoMethodError).and(
       output(/\*ERROR\*: Encountered unsupported config key/).to_stdout
     )
   end

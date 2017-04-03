@@ -14,7 +14,7 @@ describe 'gitlab::gitlab-workhorse' do
 
       context 'when a custom env variable is specified' do
         before do
-          stub_gitlab_rb(gitlab_workhorse: { env: { 'IAM' => 'CUSTOMVAR'}})
+          stub_gitlab_rb(gitlab_workhorse: { env: { 'IAM' => 'CUSTOMVAR' } })
         end
 
         it_behaves_like "enabled gitlab-workhorse env", "IAM", 'CUSTOMVAR'
@@ -24,9 +24,9 @@ describe 'gitlab::gitlab-workhorse' do
 
   context 'without api rate limiting' do
     it 'correctly renders out the workhorse service file' do
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiLimit/)
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueDuration/)
-      expect(chef_run).to_not render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit/)
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiLimit/)
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueDuration/)
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-apiQueueLimit/)
     end
   end
 
@@ -55,7 +55,7 @@ describe 'gitlab::gitlab-workhorse' do
 
   context 'with prometheus listen address' do
     before do
-      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9100'})
+      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9100' })
     end
 
     it 'correctly renders out the workhorse service file' do
@@ -124,8 +124,8 @@ describe 'gitlab::gitlab-workhorse' do
       content_sentinel_master = 'SentinelMaster'
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
-      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel)
-      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
     end
   end
 
@@ -139,8 +139,8 @@ describe 'gitlab::gitlab-workhorse' do
       content_password = 'Password = "examplepassword"'
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
-      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/Sentinel/)
-      expect(chef_run).to_not render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/SentinelMaster/)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/Sentinel/)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/SentinelMaster/)
     end
   end
 
@@ -149,8 +149,8 @@ describe 'gitlab::gitlab-workhorse' do
       stub_gitlab_rb(
         gitlab_rails: {
           redis_sentinels: [
-            {'host' => '127.0.0.1', 'port' => 2637},
-            {'host' => '127.0.8.1', 'port' => 1234}
+            { 'host' => '127.0.0.1', 'port' => 2637 },
+            { 'host' => '127.0.8.1', 'port' => 1234 }
           ]
         }
       )
@@ -171,8 +171,8 @@ describe 'gitlab::gitlab-workhorse' do
       stub_gitlab_rb(
         gitlab_rails: {
           redis_sentinels: [
-            {'host' => '127.0.0.1', 'port' => 26379},
-            {'host' => '127.0.8.1', 'port' => 12345}
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
           ]
         },
         redis: {
@@ -193,5 +193,4 @@ describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
     end
   end
-
 end

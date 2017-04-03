@@ -18,7 +18,6 @@ shared_examples 'Postgres helpers' do |service_name, service_cmd|
     allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version') { 'YYYYYYYY XXXXXXX' }
   end
 
-
   it 'is associated with a valid service' do
     # this is a validation to make sure we are passing a valid/existing service_name to the shared example
     expect(node['gitlab'][service_name].to_h).not_to be_empty
@@ -77,7 +76,7 @@ end
 describe OmnibusHelper do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
-  let(:services) {
+  let(:services) do
     %w(
       unicorn
       sidekiq
@@ -93,7 +92,7 @@ describe OmnibusHelper do
       gitlab-monitor
       gitaly
     ).freeze
-  }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

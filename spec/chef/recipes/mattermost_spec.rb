@@ -38,12 +38,12 @@ describe 'gitlab::mattermost' do
 
   it 'creates mattermost configuration file with gitlab settings' do
     stub_gitlab_rb(mattermost: {
-      enable: true,
-      gitlab_enable: true,
-      gitlab_id: 'gitlab_id',
-      gitlab_secret: 'gitlab_secret',
-      gitlab_scope: 'scope',
-    })
+                     enable: true,
+                     gitlab_enable: true,
+                     gitlab_id: 'gitlab_id',
+                     gitlab_secret: 'gitlab_secret',
+                     gitlab_scope: 'scope',
+                   })
 
     expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
       .with_content { |content|
@@ -61,12 +61,12 @@ describe 'gitlab::mattermost' do
 
   it 'allows overrides to the mattermost settings regarding GitLab endpoints' do
     stub_gitlab_rb(mattermost: {
-      enable: true,
-      gitlab_enable: true,
-      gitlab_auth_endpoint: 'https://test-endpoint.example.com/test/auth',
-      gitlab_token_endpoint: 'https://test-endpoint.example.com/test/token',
-      gitlab_user_api_endpoint: 'https://test-endpoint.example.com/test/user/api'
-    })
+                     enable: true,
+                     gitlab_enable: true,
+                     gitlab_auth_endpoint: 'https://test-endpoint.example.com/test/auth',
+                     gitlab_token_endpoint: 'https://test-endpoint.example.com/test/token',
+                     gitlab_user_api_endpoint: 'https://test-endpoint.example.com/test/user/api'
+                   })
 
     expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
       .with_content { |content|
@@ -81,16 +81,16 @@ describe 'gitlab::mattermost' do
 
   it 'creates mattermost configuration file in specified home folder' do
     stub_gitlab_rb(mattermost: {
-      enable: true,
-      home: '/var/local/gitlab/mattermost',
-    })
+                     enable: true,
+                     home: '/var/local/gitlab/mattermost',
+                   })
 
     expect(chef_run).to render_file('/opt/gitlab/sv/mattermost/run').with_content(/\-config \/var\/local\/gitlab\/mattermost\/config.json/)
   end
 
   shared_examples 'no gitlab authorization performed' do
     it 'does not authorize mattermost with gitlab' do
-      expect(chef_run).to_not run_ruby_block('authorize mattermost with gitlab')
+      expect(chef_run).not_to run_ruby_block('authorize mattermost with gitlab')
     end
   end
 
@@ -117,5 +117,4 @@ describe 'gitlab::mattermost' do
 
     it_behaves_like 'no gitlab authorization performed'
   end
-
 end

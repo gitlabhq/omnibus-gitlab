@@ -37,7 +37,6 @@ describe 'rake-attack' do
       expect(chef_run).to render_file(rack_attack_config)
         .with_content(/#\{Rails.application.config.relative_url_root\}\/users\/password/)
     end
-
   end
 
   context 'when rack_attack_protected_paths and relative_url_root are set' do
@@ -64,8 +63,6 @@ describe 'rake-attack' do
       expect(chef_run.node['gitlab']['gitlab-rails']['rack_attack_protected_paths'])
         .to eql(['/hosting/admin/', '/hosting/gitlab/admin/', '/admin/'])
     end
-
-
   end
 
   context 'when rack_attack_protected_paths is not set' do
@@ -76,8 +73,7 @@ describe 'rake-attack' do
                                '/users',
                                '/users/confirmation',
                                '/unsubscribes/',
-                               '/import/github/personal_access_token'
-                              ]
+                               '/import/github/personal_access_token']
     it 'uses default list' do
       stub_gitlab_rb(gitlab_rails: { rack_attack_protected_paths: nil })
       expect(chef_run.node['gitlab']['gitlab-rails']['rack_attack_protected_paths'])
@@ -91,12 +87,7 @@ describe 'rake-attack' do
       default_protected_paths.each do |path|
         expect(chef_run).to render_file(rack_attack_config)
           .with_content(/#\{Rails.application.config.relative_url_root\}#{path}/)
-
       end
-
     end
   end
-
-
-
 end

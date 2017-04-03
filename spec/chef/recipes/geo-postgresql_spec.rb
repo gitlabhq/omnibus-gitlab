@@ -9,8 +9,8 @@ describe 'geo postgresql 9.2' do
     allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.2')
 
     stub_gitlab_rb(geo_postgresql: {
-      enable: true
-    })
+                     enable: true
+                   })
   end
 
   it 'includes the postgresql-bin recipe' do
@@ -57,15 +57,15 @@ describe 'geo postgresql 9.2' do
   context 'when user settings are set' do
     before do
       stub_gitlab_rb(geo_postgresql: {
-        enable: true,
-        shared_preload_libraries: 'pg_stat_statements',
-        log_line_prefix: '%a',
-        max_standby_archive_delay: '60s',
-        max_standby_streaming_delay: '120s',
-        archive_mode: 'on',
-        archive_command: 'command',
-        archive_timeout: '120',
-        })
+                       enable: true,
+                       shared_preload_libraries: 'pg_stat_statements',
+                       log_line_prefix: '%a',
+                       max_standby_archive_delay: '60s',
+                       max_standby_streaming_delay: '120s',
+                       archive_mode: 'on',
+                       archive_command: 'command',
+                       archive_timeout: '120',
+                     })
     end
 
     it 'correctly sets the shared_preload_libraries setting' do
@@ -131,7 +131,7 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to render_file(
         '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
       ).with_content { |content|
-        expect(content).to_not match(/max_replication_slots = /)
+        expect(content).not_to match(/max_replication_slots = /)
       }
     end
   end
@@ -146,8 +146,8 @@ describe 'geo postgresql 9.6' do
     allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.6')
 
     stub_gitlab_rb(geo_postgresql: {
-      enable: true
-    })
+                     enable: true
+                   })
   end
 
   context 'version specific settings' do

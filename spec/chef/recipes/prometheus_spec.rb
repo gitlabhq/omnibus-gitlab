@@ -17,7 +17,7 @@ describe 'gitlab::prometheus' do
         },
         gitlab_monitor: {
           enable: true
-        },
+        }
       )
     end
 
@@ -126,11 +126,11 @@ describe 'gitlab::prometheus' do
 
       context 'and user did not enable the exporter' do
         it 'postgres exporter is disabled' do
-          expect(chef_run).to_not include_recipe('gitlab::postgres-exporter')
+          expect(chef_run).not_to include_recipe('gitlab::postgres-exporter')
         end
 
         it 'redis exporter is disabled' do
-          expect(chef_run).to_not include_recipe('gitlab::redis-exporter')
+          expect(chef_run).not_to include_recipe('gitlab::redis-exporter')
         end
       end
 

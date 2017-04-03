@@ -38,7 +38,7 @@ describe 'add_trusted_certs recipe' do
     end
 
     it 'does not attempt to link trusted certificates into our certificate chain' do
-      expect(chef_run).to_not run_ruby_block('Move existing certs and link to /opt/gitlab/embedded/ssl/certs')
+      expect(chef_run).not_to run_ruby_block('Move existing certs and link to /opt/gitlab/embedded/ssl/certs')
     end
   end
 end

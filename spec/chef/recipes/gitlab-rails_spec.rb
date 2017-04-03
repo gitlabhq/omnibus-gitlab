@@ -14,35 +14,35 @@ describe 'gitlab::gitlab-rails' do
     end
 
     it 'does not create the shared directory' do
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/shared')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared')
     end
 
     it 'does not create the artifacts directory' do
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/shared/artifacts')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/artifacts')
     end
 
     it 'does not create the lfs storage directory' do
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/shared/lfs-objects')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
     end
 
     it 'does not create the uploads storage directory' do
       stub_gitlab_rb(gitlab_rails: { uploads_directory: '/tmp/uploads' })
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/uploads')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
 
     it 'does not create the ci builds directory' do
       stub_gitlab_rb(gitlab_ci: { builds_directory: '/tmp/builds' })
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/builds')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/builds')
     end
 
     it 'does not create the GitLab pages directory' do
-      expect(chef_run).to_not run_ruby_block('directory resource: /tmp/shared/pages')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/pages')
     end
   end
 
   context 'when manage-storage-directories is enabled' do
     before do
-      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' } )
+      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' })
     end
 
     it 'creates the shared directory' do
@@ -108,8 +108,8 @@ describe 'gitlab::gitlab-rails' do
     # NOTE: Test if we pass proper notifications to other resources
     context 'rails cache management' do
       before do
-        allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).
-          and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:not_listening?)
+          .and_return(false)
       end
 
       it 'should notify rails cache clear resource' do
@@ -130,15 +130,15 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(mattermost: { enable: true },
                          mattermost_external_url: 'http://mattermost.domain.com')
 
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content("host: http://mattermost.domain.com")
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content("host: http://mattermost.domain.com")
         end
       end
 
       context 'mattermost is not configured' do
         it 'has empty values' do
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content(/mattermost:\s+enabled: false\s+host:\s+/)
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/mattermost:\s+enabled: false\s+host:\s+/)
         end
       end
 
@@ -146,8 +146,8 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the mattermost host' do
           stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
 
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
         end
 
         context 'values set twice' do
@@ -156,8 +156,8 @@ describe 'gitlab::gitlab-rails' do
                            mattermost_external_url: 'http://my.url.com',
                            gitlab_rails: { mattermost_host: 'http://do.not/setme' })
 
-            expect(chef_run).to render_file(gitlab_yml_path).
-              with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
+            expect(chef_run).to render_file(gitlab_yml_path)
+              .with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
           end
         end
       end
@@ -168,8 +168,8 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content(/geo_backfill_worker:\s+cron:\s+1 2 3 4 5/)
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/geo_backfill_worker:\s+cron:\s+1 2 3 4 5/)
         end
       end
 
@@ -185,8 +185,8 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_download_dispatch_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content(/geo_download_dispatch_worker:\s+cron:\s+1 2 3 4 5/)
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/geo_download_dispatch_worker:\s+cron:\s+1 2 3 4 5/)
         end
       end
 
@@ -202,16 +202,15 @@ describe 'gitlab::gitlab-rails' do
     context 'Gitaly settings' do
       context 'by default' do
         it 'sets the path to socket' do
-          expect(chef_run).to render_file(gitlab_yml_path).
-            with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
         end
 
         context 'when socket path is changed' do
-
           it 'sets the path to socket' do
-            stub_gitlab_rb(gitaly: { env: { 'GITALY_SOCKET_PATH' => '/tmp/socket'} })
-            expect(chef_run).to render_file(gitlab_yml_path).
-              with_content(%r{gitaly:\s+socket_path:\s+/tmp/socket})
+            stub_gitlab_rb(gitaly: { env: { 'GITALY_SOCKET_PATH' => '/tmp/socket' } })
+            expect(chef_run).to render_file(gitlab_yml_path)
+              .with_content(%r{gitaly:\s+socket_path:\s+/tmp/socket})
           end
         end
       end
@@ -220,8 +219,8 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the mattermost host' do
           stub_gitlab_rb(gitaly: { enable: false })
 
-          expect(chef_run).to_not render_file(gitlab_yml_path).
-            with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
+          expect(chef_run).not_to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
         end
       end
     end
@@ -241,7 +240,7 @@ describe 'gitlab::gitlab-rails' do
 
       context 'when a custom env variable is specified' do
         before do
-          stub_gitlab_rb(gitlab_rails: { env: { 'IAM' => 'CUSTOMVAR'}})
+          stub_gitlab_rb(gitlab_rails: { env: { 'IAM' => 'CUSTOMVAR' } })
         end
 
         it_behaves_like "enabled gitlab-rails env", "IAM", 'CUSTOMVAR'
@@ -288,10 +287,10 @@ describe 'gitlab::gitlab-rails' do
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
             .with(
-          owner: 'root',
-          group: 'root',
-          mode: '0644',
-          )
+              owner: 'root',
+              group: 'root',
+              mode: '0644'
+            )
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
@@ -302,8 +301,8 @@ describe 'gitlab::gitlab-rails' do
         it 'template triggers notifications' do
           expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink_template).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_template).to_not notify('service[nginx]').to(:restart).delayed
+          expect(templatesymlink_template).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_template).not_to notify('service[nginx]').to(:restart).delayed
         end
 
         it 'creates the symlink' do
@@ -313,8 +312,8 @@ describe 'gitlab::gitlab-rails' do
         it 'linking triggers notifications' do
           expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink_link).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_link).to_not notify('service[nginx]').to(:restart).delayed
+          expect(templatesymlink_link).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink_link).not_to notify('service[nginx]').to(:restart).delayed
         end
       end
 
@@ -350,8 +349,8 @@ describe 'gitlab::gitlab-rails' do
           it 'template triggers notifications' do
             expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
             expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
-            expect(templatesymlink_template).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
-            expect(templatesymlink_template).to_not notify('service[nginx]').to(:restart).delayed
+            expect(templatesymlink_template).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink_template).not_to notify('service[nginx]').to(:restart).delayed
           end
 
           it 'creates the symlink' do
@@ -361,14 +360,14 @@ describe 'gitlab::gitlab-rails' do
           it 'linking triggers notifications' do
             expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
             expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
-            expect(templatesymlink_link).to_not notify('service[gitlab-workhorse]').to(:restart).delayed
-            expect(templatesymlink_link).to_not notify('service[nginx]').to(:restart).delayed
+            expect(templatesymlink_link).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink_link).not_to notify('service[nginx]').to(:restart).delayed
           end
         end
 
         context 'when load balancers are specified' do
           before do
-            stub_gitlab_rb(gitlab_rails: { db_load_balancing: { 'hosts' => ['primary.example.com', 'secondary.example.com']} })
+            stub_gitlab_rb(gitlab_rails: { db_load_balancing: { 'hosts' => ['primary.example.com', 'secondary.example.com'] } })
           end
 
           it 'uses provided value in database.yml' do
@@ -400,7 +399,6 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-
     describe 'gitlab_workhorse_secret' do
       let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret') }
       let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret") }
@@ -409,10 +407,10 @@ describe 'gitlab::gitlab-rails' do
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
             .with(
-          owner: 'root',
-          group: 'root',
-          mode: '0644',
-          )
+              owner: 'root',
+              group: 'root',
+              mode: '0644'
+            )
         end
 
         it 'template triggers notifications' do
@@ -445,10 +443,10 @@ describe 'gitlab::gitlab-rails' do
         it 'uses the correct owner and permissions' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
             .with(
-          owner: 'root',
-          group: 'root',
-          mode: '0644',
-          )
+              owner: 'root',
+              group: 'root',
+              mode: '0644'
+            )
         end
 
         it 'template triggers notifications' do
