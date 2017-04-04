@@ -34,3 +34,8 @@ runit_service 'redis-exporter' do
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['registry'].to_hash)
 end
 
+if node['gitlab']['bootstrap']['enable']
+  execute "/opt/gitlab/bin/gitlab-ctl start redis-exporter" do
+    retries 20
+  end
+end
