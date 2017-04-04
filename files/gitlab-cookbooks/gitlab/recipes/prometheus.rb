@@ -52,3 +52,9 @@ runit_service 'prometheus' do
     node['gitlab']['prometheus'].to_hash
   )
 end
+
+if node['gitlab']['bootstrap']['enable']
+  execute "/opt/gitlab/bin/gitlab-ctl start prometheus" do
+    retries 20
+  end
+end
