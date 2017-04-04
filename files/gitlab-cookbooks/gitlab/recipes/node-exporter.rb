@@ -46,3 +46,9 @@ runit_service 'node-exporter' do
     node['gitlab']['node-exporter'].to_hash
   )
 end
+
+if node['gitlab']['bootstrap']['enable']
+  execute "/opt/gitlab/bin/gitlab-ctl start node-exporter" do
+    retries 20
+  end
+end
