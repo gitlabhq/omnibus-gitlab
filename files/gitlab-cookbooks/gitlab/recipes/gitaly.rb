@@ -44,3 +44,9 @@ runit_service 'gitaly' do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitaly'].to_hash)
 end
+
+if node['gitlab']['bootstrap']['enable']
+  execute "/opt/gitlab/bin/gitlab-ctl start gitaly" do
+    retries 20
+  end
+end
