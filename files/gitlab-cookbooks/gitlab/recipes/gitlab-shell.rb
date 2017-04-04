@@ -29,6 +29,8 @@ log_directory = node['gitlab']['gitlab-shell']['log_directory']
 hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 
+# Holds git-data, by default one shard at /var/opt/gitlab/git-data
+# Can be changed by user using git_data_dirs option
 git_data_directories.each do |_name, git_data_directory|
   storage_directory git_data_directory['path'] do
     owner git_user
@@ -36,6 +38,8 @@ git_data_directories.each do |_name, git_data_directory|
   end
 end
 
+# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
+# Should not be changed by user. Different permissions to git_data_dir set.
 repositories_storages.each do |_name, repositories_storage|
   storage_directory repositories_storage['path'] do
     owner git_user
