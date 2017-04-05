@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.5
+
+- Update Mattermost version to 3.6.5 bb826eeb
+
+8.17.4
+
+- No changes
+
 8.17.3
 
 - Changing call to create tmp dir as the database user 7b54cd76
