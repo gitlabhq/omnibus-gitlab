@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.4
+
+- Update Mattermost version to 3.7.3 b8abd225
+
 9.0.3
 
 - Added support for managing PostgreSQL's hot_standby_feedback option 8971a5e0
