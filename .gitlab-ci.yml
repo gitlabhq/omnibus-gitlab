@@ -23,7 +23,7 @@ rubocop:
   stage: check
   image: ruby:2.3.3
   script:
-    - bundle exec rubocop -D config lib spec
+    - bundle exec rake rubocop
   tags:
     - docker
   except:
