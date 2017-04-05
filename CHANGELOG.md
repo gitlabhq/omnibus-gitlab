@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.16.9
+
+- Update Mattermost version to 3.6.5 e5f65b8
+
+8.16.8
+
+- No changes
+
+8.16.7
+
+- No changes
+
 8.16.6
 
 - EE: Make sure `ssh_keygen` creates the directory first e5483177
