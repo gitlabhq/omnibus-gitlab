@@ -89,18 +89,30 @@ module Gitlab
   registry_external_url nil
   git_data_dirs Mash.new
   gitaly Mash.new
+  geo_secondary Mash.new
   geo_postgresql Mash.new
   prometheus_monitoring Mash.new
 
-  # roles
+  # Single-Service Roles
+  # When enabled, default enabled services are disabled
   redis_sentinel_role Mash.new
   redis_master_role Mash.new
   redis_slave_role Mash.new
 
-  ROLES ||= [
+  SERVICE_ROLES ||= [
     'redis_sentinel',
     'redis_master',
-    'redis_slave'
+    'redis_slave',
+  ].freeze
+
+  # Behavior roles
+  # Used to configure different "defaults" based on intended behavior of the node.
+  geo_primary_role Mash.new
+  geo_secondary_role Mash.new
+
+  BEHAVIOR_ROLES ||= [
+    'geo_primary',
+    'geo_secondary',
   ].freeze
 
   class << self
@@ -209,7 +221,6 @@ module Gitlab
         "postgres_exporter",
         "gitlab_monitor",
         "sentinel",
-        "geo_postgresql",
         'prometheus_monitoring'
       ].each do |key|
         rkey = key.gsub('_', '-')
@@ -217,7 +228,7 @@ module Gitlab
       end
 
       results['roles'] = {}
-      ROLES.each do |key|
+      (BEHAVIOR_ROLES + SERVICE_ROLES).each do |key|
         rkey = key.gsub('_', '-')
         results['roles'][rkey] = Gitlab["#{key}_role"]
       end

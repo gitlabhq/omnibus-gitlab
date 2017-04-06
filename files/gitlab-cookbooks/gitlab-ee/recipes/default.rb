@@ -23,7 +23,7 @@ include_recipe 'gitlab-ee::config'
   'sidekiq-cluster',
   'geo-postgresql',
 ].each do |service|
-  if node["gitlab"][service]["enable"]
+  if node['gitlab'][service]['enable']
     include_recipe "gitlab-ee::#{service}"
   else
     include_recipe "gitlab-ee::#{service}_disable"
@@ -31,3 +31,9 @@ include_recipe 'gitlab-ee::config'
 end
 
 include_recipe 'gitlab-ee::ssh_keys'
+
+# Geo secondary
+if node['gitlab']['geo-postgresql']['enable']
+  include_recipe 'gitlab-ee::geo-secondary'
+  include_recipe 'gitlab-ee::geo_database_migrations'
+end

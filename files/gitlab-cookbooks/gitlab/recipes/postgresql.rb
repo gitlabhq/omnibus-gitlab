@@ -86,7 +86,7 @@ end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
-  not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
+  not_if { pg_helper.bootstrapped? }
 end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")

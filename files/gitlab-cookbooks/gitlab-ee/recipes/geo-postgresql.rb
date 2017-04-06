@@ -60,8 +60,7 @@ end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
-  not_if { File.exists?(File.join(postgresql_data_dir, 'PG_VERSION')) }
-  notifies :run, 'execute[start geo-postgresql]', :immediately
+  not_if { pg_helper.bootstrapped? }
 end
 
 postgresql_config = File.join(postgresql_data_dir, 'postgresql.conf')
@@ -103,10 +102,11 @@ end
 # run only on new installation at which point we expect to have correct binaries.
 include_recipe 'gitlab::postgresql-bin'
 
-execute 'start geo-postgresql' do
-  command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
-  retries 20
-  action :nothing
+if node['gitlab']['geo-postgresql']['bootstrap']
+  execute 'start geo-postgresql' do
+    command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
+    retries 20
+  end
 end
 
 ###

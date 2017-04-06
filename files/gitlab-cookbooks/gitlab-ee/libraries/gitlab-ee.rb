@@ -16,6 +16,7 @@
 #
 
 require_relative 'sidekiq_cluster.rb'
+require_relative 'gitlab_geo.rb'
 
 module GitlabEE
   class << self
@@ -23,9 +24,16 @@ module GitlabEE
       # NOTE: If you are adding a new service
       # and that service has logging, make sure you add the service to
       # the array in parse_udp_log_shipping.
-      results = { "gitlab" => {} }
+      #
+      # Add to the list below any service that has additional EE specific
+      # behavior or is impacted by an EE role definition
+      results = { 'gitlab' => {} }
       [
-        "sidekiq_cluster"
+        'sidekiq_cluster',
+        'geo_secondary',
+        'geo_postgresql',
+        'postgresql', # impacted by role
+        'gitlab_rails' # impacted by role
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
@@ -36,6 +44,7 @@ module GitlabEE
 
     def generate_config
       SidekiqCluster.parse_variables
+      GitlabGeo.parse_variables
       # The last step is to convert underscores to hyphens in top-level keys
       generate_hash
     end
