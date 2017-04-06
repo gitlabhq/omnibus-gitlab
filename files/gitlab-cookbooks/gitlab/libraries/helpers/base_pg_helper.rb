@@ -43,6 +43,10 @@ class BasePgHelper
       "|grep -x t"])
   end
 
+  def bootstrapped?
+    File.exists?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION'))
+  end
+
   def psql_cmd(cmd_list)
     cmd = ["/opt/gitlab/bin/#{service_cmd}", cmd_list.join(' ')].join(' ')
     success?(cmd)

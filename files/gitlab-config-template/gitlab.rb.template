@@ -1485,3 +1485,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Additional Database Settings (EE only)
 ################################################################################
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
+
+################################################################################
+## GitLab Geo Secondary (EE only)
+################################################################################
+# geo_secondary['auto_migrate'] = true
+# geo_secondary['db_adapter'] = "postgresql"
+# geo_secondary['db_encoding'] = "unicode"
+# geo_secondary['db_collation'] = nil
+# geo_secondary['db_database'] = "gitlabhq_geo_production"
+# geo_secondary['db_pool'] = 10
+# geo_secondary['db_username'] = "gitlab_geo"
+# geo_secondary['db_password'] = nil
+# geo_secondary['db_host'] = "/var/opt/gitlab/geo-postgresql"
+# geo_secondary['db_port'] = 5431
+# geo_secondary['db_socket'] = nil
+# geo_secondary['db_sslmode'] = nil
+# geo_secondary['db_sslrootcert'] = nil
+# geo_secondary['db_sslca'] = nil
+
+################################################################################
+## GitLab Geo Secondary Tracking Database (EE only)
+################################################################################
+
+# geo_postgresql['enable'] = false
+# geo_postgresql['ha'] = false
+# geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
+# geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'

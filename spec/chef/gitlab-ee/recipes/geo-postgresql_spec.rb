@@ -1,23 +1,37 @@
 require 'chef_helper'
 
 describe 'geo postgresql 9.2' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
-
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.2.18')
     allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.2')
-
-    stub_gitlab_rb(geo_postgresql: {
-                     enable: true
-                   })
   end
 
-  it 'includes the postgresql-bin recipe' do
-    expect(chef_run).to include_recipe('gitlab::postgresql-bin')
+  context 'when geo postgres is disabled' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
+
+    before do
+      stub_gitlab_rb(geo_postgresql: { enable: false })
+    end
+
+    it_behaves_like 'disabled runit service', 'geo-postgresql'
   end
 
   context 'with default settings' do
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(geo_postgresql: { enable: true })
+      end
+
+      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+    end
+
+    it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
+
+    it 'includes the postgresql-bin recipe' do
+      expect(chef_run).to include_recipe('gitlab::postgresql-bin')
+    end
+
     it 'correctly sets the shared_preload_libraries default setting' do
       expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to be_nil
 
@@ -52,20 +66,56 @@ describe 'geo postgresql 9.2' do
         '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
       ).with_content(/archive_timeout = 60/)
     end
+
+    context 'version specific settings' do
+      it 'sets unix_socket_directory' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['unix_socket_directory']).to eq('/var/opt/gitlab/geo-postgresql')
+        expect(chef_run.node['gitlab']['geo-postgresql']['unix_socket_directories']).to eq(nil)
+        expect(chef_run).to render_file(
+          '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
+        ).with_content { |content|
+          expect(content).to match(
+            /unix_socket_directory = '\/var\/opt\/gitlab\/geo-postgresql'/
+          )
+          expect(content).not_to match(
+            /unix_socket_directories = '\/var\/opt\/gitlab\/geo-postgresql'/
+          )
+        }
+      end
+
+      it 'sets checkpoint_segments' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['checkpoint_segments']).to eq(10)
+        expect(chef_run).to render_file(
+          '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
+        ).with_content(/checkpoint_segments = 10/)
+      end
+
+      it 'does not set the max_replication_slots setting' do
+        expect(chef_run).to render_file(
+          '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
+        ).with_content { |content|
+          expect(content).not_to match(/max_replication_slots = /)
+        }
+      end
+    end
   end
 
   context 'when user settings are set' do
-    before do
-      stub_gitlab_rb(geo_postgresql: {
-                       enable: true,
-                       shared_preload_libraries: 'pg_stat_statements',
-                       log_line_prefix: '%a',
-                       max_standby_archive_delay: '60s',
-                       max_standby_streaming_delay: '120s',
-                       archive_mode: 'on',
-                       archive_command: 'command',
-                       archive_timeout: '120',
-                     })
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(geo_postgresql: {
+                         enable: true,
+                         shared_preload_libraries: 'pg_stat_statements',
+                         log_line_prefix: '%a',
+                         max_standby_archive_delay: '60s',
+                         max_standby_streaming_delay: '120s',
+                         archive_mode: 'on',
+                         archive_command: 'command',
+                         archive_timeout: '120',
+                       })
+      end
+
+      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
     end
 
     it 'correctly sets the shared_preload_libraries setting' do
@@ -103,51 +153,21 @@ describe 'geo postgresql 9.2' do
       ).with_content(/archive_timeout = 120/)
     end
   end
-
-  context 'version specific settings' do
-    it 'sets unix_socket_directory' do
-      expect(chef_run.node['gitlab']['geo-postgresql']['unix_socket_directory']).to eq('/var/opt/gitlab/geo-postgresql')
-      expect(chef_run.node['gitlab']['geo-postgresql']['unix_socket_directories']).to eq(nil)
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
-      ).with_content { |content|
-        expect(content).to match(
-          /unix_socket_directory = '\/var\/opt\/gitlab\/geo-postgresql'/
-        )
-        expect(content).not_to match(
-          /unix_socket_directories = '\/var\/opt\/gitlab\/geo-postgresql'/
-        )
-      }
-    end
-
-    it 'sets checkpoint_segments' do
-      expect(chef_run.node['gitlab']['geo-postgresql']['checkpoint_segments']).to eq(10)
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
-      ).with_content(/checkpoint_segments = 10/)
-    end
-
-    it 'does not set the max_replication_slots setting' do
-      expect(chef_run).to render_file(
-        '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
-      ).with_content { |content|
-        expect(content).not_to match(/max_replication_slots = /)
-      }
-    end
-  end
 end
 
 describe 'geo postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
-
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.6.1')
     allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.6')
+  end
 
-    stub_gitlab_rb(geo_postgresql: {
-                     enable: true
-                   })
+  cached(:chef_run) do
+    RSpec::Mocks.with_temporary_scope do
+      stub_gitlab_rb(geo_postgresql: { enable: true })
+    end
+
+    ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
   end
 
   context 'version specific settings' do

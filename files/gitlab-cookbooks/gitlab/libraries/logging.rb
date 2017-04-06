@@ -41,6 +41,7 @@ module Logging
         sidekiq
         unicorn
         postgresql
+        geo-postgresql
         remote-syslog
         gitlab-workhorse
         mailroom

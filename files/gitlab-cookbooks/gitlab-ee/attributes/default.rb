@@ -35,6 +35,25 @@ default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq
 default['gitlab']['sidekiq-cluster']['interval'] = nil
 default['gitlab']['sidekiq-cluster']['queue_groups'] = []
 
+###
+# Geo: Secondary node configuration
+###
+default['gitlab']['geo-secondary']['auto_migrate'] = true
+default['gitlab']['geo-secondary']['db_adapter'] = "postgresql"
+default['gitlab']['geo-secondary']['db_encoding'] = "unicode"
+default['gitlab']['geo-secondary']['db_collation'] = nil
+default['gitlab']['geo-secondary']['db_database'] = "gitlabhq_geo_production"
+default['gitlab']['geo-secondary']['db_pool'] = 10
+default['gitlab']['geo-secondary']['db_username'] = "gitlab_geo"
+default['gitlab']['geo-secondary']['db_password'] = nil
+default['gitlab']['geo-secondary']['db_load_balancing'] = { 'hosts' => [] }
+# Path to postgresql socket directory
+default['gitlab']['geo-secondary']['db_host'] = "/var/opt/gitlab/geo-postgresql"
+default['gitlab']['geo-secondary']['db_port'] = 5431
+default['gitlab']['geo-secondary']['db_socket'] = nil
+default['gitlab']['geo-secondary']['db_sslmode'] = nil
+default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
+default['gitlab']['geo-secondary']['db_sslca'] = nil
 
 ###
 # Geo: PostgreSQL (Tracking database)
@@ -101,6 +120,3 @@ default['gitlab']['geo-postgresql']['synchronous_standby_names'] = ''
 default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
 default['gitlab']['geo-postgresql']['archive_timeout'] = '60'
-
-# Trackin database settings
-default['gitlab']['geo-secondary']['db_database'] = 'gitlabhq_geo_production'

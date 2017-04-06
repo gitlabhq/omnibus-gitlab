@@ -26,6 +26,7 @@ property :source, String
 property :owner, String
 property :group, String
 property :mode, String
+property :cookbook, String
 property :variables, Hash, default: {}
 property :helpers, Module, default: SingleQuoteHelper
 property :notifies, Array
@@ -39,6 +40,7 @@ action :create do
     owner new_resource.owner
     group new_resource.group
     mode new_resource.mode
+    cookbook new_resource.cookbook if new_resource.cookbook
     variables new_resource.variables
     helpers new_resource.helpers
     notifies *(new_resource.notifies) if new_resource.notifies

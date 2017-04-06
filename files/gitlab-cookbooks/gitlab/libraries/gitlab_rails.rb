@@ -127,7 +127,7 @@ module GitlabRails
     end
 
     def disable_services
-      disable_services_roles if any_role_defined?
+      disable_services_roles if any_service_role_defined?
 
       disable_gitlab_rails_services
     end
@@ -138,8 +138,8 @@ module GitlabRails
 
     private
 
-    def any_role_defined?
-      Gitlab::ROLES.any? { |role| Gitlab["#{role}_role"]['enable'] }
+    def any_service_role_defined?
+      Gitlab::SERVICE_ROLES.any? { |role| Gitlab["#{role}_role"]['enable'] }
     end
 
     def disable_services_roles
@@ -185,4 +185,4 @@ module GitlabRails
       Gitlab['mailroom']['enable'] = false
     end
   end
-end
+end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
