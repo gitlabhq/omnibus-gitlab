@@ -164,6 +164,7 @@ templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
+  sensitive true
   variables('secrets' => { 'production' =>  {
     'db_key_base' => node['gitlab']['gitlab-rails']['db_key_base'],
     'secret_key_base' => node['gitlab']['gitlab-rails']['secret_key_base'],
@@ -275,6 +276,7 @@ templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails 
   owner "root"
   group "root"
   mode "0644"
+  sensitive true
   variables(secret_token: node['gitlab']['gitlab-workhorse']['secret_token'])
   restarts gitlab_workhorse_services
 end
@@ -286,6 +288,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   owner "root"
   group "root"
   mode "0644"
+  sensitive true
   variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
   restarts dependent_services
 end

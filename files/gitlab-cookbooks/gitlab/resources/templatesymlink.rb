@@ -30,6 +30,7 @@ property :variables, Hash, default: {}
 property :helpers, Module, default: SingleQuoteHelper
 property :notifies, Array
 property :restarts, Array, default: []
+property :sensitive, [true, false], default: false
 
 
 action :create do
@@ -41,6 +42,7 @@ action :create do
     variables new_resource.variables
     helpers new_resource.helpers
     notifies *(new_resource.notifies) if new_resource.notifies
+    sensitive new_resource.sensitive
     restarts.each do |resource|
       notifies :restart, resource
     end
