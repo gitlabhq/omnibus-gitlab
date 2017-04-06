@@ -5,8 +5,7 @@ requests.
 
 If you are experiencing problems during GitLab package installation or have issues with package configuration please create an issue that includes the following:
 
-- Include the omnibus-gitlab version when discussing behavior: `dpkg-query -W
-  gitlab` or `rpm -q gitlab`.
+- Include the omnibus-gitlab version when discussing behavior: `dpkg-query -W "gitlab*"` or `rpm -q gitlab`.
 - Include the omnibus-gitlab configuration: `sudo gitlab-ctl show-config`
 - Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks "```".
 
