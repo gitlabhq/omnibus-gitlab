@@ -1,6 +1,5 @@
 stages:
   - check
-  - qa-image
   - prepare
   - tests
   - post-test
@@ -10,6 +9,7 @@ stages:
   - notification_fail
   - cloud
   - notification_fail
+  - qa-image
 
 before_script:
   - echo $NIGHTLY
