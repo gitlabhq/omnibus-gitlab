@@ -98,8 +98,8 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 ```
 
 If these versions are different from your non-packaged external PostgreSQL
-(most likely they are different), move them aside and replace them with
-symbolic links to your non-packaged PostgreSQL:
+(most likely they are different), you need to add symbolic links to your
+non-packaged PostgreSQL:
 
 1. Check the location of the non-packaged executables:
 
@@ -114,21 +114,16 @@ symbolic links to your non-packaged PostgreSQL:
     /usr/bin/psql
     ```
 
-1.  Move aside the existing executables and replace them with symbolic links to
-    the non-packaged versions:
-
+1.  Add symbolic links to the non-packaged versions:
     ```bash
-    cd /opt/gitlab/embedded/bin
-    mv psql psql_moved
-    mv pg_dump pg_dump_moved
-    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/embedded/bin/
+    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
     ```
 
-1.  Re-check the versions:
+1.  Check the versions:
 
     ```
-    /opt/gitlab/embedded/bin/pg_dump --version
-    /opt/gitlab/embedded/bin/psql --version
+    /opt/gitlab/bin/pg_dump --version
+    /opt/gitlab/bin/psql --version
     ```
 
     They should now be the same as your non-packaged external PostgreSQL.
