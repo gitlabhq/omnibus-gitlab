@@ -14,19 +14,23 @@
 # limitations under the License.
 #
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
+name 'gitlab-ctl-ee'
 
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
+license 'Apache-2.0'
+license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
+dependency 'gitlab-ctl'
+
+ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
+
+source path: File.expand_path(
+  'files/gitlab-ctl-commands-ee', Omnibus::Config.project_root
+)
+
+build do
+  if ee
+    copy File.expand_path(
+      'files/gitlab-ctl-commands-ee/*.rb', Omnibus::Config.project_root
+    ), "#{install_dir}/embedded/service/omnibus-ctl/"
   end
 end

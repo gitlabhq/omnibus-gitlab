@@ -88,6 +88,7 @@ dependency 'gitlab-rails'
 dependency 'gitlab-shell'
 dependency 'gitlab-workhorse'
 dependency 'gitlab-ctl'
+dependency 'gitlab-ctl-ee' if ee
 dependency 'gitlab-psql'
 dependency 'gitlab-geo-psql' if ee
 dependency 'gitlab-healthcheck'
