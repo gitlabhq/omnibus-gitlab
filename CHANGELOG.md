@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Remove deprecated satellites configuration
 
+9.0.4
+
+- Update Mattermost version to 3.7.3 b8abd225
+
 9.0.3
 
 - Added support for managing PostgreSQL's hot_standby_feedback option 8971a5e0
@@ -58,6 +62,14 @@ are not the same (O Schwede) c4e83c5
 - Gitaly service on by default 350dea
 - Update Nginx to 1.10.3 211a89fb6
 
+8.17.5
+
+- Update Mattermost version to 3.6.5 bb826eeb
+
+8.17.4
+
+- No changes
+
 8.17.3
 
 - Changing call to create tmp dir as the database user 7b54cd76
@@ -82,6 +94,18 @@ are not the same (O Schwede) c4e83c5
 - Disconnect and reconnect database connections when forking in Unicorn a7b35aaf
 - Add support for the PostgreSQL max_replication_slots setting
 - Allow exposing prometheus metrics on gitlab-pages
+
+8.16.9
+
+- Update Mattermost version to 3.6.5 e5f65b8
+
+8.16.8
+
+- No changes
+
+8.16.7
+
+- No changes
 
 8.16.6
 
