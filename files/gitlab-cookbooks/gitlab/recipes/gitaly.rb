@@ -37,6 +37,21 @@ env_dir env_directory do
   restarts ["service[gitaly]"]
 end
 
+templatesymlink "Create config.toml and create a symlink to Gitaly root" do
+  link_from File.join(working_dir, "config.toml")
+  link_to File.join(working_dir, "config.toml")
+  source "gitaly.toml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+
+  variables(
+    storages: {}
+  )
+
+  notifies :restart, "service[gitaly]"
+end
+
 runit_service 'gitaly' do
   down node['gitlab']['gitaly']['ha']
   options({

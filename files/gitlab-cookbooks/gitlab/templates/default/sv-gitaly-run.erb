@@ -11,4 +11,4 @@ cd <%= node['gitlab']['gitaly']['dir'] %>
 exec chpst -e <%= node['gitlab']['gitaly']['env_directory'] %> -P \
   -U <%= node['gitlab']['user']['username'] %> \
   -u <%= node['gitlab']['user']['username'] %> \
-  <%= node['gitlab']['gitaly']['bin_path'] %>
+  <%= node['gitlab']['gitaly']['bin_path'] %> <%= node['gitlab']['gitaly']['dir'] %>/config.toml
