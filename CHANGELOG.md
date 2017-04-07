@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.5
+
+- Build SLES 12 EE package at the same time as others.
+- Fix AWS build errors
+- Updating documentation for external PostgreSQL usage
+- Added quotes to GITLAB_SKIP_PG_UPGRADE
+
 9.0.4
 
 - Update Mattermost version to 3.7.3 b8abd225
