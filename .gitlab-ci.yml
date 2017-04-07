@@ -452,7 +452,7 @@ OpenSUSE 42.1:
     - gems
   <<: *tag_build
 SLES 12:
-  stage: extra
+  stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -539,7 +539,7 @@ OpenSUSE 42.1 branch:
     - gems
   <<: *branch_build
 SLES 12 branch:
-  stage: extra
+  stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
