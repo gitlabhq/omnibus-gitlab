@@ -115,6 +115,7 @@ default['gitlab']['geo-postgresql']['max_standby_streaming_delay'] = '30s'
 default['gitlab']['geo-postgresql']['max_replication_slots'] = 0
 default['gitlab']['geo-postgresql']['synchronous_commit'] = 'on'
 default['gitlab']['geo-postgresql']['synchronous_standby_names'] = ''
+default['gitlab']['geo-postgresql']['hot_standby_feedback'] = 'off'
 
 # Backup/Archive settings
 default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
