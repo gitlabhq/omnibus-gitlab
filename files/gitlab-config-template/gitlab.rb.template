@@ -1023,6 +1023,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_restrict_team_names'] = true
 # mattermost['team_restrict_direct_message'] = "any"
 # mattermost['team_max_channels_per_team'] = 2000
+# mattermost['team_user_status_away_timeout'] = 300
 
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"

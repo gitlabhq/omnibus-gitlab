@@ -30,8 +30,8 @@
         "SessionLengthSSOInDays" : <%= @service_session_length_sso_in_days %>,
         "SessionCacheInMinutes" : <%= @service_session_cache_in_minutes %>,
         "TimeBetweenUserTypingUpdatesMilliseconds" : <%= @service_time_between_user_typing_updates_milliseconds %>,
-        "EnableUserTypingMessages" : <%= @service_enable_link_previews %>,
-        "EnableLinkPreviews" : <%= @service_enable_user_typing_messages %>
+        "EnableUserTypingMessages" : <%= @service_enable_user_typing_messages %>,
+        "EnableLinkPreviews" : <%= @service_enable_link_previews %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -42,7 +42,8 @@
         "RestrictCreationToDomains": "<%= @team_restrict_creation_to_domains %>",
         "RestrictTeamNames": <%= @team_restrict_team_names %>,
         "RestrictDirectMessage": "<%= @team_restrict_direct_message %>",
-        "MaxChannelsPerTeam": <%= @team_max_channels_per_team %>
+        "MaxChannelsPerTeam": <%= @team_max_channels_per_team %>,
+        "UserStatusAwayTimeout": <%= @team_user_status_away_timeout %>
     },
     "SqlSettings": {
         "DriverName": "<%= @sql_driver_name %>",
