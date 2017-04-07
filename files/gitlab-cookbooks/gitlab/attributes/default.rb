@@ -742,7 +742,6 @@ default['gitlab']['mattermost']['service_time_between_user_typing_updates_millis
 default['gitlab']['mattermost']['service_enable_link_previews'] = false
 default['gitlab']['mattermost']['service_enable_user_typing_messages'] = true
 
-
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
 default['gitlab']['mattermost']['sql_data_source_replicas'] = []
@@ -819,6 +818,7 @@ default['gitlab']['mattermost']['team_restrict_creation_to_domains'] = nil
 default['gitlab']['mattermost']['team_restrict_team_names'] = true
 default['gitlab']['mattermost']['team_restrict_direct_message'] = "any"
 default['gitlab']['mattermost']['team_max_channels_per_team'] = 2000
+default['gitlab']['mattermost']['team_user_status_away_timeout'] = 300
 
 default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
 default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
