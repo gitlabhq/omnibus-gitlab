@@ -227,7 +227,7 @@ templatesymlink "Create a relative_url.rb and create a symlink to Rails root" do
   end
 end
 
-gitaly_socket =  node['gitlab']['gitaly']['socket_path'] if node['gitlab']['gitaly']['enable']
+gitaly_socket =  node['gitlab']['gitaly']['env']['GITALY_SOCKET_PATH'] if node['gitlab']['gitaly']['enable']
 
 templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")

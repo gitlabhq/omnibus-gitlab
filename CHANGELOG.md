@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.1.0
 
 - Remove deprecated satellites configuration
+- Add configuration file for Gitaly
 
 9.0.4
 
