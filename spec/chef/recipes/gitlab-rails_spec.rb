@@ -208,7 +208,7 @@ describe 'gitlab::gitlab-rails' do
 
         context 'when socket path is changed' do
           it 'sets the path to socket' do
-            stub_gitlab_rb(gitaly: { env: { 'GITALY_SOCKET_PATH' => '/tmp/socket' } })
+            stub_gitlab_rb(gitaly: { socket_path: '/tmp/socket' })
             expect(chef_run).to render_file(gitlab_yml_path)
               .with_content(%r{gitaly:\s+socket_path:\s+/tmp/socket})
           end
