@@ -206,10 +206,11 @@ AWS:
   stage: cloud
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer"
   script:
+  - echo -e "[default]\naws_access_key_id = $AWS_AMI_ACCESS_KEY_ID \naws_secret_access_key = $AWS_AMI_SECRET_ACCESS_KEY" > ~/.aws/config
   - make aws
   allow_failure: true
   tags:
-  - docker-build
+  - docker-builder
   only:
     - tags@gitlab/omnibus-gitlab
 
@@ -451,7 +452,7 @@ OpenSUSE 42.1:
     - gems
   <<: *tag_build
 SLES 12:
-  stage: extra
+  stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -538,7 +539,7 @@ OpenSUSE 42.1 branch:
     - gems
   <<: *branch_build
 SLES 12 branch:
-  stage: extra
+  stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
