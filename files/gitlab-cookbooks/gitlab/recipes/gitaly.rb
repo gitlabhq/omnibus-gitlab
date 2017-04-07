@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2016 GitLab B.V.
+# Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ account_helper = AccountHelper.new(node)
 working_dir = node['gitlab']['gitaly']['dir']
 log_directory = node['gitlab']['gitaly']['log_directory']
 env_directory = node['gitlab']['gitaly']['env_directory']
+config_path = File.join(working_dir, "config.toml")
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -37,25 +38,25 @@ env_dir env_directory do
   restarts ["service[gitaly]"]
 end
 
-templatesymlink "Create config.toml and create a symlink to Gitaly root" do
-  link_from File.join(working_dir, "config.toml")
-  link_to File.join(working_dir, "config.toml")
-  source "gitaly.toml.erb"
+template "Create Gitaly config.toml" do
+  path config_path
+  source "gitaly-config.toml.erb"
   owner "root"
   group "root"
   mode "0644"
-
-  variables(
-    storages: {}
-  )
-
+  variables node['gitlab']['gitaly'].to_hash
   notifies :restart, "service[gitaly]"
 end
 
 runit_service 'gitaly' do
   down node['gitlab']['gitaly']['ha']
   options({
-    :log_directory => log_directory
+    user: account_helper.gitlab_user,
+    working_dir: working_dir,
+    env_dir: env_directory,
+    bin_path: node['gitlab']['gitaly']['bin_path'],
+    config_path: config_path,
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitaly'].to_hash)
 end
