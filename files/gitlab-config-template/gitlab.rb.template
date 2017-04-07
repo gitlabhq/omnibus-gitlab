@@ -1352,9 +1352,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['env_directory'] = "/opt/gitlab/etc/gitaly"
 # gitaly['env'] = {
 #  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
-#  'HOME' => '/var/opt/gitlab',
-#  'GITALY_SOCKET_PATH' => "/var/opt/gitlab/gitaly/gitaly.socket"
+#  'HOME' => '/var/opt/gitlab'
 # }
+# gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
+# gitaly['listen_addr'] = "localhost:8075"
+# gitaly['prometheus_listen_addr'] = "localhost:9175"
 
 
 ################################################################################
