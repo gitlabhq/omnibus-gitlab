@@ -6,9 +6,9 @@ exec 2>&1
 
 <%= render("mount_point_check.erb") %>
 
-cd <%= node['gitlab']['gitaly']['dir'] %>
+cd <%= @options[:working_dir] %>
 
-exec chpst -e <%= node['gitlab']['gitaly']['env_directory'] %> -P \
-  -U <%= node['gitlab']['user']['username'] %> \
-  -u <%= node['gitlab']['user']['username'] %> \
-  <%= node['gitlab']['gitaly']['bin_path'] %>
+exec chpst -e <%= @options[:env_dir] %> -P \
+  -U <%= @options[:user] %> \
+  -u <%= @options[:user] %> \
+  <%= @options[:bin_path] %> <%= @options[:config_path] %>

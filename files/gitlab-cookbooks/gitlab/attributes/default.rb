@@ -461,22 +461,6 @@ default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
 default['gitlab']['web-server']['external_users'] = []
 
-
-####
-# gitaly
-####
-default['gitlab']['gitaly']['enable'] = true
-default['gitlab']['gitaly']['ha'] = false
-default['gitlab']['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
-default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
-default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
-default['gitlab']['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
-default['gitlab']['gitaly']['env'] = {
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'HOME' => node['gitlab']['user']['home'],
-  'GITALY_SOCKET_PATH' => "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
-}
-
 ####
 # gitlab-workhorse
 ####
@@ -944,3 +928,20 @@ default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
+
+####
+# Gitaly
+####
+default['gitlab']['gitaly']['enable'] = true
+default['gitlab']['gitaly']['ha'] = false
+default['gitlab']['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
+default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
+default['gitlab']['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
+default['gitlab']['gitaly']['env'] = {
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  'HOME' => node['gitlab']['user']['home']
+}
+default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
+default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
+default['gitlab']['gitaly']['listen_addr'] = nil
+default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
