@@ -888,6 +888,7 @@ default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
 default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
+default['gitlab']['prometheus']['scrape_configs'] = []
 default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
 default['gitlab']['prometheus']['chunk_encoding_version'] = 2
 default['gitlab']['prometheus']['target_heap_size'] = (

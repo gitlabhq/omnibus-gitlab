@@ -53,3 +53,28 @@ if node['gitlab']['bootstrap']['enable']
     retries 20
   end
 end
+
+prometheus_target = node['gitlab']['gitlab-monitor']['listen_address'] + ':' + node['gitlab']['gitlab-monitor']['listen_port']
+
+# Include gitlab-monitor in scrape config.
+node.default['gitlab']['prometheus']['scrape_configs'] << {
+  'job_name' => 'gitlab_monitor_database',
+  'metrics_path' => '/database',
+  'static_configs' => [
+    'targets' => [prometheus_target],
+  ],
+}
+node.default['gitlab']['prometheus']['scrape_configs'] << {
+  'job_name' => 'gitlab_monitor_sidekiq',
+  'metrics_path' => '/sidekiq',
+  'static_configs' => [
+    'targets' => [prometheus_target],
+  ],
+}
+node.default['gitlab']['prometheus']['scrape_configs'] << {
+  'job_name' => 'gitlab_monitor_process',
+  'metrics_path' => '/process',
+  'static_configs' => [
+    'targets' => [prometheus_target],
+  ],
+}

@@ -18,6 +18,9 @@
 require_relative 'postgresql.rb'
 require_relative 'redis.rb'
 
+require 'yaml'
+require 'json'
+
 module Prometheus
   class << self
     def services
@@ -112,6 +115,12 @@ module Prometheus
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['postgres_exporter']['flags'] = default_config['flags']
+    end
+
+    # This is a hack to avoid chef's to_yaml issues.
+    def hash_to_yaml(hash)
+      mutable_hash = JSON.parse(hash.dup.to_json)
+      mutable_hash.to_yaml
     end
   end
 end
