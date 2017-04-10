@@ -32,8 +32,7 @@ add_command 'diff-config', 'Compare the user configuration with package availabl
   command = %W( #{base_path}/embedded/bin/git
                 diff
                 #{user_config_file}
-                #{config_template_file}
-             )
+                #{config_template_file})
 
   status = run_command(command.join(" "))
   status.success?

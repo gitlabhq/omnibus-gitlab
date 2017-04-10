@@ -18,7 +18,7 @@
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   service_statuses = `#{base_path}/bin/gitlab-ctl status`
 
-  if /: runsv not running/.match(service_statuses) || service_statuses.empty? then
+  if /: runsv not running/ =~ service_statuses || service_statuses.empty?
     log 'It looks like GitLab has not been configured yet; skipping the upgrade '\
       'script.'
     exit! 0
@@ -29,8 +29,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
                   -z
                   -c #{base_path}/embedded/cookbooks/solo.rb
                   -o recipe[gitlab::config]
-                  -o recipe[gitlab::postgresql-bin]
-               )
+                  -o recipe[gitlab::postgresql-bin])
 
     status = run_command(command.join(" "))
     status.success?
@@ -39,7 +38,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
-  if File.exists?(auto_migrations_skip_file)
+  if File.exist?(auto_migrations_skip_file)
     log "Found #{auto_migrations_skip_file}, exiting..."
     exit! 0
   end
@@ -49,7 +48,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     run_sv_command_for_service('stop', sv_name)
   end
 
-  MIGRATION_SERVICES = %w{postgresql redis}
+  MIGRATION_SERVICES = [%w(postgresql redis)].freeze
   MIGRATION_SERVICES.each do |sv_name|
     # If the service is disabled, e.g. because we are using an external
     # Postgres server, then this command is a no-op.
@@ -103,7 +102,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
-    if /^run: #{sv_name}:/.match(service_statuses)
+    if /^run: #{sv_name}:/ =~ service_statuses
       run_sv_command_for_service('start', sv_name)
     end
   end
