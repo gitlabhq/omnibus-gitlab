@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require_relative 'gitaly.rb'
 
 module GitlabShell
   class << self
@@ -26,6 +27,7 @@ module GitlabShell
       git_data_dirs = Gitlab['git_data_dirs']
       git_data_dir = Gitlab['git_data_dir']
       return unless git_data_dirs.any? || git_data_dir
+      gitaly_address = Gitaly.gitaly_address
 
       Gitlab['gitlab_shell']['git_data_directories'] ||=
         if git_data_dirs.any?
@@ -43,7 +45,7 @@ module GitlabShell
 
       Gitlab['gitlab_rails']['repositories_storages'] ||=
         Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, data_directory|
-          [name, { 'path' => File.join(data_directory['path'], 'repositories') }]
+          [name, { 'path' => File.join(data_directory['path'], 'repositories'), 'gitaly_address' => gitaly_address }]
         end]
     end
 

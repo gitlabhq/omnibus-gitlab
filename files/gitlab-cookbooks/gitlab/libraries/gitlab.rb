@@ -239,6 +239,9 @@ module Gitlab
     def generate_config(node_name)
       generate_secrets(node_name)
       GitlabWorkhorse.parse_variables
+      # Parse Gitaly before gitlab-shell and gitlab-rails
+      # because we need details for repositories_storages
+      Gitaly.parse_variables
       GitlabShell.parse_variables
       GitlabRails.parse_variables
       Logging.parse_variables
@@ -249,7 +252,6 @@ module Gitlab
       GitlabMattermost.parse_variables
       GitlabPages.parse_variables
       Registry.parse_variables
-      Gitaly.parse_variables
       Prometheus.parse_variables
       # Parse nginx variables last because we want all external_url to be
       # parsed first

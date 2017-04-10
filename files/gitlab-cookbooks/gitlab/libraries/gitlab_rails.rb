@@ -16,6 +16,7 @@
 #
 
 require_relative 'nginx.rb'
+require_relative 'gitaly.rb'
 
 module GitlabRails
   class << self
@@ -26,6 +27,7 @@ module GitlabRails
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
+      parse_gitaly_variables
     end
 
     def parse_directories
@@ -33,6 +35,7 @@ module GitlabRails
       parse_artifacts_dir
       parse_lfs_objects_dir
       parse_pages_dir
+      parse_repository_storage
     end
 
     def parse_external_url
@@ -89,6 +92,18 @@ module GitlabRails
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
     end
 
+    def parse_repository_storage
+      return if Gitlab['gitlab_rails']['repositories_storages']
+      gitaly_address = Gitaly.gitaly_address
+
+      Gitlab['gitlab_rails']['repositories_storages'] ||= {
+        "default" => {
+          "path" => "/var/opt/gitlab/git-data/repositories",
+          "gitaly_address" => gitaly_address
+        }
+      }
+    end
+
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
@@ -134,6 +149,15 @@ module GitlabRails
 
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
+    end
+
+    def parse_gitaly_variables
+      return unless Gitlab['gitlab_rails']['gitaly_enabled'].nil?
+
+      gitaly_enabled = Gitlab['gitaly']['enable']
+      gitaly_enabled = Gitlab['node']['gitlab']['gitaly']['enable'] if gitaly_enabled.nil?
+
+      Gitlab['gitlab_rails']['gitaly_enabled'] = gitaly_enabled
     end
 
     private
