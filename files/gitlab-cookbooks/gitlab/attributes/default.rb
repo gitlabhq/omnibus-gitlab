@@ -139,6 +139,8 @@ default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
+# Defaults set in libraries/gitlab_rails.rb
+default['gitlab']['gitlab-rails']['repositories_storages'] = {}
 
 ####
 # These LDAP settings are deprecated in favor of the new syntax. They are kept here for backwards compatibility.
@@ -319,16 +321,14 @@ default['gitlab']['gitlab-shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 default['gitlab']['gitlab-shell']['log_level'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
-default['gitlab']['gitlab-shell']['git_data_directories'] = {
-  "default" => { "path" => "/var/opt/gitlab/git-data" }
-}
-default['gitlab']['gitlab-rails']['repositories_storages'] = {
-  "default" => { "path" => "/var/opt/gitlab/git-data/repositories" }
-}
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
+# DEPRECATED! Not used by gitlab-shell
+default['gitlab']['gitlab-shell']['git_data_directories'] = {
+  "default" => { "path" => "/var/opt/gitlab/git-data" }
+}
 
 ###
 # PostgreSQL

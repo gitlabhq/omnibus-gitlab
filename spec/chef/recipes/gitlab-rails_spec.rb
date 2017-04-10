@@ -201,27 +201,66 @@ describe 'gitlab::gitlab-rails' do
 
     context 'Gitaly settings' do
       context 'by default' do
-        it 'sets the path to socket' do
+        it 'is enabled' do
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
-        end
-
-        context 'when socket path is changed' do
-          it 'sets the path to socket' do
-            stub_gitlab_rb(gitaly: { socket_path: '/tmp/socket' })
-            expect(chef_run).to render_file(gitlab_yml_path)
-              .with_content(%r{gitaly:\s+socket_path:\s+/tmp/socket})
-          end
+            .with_content(%r{gitaly:\s+enabled: true})
         end
       end
 
       context 'when gitaly is disabled' do
-        it 'sets the mattermost host' do
+        it 'disables gitaly in config' do
           stub_gitlab_rb(gitaly: { enable: false })
 
-          expect(chef_run).not_to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+socket_path:\s+/var/opt/gitlab/gitaly/gitaly.socket})
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+enabled: false})
         end
+      end
+
+      context 'when gitaly service is connecting from a different node' do
+        before do
+          stub_gitlab_rb(
+            gitaly: { enable: false },
+            gitlab_rails: { gitaly_enabled: true }
+          )
+        end
+
+        it 'enables gitaly in config' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+enabled: true})
+        end
+      end
+
+      context 'when gitaly service is running on a different node' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: { gitaly_enabled: false }
+          )
+
+          it 'disables gitaly in config' do
+            expect(chef_run).to render_file(gitlab_yml_path)
+              .with_content(%r{gitaly:\s+enabled: false})
+          end
+        end
+      end
+    end
+
+    context 'when there is a legacy GitLab Rails stuck_ci_builds_worker_cron key' do
+      before do
+        allow(Gitlab).to receive(:[]).and_call_original
+        stub_gitlab_rb(gitlab_rails: { stuck_ci_builds_worker_cron: '0 1 2 * *' })
+      end
+
+      it 'warns that this value is deprecated' do
+        allow(Chef::Log).to receive(:warn).and_call_original
+        expect(Chef::Log).to receive(:warn).with(/gitlab_rails\['stuck_ci_builds_worker_cron'\]/)
+
+        chef_run
+      end
+
+      it 'copies legacy value from legacy key to new one' do
+        chef_run
+
+        expect(Gitlab['gitlab_rails']['stuck_ci_jobs_worker_cron']).to eq('0 1 2 * *')
       end
     end
   end

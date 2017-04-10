@@ -236,7 +236,7 @@ describe 'gitlab_shell::git_data_dir' do
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories' })
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
     end
   end
 
@@ -259,8 +259,8 @@ describe 'gitlab_shell::git_data_dir' do
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
                                                                                       })
     end
   end
@@ -287,8 +287,8 @@ describe 'gitlab_shell::git_data_dir' do
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories' }
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
                                                                                       })
     end
   end

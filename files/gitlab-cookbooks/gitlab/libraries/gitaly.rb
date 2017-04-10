@@ -38,5 +38,20 @@ module Gitaly
 
       Gitlab['gitaly']['env'] = gitaly_env
     end
+
+    def gitaly_address
+      socket_path = user_config['socket_path'] || package_default['socket_path']
+      "unix:#{socket_path}"
+    end
+
+    private
+
+    def user_config
+      Gitlab['gitaly']
+    end
+
+    def package_default
+      Gitlab['node']['gitlab']['gitaly'].to_hash
+    end
   end
 end
