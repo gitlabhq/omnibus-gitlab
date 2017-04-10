@@ -6,5 +6,5 @@ Knapsack.load_tasks
 
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop) do |t|
-  t.options = ['-D', 'config', 'lib', 'spec']
+  t.options = ['-D', 'config', 'lib', 'spec', 'files/gitlab-ctl-commands']
 end

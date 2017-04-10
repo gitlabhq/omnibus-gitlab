@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-add_command_under_category 'registry-garbage-collect', 'container-registry',  'Run Container Registry garbage collection.', 2 do |cmd_name, path|
+add_command_under_category 'registry-garbage-collect', 'container-registry', 'Run Container Registry garbage collection.', 2 do |cmd_name, path|
   service_name = "registry"
 
   unless service_enabled?(service_name)
@@ -25,7 +25,7 @@ add_command_under_category 'registry-garbage-collect', 'container-registry',  'R
 
   config_file_path = path || '/var/opt/gitlab/registry/config.yml'
 
-  unless File.exists?(config_file_path)
+  unless File.exist?(config_file_path)
     log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry-garbage-collect /path/to/config.yml"
     exit! 1
   end
@@ -34,7 +34,7 @@ add_command_under_category 'registry-garbage-collect', 'container-registry',  'R
   log "Running garbage-collect using configuration from #{config_file_path}, this might take a while...\n"
   status = run_command("/opt/gitlab/embedded/bin/registry garbage-collect #{config_file_path}")
 
-  if status.exitstatus == 0
+  if status.exitstatus.zero?
     run_sv_command_for_service('start', service_name)
     exit! 0
   else

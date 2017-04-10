@@ -16,12 +16,10 @@
 #
 
 add_command "remove-accounts", "Delete *all* users and groups used by this package", 1 do
-
   command = %W( chef-client
                 -z
                 -c #{base_path}/embedded/cookbooks/solo.rb
-                -o recipe[gitlab::remove_accounts]
-             )
+                -o recipe[gitlab::remove_accounts])
 
   status = run_command(command.join(" "))
   remove_old_node_state

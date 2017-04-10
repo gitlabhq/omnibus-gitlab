@@ -76,7 +76,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking for an omnibus managed postgresql') do
       !running_version.nil? && \
-      get_all_services.member?('postgresql')
+          get_all_services.member?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     exit! 0
@@ -292,7 +292,7 @@ end
 
 def progress_message(message, &block)
   $stdout.print "\r#{message}:"
-  results = block.call
+  results = yield
   if results
     $stdout.print "\r#{message}: \e[32mOK\e[0m\n"
   else
