@@ -5,11 +5,8 @@ set -xe
 source /etc/lsb-release
 source /RELEASE
 
-# Download & Install GitLab
-echo "deb https://packages.gitlab.com/gitlab/${PACKAGECLOUD_REPO}/ubuntu/ ${DISTRIB_CODENAME} main" > /etc/apt/sources.list.d/gitlab_${RELEASE_PACKAGE}.list
-wget -q -O - https://packages.gitlab.com/gpg.key | apt-key add -
-apt-get update
-apt-get install -yq --no-install-recommends ${RELEASE_PACKAGE}=${RELEASE_VERSION}
+# Install GitLab
+dpkg -i /assets/gitlab.deb && rm /assets/gitlab.deb
 rm -rf /var/lib/apt/lists/*
 
 # Create sshd daemon
