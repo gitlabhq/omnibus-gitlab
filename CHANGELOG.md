@@ -5,10 +5,16 @@ omnibus-gitlab repository.
 
 9.1.0
 
-- Remove deprecated satellites configuration
-- Add configuration file for Gitaly
-- Add support for Gitaly address per shard
-- Add support storages in Gitaly config
+- Remove deprecated satellites configuration f88ba40b
+- Add configuration file for Gitaly 7c7c728
+- Add support for Gitaly address per shard 2096928
+- Build Container Registry with include_gcs flags (Lars Larsson) deb707fd
+- Update Prometheus flags, tweak resource usage b2dcb8da
+- EE: Create and migrate GitLab Geo database and configure Geo replication b71f72
+- EE: Add set-geo-primary-node command ecbcf2
+- EE: Add hot-standby configuration for Geo DB 82158
+- EE: Change the order of configuration loading for EE recipes ba19b7c0
+- Add support storages in Gitaly config f3205fa
 
 9.0.4
 
