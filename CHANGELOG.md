@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Remove deprecated satellites configuration
 - Add configuration file for Gitaly
 - Add support for Gitaly address per shard
+- Add support storages in Gitaly config
 
 9.0.4
 

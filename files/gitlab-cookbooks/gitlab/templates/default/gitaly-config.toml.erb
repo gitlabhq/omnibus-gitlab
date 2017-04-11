@@ -16,12 +16,12 @@ listen_addr = '<%= @listen_addr %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
-# [[storage]]
-# name = "default"
-# path = "/home/git/repositories"
-
-# # You can optionally configure more storages for this Gitaly instance to serve up
-#
-# [[storage]]
-# name = "other_storage"
-# path = "/mnt/other_storage/repositories"
+<% @storage.each do |shard| %>
+[[storage]]
+<% if shard.has_key?('name') %>
+name = '<%= shard['name'] %>'
+<% end %>
+<% if shard.has_key?('path') %>
+path = '<%= shard['path'] %>'
+<% end %>
+<% end %>
