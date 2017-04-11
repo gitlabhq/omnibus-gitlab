@@ -152,12 +152,33 @@ module GitlabRails
     end
 
     def parse_gitaly_variables
+      parse_gitaly_enablement
+      parse_gitaly_storages
+    end
+
+    def parse_gitaly_enablement
       return unless Gitlab['gitlab_rails']['gitaly_enabled'].nil?
 
       gitaly_enabled = Gitlab['gitaly']['enable']
       gitaly_enabled = Gitlab['node']['gitlab']['gitaly']['enable'] if gitaly_enabled.nil?
 
       Gitlab['gitlab_rails']['gitaly_enabled'] = gitaly_enabled
+    end
+
+    # This method cannot be inside of libraries/gitaly.rb for now
+    # because storage gets parsed in libraries/gitlab_shell.rb
+    # and libraries/gitlab_rails.rb
+    def parse_gitaly_storages
+      return unless Gitlab['gitaly']['storage'].nil?
+
+      storages = []
+      Gitlab['gitlab_rails']['repositories_storages'].each do |key, value|
+        storages << {
+                      'name' => key,
+                      'path' => value['path']
+                    }
+      end
+      Gitlab['gitaly']['storage'] = storages
     end
 
     private

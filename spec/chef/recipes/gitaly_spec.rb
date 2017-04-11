@@ -27,6 +27,11 @@ describe 'gitlab::gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
     end
+
+    it 'populates gitaly config.toml with default storages' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/var/opt/gitlab/git-data/repositories'})
+    end
   end
 
   context 'with user settings' do
@@ -47,6 +52,55 @@ describe 'gitlab::gitaly' do
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
+    end
+
+    context 'when using gitaly storage configuration' do
+      before do
+        stub_gitlab_rb(
+          gitaly: {
+            storage: [
+              {
+                'name' => 'default',
+                'path' => '/tmp/path-1'
+              },
+              {
+                'name' => 'nfs1',
+                'path' => '/mnt/nfs1'
+              }
+            ]
+          }
+        )
+      end
+
+      it 'populates gitaly config.toml with custom storages' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/tmp/path-1'})
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[\[storage\]\]\s+name = 'nfs1'\s+path = '/mnt/nfs1'})
+      end
+    end
+
+    context 'when using git_data_dirs storage configuration' do
+      before do
+        stub_gitlab_rb(
+          {
+            git_data_dirs:
+             {
+               'default' => { 'path' => '/tmp/default/git-data' },
+               'nfs1' => { 'path' => '/mnt/nfs1' }
+             }
+          }
+        )
+      end
+
+      it 'populates gitaly config.toml with custom storages' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/tmp/default/git-data/repositories'})
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[\[storage\]\]\s+name = 'nfs1'\s+path = '/mnt/nfs1/repositories'})
+        expect(chef_run).not_to render_file(config_path)
+          .with_content('gitaly_address: "/var/opt/gitlab/gitaly/gitaly.socket"')
+      end
     end
   end
 
