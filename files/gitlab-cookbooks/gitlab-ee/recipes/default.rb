@@ -16,7 +16,6 @@
 #
 
 include_recipe 'gitlab::default'
-include_recipe 'gitlab-ee::config'
 
 [
   'sentinel',
