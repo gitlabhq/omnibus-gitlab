@@ -214,5 +214,14 @@ describe 'geo postgresql 9.6' do
         '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
       ).with_content(/synchronous_standby_names = ''/)
     end
+
+    it 'sets the hot_standby_feedback setting' do
+      expect(chef_run.node['gitlab']['geo-postgresql']['hot_standby_feedback'])
+        .to eq('off')
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/geo-postgresql/data/postgresql.conf'
+      ).with_content(/hot_standby_feedback = off/)
+    end
   end
 end
