@@ -41,7 +41,16 @@ module Gitaly
 
     def gitaly_address
       socket_path = user_config['socket_path'] || package_default['socket_path']
-      "unix:#{socket_path}"
+      listen_addr = user_config['listen_addr'] || package_default['listen_addr']
+
+      # Default to using socket path if available
+      if socket_path && !socket_path.empty?
+        "unix:#{socket_path}"
+      elsif listen_addr && !listen_addr.empty?
+        "tcp://#{listen_addr}"
+      else
+        nil
+      end
     end
 
     private
