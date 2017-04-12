@@ -240,6 +240,15 @@ describe 'gitlab_shell::git_data_dir' do
     end
   end
 
+  context 'when gitaly is set to use a listen_addr instead of a socket' do
+    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data', gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' })
+    end
+  end
+
   context 'when git_data_dirs is set to multiple directories' do
     before do
       stub_gitlab_rb({
@@ -261,6 +270,24 @@ describe 'gitlab_shell::git_data_dir' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
+                                                                                      })
+    end
+  end
+
+  context 'when git_data_dirs is set to multiple directories with different gitaly addresses' do
+    before do
+      stub_gitlab_rb({
+                       git_data_dirs: {
+                         'default' => { 'path' => '/tmp/default/git-data' },
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123' }
+                       }
+                     })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' }
                                                                                       })
     end
   end
