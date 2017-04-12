@@ -81,7 +81,6 @@ Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
 OpenSUSE 13.2 knapsack: *prepare_knapsack
 OpenSUSE 42.1 knapsack: *prepare_knapsack
-Ubuntu 12.04 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 
@@ -293,33 +292,6 @@ QA Tag:
     - tags@gitlab/omnibus-gitlab
 
 # GitLab.com only
-Ubuntu 12.04 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - gems
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 12.04 knapsack
-Ubuntu 12.04 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - gems
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 12.04 knapsack
-Ubuntu 12.04 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - gems
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 12.04 knapsack
 Ubuntu 14.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
@@ -538,14 +510,6 @@ OpenSUSE 42.1 specs 2 3:
   - OpenSUSE 42.1 knapsack
 
 # dev.gitlab.org only
-Ubuntu 12.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "Ubuntu 12.04 branch"
-    paths:
-    - cache
-    - gems
-  <<: *tag_build
 Ubuntu 14.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -625,14 +589,6 @@ SLES 12:
   tags:
   - sles-12-0.0.1
 
-Ubuntu 12.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_BUILD_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
