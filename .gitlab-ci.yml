@@ -5,11 +5,11 @@ stages:
   - post-test
   - package
   - notification_fail
-  - extra
-  - notification_fail
-  - cloud
+  - images
   - notification_fail
   - qa-image
+  - raspbian
+  - notification_fail
 
 before_script:
   - echo $NIGHTLY
@@ -145,7 +145,7 @@ update-knapsack:
       - pkg/
 
 .rpi_branch_template: &rpi_branch_build
-  stage: extra
+  stage: raspbian
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -190,7 +190,7 @@ update-knapsack:
       - pkg/
 
 .rpi_tag_template: &rpi_tag_build
-  stage: extra
+  stage: raspbian
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -213,7 +213,7 @@ update-knapsack:
   dependencies: []
 
 Docker master:
-  stage: extra
+  stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
   variables:
     DOCKER_DRIVER: overlay
@@ -231,7 +231,7 @@ Docker master:
   - Ubuntu 16.04 branch
 
 Docker:
-  stage: extra
+  stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
   variables:
     DOCKER_DRIVER: overlay
@@ -249,7 +249,7 @@ Docker:
   - Ubuntu 16.04
 
 AWS:
-  stage: cloud
+  stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer"
   script:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
