@@ -51,6 +51,17 @@ scrape_configs:
     relabel_configs:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
+    # Workaround Kubernetes 1.6 enforced auth on https.
+    - source_labels: [__address__]
+      action: replace
+      target_label: __address__
+      regex: ([^:;]+):(\d+)
+      replacement: ${1}:10255
+    - source_labels: [__scheme__]
+      action: replace
+      target_label: __scheme__
+      regex: https
+      replacement: http
     metric_relabel_configs:
     - source_labels: [pod_name]
       target_label: environment
