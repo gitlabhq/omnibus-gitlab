@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Kamil Trzciński <kamil@gitlab.com>
+MAINTAINER GitLab Inc. <support@gitlab.com>
 
 SHELL ["/bin/sh", "-c"],
 
@@ -11,6 +11,7 @@ RUN apt-get update -q \
       wget \
       apt-transport-https \
       vim \
+      tzdata \
       nano \
       git-annex \
     && rm -rf /var/lib/apt/lists/* \
