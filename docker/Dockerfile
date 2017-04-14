@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Kamil Trzciński <kamil@gitlab.com>
+MAINTAINER GitLab Inc. <support@gitlab.com>
 
 # Install required packages
 RUN apt-get update -q \
@@ -9,6 +9,7 @@ RUN apt-get update -q \
       wget \
       apt-transport-https \
       vim \
+      tzdata \
       nano \
       patch \
       git-annex && rm -rf /var/lib/apt/lists/*
