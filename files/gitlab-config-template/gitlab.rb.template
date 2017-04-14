@@ -268,6 +268,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_shell_ssh_port'] = 22
 # gitlab_rails['git_max_size'] = 20971520
 # gitlab_rails['git_timeout'] = 10
+# gitlab_rails['gitlab_shell_git_timeout'] = 800
 
 ### Extra customization
 # gitlab_rails['extra_google_analytics_id'] = '_your_tracking_id'
