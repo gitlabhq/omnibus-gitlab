@@ -540,7 +540,7 @@ Centos 7:
     - gems
   <<: *tag_build
 OpenSUSE 13.2:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2-0.0.1"
   cache:
     key: "OpenSUSE 13.2 branch"
     paths:
@@ -627,7 +627,7 @@ CentOS 7 branch:
     - gems
   <<: *branch_build
 OpenSUSE 13.2 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse13.2-0.0.1"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
