@@ -295,162 +295,189 @@ QA Tag:
 Ubuntu 12.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 12.04 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 12.04 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:precise"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 14.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 14.04 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 14.04 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 16.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 16.04 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Ubuntu 16.04 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 7 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 7 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 7 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 8 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 8 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Debian 8 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 6 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 6 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 6 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 7 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 7 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 Centos 7 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 13.2 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse13.2"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 13.2 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse13.2"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 13.2 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse13.2"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 42.1 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 42.1 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
 OpenSUSE 42.1 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
   cache:
+    key: "$CI_JOB_NAME"
     paths:
     - gems
   <<: *run_rspec
