@@ -49,22 +49,14 @@ link postgresql_data_dir_symlink do
   not_if { postgresql_data_dir == postgresql_data_dir_symlink }
 end
 
-runit_service 'geo-postgresql' do
-  down node['gitlab']['geo-postgresql']['ha']
-  control(['t'])
-  options({
-    :log_directory => postgresql_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
-end
-
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_user
   not_if { pg_helper.bootstrapped? }
 end
 
 postgresql_config = File.join(postgresql_data_dir, 'postgresql.conf')
-should_notify = omnibus_helper.should_notify?('geo-postgresql')
+bootstrapping = node['gitlab']['geo-postgresql']['bootstrap']
+should_notify = omnibus_helper.should_notify?('geo-postgresql') && !bootstrapping
 
 template postgresql_config do
   source 'postgresql.conf.erb'
@@ -95,6 +87,15 @@ template File.join(postgresql_data_dir, 'pg_ident.conf') do
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end
 
+runit_service 'geo-postgresql' do
+  down node['gitlab']['geo-postgresql']['ha']
+  control(['t'])
+  options({
+            :log_directory => postgresql_log_dir
+          }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
+end
+
 # This recipe must be ran BEFORE any calls to the binaries are made
 # and AFTER the service has been defined
 # to ensure the correct running version of PostgreSQL
@@ -105,7 +106,7 @@ include_recipe 'gitlab::postgresql-bin'
 execute 'start geo-postgresql' do
   command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
   retries 20
-  unless node['gitlab']['geo-postgresql']['bootstrap']
+  unless bootstrapping
     action :nothing
   end
 end
