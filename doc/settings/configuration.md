@@ -228,8 +228,12 @@ Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 ## Disable user and group account management
 
-By default, omnibus-gitlab takes care of user and group accounts creation as well as keeping the accounts information updated.
-This behaviour makes sense for most users but in certain environments user and group accounts are managed by other software, eg. LDAP.
+By default, omnibus-gitlab takes care of creating system user and group accounts
+as well as keeping the information updated.
+These system accounts run various components of the package.
+Most users do not need to change this behaviour.
+However, if your system accounts are managed by other software, eg. LDAP, you
+might need to disable account management done by the package.
 
 In order to disable user and group accounts management, in `/etc/gitlab/gitlab.rb` set:
 
@@ -255,6 +259,9 @@ gitlab-redis
 # Postgresql user (only when using packaged Postgresql)
 gitlab-psql
 
+# Prometheus user for prometheus monitoring and various exporters
+prometheus
+
 # GitLab Mattermost user (only when using GitLab Mattermost)
 mattermost
 ```
@@ -273,6 +280,8 @@ gitlab-redis
 
 # Postgresql group (only when using packaged Postgresql)
 gitlab-psql
+# Prometheus user for prometheus monitoring and various exporters
+prometheus
 
 # GitLab Mattermost group (only when using GitLab Mattermost)
 mattermost
