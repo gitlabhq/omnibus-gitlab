@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'prometheus'
-version = Gitlab::Version.new('prometheus', '1.5.2')
+version = Gitlab::Version.new('prometheus', '1.6.1')
 default_version version.print
 
 license 'APACHE-2.0'

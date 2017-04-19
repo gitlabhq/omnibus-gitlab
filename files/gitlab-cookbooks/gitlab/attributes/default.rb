@@ -883,13 +883,9 @@ default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
 default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
 default['gitlab']['prometheus']['chunk_encoding_version'] = 2
-default['gitlab']['prometheus']['memory_chunks'] = (
-  # Use 10k + 2% of total memory for chunk buffers.
-  10_000 + (node['memory']['total'].to_i * 0.02)
-).to_i
-default['gitlab']['prometheus']['max_chunks_to_persist'] = (
-  # Use 5k + 1% of total memory for max dirty chunks. (half of total chunks)
-  5_000 + (node['memory']['total'].to_i * 0.01)
+default['gitlab']['prometheus']['target_heap_size'] = (
+  # Use 25mb + 2% of total memory for Prometheus memory.
+  26_214_400 + (node['memory']['total'].to_i * 1024 * 0.02)
 ).to_i
 
 ####
