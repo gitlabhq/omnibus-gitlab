@@ -22,11 +22,11 @@ class OmnibusHelper
   end
 
   def service_up?(service_name)
-    success?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+    success?("/opt/gitlab/init/#{service_name} status")
   end
 
   def service_down?(service_name)
-    failure?("/opt/gitlab/bin/gitlab-ctl status #{service_name}")
+    failure?("/opt/gitlab/init/#{service_name} status")
   end
 
   def user_exists?(username)
