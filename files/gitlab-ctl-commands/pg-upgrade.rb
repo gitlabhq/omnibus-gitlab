@@ -18,29 +18,15 @@
 require 'optparse'
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
-options = {
-  tmp_dir: nil,
-  wait: true
-}
-
-OptionParser.new do |opts|
-  opts.on('-tDIR', '--tmp-dir=DIR', 'Storage location for temporary data') do |t|
-    options[:tmp_dir] = t
-  end
-
-  opts.on('-w', '--no-wait', 'Do not wait before starting the upgrade process') do
-    options[:wait] = false
-  end
-end.parse!(ARGV)
-
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
-
-@db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, options[:tmp_dir])
 
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
-                           1 do |_cmd_name|
+                           2 do |_cmd_name|
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_options[:tmp_dir])
+
   maintenance_mode('enable')
+
   if progress_message('Checking if we need to downgrade') do
     @db_worker.fetch_running_version == default_version
   end
@@ -70,7 +56,9 @@ end
 
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
-                           1 do |_cmd_name|
+                           2 do |_cmd_name|
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_options[:tmp_dir])
+
   running_version = @db_worker.fetch_running_version
 
   unless progress_message(
@@ -117,7 +105,7 @@ add_command_under_category 'pg-upgrade', 'database',
 
   # Wait for processes to settle, and give use one last chance to change their
   # mind
-  delay_for(30) if options[:wait]
+  delay_for(30) if parse_options[:wait]
 
   # Get the existing locale before we move on
   begin
@@ -240,6 +228,25 @@ add_command_under_category 'pg-upgrade', 'database',
   log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version}"
   maintenance_mode('disable')
   exit! 0
+end
+
+def parse_options
+  options = {
+    tmp_dir: nil,
+    wait: true
+  }
+
+  OptionParser.new do |opts|
+    opts.on('-tDIR', '--tmp-dir=DIR', 'Storage location for temporary data') do |t|
+      options[:tmp_dir] = t
+    end
+
+    opts.on('-w', '--no-wait', 'Do not wait before starting the upgrade process') do
+      options[:wait] = false
+    end
+  end.parse!(ARGV)
+
+  options
 end
 
 def version_from_manifest(software)
