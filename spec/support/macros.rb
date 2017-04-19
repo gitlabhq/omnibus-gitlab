@@ -11,7 +11,7 @@ module GitlabSpec
 
     def stub_should_notify?(service, value)
       allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(value)
-      allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(value)
+      allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(value)
     end
 
     def stub_env_var(var, value)

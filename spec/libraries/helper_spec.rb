@@ -101,8 +101,7 @@ describe OmnibusHelper do
   context 'service is currently enabled, bootstrapped and is running' do
     before do
       services.each do |service|
-        allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(true)
+        stub_should_notify?(service, true)
       end
       stub_gitlab_rb(nginx: { enable: true })
     end
@@ -115,8 +114,7 @@ describe OmnibusHelper do
   context 'disabling a service that was bootstrapped and is currently running' do
     before do
       services.each do |service|
-        allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(true)
+        stub_should_notify?(service, true)
       end
       stub_gitlab_rb(nginx: { enable: false })
     end
@@ -130,7 +128,7 @@ describe OmnibusHelper do
     before do
       services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(false)
       end
       stub_gitlab_rb(nginx: { enable: true })
     end
@@ -144,7 +142,7 @@ describe OmnibusHelper do
     before do
       services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(true)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(false)
       end
       stub_gitlab_rb(nginx: { enable: false })
     end
@@ -158,7 +156,7 @@ describe OmnibusHelper do
     before do
       services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(true)
+        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(true)
       end
       stub_gitlab_rb(nginx: { enable: true })
     end
@@ -172,7 +170,7 @@ describe OmnibusHelper do
     before do
       services.each do |service|
         allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(true)
+        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(true)
       end
       stub_gitlab_rb(nginx: { enable: false })
     end
@@ -185,8 +183,7 @@ describe OmnibusHelper do
   context 'enabling a service that was disabled and not currently running' do
     before do
       services.each do |service|
-        allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(false)
+        stub_should_notify?(service, false)
       end
       stub_gitlab_rb(nginx: { enable: true })
     end
@@ -199,8 +196,7 @@ describe OmnibusHelper do
   context 'disabling a service that was disabled and not currently running' do
     before do
       services.each do |service|
-        allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(false)
-        allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/bin/gitlab-ctl status #{service}").and_return(false)
+        stub_should_notify?(service, false)
       end
       stub_gitlab_rb(nginx: { enable: false })
     end
