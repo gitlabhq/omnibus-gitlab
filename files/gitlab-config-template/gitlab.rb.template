@@ -635,7 +635,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_replication_slots'] = 0
 # postgresql['synchronous_commit'] = on
 # postgresql['synchronous_standby_names'] = ''
-# postgresql['hot_standby_feedback' = 'off'
+# postgresql['hot_standby_feedback'] = 'off'
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
@@ -818,7 +818,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "options" => {
 #    "stub_status" => "on", # Turn on stats
 #    "server_tokens" => "off", # Don't show the version of NGINX
-#    "access_log" => "on", # Disable logs for stats
+#    "access_log" => "off", # Disable logs for stats
 #    "allow" => "127.0.0.1", # Only allow access from localhost
 #    "deny" => "all" # Deny access to anyone else
 #  }
