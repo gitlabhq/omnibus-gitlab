@@ -169,6 +169,9 @@ production: &base
     # Remove expired build artifacts
     expire_build_artifacts_worker:
       cron: <%= @expire_build_artifacts_worker_cron %>
+    # Schedule pipelines in the near future
+    trigger_schedule_worker:
+      cron: <%= @trigger_schedule_worker_cron %>
     # Periodically run 'git fsck' on all repositories. If started more than
     # once per hour you will have concurrent 'git fsck' jobs.
     repository_check_worker:
