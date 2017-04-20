@@ -49,7 +49,10 @@ dependency 'registry'
 dependency 'gitlab-pages'
 dependency 'unzip'
 
-dependency 'mysql-client' if EE
+if EE
+  dependency 'mysql-client'
+  dependency 'gitlab-elasticsearch-indexer'
+end
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
