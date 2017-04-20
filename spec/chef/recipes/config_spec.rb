@@ -18,6 +18,9 @@ describe 'gitlab::config' do
       expect(node['gitlab']['nginx']['enable']).to eq false
       expect(node['gitlab']['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
+      expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
+      expect(node['gitlab']['postgres-exporter']['enable']).to eq false
+      expect(node['gitlab']['prometheus']['enable']).to eq false
     end
   end
 
@@ -35,6 +38,35 @@ describe 'gitlab::config' do
     )
   end
 
+  context 'when gitlab-rails is disabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          enable: false
+        }
+      )
+    end
+
+    it 'disables Gitlab components' do
+      expect(node['gitlab']['unicorn']['enable']).to eq false
+      expect(node['gitlab']['sidekiq']['enable']).to eq false
+      expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
+      expect(node['gitlab']['gitaly']['enable']).to eq false
+      expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
+    end
+
+    it 'still leaves other default service enabled' do
+      expect(node['gitlab']['nginx']['enable']).to eq true
+      expect(node['gitlab']['postgresql']['enable']).to eq true
+      expect(node['gitlab']['redis']['enable']).to eq true
+      expect(node['gitlab']['prometheus']['enable']).to eq true
+      expect(node['gitlab']['node-exporter']['enable']).to eq true
+      expect(node['gitlab']['redis-exporter']['enable']).to eq true
+      expect(node['gitlab']['logrotate']['enable']).to eq true
+      expect(node['gitlab']['postgres-exporter']['enable']).to eq true
+    end
+  end
+
   context 'with roles' do
     context 'when redis_sentinel_role is enabled' do
       before do
@@ -50,6 +82,9 @@ describe 'gitlab::config' do
       it 'only sentinel is enabled' do
         expect(node['gitlab']['sentinel']['enable']).to eq true
         expect(node['gitlab']['redis']['enable']).to eq false
+        expect(node['gitlab']['redis-exporter']['enable']).to eq true
+        expect(node['gitlab']['node-exporter']['enable']).to eq true
+        expect(node['gitlab']['logrotate']['enable']).to eq true
       end
 
       context 'when redis_sentinel_role is enabled with redis_master_role' do
@@ -69,6 +104,9 @@ describe 'gitlab::config' do
         it 'redis and sentinel are enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['gitlab']['redis']['enable']).to eq true
+          expect(node['gitlab']['redis-exporter']['enable']).to eq true
+          expect(node['gitlab']['node-exporter']['enable']).to eq true
+          expect(node['gitlab']['logrotate']['enable']).to eq true
         end
       end
 
@@ -94,6 +132,9 @@ describe 'gitlab::config' do
         it 'only redis is enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['gitlab']['redis']['enable']).to eq true
+          expect(node['gitlab']['redis-exporter']['enable']).to eq true
+          expect(node['gitlab']['node-exporter']['enable']).to eq true
+          expect(node['gitlab']['logrotate']['enable']).to eq true
         end
       end
     end
@@ -112,6 +153,9 @@ describe 'gitlab::config' do
       it 'only redis is enabled' do
         expect(node['gitlab']['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
+        expect(node['gitlab']['redis-exporter']['enable']).to eq true
+        expect(node['gitlab']['node-exporter']['enable']).to eq true
+        expect(node['gitlab']['logrotate']['enable']).to eq true
       end
     end
 
