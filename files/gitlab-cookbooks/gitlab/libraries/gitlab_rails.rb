@@ -219,6 +219,8 @@ module GitlabRails
         Gitlab['unicorn']['enable'] = false
         Gitlab['sidekiq']['enable'] = false
         Gitlab['gitlab_workhorse']['enable'] = false
+        Gitlab['gitaly']['enable'] = false
+        Gitlab['gitlab_monitor']['enable'] = false
       end
     end
 
@@ -228,6 +230,10 @@ module GitlabRails
       Gitlab['nginx']['enable'] = false
       Gitlab['postgresql']['enable'] = false
       Gitlab['mailroom']['enable'] = false
+      Gitlab['gitaly']['enable'] = false
+      Gitlab['gitlab_monitor']['enable'] = false
+      Gitlab['postgres_exporter']['enable'] = false
+      Gitlab['prometheus']['enable'] = false
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
