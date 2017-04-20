@@ -47,12 +47,19 @@ follows
     ```
 
 6. Omnibus GitLab is optimized to use the internal repositories from
-   dev.gitlab.org. This is specified in the `.custom_sources.yml` file in the
-   root of the source tree and these repositories are not publicly usable. So,
-   for personal builds, you have to use public alternatives of these repos.
-   The alternatives are provided as [comments in the `.custom_sources.yml`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml#L25-44)
-   file.  So, you can simply uncomment those lines and delete the initially
-   active options.
+   dev.gitlab.org. These repositories are specified in the `.custom_sources.yml`
+   file (specified by `remote` key) in the root of the source tree and will be
+   used by default. Since these repositories are not publicly usable, for
+   personal builds you have to use public alternatives of these repos. The
+   alternatives are also provided in the same file, specified by `alternative`
+   key. The selection between these two is controlled by `ALTERNATIVE_SOURCES`
+   environment variable, which can be set either `true` or `false`. If that
+   variable is set `true`, the repositories marked by `alternative` key will be
+   used.
+
+   Similarly, if you want to use your custom forks as sources, modify the
+   `.custom_sources.yml` file and specify them as `alternate` and set the
+   `ALTERNATIVE_SOURCES` variable to `true`.
 
 7. Install the dependencies and generate binaries
 

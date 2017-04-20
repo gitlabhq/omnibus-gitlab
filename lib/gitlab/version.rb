@@ -11,6 +11,7 @@ module Gitlab
                         read_version_from_file
                       end
       @project_root = File.join(File.dirname(__dir__), '../')
+      @software_sources = ENV["ALTERNATIVE_SOURCES"].to_s == "true" ? "alternative" : "remote"
     end
 
     def read_version_from_file
@@ -62,7 +63,7 @@ module Gitlab
       software = YAML.load_file(filepath)[@software]
 
       if software
-        software['remote']
+        software[@software_sources]
       else
         ""
       end

@@ -1,73 +1,52 @@
 gitlab-rails:
   remote: "git@dev.gitlab.org:gitlab/gitlabhq.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-ce.git"
 gitlab-rails-ee:
   remote: "git@dev.gitlab.org:gitlab/gitlab-ee.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-ee.git"
 gitlab-shell:
   remote: "git@dev.gitlab.org:gitlab/gitlab-shell.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-shell.git"
 gitlab-workhorse:
   remote: "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
 gitlab-pages:
   remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-pages.git"
 gitlab-monitor:
   remote: "git@dev.gitlab.org:gitlab-org/gitlab-monitor.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
+  alternative: "https://gitlab.com/omnibus-mirror/config_guess.git"
 omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
+  alternative: "https://gitlab.com/gitlab-org/omnibus.git"
 registry:
   remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
+  alternative: "https://gitlab.com/omnibus-mirror/distribution.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
+  alternative: "https://gitlab.com/omnibus-mirror/rb-readline.git"
 prometheus:
   remote: "git@dev.gitlab.org:omnibus-mirror/prometheus.git"
+  alternative: "https://gitlab.com/omnibus-mirror/prometheus.git"
 node-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/node_exporter.git"
+  alternative: "https://gitlab.com/omnibus-mirror/node_exporter.git"
 postgres-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/postgres_exporter.git"
+  alternative: "https://gitlab.com/omnibus-mirror/postgres_exporter.git"
 redis-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
+  alternative: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
 gitaly:
   remote: 'git@dev.gitlab.org:gitlab/gitaly'
+  alternative: 'https://gitlab.com/gitlab-org/gitaly'
 gitlab-elasticsearch-indexer:
   remote: 'git@dev.gitlab.org:gitlab/gitlab-elasticsearch-indexer.git'
+  alternative: 'https://gitlab.com:gitlab-org/gitlab-elasticsearch-indexer.git'
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
+  alternative: "https://gitlab.com/omnibus-mirror/logrotate.git"
 
-
-# For local builds, use the public repositories given below. They are mirrord
-# from the internal repositories that GitLab uses.
-
-#gitlab-rails:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-ce.git"
-#gitlab-rails-ee:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-ee.git"
-#gitlab-shell:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-shell.git"
-#gitlab-workhorse:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
-#gitlab-pages:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-pages.git"
-#gitlab-monitor:
-  #remote: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
-#omnibus:
-  #remote: "https://gitlab.com/gitlab-org/omnibus.git"
-#config_guess:
-  #remote: "https://gitlab.com/omnibus-mirror/config_guess.git"
-#registry:
-  #remote: "https://gitlab.com/omnibus-mirror/distribution.git"
-#rb-readline:
-  #remote: "https://gitlab.com/omnibus-mirror/rb-readline.git"
-#prometheus:
-  #remote: "https://gitlab.com/omnibus-mirror/prometheus.git"
-#node-exporter:
-  #remote: "https://gitlab.com/omnibus-mirror/node_exporter.git"
-#postgres-exporter:
-  #remote: "https://gitlab.com/omnibus-mirror/postgres_exporter.git"
-#redis-exporter:
-  #remote: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
-#gitaly:
-  #remote: 'https://gitlab.com/gitlab-org/gitaly'
-#gitlab-elasticsearch-indexer:
-  #remote: 'https://gitlab.com:gitlab-org/gitlab-elasticsearch-indexer.git'
-#logrotate:
-  #remote: "https://gitlab.com/omnibus-mirror/logrotate.git"

@@ -20,6 +20,23 @@ describe Gitlab::Version do
         expect(subject.remote).to eq('')
       end
     end
+
+    context 'without ALTERNATIVE_SOURCES env variable explicitly set' do
+      let(:software) { 'gitlab-rails-ee' }
+
+      it 'returns "remote" link from custom_sources yml' do
+        expect(subject.remote).to eq('git@dev.gitlab.org:gitlab/gitlab-ee.git')
+      end
+    end
+
+    context 'with ALTERNATIVE_SOURCES env variable explicitly set' do
+      let(:software) { 'gitlab-rails-ee' }
+
+      it 'returns "remote" link from custom_sources yml' do
+        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+        expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab-ee.git')
+      end
+    end
   end
 
   describe :print do
