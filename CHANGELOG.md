@@ -16,6 +16,10 @@ omnibus-gitlab repository.
 - EE: Change the order of configuration loading for EE recipes ba19b7c0
 - Add support storages in Gitaly config f3205fa
 
+9.0.6
+
+- No changes
+
 9.0.5
 
 - Build SLES 12 EE package at the same time as others.
