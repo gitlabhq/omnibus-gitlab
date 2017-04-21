@@ -6,7 +6,7 @@ source /etc/lsb-release
 source /RELEASE
 
 # Install GitLab
-dpkg -i /assets/gitlab.deb && rm /assets/gitlab.deb
+wget ${DOWNLOAD_URL} -O /tmp/gitlab.deb && dpkg -i /tmp/gitlab.deb && rm /tmp/gitlab.deb
 rm -rf /var/lib/apt/lists/*
 
 # Create sshd daemon
