@@ -76,6 +76,7 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
+	echo DOWNLOAD_URL=$(shell find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|") >> docker/RELEASE
 	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
 
 docker_push:
@@ -89,8 +90,10 @@ docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
 	DOCKER_TAG=latest bundle exec rake docker:push[$(RELEASE_PACKAGE)]
 
-do_docker_master:
+do_docker_master: RELEASE_BUCKET=omnibus-builds
+do_docker_master: docker_build
 ifdef NIGHTLY
+do_docker_master: RELEASE_BUCKET=omnibus-builds
 do_docker_master: docker_build docker_push
 endif
 
