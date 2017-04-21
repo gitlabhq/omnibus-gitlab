@@ -223,7 +223,6 @@ Docker master:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - cp pkg/ubuntu-16.04/*deb docker/assets/gitlab.deb
   - make do_docker_master
   only:
     - branches@gitlab/omnibus-gitlab
