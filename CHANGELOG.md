@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.0.6
+
+- No changes
+
 9.0.5
 
 - Build SLES 12 EE package at the same time as others.
