@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.2.0
+
+- Update mysql client to 5.5.55
+
 9.1.0
 
 - Remove deprecated satellites configuration f88ba40b
