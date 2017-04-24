@@ -11,6 +11,9 @@ stages:
   - raspbian
   - notification_fail
 
+variables:
+  BUILDER_IMAGE_REVISION: "0.0.4"
+
 before_script:
   - echo $NIGHTLY
   - mkdir -p ~/.ssh
@@ -214,7 +217,7 @@ update-knapsack:
 
 Docker master:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -231,7 +234,7 @@ Docker master:
 
 Docker:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -248,7 +251,7 @@ Docker:
 
 AWS:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
   script:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
   - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
@@ -263,7 +266,7 @@ AWS:
 
 QA Master:
   stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -277,7 +280,7 @@ QA Master:
 
 QA Tag:
   stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -536,7 +539,7 @@ OpenSUSE 42.1 specs 2 3:
 
 # dev.gitlab.org only
 Ubuntu 12.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Ubuntu 12.04 branch"
     paths:
@@ -544,7 +547,7 @@ Ubuntu 12.04:
     - gems
   <<: *tag_build
 Ubuntu 14.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Ubuntu 14.04 branch"
     paths:
@@ -552,7 +555,7 @@ Ubuntu 14.04:
     - gems
   <<: *tag_build
 Ubuntu 16.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Ubuntu 16.04 branch"
     paths:
@@ -560,7 +563,7 @@ Ubuntu 16.04:
     - gems
   <<: *tag_build
 Debian 7:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Debian 7 branch"
     paths:
@@ -568,7 +571,7 @@ Debian 7:
     - gems
   <<: *tag_build
 Debian 8:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Debian 8 branch"
     paths:
@@ -576,7 +579,7 @@ Debian 8:
     - gems
   <<: *tag_build
 Centos 6:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Centos 6 branch"
     paths:
@@ -584,7 +587,7 @@ Centos 6:
     - gems
   <<: *tag_build
 Centos 7:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Centos 7 branch"
     paths:
@@ -600,7 +603,7 @@ OpenSUSE 13.2:
     - gems
   <<: *tag_build
 OpenSUSE 42.1:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "OpenSUSE 42.1 branch"
     paths:
@@ -623,7 +626,7 @@ SLES 12:
   - sles-12-0.0.1
 
 Ubuntu 12.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_12.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -631,7 +634,7 @@ Ubuntu 12.04 branch:
     - gems
   <<: *branch_build
 Ubuntu 14.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -639,7 +642,7 @@ Ubuntu 14.04 branch:
     - gems
   <<: *branch_build
 Ubuntu 16.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -647,7 +650,7 @@ Ubuntu 16.04 branch:
     - gems
   <<: *branch_build
 Debian 7 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -655,7 +658,7 @@ Debian 7 branch:
     - gems
   <<: *branch_build
 Debian 8 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -663,7 +666,7 @@ Debian 8 branch:
     - gems
   <<: *branch_build
 CentOS 6 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -671,7 +674,7 @@ CentOS 6 branch:
     - gems
   <<: *branch_build
 CentOS 7 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -687,7 +690,7 @@ OpenSUSE 13.2 branch:
     - gems
   <<: *branch_build
 OpenSUSE 42.1 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -710,7 +713,7 @@ SLES 12 branch:
   - sles-12-0.0.1
 
 Raspberry Pi 2 Jessie branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
@@ -719,7 +722,7 @@ Raspberry Pi 2 Jessie branch:
   <<: *rpi_branch_build
 
 Raspberry Pi 2 Jessie:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-0.0.3"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "Raspberry Pi 2 Jessie branch"
     paths:
