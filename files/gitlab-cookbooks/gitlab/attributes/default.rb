@@ -400,6 +400,10 @@ default['gitlab']['postgresql']['log_line_prefix'] = nil
 default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 default['gitlab']['postgresql']['shared_preload_libraries'] = nil
 default['gitlab']['postgresql']['dynamic_shared_memory_type'] = nil
+default['gitlab']['postgresql']['random_page_cost'] = 4.0
+default['gitlab']['postgresql']['max_locks_per_transaction'] = 64
+default['gitlab']['postgresql']['log_temp_files'] = -1
+default['gitlab']['postgresql']['log_checkpoints'] = 'off'
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
