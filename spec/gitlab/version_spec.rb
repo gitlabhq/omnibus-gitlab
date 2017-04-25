@@ -33,6 +33,7 @@ describe Gitlab::Version do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns "remote" link from custom_sources yml' do
+        allow(ENV).to receive(:[]).and_call_original
         allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
         expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab-ee.git')
       end
@@ -70,6 +71,26 @@ describe Gitlab::Version do
 
       it 'does not add a v prefix if explicitly set' do
         expect(subject.print(false)).to eq("2.3.1")
+      end
+    end
+  end
+
+  describe :version do
+    subject { Gitlab::Version.new(software) }
+
+    context 'env variable for setting version' do
+      let(:software) { 'gitlab-rails' }
+
+      it 'identifies correct version from env variable' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("GITLAB_VERSION").and_return("5.6.7")
+        allow(File).to receive(:read).and_return("1.2.3")
+        expect(subject.print).to eq("v5.6.7")
+      end
+
+      it 'falls back to VERSION file if env variable not found' do
+        allow(File).to receive(:read).and_return("1.2.3")
+        expect(subject.print).to eq("v1.2.3")
       end
     end
   end

@@ -8,10 +8,29 @@ module Gitlab
       @read_version = if version
                         version
                       else
-                        read_version_from_file
+                        get_software_version
                       end
       @project_root = File.join(File.dirname(__dir__), '../')
       @software_sources = ENV["ALTERNATIVE_SOURCES"].to_s == "true" ? "alternative" : "remote"
+    end
+
+    def get_software_version
+      read_version_from_env || read_version_from_file
+    end
+
+    def read_version_from_env
+      case @software
+      when "gitlab-rails", "gitlab-rails-ee"
+        ENV["GITLAB_VERSION"]
+      when "gitlab-shell"
+        ENV["GITLAB_SHELL_VERSION"]
+      when "gitlab-workhorse"
+        ENV["GITLAB_WORKHORSE_VERSION"]
+      when "gitlab-pages"
+        ENV["GITLAB_PAGES_VERSION"]
+      when "gitaly"
+        ENV["GITALY_SERVER_VERSION"]
+      end
     end
 
     def read_version_from_file
