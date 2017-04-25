@@ -1,16 +1,63 @@
+db_common: &db_common
+  methods:
+    - probe_db
+  opts:
+    connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %> host=<%= node['gitlab']['postgresql']['dir'] %>
+
+common_git: &common_git
+  class_name: GitProber
+  methods:
+    - probe_pull
+    - probe_push
+
+# Web server config
 server:
   listen_address: <%= node['gitlab']['gitlab-monitor']['listen_address'] %>
   listen_port: <%= node['gitlab']['gitlab-monitor']['listen_port'] %>
 
+# Probes config
 probes:
+  git_repos:
+    multiple: true
+<% node['gitlab']['gitlab-shell']['git_data_directories'].each do |repo_name, git_data_directory| -%>
+    <%= repo_name %>:
+    <<: *common_git
+      opts:
+        source: <%= git_data_directory['path'] %>
+        labels:
+          name: <%= repo_name %>
+<% end -%>
+
+  git_process:
+    class_name: GitProcessProber # `class_name` is redundant here
+    methods:
+    - probe_git
+    opts:
+      quantiles: true
+
+  # We can group multiple probes under a single endpoint by setting the `multiple` key to `true`, followed
+  # by probe definitions as usual.
   database:
     multiple: true
-    dead_tuples_count:
+    blocked_queries:
+      class_name: Database::BlockedQueriesProber
+      <<: *db_common
+    ci_builds:
+      class_name: Database::CiBuildsProber
+      <<: *db_common
+    tuple_stats:
       class_name: Database::TuplesProber
-      methods:
-        - probe_db
-      opts:
-        connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %> host=<%= node['gitlab']['postgresql']['dir'] %>
+      <<: *db_common
+    rows_count:
+      class_name: Database::RowCountProber
+      <<: *db_common
+    slow_queries:
+      class_name: Database::SlowQueriesProber
+      <<: *db_common
+    vacuum_queries:
+      class_name: Database::VacuumQueriesProber
+      <<: *db_common
+
   process:
     methods:
       - probe_memory
@@ -24,6 +71,7 @@ probes:
       - pid_or_pattern: "git-upload-pack --stateless-rpc"
         name: git_upload_pack
         quantiles: true
+
   sidekiq:
     methods:
       - probe_queues
