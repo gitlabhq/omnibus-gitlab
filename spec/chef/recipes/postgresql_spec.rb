@@ -242,6 +242,42 @@ describe 'postgresql 9.6' do
       ).with_content(/hot_standby_feedback = off/)
     end
 
+    it 'sets the random_page_cost setting' do
+      expect(chef_run.node['gitlab']['postgresql']['random_page_cost'])
+        .to eq(4.0)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/random_page_cost = 4\.0/)
+    end
+
+    it 'sets the max_locks_per_transaction setting' do
+      expect(chef_run.node['gitlab']['postgresql']['max_locks_per_transaction'])
+        .to eq(64)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/max_locks_per_transaction = 64/)
+    end
+
+    it 'sets the log_temp_files setting' do
+      expect(chef_run.node['gitlab']['postgresql']['log_temp_files'])
+        .to eq(-1)
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/log_temp_files = -1/)
+    end
+
+    it 'sets the log_checkpoints setting' do
+      expect(chef_run.node['gitlab']['postgresql']['log_checkpoints'])
+        .to eq('off')
+
+      expect(chef_run).to render_file(
+        '/var/opt/gitlab/postgresql/data/postgresql.conf'
+      ).with_content(/log_checkpoints = off/)
+    end
+
     context 'when dynamic_shared_memory_type is none' do
       before do
         stub_gitlab_rb({

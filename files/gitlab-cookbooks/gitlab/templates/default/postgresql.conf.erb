@@ -263,7 +263,9 @@ hot_standby_feedback = <%= @hot_standby_feedback %>   # send info from standby t
 # - Planner Cost Constants -
 
 #seq_page_cost = 1.0      # measured on an arbitrary scale
-#random_page_cost = 4.0     # same scale as above
+<% if @random_page_cost %>
+random_page_cost = <%= @random_page_cost %>     # same scale as above
+<% end %>
 #cpu_tuple_cost = 0.01      # same scale as above
 #cpu_index_tuple_cost = 0.005   # same scale as above
 #cpu_operator_cost = 0.0025   # same scale as above
@@ -390,7 +392,9 @@ log_min_duration_statement = <%= @log_min_duration_statement %>  # -1 is disable
 #debug_print_rewritten = off
 #debug_print_plan = off
 #debug_pretty_print = on
-#log_checkpoints = off
+<% if @log_checkpoints %>
+log_checkpoints = <%= @log_checkpoints %>
+<% end %>
 #log_connections = off
 #log_disconnections = off
 #log_duration = off
@@ -417,9 +421,11 @@ log_line_prefix = '<%= @log_line_prefix %>' # default '', special values:
           #   %% = '%'
 #log_lock_waits = off     # log lock waits >= deadlock_timeout
 #log_statement = 'none'     # none, ddl, mod, all
-#log_temp_files = -1      # log temporary files equal or larger
+<% if @log_temp_files %>
+log_temp_files = <%= @log_temp_files %>      # log temporary files equal or larger
           # than the specified size in kilobytes;
           # -1 disables, 0 logs all temp files
+<% end %>
 #log_timezone = '(defaults to server environment setting)'
 
 
@@ -533,11 +539,13 @@ default_text_search_config = 'pg_catalog.english'
 #------------------------------------------------------------------------------
 
 #deadlock_timeout = 1s
-#max_locks_per_transaction = 64   # min 10
+<% if @max_locks_per_transaction %>
+max_locks_per_transaction = <%= @max_locks_per_transaction %>   # min 10
           # (change requires restart)
 # Note:  Each lock table slot uses ~270 bytes of shared memory, and there are
 # max_locks_per_transaction * (max_connections + max_prepared_transactions)
 # lock table slots.
+<% end %>
 #max_pred_locks_per_transaction = 64  # min 10
           # (change requires restart)
 
