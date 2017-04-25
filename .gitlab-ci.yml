@@ -271,6 +271,9 @@ QA Master:
   services:
   - docker:dind
   script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - make do_qa_docker_master
   allow_failure: true
   only:
@@ -285,6 +288,9 @@ QA Tag:
   services:
   - docker:dind
   script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - make do_qa_docker_release
   allow_failure: true
   only:
