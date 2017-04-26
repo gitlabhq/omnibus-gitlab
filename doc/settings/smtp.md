@@ -365,6 +365,18 @@ gitlab_rails['gitlab_email_from'] = 'username@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'username@domain.com'
 ```
 
+### Aruba (aruba.it)
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtps.aruba.it"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "user@yourdomain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_ssl'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
