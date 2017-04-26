@@ -82,14 +82,25 @@ For example, you've implemented something inside of GitLab Rails application and
 the code is located in the branch named `my-feature`.
 
 To use the custom branch for building an omnibus-gitlab package, you will need
-to prepend the branch name with `buildfrombranch:` and place it in the
-related `VERSION` file.
+to put the branch name in `VERSION` file inside of omnibus-gitlab repository.
 
-For our previous example, to build a package that will use `my-feature` branch
-for GitLab Rails project, the `VERSION` file inside of the omnibus-gitlab
-repository should contain `buildfrombranch:my-feature`.
+The same works for specifying commits also. If you want to build a package that
+will use a specific commit, you have to place the SHA of that commit in the
+VERSION file.
+
+For example, if you want to build a package that will use a branch named
+`my-feature-branch`, `VERSION` file in omnibus-repo should contain the text
+`my-feature-branch`. Similary, if you want to build a package that will use
+a specific commit, say [this one](https://dev.gitlab.org/gitlab/gitlabhq/commit/46973f3d4602c7ea6366d6401116b89d72b83b9e),
+`VERSION` file should contain the text `46973f3d4602c7ea6366d6401116b89d72b83b9e`,
+which is the SHA of that commit.
 
 Similarly, you can do the same for `GITLAB_WORKHORSE_VERSION` and so on.
+
+**Note:** Name of this custom branch should not match the format of a SemVer
+version, that is `xx.yy.zz`. This is because omnibus-gitlab will append a `v`
+before the branch name, mistaking it for a version tag. Example, branch name
+can not be `0.5.0` as omnibus-gitlab will automatically make it `v0.5.0`.
 
 ### Note for GitLab Inc. developers
 
@@ -109,9 +120,8 @@ mirror. For example, if you are working on `gitlab-shell`, make sure that your
 custom branch is pushed to the `gitlab-shell` repository on `dev.gitlab.org`
 1. Create a branch in the omnibus-gitlab repository
 1. In this branch, open the related version file of the component and specify
-the name of your branch prepended with the `buildfrombranch:` keyword.
-For example, if you are working on `gitlab-shell` open `GITLAB_SHELL_VERSION`
-and write `buildfrombranch:my-feature`
+the name of your branch. For example, if you are working on `gitlab-shell` open
+`GITLAB_SHELL_VERSION` and write `my-feature`
 1. Commit and push the omnibus-gitlab branch to `dev.gitlab.org`
 
 This will trigger a build of the custom package, and if the build is

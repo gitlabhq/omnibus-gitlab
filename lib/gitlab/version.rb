@@ -34,7 +34,7 @@ module Gitlab
     end
 
     def read_version_from_file
-      path_to_version_file = version_file
+      path_to_version_file = components_files[@software]
       if path_to_version_file
         filepath = File.expand_path(path_to_version_file, @project_root)
         File.read(filepath).chomp
@@ -46,29 +46,33 @@ module Gitlab
       @read_version = ""
     end
 
-    def version_file
-      case @software
-      when "gitlab-rails", "gitlab-rails-ee"
-        "VERSION"
-      when "gitlab-shell"
-        "GITLAB_SHELL_VERSION"
-      when "gitlab-workhorse"
-        "GITLAB_WORKHORSE_VERSION"
-      when "gitlab-pages"
-        "GITLAB_PAGES_VERSION"
-      when "gitaly"
-        "GITALY_SERVER_VERSION"
-      end
+    def components_files
+      {
+        "gitlab-rails" => "VERSION",
+        "gitlab-rails-ee" => "VERSION",
+        "gitlab-shell" => "GITLAB_SHELL_VERSION",
+        "gitlab-workhorse" => "GITLAB_WORKHORSE_VERSION",
+        "gitlab-pages" => "GITLAB_PAGES_VERSION",
+        "gitaly" => "GITALY_SERVER_VERSION"
+      }
     end
 
     def print(prepend_version = true)
       if @read_version.include?('.pre') || @read_version == "master"
         "master"
-      elsif @read_version.start_with?('buildfrombranch:')
-        @read_version.gsub(/^buildfrombranch:/, '').strip
       elsif @read_version.empty?
         nil
       else
+        # Check if it satisfies the following criteria
+        # 1. One of our own components - has a VERSION file
+        # 2. Not a valid version string following SemVer
+        # If it satisfy both, it is probably a branch name or a SHA
+        # commit of one of our own component so it doesn't need `v` prepended
+        if components_files.key?(@software)
+          unless @read_version =~ Regexp.compile(/^\d+\.\d+\.\d+(-rc\d+)?(-ee)?$/)
+            return @read_version
+          end
+        end
         v = "v" if prepend_version
         [
           v,
