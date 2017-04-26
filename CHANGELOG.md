@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 9.1.0
 
+- Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
 - Remove deprecated satellites configuration f88ba40b
 - Add configuration file for Gitaly 7c7c728
 - Add support for Gitaly address per shard 2096928

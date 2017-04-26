@@ -636,7 +636,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_replication_slots'] = 0
 # postgresql['synchronous_commit'] = on
 # postgresql['synchronous_standby_names'] = ''
-# postgresql['hot_standby_feedback' = 'off'
+# postgresql['hot_standby_feedback'] = 'off'
+# postgresql['random_page_cost'] = 4.0
+# postgresql['max_locks_per_transaction'] = 64
+# postgresql['log_temp_files'] = -1
+# postgresql['log_checkpoints'] = 'off'
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
