@@ -1268,21 +1268,25 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 ### Prometheus Memory Management
 #
-# Prometheus needs to be configured for how much memory is used.
-# * This sets the target heap size.
-# * This value accounts for approximately 2/3 of the memory used by the server.
-# * The recommended memory is 4kb per unique metrics time-series.
+# Prometheus needs to be configured for how much memory is used for buffering metric data.
+# * Memory chunks are 1kb in size.
+# * The minimum memory needs to be 2x as many chunks as there are unique metrics time-series.
 # See: https://prometheus.io/docs/operating/storage/#memory-usage
 #
-# prometheus['target_heap_size'] = (
-#   # Use 25mb + 2% of total memory for Prometheus memory.
-#   26_214_400 + (node['memory']['total'].to_i * 1024 * 0.02 )
+# prometheus['memory_chunks'] = (
+#   # Use 10k + 2% of total memory for chunk buffers.
+#   10_000 + (node['memory']['total'].to_i * 0.02)
+# ).to_i
+# prometheus['max_chunks_to_persist'] = (
+#   # Use 5k + 1% of total memory for max dirty chunks. (half of total chunks)
+#   5_000 + (node['memory']['total'].to_i * 0.01)
 # ).to_i
 #
 # prometheus['flags'] = {
 #   'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
 #   'storage.local.chunk-encoding-version' => user_config['chunk-encoding-version'],
-#   'storage.local.target-heap-size' => node['gitlab']['prometheus']['target-heap-size'],
+#   'storage.local.memory-chunks' => node['gitlab']['prometheus']['memory-chunks'],
+#   'storage.local.max-chunks-to-persist' => node['gitlab']['prometheus']['max-chunks-to-persist'],
 #   'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
 # }
 

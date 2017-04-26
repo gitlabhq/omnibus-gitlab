@@ -91,7 +91,7 @@ describe 'gitlab::prometheus' do
 
     it 'keeps the defaults that the user did not override' do
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
-        .with_content(/storage.local.target-heap-size=47689236/)
+        .with_content(/storage.local.memory-chunks=30971/)
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content(/storage.local.path=foo/)
     end
