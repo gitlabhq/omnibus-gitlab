@@ -380,6 +380,7 @@ gitlab_rails['gitlab_email_reply_to'] = 'username@domain.com'
 ```
 
 ### Aruba (aruba.it)
+
 ```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtps.aruba.it"
@@ -389,6 +390,19 @@ gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_domain'] = "yourdomain.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_ssl'] = true
+```
+
+### Aliyun Direct Mail(阿里云邮件推送)
+
+```ruby
+gitlab_rails['gitlab_email_from'] = 'username@your domain'
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtpdm.aliyun.com"
+gitlab_rails['smtp_port'] = 80
+gitlab_rails['smtp_user_name'] = "username@your domain"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "your domain"
+gitlab_rails['smtp_authentication'] = "login"
 ```
 
 ### More examples are welcome
