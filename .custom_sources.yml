@@ -45,7 +45,7 @@ gitaly:
   alternative: 'https://gitlab.com/gitlab-org/gitaly'
 gitlab-elasticsearch-indexer:
   remote: 'git@dev.gitlab.org:gitlab/gitlab-elasticsearch-indexer.git'
-  alternative: 'https://gitlab.com:gitlab-org/gitlab-elasticsearch-indexer.git'
+  alternative: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git'
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
   alternative: "https://gitlab.com/omnibus-mirror/logrotate.git"
