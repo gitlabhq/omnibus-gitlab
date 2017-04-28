@@ -21,7 +21,7 @@ probes:
     multiple: true
 <% node['gitlab']['gitlab-shell']['git_data_directories'].each do |repo_name, git_data_directory| -%>
     <%= repo_name %>:
-    <<: *common_git
+      <<: *common_git
       opts:
         source: <%= git_data_directory['path'] %>
         labels:
