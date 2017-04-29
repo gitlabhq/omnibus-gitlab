@@ -12,7 +12,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.4"
+  BUILDER_IMAGE_REVISION: "0.0.5"
 
 before_script:
   - echo $NIGHTLY
