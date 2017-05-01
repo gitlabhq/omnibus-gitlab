@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Bump Git version to 2.13.0 b8a4bc4f
 - Upgrade PostgreSQL to 9.6.3 8f144d
 - Changing relative URL requires a hard reset ccd76ae2
+- Add omniauth sync_email_from_provider configuration
 
 9.2.2
 

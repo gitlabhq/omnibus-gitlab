@@ -175,6 +175,7 @@ default['gitlab']['gitlab-rails']['kerberos_https'] = nil
 
 default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = ['saml']
+default['gitlab']['gitlab-rails']['omniauth_sync_email_from_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_sign_in_with_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_ldap_user'] = nil
