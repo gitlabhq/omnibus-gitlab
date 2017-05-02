@@ -165,24 +165,24 @@ production: &base
   cron_jobs:
     # Flag stuck CI builds as failed
     stuck_ci_jobs_worker:
-      cron: <%= @stuck_ci_jobs_worker_cron %>
+      cron: "<%= @stuck_ci_jobs_worker_cron %>"
     # Remove expired build artifacts
     expire_build_artifacts_worker:
-      cron: <%= @expire_build_artifacts_worker_cron %>
+      cron: "<%= @expire_build_artifacts_worker_cron %>"
     # Schedule pipelines in the near future
     trigger_schedule_worker:
-      cron: <%= @trigger_schedule_worker_cron %>
+      cron: "<%= @trigger_schedule_worker_cron %>"
     # Periodically run 'git fsck' on all repositories. If started more than
     # once per hour you will have concurrent 'git fsck' jobs.
     repository_check_worker:
-      cron: <%= @repository_check_worker_cron %>
+      cron: "<%= @repository_check_worker_cron %>"
     # Send admin emails once a week
     admin_email_worker:
-      cron: <%= @admin_email_worker_cron %>
+      cron: "<%= @admin_email_worker_cron %>"
 
     # Remove outdated repository archives
     repository_archive_cache_worker:
-      cron: <%= @repository_archive_cache_worker_cron %>
+      cron: "<%= @repository_archive_cache_worker_cron %>"
 
     ##
     # GitLab EE only jobs:
@@ -190,7 +190,7 @@ production: &base
     # Snapshot active users statistics
     <% unless @historical_data_worker_cron.nil? %>
     historical_data_worker:
-      cron: <%= @historical_data_worker_cron %>
+      cron: "<%= @historical_data_worker_cron %>"
     <% end %>
 
     # In addition to refreshing users when they log in,
@@ -198,28 +198,28 @@ production: &base
     # NOTE: This will only take effect if LDAP is enabled
     <% unless @ldap_sync_worker.nil? %>
     ldap_sync_worker:
-      cron: <%= @ldap_sync_worker_cron %>
+      cron: "<%= @ldap_sync_worker_cron %>"
     <% end %>
 
     # Gitlab Geo nodes notification worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_bulk_notify_worker.nil? %>
     geo_bulk_notify_worker:
-      cron: <%= @geo_bulk_notify_worker_cron %>
+      cron: "<%= @geo_bulk_notify_worker_cron %>"
     <% end %>
 
     # GitLab Geo backfill worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_backfill_worker_cron.nil? %>
     geo_backfill_worker:
-      cron: <%= @geo_backfill_worker_cron %>
+      cron: "<%= @geo_backfill_worker_cron %>"
     <% end %>
 
     # GitLab Geo file download worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_download_dispatch_worker_cron.nil? %>
     geo_download_dispatch_worker:
-      cron: <%= @geo_download_dispatch_worker_cron %>
+      cron: "<%= @geo_download_dispatch_worker_cron %>"
     <% end %>
 
   #
