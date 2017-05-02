@@ -97,7 +97,7 @@ fi
 
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   echo "Runnning Post Reconfigure Script..."
-  eval ${GITLAB_POST_RECONFIGURE_SCRIPT}
+  eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
 fi
 
 # Tail all logs
