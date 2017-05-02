@@ -47,6 +47,27 @@ describe 'gitlab::gitlab-monitor' do
     end
   end
 
+  context 'when gitlab-monitor is enabled and postgres is disabled' do
+    let(:config_template) { chef_run.template('/var/log/gitlab/gitlab-monitor/config') }
+
+    before do
+      stub_gitlab_rb(
+        gitlab_monitor: { enable: true },
+        gitlab_rails: { db_host: 'postgres.example.com', db_port: '5432', db_password: 'secret' },
+        postgresql: { enabled: false }
+      )
+    end
+
+    it 'populates a config with a remote host' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-monitor/gitlab-monitor.yml')
+        .with_content { |content|
+          expect(content).to match(/host=postgres\.example\.com/)
+          expect(content).to match(/port=5432/)
+          expect(content).to match(/password=secret/)
+        }
+    end
+  end
+
   context 'when log dir is changed' do
     before do
       stub_gitlab_rb(
