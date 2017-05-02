@@ -9,8 +9,15 @@ describe 'gitlab::gitlab-rails' do
   end
 
   context 'when manage-storage-directories is disabled' do
-    before do
-      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' }, manage_storage_directories: { enable: false })
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared',
+                                       uploads_directory: '/tmp/uploads',
+                                       builds_directory: '/tmp/builds' },
+                       manage_storage_directories: { enable: false })
+      end
+
+      ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
     end
 
     it 'does not create the shared directory' do
@@ -26,12 +33,10 @@ describe 'gitlab::gitlab-rails' do
     end
 
     it 'does not create the uploads storage directory' do
-      stub_gitlab_rb(gitlab_rails: { uploads_directory: '/tmp/uploads' })
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
 
     it 'does not create the ci builds directory' do
-      stub_gitlab_rb(gitlab_ci: { builds_directory: '/tmp/builds' })
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/builds')
     end
 
@@ -41,8 +46,14 @@ describe 'gitlab::gitlab-rails' do
   end
 
   context 'when manage-storage-directories is enabled' do
-    before do
-      stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared' })
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared',
+                                       uploads_directory: '/tmp/uploads' },
+                       gitlab_ci: { builds_directory: '/tmp/builds' })
+      end
+
+      ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
     end
 
     it 'creates the shared directory' do
@@ -58,12 +69,10 @@ describe 'gitlab::gitlab-rails' do
     end
 
     it 'creates the uploads directory' do
-      stub_gitlab_rb(gitlab_rails: { uploads_directory: '/tmp/uploads' })
       expect(chef_run).to run_ruby_block('directory resource: /tmp/uploads')
     end
 
     it 'creates the ci builds directory' do
-      stub_gitlab_rb(gitlab_ci: { builds_directory: '/tmp/builds' })
       expect(chef_run).to run_ruby_block('directory resource: /tmp/builds')
     end
 
@@ -169,7 +178,7 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_backfill_worker:\s+cron:\s+1 2 3 4 5/)
+            .with_content(/geo_backfill_worker:\s+cron:\s+"1 2 3 4 5"/)
         end
       end
 
@@ -186,7 +195,7 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: { geo_download_dispatch_worker_cron: '1 2 3 4 5' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_download_dispatch_worker:\s+cron:\s+1 2 3 4 5/)
+            .with_content(/geo_download_dispatch_worker:\s+cron:\s+"1 2 3 4 5"/)
         end
       end
 
@@ -205,7 +214,7 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: { trigger_schedule_worker_cron: '1 2 3 4 5' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/trigger_schedule_worker:\s+cron:\s+1 2 3 4 5/)
+            .with_content(/trigger_schedule_worker:\s+cron:\s+"1 2 3 4 5"/)
         end
       end
 
@@ -342,6 +351,10 @@ describe 'gitlab::gitlab-rails' do
       let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml") }
 
       context 'by default' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+        end
+
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
             .with(
@@ -395,8 +408,12 @@ describe 'gitlab::gitlab-rails' do
         end
 
         context 'when one postgresql listen_address is used' do
-          before do
-            stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
+          cached(:chef_run) do
+            RSpec::Mocks.with_temporary_scope do
+              stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
+            end
+
+            ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
           end
 
           it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
@@ -462,6 +479,10 @@ describe 'gitlab::gitlab-rails' do
       let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret") }
 
       context 'by default' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+        end
+
         it 'creates the template' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
             .with(
@@ -489,8 +510,12 @@ describe 'gitlab::gitlab-rails' do
       end
 
       context 'with specific gitlab_workhorse_secret' do
-        before do
-          stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
+          end
+
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
         end
 
         it 'renders the correct node attribute' do
