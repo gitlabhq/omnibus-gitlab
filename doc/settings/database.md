@@ -264,7 +264,7 @@ Before upgrading, please check the following:
 * If you recently upgraded, make sure that `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
 * You're using the bundled version of PostgreSQL. Look for `postgresql['enable']` to be `true`, commented out, or absent from `/etc/gitlab/gitlab.rb`.
 * You haven't already upgraded. Running `sudo gitlab-psql --version` should print `psql (PostgreSQL) 9.2.18`.
-* You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** If the partition where the database resides does not have enough space (default location is `/var/opt/gitlab/postgresql/data`), you can pass the argument `--tmp-dir $DIR` to the command.
+* You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
 
 Please note:
 
