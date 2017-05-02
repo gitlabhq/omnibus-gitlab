@@ -102,6 +102,12 @@ version, that is `xx.yy.zz`. This is because omnibus-gitlab will append a `v`
 before the branch name, mistaking it for a version tag. Example, branch name
 can not be `0.5.0` as omnibus-gitlab will automatically make it `v0.5.0`.
 
+## Building an EE package
+
+To build a GitLab EE package, set the environment variable `ee` to true (run
+the command `$ export ee=true`) before starting the build. It will make
+omnibus-gitlab pull the EE repo instead of CE one and build an EE package.
+
 ### Note for GitLab Inc. developers
 
 If you are a member of the GitLab Inc. team, you will have access to the build
