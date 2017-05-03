@@ -17,7 +17,7 @@ server:
 
 # Probes config
 probes:
-  git_repos:
+  git:
     multiple: true
 <% node['gitlab']['gitlab-shell']['git_data_directories'].each do |repo_name, git_data_directory| -%>
     <%= repo_name %>:
@@ -54,6 +54,9 @@ probes:
     slow_queries:
       class_name: Database::SlowQueriesProber
       <<: *db_common
+    stuck_idle_in_transactions:
+      class_name: Database::StuckIdleInTransactionsProber
+      <<: *db_common
     vacuum_queries:
       class_name: Database::VacuumQueriesProber
       <<: *db_common
@@ -78,5 +81,6 @@ probes:
       - probe_jobs
       - probe_workers
       - probe_retries
+      - probe_dead
     opts:
       redis_url: "<%= @redis_url %>"
