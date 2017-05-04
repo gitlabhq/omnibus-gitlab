@@ -154,6 +154,20 @@ describe 'gitlab::prometheus' do
         .with_content(/storage.local.target-heap-size=47689236/)
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content(/storage.local.path=foo/)
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_database\s+metrics_path: "/database"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_sidekiq\s+metrics_path: "/sidekiq"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_process\s+metrics_path: "/process"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: node\s+static_configs:\s+- targets:\s+- localhost:9100})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: redis\s+static_configs:\s+- targets:\s+- localhost:9121})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: postgres\s+static_configs:\s+- targets:\s+- localhost:9187})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
     end
 
     it 'renders prometheus.yml with the non-default value' do
@@ -162,7 +176,7 @@ describe 'gitlab::prometheus' do
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(/scrape_interval: 11/)
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(/- testhost:1234/)
+        .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
     end
   end
 
