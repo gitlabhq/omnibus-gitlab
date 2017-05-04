@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 name 'mysql-client'
-default_version '5.5.55'
+default_version '5.5.56'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -27,7 +27,7 @@ dependency 'zlib'
 dependency 'ncurses'
 
 source  url: "http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-#{version}.tar.gz",
-        md5: '6414b0dc724c1297139991164c4038cc'
+        md5: '76a393f1aee0d57bf71e1a7414200233'
 
 relative_path "mysql-#{version}"
 
