@@ -10,6 +10,33 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9090
+  - job_name: redis
+    static_configs:
+    - targets:
+      - localhost:9121
+  - job_name: postgres
+    static_configs:
+    - targets:
+      - localhost:9187
+  - job_name: node
+    static_configs:
+    - targets:
+      - localhost:9100
+  - job_name: gitlab_monitor_database
+    metrics_path: "/database"
+    static_configs:
+    - targets:
+      - localhost:9168
+  - job_name: gitlab_monitor_sidekiq
+    metrics_path: "/sidekiq"
+    static_configs:
+    - targets:
+      - localhost:9168
+  - job_name: gitlab_monitor_process
+    metrics_path: "/process"
+    static_configs:
+    - targets:
+      - localhost:9168
   - job_name: kubernetes-nodes
     scheme: https
     tls_config:
@@ -30,28 +57,6 @@ prometheus_yml_output = <<-PROMYML
       - pod_name
       target_label: environment
       regex: "(.+)-.+-.+"
-  - job_name: node
-    static_configs:
-    - targets:
-      - localhost:9100
-  - job_name: redis
-    static_configs:
-    - targets:
-      - localhost:9121
-  - job_name: node
-    static_configs:
-    - targets:
-      - localhost:9187
-  - job_name: gitlab_monitor_database
-    metrics_path: "/database"
-    static_configs:
-    - targets:
-      - localhost:9168
-  - job_name: gitlab_monitor_sidekiq
-    metrics_path: "/sidekiq"
-    static_configs:
-    - targets:
-      - localhost:9168
 PROMYML
 
 describe 'gitlab::prometheus' do
@@ -177,6 +182,20 @@ describe 'gitlab::prometheus' do
         .with_content(/scrape_interval: 11/)
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
+    end
+
+    context 'when kubernetes monitoring is disabled' do
+      before do
+        stub_gitlab_rb(
+          prometheus: {
+            monitor_kubernetes: false
+          })
+      end
+
+      it 'does not contain kuberentes scrap configuration' do
+        expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
+      end
     end
   end
 
