@@ -10,6 +10,26 @@ describe 'gitlab::mattermost' do
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
   end
 
+  context 'SiteUrl setting' do
+    it 'is set when mattermost_external_url is set' do
+      expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+        .with_content(%r{"SiteURL": "http://mattermost.example.com",})
+    end
+
+    context 'when explicitly set' do
+      before do
+        stub_gitlab_rb(mattermost: {
+                         service_site_url: 'http://mattermost.gitlab.example'
+                       })
+      end
+
+      it 'is not overriden by mattermost_external_url' do
+        expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+          .with_content(%r{"SiteURL": "http://mattermost.gitlab.example",})
+      end
+    end
+  end
+
   it 'authorizes mattermost with gitlab' do
     stub_gitlab_rb(external_url: 'http://external.url')
     allow(MattermostHelper).to receive(:authorize_with_gitlab)
