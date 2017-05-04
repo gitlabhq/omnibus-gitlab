@@ -45,6 +45,7 @@ namespace :docker do
   task :push, [:RELEASE_PACKAGE] do |_t, args|
     docker_tag = ENV["DOCKER_TAG"]
     release_package = args['RELEASE_PACKAGE']
+    DockerOperations.authenticate
     DockerOperations.push(release_package, "latest", docker_tag)
   end
 
@@ -52,6 +53,16 @@ namespace :docker do
   task :push_qa, [:RELEASE_PACKAGE] do |_t, args|
     docker_tag = ENV["DOCKER_TAG"]
     type = args['RELEASE_PACKAGE'].gsub("gitlab-", "").strip
+    DockerOperations.authenticate
     DockerOperations.push("gitlab-qa", "#{type}-latest", "#{type}-#{docker_tag}")
+  end
+
+  desc "Push triggered Docker Image to GitLab Registry"
+  task :push_triggered, [:RELEASE_PACKAGE] do |_t, args|
+    release_package = args['RELEASE_PACKAGE']
+    docker_tag = ENV["DOCKER_TAG"]
+    docker_registry = "https://registry.gitlab.com/v1/"
+    DockerOperations.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], docker_registry)
+    DockerOperations.push(release_package, "latest", docker_tag, ENV["CI_REGISTRY_IMAGE"])
   end
 end
