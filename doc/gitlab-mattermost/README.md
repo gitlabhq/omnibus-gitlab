@@ -9,9 +9,9 @@ Make sure you view this guide from the tag (version) of GitLab you would like to
 
 If the highest number stable branch is unclear please check the [GitLab Blog](https://about.gitlab.com/blog/) for installation guide links by version.
 
-## Pre-requisite 
+## Pre-requisite
 
-GitLab Mattermost is compiled and manually tested each release on an AMD 64 chipset for Linux. ARM chipsets and operating systems, like Raspberry PI, are not supported. 
+GitLab Mattermost is compiled and manually tested each release on an AMD 64 chipset for Linux. ARM chipsets and operating systems, like Raspberry PI, are not supported.
 
 ## Getting started
 
@@ -110,7 +110,6 @@ mattermost_external_url 'https://mattermost.gitlab.example'
 mattermost_nginx['redirect_http_to_https'] = true
 mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/mattermost-nginx.crt"
 mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/mattermost-nginx.key"
-mattermost['service_site_url'] = "https://mattermost.gitlab.example"
 mattermost['service_use_ssl'] = true
 ```
 
@@ -177,15 +176,15 @@ For help and support around your GitLab Mattermost deployment please see:
 ## Upgrading GitLab Mattermost
 
 Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).  
-  
+
 | GitLab Version | Mattermost Version |
 |----------------|--------------------|
 | 8.9            | v3.1.0             |
 | 8.10           | v3.2.0             |
 | 8.11           | v3.3.0             |
 | 8.12           | v3.4.0             |  
-  
-It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12. 
+
+It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
 GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided Mattermost configuration settings have not been changed outside of GitLab. This means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
 
