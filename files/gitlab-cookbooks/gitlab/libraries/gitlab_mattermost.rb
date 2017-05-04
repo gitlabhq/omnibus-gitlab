@@ -36,6 +36,7 @@ module GitlabMattermost
       end
 
       Gitlab['mattermost']['host'] = uri.host
+      Gitlab['mattermost']['service_site_url'] ||= Gitlab['mattermost_external_url']
 
       # setup gitlab auth endpoints if GitLab's external url has been provided
       if Gitlab['external_url']
