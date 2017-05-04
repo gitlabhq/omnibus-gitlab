@@ -33,14 +33,14 @@ To enable WAL Archiving:
 1. Edit `/etc/gitlab/gitlab.rb`:
     ```ruby
     # Replication settings
-    default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
-    default['gitlab']['postgresql']['wal_level'] = "replica"
+    postgresql['sql_replication_user'] = "gitlab_replicator"
+    postgresql['wal_level'] = "replica"
         ...
         ...
     # Backup/Archive settings
-    default['gitlab']['postgresql']['archive_mode'] = "on"
-    default['gitlab']['postgresql']['archive_command'] = "/your/wal/archiver/here"
-    default['gitlab']['postgresql']['archive_timeout'] = "60"
+    postgresql['archive_mode'] = "on"
+    postgresql['archive_command'] = "/your/wal/archiver/here"
+    postgresql['archive_timeout'] = "60"
     ```
 
 1.  [Reconfigure GitLab][] for the changes to take effect. This will result in a database restart.
