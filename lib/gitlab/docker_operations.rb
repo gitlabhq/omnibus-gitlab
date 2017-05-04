@@ -46,12 +46,15 @@ class DockerOperations
     end
   end
 
-  def self.push(image_id, old_tag, new_tag)
+  def self.authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
+    Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
+  end
+
+  def self.push(image_id, old_tag, new_tag, repo = "gitlab")
     image = Docker::Image.get("#{image_id}:#{old_tag}")
     image.info["RepoTags"].pop
-    image.tag(repo: "gitlab/#{image_id}", tag: new_tag, force: true)
-    Docker.authenticate!(username: ENV['DOCKERHUB_USERNAME'], password: ENV['DOCKERHUB_PASSWORD'], email: ENV['DOCKERHUB_EMAIL'])
-    image.push(Docker.creds, repo_tag: "gitlab/#{image_id}:#{new_tag}") do |chunk|
+    image.tag(repo: "#{repo}/#{image_id}", tag: new_tag, force: true)
+    image.push(Docker.creds, repo_tag: "#{repo}/#{image_id}:#{new_tag}") do |chunk|
       puts chunk
     end
   end

@@ -50,6 +50,8 @@ ifdef NIGHTLY
 test: packagecloud
 endif
 
+test_no_sync: no_changes purge build license_check move_to_platform_dir
+
 # Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
 do_rpi2_release: PLATFORM_DIR=raspberry-pi2
 do_rpi2_release: no_changes purge build license_check move_to_platform_dir sync packagecloud
@@ -106,6 +108,17 @@ endif
 ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
 do_docker_release: docker_push_latest
 endif
+
+docker_trigger_build_and_push:
+	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
+	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
+	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
+	# Our regular Docker image creation involves installing GitLab package from
+	# AWS bucket. Triggered ones have a package locally available and should use
+	# that. So, replacing the downloading command with a local install one.
+	sed -i "s/wget.*/dpkg -i \/assets\/gitlab.deb \&\& rm \/assets\/gitlab.deb/" docker/assets/setup
+	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=$(GITLAB_VERSION) bundle exec rake docker:push_triggered[$(RELEASE_PACKAGE)]
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
