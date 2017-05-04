@@ -36,6 +36,7 @@ module GitlabMattermost
       end
 
       Gitlab['mattermost']['host'] = uri.host
+      Gitlab['mattermost']['service_site_url'] ||= Gitlab['mattermost_external_url']
 
       case uri.scheme
       when "http"
