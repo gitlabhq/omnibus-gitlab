@@ -45,11 +45,3 @@ if node['gitlab']['bootstrap']['enable']
     retries 20
   end
 end
-
-# Include postgres_exporter in scrape config.
-node.default['gitlab']['prometheus']['scrape_configs'] << {
-  'job_name' => 'node',
-  'static_configs' => [
-    'targets' => [node['gitlab']['postgres-exporter']['listen_address']],
-  ],
-}

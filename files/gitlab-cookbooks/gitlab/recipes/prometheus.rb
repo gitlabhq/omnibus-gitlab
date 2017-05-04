@@ -33,49 +33,6 @@ directory prometheus_log_dir do
   recursive true
 end
 
-# Include Prometheus server self-scrape.
-node.default['gitlab']['prometheus']['scrape_configs'] << {
-  'job_name' => 'prometheus',
-  'static_configs' => [
-    'targets' => [node['gitlab']['prometheus']['listen_address']],
-  ],
-}
-
-if node['gitlab']['prometheus']['monitor_kubernetes']
-  node.default['gitlab']['prometheus']['scrape_configs'] << {
-    'job_name' => 'kubernetes-nodes',
-    'scheme' => 'https',
-    'tls_config' => {
-      'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-      'insecure_skip_verify' => 'true',
-    },
-    'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-    'kubernetes_sd_configs' => [
-      {
-        'role' => 'node',
-        'api_server' => 'https://kubernetes.default.svc:443',
-        'tls_config' => {
-          'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-        },
-        'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-      },
-    ],
-    'relabel_configs' => [
-      {
-        'action' => 'labelmap',
-        'regex' => '__meta_kubernetes_node_label_(.+)',
-      },
-    ],
-    'metric_relabel_configs' => [
-      {
-        'source_labels' => ['pod_name'],
-        'target_label' => 'environment',
-        'regex' => '(.+)-.+-.+',
-      },
-    ],
-  }
-end
-
 file 'Prometheus config' do
   path File.join(prometheus_dir, 'prometheus.yml')
   content lazy { Prometheus.hash_to_yaml({

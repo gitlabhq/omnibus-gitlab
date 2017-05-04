@@ -39,11 +39,3 @@ if node['gitlab']['bootstrap']['enable']
     retries 20
   end
 end
-
-# Include redis_exporter in scrape config.
-node.default['gitlab']['prometheus']['scrape_configs'] << {
-  'job_name' => 'redis',
-  'static_configs' => [
-    'targets' => [node['gitlab']['redis-exporter']['listen_address']],
-  ],
-}
