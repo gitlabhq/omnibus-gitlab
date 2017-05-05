@@ -272,6 +272,24 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'GitLab Shell settings' do
+      context 'when git_timeout is configured' do
+        it 'sets the git_timeout value' do
+          stub_gitlab_rb(gitlab_rails: { gitlab_shell_git_timeout: '1000' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/git_timeout:\s+1000/)
+        end
+      end
+
+      context 'when git_timeout is not configured' do
+        it 'sets git_timeout value to default' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/git_timeout:\s+800/)
+        end
+      end
+    end
+
     context 'when there is a legacy GitLab Rails stuck_ci_builds_worker_cron key' do
       before do
         allow(Gitlab).to receive(:[]).and_call_original

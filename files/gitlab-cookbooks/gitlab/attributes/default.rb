@@ -202,6 +202,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_hooks_path'] = "#{node['package'
 default['gitlab']['gitlab-rails']['gitlab_shell_upload_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_receive_pack'] = nil
 default['gitlab']['gitlab-rails']['gitlab_shell_ssh_port'] = nil
+default['gitlab']['gitlab-rails']['gitlab_shell_git_timeout'] = 800
 # Path to the Git Executable
 # defaults to /opt/gitlab/embedded/bin/git. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
