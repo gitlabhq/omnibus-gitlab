@@ -41,7 +41,7 @@ prometheus_yml_output = <<-PROMYML
     scheme: https
     tls_config:
       ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-      insecure_skip_verify: 'true'
+      insecure_skip_verify: true
     bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
     kubernetes_sd_configs:
     - role: node
