@@ -449,6 +449,10 @@ gitlab_rails['internal_api_url'] = 'http://git.yourdomain.com'
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
+**Note:** If you are running a version older than 8.16.0, you will have to
+manually remove the unicorn service file (`/opt/gitlab/service/unicorn`), if
+exists, for reconfigure to succeed.
+
 ### Vhost (server block)
 
 Then, in your custom Passenger/Nginx installation, create the following site
