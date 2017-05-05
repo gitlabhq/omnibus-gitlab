@@ -149,6 +149,12 @@ build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features']
 
+  # This directory will be deleted after all the licenses copied to it are
+  # handled by the DependencyInformation task of omnibus. It won't be part
+  # of the final package, thus causing a redundancy.
+  command "mkdir -p #{install_dir}/licenses"
+  copy 'vendor/licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
+
   # Create a wrapper for the rake tasks of the Rails app
   erb dest: "#{install_dir}/bin/gitlab-rake",
       source: 'bundle_exec_wrapper.erb',
