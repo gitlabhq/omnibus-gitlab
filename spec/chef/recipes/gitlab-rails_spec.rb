@@ -291,6 +291,42 @@ describe 'gitlab::gitlab-rails' do
         expect(Gitlab['gitlab_rails']['stuck_ci_jobs_worker_cron']).to eq('0 1 2 * *')
       end
     end
+
+    context 'GitLab LDAP cron_jobs settings' do
+      context 'when ldap user sync worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { ldap_sync_worker_cron: '40 2 * * *' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ldap_sync_worker:\s+cron:\s+"40 2 \* \* \*"/)
+        end
+      end
+
+      context 'when ldap user sync worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('ldap_sync_worker')
+          }
+        end
+      end
+
+      context 'when ldap group sync worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { ldap_group_sync_worker_cron: '1 0 * * *' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ldap_group_sync_worker:\s+cron:\s+"1 0 \* \* \*"/)
+        end
+      end
+
+      context 'when ldap group sync worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('ldap_group_sync_worker')
+          }
+        end
+      end
+    end
   end
 
   context 'with environment variables' do

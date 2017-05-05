@@ -196,14 +196,21 @@ production: &base
     # In addition to refreshing users when they log in,
     # periodically refresh LDAP users membership.
     # NOTE: This will only take effect if LDAP is enabled
-    <% unless @ldap_sync_worker.nil? %>
+    <% unless @ldap_sync_worker_cron.nil? %>
     ldap_sync_worker:
       cron: "<%= @ldap_sync_worker_cron %>"
     <% end %>
 
+    # GitLab LDAP group sync worker
+    # NOTE: This will only take effect if LDAP is enabled
+    <% unless @ldap_group_sync_worker_cron.nil? %>
+    ldap_group_sync_worker:
+      cron: "<%= @ldap_group_sync_worker_cron %>"
+    <% end %>
+
     # Gitlab Geo nodes notification worker
     # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_bulk_notify_worker.nil? %>
+    <% unless @geo_bulk_notify_worker_cron.nil? %>
     geo_bulk_notify_worker:
       cron: "<%= @geo_bulk_notify_worker_cron %>"
     <% end %>
