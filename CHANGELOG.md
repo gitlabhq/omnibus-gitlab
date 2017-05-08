@@ -6,6 +6,16 @@ omnibus-gitlab repository.
 9.2.0
 
 - Update mysql client to 5.5.55
+- Add a build env variable ALTERNATIVE_SOURCES f0cab0c6
+- Create reconfigure log dir explicitly (Anastas Dancha) 9654cfe3
+- Upgrade docker/distribution to 2.6.1 5fe36ffe
+- Upgrade Prometheus to 1.6.1 d4bdd143
+- Upgrade gitlab-monitor to 1.6 b245f2c1
+- Add ldap_group_sync worker configuration f21c3886
+- Add gitlab_shell_timeout configuration 0289f50b
+- Generate license .csv file 5478b1aa
+- Generate PO translation files 6b6c936a
+- Change service running detection 18b51873
 
 9.1.0
 
@@ -20,6 +30,8 @@ omnibus-gitlab repository.
 - EE: Add hot-standby configuration for Geo DB 82158
 - EE: Change the order of configuration loading for EE recipes ba19b7c0
 - Add support storages in Gitaly config f3205fa
+- Update Node exporter to 0.14.0 84f71c0
+- Update Redis exporter to 0.10.9.1 84f71c0
 
 9.0.6
 
