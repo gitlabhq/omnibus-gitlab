@@ -119,6 +119,9 @@ build do
   command 'yarn install --pure-lockfile --production'
   bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
+  # process PO files and generate MO files
+  bundle 'exec rake gettext:pack', env: assets_compile_env
+
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
   delete 'config/gitlab.yml'
