@@ -43,7 +43,7 @@ configuration = Prometheus.hash_to_yaml({
 
 file 'Prometheus config' do
   path File.join(prometheus_dir, 'prometheus.yml')
-  content lazy { configuration }
+  content configuration
   owner prometheus_user
   mode '0644'
   notifies :restart, 'service[prometheus]'
