@@ -14,7 +14,9 @@ class OmnibusHelper
   end
 
   def not_listening?(service_name)
-    File.exists?("/opt/gitlab/service/#{service_name}/down") && service_down?(service_name)
+    return true unless service_enabled?(service_name)
+
+    service_down?(service_name)
   end
 
   def service_enabled?(service_name)
@@ -36,4 +38,4 @@ class OmnibusHelper
   def group_exists?(group)
     success?("getent group #{group}")
   end
-end
+end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

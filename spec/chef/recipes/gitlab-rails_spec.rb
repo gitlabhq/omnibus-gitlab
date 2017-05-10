@@ -125,11 +125,13 @@ describe 'gitlab::gitlab-rails' do
         expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
       end
 
-      it 'should not notify rails cache clear resource if disabled' do
+      it 'should still notify rails cache clear resource if disabled' do
         stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
 
-        expect(gitlab_yml).not_to notify(
+        expect(gitlab_yml).to notify(
           'execute[clear the gitlab-rails cache]')
+        expect(gitlab_yml).not_to run_execute(
+          'clear the gitlab-rails cache')
       end
     end
 
