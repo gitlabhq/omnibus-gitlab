@@ -4,7 +4,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 
 ## Installation
 
-- [Package downloads page](https://about.gitlab.com/downloads/)
+- [Package downloads page](https://about.gitlab.com/installation/)
 - [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [GitLab Prometheus](https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html) Set up the Prometheus
