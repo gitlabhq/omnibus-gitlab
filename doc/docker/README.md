@@ -7,15 +7,17 @@ Both GitLab CE and EE are in Docker Hub:
 
 The GitLab Docker images are monolithic images of GitLab running all the necessary services on a single container.
 
-You can also deploy to Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose):
-
-[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/gitlabhq/omnibus-gitlab/tree/master/docker)
-
 In the following examples we are using the image of GitLab CE. To use GitLab EE
 instead of GitLab CE, replace the image name to `gitlab/gitlab-ee:latest`.
 
 If you want to use the latest RC image, use `gitlab/gitlab-ce:rc` or
 `gitlab/gitlab-ee:rc` for GitLab CE and GitLab EE respectively.
+
+The GitLab Docker images can be run in multiple ways:
+
+- [Run the image in Docker Engine](#run-the-image)
+- [Install GitLab into a cluster](#install-gitlab-into-a-cluster)
+- [Install GitLab using docker-compose](#install-gitlab-using-docker-compose)
 
 ## Prerequisites
 
@@ -377,6 +379,14 @@ This is the same as using `--publish 9090:9090 --publish 2224:22`.
 Provided you [installed GitLab using docker-compose](#install-gitlab-using-docker-compose),
 all you have to do is run `docker-compose pull` and `docker-compose up -d` to
 download a new release and upgrade your GitLab instance.
+
+## Install GitLab into a cluster
+
+The GitLab Docker images can also be deployed to various container scheduling platforms.
+
+- Kubernetes using the [GitLab Helm Charts](https://docs.gitlab.com/ce/install/kubernetes/).
+- Mesosphere DC/OS using the [DC/OS Package](https://github.com/dcos/examples/tree/master/gitlab/1.8).
+- Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose).
 
 ## Troubleshooting
 

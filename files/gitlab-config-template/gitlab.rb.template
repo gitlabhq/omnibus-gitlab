@@ -1267,6 +1267,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['scrape_timeout'] = 15
 # prometheus['chunk_encoding_version'] = 2
 #
+### Custom scrape configs
+#
+# Prometheus can scrape additional jobs via scrape_configs.  The default automatically
+# includes all of the exporters supported by the omnibus config.
+#
+# See: https://prometheus.io/docs/operating/configuration/#<scrape_config>
+#
+# Example:
+#
+# prometheus['scrape_configs'] = [
+#   {
+#     'job_name': 'example',
+#     'static_configs' => [
+#       'targets' => ['hostname:port'],
+#     ],
+#   },
+# ]
+#
 ### Prometheus Memory Management
 #
 # Prometheus needs to be configured for how much memory is used.
