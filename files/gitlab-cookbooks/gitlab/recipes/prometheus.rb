@@ -33,12 +33,19 @@ directory prometheus_log_dir do
   recursive true
 end
 
-template 'Prometheus template' do
+configuration = Prometheus.hash_to_yaml({
+                  'global' => {
+                    'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
+                    'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
+                  },
+                  'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
+                })
+
+file 'Prometheus config' do
   path File.join(prometheus_dir, 'prometheus.yml')
-  source 'prometheus.yml.erb'
+  content configuration
   owner prometheus_user
   mode '0644'
-  variables node['gitlab']['prometheus'].to_hash
   notifies :restart, 'service[prometheus]'
 end
 
