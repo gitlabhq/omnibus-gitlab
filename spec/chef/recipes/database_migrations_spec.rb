@@ -75,10 +75,21 @@ describe 'gitlab::database-migrations' do
         'execute[clear the gitlab-rails cache]')
     end
 
-    it 'should not notify rails cache clear resource if disabled' do
+    it 'should notify rails cache clear resource' do
       stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
-      expect(chef_run.bash('migrate gitlab-rails database')).not_to notify(
+      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
         'execute[clear the gitlab-rails cache]')
+    end
+
+    it 'should notify the postgresql enable pg_trgm extension resource by default' do
+      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
+        'execute[enable pg_trgm extension]').to(:run).before
+    end
+
+    it 'should not notify the postgresql enable pg_trgm extension when postgresql is disabled' do
+      stub_gitlab_rb(postgresql: { enable: false })
+      expect(chef_run.bash('migrate gitlab-rails database')).not_to notify(
+        'execute[enable pg_trgm extension]')
     end
   end
 end

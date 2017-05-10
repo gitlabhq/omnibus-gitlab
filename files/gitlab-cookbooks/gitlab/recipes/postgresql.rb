@@ -156,7 +156,6 @@ database_name = node['gitlab']['gitlab-rails']['db_database']
 gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
 sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
 
-
 if node['gitlab']['gitlab-rails']['enable']
   execute "create #{gitlab_sql_user} database user" do
     command "/opt/gitlab/bin/gitlab-psql -d template1 -c \"CREATE USER #{gitlab_sql_user}\""
