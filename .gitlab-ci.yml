@@ -720,7 +720,7 @@ notify:slack-fail:
     - master
     - tags@gitlab/omnibus-gitlab
   except:
-    - triggers
+    - triggers@gitlab-org/omnibus-gitlab
 
 # Trigger docs build
 # https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
