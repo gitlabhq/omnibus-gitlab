@@ -1,5 +1,64 @@
 require 'chef_helper'
 
+prometheus_yml_output = <<-PROMYML
+  ---
+  global:
+    scrape_interval: 15s
+    scrape_timeout: 15s
+  scrape_configs:
+  - job_name: prometheus
+    static_configs:
+    - targets:
+      - localhost:9090
+  - job_name: redis
+    static_configs:
+    - targets:
+      - localhost:9121
+  - job_name: postgres
+    static_configs:
+    - targets:
+      - localhost:9187
+  - job_name: node
+    static_configs:
+    - targets:
+      - localhost:9100
+  - job_name: gitlab_monitor_database
+    metrics_path: "/database"
+    static_configs:
+    - targets:
+      - localhost:9168
+  - job_name: gitlab_monitor_sidekiq
+    metrics_path: "/sidekiq"
+    static_configs:
+    - targets:
+      - localhost:9168
+  - job_name: gitlab_monitor_process
+    metrics_path: "/process"
+    static_configs:
+    - targets:
+      - localhost:9168
+  - job_name: kubernetes-nodes
+    scheme: https
+    tls_config:
+      ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecure_skip_verify: true
+    bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    kubernetes_sd_configs:
+    - role: node
+      api_server: https://kubernetes.default.svc:443
+      tls_config:
+        ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    relabel_configs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+    metric_relabel_configs:
+    - source_labels:
+      - pod_name
+      target_label: environment
+      regex: "(.+)-.+-.+"
+PROMYML
+
 describe 'gitlab::prometheus' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
@@ -34,11 +93,7 @@ describe 'gitlab::prometheus' do
         }
 
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content { |content|
-          expect(content).to match(/scrape_interval: 15s/)
-          expect(content).to match(/scrape_timeout: 15s/)
-          expect(content).to match(/localhost:9168/)
-        }
+        .with_content(prometheus_yml_output.gsub(/^ {2}/, ''))
 
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/prometheus/)
@@ -77,7 +132,17 @@ describe 'gitlab::prometheus' do
           listen_address: 'localhost:9898',
           scrape_interval: 11,
           scrape_timeout: 8888,
-          enable: true
+          enable: true,
+          scrape_configs: [
+            {
+              job_name: 'test',
+              static_configs: [
+                targets: [
+                  'testhost:1234'
+                ]
+              ]
+            }
+          ]
         }
       )
     end
@@ -94,6 +159,20 @@ describe 'gitlab::prometheus' do
         .with_content(/storage.local.target-heap-size=47689236/)
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content(/storage.local.path=foo/)
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_database\s+metrics_path: "/database"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_sidekiq\s+metrics_path: "/sidekiq"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitlab_monitor_process\s+metrics_path: "/process"\s+static_configs:\s+- targets:\s+- localhost:9168})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: node\s+static_configs:\s+- targets:\s+- localhost:9100})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: redis\s+static_configs:\s+- targets:\s+- localhost:9121})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: postgres\s+static_configs:\s+- targets:\s+- localhost:9187})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
     end
 
     it 'renders prometheus.yml with the non-default value' do
@@ -101,6 +180,22 @@ describe 'gitlab::prometheus' do
         .with_content(/scrape_timeout: 8888s/)
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(/scrape_interval: 11/)
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
+    end
+
+    context 'when kubernetes monitoring is disabled' do
+      before do
+        stub_gitlab_rb(
+          prometheus: {
+            monitor_kubernetes: false
+          })
+      end
+
+      it 'does not contain kuberentes scrap configuration' do
+        expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
+      end
     end
   end
 
