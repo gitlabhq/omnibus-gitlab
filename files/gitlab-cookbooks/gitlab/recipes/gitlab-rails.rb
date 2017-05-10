@@ -118,9 +118,6 @@ dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unico
 dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable']
 
-redis_not_listening = omnibus_helper.not_listening?("redis")
-postgresql_not_listening = omnibus_helper.not_listening?("postgresql")
-
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
 otp_key_base = node['gitlab']['gitlab-rails']['otp_key_base']
@@ -249,7 +246,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
     )
   )
   restarts dependent_services
-  notifies [:run, 'execute[clear the gitlab-rails cache]'] unless redis_not_listening || !node['gitlab']['gitlab-rails']['rake_cache_clear']
+  notifies [:run, 'execute[clear the gitlab-rails cache]']
 end
 
 templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
@@ -357,6 +354,7 @@ execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
   action :nothing
+  not_if { omnibus_helper.not_listening?('redis') || !node['gitlab']['gitlab-rails']['rake_cache_clear'] }
 end
 
 #
