@@ -43,6 +43,23 @@ class BasePgHelper
       "|grep -x t"])
   end
 
+  # Returns an array of function names for the given database
+  #
+  # Uses the  `\df` PostgreSQL command to generate a list of functions and their
+  # attributes, then cuts out only the function names.
+  #
+  # @param database [String] the name of the database
+  # @return [Array] the list of functions associated with the database
+  def list_functions(database)
+    do_shell_out(
+      %(/opt/gitlab/bin/#{service_cmd} -d #{database} -c '\\df' -tA -F, | cut -d, -f2)
+    ).stdout.split("\n")
+  end
+
+  def has_function?(database, function)
+    list_functions(database).include?(function)
+  end
+
   def bootstrapped?
     File.exists?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION'))
   end
@@ -63,6 +80,21 @@ class BasePgHelper
     else
       nil
     end
+  end
+
+  def pg_shadow_lookup
+    <<-EOF
+    CREATE OR REPLACE FUNCTION public.pg_shadow_lookup(in i_username text, out username text, out password text) RETURNS record AS $$
+    BEGIN
+        SELECT usename, passwd FROM pg_catalog.pg_shadow
+        WHERE usename = i_username INTO username, password;
+        RETURN;
+    END;
+    $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+    REVOKE ALL ON FUNCTION public.pg_shadow_lookup(text) FROM public, pgbouncer;
+    GRANT EXECUTE ON FUNCTION public.pg_shadow_lookup(text) TO pgbouncer;
+    EOF
   end
 
   protected

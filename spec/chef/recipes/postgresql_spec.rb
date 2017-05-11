@@ -13,6 +13,10 @@ describe 'postgresql 9.2' do
     expect(chef_run).to include_recipe('gitlab::postgresql-bin')
   end
 
+  it 'includes the postgresql_user recipe' do
+    expect(chef_run).to include_recipe('gitlab::postgresql_user')
+  end
+
   context 'with default settings' do
     it 'correctly sets the shared_preload_libraries default setting' do
       expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])
@@ -322,6 +326,22 @@ describe 'postgresql 9.6' do
         end
         chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
       end
+    end
+  end
+
+  context 'non-default settings' do
+    before do
+      stub_gitlab_rb(
+        {
+          postgresql: {
+            sql_user_password: 'fakepassword'
+          }
+        }
+      )
+    end
+
+    it 'should set a password for sql_user when sql_user_password is set' do
+      expect(chef_run).to create_postgresql_user('gitlab').with(password: 'md5fakepassword')
     end
   end
 end

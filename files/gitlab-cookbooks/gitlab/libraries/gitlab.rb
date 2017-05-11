@@ -92,6 +92,7 @@ module Gitlab
   geo_secondary Mash.new
   geo_postgresql Mash.new
   prometheus_monitoring Mash.new
+  pgbouncer Mash.new
 
   # Single-Service Roles
   # When enabled, default enabled services are disabled
@@ -219,8 +220,9 @@ module Gitlab
         "redis_exporter",
         "postgres_exporter",
         "gitlab_monitor",
-        "sentinel",
-        'prometheus_monitoring'
+        'prometheus_monitoring',
+        'pgbouncer',
+        "sentinel"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['gitlab'][rkey] = Gitlab[key]

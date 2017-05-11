@@ -49,4 +49,3 @@ gitlab-elasticsearch-indexer:
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
   alternative: "https://gitlab.com/omnibus-mirror/logrotate.git"
-

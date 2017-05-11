@@ -21,6 +21,7 @@ include_recipe 'gitlab::default'
   'sentinel',
   'sidekiq-cluster',
   'geo-postgresql',
+  "pgbouncer"
 ].each do |service|
   if node['gitlab'][service]['enable']
     include_recipe "gitlab-ee::#{service}"
@@ -35,4 +36,12 @@ include_recipe 'gitlab-ee::ssh_keys'
 if node['gitlab']['geo-postgresql']['enable']
   include_recipe 'gitlab-ee::geo-secondary'
   include_recipe 'gitlab-ee::geo_database_migrations'
+end
+
+# pgbouncer_user and pgbouncer_user_password are settings for the account
+# pgbouncer will use to authenticate to the database.
+if node['gitlab']['postgresql']['enable'] &&
+    !node['gitlab']['postgresql']['pgbouncer_user'].nil? &&
+    !node['gitlab']['postgresql']['pgbouncer_user_password'].nil?
+  include_recipe 'gitlab-ee::pgbouncer_user'
 end

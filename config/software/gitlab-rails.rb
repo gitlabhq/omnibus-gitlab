@@ -51,6 +51,7 @@ dependency 'unzip'
 
 if EE
   dependency 'mysql-client'
+  dependency 'pgbouncer'
   dependency 'gitlab-elasticsearch-indexer'
 end
 
