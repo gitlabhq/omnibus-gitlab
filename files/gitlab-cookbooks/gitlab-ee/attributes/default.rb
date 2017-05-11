@@ -121,3 +121,43 @@ default['gitlab']['geo-postgresql']['hot_standby_feedback'] = 'off'
 default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
 default['gitlab']['geo-postgresql']['archive_timeout'] = '60'
+
+####
+# Pgbouncer
+####
+
+default['gitlab']['postgresql']['pgbouncer_user'] = 'pgbouncer'
+default['gitlab']['postgresql']['pgbouncer_user_password'] = nil
+default['gitlab']['pgbouncer']['enable'] = false
+default['gitlab']['pgbouncer']['log_directory'] = '/var/log/gitlab/pgbouncer'
+default['gitlab']['pgbouncer']['data_directory'] = '/var/opt/gitlab/pgbouncer'
+default['gitlab']['pgbouncer']['listen_addr'] = '0.0.0.0'
+default['gitlab']['pgbouncer']['listen_port'] = 6432
+default['gitlab']['pgbouncer']['pool_mode'] = 'session'
+default['gitlab']['pgbouncer']['server_reset_query'] = 'DISCARD ALL'
+default['gitlab']['pgbouncer']['max_client_conn'] = 100
+default['gitlab']['pgbouncer']['default_pool_size'] = 20
+default['gitlab']['pgbouncer']['min_pool_size'] = 0
+default['gitlab']['pgbouncer']['reserve_pool_size'] = 0
+default['gitlab']['pgbouncer']['reserve_pool_timeout'] = '5.0'
+default['gitlab']['pgbouncer']['server_round_robin'] = 0
+default['gitlab']['pgbouncer']['log_connections'] = 0
+default['gitlab']['pgbouncer']['server_idle_timeout'] = '600.0'
+default['gitlab']['pgbouncer']['dns_max_ttl'] = '15.0'
+default['gitlab']['pgbouncer']['dns_zone_check_period'] = 0
+default['gitlab']['pgbouncer']['dns_nxdomain_ttl'] = '15.0'
+default['gitlab']['pgbouncer']['admin_users'] = %w(gitlab-psql postgres pgbouncer)
+default['gitlab']['pgbouncer']['stats_users'] = %w(gitlab-psql postgres pgbouncer)
+default['gitlab']['pgbouncer']['ignore_startup_parameters'] = 'extra_float_digits'
+default['gitlab']['pgbouncer']['databases'] = {
+  gitlabhq_production: {
+    host: '127.0.0.1',
+    port: 5432,
+    user: 'pgbouncer',
+    # generate password with md5(password + username)
+    password: nil
+  }
+}
+default['gitlab']['pgbouncer']['auth_type'] = 'md5'
+default['gitlab']['pgbouncer']['auth_hba_file'] = nil
+default['gitlab']['pgbouncer']['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
