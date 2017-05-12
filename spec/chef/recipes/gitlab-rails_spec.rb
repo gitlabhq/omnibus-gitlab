@@ -211,20 +211,12 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'Scheduled Pipeline settings' do
-      context 'when the corn pattern is configured' do
+      context 'when the cron pattern is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { trigger_schedule_worker_cron: '1 2 3 4 5' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
             .with_content(/trigger_schedule_worker:\s+cron:\s+"1 2 3 4 5"/)
-        end
-      end
-
-      context 'when backfill worker is not configured' do
-        it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_backfill_worker')
-          }
         end
       end
     end
