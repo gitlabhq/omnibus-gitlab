@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.0
+
+- Rename geo_download_dispatch worker configuration
+
 9.2.0
 
 - Update mysql client to 5.5.55
