@@ -113,10 +113,8 @@ docker_trigger_build_and_push:
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	# Our regular Docker image creation involves installing GitLab package from
-	# AWS bucket. Triggered ones have a package locally available and should use
-	# that. So, replacing the downloading command with a local install one.
-	sed -i "s/wget.*/dpkg -i \/assets\/gitlab.deb \&\& rm \/assets\/gitlab.deb/" docker/assets/setup
+	echo DOWNLOAD_URL=$(shell bundle exec support/triggered_package.rb) >> docker/RELEASE
+	@echo TRIGGER_PRIVATE_TOKEN=$(TRIGGER_PRIVATE_TOKEN) >> docker/RELEASE
 	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
 	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
 	# variable, which will be used to tag the final Docker image.
