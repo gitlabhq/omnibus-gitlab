@@ -52,6 +52,16 @@ prometheus_yml_output = <<-PROMYML
     relabel_configs:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
+    - source_labels:
+      - __address__
+      target_label: __address__
+      regex: "([^:;]+):([0-9]+)"
+      replacement: "${1}:10255"
+    - source_labels:
+      - __scheme__
+      target_label: __scheme__
+      regex: https
+      replacement: http
     metric_relabel_configs:
     - source_labels:
       - pod_name
