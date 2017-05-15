@@ -272,12 +272,14 @@ Trigger:package:
   stage: trigger-package
   script:
     - make test_no_sync
+    # Renaming so we can easily generate the artifact URL
+    - mv pkg/ubuntu-16.04/*.deb pkg/ubuntu-16.04/gitlab.deb
   only:
     - triggers@gitlab-org/omnibus-gitlab
   artifacts:
     expire_in: 1 day
     paths:
-      - pkg/ubuntu-16.04/*.deb
+      - pkg/ubuntu-16.04/gitlab.deb
 
 Trigger:docker:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
@@ -288,7 +290,6 @@ Trigger:docker:
   services:
   - docker:dind
   script:
-    - cp pkg/ubuntu-16.04/*deb docker/assets/gitlab.deb
     - make docker_trigger_build_and_push
   only:
     - triggers@gitlab-org/omnibus-gitlab
