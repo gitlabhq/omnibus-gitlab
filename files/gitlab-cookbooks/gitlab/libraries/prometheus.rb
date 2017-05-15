@@ -108,9 +108,11 @@ module Prometheus
       default_config = Gitlab['node']['gitlab']['postgres-exporter'].to_hash
       user_config = Gitlab['postgres_exporter']
 
+      home_directory = user_config['home'] || default_config['home']
       listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
+        'extend.query-path' => File.join(home_directory, 'queries.yaml'),
       }
 
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')

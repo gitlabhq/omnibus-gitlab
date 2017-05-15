@@ -917,6 +917,7 @@ default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 # Postgres exporter
 ###
 default['gitlab']['postgres-exporter']['enable'] = true
+default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['postgres-exporter']['env'] = {

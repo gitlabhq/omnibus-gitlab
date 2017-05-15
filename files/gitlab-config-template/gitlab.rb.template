@@ -1330,7 +1330,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # redis_exporter['enable'] = true
-# redis_exporter['log_directory'] = "/var/log/gitlab/redis-exporter"
+# redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
 # }
@@ -1344,7 +1344,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # postgres_exporter['enable'] = true
-# postgres_exporter['log_directory'] = "/var/log/gitlab/postgres-exporter"
+# postgres_exporter['home'] = '/var/opt/gitlab/postgres-exporter'
+# postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
 
