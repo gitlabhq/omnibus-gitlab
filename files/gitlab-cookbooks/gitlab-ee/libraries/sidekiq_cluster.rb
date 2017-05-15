@@ -19,7 +19,7 @@ module SidekiqCluster
   class << self
     def parse_variables
       # Force sidekiq-cluster to be disabled if sidekiq is disabled
-      Gitlab['sidekiq']['enable'] ||=  Gitlab['node']['gitlab']['sidekiq']['enable']
+      Gitlab['sidekiq']['enable'] ||= Gitlab['node']['gitlab']['sidekiq']['enable']
       Gitlab['sidekiq_cluster']['enable'] = false unless Gitlab['sidekiq']['enable']
 
       return unless Gitlab['sidekiq_cluster']['enable']
@@ -28,9 +28,7 @@ module SidekiqCluster
       Gitlab['sidekiq_cluster']['queue_groups'] = Array(Gitlab['sidekiq_cluster']['queue_groups'])
 
       # Error out if the queue hasn't been set
-      if Gitlab['sidekiq_cluster']['queue_groups'].empty?
-        fail "The sidekiq_cluster queue_groups must be set in order to use the sidekiq-cluster service"
-      end
+      raise "The sidekiq_cluster queue_groups must be set in order to use the sidekiq-cluster service" if Gitlab['sidekiq_cluster']['queue_groups'].empty?
     end
   end
 end

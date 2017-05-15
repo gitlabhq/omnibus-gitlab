@@ -139,7 +139,7 @@ module SSHKeygen
   end
 
   # provider functions for the SSHKeygen Chef resource provider class
-  module Helper
+  module Helper # rubocop:disable Style/MultilineIfModifier
     def create_key
       converge_by("Create SSH #{new_resource.type} #{new_resource.strength}-bit key (#{new_resource.comment})") do
         @key = ::SSHKeygen::Generator.new(

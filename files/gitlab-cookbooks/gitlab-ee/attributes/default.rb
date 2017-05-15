@@ -76,11 +76,11 @@ default['gitlab']['geo-postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['geo-postgresql']['trust_auth_cidr_addresses'] = []
 
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults
-default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / (1024), 1024].max}MB"
+default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
 
 default['gitlab']['geo-postgresql']['work_mem'] = '8MB'
 default['gitlab']['geo-postgresql']['maintenance_work_mem'] = '16MB'
-default['gitlab']['geo-postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / (1024), 2048].max}MB" # double of shared_buffers estimation
+default['gitlab']['geo-postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 2048].max}MB" # double of shared_buffers estimation
 default['gitlab']['geo-postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
 default['gitlab']['geo-postgresql']['checkpoint_segments'] = 10
 default['gitlab']['geo-postgresql']['min_wal_size'] = '80MB'

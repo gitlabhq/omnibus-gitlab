@@ -91,8 +91,8 @@ runit_service 'geo-postgresql' do
   down node['gitlab']['geo-postgresql']['ha']
   control(['t'])
   options({
-            :log_directory => postgresql_log_dir
-          }.merge(params))
+    log_directory: postgresql_log_dir
+  }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
 end
 
@@ -106,9 +106,7 @@ include_recipe 'gitlab::postgresql-bin'
 execute 'start geo-postgresql' do
   command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
   retries 20
-  unless bootstrapping
-    action :nothing
-  end
+  action :nothing unless bootstrapping
 end
 
 ###
