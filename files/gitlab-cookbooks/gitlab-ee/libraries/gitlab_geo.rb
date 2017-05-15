@@ -44,7 +44,7 @@ module GitlabGeo
 
     def parse_data_dir
       postgresql_data_dir = Gitlab['geo_postgresql']['data_dir'] || node['gitlab']['geo-postgresql']['data_dir']
-      Gitlab['geo_postgresql']['bootstrap'] = !File.exists?(File.join(postgresql_data_dir, 'PG_VERSION'))
+      Gitlab['geo_postgresql']['bootstrap'] = !File.exist?(File.join(postgresql_data_dir, 'PG_VERSION'))
     end
 
     def geo_primary_role?

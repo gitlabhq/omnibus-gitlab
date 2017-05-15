@@ -25,13 +25,13 @@ class GitlabGeoHelper
   end
 
   def connection_digest
-    connection_attributes = [
-      'db_adapter',
-      'db_database',
-      'db_host',
-      'db_port',
-      'db_socket'
-    ].collect { |attribute| node['gitlab']['geo-secondary'][attribute] }
+    connection_attributes = %w(
+      db_adapter
+      db_database
+      db_host
+      db_port
+      db_socket
+    ).collect { |attribute| node['gitlab']['geo-secondary'][attribute] }
 
     Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
   end
