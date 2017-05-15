@@ -85,6 +85,8 @@ production: &base
     # The default is 'tmp/repositories' relative to the root of the Rails app.
     repository_downloads_path: <%= @gitlab_repository_downloads_path %>
 
+    usage_ping_enabled: <%= @usage_ping_enabled %>
+
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see https://docs.gitlab.com/ce/administration/reply_by_email.html
