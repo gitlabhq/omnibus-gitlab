@@ -162,8 +162,9 @@ class ReplicateGeoHelpers
   def run_command(cmd, live: false)
     status = GitlabCtl::Util.run_command(cmd, live: live)
     if status.error?
+      puts status.stdout
       puts status.stderr
-      puts "[ERROR] Failed to execute: #{cmd}".color(:red)
+      puts "[ERROR] Failed to execute: #{cmd} -- be sure to run this command as root".color(:red)
       puts
       exit 1
     end
