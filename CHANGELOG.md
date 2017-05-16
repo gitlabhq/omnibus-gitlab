@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
 - Compile python with libedit
+- Compile new binaries for gitlab-shell
 
 9.1.2
 
