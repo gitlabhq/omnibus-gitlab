@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Generate license .csv file 5478b1aa
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
+- Compile new binaries for gitlab-shell
 
 9.1.2
 
