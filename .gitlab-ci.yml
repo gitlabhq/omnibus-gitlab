@@ -361,7 +361,7 @@ QA Tag:
 
 # GitLab.com only
 Ubuntu 14.04 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -370,7 +370,7 @@ Ubuntu 14.04 specs 0 3:
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -379,7 +379,7 @@ Ubuntu 14.04 specs 1 3:
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -388,7 +388,7 @@ Ubuntu 14.04 specs 2 3:
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 16.04 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -397,7 +397,7 @@ Ubuntu 16.04 specs 0 3:
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -406,7 +406,7 @@ Ubuntu 16.04 specs 1 3:
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -415,7 +415,7 @@ Ubuntu 16.04 specs 2 3:
   dependencies:
   - Ubuntu 16.04 knapsack
 Debian 7 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -424,7 +424,7 @@ Debian 7 specs 0 3:
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -433,7 +433,7 @@ Debian 7 specs 1 3:
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -442,7 +442,7 @@ Debian 7 specs 2 3:
   dependencies:
   - Debian 7 knapsack
 Debian 8 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -451,7 +451,7 @@ Debian 8 specs 0 3:
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -460,7 +460,7 @@ Debian 8 specs 1 3:
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -469,7 +469,7 @@ Debian 8 specs 2 3:
   dependencies:
   - Debian 8 knapsack
 Centos 6 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -478,7 +478,7 @@ Centos 6 specs 0 3:
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -487,7 +487,7 @@ Centos 6 specs 1 3:
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -496,7 +496,7 @@ Centos 6 specs 2 3:
   dependencies:
   - Centos 6 knapsack
 Centos 7 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -505,7 +505,7 @@ Centos 7 specs 0 3:
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -514,7 +514,7 @@ Centos 7 specs 1 3:
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -523,7 +523,7 @@ Centos 7 specs 2 3:
   dependencies:
   - Centos 7 knapsack
 OpenSUSE 42.1 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -532,7 +532,7 @@ OpenSUSE 42.1 specs 0 3:
   dependencies:
   - OpenSUSE 42.1 knapsack
 OpenSUSE 42.1 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -541,7 +541,7 @@ OpenSUSE 42.1 specs 1 3:
   dependencies:
   - OpenSUSE 42.1 knapsack
 OpenSUSE 42.1 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
     key: "$CI_JOB_NAME"
     paths:
