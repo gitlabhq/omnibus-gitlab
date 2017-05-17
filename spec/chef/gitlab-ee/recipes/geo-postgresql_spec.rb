@@ -32,6 +32,10 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to include_recipe('gitlab::postgresql-bin')
     end
 
+    it 'creates the gitlab_geo role in the geo-postgresql database' do
+      expect(chef_run).to create_postgresql_user('gitlab_geo')
+    end
+
     it 'correctly sets the shared_preload_libraries default setting' do
       expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to be_nil
 
