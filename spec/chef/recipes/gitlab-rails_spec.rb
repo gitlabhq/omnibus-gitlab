@@ -213,10 +213,10 @@ describe 'gitlab::gitlab-rails' do
     context 'Scheduled Pipeline settings' do
       context 'when the corn pattern is configured' do
         it 'sets the cron value' do
-          stub_gitlab_rb(gitlab_rails: { trigger_schedule_worker_cron: '1 2 3 4 5' })
+          stub_gitlab_rb(gitlab_rails: { pipeline_schedule_worker_cron: '41 * * * *' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/trigger_schedule_worker:\s+cron:\s+"1 2 3 4 5"/)
+            .with_content(/pipeline_schedule_worker:\s+cron:\s+"41/)
         end
       end
 
