@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 9.2.0
 
+- Add a missing symlink for /opt/gitlab/init/sshd to make `gitlab-ctl stop` work in Docker 4a098168
 - Allow setting `usage_ping_enabled` in `gitlab.rb`
 - Update mysql client to 5.5.55
 - Add a build env variable ALTERNATIVE_SOURCES f0cab0c6

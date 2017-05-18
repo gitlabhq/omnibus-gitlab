@@ -72,6 +72,7 @@ fi
 echo "Preparing services..."
 rm -f /opt/gitlab/service/*
 ln -s /opt/gitlab/sv/sshd /opt/gitlab/service
+ln -s /opt/gitlab/embedded/bin/sv /opt/gitlab/init/sshd
 mkdir -p /var/log/gitlab/sshd
 
 # Start service manager
