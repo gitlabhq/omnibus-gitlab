@@ -16,6 +16,11 @@ omnibus-gitlab repository.
 - Generate license .csv file 5478b1aa
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
+- Compile python with libedit
+
+9.1.2
+
+- Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
 
 9.1.0
 
