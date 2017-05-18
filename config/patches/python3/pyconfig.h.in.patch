@@ -1,0 +1,20 @@
+--- pyconfig.h.in.orig	2016-06-25 17:52:32.000000000 -0400
++++ pyconfig.h.in	2017-05-17 10:19:52.240012001 -0400
+@@ -495,7 +495,7 @@
+ /* Define to 1 if you have the <libintl.h> header file. */
+ #undef HAVE_LIBINTL_H
+
+-/* Define if you have the readline library (-lreadline). */
++/* Define to build the readline module. */
+ #undef HAVE_LIBREADLINE
+
+ /* Define to 1 if you have the `resolv' library (-lresolv). */
+@@ -1339,6 +1339,9 @@
+    Dyld is necessary to support frameworks. */
+ #undef WITH_DYLD
+
++/* Define to build the readline module against Editline. */
++#undef WITH_EDITLINE
++
+ /* Define to 1 if libintl is needed for locale functions. */
+ #undef WITH_LIBINTL

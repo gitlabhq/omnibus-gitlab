@@ -1,0 +1,43 @@
+--- setup.py.orig	2016-06-25 17:52:32.000000000 -0400
++++ setup.py	2017-05-17 10:20:29.552012001 -0400
+@@ -658,7 +658,6 @@
+         exts.append( Extension('audioop', ['audioop.c']) )
+
+         # readline
+-        do_readline = self.compiler.find_library_file(lib_dirs, 'readline')
+         readline_termcap_library = ""
+         curses_library = ""
+         # Cannot use os.popen here in py3k.
+@@ -666,7 +665,13 @@
+         if not os.path.exists(self.build_temp):
+             os.makedirs(self.build_temp)
+         # Determine if readline is already linked against curses or tinfo.
+-        if do_readline:
++        if sysconfig.get_config_var('HAVE_LIBREADLINE'):
++            if sysconfig.get_config_var('WITH_EDITLINE'):
++                readline_lib = 'edit'
++            else:
++                readline_lib = 'readline'
++            do_readline = self.compiler.find_library_file(lib_dirs,
++                readline_lib)
+             if cross_compiling:
+                 ret = os.system("%s -d %s | grep '(NEEDED)' > %s" \
+                                 % (sysconfig.get_config_var('READELF'),
+@@ -689,6 +694,8 @@
+                             break
+             if os.path.exists(tmpfile):
+                 os.unlink(tmpfile)
++        else:
++            do_readline = False
+         # Issue 7384: If readline is already linked against curses,
+         # use the same library for the readline and curses modules.
+         if 'curses' in readline_termcap_library:
+@@ -724,7 +731,7 @@
+             else:
+                 readline_extra_link_args = ()
+
+-            readline_libs = ['readline']
++            readline_libs = [readline_lib]
+             if readline_termcap_library:
+                 pass # Issue 7384: Already linked against curses or tinfo.
+             elif curses_library:
