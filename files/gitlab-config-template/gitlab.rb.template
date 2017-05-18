@@ -1405,7 +1405,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 #
 # gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
-# gitlab_rails['geo_backfill_worker_cron'] = "*/5 * * * *"
+# gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['ldap_group_sync_worker_cron'] = "0 * * * *"

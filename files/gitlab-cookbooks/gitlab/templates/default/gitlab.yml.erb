@@ -217,11 +217,11 @@ production: &base
       cron: "<%= @geo_bulk_notify_worker_cron %>"
     <% end %>
 
-    # GitLab Geo backfill worker
+    # GitLab Geo repository sync worker
     # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_backfill_worker_cron.nil? %>
-    geo_backfill_worker:
-      cron: "<%= @geo_backfill_worker_cron %>"
+    <% unless @geo_repository_sync_worker_cron.nil? %>
+    geo_repository_sync_worker:
+      cron: "<%= @geo_repository_sync_worker_cron %>"
     <% end %>
 
     # GitLab Geo file download worker
