@@ -51,7 +51,7 @@ def repo_string
     end
   end
 
-  if os == :unknown or version == :unknown
+  if (os == :unknown) || (version == :unknown)
     abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}"
   end
 
@@ -83,5 +83,5 @@ when 'platform-dir'
 when 'repo-string'
   repo_string
 else
-  abort "Usage: #{$0} platform-dir|repo-string"
+  abort "Usage: #{$PROGRAM_NAME} platform-dir|repo-string"
 end

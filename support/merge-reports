@@ -11,7 +11,8 @@ Dir.glob(path + "/*_main_rspec_report.json").each do |main_report_file|
   new_report = main_report.dup
   main_file_name = File.basename(main_report_file)
   match = main_file_name.match(/(?<DISTRO_NAME>.*?)_(?<DISTRO_VERSION>.*?)_.*/)
-  os,version = match['DISTRO_NAME'], match['DISTRO_VERSION']
+  os = match['DISTRO_NAME']
+  version = match['DISTRO_VERSION']
   puts "#{os} #{version}"
   Dir.glob(path + "/#{os}_#{version}_rspec_node_*").each do |report_file|
     report = JSON.parse(File.read(report_file))
@@ -27,5 +28,4 @@ Dir.glob(path + "/*_main_rspec_report.json").each do |main_report_file|
 
   File.write(main_report_file, JSON.pretty_generate(new_report))
   puts "\tSaved #{main_report_file}."
-
 end
