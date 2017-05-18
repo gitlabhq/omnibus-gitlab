@@ -19,12 +19,12 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'registry'
-version = Gitlab::Version.new('registry', '2.6.1')
+version = Gitlab::Version.new('registry', 'dd544a82d93e8d39cec3d3d45117c3f486365589')
 
-default_version version.print
+default_version version.print(false)
 
 license 'Apache-2.0'
-license_file "https://raw.githubusercontent.com/docker/distribution/#{version.print}/LICENSE"
+license_file "https://gitlab.com/omnibus-mirror/distribution/raw/#{version.print(false)}/LICENSE"
 
 source git: version.remote
 
