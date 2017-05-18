@@ -224,11 +224,11 @@ production: &base
       cron: "<%= @geo_backfill_worker_cron %>"
     <% end %>
 
-    # GitLab Geo file download worker
+    # GitLab Geo file download dispatch worker
     # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_download_dispatch_worker_cron.nil? %>
-    geo_download_dispatch_worker:
-      cron: "<%= @geo_download_dispatch_worker_cron %>"
+    <% unless @geo_file_download_dispatch_worker_cron.nil? %>
+    geo_file_download_dispatch_worker:
+      cron: "<%= @geo_file_download_dispatch_worker_cron %>"
     <% end %>
 
   #
