@@ -31,7 +31,9 @@
         "SessionCacheInMinutes" : <%= @service_session_cache_in_minutes %>,
         "TimeBetweenUserTypingUpdatesMilliseconds" : <%= @service_time_between_user_typing_updates_milliseconds %>,
         "EnableUserTypingMessages" : <%= @service_enable_user_typing_messages %>,
-        "EnableLinkPreviews" : <%= @service_enable_link_previews %>
+        "EnableLinkPreviews" : <%= @service_enable_link_previews %>,
+        "EnablePostSearch" : <%= @service_enable_post_search %>,
+        "EnableUserStatuses" : <%= @service_enable_post_search %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -52,7 +54,8 @@
         "MaxIdleConns": <%= @sql_max_idle_conns %>,
         "MaxOpenConns": <%= @sql_max_open_conns %>,
         "Trace": <%= @sql_trace %>,
-        "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>"
+        "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>",
+        "DataSourceSearchReplicas": "<%= @sql_data_source_search_replicas %>"
     },
     "LogSettings": {
         "EnableConsole": <%= @log_console_enable %>,
@@ -85,7 +88,8 @@
         "AmazonS3BucketEndpoint": "<%= @file_amazon_s3_bucket_endpoint %>",
         "AmazonS3LocationConstraint": <%= @file_amazon_s3_location_constraint %>,
         "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>,
-        "AmazonS3SSL": <%= @file_amazon_s3_ssl %>
+        "AmazonS3SSL": <%= @file_amazon_s3_ssl %>,
+        "EnableFileAttachments": <%= @file_enable_file_attachments %>
     },
     "EmailSettings": {
         "EnableSignUpWithEmail": <%= @email_enable_sign_up_with_email %>,
@@ -102,13 +106,13 @@
         "SMTPPort": "<%= @email_smtp_port %>",
         "ConnectionSecurity": "<%= @email_connection_security %>",
         "InviteSalt": "<%= @email_invite_salt %>",
-        "PasswordResetSalt": "<%= @email_password_reset_salt %>",
         "SendPushNotifications": <%= @email_send_push_notifications %>,
         "PushNotificationServer": "<%= @email_push_notification_server %>",
         "PushNotificationContents": "<%= @email_push_notification_contents %>",
         "EnableEmailBatching": <%= @email_enable_batching %>,
         "EmailBatchingBufferSize": <%= @email_batching_buffer_size %>,
-        "EmailBatchingInterval": <%= @email_batching_interval %>
+        "EmailBatchingInterval": <%= @email_batching_interval %>,
+        "SkipServerCertificateVerification": <%= @email_skip_server_certificate_verification %>
     },
     "RateLimitSettings": {
         "Enable": <%= @ratelimit_enable_rate_limiter %>,
