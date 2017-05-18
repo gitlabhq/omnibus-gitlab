@@ -734,6 +734,8 @@ default['gitlab']['mattermost']['service_write_timeout'] = 300
 default['gitlab']['mattermost']['service_time_between_user_typing_updates_milliseconds'] = 5000
 default['gitlab']['mattermost']['service_enable_link_previews'] = false
 default['gitlab']['mattermost']['service_enable_user_typing_messages'] = true
+default['gitlab']['mattermost']['service_enable_post_search'] = true
+default['gitlab']['mattermost']['service_enable_user_statuses'] = true
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -741,6 +743,7 @@ default['gitlab']['mattermost']['sql_data_source_replicas'] = []
 default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
 default['gitlab']['mattermost']['sql_max_open_conns'] = 10
 default['gitlab']['mattermost']['sql_trace'] = false
+default['gitlab']['mattermost']['sql_data_source_search_replicas'] = []
 
 # default['gitlab']['mattermost']['gitlab'] = {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }
 default['gitlab']['mattermost']['gitlab'] = {}
@@ -765,6 +768,7 @@ default['gitlab']['mattermost']["file_amazon_s3_bucket_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_location_constraint"] = false
 default['gitlab']['mattermost']["file_amazon_s3_lowercase_bucket"] = false
 default['gitlab']['mattermost']["file_amazon_s3_ssl"] = true
+default['gitlab']['mattermost']['file_enable_file_attachments'] = true
 
 default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
 default['gitlab']['mattermost']['email_enable_sign_in_with_email'] = true
@@ -785,6 +789,7 @@ default['gitlab']['mattermost']['email_push_notification_contents'] = "generic"
 default['gitlab']['mattermost']['email_enable_batching'] = false
 default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
 default['gitlab']['mattermost']['email_batching_interval'] = 30
+default['gitlab']['mattermost']['email_skip_server_certificate_verification'] = false
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10

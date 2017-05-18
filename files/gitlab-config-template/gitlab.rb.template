@@ -1024,6 +1024,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_time_between_user_typing_updates_milliseconds'] = 5000
 # mattermost['service_enable_link_previews'] = false
 # mattermost['service_enable_user_typing_messages'] = true
+# mattermost['service_enable_post_search'] = true
+# mattermost['service_enable_user_statuses'] = true
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -1044,6 +1046,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['sql_max_idle_conns'] = 10
 # mattermost['sql_max_open_conns'] = 10
 # mattermost['sql_trace'] = false
+# mattermost['sql_data_source_search_replicas'] = []
 
 # mattermost['log_file_directory'] = '/var/log/gitlab/mattermost'
 # mattermost['log_console_enable'] = true
@@ -1082,6 +1085,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_enable_batching'] = false
 # mattermost['email_batching_buffer_size'] = 256
 # mattermost['email_batching_interval'] = 30
+# mattermost['email_skip_server_certificate_verification'] = false
 
 # mattermost['file_max_file_size'] = 52428800
 # mattermost['file_driver_name'] = "local"
@@ -1103,6 +1107,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost["file_amazon_s3_location_constraint"] = false
 # mattermost["file_amazon_s3_lowercase_bucket"] = false
 # mattermost["file_amazon_s3_ssl"] = true
+# mattermost['file_enable_file_attachments'] = true
 
 # mattermost['ratelimit_enable_rate_limiter'] = false
 # mattermost['ratelimit_per_sec'] = 10

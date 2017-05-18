@@ -126,6 +126,7 @@ database_name = node['gitlab']['geo-secondary']['db_database']
 
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user gitlab_sql_user do
+    helper pg_helper
     action :create
   end
 

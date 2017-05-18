@@ -97,8 +97,6 @@ class BasePgHelper
     EOF
   end
 
-  protected
-
   def service_name
     raise NotImplementedError
   end
