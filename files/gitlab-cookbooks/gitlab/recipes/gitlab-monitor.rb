@@ -32,13 +32,24 @@ directory gitlab_monitor_log_dir do
   recursive true
 end
 
+connection_string = "dbname=#{node['gitlab']['gitlab-rails']['db_database']} user=#{node['gitlab']['gitlab-rails']['db_username']}"
+
+if node['gitlab']['postgresql']['enabled']
+  connection_string += " host=#{node['gitlab']['postgresql']['dir']}"
+else
+  connection_string += " host=#{node['gitlab']['gitlab-rails']['db_host']} port=#{node['gitlab']['gitlab-rails']['db_port']} password=#{node['gitlab']['gitlab-rails']['db_password']}"
+end
+
 redis_url = RedisHelper.new(node).redis_url
 template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   source "gitlab-monitor.yml.erb"
   owner gitlab_user
   mode "0644"
   notifies :restart, "service[gitlab-monitor]"
-  variables(:redis_url => redis_url)
+  variables(
+    :redis_url => redis_url,
+    :connection_string => connection_string,
+  )
 end
 
 runit_service "gitlab-monitor" do

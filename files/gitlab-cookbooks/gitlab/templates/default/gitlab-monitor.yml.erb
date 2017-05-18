@@ -2,7 +2,7 @@ db_common: &db_common
   methods:
     - probe_db
   opts:
-    connection_string: dbname=<%= node['gitlab']['gitlab-rails']['db_database'] %> user=<%= node['gitlab']['gitlab-rails']['db_username'] %> host=<%= node['gitlab']['postgresql']['dir'] %>
+    connection_string: <%= @connection_string %>
 
 common_git: &common_git
   class_name: GitProber
