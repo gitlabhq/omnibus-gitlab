@@ -51,7 +51,6 @@ class SecretsHelper
       'mattermost' => {
         'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],
         'file_public_link_salt' => Gitlab['mattermost']['file_public_link_salt'],
-        'email_password_reset_salt' => Gitlab['mattermost']['email_password_reset_salt'],
         'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key']
       }
     }

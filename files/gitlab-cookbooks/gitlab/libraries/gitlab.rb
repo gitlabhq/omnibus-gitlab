@@ -172,7 +172,6 @@ module Gitlab
 
       Gitlab['mattermost']['email_invite_salt'] ||= SecretsHelper.generate_hex(16)
       Gitlab['mattermost']['file_public_link_salt'] ||= SecretsHelper.generate_hex(16)
-      Gitlab['mattermost']['email_password_reset_salt'] ||= SecretsHelper.generate_hex(16)
       Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= SecretsHelper.generate_hex(16)
 
       SecretsHelper.write_to_gitlab_secrets
