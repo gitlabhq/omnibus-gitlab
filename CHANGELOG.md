@@ -25,6 +25,7 @@ omnibus-gitlab repository.
 - Change service running detection 18b51873
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
+- Compile python with libedit
 
 9.1.2
 

@@ -19,7 +19,7 @@
 name 'python3'
 default_version '3.4.5'
 
-dependency 'readline'
+dependency 'libedit'
 dependency 'ncurses'
 dependency 'zlib'
 dependency 'openssl'
@@ -33,7 +33,7 @@ source url: "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
 
 relative_path "Python-#{version}"
 
-LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/embedded/libexec #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec).freeze
+LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec).freeze
 
 env = {
   'CFLAGS' => "-I#{install_dir}/embedded/include -O3 -g -pipe",
@@ -41,9 +41,18 @@ env = {
 }
 
 build do
+  # Patches below are based on patches provided by martin.panter, 2016-06-02 06:31
+  # in https://bugs.python.org/issue13501
+  patch source: 'configure.ac.patch', target: "configure.ac"
+  patch source: 'configure.patch', target: "configure"
+  patch source: 'pyconfig.h.in.patch', target: "pyconfig.h.in"
+  patch source: 'readline.c.patch', target: "Modules/readline.c"
+  patch source: 'setup.py.patch', target: "setup.py"
+
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
+           '--with-readline=editline',
            '--with-dbmliborder='].join(' '), env: env
   make env: env
   make 'install', env: env
