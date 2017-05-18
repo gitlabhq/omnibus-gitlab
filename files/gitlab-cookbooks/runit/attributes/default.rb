@@ -22,4 +22,3 @@ default[:runit][:sv_bin] = "/opt/gitlab/embedded/bin/sv"
 default[:runit][:chpst_bin] = "/opt/gitlab/embedded/bin/chpst"
 default[:runit][:service_dir] = "/opt/gitlab/service"
 default[:runit][:sv_dir] = "/opt/gitlab/sv"
-

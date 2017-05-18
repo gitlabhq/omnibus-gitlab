@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.3.0
 
 - Rename geo_download_dispatch worker configuration
+- Rename geo_backfill worker configuration
 
 9.2.0
 
