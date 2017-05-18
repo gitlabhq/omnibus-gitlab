@@ -33,7 +33,7 @@ source url: "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
 
 relative_path "Python-#{version}"
 
-LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec)
+LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{install_dir}/lib #{install_dir}/lib64 #{install_dir}/libexec).freeze
 
 env = {
   'CFLAGS' => "-I#{install_dir}/embedded/include -O3 -g -pipe",
