@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
 - Compile python with libedit
+- Disable Nginx proxy_request_buffering for Git LFS endpoints
 
 9.1.2
 
