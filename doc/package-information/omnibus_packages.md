@@ -1,9 +1,17 @@
-# Package with bundled dependencies
+# Omnibus based packages and images
 
-Below you can find some basic information on why GitLab provides packages and
-a Docker image that come with bundled dependencies.
+These packages are what GitLab offers today, which are all based on our Omnibus build system. These packages include everything you need to run GitLab, nearly all of its dependencies, and provide support across a wide range of operating systems.
 
-## GitLab Architecture
+These are the easiest methods to get started with GitLab, and are also great for physical and virtual machine installations, and simple Docker installations.
+
+## Goals
+
+We have a few core goals with these packages
+1. Extremely easy to install, upgrade, maintain.
+1. Support for a wide variety of operating systems
+1. Wide support of cloud service providers
+
+## GitLab Omnibus Architecture
 
 GitLab in its core is a Ruby on Rails project. However, GitLab as a whole
 application is more complex and has multiple components. If these components are
@@ -94,16 +102,9 @@ what was noted above:
 1. Very simple to get started.
 1. Upgrading to the latest version is extremely simple.
 1. Running separate services in multiple containers and keeping them running
-is a large task that might not be required.
+is can be more complex and might not be required for a given install
 
-Additionally, containers started with this Docker image can also be configured
-to connect to other containers in a similar way like any other Docker container.
-This allows you to start up with GitLab fast without a lot of overhead and then
-scale up when necessary just by changing configuration.
-
-Like noted above, if your circumstances allow you to spend time installing,
-configuring and maintaining, the 'lean' Docker image might be a valid use-case
-for you.
+This method is great for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation when they are just getting started.This method is a great introduction, and will work well for smaller organizations.
 
 [GitLab Architecture Overview]: https://docs.gitlab.com/ce/development/architecture.html#gitlab-architecture-overview
 [rubygems]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/Gemfile.lock
