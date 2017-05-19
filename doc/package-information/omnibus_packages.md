@@ -104,7 +104,7 @@ what was noted above:
 1. Running separate services in multiple containers and keeping them running
 is can be more complex and might not be required for a given install
 
-This method is great for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation when they are just getting started.This method is a great introduction, and will work well for smaller organizations.
+This method is great for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation when they are just getting started. This method is a great introduction, and will work well for smaller organizations.
 
 [GitLab Architecture Overview]: https://docs.gitlab.com/ce/development/architecture.html#gitlab-architecture-overview
 [rubygems]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/Gemfile.lock

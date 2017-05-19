@@ -38,7 +38,7 @@ We plan to offer a container for the following services:
 * Mattermost
 
 We likely plan to leverage the following existing official containers for underlying services:
-* Docker Distribution (Container Registry)
+* Docker Distribution ([Docker Registry 2.0](https://github.com/docker/distribution))
 * Redis
 * Prometheus
 * Node Exporter
