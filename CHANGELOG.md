@@ -21,10 +21,8 @@ omnibus-gitlab repository.
 - Compile python with libedit
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
-
-9.1.2
-
-- Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
+- Compile python with libedit
+- Disable Nginx proxy_request_buffering for Git LFS endpoints
 
 9.1.2
 
