@@ -162,6 +162,7 @@ if node['gitlab']['gitlab-rails']['enable']
   end
 
   postgresql_user sql_replication_user do
+    options %w(replication)
     action :create
   end
 end
