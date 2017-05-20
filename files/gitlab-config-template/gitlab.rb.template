@@ -580,6 +580,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## GitLab PostgreSQL
 ################################################################
 
+###! Changing any of these settings requires a restart of postgresql.
+###! By default, reconfigure reloads postgresql if it is running. If you
+###! change any of these settings, be sure to run `gitlab-ctl restart postgresql`
+###! after reconfigure in order for the changes to take effect.
 # postgresql['enable'] = true
 # postgresql['listen_address'] = nil
 # postgresql['port'] = 5432
@@ -602,59 +606,67 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_connections'] = 200
 # postgresql['md5_auth_cidr_addresses'] = []
 # postgresql['trust_auth_cidr_addresses'] = []
-# postgresql['shmmax'] =  17179869184 # or 4294967295
-# postgresql['shmall'] =  4194304 # or 1048575
+# postgresql['wal_buffers'] = "-1"
+# postgresql['autovacuum_max_workers'] = "3"
+# postgresql['autovacuum_freeze_max_age'] = "200000000"
+# postgresql['track_activity_query_size'] = "1024"
+# postgresql['shared_preload_libraries'] = nil
+# postgresql['dynamic_shared_memory_type'] = nil
+# postgresql['hot_standby'] = "off"
+
+### Replication settings
+###! Note, some replication settings do not require a full restart. They are documented below.
+# postgresql['wal_level'] = "hot_standby"
+# postgresql['max_wal_senders'] = 5
+# postgresql['max_replication_slots'] = 0
+# postgresql['max_locks_per_transaction'] = 64
+
+# Backup/Archive settings
+# default['gitlab']['postgresql']['archive_mode'] = "off"
+
+###! Changing any of these settings only requires a reload of postgresql. You do not need to
+###! restart postgresql if you change any of these and run reconfigure.
 # postgresql['work_mem'] = "8MB"
 # postgresql['maintenance_work_mem'] = "16MB"
-# postgresql['effective_cache_size'] = "1MB"
 # postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
 # postgresql['checkpoint_completion_target'] = 0.9
 # postgresql['checkpoint_warning'] = "30s"
-# postgresql['wal_buffers'] = "-1"
+# postgresql['effective_cache_size'] = "1MB"
+# postgresql['shmmax'] =  17179869184 # or 4294967295
+# postgresql['shmall'] =  4194304 # or 1048575
 # postgresql['autovacuum'] = "on"
 # postgresql['log_autovacuum_min_duration'] = "-1"
-# postgresql['autovacuum_max_workers'] = "3"
 # postgresql['autovacuum_naptime'] = "1min"
 # postgresql['autovacuum_vacuum_threshold'] = "50"
 # postgresql['autovacuum_analyze_threshold'] = "50"
 # postgresql['autovacuum_vacuum_scale_factor'] = "0.02"
 # postgresql['autovacuum_analyze_scale_factor'] = "0.01"
-# postgresql['autovacuum_freeze_max_age'] = "200000000"
 # postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
 # postgresql['autovacuum_vacuum_cost_limit'] = "-1"
 # postgresql['statement_timeout'] = "0"
 # postgresql['log_line_prefix'] = "%a"
-# postgresql['track_activity_query_size'] = "1024"
-# postgresql['shared_preload_libraries'] = nil
-# postgresql['dynamic_shared_memory_type'] = nil
-
-### Replication settings
-# postgresql['sql_replication_user'] = "gitlab_replicator"
-# postgresql['wal_level'] = "hot_standby"
-# postgresql['max_wal_senders'] = 5
-# postgresql['wal_keep_segments'] = 10
-# postgresql['hot_standby'] = "off"
-# postgresql['max_standby_archive_delay'] = "30s"
-# postgresql['max_standby_streaming_delay'] = "30s"
-# postgresql['max_replication_slots'] = 0
-# postgresql['synchronous_commit'] = on
-# postgresql['synchronous_standby_names'] = ''
-# postgresql['hot_standby_feedback'] = 'off'
-# postgresql['random_page_cost'] = 4.0
-# postgresql['max_locks_per_transaction'] = 64
-# postgresql['log_temp_files'] = -1
-# postgresql['log_checkpoints'] = 'off'
-
-
-# Backup/Archive settings
-# default['gitlab']['postgresql']['archive_mode'] = "off"
-# default['gitlab']['postgresql']['archive_command'] = nil
-# default['gitlab']['postgresql']['archive_timeout'] = "60"
 
 ### Available in PostgreSQL 9.6 and later
 # postgresql['min_wal_size'] = 80MB
 # postgresql['max_wal_size'] = 1GB
+
+# Backup/Archive settings
+# default['gitlab']['postgresql']['archive_command'] = nil
+# default['gitlab']['postgresql']['archive_timeout'] = "60"
+
+### Replication settings
+# postgresql['sql_replication_user'] = "gitlab_replicator"
+# postgresql['wal_keep_segments'] = 10
+# postgresql['max_standby_archive_delay'] = "30s"
+# postgresql['max_standby_streaming_delay'] = "30s"
+# postgresql['synchronous_commit'] = on
+# postgresql['synchronous_standby_names'] = ''
+# postgresql['hot_standby_feedback'] = 'off'
+# postgresql['random_page_cost'] = 4.0
+# postgresql['log_temp_files'] = -1
+# postgresql['log_checkpoints'] = 'off'
+
 
 ################################################################################
 ## GitLab Redis
