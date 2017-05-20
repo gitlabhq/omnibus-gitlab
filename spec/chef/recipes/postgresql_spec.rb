@@ -329,7 +329,7 @@ describe 'postgresql 9.6' do
     end
   end
 
-  context 'non-default settings' do
+  context 'postgresql_user resource' do
     before do
       stub_gitlab_rb(
         {
@@ -342,6 +342,10 @@ describe 'postgresql 9.6' do
 
     it 'should set a password for sql_user when sql_user_password is set' do
       expect(chef_run).to create_postgresql_user('gitlab').with(password: 'md5fakepassword')
+    end
+
+    it 'should create the gitlab_replicator user with replication permissions' do
+      expect(chef_run).to create_postgresql_user('gitlab_replicator').with(options: %w(replication))
     end
   end
 end
