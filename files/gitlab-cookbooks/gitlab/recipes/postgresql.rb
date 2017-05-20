@@ -81,6 +81,7 @@ execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
 end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
+postgresql_runtime_config = File.join(postgresql_data_dir, 'runtime.conf')
 should_notify = omnibus_helper.should_notify?("postgresql")
 
 template postgresql_config do
@@ -89,7 +90,18 @@ template postgresql_config do
   mode '0644'
   helper(:pg_helper) { pg_helper }
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]', :immediately if should_notify
+  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
+  notifies :run, 'execute[start postgresql]', :immediately if should_notify
+end
+
+template postgresql_runtime_config do
+  source 'postgresql-runtime.conf.erb'
+  owner postgresql_username
+  mode '0644'
+  helper(:pg_helper) { pg_helper }
+  variables(node['gitlab']['postgresql'].to_hash)
+  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
+  notifies :run, 'execute[start postgresql]', :immediately if should_notify
 end
 
 pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
@@ -173,4 +185,18 @@ execute "enable pg_trgm extension" do
   retries 20
   action :nothing
   not_if { !pg_helper.is_running? || pg_helper.is_slave? || pg_helper.extension_enabled?('pg_trgm', database_name) }
+end
+
+execute 'reload postgresql' do
+  command %(/opt/gitlab/bin/gitlab-ctl hup postgresql)
+  retries 20
+  action :nothing
+  only_if { pg_helper.is_running? }
+end
+
+execute 'start postgresql' do
+  command %(/opt/gitlab/bin/gitlab-ctl start postgresql)
+  retries 20
+  action :nothing
+  not_if { pg_helper.is_running? }
 end
