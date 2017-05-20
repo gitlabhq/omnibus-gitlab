@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Add ldap_group_sync worker configuration f21c3886
 - Add gitlab_shell_timeout configuration 0289f50b
 - Generate license .csv file 5478b1aa
+- Postgresql configuration changle will now reload Postgresql instead of restart
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
 - Rename trigger schedules to pipeline schedules
