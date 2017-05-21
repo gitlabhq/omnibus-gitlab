@@ -520,31 +520,6 @@ default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
 ####
-# Registry
-####
-default['gitlab']['registry']['enable'] = false
-default['gitlab']['registry']['username'] = "registry"
-default['gitlab']['registry']['group'] = "registry"
-default['gitlab']['registry']['uid'] = nil
-default['gitlab']['registry']['gid'] = nil
-default['gitlab']['registry']['dir'] = "/var/opt/gitlab/registry"
-default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
-default['gitlab']['registry']['log_level'] = "info"
-default['gitlab']['registry']['rootcertbundle'] = nil
-default['gitlab']['registry']['storage_delete_enabled'] = nil
-default['gitlab']['registry']['storage'] = nil
-default['gitlab']['registry']['debug_addr'] = nil
-
-####
-# Registry Notifications
-####
-default['gitlab']['registry']['notifications'] = nil
-default['gitlab']['registry']['default_notifications_timeout'] = "500ms"
-default['gitlab']['registry']['default_notifications_threshold'] = 5
-default['gitlab']['registry']['default_notifications_backoff'] = "1s"
-default['gitlab']['registry']['default_notifications_headers'] = {}
-
-####
 # Nginx
 ####
 default['gitlab']['nginx']['enable'] = true

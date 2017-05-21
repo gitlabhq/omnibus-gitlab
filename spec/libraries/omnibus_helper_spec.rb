@@ -23,7 +23,7 @@ describe OmnibusHelper do
 
   describe '#group_exists?' do
     it 'returns true when group exists' do
-      expect(subject.group_exists?('root')).to be_truthy
+      expect(subject.group_exists?('admin')).to be_truthy
     end
 
     it 'returns false when group does not exist' do
