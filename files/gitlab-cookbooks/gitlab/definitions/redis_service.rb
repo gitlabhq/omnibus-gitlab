@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :redis_service, :socket_group => nil do
+define :redis_service, socket_group: nil do
   svc = params[:name]
 
   redis_dir = node['gitlab'][svc]['dir']
@@ -29,7 +29,7 @@ define :redis_service, :socket_group => nil do
     ugid redis_user
     groupname redis_user
     gid node['gitlab'][svc]['gid']
-    shell  node['gitlab'][svc]['shell']
+    shell node['gitlab'][svc]['shell']
     home node['gitlab'][svc]['home']
     manage node['gitlab']['manage-accounts']['enable']
   end
@@ -52,14 +52,14 @@ define :redis_service, :socket_group => nil do
 
   redis_config = File.join(redis_dir, "redis.conf")
   is_slave = node['gitlab'][svc]['master_ip'] &&
-             node['gitlab'][svc]['master_port'] &&
-             !node['gitlab'][svc]['master']
+    node['gitlab'][svc]['master_port'] &&
+    !node['gitlab'][svc]['master']
 
   template redis_config do
     source "redis.conf.erb"
     owner redis_user
     mode "0644"
-    variables(node['gitlab'][svc].to_hash.merge({is_slave: is_slave}))
+    variables(node['gitlab'][svc].to_hash.merge({ is_slave: is_slave }))
     notifies :restart, "service[#{svc}]", :immediately if omnibus_helper.should_notify?(svc)
   end
 
@@ -67,8 +67,8 @@ define :redis_service, :socket_group => nil do
     down node['gitlab'][svc]['ha']
     template_name 'redis'
     options({
-      :service => svc,
-      :log_directory => redis_log_dir
+      service: svc,
+      log_directory: redis_log_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end
