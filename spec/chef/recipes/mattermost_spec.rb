@@ -99,6 +99,22 @@ describe 'gitlab::mattermost' do
       }
   end
 
+  it 'render mattermost configuration values correctly when arrays are expected'
+    stub_gitlab_rb(mattermost: {
+                     enable: true,
+                     sql_data_source_replicas: [],
+                     sql_data_source_search_replicas: []
+                   })
+
+    expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+      .with_content { |content|
+        config = JSON.parse(content)
+        expect(config).to have_key 'SqlSettings'
+        expect(config['SqlSettings']['DataSourceReplicas'].to be_instance_of(Array)
+        expect(config['SqlSettings']['DataSourceSearchReplicas'].to be_instance_of(Array)
+      }
+  end
+
   it 'creates mattermost configuration file in specified home folder' do
     stub_gitlab_rb(mattermost: {
                      enable: true,
