@@ -110,8 +110,8 @@ describe 'gitlab::mattermost' do
       .with_content { |content|
         config = JSON.parse(content)
         expect(config).to have_key 'SqlSettings'
-        expect(config['SqlSettings']['DataSourceReplicas'].to be_instance_of(Array)
-        expect(config['SqlSettings']['DataSourceSearchReplicas'].to be_instance_of(Array)
+        expect(config['SqlSettings']['DataSourceReplicas']).to be_instance_of(Array)
+        expect(config['SqlSettings']['DataSourceSearchReplicas']).to be_instance_of(Array)
       }
   end
 
