@@ -99,7 +99,7 @@ describe 'gitlab::mattermost' do
       }
   end
 
-  it 'render mattermost configuration values correctly when arrays are expected'
+  it 'render mattermost configuration values correctly when arrays are expected' do
     stub_gitlab_rb(mattermost: {
                      enable: true,
                      sql_data_source_replicas: [],
