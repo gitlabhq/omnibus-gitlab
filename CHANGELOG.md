@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - Rename geo_backfill worker configuration
 - Bump Git version to 2.13.0 b8a4bc4f
 
+9.2.1
+
+- Use ln -sf to prevent sshd startup errors upon a full Docker restart ecf4fd62b
+
 9.2.0
 
 - Add a missing symlink for /opt/gitlab/init/sshd to make `gitlab-ctl stop` work in Docker 4a098168

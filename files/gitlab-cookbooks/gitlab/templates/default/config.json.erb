@@ -55,7 +55,7 @@
         "MaxOpenConns": <%= @sql_max_open_conns %>,
         "Trace": <%= @sql_trace %>,
         "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>",
-        "DataSourceSearchReplicas": "<%= @sql_data_source_search_replicas %>"
+        "DataSourceSearchReplicas": <%= @sql_data_source_search_replicas %>
     },
     "LogSettings": {
         "EnableConsole": <%= @log_console_enable %>,
