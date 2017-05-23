@@ -8,6 +8,10 @@ omnibus-gitlab repository.
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration
 
+9.2.1
+
+- Use ln -sf to prevent sshd startup errors upon a full Docker restart ecf4fd62b
+
 9.2.0
 
 - Add a missing symlink for /opt/gitlab/init/sshd to make `gitlab-ctl stop` work in Docker 4a098168
