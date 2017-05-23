@@ -16,15 +16,14 @@ omnibus-gitlab repository.
 - Add ldap_group_sync worker configuration f21c3886
 - Add gitlab_shell_timeout configuration 0289f50b
 - Generate license .csv file 5478b1aa
+- Postgresql configuration changle will now reload Postgresql instead of restart
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
 - Compile python with libedit
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
-
-9.1.2
-
-- Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
+- Compile python with libedit
+- Disable Nginx proxy_request_buffering for Git LFS endpoints
 
 9.1.2
 
