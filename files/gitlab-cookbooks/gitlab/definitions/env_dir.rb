@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :env_dir, :variables => Hash.new, :restarts => [] do
+define :env_dir, variables: {}, restarts: [] do
   env_dir = params[:name]
 
   directory env_dir do
@@ -34,7 +34,7 @@ define :env_dir, :variables => Hash.new, :restarts => [] do
   end
 
   if File.directory?(env_dir)
-    deleted_env_vars = Dir.entries(env_dir) - params[:variables].keys - %w{. ..}
+    deleted_env_vars = Dir.entries(env_dir) - params[:variables].keys - %w(. ..)
     deleted_env_vars.each do |deleted_var|
       file File.join(env_dir, deleted_var) do
         action :delete
