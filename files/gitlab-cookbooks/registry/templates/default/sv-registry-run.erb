@@ -4,9 +4,9 @@ set -e # fail on errors
 # Redirect stderr -> stdout
 exec 2>&1
 
-cd <%= node['gitlab']['registry']['dir'] %>
+cd <%= node['registry']['dir'] %>
 
 exec chpst -P \
-  -U <%= node['gitlab']['registry']['username'] %>:<%= node['gitlab']['registry']['group'] %> \
-  -u <%= node['gitlab']['registry']['username'] %>:<%= node['gitlab']['registry']['group'] %> \
+  -U <%= node['registry']['username'] %>:<%= node['registry']['group'] %> \
+  -u <%= node['registry']['username'] %>:<%= node['registry']['group'] %> \
   /opt/gitlab/embedded/bin/registry serve ./config.yml

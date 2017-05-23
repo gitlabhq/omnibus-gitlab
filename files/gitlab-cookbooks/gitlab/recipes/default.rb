@@ -133,7 +133,7 @@ end
 %w(
   registry
 ).each do |service|
-  if node["gitlab"][service]["enable"]
+  if node[service]["enable"]
     include_recipe "#{service}::enable"
   else
     include_recipe "#{service}::disable"

@@ -44,7 +44,7 @@ runit_service 'postgres-exporter' do
     log_directory: postgres_exporter_log_dir,
     flags: runtime_flags
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['registry'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
 
 template File.join(postgres_exporter_dir, 'queries.yaml') do

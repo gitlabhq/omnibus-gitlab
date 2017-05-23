@@ -14,24 +14,24 @@
 # limitations under the License.
 #
 
-default['gitlab']['registry']['enable'] = false
-default['gitlab']['registry']['username'] = "registry"
-default['gitlab']['registry']['group'] = "registry"
-default['gitlab']['registry']['uid'] = nil
-default['gitlab']['registry']['gid'] = nil
-default['gitlab']['registry']['dir'] = "/var/opt/gitlab/registry"
-default['gitlab']['registry']['log_directory'] = "/var/log/gitlab/registry"
-default['gitlab']['registry']['log_level'] = "info"
-default['gitlab']['registry']['rootcertbundle'] = nil
-default['gitlab']['registry']['storage_delete_enabled'] = nil
-default['gitlab']['registry']['storage'] = nil
-default['gitlab']['registry']['debug_addr'] = nil
+default['registry']['enable'] = false
+default['registry']['username'] = "registry"
+default['registry']['group'] = "registry"
+default['registry']['uid'] = nil
+default['registry']['gid'] = nil
+default['registry']['dir'] = "/var/opt/gitlab/registry"
+default['registry']['log_directory'] = "/var/log/gitlab/registry"
+default['registry']['log_level'] = "info"
+default['registry']['rootcertbundle'] = nil
+default['registry']['storage_delete_enabled'] = nil
+default['registry']['storage'] = nil
+default['registry']['debug_addr'] = nil
 
 ####
 # Notifications
 ####
-default['gitlab']['registry']['notifications'] = nil
-default['gitlab']['registry']['default_notifications_timeout'] = "500ms"
-default['gitlab']['registry']['default_notifications_threshold'] = 5
-default['gitlab']['registry']['default_notifications_backoff'] = "1s"
-default['gitlab']['registry']['default_notifications_headers'] = {}
+default['registry']['notifications'] = nil
+default['registry']['default_notifications_timeout'] = "500ms"
+default['registry']['default_notifications_threshold'] = 5
+default['registry']['default_notifications_backoff'] = "1s"
+default['registry']['default_notifications_headers'] = {}
