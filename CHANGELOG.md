@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration
+- Bump Git version to 2.13.0 b8a4bc4f
 
 9.2.0
 
