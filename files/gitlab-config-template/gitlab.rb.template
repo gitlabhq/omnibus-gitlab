@@ -141,6 +141,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
 
+### Usage Statistics
+# gitlab_rails['usage_ping_enabled'] = true
+
 ### GitLab Mattermost
 ###! These settings are void if Mattermost is installed on the same omnibus
 ###! install
