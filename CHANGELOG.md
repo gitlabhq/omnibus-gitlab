@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.0
+
+- Bump Git version to 2.13.0 b8a4bc4f
+
 9.2.0
 
 - Allow setting `usage_ping_enabled` in `gitlab.rb`
