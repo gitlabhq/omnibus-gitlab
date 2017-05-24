@@ -3,6 +3,19 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+<<<<<<< HEAD
+=======
+9.3.0
+
+- Rename geo_download_dispatch worker configuration
+- Rename geo_backfill worker configuration
+- Bump Git version to 2.13.0 b8a4bc4f
+
+9.2.2
+
+- Fix bug where cron values are not set to nil and default to a set value
+
+>>>>>>> 49e7a84... Merge branch 'zj-fix-worker-cron-empty-string' into 'master'
 9.2.1
 
 - Use ln -sf to prevent sshd startup errors upon a full Docker restart ecf4fd62b
