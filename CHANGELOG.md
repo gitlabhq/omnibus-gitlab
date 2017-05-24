@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - Rename geo_backfill worker configuration
 - Bump Git version to 2.13.0 b8a4bc4f
 
+9.2.2
+
+- Fix bug where cron values are not set to nil and default to a set value
+
 9.2.1
 
 - Use ln -sf to prevent sshd startup errors upon a full Docker restart ecf4fd62b
