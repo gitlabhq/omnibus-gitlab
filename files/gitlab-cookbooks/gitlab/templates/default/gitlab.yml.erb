@@ -167,24 +167,24 @@ production: &base
   cron_jobs:
     # Flag stuck CI builds as failed
     stuck_ci_jobs_worker:
-      cron: "<%= @stuck_ci_jobs_worker_cron %>"
+      cron:<% if @stuck_ci_jobs_worker_cron %> "<%= @stuck_ci_jobs_worker_cron %>"<% end %>
     # Remove expired build artifacts
     expire_build_artifacts_worker:
-      cron: "<%= @expire_build_artifacts_worker_cron %>"
+      cron:<% if @expire_build_artifacts_worker_cron %> "<%= @expire_build_artifacts_worker_cron %>"<% end %>
     # Schedule pipelines in the near future
     pipeline_schedule_worker:
-      cron: "<%= @pipeline_schedule_worker_cron %>"
+      cron:<% if @pipeline_schedule_worker_cron %> "<%= @pipeline_schedule_worker_cron %>"<% end %>
     # Periodically run 'git fsck' on all repositories. If started more than
     # once per hour you will have concurrent 'git fsck' jobs.
     repository_check_worker:
-      cron: "<%= @repository_check_worker_cron %>"
+      cron:<% if @repository_check_worker_cron %> "<%= @repository_check_worker_cron %>"<% end %>
     # Send admin emails once a week
     admin_email_worker:
-      cron: "<%= @admin_email_worker_cron %>"
+      cron:<% if @admin_email_worker %> "<%= @admin_email_worker_cron %>"<% end %>
 
     # Remove outdated repository archives
     repository_archive_cache_worker:
-      cron: "<%= @repository_archive_cache_worker_cron %>"
+      cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
 
     ##
     # GitLab EE only jobs:
