@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.2.2
+
+- Fix bug where cron values are not set to nil and default to a set value
+
 9.2.1
 
 - Use ln -sf to prevent sshd startup errors upon a full Docker restart ecf4fd62b

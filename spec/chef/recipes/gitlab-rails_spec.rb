@@ -227,6 +227,13 @@ describe 'gitlab::gitlab-rails' do
           }
         end
       end
+
+      context 'when the cron pattern is not configured' do
+        it 'sets no value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pipeline_schedule_worker:\s+cron:\s[^"]+/)
+        end
+      end
     end
 
     context 'Gitaly settings' do
