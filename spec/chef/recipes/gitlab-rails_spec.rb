@@ -220,18 +220,18 @@ describe 'gitlab::gitlab-rails' do
         end
       end
 
-<<<<<<< HEAD
       context 'when backfill worker is not configured' do
         it 'does not set the cron value' do
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
             expect(content).not_to include('geo_backfill_worker')
           }
-=======
+        end
+      end
+
       context 'when the cron pattern is not configured' do
         it 'sets no value' do
           expect(chef_run).to render_file(gitlab_yml_path)
             .with_content(/pipeline_schedule_worker:\s+cron:\s[^"]+/)
->>>>>>> 49e7a84... Merge branch 'zj-fix-worker-cron-empty-string' into 'master'
         end
       end
     end
