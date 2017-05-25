@@ -104,11 +104,12 @@ Jun 26 06:33:46 ubuntu1204-test gitlab_access.log: 172.16.228.1 - - [26/Jun/2014
 
 ### Using a custom NGINX log format
 
-By default the NGINX access logs will use the 'combined' NGINX
-format, see
-http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format .
+By default the NGINX access logs will use a version of the 'combined' NGINX
+format, designed to hide potentially sensitive information embedded in query strings.
 If you want to use a custom log format string you can specify it
-in `/etc/gitlab/gitlab.rb`.
+in `/etc/gitlab/gitlab.rb` - see
+[the NGINX documentation](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)
+for format details.
 
 ```
 nginx['log_format'] = 'my format string $foo $bar'
