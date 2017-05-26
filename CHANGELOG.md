@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 9.3.0
 
+- Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration
 - Bump Git version to 2.13.0 b8a4bc4f

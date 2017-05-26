@@ -80,7 +80,8 @@ class ReplicateGeoHelpers
       host: nil,
       password: nil,
       now: false,
-      force: false
+      force: false,
+      skip_backup: false
     }
 
     opts_parser = OptionParser.new do |opts|
@@ -109,6 +110,10 @@ class ReplicateGeoHelpers
         @options[:force] = true
       end
 
+      opts.on('--skip-backup', 'Skip the backup before starting the replication process') do
+        @options[:skip_backup] = true
+      end
+
       opts.on_tail('-h', '--help', 'Show this message') do
         puts opts
         exit
@@ -126,6 +131,7 @@ class ReplicateGeoHelpers
   private
 
   def execute_gitlab_backup!
+    return if @options[:skip_backup]
     return unless gitlab_bootstrapped? && database_exists? && table_exists?('projects')
 
     puts '* Executing GitLab backup task to prevent accidental data loss'.color(:green)
