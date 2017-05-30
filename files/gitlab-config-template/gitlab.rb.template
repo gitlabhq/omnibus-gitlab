@@ -1383,7 +1383,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_monitor['home'] = "/var/opt/gitlab/gitlab-monitor"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
-# gitlab_monitor['listen_address'] = 'localhost:9168'
+# gitlab_monitor['listen_address'] = 'localhost'
+# gitlab_monitor['listen_port'] = '9168'
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true
