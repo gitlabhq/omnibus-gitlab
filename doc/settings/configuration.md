@@ -75,7 +75,7 @@ Follow the steps below to enable relative URL in GitLab:
     sudo gitlab-ctl reconfigure
     ```
 
-1.  Restart GitLab in case you shut down Unicorn and Sidekiq in the first step:
+1.  Restart the services so that Unicorn and Sidekiq picks up the changes
 
     ```shell
     sudo gitlab-ctl restart

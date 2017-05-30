@@ -210,20 +210,6 @@ templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" d
   end
 end
 
-templatesymlink "Create a relative_url.rb and create a symlink to Rails root" do
-  link_from File.join(gitlab_rails_source_dir, "config/initializers/relative_url.rb")
-  link_to File.join(gitlab_rails_etc_dir, "relative_url.rb")
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
-  restarts dependent_services
-
-  unless node['gitlab']['gitlab-rails']['gitlab_relative_url']
-    action :delete
-  end
-end
-
 templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/gitlab.yml")
   link_to File.join(gitlab_rails_etc_dir, "gitlab.yml")
@@ -291,6 +277,9 @@ rails_env = {
   'HOME' => node['gitlab']['user']['home'],
   'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
 }
+
+gitlab_relative_url = node['gitlab']['gitlab-rails']['gitlab_relative_url']
+rails_env['RAILS_RELATIVE_URL_ROOT'] = gitlab_relative_url if gitlab_relative_url
 
 if node['gitlab']['gitlab-rails']['enable_jemalloc']
   rails_env.merge!({'LD_PRELOAD' => "/opt/gitlab/embedded/lib/libjemalloc.so"})
