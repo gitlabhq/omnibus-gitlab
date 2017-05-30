@@ -160,3 +160,76 @@ pg_stat_statements:
     - temp_blks_written:
         usage: "COUNTER"
         description: "Total number of temp blocks written by the statement"
+
+pg_blocked:
+  query: |
+    SELECT
+      count(blocked.transactionid) AS queries,
+      '__transaction__' AS table
+    FROM pg_catalog.pg_locks blocked
+    WHERE NOT blocked.granted AND locktype = 'transactionid'
+    GROUP BY locktype
+    UNION
+    SELECT
+      count(blocked.relation) AS queries,
+      blocked.relation::regclass::text AS table
+    FROM pg_catalog.pg_locks blocked
+    WHERE NOT blocked.granted AND locktype != 'transactionid'
+    GROUP BY relation
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "The current number of blocked queries"
+    - table:
+        usage: "LABEL"
+        description: "The table on which a query is blocked"
+
+pg_slow:
+  query: |
+    SELECT COUNT(*) AS queries
+    FROM pg_stat_activity
+    WHERE state = 'active' AND (now() - query_start) > '1 seconds'::interval
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "Current number of slow queries"
+
+pg_vacuum:
+  query: |
+    SELECT
+      COUNT(*) AS queries,
+      MAX(EXTRACT(EPOCH FROM (clock_timestamp() - query_start))) AS age_in_seconds
+    FROM pg_catalog.pg_stat_activity
+    WHERE state = 'active' AND trim(query) ~* '\AVACUUM (?!ANALYZE)'
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "The current number of VACUUM queries"
+    - age_in_seconds:
+        usage: "GAUGE"
+        description: "The current maximum VACUUM query age in seconds"
+
+pg_vacuum_analyze:
+  query: |
+    SELECT
+      COUNT(*) AS queries,
+      MAX(EXTRACT(EPOCH FROM (clock_timestamp() - query_start))) AS age_in_seconds
+    FROM pg_catalog.pg_stat_activity
+    WHERE state = 'active' AND trim(query) ~* '\AVACUUM ANALYZE'
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "The current number of VACUUM ANALYZE queries"
+    - age_in_seconds:
+        usage: "GAUGE"
+        description: "The current maximum VACUUM ANALYZE query age in seconds"
+
+pg_stuck_idle_in_transaction:
+  query: |
+    SELECT COUNT(*) AS queries
+    FROM pg_stat_activity
+    WHERE state = 'idle in transaction' AND (now() - query_start) > '10 minutes'::interval
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "Current number of queries that are stuck being idle in transactions"
