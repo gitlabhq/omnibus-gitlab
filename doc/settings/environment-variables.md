@@ -11,4 +11,17 @@ example:
 gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
 ```
 
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+## Applying the changes
+
+Any change made to the environment variables **requires a hard restart** after
+reconfigure for it to take effect.
+
+**`Note`**: During a hard restart, your GitLab instance will be down until the
+services are back up.
+
+So, after editing `gitlab.rb` file, run the following commands
+
+```shell
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl restart
+```
