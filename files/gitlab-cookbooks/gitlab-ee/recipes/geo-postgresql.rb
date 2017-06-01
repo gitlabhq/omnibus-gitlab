@@ -27,6 +27,8 @@ postgresql_username = account_helper.postgresql_user
 
 pg_helper = GeoPgHelper.new(node)
 
+include_recipe 'gitlab::postgresql_user'
+
 directory postgresql_dir do
   owner postgresql_username
   mode '0755'
