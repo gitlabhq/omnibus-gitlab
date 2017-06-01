@@ -1212,6 +1212,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost_nginx['log_directory'] = "/var/log/gitlab/nginx"
 # mattermost_nginx['worker_processes'] = 4
 # mattermost_nginx['worker_connections'] = 10240
+# mattermost_nginx['log_format'] = '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"'
 # mattermost_nginx['sendfile'] = 'on'
 # mattermost_nginx['tcp_nopush'] = 'on'
 # mattermost_nginx['tcp_nodelay'] = 'on'
