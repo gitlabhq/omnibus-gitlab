@@ -14,4 +14,9 @@ namespace :repository do
   task :gitlab_edition do
     puts PackageRepository.new.repository_for_edition
   end
+
+  task :upload, [:packagecloud_user] do |_t, args|
+    user =  args['packagecloud_user']
+    PackageRepository.new.upload(user)
+  end
 end
