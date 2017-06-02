@@ -5,12 +5,11 @@ PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
 ifeq ($(shell support/is_gitlab_ee.sh; echo $$?), 0)
-RELEASE_PACKAGE=gitlab-ee
 TAG_MATCH='*[+.]ee.*'
 else
-RELEASE_PACKAGE=gitlab-ce
 TAG_MATCH='*[+.]ce.*'
 endif
+RELEASE_PACKAGE=$(shell bundle exec rake build:package)
 RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
 LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
 LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)

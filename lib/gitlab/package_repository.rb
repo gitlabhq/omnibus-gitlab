@@ -1,3 +1,5 @@
+require_relative 'build.rb'
+
 class PackageRepository
   def target
     return ENV['PACKAGECLOUD_REPO'] if ENV['PACKAGECLOUD_REPO'] && !ENV['PACKAGECLOUD_REPO'].empty?
@@ -8,20 +10,11 @@ class PackageRepository
     if rc_repository
       rc_repository
     else
-      repository_for_edition
+      Build.package
     end
   end
 
   def repository_for_rc
     "unstable" if system('git describe | grep -q -e rc')
-  end
-
-  def repository_for_edition
-    is_ee = system('grep -q -E "\-ee" VERSION')
-    if ENV['EE'] || is_ee
-      "gitlab-ee"
-    else
-      "gitlab-ce"
-    end
   end
 end
