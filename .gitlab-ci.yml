@@ -7,6 +7,8 @@ stages:
   - post-test
   - package
   - notification_fail
+  - staging_upload
+  - release
   - images
   - docker_release
   - notification_fail
@@ -623,18 +625,18 @@ Debian 9:
     - cache
     - gems
   <<: *tag_build
-Centos 6:
+CentOS 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "Centos 6 branch"
+    key: "CentOS 6 branch"
     paths:
     - cache
     - gems
   <<: *tag_build
-Centos 7:
+CentOS 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "Centos 7 branch"
+    key: "CentOS 7 branch"
     paths:
     - cache
     - gems
@@ -804,3 +806,110 @@ Docker Release:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
   when: manual
+
+# This stage is used for uploading packages:
+# 1. When ran on tag
+#   * To a staging package repository
+# 2. When ran on a branch
+#   * If the build was Nightly, push to Nightly repository
+#   * As temporary artifacts, expiring after 7 days
+# 3. Always ran on dev.gitlab.org
+.staging_upload_template: &staging_upload
+  stage: staging_upload
+  image: ruby:2.3.3
+  script:
+    - bundle exec rake repository:upload[$PACKAGECLOUD_USER]
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+
+# This stage is ran only on tag:
+# 1. It is a manual action
+# 2. It will upload the package to public user facing repositories
+# 3. Only ran on dev.gitlab.org
+.production_release_template: &production_release
+  stage: release
+  image: ruby:2.3.3
+  script:
+    - bundle exec rake repository:upload[$PACKAGECLOUD_USER]
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+
+# Staging
+Ubuntu 14.04 staging:
+  dependencies:
+    - Ubuntu 14.04
+    - Ubuntu 14.04 branch
+  <<: *staging_upload
+Ubuntu 16.04 staging:
+  dependencies:
+    - Ubuntu 16.04
+    - Ubuntu 16.04 branch
+  <<: *staging_upload
+Debian 7 staging:
+  dependencies:
+    - Debian 7
+    - Debian 7 branch
+  <<: *staging_upload
+Debian 8 staging:
+  dependencies:
+    - Debian 8
+    - Debian 8 branch
+  <<: *staging_upload
+CentOS 6 staging:
+  dependencies:
+    - CentOS 6
+    - CentOS 6 branch
+  <<: *staging_upload
+CentOS 7 staging:
+  dependencies:
+    - CentOS 7
+    - CentOS 7 branch
+  <<: *staging_upload
+OpenSUSE 42.1 staging:
+  dependencies:
+    - OpenSUSE 42.1
+    - OpenSUSE 42.1 branch
+  <<: *staging_upload
+SLES 12 staging:
+  dependencies:
+    - SLES 12
+    - SLES 12 branch
+  allow_failure: true
+  <<: *staging_upload
+
+# Release
+Ubuntu 14.04 release:
+  dependencies:
+    - Ubuntu 14.04 staging
+  <<: *production_release
+Ubuntu 16.04 release:
+  dependencies:
+    - Ubuntu 16.04 staging
+  <<: *production_release
+Debian 7 release:
+  dependencies:
+    - Debian 7 staging
+  <<: *production_release
+Debian 8 release:
+  dependencies:
+    - Debian 8 staging
+  <<: *production_release
+CentOS 6 release:
+  dependencies:
+    - CentOS 6 staging
+CentOS 7 release:
+  dependencies:
+    - CentOS 7 staging
+  <<: *production_release
+OpenSUSE 42.1 release:
+  dependencies:
+    - OpenSUSE 42.1 staging
+  <<: *production_release
+SLES 12 release:
+  dependencies:
+    - SLES 12 staging
+  allow_failure: true
+  <<: *production_release
