@@ -20,7 +20,8 @@ class OmnibusHelper
   end
 
   def service_enabled?(service_name)
-    node['gitlab'][service_name]['enable']
+    return node['gitlab'][service_name]['enable'] if node['gitlab'].key?(service_name)
+    node[service_name]['enable']
   end
 
   def service_up?(service_name)

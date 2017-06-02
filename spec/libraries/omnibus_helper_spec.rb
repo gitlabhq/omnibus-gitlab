@@ -68,4 +68,32 @@ describe OmnibusHelper do
       end
     end
   end
+
+  describe '#service_enabled?' do
+    context 'services are enabled' do
+      before do
+        chef_run.node.normal['gitlab']['old_service']['enable'] = true
+        chef_run.node.normal['new_service']['enable'] = true
+        chef_run.converge('gitlab::config')
+      end
+
+      it 'should return true' do
+        expect(subject.service_enabled?('old_service')).to be_truthy
+        expect(subject.service_enabled?('new_service')).to be_truthy
+      end
+    end
+
+    context 'services are disabled' do
+      before do
+        chef_run.node.normal['gitlab']['old_service']['enable'] = false
+        chef_run.node.normal['new_service']['enable'] = false
+        chef_run.converge('gitlab::config')
+      end
+
+      it 'should return false' do
+        expect(subject.service_enabled?('old_service')).to be_falsey
+        expect(subject.service_enabled?('new_service')).to be_falsey
+      end
+    end
+  end
 end
