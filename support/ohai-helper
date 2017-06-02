@@ -44,20 +44,22 @@ def os_platform
 end
 
 def os_platform_version
+  version = :unknown
+
   case ohai['platform']
   when 'ubuntu'
     case ohai['platform_version']
     when /^12\.04/
-      'precise'
+      version = 'precise'
     when /^14\.04/
-      'trusty'
+      version = 'trusty'
     when /^16\.04/
-      'xenial'
+      version = 'xenial'
     end
   when 'debian', 'raspbian'
     case ohai['platform_version']
     when /^7\./
-      'wheezy'
+      version = 'wheezy'
     when /^8\./
       version = 'jessie'
     when /^9\./
@@ -66,21 +68,19 @@ def os_platform_version
   when 'centos'
     case ohai['platform_version']
     when /^6\./
-      '6'
+      version = '6'
     when /^7\./
-      '7'
+      version = '7'
     end
   when 'opensuse', 'opensuseleap'
     version = ohai['platform_version']
   when 'suse'
     case ohai['platform_version']
     when /^12\./
-      '12.2'
+      version = '12.2'
     when /^11\./
-      '11.4'
+      version = '11.4'
     end
-  else
-    :unknown
   end
 
   version
