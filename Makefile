@@ -1,18 +1,12 @@
-PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-ifeq ($(shell support/is_gitlab_ee.sh; echo $$?), 0)
-TAG_MATCH='*[+.]ee.*'
-else
-TAG_MATCH='*[+.]ce.*'
-endif
-RELEASE_PACKAGE=$(shell bundle exec rake build:package)
+RELEASE_PACKAGE:=$(shell bundle exec rake build:show:edition)
 RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
-LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
-LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
+LATEST_TAG:=$(shell bundle exec rake build:show:latest_tag)
+LATEST_STABLE_TAG:=$(shell bundle exec rake build:show:latest_stable_tag)
 ifdef NIGHTLY
 DOCKER_TAG:=nightly
 else

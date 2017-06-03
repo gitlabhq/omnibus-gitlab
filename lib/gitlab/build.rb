@@ -23,6 +23,15 @@ class Build
       "gitlab-ce"
     end
 
+    # TODO, merge latest_tag with latest_stable_tag
+    def latest_tag
+      `git -c versionsort.prereleaseSuffix=rc tag -l '#{tag_match_pattern}' --sort=-v:refname | head -1`
+    end
+
+    def latest_stable_tag
+      `git -c versionsort.prereleaseSuffix=rc tag -l '#{tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -1`
+    end
+
     private
 
     def log_level
@@ -31,6 +40,12 @@ class Build
       else
         'info'
       end
+    end
+
+    def tag_match_pattern
+      return '*[+.]ee.*' if is_ee?
+
+      '*[+.]ce.*'
     end
   end
 end
