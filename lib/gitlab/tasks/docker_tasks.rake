@@ -10,6 +10,7 @@ namespace :docker do
   desc "Build Docker image"
   task :build do
     release_package = Build.package
+    Build.write_release_file
     location = File.absolute_path(File.join(File.dirname(File.expand_path(__FILE__)), "../../../docker"))
     DockerOperations.build(location, release_package, "latest")
   end

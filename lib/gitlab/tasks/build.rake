@@ -6,10 +6,10 @@ namespace :build do
     Build.exec('gitlab')
   end
 
-  namespace :show do
-    desc 'Show which package is being built, CE/EE'
-    task :edition do
-      puts Build.package
+  namespace :docker do
+    desc 'Show package version which will be installed in the Docker image.'
+    task :release_version do
+      puts Build.release_version
     end
 
     desc 'Show latest available tag. Includes unstable releases.'

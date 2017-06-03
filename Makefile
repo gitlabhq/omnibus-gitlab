@@ -3,10 +3,9 @@ RELEASE_BUCKET_REGION=eu-west-1
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-RELEASE_PACKAGE:=$(shell bundle exec rake build:show:edition)
-RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
-LATEST_TAG:=$(shell bundle exec rake build:show:latest_tag)
-LATEST_STABLE_TAG:=$(shell bundle exec rake build:show:latest_stable_tag)
+RELEASE_VERSION?=$(shell bundle exec rake build:docker:release_version) # TODO, to be removed once DOCKER_TAG is built differently
+LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag)
+LATEST_STABLE_TAG:=$(shell bundle exec rake build:docker:latest_stable_tag)
 ifdef NIGHTLY
 DOCKER_TAG:=nightly
 else
@@ -103,11 +102,6 @@ do_docker_release: docker_push_latest
 endif
 
 docker_trigger_build_and_push:
-	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
-	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell bundle exec support/triggered_package.rb) >> docker/RELEASE
-	@echo TRIGGER_PRIVATE_TOKEN=$(TRIGGER_PRIVATE_TOKEN) >> docker/RELEASE
 	bundle exec rake docker:build
 	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
 	# variable, which will be used to tag the final Docker image.
