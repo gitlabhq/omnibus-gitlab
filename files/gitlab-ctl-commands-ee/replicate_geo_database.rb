@@ -48,12 +48,12 @@ class ReplicateGeoHelpers
     run_command('gitlab-ctl stop')
 
     puts '* Backing up postgresql.conf'.color(:green)
-    run_command("sudo -u gitlab-psql mv #{data_path}/postgresql/data/postgresql.conf #{data_path}/postgresql/")
+    run_command("mv #{data_path}/postgresql/data/postgresql.conf #{data_path}/postgresql/")
 
     bkp_dir = "#{data_path}/postgresql/data.#{Time.now.to_i}"
     puts "* Moving old data directory to '#{bkp_dir}'".color(:green)
 
-    run_command("sudo -u gitlab-psql mv #{data_path}/postgresql/data #{bkp_dir}")
+    run_command("mv #{data_path}/postgresql/data #{bkp_dir}")
     run_command('rm -f /tmp/postgresql.trigger')
 
     puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
@@ -61,13 +61,16 @@ class ReplicateGeoHelpers
     pgpass = "#{data_path}/postgresql/.pgpass"
     create_pgpass_file!(pgpass)
 
-    run_command("sudo PGPASSFILE=#{pgpass} -u gitlab-psql #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
+    run_command("PGPASSFILE=#{pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
 
     puts '* Writing recovery.conf file'.color(:green)
     create_recovery_file!
 
     puts '* Restoring postgresql.conf'.color(:green)
-    run_command("sudo -u gitlab-psql mv #{data_path}/postgresql/postgresql.conf #{data_path}/postgresql/data/")
+    run_command("mv #{data_path}/postgresql/postgresql.conf #{data_path}/postgresql/data/")
+
+    puts '* Setting ownership permissions in PostgreSQL data directory'.color(:green)
+    run_command("chown -R gitlab-psql:gitlab-psql #{data_path}/postgresql/data")
 
     puts '* Starting PostgreSQL and all GitLab services'.color(:green)
     run_command('gitlab-ctl start')
@@ -145,7 +148,7 @@ class ReplicateGeoHelpers
       EOF
       )
     end
-    run_command("sudo chown gitlab-psql #{pgpass}")
+    run_command("chown gitlab-psql #{pgpass}")
   end
 
   def create_recovery_file!
@@ -158,7 +161,7 @@ class ReplicateGeoHelpers
       EOF
       )
     end
-    run_command("sudo chown gitlab-psql #{recovery_file}")
+    run_command("chown gitlab-psql #{recovery_file}")
   end
 
   def ask_pass(text)
