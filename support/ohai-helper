@@ -71,7 +71,7 @@ def os_platform_version
       version = '7'
     end
   when 'opensuse', 'opensuseleap'
-    ohai['platform_version']
+    version = ohai['platform_version']
   when 'suse'
     case ohai['platform_version']
     when /^12\./
