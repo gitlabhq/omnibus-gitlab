@@ -16,7 +16,7 @@
 #
 
 name 'postgresql_new'
-default_version '9.6.1'
+default_version '9.6.3'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,6 +30,10 @@ dependency 'config_guess'
 
 version '9.6.1' do
   source sha256: 'e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd'
+end
+
+version '9.6.3' do
+  source sha256: '1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6'
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
