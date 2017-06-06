@@ -430,6 +430,31 @@ Docker Toolbox's boot2docker.
 [down-yml]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/docker/docker-compose.yml
 [docker-ports]: https://docs.docker.com/engine/reference/run/#/expose-incoming-ports
 
+### Linux ACL issues
+
+If you are using file ACLs on the docker host, the `docker`[^1] group requires full access to the volumes in order for GitLab to work.
+```
+$ getfacl /srv/gitlab
+# file: /srv/gitlab
+# owner: XXXX
+# group: XXXX
+user::rwx
+group::rwx
+group:docker:rwx
+mask::rwx
+default:user::rwx
+default:group::rwx
+default:group:docker:rwx
+default:mask::rwx
+default:other::r-x
+```
+
+If these are not correct, set them with:
+```
+$ sudo setfacl -mR default:group:docker:rwx /srv/gitlab
+```
+
+[^1]: `docker` is the default group, if you've changed this, update your commands accordingly.
 ### Getting help
 
 If your problem is not listed here please see [getting help](https://about.gitlab.com/getting-help/) for the support channels.
