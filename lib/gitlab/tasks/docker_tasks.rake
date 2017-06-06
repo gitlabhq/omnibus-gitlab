@@ -46,16 +46,41 @@ namespace :docker do
   end
 
   desc "Push Docker Image to Registry"
-  task :push do
-    docker_tag = ENV["DOCKER_TAG"]
-    release_package = Build.package
-    DockerOperations.authenticate
-    DockerOperations.push(release_package, "latest", docker_tag)
+  namespace :push do
+    task :stable do
+      docker_tag = Build.docker_tag
+      puts "Pushing tag: #{docker_tag}"
+      auth_and_push(docker_tag)
+    end
+
+    task :rc do
+      # push as :rc tag, the :rc is always the latest tagged release
+
+      if Build.add_rc_tag?
+        auth_and_push('rc')
+        puts "Pushing tag: rc"
+      end
+    end
+
+    task :latest do
+      # push as :latest tag, the :latest is always the latest stable release
+
+      if Build.add_latest_tag?
+        auth_and_push('latest')
+        puts "Pushing tag: latest"
+      end
+    end
+
+    def auth_and_push(tag)
+      release_package = Build.package
+      DockerOperations.authenticate
+      DockerOperations.push(release_package, "latest", docker_tag)
+    end
   end
 
   desc "Push QA Docker Image to Registry"
   task :push_qa do
-    docker_tag = ENV["DOCKER_TAG"]
+    docker_tag = Build.docker_tag
     release_package = Build.package
     type = release_package.gsub("gitlab-", "").strip
     DockerOperations.authenticate

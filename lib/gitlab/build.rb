@@ -51,6 +51,22 @@ class Build
       `git -c versionsort.prereleaseSuffix=rc tag -l '#{tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -1`
     end
 
+    def docker_tag
+      if ENV['NIGHTLY'] && ENV['NIGHTLY'] == true
+        'nightly'
+      else
+        release_version
+      end
+    end
+
+    def add_latest_tag?
+      match_tag(latest_stable_tag)
+    end
+
+    def add_rc_tag?
+      match_tag(latest_tag)
+    end
+
     def write_release_file
       contents = release_file_contents
       File.write('docker/RELEASE', contents)
@@ -108,6 +124,10 @@ class Build
       output = JSON.parse(res.body)
       id = output.find { |job| job['name'] == 'Trigger:package' }['id']
       "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/file/pkg/ubuntu-16.04/gitlab.deb"
+    end
+
+    def match_tag(tag)
+      system("git describe --exact-match --match #{tag}")
     end
   end
 end

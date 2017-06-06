@@ -8,8 +8,8 @@ namespace :build do
 
   namespace :docker do
     desc 'Show package version which will be installed in the Docker image.'
-    task :release_version do
-      puts Build.release_version
+    task :tag do
+      puts Build.docker_tag
     end
 
     desc 'Show latest available tag. Includes unstable releases.'

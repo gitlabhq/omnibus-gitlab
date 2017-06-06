@@ -3,14 +3,8 @@ RELEASE_BUCKET_REGION=eu-west-1
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-RELEASE_VERSION?=$(shell bundle exec rake build:docker:release_version) # TODO, to be removed once DOCKER_TAG is built differently
-LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag)
 LATEST_STABLE_TAG:=$(shell bundle exec rake build:docker:latest_stable_tag)
-ifdef NIGHTLY
-DOCKER_TAG:=nightly
-else
-DOCKER_TAG:=$(RELEASE_VERSION)
-endif
+LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag)
 
 populate_cache:
 	bin/omnibus cache populate
@@ -63,44 +57,6 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-docker_cleanup:
-	-bundle exec rake docker:clean
-
-docker_build: docker_cleanup
-	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
-	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell echo "https://${RELEASE_BUCKET}.s3.amazonaws.com/ubuntu-xenial/${RELEASE_PACKAGE}_${RELEASE_VERSION}_amd64.deb" | sed -e "s|+|%2B|") >> docker/RELEASE
-	bundle exec rake docker:build
-
-docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push
-
-docker_push_rc:
-	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push
-
-docker_push_latest:
-	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push
-
-do_docker_master: RELEASE_BUCKET=omnibus-builds
-do_docker_master: docker_build
-ifdef NIGHTLY
-do_docker_master: RELEASE_BUCKET=omnibus-builds
-do_docker_master: docker_build docker_push
-endif
-
-do_docker_release: no_changes on_tag docker_build docker_push
-# The rc should always be the latest tag, stable or upcoming release
-ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} > /dev/null 2>&1; echo $$?), 0)
-do_docker_release: docker_push_rc
-endif
-# The lastest tag is alwasy the latest stable
-ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
-do_docker_release: docker_push_latest
-endif
-
 docker_trigger_build_and_push:
 	bundle exec rake docker:build
 	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
@@ -140,7 +96,7 @@ qa_docker_build: qa_docker_cleanup
 	bundle exec rake docker:build_qa
 
 qa_docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push_qa
+	bundle exec rake docker:push_qa
 
 qa_docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
