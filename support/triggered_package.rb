@@ -10,4 +10,4 @@ http.use_ssl = true
 res = http.request(req)
 output = JSON.parse(res.body)
 id = output.find { |job| job['name'] == 'Trigger:package' }['id']
-puts "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/file/pkg/ubuntu-16.04/gitlab.deb"
+puts "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/file/pkg/ubuntu-xenial/gitlab.deb"
