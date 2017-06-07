@@ -421,6 +421,12 @@ production: &base
     # Git timeout to read a commit, in seconds
     timeout: <%= @git_timeout %>
 
+  ## GitLab Geo settings (EE-only)
+  geo_primary_role:
+    enabled: <%= @geo_primary_role_enabled %>
+  geo_secondary_role:
+    enabled: <%= @geo_secondary_role_enabled %>
+
   #
   # 5. Extra customization
   # ==========================
