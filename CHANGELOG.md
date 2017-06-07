@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Changing relative URL requires a hard reset ccd76ae2
 - Add omniauth sync_email_from_provider configuration
 - Add libre2 to support the 're2' gem
+- Add support for Gitaly configurations for logging and prometheus
 
 9.2.5
 

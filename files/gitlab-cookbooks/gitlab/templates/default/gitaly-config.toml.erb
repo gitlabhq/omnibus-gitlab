@@ -25,3 +25,17 @@ name = '<%= shard['name'] %>'
 path = '<%= shard['path'] %>'
 <% end %>
 <% end %>
+
+[logging]
+<% if @logging_format %>
+format = '<%= @logging_format %>'
+<% end %>
+<% if @sentry_dns %>
+sentry_dns = '<%= @sentry_dns %>'
+<% end %>
+
+<% if @grpc_latency_buckets %>
+# # You can optionally configure Gitaly to record histogram latencies on GRPC method calls
+[prometheus]
+grpc_latency_buckets = <%= @grpc_latency_buckets %>
+<% end %>
