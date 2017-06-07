@@ -27,15 +27,18 @@ follows
     Omnibus GitLab registry contains images for all the supported OSs and
     versions. You can use one of them to build a package for it. For example,
     to prepare a build environment for Debian Jessie, you have to pull its
-    image.
+    image. The revision of the image to be used is specified in `BUILDER_IMAGE_REVISION`
+    variable in [.gitlab-ci.yml](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.gitlab-ci.yml)
+    file. Make sure you substitute that value to `${BUILDER_IMAGE_REVISION}`
+    in the following commands.
 
     ```
-    docker pull registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie
+    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:jessie-${BUILDER_IMAGE_REVISION}
     ```
 4. Start the container and enter its shell
 
     ```
-    docker run -it registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie bash
+    docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:jessie-${BUILDER_IMAGE_REVISION} bash
     ```
 
 5. Clone the Omnibus GitLab source and change to the cloned directory

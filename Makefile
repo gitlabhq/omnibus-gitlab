@@ -78,7 +78,7 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|") >> docker/RELEASE
+	echo DOWNLOAD_URL=$(shell find pkg/ubuntu-xenial -type f -name '*.deb'| sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|") >> docker/RELEASE
 	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
 
 docker_push:
