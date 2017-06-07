@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration
+- Upgrade Prometheus to 1.6.3
 - Bump Git version to 2.13.0 b8a4bc4f
 - Upgrade PostgreSQL to 9.6.3 8f144d
 - Changing relative URL requires a hard reset ccd76ae2
