@@ -313,6 +313,12 @@ production: &base
     # showing GitLab's sign-in page (default: show the GitLab sign-in page)
     auto_sign_in_with_provider: <%= @omniauth_auto_sign_in_with_provider %>
 
+    # Sync user's email address from the specified Omniauth provider every time the user logs
+    # in (default: nil). And consequently make this field read-only.
+    <% unless @omniauth_sync_email_from_provider.nil? %>
+    sync_email_from_provider: <%= @omniauth_sync_email_from_provider.inspect %>
+    <% end %>
+
     # CAUTION!
     # This allows users to login without having a user account first. Define the allowed
     # providers using an array, e.g. ["saml", "twitter"]

@@ -174,6 +174,25 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'omniauth settings' do
+      context 'sync email from omniauth provider is configured' do
+        it 'sets the omniauth provider' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content("sync_email_from_provider: \"cas3\"")
+        end
+      end
+
+      context 'sync email from omniauth provider is not configured' do
+        it 'does not include the sync email from omniauth provider setting' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('sync_email_from_provider')
+          }
+        end
+      end
+    end
+
     context 'GitLab Geo settings' do
       context 'by default' do
         it 'geo_primary_role is disabled' do
