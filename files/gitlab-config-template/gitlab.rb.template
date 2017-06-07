@@ -1426,6 +1426,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
 
 ################################################################################
+## GitLab Geo
+##! Docs: https://docs.gitlab.com/ee/gitlab-geo
+################################################################################
+# geo_primary_role['enable'] = false
+# geo_secondary_role['enable'] = false
+
+################################################################################
 ## GitLab Geo Secondary (EE only)
 ################################################################################
 # geo_secondary['auto_migrate'] = true

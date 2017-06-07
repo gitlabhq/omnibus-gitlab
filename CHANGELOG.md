@@ -13,6 +13,10 @@ omnibus-gitlab repository.
 - Upgrade PostgreSQL to 9.6.3 8f144d
 - Changing relative URL requires a hard reset ccd76ae2
 
+9.2.5
+
+- Add default values to GitLab Geo roles 77e7bdfa
+
 9.2.2
 
 - Fix bug where cron values are not set to nil and default to a set value
