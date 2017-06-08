@@ -16,8 +16,7 @@ class Build
     end
 
     def is_ee?
-      ee_env = ENV['ee']
-      return true if ee_env && !ee_env.empty? && ee_env == 'true'
+      return true if ENV['ee'] == 'true'
 
       system('grep -q -E "\-ee" VERSION')
     end
@@ -116,8 +115,11 @@ class Build
     end
 
     def package_from_triggered_build
-      return "https://test.com"
-      uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/pipelines/#{ENV['CI_PIPELINE_ID']}/jobs")
+      project_id = ENV['CI_PROJECT_ID']
+      pipeline_id = ENV['CI_PIPELINE_ID']
+      return unless project_id && pipeline_id
+
+      uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
       req = Net::HTTP::Get.new(uri)
       req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
       http = Net::HTTP.new(uri.hostname, uri.port)

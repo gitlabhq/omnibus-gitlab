@@ -3,8 +3,8 @@ RELEASE_BUCKET_REGION=eu-west-1
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-LATEST_STABLE_TAG:=$(shell bundle exec rake build:docker:latest_stable_tag)
-LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag)
+LATEST_STABLE_TAG:=$(shell bundle exec rake build:docker:latest_stable_tag) # TODO, remove when aws and qa are in the rake task
+LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag) # TODO, remove when qa is in the rake task
 
 populate_cache:
 	bin/omnibus cache populate
