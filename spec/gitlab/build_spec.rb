@@ -109,14 +109,14 @@ describe Build do
 
   describe 'write_release_file' do
     describe 'with triggered build' do
-      let(:release_file) {
-        release_file_content = [
+      let(:release_file) do
+        [
           "PACKAGECLOUD_REPO=download-package",
           "RELEASE_VERSION=12.121.12-ce.1",
           "DOWNLOAD_URL=https://download-package.s3.com/builds/1/artifacts/file/pkg/ubuntu-16.04/gitlab.deb",
           "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
         ]
-      }
+      end
 
       before do
         stub_env_var('PACKAGECLOUD_REPO', 'download-package')
@@ -152,12 +152,12 @@ describe Build do
       describe 'with regular build' do
         let(:s3_download_link) { 'https://release-bucket.s3.amazonaws.com/ubuntu-xenial/gitlab-ce_12.121.12-ce.1_amd64.deb' }
 
-        let(:release_file) {
-          release_file_content = [
+        let(:release_file) do
+          [
             "RELEASE_VERSION=12.121.12-ce.1",
             "DOWNLOAD_URL=#{s3_download_link}\n",
           ]
-        }
+        end
 
         before do
           stub_env_var('PACKAGECLOUD_REPO', '')
@@ -165,12 +165,9 @@ describe Build do
           stub_env_var('CI_PROJECT_ID', '')
           stub_env_var('CI_PIPELINE_ID', '')
           stub_env_var('RELEASE_BUCKET', 'release-bucket')
+          allow(described_class).to receive(:package).and_return('gitlab-ee')
           allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
           allow(described_class).to receive(:`).with("find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://release-bucket.s3.amazonaws.com|' -e 's|+|%2B|'").and_return(s3_download_link)
-        end
-
-        before do
-          allow(described_class).to receive(:package).and_return('gitlab-ee')
         end
 
         it 'returns build version and iteration with env variable' do
