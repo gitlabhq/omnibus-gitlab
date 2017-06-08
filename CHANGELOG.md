@@ -3,23 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-<<<<<<< HEAD
-=======
-9.3.0
-
-- Ensure PostgreSQL user is created for Geo installations 4bedc5f1
-- Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
-- Rename geo_download_dispatch worker configuration
-- Rename geo_backfill worker configuration
-- Bump Git version to 2.13.0 b8a4bc4f
-- Upgrade PostgreSQL to 9.6.3 8f144d
-- Changing relative URL requires a hard reset ccd76ae2
-
 9.2.5
 
 - Add default values to GitLab Geo roles 77e7bdfa
 
->>>>>>> 272c0f9... Merge branch 'da-gitlab-geo-roles' into 'master'
 9.2.2
 
 - Fix bug where cron values are not set to nil and default to a set value

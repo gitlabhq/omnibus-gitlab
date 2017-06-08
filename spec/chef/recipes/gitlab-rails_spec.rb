@@ -175,9 +175,6 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'GitLab Geo settings' do
-<<<<<<< HEAD
-      context 'when backfill worker is configured' do
-=======
       context 'by default' do
         it 'geo_primary_role is disabled' do
           expect(chef_run).to render_file(gitlab_yml_path)
@@ -208,8 +205,7 @@ describe 'gitlab::gitlab-rails' do
         end
       end
 
-      context 'when repository sync worker is configured' do
->>>>>>> 272c0f9... Merge branch 'da-gitlab-geo-roles' into 'master'
+      context 'when backfill worker is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
 
