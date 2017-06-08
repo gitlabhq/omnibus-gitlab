@@ -28,6 +28,14 @@ class Build
     end
 
     # Docker related commands
+
+    # For nightly builds we fetch all GitLab components from master branch
+    # If there was no change inside of the omnibus-gitlab repository, the
+    # package version will remain the same but contents of the package will be
+    # different.
+    # To resolve this, we append a PIPELINE_ID to change the name of the package
+
+    # TODO, duplication of the code in config/project/gitlab.rb should be removed.
     def release_version
       # timestamp is disabled in omnibus configuration
       Omnibus.load_configuration('omnibus.rb')
@@ -69,6 +77,7 @@ class Build
     def write_release_file
       contents = release_file_contents
       File.write('docker/RELEASE', contents)
+      contents
     end
 
     private
@@ -117,7 +126,7 @@ class Build
     def package_from_triggered_build
       project_id = ENV['CI_PROJECT_ID']
       pipeline_id = ENV['CI_PIPELINE_ID']
-      return unless project_id && pipeline_id
+      return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
       uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
       req = Net::HTTP::Get.new(uri)
