@@ -28,24 +28,6 @@ describe PackageRepository do
     end
   end
 
-  describe :repository_for_edition do
-    context 'when EE' do
-      before do
-        allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
-      end
-
-      it { expect(repo.repository_for_edition).to eq 'gitlab-ee' }
-    end
-
-    context 'when CE' do
-      before do
-        allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
-      end
-
-      it { expect(repo.repository_for_edition).to eq 'gitlab-ce' }
-    end
-  end
-
   describe :target do
     shared_examples 'with an override repository' do
       context 'with repository override' do
@@ -104,7 +86,7 @@ describe PackageRepository do
 
       context 'when EE' do
         before do
-          allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
+          allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
         end
 
         it 'prints gitlab-ee' do
