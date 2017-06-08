@@ -74,7 +74,7 @@ namespace :docker do
     def auth_and_push(tag)
       release_package = Build.package
       DockerOperations.authenticate
-      DockerOperations.push(release_package, "latest", docker_tag)
+      DockerOperations.push(release_package, "latest", tag)
     end
   end
 

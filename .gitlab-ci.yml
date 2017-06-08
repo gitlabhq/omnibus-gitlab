@@ -248,7 +248,7 @@ Docker branch:
   - echo $RELEASE_BUCKET
   - bundle exec rake docker:clean
   - bundle exec rake docker:build
-  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push ;fi
+  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
 

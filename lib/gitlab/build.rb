@@ -52,7 +52,7 @@ class Build
     end
 
     def docker_tag
-      if ENV['NIGHTLY'] && ENV['NIGHTLY'] == true
+      if ENV['NIGHTLY'] && ENV['NIGHTLY'] == 'true'
         'nightly'
       else
         release_version
@@ -103,14 +103,16 @@ class Build
       contents << "PACKAGECLOUD_REPO=#{repo.chomp}\n" if repo && !repo.empty?
       contents << "RELEASE_PACKAGE=#{release_package}\n"
       contents << "RELEASE_VERSION=#{package_filename}\n"
-      contents << "DOWNLOAD_URL=#{download_url}\n"
+      contents << "DOWNLOAD_URL=#{download_url}\n" if download_url
       contents << "TRIGGER_PRIVATE_TOKEN=#{token.chomp}\n" if token && !token.empty?
       contents.join
     end
 
     # Fetch the package from an S3 bucket
     def package_download_url
-      `find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|' -e 's|+|%2B|'`.chomp
+      release_bucket = ENV['RELEASE_BUCKET']
+      return unless release_bucket
+      `find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://#{release_bucket}.s3.amazonaws.com|' -e 's|+|%2B|'`.chomp
     end
 
     def package_from_triggered_build
