@@ -63,11 +63,11 @@ class AccountHelper
   end
 
   def registry_user
-    node['gitlab']['registry']['username']
+    node['registry']['username']
   end
 
   def registry_group
-    node['gitlab']['registry']['group']
+    node['registry']['group']
   end
 
   def prometheus_user

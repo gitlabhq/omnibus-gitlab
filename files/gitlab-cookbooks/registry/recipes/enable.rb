@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-registry_uid = node['gitlab']['registry']['uid']
-registry_gid = node['gitlab']['registry']['gid']
+registry_uid = node['registry']['uid']
+registry_gid = node['registry']['gid']
 
-working_dir = node['gitlab']['registry']['dir']
-log_directory = node['gitlab']['registry']['log_directory']
+working_dir = node['registry']['dir']
+log_directory = node['registry']['log_directory']
 
 directory "create #{working_dir}" do
   path working_dir
@@ -59,15 +59,15 @@ end
 
 key_file_path = node['gitlab']['gitlab-rails']['registry_key_path']
 file key_file_path do
-  content node['gitlab']['registry']['internal_key']
+  content node['registry']['internal_key']
   owner account_helper.gitlab_user
   group account_helper.gitlab_group
 end
 
 cert_file_path = File.join(working_dir, "gitlab-registry.crt")
-node.default['gitlab']['registry']['rootcertbundle'] = cert_file_path
+node.default['registry']['rootcertbundle'] = cert_file_path
 file cert_file_path do
-  content node['gitlab']['registry']['internal_certificate']
+  content node['registry']['internal_certificate']
   owner account_helper.registry_user
   group account_helper.registry_group
 end
@@ -75,7 +75,7 @@ end
 template "#{working_dir}/config.yml" do
   source "registry-config.yml.erb"
   owner account_helper.registry_user
-  variables node['gitlab']['registry'].to_hash.merge(node['gitlab']['gitlab-rails'].to_hash)
+  variables node['registry'].to_hash.merge(node['gitlab']['gitlab-rails'].to_hash)
   mode "0644"
   notifies :restart, "service[registry]"
 end
@@ -84,7 +84,7 @@ runit_service 'registry' do
   options({
     :log_directory => log_directory
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['registry'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
 
 file File.join(working_dir, "VERSION") do

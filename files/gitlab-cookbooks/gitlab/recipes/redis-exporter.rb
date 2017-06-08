@@ -31,7 +31,7 @@ runit_service 'redis-exporter' do
     log_directory: redis_exporter_log_dir,
     flags: runtime_flags
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['registry'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']

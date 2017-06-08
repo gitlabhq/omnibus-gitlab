@@ -87,7 +87,7 @@ module Registry
       return unless Gitlab['registry']['notifications']
 
       user_configuration = Gitlab['registry']
-      gitlab_configuration = Gitlab['node']['gitlab']['registry']
+      gitlab_configuration = Gitlab['node']['registry']
 
       # Use the registry defaults configured by the user but use the defaults from gitlab if they were not set
       user_configuration['default_notifications_timeout'] ||=  gitlab_configuration['default_notifications_timeout']

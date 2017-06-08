@@ -11,9 +11,9 @@ describe 'registry recipe' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
 
     it 'creates default set of directories' do
-      expect(chef_run.node['gitlab']['registry']['dir'])
+      expect(chef_run.node['registry']['dir'])
         .to eql('/var/opt/gitlab/registry')
-      expect(chef_run.node['gitlab']['registry']['log_directory'])
+      expect(chef_run.node['registry']['log_directory'])
         .to eql('/var/log/gitlab/registry')
       expect(chef_run.node['gitlab']['gitlab-rails']['registry_path'])
         .to eql('/var/opt/gitlab/gitlab-rails/shared/registry')
@@ -32,9 +32,9 @@ describe 'registry recipe' do
     end
 
     it 'creates default user and group' do
-      expect(chef_run.node['gitlab']['registry']['username'])
+      expect(chef_run.node['registry']['username'])
         .to eql('registry')
-      expect(chef_run.node['gitlab']['registry']['group'])
+      expect(chef_run.node['registry']['group'])
         .to eql('registry')
 
       expect(chef_run).to create_group('registry').with(
@@ -136,11 +136,11 @@ describe 'registry' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
 
     it 'sets default storage options' do
-      expect(chef_run.node['gitlab']['registry']['storage']['filesystem'])
+      expect(chef_run.node['registry']['storage']['filesystem'])
         .to eql('rootdirectory' => '/var/opt/gitlab/gitlab-rails/shared/registry')
-      expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+      expect(chef_run.node['registry']['storage']['cache'])
         .to eql('blobdescriptor' => 'inmemory')
-      expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+      expect(chef_run.node['registry']['storage']['delete'])
         .to eql('enabled' => true)
     end
 
@@ -156,24 +156,24 @@ describe 'registry' do
       end
 
       it 'uses custom storage instead of the default rootdirectory' do
-        expect(chef_run.node['gitlab']['registry']['storage'])
+        expect(chef_run.node['registry']['storage'])
           .to include(s3: { accesskey: 'awsaccesskey', secretkey: 'awssecretkey', bucketname: 'bucketname' })
-        expect(chef_run.node['gitlab']['registry']['storage'])
+        expect(chef_run.node['registry']['storage'])
           .not_to include('rootdirectory' => '/var/opt/gitlab/gitlab-rails/shared/registry')
       end
 
       it 'uses the default cache and delete settings if not overridden' do
-        expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+        expect(chef_run.node['registry']['storage']['cache'])
           .to eql('blobdescriptor' => 'inmemory')
-        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+        expect(chef_run.node['registry']['storage']['delete'])
           .to eql('enabled' => true)
       end
 
       it 'allows the cache and delete settings to be overridden' do
         stub_gitlab_rb(registry: { storage: { cache: 'somewhere-else', delete: { enabled: false } } })
-        expect(chef_run.node['gitlab']['registry']['storage']['cache'])
+        expect(chef_run.node['registry']['storage']['cache'])
           .to eql('somewhere-else')
-        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+        expect(chef_run.node['registry']['storage']['delete'])
           .to eql('enabled' => false)
       end
     end
@@ -182,7 +182,7 @@ describe 'registry' do
       before { stub_gitlab_rb(registry: { storage_delete_enabled: false }) }
 
       it 'sets the delete enabled field on the storage object' do
-        expect(chef_run.node['gitlab']['registry']['storage']['delete'])
+        expect(chef_run.node['registry']['storage']['delete'])
           .to eql('enabled' => false)
       end
     end

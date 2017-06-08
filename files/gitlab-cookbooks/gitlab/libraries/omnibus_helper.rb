@@ -20,7 +20,12 @@ class OmnibusHelper
   end
 
   def service_enabled?(service_name)
-    node['gitlab'][service_name]['enable']
+    # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
+    # being split to their own dedicated cookbooks, and attributes are being moved from
+    # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
+    # need to check both.
+    return node['gitlab'][service_name]['enable'] if node['gitlab'].key?(service_name)
+    node[service_name]['enable']
   end
 
   def service_up?(service_name)
