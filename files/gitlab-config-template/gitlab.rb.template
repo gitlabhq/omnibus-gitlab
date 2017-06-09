@@ -896,6 +896,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # manage_storage_directories['manage_etc'] = false
 
 ################################################################################
+## Runtime directory
+##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#runtime-directory
+################################################################################
+
+# runtime_dir '/run'
+
+################################################################################
 ## Git
 ##! Advanced setting for configuring git system settings for omnibus-gitlab
 ##! internal git
