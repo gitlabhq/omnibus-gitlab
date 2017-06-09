@@ -35,6 +35,7 @@ probes:
     opts:
       quantiles: true
 
+<% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
   # We can group multiple probes under a single endpoint by setting the `multiple` key to `true`, followed
   # by probe definitions as usual.
   database:
@@ -60,6 +61,7 @@ probes:
     vacuum_queries:
       class_name: Database::VacuumQueriesProber
       <<: *db_common
+<% end -%>
 
   process:
     methods:
