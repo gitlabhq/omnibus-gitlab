@@ -20,6 +20,10 @@ omnibus-gitlab repository.
 
 - Add default values to GitLab Geo roles 77e7bdfa
 
+9.2.5
+
+- Fix gitlab-ctl replicate-geo-database when run in a Docker container
+
 9.2.2
 
 - Fix bug where cron values are not set to nil and default to a set value
