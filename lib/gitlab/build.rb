@@ -59,7 +59,7 @@ class Build
     end
 
     def docker_tag
-      if ENV['NIGHTLY'] && ENV['NIGHTLY'] == 'true'
+      if ENV['NIGHTLY'] == 'true'
         'nightly'
       else
         release_version
@@ -100,10 +100,10 @@ class Build
       repo = ENV['PACKAGECLOUD_REPO'] # Target repository
       release_package = package # CE/EE
       package_filename = release_version
-      token = ENV['TRIGGER_PRIVATE_TOKEN'] # Token used for triggering
+      token = ENV['TRIGGER_PRIVATE_TOKEN'] # Token used for triggering a build
 
       download_url = if token && !token.empty?
-                       package_from_triggered_build
+                       triggered_build_package_url
                      else
                        package_download_url
                      end
@@ -123,11 +123,16 @@ class Build
       `find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://#{release_bucket}.s3.amazonaws.com|' -e 's|+|%2B|'`.chomp
     end
 
-    def package_from_triggered_build
+    def triggered_build_package_url
       project_id = ENV['CI_PROJECT_ID']
       pipeline_id = ENV['CI_PIPELINE_ID']
       return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
+      id = fetch_artifact_url(project_id, pipeline_id)
+      "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-16.04/gitlab.deb"
+    end
+
+    def fetch_artifact_url(project_id, pipeline_id)
       uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
       req = Net::HTTP::Get.new(uri)
       req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
@@ -135,8 +140,7 @@ class Build
       http.use_ssl = true
       res = http.request(req)
       output = JSON.parse(res.body)
-      id = output.find { |job| job['name'] == 'Trigger:package' }['id']
-      "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/file/pkg/ubuntu-16.04/gitlab.deb"
+      output.find { |job| job['name'] == 'Trigger:package' }['id']
     end
 
     def match_tag(tag)
