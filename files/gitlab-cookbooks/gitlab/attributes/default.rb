@@ -934,6 +934,9 @@ default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
 default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
 default['gitlab']['gitaly']['listen_addr'] = nil
 default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
+default['gitlab']['gitaly']['logging_format'] = nil
+default['gitlab']['gitaly']['sentry_dns'] = nil
+default['gitlab']['gitaly']['grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
 
 ####

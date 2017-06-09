@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Add libre2 to support the 're2' gem
 - Add a runtime directory for unicorn metrics
 - Add repmgr as an EE dependency
+- Add support for Gitaly configurations for logging and prometheus
 
 9.2.5
 

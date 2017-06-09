@@ -2,8 +2,16 @@ require 'chef_helper'
 
 describe 'gitlab::gitaly' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
-  config_path = '/var/opt/gitlab/gitaly/config.toml'
+  let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
+  let(:socket_path) { '/tmp/gitaly.socket' }
+  let(:listen_addr) { 'localhost:7777' }
+  let(:prometheus_listen_addr) { 'localhost:9000' }
+  let(:logging_format) { 'json' }
+  let(:sentry_dns) { 'https://my_key:my_secret@sentry.io/test_project' }
+  let(:grpc_latency_buckets) do
+    '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -23,9 +31,13 @@ describe 'gitlab::gitaly' do
       expect(chef_run).to render_file(config_path)
         .with_content("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
       expect(chef_run).not_to render_file(config_path)
-        .with_content("listen_addr = 'localhost:7777'")
+        .with_content("listen_addr = '#{listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
-        .with_content("prometheus_listen_addr = 'localhost:9000'")
+        .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dns = '#{sentry_dns}'})
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(grpc_latency_buckets)}})
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -38,20 +50,27 @@ describe 'gitlab::gitaly' do
     before do
       stub_gitlab_rb(
         gitaly: {
-          socket_path: '/tmp/gitaly.socket',
-          listen_addr: 'localhost:7777',
-          prometheus_listen_addr: 'localhost:9000'
+          socket_path: socket_path,
+          listen_addr: listen_addr,
+          prometheus_listen_addr: prometheus_listen_addr,
+          logging_format: logging_format,
+          sentry_dns: sentry_dns,
+          grpc_latency_buckets: grpc_latency_buckets,
         }
       )
     end
 
     it 'populates gitaly config.toml with custom values' do
       expect(chef_run).to render_file(config_path)
-        .with_content("socket_path = '/tmp/gitaly.socket'")
+        .with_content("socket_path = '#{socket_path}'")
       expect(chef_run).to render_file(config_path)
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dns = '#{sentry_dns}'})
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(grpc_latency_buckets)}})
     end
 
     context 'when using gitaly storage configuration' do
