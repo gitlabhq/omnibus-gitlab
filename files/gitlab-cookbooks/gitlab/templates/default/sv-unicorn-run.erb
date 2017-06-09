@@ -3,6 +3,16 @@
 # Let runit capture all script error messages
 exec 2>&1
 
+<% if @options[:metrics_dir].nil? -%>
+export prometheus_run_dir=''
+<% else -%>
+# Setup run directory.
+mkdir -p <%= @options[:metrics_dir] %>
+rm <%= File.join(@options[:metrics_dir], '*.db') %> 2> /dev/null
+chmod 0600 <%= @options[:metrics_dir] %>
+chown <%= @options[:user] %> <%= @options[:metrics_dir] %>
+export prometheus_run_dir='<%= @options[:metrics_dir] %>'
+<% end -%>
 <%= render("mount_point_check.erb") %>
 
 exec chpst -P -u <%= @options[:user] %> \
@@ -12,4 +22,5 @@ exec chpst -P -u <%= @options[:user] %> \
     user=<%= @options[:user] %> \
     environment=<%= node['gitlab'][@options[:rails_app]]['environment'] %> \
     unicorn_rb=<%= @options[:unicorn_rb] %> \
+    prometheus_multiproc_dir="${prometheus_run_dir}" \
     /opt/gitlab/embedded/bin/gitlab-unicorn-wrapper

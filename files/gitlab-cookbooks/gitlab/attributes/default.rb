@@ -33,6 +33,9 @@ default['gitlab']['manage-accounts']['enable'] = true
 default['gitlab']['manage-storage-directories']['enable'] = true
 default['gitlab']['manage-storage-directories']['manage_etc'] = true
 
+# A tmpfs mount point directory for runtime files, actual default is located in libraries/gitlab_rails.rb.
+default['gitlab']['runtime-dir'] = nil
+
 ####
 # The Git User that services run as
 ####
