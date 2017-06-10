@@ -247,8 +247,6 @@ Docker master:
   - make do_docker_master
   only:
     - branches@gitlab/omnibus-gitlab
-  dependencies:
-  - Ubuntu 16.04 branch
 
 Docker:
   stage: images
@@ -264,8 +262,6 @@ Docker:
   - make do_docker_release
   only:
     - tags@gitlab/omnibus-gitlab
-  dependencies:
-  - Ubuntu 16.04
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
@@ -293,8 +289,6 @@ Trigger:docker:
     - make docker_trigger_build_and_push
   only:
     - triggers@gitlab-org/omnibus-gitlab
-  dependencies:
-  - Trigger:package
 
 Trigger:omnibus-package:
   stage: trigger-package
