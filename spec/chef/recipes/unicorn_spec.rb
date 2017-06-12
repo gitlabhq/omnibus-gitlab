@@ -22,7 +22,7 @@ describe 'gitlab::unicorn' do
           expect(content).not_to match(/export prometheus_run_dir=\'\'/)
           expect(content).to match(/mkdir -p \/run\/gitlab\/unicorn/)
           expect(content).to match(/rm \/run\/gitlab\/unicorn/)
-          expect(content).to match(/chmod 0600 \/run\/gitlab\/unicorn/)
+          expect(content).to match(/chmod 0700 \/run\/gitlab\/unicorn/)
           expect(content).to match(/chown git \/run\/gitlab\/unicorn/)
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/unicorn\'/)
         }
