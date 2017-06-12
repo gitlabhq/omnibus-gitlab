@@ -957,3 +957,9 @@ default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}
 default['gitlab']['gitaly']['listen_addr'] = nil
 default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
 default['gitlab']['gitaly']['storage'] = []
+
+####
+# Geo (EE-only)
+####
+default['gitlab']['gitlab-rails']['geo_primary_role_enabled'] = false
+default['gitlab']['gitlab-rails']['geo_secondary_role_enabled'] = false
