@@ -99,68 +99,6 @@ pg_stat_user_tables:
         usage: "COUNTER"
         description: "Number of times this table has been analyzed by the autovacuum daemon"
 
-pg_stat_statements:
-  query: |
-    SELECT
-      pg_authid.rolname as user,
-      pg_database.datname as database,
-      pg_stat_statements.queryid,
-      left(pg_stat_statements.query,250) as query,
-      pg_stat_statements.calls,
-      pg_stat_statements.total_time as time_milliseconds,
-      pg_stat_statements.rows,
-      pg_stat_statements.shared_blks_hit,
-      pg_stat_statements.shared_blks_read,
-      pg_stat_statements.shared_blks_dirtied,
-      pg_stat_statements.shared_blks_written,
-      pg_stat_statements.temp_blks_read,
-      pg_stat_statements.temp_blks_written
-      FROM pg_stat_statements
-      JOIN pg_authid
-        ON pg_authid.oid = pg_stat_statements.userid
-      JOIN pg_database
-        ON pg_database.oid = pg_stat_statements.dbid
-  metrics:
-    - user:
-        usage: "LABEL"
-        description: "The user who executed the statement"
-    - dbid:
-        usage: "LABEL"
-        description: "The database in which the statement was executed"
-    - queryid:
-        usage: "LABEL"
-        description: "Internal hash code, computed from the statement's parse tree"
-    - query:
-        usage: "LABEL"
-        description: "Text of a representative statement (first 250 characters)"
-    - calls:
-        usage: "COUNTER"
-        description: "Number of times executed"
-    - time_milliseconds:
-        usage: "COUNTER"
-        description: "Total time spent in the statement, in milliseconds"
-    - rows:
-        usage: "COUNTER"
-        description: "Total number of rows retrieved or affected by the statement"
-    - shared_blks_hit:
-        usage: "COUNTER"
-        description: "Total number of shared block cache hits by the statement"
-    - shared_blks_read:
-        usage: "COUNTER"
-        description: "Total number of shared blocks read by the statement"
-    - shared_blks_dirtied:
-        usage: "COUNTER"
-        description: "Total number of shared blocks dirtied by the statement"
-    - shared_blks_written:
-        usage: "COUNTER"
-        description: "Total number of shared blocks written by the statement"
-    - temp_blks_read:
-        usage: "COUNTER"
-        description: "Total number of temp blocks read by the statement"
-    - temp_blks_written:
-        usage: "COUNTER"
-        description: "Total number of temp blocks written by the statement"
-
 pg_blocked:
   query: |
     SELECT
