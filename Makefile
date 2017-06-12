@@ -89,10 +89,7 @@ aws: do_aws_not_latest
 endif
 
 ## QA related stuff
-qa_docker_cleanup:
-	-bundle exec rake docker:clean_qa
-
-qa_docker_build: qa_docker_cleanup
+qa_docker_build:
 	bundle exec rake docker:build_qa
 
 qa_docker_push:

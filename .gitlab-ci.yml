@@ -245,7 +245,6 @@ Docker branch:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
   - export RELEASE_BUCKET=omnibus-builds
-  - bundle exec rake docker:clean
   - bundle exec rake docker:build
   - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
@@ -262,7 +261,7 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - bundle exec rake docker:clean
+  - export RELEASE_BUCKET=downloads-packages
   - bundle exec rake docker:build
   - bundle exec rake docker:push:stable
   - bundle exec rake docker:push:rc

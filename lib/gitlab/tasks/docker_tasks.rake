@@ -30,21 +30,6 @@ namespace :docker do
     FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
   end
 
-  desc "Clean Docker stuff"
-  task :clean do
-    release_package = Build.package
-    DockerOperations.remove_containers
-    DockerOperations.remove_dangling_images
-    DockerOperations.remove_existing_images(release_package)
-  end
-
-  desc "Clean QA Docker stuff"
-  task :clean_qa do
-    DockerOperations.remove_containers
-    DockerOperations.remove_dangling_images
-    DockerOperations.remove_existing_images("gitlab-qa")
-  end
-
   desc "Push Docker Image to Registry"
   namespace :push do
     task :stable do
