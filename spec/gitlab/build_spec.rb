@@ -125,7 +125,7 @@ describe Build do
         stub_env_var('CI_PROJECT_ID', '1')
         stub_env_var('CI_PIPELINE_ID', '2')
         allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
-        allow(described_class).to receive(:fetch_artifact_url).with('1','2').and_return('1')
+        allow(described_class).to receive(:fetch_artifact_url).with('1', '2').and_return('1')
       end
 
       describe 'for CE' do
@@ -151,7 +151,7 @@ describe Build do
       end
 
       describe 'with regular build' do
-        let(:s3_download_link) { 'https://release-bucket.s3.amazonaws.com/ubuntu-xenial/gitlab-ce_12.121.12-ce.1_amd64.deb' }
+        let(:s3_download_link) { 'https://release-bucket.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_12.121.12-ce.1_amd64.deb' }
 
         let(:release_file) do
           [
@@ -168,7 +168,6 @@ describe Build do
           stub_env_var('RELEASE_BUCKET', 'release-bucket')
           allow(described_class).to receive(:package).and_return('gitlab-ee')
           allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
-          allow(described_class).to receive(:`).with("find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://release-bucket.s3.amazonaws.com|' -e 's|+|%2B|'").and_return(s3_download_link)
         end
 
         it 'returns build version and iteration with env variable' do
@@ -179,7 +178,7 @@ describe Build do
     end
   end
 
-  # Specs for latest_tag and for latest_stable_tag are really usefull since we
+  # Specs for latest_tag and for latest_stable_tag are really useful since we
   # are stubbing out shell out to git.
   # However, they are showing what we expect to see.
   describe 'latest_tag' do

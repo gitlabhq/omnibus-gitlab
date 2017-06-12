@@ -120,7 +120,9 @@ class Build
     def package_download_url
       release_bucket = ENV['RELEASE_BUCKET']
       return unless release_bucket
-      `find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e 's|pkg|https://#{release_bucket}.s3.amazonaws.com|' -e 's|+|%2B|'`.chomp
+
+      package_filename_url_safe = release_version.gsub("+", "%2B")
+      "https://#{release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{package}_#{package_filename_url_safe}_amd64.deb"
     end
 
     def triggered_build_package_url
