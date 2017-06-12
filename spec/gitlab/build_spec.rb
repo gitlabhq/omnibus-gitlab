@@ -113,7 +113,7 @@ describe Build do
         [
           "PACKAGECLOUD_REPO=download-package",
           "RELEASE_VERSION=12.121.12-ce.1",
-          "DOWNLOAD_URL=https://download-package.s3.com/builds/1/artifacts/file/pkg/ubuntu-16.04/gitlab.deb",
+          "DOWNLOAD_URL=https://gitlab.example.com/project/repository/builds/1/artifacts/raw/pkg/ubuntu-16.04/gitlab.deb",
           "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
         ]
       end
@@ -121,10 +121,11 @@ describe Build do
       before do
         stub_env_var('PACKAGECLOUD_REPO', 'download-package')
         stub_env_var('TRIGGER_PRIVATE_TOKEN', 'NOT-PRIVATE-TOKEN')
-        stub_env_var('CI_PROJECT_ID', '')
-        stub_env_var('CI_PIPELINE_ID', '')
+        stub_env_var('CI_PROJECT_URL', 'https://gitlab.example.com/project/repository')
+        stub_env_var('CI_PROJECT_ID', '1')
+        stub_env_var('CI_PIPELINE_ID', '2')
         allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
-        allow(described_class).to receive(:package_from_triggered_build).and_return('https://download-package.s3.com/builds/1/artifacts/file/pkg/ubuntu-16.04/gitlab.deb')
+        allow(described_class).to receive(:fetch_artifact_url).with('1','2').and_return('1')
       end
 
       describe 'for CE' do
