@@ -1,5 +1,6 @@
 require 'docker'
 require_relative '../docker_operations.rb'
+require_relative '../build.rb'
 
 # To use PROCESS_ID instead of $$ to randomize the target directory for cloning
 # GitLab repository. Rubocop requirement to increase readability.

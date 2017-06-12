@@ -1,3 +1,8 @@
+require_relative "build_iteration.rb"
+require 'omnibus'
+require 'net/http'
+require 'json'
+
 class Build
   class << self
     include FileUtils
@@ -83,6 +88,65 @@ class Build
       else
         'info'
       end
+    end
+
+    def tag_match_pattern
+      return '*[+.]ee.*' if is_ee?
+
+      '*[+.]ce.*'
+    end
+
+    def release_file_contents
+      repo = ENV['PACKAGECLOUD_REPO'] # Target repository
+      release_package = package # CE/EE
+      package_filename = release_version
+      token = ENV['TRIGGER_PRIVATE_TOKEN'] # Token used for triggering a build
+
+      download_url = if token && !token.empty?
+                       triggered_build_package_url
+                     else
+                       package_download_url
+                     end
+      contents = []
+      contents << "PACKAGECLOUD_REPO=#{repo.chomp}\n" if repo && !repo.empty?
+      contents << "RELEASE_PACKAGE=#{release_package}\n"
+      contents << "RELEASE_VERSION=#{package_filename}\n"
+      contents << "DOWNLOAD_URL=#{download_url}\n" if download_url
+      contents << "TRIGGER_PRIVATE_TOKEN=#{token.chomp}\n" if token && !token.empty?
+      contents.join
+    end
+
+    # Fetch the package from an S3 bucket
+    def package_download_url
+      release_bucket = ENV['RELEASE_BUCKET']
+      return unless release_bucket
+
+      package_filename_url_safe = release_version.gsub("+", "%2B")
+      "https://#{release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{package}_#{package_filename_url_safe}_amd64.deb"
+    end
+
+    def triggered_build_package_url
+      project_id = ENV['CI_PROJECT_ID']
+      pipeline_id = ENV['CI_PIPELINE_ID']
+      return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
+
+      id = fetch_artifact_url(project_id, pipeline_id)
+      "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-16.04/gitlab.deb"
+    end
+
+    def fetch_artifact_url(project_id, pipeline_id)
+      uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
+      req = Net::HTTP::Get.new(uri)
+      req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
+      http = Net::HTTP.new(uri.hostname, uri.port)
+      http.use_ssl = true
+      res = http.request(req)
+      output = JSON.parse(res.body)
+      output.find { |job| job['name'] == 'Trigger:package' }['id']
+    end
+
+    def match_tag(tag)
+      system("git describe --exact-match --match #{tag}")
     end
   end
 end

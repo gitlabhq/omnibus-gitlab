@@ -1,4 +1,5 @@
 require_relative '../../lib/gitlab/build.rb'
+require 'chef_helper'
 
 describe Build do
   describe 'cmd' do
@@ -244,10 +245,125 @@ describe Build do
     end
   end
 
-  describe 'with different log level' do
-    it 'runs build command with custom log level' do
-      allow(ENV).to receive(:[]).with('BUILD_LOG_LEVEL').and_return('debug')
-      expect(described_class.cmd('gitlab')).to eq 'bundle exec omnibus build gitlab --log-level debug'
+  describe 'write_release_file' do
+    describe 'with triggered build' do
+      let(:release_file) do
+        [
+          "PACKAGECLOUD_REPO=download-package",
+          "RELEASE_VERSION=12.121.12-ce.1",
+          "DOWNLOAD_URL=https://gitlab.example.com/project/repository/builds/1/artifacts/raw/pkg/ubuntu-16.04/gitlab.deb",
+          "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
+        ]
+      end
+
+      before do
+        stub_env_var('PACKAGECLOUD_REPO', 'download-package')
+        stub_env_var('TRIGGER_PRIVATE_TOKEN', 'NOT-PRIVATE-TOKEN')
+        stub_env_var('CI_PROJECT_URL', 'https://gitlab.example.com/project/repository')
+        stub_env_var('CI_PROJECT_ID', '1')
+        stub_env_var('CI_PIPELINE_ID', '2')
+        allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
+        allow(described_class).to receive(:fetch_artifact_url).with('1', '2').and_return('1')
+      end
+
+      describe 'for CE' do
+        before do
+          allow(described_class).to receive(:package).and_return('gitlab-ce')
+        end
+
+        it 'returns build version and iteration with env variable' do
+          release_file_content = release_file.insert(1, 'RELEASE_PACKAGE=gitlab-ce').join("\n")
+          expect(described_class.write_release_file).to eq(release_file_content)
+        end
+      end
+
+      describe 'for EE' do
+        before do
+          allow(described_class).to receive(:package).and_return('gitlab-ee')
+        end
+
+        it 'returns build version and iteration with env variable' do
+          release_file_content = release_file.insert(1, 'RELEASE_PACKAGE=gitlab-ee').join("\n")
+          expect(described_class.write_release_file).to eq(release_file_content)
+        end
+      end
+
+      describe 'with regular build' do
+        let(:s3_download_link) { 'https://release-bucket.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_12.121.12-ce.1_amd64.deb' }
+
+        let(:release_file) do
+          [
+            "RELEASE_VERSION=12.121.12-ce.1",
+            "DOWNLOAD_URL=#{s3_download_link}\n",
+          ]
+        end
+
+        before do
+          stub_env_var('PACKAGECLOUD_REPO', '')
+          stub_env_var('TRIGGER_PRIVATE_TOKEN', '')
+          stub_env_var('CI_PROJECT_ID', '')
+          stub_env_var('CI_PIPELINE_ID', '')
+          stub_env_var('RELEASE_BUCKET', 'release-bucket')
+          allow(described_class).to receive(:package).and_return('gitlab-ee')
+          allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
+        end
+
+        it 'returns build version and iteration with env variable' do
+          release_file_content = release_file.insert(0, 'RELEASE_PACKAGE=gitlab-ee').join("\n")
+          expect(described_class.write_release_file).to eq(release_file_content)
+        end
+      end
+    end
+  end
+
+  # Specs for latest_tag and for latest_stable_tag are really useful since we
+  # are stubbing out shell out to git.
+  # However, they are showing what we expect to see.
+  describe 'latest_tag' do
+    describe 'for CE' do
+      before do
+        stub_env_var('ee', '')
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ce.0')
+      end
+
+      it 'returns the version of correct edition' do
+        expect(described_class.latest_tag).to eq('12.121.12+rc7.ce.0')
+      end
+    end
+
+    describe 'for EE' do
+      before do
+        stub_env_var('ee', 'false')
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
+      end
+
+      it 'returns the version of correct edition' do
+        expect(described_class.latest_tag).to eq('12.121.12+rc7.ee.0')
+      end
+    end
+  end
+
+  describe 'latest_stable_tag' do
+    describe 'for CE' do
+      before do
+        stub_env_var('ee', '')
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ce.0')
+      end
+
+      it 'returns the version of correct edition' do
+        expect(described_class.latest_stable_tag).to eq('12.121.12+ce.0')
+      end
+    end
+
+    describe 'for EE' do
+      before do
+        stub_env_var('ee', 'true')
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ee.0')
+      end
+
+      it 'returns the version of correct edition' do
+        expect(described_class.latest_stable_tag).to eq('12.121.12+ee.0')
+      end
     end
   end
 end

@@ -234,7 +234,7 @@ update-knapsack:
       - pkg/
   dependencies: []
 
-Docker master:
+Docker branch:
   stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
