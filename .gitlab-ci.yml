@@ -97,7 +97,7 @@ Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
-OpenSUSE 42.1 knapsack: *prepare_knapsack
+OpenSUSE 42.2 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 
@@ -522,33 +522,33 @@ Centos 7 specs 2 3:
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
-OpenSUSE 42.1 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
+OpenSUSE 42.2 specs 0 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
   cache:
     key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.1 knapsack
-OpenSUSE 42.1 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
+  - OpenSUSE 42.2 knapsack
+OpenSUSE 42.2 specs 1 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
   cache:
     key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.1 knapsack
-OpenSUSE 42.1 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
+  - OpenSUSE 42.2 knapsack
+OpenSUSE 42.2 specs 2 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
   cache:
     key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.1 knapsack
+  - OpenSUSE 42.2 knapsack
 
 # dev.gitlab.org only
 Ubuntu 14.04:
@@ -599,10 +599,10 @@ Centos 7:
     - cache
     - gems
   <<: *tag_build
-OpenSUSE 42.1:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.5"
+OpenSUSE 42.2:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "OpenSUSE 42.1 branch"
+    key: "OpenSUSE 42.2 branch"
     paths:
     - cache
     - gems
@@ -670,8 +670,8 @@ CentOS 7 branch:
     - cache
     - gems
   <<: *branch_build
-OpenSUSE 42.1 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.5"
+OpenSUSE 42.2 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
