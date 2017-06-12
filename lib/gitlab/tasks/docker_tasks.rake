@@ -18,14 +18,13 @@ namespace :docker do
     task :qa do
       repo = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
 
-      # PROCESS_ID is appended to ensure randomness in the directory name
-      # to avoid possible conflicts that may arise if the clone's destination
-      # directory already exists.
-      system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
-      location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
-      DockerOperations.build(location, "gitlab-qa", "#{edition}-latest")
-      FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
-    end
+    # PROCESS_ID is appended to ensure randomness in the directory name
+    # to avoid possible conflicts that may arise if the clone's destination
+    # directory already exists.
+    system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
+    location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
+    DockerOperations.build(location, "gitlab-qa", "#{type}-latest")
+    FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
   end
 
   desc "Push Docker Image to Registry"
