@@ -175,6 +175,36 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'GitLab Geo settings' do
+      context 'by default' do
+        it 'geo_primary_role is disabled' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_primary_role:\s+enabled: false})
+        end
+
+        it 'geo_secondary_role is disabled' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_secondary_role:\s+enabled: false})
+        end
+      end
+
+      context 'when geo_primary_role is enabled' do
+        it 'enables geo_primary_role in config' do
+          stub_gitlab_rb(geo_primary_role: { enable: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_primary_role:\s+enabled: true})
+        end
+      end
+
+      context 'when geo_secondary_role is enabled' do
+        it 'enables geo_secondary_role in config' do
+          stub_gitlab_rb(geo_secondary_role: { enable: true }, geo_postgresql: { data_dir: 'foo' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_secondary_role:\s+enabled: true})
+        end
+      end
+
       context 'when backfill worker is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
