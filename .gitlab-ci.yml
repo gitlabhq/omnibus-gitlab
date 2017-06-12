@@ -233,7 +233,7 @@ update-knapsack:
       - pkg/
   dependencies: []
 
-Docker master:
+Docker branch:
   stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
@@ -244,7 +244,10 @@ Docker master:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_master
+  - export RELEASE_BUCKET=omnibus-builds
+  - bundle exec rake docker:clean
+  - bundle exec rake docker:build
+  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
 
@@ -259,7 +262,12 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_release
+  - bundle exec rake docker:clean
+  - bundle exec rake docker:build
+  - bundle exec rake docker:push:stable
+  - bundle exec rake docker:push:rc
+  - bundle exec rake docker:push:latest
+
   only:
     - tags@gitlab/omnibus-gitlab
 

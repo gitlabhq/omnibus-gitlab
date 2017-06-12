@@ -1,24 +1,10 @@
-PROJECT=gitlab
 RELEASE_BUCKET=downloads-packages
 RELEASE_BUCKET_REGION=eu-west-1
 PLATFORM_DIR:=$(shell bundle exec support/ohai-helper platform-dir)
 PACKAGECLOUD_USER=gitlab
 PACKAGECLOUD_OS:=$(shell bundle exec support/ohai-helper repo-string)
-ifeq ($(shell support/is_gitlab_ee.sh; echo $$?), 0)
-RELEASE_PACKAGE=gitlab-ee
-TAG_MATCH='*[+.]ee.*'
-else
-RELEASE_PACKAGE=gitlab-ce
-TAG_MATCH='*[+.]ce.*'
-endif
-RELEASE_VERSION?=$(shell bundle exec support/release_version.rb)
-LATEST_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | head -1)
-LATEST_STABLE_TAG:=$(shell git -c versionsort.prereleaseSuffix=rc tag -l ${TAG_MATCH} --sort=-v:refname | awk '!/rc/' | head -1)
-ifdef NIGHTLY
-DOCKER_TAG:=nightly
-else
-DOCKER_TAG:=$(RELEASE_VERSION)
-endif
+LATEST_STABLE_TAG:=$(shell bundle exec rake build:docker:latest_stable_tag) # TODO, remove when aws and qa are in the rake task
+LATEST_TAG:=$(shell bundle exec rake build:docker:latest_tag) # TODO, remove when qa is in the rake task
 
 populate_cache:
 	bin/omnibus cache populate
@@ -71,58 +57,15 @@ move_to_platform_dir:
 	mkdir pkg
 	mv ${PLATFORM_DIR} pkg/
 
-docker_cleanup:
-	-bundle exec rake docker:clean[$(RELEASE_VERSION)]
-
-docker_build: docker_cleanup
-	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
-	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell echo "https://${RELEASE_BUCKET}.s3.amazonaws.com/ubuntu-xenial/${RELEASE_PACKAGE}_${RELEASE_VERSION}_amd64.deb" | sed -e "s|+|%2B|") >> docker/RELEASE
-	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
-
-docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push[$(RELEASE_PACKAGE)]
-
-docker_push_rc:
-	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push[$(RELEASE_PACKAGE)]
-
-docker_push_latest:
-	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push[$(RELEASE_PACKAGE)]
-
-do_docker_master: RELEASE_BUCKET=omnibus-builds
-do_docker_master: docker_build
-ifdef NIGHTLY
-do_docker_master: RELEASE_BUCKET=omnibus-builds
-do_docker_master: docker_build docker_push
-endif
-
-do_docker_release: no_changes on_tag docker_build docker_push
-# The rc should always be the latest tag, stable or upcoming release
-ifeq ($(shell git describe --exact-match --match ${LATEST_TAG} > /dev/null 2>&1; echo $$?), 0)
-do_docker_release: docker_push_rc
-endif
-# The lastest tag is alwasy the latest stable
-ifeq ($(shell git describe --exact-match --match ${LATEST_STABLE_TAG} > /dev/null 2>&1; echo $$?), 0)
-do_docker_release: docker_push_latest
-endif
-
 docker_trigger_build_and_push:
-	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
-	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell bundle exec support/triggered_package.rb) >> docker/RELEASE
-	@echo TRIGGER_PRIVATE_TOKEN=$(TRIGGER_PRIVATE_TOKEN) >> docker/RELEASE
-	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
+	bundle exec rake docker:build
 	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
 	# variable, which will be used to tag the final Docker image.
 	# So, if IMAGE_TAG variable is empty, it means the trigger happened from
 	# either CE or EE repository. In that case, we can use the GITLAB_VERSION
 	# variable as IMAGE_TAG.
 	if [ -z "$(IMAGE_TAG)" ] ; then export IMAGE_TAG=$(GITLAB_VERSION) ;  fi
-	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push_triggered[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push_triggered
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
@@ -147,21 +90,21 @@ endif
 
 ## QA related stuff
 qa_docker_cleanup:
-	-bundle exec rake docker:clean_qa[$(RELEASE_VERSION)]
+	-bundle exec rake docker:clean_qa
 
 qa_docker_build: qa_docker_cleanup
-	bundle exec rake docker:build_qa[$(RELEASE_PACKAGE)]
+	bundle exec rake docker:build_qa
 
 qa_docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	bundle exec rake docker:push_qa
 
 qa_docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=rc bundle exec rake docker:push_qa
 
 qa_docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=latest bundle exec rake docker:push_qa
 
 do_qa_docker_master: qa_docker_build
 ifdef NIGHTLY
