@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 source /etc/lsb-release
 source /RELEASE
 
