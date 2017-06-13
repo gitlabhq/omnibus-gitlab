@@ -67,7 +67,7 @@ gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
                          false
                        end
 
-gitlab_registry_enabled = if node['gitlab']['registry']['enable']
+gitlab_registry_enabled = if node['registry']['enable']
                          node['gitlab']['registry-nginx']['enable']
                        else
                          false
@@ -165,7 +165,7 @@ template gitlab_registry_http_conf do
     {
       registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
       registry_host: node['gitlab']['gitlab-rails']['registry_host'],
-      registry_http_addr: node['gitlab']['registry']['registry_http_addr']
+      registry_http_addr: node['registry']['registry_http_addr']
     }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")

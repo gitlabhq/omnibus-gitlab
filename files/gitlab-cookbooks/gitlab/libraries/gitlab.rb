@@ -213,7 +213,6 @@ module Gitlab
         "mattermost_external_url",
         "pages_external_url",
         "gitlab_pages",
-        "registry",
         "gitaly",
         "node_exporter",
         "prometheus",
@@ -224,8 +223,15 @@ module Gitlab
         'pgbouncer',
         "sentinel"
       ].each do |key|
-        rkey = key.gsub('_', '-')
+        rkey = key.tr('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
+      end
+
+      %w(
+        registry
+      ).each do |key|
+        rkey = key.tr('_', '-')
+        results[rkey] = Gitlab[key]
       end
 
       results['roles'] = {}

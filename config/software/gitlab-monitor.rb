@@ -19,6 +19,8 @@ version = Gitlab::Version.new('gitlab-monitor', '1.6.0')
 default_version version.print
 
 name 'gitlab-monitor'
+license 'MIT'
+license_file 'LICENSE'
 
 dependency 'ruby'
 dependency 'rubygems'

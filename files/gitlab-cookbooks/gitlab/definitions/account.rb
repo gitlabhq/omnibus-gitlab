@@ -16,7 +16,6 @@
 #
 
 define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil, gid: nil, shell: nil, home: nil, system: true, append_to_group: false, group_members: [], user_supports: {}, manage: nil do
-
   manage = params[:manage]
 
   groupname = params[:groupname]

@@ -10,11 +10,11 @@ require 'yaml'
 
 module GitlabYamlConverter
   class Flattener
-    def initialize(separator='_')
+    def initialize(separator = '_')
       @separator = separator
     end
 
-    def flatten(hash, prefix=nil)
+    def flatten(hash, prefix = nil)
       Enumerator.new do |yielder|
         hash.each do |key, value|
           raise "Bad key: #{key.inspect}" unless key.is_a?(String)
@@ -39,6 +39,4 @@ module GitlabYamlConverter
   end
 end
 
-if $0 == __FILE__
-  GitlabYamlConverter.convert(YAML.load(ARGF.read))
-end
+GitlabYamlConverter.convert(YAML.safe_load(ARGF.read)) if $PROGRAM_NAME == __FILE__

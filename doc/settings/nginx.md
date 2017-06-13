@@ -437,6 +437,9 @@ First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
 Nginx and Unicorn:
 
 ```ruby
+# Define the external url
+external_url 'http://git.example.com'
+
 # Disable the built-in nginx
 nginx['enable'] = false
 
@@ -444,7 +447,10 @@ nginx['enable'] = false
 unicorn['enable'] = false
 
 # Set the internal API URL
-gitlab_rails['internal_api_url'] = 'http://git.yourdomain.com'
+gitlab_rails['internal_api_url'] = 'http://git.example.com'
+
+# Define the web server process user (ubuntu/nginx)
+web_server['external_users'] = ['www-data']
 ```
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
@@ -573,6 +579,14 @@ server {
   error_page 502 /502.html;
 }
 ```
+Don't forget to update 'git.example.com' in the above example to be your server url.
+
+**Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in /etc/nginx/nginx.conf, to do so simply uncomment:
+
+```
+# include /etc/nginx/passenger.conf;
+```
+then, 'sudo service nginx reload'
 
 ### Enabling/Disabling nginx_status
 

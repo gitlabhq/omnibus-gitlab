@@ -47,7 +47,7 @@ define :sysctl, value: nil do
     file "delete #{conf} #{name}" do
       path conf
       action :delete
-      only_if { File.exists?(conf) }
+      only_if { File.exist?(conf) }
     end
   end
 
