@@ -106,17 +106,10 @@
       "spec": {
         "tags": [
           {
-<<<<<<< HEAD
-            "name": "gitlab-9.2.4",
-            "from": {
-              "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:9.2.4-ce.0"
-=======
             "name": "gitlab-9.2.5",
             "from": {
               "kind": "DockerImage",
               "name": "gitlab/gitlab-ce:9.2.5-ce.0"
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
             }
           }
         ]
@@ -178,11 +171,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-<<<<<<< HEAD
-                "name": "${APPLICATION_NAME}:gitlab-9.2.4"
-=======
                 "name": "${APPLICATION_NAME}:gitlab-9.2.5"
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
               }
             }
           }

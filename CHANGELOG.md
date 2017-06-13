@@ -3,8 +3,6 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-<<<<<<< HEAD
-=======
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
@@ -22,7 +20,6 @@ omnibus-gitlab repository.
 
 - Add default values to GitLab Geo roles 77e7bdfa
 
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 9.2.2
 
 - Fix bug where cron values are not set to nil and default to a set value
@@ -47,10 +44,6 @@ omnibus-gitlab repository.
 - Postgresql configuration changle will now reload Postgresql instead of restart
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
-<<<<<<< HEAD
-- Compile python with libedit
-=======
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
 - Compile python with libedit

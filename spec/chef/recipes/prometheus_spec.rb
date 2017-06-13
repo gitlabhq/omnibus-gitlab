@@ -52,18 +52,6 @@ prometheus_yml_output = <<-PROMYML
     relabel_configs:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
-<<<<<<< HEAD
-    - source_labels:
-      - __address__
-      target_label: __address__
-      regex: "([^:;]+):([0-9]+)"
-      replacement: "${1}:10255"
-    - source_labels:
-      - __scheme__
-      target_label: __scheme__
-      regex: https
-      replacement: http
-=======
     - target_label: __address__
       replacement: kubernetes.default.svc:443
     - source_labels:
@@ -71,7 +59,6 @@ prometheus_yml_output = <<-PROMYML
       regex: "(.+)"
       target_label: __metrics_path__
       replacement: "/api/v1/nodes/${1}/proxy/metrics"
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
     metric_relabel_configs:
     - source_labels:
       - pod_name

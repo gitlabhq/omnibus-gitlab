@@ -68,8 +68,6 @@ describe OmnibusHelper do
       end
     end
   end
-<<<<<<< HEAD
-=======
 
   describe '#service_enabled?' do
     context 'services are enabled' do
@@ -98,5 +96,4 @@ describe OmnibusHelper do
       end
     end
   end
->>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 end
