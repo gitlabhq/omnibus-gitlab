@@ -62,6 +62,8 @@ def os_platform_version
       version = 'wheezy'
     when /^8\./
       version = 'jessie'
+    when /^9\./
+      version = 'stretch'
     end
   when 'centos'
     case ohai['platform_version']
