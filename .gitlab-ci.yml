@@ -245,7 +245,7 @@ Docker branch:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
   - export RELEASE_BUCKET=omnibus-builds
-  - bundle exec rake docker:build
+  - bundle exec rake docker:build:image
   - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
@@ -262,7 +262,7 @@ Docker:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
   - export RELEASE_BUCKET=downloads-packages
-  - bundle exec rake docker:build
+  - bundle exec rake docker:build:image
   - bundle exec rake docker:push:stable
   - bundle exec rake docker:push:rc
   - bundle exec rake docker:push:latest
