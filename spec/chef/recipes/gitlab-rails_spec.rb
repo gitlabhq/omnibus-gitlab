@@ -174,57 +174,98 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'GitLab Geo settings' do
-      context 'when backfill worker is configured' do
-        it 'sets the cron value' do
-          stub_gitlab_rb(gitlab_rails: { geo_backfill_worker_cron: '1 2 3 4 5' })
+    context 'omniauth settings' do
+      context 'sync email from omniauth provider is configured' do
+        it 'sets the omniauth provider' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_backfill_worker:\s+cron:\s+"1 2 3 4 5"/)
+            .with_content("sync_email_from_provider: \"cas3\"")
         end
       end
 
-      context 'when backfill worker is not configured' do
+      context 'sync email from omniauth provider is not configured' do
+        it 'does not include the sync email from omniauth provider setting' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('sync_email_from_provider')
+          }
+        end
+      end
+    end
+
+    context 'GitLab Geo settings' do
+      context 'by default' do
+        it 'geo_primary_role is disabled' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_primary_role:\s+enabled: false})
+        end
+
+        it 'geo_secondary_role is disabled' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_secondary_role:\s+enabled: false})
+        end
+      end
+
+      context 'when geo_primary_role is enabled' do
+        it 'enables geo_primary_role in config' do
+          stub_gitlab_rb(geo_primary_role: { enable: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_primary_role:\s+enabled: true})
+        end
+      end
+
+      context 'when geo_secondary_role is enabled' do
+        it 'enables geo_secondary_role in config' do
+          stub_gitlab_rb(geo_secondary_role: { enable: true }, geo_postgresql: { data_dir: 'foo' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{geo_secondary_role:\s+enabled: true})
+        end
+      end
+
+      context 'when repository sync worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_repository_sync_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/geo_repository_sync_worker:\s+cron:\s+"1 2 3 4 5"/)
+        end
+      end
+
+      context 'when repository sync worker is not configured' do
         it 'does not set the cron value' do
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_backfill_worker')
+            expect(content).not_to include('geo_repository_sync_worker')
           }
         end
       end
 
-      context 'when file download worker is configured' do
+      context 'when file download dispatch worker is configured' do
         it 'sets the cron value' do
-          stub_gitlab_rb(gitlab_rails: { geo_download_dispatch_worker_cron: '1 2 3 4 5' })
+          stub_gitlab_rb(gitlab_rails: { geo_file_download_dispatch_worker_cron: '1 2 3 4 5' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_download_dispatch_worker:\s+cron:\s+"1 2 3 4 5"/)
+            .with_content(/geo_file_download_dispatch_worker:\s+cron:\s+"1 2 3 4 5"/)
         end
       end
 
-      context 'when file download worker is not configured' do
+      context 'when file download dispatch worker is not configured' do
         it 'does not set the cron value' do
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_download_dispatch_worker')
+            expect(content).not_to include('geo_file_download_dispatch_worker')
           }
         end
       end
     end
 
     context 'Scheduled Pipeline settings' do
-      context 'when the corn pattern is configured' do
+      context 'when the cron pattern is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { pipeline_schedule_worker_cron: '41 * * * *' })
 
           expect(chef_run).to render_file(gitlab_yml_path)
             .with_content(/pipeline_schedule_worker:\s+cron:\s+"41/)
-        end
-      end
-
-      context 'when backfill worker is not configured' do
-        it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_backfill_worker')
-          }
         end
       end
 
@@ -367,6 +408,7 @@ describe 'gitlab::gitlab-rails' do
       it_behaves_like "enabled gitlab-rails env", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
 
       it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it_behaves_like "disabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", ''
 
       context 'when a custom env variable is specified' do
         before do
@@ -377,6 +419,22 @@ describe 'gitlab::gitlab-rails' do
         it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
         it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
       end
+    end
+
+    context 'when relative URL is enabled' do
+      before do
+        stub_gitlab_rb(gitlab_rails: { gitlab_relative_url: '/gitlab' })
+      end
+
+      it_behaves_like "enabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
+    end
+
+    context 'when relative URL is specified in external_url' do
+      before do
+        stub_gitlab_rb(external_url: 'http://localhost/gitlab')
+      end
+
+      it_behaves_like "enabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
     end
 
     context 'when jemalloc is disabled' do

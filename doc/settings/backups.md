@@ -1,6 +1,6 @@
 # Backups
 
-### Backup and restore omnibus-gitlab configuration
+## Backup and restore Omnibus GitLab configuration
 
 It is recommended to keep a copy of `/etc/gitlab`, or at least of
 `/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
@@ -59,7 +59,7 @@ backup.
 
 NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
-#### Separate configuration backups from application data
+### Separate configuration backups from application data
 
 Do not store your GitLab application backups (Git repositories, SQL
 data) in the same place as your configuration backup (`/etc/gitlab`).
@@ -74,10 +74,10 @@ If you separate your configuration backup from your application data backup,
 you reduce the chance that your encrypted application data will be
 lost/leaked/stolen together with the keys needed to decrypt it.
 
-### Creating an application backup
+## Creating an application backup
 
 To create a backup of your repositories and GitLab metadata, follow the
-[backup create documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system).
+[backup create documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
@@ -89,7 +89,7 @@ reconfigure`:
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
 
-### Creating backups for GitLab instances in Docker containers
+## Creating backups for GitLab instances in Docker containers
 
 Backups can scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
 
@@ -109,19 +109,19 @@ docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/git
 You need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
 in order to have these backups persisted outside the container.
 
-### Restoring an application backup
+## Restoring an application backup
 
-See [backup restore documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#omnibus-installations).
+See [backup restore documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-for-omnibus-installations).
 
-### Backup and restore using non-packaged database
+## Backup and restore using non-packaged database
 
 If you are using non-packaged database see [documentation on using non-packaged database](database.md#using-a-non-packaged-postgresql-database-management-server).
 
-### Upload backups to remote (cloud) storage
+## Upload backups to remote (cloud) storage
 
-For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+For details check [backup restore document of GitLab CE](https://docs.gitlab.com/ce/raketasks/backup_restore.html#uploading-backups-to-a-remote-cloud-storage).
 
-### Manually manage backup directory
+## Manually manage backup directory
 
 Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
 That directory will hold backup archives and they contain sensitive information.

@@ -141,6 +141,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/mnt/storage/lfs-objects"
 
+### Usage Statistics
+# gitlab_rails['usage_ping_enabled'] = true
+
 ### GitLab Mattermost
 ###! These settings are void if Mattermost is installed on the same omnibus
 ###! install
@@ -208,6 +211,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
 # gitlab_rails['omniauth_enabled'] = false
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
+# gitlab_rails['omniauth_sync_email_from_provider'] = 'saml'
 # gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
 # gitlab_rails['omniauth_block_auto_created_users'] = true
 # gitlab_rails['omniauth_auto_link_ldap_user'] = false
@@ -232,7 +236,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_archive_permissions'] = 0644
 
 # gitlab_rails['backup_pg_schema'] = 'public'
+
+###! The duration in seconds to keep backups before they are allowed to be deleted
 # gitlab_rails['backup_keep_time'] = 604800
+
 # gitlab_rails['backup_upload_connection'] = {
 #   'provider' => 'AWS',
 #   'region' => 'eu-west-1',
@@ -734,7 +741,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # web_server['home'] = '/var/opt/gitlab/nginx'
 
 ################################################################################
-## GitLab Nginx
+## GitLab NGINX
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html
 ################################################################################
 
@@ -933,45 +940,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## GitLab Pages NGINX
 ################################################################################
 
+# All the settings defined in the "GitLab Nginx" section are also available in this "GitLab Pages NGINX" section
+# You just have to change the key "nginx['some_settings']" with "pages_nginx['some_settings']"
+
+# Below you can find settings that are exclusive to "GitLab Pages NGINX"
 # pages_nginx['enable'] = false
-# pages_nginx['redirect_http_to_https'] = false
-# pages_nginx['redirect_http_to_https_port'] = 80
-# pages_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
-# pages_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-# pages_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
-# pages_nginx['ssl_verify_client'] = "off"
-# pages_nginx['ssl_verify_depth'] = "1"
-# pages_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
-# pages_nginx['ssl_prefer_server_ciphers'] = "on"
-
-##! Recommended by : https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-##!                  https://cipherli.st/
-# pages_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
-
-##! Recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# pages_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
-
-##! Default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# pages_nginx['ssl_session_timeout'] = "5m"
-
-##! Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
-# pages_nginx['ssl_dhparam'] = nil
-
-# pages_nginx['listen_addresses'] = ['*', '[::]']
-
-##! **Override only if you use a reverse proxy**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
-# pages_nginx['listen_port'] = nil
-
-##! **Override only if your reverse proxy internally communicates over HTTP**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
-# pages_nginx['listen_https'] = nil
-
-# pages_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
-
-### Advanced settings
-# pages_nginx['dir'] = "/var/opt/gitlab/nginx"
-# pages_nginx['log_directory'] = "/var/log/gitlab/nginx"
 
 # gitlab_rails['pages_path'] = "/mnt/storage/pages"
 
@@ -1151,40 +1124,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Mattermost NGINX
 ################################################################################
 
+# All the settings defined in the "GitLab NGINX" section are also available in this "Mattermost NGINX" section
+# You just have to change the key "nginx['some_settings']" with "mattermost_nginx['some_settings']"
+
+# Below you can find settings that are exclusive to "Mattermost NGINX"
 # mattermost_nginx['enable'] = false
-# mattermost_nginx['client_max_body_size'] = '250m'
-# mattermost_nginx['redirect_http_to_https'] = false
-# mattermost_nginx['redirect_http_to_https_port'] = 80
-# mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
-# mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-# mattermost_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
-# mattermost_nginx['ssl_verify_client'] = "off"
-# mattermost_nginx['ssl_verify_depth'] = "1"
-# mattermost_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
-# mattermost_nginx['ssl_prefer_server_ciphers'] = "on"
-
-##! Recommended by: https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-##!                 https://cipherli.st/
-# mattermost_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
-
-##! Recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# mattermost_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
-
-##! Default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# mattermost_nginx['ssl_session_timeout'] = "5m"
-
-##! Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
-# mattermost_nginx['ssl_dhparam'] = nil
-
-# mattermost_nginx['listen_addresses'] = ['*', '[::]']
-
-##! **Override only if you use a reverse proxy**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
-# mattermost_nginx['listen_port'] = nil
-
-##! **Override only if your reverse proxy internally communicates over HTTP**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
-# mattermost_nginx['listen_https'] = nil
 
 # mattermost_nginx['custom_gitlab_mattermost_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 # mattermost_nginx['proxy_set_headers'] = {
@@ -1197,48 +1141,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   "Upgrade" => "$http_upgrade",
 #   "Connection" => "$connection_upgrade"
 # }
-# mattermost_nginx['real_ip_trusted_addresses'] = []
-# mattermost_nginx['real_ip_header'] = nil
-# mattermost_nginx['real_ip_recursive'] = nil
 
-### Advanced settings
-# mattermost_nginx['dir'] = "/var/opt/gitlab/nginx"
-# mattermost_nginx['log_directory'] = "/var/log/gitlab/nginx"
-# mattermost_nginx['worker_processes'] = 4
-# mattermost_nginx['worker_connections'] = 10240
-# mattermost_nginx['sendfile'] = 'on'
-# mattermost_nginx['tcp_nopush'] = 'on'
-# mattermost_nginx['tcp_nodelay'] = 'on'
-# mattermost_nginx['gzip'] = "on"
-# mattermost_nginx['gzip_http_version'] = "1.0"
-# mattermost_nginx['gzip_comp_level'] = "2"
-# mattermost_nginx['gzip_proxied'] = "any"
-# mattermost_nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
-# mattermost_nginx['keepalive_timeout'] = 65
-# mattermost_nginx['cache_max_size'] = '5000m'
 
 ################################################################################
 ## Registry NGINX
 ################################################################################
 
+# All the settings defined in the "GitLab NGINX" section are also available in this "Registry NGINX" section
+# You just have to change the key "nginx['some_settings']" with "registry_nginx['some_settings']"
+
+# Below you can find settings that are exclusive to "Registry NGINX"
 # registry_nginx['enable'] = false
-# registry_nginx['redirect_http_to_https'] = false
-# registry_nginx['redirect_http_to_https_port'] = 80
-# registry_nginx['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
-# registry_nginx['ssl_prefer_server_ciphers'] = "on"
-# registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/certificate.pem"
-# registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/certificate.key"
-# registry_nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
-# registry_nginx['ssl_verify_client'] = "off"
-# registry_nginx['ssl_verify_depth'] = "1"
-
-##! **Override only if you use a reverse proxy**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
-# registry_nginx['listen_port'] = nil
-
-##! **Override only if your reverse proxy internally communicates over HTTP**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
-# registry_nginx['listen_https'] = nil
 
 # registry_nginx['proxy_set_headers'] = {
 #  "Host" => "$http_host",
@@ -1247,26 +1160,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Forwarded-Proto" => "https",
 #  "X-Forwarded-Ssl" => "on"
 # }
-
-##! Recommended by : https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-##!                  https://cipherli.st/
-# registry_nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
-
-##! Recommended in https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# registry_nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
-
-##! Default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-# registry_nginx['ssl_session_timeout'] = "5m"
-
-##! Path to ci_dhparams.pem, eg. /etc/gitlab/ssl/ci_dhparams.pem
-# registry_nginx['ssl_dhparam'] = nil
-
-# registry_nginx['listen_addresses'] = ['*', '[::]']
-
-### Advanced settings
-# registry_nginx['log_directory'] = "/var/log/gitlab/nginx"
-
-# registry_nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
 
 ################################################################################
 ## Prometheus
@@ -1347,7 +1240,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # redis_exporter['enable'] = true
-# redis_exporter['log_directory'] = "/var/log/gitlab/redis-exporter"
+# redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
 # }
@@ -1361,7 +1254,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # postgres_exporter['enable'] = true
-# postgres_exporter['log_directory'] = "/var/log/gitlab/postgres-exporter"
+# postgres_exporter['home'] = '/var/opt/gitlab/postgres-exporter'
+# postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
 
@@ -1376,7 +1270,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_monitor['home'] = "/var/opt/gitlab/gitlab-monitor"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
-# gitlab_monitor['listen_address'] = 'localhost:9168'
+# gitlab_monitor['listen_address'] = 'localhost'
+# gitlab_monitor['listen_port'] = '9168'
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true
@@ -1413,8 +1308,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 #
 # gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
-# gitlab_rails['geo_backfill_worker_cron'] = "*/5 * * * *"
-# gitlab_rails['geo_download_dispatch_worker_cron'] = "*/10 * * * *"
+# gitlab_rails['geo_file_download_dispatch_worker_cron'] = "*/10 * * * *"
+# gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['ldap_group_sync_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
@@ -1530,6 +1425,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Additional Database Settings (EE only)
 ################################################################################
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
+
+################################################################################
+## GitLab Geo
+##! Docs: https://docs.gitlab.com/ee/gitlab-geo
+################################################################################
+# geo_primary_role['enable'] = false
+# geo_secondary_role['enable'] = false
 
 ################################################################################
 ## GitLab Geo Secondary (EE only)

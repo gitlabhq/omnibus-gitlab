@@ -1,6 +1,12 @@
 # Omnibus GitLab documentation
 
-Omnibus is a way to package different services and tools required to run GitLab, so that most of developers can install it without laborious configuration.
+Omnibus is a way to package different services and tools required to run GitLab, so that most users can install it without laborious configuration.
+
+## Package information
+
+- [Package Architecture and Design](package-information/architecture.md)
+- [Checking the versions of bundled software](package-information/README.md#checking-the-versions-of-bundled-software)
+- [Package defaults](package-information/defaults.md)
 
 ## Installation
 
@@ -54,11 +60,6 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Note about updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
 - [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-660pre1-to-664)
 - [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-from-gitlab-ci-version-prior-to-540-to-the-latest-version)
-
-## Package information
-
-- [Package defaults](package-information/defaults.md)
-- [Checking the versions of bundled software](package-information/README.md#checking-the-versions-of-bundled-software)
 
 ## Troubleshooting
 

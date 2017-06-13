@@ -50,6 +50,11 @@ up a Build Environment](../build/prepare-build-environment.md).
     and start gitlab. Check if you can access it from your host browser on
     \<ip address of host>
 
+    **`Note`**: Nightly packages versioning is incorrect which can cause a
+    confusion. This [issue is reported in #864](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/864).
+    For the time being, consider the date of pushing (which is available next
+    to the package name in the repository page) to find the latest package version.
+
  4. Getting source of Omnibus GitLab
 
     Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)

@@ -35,7 +35,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
     ugid redis_user
     groupname redis_user
     gid node['gitlab']['redis']['gid']
-    shell  node['gitlab']['redis']['shell']
+    shell node['gitlab']['redis']['shell']
     home node['gitlab']['redis']['home']
     manage node['gitlab']['manage-accounts']['enable']
   end

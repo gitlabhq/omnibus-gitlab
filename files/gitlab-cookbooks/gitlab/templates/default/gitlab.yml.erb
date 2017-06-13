@@ -217,18 +217,18 @@ production: &base
       cron: "<%= @geo_bulk_notify_worker_cron %>"
     <% end %>
 
-    # GitLab Geo backfill worker
+    # GitLab Geo repository sync worker
     # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_backfill_worker_cron.nil? %>
-    geo_backfill_worker:
-      cron: "<%= @geo_backfill_worker_cron %>"
+    <% unless @geo_repository_sync_worker_cron.nil? %>
+    geo_repository_sync_worker:
+      cron: "<%= @geo_repository_sync_worker_cron %>"
     <% end %>
 
-    # GitLab Geo file download worker
+    # GitLab Geo file download dispatch worker
     # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_download_dispatch_worker_cron.nil? %>
-    geo_download_dispatch_worker:
-      cron: "<%= @geo_download_dispatch_worker_cron %>"
+    <% unless @geo_file_download_dispatch_worker_cron.nil? %>
+    geo_file_download_dispatch_worker:
+      cron: "<%= @geo_file_download_dispatch_worker_cron %>"
     <% end %>
 
   #
@@ -312,6 +312,12 @@ production: &base
     # Uncomment this to automatically sign in with a specific omniauth provider's without
     # showing GitLab's sign-in page (default: show the GitLab sign-in page)
     auto_sign_in_with_provider: <%= @omniauth_auto_sign_in_with_provider %>
+
+    # Sync user's email address from the specified Omniauth provider every time the user logs
+    # in (default: nil). And consequently make this field read-only.
+    <% unless @omniauth_sync_email_from_provider.nil? %>
+    sync_email_from_provider: <%= @omniauth_sync_email_from_provider.inspect %>
+    <% end %>
 
     # CAUTION!
     # This allows users to login without having a user account first. Define the allowed
@@ -420,6 +426,12 @@ production: &base
     max_size: <%= @git_max_size %>
     # Git timeout to read a commit, in seconds
     timeout: <%= @git_timeout %>
+
+  ## GitLab Geo settings (EE-only)
+  geo_primary_role:
+    enabled: <%= @geo_primary_role_enabled %>
+  geo_secondary_role:
+    enabled: <%= @geo_secondary_role_enabled %>
 
   #
   # 5. Extra customization

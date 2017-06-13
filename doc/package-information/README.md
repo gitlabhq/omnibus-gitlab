@@ -1,7 +1,8 @@
 # Package information
 
-The omnibus-gitlab package is bundled with all dependencies which GitLab
-requires in order to function correctly.
+The omnibus-gitlab package is bundled with all dependencies required for GitLab
+to function correctly. More details can be found
+at [bundling dependencies document](omnibus_packages.md).
 
 ## Licenses
 

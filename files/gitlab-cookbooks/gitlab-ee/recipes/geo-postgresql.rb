@@ -27,6 +27,8 @@ postgresql_username = account_helper.postgresql_user
 
 pg_helper = GeoPgHelper.new(node)
 
+include_recipe 'gitlab::postgresql_user'
+
 directory postgresql_dir do
   owner postgresql_username
   mode '0755'
@@ -102,8 +104,8 @@ runit_service 'geo-postgresql' do
   down node['gitlab']['geo-postgresql']['ha']
   control(['t'])
   options({
-            :log_directory => postgresql_log_dir
-          }.merge(params))
+    log_directory: postgresql_log_dir
+  }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
 end
 
@@ -117,9 +119,7 @@ include_recipe 'gitlab::postgresql-bin'
 execute 'start geo-postgresql' do
   command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
   retries 20
-  unless bootstrapping
-    action :nothing
-  end
+  action :nothing unless bootstrapping
 end
 
 ###

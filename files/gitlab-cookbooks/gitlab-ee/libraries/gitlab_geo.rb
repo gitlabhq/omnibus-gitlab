@@ -26,6 +26,7 @@ module GitlabGeo
     private
 
     def parse_primary_role
+      Gitlab['gitlab_rails']['geo_primary_role_enabled'] = true
       Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
       Gitlab['postgresql']['wal_level'] = 'hot_standby'
       Gitlab['postgresql']['max_wal_senders'] ||= 10
@@ -34,6 +35,7 @@ module GitlabGeo
     end
 
     def parse_secondary_role
+      Gitlab['gitlab_rails']['geo_secondary_role_enabled'] = true
       Gitlab['geo_postgresql']['enable'] = true
       Gitlab['postgresql']['wal_level'] = 'hot_standby'
       Gitlab['postgresql']['max_wal_senders'] ||= 10
@@ -44,7 +46,7 @@ module GitlabGeo
 
     def parse_data_dir
       postgresql_data_dir = Gitlab['geo_postgresql']['data_dir'] || node['gitlab']['geo-postgresql']['data_dir']
-      Gitlab['geo_postgresql']['bootstrap'] = !File.exists?(File.join(postgresql_data_dir, 'PG_VERSION'))
+      Gitlab['geo_postgresql']['bootstrap'] = !File.exist?(File.join(postgresql_data_dir, 'PG_VERSION'))
     end
 
     def geo_primary_role?
