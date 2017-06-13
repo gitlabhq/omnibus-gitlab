@@ -35,6 +35,13 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to include_recipe('gitlab::postgresql-bin')
     end
 
+<<<<<<< HEAD
+=======
+    it 'includes the postgresql_user recipe' do
+      expect(chef_run).to include_recipe('gitlab::postgresql_user')
+    end
+
+>>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
     it 'creates the gitlab_geo role in the geo-postgresql database' do
       expect(chef_run).to create_postgresql_user('gitlab_geo')
     end

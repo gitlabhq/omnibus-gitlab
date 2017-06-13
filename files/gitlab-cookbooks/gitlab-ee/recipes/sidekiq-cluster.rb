@@ -27,8 +27,8 @@ runit_service 'sidekiq-cluster' do
   down node['gitlab']['sidekiq-cluster']['ha']
   template_name 'sidekiq-cluster'
   options({
-    :user => account_helper.gitlab_user,
-    :log_directory => log_directory,
+    user: account_helper.gitlab_user,
+    log_directory: log_directory,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['sidekiq-cluster'].to_hash)
 end

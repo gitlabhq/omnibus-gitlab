@@ -50,9 +50,11 @@ class DockerOperations
     Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
   end
 
-  def self.push(image_id, old_tag, new_tag, repo = "gitlab")
-    image = Docker::Image.get("#{image_id}:#{old_tag}")
-    image.info["RepoTags"].pop
+  def self.push(image_id, initial_tag, new_tag, repo = "gitlab")
+    # initial_tag specifies the tag used while building the image. It can be
+    # 1. latest - for GitLab images
+    # 2. ce-latest or ee-latest - for GitLab QA images
+    image = Docker::Image.get("#{image_id}:#{initial_tag}")
     image.tag(repo: "#{repo}/#{image_id}", tag: new_tag, force: true)
     image.push(Docker.creds, repo_tag: "#{repo}/#{image_id}:#{new_tag}") do |chunk|
       puts chunk

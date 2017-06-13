@@ -108,9 +108,11 @@ module Prometheus
       default_config = Gitlab['node']['gitlab']['postgres-exporter'].to_hash
       user_config = Gitlab['postgres_exporter']
 
+      home_directory = user_config['home'] || default_config['home']
       listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
+        'extend.query-path' => File.join(home_directory, 'queries.yaml'),
       }
 
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
@@ -223,6 +225,7 @@ module Prometheus
               'regex' => '__meta_kubernetes_node_label_(.+)',
             },
             {
+<<<<<<< HEAD
               'source_labels' => ['__address__'],
               'target_label' => '__address__',
               'regex' => '([^:;]+):([0-9]+)',
@@ -233,6 +236,16 @@ module Prometheus
               'target_label' => '__scheme__',
               'regex' => 'https',
               'replacement' => 'http',
+=======
+              'target_label' => '__address__',
+              'replacement' => 'kubernetes.default.svc:443',
+            },
+            {
+              'source_labels' => ['__meta_kubernetes_node_name'],
+              'regex' => '(.+)',
+              'target_label' => '__metrics_path__',
+              'replacement' => '/api/v1/nodes/${1}/proxy/metrics',
+>>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
             },
           ],
           'metric_relabel_configs' => [

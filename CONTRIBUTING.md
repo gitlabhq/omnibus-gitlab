@@ -17,6 +17,15 @@ This can be the case when installation and `gitlab-ctl reconfigure` run went wit
 
 ## Maintainer documentation
 
+Maintainers of this project will try to address issues in a timely manner.
+Maintainers, however, cannot guarantee that they would be able to address
+all incoming issues as soon as they are raised nor can guarantee to provide an
+answer to all raised issues.
+
+If your issue is closed due to inactivity (from either side), please check
+whether the issue persists in the latest version. If that is the case, feel free
+to reopen the issue or create a new one with a link to the old issue.
+
 ### Issue description templates
 
 Issue description template will show this message to
@@ -72,7 +81,7 @@ Request includes more tests. This is to ensure that the test coverage grows with
 development.
 
 When in rush to fix something (eg. security issue, bug blocking the release),
-writing specs can be skipped. However, an issue to implement the tests 
+writing specs can be skipped. However, an issue to implement the tests
 **must be** created and assigned to the person who originally wrote the code.
 
 To run tests, execute the following command (you may have to run `bundle install` before running it)

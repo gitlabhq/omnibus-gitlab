@@ -35,7 +35,7 @@ module GitlabEE
         'postgresql', # impacted by role
         'gitlab_rails' # impacted by role
       ].each do |key|
-        rkey = key.gsub('_', '-')
+        rkey = key.tr('_', '-')
         results['gitlab'][rkey] = Gitlab[key]
       end
 

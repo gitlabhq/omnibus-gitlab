@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :unicorn_service, :rails_app => nil, :user => nil do
+define :unicorn_service, rails_app: nil, user: nil do
   rails_app = params[:rails_app]
   rails_home = node['gitlab'][rails_app]['dir']
   svc = params[:name]
@@ -55,10 +55,10 @@ define :unicorn_service, :rails_app => nil, :user => nil do
   unicorn_config unicorn_rb do
     listen(
       unicorn_listen_tcp => {
-        :tcp_nopush => node['gitlab'][svc]['tcp_nopush']
+        tcp_nopush: node['gitlab'][svc]['tcp_nopush']
       },
       unicorn_listen_socket => {
-        :backlog => node['gitlab'][svc]['backlog_socket'],
+        backlog: node['gitlab'][svc]['backlog_socket'],
       }
     )
     worker_timeout node['gitlab'][svc]['worker_timeout']
@@ -98,11 +98,11 @@ define :unicorn_service, :rails_app => nil, :user => nil do
     template_name 'unicorn'
     control ['t']
     options({
-      :service => svc,
-      :user => user,
-      :rails_app => rails_app,
-      :unicorn_rb => unicorn_rb,
-      :log_directory => unicorn_log_dir
+      service: svc,
+      user: user,
+      rails_app: rails_app,
+      unicorn_rb: unicorn_rb,
+      log_directory: unicorn_log_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end

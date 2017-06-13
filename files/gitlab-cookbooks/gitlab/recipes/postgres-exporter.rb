@@ -19,8 +19,15 @@ account_helper = AccountHelper.new(node)
 postgresql_user = account_helper.postgresql_user
 postgres_exporter_log_dir = node['gitlab']['postgres-exporter']['log_directory']
 postgres_exporter_static_etc_dir = "/opt/gitlab/etc/postgres-exporter"
+postgres_exporter_dir = node['gitlab']['postgres-exporter']['home']
 
 directory postgres_exporter_log_dir do
+  owner postgresql_user
+  mode '0700'
+  recursive true
+end
+
+directory postgres_exporter_dir do
   owner postgresql_user
   mode '0700'
   recursive true
@@ -37,7 +44,13 @@ runit_service 'postgres-exporter' do
     log_directory: postgres_exporter_log_dir,
     flags: runtime_flags
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['registry'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
+end
+
+template File.join(postgres_exporter_dir, 'queries.yaml') do
+  source 'postgres-queries.yaml'
+  owner postgresql_user
+  mode '0644'
 end
 
 if node['gitlab']['bootstrap']['enable']

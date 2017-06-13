@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :sidekiq_service, :rails_app => nil, :user => nil do
+define :sidekiq_service, rails_app: nil, user: nil do
   svc = params[:name]
   user = params[:user]
   rails_app = params[:rails_app]
@@ -32,11 +32,11 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
     down node['gitlab'][svc]['ha']
     template_name 'sidekiq'
     options({
-      :rails_app => rails_app,
-      :user => user,
-      :shutdown_timeout => node['gitlab'][svc]['shutdown_timeout'],
-      :concurrency => node['gitlab'][svc]['concurrency'],
-      :log_directory => sidekiq_log_dir
+      rails_app: rails_app,
+      user: user,
+      shutdown_timeout: node['gitlab'][svc]['shutdown_timeout'],
+      concurrency: node['gitlab'][svc]['concurrency'],
+      log_directory: sidekiq_log_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end

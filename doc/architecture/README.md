@@ -93,10 +93,52 @@ Omnibus-GitLab repository uses ChefSpec to test the cookbooks and recipes it shi
 So, of the components described above, some (software definitions, project metadata, tests, etc.) find use during the package building, in a build environment, and some (Chef cookbooks and recipes, GitLab configuration file, Runit, gitlab-ctl commands, etc.) are used to configure the user's installed instance.
 
 ## Work life cycle of Omnibus-GitLab
-### What happens during Package Building
+### What happens during package building
 
-When packages are built using the `omnibus build` command, a few steps are completed in the background. The main step of this is collecting all the dependency softwares whose definitions are available. This involves parsing the software definitions, finding out the necessary version, getting their corresponding source codes from prescribed URL, and building them as specified in those software definitions. This is followed by a HealthCheck, that checks the licenses of all the dependencies and see if they are all present, valid, and compatible with the Omnibus-GitLab licensing. The next step involves actual package building, which depends on the host OS in which the command is run, i.e. a .deb package is created if ran on a Debian OS. Package building uses the metadata provided in the project definition like name, description, maintainer, conflict and replace relations, etc. The package consists of all the defined softwares embedded in it, global configuration file, the necessary cookbooks, and other package specific control files, metadata, and scripts.
+The type of packages being built depends on the OS the build process is run. If build is done on a Debian environment, a `.deb` package will be created. What happens during package building can be summarized to the following steps
+1. Fetching sources of dependency softwares
+    1. Parsing software definitions to find out corresponding versions
+    1. Getting source code from remotes or cache
+1. Building individual software components
+    1. Setting up necessary environment variables and flags
+    1. Applying patches, if applicable
+    1. Performing the build and installation of the component, which involves installing it to appropriate location (inside `/opt/gitlab`)
+1. Generating license information of all bundled components - including external softwares, Ruby gems, JS modules etc. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by gitlab-rails)
+1. Checking license of the components to make sure we are not shipping a component with a non-compatible license
+1. Running a health check on the package to make sure the binaries are linked against available libraries. For bundled libraries, the binaries should link against them and not the one available globally.
+1. Building the package with contents of `/opt/gitlab`. This makes use of the metadata given inside [gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb) file. This includes package name, version, maintainer, homepage, information regarding conflicts with other packages etc.
+
+#### Caching
+
+Omnibus uses two types of cache to optimize the build process- one to store the software artifacts (sources of dependent softwares), and one to store the project tree after each software component is built
+
+##### Software artifact cache (for GitLab Inc builds)
+
+Software artifact cache uses an Amazon S3 bucket to store the sources of the dependent softwares. In our build process, this cache is populated using the command `bin/omnibus cache populate`. This will pull in all the necessary software sources from the Amazon bucket and store it in the necessary locations. When there is a change in the version requirement of a software, omnibus pulls it from the original upstream and add it to the artifact cache. This process is internal to omnibus and we configure the Amazon bucket to use in [omnibus.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/omnibus.rb) file available in the root of the repository. This cache ensures availability of the dependent softwares even if their original upstream remotes go down.
+
+##### Build cache
+
+A second type of cache that plays an important role in our build process is the build cache. Build cache can be described in simple words as snapshots of the project tree (where the project actually gets built - `/opt/gitlab`) after each dependent software is built. To understand it easily, consider a project with 5 dependent softwares - A, B, C, D and E, built in that order. For simplicity, we are not considering the dependencies of these individual softwares. Build cache makes use of git tags to make snapshots. After each software is built, a git tag is computed and committed. Now, consider we made some change to the definition of software D. A, B, C and E remains the same. When we try to build again, omnibus can reuse the snapshot that was made before D was built in the previous build. Thus, the time taken to build A, B and C can be saved as it can simply checkout the snapshot that was made after C was built. Omnibus uses the snapshot just before the software which "dirtied" the cache (dirtying can happen either by a change in the software definition, a change in name/version of a previous component, or a change in version of the current component) was built. Similarly, if in a build there is a change in definition of software A, it will dirty the cache and hence A and all the following dependencies get built from scratch. If C dirties the cache, A and B gets reused and C, D and E gets built again from scratch.
+
+This cache makes sense only if it is retained across builds. For that, we use the caching mechanism of GitLab CI. We have a dedicated runner which is configured to store its internal cache in an Amazon bucket. Before each build, we pull in this cache (`restore_cache_bundle` target in out Makefile), move it to appropriate location and start the build. It gets used by the omnibus until the point of dirtying. After the build, we pack the new cache and tells CI to back it up to the Amazon bucket (`pack_cache_bundle` in our Makefile).
+
+Both types of cache reduce the overall build time of GitLab and dependencies on external factors.
+
+The cache mechanism can be summarised as follows:
+1. For each software dependency
+  1. Parse definition to understand version and SHA256
+  1. If the source file tarball available in artifact cache in Amazon bucket matches the version and SHA256, use it
+  1. Else, download the correct tarball from the upstream remote
+1. Get build cache from CI cache
+1. For each software dependency
+  1. If cache has been dirtied, break the loop
+  1. Else, checkout the snapshot
+1. If there are remaining dependencies
+  1. For each remaining  dependency
+    1. Build the dependency
+    2. Create a snapshot and commit it
+1. Push back the new build cache to CI cache
 
 ### What happens during `gitlab-ctl reconfigure`
 
-One of the commonly used commands while managing a GitLab instance is `gitlab-ctl reconfigure`. This command, in short, parses the config file and runs the recipes with the values supplied from it. The recipes to be run are defined in a file called `dna.json` present in the `embedded` folder inside the installation directory (This file is generated by a software dependency named `gitlab-cookbooks` that is defined in the software definitions). In case of GitLab CE, the cookbook named `gitlab` will be selected as the master recipe, which in-turn invokes all other necessary recipes, including runit. So, reconfigure is basically a chef-client run that configures different files and services with the values provided in configuration template.
+One of the commonly used commands while managing a GitLab instance is `gitlab-ctl reconfigure`. This command, in short, parses the config file and runs the recipes with the values supplied from it. The recipes to be run are defined in a file called `dna.json` present in the `embedded` folder inside the installation directory (This file is generated by a software dependency named `gitlab-cookbooks` that is defined in the software definitions). In case of GitLab CE, the cookbook named `gitlab` will be selected as the master recipe, which in-turn invokes all other necessary recipes, including runit. In short, reconfigure is basically a chef-client run that configures different files and services with the values provided in configuration template.

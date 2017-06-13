@@ -14,7 +14,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.5"
+  BUILDER_IMAGE_REVISION: "0.0.6"
 
 before_script:
   - echo $NIGHTLY
@@ -272,12 +272,14 @@ Trigger:package:
   stage: trigger-package
   script:
     - make test_no_sync
+    # Renaming so we can easily generate the artifact URL
+    - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
   only:
     - triggers@gitlab-org/omnibus-gitlab
   artifacts:
     expire_in: 1 day
     paths:
-      - pkg/ubuntu-16.04/*.deb
+      - pkg/ubuntu-xenial/gitlab.deb
 
 Trigger:docker:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
@@ -288,7 +290,6 @@ Trigger:docker:
   services:
   - docker:dind
   script:
-    - cp pkg/ubuntu-16.04/*deb docker/assets/gitlab.deb
     - make docker_trigger_build_and_push
   only:
     - triggers@gitlab-org/omnibus-gitlab
@@ -300,7 +301,9 @@ Trigger:omnibus-package:
   when: manual
   before_script: []
   script:
-    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true"  https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
+    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
+    # may have same tag and hence overwrite each other.
+    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
     - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
   only:
     - branches@gitlab-org/omnibus-gitlab
@@ -358,189 +361,189 @@ QA Tag:
 
 # GitLab.com only
 Ubuntu 14.04 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:trusty"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 16.04 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:xenial"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Debian 7 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:wheezy"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 8 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:jessie"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Centos 6 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos6"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 7 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:centos7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 OpenSUSE 42.1 specs 0 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - OpenSUSE 42.1 knapsack
 OpenSUSE 42.1 specs 1 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
   dependencies:
   - OpenSUSE 42.1 knapsack
 OpenSUSE 42.1 specs 2 3:
-  image: "registry.gitlab.com/gitlab-org/omnibus-gitlab:opensuse42.1"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.1"
   cache:
-    key: "$CI_JOB_NAME"
+    key: "$CI_JOB_NAME-1"
     paths:
     - gems
   <<: *run_rspec
@@ -597,7 +600,7 @@ Centos 7:
     - gems
   <<: *tag_build
 OpenSUSE 42.1:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-${BUILDER_IMAGE_REVISION}"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.5"
   cache:
     key: "OpenSUSE 42.1 branch"
     paths:
@@ -668,7 +671,7 @@ CentOS 7 branch:
     - gems
   <<: *branch_build
 OpenSUSE 42.1 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-${BUILDER_IMAGE_REVISION}"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.1-0.0.5"
   cache:
     key: "$CI_BUILD_NAME"
     paths:

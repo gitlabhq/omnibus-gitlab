@@ -50,6 +50,11 @@ describe 'gitlab::postgres-exporter' do
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/postgres-exporter/)
     end
 
+    it 'creates the queries.yaml file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/postgres-exporter/queries.yaml')
+        .with_content(/pg_replication:/)
+    end
+
     it 'creates default set of directories' do
       expect(chef_run).to create_directory('/var/log/gitlab/postgres-exporter').with(
         owner: 'gitlab-psql',
@@ -60,7 +65,10 @@ describe 'gitlab::postgres-exporter' do
 
     it 'sets default flags' do
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
-        .with_content(/web.listen-address=localhost:9187/)
+        .with_content { |content|
+          expect(content).to match(/web.listen-address=localhost:9187/)
+          expect(content).to match(/extend.query-path=\/var\/opt\/gitlab\/postgres-exporter\/queries.yaml/)
+        }
     end
   end
 

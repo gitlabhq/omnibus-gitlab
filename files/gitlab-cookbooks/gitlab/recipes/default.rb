@@ -122,7 +122,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   "bootstrap",
   "mattermost",
   "gitlab-pages",
-  "registry"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
@@ -131,6 +130,15 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   end
 end
 
+%w(
+  registry
+).each do |service|
+  if node[service]["enable"]
+    include_recipe "#{service}::enable"
+  else
+    include_recipe "#{service}::disable"
+  end
+end
 # Configure healthcheck if we have nginx or workhorse enabled
 include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab-workhorse"]["enable"]
 

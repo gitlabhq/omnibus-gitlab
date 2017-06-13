@@ -15,7 +15,10 @@
 #
 
 account_helper = AccountHelper.new(node)
+<<<<<<< HEAD
 omnibus_helper = OmnibusHelper.new(node)
+=======
+>>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 
 include_recipe 'gitlab::postgresql_user'
 [

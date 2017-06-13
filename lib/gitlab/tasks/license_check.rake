@@ -1,3 +1,5 @@
+require 'json'
+
 desc "Check licenses of bundled softwares"
 namespace :license do
   task :check do
@@ -7,26 +9,26 @@ namespace :license do
     puts "###### BEGIN LICENSE CHECK ######"
 
     install_dir = File.open('config/projects/gitlab.rb').grep(/install_dir *'/)[0].match(/install_dir[ \t]*'(?<install_dir>.*)'/)['install_dir']
-    raise StandardError, "Unable to retrieve install_dir, thus unable to check #{install_dir}/LICENSE" unless File.exist?(install_dir)
-    puts "Checking licenses via the contents of '#{install_dir}/LICENSE'"
+    raise StandardError, "Unable to retrieve install_dir, thus unable to check #{install_dir}/dependency_licenses.json" unless File.exist?(install_dir)
+    puts "Checking licenses via the contents of '#{install_dir}/dependency_licenses.json'"
 
-    unless File.exist?("#{install_dir}/LICENSE")
+    unless File.exist?("#{install_dir}/dependency_licenses.json")
 
-      raise StandardError, "Unable to open #{install_dir}/LICENSE"
+      raise StandardError, "Unable to open #{install_dir}/dependency_licenses.json"
     end
 
-    reg = Regexp.compile(/product bundles (?<software>.*?),?\n(,\n)?.*available under a "(?<license>.*)" License/)
-    matches = File.read("#{install_dir}/LICENSE").scan(reg)
-    matches.each do |software, license|
+    content = File.read("#{install_dir}/dependency_licenses.json")
+    JSON.parse(content).each do |dependency, attributes|
+      license = attributes['license']
+      version = attributes['version']
       if license.match(good)
-        puts "Good   : #{software} uses #{license}"
+        puts "Good   : #{dependency} - #{version} uses #{license}"
       elsif license.match(bad)
-        puts "Check  ! #{software} uses #{license}"
+        puts "Check  ! #{dependency} - #{version} uses #{license}"
       else
-        puts "Unknown? #{software} uses #{license}"
+        puts "Unknown? #{dependency} - #{version} uses #{license}"
       end
     end
-
     puts "###### END LICENSE CHECK ######"
   end
 end

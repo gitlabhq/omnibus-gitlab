@@ -78,7 +78,7 @@ docker_build: docker_cleanup
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	echo DOWNLOAD_URL=$(shell find pkg/ubuntu-16.04 -type f -name '*.deb'| sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|") >> docker/RELEASE
+	echo DOWNLOAD_URL=$(shell find pkg/ubuntu-xenial -type f -name '*.deb'| sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|") >> docker/RELEASE
 	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
 
 docker_push:
@@ -113,12 +113,16 @@ docker_trigger_build_and_push:
 	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
 	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
 	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	# Our regular Docker image creation involves installing GitLab package from
-	# AWS bucket. Triggered ones have a package locally available and should use
-	# that. So, replacing the downloading command with a local install one.
-	sed -i "s/wget.*/dpkg -i \/assets\/gitlab.deb \&\& rm \/assets\/gitlab.deb/" docker/assets/setup
+	echo DOWNLOAD_URL=$(shell bundle exec support/triggered_package.rb) >> docker/RELEASE
+	@echo TRIGGER_PRIVATE_TOKEN=$(TRIGGER_PRIVATE_TOKEN) >> docker/RELEASE
 	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
-	DOCKER_TAG=$(GITLAB_VERSION) bundle exec rake docker:push_triggered[$(RELEASE_PACKAGE)]
+	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
+	# variable, which will be used to tag the final Docker image.
+	# So, if IMAGE_TAG variable is empty, it means the trigger happened from
+	# either CE or EE repository. In that case, we can use the GITLAB_VERSION
+	# variable as IMAGE_TAG.
+	if [ -z "$(IMAGE_TAG)" ] ; then export IMAGE_TAG=$(GITLAB_VERSION) ;  fi
+	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push_triggered[$(RELEASE_PACKAGE)]
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}

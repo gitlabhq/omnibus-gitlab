@@ -3,6 +3,26 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+<<<<<<< HEAD
+=======
+9.3.0
+
+- Ensure PostgreSQL user is created for Geo installations 4bedc5f1
+- Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
+- Rename geo_download_dispatch worker configuration
+- Rename geo_backfill worker configuration
+- Upgrade Prometheus to 1.6.3
+- Bump Git version to 2.13.0 b8a4bc4f
+- Upgrade PostgreSQL to 9.6.3 8f144d
+- Changing relative URL requires a hard reset ccd76ae2
+- Add omniauth sync_email_from_provider configuration
+- Add libre2 to support the 're2' gem
+
+9.2.5
+
+- Add default values to GitLab Geo roles 77e7bdfa
+
+>>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 9.2.2
 
 - Fix bug where cron values are not set to nil and default to a set value
@@ -27,7 +47,10 @@ omnibus-gitlab repository.
 - Postgresql configuration changle will now reload Postgresql instead of restart
 - Generate PO translation files 6b6c936a
 - Change service running detection 18b51873
+<<<<<<< HEAD
 - Compile python with libedit
+=======
+>>>>>>> 2cc62493342d3906f35fcff57bb8da34f612c7d2
 - Rename trigger schedules to pipeline schedules
 - Compile new binaries for gitlab-shell
 - Compile python with libedit

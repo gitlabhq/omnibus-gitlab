@@ -177,12 +177,16 @@ For help and support around your GitLab Mattermost deployment please see:
 
 Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).  
 
-| GitLab Version | Mattermost Version |
-|----------------|--------------------|
-| 8.9            | v3.1.0             |
-| 8.10           | v3.2.0             |
-| 8.11           | v3.3.0             |
-| 8.12           | v3.4.0             |  
+| GitLab Version  | Mattermost Version |
+| :------------ |:----------------|
+| 8.9 | 3.1 |
+| 8.10 | 3.2 |
+| 8.11 | 3.3 |
+| 8.12, 8.13 | 3.4 |
+| 8.14, 8.15 | 3.5 |
+| 8.16, 8.17 | 3.6 |
+| 9.0, 9.1 | 3.7 |
+| 9.2 | 3.9 |
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
@@ -200,8 +204,9 @@ If this is not the case, there are two options:
 
 Consider these notes when upgrading GitLab Mattermost:
 
+1. Security related changes were made in Mattermost version 3.9.0 that cause any previously created team invite links, password reset links, and email verification links to no longer work. You must update any place where you have published these links.
 1. If public links are enabled, upgrading to Mattermost v3.4 will invalidate existing public links due to a security upgrade allowing admins to invalidate links by resetting a public link salt from the System Console.
-2. Upgrading from v3.2 to v3.4 will be incomplete due to a migration code not being run properly. You can either:
+1. Upgrading from v3.2 to v3.4 will be incomplete due to a migration code not being run properly. You can either:
     - Upgrade from v3.2 to v3.3 and then from v3.3 to v3.4, or
     - Upgrade from v3.2 to v3.4, then run the following SQL query to make Mattermost rerun upgrade steps that were not properly completed: `UPDATE Systems SET Value = '3.1.0' WHERE Name = 'Version';`
 
