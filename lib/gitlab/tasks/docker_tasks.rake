@@ -80,7 +80,7 @@ namespace :docker do
       DockerOperations.push(release_package, "latest", docker_tag, repository)
     end
 
-    def authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
+    def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
       DockerOperations.authenticate(user, token, registry)
     end
   end
