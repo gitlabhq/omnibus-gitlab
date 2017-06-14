@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 version = Gitlab::Version.new('gitlab-elasticsearch-indexer')
 
 name 'gitlab-elasticsearch-indexer'
-default_version 'master'
+default_version 'v0.1.0'
 
 license 'MIT'
 license_file 'LICENSE'
