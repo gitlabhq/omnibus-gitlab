@@ -76,11 +76,11 @@ namespace :docker do
       Build.docker_tag
     end
 
-    def push(docker_tag, repository = nil)
+    def push(docker_tag, repository = 'gitlab')
       DockerOperations.push(release_package, "latest", docker_tag, repository)
     end
 
-    def authenticate(user = nil, token = nil, registry = nil)
+    def authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
       DockerOperations.authenticate(user, token, registry)
     end
   end
