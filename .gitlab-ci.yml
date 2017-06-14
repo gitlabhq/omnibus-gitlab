@@ -249,6 +249,7 @@ Docker branch:
   - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
 Docker:
   stage: images
@@ -266,9 +267,9 @@ Docker:
   - bundle exec rake docker:push:stable
   - bundle exec rake docker:push:rc
   - bundle exec rake docker:push:latest
-
   only:
     - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
