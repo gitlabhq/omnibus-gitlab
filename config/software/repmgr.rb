@@ -16,13 +16,13 @@
 #
 
 name 'repmgr'
-default_version '3.3.1'
+default_version '3.3.2'
 
 license 'gplv3'
 license_file 'LICENSE'
 
 source url: "http://www.repmgr.org/download/repmgr-#{version}.tar.gz",
-       sha1: '54860f53f53ef1fd2a1353d1f7153df3beb1e2f6'
+       sha1: '48ed41fd552df50b597b547deccfecd8b12a5cf1'
 
 dependency 'postgresql_new'
 
@@ -31,11 +31,11 @@ env = with_standard_compiler_flags(with_embedded_path)
 relative_path "#{name}-#{version}"
 
 build do
+  make "-j #{workers} USE_PGXS=1 all", env: env
   make "-j #{workers} USE_PGXS=1 install", env: env
 
   block 'link bin files' do
-    %w(repmgr repmgrd).each do |bin_file|
-      link "#{install_dir}/embedded/postgresql/9.6.3/bin/#{bin_file}", "#{install_dir}/embedded/bin/#{bin_file}"
-    end
+    postgresql_version = shellout!("#{embedded_bin('psql')} --version", env: env).stdout.split.last
+    link "#{install_dir}/embedded/postgresql/#{postgresql_version}/bin/repmgr*", "#{install_dir}/embedded/bin/"
   end
 end
