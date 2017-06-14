@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-define :runit_service, directory: nil, only_if: false, finish_script: false, control: [], run_restart: true, active_directory: nil, init_script_template: nil, owner: "root", group: "root", template_name: nil, start_command: "start", stop_command: "stop", restart_command: "restart", status_command: "status", options: {}, log_options: {}, env: {}, action: :enable, down: false do
+define :runit_service, directory: nil, only_if: false, finish_script: false, control: [], run_restart: true, active_directory: nil, init_script_template: nil, owner: "root", group: "root", template_name: nil, start_command: "start", stop_command: "stop", restart_command: "restart", status_command: "status", options: {}, log_options: {}, env: {}, action: :enable, down: false, supervisor_owner: nil, supervisor_group: nil do
   include_recipe "runit"
 
   omnibus_helper = OmnibusHelper.new(node)
@@ -53,6 +53,14 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       group params[:group]
       mode 0755
       action :create
+    end
+
+    directory "#{sv_dir_name}/supervise" do
+      owner params[:supervisor_owner] || 'root'
+      group params[:supervisor_group] || 'root'
+      mode 0755
+      action :create
+      not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
     end
 
     template "#{sv_dir_name}/run" do
