@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+9.2.6
+
+- Backport: Upgrade ES indexer to 0.1.0
+
 9.2.5
 
 - Add default values to GitLab Geo roles 77e7bdfa
