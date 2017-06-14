@@ -34,7 +34,7 @@ namespace :docker do
     task :stable do
       authenticate
       push(tag)
-      puts "Pushing tag: #{tag}"
+      puts "Pushed tag: #{tag}"
     end
 
     # push as :rc tag, the :rc is always the latest tagged release
@@ -42,7 +42,7 @@ namespace :docker do
       if Build.add_rc_tag?
         authenticate
         push('rc')
-        puts "Pushing tag: rc"
+        puts "Pushed tag: rc"
       end
     end
 
@@ -51,7 +51,7 @@ namespace :docker do
       if Build.add_latest_tag?
         authenticate
         push('latest')
-        puts "Pushing tag: latest"
+        puts "Pushed tag: latest"
       end
     end
 
@@ -60,7 +60,7 @@ namespace :docker do
       docker_tag = "#{edition}-#{tag}"
       authenticate
       DockerOperations.push("gitlab-qa", "#{edition}-latest", docker_tag)
-      puts "Pushing tag: #{docker_tag}"
+      puts "Pushed tag: #{docker_tag}"
     end
 
     desc "Push triggered Docker Image to GitLab Registry"
@@ -69,7 +69,7 @@ namespace :docker do
       docker_tag = ENV["DOCKER_TAG"]
       authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
       push(docker_tag, ENV["CI_REGISTRY_IMAGE"])
-      puts "Pushing tag: #{docker_tag}"
+      puts "Pushed tag: #{docker_tag}"
     end
 
     def tag
