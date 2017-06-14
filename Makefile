@@ -58,14 +58,14 @@ move_to_platform_dir:
 	mv ${PLATFORM_DIR} pkg/
 
 docker_trigger_build_and_push:
-	bundle exec rake docker:build
+	bundle exec rake docker:build:image
 	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
 	# variable, which will be used to tag the final Docker image.
 	# So, if IMAGE_TAG variable is empty, it means the trigger happened from
 	# either CE or EE repository. In that case, we can use the GITLAB_VERSION
 	# variable as IMAGE_TAG.
 	if [ -z "$(IMAGE_TAG)" ] ; then export IMAGE_TAG=$(GITLAB_VERSION) ;  fi
-	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push_triggered
+	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push:triggered
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
@@ -90,18 +90,18 @@ endif
 
 ## QA related stuff
 qa_docker_build:
-	bundle exec rake docker:build_qa
+	bundle exec rake docker:build:qa
 
 qa_docker_push:
-	bundle exec rake docker:push_qa
+	bundle exec rake docker:push:qa
 
 qa_docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push_qa
+	DOCKER_TAG=rc bundle exec rake docker:push:qa
 
 qa_docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push_qa
+	DOCKER_TAG=latest bundle exec rake docker:push:qa
 
 do_qa_docker_master: qa_docker_build
 ifdef NIGHTLY
