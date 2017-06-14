@@ -10,7 +10,7 @@ class DockerOperations
     end
   end
 
-  def self.authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
+  def self.authenticate(username, password, serveraddress)
     Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
   end
 
