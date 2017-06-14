@@ -244,7 +244,9 @@ Docker master:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_master
+  - export RELEASE_BUCKET=omnibus-builds
+  - bundle exec rake docker:build:image
+  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
   dependencies:
@@ -261,7 +263,11 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_release
+  - export RELEASE_BUCKET=downloads-packages
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:stable
+  - bundle exec rake docker:push:rc
+  - bundle exec rake docker:push:latest
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies:

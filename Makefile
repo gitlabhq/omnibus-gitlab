@@ -110,15 +110,14 @@ do_docker_release: docker_push_latest
 endif
 
 docker_trigger_build_and_push:
-	echo PACKAGECLOUD_REPO=$(PACKAGECLOUD_REPO) > docker/RELEASE
-	echo RELEASE_PACKAGE=$(RELEASE_PACKAGE) >> docker/RELEASE
-	echo RELEASE_VERSION=$(RELEASE_VERSION) >> docker/RELEASE
-	# Our regular Docker image creation involves installing GitLab package from
-	# AWS bucket. Triggered ones have a package locally available and should use
-	# that. So, replacing the downloading command with a local install one.
-	sed -i "s/wget.*/dpkg -i \/assets\/gitlab.deb \&\& rm \/assets\/gitlab.deb/" docker/assets/setup
-	bundle exec rake docker:build[$(RELEASE_PACKAGE)]
-	DOCKER_TAG=$(GITLAB_VERSION) bundle exec rake docker:push_triggered[$(RELEASE_PACKAGE)]
+	bundle exec rake docker:build:image
+	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
+	# variable, which will be used to tag the final Docker image.
+	# So, if IMAGE_TAG variable is empty, it means the trigger happened from
+	# either CE or EE repository. In that case, we can use the GITLAB_VERSION
+	# variable as IMAGE_TAG.
+	if [ -z "$(IMAGE_TAG)" ] ; then export IMAGE_TAG=$(GITLAB_VERSION) ;  fi
+	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push:triggered
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
@@ -142,22 +141,19 @@ aws: do_aws_not_latest
 endif
 
 ## QA related stuff
-qa_docker_cleanup:
-	-bundle exec rake docker:clean_qa[$(RELEASE_VERSION)]
-
-qa_docker_build: qa_docker_cleanup
-	bundle exec rake docker:build_qa[$(RELEASE_PACKAGE)]
+qa_docker_build:
+	bundle exec rake docker:build:qa
 
 qa_docker_push:
-	DOCKER_TAG=$(DOCKER_TAG) bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	bundle exec rake docker:push:qa
 
 qa_docker_push_rc:
 	# push as :rc tag, the :rc is always the latest tagged release
-	DOCKER_TAG=rc bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=rc bundle exec rake docker:push:qa
 
 qa_docker_push_latest:
 	# push as :latest tag, the :latest is always the latest stable release
-	DOCKER_TAG=latest bundle exec rake docker:push_qa[$(RELEASE_PACKAGE)]
+	DOCKER_TAG=latest bundle exec rake docker:push:qa
 
 do_qa_docker_master: qa_docker_build
 ifdef NIGHTLY
