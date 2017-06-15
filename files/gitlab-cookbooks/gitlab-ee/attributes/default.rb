@@ -161,3 +161,9 @@ default['gitlab']['pgbouncer']['databases'] = {
 default['gitlab']['pgbouncer']['auth_type'] = 'md5'
 default['gitlab']['pgbouncer']['auth_hba_file'] = nil
 default['gitlab']['pgbouncer']['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
+
+####
+# Repmgr
+# ##
+default['gitlab']['postgresql']['repmgr']['enable'] = false
+default['gitlab']['postgresql']['repmgr']['trust_md5_auth_cidr_addresses'] = []
