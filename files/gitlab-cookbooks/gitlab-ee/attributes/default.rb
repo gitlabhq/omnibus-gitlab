@@ -166,4 +166,4 @@ default['gitlab']['pgbouncer']['auth_query'] = 'SELECT username, password FROM p
 # Repmgr
 # ##
 default['gitlab']['postgresql']['repmgr']['enable'] = false
-default['gitlab']['postgresql']['repmgr']['trust_md5_auth_cidr_addresses'] = []
+default['gitlab']['postgresql']['repmgr']['trust_auth_cidr_addresses'] = []

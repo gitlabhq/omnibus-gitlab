@@ -19,7 +19,7 @@ describe 'repmgr' do
         postgresql: {
           repmgr: {
             enable: true,
-            trust_md5_auth_cidr_addresses: ['123.456.789.0/24']
+            trust_auth_cidr_addresses: ['123.456.789.0/24']
           }
         }
       )

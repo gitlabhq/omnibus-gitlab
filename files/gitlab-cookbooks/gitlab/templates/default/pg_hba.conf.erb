@@ -65,11 +65,11 @@
 
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
-<% if @repmgr['enable'] %>
+<% if @repmgr && @repmgr['enable'] %>
   <% %w(replication repmgr).each do |db| %> 
 local   <%= db %>   repmgr                            trust
 host    <%= db %>   repmgr      127.0.0.1/32          trust
-    <% @repmgr['trust_md5_auth_cidr_addresses'].each do |cidr| %>
+    <% @repmgr['trust_auth_cidr_addresses'].each do |cidr| %>
 host    <%= db %>   repmgr      <%= cidr %>           trust 
     <% end %>
   <% end %>
