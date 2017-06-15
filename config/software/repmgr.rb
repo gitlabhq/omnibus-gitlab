@@ -18,7 +18,7 @@
 name 'repmgr'
 default_version '3.3.2'
 
-license 'gplv3'
+license 'GPL-3.0'
 license_file 'LICENSE'
 
 source url: "http://www.repmgr.org/download/repmgr-#{version}.tar.gz",
