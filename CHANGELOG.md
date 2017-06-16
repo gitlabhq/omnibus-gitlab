@@ -15,6 +15,8 @@ omnibus-gitlab repository.
 - Changing relative URL requires a hard reset ccd76ae2
 - Add omniauth sync_email_from_provider configuration
 - Add libre2 to support the 're2' gem
+- Add a runtime directory for unicorn metrics
+- Add repmgr as an EE dependency
 
 9.2.5
 

@@ -53,6 +53,7 @@ dependency 'libre2'
 if EE
   dependency 'mysql-client'
   dependency 'pgbouncer'
+  dependency 'repmgr'
   dependency 'gitlab-elasticsearch-indexer'
 end
 
