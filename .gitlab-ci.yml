@@ -97,6 +97,7 @@ Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
+Debian 9 knapsack: *prepare_knapsack
 OpenSUSE 42.1 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
@@ -470,6 +471,33 @@ Debian 8 specs 2 3:
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
+Debian 9 specs 0 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
+Debian 9 specs 1 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
+Debian 9 specs 2 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
 Centos 6 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
@@ -585,6 +613,14 @@ Debian 8:
     - cache
     - gems
   <<: *tag_build
+Debian 9:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "Debian 9 branch"
+    paths:
+    - cache
+    - gems
+  <<: *tag_build
 Centos 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -650,6 +686,14 @@ Debian 7 branch:
   <<: *branch_build
 Debian 8 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "$CI_BUILD_NAME"
+    paths:
+    - cache
+    - gems
+  <<: *branch_build
+Debian 9 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:
