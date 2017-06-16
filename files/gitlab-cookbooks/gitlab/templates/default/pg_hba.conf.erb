@@ -65,14 +65,8 @@
 
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
-<% if @repmgr && @repmgr['enable'] %>
-  <% %w(replication repmgr).each do |db| %> 
-local   <%= db %>   repmgr                            trust
-host    <%= db %>   repmgr      127.0.0.1/32          trust
-    <% @repmgr['trust_auth_cidr_addresses'].each do |cidr| %>
-host    <%= db %>   repmgr      <%= cidr %>           trust 
-    <% end %>
-  <% end %>
+<% @custom_pg_hba_entries.each do |entry| %>
+<%= entry['type'] %> <%= entry['database'] %> <%= entry['user'] %> <%= entry['cidr'] %> <%= entry['method'] %> <%= entry['option'] %>
 <% end %>
 
 # "local" is for Unix domain socket connections only
