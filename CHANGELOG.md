@@ -19,6 +19,9 @@ omnibus-gitlab repository.
 - Add a runtime directory for unicorn metrics
 - Add repmgr as an EE dependency
 
+9.2.6
+- Backport: Upgrade ES indexer to 0.1.0
+
 9.2.5
 
 - Add default values to GitLab Geo roles 77e7bdfa
