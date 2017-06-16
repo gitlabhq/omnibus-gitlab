@@ -55,15 +55,6 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       action :create
     end
 
-    directory "#{sv_dir_name}/supervise" do
-      owner params[:supervisor_owner] || 'root'
-      group params[:supervisor_group] || 'root'
-      mode 0755
-      recursive true
-      action :create
-      not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
-    end
-
     template "#{sv_dir_name}/run" do
       owner params[:owner]
       group params[:group]
@@ -195,8 +186,15 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       not_if { FileTest.pipe?("#{sv_dir_name}/supervise/ok") }
     end
 
-    %w(ok control).each do |fl|
+    %w(ok control status).each do |fl|
       file "#{sv_dir_name}/supervise/#{fl}" do
+        owner params[:supervisor_owner] || 'root'
+        group params[:supervisor_group] || 'root'
+        not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
+        action :touch
+      end
+
+      file "#{sv_dir_name}/log/supervise/#{fl}" do
         owner params[:supervisor_owner] || 'root'
         group params[:supervisor_group] || 'root'
         not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
