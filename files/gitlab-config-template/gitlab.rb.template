@@ -670,6 +670,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['random_page_cost'] = 4.0
 # postgresql['log_temp_files'] = -1
 # postgresql['log_checkpoints'] = 'off'
+# To add custom entries to pg_hba.conf use the following
+# postgresql['custom_pg_hba_entries'] = [
+# {
+#   type: example,
+#   database: example,
+#   user: example,
+#   cidr: example,
+#   method: example,
+#   option: exmple
+# }
+# ]
+# See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html for an explanation
+# of the values
 
 
 ################################################################################
