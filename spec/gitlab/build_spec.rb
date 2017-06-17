@@ -20,23 +20,24 @@ describe Build do
   describe 'is_ee?' do
     describe 'with environment variables' do
       it 'when ee=true' do
-        stub_env_var('ee', 'true')
+        stub_is_ee_env(true)
         expect(described_class.is_ee?).to be_truthy
       end
 
       it 'when ee=false' do
-        stub_env_var('ee', 'false')
+        stub_is_ee(false)
         expect(described_class.is_ee?).to be_falsy
       end
 
       it 'when env variable is not set' do
+        stub_is_ee_version(false)
         expect(described_class.is_ee?).to be_falsy
       end
     end
 
     describe 'without environment variables' do
       it 'checks the VERSION file' do
-        allow(described_class).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
+        stub_is_ee_version(true)
         expect(described_class.is_ee?).to be_truthy
       end
     end
@@ -45,18 +46,19 @@ describe Build do
   describe 'package' do
     describe 'shows EE' do
       it 'when ee=true' do
-        stub_env_var('ee', 'true')
+        stub_is_ee_env(true)
         expect(described_class.package).to eq('gitlab-ee')
       end
 
       it 'when env var is not present, checks VERSION file' do
-        allow(described_class).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
+        stub_is_ee_version(true)
         expect(described_class.package).to eq('gitlab-ee')
       end
     end
 
     describe 'shows CE' do
       it 'by default' do
+        stub_is_ee(false)
         expect(described_class.package).to eq('gitlab-ce')
       end
     end
@@ -184,7 +186,7 @@ describe Build do
   describe 'latest_tag' do
     describe 'for CE' do
       before do
-        stub_env_var('ee', '')
+        stub_is_ee(false)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ce.0')
       end
 
@@ -195,8 +197,8 @@ describe Build do
 
     describe 'for EE' do
       before do
-        stub_env_var('ee', 'false')
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
+        stub_is_ee(true)
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
       end
 
       it 'returns the version of correct edition' do
@@ -208,7 +210,7 @@ describe Build do
   describe 'latest_stable_tag' do
     describe 'for CE' do
       before do
-        stub_env_var('ee', '')
+        stub_is_ee(nil)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ce.0')
       end
 
@@ -219,7 +221,7 @@ describe Build do
 
     describe 'for EE' do
       before do
-        stub_env_var('ee', 'true')
+        stub_is_ee(true)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ee.0')
       end
 
@@ -227,5 +229,18 @@ describe Build do
         expect(described_class.latest_stable_tag).to eq('12.121.12+ee.0')
       end
     end
+  end
+
+  def stub_is_ee_version(value)
+    allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
+  end
+
+  def stub_is_ee_env(value)
+    stub_env_var('ee', value.nil? ? '' : value.to_s)
+  end
+
+  def stub_is_ee(value)
+    stub_is_ee_version(value)
+    stub_is_ee_env(value)
   end
 end
