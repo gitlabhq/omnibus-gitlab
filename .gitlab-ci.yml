@@ -97,6 +97,7 @@ Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
+Debian 9 knapsack: *prepare_knapsack
 OpenSUSE 42.1 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
@@ -233,7 +234,7 @@ update-knapsack:
       - pkg/
   dependencies: []
 
-Docker master:
+Docker branch:
   stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
@@ -244,11 +245,12 @@ Docker master:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_master
+  - export RELEASE_BUCKET=omnibus-builds
+  - bundle exec rake docker:build:image
+  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
   only:
     - branches@gitlab/omnibus-gitlab
-  dependencies:
-  - Ubuntu 16.04 branch
+  dependencies: []
 
 Docker:
   stage: images
@@ -261,11 +263,14 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_release
+  - export RELEASE_BUCKET=downloads-packages
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:stable
+  - bundle exec rake docker:push:rc
+  - bundle exec rake docker:push:latest
   only:
     - tags@gitlab/omnibus-gitlab
-  dependencies:
-  - Ubuntu 16.04
+  dependencies: []
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
@@ -293,8 +298,6 @@ Trigger:docker:
     - make docker_trigger_build_and_push
   only:
     - triggers@gitlab-org/omnibus-gitlab
-  dependencies:
-  - Trigger:package
 
 Trigger:omnibus-package:
   stage: trigger-package
@@ -468,6 +471,33 @@ Debian 8 specs 2 3:
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
+Debian 9 specs 0 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
+Debian 9 specs 1 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
+Debian 9 specs 2 3:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
+  <<: *run_rspec
+  dependencies:
+  - Debian 9 knapsack
 Centos 6 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   cache:
@@ -583,6 +613,14 @@ Debian 8:
     - cache
     - gems
   <<: *tag_build
+Debian 9:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "Debian 9 branch"
+    paths:
+    - cache
+    - gems
+  <<: *tag_build
 Centos 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -648,6 +686,14 @@ Debian 7 branch:
   <<: *branch_build
 Debian 8 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "$CI_BUILD_NAME"
+    paths:
+    - cache
+    - gems
+  <<: *branch_build
+Debian 9 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
   cache:
     key: "$CI_BUILD_NAME"
     paths:

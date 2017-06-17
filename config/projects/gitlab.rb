@@ -53,7 +53,7 @@ install_dir     '/opt/gitlab'
 # This will be resolved as part of
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1007
 #
-# Also check support/release_version.rb for Docker version forming
+# Also check lib/gitlab/build.rb for Docker version forming
 if ENV['NIGHTLY'] && ENV['CI_PIPELINE_ID']
   build_version "#{Omnibus::BuildVersion.new.semver}.#{ENV['CI_PIPELINE_ID']}"
 else

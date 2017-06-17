@@ -12,13 +12,21 @@ omnibus-gitlab repository.
 - Upgrade Prometheus to 1.6.3
 - Bump Git version to 2.13.0 b8a4bc4f
 - Upgrade PostgreSQL to 9.6.3 8f144d
+- Upgrade ES indexer to 0.1.0
 - Changing relative URL requires a hard reset ccd76ae2
 - Add omniauth sync_email_from_provider configuration
 - Add libre2 to support the 're2' gem
+- Add a runtime directory for unicorn metrics
+- Add repmgr as an EE dependency
+- Add support for Gitaly configurations for logging and prometheus
 
 9.2.5
 
 - Add default values to GitLab Geo roles 77e7bdfa
+
+9.2.5
+
+- Fix gitlab-ctl replicate-geo-database when run in a Docker container
 
 9.2.2
 
