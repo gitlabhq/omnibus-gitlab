@@ -260,10 +260,13 @@ gitlab-redis
 gitlab-psql
 
 # Prometheus user for prometheus monitoring and various exporters
-prometheus
+gitlab-prometheus
 
 # GitLab Mattermost user (only when using GitLab Mattermost)
 mattermost
+
+# GitLab Registry user (only when using GitLab Registry)
+registry
 ```
 
 By default, omnibus-gitlab package expects that following groups exist:
@@ -280,11 +283,15 @@ gitlab-redis
 
 # Postgresql group (only when using packaged Postgresql)
 gitlab-psql
+
 # Prometheus user for prometheus monitoring and various exporters
-prometheus
+gitlab-prometheus
 
 # GitLab Mattermost group (only when using GitLab Mattermost)
 mattermost
+
+# GitLab Registry group (only when using GitLab Registry)
+registry
 ```
 
 You can also use different user/group names but then you must specify user/group details in `/etc/gitlab/gitlab.rb`, eg.
@@ -366,6 +373,7 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/gitlab-rails/uploads` | 0700 | git:root | Holds user attachments |
 | `/var/opt/gitlab/gitlab-rails/shared/pages` | 0750 | git:gitlab-www | Holds user pages |
 | `/var/opt/gitlab/gitlab-ci/builds` | 0700 | git:root | Holds CI build logs |
+| `/var/opt/gitlab/.ssh` | 0700 | git:git | Holds authorized keys |
 
 
 
@@ -381,6 +389,35 @@ high_availability['mountpoint'] = '/var/opt/gitlab'
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+## Configuring runtime directory
+
+When Prometheus monitoring is enabled, GitLab-monitor will conduct measurements
+of each Unicorn process (Rails metrics). Every Unicorn process will need to write
+a metrics file to a temporary location for each controller request.
+Prometheus will then collect all these files and process their values.
+
+In order to avoid creating disk I/O, the omnibus-gitlab package will use a
+runtime directory.
+
+During `reconfigure`, package will check if `/run` is a `tmpfs` mount.
+If it is not, warning will be printed:
+
+```
+Runtime directory '/run' is not a tmpfs mount.
+```
+
+and Rails metrics will be disabled.
+
+To enable Rails metrics again, create a `tmpfs` mount and specify it in `/etc/gitlab/gitlab.rb`:
+
+```
+runtime_dir '/path/to/tmpfs'
+```
+
+*Please note that there is no `=` in the configuration.*
+
+Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 
 ## Configuring Rack Attack
 

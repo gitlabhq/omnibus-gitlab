@@ -896,6 +896,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # manage_storage_directories['manage_etc'] = false
 
 ################################################################################
+## Runtime directory
+##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#runtime-directory
+################################################################################
+
+# runtime_dir '/run'
+
+################################################################################
 ## Git
 ##! Advanced setting for configuring git system settings for omnibus-gitlab
 ##! internal git
@@ -1294,6 +1301,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['prometheus_listen_addr'] = "localhost:9175"
+# gitaly['logging_format'] = "json"
+# gitaly['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
+# gitaly['grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 
 
 ################################################################################

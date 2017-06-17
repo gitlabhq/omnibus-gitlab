@@ -33,6 +33,9 @@ default['gitlab']['manage-accounts']['enable'] = true
 default['gitlab']['manage-storage-directories']['enable'] = true
 default['gitlab']['manage-storage-directories']['manage_etc'] = true
 
+# A tmpfs mount point directory for runtime files, actual default is located in libraries/gitlab_rails.rb.
+default['gitlab']['runtime-dir'] = nil
+
 ####
 # The Git User that services run as
 ####
@@ -931,6 +934,9 @@ default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
 default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
 default['gitlab']['gitaly']['listen_addr'] = nil
 default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
+default['gitlab']['gitaly']['logging_format'] = nil
+default['gitlab']['gitaly']['sentry_dsn'] = nil
+default['gitlab']['gitaly']['grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
 
 ####

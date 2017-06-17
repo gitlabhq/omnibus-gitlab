@@ -52,6 +52,7 @@ module Gitlab
   omnibus_gitconfig Mash.new
   manage_accounts Mash.new
   manage_storage_directories Mash.new
+  runtime_dir nil
   user Mash.new
   postgresql Mash.new
   redis Mash.new
@@ -188,6 +189,7 @@ module Gitlab
         "omnibus_gitconfig",
         "manage_accounts",
         "manage_storage_directories",
+        "runtime_dir",
         "user",
         "redis",
         "gitlab_rails",

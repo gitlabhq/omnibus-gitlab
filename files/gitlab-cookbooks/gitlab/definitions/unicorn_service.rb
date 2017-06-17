@@ -23,6 +23,8 @@ define :unicorn_service, rails_app: nil, user: nil do
 
   omnibus_helper = OmnibusHelper.new(node)
 
+  metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/unicorn') unless node['gitlab']['runtime-dir'].nil?
+
   unicorn_etc_dir = File.join(rails_home, "etc")
   unicorn_working_dir = File.join(rails_home, "working")
 
@@ -102,7 +104,8 @@ define :unicorn_service, rails_app: nil, user: nil do
       user: user,
       rails_app: rails_app,
       unicorn_rb: unicorn_rb,
-      log_directory: unicorn_log_dir
+      log_directory: unicorn_log_dir,
+      metrics_dir: metrics_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end
