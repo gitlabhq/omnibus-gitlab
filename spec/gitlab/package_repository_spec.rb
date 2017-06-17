@@ -100,7 +100,7 @@ describe PackageRepository do
 
       context 'when CE' do
         before do
-          allow(repo).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
+          allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
         end
 
         it 'prints gitlab-ce' do
