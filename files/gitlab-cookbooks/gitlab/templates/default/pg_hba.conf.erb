@@ -65,6 +65,9 @@
 
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+<% @custom_pg_hba_entries.each do |entry| %>
+<%= entry['type'] %> <%= entry['database'] %> <%= entry['user'] %> <%= entry['cidr'] %> <%= entry['method'] %> <%= entry['option'] %>
+<% end %>
 
 # "local" is for Unix domain socket connections only
 local   all         all                               peer map=gitlab
