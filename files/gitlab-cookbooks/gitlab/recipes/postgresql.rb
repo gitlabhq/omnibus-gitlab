@@ -123,8 +123,6 @@ end
 
 runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
-  owner postgresql_username
-  group postgresql_username
   supervisor_owner postgresql_username
   supervisor_group postgresql_username
   control(['t'])
