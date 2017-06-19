@@ -19,7 +19,7 @@ describe 'postgresql 9.2' do
     expect(chef_run).to include_recipe('gitlab::postgresql_user')
   end
 
-  it_behaves_like 'enabled runit service', 'postgresql', 'gitlab-psql', 'gitlab-psql'
+  it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root'
 
   context 'renders postgresql.conf' do
     it 'includes runtime.conf in postgreslq.conf' do
