@@ -17,7 +17,7 @@
 #
 
 name 'nginx'
-default_version '1.10.3'
+default_version '1.12.0'
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
@@ -28,8 +28,8 @@ dependency 'pcre'
 dependency 'zlib'
 dependency 'openssl'
 
-version '1.10.3' do
-  source sha256: '75020f1364cac459cb733c4e1caed2d00376e40ea05588fb8793076a4c69dd90'
+version '1.12.0' do
+  source sha256: 'b4222e26fdb620a8d3c3a3a8b955e08b713672e1bc5198d1e4f462308a795b30'
 end
 
 source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
