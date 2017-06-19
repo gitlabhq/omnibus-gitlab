@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Add omniauth sync_email_from_provider configuration
 - Add libre2 to support the 're2' gem
 - Add a runtime directory for unicorn metrics
+- Support object storage for artifacts for GitLab EEP
 - Add repmgr as an EE dependency
 
 9.2.6

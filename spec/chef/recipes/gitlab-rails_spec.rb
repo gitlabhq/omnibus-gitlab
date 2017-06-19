@@ -135,6 +135,35 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'for settings regarding object storage for artifacts' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/object_store:\s+enabled: false\s+remote_directory: 'artifacts'\s+connection:/)
+      end
+
+      it 'sets the connection in YAML' do
+        json = <<~JSON
+        {
+          'provider' => 'AWS',
+          'region' => 'eu-west-1',
+          'aws_access_key_id' => 'AKIAKIAKI',
+          'aws_secret_access_key' => 'secret123'
+        }
+        JSON
+
+        stub_gitlab_rb(gitlab_rails: { artifacts: {
+                         object_store_enabled: true,
+                         object_store_remote_directory: 'mepmep',
+                         object_store_connection: json
+                       } })
+
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+'mepmep'/)
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/connection:\s"{\\n  'provider' => 'AWS'/)
+      end
+    end
+
     context 'mattermost settings' do
       context 'mattermost is configured' do
         it 'exposes the mattermost host' do
