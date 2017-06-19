@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.4.0
 
 - Bump NGINX version to 1.12.0 894ddc79
+- Remove software definition of expat 59c39870
 
 9.3.0
 
