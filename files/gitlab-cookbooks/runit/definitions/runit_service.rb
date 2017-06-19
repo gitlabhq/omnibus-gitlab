@@ -186,6 +186,14 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       not_if { FileTest.pipe?("#{sv_dir_name}/supervise/ok") }
     end
 
+    directory "#{sv_dir_name}/supervise" do
+      mode 0755
+    end
+
+    directory "#{sv_dir_name}/log/supervise" do
+      mode 0755
+    end
+
     %w(ok control status).each do |fl|
       file "#{sv_dir_name}/supervise/#{fl}" do
         owner params[:supervisor_owner] || 'root'
