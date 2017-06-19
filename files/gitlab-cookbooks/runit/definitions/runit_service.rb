@@ -187,10 +187,14 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
     end
 
     directory "#{sv_dir_name}/supervise" do
+      owner params[:supervisor_owner] || 'root'
+      group params[:supervisor_group] || 'root'
       mode 0755
     end
 
     directory "#{sv_dir_name}/log/supervise" do
+      owner params[:supervisor_owner] || 'root'
+      group params[:supervisor_group] || 'root'
       mode 0755
     end
 
