@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.4.0
+
+- Bump NGINX version to 1.12.0 894ddc79
+
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
