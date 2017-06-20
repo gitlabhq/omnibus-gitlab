@@ -133,9 +133,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! The IDLE command timeout.
 # gitlab_rails['incoming_email_idle_timeout'] = 60
 
-### Build Artifacts
+### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/mnt/storage/artifacts"
+# gitlab_rails['artifacts']['object_store_enabled'] = false
+# gitlab_rails['artifacts']['object_store_remote_directory'] = "artifacts"
+# gitlab_rails['artifacts']['object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY'
+# }
 
 ### Git LFS
 # gitlab_rails['lfs_enabled'] = true
