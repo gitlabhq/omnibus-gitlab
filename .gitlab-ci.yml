@@ -344,6 +344,7 @@ QA Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
 QA Tag:
   stage: qa-image
@@ -361,6 +362,7 @@ QA Tag:
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 # GitLab.com only
 Ubuntu 14.04 specs 0 3:
