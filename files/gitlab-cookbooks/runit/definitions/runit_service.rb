@@ -194,7 +194,7 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       mode 0755
     end
 
-    %w(ok control status).each do |fl|
+    %w(ok control).each do |fl|
       file "#{sv_dir_name}/supervise/#{fl}" do
         owner params[:supervisor_owner] || 'root'
         group params[:supervisor_group] || 'root'
