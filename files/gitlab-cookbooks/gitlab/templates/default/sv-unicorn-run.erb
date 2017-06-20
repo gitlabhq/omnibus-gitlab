@@ -3,16 +3,7 @@
 # Let runit capture all script error messages
 exec 2>&1
 
-<% if @options[:metrics_dir].nil? -%>
-export prometheus_run_dir=''
-<% else -%>
-# Setup run directory.
-mkdir -p <%= @options[:metrics_dir] %>
-rm <%= File.join(@options[:metrics_dir], '*.db') %> 2> /dev/null
-chmod 0700 <%= @options[:metrics_dir] %>
-chown <%= @options[:user] %> <%= @options[:metrics_dir] %>
-export prometheus_run_dir='<%= @options[:metrics_dir] %>'
-<% end -%>
+<%= render("make_metrics_rundir.erb") %>
 <%= render("mount_point_check.erb") %>
 
 exec chpst -P -u <%= @options[:user] %> \
