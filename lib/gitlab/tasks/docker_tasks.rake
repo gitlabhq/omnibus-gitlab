@@ -59,7 +59,7 @@ namespace :docker do
     task :qa do
       docker_tag = "#{edition}-#{tag}"
       authenticate
-      DockerOperations.push("gitlab-qa", "#{edition}-latest", docker_tag)
+      DockerOperations.push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -68,7 +68,7 @@ namespace :docker do
       registry = "https://registry.gitlab.com/v2/"
       docker_tag = ENV["DOCKER_TAG"]
       authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      push(docker_tag, ENV["CI_REGISTRY_IMAGE"])
+      push(docker_tag, ENV["CI_PROJECT_PATH"], registry)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -76,8 +76,9 @@ namespace :docker do
       Build.docker_tag
     end
 
-    def push(docker_tag, repository = 'gitlab')
-      DockerOperations.push(release_package, "latest", docker_tag, repository)
+    def push(docker_tag, repository = 'gitlab', registry = 'docker.io')
+      namespace = "#{repository}/#{release_package}"
+      DockerOperations.push(namespace, "latest", docker_tag, registry)
     end
 
     def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
