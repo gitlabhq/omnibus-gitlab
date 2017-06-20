@@ -31,9 +31,18 @@ class DockerOperations
   # 2. gitlab.com
   # 3. dev.gitlab.org
   def self.push(namespace, initial_tag, new_tag, registry = 'docker.io')
-    image = Docker::Image.get("#{registry}/#{namespace}:#{initial_tag}")
-    image.tag(repo: namespace, tag: new_tag, force: true)
-    image.push(Docker.creds, repo_tag: "#{namespace}:#{new_tag}") do |chunk|
+    image = get(registry, namespace, initial_tag)
+    tag_and_push(image, registry, namespace, new_tag)
+  end
+
+  def self.get(registry, namespace, tag)
+    Docker::Image.get("#{registry}/#{namespace}:#{tag}")
+  end
+
+  def self.tag_and_push(image, registry, namespace, tag)
+    registry_repository = "#{registry}/#{namespace}"
+    image.tag(repo: registry_repository, tag: tag, force: true)
+    image.push(Docker.creds, repo_tag: "#{registry_repository}:#{tag}") do |chunk|
       puts chunk
     end
   end
