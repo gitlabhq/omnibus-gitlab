@@ -1,7 +1,13 @@
 require 'chef_helper'
 
 describe 'gitlab-ee::sidekiq-cluster' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) do
+    runner = ChefSpec::SoloRunner.new(
+      step_into: %w(templatesymlink),
+      path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
+    )
+    runner.converge('gitlab-ee::default')
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -24,8 +30,17 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
 
     it 'correctly renders out the sidekiq-cluster service file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run").with_content(/process_commit,post_receive/)
-      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run").with_content(/gitlab_shell/)
+      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
+        .with_content { |content|
+          expect(content).not_to match(/export prometheus_run_dir=\'\'/)
+          expect(content).to match(/mkdir -p \/run\/gitlab\/sidekiq-cluster/)
+          expect(content).to match(/rm \/run\/gitlab\/sidekiq-cluster/)
+          expect(content).to match(/chmod 0700 \/run\/gitlab\/sidekiq-cluster/)
+          expect(content).to match(/chown git \/run\/gitlab\/sidekiq-cluster/)
+          expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/sidekiq-cluster\'/)
+          expect(content).to match(/process_commit,post_receive/)
+          expect(content).to match(/gitlab_shell/)
+        }
     end
   end
 
