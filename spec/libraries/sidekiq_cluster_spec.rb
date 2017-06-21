@@ -4,6 +4,14 @@ describe SidekiqCluster do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
+  describe 'when sidekiq is disabled' do
+    before { stub_gitlab_rb(sidekiq: { enable: false }, sidekiq_cluster: { enable: true }) }
+
+    it 'disabled sidekiq-cluster' do
+      expect(chef_run.node['gitlab']['sidekiq-cluster']['enable']).to be false
+    end
+  end
+
   describe 'when queue_groups is passed a string instead of an array' do
     before { stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: 'gitlab_shell' }) }
 
