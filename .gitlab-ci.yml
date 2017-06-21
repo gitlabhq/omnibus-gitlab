@@ -83,7 +83,7 @@ docs check links:
   stage: prepare
   before_script: []
   script:
-    - JOB_NAME=( $CI_BUILD_NAME )
+    - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
@@ -106,7 +106,7 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
 .spec_template: &run_rspec
   stage: tests
   script:
-    - JOB_NAME=( $CI_BUILD_NAME )
+    - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - export CI_NODE_INDEX=${JOB_NAME[3]}
@@ -665,7 +665,7 @@ SLES 12:
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -673,7 +673,7 @@ Ubuntu 14.04 branch:
 Ubuntu 16.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -681,7 +681,7 @@ Ubuntu 16.04 branch:
 Debian 7 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -689,7 +689,7 @@ Debian 7 branch:
 Debian 8 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -697,7 +697,7 @@ Debian 8 branch:
 Debian 9 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -705,7 +705,7 @@ Debian 9 branch:
 CentOS 6 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -713,7 +713,7 @@ CentOS 6 branch:
 CentOS 7 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -721,7 +721,7 @@ CentOS 7 branch:
 OpenSUSE 42.2 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -744,7 +744,7 @@ SLES 12 branch:
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "$CI_BUILD_NAME"
+    key: "$CI_JOB_NAME"
     paths:
     - cache
     - gems
@@ -765,7 +765,7 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_BUILD_REF_NAME\` failed! Commit \`$(git log -1 --oneline | sed 's|\"|\\\\\"|g')\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_BUILD_REF"/pipelines>"
+    - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_COMMIT_REF_NAME\` failed! Commit \`$(git log -1 --oneline | sed 's|\"|\\\\\"|g')\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/commit/"$CI_COMMIT_SHA"/pipelines>"
   when: on_failure
   only:
     - master
