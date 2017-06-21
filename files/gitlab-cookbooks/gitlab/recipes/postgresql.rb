@@ -123,6 +123,8 @@ end
 
 runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
+  supervisor_owner postgresql_username
+  supervisor_group postgresql_username
   control(['t'])
   options({
     :log_directory => postgresql_log_dir

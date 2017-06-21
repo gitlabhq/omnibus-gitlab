@@ -20,6 +20,8 @@ define :sidekiq_service, rails_app: nil, user: nil do
   user = params[:user]
   rails_app = params[:rails_app]
 
+  metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/sidekiq') unless node['gitlab']['runtime-dir'].nil?
+
   sidekiq_log_dir = node['gitlab'][svc]['log_directory']
 
   directory sidekiq_log_dir do
@@ -36,7 +38,8 @@ define :sidekiq_service, rails_app: nil, user: nil do
       user: user,
       shutdown_timeout: node['gitlab'][svc]['shutdown_timeout'],
       concurrency: node['gitlab'][svc]['concurrency'],
-      log_directory: sidekiq_log_dir
+      log_directory: sidekiq_log_dir,
+      metrics_dir: metrics_dir
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end

@@ -17,6 +17,8 @@
 account_helper = AccountHelper.new(node)
 log_directory = node['gitlab']['sidekiq-cluster']['log_directory']
 
+metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/sidekiq-cluster') unless node['gitlab']['runtime-dir'].nil?
+
 directory log_directory do
   owner account_helper.gitlab_user
   mode '0700'
@@ -29,6 +31,7 @@ runit_service 'sidekiq-cluster' do
   options({
     user: account_helper.gitlab_user,
     log_directory: log_directory,
+    metrics_dir: metrics_dir,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['sidekiq-cluster'].to_hash)
 end
