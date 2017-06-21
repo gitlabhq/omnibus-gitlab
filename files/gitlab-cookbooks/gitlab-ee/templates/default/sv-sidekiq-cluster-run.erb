@@ -2,18 +2,31 @@
 
 cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
 
+<% if @options[:metrics_dir].nil? -%>
+export prometheus_run_dir=''
+<% else -%>
+# Setup run directory.
+mkdir -p <%= @options[:metrics_dir] %>
+rm <%= File.join(@options[:metrics_dir], '*.db') %> 2> /dev/null
+chmod 0700 <%= @options[:metrics_dir] %>
+chown <%= @options[:user] %> <%= @options[:metrics_dir] %>
+export prometheus_run_dir='<%= @options[:metrics_dir] %>'
+<% end -%>
+
 exec 2>&1
 <%= render("mount_point_check.erb", cookbook: 'gitlab') %>
 exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -U <%= @options[:user] %> -u <%= @options[:user] %> \
-  /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
-    -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
-    -r /opt/gitlab/embedded/service/gitlab-rails \
-    <% if node['gitlab']['sidekiq-cluster']['interval'] %>
-    -i <%= node['gitlab']['sidekiq-cluster']['interval'] %> \
-    <% end %>
-    <% node['gitlab']['sidekiq-cluster']['queue_groups'].each do |queue| %>
-      <%= queue %> \
-    <% end %>
+  /usr/bin/env \
+    prometheus_multiproc_dir="${prometheus_run_dir}" \
+    /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
+      -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
+      -r /opt/gitlab/embedded/service/gitlab-rails \
+      <% if node['gitlab']['sidekiq-cluster']['interval'] %>
+      -i <%= node['gitlab']['sidekiq-cluster']['interval'] %> \
+      <% end %>
+      <% node['gitlab']['sidekiq-cluster']['queue_groups'].each do |queue| %>
+        <%= queue %> \
+      <% end %>
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.
