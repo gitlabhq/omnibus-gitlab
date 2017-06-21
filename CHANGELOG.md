@@ -25,6 +25,7 @@ omnibus-gitlab repository.
 - Add a runtime directory for unicorn metrics
 - Support object storage for artifacts for GitLab EEP
 - Add repmgr as an EE dependency
+- Upgrade Mattermost to 3.10.0
 
 9.2.6
 - Backport: Upgrade ES indexer to 0.1.0
