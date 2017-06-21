@@ -3,7 +3,7 @@ require 'docker'
 class DockerOperations
   def self.build(location, image, tag)
     Docker.options[:read_timeout] = 600
-    Docker::Image.build_from_dir(location.to_s, { t: "gitlab/#{image}:#{tag}", pull: true }) do |chunk|
+    Docker::Image.build_from_dir(location.to_s, { t: "#{image}:#{tag}", pull: true }) do |chunk|
       if (log = JSON.parse(chunk)) && log.key?("stream")
         puts log["stream"]
       end
@@ -31,18 +31,17 @@ class DockerOperations
   # 2. gitlab.com
   # 3. dev.gitlab.org
   def self.push(namespace, initial_tag, new_tag, registry = 'docker.io')
-    image = get(registry, namespace, initial_tag)
-    tag_and_push(image, registry, namespace, new_tag)
+    image = get(namespace, initial_tag)
+    tag_and_push(image, namespace, new_tag)
   end
 
-  def self.get(registry, namespace, tag)
-    Docker::Image.get("#{registry}/#{namespace}:#{tag}")
+  def self.get(namespace, tag)
+    Docker::Image.get("#{namespace}:#{tag}")
   end
 
-  def self.tag_and_push(image, registry, namespace, tag)
-    registry_repository = "#{registry}/#{namespace}"
-    image.tag(repo: registry_repository, tag: tag, force: true)
-    image.push(Docker.creds, repo_tag: "#{registry_repository}:#{tag}") do |chunk|
+  def self.tag_and_push(image, namespace, tag)
+    image.tag(repo: namespace, tag: tag, force: true)
+    image.push(Docker.creds, repo_tag: "#{namespace}:#{tag}") do |chunk|
       puts chunk
     end
   end
