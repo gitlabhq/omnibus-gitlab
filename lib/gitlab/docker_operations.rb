@@ -3,7 +3,7 @@ require 'docker'
 class DockerOperations
   def self.build(location, image, tag)
     Docker.options[:read_timeout] = 600
-    Docker::Image.build_from_dir(location.to_s, { t: "#{image}:#{tag}", pull: true }) do |chunk|
+    Docker::Image.build_from_dir(location.to_s, { t: "gitlab/#{image}:#{tag}", pull: true }) do |chunk|
       if (log = JSON.parse(chunk)) && log.key?("stream")
         puts log["stream"]
       end
