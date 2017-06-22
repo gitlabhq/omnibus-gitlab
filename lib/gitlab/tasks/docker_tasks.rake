@@ -67,15 +67,6 @@ namespace :docker do
       end
     end
 
-    # push as :latest tag, the :latest is always the latest stable release
-    task :latest do
-      if Build.add_latest_tag?
-        authenticate
-        push('latest')
-        puts "Pushed tag: latest"
-      end
-    end
-
     desc "Push QA Docker Image"
     task :qa do
       docker_tag = "#{edition}-#{tag}"
@@ -91,27 +82,6 @@ namespace :docker do
       authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
       push(docker_tag, ENV["CI_PROJECT_PATH"])
       puts "Pushed tag: #{docker_tag}"
-    end
-
-    def tag
-      Build.docker_tag
-    end
-
-    def push(docker_tag, repository = 'gitlab')
-      namespace = "#{repository}/#{release_package}"
-      DockerOperations.push(namespace, "latest", docker_tag)
-    end
-
-    def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
-      DockerOperations.authenticate(user, token, registry)
-    end
-
-    def push_to_dockerhub(final_tag)
-      # Use the local image
-      image = DockerOperations.get(image_name, tag)
-      # Create different tags and push to dockerhub
-      DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
-      puts "Pushed tag: #{final_tag}"
     end
   end
 
@@ -139,5 +109,22 @@ namespace :docker do
 
   def image_name
     "#{ENV['CI_REGISTRY_IMAGE']}/#{release_package}"
+  end
+
+  def push(docker_tag, repository = 'gitlab')
+    namespace = "#{repository}/#{release_package}"
+    DockerOperations.push(namespace, "latest", docker_tag)
+  end
+
+  def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
+    DockerOperations.authenticate(user, token, registry)
+  end
+
+  def push_to_dockerhub(final_tag)
+    # Use the local image
+    image = DockerOperations.get(image_name, tag)
+    # Create different tags and push to dockerhub
+    DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
+    puts "Pushed tag: #{final_tag}"
   end
 end

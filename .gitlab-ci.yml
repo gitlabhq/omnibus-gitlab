@@ -805,6 +805,6 @@ Docker Release:
     - bundle exec rake docker:push:rc
     - bundle exec rake docker:push:latest
   only:
-    - tags@marin/omnibus-gitlab
+    - tags@gitlab/omnibus-gitlab
   dependencies: []
   when: manual
