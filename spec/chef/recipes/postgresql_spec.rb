@@ -261,11 +261,11 @@ describe 'postgresql 9.6' do
 
       it 'sets the max_locks_per_transaction setting' do
         expect(chef_run.node['gitlab']['postgresql']['max_locks_per_transaction'])
-          .to eq(64)
+          .to eq(128)
 
         expect(chef_run).to render_file(
           postgresql_conf
-        ).with_content(/max_locks_per_transaction = 64/)
+        ).with_content(/max_locks_per_transaction = 128/)
       end
 
       context 'when dynamic_shared_memory_type is none' do
@@ -306,11 +306,11 @@ describe 'postgresql 9.6' do
 
       it 'sets the random_page_cost setting' do
         expect(chef_run.node['gitlab']['postgresql']['random_page_cost'])
-          .to eq(4.0)
+          .to eq(2.0)
 
         expect(chef_run).to render_file(
           runtime_conf
-        ).with_content(/random_page_cost = 4\.0/)
+        ).with_content(/random_page_cost = 2\.0/)
       end
 
       it 'sets the log_temp_files setting' do

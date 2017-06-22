@@ -383,7 +383,7 @@ default['gitlab']['postgresql']['shared_buffers'] = if (node['memory']['total'].
                                                       "#{(node['memory']['total'].to_i / 4) / 1024}MB"
                                                     end
 
-default['gitlab']['postgresql']['work_mem'] = "8MB"
+default['gitlab']['postgresql']['work_mem'] = "16MB"
 default['gitlab']['postgresql']['maintenance_work_mem'] = "16MB"
 default['gitlab']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / 1024}MB"
 default['gitlab']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
@@ -405,13 +405,13 @@ default['gitlab']['postgresql']['autovacuum_analyze_scale_factor'] = "0.01" # 10
 default['gitlab']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
 default['gitlab']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
-default['gitlab']['postgresql']['statement_timeout'] = "0"
+default['gitlab']['postgresql']['statement_timeout'] = '60000'
 default['gitlab']['postgresql']['log_line_prefix'] = nil
 default['gitlab']['postgresql']['track_activity_query_size'] = "1024"
 default['gitlab']['postgresql']['shared_preload_libraries'] = nil
 default['gitlab']['postgresql']['dynamic_shared_memory_type'] = nil
-default['gitlab']['postgresql']['random_page_cost'] = 4.0
-default['gitlab']['postgresql']['max_locks_per_transaction'] = 64
+default['gitlab']['postgresql']['random_page_cost'] = 2.0
+default['gitlab']['postgresql']['max_locks_per_transaction'] = 128
 default['gitlab']['postgresql']['log_temp_files'] = -1
 default['gitlab']['postgresql']['log_checkpoints'] = 'off'
 default['gitlab']['postgresql']['custom_pg_hba_entries'] = []

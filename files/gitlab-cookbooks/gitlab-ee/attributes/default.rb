@@ -78,7 +78,7 @@ default['gitlab']['geo-postgresql']['trust_auth_cidr_addresses'] = []
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults
 default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
 
-default['gitlab']['geo-postgresql']['work_mem'] = '8MB'
+default['gitlab']['geo-postgresql']['work_mem'] = '16MB'
 default['gitlab']['geo-postgresql']['maintenance_work_mem'] = '16MB'
 default['gitlab']['geo-postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 2048].max}MB" # double of shared_buffers estimation
 default['gitlab']['geo-postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
@@ -100,7 +100,7 @@ default['gitlab']['geo-postgresql']['autovacuum_analyze_scale_factor'] = '0.01' 
 default['gitlab']['geo-postgresql']['autovacuum_freeze_max_age'] = '200000000'
 default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_delay'] = '20ms'
 default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_limit'] = '-1'
-default['gitlab']['geo-postgresql']['statement_timeout'] = '0'
+default['gitlab']['geo-postgresql']['statement_timeout'] = '60000'
 default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
 default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
 default['gitlab']['geo-postgresql']['shared_preload_libraries'] = nil
