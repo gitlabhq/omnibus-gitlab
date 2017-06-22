@@ -16,6 +16,12 @@ GIT
       ruby-progressbar (~> 1.7)
       thor (~> 0.18)
 
+GIT
+  remote: https://gitlab.com/gitlab-org/gitlab-qa.git
+  revision: 4a81f3cbd25f958b97c5c657a7e2539f38f8ae1b
+  specs:
+    gitlab-qa (0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -90,7 +96,6 @@ GEM
     ffi-yajl (2.3.0)
       libyajl2 (~> 1.2)
     fuzzyurl (0.9.0)
-    gitlab-qa (0.1.0)
     hashie (3.4.6)
     highline (1.6.20)
     iniparse (1.4.2)
@@ -222,7 +227,7 @@ DEPENDENCIES
   chefspec
   docker-api
   fantaskspec
-  gitlab-qa
+  gitlab-qa!
   json
   knapsack
   ohai
