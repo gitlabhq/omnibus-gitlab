@@ -20,6 +20,11 @@ omnibus-gitlab repository.
 - Support object storage for artifacts for GitLab EEP
 - Add repmgr as an EE dependency
 - Add support for Gitaly configurations for logging and prometheus
+- Upgrade Mattermost to 3.10.0
+
+9.2.6
+- Backport: Upgrade ES indexer to 0.1.0
+>>>>>>> 116b828... Merge branch 'patch-2' into 'master'
 
 9.2.5
 
