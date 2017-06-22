@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Bump NGINX version to 1.12.0 894ddc79
 - Remove software definition of expat 59c39870
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
+- Adjust various default values for PostgreSQL based on GitLab.com
 
 9.3.0
 

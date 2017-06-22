@@ -631,14 +631,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['wal_level'] = "hot_standby"
 # postgresql['max_wal_senders'] = 5
 # postgresql['max_replication_slots'] = 0
-# postgresql['max_locks_per_transaction'] = 64
+# postgresql['max_locks_per_transaction'] = 128
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_mode'] = "off"
 
 ###! Changing any of these settings only requires a reload of postgresql. You do not need to
 ###! restart postgresql if you change any of these and run reconfigure.
-# postgresql['work_mem'] = "8MB"
+# postgresql['work_mem'] = "16MB"
 # postgresql['maintenance_work_mem'] = "16MB"
 # postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
@@ -656,7 +656,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['autovacuum_analyze_scale_factor'] = "0.01"
 # postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
 # postgresql['autovacuum_vacuum_cost_limit'] = "-1"
-# postgresql['statement_timeout'] = "0"
+# postgresql['statement_timeout'] = "60000"
 # postgresql['log_line_prefix'] = "%a"
 
 ### Available in PostgreSQL 9.6 and later
@@ -675,7 +675,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['synchronous_commit'] = on
 # postgresql['synchronous_standby_names'] = ''
 # postgresql['hot_standby_feedback'] = 'off'
-# postgresql['random_page_cost'] = 4.0
+# postgresql['random_page_cost'] = 2.0
 # postgresql['log_temp_files'] = -1
 # postgresql['log_checkpoints'] = 'off'
 # To add custom entries to pg_hba.conf use the following
