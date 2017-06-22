@@ -23,6 +23,21 @@ namespace :docker do
       # to avoid possible conflicts that may arise if the clone's destination
       # directory already exists.
       system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
+
+      # The below code is for handling triggered builds. In case of triggered
+      # builds, we want to use the qa folder from the commit from which the
+      # build was triggered, not master. This is needed when the change to test
+      # is in the qa folder.
+      checkout_version = if ENV['GITLAB_VERSION'].nil? || ENV['GITLAB_VERSION'].empty?
+                           File.read('VERSION').strip
+                         else
+                           ENV['GITLAB_VERSION']
+                         end
+
+      # Checking out the cloned repo to the specific commit (well, without doing
+      # a to-and-fro `cd`).
+      system("git --git-dir=/tmp/#{repo}.#{$PROCESS_ID}/.git --work-tree=/tmp/#{repo}.#{$PROCESS_ID} checkout --quiet #{checkout_version}")
+
       location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
       DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
       FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
