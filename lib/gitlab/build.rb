@@ -59,7 +59,7 @@ class Build
     end
 
     def docker_tag
-      release_version.tr('+','-')
+      release_version.tr('+', '-')
     end
 
     def add_latest_tag?

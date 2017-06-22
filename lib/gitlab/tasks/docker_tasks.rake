@@ -90,7 +90,7 @@ namespace :docker do
     task :staging do
       registry = ENV['CI_REGISTRY']
       authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      image = Docker::Image.create('fromImage' => "#{image_name}:#{tag}")
+      Docker::Image.create('fromImage' => "#{image_name}:#{tag}")
       puts "Pulled tag: #{tag}"
     end
   end
