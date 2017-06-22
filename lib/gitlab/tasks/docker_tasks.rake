@@ -24,7 +24,7 @@ namespace :docker do
       # directory already exists.
       system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
       location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
-      DockerOperations.build(location, "gitlab-qa", "#{edition}-latest")
+      DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
       FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
     end
   end
