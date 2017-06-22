@@ -43,6 +43,14 @@ namespace :docker do
       push_to_dockerhub(tag)
     end
 
+    # Special tags
+    task :nightly do
+      if Build.add_nightly_tag?
+        authenticate
+        push_to_dockerhub('nightly')
+      end
+    end
+
     # push as :rc tag, the :rc is always the latest tagged release
     task :rc do
       if Build.add_rc_tag?
