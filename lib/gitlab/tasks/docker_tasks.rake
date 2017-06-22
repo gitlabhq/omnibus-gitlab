@@ -108,7 +108,7 @@ namespace :docker do
 
     def push_to_dockerhub(final_tag)
       # Use the local image
-      image = DockerOperations.get("#{image_name}:##{tag}")
+      image = DockerOperations.get(image_name, tag)
       # Create different tags and push to dockerhub
       DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
       puts "Pushed tag: #{final_tag}"
