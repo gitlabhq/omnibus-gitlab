@@ -858,6 +858,11 @@ Debian 8 staging:
     - Debian 8
     - Debian 8 branch
   <<: *staging_upload
+Debian 9 staging:
+  dependencies:
+    - Debian 9
+    - Debian 9 branch
+  <<: *staging_upload
 CentOS 6 staging:
   dependencies:
     - CentOS 6
@@ -868,10 +873,10 @@ CentOS 7 staging:
     - CentOS 7
     - CentOS 7 branch
   <<: *staging_upload
-OpenSUSE 42.1 staging:
+OpenSUSE 42.2 staging:
   dependencies:
-    - OpenSUSE 42.1
-    - OpenSUSE 42.1 branch
+    - OpenSUSE 42.2
+    - OpenSUSE 42.2 branch
   <<: *staging_upload
 SLES 12 staging:
   dependencies:
@@ -897,16 +902,21 @@ Debian 8 release:
   dependencies:
     - Debian 8 staging
   <<: *production_release
+Debian 9 release:
+  dependencies:
+    - Debian 9 staging
+  <<: *production_release
 CentOS 6 release:
   dependencies:
     - CentOS 6 staging
+  <<: *production_release
 CentOS 7 release:
   dependencies:
     - CentOS 7 staging
   <<: *production_release
-OpenSUSE 42.1 release:
+OpenSUSE 42.2 release:
   dependencies:
-    - OpenSUSE 42.1 staging
+    - OpenSUSE 42.2 staging
   <<: *production_release
 SLES 12 release:
   dependencies:
