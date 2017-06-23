@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ ${DOWNLOAD_URL} == *"amazonaws"* ]]; then
+    echo "Downloading package from Amazon bucket - ${DOWNLOAD_URL}"
+    wget --quiet ${DOWNLOAD_URL} -O /tmp/gitlab.deb
+else
+    echo "Downloading package as artifact - ${DOWNLOAD_URL}"
+    # If we are fetching the package which is available as an artifact, we need
+    # to authenticate to access it. Hence, we pass PRIVATE-TOKEN header.
+    wget --quiet --header "PRIVATE-TOKEN: ${TRIGGER_PRIVATE_TOKEN}" ${DOWNLOAD_URL} -O /tmp/gitlab.deb
+fi

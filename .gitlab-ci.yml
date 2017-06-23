@@ -8,6 +8,7 @@ stages:
   - package
   - notification_fail
   - images
+  - docker_release
   - notification_fail
   - qa-image
   - raspbian
@@ -246,7 +247,8 @@ Docker master:
   - echo $PACKAGECLOUD_REPO
   - export RELEASE_BUCKET=omnibus-builds
   - bundle exec rake docker:build:image
-  - if [ -n "$NIGHTLY" ] ; then bundle exec rake docker:push:stable ;fi
+  - bundle exec rake docker:push:staging
+  - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
   dependencies:
@@ -265,9 +267,7 @@ Docker:
   - echo $PACKAGECLOUD_REPO
   - export RELEASE_BUCKET=downloads-packages
   - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:stable
-  - bundle exec rake docker:push:rc
-  - bundle exec rake docker:push:latest
+  - bundle exec rake docker:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies:
@@ -747,3 +747,21 @@ trigger_docs:
     - master@gitlab-org/omnibus-gitlab
   except:
     - triggers
+
+Docker Release:
+  stage: docker_release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+    - bundle exec rake docker:pull:staging
+    - bundle exec rake docker:push:stable
+    - bundle exec rake docker:push:rc
+    - bundle exec rake docker:push:latest
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  when: manual

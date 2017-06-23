@@ -14,11 +14,29 @@ class DockerOperations
     Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
   end
 
-  def self.push(image_id, old_tag, new_tag, repo = "gitlab")
-    image = Docker::Image.get("#{image_id}:#{old_tag}")
-    image.info["RepoTags"].pop
-    image.tag(repo: "#{repo}/#{image_id}", tag: new_tag, force: true)
-    image.push(Docker.creds, repo_tag: "#{repo}/#{image_id}:#{new_tag}") do |chunk|
+  # namespace - registry project. Can be one of:
+  # 1. gitlab/gitlab-{ce,ee}
+  # 2. gitlab/gitlab-qa
+  # 3. omnibus-gitlab/gitlab-{ce,ee}
+  #
+  # initial_tag - specifies the tag used while building the image. Can be one of:
+  # 1. latest - for GitLab images
+  # 2. ce-latest or ee-latest - for GitLab QA images
+  # 3. any other valid docker tag
+  #
+  # new_tag - specifies the new tag for the existing image
+  def self.push(namespace, initial_tag, new_tag)
+    image = get(namespace, initial_tag)
+    tag_and_push(image, namespace, new_tag)
+  end
+
+  def self.get(namespace, tag)
+    Docker::Image.get("#{namespace}:#{tag}")
+  end
+
+  def self.tag_and_push(image, namespace, tag)
+    image.tag(repo: namespace, tag: tag, force: true)
+    image.push(Docker.creds, repo_tag: "#{namespace}:#{tag}") do |chunk|
       puts chunk
     end
   end
