@@ -25,12 +25,7 @@ class DockerOperations
   # 3. any other valid docker tag
   #
   # new_tag - specifies the new tag for the existing image
-  #
-  # registry - specifies the target registry. Can be one of:
-  # 1. docker.io
-  # 2. gitlab.com
-  # 3. dev.gitlab.org
-  def self.push(namespace, initial_tag, new_tag, registry = 'docker.io')
+  def self.push(namespace, initial_tag, new_tag)
     image = get(namespace, initial_tag)
     tag_and_push(image, namespace, new_tag)
   end
