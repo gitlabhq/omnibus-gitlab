@@ -999,6 +999,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['gid'] = nil
 # mattermost['home'] = '/var/opt/gitlab/mattermost'
 # mattermost['database_name'] = 'mattermost_production'
+# mattermost['env'] = {}
 
 # mattermost['service_use_ssl'] = false
 # mattermost['service_address'] = "127.0.0.1"

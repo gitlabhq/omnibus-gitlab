@@ -22,6 +22,7 @@ mattermost_gid = node['gitlab']['mattermost']['gid']
 mattermost_home = node['gitlab']['mattermost']['home']
 mattermost_log_dir = node['gitlab']['mattermost']['log_file_directory']
 mattermost_storage_directory = node['gitlab']['mattermost']['file_directory']
+mattermost_static_etc_dir = "/opt/gitlab/etc/mattermost"
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
@@ -163,6 +164,17 @@ end
 ###
 # Mattermost control service
 ###
+
+directory mattermost_static_etc_dir do
+  owner mattermost_user
+  mode '0700'
+  recursive true
+end
+
+env_dir File.join(mattermost_static_etc_dir, 'env') do
+  variables node['gitlab']['mattermost']['env']
+  restarts ["service[mattermost]"]
+end
 
 runit_service "mattermost" do
   options({

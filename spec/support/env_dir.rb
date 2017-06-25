@@ -33,3 +33,15 @@ shared_examples 'enabled gitlab-workhorse env' do |env_var, content|
     )
   end
 end
+
+shared_examples 'enabled mattermost env' do |env_var, content|
+  it 'created env directory' do
+    expect(chef_run).to create_directory("/opt/gitlab/etc/mattermost/env")
+  end
+
+  it "does create the #{env_var} file" do
+    expect(chef_run).to create_file("/opt/gitlab/etc/mattermost/env/#{env_var}").with_content(
+      /#{content}/
+    )
+  end
+end
