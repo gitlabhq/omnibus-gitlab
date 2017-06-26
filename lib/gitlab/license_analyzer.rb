@@ -66,23 +66,51 @@ class LicenseAnalyzer
     ['unacceptable', 'Unknown license']
   end
 
+  def self.print_status(dependency, version, license, status, reason, level)
+    # level is used to properly align the output. First level dependencies
+    # (level-0) have no indentation. Their dependencies, the level-1 ones,
+    # are indented.
+    case status
+    when 'acceptable'
+      if reason == 'Acceptable license'
+        puts "\t" * level + "✓ #{dependency} - #{version} uses #{license} - #{reason}"
+      elsif reason == 'Whitelisted software'
+        puts "\t" * level + "# #{dependency} - #{version} uses #{license} - #{reason}"
+      end
+    when 'unacceptable'
+      if reason == 'Unknown license'
+        puts "\t" * level + "! #{dependency} - #{version} uses #{license} - #{reason}"
+      else
+        puts "\t" * level + "⨉ #{dependency} - #{version} uses #{license} - #{reason}"
+      end
+    end
+  end
+
   def self.analyze(json_data)
     violations = []
-    json_data.each do |dependency, attributes|
-      license = attributes['license'].strip.delete('"').delete("'")
-      version = attributes['version']
-      status, reason = acceptable?(dependency, license.strip)
 
-      case status
-      when 'acceptable'
-        puts "Acceptable   : #{dependency} - #{version} uses #{license} - #{reason}"
-      when 'unacceptable'
-        violations << "#{dependency} - #{version} - #{license} - #{reason}"
-        if reason == 'Blacklisted software'
-          puts "Unacceptable ! #{dependency} - #{version} uses #{license} - #{reason}"
-        elsif reason == 'Unknown license'
-          puts "Unknown      ? #{dependency} - #{version} uses #{license} - #{reason}"
-        end
+    # We are currently considering dependencies in a two-level view only. This
+    # means some information will be repeated as there are softwares that are
+    # dependencies of multiple components and they get listed again and again.
+
+    # Handling level-0 dependencies
+    json_data.each do |library|
+      level = 0
+      name = library['name']
+      license = library['license'].strip.delete('"').delete("'")
+      version = library['version']
+      status, reason = acceptable?(name, license.strip)
+      print_status(name, version, license, status, reason, level)
+      violations << "#{name} - #{version} - #{license} - #{reason}" if status == 'unacceptable'
+
+      # Handling level-1 dependencies
+      library['dependencies'].each do |dependency|
+        level = 1
+        name = dependency['name']
+        license = dependency['license'].strip.delete('"').delete("'")
+        version = library['version']
+        status, reason = acceptable?(name, license.strip)
+        print_status(name, version, license, status, reason, level)
       end
     end
 

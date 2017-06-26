@@ -11,95 +11,120 @@ describe 'license:check', type: :rake do
   end
 
   it 'detects good licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "chef-zero",
         "version": "4.8.0",
-        "license": "Apache-2.0"
+        "license": "Apache-2.0",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "MIT"
+          }
+        ]
       }
-    }'
+     ]'
     allow(File).to receive(:read).and_return(license_info)
 
-    expect { Rake::Task['license:check'].invoke }.to output(/Acceptable.*chef-zero - 4.8.0.*Apache-2.0/).to_stdout
+    expect { Rake::Task['license:check'].invoke }.to output(/✓.*chef-zero - 4.8.0.*Apache-2.0/).to_stdout
   end
 
   it 'detects blacklisted softwares with good licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "readline",
         "version": "4.8.0",
-        "license": "Apache-2.0"
-      },
-      "readline": {
-        "version": "2.3.0",
-        "license": "Apache-2.0"
+        "license": "Apache-2.0",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "MIT"
+          }
+        ]
       }
-    }'
+     ]'
     allow(File).to receive(:read).and_return(license_info)
 
     expect { Rake::Task['license:check'].invoke }.to output(/readline.*Blacklisted software/).to_stdout.and raise_error(RuntimeError, "Build Aborted due to license violations")
   end
 
   it 'detects bad licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "foo",
         "version": "4.8.0",
-        "license": "Apache-2.0"
-      },
-      "bar": {
-        "version": "2.3.0",
-        "license": "jargon"
-      },
-      "foo": {
-        "version": "1.2.11",
-        "license": "GPL-3.0+"
+        "license": "GPL-3.0",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "GPL-3.0"
+          }
+        ]
       }
-    }'
+     ]'
+
     allow(File).to receive(:read).and_return(license_info)
     expect { Rake::Task['license:check'].invoke }.to output(/foo.*Unacceptable license/).to_stdout.and raise_error(RuntimeError, "Build Aborted due to license violations")
   end
 
   it 'detects whitelisted softwares with bad licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "git",
         "version": "4.8.0",
-        "license": "Apache-2.0"
-      },
-      "git": {
-        "version": "1.2.11",
-        "license": "GPL-3.0+"
+        "license": "GPL-3.0",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "GPL-3.0"
+          }
+        ]
       }
-    }'
+     ]'
     allow(File).to receive(:read).and_return(license_info)
 
     expect { Rake::Task['license:check'].invoke }.to output(/git.*Whitelisted software/).to_stdout
   end
 
   it 'detects blacklisted softwares with unknown licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "readline",
         "version": "4.8.0",
-        "license": "Apache-2.0"
-      },
-      "readline": {
-        "version": "2.3.0",
-        "license": "jargon"
+        "license": "jargon",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "MIT"
+          }
+        ]
       }
-    }'
+     ]'
     allow(File).to receive(:read).and_return(license_info)
 
     expect { Rake::Task['license:check'].invoke }.to output(/readline.*Blacklisted software/).to_stdout.and raise_error(RuntimeError, "Build Aborted due to license violations")
   end
 
   it 'detects whitelisted software with unknown licenses correctly' do
-    license_info = '{
-      "chef-zero": {
+    license_info = '[
+      {
+        "name": "git",
         "version": "4.8.0",
-        "license": "Apache-2.0"
-      },
-      "git": {
-        "version": "1.2.11",
-        "license": "jargon"
+        "license": "jargon",
+        "dependencies": [
+          {
+            "name": "sample",
+            "version": "1.0.0",
+            "license": "MIT"
+          }
+        ]
       }
-    }'
+     ]'
     allow(File).to receive(:read).and_return(license_info)
     expect { Rake::Task['license:check'].invoke }.to output(/git.*Whitelisted software/).to_stdout
   end
