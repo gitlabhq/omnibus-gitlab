@@ -818,7 +818,7 @@ Docker Release:
   stage: staging_upload
   image: ruby:2.3.3
   script:
-    - bundle exec rake repository:upload[$PACKAGECLOUD_USER]
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts:
     expire_in: 7 days
     paths:
@@ -832,7 +832,7 @@ Docker Release:
   stage: release
   image: ruby:2.3.3
   script:
-    - bundle exec rake repository:upload[$PACKAGECLOUD_USER]
+    - bundle exec rake repository:upload:production
   only:
     - tags@gitlab/omnibus-gitlab
   when: manual

@@ -15,8 +15,14 @@ namespace :repository do
     puts PackageRepository.new.repository_for_edition
   end
 
-  task :upload, [:packagecloud_user] do |_t, args|
-    user =  args['packagecloud_user']
-    PackageRepository.new.upload(user)
+  namespace :upload do
+    task :staging, [:staging_repo] do |_t, args|
+      staging_repo = args['staging_repo']
+      PackageRepository.new.upload(staging_repo)
+    end
+
+    task :production do
+      PackageRepository.new.upload
+    end
   end
 end
