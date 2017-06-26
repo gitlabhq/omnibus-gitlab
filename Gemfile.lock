@@ -1,6 +1,6 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: a902aa9a1af91f2491d6e94b5c8a937f003362ac
+  revision: 4c17964a9b164485fe292d6220442b31c5345d8d
   branch: gitlab-omnibus-ad5d3f98
   specs:
     omnibus (5.5.0)
