@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.2
+- Update gitlab-monitor to 1.8.0
+
 9.3.1
 
 - Use the new "gettext:compile" task during build  59dbbd8b
