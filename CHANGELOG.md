@@ -10,6 +10,11 @@ omnibus-gitlab repository.
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
 - Adjust various default values for PostgreSQL based on GitLab.com
 
+9.3.1
+
+- Use the new "gettext:compile" task during build  59dbbd8b
+- Create the postgresql user for postgresql-exporter  3fedab4f
+
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
