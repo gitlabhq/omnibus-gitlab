@@ -14,6 +14,7 @@ stages:
   - notification_fail
   - qa-image
   - raspbian
+  - raspbian_release
   - notification_fail
 
 variables:
@@ -154,8 +155,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -176,8 +175,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -199,8 +196,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -221,11 +216,9 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
-    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_release;fi
     - make pack_cache_bundle
   tags:
   - docker-rpi-builder
@@ -919,3 +912,14 @@ SLES 12 release:
     - SLES 12 staging
   allow_failure: true
   <<: *production_release
+Raspberry Pi 2 Jessie release:
+  stage: raspbian_release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+  dependencies:
+    - Raspberry Pi 2 Jessie branch

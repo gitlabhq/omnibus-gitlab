@@ -35,11 +35,6 @@ test: no_changes purge build license_check move_to_platform_dir sync
 
 test_no_sync: no_changes purge build license_check move_to_platform_dir
 
-# Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
-do_rpi2_release: PLATFORM_DIR=raspberry-pi2
-# TODO: Upload the final package to package repository.
-do_rpi2_release: no_changes purge build license_check move_to_platform_dir sync
-
 no_changes:
 	git diff --quiet HEAD
 
