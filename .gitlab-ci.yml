@@ -816,7 +816,7 @@ Docker Release:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts:
-    expire_in: 7 days
+    expire_in: 14 days
     paths:
       - pkg/
 
