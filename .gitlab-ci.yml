@@ -807,13 +807,9 @@ Docker Release:
   dependencies: []
   when: manual
 
-# This stage is used for uploading packages:
-# 1. When ran on tag
-#   * To a staging package repository
-# 2. When ran on a branch
-#   * If the build was Nightly, push to Nightly repository
-#   * As temporary artifacts, expiring after 7 days
-# 3. Always ran on dev.gitlab.org
+# This stage is used for uploading packages
+# 1. To a staging package repository
+# 2. Always ran on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
   image: ruby:2.3.3
@@ -826,7 +822,7 @@ Docker Release:
 
 # This stage is ran only on tag:
 # 1. It is a manual action
-# 2. It will upload the package to public user facing repositories
+# 2. It will upload the package to public, user facing repositories
 # 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
   stage: release

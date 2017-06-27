@@ -11,10 +11,6 @@ namespace :repository do
     puts PackageRepository.new.repository_for_rc
   end
 
-  task :gitlab_edition do
-    puts PackageRepository.new.repository_for_edition
-  end
-
   namespace :upload do
     task :staging, [:staging_repo] do |_t, args|
       staging_repo = args['staging_repo']

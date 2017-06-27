@@ -21,26 +21,24 @@ class PackageRepository
     "unstable" if system('git describe | grep -q -e rc')
   end
 
-  def repository_for_edition
-    is_ee = system('grep -q -E "\-ee" VERSION')
-    if ENV['EE'] || is_ee
-      "gitlab-ee"
-    else
-      "gitlab-ce"
-    end
-  end
-
-  def upload(repository = nil)
+  def upload(repository = nil, dry_run = false)
     return "User for uploading to package server not specified!" if upload_user.nil?
 
-    puts "Uploading...\n"
-
-    # TODO: upload for real
     # For CentOS 6 and 7 we will upload the same package to Scientific and Oracle Linux
     # For all other OSs, we only upload one package.
-    package_list(repository).each do |pkg|
+    upload_list = package_list(repository)
+    return "No packages found for upload. Are artifacts available?" if upload_list.empty?
+
+    upload_list.each do |pkg|
       # bin/package_cloud push gitlab/unstable/ubuntu/xenial gitlab-ce.deb  --url=https://packages.gitlab.com
-      puts "bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
+      cmd = "bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
+
+      puts "Uploading...\n"
+      if dry_run
+        puts cmd
+      else
+        system(cmd)
+      end
     end
   end
 
