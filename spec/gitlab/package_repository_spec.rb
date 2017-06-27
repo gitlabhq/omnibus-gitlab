@@ -133,10 +133,10 @@ describe PackageRepository do
           end
 
           it 'in dry run mode prints the upload commands' do
-            expect{repo.upload('my-staging-repository', true)}.to output(%r{Uploading...\n}).to_stdout
-            expect{repo.upload('my-staging-repository', true)}.to output(%r{bin/package_cloud push gitlab/my-staging-repository/sc/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
-            expect{repo.upload('my-staging-repository', true)}.to output(%r{bin/package_cloud push gitlab/my-staging-repository/ol/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
-            expect{repo.upload('my-staging-repository', true)}.to output(%r{bin/package_cloud push gitlab/my-staging-repository/el/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{Uploading...\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/sc/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/ol/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/el/6 gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
 
@@ -173,8 +173,8 @@ describe PackageRepository do
             end
 
             it 'in dry run mode prints the upload commands' do
-              expect{repo.upload(nil, true)}.to output(%r{Uploading...\n}).to_stdout
-              expect{repo.upload(nil, true)}.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
             end
           end
 
@@ -184,8 +184,8 @@ describe PackageRepository do
             end
 
             it 'in dry run mode prints the upload commands' do
-              expect{repo.upload(nil, true)}.to output(%r{Uploading...\n}).to_stdout
-              expect{repo.upload(nil, true)}.to output(%r{bin/package_cloud push gitlab/gitlab-ce/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ce/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
             end
           end
         end
@@ -197,8 +197,8 @@ describe PackageRepository do
           end
 
           it 'in dry run mode prints the upload commands' do
-            expect{repo.upload(nil, true)}.to output(%r{Uploading...\n}).to_stdout
-            expect{repo.upload(nil, true)}.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+            expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
 
@@ -209,10 +209,22 @@ describe PackageRepository do
           end
 
           it 'in dry run mode prints the upload commands' do
-            expect{repo.upload(nil, true)}.to output(%r{Uploading...\n}).to_stdout
-            expect{repo.upload(nil, true)}.to output(%r{bin/package_cloud push gitlab/raspi/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+            expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/raspi/ubuntu/xenial gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
+      end
+    end
+
+    describe 'when artifacts contain unexpected files' do
+      before do
+        stub_env_var('PACKAGECLOUD_USER', "gitlab")
+        set_all_env_variables
+        allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-xenial/gitlab.deb', 'pkg/ubuntu-xenial/testing/gitlab.deb'])
+      end
+
+      it 'raises an exception' do
+        expect { repo.upload(nil, true) }.to raise_exception(%r{Found unexpected contents in the directory:})
       end
     end
   end

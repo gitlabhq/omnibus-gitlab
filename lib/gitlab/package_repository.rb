@@ -32,8 +32,8 @@ class PackageRepository
     upload_list.each do |pkg|
       # bin/package_cloud push gitlab/unstable/ubuntu/xenial gitlab-ce.deb  --url=https://packages.gitlab.com
       cmd = "bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
-
       puts "Uploading...\n"
+
       if dry_run
         puts cmd
       else
@@ -52,8 +52,8 @@ class PackageRepository
       platform_path.delete("pkg") # ['ubuntu-xenial', 'gitlab-ce.deb']
 
       if platform_path.size != 2
-        list_dir_contents = `ls -la`
-        abort "Found unexpected contents in the directory:\n #{list_dir_contents}"
+        list_dir_contents = `ls -la pkg/`
+        raise "Found unexpected contents in the directory:\n #{list_dir_contents}"
       end
 
       platform_name = platform_path[0] # "ubuntu-xenial"
