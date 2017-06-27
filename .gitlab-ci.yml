@@ -922,4 +922,4 @@ Raspberry Pi 2 Jessie release:
     - tags@gitlab/omnibus-gitlab
   when: manual
   dependencies:
-    - Raspberry Pi 2 Jessie branch
+    - Raspberry Pi 2 Jessie
