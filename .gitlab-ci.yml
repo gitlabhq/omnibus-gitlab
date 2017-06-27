@@ -802,7 +802,7 @@ Docker Release:
 
 # This stage is used for uploading packages
 # 1. To a staging package repository
-# 2. Always ran on dev.gitlab.org
+# 2. Only ran on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
   image: ruby:2.3.3
@@ -812,6 +812,9 @@ Docker Release:
     expire_in: 14 days
     paths:
       - pkg/
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - branches@gitlab/omnibus-gitlab
 
 # This stage is ran only on tag:
 # 1. It is a manual action
