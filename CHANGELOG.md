@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.2
+- Update gitlab-monitor to 1.8.0
+
+9.3.1
+
+- Use the new "gettext:compile" task during build  59dbbd8b
+- Create the postgresql user for postgresql-exporter  3fedab4f
+
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
@@ -24,7 +32,6 @@ omnibus-gitlab repository.
 
 9.2.6
 - Backport: Upgrade ES indexer to 0.1.0
->>>>>>> 116b828... Merge branch 'patch-2' into 'master'
 
 9.2.5
 
