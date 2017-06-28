@@ -19,7 +19,7 @@
 name 'libicu'
 default_version '57.1'
 
-source url: 'http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz',
+source url: 'https://downloads.sourceforge.net/project/icu/ICU4C/57.1/icu4c-57_1-src.tgz',
        sha256: 'ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581'
 
 license 'MIT'
