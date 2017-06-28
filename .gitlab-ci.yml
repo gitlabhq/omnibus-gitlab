@@ -659,8 +659,6 @@ SLES 12:
   only:
     - tags@gitlab/omnibus-gitlab
   allow_failure: true
-  tags:
-  - sles-12-0.0.1
 
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
@@ -738,8 +736,6 @@ SLES 12 branch:
   only:
     - branches@gitlab/omnibus-gitlab
   allow_failure: true
-  tags:
-  - sles-12-0.0.1
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
