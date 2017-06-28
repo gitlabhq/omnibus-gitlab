@@ -12,13 +12,15 @@ namespace :repository do
   end
 
   namespace :upload do
-    task :staging, [:staging_repo] do |_t, args|
+    task :staging, [:staging_repo, :dry_run] do |_t, args|
       staging_repo = args['staging_repo']
+      dry_run = args['dry_run'] || false
       PackageRepository.new.upload(staging_repo)
     end
 
-    task :production do
-      PackageRepository.new.upload
+    task :production, [:dry_run] do |_t, args|
+      dry_run = args['dry_run'] || false
+      PackageRepository.new.upload(nil, dry_run)
     end
   end
 end
