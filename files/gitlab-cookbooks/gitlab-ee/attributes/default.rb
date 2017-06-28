@@ -117,6 +117,14 @@ default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
 default['gitlab']['geo-postgresql']['archive_timeout'] = '60'
 
+###
+# Geo: LogCursor (replication)
+###
+
+default['gitlab']['geo-logcursor']['ha'] = false
+default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
+default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor'
+
 ####
 # Pgbouncer
 ####

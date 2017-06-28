@@ -92,6 +92,7 @@ module Gitlab
   gitaly Mash.new
   geo_secondary Mash.new
   geo_postgresql Mash.new
+  geo_logcursor Mash.new
   prometheus_monitoring Mash.new
   pgbouncer Mash.new
   repmgr Mash.new
