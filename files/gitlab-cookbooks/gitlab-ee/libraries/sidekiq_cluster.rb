@@ -18,10 +18,6 @@
 module SidekiqCluster
   class << self
     def parse_variables
-      # Force sidekiq-cluster to be disabled if sidekiq is disabled
-      Gitlab['sidekiq']['enable'] ||= Gitlab['node']['gitlab']['sidekiq']['enable']
-      Gitlab['sidekiq_cluster']['enable'] = false unless Gitlab['sidekiq']['enable']
-
       return unless Gitlab['sidekiq_cluster']['enable']
 
       # Ensure queues is an array

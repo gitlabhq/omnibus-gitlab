@@ -10,6 +10,11 @@ omnibus-gitlab repository.
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
 - Adjust various default values for PostgreSQL based on GitLab.com
 
+
+9.3.3
+
+- Allow sidekiq-cluster to run without having sidekiq enabled
+
 9.3.2
 - Update gitlab-monitor to 1.8.0
 
