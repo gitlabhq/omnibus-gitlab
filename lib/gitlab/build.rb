@@ -131,7 +131,7 @@ class Build
       return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
       id = fetch_artifact_url(project_id, pipeline_id)
-      "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-16.04/gitlab.deb"
+      "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-xenial/gitlab.deb"
     end
 
     def fetch_artifact_url(project_id, pipeline_id)
