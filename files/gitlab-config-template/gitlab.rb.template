@@ -918,7 +918,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Runtime directory
-##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#runtime-directory
+##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#configuring-runtime-directory
 ################################################################################
 
 # runtime_dir '/run'
