@@ -455,26 +455,8 @@ OpenSUSE 42.2 specs 2 3:
   dependencies:
   - OpenSUSE 42.2 knapsack
 
-Docker branch:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
-  script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=omnibus-builds
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
-  - bundle exec rake docker:push:nightly
-  only:
-    - branches@gitlab/omnibus-gitlab
-  dependencies: []
-
 # dev.gitlab.org only
+# Release build
 Ubuntu 14.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -558,6 +540,67 @@ SLES 12:
     - cache
     - gems
 
+Docker:
+  stage: images
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - export RELEASE_BUCKET=downloads-packages
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+
+AWS:
+  stage: images
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - make aws
+  allow_failure: true
+  tags:
+  - docker-builder
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+
+QA Tag:
+  stage: qa-image
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - make do_qa_docker_release
+  allow_failure: true
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+
+Raspberry Pi 2 Jessie:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "Raspberry Pi 2 Jessie branch"
+    paths:
+    - cache
+    - gems
+  <<: *rpi_tag_build
+
+## Building from branch
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -601,7 +644,7 @@ SLES 12 branch:
     - cache
     - gems
 
-Docker:
+Docker branch:
   stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
@@ -612,26 +655,12 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=downloads-packages
+  - export RELEASE_BUCKET=omnibus-builds
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
+  - bundle exec rake docker:push:nightly
   only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-
-AWS:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
-  script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - make aws
-  allow_failure: true
-  tags:
-  - docker-builder
-  only:
-    - tags@gitlab/omnibus-gitlab
+    - branches@gitlab/omnibus-gitlab
   dependencies: []
 
 QA Master:
@@ -652,24 +681,6 @@ QA Master:
     - branches@gitlab/omnibus-gitlab
   dependencies: []
 
-QA Tag:
-  stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - make do_qa_docker_release
-  allow_failure: true
-  only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -678,15 +689,6 @@ Raspberry Pi 2 Jessie branch:
     - cache
     - gems
   <<: *rpi_branch_build
-
-Raspberry Pi 2 Jessie:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "Raspberry Pi 2 Jessie branch"
-    paths:
-    - cache
-    - gems
-  <<: *rpi_tag_build
 
 notify:slack-fail:
   before_script:
