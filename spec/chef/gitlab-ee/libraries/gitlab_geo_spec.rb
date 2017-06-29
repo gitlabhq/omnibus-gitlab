@@ -35,6 +35,10 @@ describe GitlabGeo do
         expect(config_attrs['wal_keep_segments']).to eq(10)
       end
 
+      it 'defines max_replication_slots' do
+        expect(config_attrs['max_replication_slots']).to eq(1)
+      end
+
       it 'defines hot_standby' do
         expect(config_attrs['hot_standby']).to eq('on')
       end
@@ -68,6 +72,10 @@ describe GitlabGeo do
 
       it 'defines wal_keep_segments' do
         expect(config_attrs['wal_keep_segments']).to eq(10)
+      end
+
+      it 'defines max_replication_slots' do
+        expect(config_attrs['max_replication_slots']).to eq(0)
       end
 
       it 'defines hot_standby' do

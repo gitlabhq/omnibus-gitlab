@@ -31,6 +31,7 @@ module GitlabGeo
       Gitlab['postgresql']['wal_level'] = 'hot_standby'
       Gitlab['postgresql']['max_wal_senders'] ||= 10
       Gitlab['postgresql']['wal_keep_segments'] ||= 10
+      Gitlab['postgresql']['max_replication_slots'] ||= 1
       Gitlab['postgresql']['hot_standby'] = 'on'
     end
 
