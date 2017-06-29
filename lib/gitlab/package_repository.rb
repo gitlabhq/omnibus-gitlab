@@ -55,15 +55,15 @@ class PackageRepository
 
     Dir.glob("pkg/**/*.{deb,rpm}").each do |path|
       platform_path = path.split("/") # ['pkg', 'ubuntu-xenial', 'gitlab-ce.deb']
-      platform_path.delete("pkg") # ['ubuntu-xenial', 'gitlab-ce.deb']
 
-      if platform_path.size != 2
+      if platform_path.size != 3
         list_dir_contents = `ls -la pkg/`
         raise "Found unexpected contents in the directory:\n #{list_dir_contents}"
       end
 
-      platform_name = platform_path[0] # "ubuntu-xenial"
-      package_name = platform_path[1] # "gitlab-ce.deb"
+      platform_name = platform_path[1] # "ubuntu-xenial"
+      package_name = platform_path[2] # "gitlab-ce.deb"
+      package_path = "#{platform_path[0]}/#{platform_name}/#{package_name}"
       platform = platform_name.tr("-", "/") # "ubuntu/xenial"
       target_repository = repository || target # staging override or the rest, eg. "unstable"
 
@@ -71,11 +71,13 @@ class PackageRepository
       # to Scientific and Oracle Linux repositories
       if platform.start_with?("el/")
         %w(scientific ol).each do |distro|
-          list << "#{target_repository}/#{platform.tr('el', distro)} #{package_name}"
+          platform_path = platform.tr('el', distro)
+
+          list << "#{target_repository}/#{platform_path} #{package_path}"
         end
       end
 
-      list << "#{target_repository}/#{platform} #{package_name}" # "unstable/ubuntu/xenial gitlab-ce.deb"
+      list << "#{target_repository}/#{platform} #{package_path}" # "unstable/ubuntu/xenial gitlab-ce.deb"
     end
 
     list
