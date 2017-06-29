@@ -187,7 +187,20 @@ describe 'geo postgresql 9.6' do
 
   cached(:chef_run) do
     RSpec::Mocks.with_temporary_scope do
-      stub_gitlab_rb(geo_postgresql: { enable: true })
+      stub_gitlab_rb(
+        geo_postgresql: {
+          enable: true,
+          custom_pg_hba_entries: {
+            foo: [
+              type: 'host',
+              database: 'foo',
+              user: 'bar',
+              cidr: '127.0.0.1/32',
+              method: 'trust'
+            ]
+          }
+        }
+      )
     end
 
     ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
@@ -249,6 +262,20 @@ describe 'geo postgresql 9.6' do
           runtime_conf
         ).with_content(/hot_standby_feedback = off/)
       end
+    end
+  end
+
+  context 'pg_hba.conf' do
+    let(:pg_hba_conf) { '/var/opt/gitlab/geo-postgresql/data/pg_hba.conf' }
+
+    it 'creates a standard pg_hba.conf' do
+      expect(chef_run).to render_file(pg_hba_conf)
+        .with_content('local   all         all                               peer map=gitlab')
+    end
+
+    it 'adds users custom entries to pg_hba.conf' do
+      expect(chef_run).to render_file(pg_hba_conf)
+        .with_content('host foo bar 127.0.0.1/32 trust')
     end
   end
 end
