@@ -15,7 +15,7 @@ namespace :repository do
     task :staging, [:staging_repo, :dry_run] do |_t, args|
       staging_repo = args['staging_repo']
       dry_run = args['dry_run'] || false
-      PackageRepository.new.upload(staging_repo)
+      PackageRepository.new.upload(staging_repo, dry_run)
     end
 
     task :production, [:dry_run] do |_t, args|

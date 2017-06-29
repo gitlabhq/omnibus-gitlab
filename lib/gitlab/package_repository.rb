@@ -22,16 +22,22 @@ class PackageRepository
   end
 
   def upload(repository = nil, dry_run = false)
-    return "User for uploading to package server not specified!" if upload_user.nil?
+    if upload_user.nil?
+      puts "User for uploading to package server not specified!"
+      return
+    end
 
     # For CentOS 6 and 7 we will upload the same package to Scientific and Oracle Linux
     # For all other OSs, we only upload one package.
     upload_list = package_list(repository)
-    return "No packages found for upload. Are artifacts available?" if upload_list.empty?
+    if upload_list.empty?
+      puts "No packages found for upload. Are artifacts available?"
+      return
+    end
 
     upload_list.each do |pkg|
       # bin/package_cloud push gitlab/unstable/ubuntu/xenial gitlab-ce.deb  --url=https://packages.gitlab.com
-      cmd = "bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
+      cmd = "LC_ALL='en_US.UTF-8' bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
       puts "Uploading...\n"
 
       if dry_run

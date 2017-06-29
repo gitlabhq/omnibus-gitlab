@@ -118,7 +118,7 @@ describe PackageRepository do
     describe 'with staging repository' do
       context 'when upload user is not specified' do
         it 'prints a message and aborts' do
-          expect(repo.upload('my-staging-repository', true)).to eq('User for uploading to package server not specified!')
+          expect { repo.upload('my-staging-repository', true) }.to output(%r{User for uploading to package server not specified!\n}).to_stdout
         end
       end
 
@@ -146,7 +146,7 @@ describe PackageRepository do
           end
 
           it 'prints a message and aborts' do
-            expect(repo.upload('my-staging-repository', true)).to eq('No packages found for upload. Are artifacts available?')
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{No packages found for upload. Are artifacts available?}).to_stdout
           end
         end
       end
