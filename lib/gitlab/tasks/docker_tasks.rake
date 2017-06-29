@@ -80,7 +80,7 @@ namespace :docker do
       registry = "https://registry.gitlab.com/v2/"
       docker_tag = ENV["DOCKER_TAG"]
       authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      push(docker_tag, ENV["CI_PROJECT_PATH"])
+      push(docker_tag, ENV["CI_REGISTRY_IMAGE"])
       puts "Pushed tag: #{docker_tag}"
     end
   end
