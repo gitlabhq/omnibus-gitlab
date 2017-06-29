@@ -414,7 +414,7 @@ default['gitlab']['postgresql']['random_page_cost'] = 2.0
 default['gitlab']['postgresql']['max_locks_per_transaction'] = 128
 default['gitlab']['postgresql']['log_temp_files'] = -1
 default['gitlab']['postgresql']['log_checkpoints'] = 'off'
-default['gitlab']['postgresql']['custom_pg_hba_entries'] = []
+default['gitlab']['postgresql']['custom_pg_hba_entries'] = {}
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"

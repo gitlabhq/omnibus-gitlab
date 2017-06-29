@@ -110,7 +110,7 @@ template pg_hba_config do
   source 'pg_hba.conf.erb'
   owner postgresql_username
   mode "0644"
-  variables(node['gitlab']['postgresql'].to_hash)
+  variables(lazy { node['gitlab']['postgresql'].to_hash })
   notifies :restart, 'service[postgresql]', :immediately if should_notify
 end
 
