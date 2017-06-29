@@ -39,6 +39,12 @@ namespace :docker do
 
       location = File.absolute_path("/tmp/gitlab.#{$PROCESS_ID}/qa")
       DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
+
+      # For triggered builds, we need the QA image's tag to match the docker
+      # tag. So, we are retagging the image.
+      if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+        DockerOperations.tag("gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}")
+      end
       FileUtils.rm_rf("/tmp/gitlab.#{$PROCESS_ID}")
     end
   end
@@ -85,7 +91,7 @@ namespace :docker do
     task :qa do
       docker_tag = "#{edition}-#{tag}"
       authenticate
-      DockerOperations.push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
+      DockerOperations.push_image("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -127,7 +133,7 @@ namespace :docker do
 
   def push(docker_tag, repository = 'gitlab')
     namespace = "#{repository}/#{release_package}"
-    DockerOperations.push(namespace, "latest", docker_tag)
+    DockerOperations.push_image(namespace, "latest", docker_tag)
   end
 
   def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
