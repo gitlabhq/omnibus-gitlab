@@ -87,7 +87,7 @@ template pg_hba_config do
   source 'pg_hba.conf.erb'
   owner postgresql_username
   mode '0644'
-  variables(node['gitlab']['geo-postgresql'].to_hash)
+  variables(lazy { node['gitlab']['geo-postgresql'].to_hash })
   cookbook 'gitlab'
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end

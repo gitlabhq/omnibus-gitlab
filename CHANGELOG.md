@@ -3,7 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.3
+
+- Allow sidekiq-cluster to run without having sidekiq enabled
+- Remove outdated Mattermost v2 DB upgrade code
+- Switch postgresql['custom_pg_hba_entries'] from Array to Hash
+
 9.3.2
+
 - Update gitlab-monitor to 1.8.0
 
 9.3.1
