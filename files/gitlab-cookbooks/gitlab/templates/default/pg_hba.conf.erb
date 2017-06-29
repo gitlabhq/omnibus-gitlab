@@ -65,8 +65,11 @@
 
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
-<% @custom_pg_hba_entries.each do |entry| %>
+<% @custom_pg_hba_entries.each do |name, entries| %>
+# <%= name %>
+<% entries.each do |entry| %>
 <%= entry['type'] %> <%= entry['database'] %> <%= entry['user'] %> <%= entry['cidr'] %> <%= entry['method'] %> <%= entry['option'] %>
+<% end %>
 <% end %>
 
 # "local" is for Unix domain socket connections only

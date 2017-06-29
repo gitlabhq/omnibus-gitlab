@@ -104,6 +104,7 @@ default['gitlab']['geo-postgresql']['statement_timeout'] = '0'
 default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
 default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
 default['gitlab']['geo-postgresql']['shared_preload_libraries'] = nil
+default['gitlab']['geo-postgresql']['custom_pg_hba_entries'] = {}
 
 # Replication settings
 default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
