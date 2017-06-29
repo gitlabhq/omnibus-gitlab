@@ -17,7 +17,6 @@ namespace :docker do
 
     desc "Build QA Docker image"
     task :qa do
-
       # PROCESS_ID is appended to ensure randomness in the directory name
       # to avoid possible conflicts that may arise if the clone's destination
       # directory already exists.
@@ -149,6 +148,10 @@ namespace :docker do
   end
 
   def gitlab_rails_repo
+    # For normal builds, QA build happens from the gitlab repositories in dev.
+    # For triggered builds, they are not available and their gitlab.com mirrors
+    # have to be used.
+
     if ENV['ALTERNATIVE_SOURCES'].to_s == "true"
       domain = "https://gitlab.com/gitlab-org"
       project = release_package

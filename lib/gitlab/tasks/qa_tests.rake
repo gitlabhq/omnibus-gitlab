@@ -9,7 +9,7 @@ namespace :trigger do
     release_package = Build.package
 
     # Get the docker image which was built on the previous stage of pipeline
-    image = "registry.gitlab.com/omnibus-gitlab/#{release_package}:#{ENV['IMAGE_TAG']}"
+    image = "registry.gitlab.com/gitlab-org/omnibus-gitlab/#{release_package}:#{ENV['IMAGE_TAG']}"
 
     [
       "Test::Instance::Image", # Test whether instance starts correctly
@@ -18,7 +18,7 @@ namespace :trigger do
     ].each do |task|
       Gitlab::QA::Scenario
         .const_get(task)
-        .perform([image])
+        .perform(image)
     end
   end
 end
