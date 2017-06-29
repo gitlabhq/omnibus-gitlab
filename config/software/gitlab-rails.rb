@@ -120,10 +120,11 @@ build do
     'SKIP_STORAGE_VALIDATION' => 'true'
   }
   command 'yarn install --pure-lockfile --production'
-  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
+
+  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
