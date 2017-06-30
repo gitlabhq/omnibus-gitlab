@@ -61,7 +61,7 @@ class ReplicateGeoHelpers
     pgpass = "#{data_path}/postgresql/.pgpass"
     create_pgpass_file!(pgpass)
 
-    run_command("PGPASSFILE=#{pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
+    run_command("PGPASSFILE=#{pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
 
     puts '* Writing recovery.conf file'.color(:green)
     create_recovery_file!
