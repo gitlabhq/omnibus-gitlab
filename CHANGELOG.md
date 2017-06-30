@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Remove software definition of expat 59c39870
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
 - Adjust various default values for PostgreSQL based on GitLab.com
+- Bump omnibus-ctl version to 0.5.0
 
 9.3.3
 

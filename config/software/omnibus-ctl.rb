@@ -15,7 +15,7 @@
 #
 
 name 'omnibus-ctl'
-default_version '0.3.6'
+default_version 'v0.5.0'
 
 license 'Apache-2.0'
 license_file 'https://github.com/chef/omnibus-ctl/blob/master/LICENSE'
@@ -30,6 +30,7 @@ relative_path 'omnibus-ctl'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  patch source: 'skip-license-acceptance.patch'
 
   # Remove existing built gems in case they exist in the current dir
   delete 'omnibus-ctl-*.gem'
