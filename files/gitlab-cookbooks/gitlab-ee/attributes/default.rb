@@ -58,22 +58,18 @@ default['gitlab']['geo-secondary']['db_sslca'] = nil
 ###
 # Geo: PostgreSQL (Tracking database)
 ###
+
+default['gitlab']['geo-postgresql'] = default['gitlab']['postgresql'].dup
+# We are inheriting default attributes from postgresql and changing below what should be different
 default['gitlab']['geo-postgresql']['enable'] = false
-default['gitlab']['geo-postgresql']['ha'] = false
 default['gitlab']['geo-postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
 default['gitlab']['geo-postgresql']['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
 default['gitlab']['geo-postgresql']['log_directory'] = '/var/log/gitlab/geo-postgresql'
 default['gitlab']['geo-postgresql']['unix_socket_directory'] = '/var/opt/gitlab/geo-postgresql'
 # Postgres User's Environment Path
-# defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
 default['gitlab']['geo-postgresql']['sql_user'] = 'gitlab_geo'
+default['gitlab']['geo-postgresql']['sql_mattermost_user'] = nil
 default['gitlab']['geo-postgresql']['port'] = 5431
-# Postgres allow multi listen_address, comma-separated values.
-# If used, first address from the list will be use for connection
-default['gitlab']['geo-postgresql']['listen_address'] = nil
-default['gitlab']['geo-postgresql']['max_connections'] = 200
-default['gitlab']['geo-postgresql']['md5_auth_cidr_addresses'] = []
-default['gitlab']['geo-postgresql']['trust_auth_cidr_addresses'] = []
 
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults
 default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
@@ -103,8 +99,6 @@ default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_limit'] = '-1'
 default['gitlab']['geo-postgresql']['statement_timeout'] = '60000'
 default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
 default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
-default['gitlab']['geo-postgresql']['shared_preload_libraries'] = nil
-default['gitlab']['geo-postgresql']['custom_pg_hba_entries'] = {}
 
 # Replication settings
 default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
