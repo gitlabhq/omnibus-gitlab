@@ -11,6 +11,9 @@ omnibus-gitlab repository.
 - Adjust various default values for PostgreSQL based on GitLab.com
 - Bump omnibus-ctl version to 0.5.0
 
+9.3.4
+- Update gitlab-monitor to 1.9.0
+
 9.3.3
 
 - Allow sidekiq-cluster to run without having sidekiq enabled
