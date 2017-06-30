@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
 - Adjust various default values for PostgreSQL based on GitLab.com
 - Bump omnibus-ctl version to 0.5.0
+- Set max_replication_slots to 1 by default for primary Geo instances
 
 9.3.3
 
