@@ -24,7 +24,7 @@ class ReplicateGeoHelpers
 
     unless ctl.service_enabled?('postgresql')
       puts 'There is no PostgreSQL instance enabled in omnibus, exiting...'.color(:red)
-      exit! 1
+      Kernel.exit 1
     end
 
     puts

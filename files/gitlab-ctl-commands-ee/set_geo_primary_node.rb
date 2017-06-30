@@ -20,14 +20,14 @@ add_command_under_category 'set-geo-primary-node', 'gitlab-geo', 'Make this node
 
   unless service_enabled?(service_name)
     log 'unicorn is not enabled, exiting...'
-    exit! 1
+    Kernel.exit 1
   end
 
   ssh_file_path = path || '/var/opt/gitlab/.ssh/id_rsa.pub'
 
   unless File.exist?(ssh_file_path)
     log "Didn't find #{ssh_file_path}, please supply the path to the Geo SSH public key, e.g.: gitlab-ctl add-geo-primary-node /path/to/id_rsa.pub"
-    exit! 1
+    Kernel.exit 1
   end
 
   command = "gitlab-rake geo:set_primary_node[#{ssh_file_path}]"

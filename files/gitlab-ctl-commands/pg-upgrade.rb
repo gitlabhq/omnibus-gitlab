@@ -23,7 +23,7 @@ INST_DIR = "#{base_path}/embedded/postgresql".freeze
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
-  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_options[:tmp_dir])
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_gitlab_options[:tmp_dir])
 
   maintenance_mode('enable')
 
@@ -31,7 +31,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     @db_worker.fetch_running_version == default_version
   end
     log "Already running #{default_version}"
-    exit! 1
+    Kernel.exit 1
   end
 
   unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version}")
@@ -48,7 +48,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     sleep 5
   rescue Interrupt
     log 'Received interrupt, not doing anything'
-    exit! 0
+    Kernel.exit 0
   end
   revert
   maintenance_mode('disable')
@@ -57,7 +57,7 @@ end
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            2 do |_cmd_name|
-  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_options[:tmp_dir])
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_gitlab_options[:tmp_dir])
 
   running_version = @db_worker.fetch_running_version
 
@@ -67,14 +67,14 @@ add_command_under_category 'pg-upgrade', 'database',
           get_all_services.member?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
-    exit! 0
+    Kernel.exit 0
   end
 
   if progress_message('Checking if we already upgraded') do
     running_version == upgrade_version
   end
     $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
-    exit! 0
+    Kernel.exit 0
   end
 
   if progress_message(
@@ -85,7 +85,7 @@ add_command_under_category 'pg-upgrade', 'database',
     log "Upgrading PostgreSQL to #{upgrade_version}"
   else
     $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
-    exit! 1
+    Kernel.exit 1
   end
 
   unless progress_message(
@@ -97,7 +97,7 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
     log "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
-    exit! 1
+    Kernel.exit 1
   end
 
   # All tests have passed, this should be an upgradable instance.
@@ -105,7 +105,7 @@ add_command_under_category 'pg-upgrade', 'database',
 
   # Wait for processes to settle, and give use one last chance to change their
   # mind
-  delay_for(30) if parse_options[:wait]
+  delay_for(30) if parse_gitlab_options[:wait]
 
   # Get the existing locale before we move on
   begin
@@ -227,10 +227,10 @@ add_command_under_category 'pg-upgrade', 'database',
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version}"
   maintenance_mode('disable')
-  exit! 0
+  Kernel.exit 0
 end
 
-def parse_options
+def parse_gitlab_options
   options = {
     tmp_dir: nil,
     wait: true
@@ -342,5 +342,5 @@ def delay_for(seconds)
 rescue Interrupt
   log "\nInterrupt received, cancelling upgrade"
   maintenance_mode('disable')
-  exit! 0
+  Kernel.exit 0
 end

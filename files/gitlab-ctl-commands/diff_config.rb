@@ -21,12 +21,12 @@ add_command 'diff-config', 'Compare the user configuration with package availabl
 
   unless File.exist?(user_config_file)
     puts "Could not find '/etc/gitlab/gitlab.rb' configuration file. Did you run 'sudo gitlab-ctl reconfigure'?"
-    exit! 1
+    Kernel.exit 1
   end
 
   unless File.exist?(config_template_file)
     puts "Could not find '/opt/gitlab/etc/gitlab.rb.template' template file. Is your package installed correctly?"
-    exit! 1
+    Kernel.exit 1
   end
 
   command = %W( #{base_path}/embedded/bin/git

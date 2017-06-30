@@ -23,5 +23,5 @@ add_command "remove-accounts", "Delete *all* users and groups used by this packa
 
   status = run_command(command.join(" "))
   remove_old_node_state
-  exit! 1 unless status.success?
+  Kernel.exit 1 unless status.success?
 end

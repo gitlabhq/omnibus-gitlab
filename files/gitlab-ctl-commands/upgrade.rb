@@ -21,7 +21,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   if /: runsv not running/ =~ service_statuses || service_statuses.empty?
     log 'It looks like GitLab has not been configured yet; skipping the upgrade '\
       'script.'
-    exit! 0
+    Kernel.exit 0
   end
 
   unless progress_message('Checking PostgreSQL executables') do
@@ -40,7 +40,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   auto_migrations_skip_file = "#{etc_path}/skip-auto-migrations"
   if File.exist?(auto_migrations_skip_file)
     log "Found #{auto_migrations_skip_file}, exiting..."
-    exit! 0
+    Kernel.exit 0
   end
 
   log 'Shutting down all GitLab services except those needed for migrations'
@@ -97,7 +97,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     status.success?
   end
     log 'Error ensuring PostgreSQL is updated. Please check the logs'
-    exit! 1
+    Kernel.exit 1
   end
 
   log 'Restarting previously running GitLab services'

@@ -20,14 +20,14 @@ add_command_under_category 'registry-garbage-collect', 'container-registry', 'Ru
 
   unless service_enabled?(service_name)
     log "Container registry is not enabled, exiting..."
-    exit! 1
+    Kernel.exit 1
   end
 
   config_file_path = path || '/var/opt/gitlab/registry/config.yml'
 
   unless File.exist?(config_file_path)
     log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry-garbage-collect /path/to/config.yml"
-    exit! 1
+    Kernel.exit 1
   end
 
   run_sv_command_for_service('stop', service_name)
@@ -36,10 +36,10 @@ add_command_under_category 'registry-garbage-collect', 'container-registry', 'Ru
 
   if status.exitstatus.zero?
     run_sv_command_for_service('start', service_name)
-    exit! 0
+    Kernel.exit 0
   else
     log "\nFailed to run garbage-collect command, starting registry service."
     run_sv_command_for_service('start', service_name)
-    exit! 1
+    Kernel.exit 1
   end
 end
