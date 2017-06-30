@@ -390,6 +390,7 @@ describe 'postgresql 9.6' do
       expect(chef_run).to create_postgresql_user('gitlab_replicator').with(options: %w(replication))
     end
   end
+
   context 'pg_hba.conf' do
     let(:pg_hba_conf) { '/var/opt/gitlab/postgresql/data/pg_hba.conf' }
     it 'creates a standard pg_hba.conf' do
@@ -400,13 +401,15 @@ describe 'postgresql 9.6' do
     it 'adds users custom entries to pg_hba.conf' do
       stub_gitlab_rb(
         postgresql: {
-          custom_pg_hba_entries: [
-            type: 'host',
-            database: 'foo',
-            user: 'bar',
-            cidr: '127.0.0.1/32',
-            method: 'trust'
-          ]
+          custom_pg_hba_entries: {
+            foo: [
+              type: 'host',
+              database: 'foo',
+              user: 'bar',
+              cidr: '127.0.0.1/32',
+              method: 'trust'
+            ]
+          }
         }
       )
       expect(chef_run).to render_file(pg_hba_conf)
