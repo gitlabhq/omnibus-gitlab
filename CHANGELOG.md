@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 
 - Allow sidekiq-cluster to run without having sidekiq enabled
 - Remove outdated Mattermost v2 DB upgrade code
+- Fix port not being passed to pg_basebackup in replicate-geo-database script
 - Switch postgresql['custom_pg_hba_entries'] from Array to Hash
 
 9.3.2
