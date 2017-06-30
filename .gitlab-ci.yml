@@ -805,7 +805,7 @@ Docker Release:
 # 2. Only ran on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
-  image: ruby:2.3.3
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts:
@@ -822,7 +822,7 @@ Docker Release:
 # 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
   stage: release
-  image: ruby:2.3.3
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - bundle exec rake repository:upload:production
   only:
@@ -917,7 +917,7 @@ SLES 12 release:
   <<: *production_release
 Raspberry Pi 2 Jessie release:
   stage: raspbian_release
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production

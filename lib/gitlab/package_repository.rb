@@ -43,7 +43,7 @@ class PackageRepository
       if dry_run
         puts cmd
       else
-        system(cmd)
+        raise "Upload to package server failed!." unless system(cmd)
       end
     end
   end
