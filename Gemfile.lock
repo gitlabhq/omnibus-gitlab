@@ -90,7 +90,7 @@ GEM
     ffi-yajl (2.3.0)
       libyajl2 (~> 1.2)
     fuzzyurl (0.9.0)
-    gitlab-qa (0.2.1)
+    gitlab-qa (0.2.2)
     hashie (3.4.6)
     highline (1.6.20)
     iniparse (1.4.2)
