@@ -378,6 +378,11 @@ production: &base
   gitaly:
     enabled: <%= @gitaly_enabled %>
 
+  # Performance Bar settings
+  performance_bar:
+    # This setting controls what group can see the performance bar.
+    allowed_group: <%= @performance_bar_allowed_group %>
+
 
   #
   # 4. Advanced settings

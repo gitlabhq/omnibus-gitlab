@@ -275,6 +275,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Gitaly settings
 # gitlab_rails['gitaly_enabled'] = true
 
+### GitLab Performance Bar settings
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/performance_bar.html
+# This setting controls what group can see the performance bar
+# gitlab_rails['performance_bar_allowed_group'] = nil
+
 ### For storing GitLab application uploads, eg. LFS objects, build artifacts
 ###! Docs: https://docs.gitlab.com/ce/development/shared_files.html
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'

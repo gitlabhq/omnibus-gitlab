@@ -944,6 +944,11 @@ default['gitlab']['gitaly']['grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
 
 ####
+# Performance Bar
+####
+default['gitlab']['gitlab-rails']['performance_bar_allowed_group'] = nil
+
+####
 # Geo (EE-only)
 ####
 default['gitlab']['gitlab-rails']['geo_primary_role_enabled'] = false
