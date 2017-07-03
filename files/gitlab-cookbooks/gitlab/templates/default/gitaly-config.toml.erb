@@ -39,3 +39,11 @@ sentry_dsn = '<%= @sentry_dsn %>'
 [prometheus]
 grpc_latency_buckets = <%= @grpc_latency_buckets %>
 <% end %>
+
+[auth]
+<% if @auth_token %>
+token = '<%= @auth_token %>'
+<% end %>
+<% if @auth_unenforced %>
+unenforced = <%= @auth_unenforced %>
+<% end %>
