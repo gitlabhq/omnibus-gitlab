@@ -30,12 +30,12 @@ path = '<%= shard['path'] %>'
 <% if @logging_format %>
 format = '<%= @logging_format %>'
 <% end %>
-<% if @sentry_dsn %>
-sentry_dsn = '<%= @sentry_dsn %>'
+<% if @logging_sentry_dsn %>
+sentry_dsn = '<%= @logging_sentry_dsn %>'
 <% end %>
 
-<% if @grpc_latency_buckets %>
+<% if @prometheus_grpc_latency_buckets %>
 # # You can optionally configure Gitaly to record histogram latencies on GRPC method calls
 [prometheus]
-grpc_latency_buckets = <%= @grpc_latency_buckets %>
+grpc_latency_buckets = <%= @prometheus_grpc_latency_buckets %>
 <% end %>
