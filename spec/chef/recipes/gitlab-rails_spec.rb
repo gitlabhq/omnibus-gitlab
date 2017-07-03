@@ -306,6 +306,19 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Gitaly settings' do
+      context 'when a global token is set' do
+        let(:token) { '123secret456gitaly' }
+
+        it 'renders the token in the gitaly section' do
+          stub_gitlab_rb(gitlab_rails: { gitaly_token: token })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+token: "#{token}"})
+        end
+      end
+    end
+
     context 'GitLab Shell settings' do
       context 'when git_timeout is configured' do
         it 'sets the git_timeout value' do
