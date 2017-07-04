@@ -90,7 +90,7 @@ namespace :docker do
     task :qa do
       docker_tag = "#{edition}-#{tag}"
       authenticate
-      DockerOperations.push_image("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
+      DockerOperations.tag_and_push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -132,7 +132,7 @@ namespace :docker do
 
   def push(docker_tag, repository = 'gitlab')
     namespace = "#{repository}/#{release_package}"
-    DockerOperations.push_image(namespace, "latest", docker_tag)
+    DockerOperations.tag_and_push(namespace, "latest", docker_tag)
   end
 
   def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
@@ -157,6 +157,10 @@ namespace :docker do
       project = release_package
     else
       domain = "git@dev.gitlab.org:gitlab"
+
+      # GitLab CE repo in dev.gitlab.org is named gitlabhq. So we need to
+      # identify gitlabhq from gitlab-ce. Fortunately gitlab-ee does not have
+      # this problem.
       project = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
     end
 
