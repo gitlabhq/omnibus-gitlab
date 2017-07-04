@@ -248,9 +248,6 @@ module Gitlab
     def generate_config(node_name)
       generate_secrets(node_name)
       GitlabWorkhorse.parse_variables
-      # Parse Gitaly before gitlab-shell and gitlab-rails
-      # because we need details for repositories_storages
-      Gitaly.parse_variables
       GitlabShell.parse_variables
       GitlabRails.parse_variables
       Logging.parse_variables
