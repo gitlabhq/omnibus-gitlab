@@ -9,7 +9,7 @@ namespace :trigger do
     release_package = Build.package
 
     # Get the docker image which was built on the previous stage of pipeline
-    image = "registry.gitlab.com/gitlab-org/omnibus-gitlab/#{release_package}:#{ENV['IMAGE_TAG']}"
+    image = "#{ENV['CI_REGISTRY_IMAGE']}/#{release_package}:#{ENV['IMAGE_TAG']}"
 
     [
       "Test::Instance::Image", # Test whether instance starts correctly
