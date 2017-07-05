@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.5
+- Update gitlab-monitor to 1.9.0
+- Fix port not being passed to pg_basebackup in replicate-geo-database script
+
 9.3.3
 
 - Allow sidekiq-cluster to run without having sidekiq enabled
