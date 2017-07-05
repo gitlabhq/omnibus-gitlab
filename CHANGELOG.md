@@ -12,7 +12,13 @@ omnibus-gitlab repository.
 - Bump omnibus-ctl version to 0.5.0
 - Set max_replication_slots to 1 by default for primary Geo instances
 
+9.3.5
+
+- Update gitlab-monitor to 1.9.0
+- Fix port not being passed to pg_basebackup in replicate-geo-database script
+
 9.3.4
+
 - Update gitlab-monitor to 1.9.0
 
 9.3.3
