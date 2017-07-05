@@ -36,7 +36,8 @@ build do
 
   block do
     env_shebang = '#!/usr/bin/env ruby'
-    shebang_args_regexp = %r{^#{env_shebang} (.*)[\r\n]}
+    # This regular expression works because multiline match is disabled by default
+    shebang_args_regexp = %r{^#{env_shebang} (.*)}
 
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       script = File.read(ruby_script)
