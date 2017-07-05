@@ -643,6 +643,7 @@ OpenSUSE 42.2:
     - gems
   <<: *tag_build
 SLES 12:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -653,7 +654,11 @@ SLES 12:
     - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
-  allow_failure: true
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
 
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
@@ -720,6 +725,7 @@ OpenSUSE 42.2 branch:
     - gems
   <<: *branch_build
 SLES 12 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -730,7 +736,11 @@ SLES 12 branch:
     - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
   only:
     - branches@gitlab/omnibus-gitlab
-  allow_failure: true
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
