@@ -17,6 +17,8 @@
 
 include_recipe 'gitlab::default'
 
+Services.prepend_ee_services
+
 [
   'sentinel',
   'sidekiq-cluster',
