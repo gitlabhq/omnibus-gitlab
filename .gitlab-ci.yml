@@ -802,7 +802,7 @@ Docker Release:
 
 # This stage is used for uploading packages
 # 1. To a staging package repository
-# 2. Only ran on dev.gitlab.org
+# 2. Only run on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
@@ -819,7 +819,7 @@ Docker Release:
 # This stage is ran only on tag:
 # 1. It is a manual action
 # 2. It will upload the package to public, user facing repositories
-# 3. Only ran on dev.gitlab.org
+# 3. Only run on dev.gitlab.org
 .production_release_template: &production_release
   stage: release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
