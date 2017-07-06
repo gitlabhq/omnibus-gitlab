@@ -16,6 +16,7 @@
 
 require_relative 'nginx.rb'
 require_relative 'gitaly.rb'
+require_relative 'services.rb'
 
 module GitlabRails
   class << self
