@@ -36,17 +36,12 @@ build do
 
   block do
     env_shebang = '#!/usr/bin/env ruby'
-    # This regular expression works because multiline match is disabled by default
-    shebang_args_regexp = %r{^#{env_shebang} (.*)}
-
     `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
       script = File.read(ruby_script)
-      shebang = "#!#{install_dir}/embedded/bin/ruby"
-      shebang += " #{Regexp.last_match[1]}" if script.match(shebang_args_regexp)
       erb dest: ruby_script.sub(project_dir, "#{install_dir}/embedded/service/gitlab-shell"),
           source: 'ruby_script_wrapper.erb',
           mode: 0755,
-          vars: { shebang: shebang, script: script, install_dir: install_dir }
+          vars: { script: script, install_dir: install_dir }
     end
   end
 end
