@@ -1,0 +1,169 @@
+require 'chef_helper'
+
+describe 'repmgr' do
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
+
+  let(:repmgr_conf) { '/var/opt/gitlab/postgresql/repmgr.conf' }
+
+  let(:hba_block) do
+    <<-EOF
+    EOF
+  end
+
+  let(:repmgr_conf_block) do
+    <<-EOF
+cluster=gitlab_cluster
+node=1647392869
+node_name=fauxhai.local
+conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
+pg_bindir='/opt/gitlab/embedded/bin'
+service_start_command = '/opt/gitlab/bin/gitlab-ctl start postgresql'
+service_stop_command = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
+service_restart_command = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
+promote_command = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
+follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'
+    EOF
+  end
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'disabled by default' do
+    # TODO: uncomment once we are automating repmgrd
+    # it_behaves_like 'disabled runit service', 'repmgrd'
+
+    it 'should include the repmgr::disable recipe' do
+      expect(chef_run).to include_recipe('repmgr::disable')
+    end
+  end
+
+  context 'enabled' do
+    before do
+      stub_gitlab_rb(
+        repmgr: {
+          enable: true,
+          trust_auth_cidr_addresses: %w(123.456.789.0/24)
+        },
+        postgresql: {
+          md5_auth_cidr_addresses: %w(0.0.0.0/0),
+          trust_auth_cidr_addresses: %w(127.0.0.0/24),
+          sql_user_password: 'fakemd5hash',
+          hot_standby: 'on',
+          wal_level: 'replica',
+          max_wal_senders: 3,
+          shared_preload_libraries: 'repmgr_funcs'
+        }
+      )
+    end
+
+    # TODO: uncomment once we are automating repmgrd
+    # it_behaves_like 'enabled runit service', 'repmgrd'
+
+    context 'by default' do
+      it 'includes the repmgr::enable recipe' do
+        expect(chef_run).to include_recipe('repmgr::enable')
+      end
+
+      it 'sets up the repmgr specific entries in pg_hba.conf' do
+        expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/pg_hba.conf')
+          .with_content { |content|
+            expect(content).to include('local replication gitlab_repmgr  trust')
+            expect(content).to include('host replication gitlab_repmgr 127.0.0.1/32 trust')
+            expect(content).to include('host replication gitlab_repmgr 123.456.789.0/24 trust')
+            expect(content).to include('local gitlab_repmgr gitlab_repmgr  trust')
+            expect(content).to include('host gitlab_repmgr gitlab_repmgr 127.0.0.1/32 trust')
+            expect(content).to include('host gitlab_repmgr gitlab_repmgr 123.456.789.0/24 trust')
+          }
+      end
+
+      it 'creates pg_hba.conf with custom entries and repmgr entries' do
+        stub_gitlab_rb(
+          postgresql: {
+            custom_pg_hba_entries:  {
+              postgres: [
+                {
+                  type: 'host',
+                  database: 'testing',
+                  user: 'fakeuser',
+                  cidr: '123.0.0.0/24',
+                  method: 'md5'
+                }
+              ]
+            }
+          }
+        )
+        expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/pg_hba.conf')
+          .with_content { |content|
+            expect(content).to include('local replication gitlab_repmgr  trust')
+            expect(content).to include('host replication gitlab_repmgr 127.0.0.1/32 trust')
+            expect(content).to include('host replication gitlab_repmgr 123.456.789.0/24 trust')
+            expect(content).to include('local gitlab_repmgr gitlab_repmgr  trust')
+            expect(content).to include('host gitlab_repmgr gitlab_repmgr 127.0.0.1/32 trust')
+            expect(content).to include('host gitlab_repmgr gitlab_repmgr 123.456.789.0/24 trust')
+            expect(content).to include('# postgres')
+            expect(content).to include('host testing fakeuser 123.0.0.0/24 md5')
+          }
+      end
+
+      it 'creates repmgr.conf' do
+        expect(chef_run).to render_file(repmgr_conf).with_content(repmgr_conf_block)
+      end
+
+      it 'creates the repmgr database' do
+        expect(chef_run).to create_postgresql_database('gitlab_repmgr').with(owner: 'gitlab_repmgr')
+      end
+
+      it 'registers the master node' do
+        resource = chef_run.postgresql_database('gitlab_repmgr')
+        expect(resource).to notify('execute[register repmgr master node]').to(:run)
+      end
+    end
+
+    context 'with non-default options' do
+      it 'allows the user to specify node numbers' do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            node_number: 12345
+          }
+        )
+        expect(chef_run).to render_file(repmgr_conf).with_content('node=12345')
+      end
+
+      it 'allows the user to specify the node name' do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            node_name: 'fakenodename'
+          }
+        )
+        expect(chef_run).to render_file(repmgr_conf).with_content('node_name=fakenodename')
+      end
+
+      it 'allows the user to specify host name for the connection info' do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            host: 'fakehostname'
+          }
+        )
+        expect(chef_run).to render_file(repmgr_conf).with_content(
+          %(conninfo='host=fakehostname port=5432 user=gitlab_repmgr dbname=gitlab_repmgr')
+        )
+      end
+
+      it 'allows the user to specify port number for the connection info' do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            port: 7777
+          }
+        )
+        expect(chef_run).to render_file(repmgr_conf).with_content(
+          %(conninfo='host=fauxhai.local port=7777 user=gitlab_repmgr dbname=gitlab_repmgr')
+        )
+      end
+    end
+  end
+end

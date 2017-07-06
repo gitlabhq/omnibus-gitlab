@@ -13,3 +13,4 @@ supports "centos"
 depends "runit"
 depends "gitlab"
 depends "package"
+depends 'repmgr'

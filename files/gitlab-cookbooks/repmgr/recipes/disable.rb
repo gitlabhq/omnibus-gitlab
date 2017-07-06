@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,21 +15,6 @@
 # limitations under the License.
 #
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
-
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
-
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
-
-    class NodeError < StandardError; end
-  end
+runit_service 'repmgr' do
+  action :disable
 end
