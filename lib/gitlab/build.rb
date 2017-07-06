@@ -80,6 +80,63 @@ class Build
       contents
     end
 
+    def gitlab_version
+      # Get the branch/version/commit of GitLab CE/EE repo against which package
+      # is built. If GITLAB_VERSION variable is specified, as in triggered builds,
+      # we use that. Else, we use the value in VERSION file.
+
+      if ENV['GITLAB_VERSION'].nil? || ENV['GITLAB_VERSION'].empty?
+        File.read('VERSION').strip
+      else
+        ENV['GITLAB_VERSION']
+      end
+    end
+
+    def gitlab_rails_repo
+      # For normal builds, QA build happens from the gitlab repositories in dev.
+      # For triggered builds, they are not available and their gitlab.com mirrors
+      # have to be used.
+
+      if ENV['ALTERNATIVE_SOURCES'].to_s == "true"
+        domain = "https://gitlab.com/gitlab-org"
+        project = release_package
+      else
+        domain = "git@dev.gitlab.org:gitlab"
+
+        # GitLab CE repo in dev.gitlab.org is named gitlabhq. So we need to
+        # identify gitlabhq from gitlab-ce. Fortunately gitlab-ee does not have
+        # this problem.
+        project = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
+      end
+
+      "#{domain}/#{project}.git"
+    end
+
+    def get_gitlab_repo
+      clone_gitlab_rails
+      checkout_gitlab_rails
+      File.absolute_path("/tmp/gitlab.#{$PROCESS_ID}/qa")
+    end
+
+    def clone_gitlab_rails
+      # PROCESS_ID is appended to ensure randomness in the directory name
+      # to avoid possible conflicts that may arise if the clone's destination
+      # directory already exists.
+      system("git clone #{gitlab_rails_repo} /tmp/gitlab.#{$PROCESS_ID}")
+    end
+
+    def checkout_gitlab_rails
+      # Checking out the cloned repo to the specific commit (well, without doing
+      # a to-and-fro `cd`).
+      system("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet #{gitlab_version}")
+    end
+
+    def tag_triggered_qa
+      # For triggered builds, we need the QA image's tag to match the docker
+      # tag. So, we are retagging the image.
+      DockerOperations.tag("gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}") if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+    end
+
     private
 
     def log_level
