@@ -71,7 +71,7 @@ class PackageRepository
       # to Scientific and Oracle Linux repositories
       if platform.start_with?("el/")
         %w(scientific ol).each do |distro|
-          platform_path = platform.tr('el', distro)
+          platform_path = platform.gsub('el', distro)
 
           list << "#{target_repository}/#{platform_path} #{package_path}"
         end
