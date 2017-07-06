@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Set max_replication_slots to 1 by default for primary Geo instances
 - Set TZ environment variable for Gitaly
 - Add Performance Bar `performance_bar_allowed_group` configuration
+- Automate repmgr configuration
 
 9.3.5
 

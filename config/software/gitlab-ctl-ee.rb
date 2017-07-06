@@ -29,8 +29,10 @@ source path: File.expand_path(
 
 build do
   if ee
-    copy File.expand_path(
-      'files/gitlab-ctl-commands-ee/*.rb', Omnibus::Config.project_root
-    ), "#{install_dir}/embedded/service/omnibus-ctl/"
+    ['', 'lib/'].each do |dir|
+      copy File.expand_path(
+        "files/gitlab-ctl-commands-ee/#{dir}*.rb", Omnibus::Config.project_root
+      ), "#{install_dir}/embedded/service/omnibus-ctl/#{dir}"
+    end
   end
 end

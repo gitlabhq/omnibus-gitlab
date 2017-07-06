@@ -1494,7 +1494,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['ha'] = false
 # geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
 # geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
-#
+
 ################################################################################
 # Pgbouncer (EE only)
 # See [GitLab PgBouncer documentation](http://docs.gitlab.com/omnibus/settings/database.html#enabling-pgbouncer-ee-only)
@@ -1536,3 +1536,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
+#
+
+################################################################################
+# Repmgr (EE only)
+################################################################################
+# repmgr['cluster'] = 'gitlab_cluster'
+# repmgr['database'] = 'gitlab_repmgr'
+# repmgr['host'] = nil
+# repmgr['node_number'] = nil
+# repmgr['port'] = 5432
+# repmgr['trust_auth_cidr_addresses'] = []
+# repmgr['user'] = 'gitlab_repmgr'

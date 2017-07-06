@@ -94,6 +94,7 @@ module Gitlab
   geo_postgresql Mash.new
   prometheus_monitoring Mash.new
   pgbouncer Mash.new
+  repmgr Mash.new
 
   # Single-Service Roles
   # When enabled, default enabled services are disabled
@@ -231,6 +232,7 @@ module Gitlab
 
       %w(
         registry
+        repmgr
       ).each do |key|
         rkey = key.tr('_', '-')
         results[rkey] = Gitlab[key]

@@ -1,0 +1,10 @@
+cluster=<%= @cluster %>
+node=<%= @node_number %>
+node_name=<%= @node_name %>
+conninfo='host=<%= @host %> port=<%= @port %> user=<%= @user %> dbname=<%= @database %>'
+pg_bindir='/opt/gitlab/embedded/bin'
+service_start_command = '/opt/gitlab/bin/gitlab-ctl start postgresql'
+service_stop_command = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
+service_restart_command = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
+promote_command = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
+follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'

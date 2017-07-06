@@ -403,11 +403,13 @@ describe 'postgresql 9.6' do
         postgresql: {
           custom_pg_hba_entries: {
             foo: [
-              type: 'host',
-              database: 'foo',
-              user: 'bar',
-              cidr: '127.0.0.1/32',
-              method: 'trust'
+              {
+                type: 'host',
+                database: 'foo',
+                user: 'bar',
+                cidr: '127.0.0.1/32',
+                method: 'trust'
+              }
             ]
           }
         }
