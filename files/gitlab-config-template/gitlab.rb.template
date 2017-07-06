@@ -1451,7 +1451,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 
 ################################################################################
-# Additional Database Settings (EE only)
+## Additional Database Settings (EE only)
+##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
 ################################################################################
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
 
