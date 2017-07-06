@@ -27,20 +27,13 @@ license_check:
 # because there exists a file called 'release.sh' in this directory. Make has
 # built-in rules on how to build .sh files. By calling this task do_release, it
 # can coexist with the release.sh file.
-do_release: no_changes on_tag purge build license_check move_to_platform_dir sync packagecloud
+do_release: no_changes on_tag purge build license_check move_to_platform_dir sync
 
 # Redefine RELEASE_BUCKET for test builds
 test: RELEASE_BUCKET=omnibus-builds
 test: no_changes purge build license_check move_to_platform_dir sync
-ifdef NIGHTLY
-test: packagecloud
-endif
 
 test_no_sync: no_changes purge build license_check move_to_platform_dir
-
-# Redefine PLATFORM_DIR for Raspberry Pi 2 packages.
-do_rpi2_release: PLATFORM_DIR=raspberry-pi2
-do_rpi2_release: no_changes purge build license_check move_to_platform_dir sync packagecloud
 
 no_changes:
 	git diff --quiet HEAD
@@ -59,22 +52,13 @@ move_to_platform_dir:
 
 docker_trigger_build_and_push:
 	bundle exec rake docker:build:image
-	# While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
-	# variable, which will be used to tag the final Docker image.
-	# So, if IMAGE_TAG variable is empty, it means the trigger happened from
-	# either CE or EE repository. In that case, we can use the GITLAB_VERSION
-	# variable as IMAGE_TAG.
-	if [ -z "$(IMAGE_TAG)" ] ; then export IMAGE_TAG=$(GITLAB_VERSION) ;  fi
-	DOCKER_TAG=$(IMAGE_TAG) bundle exec rake docker:push:triggered
+	DOCKER_TAG=${IMAGE_TAG} bundle exec rake docker:push:triggered
 
 sync:
 	aws s3 sync pkg/ s3://${RELEASE_BUCKET} --acl public-read --region ${RELEASE_BUCKET_REGION}
 	# empty line for aws status crud
 	# Replace FQDN in URL and deal with URL encoding
 	echo "Download URLS:" && find pkg -type f | sed -e "s|pkg|https://${RELEASE_BUCKET}.s3.amazonaws.com|" -e "s|+|%2B|"
-
-packagecloud:
-	bash support/packagecloud_upload.sh ${PACKAGECLOUD_USER} ${PACKAGECLOUD_REPO} ${PACKAGECLOUD_OS}
 
 do_aws_latest:
 	bundle exec rake aws:process
