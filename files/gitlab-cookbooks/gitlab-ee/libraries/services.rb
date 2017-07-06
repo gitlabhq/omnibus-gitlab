@@ -2,10 +2,10 @@ module EEServices
   def service_list
     @ee_service_list ||= super.merge(
       {
-        'sentinel' =>         { groups: [] },
-        'sidekiq-cluster' =>  { groups: [] },
-        'geo-postgresql' =>   { groups: [] },
-        'pgbouncer' =>        { groups: [] },
+        'sentinel' =>         svc(groups: ['redis']),
+        'sidekiq_cluster' =>  svc,
+        'geo_postgresql' =>   svc,
+        'pgbouncer' =>        svc,
       }
     )
   end

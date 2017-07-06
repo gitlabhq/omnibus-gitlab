@@ -160,7 +160,7 @@ module GitlabRails
     def disable_services
       disable_services_roles if any_service_role_defined?
 
-      disable_gitlab_rails_services
+      Service.disable_group('rails') if Gitlab['gitlab_rails']['enable'] == false
     end
 
     def public_path
@@ -205,51 +205,20 @@ module GitlabRails
 
     def disable_services_roles
       if Gitlab['redis_sentinel_role']['enable']
-        disable_non_redis_services
-        Gitlab['sentinel']['enable'] = true
+        Services.disable_group(except: 'redis')
+        Services.enable('sentinel')
       else
-        Gitlab['sentinel']['enable'] = false
-      end
-
-      if Gitlab['redis_master_role']['enable']
-        disable_non_redis_services
-        Gitlab['redis']['enable'] = true
-      end
-
-      if Gitlab['redis_slave_role']['enable']
-        disable_non_redis_services
-        Gitlab['redis']['enable'] = true
+        Services.disable('sentinel')
       end
 
       if Gitlab['redis_master_role']['enable'] && Gitlab['redis_slave_role']['enable']
         fail 'Cannot define both redis_master_role and redis_slave_role in the same machine.'
       elsif Gitlab['redis_master_role']['enable'] || Gitlab['redis_slave_role']['enable']
-        disable_non_redis_services
+        Services.disable_group(except: 'redis')
+        Services.enable('redis')
       else
-        Gitlab['redis']['enable'] = false
+        Services.disable('redis')
       end
-    end
-
-    def disable_gitlab_rails_services
-      if Gitlab['gitlab_rails']['enable'] == false
-        Gitlab['unicorn']['enable'] = false
-        Gitlab['sidekiq']['enable'] = false
-        Gitlab['gitlab_workhorse']['enable'] = false
-        Gitlab['gitaly']['enable'] = false
-        Gitlab['gitlab_monitor']['enable'] = false
-      end
-    end
-
-    def disable_non_redis_services
-      Gitlab['gitlab_rails']['enable'] = false
-      Gitlab['bootstrap']['enable'] = false
-      Gitlab['nginx']['enable'] = false
-      Gitlab['postgresql']['enable'] = false
-      Gitlab['mailroom']['enable'] = false
-      Gitlab['gitaly']['enable'] = false
-      Gitlab['gitlab_monitor']['enable'] = false
-      Gitlab['postgres_exporter']['enable'] = false
-      Gitlab['prometheus']['enable'] = false
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
