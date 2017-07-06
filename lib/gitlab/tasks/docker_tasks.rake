@@ -17,34 +17,9 @@ namespace :docker do
 
     desc "Build QA Docker image"
     task :qa do
-      # PROCESS_ID is appended to ensure randomness in the directory name
-      # to avoid possible conflicts that may arise if the clone's destination
-      # directory already exists.
-      system("git clone #{gitlab_rails_repo} /tmp/gitlab.#{$PROCESS_ID}")
-
-      # The below code is for handling triggered builds. In case of triggered
-      # builds, we want to use the qa folder from the commit from which the
-      # build was triggered, not master. This is needed when the change to test
-      # is in the qa folder.
-      checkout_version = if ENV['GITLAB_VERSION'].nil? || ENV['GITLAB_VERSION'].empty?
-                           File.read('VERSION').strip
-                         else
-                           ENV['GITLAB_VERSION']
-                         end
-
-      # Checking out the cloned repo to the specific commit (well, without doing
-      # a to-and-fro `cd`).
-      system("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet #{checkout_version}")
-
-      location = File.absolute_path("/tmp/gitlab.#{$PROCESS_ID}/qa")
+      location = Build.get_gitlab_repo
       DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
-
-      # For triggered builds, we need the QA image's tag to match the docker
-      # tag. So, we are retagging the image.
-      if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
-        DockerOperations.tag("gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}")
-      end
-      FileUtils.rm_rf("/tmp/gitlab.#{$PROCESS_ID}")
+      Build.tag_triggered_qa # Check if triggered QA and retag if necessary
     end
   end
 
@@ -145,25 +120,5 @@ namespace :docker do
     # Create different tags and push to dockerhub
     DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
     puts "Pushed tag: #{final_tag}"
-  end
-
-  def gitlab_rails_repo
-    # For normal builds, QA build happens from the gitlab repositories in dev.
-    # For triggered builds, they are not available and their gitlab.com mirrors
-    # have to be used.
-
-    if ENV['ALTERNATIVE_SOURCES'].to_s == "true"
-      domain = "https://gitlab.com/gitlab-org"
-      project = release_package
-    else
-      domain = "git@dev.gitlab.org:gitlab"
-
-      # GitLab CE repo in dev.gitlab.org is named gitlabhq. So we need to
-      # identify gitlabhq from gitlab-ce. Fortunately gitlab-ee does not have
-      # this problem.
-      project = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
-    end
-
-    "#{domain}/#{project}.git"
   end
 end
