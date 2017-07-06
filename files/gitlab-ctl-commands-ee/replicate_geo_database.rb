@@ -47,6 +47,12 @@ class ReplicateGeoHelpers
     puts '* Stopping PostgreSQL and all GitLab services'.color(:green)
     run_command('gitlab-ctl stop')
 
+    @options[:password] = ask_pass("Enter the password for #{@options[:user]}@#{@options[:host]}")
+    @pgpass = "#{data_path}/postgresql/.pgpass"
+    create_pgpass_file!
+
+    check_and_create_replication_slot!
+
     puts '* Backing up postgresql.conf'.color(:green)
     run_command("mv #{data_path}/postgresql/data/postgresql.conf #{data_path}/postgresql/")
 
@@ -57,11 +63,7 @@ class ReplicateGeoHelpers
     run_command('rm -f /tmp/postgresql.trigger')
 
     puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
-    @options[:password] = ask_pass("Enter the password for #{@options[:user]}@#{@options[:host]}")
-    pgpass = "#{data_path}/postgresql/.pgpass"
-    create_pgpass_file!(pgpass)
-
-    run_command("PGPASSFILE=#{pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
+    run_command("PGPASSFILE=#{@pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
 
     puts '* Writing recovery.conf file'.color(:green)
     create_recovery_file!
@@ -76,6 +78,16 @@ class ReplicateGeoHelpers
     run_command('gitlab-ctl start')
   end
 
+  def check_and_create_replication_slot!
+    return if @options[:skip_replication_slot]
+
+    puts "* Checking for replication slot #{@options[:slot_name]}".color(:green)
+    unless replication_slot_exists?
+      puts "* Creating replication slot #{@options[:slot_name]}".color(:green)
+      create_replication_slot!
+    end
+  end
+
   def parse_options!(args)
     @options = {
       user: 'gitlab_replicator',
@@ -84,7 +96,9 @@ class ReplicateGeoHelpers
       password: nil,
       now: false,
       force: false,
-      skip_backup: false
+      skip_backup: false,
+      slot_name: nil,
+      skip_replication_slot: false
     }
 
     opts_parser = OptionParser.new do |opts|
@@ -105,6 +119,10 @@ class ReplicateGeoHelpers
         @options[:port] = port
       end
 
+      opts.on('--slot-name[=SLOT-NAME]', 'PostgreSQL replication slot name') do |slot_name|
+        @options[:slot_name] = slot_name
+      end
+
       opts.on('--no-wait', 'Do not wait before starting the replication process') do
         @options[:now] = true
       end
@@ -117,6 +135,10 @@ class ReplicateGeoHelpers
         @options[:skip_backup] = true
       end
 
+      opts.on('--skip-replication-slot', 'Skip the check and creation of replication slot') do
+        @options[:skip_replication_slot] = true
+      end
+
       opts.on_tail('-h', '--help', 'Show this message') do
         puts opts
         exit
@@ -125,6 +147,7 @@ class ReplicateGeoHelpers
 
     opts_parser.parse!(args)
     raise OptionParser::MissingArgument.new(:host) unless @options.fetch(:host)
+    raise OptionParser::MissingArgument.new('--slot-name') unless @options[:skip_replication_slot] || @options.fetch(:slot_name)
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument
     puts $!.to_s
     puts opts_parser
@@ -141,14 +164,14 @@ class ReplicateGeoHelpers
     run_command('gitlab-rake gitlab:backup:create')
   end
 
-  def create_pgpass_file!(pgpass)
-    File.open(pgpass, 'w', 0600) do |file|
+  def create_pgpass_file!
+    File.open(@pgpass, 'w', 0600) do |file|
       file.write(<<~EOF
         #{@options[:host]}:#{@options[:port]}:*:#{@options[:user]}:#{@options[:password]}
       EOF
       )
     end
-    run_command("chown gitlab-psql #{pgpass}")
+    run_command("chown gitlab-psql #{@pgpass}")
   end
 
   def create_recovery_file!
@@ -160,12 +183,28 @@ class ReplicateGeoHelpers
         trigger_file = '/tmp/postgresql.trigger'
       EOF
       )
+      file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
     end
     run_command("chown gitlab-psql #{recovery_file}")
   end
 
   def ask_pass(text)
     STDIN.getpass("#{text}: ")
+  end
+
+  def replication_slot_exists?
+    status = run_psql_command("SELECT slot_name FROM pg_replication_slots WHERE slot_name = '#{@options[:slot_name]}';")
+    status.stdout.include?(@options[:slot_name])
+  end
+
+  def create_replication_slot!
+    status = run_psql_command("SELECT slot_name FROM pg_create_physical_replication_slot('#{@options[:slot_name]}');")
+    status.stdout.include?(@options[:slot_name])
+  end
+
+  def run_psql_command(query)
+    cmd = %(PGPASSFILE=#{@pgpass} #{base_path}/bin/gitlab-psql -h #{@options[:host]} -U #{@options[:user]} -d #{db_name} -t -c "#{query}")
+    run_command(cmd, live: false)
   end
 
   def run_command(cmd, live: false)
@@ -177,6 +216,8 @@ class ReplicateGeoHelpers
       puts
       exit 1
     end
+
+    status
   end
 
   def run_query(query)
