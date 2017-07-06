@@ -273,7 +273,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # git_data_dirs({ "default" => { "path" => "/var/opt/gitlab/git-data", 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' } })
 
 ### Gitaly settings
-# gitlab_rails['gitaly_enabled'] = true
 
 ### GitLab Performance Bar settings
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/performance/performance_bar.html
