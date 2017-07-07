@@ -14,10 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+Services.include_services('gitlab-ee', EEServices.service_list)
 
 include_recipe 'gitlab::default'
-
-Services.prepend_ee_services
 
 [
   'sentinel',
