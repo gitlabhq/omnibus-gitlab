@@ -3,6 +3,6 @@ class EEServices < BaseServices
     'sentinel' =>         svc(groups: ['redis']),
     'sidekiq_cluster' =>  svc,
     'geo_postgresql' =>   svc,
-    'pgbouncer' =>        svc,
+    'pgbouncer' =>        svc
   )
 end

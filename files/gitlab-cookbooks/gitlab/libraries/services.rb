@@ -21,7 +21,7 @@ class Services < BaseServices
     'mattermost' =>         svc,
     'mattermost_nginx' =>   svc,
     'pages_nginx' =>        svc,
-    'registry' =>           svc,
+    'registry' =>           svc
   )
 
   class << self
