@@ -74,4 +74,4 @@ class Services < BaseServices
       end
     end
   end
-end
+end unless defined?(Services) # Prevent reloading during converge, so we can test
