@@ -161,7 +161,7 @@ module GitlabRails
     def disable_services
       disable_services_roles if any_service_role_defined?
 
-      Service.disable_group('rails') if Gitlab['gitlab_rails']['enable'] == false
+      Services.disable_group('rails') if Gitlab['gitlab_rails']['enable'] == false
     end
 
     def public_path
