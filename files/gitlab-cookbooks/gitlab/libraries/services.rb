@@ -51,7 +51,7 @@ class Services < BaseServices
     end
 
     def find_by_group(group)
-      service_list.select { |name, service| service.groups.include?(group) }
+      service_list.select { |name, service| service[:groups].include?(group) }
     end
 
     private
@@ -68,7 +68,7 @@ class Services < BaseServices
     def set_enabled_group(enable, *groups, except: nil)
       exceptions = [except].flatten
       service_list.select do |name, service|
-        if (groups.empty? || !(groups & service.groups).empty?) && (exceptions & service.groups).empty?
+        if (groups.empty? || !(groups & service[:groups]).empty?) && (exceptions & service[:groups]).empty?
           Gitlab[name]['enable'] = enable
         end
       end
