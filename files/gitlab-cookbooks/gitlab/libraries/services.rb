@@ -32,7 +32,7 @@ class Services < BaseServices
 
     def disable(*services, except: nil, force: false)
       exceptions = [except].flatten
-      exceptions.merge!(system_services.keys) unless force
+      exceptions.concat(system_services.keys) unless force
       set_enabled(false, *services, except: exceptions)
     end
 
