@@ -1,6 +1,7 @@
 require_relative 'base_services.rb'
 
 class Services < BaseServices
+
   core_services(
     'logrotate' =>          svc(groups: [DEFAULT_GROUP, SYSTEM_GROUP]),
     'node_exporter' =>      svc(groups: [DEFAULT_GROUP, SYSTEM_GROUP]),
@@ -26,7 +27,7 @@ class Services < BaseServices
 
   class << self
     def system_services
-      find_by_group(SYSTEM_GROUP)
+      find_by_group(BaseServices::SYSTEM_GROUP)
     end
 
     def disable(*services, except: nil, force: false)
@@ -41,7 +42,7 @@ class Services < BaseServices
 
     def disable_group(*groups, except: nil, force: false)
       exceptions = [except].flatten
-      exceptions << SYSTEM_GROUP unless force
+      exceptions << BaseServices::SYSTEM_GROUP unless force
       set_enabled_group(false, *groups, except: exceptions)
     end
 
