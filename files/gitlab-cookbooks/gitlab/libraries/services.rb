@@ -8,11 +8,11 @@ class Services < BaseServices
     'gitlab_rails' =>       svc(groups: [DEFAULT_GROUP, 'rails']),
     'unicorn' =>            svc(groups: [DEFAULT_GROUP, 'rails']),
     'sidekiq' =>            svc(groups: [DEFAULT_GROUP, 'rails']),
-    'gitaly' =>             svc(groups: [DEFAULT_GROUP, 'rails']),
     'gitlab_monitor' =>     svc(groups: [DEFAULT_GROUP, 'rails']),
     'gitlab_workhorse' =>   svc(groups: [DEFAULT_GROUP, 'rails']),
     'redis' =>              svc(groups: [DEFAULT_GROUP, 'redis']),
     'redis_exporter' =>     svc(groups: [DEFAULT_GROUP, 'redis']),
+    'gitaly' =>             svc(groups: [DEFAULT_GROUP]),
     'postgresql' =>         svc(groups: [DEFAULT_GROUP]),
     'nginx' =>              svc(groups: [DEFAULT_GROUP]),
     'prometheus' =>         svc(groups: [DEFAULT_GROUP]),
@@ -58,7 +58,7 @@ class Services < BaseServices
 
     def set_enabled(enable, *services, except: nil)
       exceptions = [except].flatten
-      service_list.each do |name|
+      service_list.each do |name, _|
         if (services.empty? || services.include?(name)) && !exceptions.include?(name)
           Gitlab[name]['enable'] = enable
         end
@@ -67,7 +67,7 @@ class Services < BaseServices
 
     def set_enabled_group(enable, *groups, except: nil)
       exceptions = [except].flatten
-      service_list.select do |name, service|
+      service_list.each do |name, service|
         if (groups.empty? || !(groups & service[:groups]).empty?) && (exceptions & service[:groups]).empty?
           Gitlab[name]['enable'] = enable
         end
