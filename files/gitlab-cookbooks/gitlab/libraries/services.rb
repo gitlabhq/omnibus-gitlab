@@ -1,22 +1,39 @@
+#
+# Copyright:: Copyright (c) 2017 GitLab Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 require_relative 'base_services.rb'
 
 class Services < BaseServices
 
   core_services(
     'logrotate' =>          svc(groups: [DEFAULT_GROUP, SYSTEM_GROUP]),
-    'node_exporter' =>      svc(groups: [DEFAULT_GROUP, SYSTEM_GROUP]),
+    'node_exporter' =>      svc(groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'prometheus']),
     'gitlab_rails' =>       svc(groups: [DEFAULT_GROUP, 'rails']),
     'unicorn' =>            svc(groups: [DEFAULT_GROUP, 'rails']),
-    'sidekiq' =>            svc(groups: [DEFAULT_GROUP, 'rails']),
-    'gitlab_monitor' =>     svc(groups: [DEFAULT_GROUP, 'rails']),
+    'sidekiq' =>            svc(groups: [DEFAULT_GROUP, 'rails', 'sidekiq']),
+    'gitlab_monitor' =>     svc(groups: [DEFAULT_GROUP, 'rails', 'prometheus']),
     'gitlab_workhorse' =>   svc(groups: [DEFAULT_GROUP, 'rails']),
     'redis' =>              svc(groups: [DEFAULT_GROUP, 'redis']),
-    'redis_exporter' =>     svc(groups: [DEFAULT_GROUP, 'redis']),
+    'redis_exporter' =>     svc(groups: [DEFAULT_GROUP, 'redis', 'prometheus']),
     'gitaly' =>             svc(groups: [DEFAULT_GROUP]),
-    'postgresql' =>         svc(groups: [DEFAULT_GROUP]),
+    'postgresql' =>         svc(groups: [DEFAULT_GROUP, 'postgres']),
     'nginx' =>              svc(groups: [DEFAULT_GROUP]),
-    'prometheus' =>         svc(groups: [DEFAULT_GROUP]),
-    'postgres_exporter' =>  svc(groups: [DEFAULT_GROUP]),
+    'prometheus' =>         svc(groups: [DEFAULT_GROUP, 'prometheus']),
+    'postgres_exporter' =>  svc(groups: [DEFAULT_GROUP, 'prometheus', 'postgres']),
     'mailroom' =>           svc,
     'gitlab_pages' =>       svc,
     'mattermost' =>         svc,

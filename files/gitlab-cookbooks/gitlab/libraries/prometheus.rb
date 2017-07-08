@@ -24,13 +24,7 @@ require 'json'
 module Prometheus
   class << self
     def services
-      %w(
-        prometheus
-        node-exporter
-        redis-exporter
-        postgres-exporter
-        gitlab-monitor
-      )
+      Services.find_by_group('prometheus').map { |name, _| name.tr('_', '-') }
     end
 
     def parse_variables
