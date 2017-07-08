@@ -163,7 +163,6 @@ describe PackageRepository do
           before do
             stub_env_var('PACKAGECLOUD_REPO', nil)
             stub_env_var('RASPBERRY_REPO', nil)
-            stub_env_var('NIGHTLY_REPO', nil)
             allow_any_instance_of(PackageRepository).to receive(:repository_for_rc).and_return(nil)
           end
 
@@ -231,19 +230,16 @@ describe PackageRepository do
 
   def set_all_env_variables
     stub_env_var("PACKAGECLOUD_REPO", "super-stable-1234")
-    stub_env_var("NIGHTLY_REPO", "nightly-builds")
     stub_env_var("RASPBERRY_REPO", "raspi")
   end
 
   def set_nightly_env_variable
     stub_env_var("PACKAGECLOUD_REPO", "")
-    stub_env_var("NIGHTLY_REPO", "nightly-builds")
     stub_env_var("RASPBERRY_REPO", "")
   end
 
   def set_raspi_env_variable
     stub_env_var("PACKAGECLOUD_REPO", "")
-    stub_env_var("NIGHTLY_REPO", "nightly-builds")
     stub_env_var("RASPBERRY_REPO", "raspi")
   end
 end
