@@ -23,6 +23,10 @@ variables:
 
 # Templates
 ## Runs on GitLab.com only
+.dedicated-runner: &dedicated-runner
+  tags:
+    - gitlab-org
+
 .knapsack-state: &knapsack-state
   services: []
   cache:
@@ -36,6 +40,7 @@ variables:
 
 .knapsack: &prepare_knapsack
   <<: *knapsack-state
+  <<: *dedicated-runner
   stage: prepare
   before_script: []
   script:
@@ -51,6 +56,7 @@ variables:
 
 .spec_template: &run_rspec
   stage: tests
+  <<: *dedicated-runner
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
@@ -180,6 +186,9 @@ variables:
     expire_in: 14 days
     paths:
       - pkg/
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - branches@gitlab/omnibus-gitlab
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -219,11 +228,10 @@ before_script:
 ## Runs on GitLab.com only
 rubocop:
   stage: check
+  <<: *dedicated-runner
   image: ruby:2.3.3
   script:
     - bundle exec rake rubocop
-  tags:
-    - docker
   except:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
@@ -235,6 +243,7 @@ docs check links:
   cache: {}
   dependencies: []
   before_script: []
+  <<: *dedicated-runner
   script:
     - mv doc/ /nanoc/content/
     - cd /nanoc
@@ -258,6 +267,7 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
 
 update-knapsack:
   <<: *knapsack-state
+  <<: *dedicated-runner
   stage: post-test
   before_script: []
   script:
@@ -270,6 +280,7 @@ update-knapsack:
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
+  <<: *dedicated-runner
   stage: trigger-package
   script:
     - make test_no_sync
@@ -303,6 +314,7 @@ Trigger:docker:
 
 Trigger:omnibus-package:
   stage: trigger-package
+  <<: *dedicated-runner
   when: manual
   before_script: []
   script:
@@ -319,6 +331,7 @@ Trigger:omnibus-package:
 # https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
 trigger_docs:
   stage: package
+  <<: *dedicated-runner
   image: "alpine"
   before_script:
     - apk update && apk add curl
