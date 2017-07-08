@@ -80,9 +80,12 @@ nginx['logrotate_size'] = "200M"
 logrotate['enable'] = false
 ```
 
-### UDP log shipping (GitLab Enterprise Edition only)
+### UDP log forwarding
 
-You can configure omnibus-gitlab to send syslog-ish log messages via UDP.
+> Available in [GitLab Enterprise Edition Starter][ee].
+
+In case you have a central server where all your infra logs are gathered,
+you can configure Omnibus GitLab to send syslog-ish log messages via UDP:
 
 ```ruby
 logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
@@ -92,15 +95,13 @@ logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 Example log messages:
 
 ```
-<13>Jun 26 06:33:46 ubuntu1204-test production.log: Started GET "/root/my-project/import" for 127.0.0.1 at 2014-06-26 06:33:46 -0700
-<13>Jun 26 06:33:46 ubuntu1204-test production.log: Processing by ProjectsController#import as HTML
-<13>Jun 26 06:33:46 ubuntu1204-test production.log: Parameters: {"id"=>"root/my-project"}
-<13>Jun 26 06:33:46 ubuntu1204-test production.log: Completed 200 OK in 122ms (Views: 71.9ms | ActiveRecord: 12.2ms)
-<13>Jun 26 06:33:46 ubuntu1204-test gitlab_access.log: 172.16.228.1 - - [26/Jun/2014:06:33:46 -0700] "GET /root/my-project/import HTTP/1.1" 200 5775 "https://172.16.228.169/root/my-project/import" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"
+Jun 26 06:33:46 ubuntu1204-test production.log: Started GET "/root/my-project/import" for 127.0.0.1 at 2014-06-26 06:33:46 -0700
+Jun 26 06:33:46 ubuntu1204-test production.log: Processing by ProjectsController#import as HTML
+Jun 26 06:33:46 ubuntu1204-test production.log: Parameters: {"id"=>"root/my-project"}
+Jun 26 06:33:46 ubuntu1204-test production.log: Completed 200 OK in 122ms (Views: 71.9ms | ActiveRecord: 12.2ms)
+Jun 26 06:33:46 ubuntu1204-test gitlab_access.log: 172.16.228.1 - - [26/Jun/2014:06:33:46 -0700] "GET /root/my-project/import HTTP/1.1" 200 5775 "https://172.16.228.169/root/my-project/import" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"
 2014-06-26_13:33:46.49866 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7nbj0 Sidekiq::Extensions::DelayedMailer JID-bbfb118dd1db20f6c39f5b50 INFO: start
-
 2014-06-26_13:33:46.52608 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7muoc RepositoryImportWorker JID-57ee926c3655fcfa062338ae INFO: start
-
 ```
 
 ### Using a custom NGINX log format
@@ -115,3 +116,5 @@ in `/etc/gitlab/gitlab.rb`.
 nginx['log_format'] = 'my format string $foo $bar'
 mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ```
+
+[ee]: https://about.gitlab.com/gitlab-ee/
