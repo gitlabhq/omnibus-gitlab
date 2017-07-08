@@ -306,51 +306,6 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Gitaly settings' do
-      context 'by default' do
-        it 'is enabled' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: true})
-        end
-      end
-
-      context 'when gitaly is disabled' do
-        it 'disables gitaly in config' do
-          stub_gitlab_rb(gitaly: { enable: false })
-
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: false})
-        end
-      end
-
-      context 'when gitaly service is connecting from a different node' do
-        before do
-          stub_gitlab_rb(
-            gitaly: { enable: false },
-            gitlab_rails: { gitaly_enabled: true }
-          )
-        end
-
-        it 'enables gitaly in config' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: true})
-        end
-      end
-
-      context 'when gitaly service is running on a different node' do
-        before do
-          stub_gitlab_rb(
-            gitlab_rails: { gitaly_enabled: false }
-          )
-
-          it 'disables gitaly in config' do
-            expect(chef_run).to render_file(gitlab_yml_path)
-              .with_content(%r{gitaly:\s+enabled: false})
-          end
-        end
-      end
-    end
-
     context 'GitLab Shell settings' do
       context 'when git_timeout is configured' do
         it 'sets the git_timeout value' do
