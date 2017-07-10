@@ -16,6 +16,7 @@
 #
 
 class EEServices < BaseServices
+  # Define all gitlab-ee cookbook services
   core_services(
     'sentinel' =>         svc(groups: ['redis']),
     'geo_postgresql' =>   svc(groups: ['postgres']),

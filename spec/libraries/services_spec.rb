@@ -24,7 +24,7 @@ describe Services do
   end
 
   it 'uses the default template when populating service information' do
-    expect(Services.send(:svc)).to eq(Services::SERVICE_CONFIG_TEMPLATE)
+    expect(Services.send(:svc)).to eq({ groups: [] })
   end
 
   describe 'service' do
@@ -103,7 +103,7 @@ describe Services do
       end
 
       it 'allows forced disable on system services' do
-        Services.disable('node_exporter', force: true)
+        Services.disable('node_exporter', include_system: true)
         expect(Gitlab['node_exporter']['enable']).to be false
       end
     end
@@ -260,7 +260,7 @@ describe Services do
       end
 
       it 'allows forced disable on system services' do
-        Services.disable_group(BaseServices::SYSTEM_GROUP, force: true)
+        Services.disable_group(BaseServices::SYSTEM_GROUP, include_system: true)
         expect(Gitlab['logrotate']['enable']).to be false
       end
     end
