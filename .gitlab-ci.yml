@@ -222,7 +222,7 @@ before_script:
         && git add Gemfile.lock
         && git commit -m "Updating Gemfile.lock" ;
     fi
-  - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
+  - if [ -n "$NIGHTLY" ] ; then export STAGING_REPO=nightly-builds ;fi
 
 # Jobs
 ## Runs on GitLab.com only
