@@ -292,22 +292,22 @@ describe Build do
       end
 
       it 'returns public mirror for GitLab CE' do
-        allow(Build).to receive(:release_package).and_return("gitlab-ce")
+        allow(Build).to receive(:package).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-ce.git")
       end
       it 'returns public mirror for GitLab EE' do
-        allow(Build).to receive(:release_package).and_return("gitlab-ee")
+        allow(Build).to receive(:package).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-ee.git")
       end
     end
 
     describe 'ALTERNATIVE_SOURCES variable not specified' do
       it 'returns dev repo for GitLab CE' do
-        allow(Build).to receive(:release_package).and_return("gitlab-ce")
+        allow(Build).to receive(:package).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlabhq.git")
       end
       it 'returns dev repo for GitLab EE' do
-        allow(Build).to receive(:release_package).and_return("gitlab-ee")
+        allow(Build).to receive(:package).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
       end
     end
@@ -315,7 +315,7 @@ describe Build do
 
   describe 'clone gitlab repo' do
     it 'calls the git command' do
-      allow(Build).to receive(:release_package).and_return("gitlab-ee")
+      allow(Build).to receive(:package).and_return("gitlab-ee")
       expect(described_class).to receive("system").with("git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab.#{$PROCESS_ID}")
       Build.clone_gitlab_rails
     end
@@ -323,7 +323,7 @@ describe Build do
 
   describe 'checkout gitlab repo' do
     it 'calls the git command' do
-      allow(Build).to receive(:release_package).and_return("gitlab-ee")
+      allow(Build).to receive(:package).and_return("gitlab-ee")
       allow(Build).to receive(:gitlab_version).and_return("9.0.0")
       expect(described_class).to receive("system").with("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet 9.0.0")
       Build.checkout_gitlab_rails

@@ -3,6 +3,10 @@ require 'omnibus'
 require 'net/http'
 require 'json'
 
+# To use PROCESS_ID instead of $$ to randomize the target directory for cloning
+# GitLab repository. Rubocop requirement to increase readability.
+require 'English'
+
 class Build
   class << self
     include FileUtils
@@ -99,14 +103,14 @@ class Build
 
       if ENV['ALTERNATIVE_SOURCES'].to_s == "true"
         domain = "https://gitlab.com/gitlab-org"
-        project = release_package
+        project = package
       else
         domain = "git@dev.gitlab.org:gitlab"
 
         # GitLab CE repo in dev.gitlab.org is named gitlabhq. So we need to
         # identify gitlabhq from gitlab-ce. Fortunately gitlab-ee does not have
         # this problem.
-        project = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
+        project = package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
       end
 
       "#{domain}/#{project}.git"
