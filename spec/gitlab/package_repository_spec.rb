@@ -41,18 +41,6 @@ describe PackageRepository do
       end
     end
 
-    shared_examples 'with a nightly repository' do
-      context 'with nightly repo' do
-        before do
-          set_nightly_env_variable
-        end
-
-        it 'uses the nightly repository' do
-          expect(repo.target).to eq('nightly-builds')
-        end
-      end
-    end
-
     shared_examples 'with raspberry pi repo' do
       context 'with raspberry pi repo' do
         before do
@@ -75,7 +63,6 @@ describe PackageRepository do
       end
 
       it_behaves_like 'with an override repository'
-      it_behaves_like 'with a nightly repository'
       it_behaves_like 'with raspberry pi repo'
     end
 
@@ -94,7 +81,6 @@ describe PackageRepository do
         end
 
         it_behaves_like 'with an override repository'
-        it_behaves_like 'with a nightly repository'
         it_behaves_like 'with raspberry pi repo'
       end
 
@@ -108,7 +94,6 @@ describe PackageRepository do
         end
 
         it_behaves_like 'with an override repository'
-        it_behaves_like 'with a nightly repository'
         it_behaves_like 'with raspberry pi repo'
       end
     end
@@ -196,8 +181,8 @@ describe PackageRepository do
           end
 
           it 'in dry run mode prints the upload commands' do
-            expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
-            expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(ENV['STAGING_REPO'], true) }.to output(%r{Uploading...\n}).to_stdout
+            expect { repo.upload(ENV['STAGING_REPO'], true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
 
@@ -236,6 +221,7 @@ describe PackageRepository do
   def set_nightly_env_variable
     stub_env_var("PACKAGECLOUD_REPO", "")
     stub_env_var("RASPBERRY_REPO", "")
+    stub_env_var("STAGING_REPO", "nightly-builds")
   end
 
   def set_raspi_env_variable
