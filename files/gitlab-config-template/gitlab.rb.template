@@ -1324,7 +1324,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # gitaly['grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 # gitaly['auth_token'] = '<secret>'
-# gitaly['auth_unenforced'] = false # When true, auth is logged to Prometheus but NOT enforced
+# gitaly['auth_transitioning'] = false # When true, auth is logged to Prometheus but NOT enforced
 
 
 ################################################################################

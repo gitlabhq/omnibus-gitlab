@@ -13,7 +13,7 @@ describe 'gitlab::gitaly' do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
   end
   let(:auth_token) { '123secret456' }
-  let(:auth_unenforced) { true }
+  let(:auth_transitioning) { true }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -43,7 +43,7 @@ describe 'gitlab::gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[auth\]\s+token = })
       expect(chef_run).not_to render_file(config_path)
-        .with_content('unenforced =')
+        .with_content('transitioning =')
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -63,7 +63,7 @@ describe 'gitlab::gitaly' do
           sentry_dsn: sentry_dsn,
           grpc_latency_buckets: grpc_latency_buckets,
           auth_token: auth_token,
-          auth_unenforced: auth_unenforced,
+          auth_transitioning: auth_transitioning,
         }
       )
     end
@@ -80,7 +80,7 @@ describe 'gitlab::gitaly' do
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(grpc_latency_buckets)}})
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[auth\]\s+token = '#{Regexp.escape(auth_token)}'\s+unenforced = true})
+        .with_content(%r{\[auth\]\s+token = '#{Regexp.escape(auth_token)}'\s+transitioning = true})
     end
 
     context 'when using gitaly storage configuration' do

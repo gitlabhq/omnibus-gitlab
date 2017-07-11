@@ -44,6 +44,6 @@ grpc_latency_buckets = <%= @grpc_latency_buckets %>
 <% if @auth_token %>
 token = '<%= @auth_token %>'
 <% end %>
-<% if @auth_unenforced %>
-unenforced = <%= @auth_unenforced %>
+<% if @auth_transitioning %>
+transitioning = <%= @auth_transitioning %>
 <% end %>
