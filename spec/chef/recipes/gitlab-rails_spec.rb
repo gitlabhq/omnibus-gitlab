@@ -655,4 +655,25 @@ describe 'gitlab::gitlab-rails' do
       end
     end
   end
+  context 'gitlab registry' do
+    describe 'registry is disabled' do
+      it 'does not generate gitlab-registry.key file' do
+        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key")
+      end
+    end
+
+    describe 'registry is enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            registry_enabled: true
+          }
+        )
+      end
+
+      it 'generates gitlab-registry.key file' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
+      end
+    end
+  end
 end
