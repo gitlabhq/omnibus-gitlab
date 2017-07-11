@@ -436,6 +436,15 @@ production: &base
   geo_secondary_role:
     enabled: <%= @geo_secondary_role_enabled %>
 
+  monitoring:
+    # Time between sampling of unicorn socket metrics, in seconds
+    unicorn_sampler_interval: <%= @monitoring_unicorn_sampler_interval %>
+    # IP whitelist controlling access to monitoring endpoints
+    ip_whitelist:
+<% @monitoring_whitelist.each do |entry| %>
+      - <%= entry %>
+<% end %>
+
   #
   # 5. Extra customization
   # ==========================
