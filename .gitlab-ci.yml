@@ -1,6 +1,7 @@
 stages:
   - trigger-package
   - trigger-docker
+  - trigger-qa
   - check
   - prepare
   - tests
@@ -327,6 +328,25 @@ Trigger:omnibus-package:
   except:
     - triggers
 
+Trigger:qa:
+  stage: trigger-qa
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
+    - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
+    - bundle exec rake trigger:qa
+  only:
+    - triggers
+  dependencies: []
+
 # Trigger docs build
 # https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
 trigger_docs:
@@ -345,7 +365,6 @@ trigger_docs:
     - master@gitlab-org/omnibus-gitlab
   except:
     - triggers
-
 
 Ubuntu 14.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"

@@ -25,19 +25,24 @@ class DockerOperations
   # 3. any other valid docker tag
   #
   # new_tag - specifies the new tag for the existing image
-  def self.push(namespace, initial_tag, new_tag)
-    image = get(namespace, initial_tag)
-    tag_and_push(image, namespace, new_tag)
+  def self.tag_and_push(namespace, initial_tag, new_tag)
+    tag(namespace, initial_tag, new_tag)
+    push(namespace, new_tag)
   end
 
   def self.get(namespace, tag)
     Docker::Image.get("#{namespace}:#{tag}")
   end
 
-  def self.tag_and_push(image, namespace, tag)
-    image.tag(repo: namespace, tag: tag, force: true)
+  def self.push(namespace, tag)
+    image = get(namespace, tag)
     image.push(Docker.creds, repo_tag: "#{namespace}:#{tag}") do |chunk|
       puts chunk
     end
+  end
+
+  def self.tag(namespace, initial_tag, tag)
+    image = get(namespace, initial_tag)
+    image.tag(repo: namespace, tag: tag, force: true)
   end
 end

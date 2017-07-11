@@ -2,10 +2,6 @@ require 'docker'
 require_relative '../docker_operations.rb'
 require_relative '../build.rb'
 
-# To use PROCESS_ID instead of $$ to randomize the target directory for cloning
-# GitLab repository. Rubocop requirement to increase readability.
-require 'English'
-
 namespace :docker do
   namespace :build do
     desc "Build Docker All in one image"
@@ -17,15 +13,9 @@ namespace :docker do
 
     desc "Build QA Docker image"
     task :qa do
-      repo = release_package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
-
-      # PROCESS_ID is appended to ensure randomness in the directory name
-      # to avoid possible conflicts that may arise if the clone's destination
-      # directory already exists.
-      system("git clone git@dev.gitlab.org:gitlab/#{repo}.git /tmp/#{repo}.#{$PROCESS_ID}")
-      location = File.absolute_path("/tmp/#{repo}.#{$PROCESS_ID}/qa")
+      location = Build.get_gitlab_repo
       DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
-      FileUtils.rm_rf("/tmp/#{repo}.#{$PROCESS_ID}")
+      Build.tag_triggered_qa # Check if triggered QA and retag if necessary
     end
   end
 
@@ -71,7 +61,7 @@ namespace :docker do
     task :qa do
       docker_tag = "#{edition}-#{tag}"
       authenticate
-      DockerOperations.push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
+      DockerOperations.tag_and_push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -113,7 +103,7 @@ namespace :docker do
 
   def push(docker_tag, repository = 'gitlab')
     namespace = "#{repository}/#{release_package}"
-    DockerOperations.push(namespace, "latest", docker_tag)
+    DockerOperations.tag_and_push(namespace, "latest", docker_tag)
   end
 
   def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")

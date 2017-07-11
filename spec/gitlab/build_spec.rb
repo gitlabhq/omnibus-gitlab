@@ -269,6 +269,75 @@ describe Build do
     end
   end
 
+  describe 'gitlab_version' do
+    describe 'GITLAB_VERSION variable specified' do
+      it 'returns passed value' do
+        allow(ENV).to receive(:[]).with("GITLAB_VERSION").and_return("9.0.0")
+        expect(described_class.gitlab_version).to eq('9.0.0')
+      end
+    end
+
+    describe 'GITLAB_VERSION variable not specified' do
+      it 'returns content of VERSION' do
+        allow(File).to receive(:read).with("VERSION").and_return("8.5.6")
+        expect(described_class.gitlab_version).to eq('8.5.6')
+      end
+    end
+  end
+
+  describe 'gitlab_rails repo' do
+    describe 'ALTERNATIVE_SOURCES variable specified' do
+      before do
+        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+      end
+
+      it 'returns public mirror for GitLab CE' do
+        allow(Build).to receive(:package).and_return("gitlab-ce")
+        expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-ce.git")
+      end
+      it 'returns public mirror for GitLab EE' do
+        allow(Build).to receive(:package).and_return("gitlab-ee")
+        expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-ee.git")
+      end
+    end
+
+    describe 'ALTERNATIVE_SOURCES variable not specified' do
+      it 'returns dev repo for GitLab CE' do
+        allow(Build).to receive(:package).and_return("gitlab-ce")
+        expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlabhq.git")
+      end
+      it 'returns dev repo for GitLab EE' do
+        allow(Build).to receive(:package).and_return("gitlab-ee")
+        expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
+      end
+    end
+  end
+
+  describe 'clone gitlab repo' do
+    it 'calls the git command' do
+      allow(Build).to receive(:package).and_return("gitlab-ee")
+      expect(described_class).to receive("system").with("git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab.#{$PROCESS_ID}")
+      Build.clone_gitlab_rails
+    end
+  end
+
+  describe 'checkout gitlab repo' do
+    it 'calls the git command' do
+      allow(Build).to receive(:package).and_return("gitlab-ee")
+      allow(Build).to receive(:gitlab_version).and_return("9.0.0")
+      expect(described_class).to receive("system").with("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet 9.0.0")
+      Build.checkout_gitlab_rails
+    end
+  end
+
+  describe 'get_gitlab_repo' do
+    it 'returns correct location' do
+      allow(Build).to receive(:clone_gitlab_rails).and_return(true)
+      allow(Build).to receive(:checkout_gitlab_rails).and_return(true)
+      expect(described_class.get_gitlab_repo).to eq("/tmp/gitlab.#{$PROCESS_ID}/qa")
+    end
+  end
+
   def stub_is_ee_version(value)
     allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
   end
