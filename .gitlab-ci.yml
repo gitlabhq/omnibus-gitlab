@@ -661,6 +661,10 @@ SLES 12:
     - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -749,6 +753,10 @@ SLES 12 branch:
     paths:
     - cache
     - gems
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
