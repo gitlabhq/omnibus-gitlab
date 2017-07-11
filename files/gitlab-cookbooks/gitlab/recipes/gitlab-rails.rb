@@ -111,6 +111,14 @@ directory gitlab_ci_dir do
   recursive true
 end
 
+key_file_path = node['gitlab']['gitlab-rails']['registry_key_path']
+file key_file_path do
+  content node['registry']['internal_key']
+  owner gitlab_user
+  group gitlab_group
+  only_if { node['gitlab']['gitlab-rails']['registry_enabled'] && node['registry']['internal_key'] }
+end
+
 template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 
 dependent_services = []
