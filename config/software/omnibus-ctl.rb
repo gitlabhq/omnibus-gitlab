@@ -18,7 +18,7 @@ name 'omnibus-ctl'
 default_version 'v0.5.0'
 
 license 'Apache-2.0'
-license_file 'https://github.com/chef/omnibus-ctl/blob/master/LICENSE'
+license_file 'https://github.com/chef/omnibus-ctl/raw/master/LICENSE'
 
 dependency 'ruby'
 dependency 'rubygems'
