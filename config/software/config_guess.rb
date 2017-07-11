@@ -25,12 +25,12 @@ source git: version.remote
 
 # http://savannah.gnu.org/projects/config
 license 'GPL-3.0 (with exception)'
-license_file 'config.guess'
-license_file 'config.sub'
+license_file 'LICENSE'
 
 relative_path "config_guess-#{version.print}"
 
 build do
+  patch source: 'add-license-file.patch'
   mkdir "#{install_dir}/embedded/lib/config_guess"
 
   copy "#{project_dir}/config.guess", "#{install_dir}/embedded/lib/config_guess/config.guess"
