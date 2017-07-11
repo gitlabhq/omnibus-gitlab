@@ -75,7 +75,7 @@ end
 
 runit_service 'registry' do
   options({
-    :log_directory => log_directory
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
