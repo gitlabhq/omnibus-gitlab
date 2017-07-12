@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Bump NGINX version to 1.12.0 894ddc79
 - Add support in Geo replicate-geo-database command for replication slots 9fa27e9a0
 - Remove software definition of expat 59c39870
+- Add unicorn metrics to Prometheus
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
 - Disable RubyGems in gitlab-shell scripts for performance
 - Adjust various default values for PostgreSQL based on GitLab.com
