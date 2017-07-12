@@ -26,6 +26,19 @@ module GitlabSpec
       allow(ENV).to receive(:[]).with(var).and_return(value)
     end
 
+    def stub_is_ee_version(value)
+      allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
+    end
+
+    def stub_is_ee_env(value)
+      stub_env_var('ee', value.nil? ? '' : value.to_s)
+    end
+
+    def stub_is_ee(value)
+      stub_is_ee_version(value)
+      stub_is_ee_env(value)
+    end
+
     # a small helper function that creates a SHA1 fingerprint from a private or
     # public key.
     def create_fingerprint_from_key(key, passphrase = nil)
