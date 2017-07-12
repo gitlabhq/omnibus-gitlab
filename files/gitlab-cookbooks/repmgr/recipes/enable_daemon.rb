@@ -1,6 +1,5 @@
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
-# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,4 +14,14 @@
 # limitations under the License.
 #
 
-include_recipe 'repmgr::disable_daemon'
+account_helper = AccountHelper.new(node)
+log_directory = node['repmgr']['log_directory']
+
+runit_service 'repmgrd' do
+  supervisor_owner account_helper.postgresql_user
+  supervisor_group account_helper.postgresql_user
+  options({
+    log_directory: log_directory,
+  }.merge(params))
+  log_options node['gitlab']['logging'].to_hash.merge(node['repmgr'].to_hash)
+end
