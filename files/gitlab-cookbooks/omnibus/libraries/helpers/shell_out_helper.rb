@@ -15,7 +15,7 @@ module ShellOutHelper
 
   def success?(cmd)
     o = do_shell_out(cmd)
-    o.exitstatus == 0
+    o.exitstatus.zero?
   end
 
   def failure?(cmd)

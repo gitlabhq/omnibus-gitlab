@@ -13,7 +13,7 @@ describe 'secrets' do
 
   before do
     allow(File).to receive(:directory?).and_call_original
-    allow(File).to receive(:exists?).and_call_original
+    allow(File).to receive(:exist?).and_call_original
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:open).and_call_original
   end
@@ -41,7 +41,7 @@ describe 'secrets' do
 
     context 'when there are no existing secrets' do
       before do
-        allow(File).to receive(:exists?).with('/etc/gitlab/gitlab-secrets.json').and_return(false)
+        allow(File).to receive(:exist?).with('/etc/gitlab/gitlab-secrets.json').and_return(false)
 
         chef_run
       end
@@ -71,7 +71,7 @@ describe 'secrets' do
         allow(SecretsHelper).to receive(:system)
         allow(File).to receive(:directory?).with('/etc/gitlab').and_return(true)
         allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w').and_yield(file).once
-        allow(File).to receive(:exists?).with('/etc/gitlab/gitlab-secrets.json').and_return(true)
+        allow(File).to receive(:exist?).with('/etc/gitlab/gitlab-secrets.json').and_return(true)
       end
 
       context 'when secrets are only partially present' do
@@ -120,7 +120,7 @@ describe 'secrets' do
     context 'when there are existing secrets in /etc/gitlab/gitlab.rb and /etc/gitlab/gitlab-secrets.json' do
       before do
         allow(Gitlab).to receive(:[]).and_call_original
-        allow(File).to receive(:exists?).with('/etc/gitlab/gitlab-secrets.json').and_return(true)
+        allow(File).to receive(:exist?).with('/etc/gitlab/gitlab-secrets.json').and_return(true)
       end
 
       context 'when secrets are only partially present' do
@@ -209,7 +209,7 @@ describe 'secrets' do
           stub_gitlab_rb(gitlab_rails: { otp_key_base: 'rb_rails_otp_key_base',
                                          secret_key_base: 'rb_rails_secret_key_base' })
 
-          allow(File).to receive(:exists?).with(secret_file).and_return(true)
+          allow(File).to receive(:exist?).with(secret_file).and_return(true)
           allow(File).to receive(:read).with(secret_file).and_return('secret_key_base')
 
           expect { chef_run }.to raise_error(RuntimeError, /otp_key_base/)

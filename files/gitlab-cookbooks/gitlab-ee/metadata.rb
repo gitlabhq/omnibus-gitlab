@@ -10,7 +10,6 @@ recipe "gitlab", "Configures GitLab EE from Omnibus"
 supports "ubuntu"
 supports "centos"
 
-depends "runit"
+depends "omnibus"
 depends "gitlab"
-depends "package"
 depends 'repmgr'

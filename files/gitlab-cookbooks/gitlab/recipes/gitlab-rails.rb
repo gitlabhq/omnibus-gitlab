@@ -130,7 +130,7 @@ secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
 otp_key_base = node['gitlab']['gitlab-rails']['otp_key_base']
 
-if File.exists?(secret_file) && File.read(secret_file).chomp != otp_key_base
+if File.exist?(secret_file) && File.read(secret_file).chomp != otp_key_base
   message = [
     "The contents of #{secret_file} don't match the value of Gitlab['gitlab_rails']['otp_key_base'] (#{otp_key_base})",
     "Changing the value of the otp_key_base secret will stop two-factor auth working. Please back up #{secret_file} before continuing",

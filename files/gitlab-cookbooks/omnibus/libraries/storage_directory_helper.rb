@@ -26,11 +26,11 @@ class StorageDirectoryHelper
   end
 
   def writable?(path)
-    do_shell_out("test -w #{path} -a -w $(readlink -f #{path})", @target_owner).exitstatus == 0
+    do_shell_out("test -w #{path} -a -w $(readlink -f #{path})", @target_owner).exitstatus.zero?
   end
 
   def run_command(cmd, use_euid: false, throw_error: true)
-    run_shell = Mixlib::ShellOut.new(cmd, user: (@target_owner if use_euid),  group: (@target_group if use_euid))
+    run_shell = Mixlib::ShellOut.new(cmd, user: (@target_owner if use_euid), group: (@target_group if use_euid))
     run_shell.run_command
     run_shell.error! if throw_error
     run_shell
@@ -92,7 +92,8 @@ class StorageDirectoryHelper
     commands_info = ["Failed expecting \"#{path}\" to be a directory."]
 
     format_string = '%U'
-    expect_string = "#{@target_owner}"
+    expect_string = ''
+    expect_string << @target_owner.to_s
 
     if @target_group
       format_string << ':%G'
@@ -109,7 +110,7 @@ class StorageDirectoryHelper
 
     result = true
     commands.each_index do |index|
-      result = result && validate_command(commands[index], throw_error: throw_error, error_message: commands_info[index])
+      result &&= validate_command(commands[index], throw_error: throw_error, error_message: commands_info[index])
       break unless result
     end
 
@@ -122,6 +123,6 @@ class StorageDirectoryHelper
     # success case, so always use the euid to run the command, and use a custom error message
     cmd = run_command("set -x && #{cmd}", use_euid: true, throw_error: false)
     cmd.invalid!(error_message) if cmd.exitstatus != 0 && throw_error
-    cmd.exitstatus == 0
+    cmd.exitstatus.zero?
   end
 end
