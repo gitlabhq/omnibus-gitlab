@@ -944,8 +944,8 @@ default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}
 default['gitlab']['gitaly']['listen_addr'] = nil
 default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
 default['gitlab']['gitaly']['logging_format'] = nil
-default['gitlab']['gitaly']['sentry_dsn'] = nil
-default['gitlab']['gitaly']['grpc_latency_buckets'] = nil
+default['gitlab']['gitaly']['logging_sentry_dsn'] = nil
+default['gitlab']['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
 
 ####
