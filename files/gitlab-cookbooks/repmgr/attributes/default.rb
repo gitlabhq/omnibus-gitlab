@@ -1,0 +1,15 @@
+default['repmgr']['cluster'] = 'gitlab_cluster'
+default['repmgr']['database'] = 'gitlab_repmgr'
+default['repmgr']['failover'] = 'automatic'
+default['repmgr']['host'] = nil
+default['repmgr']['log_directory'] = '/var/log/gitlab/repmgrd'
+default['repmgr']['node_number'] = nil
+default['repmgr']['port'] = 5432
+default['repmgr']['trust_auth_cidr_addresses'] = []
+default['repmgr']['user'] = 'gitlab_repmgr'
+default['repmgr']['daemon'] = true
+default['repmgr']['service_start_command'] = '/opt/gitlab/bin/gitlab-ctl start postgresql'
+default['repmgr']['service_stop_command'] = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
+default['repmgr']['service_restart_command'] = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
+default['repmgr']['promote_command'] = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
+default['repmgr']['follow_command'] = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'

@@ -31,6 +31,16 @@ include_recipe 'gitlab::default'
   end
 end
 
+%w(
+  repmgr
+).each do |service|
+  if node[service]['enable']
+    include_recipe "#{service}::enable"
+  else
+    include_recipe "#{service}::disable"
+  end
+end
+
 include_recipe 'gitlab-ee::ssh_keys'
 
 # Geo secondary

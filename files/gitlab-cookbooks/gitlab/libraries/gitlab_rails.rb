@@ -169,17 +169,7 @@ module GitlabRails
     end
 
     def parse_gitaly_variables
-      parse_gitaly_enablement
       parse_gitaly_storages
-    end
-
-    def parse_gitaly_enablement
-      return unless Gitlab['gitlab_rails']['gitaly_enabled'].nil?
-
-      gitaly_enabled = Gitlab['gitaly']['enable']
-      gitaly_enabled = Gitlab['node']['gitlab']['gitaly']['enable'] if gitaly_enabled.nil?
-
-      Gitlab['gitlab_rails']['gitaly_enabled'] = gitaly_enabled
     end
 
     # This method cannot be inside of libraries/gitaly.rb for now

@@ -28,5 +28,7 @@ module GitlabCtl
         @stderr = stderr
       end
     end
+
+    class NodeError < StandardError; end
   end
 end

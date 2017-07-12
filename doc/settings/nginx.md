@@ -308,7 +308,7 @@ nginx['hsts_max_age'] = 31536000
 nginx['hsts_include_subdomains'] = false
 ```
 
-By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS. 
+By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS.
 Setting `max_age` to 0 will disable this feature. For more information see:
 
 * https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
@@ -356,6 +356,9 @@ After making the changes run `sudo gitlab-ctl reconfigure`.
 
 ## Inserting custom NGINX settings into the GitLab server block
 
+Please keep in mind that these custom settings may create conflicts if the
+same settings are defined in your `gitlab.rb` file.
+
 If you need to add custom settings into the NGINX `server` block for GitLab for
 some reason you can use the following setting.
 
@@ -378,7 +381,7 @@ This inserts the defined string into the end of the `server` block of
     proxy_cache off;
     proxy_pass http://gitlab-workhorse;
     ```
-  
+
     in the string or in the included nginx config. Without these, any sub-location
     will return a 404. See
     [gitlab-ce#30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
@@ -657,6 +660,13 @@ Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
+
+#### Troubleshooting
+
+##### 400 Bad Request: too many Host headers
+Make sure you don't have the `proxy_set_header` configuration in
+`nginx['custom_gitlab_server_config']` settings and instead use the
+['proxy_set_headers'](https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl) configuration in your `gitlab.rb` file.
 
 [recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
 [selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications

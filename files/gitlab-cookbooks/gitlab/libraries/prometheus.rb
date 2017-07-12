@@ -118,6 +118,7 @@ module Prometheus
       # Don't parse if prometheus is explicitly disabled
       return if Gitlab['prometheus']['enable'] == false
       gitlab_monitor_scrape_configs
+      unicorn_scrape_configs
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
       exporter_scrape_config('redis')
@@ -159,6 +160,29 @@ module Prometheus
                 }
 
       default_scrape_configs = [] << database << sidekiq << process << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def unicorn_scrape_configs
+      # Don't parse if unicorn is explicitly disabled
+      return if Gitlab['unicorn']['enable'] == false
+
+      default_config = Gitlab['node']['gitlab']['unicorn'].to_hash
+      user_config = Gitlab['unicorn']
+
+      listen_address = user_config['listen'] || default_config['listen']
+      listen_port = user_config['port'] || default_config['port']
+      prometheus_target = [ listen_address, listen_port ].join(':')
+
+      scrape_config = {
+                        'job_name' => 'gitlab-unicorn',
+                        'metrics_path' => '/-/metrics',
+                        'static_configs' => [
+                          'targets' => [prometheus_target],
+                        ]
+                      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
@@ -238,8 +262,62 @@ module Prometheus
           ],
         }
 
+      k8s_pods = {
+          'job_name' => 'kubernetes-pods',
+          'scheme' => 'https',
+          'tls_config' => {
+            'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+            'insecure_skip_verify' => true,
+          },
+          'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
+          'kubernetes_sd_configs' => [
+            {
+              'role' => 'pod',
+              'api_server' => 'https://kubernetes.default.svc:443',
+              'tls_config' => {
+                'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+              },
+              'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
+            },
+          ],
+          'relabel_configs' => [
+            {
+              'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_scrape'],
+              'action' => 'keep',
+              'regex' => 'true',
+            },
+            {
+              'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_path'],
+              'action' => 'replace',
+              'target_label' => '__metrics_path__',
+              'regex' => '(.+)',
+            },
+            {
+              'source_labels' => ['__address__', '__meta_kubernetes_pod_annotation_prometheus_io_port'],
+              'action' => 'replace',
+              'regex' => '([^:]+)(?::[0-9]+)?;([0-9]+)',
+              'replacement' => '$1:$2',
+              'target_label' => '__address__',
+            },
+            {
+              'action' => 'labelmap',
+              'regex' => '__meta_kubernetes_pod_label_(.+)',
+            },
+            {
+              'source_labels' => ['__meta_kubernetes_namespace'],
+              'action' => 'replace',
+              'target_label' => 'kubernetes_namespace',
+            },
+            {
+              'source_labels' => ['__meta_kubernetes_pod_name'],
+              'action' => 'replace',
+              'target_label' => 'kubernetes_pod_name',
+            },
+          ],
+        }
+
       default_scrape_configs = [] << prometheus << Gitlab['prometheus']['scrape_configs']
-      default_scrape_configs = default_scrape_configs << k8s_nodes unless Gitlab['prometheus']['monitor_kubernetes'] == false
+      default_scrape_configs = default_scrape_configs << k8s_nodes << k8s_pods unless Gitlab['prometheus']['monitor_kubernetes'] == false
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 

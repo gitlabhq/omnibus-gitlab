@@ -1,6 +1,7 @@
 stages:
   - trigger-package
   - trigger-docker
+  - trigger-qa
   - check
   - prepare
   - tests
@@ -10,66 +11,22 @@ stages:
   - staging_upload
   - release
   - images
+  - notification_fail
   - docker_release
-  - notification_fail
   - qa-image
-  - raspbian
-  - raspbian_release
   - notification_fail
+  - raspbian
+  - notification_fail
+  - raspbian_release
 
 variables:
   BUILDER_IMAGE_REVISION: "0.0.6"
 
-before_script:
-  - echo $NIGHTLY
-  - mkdir -p ~/.ssh
-  - mkdir -p ~/.aws
-  - mkdir -p cache
-  - bundle install -j $(nproc) --binstubs --path gems
-  # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
-  # This will alter Gemfile.lock file. As part of the build pipeline, we are
-  # checking whether the state of the repository is unchanged during the build
-  # process, by comparing it with the last commit (So that no unexpected monsters
-  # show up). So, an altered Gemfile.lock file will fail on this
-  # check. Hence we do a git commit as part of the pipeline if
-  # ALTERNATIVE_SOURCES is used.
-  - if [ -n "$ALTERNATIVE_SOURCES" ]; then
-        git config --global user.email "packages@gitlab.com"
-        && git config --global user.name "GitLab Inc."
-        && git add Gemfile.lock
-        && git commit -m "Updating Gemfile.lock" ;
-    fi
-  - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
-
-rubocop:
-  stage: check
-  image: ruby:2.3.3
-  script:
-    - bundle exec rake rubocop
+# Templates
+## Runs on GitLab.com only
+.dedicated-runner: &dedicated-runner
   tags:
-    - docker
-  except:
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
-
-docs check links:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:nanoc-bootstrap-ruby-2.4-alpine"
-  stage: check
-  cache: {}
-  dependencies: []
-  before_script: []
-  script:
-    - mv doc/ /nanoc/content/
-    - cd /nanoc
-    # Build HTML from Markdown
-    - bundle exec nanoc
-    # Check the internal links
-    - bundle exec nanoc check internal_links
-  except:
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    - gitlab-org
 
 .knapsack-state: &knapsack-state
   services: []
@@ -84,6 +41,7 @@ docs check links:
 
 .knapsack: &prepare_knapsack
   <<: *knapsack-state
+  <<: *dedicated-runner
   stage: prepare
   before_script: []
   script:
@@ -97,18 +55,9 @@ docs check links:
     - tags@gitlab/omnibus-gitlab
     - triggers
 
-Centos 6 knapsack: *prepare_knapsack
-Centos 7 knapsack: *prepare_knapsack
-Debian 7 knapsack: *prepare_knapsack
-Debian 8 knapsack: *prepare_knapsack
-Debian 9 knapsack: *prepare_knapsack
-OpenSUSE 42.2 knapsack: *prepare_knapsack
-Ubuntu 14.04 knapsack: *prepare_knapsack
-Ubuntu 16.04 knapsack: *prepare_knapsack
-
-# Runs on GitLab.com only
 .spec_template: &run_rspec
   stage: tests
+  <<: *dedicated-runner
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
@@ -129,25 +78,16 @@ Ubuntu 16.04 knapsack: *prepare_knapsack
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
+  cache:
+    key: "$CI_JOB_NAME-1"
+    paths:
+    - gems
   artifacts:
     expire_in: 31d
     paths:
     - knapsack/
 
-update-knapsack:
-  <<: *knapsack-state
-  stage: post-test
-  before_script: []
-  script:
-    - support/merge-reports knapsack
-    - rm -f knapsack/*node*
-  except:
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
-
-
-# Runs on dev.gitlab.org
+## Runs on dev.gitlab.org
 .branch_template: &branch_build
   stage: package
   script:
@@ -167,6 +107,11 @@ update-knapsack:
     expire_in: 1 day
     paths:
       - pkg/
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
 
 .rpi_branch_template: &rpi_branch_build
   stage: raspbian
@@ -230,45 +175,114 @@ update-knapsack:
       - pkg/
   dependencies: []
 
-Docker branch:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
+### This stage is used for uploading packages
+### 1. To a staging package repository
+### 2. Always ran on dev.gitlab.org
+.staging_upload_template: &staging_upload
+  stage: staging_upload
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=omnibus-builds
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
-  - bundle exec rake docker:push:nightly
-  only:
-    - branches@gitlab/omnibus-gitlab
-  dependencies: []
-
-Docker:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
-  script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=downloads-packages
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+  artifacts:
+    expire_in: 14 days
+    paths:
+      - pkg/
   only:
     - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+
+### This stage is ran only on tag:
+### 1. It is a manual action
+### 2. It will upload the package to public, user facing repositories
+### 3. Only ran on dev.gitlab.org
+.production_release_template: &production_release
+  stage: release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - bundle exec rake repository:upload:production
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+
+before_script:
+  - echo $NIGHTLY
+  - mkdir -p ~/.ssh
+  - mkdir -p ~/.aws
+  - mkdir -p cache
+  - bundle install -j $(nproc) --binstubs --path gems
+  # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
+  # This will alter Gemfile.lock file. As part of the build pipeline, we are
+  # checking whether the state of the repository is unchanged during the build
+  # process, by comparing it with the last commit (So that no unexpected monsters
+  # show up). So, an altered Gemfile.lock file will fail on this
+  # check. Hence we do a git commit as part of the pipeline if
+  # ALTERNATIVE_SOURCES is used.
+  - if [ -n "$ALTERNATIVE_SOURCES" ]; then
+        git config --global user.email "packages@gitlab.com"
+        && git config --global user.name "GitLab Inc."
+        && git add Gemfile.lock
+        && git commit -m "Updating Gemfile.lock" ;
+    fi
+  - if [ -n "$NIGHTLY" ] ; then export STAGING_REPO=nightly-builds ;fi
+
+# Jobs
+## Runs on GitLab.com only
+rubocop:
+  stage: check
+  <<: *dedicated-runner
+  image: ruby:2.3.3
+  script:
+    - bundle exec rake rubocop
+  except:
+    - branches@gitlab/omnibus-gitlab
+    - tags@gitlab/omnibus-gitlab
+    - triggers
+
+docs check links:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:nanoc-bootstrap-ruby-2.4-alpine"
+  stage: check
+  cache: {}
   dependencies: []
+  before_script: []
+  <<: *dedicated-runner
+  script:
+    - mv doc/ /nanoc/content/
+    - cd /nanoc
+    # Build HTML from Markdown
+    - bundle exec nanoc
+    # Check the internal links
+    - bundle exec nanoc check internal_links
+  except:
+    - branches@gitlab/omnibus-gitlab
+    - tags@gitlab/omnibus-gitlab
+    - triggers
+
+Centos 6 knapsack: *prepare_knapsack
+Centos 7 knapsack: *prepare_knapsack
+Debian 7 knapsack: *prepare_knapsack
+Debian 8 knapsack: *prepare_knapsack
+Debian 9 knapsack: *prepare_knapsack
+OpenSUSE 42.2 knapsack: *prepare_knapsack
+Ubuntu 14.04 knapsack: *prepare_knapsack
+Ubuntu 16.04 knapsack: *prepare_knapsack
+
+update-knapsack:
+  <<: *knapsack-state
+  <<: *dedicated-runner
+  stage: post-test
+  before_script: []
+  script:
+    - support/merge-reports knapsack
+    - rm -f knapsack/*node*
+  except:
+    - branches@gitlab/omnibus-gitlab
+    - tags@gitlab/omnibus-gitlab
+    - triggers
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
+  <<: *dedicated-runner
   stage: trigger-package
   script:
     - make test_no_sync
@@ -290,12 +304,19 @@ Trigger:docker:
   services:
   - docker:dind
   script:
+    # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
+    # variable, which will be used to tag the final Docker image.
+    # So, if IMAGE_TAG variable is empty, it means the trigger happened from
+    # either CE or EE repository. In that case, we can use the GITLAB_VERSION
+    # variable as IMAGE_TAG.
+    - if [ -z "${IMAGE_TAG}" ] ; then export IMAGE_TAG=${GITLAB_VERSION} ;  fi
     - make docker_trigger_build_and_push
   only:
     - triggers@gitlab-org/omnibus-gitlab
 
-Trigger:omnibus-package:
+Trigger:ce-package:
   stage: trigger-package
+  <<: *dedicated-runner
   when: manual
   before_script: []
   script:
@@ -307,25 +328,9 @@ Trigger:omnibus-package:
     - branches@gitlab-org/omnibus-gitlab
   except:
     - triggers
-
-AWS:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
-  script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - make aws
-  allow_failure: true
-  tags:
-  - docker-builder
-  only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-
-QA Master:
-  stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+Trigger:qa:
+  stage: trigger-qa
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -335,249 +340,170 @@ QA Master:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
-    - make do_qa_docker_master
-  allow_failure: true
+    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
+    - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
+    - bundle exec rake trigger:qa
   only:
-    - branches@gitlab/omnibus-gitlab
+    - triggers
   dependencies: []
 
-QA Tag:
-  stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
+Trigger:ee-package:
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  before_script: []
   script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - make do_qa_docker_release
-  allow_failure: true
+    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
+    # may have same tag and hence overwrite each other.
+    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" -F "variables[ee]=true" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
+    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
   only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    - triggers
 
-# GitLab.com only
+# Trigger docs build
+# https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
+trigger_docs:
+  stage: package
+  <<: *dedicated-runner
+  image: "alpine"
+  before_script:
+    - apk update && apk add curl
+  variables:
+    GIT_STRATEGY: none
+  cache: {}
+  artifacts: {}
+  script:
+    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/1794617/trigger/builds"
+  only:
+    - master@gitlab-org/omnibus-gitlab
+  except:
+    - triggers
+
 Ubuntu 14.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 14.04 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 14.04 knapsack
 Ubuntu 16.04 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Ubuntu 16.04 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
 Debian 7 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 7 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 7 knapsack
 Debian 8 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Debian 8 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
 Debian 9 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 9 knapsack
 Debian 9 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 9 knapsack
 Debian 9 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Debian 9 knapsack
 Centos 6 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 6 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 6 knapsack
 Centos 7 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 Centos 7 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
 OpenSUSE 42.2 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - OpenSUSE 42.2 knapsack
 OpenSUSE 42.2 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - OpenSUSE 42.2 knapsack
 OpenSUSE 42.2 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  cache:
-    key: "$CI_JOB_NAME-1"
-    paths:
-    - gems
   <<: *run_rspec
   dependencies:
   - OpenSUSE 42.2 knapsack
 
 # dev.gitlab.org only
+# Release build
 Ubuntu 14.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -643,103 +569,78 @@ OpenSUSE 42.2:
     - gems
   <<: *tag_build
 SLES 12:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
-  allow_failure: true
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
 
-Ubuntu 14.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-Ubuntu 16.04 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-Debian 7 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-Debian 8 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-Debian 9 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-CentOS 6 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-CentOS 7 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-OpenSUSE 42.2 branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *branch_build
-SLES 12 branch:
-  stage: package
+Docker:
+  stage: images
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - export RELEASE_BUCKET=downloads-packages
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+
+AWS:
+  stage: images
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - make aws
+  allow_failure: true
+  tags:
+  - docker-builder
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+
+QA Tag:
+  stage: qa-image
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
-    - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
-  only:
-    - branches@gitlab/omnibus-gitlab
+    - chmod -R 0600 ~/.ssh/
+    - make do_qa_docker_release
   allow_failure: true
-
-Raspberry Pi 2 Jessie branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-    - cache
-    - gems
-  <<: *rpi_branch_build
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 Raspberry Pi 2 Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
@@ -750,40 +651,56 @@ Raspberry Pi 2 Jessie:
     - gems
   <<: *rpi_tag_build
 
-notify:slack-fail:
-  before_script: # Nothing
-    - apk update && apk add git curl bash
-  image: "alpine"
-  stage: notification_fail
-  script:
-    - ./support/notify_slack.sh "#omnibus-builds" "(╯°□°)╯︵┻━┻  Build on \`$CI_COMMIT_REF_NAME\` failed! Commit \`$(git log -1 --oneline | sed 's|\"|\\\\\"|g')\` See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
-  when: on_failure
-  only:
-    - master
-    - tags@gitlab/omnibus-gitlab
-  except:
-    - triggers@gitlab-org/omnibus-gitlab
-
-# Trigger docs build
-# https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
-trigger_docs:
+## Building from branch
+Ubuntu 14.04 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Ubuntu 16.04 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian 7 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian 8 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian 9 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+CentOS 6 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+CentOS 7 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+OpenSUSE 42.2 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+SLES 12 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
-  image: "alpine"
-  before_script:
-    - apk update && apk add curl
-  variables:
-    GIT_STRATEGY: none
-  cache: {}
-  artifacts: {}
   script:
-    - "curl -X POST -F token=${DOCS_TRIGGER_TOKEN} -F ref=master -F variables[PROJECT]=omnibus https://gitlab.com/api/v3/projects/1794617/trigger/builds"
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
+    - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
   only:
-    - master@gitlab-org/omnibus-gitlab
-  except:
-    - triggers
+    - branches@gitlab/omnibus-gitlab
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
-Docker Release:
-  stage: docker_release
+Docker branch:
+  stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
@@ -791,45 +708,58 @@ Docker Release:
   services:
   - docker:dind
   script:
-    - bundle exec rake docker:pull:staging
-    - bundle exec rake docker:push:stable
-    - bundle exec rake docker:push:rc
-    - bundle exec rake docker:push:latest
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - export RELEASE_BUCKET=omnibus-builds
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  - bundle exec rake docker:push:nightly
   only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-  when: manual
-
-# This stage is used for uploading packages
-# 1. To a staging package repository
-# 2. Only ran on dev.gitlab.org
-.staging_upload_template: &staging_upload
-  stage: staging_upload
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
-  script:
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-  artifacts:
-    expire_in: 14 days
-    paths:
-      - pkg/
-  only:
-    - tags@gitlab/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
-# This stage is ran only on tag:
-# 1. It is a manual action
-# 2. It will upload the package to public, user facing repositories
-# 3. Only ran on dev.gitlab.org
-.production_release_template: &production_release
-  stage: release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+QA Master:
+  stage: qa-image
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
   script:
-    - bundle exec rake repository:upload:production
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - make do_qa_docker_master
+  allow_failure: true
   only:
-    - tags@gitlab/omnibus-gitlab
-  when: manual
+    - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
-# Staging
+Raspberry Pi 2 Jessie branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+  <<: *rpi_branch_build
+
+notify:slack-fail:
+  before_script:
+    - apk update && apk add git curl bash
+  image: "alpine"
+  stage: notification_fail
+  script:
+    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_COMMIT_REF_NAME\`, stage \`$CI_JOB_STAGE\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+  when: on_failure
+  only:
+    - master
+    - tags@gitlab/omnibus-gitlab
+  except:
+    - triggers@gitlab-org/omnibus-gitlab
+
+# Staging upload
 Ubuntu 14.04 staging:
   dependencies:
     - Ubuntu 14.04
@@ -915,6 +845,7 @@ SLES 12 release:
     - SLES 12 staging
   allow_failure: true
   <<: *production_release
+
 Raspberry Pi 2 Jessie release:
   stage: raspbian_release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
@@ -926,3 +857,21 @@ Raspberry Pi 2 Jessie release:
   when: manual
   dependencies:
     - Raspberry Pi 2 Jessie
+
+Docker Release:
+  stage: docker_release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+    - bundle exec rake docker:pull:staging
+    - bundle exec rake docker:push:stable
+    - bundle exec rake docker:push:rc
+    - bundle exec rake docker:push:latest
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  when: manual

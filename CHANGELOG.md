@@ -5,14 +5,29 @@ omnibus-gitlab repository.
 
 9.4.0
 
+- Add configuration options of monitoring ip whitelist and Unicorn sampler interval
 - Bump NGINX version to 1.12.0 894ddc79
+- Add support in Geo replicate-geo-database command for replication slots 9fa27e9a0
 - Remove software definition of expat 59c39870
+- Add unicorn metrics to Prometheus
 - Bump gitlab-elasticsearch-indexer version to 0.2.0 bba8edd3
+- Disable RubyGems in gitlab-shell scripts for performance
 - Adjust various default values for PostgreSQL based on GitLab.com
+- Gitaly can no longer be disabled
 - Bump omnibus-ctl version to 0.5.0
 - Set max_replication_slots to 1 by default for primary Geo instances
+- Set TZ environment variable for Gitaly
+- Automate repmgr configuration
+- Render Gitaly token authentication settings
+
+9.3.5
+
+- Update gitlab-monitor to 1.9.0
+- Fix port not being passed to pg_basebackup in replicate-geo-database script
+
 
 9.3.4
+
 - Update gitlab-monitor to 1.9.0
 
 9.3.3

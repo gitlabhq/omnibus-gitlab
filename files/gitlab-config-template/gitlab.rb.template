@@ -99,6 +99,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   will appear signed in from that address.**
 # gitlab_rails['trusted_proxies'] = []
 
+### Monitoring settings
+###! IP whitelist controlling access to monitoring endpoints
+# gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8']
+###! Time between sampling of unicorn socket metrics, in seconds
+# gitlab_rails['monitoring_unicorn_sampler_interval'] = 10
+
 ### Reply by email
 ###! Allow users to comment on issues and merge requests by replying to
 ###! notification emails.
@@ -273,7 +279,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # git_data_dirs({ "default" => { "path" => "/var/opt/gitlab/git-data", 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' } })
 
 ### Gitaly settings
-# gitlab_rails['gitaly_enabled'] = true
+# gitlab_rails['gitaly_token'] = 'secret token'
 
 ### For storing GitLab application uploads, eg. LFS objects, build artifacts
 ###! Docs: https://docs.gitlab.com/ce/development/shared_files.html
@@ -1321,8 +1327,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['prometheus_listen_addr'] = "localhost:9175"
 # gitaly['logging_format'] = "json"
-# gitaly['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
-# gitaly['grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
+# gitaly['logging_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
+# gitaly['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
+# gitaly['auth_token'] = '<secret>'
+# gitaly['auth_transitioning'] = false # When true, auth is logged to Prometheus but NOT enforced
 
 
 ################################################################################
@@ -1451,7 +1459,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 
 ################################################################################
-# Additional Database Settings (EE only)
+## Additional Database Settings (EE only)
+##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
 ################################################################################
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
 
@@ -1488,7 +1497,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['ha'] = false
 # geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
 # geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
-#
+
 ################################################################################
 # Pgbouncer (EE only)
 # See [GitLab PgBouncer documentation](http://docs.gitlab.com/omnibus/settings/database.html#enabling-pgbouncer-ee-only)
@@ -1530,3 +1539,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
+#
+
+################################################################################
+# Repmgr (EE only)
+################################################################################
+# repmgr['cluster'] = 'gitlab_cluster'
+# repmgr['database'] = 'gitlab_repmgr'
+# repmgr['host'] = nil
+# repmgr['node_number'] = nil
+# repmgr['port'] = 5432
+# repmgr['trust_auth_cidr_addresses'] = []
+# repmgr['user'] = 'gitlab_repmgr'

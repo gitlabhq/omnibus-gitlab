@@ -16,12 +16,6 @@
 # limitations under the License.
 #
 
-require 'uri'
-require 'digest'
 require_relative 'helpers/pg_helper'
 require_relative 'helpers/geo_pg_helper'
 require_relative 'helpers/mattermost_helper'
-require_relative 'helpers/redhat_helper'
-require_relative 'helpers/secrets_helper'
-require_relative 'helpers/version_helper'
-require_relative 'helpers/single_quote_helper'

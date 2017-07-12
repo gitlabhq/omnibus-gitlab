@@ -57,13 +57,6 @@ directory node['gitlab']['gitlab-rails']['registry_path'] do
   only_if { node['gitlab']['manage-storage-directories']['enable'] }
 end
 
-key_file_path = node['gitlab']['gitlab-rails']['registry_key_path']
-file key_file_path do
-  content node['registry']['internal_key']
-  owner account_helper.gitlab_user
-  group account_helper.gitlab_group
-end
-
 cert_file_path = File.join(working_dir, "gitlab-registry.crt")
 node.default['registry']['rootcertbundle'] = cert_file_path
 file cert_file_path do
@@ -82,7 +75,7 @@ end
 
 runit_service 'registry' do
   options({
-    :log_directory => log_directory
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end

@@ -416,6 +416,23 @@ gitlab_rails['smtp_domain'] = "your domain"
 gitlab_rails['smtp_authentication'] = "login"
 ```
 
+### FastMail
+
+FastMail requires an 
+[App Password](https://www.fastmail.com/help/clients/apppassword.html?u=ca68414c.oui-14827457)
+even when two-step verification is not enabled.
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.fastmail.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "account@fastmail.com"
+gitlab_rails['smtp_password'] = "app-specific-password"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge

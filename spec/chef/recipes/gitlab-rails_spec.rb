@@ -306,47 +306,49 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Gitaly settings' do
+    context 'Monitoring settings' do
       context 'by default' do
-        it 'is enabled' do
+        it 'whitelists local subnet' do
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: true})
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 127.0.0.0/8})
+        end
+        it 'sampler will sample every 10s' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 10})
         end
       end
 
-      context 'when gitaly is disabled' do
-        it 'disables gitaly in config' do
-          stub_gitlab_rb(gitaly: { enable: false })
-
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: false})
-        end
-      end
-
-      context 'when gitaly service is connecting from a different node' do
+      context 'when ip whitelist is configured' do
         before do
-          stub_gitlab_rb(
-            gitaly: { enable: false },
-            gitlab_rails: { gitaly_enabled: true }
-          )
+          stub_gitlab_rb(gitlab_rails: { monitoring_whitelist: %w(1.0.0.0 2.0.0.0) })
         end
-
-        it 'enables gitaly in config' do
+        it 'sets the whitelist' do
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+enabled: true})
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 1.0.0.0\s+- 2.0.0.0})
         end
       end
 
-      context 'when gitaly service is running on a different node' do
+      context 'when unicorn sampler interval is configured' do
         before do
-          stub_gitlab_rb(
-            gitlab_rails: { gitaly_enabled: false }
-          )
+          stub_gitlab_rb(gitlab_rails: { monitoring_unicorn_sampler_interval: 123 })
+        end
 
-          it 'disables gitaly in config' do
-            expect(chef_run).to render_file(gitlab_yml_path)
-              .with_content(%r{gitaly:\s+enabled: false})
-          end
+        it 'sets the interval value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 123})
+        end
+      end
+    end
+
+    context 'Gitaly settings' do
+      context 'when a global token is set' do
+        let(:token) { '123secret456gitaly' }
+
+        it 'renders the token in the gitaly section' do
+          stub_gitlab_rb(gitlab_rails: { gitaly_token: token })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(%r{gitaly:\s+token: "#{token}"})
         end
       end
     end
@@ -697,6 +699,27 @@ describe 'gitlab::gitlab-rails' do
           expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
         end
+      end
+    end
+  end
+  context 'gitlab registry' do
+    describe 'registry is disabled' do
+      it 'does not generate gitlab-registry.key file' do
+        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key")
+      end
+    end
+
+    describe 'registry is enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            registry_enabled: true
+          }
+        )
+      end
+
+      it 'generates gitlab-registry.key file' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
       end
     end
   end

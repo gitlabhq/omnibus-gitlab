@@ -1,5 +1,4 @@
 require 'chef_helper'
-require_relative '../../files/gitlab-cookbooks/gitlab/libraries/omnibus_helper.rb'
 
 describe OmnibusHelper do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }

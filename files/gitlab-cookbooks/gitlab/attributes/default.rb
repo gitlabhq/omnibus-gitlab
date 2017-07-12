@@ -286,6 +286,10 @@ default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
 default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
+# List of ips and subnets that are allowed to access Gitlab monitoring endpoints
+default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8']
+default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
+
 ####
 # Unicorn
 ####
@@ -932,15 +936,16 @@ default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
 default['gitlab']['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
 default['gitlab']['gitaly']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'HOME' => node['gitlab']['user']['home']
+  'HOME' => node['gitlab']['user']['home'],
+  'TZ' => ':/etc/localtime'
 }
 default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
 default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
 default['gitlab']['gitaly']['listen_addr'] = nil
 default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
 default['gitlab']['gitaly']['logging_format'] = nil
-default['gitlab']['gitaly']['sentry_dsn'] = nil
-default['gitlab']['gitaly']['grpc_latency_buckets'] = nil
+default['gitlab']['gitaly']['logging_sentry_dsn'] = nil
+default['gitlab']['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
 
 ####

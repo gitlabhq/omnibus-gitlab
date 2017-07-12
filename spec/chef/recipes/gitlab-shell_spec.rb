@@ -279,7 +279,7 @@ describe 'gitlab_shell::git_data_dir' do
       stub_gitlab_rb({
                        git_data_dirs: {
                          'default' => { 'path' => '/tmp/default/git-data' },
-                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123' }
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
                        }
                      })
     end
@@ -287,7 +287,7 @@ describe 'gitlab_shell::git_data_dir' do
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' }
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
                                                                                       })
     end
   end

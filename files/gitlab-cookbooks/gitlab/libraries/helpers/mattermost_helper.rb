@@ -1,4 +1,3 @@
-require_relative 'shell_out_helper'
 require_relative 'authorizer_helper'
 
 class MattermostHelper

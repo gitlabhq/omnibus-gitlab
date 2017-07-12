@@ -23,8 +23,8 @@ class RedhatHelper
   end
 
   def self.read_release_file
-    if File.exists?('/etc/redhat-release')
-      contents = File.read('/etc/redhat-release').chomp
+    if File.exist?('/etc/redhat-release')
+      File.read('/etc/redhat-release').chomp
     else
       'not redhat'
     end
