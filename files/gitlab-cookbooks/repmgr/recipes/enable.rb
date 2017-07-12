@@ -13,10 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+#
+account_helper = AccountHelper.new(node)
 repmgr_helper = RepmgrHelper.new(node)
 replication_user = node['repmgr']['user']
 repmgr_conf = "#{node['gitlab']['postgresql']['dir']}/repmgr.conf"
+
+log_directory = node['repmgr']['log_directory']
 
 node.default['gitlab']['postgresql']['custom_pg_hba_entries']['repmgr'] = repmgr_helper.pg_hba_entries
 
@@ -26,7 +29,7 @@ node_number = node['repmgr']['node_number'] ||
   Digest::MD5.hexdigest(node['fqdn']).unpack('L').first
 template repmgr_conf do
   source 'repmgr.conf.erb'
-  owner node['gitlab']['postgresql']['username']
+  owner account_helper.postgresql_user
   variables(
     node['repmgr'].to_hash.merge(
       node_name: node['repmgr']['node_name'] || node['fqdn'],
@@ -47,6 +50,17 @@ end
 
 execute 'register repmgr master node' do
   command "/opt/gitlab/embedded/bin/repmgr -f #{repmgr_conf} master register"
-  user node['gitlab']['postgresql']['username']
+  user account_helper.postgresql_user
   action :nothing
+end
+
+directory log_directory do
+  owner account_helper.postgresql_user
+  mode '0700'
+end
+
+if node['repmgr']['daemon']
+  include_recipe 'repmgr::enable_daemon'
+else
+  include_recipe 'repmgr::disable_daemon'
 end
