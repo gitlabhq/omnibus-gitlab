@@ -870,10 +870,10 @@ CentOS 7 staging:
     - CentOS 7
     - CentOS 7 branch
   <<: *staging_upload
-OpenSUSE 42.2 staging:
+OpenSUSE 42.1 staging:
   dependencies:
-    - OpenSUSE 42.2
-    - OpenSUSE 42.2 branch
+    - OpenSUSE 42.1
+    - OpenSUSE 42.1 branch
   <<: *staging_upload
 SLES 12 staging:
   dependencies:
@@ -911,9 +911,9 @@ CentOS 7 release:
   dependencies:
     - CentOS 7 staging
   <<: *production_release
-OpenSUSE 42.2 release:
+OpenSUSE 42.1 release:
   dependencies:
-    - OpenSUSE 42.2 staging
+    - OpenSUSE 42.1 staging
   <<: *production_release
 SLES 12 release:
   dependencies:
