@@ -189,7 +189,8 @@ variables:
       - pkg/
   only:
     - tags@gitlab/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
