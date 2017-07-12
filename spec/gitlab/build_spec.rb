@@ -268,17 +268,4 @@ describe Build do
       end
     end
   end
-
-  def stub_is_ee_version(value)
-    allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
-  end
-
-  def stub_is_ee_env(value)
-    stub_env_var('ee', value.nil? ? '' : value.to_s)
-  end
-
-  def stub_is_ee(value)
-    stub_is_ee_version(value)
-    stub_is_ee_env(value)
-  end
 end
