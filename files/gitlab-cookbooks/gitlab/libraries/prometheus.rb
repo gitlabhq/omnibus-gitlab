@@ -124,6 +124,7 @@ module Prometheus
       # Don't parse if prometheus is explicitly disabled
       return if Gitlab['prometheus']['enable'] == false
       gitlab_monitor_scrape_configs
+      unicorn_scrape_configs
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
       exporter_scrape_config('redis')
@@ -165,6 +166,29 @@ module Prometheus
                 }
 
       default_scrape_configs = [] << database << sidekiq << process << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def unicorn_scrape_configs
+      # Don't parse if unicorn is explicitly disabled
+      return if Gitlab['unicorn']['enable'] == false
+
+      default_config = Gitlab['node']['gitlab']['unicorn'].to_hash
+      user_config = Gitlab['unicorn']
+
+      listen_address = user_config['listen'] || default_config['listen']
+      listen_port = user_config['port'] || default_config['port']
+      prometheus_target = [ listen_address, listen_port ].join(':')
+
+      scrape_config = {
+                        'job_name' => 'gitlab-unicorn',
+                        'metrics_path' => '/-/metrics',
+                        'static_configs' => [
+                          'targets' => [prometheus_target],
+                        ]
+                      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
