@@ -71,6 +71,7 @@ You can also use the docker images provided by GitLab to install and configure a
 - [gitlab.yml](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
 - [Pages](https://docs.gitlab.com/ce/pages/administration.html)
+- [SSL](settings/ssl.md)
 
 ## Updating
 

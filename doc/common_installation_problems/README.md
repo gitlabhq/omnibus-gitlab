@@ -401,8 +401,6 @@ Read more about `apt-cacher-ng` and the reasons why this change is needed [on th
 
 ### Using self signed certificate or custom certificate authorities
 
-Omnibus-gitlab is shipped with the official [CAcert.org][] collection of trusted root certification authorities which are used to verify certificate authenticity.
-
 If you are installing GitLab in an isolated network with custom certificate authorities or using self-signed certificate make sure that the certificate can be reached by GitLab. Not doing so will cause errors like:
 
 ```bash
@@ -411,41 +409,7 @@ Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certif
 
 when GitLab tries to connect with the internal services like gitlab-shell.
 
-#### Install custom certificate authorities:
-
-Starting from GitLab version *8.9*, the omnibus-gitlab package will handle
-custom certificates.
-
-1. Place your custom (Root CA) or a self-signed certificate in the
-`/etc/gitlab/trusted-certs/` directory;
-For example, `/etc/gitlab/trusted-certs/customcacert.pem`.
-**Note**: The certificate must be either **DER- or PEM-encoded**.
-1. Run `gitlab-ctl reconfigure`.
-
-This will create a symlink in `/opt/gitlab/embedded/ssl/certs/` pointing to
-your custom certificate. The symlink name is the subject hash.
-**Warning** Any broken symlink found in `/opt/gitlab/embedded/ssl/certs` will be
-removed and any existing symlink will not be changed.
-If the directory contains valid certificates, they will be automatically moved
-to `/etc/gitlab/trusted-certs`. If the directory contains any other files,
-reconfigure run will fail with:
-
-```
-ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE -> /opt/gitlab/embedded/ssl/certs/FILE
-```
-
-Move the files that are not certificates out of `/opt/gitlab/embedded/ssl/certs`
-and run reconfigure once more.
-
-**WARNING** In GitLab version 8.9.0, 8.9.1 and 8.9.2, the directory that was used
-to hold the custom certificates was mistakenly set to `/etc/gitlab/ssl/trusted-certs/`.
-If you **do not** have any files inside of this directory, it is safe to remove it.
-If you do have custom certificates in there, move them to `/etc/gitlab/trusted-certs/`
-and run `sudo gitlab-ctl reconfigure`.
-
-#### Enable self-signed certificates
-
-If you are using self-signed certificate do not forget to set `self_signed_cert: true` for gitlab-shell, see [gitlab.rb.template][] for more details.
+To fix these errors, see the [Custom SSL settings](../settings/ssl.md) section.
 
 ### error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
@@ -584,10 +548,8 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [disable storage directory management](../settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
-[CAcert.org]: http://www.cacert.org/
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
-[gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
 [Change the default proxy headers section of nginx doc]: ../settings/nginx.md
 [reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
 [runit-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/runit/recipes/default.rb
