@@ -15,12 +15,12 @@
 # limitations under the License.
 #
 
-class EEServices < BaseServices
-  # Define all gitlab-ee cookbook services
-  core_services(
-    'sentinel' =>         svc(groups: ['redis']),
-    'geo_postgresql' =>   svc(groups: ['postgres']),
-    'pgbouncer' =>        svc(groups: ['postgres']),
-    'sidekiq_cluster' =>  svc(groups: ['sidekiq'])
-  )
+module GitlabEE
+  class Services < ::Services::Config
+    # Define all gitlab-ee cookbook services
+    service 'sentinel',         groups: ['redis']
+    service 'geo_postgresql',   groups: ['postgres']
+    service 'pgbouncer',        groups: ['postgres']
+    service 'sidekiq_cluster',  groups: ['sidekiq']
+  end
 end

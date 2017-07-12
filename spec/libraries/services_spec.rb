@@ -24,12 +24,15 @@ describe Services do
   end
 
   it 'uses the default template when populating service information' do
-    expect(Services.send(:svc)).to eq({ groups: [] })
+    expect(Services::Config.send(:service, ['test_service'])).to eq({ groups: [] })
   end
 
   describe 'service' do
     context 'when enable/disable is passed a single service' do
-      before { stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false }) }
+      before do
+        Services.add_services('gitlab', Gitlab::Services.list)
+        stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
+      end
 
       it 'sets the correct values' do
         Services.disable('redis')
@@ -50,6 +53,7 @@ describe Services do
 
     context 'when enable/disable is passed multiple services' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           node_exporter: { enable: true },
           redis: { enable: true },
@@ -110,6 +114,7 @@ describe Services do
 
     context 'when passed single exception' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           redis: { enable: true },
           postgresql: { enable: true },
@@ -137,6 +142,7 @@ describe Services do
 
     context 'when passed multiple exceptions' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           redis: { enable: true },
           postgresql: { enable: true },
@@ -172,6 +178,7 @@ describe Services do
   describe 'group' do
     context 'when enable_group/disable_group is passed a single group' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: true },
@@ -203,6 +210,7 @@ describe Services do
 
     context 'when enable/disable is passed multiple groups' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: false },
@@ -242,7 +250,7 @@ describe Services do
       end
 
       it 'supports multiple exceptions' do
-        Services.enable_group('rails', 'prometheus', except: ['redis', BaseServices::SYSTEM_GROUP])
+        Services.enable_group('rails', 'prometheus', except: ['redis', Services::Config::SYSTEM_GROUP])
         expect(Gitlab['redis_exporter']['enable']).to be false
         expect(Gitlab['node_exporter']['enable']).to be false
         expect(Gitlab['unicorn']['enable']).to be true
@@ -255,18 +263,19 @@ describe Services do
       end
 
       it 'ignores disable on system services' do
-        Services.disable_group(BaseServices::SYSTEM_GROUP)
+        Services.disable_group(Services::Config::SYSTEM_GROUP)
         expect(Gitlab['logrotate']['enable']).to be true
       end
 
       it 'allows forced disable on system services' do
-        Services.disable_group(BaseServices::SYSTEM_GROUP, include_system: true)
+        Services.disable_group(Services::Config::SYSTEM_GROUP, include_system: true)
         expect(Gitlab['logrotate']['enable']).to be false
       end
     end
 
     context 'when passed single exception' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           postgresql: { enable: true },
           postgres_exporter: { enable: true },
@@ -290,6 +299,7 @@ describe Services do
 
     context 'when passed multiple exceptions' do
       before do
+        Services.add_services('gitlab', Gitlab::Services.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: false },

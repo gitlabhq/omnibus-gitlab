@@ -17,13 +17,15 @@
 
 Gitlab[:node] = node
 
+# Include EE config if our run-list contains the gitlab-ee cookbook
+includes_ee = node.run_list.select { |item| item.name =~ /^gitlab-ee:/ }.count.positive?
+
+Services.add_services('gitlab', Gitlab::Services.list)
+Services.add_services('gitlab-ee', GitlabEE::Services.list) if includes_ee
+
 if File.exists?('/etc/gitlab/gitlab.rb')
   Gitlab.from_file('/etc/gitlab/gitlab.rb')
 end
 
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))
-
-# If is EE package, load EE config
-if defined?(GitlabEE) == 'constant'
-  node.consume_attributes(GitlabEE.generate_config)
-end
+node.consume_attributes(GitlabEE.generate_config) if includes_ee
