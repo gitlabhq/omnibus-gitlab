@@ -42,7 +42,7 @@ class CertificateHelper
     rescue OpenSSL::X509::CertificateError => e
       warn("ERROR: " + file + ": OpenSSL error: " + e.message + "!")
       false
-    rescue Exception => e
+    rescue StandardError => e
       warn(e.message)
       false
     end
@@ -51,7 +51,7 @@ class CertificateHelper
   # If the number of files between the two directories is different
   # something got added so trigger the run
   def new_certificate_added?
-    return true unless File.exists?(@directory_hash_file)
+    return true unless File.exist?(@directory_hash_file)
 
     stored_hash = File.read(@directory_hash_file)
     trusted_certs_dir_hash != stored_hash
@@ -76,10 +76,9 @@ class CertificateHelper
   #   raise and error
   def move_existing_certificates
     Dir.glob(File.join(@omnibus_certs_dir, "*")) do |file|
-      case
-      when !valid?(file),whitelisted?(file)
-        next
-      when is_x509_certificate?(file)
+      next if !valid?(file) || whitelisted?(file)
+
+      if is_x509_certificate?(file)
         move_certificate(file)
       else
         raise_msg(file)
@@ -92,7 +91,7 @@ class CertificateHelper
   end
 
   def valid?(file)
-    exists = File.exists?(file)
+    exists = File.exist?(file)
     FileUtils.rm_f(file) if File.symlink?(file) && !exists
 
     exists

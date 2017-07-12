@@ -1,7 +1,7 @@
 require 'mixlib/shellout'
 require_relative 'helper'
 
-class OmnibusHelper
+class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(OmnibusHelper)` at the end of the class definition)
   include ShellOutHelper
   attr_reader :node
 

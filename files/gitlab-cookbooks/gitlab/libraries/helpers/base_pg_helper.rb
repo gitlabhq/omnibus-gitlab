@@ -1,5 +1,3 @@
-require_relative 'shell_out_helper'
-
 # This is a base class to be inherited by PG Helpers
 class BasePgHelper
   include ShellOutHelper

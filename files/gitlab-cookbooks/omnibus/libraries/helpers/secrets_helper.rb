@@ -10,9 +10,9 @@ class SecretsHelper
   end
 
   def self.read_gitlab_secrets
-    existing_secrets ||= Hash.new
+    existing_secrets ||= {}
 
-    if File.exists?("/etc/gitlab/gitlab-secrets.json")
+    if File.exist?("/etc/gitlab/gitlab-secrets.json")
       existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
     end
 
@@ -74,5 +74,7 @@ class SecretsHelper
         f.chmod(0600)
       end
     end
+
+    nil
   end
 end
