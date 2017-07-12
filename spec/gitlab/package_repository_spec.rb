@@ -153,7 +153,7 @@ describe PackageRepository do
 
           context 'of EE' do
             before do
-              stub_env_var('ee', 'true')
+              stub_is_ee(true)
             end
 
             it 'in dry run mode prints the upload commands' do
@@ -164,7 +164,7 @@ describe PackageRepository do
 
           context 'of CE' do
             before do
-              stub_env_var('ee', nil)
+              stub_is_ee(nil)
             end
 
             it 'in dry run mode prints the upload commands' do
