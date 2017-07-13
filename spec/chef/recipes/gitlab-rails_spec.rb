@@ -223,6 +223,10 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'GitLab Geo settings' do
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default')
+      end
+
       context 'by default' do
         it 'geo_primary_role is disabled' do
           expect(chef_run).to render_file(gitlab_yml_path)
