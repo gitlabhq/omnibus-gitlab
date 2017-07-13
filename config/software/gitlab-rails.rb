@@ -91,6 +91,10 @@ build do
       FileUtils.mkdir_p lib_dir
       FileUtils.mv(File.join(bin_dir, 'grpc_c.so'), File.join(lib_dir, 'grpc_c.so'))
     end
+
+    # Delete unsed shared objects included in grpc gem
+    ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
+    command "find #{lib_dir} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
   end
 
   # This patch makes the github-markup gem use and be compatible with Python3
