@@ -313,21 +313,6 @@ Trigger:docker:
   only:
     - triggers@gitlab-org/omnibus-gitlab
 
-Trigger:ce-package:
-  stage: trigger-package
-  <<: *dedicated-runner
-  when: manual
-  before_script: []
-  script:
-    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
-    # may have same tag and hence overwrite each other.
-    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
-    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-  except:
-    - triggers
-
 Trigger:qa:
   stage: trigger-qa
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
@@ -344,24 +329,38 @@ Trigger:qa:
     - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
     - bundle exec rake trigger:qa
   only:
-    - triggers
+    - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
 
-
-AWS:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
+Trigger:ce-package:
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  before_script: []
   script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - make aws
-  allow_failure: true
-  tags:
-  - docker-builder
+    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
+    # may have same tag and hence overwrite each other.
+    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
+    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
   only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    - triggers
+
+Trigger:ee-package:
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  before_script: []
+  script:
+    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
+    # may have same tag and hence overwrite each other.
+    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" -F "variables[ee]=true" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
+    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    - triggers
 
 # Trigger docs build
 # https://gitlab.com/gitlab-com/gitlab-docs/blob/master/README.md#deployment-process
