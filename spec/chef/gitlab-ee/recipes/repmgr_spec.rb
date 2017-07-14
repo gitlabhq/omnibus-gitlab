@@ -17,11 +17,12 @@ node=1647392869
 node_name=fauxhai.local
 conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
 pg_bindir='/opt/gitlab/embedded/bin'
-service_start_command = '/opt/gitlab/bin/gitlab-ctl start postgresql'
-service_stop_command = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
-service_restart_command = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
-promote_command = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
-follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'
+service_start_command = /opt/gitlab/bin/gitlab-ctl start postgresql
+service_stop_command = /opt/gitlab/bin/gitlab-ctl stop postgresql
+service_restart_command = /opt/gitlab/bin/gitlab-ctl restart postgresql
+promote_command = /opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf
+follow_command = /opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf
+failover = automatic
     EOF
   end
 
@@ -29,10 +30,23 @@ follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/git
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  context 'disabled by default' do
-    # TODO: uncomment once we are automating repmgrd
-    # it_behaves_like 'disabled runit service', 'repmgrd'
+  context 'disable_daemon' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::disable_daemon') }
+    it_behaves_like 'disabled runit service', 'repmgrd'
+  end
 
+  context 'enable_daemon' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::enable_daemon') }
+    it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root'
+  end
+
+  context 'disable' do
+    it 'should include the repmgr::disable_daemon recipe' do
+      expect(chef_run).to include_recipe('repmgr::disable_daemon')
+    end
+  end
+
+  context 'disabled by default' do
     it 'should include the repmgr::disable recipe' do
       expect(chef_run).to include_recipe('repmgr::disable')
     end
@@ -57,12 +71,13 @@ follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/git
       )
     end
 
-    # TODO: uncomment once we are automating repmgrd
-    # it_behaves_like 'enabled runit service', 'repmgrd'
-
     context 'by default' do
       it 'includes the repmgr::enable recipe' do
         expect(chef_run).to include_recipe('repmgr::enable')
+      end
+
+      it 'should include the repmgr::enable_daemon recipe' do
+        expect(chef_run).to include_recipe('repmgr::enable_daemon')
       end
 
       it 'sets up the repmgr specific entries in pg_hba.conf' do
@@ -164,6 +179,19 @@ follow_command = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/git
           %(conninfo='host=fauxhai.local port=7777 user=gitlab_repmgr dbname=gitlab_repmgr')
         )
       end
+    end
+
+    context 'user disabled the daemon' do
+      before do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            daemon: false
+          }
+        )
+      end
+
+      it_behaves_like 'disabled runit service', 'repmgrd'
     end
   end
 end

@@ -306,6 +306,40 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Monitoring settings' do
+      context 'by default' do
+        it 'whitelists local subnet' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 127.0.0.0/8})
+        end
+        it 'sampler will sample every 10s' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 10})
+        end
+      end
+
+      context 'when ip whitelist is configured' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { monitoring_whitelist: %w(1.0.0.0 2.0.0.0) })
+        end
+        it 'sets the whitelist' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 1.0.0.0\s+- 2.0.0.0})
+        end
+      end
+
+      context 'when unicorn sampler interval is configured' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { monitoring_unicorn_sampler_interval: 123 })
+        end
+
+        it 'sets the interval value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 123})
+        end
+      end
+    end
+
     context 'GitLab Shell settings' do
       context 'when git_timeout is configured' do
         it 'sets the git_timeout value' do

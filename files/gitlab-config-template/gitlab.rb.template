@@ -99,6 +99,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   will appear signed in from that address.**
 # gitlab_rails['trusted_proxies'] = []
 
+### Monitoring settings
+###! IP whitelist controlling access to monitoring endpoints
+# gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8']
+###! Time between sampling of unicorn socket metrics, in seconds
+# gitlab_rails['monitoring_unicorn_sampler_interval'] = 10
+
 ### Reply by email
 ###! Allow users to comment on issues and merge requests by replying to
 ###! notification emails.
@@ -1320,8 +1326,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['prometheus_listen_addr'] = "localhost:9175"
 # gitaly['logging_format'] = "json"
-# gitaly['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
-# gitaly['grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
+# gitaly['logging_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
+# gitaly['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 
 
 ################################################################################
