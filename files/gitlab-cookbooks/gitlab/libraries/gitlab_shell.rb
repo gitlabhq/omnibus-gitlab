@@ -46,7 +46,9 @@ module GitlabShell
       Gitlab['gitlab_rails']['repositories_storages'] ||=
         Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, data_directory|
           shard_gitaly_address = data_directory['gitaly_address'] || gitaly_address
-          [name, { 'path' => File.join(data_directory['path'], 'repositories'), 'gitaly_address' => shard_gitaly_address }]
+          params = { 'path' => File.join(data_directory['path'], 'repositories'), 'gitaly_address' => shard_gitaly_address }
+          params['gitaly_token'] = data_directory['gitaly_token'] if data_directory['gitaly_token']
+          [name, params]
         end]
     end
 

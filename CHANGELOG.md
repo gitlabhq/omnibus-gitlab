@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Set max_replication_slots to 1 by default for primary Geo instances
 - Set TZ environment variable for Gitaly
 - Automate repmgr configuration
+- Render Gitaly token authentication settings
 
 9.3.5
 
