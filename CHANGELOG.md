@@ -6,7 +6,7 @@ omnibus-gitlab repository.
 9.4.0
 
 - Add configuration options of monitoring ip whitelist and Unicorn sampler interval
-- Bump NGINX version to 1.12.0 894ddc79
+- Bump NGINX version to 1.12.1 f8c349bf
 - Add support in Geo replicate-geo-database command for replication slots 9fa27e9a0
 - Fix gitlab-shell not able to import projects from trusted SSL certificates
 - Remove software definition of expat 59c39870
