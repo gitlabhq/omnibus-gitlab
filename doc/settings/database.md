@@ -1,24 +1,23 @@
 # Database settings
 
-_**Note:**
+>**Note:**
 Omnibus GitLab has a bundled PostgreSQL server and PostgreSQL is the preferred
-database for GitLab._
-
----
+database for GitLab.
 
 GitLab supports the following database management systems:
 
 - PostgreSQL
-- MySQL
+- MySQL/MariaDB
 
 Thus you have three options for database servers to use with Omnibus GitLab:
 
 - Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required, recommended)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
-- Use an [external MySQL server with EE package](#using-a-mysql-database-management-server-enterprise-edition-only)
+- Use an [external MySQL server with Enterprise Edition package](#using-a-mysql-database-management-server-enterprise-edition-only) (deprecated)
 
-If you are planning to use MySQL/MariaDB, make sure to read the [MySQL special notes]
-(#omnibus-mysql-special-notes) before proceeding.
+If you are planning to use MySQL/MariaDB, make sure to read the [introductory
+paragraph](#using-a-mysql-database-management-server-enterprise-edition-only)
+before proceeding, as it contains some useful information.
 
 ## Enabling PostgreSQL WAL (Write Ahead Log) Archiving
 
@@ -132,31 +131,34 @@ After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup][rake-backup] and
 [restore][rake-restore] tasks.
 
-## Omnibus MySQL special notes
+## Using a MySQL database management server (Enterprise Edition only)
 
-MySQL in Omnibus is only supported in GitLab Enterprise Edition.
-The MySQL server itself is _not_ shipped with Omnibus, you will have to install
-it on your own or use an existing one. Omnibus ships only the MySQL client.
+>**Note:**
+Using MySQL with the Omnibus GitLab package is considered deprecated. Although
+GitLab Enterprise Edition will still work when MySQL is used, there will be some
+limitations as outlined in the [database requirements document].
+
+MySQL in Omnibus GitLab package is only supported in GitLab Enterprise Edition
+Starter and Premium. The MySQL server itself is _not_ shipped with Omnibus, you
+will have to install it on your own or use an existing one. Omnibus ships only
+the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
 hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
 (#set-mysql-collation-to-utf-8) to fix any relevant errors.
-
-## Using a MySQL database management server (Enterprise Edition only)
-
-_**Important note:**
-If you are connecting Omnibus GitLab to an existing GitLab database you should
-[create a backup][rake-backup] before attempting this procedure._
 
 ---
 
 The following guide assumes that you want to use MySQL or MariaDB and are using
 the **GitLab Enterprise Edition packages**.
 
-1.  First, set up your database server according to the [upstream GitLab
-    instructions][mysql-install].
+>**Important note:**
+If you are connecting Omnibus GitLab to an existing GitLab database you should
+[create a backup][rake-backup] before attempting this procedure.
 
-    If you want to keep using an existing GitLab database you can skip this step.
+1.  First, set up your database server according to the [upstream GitLab
+    instructions][mysql-install]. If you want to keep using an existing GitLab
+    database you can skip this step.
 
 1.  Next, add the following settings to `/etc/gitlab/gitlab.rb`:
 
@@ -176,14 +178,13 @@ the **GitLab Enterprise Edition packages**.
     `db_adapter` and `db_encoding` should be like the example above. Change
     all other settings according to your MySQL setup.
 
+    >**Note:**
+    `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
+    plain-text passwords.
 
 1.  [Reconfigure GitLab][] for the changes to take effect.
 
-1.  [Seed the database](#seed-the-database-fresh-installs-only).
-
-**Note:**
-`/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
-plain-text passwords.
+1.  (Optionally) [Seed the database](#seed-the-database-fresh-installs-only).
 
 ## Seed the database (fresh installs only)
 
