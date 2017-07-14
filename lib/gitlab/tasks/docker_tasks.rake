@@ -61,7 +61,7 @@ namespace :docker do
     task :qa do
       docker_tag = "#{edition}-#{tag}"
       authenticate
-      DockerOperations.tag_and_push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
+      DockerOperations.tag_and_push("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
 
@@ -103,7 +103,7 @@ namespace :docker do
 
   def push(docker_tag, repository = 'gitlab')
     namespace = "#{repository}/#{release_package}"
-    DockerOperations.tag_and_push(namespace, "latest", docker_tag)
+    DockerOperations.tag_and_push(namespace, namespace, "latest", docker_tag)
   end
 
   def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
@@ -111,10 +111,8 @@ namespace :docker do
   end
 
   def push_to_dockerhub(final_tag)
-    # Use the local image
-    image = DockerOperations.get(image_name, tag)
     # Create different tags and push to dockerhub
-    DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
+    DockerOperations.tag_and_push(image_name, "gitlab/#{release_package}", tag, final_tag)
     puts "Pushed tag: #{final_tag}"
   end
 end
