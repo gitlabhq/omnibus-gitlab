@@ -29,6 +29,9 @@ module Prometheus
 
     def parse_variables
       parse_exporter_enabled
+
+      Services.disable_group('prometheus', include_system: true) if Gitlab['prometheus_monitoring']['enable'] == false
+
       parse_scrape_configs
       parse_flags
     end
