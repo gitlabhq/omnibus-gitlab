@@ -59,7 +59,7 @@ RSpec.configure do |config|
     mock_file_load(%r{gitlab/libraries/helper})
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return("9.2")
 
-    # Clear EE services addition before each test
+    # Clear services list before each test
     Services.reset_list
   end
 end
