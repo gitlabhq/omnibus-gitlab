@@ -65,8 +65,7 @@ build do
     '--without-librtmp',
     '--without-libssh2',
     "--with-ssl=#{install_dir}/embedded",
-    "--with-zlib=#{install_dir}/embedded",
-    "--with-ca-path=#{install_dir}/embedded/ssl/certs"
+    "--with-zlib=#{install_dir}/embedded"
   ]
 
   command configure_command.join(' '), env: env
