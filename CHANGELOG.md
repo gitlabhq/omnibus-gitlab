@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Adjust various default values for PostgreSQL based on GitLab.com
 - Gitaly can no longer be disabled
 - Bump omnibus-ctl version to 0.5.0
+- Add GeoLogCursor EE service
 - Set max_replication_slots to 1 by default for primary Geo instances
 - Set TZ environment variable for Gitaly
 - Automate repmgr configuration
