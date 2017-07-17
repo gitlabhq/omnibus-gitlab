@@ -637,7 +637,11 @@ QA Tag:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
-    - make do_qa_docker_release
+    - bundle exec rake docker:build:qa
+    - bundle exec rake docker:push:qa:stable
+    - bundle exec rake docker:push:qa:nightly
+    - bundle exec rake docker:push:qa:rc
+    - bundle exec rake docker:push:qa:latest
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
@@ -731,7 +735,9 @@ QA Master:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
-    - make do_qa_docker_master
+    - bundle exec rake docker:build:qa
+    - bundle exec rake docker:push:qa:stable
+    - bundle exec rake docker:push:qa:nightly
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
