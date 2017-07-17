@@ -36,31 +36,32 @@ module Logging
       end
 
       %w{
-        geo-postgresql
-        gitaly
-        gitlab-pages
-        gitlab-shell
-        gitlab-workhorse
-        gitlab-monitor
-        logrotate
-        mailroom
-        mattermost
-        nginx
-        node-exporter
-        pgbouncer
-        postgres-exporter
-        postgresql
-        prometheus
-        redis
-        redis-exporter
-        registry
-        remote-syslog
-        sentinel
-        sidekiq
-        sidekiq-cluster
-        unicorn
+          geo-logcursor
+          geo-postgresql
+          gitaly
+          gitlab-pages
+          gitlab-shell
+          gitlab-workhorse
+          gitlab-monitor
+          logrotate
+          mailroom
+          mattermost
+          nginx
+          node-exporter
+          pgbouncer
+          postgres-exporter
+          postgresql
+          prometheus
+          redis
+          redis-exporter
+          registry
+          remote-syslog
+          sentinel
+          sidekiq
+          sidekiq-cluster
+          unicorn
       }.each do |runit_sv|
-        Gitlab[runit_sv.gsub('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
+        Gitlab[runit_sv.tr('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
       end
     end
   end

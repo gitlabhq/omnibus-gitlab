@@ -66,7 +66,9 @@ build do
     '--without-libssh2',
     "--with-ssl=#{install_dir}/embedded",
     "--with-zlib=#{install_dir}/embedded",
-    "--with-ca-path=#{install_dir}/embedded/ssl/certs"
+    "--without-ca-path",
+    "--without-ca-bundle",
+    "--with-ca-fallback"
   ]
 
   command configure_command.join(' '), env: env
