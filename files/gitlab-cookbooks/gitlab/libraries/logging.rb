@@ -60,9 +60,8 @@ module Logging
           sidekiq
           sidekiq-cluster
           unicorn
-        }.each do |runit_sv|
-          Gitlab[runit_sv.tr('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
-        end
+      }.each do |runit_sv|
+        Gitlab[runit_sv.tr('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
       end
     end
   end
