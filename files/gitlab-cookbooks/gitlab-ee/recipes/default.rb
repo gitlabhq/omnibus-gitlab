@@ -21,7 +21,8 @@ include_recipe 'gitlab::default'
   'sentinel',
   'sidekiq-cluster',
   'geo-postgresql',
-  "pgbouncer"
+  'geo-logcursor',
+  'pgbouncer'
 ].each do |service|
   if node['gitlab'][service]['enable']
     include_recipe "gitlab-ee::#{service}"

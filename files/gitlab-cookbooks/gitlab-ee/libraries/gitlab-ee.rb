@@ -32,6 +32,7 @@ module GitlabEE
         'sidekiq_cluster',
         'geo_secondary',
         'geo_postgresql',
+        'geo_logcursor',
         'postgresql', # impacted by role
         'gitlab_rails' # impacted by role
       ].each do |key|
