@@ -124,7 +124,7 @@ describe Services do
       end
 
       it 'enables all others' do
-        Services.enable(except: 'registry')
+        Services.enable(Services::ALL_SERVICES, except: 'registry')
         expect(Gitlab['redis']['enable']).to be true
         expect(Gitlab['postgresql']['enable']).to be true
         expect(Gitlab['mattermost']['enable']).to be true
@@ -132,7 +132,7 @@ describe Services do
       end
 
       it 'disables all others' do
-        Services.disable(except: 'redis')
+        Services.disable(Services::ALL_SERVICES, except: 'redis')
         expect(Gitlab['redis']['enable']).to be true
         expect(Gitlab['postgresql']['enable']).to be false
         expect(Gitlab['mattermost']['enable']).to be false
@@ -154,7 +154,7 @@ describe Services do
       end
 
       it 'enables all others' do
-        Services.enable(except: %w(registry mailroom))
+        Services.enable(Services::ALL_SERVICES, except: %w(registry mailroom))
         expect(Gitlab['redis']['enable']).to be true
         expect(Gitlab['postgresql']['enable']).to be true
         expect(Gitlab['gitaly']['enable']).to be true
@@ -164,7 +164,7 @@ describe Services do
       end
 
       it 'disables all others' do
-        Services.disable(except: %w(postgresql gitaly))
+        Services.disable(Services::ALL_SERVICES, except: %w(postgresql gitaly))
         expect(Gitlab['redis']['enable']).to be false
         expect(Gitlab['postgresql']['enable']).to be true
         expect(Gitlab['gitaly']['enable']).to be true
@@ -250,7 +250,7 @@ describe Services do
       end
 
       it 'supports multiple exceptions' do
-        Services.enable_group('rails', 'prometheus', except: ['redis', Services::Config::SYSTEM_GROUP])
+        Services.enable_group('rails', 'prometheus', except: ['redis', Services::SYSTEM_GROUP])
         expect(Gitlab['redis_exporter']['enable']).to be false
         expect(Gitlab['node_exporter']['enable']).to be false
         expect(Gitlab['unicorn']['enable']).to be true
@@ -263,12 +263,12 @@ describe Services do
       end
 
       it 'ignores disable on system services' do
-        Services.disable_group(Services::Config::SYSTEM_GROUP)
+        Services.disable_group(Services::SYSTEM_GROUP)
         expect(Gitlab['logrotate']['enable']).to be true
       end
 
       it 'allows forced disable on system services' do
-        Services.disable_group(Services::Config::SYSTEM_GROUP, include_system: true)
+        Services.disable_group(Services::SYSTEM_GROUP, include_system: true)
         expect(Gitlab['logrotate']['enable']).to be false
       end
     end
@@ -285,13 +285,13 @@ describe Services do
       end
 
       it 'enables all others' do
-        Services.enable_group(except: 'prometheus')
+        Services.enable_group(Services::ALL_GROUPS, except: 'prometheus')
         expect(Gitlab['unicorn']['enable']).to be true
         expect(Gitlab['gitlab_monitor']['enable']).to be false
       end
 
       it 'disables all others' do
-        Services.disable_group(except: 'prometheus')
+        Services.disable_group(Services::ALL_GROUPS, except: 'prometheus')
         expect(Gitlab['postgres_exporter']['enable']).to be true
         expect(Gitlab['postgresql']['enable']).to be false
       end
@@ -311,14 +311,14 @@ describe Services do
       end
 
       it 'enables all others' do
-        Services.enable_group(except: %w(redis rails))
+        Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(Gitlab['unicorn']['enable']).to be false
         expect(Gitlab['node_exporter']['enable']).to be true
         expect(Gitlab['redis_exporter']['enable']).to be false
       end
 
       it 'disables all others' do
-        Services.disable_group(except: %w(redis rails))
+        Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(Gitlab['prometheus']['enable']).to be false
         expect(Gitlab['redis']['enable']).to be true
         expect(Gitlab['sidekiq']['enable']).to be true

@@ -16,10 +16,12 @@
 #
 
 module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(Services)` at the end of the class definition)
-  class Config
-    SYSTEM_GROUP = 'system'.freeze
-    DEFAULT_GROUP = 'default'.freeze
+  ALL_SERVICES = 'all'.freeze
+  ALL_GROUPS = 'all-groups'.freeze
+  SYSTEM_GROUP = 'system'.freeze
+  DEFAULT_GROUP = 'default'.freeze
 
+  class Config
     def self.list
       @services.dup
     end
@@ -33,56 +35,52 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
   end
 
   class << self
-    # Disables the group of services that were passed as arguments, or all
-    # services if no services are provided
+    # Disables the group of services that were passed as arguments
     #
     # Excludes the group, or array of groups, provided in the `except` argument
     # ex: Services.disable_group('redis')
-    #     Services.disable_group('prometheus' except: ['redis', 'postgres'])
-    #     Services.disable_group(except: 'redis')
+    #     Services.disable_group('prometheus', except: ['redis', 'postgres'])
+    #     Services.disable_group(Services::ALL_GROUPS, except: 'redis')
     def disable_group(*groups, except: nil, include_system: false)
       exceptions = [except].flatten
-      exceptions << Config::SYSTEM_GROUP unless include_system
-      set_enabled_group(false, *groups, except: exceptions)
+      exceptions << SYSTEM_GROUP unless include_system
+      set_service_group_status(false, *groups, except: exceptions)
     end
 
-    # Enables the group of services that were passed as arguments, or all
-    # services if no services are provided
+    # Enables the group of services that were passed as arguments
     #
     # Excludes the group, or array of groups, provided in the `except` argument
     # ex: Services.enable_group('redis')
-    #     Services.enable_group('prometheus' except: ['redis', 'postgres'])
-    #     Services.enable_group(except: 'redis')
+    #     Services.enable_group('prometheus', except: ['redis', 'postgres'])
+    #     Services.enable_group(Services::DEFAULT_GROUP, except: 'redis')
     def enable_group(*groups, except: nil)
-      set_enabled_group(true, *groups, except: except)
+      set_service_group_status(true, *groups, except: except)
     end
 
-    # Disables the services that were passed as arguments, or all services if
-    # no services are provided
+    # Disables the services that were passed as arguments
     #
     # Excludes the service, or array of services, provided in the `except` argument
     # ex: Services.disable('mailroom')
-    #     Services.disable(except: ['redis', 'sentinel'])
+    #     Services.disable(Services::ALL_SERVICES, except: ['redis', 'sentinel'])
     def disable(*services, except: nil, include_system: false)
       # Automatically excludes system services unless `include_system: true` is passed
       exceptions = [except].flatten
       exceptions.concat(system_services.keys) unless include_system
 
-      set_enabled(false, *services, except: exceptions)
+      set_service_status(false, *services, except: exceptions)
     end
 
-    # Enables the services that were passed as arguments, or all services if
-    # no services are provided
+    # Enables the services that were passed as arguments
     #
     # Excludes the service, or array of services, provided in the `except` argument
     # ex: Services.enable('mailroom')
-    #     Services.enable(except: ['prometheus'])
+    #     Services.enable(Services::ALL_SERVICES, except: ['prometheus'])
     def enable(*services, except: nil)
-      set_enabled(true, *services, except: except)
+      set_service_status(true, *services, except: except)
     end
 
     def system_services
-      find_by_group(Config::SYSTEM_GROUP)
+      find_by_group(SYSTEM_GROUP)
     end
 
     def find_by_group(group)
@@ -111,21 +109,21 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
       @cookbook_services ||= {}
     end
 
-    def set_enabled(enable, *services, except: nil)
+    def set_service_status(enable, *services, except: nil)
       exceptions = [except].flatten
       service_list.each do |name, _|
         # Set the service enable config if:
         #  The current service is not in the list of exceptions
         #  AND
-        #  The current service was requested to be set, or no specific service was
+        #  The current service was requested to be set, or ALL_SERVICES was
         #  requested, so we are setting them all
-        if !exceptions.include?(name) && (services.empty? || services.include?(name))
+        if !exceptions.include?(name) && (services.include?(ALL_SERVICES) || services.include?(name))
           Gitlab[name]['enable'] = enable
         end
       end
     end
 
-    def set_enabled_group(enable, *groups, except: nil)
+    def set_service_group_status(enable, *groups, except: nil)
       exceptions = [except].flatten
       service_list.each do |name, service|
         # Find the matching groups among our passed arguments and our current service's groups
@@ -136,11 +134,11 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
         #  The current service has no matching exceptions
         #  AND
         #  The current service has matching groups that were requested to be set,
-        #  or no specific group was requested, so we are setting them all
-        if matching_exceptions.empty? && (groups.empty? || !matching_groups.empty?)
+        #  or ALL_GROUPS was requested, so we are setting them all
+        if matching_exceptions.empty? && (groups.include?(ALL_GROUPS) || !matching_groups.empty?)
           Gitlab[name]['enable'] = enable
         end
       end
     end
   end
-end unless defined?(Services) # Prevent reloading during converge, so we can test
+end unless defined?(Services)  # Prevent reloading during converge, so we can test
