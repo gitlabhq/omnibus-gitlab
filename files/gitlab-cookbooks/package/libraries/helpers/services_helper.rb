@@ -141,4 +141,4 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
       end
     end
   end
-end unless defined?(Services)  # Prevent reloading during converge, so we can test
+end unless defined?(Services) # Prevent reloading during converge, so we can test
