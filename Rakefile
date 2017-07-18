@@ -15,7 +15,7 @@ RuboCop::RakeTask.new(:rubocop) do |t|
                'files/gitlab-ctl-commands',
                'files/gitlab-cookbooks/gitlab-ee',
                'files/gitlab-cookbooks/runit',
-               'files/gitlab-cookbooks/omnibus',
+               'files/gitlab-cookbooks/package',
                'files/gitlab-cookbooks/registry',
                'files/gitlab-cookbooks/repmgr',
                'files/gitlab-cookbooks/gitlab/attributes',
