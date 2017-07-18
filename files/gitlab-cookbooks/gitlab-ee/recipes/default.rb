@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+Services.add_services('gitlab-ee', Services::EEServices.list)
+
 include_recipe 'gitlab::default'
 
 [

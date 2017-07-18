@@ -211,7 +211,7 @@ describe 'gitlab::config' do
   end
 
   def converge_config(ee: false)
-    Services.add_services('gitlab-ee', GitlabEE::Services.list) if ee
+    Services.add_services('gitlab-ee', Services::EEServices.list) if ee
     ChefSpec::SoloRunner.converge('gitlab::config')
   end
 end

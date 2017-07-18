@@ -30,7 +30,7 @@ describe Services do
   describe 'service' do
     context 'when enable/disable is passed a single service' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
       end
 
@@ -53,7 +53,7 @@ describe Services do
 
     context 'when enable/disable is passed multiple services' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           node_exporter: { enable: true },
           redis: { enable: true },
@@ -114,7 +114,7 @@ describe Services do
 
     context 'when passed single exception' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           redis: { enable: true },
           postgresql: { enable: true },
@@ -142,7 +142,7 @@ describe Services do
 
     context 'when passed multiple exceptions' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           redis: { enable: true },
           postgresql: { enable: true },
@@ -178,7 +178,7 @@ describe Services do
   describe 'group' do
     context 'when enable_group/disable_group is passed a single group' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: true },
@@ -210,7 +210,7 @@ describe Services do
 
     context 'when enable/disable is passed multiple groups' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: false },
@@ -275,7 +275,7 @@ describe Services do
 
     context 'when passed single exception' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           postgresql: { enable: true },
           postgres_exporter: { enable: true },
@@ -299,7 +299,7 @@ describe Services do
 
     context 'when passed multiple exceptions' do
       before do
-        Services.add_services('gitlab', Gitlab::Services.list)
+        Services.add_services('gitlab', Services::BaseServices.list)
         stub_gitlab_rb(
           redis: { enable: true },
           redis_exporter: { enable: false },

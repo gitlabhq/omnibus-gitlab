@@ -1,4 +1,3 @@
-#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
@@ -15,8 +14,11 @@
 # limitations under the License.
 #
 
-module Gitlab
-  class Services < ::Services::Config
+require_relative 'helpers/services_helper.rb'
+
+module Services
+  # Define the services included in every GitLab Edition
+  class BaseServices < ::Services::Config
     # Define all gitlab cookbook services
     service 'logrotate',          groups: [DEFAULT_GROUP, SYSTEM_GROUP]
     service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'prometheus']
@@ -38,5 +40,13 @@ module Gitlab
     service 'mattermost_nginx'
     service 'pages_nginx'
     service 'registry'
+  end
+
+  # Define the services included in the EE edition of GitLab
+  class EEServices < ::Services::Config
+    service 'sentinel',         groups: ['redis']
+    service 'geo_postgresql',   groups: ['postgres']
+    service 'pgbouncer',        groups: ['postgres']
+    service 'sidekiq_cluster',  groups: ['sidekiq']
   end
 end
