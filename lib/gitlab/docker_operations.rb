@@ -25,9 +25,9 @@ class DockerOperations
   # 3. any other valid docker tag
   #
   # new_tag - specifies the new tag for the existing image
-  def self.tag_and_push(namespace, initial_tag, new_tag)
-    tag(namespace, initial_tag, new_tag)
-    push(namespace, new_tag)
+  def self.tag_and_push(initial_namespace, new_namespace, initial_tag, new_tag)
+    tag(initial_namespace, new_namespace, initial_tag, new_tag)
+    push(new_namespace, new_tag)
   end
 
   def self.get(namespace, tag)
@@ -41,8 +41,8 @@ class DockerOperations
     end
   end
 
-  def self.tag(namespace, initial_tag, tag)
-    image = get(namespace, initial_tag)
-    image.tag(repo: namespace, tag: tag, force: true)
+  def self.tag(initial_namespace, new_namespace, initial_tag, new_tag)
+    image = get(initial_namespace, initial_tag)
+    image.tag(repo: new_namespace, tag: new_tag, force: true)
   end
 end

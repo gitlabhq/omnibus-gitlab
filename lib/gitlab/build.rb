@@ -138,7 +138,8 @@ class Build
     def tag_triggered_qa
       # For triggered builds, we need the QA image's tag to match the docker
       # tag. So, we are retagging the image.
-      DockerOperations.tag("gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}") if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+      edition = package.gsub("gitlab-", "").strip # 'ee' or 'ce'
+      DockerOperations.tag("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}") if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
     end
 
     private

@@ -9,5 +9,5 @@ recipe "gitlab", "Configures GitLab from Omnibus"
 
 supports "ubuntu"
 
-depends "omnibus"
+depends "package"
 depends 'registry'

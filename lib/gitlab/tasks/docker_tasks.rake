@@ -58,11 +58,32 @@ namespace :docker do
     end
 
     desc "Push QA Docker Image"
-    task :qa do
-      docker_tag = "#{edition}-#{tag}"
-      authenticate
-      DockerOperations.tag_and_push("gitlab/gitlab-qa", "#{edition}-latest", docker_tag)
-      puts "Pushed tag: #{docker_tag}"
+    namespace :qa do
+      task :latest do
+        if Build.add_latest_tag?
+          authenticate
+          push_to_dockerhub("#{edition}-latest", "qa")
+        end
+      end
+
+      task :nightly do
+        if Build.add_nightly_tag?
+          authenticate
+          push_to_dockerhub("#{edition}-nightly", "qa")
+        end
+      end
+
+      task :rc do
+        if Build.add_rc_tag?
+          authenticate
+          push_to_dockerhub("#{edition}-rc", "qa")
+        end
+      end
+
+      task :stable do
+        authenticate
+        push_to_dockerhub(tag, "qa")
+      end
     end
 
     desc "Push triggered Docker Image to GitLab Registry"
@@ -103,18 +124,20 @@ namespace :docker do
 
   def push(docker_tag, repository = 'gitlab')
     namespace = "#{repository}/#{release_package}"
-    DockerOperations.tag_and_push(namespace, "latest", docker_tag)
+    DockerOperations.tag_and_push(namespace, namespace, "latest", docker_tag)
   end
 
   def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
     DockerOperations.authenticate(user, token, registry)
   end
 
-  def push_to_dockerhub(final_tag)
-    # Use the local image
-    image = DockerOperations.get(image_name, tag)
+  def push_to_dockerhub(final_tag, type = "gitlab")
     # Create different tags and push to dockerhub
-    DockerOperations.tag_and_push(image, "gitlab/#{release_package}", final_tag)
+    if type == "qa"
+      DockerOperations.tag_and_push("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{edition}-latest", final_tag)
+    else
+      DockerOperations.tag_and_push(image_name, "gitlab/#{release_package}", tag, final_tag)
+    end
     puts "Pushed tag: #{final_tag}"
   end
 end

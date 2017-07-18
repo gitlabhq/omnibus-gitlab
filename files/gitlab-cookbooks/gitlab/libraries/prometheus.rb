@@ -267,7 +267,6 @@ module Prometheus
 
       k8s_pods = {
           'job_name' => 'kubernetes-pods',
-          'scheme' => 'https',
           'tls_config' => {
             'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
             'insecure_skip_verify' => true,
