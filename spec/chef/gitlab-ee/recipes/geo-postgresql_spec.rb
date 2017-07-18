@@ -11,7 +11,7 @@ describe 'geo postgresql 9.2' do
   end
 
   context 'when geo postgres is disabled' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
     before do
       stub_gitlab_rb(geo_postgresql: { enable: false })
@@ -26,7 +26,7 @@ describe 'geo postgresql 9.2' do
         stub_gitlab_rb(geo_postgresql: { enable: true })
       end
 
-      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
 
     it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
@@ -135,7 +135,7 @@ describe 'geo postgresql 9.2' do
                        })
       end
 
-      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
 
     it 'correctly sets the shared_preload_libraries setting' do
@@ -203,7 +203,7 @@ describe 'geo postgresql 9.6' do
       )
     end
 
-    ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+    ChefSpec::SoloRunner.converge('gitlab-ee::default')
   end
 
   context 'version specific settings' do

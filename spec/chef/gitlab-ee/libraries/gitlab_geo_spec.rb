@@ -13,7 +13,7 @@ describe GitlabGeo do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(geo_primary_role: { enable: true })
       end
-      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
 
     context 'in postgres settings' do
@@ -50,7 +50,7 @@ describe GitlabGeo do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(geo_secondary_role: { enable: true })
       end
-      ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
 
     context 'in geo_postgres settings' do

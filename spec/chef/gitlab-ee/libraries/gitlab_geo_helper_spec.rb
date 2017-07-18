@@ -2,7 +2,7 @@ require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/gitlab_
 require 'chef_helper'
 
 describe GitlabGeoHelper do
-  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  cached(:chef_run) { converge_config }
   subject { described_class.new(chef_run.node) }
 
   describe '#migrated?' do

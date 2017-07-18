@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'repmgr' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
   let(:repmgr_conf) { '/var/opt/gitlab/postgresql/repmgr.conf' }
 

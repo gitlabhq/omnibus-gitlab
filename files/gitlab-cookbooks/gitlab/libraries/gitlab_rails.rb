@@ -160,6 +160,7 @@ module GitlabRails
     def disable_services
       disable_services_roles if any_service_role_defined?
 
+      # Disable the rails group of services if it has been explicitly set to false
       Services.disable_group('rails') if Gitlab['gitlab_rails']['enable'] == false
     end
 

@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::config' do
-  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
 
   before do
@@ -208,10 +208,5 @@ describe 'gitlab::config' do
         expect { chef_run }.to raise_error RuntimeError
       end
     end
-  end
-
-  def converge_config(ee: false)
-    Services.add_services('gitlab-ee', Services::EEServices.list) if ee
-    ChefSpec::SoloRunner.converge('gitlab::config')
   end
 end

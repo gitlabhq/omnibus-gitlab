@@ -73,7 +73,7 @@ describe 'gitlab::postgres-exporter' do
   end
 
   context 'when enabled and run as an isolated recipe' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab::postgres-exporter') }
+    let(:chef_run) { converge_config('gitlab::postgres-exporter') }
     before do
       stub_gitlab_rb(postgres_exporter: { enable: true })
     end

@@ -2,7 +2,7 @@ require_relative '../../files/gitlab-cookbooks/gitlab/libraries/redis_helper.rb'
 require 'chef_helper'
 
 describe RedisHelper do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  let(:chef_run) { converge_config }
   subject { described_class.new(chef_run.node) }
 
   context '#redis_url' do

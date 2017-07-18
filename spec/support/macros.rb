@@ -50,5 +50,10 @@ module GitlabSpec
     def create_fingerprint_from_public_key(public_key)
       ::SSHKeygen::PublicKeyReader.new(public_key).key_fingerprint
     end
+
+    def converge_config(*recipes, ee: false)
+      Services.add_services('gitlab-ee', Services::EEServices.list) if ee
+      ChefSpec::SoloRunner.converge('gitlab::config', *recipes)
+    end
   end
 end

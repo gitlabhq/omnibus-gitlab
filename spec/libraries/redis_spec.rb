@@ -3,7 +3,7 @@
 require 'chef_helper'
 
 describe 'Redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  let(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { ::Redis }
   before do

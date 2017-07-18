@@ -2,7 +2,7 @@ require_relative '../../files/gitlab-cookbooks/gitlab-ee/libraries/sentinel_help
 require 'chef_helper'
 
 describe SentinelHelper do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  let(:chef_run) { converge_config }
   subject { described_class.new(chef_run.node) }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
