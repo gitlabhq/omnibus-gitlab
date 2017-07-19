@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Set TZ environment variable for Gitaly
 - Automate repmgr configuration
 - Render Gitaly token authentication settings
+- Update Mattermost to 4.0.1
 
 9.3.5
 
