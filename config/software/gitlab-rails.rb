@@ -48,6 +48,7 @@ dependency 'krb5'
 dependency 'registry'
 dependency 'gitlab-pages'
 dependency 'unzip'
+dependency 'libre2'
 
 if EE
   dependency 'mysql-client'

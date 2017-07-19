@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.2.8
 
 - Update Mattermost to 3.9.2 f55f9f
+- Add libre2 to support the 're2' gem
 
 9.2.7
 
