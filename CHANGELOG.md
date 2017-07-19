@@ -3,6 +3,34 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.1.7
+
+-  Update Mattermost to 3.7.6 ce50d5f
+
+9.1.6
+
+- No changes
+
+9.1.5
+
+- No changes
+
+9.1.4
+
+-  Fix gitlab.yml template to quote sidekiq-cron 285fbb
+
+9.1.3
+
+- Update mysql client to 5.5.56. 5e673
+
+9.1.2
+
+- No changes
+
+9.1.1
+
+- No changes
+
 9.1.0
 
 - Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
