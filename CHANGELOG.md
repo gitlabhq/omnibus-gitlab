@@ -67,7 +67,16 @@ omnibus-gitlab repository.
 - Add repmgr as an EE dependency
 - Upgrade Mattermost to 3.10.0
 
+9.2.8
+
+- Update Mattermost to 3.9.2 f55f9f
+
+9.2.7
+
+- No changes
+
 9.2.6
+
 - Backport: Upgrade ES indexer to 0.1.0
 
 9.2.5
@@ -121,7 +130,7 @@ omnibus-gitlab repository.
 
 9.1.4
 
--  Fix gitlab.yml template to quote sidekiq-cron 285fbb
+- Fix gitlab.yml template to quote sidekiq-cron 285fbb
 
 9.1.3
 
