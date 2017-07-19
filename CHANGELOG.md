@@ -3,15 +3,32 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.8
+
+- Upgrade Mattermost to 3.10.2 6ebf54
+
+9.3.7
+
+- No Changes
+
+9.3.6
+
+- No Changes
+
 9.3.5
-- Update gitlab-monitor to 1.9.0
-- Fix port not being passed to pg_basebackup in replicate-geo-database script
+
+- Update gitlab-monitor to 1.9.0 c18672
+- Fix port not being passed to pg_basebackup in replicate-geo-database script ca92eb
+
+9.3.4
+
+- No Changes
 
 9.3.3
 
-- Allow sidekiq-cluster to run without having sidekiq enabled
-- Remove outdated Mattermost v2 DB upgrade code
-- Switch postgresql['custom_pg_hba_entries'] from Array to Hash
+- Allow sidekiq-cluster to run without having sidekiq enabled c762728
+- Remove outdated Mattermost v2 DB upgrade code d06f6
+- Switch postgresql['custom_pg_hba_entries'] from Array to Hash 028ff9
 
 9.3.2
 
@@ -41,7 +58,16 @@ omnibus-gitlab repository.
 - Add support for Gitaly configurations for logging and prometheus
 - Upgrade Mattermost to 3.10.0
 
+9.2.8
+
+- Update Mattermost to 3.9.2 f55f9f
+
+9.2.7
+
+- No changes
+
 9.2.6
+
 - Backport: Upgrade ES indexer to 0.1.0
 
 9.2.5
@@ -81,9 +107,33 @@ omnibus-gitlab repository.
 - Compile python with libedit
 - Disable Nginx proxy_request_buffering for Git LFS endpoints
 
+9.1.7
+
+- Update Mattermost to 3.7.6 ce50d5f8
+
+9.1.6
+
+- No changes
+
+9.1.5
+
+- No changes
+
+9.1.4
+
+- Fix gitlab.yml template to quote sidekiq-cron 285fbb
+
+9.1.3
+
+- Update mysql client to 5.5.56. 5e673
+
 9.1.2
 
 - Add support for the following PostgreSQL settings: random_page_cost, max_locks_per_transaction, log_temp_files, log_checkpoints
+
+9.1.1
+
+- No changes
 
 9.1.0
 
