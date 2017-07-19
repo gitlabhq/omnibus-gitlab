@@ -4,12 +4,6 @@ db_common: &db_common
   opts:
     connection_string: <%= @connection_string %>
 
-common_git: &common_git
-  class_name: GitProber
-  methods:
-    - probe_pull
-    - probe_push
-
 # Web server config
 server:
   listen_address: <%= node['gitlab']['gitlab-monitor']['listen_address'] %>
@@ -17,17 +11,6 @@ server:
 
 # Probes config
 probes:
-  git:
-    multiple: true
-<% node['gitlab']['gitlab-shell']['git_data_directories'].each do |repo_name, git_data_directory| -%>
-    <%= repo_name %>:
-      <<: *common_git
-      opts:
-        source: <%= git_data_directory['path'] %>
-        labels:
-          name: <%= repo_name %>
-<% end -%>
-
   git_process:
     class_name: GitProcessProber # `class_name` is redundant here
     methods:

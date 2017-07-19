@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Automate repmgr configuration
 - Render Gitaly token authentication settings
 - Update Mattermost to 4.0.1
+- Drop GitProbe settings from gitlab-monitor
 
 9.3.8
 
