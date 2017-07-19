@@ -23,15 +23,26 @@ omnibus-gitlab repository.
 - Render Gitaly token authentication settings
 - Update Mattermost to 4.0.1
 
+9.3.8
+
+- Upgrade Mattermost to 3.10.2 6ebf54
+
+9.3.7
+
+- No Changes
+
+9.3.6
+
+- No Changes
+
 9.3.5
 
-- Update gitlab-monitor to 1.9.0
-- Fix port not being passed to pg_basebackup in replicate-geo-database script
-
+- Update gitlab-monitor to 1.9.0 c18672
+- Fix port not being passed to pg_basebackup in replicate-geo-database script ca92eb
 
 9.3.4
 
-- Update gitlab-monitor to 1.9.0
+- No Changes
 
 9.3.3
 
