@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.1.8
+
+- Add libre2 to support the 're2' gem
+
 9.1.7
 
 -  Update Mattermost to 3.7.6 ce50d5f
