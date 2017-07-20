@@ -124,7 +124,11 @@ build do
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
 
-  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
+  # bundle 'exec rake gitlab:assets:compile --trace', env: assets_compile_env
+  bundle 'exec rake yarn:check --trace', env: assets_compile_env
+  bundle 'exec rake rake:assets:precompile --trace', env: assets_compile_env
+  bundle 'exec rake webpack:compile --trace', env: assets_compile_env
+  bundle 'exec rake gitlab:assets:fix_urls --trace', env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
