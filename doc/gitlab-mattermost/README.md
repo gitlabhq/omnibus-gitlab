@@ -53,7 +53,7 @@ mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_scope'] = ""
 mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
-mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v3/user"
+mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
 
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
@@ -87,7 +87,7 @@ mattermost['gitlab_secret'] = "123456789"
 mattermost['gitlab_scope'] = ""
 mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
-mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v3/user"
+mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
 ```
 
 Save the changes and then run `sudo gitlab-ctl reconfigure`.

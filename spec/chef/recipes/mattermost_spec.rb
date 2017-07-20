@@ -75,7 +75,7 @@ describe 'gitlab::mattermost' do
         expect(config['GitLabSettings']['Scope']).to eq 'scope'
         expect(config['GitLabSettings']['AuthEndpoint']).to eq 'http://gitlab.example.com/oauth/authorize'
         expect(config['GitLabSettings']['TokenEndpoint']).to eq 'http://gitlab.example.com/oauth/token'
-        expect(config['GitLabSettings']['UserApiEndpoint']).to eq 'http://gitlab.example.com/api/v3/user'
+        expect(config['GitLabSettings']['UserApiEndpoint']).to eq 'http://gitlab.example.com/api/v4/user'
       }
   end
 
