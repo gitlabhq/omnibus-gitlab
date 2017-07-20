@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.5.0
+
+- Bump openssl to 1.0.2l 04ae64d7
+
 9.4.0
 
 - Add configuration options of monitoring ip whitelist and Unicorn sampler interval
