@@ -22,7 +22,7 @@ msc {
   gitlab=>gitlab [label="Doorkeeper::TokensController#create"];
   gitlab=>mattermost [label="Access token", textcolor="red"];
   mattermost note gitlab [label="Mattermost looks up GitLab user", textcolor="green"];
-  mattermost=>gitlab [label="GET https://gitlab.domain.com/api/v3/user", textcolor="indigo"];
+  mattermost=>gitlab [label="GET https://gitlab.domain.com/api/v4/user", textcolor="indigo"];
   gitlab=>mattermost [label="User details", textcolor="red"];
   mattermost=>user [label="Mattermost/GitLab user ready"];
 }

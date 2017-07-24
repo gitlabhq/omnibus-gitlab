@@ -43,7 +43,7 @@ module GitlabMattermost
         gitlab_url = Gitlab['external_url'].chomp("/")
         Gitlab['mattermost']['gitlab_auth_endpoint'] ||= "#{gitlab_url}/oauth/authorize"
         Gitlab['mattermost']['gitlab_token_endpoint'] ||= "#{gitlab_url}/oauth/token"
-        Gitlab['mattermost']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v3/user"
+        Gitlab['mattermost']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v4/user"
       end
 
       case uri.scheme
