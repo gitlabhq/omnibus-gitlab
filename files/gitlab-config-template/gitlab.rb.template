@@ -1043,7 +1043,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_emoji_picker'] = true
 # mattermost['service_enable_channel_viewed_messages'] = true
 # mattermost['service_teammate_name_display'] = "username"
-# mattermost['service_enable_apiv3'] = "true"
+# mattermost['service_enable_apiv3'] = true
 # mattermost['service_goroutine_health_threshold'] = -1
 
 # mattermost['team_site_name'] = "GitLab Mattermost"

@@ -724,7 +724,7 @@ default['gitlab']['mattermost']['service_enable_user_statuses'] = true
 default['gitlab']['mattermost']['service_enable_emoji_picker'] = true
 default['gitlab']['mattermost']['service_enable_channel_viewed_messages'] = true
 default['gitlab']['mattermost']['service_teammate_name_display'] = "username"
-default['gitlab']['mattermost']['service_enable_apiv3'] = "true"
+default['gitlab']['mattermost']['service_enable_apiv3'] = true
 default['gitlab']['mattermost']['service_goroutine_health_threshold'] = -1
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
