@@ -721,6 +721,11 @@ default['gitlab']['mattermost']['service_enable_link_previews'] = false
 default['gitlab']['mattermost']['service_enable_user_typing_messages'] = true
 default['gitlab']['mattermost']['service_enable_post_search'] = true
 default['gitlab']['mattermost']['service_enable_user_statuses'] = true
+default['gitlab']['mattermost']['service_enable_emoji_picker'] = true
+default['gitlab']['mattermost']['service_enable_channel_viewed_messages'] = true
+default['gitlab']['mattermost']['service_teammate_name_display'] = "username"
+default['gitlab']['mattermost']['service_enable_apiv3'] = "true"
+default['gitlab']['mattermost']['service_goroutine_health_threshold'] = -1
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -729,6 +734,7 @@ default['gitlab']['mattermost']['sql_max_idle_conns'] = 10
 default['gitlab']['mattermost']['sql_max_open_conns'] = 10
 default['gitlab']['mattermost']['sql_trace'] = false
 default['gitlab']['mattermost']['sql_data_source_search_replicas'] = []
+default['gitlab']['mattermost']['sql_query_timeout'] = 30
 
 # default['gitlab']['mattermost']['gitlab'] = {'Allow' => true, 'Secret' => "123", 'Id' => "123", "AuthEndpoint" => "aa", "TokenEndpoint" => "bb", "UserApiEndpoint" => "cc" }
 default['gitlab']['mattermost']['gitlab'] = {}
@@ -737,12 +743,6 @@ default['gitlab']['mattermost']['file_max_file_size'] = 52428800
 default['gitlab']['mattermost']['file_driver_name'] = "local"
 default['gitlab']['mattermost']['file_directory'] = "/var/opt/gitlab/mattermost/data"
 default['gitlab']['mattermost']['file_enable_public_link'] = true
-default['gitlab']['mattermost']['file_thumbnail_width'] = 120
-default['gitlab']['mattermost']['file_thumbnail_height'] = 100
-default['gitlab']['mattermost']['file_preview_width'] = 1024
-default['gitlab']['mattermost']['file_preview_height'] = 0
-default['gitlab']['mattermost']['file_profile_width'] = 128
-default['gitlab']['mattermost']['file_profile_height'] = 128
 default['gitlab']['mattermost']['file_initial_font'] = 'luximbi.ttf'
 default['gitlab']['mattermost']['file_amazon_s3_access_key_id'] = nil
 default['gitlab']['mattermost']['file_amazon_s3_bucket'] = nil
@@ -753,6 +753,7 @@ default['gitlab']['mattermost']["file_amazon_s3_bucket_endpoint"] = nil
 default['gitlab']['mattermost']["file_amazon_s3_location_constraint"] = false
 default['gitlab']['mattermost']["file_amazon_s3_lowercase_bucket"] = false
 default['gitlab']['mattermost']["file_amazon_s3_ssl"] = true
+default['gitlab']['mattermost']["file_amazon_s3_sign_v2"] = false
 default['gitlab']['mattermost']['file_enable_file_attachments'] = true
 
 default['gitlab']['mattermost']['email_enable_sign_up_with_email'] = false
