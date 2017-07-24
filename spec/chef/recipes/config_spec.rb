@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::config' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
 
   before do
@@ -14,7 +14,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['unicorn']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
-      expect(node['gitlab']['bootstrap']['enable']).to eq false
+      expect(node['gitlab']['gitaly']['enable']).to eq false
       expect(node['gitlab']['nginx']['enable']).to eq false
       expect(node['gitlab']['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
@@ -39,6 +39,7 @@ describe 'gitlab::config' do
   end
 
   context 'when gitlab-rails is disabled' do
+    cached(:chef_run) { converge_config }
     before do
       stub_gitlab_rb(
         gitlab_rails: {
@@ -51,7 +52,6 @@ describe 'gitlab::config' do
       expect(node['gitlab']['unicorn']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
-      expect(node['gitlab']['gitaly']['enable']).to eq false
       expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
     end
 
@@ -69,6 +69,7 @@ describe 'gitlab::config' do
 
   context 'with roles' do
     context 'when redis_sentinel_role is enabled' do
+      cached(:chef_run) { converge_config(ee: true) }
       before do
         stub_gitlab_rb(
           redis_sentinel_role: {
@@ -88,6 +89,7 @@ describe 'gitlab::config' do
       end
 
       context 'when redis_sentinel_role is enabled with redis_master_role' do
+        cached(:chef_run) { converge_config(ee: true) }
         before do
           stub_gitlab_rb(
             redis_sentinel_role: {
@@ -111,6 +113,7 @@ describe 'gitlab::config' do
       end
 
       context 'when redis_sentinel_role is enabled with redis_slave_role' do
+        cached(:chef_run) { converge_config(ee: true) }
         before do
           stub_gitlab_rb(
             redis_sentinel_role: {
@@ -140,6 +143,7 @@ describe 'gitlab::config' do
     end
 
     context 'when redis_master_role is enabled' do
+      cached(:chef_run) { converge_config(ee: true) }
       before do
         stub_gitlab_rb(
           redis_master_role: {
@@ -160,6 +164,7 @@ describe 'gitlab::config' do
     end
 
     context 'when redis_slave_role is enabled' do
+      cached(:chef_run) { converge_config(ee: true) }
       before do
         stub_gitlab_rb(
           redis_slave_role: {
@@ -182,6 +187,7 @@ describe 'gitlab::config' do
     end
 
     context 'when redis_master_role and redis_slave_role are enabled' do
+      cached(:chef_run) { converge_config(ee: true) }
       before do
         stub_gitlab_rb(
           redis_master_role: {

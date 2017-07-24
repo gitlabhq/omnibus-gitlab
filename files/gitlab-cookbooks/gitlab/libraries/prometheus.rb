@@ -24,19 +24,19 @@ require 'json'
 module Prometheus
   class << self
     def services
-      %w(
-        prometheus
-        node-exporter
-        redis-exporter
-        postgres-exporter
-        gitlab-monitor
-      )
+      Services.find_by_group('prometheus').map { |name, _| name.tr('_', '-') }
     end
 
     def parse_variables
       parse_exporter_enabled
+      parse_monitoring_enabled
       parse_scrape_configs
       parse_flags
+    end
+
+    def parse_monitoring_enabled
+      # Disabled monitoring if it has been explicitly set to false
+      Services.disable_group('prometheus', include_system: true) if Gitlab['prometheus_monitoring']['enable'] == false
     end
 
     def parse_exporter_enabled

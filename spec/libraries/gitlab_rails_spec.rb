@@ -11,11 +11,12 @@ describe GitlabRails do
   context 'when a service role is activated' do
     before do
       stub_gitlab_rb(redis_master_role: { enable: true })
+      allow(Services).to receive(:disable_group).and_call_original
     end
 
     it 'disables other services' do
-      expect(GitlabRails).to receive(:disable_services_roles)
-      expect(GitlabRails).to receive(:disable_gitlab_rails_services)
+      expect(GitlabRails).to receive(:disable_services_roles).and_call_original
+      expect(Services).to receive(:disable_group).with('rails')
 
       chef_run
     end

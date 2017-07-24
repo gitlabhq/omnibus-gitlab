@@ -6,7 +6,7 @@ describe 'gitlab-ee::geo-secondary' do
   end
 
   describe 'when geo-postgresql is disabled' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
     before { stub_gitlab_rb(geo_postgresql: { enable: false }) }
 
