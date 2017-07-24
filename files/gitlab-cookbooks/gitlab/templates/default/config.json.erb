@@ -33,7 +33,12 @@
         "EnableUserTypingMessages" : <%= @service_enable_user_typing_messages %>,
         "EnableLinkPreviews" : <%= @service_enable_link_previews %>,
         "EnablePostSearch" : <%= @service_enable_post_search %>,
-        "EnableUserStatuses" : <%= @service_enable_post_search %>
+        "EnableUserStatuses" : <%= @service_enable_post_search %>,
+        "EnableEmojiPicker" : <%= @service_enable_emoji_picker %>,
+        "EnableChannelViewedMessages" : <%= @service_enable_channel_viewed_messages %>,
+        "TeammateNameDisplay" : "<%= @service_teammate_name_display %>",
+        "EnableAPIv3" : <%= @service_enable_apiv3 %>,
+        "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -55,7 +60,8 @@
         "MaxOpenConns": <%= @sql_max_open_conns %>,
         "Trace": <%= @sql_trace %>,
         "AtRestEncryptKey": "<%= @sql_at_rest_encrypt_key %>",
-        "DataSourceSearchReplicas": <%= @sql_data_source_search_replicas %>
+        "DataSourceSearchReplicas": <%= @sql_data_source_search_replicas %>,
+        "QueryTimeout" : <%= @sql_query_timeout %>
     },
     "LogSettings": {
         "EnableConsole": <%= @log_console_enable %>,
@@ -73,12 +79,6 @@
         "Directory": "<%= @file_directory %>",
         "EnablePublicLink": <%= @file_enable_public_link %>,
         "PublicLinkSalt": "<%= @file_public_link_salt %>",
-        "ThumbnailWidth": <%= @file_thumbnail_width %>,
-        "ThumbnailHeight": <%= @file_thumbnail_height %>,
-        "PreviewWidth": <%= @file_preview_width %>,
-        "PreviewHeight": <%= @file_preview_height %>,
-        "ProfileWidth": <%= @file_profile_width %>,
-        "ProfileHeight": <%= @file_profile_height %>,
         "InitialFont": "<%= @file_initial_font %>",
         "AmazonS3AccessKeyId": "<%= @file_amazon_s3_access_key_id %>",
         "AmazonS3SecretAccessKey": "<%= @file_amazon_s3_secret_access_key %>",
@@ -89,6 +89,7 @@
         "AmazonS3LocationConstraint": <%= @file_amazon_s3_location_constraint %>,
         "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>,
         "AmazonS3SSL": <%= @file_amazon_s3_ssl %>,
+        "AmazonS3SignV2" : <%= @file_amazon_s3_sign_v2 %>,
         "EnableFileAttachments": <%= @file_enable_file_attachments %>
     },
     "EmailSettings": {
