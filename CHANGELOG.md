@@ -31,6 +31,7 @@ omnibus-gitlab repository.
 - Render Gitaly token authentication settings
 - Update Mattermost to 4.0.1
 - Drop GitProbe settings from gitlab-monitor
+- Move registry internal key population to gitlab-rails recipe 683bdcfb
 
 9.3.8
 
