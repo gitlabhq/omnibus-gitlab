@@ -18,6 +18,7 @@ require 'chef_helper'
 describe 'gitlab-ee::pgbouncer' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
   let(:pgbouncer_ini) { '/var/opt/gitlab/pgbouncer/pgbouncer.ini' }
+  let(:databases_ini) { '/var/opt/gitlab/pgbouncer/databases.ini' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -81,8 +82,8 @@ describe 'gitlab-ee::pgbouncer' do
         expect(content).to match(%r{^auth_file = /var/opt/gitlab/pgbouncer/pg_auth$})
         expect(content).to match(/^admin_users = gitlab-psql, postgres, pgbouncer$/)
         expect(content).to match(/^stats_users = gitlab-psql, postgres, pgbouncer$/)
-        expect(content).to match(/^gitlabhq_production = host=1\.2\.3\.4 port=5432 dbname=gitlabhq_production auth_user=pgbouncer$/)
         expect(content).to match(/^ignore_startup_parameters = extra_float_digits$/)
+        expect(content).to match(%r{^%include /var/opt/gitlab/pgbouncer/databases.ini})
       }
     end
 
@@ -133,7 +134,7 @@ describe 'gitlab-ee::pgbouncer' do
         }
       }
     )
-    expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
+    expect(chef_run).to render_file(databases_ini).with_content { |content|
       expect(content).to match(%r{^first = host=1\.2\.3\.4 port=6432 dbname=first auth_user=first_user$})
       expect(content).to match(%r{^second = host=5\.6\.7\.8 port=7432 dbname=second auth_user=second_user$})
     }
@@ -158,7 +159,7 @@ describe 'gitlab-ee::pgbouncer' do
         }
       }
     )
-    expect(chef_run).to render_file(pgbouncer_ini)
+    expect(chef_run).to render_file(databases_ini)
       .with_content(/^gitlabhq_production = host=127\.0\.0\.1 port=5432 dbname=gitlabhq_production auth_user=fakeuser$/)
     expect(chef_run).to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
       .with_content(%r{^"fakeuser" "md5fakemd5password"$})
