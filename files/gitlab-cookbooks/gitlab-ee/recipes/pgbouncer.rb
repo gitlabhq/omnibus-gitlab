@@ -41,10 +41,12 @@ runit_service 'pgbouncer' do
   )
 end
 
-template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
-  source "pgbouncer.ini.erb"
-  variables node['gitlab']['pgbouncer'].to_hash
-  notifies :run, 'execute[reload pgbouncer]', :immediately
+%w(pgbouncer databases).each do |fn|
+  template "#{node['gitlab']['pgbouncer']['data_directory']}/#{fn}.ini" do
+    source "#{fn}.ini.erb"
+    variables node['gitlab']['pgbouncer'].to_hash
+    notifies :run, 'execute[reload pgbouncer]', :immediately
+  end
 end
 
 execute 'reload pgbouncer' do

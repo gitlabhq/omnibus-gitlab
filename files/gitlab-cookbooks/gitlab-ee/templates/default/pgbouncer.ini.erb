@@ -4,10 +4,6 @@
 ;;   dbname= host= port= user= password=
 ;;   client_encoding= datestyle= timezone=
 ;;   pool_size= connect_query=
-[databases]
-<% @databases.each do |db, settings| %>
-<%= db %> = host=<%= settings['host'] %> port=<%= settings['port'] %> dbname=<%= db %> auth_user=<%= settings['user'] %>
-<% end %>
 ; foodb over unix socket
 ;foodb =
 
@@ -341,3 +337,4 @@ dns_nxdomain_ttl = <%= @dns_nxdomain_ttl %>
 
 ;; Read additional config from the /etc/pgbouncer/pgbouncer-other.ini file
 ;%include /etc/pgbouncer/pgbouncer-other.ini
+%include <%= @data_directory %>/databases.ini
