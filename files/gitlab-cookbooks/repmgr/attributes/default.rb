@@ -1,3 +1,4 @@
+default['repmgr']['enable'] = false
 default['repmgr']['cluster'] = 'gitlab_cluster'
 default['repmgr']['database'] = 'gitlab_repmgr'
 default['repmgr']['failover'] = 'automatic'

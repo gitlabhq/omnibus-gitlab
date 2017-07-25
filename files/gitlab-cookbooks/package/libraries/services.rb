@@ -47,6 +47,7 @@ module Services
     service 'sentinel',         groups: ['redis']
     service 'geo_postgresql',   groups: ['postgres']
     service 'pgbouncer',        groups: ['postgres']
+    service 'repmgr',           groups: ['postgres']
     service 'sidekiq_cluster',  groups: ['sidekiq']
   end
 end
