@@ -1,0 +1,4 @@
+[databases]
+<% @databases.each do |db, settings| %>
+<%= db %> = host=<%= settings['host'] %> port=<%= settings['port'] %> dbname=<%= db %> auth_user=<%= settings['user'] %>
+<% end %>
