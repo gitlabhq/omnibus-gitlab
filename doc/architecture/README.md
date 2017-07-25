@@ -78,6 +78,10 @@ Of all the libraries used in Omnibus-GitLab, there are some special ones: the pr
 GitLab uses [runit](http://smarden.org/runit/) recipes for the purpose of service management and supervision. Runit recipes do the job of identifying the init system used by the OS and perform basic service management tasks like creating necessary service files for GitLab, service enabling, service reloading, etc. Runit provides `runit_service` definitions that can be used by other recipes to interact with services.
 (/files/gitlab-cookbook/runit)
 
+### Services
+
+Services are software processes that we run using the Runit process init/supervisor. You are able to check their status, start, stop, and restart them using the gitlab-ctl commands. Recipes may also disable or enable these services based on their process group and the settings/roles that have been configured for the instance of gitlab. The list of services and the service groups associated with them can be found in [files/gitlab-cookbooks/package/libraries/services.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/package/libraries/services.rb).
+
 ## Additional gitlab-ctl commands
 
 Omnibus, by default, provides some wrapper commands like `gitlab-ctl reconfigure`, `gitlab-ctl restart`, etc.to manage the GitLab instance. There are some additional wrapper commands that targets some specific use-cases defined in the Omnibus-GitLab repository. These commands get used with the general `gitlab-ctl` command to perform certain actions like running database migrations or removing dormant accounts and similar not-so-common tasks.
