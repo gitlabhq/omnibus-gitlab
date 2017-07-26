@@ -124,7 +124,9 @@ build do
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
 
-  bundle 'exec rake gitlab:assets:compile', env: assets_compile_env
+  # Up the default timeout from 10min to 4hrs for this command so it has the
+  # opportunity to complete on the pi
+  bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
