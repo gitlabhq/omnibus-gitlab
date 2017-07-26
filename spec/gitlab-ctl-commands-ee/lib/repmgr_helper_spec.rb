@@ -7,7 +7,15 @@ require 'repmgr'
 describe RepmgrHelper do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
   let(:shellout) do
-    double('shellout', error!: nil, stdout: 'xxxx', run_command: nil)
+    double('shellout', error!: nil, stdout: 'xxxx', stderr: 'yyyy', run_command: nil)
+  end
+
+  let(:shellout_args) do
+    {
+      user: 'gitlab-psql',
+      cwd: '/tmp',
+      timeout: 604800
+    }
   end
 
   before do
@@ -19,8 +27,7 @@ describe RepmgrHelper do
       it 'calls repmgr with the correct arguments' do
         expect(Mixlib::ShellOut).to receive(:new).with(
           "#{repmgr_base_cmd} -h ahost -U auser -d adatabase -D /a/directory standby follow",
-          user: 'gitlab-psql',
-          cwd: '/tmp'
+          shellout_args
         )
         args = {
           primary: 'ahost',
@@ -36,8 +43,7 @@ describe RepmgrHelper do
       it 'calls clone with the correct arguments' do
         expect(Mixlib::ShellOut).to receive(:new).with(
           "#{repmgr_base_cmd} -h ahost -U auser -d adatabase -D /a/directory standby clone",
-          user: 'gitlab-psql',
-          cwd: '/tmp'
+          shellout_args
         )
         args = {
           primary: 'ahost',
@@ -54,8 +60,7 @@ describe RepmgrHelper do
       it 'calls register with the correct arguments' do
         expect(Mixlib::ShellOut).to receive(:new).with(
           "#{repmgr_base_cmd} standby register",
-          user: 'gitlab-psql',
-          cwd: '/tmp'
+          shellout_args
         )
         described_class.send(:register, {})
       end
@@ -65,8 +70,7 @@ describe RepmgrHelper do
       it 'unregisters the current host if no node is specified' do
         expect(Mixlib::ShellOut).to receive(:new).with(
           "#{repmgr_base_cmd} standby unregister",
-          user: 'gitlab-psql',
-          cwd: '/tmp'
+          shellout_args
         )
         described_class.send(:unregister, {})
       end
@@ -74,8 +78,7 @@ describe RepmgrHelper do
       it 'removes a different host if node is specified' do
         expect(Mixlib::ShellOut).to receive(:new).with(
           "#{repmgr_base_cmd} standby unregister --node=1234",
-          user: 'gitlab-psql',
-          cwd: '/tmp'
+          shellout_args
         )
         described_class.send(:unregister, {}, 1234)
       end
@@ -86,7 +89,8 @@ describe RepmgrHelper do
     context '#show' do
       it 'should call the correct command' do
         expect(Mixlib::ShellOut).to receive(:new).with(
-          "#{repmgr_base_cmd} cluster show", user: 'gitlab-psql', cwd: '/tmp'
+          "#{repmgr_base_cmd} cluster show",
+          shellout_args
         )
         described_class.send(:show, {})
       end
@@ -96,7 +100,10 @@ describe RepmgrHelper do
   describe RepmgrHelper::Master do
     context '#register' do
       it 'should register the master node' do
-        expect(Mixlib::ShellOut).to receive(:new).with("#{repmgr_base_cmd} master register", user: 'gitlab-psql', cwd: '/tmp')
+        expect(Mixlib::ShellOut).to receive(:new).with(
+          "#{repmgr_base_cmd} master register",
+          shellout_args
+        )
         described_class.send(:register, {})
       end
     end

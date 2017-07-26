@@ -21,19 +21,29 @@ class RepmgrHelper
       end
 
       def cmd(command, user = 'root')
-        results = Mixlib::ShellOut.new(command, user: user, cwd: '/tmp')
+        results = Mixlib::ShellOut.new(
+          command,
+          user: user,
+          cwd: '/tmp',
+          # Allow a week before timing out.
+          timeout: 604800
+        )
         begin
           results.run_command
           results.error!
         rescue Mixlib::ShellOut::ShellCommandFailed
-          puts "Error running command: #{results.command}"
-          puts "STDOUT: #{results.stdout}" if results.stdout
-          puts "STDERR: #{results.stderr}" if results.stderr
+          $stderr.puts "Error running command: #{results.command}"
+          $stderr.puts "ERROR: #{results.stderr}" unless results.stderr.empty?
+          raise
+        rescue Mixlib::ShellOut::CommandTimeout
+          $stderr.puts "Timeout running command: #{results.command}"
           raise
         rescue StandardError => se
           puts "Unknown Error: #{se}"
         end
-        results.stdout
+        # repmgr logs most output to stderr by default
+        return results.stdout unless results.stdout.empty?
+        results.stderr
       end
 
       def repmgr_with_args(command, args)

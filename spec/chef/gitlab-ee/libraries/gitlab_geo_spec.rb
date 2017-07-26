@@ -16,6 +16,12 @@ describe GitlabGeo do
       ChefSpec::SoloRunner.converge('gitlab::config', 'gitlab-ee::default')
     end
 
+    context 'in geo_logcursor settings' do
+      it 'is not enabled' do
+        expect(node['gitlab']['geo-logcursor']['enable']).to eq(nil)
+      end
+    end
+
     context 'in postgres settings' do
       let(:config_attrs) { node['gitlab']['postgresql'] }
 
@@ -56,6 +62,12 @@ describe GitlabGeo do
     context 'in geo_postgres settings' do
       it 'is enabled' do
         expect(node['gitlab']['geo-postgresql']['enable']).to eq(true)
+      end
+    end
+
+    context 'in geo_logcursor settings' do
+      it 'is enabled' do
+        expect(node['gitlab']['geo-logcursor']['enable']).to eq(true)
       end
     end
 
