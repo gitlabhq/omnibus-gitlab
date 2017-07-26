@@ -322,7 +322,7 @@ describe Build do
   describe 'latest_tag' do
     describe 'for CE' do
       before do
-        stub_env_var('ee', '')
+        stub_is_ee(false)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ce.0')
       end
 
@@ -333,8 +333,8 @@ describe Build do
 
     describe 'for EE' do
       before do
-        stub_env_var('ee', 'false')
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
+        stub_is_ee(true)
+        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
       end
 
       it 'returns the version of correct edition' do
@@ -346,7 +346,7 @@ describe Build do
   describe 'latest_stable_tag' do
     describe 'for CE' do
       before do
-        stub_env_var('ee', '')
+        stub_is_ee(nil)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ce.0')
       end
 
@@ -357,7 +357,7 @@ describe Build do
 
     describe 'for EE' do
       before do
-        stub_env_var('ee', 'true')
+        stub_is_ee(true)
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ee.0')
       end
 
