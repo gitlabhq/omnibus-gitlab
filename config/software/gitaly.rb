@@ -23,8 +23,31 @@ default_version version.print
 license 'MIT'
 license_file 'LICENSE'
 
+dependency 'ruby'
+dependency 'bundler'
+dependency 'libicu'
+
 source git: version.remote
 
 build do
-  make "install PREFIX=#{install_dir}/embedded"
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  ruby_build_dir = "#{Omnibus::Config.source_dir}/gitaly/ruby"
+  # Temporary check until gitaly-ruby is in a proper release
+  if File.exist?(ruby_build_dir)
+    bundle 'config build.rugged --no-use-system-libraries', env: env, cwd: ruby_build_dir
+    bundle 'install', env: env, cwd: ruby_build_dir
+    touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
+
+    ruby_install_dir = "#{install_dir}/embedded/service/gitaly-ruby"
+    command "mkdir -p #{ruby_install_dir}"
+    sync './ruby/', "#{ruby_install_dir}/", exclude: ['.git', '.gitignore', 'spec', 'features']
+    %w(
+      LICENSE
+      NOTICE
+      VERSION
+    ).each { |f| copy(f, ruby_install_dir) }
+  end
+
+  make "install PREFIX=#{install_dir}/embedded", env: env
 end
