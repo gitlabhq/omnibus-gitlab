@@ -59,11 +59,7 @@ class Build
     end
 
     def docker_tag
-      if ENV['NIGHTLY'] == 'true'
-        'nightly'
-      else
-        release_version
-      end
+      release_version.tr('+', '-')
     end
 
     def add_latest_tag?
@@ -72,6 +68,10 @@ class Build
 
     def add_rc_tag?
       match_tag(latest_tag)
+    end
+
+    def add_nightly_tag?
+      ENV['NIGHTLY'] == 'true'
     end
 
     def write_release_file

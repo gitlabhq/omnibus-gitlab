@@ -100,11 +100,49 @@ describe Build do
     it 'returns package version when regular build' do
       expect(described_class.docker_tag).to eq('12.121.12-ce.1')
     end
+  end
 
-    describe 'with nightly build' do
-      it 'returns build version and iteration with env variable' do
+  describe 'add tag methods' do
+    describe 'add_nightly_tag?' do
+      it 'returns true if it is a nightly build' do
         stub_env_var('NIGHTLY', 'true')
-        expect(described_class.docker_tag).to eq('nightly')
+        expect(described_class.add_nightly_tag?).to be_truthy
+      end
+
+      it 'returns false if it is not a nightly build' do
+        expect(described_class.add_nightly_tag?).to be_falsey
+      end
+    end
+
+    describe 'add_rc_tag?' do
+      it 'returns true if it is an rc release' do
+        # This will be the case if latest_tag is eg. 9.3.0+rc6.ce.0
+        # or 9.3.0+ce.0
+        allow(described_class).to receive(:latest_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
+        allow(described_class).to receive(:match_tag).and_return(true)
+        expect(described_class.add_rc_tag?).to be_truthy
+      end
+
+      it 'returns true if it is not an rc release' do
+        allow(described_class).to receive(:latest_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
+        allow(described_class).to receive(:match_tag).and_return(false)
+        expect(described_class.add_rc_tag?).to be_falsey
+      end
+    end
+
+    describe 'add_latest_tag?' do
+      it 'returns true if it is a stable release' do
+        # This will be the case if latest_tag is eg. 9.3.0+ce.0
+        # It will not be the case if the tag is 9.3.0+rc6.ce.0
+        allow(described_class).to receive(:latest_stable_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
+        allow(described_class).to receive(:match_tag).and_return(true)
+        expect(described_class.add_latest_tag?).to be_truthy
+      end
+
+      it 'returns true if it is not a stable release' do
+        allow(described_class).to receive(:latest_stable_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
+        allow(described_class).to receive(:match_tag).and_return(false)
+        expect(described_class.add_latest_tag?).to be_falsey
       end
     end
   end
@@ -229,18 +267,5 @@ describe Build do
         expect(described_class.latest_stable_tag).to eq('12.121.12+ee.0')
       end
     end
-  end
-
-  def stub_is_ee_version(value)
-    allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
-  end
-
-  def stub_is_ee_env(value)
-    stub_env_var('ee', value.nil? ? '' : value.to_s)
-  end
-
-  def stub_is_ee(value)
-    stub_is_ee_version(value)
-    stub_is_ee_env(value)
   end
 end
