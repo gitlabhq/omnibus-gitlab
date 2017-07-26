@@ -37,8 +37,6 @@ module Services
     service 'mailroom'
     service 'gitlab_pages'
     service 'mattermost'
-    service 'mattermost_nginx'
-    service 'pages_nginx'
     service 'registry'
   end
 
