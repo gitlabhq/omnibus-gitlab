@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Bump openssl to 1.0.2l 04ae64d7
 
+9.4.2
+
+- Update LDAP SSL config: Rename method to encryption. Add ca_cert, ssl_version and verify_certificates
+
 9.4.1
 
 - Expose new Mattermost config options that went into 4.0.1
