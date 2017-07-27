@@ -7,10 +7,14 @@ stages:
   - post-test
   - package
   - notification_fail
+  - staging_upload
+  - release
   - images
+  - docker_release
   - notification_fail
   - qa-image
   - raspbian
+  - raspbian_release
   - notification_fail
 
 variables:
@@ -35,7 +39,7 @@ before_script:
         && git add Gemfile.lock
         && git commit -m "Updating Gemfile.lock" ;
     fi
-  - if [ -n "$NIGHTLY" ] ; then export NIGHTLY_REPO=nightly-builds ;fi
+  - if [ -n "$NIGHTLY" ] ; then export STAGING_REPO=nightly-builds ;fi
 
 rubocop:
   stage: check
@@ -150,8 +154,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make test
@@ -172,8 +174,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
@@ -195,8 +195,6 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
     - make do_release
@@ -217,11 +215,9 @@ update-knapsack:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target RASPBERRY_REPO=raspberry-pi2)
-    - echo $PACKAGECLOUD_REPO
     - make populate_cache
     - make restore_cache_bundle
-    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_rpi2_release;fi
+    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_release;fi
     - make pack_cache_bundle
   tags:
   - docker-rpi-builder
@@ -233,7 +229,7 @@ update-knapsack:
       - pkg/
   dependencies: []
 
-Docker master:
+Docker branch:
   stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
@@ -244,7 +240,10 @@ Docker master:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_master
+  - export RELEASE_BUCKET=omnibus-builds
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
   dependencies:
@@ -261,7 +260,9 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - make do_docker_release
+  - export RELEASE_BUCKET=downloads-packages
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies:
@@ -338,6 +339,7 @@ QA Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
+  dependencies: []
 
 QA Tag:
   stage: qa-image
@@ -355,6 +357,7 @@ QA Tag:
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
+  dependencies: []
 
 # GitLab.com only
 Ubuntu 14.04 specs 0 3:
@@ -580,18 +583,18 @@ Debian 8:
     - cache
     - gems
   <<: *tag_build
-Centos 6:
+CentOS 6:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_6-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "Centos 6 branch"
+    key: "CentOS 6 branch"
     paths:
     - cache
     - gems
   <<: *tag_build
-Centos 7:
+CentOS 7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "Centos 7 branch"
+    key: "CentOS 7 branch"
     paths:
     - cache
     - gems
@@ -605,19 +608,30 @@ OpenSUSE 42.1:
     - gems
   <<: *tag_build
 SLES 12:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
+    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
-  allow_failure: true
-  tags:
-  - sles-12-0.0.1
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
 
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
@@ -676,19 +690,30 @@ OpenSUSE 42.1 branch:
     - gems
   <<: *branch_build
 SLES 12 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
+    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
   only:
     - branches@gitlab/omnibus-gitlab
-  allow_failure: true
-  tags:
-  - sles-12-0.0.1
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
@@ -739,3 +764,141 @@ trigger_docs:
     - master@gitlab-org/omnibus-gitlab
   except:
     - triggers
+
+Docker Release:
+  stage: docker_release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+  - docker:dind
+  script:
+    - bundle exec rake docker:pull:staging
+    - bundle exec rake docker:push:stable
+    - bundle exec rake docker:push:rc
+    - bundle exec rake docker:push:latest
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  when: manual
+
+# This stage is used for uploading packages
+# 1. To a staging package repository
+# 2. Only ran on dev.gitlab.org
+.staging_upload_template: &staging_upload
+  stage: staging_upload
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+  artifacts:
+    expire_in: 14 days
+    paths:
+      - pkg/
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+
+
+# This stage is ran only on tag:
+# 1. It is a manual action
+# 2. It will upload the package to public, user facing repositories
+# 3. Only ran on dev.gitlab.org
+.production_release_template: &production_release
+  stage: release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - bundle exec rake repository:upload:production
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+
+# Staging
+Ubuntu 14.04 staging:
+  dependencies:
+    - Ubuntu 14.04
+    - Ubuntu 14.04 branch
+  <<: *staging_upload
+Ubuntu 16.04 staging:
+  dependencies:
+    - Ubuntu 16.04
+    - Ubuntu 16.04 branch
+  <<: *staging_upload
+Debian 7 staging:
+  dependencies:
+    - Debian 7
+    - Debian 7 branch
+  <<: *staging_upload
+Debian 8 staging:
+  dependencies:
+    - Debian 8
+    - Debian 8 branch
+  <<: *staging_upload
+CentOS 6 staging:
+  dependencies:
+    - CentOS 6
+    - CentOS 6 branch
+  <<: *staging_upload
+CentOS 7 staging:
+  dependencies:
+    - CentOS 7
+    - CentOS 7 branch
+  <<: *staging_upload
+OpenSUSE 42.1 staging:
+  dependencies:
+    - OpenSUSE 42.1
+    - OpenSUSE 42.1 branch
+  <<: *staging_upload
+SLES 12 staging:
+  dependencies:
+    - SLES 12
+    - SLES 12 branch
+  allow_failure: true
+  <<: *staging_upload
+
+# Release
+Ubuntu 14.04 release:
+  dependencies:
+    - Ubuntu 14.04 staging
+  <<: *production_release
+Ubuntu 16.04 release:
+  dependencies:
+    - Ubuntu 16.04 staging
+  <<: *production_release
+Debian 7 release:
+  dependencies:
+    - Debian 7 staging
+  <<: *production_release
+Debian 8 release:
+  dependencies:
+    - Debian 8 staging
+  <<: *production_release
+CentOS 6 release:
+  dependencies:
+    - CentOS 6 staging
+  <<: *production_release
+CentOS 7 release:
+  dependencies:
+    - CentOS 7 staging
+  <<: *production_release
+OpenSUSE 42.1 release:
+  dependencies:
+    - OpenSUSE 42.1 staging
+  <<: *production_release
+SLES 12 release:
+  dependencies:
+    - SLES 12 staging
+  allow_failure: true
+  <<: *production_release
+Raspberry Pi 2 Jessie release:
+  stage: raspbian_release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+  dependencies:
+    - Raspberry Pi 2 Jessie
