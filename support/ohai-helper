@@ -1,19 +1,53 @@
 #!/usr/bin/env ruby
 require 'ohai'
 
-# This prints something like 'ubuntu-12.04'; used by our legacy AWS uploads
+# This prints something like 'ubuntu-xenial'
 def platform_dir
-  puts "#{ohai['platform']}-#{ohai['platform_version']}"
+  os, codename = fetch_os_with_codename
+
+  puts "#{os}-#{codename}"
 end
 
-# This prints something like 'ubuntu/precise'; used for packagecloud uploads
+# This prints something like 'ubuntu/xenial'; used for packagecloud uploads
 def repo_string
-  os = :unknown
+  os, codename = fetch_os_with_codename
+
+  puts "#{os}/#{codename}"
+end
+
+def fetch_os_with_codename
+  os = os_platform
+  version = os_platform_version
+
+  if (os == :unknown) || (version == :unknown)
+    abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}"
+  end
+
+  [os, version]
+end
+
+def os_platform
+  case ohai['platform']
+  when 'ubuntu'
+    'ubuntu'
+  when 'debian', 'raspbian'
+    verify_platform
+  when 'centos'
+    'el'
+  when 'opensuse', 'opensuseleap'
+    'opensuse'
+  when 'suse'
+    'sles'
+  else
+    :unknown
+  end
+end
+
+def os_platform_version
   version = :unknown
 
   case ohai['platform']
   when 'ubuntu'
-    os = 'ubuntu'
     case ohai['platform_version']
     when /^12\.04/
       version = 'precise'
@@ -23,7 +57,6 @@ def repo_string
       version = 'xenial'
     end
   when 'debian', 'raspbian'
-    os = verify_platform
     case ohai['platform_version']
     when /^7\./
       version = 'wheezy'
@@ -31,7 +64,6 @@ def repo_string
       version = 'jessie'
     end
   when 'centos'
-    os = 'el'
     case ohai['platform_version']
     when /^6\./
       version = '6'
@@ -39,10 +71,8 @@ def repo_string
       version = '7'
     end
   when 'opensuse', 'opensuseleap'
-    os = 'opensuse'
     version = ohai['platform_version']
   when 'suse'
-    os = 'sles'
     case ohai['platform_version']
     when /^12\./
       version = '12.2'
@@ -51,11 +81,7 @@ def repo_string
     end
   end
 
-  if os == :unknown or version == :unknown
-    abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}"
-  end
-
-  puts "#{os}/#{version}"
+  version
 end
 
 def ohai
