@@ -643,19 +643,30 @@ OpenSUSE 42.1:
     - gems
   <<: *tag_build
 SLES 12:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
+    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
-  allow_failure: true
-  tags:
-  - sles-12-0.0.1
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+
 
 Ubuntu 14.04 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_14.04-${BUILDER_IMAGE_REVISION}"
@@ -722,19 +733,30 @@ OpenSUSE 42.1 branch:
     - gems
   <<: *branch_build
 SLES 12 branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
+    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
   only:
     - branches@gitlab/omnibus-gitlab
-  allow_failure: true
-  tags:
-  - sles-12-0.0.1
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
