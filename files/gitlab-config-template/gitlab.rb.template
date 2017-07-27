@@ -177,9 +177,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     host: '_your_ldap_server'
 #     port: 389
 #     uid: 'sAMAccountName'
-#     method: 'plain' # "tls" or "ssl" or "plain"
 #     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
 #     password: '_the_password_of_the_bind_user'
+#     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
+#     verify_certificates: true
+#     ca_cert: ''
+#     ssl_version: ''
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     block_auto_created_users: false
@@ -201,9 +204,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     host: '_your_ldap_server'
 #     port: 389
 #     uid: 'sAMAccountName'
-#     method: 'plain' # "tls" or "ssl" or "plain"
 #     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
 #     password: '_the_password_of_the_bind_user'
+#     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
+#     verify_certificates: true
+#     ca_cert: ''
+#     ssl_version: ''
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     block_auto_created_users: false
@@ -1040,6 +1046,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_user_typing_messages'] = true
 # mattermost['service_enable_post_search'] = true
 # mattermost['service_enable_user_statuses'] = true
+# mattermost['service_enable_emoji_picker'] = true
+# mattermost['service_enable_channel_viewed_messages'] = true
+# mattermost['service_teammate_name_display'] = "username"
+# mattermost['service_enable_apiv3'] = true
+# mattermost['service_goroutine_health_threshold'] = -1
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -1061,6 +1072,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['sql_max_open_conns'] = 10
 # mattermost['sql_trace'] = false
 # mattermost['sql_data_source_search_replicas'] = []
+# mattermost['sql_query_timeout'] = 30
+
 
 # mattermost['log_file_directory'] = '/var/log/gitlab/mattermost'
 # mattermost['log_console_enable'] = true
@@ -1105,12 +1118,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['file_driver_name'] = "local"
 # mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
 # mattermost['file_enable_public_link'] = true
-# mattermost['file_thumbnail_width'] = 120
-# mattermost['file_thumbnail_height'] = 100
-# mattermost['file_preview_width'] = 1024
-# mattermost['file_preview_height'] = 0
-# mattermost['file_profile_width'] = 128
-# mattermost['file_profile_height'] = 128
 # mattermost['file_initial_font'] = 'luximbi.ttf'
 # mattermost['file_amazon_s3_access_key_id'] = nil
 # mattermost['file_amazon_s3_bucket'] = nil
@@ -1121,6 +1128,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost["file_amazon_s3_location_constraint"] = false
 # mattermost["file_amazon_s3_lowercase_bucket"] = false
 # mattermost["file_amazon_s3_ssl"] = true
+# mattermost["file_amazon_s3_sign_v2"] = false
 # mattermost['file_enable_file_attachments'] = true
 
 # mattermost['ratelimit_enable_rate_limiter'] = false
