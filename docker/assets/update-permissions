@@ -11,7 +11,7 @@ chown_if_exists()
 	# the last argument of chown is the file or path
 	path="${@:${#@}}"
 	if [ -e "$path" ]; then
-		echo chown $@
+		chown $@
 	else
 		echo "skipping, path does not exist: $path"
 	fi
