@@ -20,6 +20,8 @@ version = Gitlab::Version.new('gitaly')
 name 'gitaly'
 default_version version.print
 
+dependency 'libicu'
+
 license 'MIT'
 license_file 'LICENSE'
 
