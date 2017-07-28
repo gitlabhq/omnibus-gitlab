@@ -46,19 +46,22 @@ describe 'aws:process', type: :rake do
   end
 
   it 'should identify ce category correctly, if specified' do
-    allow(File).to receive(:read).with('VERSION').and_return('8.16.4-ce')
+    allow(Build).to receive(:edition).and_return('ce')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
     expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Community Edition/).to_stdout
   end
 
   it 'should identify ce category correctly if nothing is specified' do
-    allow(File).to receive(:read).with('VERSION').and_return('8.16.4')
+    allow(Build).to receive(:edition).and_return(nil)
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
     expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Community Edition/).to_stdout
   end
 
   it 'should identify ee category correctly' do
-    allow(File).to receive(:read).with('VERSION').and_return('1.0.0-ee')
+    allow(Build).to receive(:edition).and_return('ee')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
     expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Enterprise Edition/).to_stdout
   end
@@ -70,20 +73,24 @@ describe 'aws:process', type: :rake do
   # end
 
   it 'should call packer with necessary arguments' do
-    allow(File).to receive(:read).with('VERSION').and_return('8.16.4-ce')
+    allow(Build).to receive(:edition).and_return('ce')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('8.16.4')
+    allow(Build).to receive(:is_ee?).and_return(false)
+    allow(Build).to receive(:match_tag).and_return(true)
 
     expect_any_instance_of(Kernel).to receive(:system).with("support/packer/packer_ami.sh 8.16.4 ce")
     expect { Rake::Task['aws:process'].invoke }.to output(/No greater version exists. Creating AMI/).to_stdout
   end
 
   it 'should identify existing greater versioned AMIs' do
-    allow(File).to receive(:read).with('VERSION').and_return('8.16.4-ee')
+    allow(Build).to receive(:edition).and_return('ee')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('8.16.4')
 
     expect { Rake::Task['aws:process'].invoke }.to output(/Greater version already exists. Skipping/).to_stdout
   end
 
   it 'should not build cloud image for RC versions' do
-    allow(File).to receive(:read).with('VERSION').and_return('8.16.4-rc1-ee')
-    expect { Rake::Task['aws:process'].invoke }.to output(/RC version found. Not building AWS image./).to_stdout
+    allow(Build).to receive(:match_tag).and_return(false)
+    expect(Kernel).not_to receive(:system)
   end
 end

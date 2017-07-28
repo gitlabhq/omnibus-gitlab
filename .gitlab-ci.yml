@@ -98,10 +98,10 @@ variables:
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
-    - make populate_cache
-    - make restore_cache_bundle
-    - make test
-    - make pack_cache_bundle
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake build:project build:package:sync
+    - bundle exec rake cache:bundle
   tags:
   - docker-builder
   only:
@@ -126,10 +126,10 @@ variables:
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
-    - make populate_cache
-    - make restore_cache_bundle
-    - if ./support/is_gitlab_ee.sh; then exit 0; else make test;fi
-    - make pack_cache_bundle
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake build:project build:package:sync ;fi
+    - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
   only:
@@ -150,10 +150,10 @@ variables:
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
-    - make populate_cache
-    - make restore_cache_bundle
-    - make do_release
-    - make pack_cache_bundle
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake release:package
+    - bundle exec rake cache:bundle
   tags:
   - docker-builder
   only:
@@ -173,10 +173,10 @@ variables:
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
-    - make populate_cache
-    - make restore_cache_bundle
-    - if ./support/is_gitlab_ee.sh; then exit 0; else make do_release;fi
-    - make pack_cache_bundle
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake release:package ;fi
+    - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
   only:
@@ -297,7 +297,7 @@ Trigger:package:
   <<: *dedicated-runner
   stage: trigger-package
   script:
-    - make test_no_sync
+    - bundle exec rake build:project
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
   only:
@@ -322,7 +322,8 @@ Trigger:docker:
     # either CE or EE repository. In that case, we can use the GITLAB_VERSION
     # variable as IMAGE_TAG.
     - if [ -z "${IMAGE_TAG}" ] ; then export IMAGE_TAG=${GITLAB_VERSION} ;  fi
-    - make docker_trigger_build_and_push
+    - bundle exec rake docker:build:image
+    - bundle exec rake docker:push:triggered
   only:
     - triggers@gitlab-org/omnibus-gitlab
 
@@ -340,7 +341,7 @@ Trigger:qa:
     - chmod -R 0600 ~/.ssh/
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
     - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
-    - bundle exec rake trigger:qa
+    - bundle exec rake qa:test
   only:
     - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
@@ -594,7 +595,7 @@ SLES 12:
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
-    - if ./support/is_gitlab_ee.sh; then make do_release; else exit 0;fi
+    - if ./support/is_gitlab_ee.sh; then bundle exec rake release:package ; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
@@ -618,7 +619,6 @@ Docker:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=downloads-packages
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   only:
@@ -632,7 +632,7 @@ AWS:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
   - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
   - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - make aws
+  - bundle exec rake aws:process
   allow_failure: true
   tags:
   - docker-builder
@@ -652,11 +652,7 @@ QA Tag:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
-    - bundle exec rake docker:build:qa
-    - bundle exec rake docker:push:qa:stable
-    - bundle exec rake docker:push:qa:nightly
-    - bundle exec rake docker:push:qa:rc
-    - bundle exec rake docker:push:qa:latest
+    - bundle exec rake release:qa
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
@@ -709,7 +705,7 @@ SLES 12 branch:
     - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
-    - if ./support/is_gitlab_ee.sh; then make test; else exit 0;fi
+    - if ./support/is_gitlab_ee.sh; then bundle exec rake build:project build:package:sync ; else exit 0;fi
   only:
     - branches@gitlab/omnibus-gitlab
   cache:
@@ -733,7 +729,6 @@ Docker branch:
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
-  - export RELEASE_BUCKET=omnibus-builds
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   - bundle exec rake docker:push:nightly
@@ -753,9 +748,9 @@ QA Master:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
-    - bundle exec rake docker:build:qa
-    - bundle exec rake docker:push:qa:stable
-    - bundle exec rake docker:push:qa:nightly
+    - bundle exec rake qa:build
+    - bundle exec rake qa:push:stable
+    - bundle exec rake qa:push:nightly
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
@@ -892,10 +887,7 @@ Docker Release:
   services:
   - docker:dind
   script:
-    - bundle exec rake docker:pull:staging
-    - bundle exec rake docker:push:stable
-    - bundle exec rake docker:push:rc
-    - bundle exec rake docker:push:latest
+    - bundle exec rake release:docker
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
