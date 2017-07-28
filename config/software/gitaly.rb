@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 version = Gitlab::Version.new('gitaly')
 
 name 'gitaly'
-default_version version.print
+default_version '0ffed4e45f9ced7aec0d15187432d85d68295f7d'
 
 license 'MIT'
 license_file 'LICENSE'
