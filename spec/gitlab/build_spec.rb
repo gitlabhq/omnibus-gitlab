@@ -191,7 +191,7 @@ describe Build do
       end
 
       describe 'with regular build' do
-        let(:s3_download_link) { 'https://release-bucket.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_12.121.12-ce.1_amd64.deb' }
+        let(:s3_download_link) { 'https://downloads-packages.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_12.121.12-ce.1_amd64.deb' }
 
         let(:release_file) do
           [
@@ -205,7 +205,7 @@ describe Build do
           stub_env_var('TRIGGER_PRIVATE_TOKEN', '')
           stub_env_var('CI_PROJECT_ID', '')
           stub_env_var('CI_PIPELINE_ID', '')
-          stub_env_var('RELEASE_BUCKET', 'release-bucket')
+          allow(described_class).to receive(:on_tag?).and_return(true)
           allow(described_class).to receive(:package).and_return('gitlab-ee')
           allow(described_class).to receive(:release_version).and_return('12.121.12-ce.1')
         end

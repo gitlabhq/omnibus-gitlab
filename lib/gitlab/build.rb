@@ -78,6 +78,14 @@ class Build
       ENV['NIGHTLY'] == 'true'
     end
 
+    def no_changes?
+      system("git diff --quiet")
+    end
+
+    def on_tag?
+      system("git describe --exact-match")
+    end
+
     def write_release_file
       contents = release_file_contents
       File.write('docker/RELEASE', contents)
@@ -138,8 +146,35 @@ class Build
     def tag_triggered_qa
       # For triggered builds, we need the QA image's tag to match the docker
       # tag. So, we are retagging the image.
-      edition = package.gsub("gitlab-", "").strip # 'ee' or 'ce'
       DockerOperations.tag("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{edition}-latest", "#{edition}-#{ENV['IMAGE_TAG']}") if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+    end
+
+    def edition
+      package.gsub("gitlab-", "").strip # 'ee' or 'ce'
+    end
+
+    def get_release_bucket
+      # Tag builds are releases and they get pushed to a specific S3 bucket
+      # whereas regular branch builds use a separate one
+      on_tag? ? "downloads-packages" : "omnibus-builds"
+    end
+
+    def authenticate(user = ENV['DOCKERHUB_USERNAME'], token = ENV['DOCKERHUB_PASSWORD'], registry = "")
+      DockerOperations.authenticate(user, token, registry)
+    end
+
+    def push_to_dockerhub(final_tag, type = "gitlab")
+      # Create different tags and push to dockerhub
+      if type == "qa"
+        DockerOperations.tag_and_push("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{edition}-latest", final_tag)
+      else
+        DockerOperations.tag_and_push(image_name, "gitlab/#{package}", docker_tag, final_tag)
+      end
+      puts "Pushed tag: #{final_tag}"
+    end
+
+    def image_name
+      "#{ENV['CI_REGISTRY_IMAGE']}/#{package}"
     end
 
     private
@@ -180,8 +215,7 @@ class Build
 
     # Fetch the package from an S3 bucket
     def package_download_url
-      release_bucket = ENV['RELEASE_BUCKET']
-      return unless release_bucket
+      release_bucket = get_release_bucket
 
       package_filename_url_safe = release_version.gsub("+", "%2B")
       "https://#{release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{package}_#{package_filename_url_safe}_amd64.deb"
