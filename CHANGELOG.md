@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Bump openssl to 1.0.2l 04ae64d7
 
+9.4.3
+
+- Fix LDAP SSL config: Use ca_file, not ca_cert.
+
 9.4.2
 
 - Update LDAP SSL config: Rename method to encryption. Add ca_cert, ssl_version and verify_certificates
