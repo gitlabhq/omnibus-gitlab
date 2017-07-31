@@ -433,6 +433,22 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Dinahosting
+
+```ruby
+gitlab_rails['gitlab_email_from'] = 'username@example.com'
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "example-com.correoseguro.dinaserver.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username-example-com"
+gitlab_rails['smtp_password'] = "mypassword"
+gitlab_rails['smtp_domain'] = "example-com.correoseguro.dinaserver.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
