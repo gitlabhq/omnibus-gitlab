@@ -11,6 +11,8 @@ omnibus-gitlab repository.
 9.4.3
 
 - Fix LDAP SSL config: Use ca_file, not ca_cert.
+- Fix Mattermost setting teammate_name_display not working.
+  * Renamed mattermost['service_teammate_name_display'] to mattermost['team_teammate_name_display'] ad3a4f58
 
 9.4.3
 
