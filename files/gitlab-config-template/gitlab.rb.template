@@ -181,7 +181,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
-#     ca_cert: ''
+#     ca_file: ''
 #     ssl_version: ''
 #     active_directory: true
 #     allow_username_or_email_login: false
@@ -208,7 +208,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
-#     ca_cert: ''
+#     ca_file: ''
 #     ssl_version: ''
 #     active_directory: true
 #     allow_username_or_email_login: false
