@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.5.0
 
 - Bump openssl to 1.0.2l 04ae64d7
+- Build and configure gitaly-ruby
 
 9.4.3
 
