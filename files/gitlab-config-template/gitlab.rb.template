@@ -669,6 +669,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
 # postgresql['autovacuum_vacuum_cost_limit'] = "-1"
 # postgresql['statement_timeout'] = "60000"
+# postgresql['idle_in_transaction_session_timeout'] = "60000"
 # postgresql['log_line_prefix'] = "%a"
 
 ### Available in PostgreSQL 9.6 and later

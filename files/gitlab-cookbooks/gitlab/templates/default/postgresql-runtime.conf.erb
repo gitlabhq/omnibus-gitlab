@@ -109,6 +109,10 @@ autovacuum_vacuum_cost_limit = <%= @autovacuum_vacuum_cost_limit %> # default va
 # - Client connection timeouts
 statement_timeout = <%= @statement_timeout %>
 
+<% unless pg_helper.database_version == '9.2' %>
+idle_in_transaction_session_timeout = <%= @idle_in_transaction_session_timeout %>
+<% end %>
+
 # - Locale and Formatting -
 datestyle = 'iso, mdy'
 
