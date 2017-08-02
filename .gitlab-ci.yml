@@ -96,8 +96,8 @@ variables:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
     - bundle exec rake build:project build:package:sync
@@ -124,8 +124,8 @@ variables:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
     - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake build:project build:package:sync ;fi
@@ -148,8 +148,8 @@ variables:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
     - bundle exec rake release:package
@@ -171,8 +171,8 @@ variables:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
     - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake release:package ;fi
@@ -591,8 +591,8 @@ SLES 12:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then bundle exec rake release:package ; else exit 0;fi
@@ -701,8 +701,8 @@ SLES 12 branch:
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/rpm_signing.gpg .
-    - gpg --batch --no-tty --allow-secret-key-import --import rpm_signing.gpg
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-secrets/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
     - if ./support/is_gitlab_ee.sh; then bundle exec rake build:project build:package:sync ; else exit 0;fi
