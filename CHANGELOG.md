@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.4.5
+
+- Fix Mattermost setting teammate_name_display not working.
+  * Renamed mattermost['service_teammate_name_display'] to mattermost['team_teammate_name_display'] ad3a4f58
+
 9.4.4
 
 - Upgrade Git version to 2.13.5

@@ -1048,7 +1048,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_user_statuses'] = true
 # mattermost['service_enable_emoji_picker'] = true
 # mattermost['service_enable_channel_viewed_messages'] = true
-# mattermost['service_teammate_name_display'] = "username"
 # mattermost['service_enable_apiv3'] = true
 # mattermost['service_goroutine_health_threshold'] = -1
 
@@ -1064,6 +1063,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_restrict_direct_message'] = "any"
 # mattermost['team_max_channels_per_team'] = 2000
 # mattermost['team_user_status_away_timeout'] = 300
+# mattermost['team_teammate_name_display'] = "full_name"
 
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"
