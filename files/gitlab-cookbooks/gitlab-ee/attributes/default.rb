@@ -97,6 +97,7 @@ default['gitlab']['geo-postgresql']['autovacuum_freeze_max_age'] = '200000000'
 default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_delay'] = '20ms'
 default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_limit'] = '-1'
 default['gitlab']['geo-postgresql']['statement_timeout'] = '60000'
+default['gitlab']['geo-postgresql']['idle_in_transaction_session_timeout'] = '60000'
 default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
 default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
 

@@ -330,6 +330,14 @@ describe 'postgresql 9.6' do
           runtime_conf
         ).with_content(/log_checkpoints = off/)
       end
+
+      it 'sets idle_in_transaction_session_timeout' do
+        expect(chef_run.node['gitlab']['postgresql']['idle_in_transaction_session_timeout'])
+          .to eq('60000')
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/idle_in_transaction_session_timeout = 60000/)
+      end
     end
 
     it 'notifies reload postgresql when postgresql.conf changes' do
