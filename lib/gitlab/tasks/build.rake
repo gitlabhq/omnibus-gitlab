@@ -1,5 +1,6 @@
 require 'fileutils'
 require_relative "../build.rb"
+require_relative "../build/info.rb"
 require_relative "../ohai_helper.rb"
 
 namespace :build do
@@ -13,12 +14,12 @@ namespace :build do
   namespace :docker do
     desc 'Show latest available tag. Includes unstable releases.'
     task :latest_tag do
-      puts Build.latest_tag
+      puts Build::Info.latest_tag
     end
 
     desc 'Show latest stable tag.'
     task :latest_stable_tag do
-      puts Build.latest_stable_tag
+      puts Build::Info.latest_stable_tag
     end
   end
 
@@ -33,7 +34,7 @@ namespace :build do
 
     desc "Sync packages to aws"
     task :sync do
-      release_bucket = Build.get_release_bucket
+      release_bucket = Build::Info.release_bucket
       release_bucket_region = "eu-west-1"
       system("aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}")
       files = Dir.glob('pkg/**/*').select { |f| File.file? f }

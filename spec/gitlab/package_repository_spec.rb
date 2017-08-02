@@ -73,7 +73,7 @@ describe PackageRepository do
 
       context 'when EE' do
         before do
-          allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
+          allow(Build::Check).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
         end
 
         it 'prints gitlab-ee' do
@@ -86,7 +86,7 @@ describe PackageRepository do
 
       context 'when CE' do
         before do
-          allow(Build).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
+          allow(Build::Check).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
         end
 
         it 'prints gitlab-ce' do
