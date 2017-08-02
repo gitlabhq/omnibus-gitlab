@@ -1,4 +1,4 @@
-require_relative 'build.rb'
+require_relative 'build/info.rb'
 
 class PackageRepository
   def target
@@ -11,7 +11,7 @@ class PackageRepository
     if rc_repository
       rc_repository
     else
-      Build.package
+      Build::Info.package
     end
   end
 

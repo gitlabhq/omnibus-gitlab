@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
@@ -54,11 +55,7 @@ install_dir     '/opt/gitlab'
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1007
 #
 # Also check lib/gitlab/build.rb for Docker version forming
-if ENV['NIGHTLY'] && ENV['CI_PIPELINE_ID']
-  build_version "#{Omnibus::BuildVersion.new.semver}.#{ENV['CI_PIPELINE_ID']}"
-else
-  build_version Omnibus::BuildVersion.new.semver
-end
+build_version Build::Info.semver_version
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 # Openssh needs to be installed

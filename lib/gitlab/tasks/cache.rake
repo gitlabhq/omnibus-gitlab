@@ -1,5 +1,4 @@
 require 'fileutils'
-require_relative "../build.rb"
 require_relative "../ohai_helper.rb"
 
 namespace :cache do
