@@ -23,9 +23,12 @@ module Gitlab
   class ConfigMash < Mash
     def self.auto_vivify
       return unless block_given?
-      @auto_vivify = true
-      yield
-      @auto_vivify = false
+      begin
+        @auto_vivify = true
+        yield
+      ensure
+        @auto_vivify = false
+      end
     end
 
     def self.auto_vivify?
