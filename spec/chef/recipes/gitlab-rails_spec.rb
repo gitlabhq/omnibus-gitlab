@@ -151,16 +151,22 @@ describe 'gitlab::gitlab-rails' do
         }
         JSON
 
-        stub_gitlab_rb(gitlab_rails: { artifacts: {
-                         object_store_enabled: true,
-                         object_store_remote_directory: 'mepmep',
-                         object_store_connection: json
-                       } })
+        stub_gitlab_rb(gitlab_rails: {
+                         artifacts_object_store_enabled: true,
+                         artifacts_object_store_remote_directory: 'mepmep',
+                         artifacts_object_store_connection: json
+                       })
 
         expect(chef_run).to render_file(gitlab_yml_path)
             .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+'mepmep'/)
         expect(chef_run).to render_file(gitlab_yml_path)
           .with_content(/connection:\s"{\\n  'provider' => 'AWS'/)
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/'region' => 'eu-west-1'/)
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/'aws_access_key_id' => 'AKIAKIAKI'/)
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/'aws_secret_access_key' => 'secret123'/)
       end
     end
 
