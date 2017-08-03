@@ -113,3 +113,11 @@ their applicability:
  6. Changelog entry to inform about the change, if necessary.
 
 **`Note:`** CI jobs that run the tests are restricted to the [original omnibus-gitlab repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and hence, they will not be run on its forks. Contributors who develop on their own forks should configure the CI jobs (refer `.gitlab-ci.yml` file for details) themselves.
+
+### Unofficial packaging point of contact
+
+The omnibus-gitlab project is a project used for building official GitLab packages.
+There are multiple community driven projects for packaging, such as [GitLab CE unofficial Debian 9](https://packages.debian.org/stretch/gitlab) package.
+
+If you are a maintainer or point of contact for a such project, and you require
+assistance or just want to talk about GitLab, please raise [an issue in the omnibus-gitlab project](https://gitlab.com/gitlab-org/omnibus-gitlab/issues).
