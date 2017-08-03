@@ -107,7 +107,7 @@ Primary key fingerprint: DBEF 8977 4DDB 9EB3 7D9F  C3A0 3CFC F9BA F27E AB47
 
 #### Configuring debsigs
 
-Configuring a policy and keyring for `debsigs` can be complicated, so GitLab provides [gitlab-debsigs](debsigs) as scripted method of configuration.
+Configuring a policy and keyring for `debsigs` can be complicated, so GitLab provides [gitlab-debsigs][debsigs] as scripted method of configuration.
 
 To use this script, you will need to download the public key and the script.
 ```

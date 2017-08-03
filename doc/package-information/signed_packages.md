@@ -11,7 +11,7 @@ All packages are signed with [GnuPG](https://www.gnupg.org/), in a method approp
 
 ## Verifying Signatures
 
-Information on how to verify GitLab package signatures can be found in [Package Signatures](../update/package_signatures.md) under [Updating GitLab via omnibus-gitlab](../update/)
+Information on how to verify GitLab package signatures can be found in [Package Signatures](../update/package_signatures.md) under [Updating GitLab via omnibus-gitlab](../update/README.md)
 
 
 [packages]: https://packages.gitlab.com
