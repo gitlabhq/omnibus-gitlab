@@ -25,7 +25,6 @@
 # place in the cookbook where we write 'gitlab_rails'.
 
 require 'mixlib/config'
-require 'chef/mash'
 require 'chef/json_compat'
 require 'chef/mixin/deep_merge'
 require 'securerandom'
@@ -47,36 +46,6 @@ require_relative 'prometheus.rb'
 
 module Gitlab
   extend(Mixlib::Config)
-
-  class ConfigMash < Mash
-    class << self
-      attr_writer :auto_vivify
-
-      def auto_vivify
-        @auto_vivify || false
-      end
-    end
-
-    def [](key)
-      value = super
-      if ConfigMash.auto_vivify && !key?(key)
-        value = self.class.new({})
-        self[key] = value
-      else
-        value
-      end
-    end
-
-    def convert_value(value)
-      if value.class == ConfigMash
-        value
-      elsif value.class == Hash
-        ConfigMash.new(value)
-      else
-        super
-      end
-    end
-  end
 
   bootstrap ConfigMash.new
   omnibus_gitconfig ConfigMash.new
@@ -150,11 +119,9 @@ module Gitlab
   ].freeze
 
   class << self
-
     def from_file(_file_path)
-      ConfigMash.auto_vivify = true
-      super
-      ConfigMash.auto_vivify = false
+      # Allow auto mash creation during from_file call
+      ConfigMash.auto_vivify { super }
     end
 
     def method_missing(method_name, *arguments)

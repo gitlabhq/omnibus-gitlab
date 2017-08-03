@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.5.0
 
 - Bump openssl to 1.0.2l 04ae64d7
+- Allow deeply nested configuration settings in gitlab.rb
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 
