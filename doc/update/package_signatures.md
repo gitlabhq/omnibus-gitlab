@@ -18,8 +18,7 @@ the public key, or `package gpg-pubkey-f27eab47 is not installed`. If the key is
 not present, perform the following steps:
 
 ```
-curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
-rpm --import gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
+rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
 ```
 
 ### Enable Automatic Verification
