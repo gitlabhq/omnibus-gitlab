@@ -18,7 +18,7 @@ the public key, or `package gpg-pubkey-f27eab47 is not installed`. If the key is
 not present, perform the following steps:
 
 ```
-rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
+rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
 
 ### Enable Automatic Verification
@@ -35,7 +35,7 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
    Edit `/etc/yum.repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
    ```
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
-           https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-331E7725DC169E52.pub.gpg
+           https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `yum` to refresh the cache for the repository
@@ -53,7 +53,7 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
    Edit `/etc/zypp/repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
    ```
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
-           https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-331E7725DC169E52.pub.gpg
+           https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `zypper` to refresh the repository and import the keys
@@ -79,8 +79,8 @@ The `debsig-verify` package has a [slew of dependencies](https://packages.debian
 
 1. Download and import the package signing public key
    ```
-   $ curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
-   $ gpg --import gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
+   $ curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+   $ gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Extract the signature file (`_gpgorigin`)
@@ -110,10 +110,10 @@ Configuring a policy and keyring for `debsigs` can be complicated, so GitLab pro
 
 To use this script, you will need to download the public key and the script.
 ```
-curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
+curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 curl -JLO https://gitlab.com/gitlab-org/gitlab-debsigs/raw/master/gitlab-debsigs.sh
 chmod +x gitlab-debsigs.sh
-sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3CFCF9BAF27EAB47.pub.gpg
+sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
 
 
