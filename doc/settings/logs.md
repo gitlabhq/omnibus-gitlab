@@ -82,8 +82,6 @@ logrotate['enable'] = false
 
 ### UDP log forwarding
 
-> Available in [GitLab Enterprise Edition Starter][ee].
-
 In case you have a central server where all your infra logs are gathered,
 you can configure Omnibus GitLab to send syslog-ish log messages via UDP:
 
