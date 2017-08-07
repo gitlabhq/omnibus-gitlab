@@ -7,17 +7,14 @@ stages:
   - tests
   - post-test
   - package
-  - notification_fail
   - staging_upload
   - release
   - images
-  - notification_fail
   - docker_release
   - qa-image
-  - notification_fail
   - raspbian
-  - notification_fail
   - raspbian_release
+  - notification_fail
 
 variables:
   BUILDER_IMAGE_REVISION: "0.0.6"
@@ -771,7 +768,7 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_COMMIT_REF_NAME\`, stage \`$CI_JOB_STAGE\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+    - ./support/notify_slack.sh "#omnibus-builds" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
   only:
     - master
