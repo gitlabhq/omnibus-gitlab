@@ -16,12 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'open3'
+
 if File.exist?('/.dockerenv')
   Chef::Log.warn "Skipped selecting an init system because it looks like we are running in a container"
-elsif system('/sbin/init --version | grep upstart')
+elsif Open3.capture3('/sbin/init --version | grep upstart')[2].success?
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
   include_recipe "runit::upstart"
-elsif system('systemctl | grep "\-\.mount"')
+elsif Open3.capture3('systemctl | grep "\-\.mount"')[2].success?
   Chef::Log.warn "Selected systemd because systemctl shows .mount units"
   include_recipe "runit::systemd"
 else
