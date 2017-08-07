@@ -1,3 +1,7 @@
+---
+toc: false
+---
+
 # Omnibus GitLab documentation
 
 Omnibus is a way to package different services and tools required to run GitLab, so that most users can install it without laborious configuration.
