@@ -42,7 +42,7 @@ module Postgresql
         end
 
         better_value_from_gitlab_rb = Gitlab[right.first][right.last]
-        default_from_attributes = Gitlab['node']['gitlab'][right.first.gsub('_', '-')][right.last]
+        default_from_attributes = Gitlab['node']['gitlab'][left.first.gsub('_', '-')][left.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
       end
     end
@@ -85,7 +85,7 @@ module Postgresql
     end
 
     def postgresql_managed?
-      Gitlab['postgresql']['enable'].nil? ? Gitlab['node']['gitlab']['postgresql']['enable'] : Gitlab['postgresql']['enable']
+      Services.enabled?('postgresql')
     end
   end
 end
