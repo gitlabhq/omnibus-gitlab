@@ -159,7 +159,7 @@ mattermost['email_feedback_email'] = "email@example.com"
 Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
 
 ```ruby
-mattermost['service_site_url'] = 'https://mattermost.example.com:443'
+mattermost['service_site_url'] = 'https://mattermost.example.com'
 mattermost['email_enable_batching'] = true
 ```
 
