@@ -12,14 +12,16 @@ format. There are two methods of verification.
 ### Verify GitLab public key is present
 
 To verify a package on an RPM based distribution, we'll need to ensure
-that the GitLab, Inc. public key is present in the `rpm` tool's keychain. When
-run, `rpm -qa gpg-pubkey-f27eab47` will produce either the information on
+that the GitLab, Inc. public key is present in the `rpm` tool's keychain.
+
+Run `rpm -q gpg-pubkey-f27eab47-5980fed7 --qf '%{name}-%{version}-%{release} --> %{summary}\n'`. This will produce either the information on
 the public key, or `package gpg-pubkey-f27eab47 is not installed`. If the key is
 not present, perform the following steps:
 
 ```
 rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
+
 ### Verify if signature check is active
 
 The simplest method of checking if package signature checking is active on an existing install is to compare the content of the repository file in use.
