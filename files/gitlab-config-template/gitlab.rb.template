@@ -901,6 +901,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['logrotate_postrotate'] = nil # no postrotate command by default
 # logging['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
 
+### UDP log forwarding
+##! Docs: http://docs.gitlab.com/omnibus/settings/logs.html#udp-log-forwarding
+
+##! remote host to ship log messages to via UDP
+# logging['udp_log_shipping_host'] = nil
+
+##! remote port to ship log messages to via UDP
+# logging['udp_log_shipping_port'] = 514
+
 ################################################################################
 ## Logrotate
 ##! Docs: https://docs.gitlab.com/omnibus/settings/logs.html#logrotate
@@ -1431,17 +1440,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##!   the slaves will be reconfigured by the Sentinels anyway, but not with
 ##!   the exact parallel-syncs progression as specified.
 # sentinel['failover_timeout'] = 60000
-
-################################################################################
-## Logging (Additional, EE Only features)
-##! Docs: http://docs.gitlab.com/omnibus/settings/logs.html#udp-log-shipping-gitlab-enterprise-edition-only-
-################################################################################
-
-##! remote host to ship log messages to via UDP
-# logging['udp_log_shipping_host'] = nil
-
-##! remote port to ship log messages to via UDP
-# logging['udp_log_shipping_port'] = 514
 
 ################################################################################
 ## GitLab Sidekiq Cluster (EE only)

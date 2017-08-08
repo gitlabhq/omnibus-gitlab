@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Bump openssl to 1.0.2l 04ae64d7
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
+- UDP log shipping as part of CE
 
 9.4.3
 
