@@ -36,11 +36,11 @@ end
 
 shared_examples 'enabled mattermost env' do |env_var, content|
   it 'created env directory' do
-    expect(chef_run).to create_directory("/opt/gitlab/etc/mattermost/env")
+    expect(chef_run).to create_directory("/var/opt/gitlab/mattermost/env")
   end
 
   it "does create the #{env_var} file" do
-    expect(chef_run).to create_file("/opt/gitlab/etc/mattermost/env/#{env_var}").with_content(
+    expect(chef_run).to create_file("/var/opt/gitlab/mattermost/env/#{env_var}").with_content(
       /#{content}/
     )
   end
