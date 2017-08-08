@@ -179,7 +179,7 @@ index 01e8642..9768293 100644
 @@ -80,4 +80,11 @@ Fixes since v2.9.3
     the file descriptor still open.  Open tempfile with O_CLOEXEC flag
     to avoid this (on Windows, this is mapped to O_NOINHERIT).
- 
+
 + * "git-shell" rejects a request to serve a repository whose name
 +   begins with a dash, which makes it no longer possible to get it
 +   confused into spawning service programs like "git-upload-pack" with
@@ -195,7 +195,7 @@ index 21fdddf..cbae7a6 100644
 @@ -2436,7 +2436,7 @@ rebase.missingCommitsCheck::
  	command in the todo-list.
  	Defaults to "ignore".
- 
+
 -rebase.instructionFormat
 +rebase.instructionFormat::
  	A format string, as specified in linkgit:git-log[1], to be used for
@@ -208,14 +208,14 @@ index 6526b17..44892c4 100644
 @@ -60,10 +60,10 @@ merge.summary::
  EXAMPLE
  -------
- 
+
 ---
 +---------
  $ git fetch origin master
  $ git fmt-merge-msg --log <$GIT_DIR/FETCH_HEAD
 ---
 +---------
- 
+
  Print a log message describing a merge of the "master" branch from
  the "origin" remote.
 diff --git a/Documentation/git-worktree.txt b/Documentation/git-worktree.txt
@@ -229,7 +229,7 @@ index 0aeb020..e257c19 100644
 -you only have to working trees at "/abc/def/ghi" and "/abc/def/ggg",
 +you only have two working trees, at "/abc/def/ghi" and "/abc/def/ggg",
  then "ghi" or "def/ghi" is enough to point to the former working tree.
- 
+
  DETAILS
 diff --git a/Documentation/git.txt b/Documentation/git.txt
 index ed717e4..89157e2 100644
@@ -238,29 +238,29 @@ index ed717e4..89157e2 100644
 @@ -43,41 +43,47 @@ unreleased) version of Git, that is available from the 'master'
  branch of the `git.git` repository.
  Documentation for older releases are available here:
- 
+
 -* link:v2.10.2/git.html[documentation for release 2.10.2]
 +* link:v2.10.3/git.html[documentation for release 2.10.3]
- 
+
  * release notes for
 +  link:RelNotes/2.10.3.txt[2.10.3],
    link:RelNotes/2.10.2.txt[2.10.2],
    link:RelNotes/2.10.1.txt[2.10.1],
    link:RelNotes/2.10.0.txt[2.10].
- 
+
 -* link:v2.9.3/git.html[documentation for release 2.9.3]
 +* link:v2.9.4/git.html[documentation for release 2.9.4]
- 
+
  * release notes for
 +  link:RelNotes/2.9.4.txt[2.9.4],
    link:RelNotes/2.9.3.txt[2.9.3],
    link:RelNotes/2.9.2.txt[2.9.2],
    link:RelNotes/2.9.1.txt[2.9.1],
    link:RelNotes/2.9.0.txt[2.9].
- 
+
 -* link:v2.8.4/git.html[documentation for release 2.8.4]
 +* link:v2.8.5/git.html[documentation for release 2.8.5]
- 
+
  * release notes for
 +  link:RelNotes/2.8.5.txt[2.8.5],
    link:RelNotes/2.8.4.txt[2.8.4],
@@ -268,10 +268,10 @@ index ed717e4..89157e2 100644
    link:RelNotes/2.8.2.txt[2.8.2],
    link:RelNotes/2.8.1.txt[2.8.1],
    link:RelNotes/2.8.0.txt[2.8].
- 
+
 -* link:v2.7.3/git.html[documentation for release 2.7.3]
 +* link:v2.7.5/git.html[documentation for release 2.7.5]
- 
+
  * release notes for
 +  link:RelNotes/2.7.5.txt[2.7.5],
 +  link:RelNotes/2.7.4.txt[2.7.4],
@@ -279,10 +279,10 @@ index ed717e4..89157e2 100644
    link:RelNotes/2.7.2.txt[2.7.2],
    link:RelNotes/2.7.1.txt[2.7.1],
    link:RelNotes/2.7.0.txt[2.7].
- 
+
 -* link:v2.6.6/git.html[documentation for release 2.6.6]
 +* link:v2.6.7/git.html[documentation for release 2.6.7]
- 
+
  * release notes for
 +  link:RelNotes/2.6.7.txt[2.6.7],
    link:RelNotes/2.6.6.txt[2.6.6],
@@ -291,10 +291,10 @@ index ed717e4..89157e2 100644
 @@ -86,9 +92,10 @@ Documentation for older releases are available here:
    link:RelNotes/2.6.1.txt[2.6.1],
    link:RelNotes/2.6.0.txt[2.6].
- 
+
 -* link:v2.5.5/git.html[documentation for release 2.5.5]
 +* link:v2.5.6/git.html[documentation for release 2.5.6]
- 
+
  * release notes for
 +  link:RelNotes/2.5.6.txt[2.5.6],
    link:RelNotes/2.5.5.txt[2.5.5],
@@ -303,10 +303,10 @@ index ed717e4..89157e2 100644
 @@ -96,9 +103,10 @@ Documentation for older releases are available here:
    link:RelNotes/2.5.1.txt[2.5.1],
    link:RelNotes/2.5.0.txt[2.5].
- 
+
 -* link:v2.4.11/git.html[documentation for release 2.4.11]
 +* link:v2.4.12/git.html[documentation for release 2.4.12]
- 
+
  * release notes for
 +  link:RelNotes/2.4.12.txt[2.4.12],
    link:RelNotes/2.4.11.txt[2.4.11],
@@ -322,7 +322,7 @@ index 577ee84..a5f99cb 100644
  	in this directory. This directory is ignored if $GIT_COMMON_DIR
 -	is set and "$GIT_COMMON_DIR/index" will be used instead.
 +	is set and "$GIT_COMMON_DIR/info" will be used instead.
- 
+
  info/refs::
  	This file helps dumb transports discover what refs are
 diff --git a/GIT-VERSION-GEN b/GIT-VERSION-GEN
@@ -331,11 +331,11 @@ index 153c17c..40700d5 100755
 +++ b/GIT-VERSION-GEN
 @@ -1,7 +1,7 @@
  #!/bin/sh
- 
+
  GVF=GIT-VERSION-FILE
 -DEF_VER=v2.10.2
 +DEF_VER=v2.10.3
- 
+
  LF='
  '
 diff --git a/Makefile b/Makefile
@@ -350,15 +350,6 @@ index ddd1bdf..46ad908 100644
  		APPLE_COMMON_CRYPTO = YesPlease
  		COMPAT_CFLAGS += -DAPPLE_COMMON_CRYPTO
  	endif
-diff --git a/RelNotes b/RelNotes
-index c02235f..75030cb 120000
---- a/RelNotes
-+++ b/RelNotes
-@@ -1 +1 @@
--Documentation/RelNotes/2.10.2.txt
-\ No newline at end of file
-+Documentation/RelNotes/2.10.3.txt
-\ No newline at end of file
 diff --git a/branch.c b/branch.c
 index a5a8dcb..0d459b3 100644
 --- a/branch.c
@@ -366,7 +357,7 @@ index a5a8dcb..0d459b3 100644
 @@ -228,8 +228,7 @@ N_("\n"
  "will track its remote counterpart, you may want to use\n"
  "\"git push -u\" to set the upstream config as you push.");
- 
+
 -void create_branch(const char *head,
 -		   const char *name, const char *start_name,
 +void create_branch(const char *name, const char *start_name,
@@ -379,7 +370,7 @@ index b2f9649..3103eb9 100644
 +++ b/branch.h
 @@ -4,15 +4,21 @@
  /* Functions for acting on the information about branches. */
- 
+
  /*
 - * Creates a new branch, where head is the branch currently checked
 - * out, name is the new branch name, start_name is the name of the
@@ -406,7 +397,7 @@ index b2f9649..3103eb9 100644
 +void create_branch(const char *name, const char *start_name,
  		   int force, int reflog,
  		   int clobber_head, int quiet, enum branch_track track);
- 
+
 diff --git a/builtin/am.c b/builtin/am.c
 index 9e2ae5c..9daeb27 100644
 --- a/builtin/am.c
@@ -416,12 +407,12 @@ index 9e2ae5c..9daeb27 100644
  #include "prompt.h"
  #include "mailinfo.h"
 +#include "string-list.h"
- 
+
  /**
   * Returns 1 if the file is empty or does not exist, 0 otherwise.
 @@ -258,38 +259,29 @@ static int read_state_file(struct strbuf *sb, const struct am_state *state,
  }
- 
+
  /**
 - * Reads a KEY=VALUE shell variable assignment from `fp`, returning the VALUE
 - * as a newly-allocated string. VALUE must be a quoted string, and the KEY must
@@ -477,7 +468,7 @@ index 9e2ae5c..9daeb27 100644
 +	}
 +	return 0;
  }
- 
+
  /**
 @@ -311,44 +303,39 @@ static char *read_shell_var(FILE *fp, const char *key)
  static int read_author_script(struct am_state *state)
@@ -488,11 +479,11 @@ index 9e2ae5c..9daeb27 100644
 +	struct string_list kv = STRING_LIST_INIT_DUP;
 +	int retval = -1; /* assume failure */
 +	int fd;
- 
+
  	assert(!state->author_name);
  	assert(!state->author_email);
  	assert(!state->author_date);
- 
+
 -	fp = fopen(filename, "r");
 -	if (!fp) {
 +	fd = open(filename, O_RDONLY);
@@ -505,7 +496,7 @@ index 9e2ae5c..9daeb27 100644
 +	close(fd);
 +	if (parse_key_value_squoted(buf.buf, &kv))
 +		goto finish;
- 
+
 -	state->author_name = read_shell_var(fp, "GIT_AUTHOR_NAME");
 -	if (!state->author_name) {
 -		fclose(fp);
@@ -545,7 +536,7 @@ index 9e2ae5c..9daeb27 100644
 +	strbuf_release(&buf);
 +	return retval;
  }
- 
+
  /**
 diff --git a/builtin/branch.c b/builtin/branch.c
 index 7df0543..6810c3a 100644
@@ -562,12 +553,12 @@ index 7df0543..6810c3a 100644
  		struct strbuf buf = STRBUF_INIT;
 @@ -853,7 +853,7 @@ int cmd_branch(int argc, const char **argv, const char *prefix)
  		strbuf_release(&buf);
- 
+
  		branch_existed = ref_exists(branch->refname);
 -		create_branch(head, argv[0], (argc == 2) ? argv[1] : head,
 +		create_branch(argv[0], (argc == 2) ? argv[1] : head,
  			      force, reflog, 0, quiet, track);
- 
+
  		/*
 diff --git a/builtin/checkout.c b/builtin/checkout.c
 index 32cf317..899bd8d 100644
@@ -611,7 +602,7 @@ index 7a1ade0..63a8424 100644
  		FILE *fp;
  		int allow_fast_forward = 1;
 +		struct commit_list **pptr = &parents;
- 
+
  		if (!reflog_msg)
  			reflog_msg = "commit (merge)";
 -		pptr = &commit_list_insert(current_head, pptr)->next;
@@ -635,28 +626,28 @@ index 7a1ade0..63a8424 100644
 -		pptr = &commit_list_insert(current_head, pptr)->next;
 +		commit_list_insert(current_head, &parents);
  	}
- 
+
  	/* Finally, get the commit message */
 diff --git a/common-main.c b/common-main.c
 index 44a29e8..c654f95 100644
 --- a/common-main.c
 +++ b/common-main.c
 @@ -33,7 +33,7 @@ int main(int argc, const char **argv)
- 
+
  	git_setup_gettext();
- 
+
 -	argv[0] = git_extract_argv0_path(argv[0]);
 +	git_extract_argv0_path(argv[0]);
- 
+
  	restore_sigpipe_to_default();
- 
+
 diff --git a/contrib/coccinelle/object_id.cocci b/contrib/coccinelle/object_id.cocci
 index 0307624..09afdbf 100644
 --- a/contrib/coccinelle/object_id.cocci
 +++ b/contrib/coccinelle/object_id.cocci
 @@ -17,10 +17,13 @@ expression E1;
  + oid_to_hex(&E1)
- 
+
  @@
 +identifier f != oid_to_hex;
  expression E1;
@@ -665,12 +656,12 @@ index 0307624..09afdbf 100644
  - sha1_to_hex(E1->hash)
  + oid_to_hex(E1)
 +  ...}
- 
+
  @@
  expression E1, E2;
 @@ -29,10 +32,13 @@ expression E1, E2;
  + oid_to_hex_r(E1, &E2)
- 
+
  @@
 +identifier f != oid_to_hex_r;
  expression E1, E2;
@@ -679,12 +670,12 @@ index 0307624..09afdbf 100644
  - sha1_to_hex_r(E1, E2->hash)
  + oid_to_hex_r(E1, E2)
 +  ...}
- 
+
  @@
  expression E1;
 @@ -41,10 +47,13 @@ expression E1;
  + oidclr(&E1)
- 
+
  @@
 +identifier f != oidclr;
  expression E1;
@@ -693,12 +684,12 @@ index 0307624..09afdbf 100644
  - hashclr(E1->hash)
  + oidclr(E1)
 +  ...}
- 
+
  @@
  expression E1, E2;
 @@ -53,10 +62,13 @@ expression E1, E2;
  + oidcmp(&E1, &E2)
- 
+
  @@
 +identifier f != oidcmp;
  expression E1, E2;
@@ -707,12 +698,12 @@ index 0307624..09afdbf 100644
  - hashcmp(E1->hash, E2->hash)
  + oidcmp(E1, E2)
 +  ...}
- 
+
  @@
  expression E1, E2;
 @@ -77,10 +89,13 @@ expression E1, E2;
  + oidcpy(&E1, &E2)
- 
+
  @@
 +identifier f != oidcpy;
  expression E1, E2;
@@ -721,7 +712,7 @@ index 0307624..09afdbf 100644
  - hashcpy(E1->hash, E2->hash)
  + oidcpy(E1, E2)
 +  ...}
- 
+
  @@
  expression E1, E2;
 diff --git a/contrib/completion/git-completion.bash b/contrib/completion/git-completion.bash
@@ -766,7 +757,7 @@ index 425aad0..ff0fa58 100644
 +	size_t rlen;
  	const char *path;
  	const char *dir;
- 
+
 @@ -187,8 +188,12 @@ static const char *path_ok(const char *directory, struct hostinfo *hi)
  			namlen = slash - dir;
  			restlen -= namlen;
@@ -783,7 +774,7 @@ index 425aad0..ff0fa58 100644
  		}
  	}
 @@ -207,7 +212,15 @@ static const char *path_ok(const char *directory, struct hostinfo *hi)
- 
+
  		strbuf_expand(&expanded_path, interpolated_path,
  			      expand_path, &context);
 -		strlcpy(interp_path, expanded_path.buf, PATH_MAX);
@@ -798,7 +789,7 @@ index 425aad0..ff0fa58 100644
 +
  		strbuf_release(&expanded_path);
  		loginfo("Interpolated dir '%s'", interp_path);
- 
+
 @@ -219,7 +232,11 @@ static const char *path_ok(const char *directory, struct hostinfo *hi)
  			logerror("'%s': Non-absolute path denied (base-path active)", dir);
  			return NULL;
@@ -811,7 +802,7 @@ index 425aad0..ff0fa58 100644
 +		}
  		dir = rpath;
  	}
- 
+
 diff --git a/diff.c b/diff.c
 index fe6f591..8c78fce 100644
 --- a/diff.c
@@ -830,13 +821,13 @@ index 881a74f..c64359f 100644
 --- a/diffcore-break.c
 +++ b/diffcore-break.c
 @@ -73,7 +73,6 @@ static int should_break(struct diff_filespec *src,
- 
+
  	if (diffcore_count_changes(src, dst,
  				   &src->cnt_data, &dst->cnt_data,
 -				   0,
  				   &src_copied, &literal_added))
  		return 0;
- 
+
 diff --git a/diffcore-delta.c b/diffcore-delta.c
 index 4159748..e2db85a 100644
 --- a/diffcore-delta.c
@@ -859,12 +850,12 @@ index 73d003a..15c014d 100644
  	unsigned long max_size, delta_size, base_size, src_copied, literal_added;
 -	unsigned long delta_limit;
  	int score;
- 
+
  	/* We deal only with regular files.  Symlink renames are handled
 @@ -191,11 +190,8 @@ static int estimate_similarity(struct diff_filespec *src,
  	if (!dst->cnt_data && diff_populate_filespec(dst, 0))
  		return 0;
- 
+
 -	delta_limit = (unsigned long)
 -		(base_size * (MAX_SCORE-minimum_score) / MAX_SCORE);
  	if (diffcore_count_changes(src, dst,
@@ -872,7 +863,7 @@ index 73d003a..15c014d 100644
 -				   delta_limit,
  				   &src_copied, &literal_added))
  		return 0;
- 
+
 diff --git a/diffcore.h b/diffcore.h
 index c11b846..6230241 100644
 --- a/diffcore.h
@@ -884,7 +875,7 @@ index c11b846..6230241 100644
 -				  unsigned long delta_limit,
  				  unsigned long *src_copied,
  				  unsigned long *literal_added);
- 
+
 diff --git a/exec_cmd.c b/exec_cmd.c
 index 9d5703a..19ac214 100644
 --- a/exec_cmd.c
@@ -892,18 +883,18 @@ index 9d5703a..19ac214 100644
 @@ -38,21 +38,17 @@ char *system_path(const char *path)
  	return strbuf_detach(&d, NULL);
  }
- 
+
 -const char *git_extract_argv0_path(const char *argv0)
 +void git_extract_argv0_path(const char *argv0)
  {
  	const char *slash;
- 
+
  	if (!argv0 || !*argv0)
 -		return NULL;
 +		return;
- 
+
  	slash = find_last_dir_sep(argv0);
- 
+
 -	if (slash) {
 +	if (slash)
  		argv0_path = xstrndup(argv0, slash - argv0);
@@ -912,7 +903,7 @@ index 9d5703a..19ac214 100644
 -
 -	return argv0;
  }
- 
+
  void git_set_argv_exec_path(const char *exec_path)
 diff --git a/exec_cmd.h b/exec_cmd.h
 index 1f6b433..ff0b480 100644
@@ -920,7 +911,7 @@ index 1f6b433..ff0b480 100644
 +++ b/exec_cmd.h
 @@ -4,7 +4,7 @@
  struct argv_array;
- 
+
  extern void git_set_argv_exec_path(const char *exec_path);
 -extern const char *git_extract_argv0_path(const char *path);
 +extern void git_extract_argv0_path(const char *path);
@@ -934,7 +925,7 @@ index b4d9c2a..d89a786 100644
 @@ -1090,6 +1090,6 @@ struct tm *git_gmtime_r(const time_t *, struct tm *);
  #define getc_unlocked(fh) getc(fh)
  #endif
- 
+
 -#endif
 -
  extern int cmd_main(int, const char **);
@@ -947,7 +938,7 @@ index a8a4576..240c7eb 100644
 @@ -2,9 +2,6 @@
  # to set up some variables pointing at the normal git directories and
  # a few helper shell functions.
- 
+
 -# Source git-sh-i18n for gettext support.
 -. git-sh-i18n
 -
@@ -955,9 +946,9 @@ index a8a4576..240c7eb 100644
  # you would cause "cd" to be taken to unexpected places.  If you
  # like CDPATH, define it for your interactive shell sessions without
 @@ -46,6 +43,9 @@ git_broken_path_fix () {
- 
+
  # @@BROKEN_PATH_FIX@@
- 
+
 +# Source git-sh-i18n for gettext support.
 +. "$(git --exec-path)/git-sh-i18n"
 +
@@ -977,9 +968,9 @@ index f914490..7acf290 100644
 +		if (slash)
 +			cmd = slash + 1;
 +	}
- 
+
  	trace_command_performance(argv);
- 
+
 diff --git a/hex.c b/hex.c
 index ab2610e..845b01a 100644
 --- a/hex.c
@@ -992,7 +983,7 @@ index ab2610e..845b01a 100644
 +	bufno = (bufno + 1) % ARRAY_SIZE(hexbuffer);
 +	return sha1_to_hex_r(hexbuffer[bufno], sha1);
  }
- 
+
  char *oid_to_hex(const struct object_id *oid)
 diff --git a/path.c b/path.c
 index fe3c4d9..9bfaeda 100644
@@ -1013,9 +1004,9 @@ index ce7e4e8..864123f 100644
 --- a/perl/Git.pm
 +++ b/perl/Git.pm
 @@ -871,6 +871,8 @@ Return an array of mailboxes extracted from a string.
- 
+
  =cut
- 
+
 +# Very close to Mail::Address's parser, but we still have minor
 +# differences in some cases (see t9000 for examples).
  sub parse_mailboxes {
@@ -1026,7 +1017,7 @@ index ce7e4e8..864123f 100644
  	my $re_token = qr/(?:$re_quote|$re_word|$re_comment|\S)/;
  	my @tokens = map { $_ =~ /\s*($re_token)\s*/g } @_;
 +	my $end_of_addr_seen = 0;
- 
+
  	# add a delimiter to simplify treatment for the last mailbox
  	push @tokens, ",";
 @@ -888,10 +891,10 @@ sub parse_mailboxes {
@@ -1041,11 +1032,11 @@ index ce7e4e8..864123f 100644
 +			} else {
 +				push @address, @buffer;
  			}
- 
+
  			my $str_phrase = join ' ', @phrase;
 @@ -915,16 +918,16 @@ sub parse_mailboxes {
  			push @addr_list, $str_mailbox if ($str_mailbox);
- 
+
  			@phrase = @address = @comment = @buffer = ();
 +			$end_of_addr_seen = 0;
  		} elsif ($token =~ /^\(/) {
@@ -1069,7 +1060,7 @@ index 464ee1a..fe2d314 100644
 +++ b/shell.c
 @@ -13,7 +13,7 @@ static int do_generic_cmd(const char *me, char *arg)
  	const char *my_argv[4];
- 
+
  	setup_path();
 -	if (!arg || !(arg = sq_dequote(arg)))
 +	if (!arg || !(arg = sq_dequote(arg)) || *arg == '-')
@@ -1081,7 +1072,7 @@ index 7a6e33e..8f9b48a 100755
 --- a/t/t6026-merge-attr.sh
 +++ b/t/t6026-merge-attr.sh
 @@ -183,16 +183,24 @@ test_expect_success 'up-to-date merge without common ancestor' '
- 
+
  test_expect_success 'custom merge does not lock index' '
  	git reset --hard anchor &&
 -	write_script sleep-one-second.sh <<-\EOF &&
@@ -1091,7 +1082,7 @@ index 7a6e33e..8f9b48a 100755
  		echo $! >sleep.pid
  	EOF
 -	test_when_finished "kill \$(cat sleep.pid)" &&
- 
+
  	test_write_lines >.gitattributes \
 -		"* merge=ours" "text merge=sleep-one-second" &&
 +		"* merge=ours" "text merge=sleep-an-hour" &&
@@ -1109,7 +1100,7 @@ index 7a6e33e..8f9b48a 100755
 +	test_when_finished "kill \$(cat sleep.pid)" &&
  	git merge master
  '
- 
+
 diff --git a/t/t9000/test.pl b/t/t9000/test.pl
 index 2d05d3e..dfeaa9c 100755
 --- a/t/t9000/test.pl
@@ -1123,7 +1114,7 @@ index 2d05d3e..dfeaa9c 100755
 +	q[Jane@:;\.,()<>Doe <jdoe@example.com>],
 +	q[Jane <jdoe@example.com> Doe],
 +	q[<jdoe@example.com> Jane Doe]);
- 
+
  my @known_failure_list = (q[Jane\ Doe <jdoe@example.com>],
  	q["Doe, Ja"ne <jdoe@example.com>],
  	q["Doe, Katarina" Jane <jdoe@example.com>],
@@ -1141,7 +1132,7 @@ index b3355d2..3dc4a34 100755
 @@ -140,6 +140,35 @@ test_expect_success $PREREQ 'Verify commandline' '
  	test_cmp expected commandline1
  '
- 
+
 +test_expect_success $PREREQ 'setup expect for cc trailer' "
 +cat >expected-cc <<\EOF
 +!recipient@example.com!
@@ -1180,7 +1171,7 @@ index 21e4aa2..b021329 100644
 +++ b/t/test-lib.sh
 @@ -809,7 +809,14 @@ then
  		return;
- 
+
  		base=$(basename "$1")
 -		symlink_target=$GIT_BUILD_DIR/$base
 +		case "$base" in
@@ -1200,7 +1191,7 @@ index 4215303..669ebaf 100755
 +++ b/t/valgrind/valgrind.sh
 @@ -1,11 +1,19 @@
  #!/bin/sh
- 
+
  base=$(basename "$0")
 +case "$base" in
 +test-*)
@@ -1210,13 +1201,13 @@ index 4215303..669ebaf 100755
 +	program="$GIT_VALGRIND/../../$base"
 +	;;
 +esac
- 
+
  TOOL_OPTIONS='--leak-check=no'
- 
+
  test -z "$GIT_VALGRIND_ENABLED" &&
 -exec "$GIT_VALGRIND"/../../"$base" "$@"
 +exec "$program" "$@"
- 
+
  case "$GIT_VALGRIND_MODE" in
  memcheck-fast)
 @@ -29,4 +37,4 @@ exec valgrind -q --error-exitcode=126 \
