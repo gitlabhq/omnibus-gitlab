@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+UNRELEASED
+
+- Remove sensitive params from the NGINX access logs 6983fe59
+
 9.5.0
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
 - Bump openssl to 1.0.2l 04ae64d7
