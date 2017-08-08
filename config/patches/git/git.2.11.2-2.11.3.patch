@@ -75,22 +75,13 @@ index d207f15..01d3c71 100755
 +++ b/GIT-VERSION-GEN
 @@ -1,7 +1,7 @@
  #!/bin/sh
- 
+
  GVF=GIT-VERSION-FILE
 -DEF_VER=v2.11.2
 +DEF_VER=v2.11.3
- 
+
  LF='
  '
-diff --git a/RelNotes b/RelNotes
-index 9f01cfb..ff91cb2 120000
---- a/RelNotes
-+++ b/RelNotes
-@@ -1 +1 @@
--Documentation/RelNotes/2.11.2.txt
-\ No newline at end of file
-+Documentation/RelNotes/2.11.3.txt
-\ No newline at end of file
 diff --git a/cache.h b/cache.h
 index 5c035da..aaf5695 100644
 --- a/cache.h
@@ -98,7 +89,7 @@ index 5c035da..aaf5695 100644
 @@ -1108,6 +1108,14 @@ char *strip_path_suffix(const char *path, const char *suffix);
  int daemon_avoid_alias(const char *path);
  extern int is_ntfs_dotgit(const char *name);
- 
+
 +/*
 + * Returns true iff "str" could be confused as a command-line option when
 + * passed to a sub-program like "ssh". Note that this has nothing to do with
@@ -115,9 +106,9 @@ index 8cb93b0..ea316c4 100644
 --- a/connect.c
 +++ b/connect.c
 @@ -577,6 +577,11 @@ static struct child_process *git_proxy_connect(int fd[2], char *host)
- 
+
  	get_host_and_port(&host, &port);
- 
+
 +	if (looks_like_command_line_option(host))
 +		die("strange hostname '%s' blocked", host);
 +	if (looks_like_command_line_option(port))
@@ -129,7 +120,7 @@ index 8cb93b0..ea316c4 100644
 @@ -759,6 +764,9 @@ struct child_process *git_connect(int fd[2], const char *url,
  		conn = xmalloc(sizeof(*conn));
  		child_process_init(conn);
- 
+
 +		if (looks_like_command_line_option(path))
 +			die("strange pathname '%s' blocked", path);
 +
@@ -139,7 +130,7 @@ index 8cb93b0..ea316c4 100644
 @@ -791,6 +799,9 @@ struct child_process *git_connect(int fd[2], const char *url,
  				return NULL;
  			}
- 
+
 +			if (looks_like_command_line_option(ssh_host))
 +				die("strange hostname '%s' blocked", ssh_host);
 +
@@ -153,7 +144,7 @@ index efcedaf..897b341 100644
 @@ -1257,6 +1257,11 @@ int is_ntfs_dotgit(const char *name)
  		}
  }
- 
+
 +int looks_like_command_line_option(const char *str)
 +{
 +	return str && str[0] == '-';
@@ -169,7 +160,7 @@ index 51c9669..9c27986 100755
 @@ -43,4 +43,9 @@ test_expect_success 'fetch through proxy works' '
  	test_cmp expect actual
  '
- 
+
 +test_expect_success 'funny hostnames are rejected before running proxy' '
 +	test_must_fail git fetch git://-remote/repo.git 2>stderr &&
 +	! grep "proxying for" stderr
@@ -183,7 +174,7 @@ index 563592d..c1ef99b 100755
 @@ -11,4 +11,27 @@ test_expect_success 'setup repository to clone' '
  test_proto "file://" file "file://$PWD"
  test_proto "path" file .
- 
+
 +test_expect_success 'setup repo with dash' '
 +	git init --bare repo.git &&
 +	git push repo.git HEAD &&
@@ -215,7 +206,7 @@ index a954ead..3f084ee 100755
 @@ -17,4 +17,27 @@ test_proto "host:path" ssh "remote:repo.git"
  test_proto "ssh://" ssh "ssh://remote$PWD/remote/repo.git"
  test_proto "git+ssh://" ssh "git+ssh://remote$PWD/remote/repo.git"
- 
+
 +# Don't even bother setting up a "-remote" directory, as ssh would generally
 +# complain about the bogus option rather than completing our request. Our
 +# fake wrapper actually _can_ handle this case, but it's more robust to
