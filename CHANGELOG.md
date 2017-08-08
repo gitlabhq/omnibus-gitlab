@@ -4,7 +4,7 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 9.5.0
-
+- Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
 - Bump openssl to 1.0.2l 04ae64d7
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
