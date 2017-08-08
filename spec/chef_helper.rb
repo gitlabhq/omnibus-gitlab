@@ -33,7 +33,7 @@ RSpec.configure do |config|
   config.platform = platform
   config.version = version
 
-  config.cookbook_path = ['spec/chef/fixture/', 'files/gitlab-cookbooks/']
+  config.cookbook_path = ['files/gitlab-cookbooks/']
   config.log_level = :error
 
   config.filter_run focus: true
