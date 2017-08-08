@@ -64,7 +64,7 @@ module Redis
     end
 
     def redis_managed?
-      Gitlab['redis']['enable'].nil? ? node['gitlab']['redis']['enable'] : Gitlab['redis']['enable']
+      Services.enabled?('redis')
     end
 
     private
