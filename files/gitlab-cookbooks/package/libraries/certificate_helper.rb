@@ -98,7 +98,7 @@ class CertificateHelper
   end
 
   def move_certificate(file)
-    return if File.symlink?(file) && File.readlink(file).start_with?(@trusted_certs_dir)
+    return if exists_in_trusted?(file)
 
     # Move the certs to the trusted certs directory if it is located within our managed certs directory
     # Otherwise copy the cert to the trusted certs directory
@@ -111,6 +111,13 @@ class CertificateHelper
 
     FileUtils.rm_f(file) if File.symlink?(file)
     puts "\n Moving #{realpath}"
+  end
+
+  def exists_in_trusted?(file)
+    trusted_path = File.join(@trusted_certs_dir, File.basename(file))
+
+    (File.symlink?(file) && File.readlink(file).start_with?(@trusted_certs_dir)) ||
+      (File.exist?(trusted_path) && FileUtils.identical?(file, trusted_path))
   end
 
   def link_certificates
