@@ -29,6 +29,10 @@ For example, if you take a look at the `8-6-stable` branch, you can conclude tha
 8.6 packages were running [ruby 2.1.8]. Or, that 8.5 packages were bundled
 with [nginx 1.9.0].
 
+## Signatures of GitLab, Inc. provided packages
+
+Documentation on package signatures can be found at [Signed Packages](signed_packages.md)
+
 ## Checking for newer configuration options on upgrade
 
 Configuration file in `/etc/gitlab/gitlab.rb` is created on initial installation
