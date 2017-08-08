@@ -106,12 +106,12 @@ Primary key fingerprint: DBEF 8977 4DDB 9EB3 7D9F  C3A0 3CFC F9BA F27E AB47
 
 #### Configuring debsigs
 
-Configuring a policy and keyring for `debsigs` can be complicated, so GitLab provides [gitlab-debsigs][debsigs] as a scripted method of configuration.
+Configuring a policy and keyring for `debsigs` can be complicated, so GitLab provides `gitlab-debsigs.sh` as a scripted method of configuration.
 
 To use this script, you will need to download the public key and the script.
 ```
 curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
-curl -JLO https://gitlab.com/gitlab-org/gitlab-debsigs/raw/master/gitlab-debsigs.sh
+curl -JLO https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh
 chmod +x gitlab-debsigs.sh
 sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
@@ -125,4 +125,3 @@ To make use of `debsig-verify`, perform the steps in [Configuring debsigs](#conf
 
 
 [install]: https://about.gitlab.com/installation/
-[debsigs]: https://gitlab.com/gitlab-org/gitlab-debsigs
