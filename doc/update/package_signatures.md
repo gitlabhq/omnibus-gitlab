@@ -20,6 +20,22 @@ not present, perform the following steps:
 ```
 rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
+### Verify if signature check is active
+
+The simplest method of checking if package signature checking is active on an existing install is to compare the content of the repository file in use.
+
+* Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`
+* Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo` should output
+    ```
+    repo_gpgcheck=1
+    gpgcheck=1
+    ```
+    or
+    ```
+    repo_gpgcheck=1
+    pkg_gpgcheck=1
+    ```
+If the file does not exist, you don't have the repository installed. If the file exists, but the output shows `gpgpcheck=0`, then you will need to edit that value to enable it, as below.
 
 ### Enable Automatic Verification
 
