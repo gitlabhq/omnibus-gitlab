@@ -78,7 +78,7 @@ dependency 'mixlib-log'
 dependency 'chef-zero'
 dependency 'ohai'
 dependency 'chef-gem'
-dependency 'remote-syslog' if ee
+dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
 dependency 'gitlab-rails'
