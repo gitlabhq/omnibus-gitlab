@@ -41,8 +41,8 @@ module Prometheus
 
     def parse_exporter_enabled
       # Disable exporters by default if their service is not managed on this node
-      Gitlab['postgres_exporter']['enable'] = Postgresql.postgresql_managed? if Gitlab['postgres_exporter']['enable'].nil?
-      Gitlab['redis_exporter']['enable'] = Redis.redis_managed? if Gitlab['redis_exporter']['enable'].nil?
+      Services.set_enable('postgres_exporter', Postgresql.postgresql_managed?) if Gitlab['postgres_exporter']['enable'].nil?
+      Services.set_enable('redis_exporter', Redis.redis_managed?) if Gitlab['redis_exporter']['enable'].nil?
     end
 
     def parse_flags
@@ -122,7 +122,7 @@ module Prometheus
 
     def parse_scrape_configs
       # Don't parse if prometheus is explicitly disabled
-      return if Gitlab['prometheus']['enable'] == false
+      return unless Services.enabled?('prometheus')
       gitlab_monitor_scrape_configs
       unicorn_scrape_configs
       exporter_scrape_config('node')
@@ -133,7 +133,7 @@ module Prometheus
 
     def gitlab_monitor_scrape_configs
       # Don't parse if gitlab_monitor is explicitly disabled
-      return if Gitlab['gitlab_monitor']['enable'] == false
+      return unless Services.enabled?('gitlab_monitor')
 
       default_config = Gitlab['node']['gitlab']['gitlab-monitor'].to_hash
       user_config = Gitlab['gitlab_monitor']
@@ -171,7 +171,7 @@ module Prometheus
 
     def unicorn_scrape_configs
       # Don't parse if unicorn is explicitly disabled
-      return if Gitlab['unicorn']['enable'] == false
+      return unless Services.enabled?('unicorn')
 
       default_config = Gitlab['node']['gitlab']['unicorn'].to_hash
       user_config = Gitlab['unicorn']
@@ -194,7 +194,7 @@ module Prometheus
 
     def exporter_scrape_config(exporter)
       # Don't parse if exporter is explicitly disabled
-      return if Gitlab["#{exporter}_exporter"]['enable'] == false
+      return unless Services.enabled?("#{exporter}_exporter")
 
       default_config = Gitlab['node']['gitlab']["#{exporter}-exporter"].to_hash
       user_config = Gitlab["#{exporter}_exporter"]
