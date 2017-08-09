@@ -4,64 +4,11 @@
 # after package is installed.
 #
 DEST_DIR=<%= install_dir %>
-EXTERNAL_URL="http://gitlab.example.com"
 
 notify()
 {
   echo "gitlab: $1"
 }
-
-tanuki_ascii()
-{
-  echo "       *.                  *."
-  echo "      ***                 ***"
-  echo "     *****               *****"
-  echo "    .******             *******"
-  echo "    ********            ********"
-  echo "   ,,,,,,,,,***********,,,,,,,,,"
-  echo "  ,,,,,,,,,,,*********,,,,,,,,,,,"
-  echo "  .,,,,,,,,,,,*******,,,,,,,,,,,,"
-  echo "      ,,,,,,,,,*****,,,,,,,,,."
-  echo "         ,,,,,,,****,,,,,,"
-  echo "            .,,,***,,,,"
-  echo "                ,*,."
-}
-
-gitlab_ascii()
-{
-  echo "     _______ __  __          __"
-  echo "    / ____(_) /_/ /   ____ _/ /_"
-  echo "   / / __/ / __/ /   / __ \`/ __ \\"
-  echo "  / /_/ / / /_/ /___/ /_/ / /_/ /"
-  echo "  \____/_/\__/_____/\__,_/_.___/"
-}
-
-print_banner()
-{
-    # Check if we have colors enabled
-    tput=$(which tput)
-    if [ -n "$tput" ]; then
-      ncolors=$($tput colors)
-      if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-        RED="$(tput setaf 1)"
-        YELLOW="$(tput setaf 3)"
-        NOCOLOR="$(tput sgr0)"
-      else
-        RED=""
-        YELLOW=""
-        NOCOLOR=""
-      fi
-    fi
-
-    echo ""
-    echo "$YELLOW"
-    echo "$(tanuki_ascii)"
-    echo "$RED"
-    echo "$(gitlab_ascii)"
-    echo "$NOCOLOR"
-    echo ""
-}
-
 create_config_template()
 {
   # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
@@ -90,38 +37,12 @@ fix_directory_permissions()
 fi
 }
 
-print_welcome()
-{
-  print_banner
-  notify "Thank you for installing GitLab!"
-  notify "To configure and start GitLab, RUN THE FOLLOWING COMMAND:"
-  echo ""
-  echo "sudo gitlab-ctl reconfigure"
-  echo ""
-  notify "GitLab should be reachable at ${EXTERNAL_URL}"
-  notify "Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
-  notify "And running reconfigure again."
-  notify
-  notify "For a comprehensive list of configuration options please see the Omnibus GitLab readme"
-  notify "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md"
-  notify
-}
-
 check_if_ec2()
 {
   if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` = 'ec2' ]; then
     return 0
   else
     return 1
-  fi
-}
-
-get_fqdn_from_hostname()
-{
-  # Try collecting fqdn if it is set correctly
-  fqdn=$(/bin/hostname -f)
-  if [ -n "${fqdn}" ]; then
-    EXTERNAL_URL="http://${fqdn}"
   fi
 }
 
@@ -166,24 +87,25 @@ if [ -n "${GITLAB_DEBUG}" ] ; then
   notify "debug: arguments: $@"
 fi
 
-check_if_ec2
-if [ $? -eq 0 ]  ; then
-  get_ec2_hostname
-else
-  get_fqdn_from_hostname
+if [ -z "${EXTERNAL_URL}" ]; then
+  check_if_ec2
+  if [ $? -eq 0 ]  ; then
+    get_ec2_hostname
+  else
+    EXTERNAL_URL="http://gitlab.example.com"
+  fi
 fi
 
 ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
 create_config_template
 fix_directory_permissions
-print_welcome
 print_upgrade_info
 
 case "$1" in
   configure)
     # Looks like a DEB install. We don't know if it is a fresh install or an
     # upgrade.
-    ${DEST_DIR}/bin/gitlab-ctl upgrade
+    EXTERNAL_URL=${EXTERNAL_URL} ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)
     # No op.
