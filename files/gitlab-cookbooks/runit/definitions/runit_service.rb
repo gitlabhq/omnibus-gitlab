@@ -194,18 +194,22 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       mode 0755
     end
 
+    supervisor_owner = params[:supervisor_owner] || 'root'
+    supervisor_group = params[:supervisor_group] || 'root'
     %w(ok control).each do |fl|
       file "#{sv_dir_name}/supervise/#{fl}" do
-        owner params[:supervisor_owner] || 'root'
-        group params[:supervisor_group] || 'root'
+        owner supervisor_owner
+        group supervisor_group
         not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
+        only_if { !omnibus_helper.expected_owner?(name, supervisor_owner, supervisor_group) }
         action :touch
       end
 
       file "#{sv_dir_name}/log/supervise/#{fl}" do
-        owner params[:supervisor_owner] || 'root'
-        group params[:supervisor_group] || 'root'
+        owner supervisor_owner
+        group supervisor_group
         not_if { params[:supervisor_owner].nil? || params[:supervisor_group].nil? }
+        only_if { !omnibus_helper.expected_owner?(name, supervisor_owner, supervisor_group) }
         action :touch
       end
     end
