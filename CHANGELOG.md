@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.3.10
+
+- Upgrade Git version to 2.13.5
+
 9.3.8
 
 - Upgrade Mattermost to 3.10.2 6ebf54

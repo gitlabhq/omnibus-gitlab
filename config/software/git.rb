@@ -17,7 +17,7 @@
 #
 
 name 'git'
-default_version '2.13.0'
+default_version '2.13.4'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -28,7 +28,7 @@ dependency 'openssl'
 dependency 'curl'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '9f2fa8040ebafc0c2caae4a9e2cb385c6f16c0525bcb0fbd84938bc796372e80'
+       sha256: 'a7b3361ed4675ea36ad1cf34c18d4a687c9d7d9a7d2aee45ed6e3b259542184c'
 
 relative_path "git-#{version}"
 
@@ -55,6 +55,9 @@ NO_INSTALL_HARDLINKS=YesPlease
       EOH
     end
   end
+
+  # Patch git to version 2.13.5 (not yet released)
+  patch source: 'git.2.13.4-2.13.5.patch'
 
   command "make -j #{workers}", env: env
   command 'make install'
