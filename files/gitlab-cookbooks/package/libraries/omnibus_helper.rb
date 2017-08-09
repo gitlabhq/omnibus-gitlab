@@ -43,4 +43,16 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def group_exists?(group)
     success?("getent group #{group}")
   end
+
+  def expected_user?(file, user)
+    File.stat(file).uid == Etc.getpwnam(user).uid
+  end
+
+  def expected_group?(file, group)
+    File.stat(file).gid == Etc.getgrnam(group).gid
+  end
+
+  def expected_owner?(file, user, group)
+    expected_user?(file, user) && expected_group?(file, group)
+  end
 end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

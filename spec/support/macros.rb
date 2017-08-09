@@ -22,6 +22,10 @@ module GitlabSpec
       stub_service_success_status(service, value)
     end
 
+    def stub_expected_owner?
+      allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).and_return(true)
+    end
+
     def stub_env_var(var, value)
       allow(ENV).to receive(:[]).with(var).and_return(value)
     end
