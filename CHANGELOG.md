@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+8.17.8
+
+- Upgrade Git version to 2.10.3
+
 8.17.5
 
 - Update Mattermost version to 3.6.5 bb826eeb
