@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.1.10
+
+- Upgrade Git version to 2.11.3
+
 9.1.8
 
 - Add libre2 to support the 're2' gem
