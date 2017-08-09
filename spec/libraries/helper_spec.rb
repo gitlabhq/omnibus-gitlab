@@ -205,4 +205,37 @@ describe OmnibusHelper do
       expect(chef_run.template('/var/opt/gitlab/nginx/conf/gitlab-http.conf')).not_to notify('service[nginx]').to(:restart).delayed
     end
   end
+
+  context 'expected_owner?' do
+    let(:oh) { OmnibusHelper.new(chef_run.node) }
+    before do
+      allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?)
+        .and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(
+        :expected_user?).and_return(false)
+      allow_any_instance_of(OmnibusHelper).to receive(
+        :expected_user?
+      ).with('/tmp/fakefile', 'fakeuser').and_return(true)
+      allow_any_instance_of(OmnibusHelper).to receive(
+        :expected_group?).and_return(false)
+      allow_any_instance_of(OmnibusHelper).to receive(
+        :expected_group?
+      ).with('/tmp/fakefile', 'fakegroup').and_return(true)
+    end
+
+    it 'should return false if the group is wrong' do
+      expect(oh.expected_owner?('/tmp/fakefile', 'fakeuser', 'wronggroup'))
+        .to be false
+    end
+
+    it 'should return false if the user is wrong' do
+      expect(oh.expected_owner?('/tmp/fakefile', 'wronguser', 'fakegroup'))
+        .to be false
+    end
+
+    it 'should return true if user and group is correct' do
+      expect(oh.expected_owner?('/tmp/fakefile', 'fakeuser', 'fakegroup'))
+        .to be true
+    end
+  end
 end
