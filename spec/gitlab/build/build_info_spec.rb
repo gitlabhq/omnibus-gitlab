@@ -25,6 +25,7 @@ describe Build::Info do
 
   describe 'release_version' do
     before do
+      allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow_any_instance_of(Omnibus::BuildVersion).to receive(:semver).and_return('12.121.12')
       allow_any_instance_of(Gitlab::BuildIteration).to receive(:build_iteration).and_return('ce.1')
     end
@@ -45,13 +46,14 @@ describe Build::Info do
         stub_env_var('NIGHTLY', 'true')
         stub_env_var('CI_PIPELINE_ID', '5555')
 
-        expect(described_class.release_version).to eq('12.121.12.5555-ce.1')
+        expect(described_class.release_version).to eq('12.121.12-ce.1')
       end
     end
   end
 
   describe 'docker_tag' do
     before do
+      allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow_any_instance_of(Omnibus::BuildVersion).to receive(:semver).and_return('12.121.12')
       allow_any_instance_of(Gitlab::BuildIteration).to receive(:build_iteration).and_return('ce.1')
     end

@@ -22,14 +22,20 @@ module Build
       # different.
       # To resolve this, we append a PIPELINE_ID to change the name of the package
       def semver_version
-        # timestamp is disabled in omnibus configuration
-        Omnibus.load_configuration('omnibus.rb')
-
-        semver = Omnibus::BuildVersion.semver
-        if ENV['NIGHTLY'] && ENV['CI_PIPELINE_ID']
-          semver = "#{semver}.#{ENV['CI_PIPELINE_ID']}"
+        if Build::Check.on_tag?
+          # timestamp is disabled in omnibus configuration
+          Omnibus.load_configuration('omnibus.rb')
+          Omnibus::BuildVersion.semver
+        else
+          latest_git_tag = Info.latest_tag.strip
+          latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
+          commit_sha = ENV['CI_COMMIT_SHA'][0, 8]
+          if Build::Check.add_nightly_tag?
+            "#{latest_version}+rnightly.#{ENV['CI_PIPELINE_ID']}.#{commit_sha}"
+          else
+            "#{latest_version}+rfbranch.#{ENV['CI_PIPELINE_ID']}.#{commit_sha}"
+          end
         end
-        semver
       end
 
       def release_version
