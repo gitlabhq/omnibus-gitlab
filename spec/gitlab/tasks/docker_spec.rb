@@ -1,4 +1,5 @@
 require 'chef_helper'
+require_relative '../../../lib/gitlab/docker_operations.rb'
 
 describe 'docker', type: :rake do
   before :all do
@@ -94,6 +95,24 @@ describe 'docker', type: :rake do
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:omnibus-12345')
       Rake::Task['docker:push:triggered'].invoke
+    end
+  end
+end
+
+describe 'docker_operations' do
+  describe 'without docker operations timeout variable' do
+    it 'sets default value as timeout' do
+      DockerOperations.set_timeout
+      expect(Docker.options[:read_timeout]).to eq(1200)
+    end
+  end
+
+  describe 'with docker operations timeout variable specified' do
+    it 'sets provided value as timeout' do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('DOCKER_TIMEOUT').and_return(500)
+      DockerOperations.set_timeout
+      expect(Docker.options[:read_timeout]).to eq(500)
     end
   end
 end
