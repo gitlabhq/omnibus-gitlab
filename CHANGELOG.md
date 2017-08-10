@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.4.4
+
+- Upgrade Git version to 2.13.5
+
 9.4.2
 
 - Update LDAP SSL config: Rename method to encryption. Add ca_cert, ssl_version and verify_certificates
