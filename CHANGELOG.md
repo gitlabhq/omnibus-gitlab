@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 - UDP log shipping as part of CE
+- Bump Git verison to 2.13.5
 
 9.4.3
 
