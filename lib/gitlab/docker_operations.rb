@@ -1,8 +1,13 @@
 require 'docker'
 
 class DockerOperations
+  def self.set_timeout
+    timeout = ENV['DOCKER_TIMEOUT'] || 1200
+    Docker.options = { read_timeout: timeout, write_timeout: timeout }
+  end
+
   def self.build(location, image, tag)
-    Docker.options[:read_timeout] = 600
+    set_timeout
     Docker::Image.build_from_dir(location.to_s, { t: "#{image}:#{tag}", pull: true }) do |chunk|
       if (log = JSON.parse(chunk)) && log.key?("stream")
         puts log["stream"]
@@ -31,10 +36,12 @@ class DockerOperations
   end
 
   def self.get(namespace, tag)
+    set_timeout
     Docker::Image.get("#{namespace}:#{tag}")
   end
 
   def self.push(namespace, tag)
+    set_timeout
     image = get(namespace, tag)
     image.push(Docker.creds, repo_tag: "#{namespace}:#{tag}") do |chunk|
       puts chunk
@@ -42,6 +49,7 @@ class DockerOperations
   end
 
   def self.tag(initial_namespace, new_namespace, initial_tag, new_tag)
+    set_timeout
     image = get(initial_namespace, initial_tag)
     image.tag(repo: new_namespace, tag: new_tag, force: true)
   end
