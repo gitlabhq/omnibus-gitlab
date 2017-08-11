@@ -124,9 +124,9 @@ production: &base
     # The location where Build Artifacts are stored (default: shared/artifacts).
     path: <%= @artifacts_path %>
     object_store:
-      enabled: <%= @artifacts['object_store_enabled'] %>
-      remote_directory: <%= single_quote(@artifacts['object_store_remote_directory']) %>
-      connection: <%= @artifacts['object_store_connection'].to_json %>
+      enabled: <%= @artifacts_object_store_enabled %>
+      remote_directory: <%= single_quote(@artifacts_object_store_remote_directory) %>
+      connection: <%= @artifacts_object_store_connection.to_json %>
 
   ## Git LFS
   lfs:

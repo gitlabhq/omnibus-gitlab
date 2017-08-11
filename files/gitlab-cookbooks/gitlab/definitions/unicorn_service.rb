@@ -87,6 +87,8 @@ define :unicorn_service, rails_app: nil, user: nil do
     EOS
     after_fork <<-'EOS'
       ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
+      defined?(::Prometheus::Client.reinitialize_on_pid_change) &&
+        Prometheus::Client.reinitialize_on_pid_change
     EOS
     owner "root"
     group "root"
