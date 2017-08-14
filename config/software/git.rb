@@ -17,7 +17,7 @@
 #
 
 name 'git'
-default_version '2.13.0'
+default_version '2.13.5'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -28,7 +28,7 @@ dependency 'openssl'
 dependency 'curl'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '9f2fa8040ebafc0c2caae4a9e2cb385c6f16c0525bcb0fbd84938bc796372e80'
+       sha256: 'b2bdabe9ebe1043bc37cf2ca2a1c5847dc2d933884708c670bc691d027791ad0'
 
 relative_path "git-#{version}"
 
