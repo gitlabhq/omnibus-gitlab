@@ -37,8 +37,7 @@ module GitlabGeo
 
     def parse_secondary_role
       Gitlab['gitlab_rails']['geo_secondary_role_enabled'] = true
-      Gitlab['geo_postgresql']['enable'] = true
-      Gitlab['geo_logcursor']['enable'] = true
+      Services.enable_group('geo')
       Gitlab['postgresql']['wal_level'] = 'hot_standby'
       Gitlab['postgresql']['max_wal_senders'] ||= 10
       Gitlab['postgresql']['wal_keep_segments'] ||= 10
@@ -60,7 +59,7 @@ module GitlabGeo
     end
 
     def geo_postgresql_enabled?
-      Gitlab['geo_postgresql']['enable']
+      Services.enabled?('geo_postgresql')
     end
 
     def node
