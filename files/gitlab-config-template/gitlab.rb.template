@@ -1465,6 +1465,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ]
 #
 
+##! If negate is enabled then sidekiq-cluster will process all the queues that
+##! don't match those in queue_groups.
+
+# sidekiq_cluster['negate'] = false
+
 ################################################################################
 ## Additional Database Settings (EE only)
 ##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
