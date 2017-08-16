@@ -40,6 +40,24 @@ describe 'gitlab-ee::sidekiq-cluster' do
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/sidekiq-cluster\'/)
           expect(content).to match(/process_commit,post_receive/)
           expect(content).to match(/gitlab_shell/)
+          expect(content).not_to match(/--negate/)
+        }
+    end
+  end
+
+  context 'with --negate set' do
+    before do
+      stub_gitlab_rb(sidekiq_cluster: {
+                       enable: true,
+                       negate: true,
+                       queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+                     })
+    end
+
+    it 'correctly renders out the sidekiq-cluster service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
+        .with_content { |content|
+          expect(content).to match(/--negate/)
         }
     end
   end
