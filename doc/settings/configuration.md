@@ -150,7 +150,7 @@ the `git-data` parent directory by adding the following line to
 git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
 ```
 
-Starting from GitLab 8.10 you can also add more than one git data directory by
+You can also add more than one git data directory by
 adding the following lines to `/etc/gitlab/gitlab.rb` instead.
 
 ```ruby
