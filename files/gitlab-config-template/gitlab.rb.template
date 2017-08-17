@@ -282,7 +282,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ###! **If you want to use a single non-default directory to store git data use a
 ###!   path that doesn't contain symlinks.**
-# git_data_dirs({ "default" => { "path" => "/var/opt/gitlab/git-data", 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' } })
+# git_data_dirs({
+#   "default" => {
+#     "path" => "/mnt/nfs-01/git-data",
+#     "failure_count_threshold" => 10,
+#     "failure_wait_time" => 30,
+#     "failure_reset_time" => 1800,
+#     "storage_timeout" => 5
+#    }
+# })
 
 ### Gitaly settings
 # gitlab_rails['gitaly_token'] = 'secret token'
