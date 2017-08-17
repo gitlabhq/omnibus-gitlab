@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - UDP log shipping as part of CE
 - Bump Git verison to 2.13.5
 - Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
+- Add configuration options for handling repository storage failures
 - Add support for `--negate` in sidekiq-cluster
 
 9.4.3
