@@ -1,7 +1,16 @@
 require 'mixlib/shellout'
 require 'timeout'
 
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../omnibus-ctl/lib/gitlab_ctl'
+rescue LoadError
+  require_relative '../../gitlab-ctl-commands/lib/gitlab_ctl'
+end
+
 class RepmgrHelper
+  class MasterError < StandardError; end
+
   attr_accessor :command, :subcommand, :args
 
   def initialize(command, subcommand, args = nil)
@@ -18,6 +27,16 @@ class RepmgrHelper
     class << self
       def repmgr_cmd(args, command)
         cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f /var/opt/gitlab/postgresql/repmgr.conf #{command}", 'gitlab-psql')
+      end
+
+      def execute_psql(options)
+        database = options[:database]
+        query = options[:query]
+        host = options[:host]
+        port = options[:port]
+        user = options[:user] || Etc.getlogin
+        command = %(/opt/gitlab/embedded/bin/psql -qt -d #{database} -h #{host} -p #{port} -c "#{query}" -U #{user})
+        cmd(command, Etc.getlogin).chomp.lines.map(&:strip)
       end
 
       def cmd(command, user = 'root')
@@ -131,6 +150,24 @@ class RepmgrHelper
       def register(args)
         repmgr_cmd(args, 'master register')
       end
+    end
+  end
+
+  class Node
+    attr_accessor :attributes
+
+    def initialize
+      @attributes = GitlabCtl::Util.get_node_attributes('/opt/gitlab')
+    end
+
+    def is_master?
+      hostname = attributes['repmgr']['node_name'] || `hostname -f`.chomp
+      query = "SELECT name FROM repmgr_gitlab_cluster.repl_nodes WHERE type='master' AND active != 'f'"
+      host = attributes['gitlab']['postgresql']['unix_socket_directory']
+      port = attributes['gitlab']['postgresql']['port']
+      master = RepmgrHelper::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
+      raise MasterError, master if master.length != 1
+      master.first.eql?(hostname)
     end
   end
 end

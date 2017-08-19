@@ -267,6 +267,9 @@ mattermost
 
 # GitLab Registry user (only when using GitLab Registry)
 registry
+
+# GitLab Consul user (only when using GitLab Consul)
+gitlab-consul
 ```
 
 By default, omnibus-gitlab package expects that following groups exist:
@@ -292,6 +295,9 @@ mattermost
 
 # GitLab Registry group (only when using GitLab Registry)
 registry
+
+# GitLab Consul group (only when using GitLab Consul)
+gitlab-consul
 ```
 
 You can also use different user/group names but then you must specify user/group details in `/etc/gitlab/gitlab.rb`, eg.

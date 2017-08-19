@@ -5,7 +5,7 @@ describe AccountHelper do
 
   it 'returns a list of users' do
     expect(AccountHelper.new(chef_run.node).users).to eq(
-      %w(git gitlab-www gitlab-redis gitlab-psql mattermost registry gitlab-prometheus)
+      %w(git gitlab-www gitlab-redis gitlab-psql mattermost registry gitlab-prometheus gitlab-consul)
     )
   end
 

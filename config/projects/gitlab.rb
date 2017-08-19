@@ -76,6 +76,7 @@ dependency 'redis'
 dependency 'nginx'
 dependency 'mixlib-log'
 dependency 'chef-zero'
+dependency 'consul' if ee
 dependency 'ohai'
 dependency 'chef-gem'
 dependency 'remote-syslog'

@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl/lib/repmgr"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/repmgr"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
 add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL cluster nodes', 2) do |_cmd_name, _args|
@@ -45,6 +45,20 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
     exit 1
   end
   log results
+end
+
+add_command_under_category('repmgr-check-master', 'database', 'Check if the current node is the repmgr master', 2) do
+  node = RepmgrHelper::Node.new
+  begin
+    if node.is_master?
+      Kernel.exit 0
+    else
+      Kernel.exit 2
+    end
+  rescue RepmgrHelper::MasterError => se
+    $stderr.puts "Error checking for master: #{se}"
+    Kernel.exit 3
+  end
 end
 
 def repmgr_help
