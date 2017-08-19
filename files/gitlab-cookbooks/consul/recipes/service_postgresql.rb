@@ -13,24 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
-
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
-
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
-
-    class NodeError < StandardError; end
-
-    class PasswordMismatch < StandardError; end
-  end
+file "#{node['consul']['config_dir']}/postgresql_service.json" do
+  content node['consul']['service_config']['postgresql'].to_json
+  owner account_helper.consul_user
 end
+
+include_recipe 'repmgr::consul_user_permissions'

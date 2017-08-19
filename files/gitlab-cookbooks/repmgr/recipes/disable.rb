@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 
-include_recipe 'repmgr::disable_daemon'
+include_recipe 'repmgr::repmgrd_disable'

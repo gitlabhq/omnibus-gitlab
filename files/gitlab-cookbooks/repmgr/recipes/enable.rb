@@ -23,10 +23,7 @@ log_directory = node['repmgr']['log_directory']
 
 node.default['gitlab']['postgresql']['custom_pg_hba_entries']['repmgr'] = repmgr_helper.pg_hba_entries
 
-# node number needs to be unique (to the cluster) positive 32 bit integer.
-# If the user doesn't provide one, generate one ourselves.
-node_number = node['repmgr']['node_number'] ||
-  Digest::MD5.hexdigest(node['fqdn']).unpack('L').first
+node_number = node['repmgr']['node_number'] || repmgr_helper.generate_node_number
 template repmgr_conf do
   source 'repmgr.conf.erb'
   owner account_helper.postgresql_user
@@ -45,7 +42,7 @@ end
 
 postgresql_database node['repmgr']['database'] do
   owner replication_user
-  notifies :run, "execute[register repmgr master node]"
+  notifies :run, "execute[register repmgr master node]", :immediately
 end
 
 execute 'register repmgr master node' do
@@ -59,8 +56,8 @@ directory log_directory do
   mode '0700'
 end
 
-if node['repmgr']['daemon']
-  include_recipe 'repmgr::enable_daemon'
+if node['repmgrd']['enable']
+  include_recipe 'repmgr::repmgrd'
 else
-  include_recipe 'repmgr::disable_daemon'
+  include_recipe 'repmgr::repmgrd_disable'
 end
