@@ -13,24 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
-
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
-
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
-
-    class NodeError < StandardError; end
-
-    class PasswordMismatch < StandardError; end
-  end
+runit_service 'consul' do
+  options({
+            config_dir: node['consul']['config_dir'],
+            config_file: node['consul']['config_file'],
+            data_dir: node['consul']['data_dir'],
+            dir: node['consul']['dir'],
+            log_directory: node['consul']['log_directory'],
+            user: node['consul']['user']
+          })
+  supervisor_owner account_helper.consul_user
+  supervisor_group account_helper.consul_user
+  owner account_helper.consul_user
+  group account_helper.consul_user
 end

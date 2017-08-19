@@ -34,6 +34,7 @@ include_recipe 'gitlab::default'
 end
 
 %w(
+  consul
   repmgr
 ).each do |service|
   if node[service]['enable']

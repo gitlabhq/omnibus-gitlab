@@ -14,23 +14,24 @@
 # limitations under the License.
 #
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
+name 'consul'
+default_version 'v0.9.0'
 
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
+license 'MPL-2.0'
+license_file 'LICENSE'
 
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
+version '0.9.0' do
+  source sha256: '4e3db525b58ba9ed8d3f0a09047d4935180748f44be2a48342414bfcff3c69a4'
+end
 
-    class NodeError < StandardError; end
+source git: 'https://github.com/hashicorp/consul.git'
 
-    class PasswordMismatch < StandardError; end
-  end
+relative_path 'src/github.com/hashicorp/consul'
+
+build do
+  env = {}
+  env['GOPATH'] = "#{Omnibus::Config.source_dir}/consul"
+  env['PATH'] = "#{ENV['PATH']}:#{env['GOPATH']}/bin"
+  command 'make dev', env: env
+  copy 'bin/consul', "#{install_dir}/embedded/bin/"
 end

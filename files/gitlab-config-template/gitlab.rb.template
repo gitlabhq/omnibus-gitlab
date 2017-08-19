@@ -1557,6 +1557,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
+# pgbouncer['users'] = [
+#   {
+#     name: USERNAME,
+#     password: MD5_PASSWORD_HASH
+#   }
+# ]
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
 #
@@ -1571,3 +1577,43 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['port'] = 5432
 # repmgr['trust_auth_cidr_addresses'] = []
 # repmgr['user'] = 'gitlab_repmgr'
+
+################################################################################
+# Consul (EEP only)
+################################################################################
+# consul['enable'] = false
+# consul['dir'] = '/var/opt/gitlab/consul'
+# consul['user'] = 'gitlab-consul'
+# consul['config_file'] = '/var/opt/gitlab/consul/config.json'
+# consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
+# consul['data_dir'] = '/var/opt/gitlab/consul/data'
+# consul['log_directory'] = '/var/log/gitlab/consul'
+# consul['script_directory'] = '/var/opt/gitlab/consul/scripts'
+# consul['configuration'] = {
+#   'client_addr' => nil,
+#   'datacenter' => 'gitlab_consul',
+#   'enable_script_checks' => true,
+#   'server' => false
+# }
+# consul['services'] = []
+# consul['service_config'] = {
+#   'postgresql' => {
+#     'service' => {
+#       'name' => "postgresql",
+#       'address' => '',
+#       'port' => 5432,
+#       'checks' => [
+#         {
+#           'script' => "/var/opt/gitlab/consul/scripts/check_postgresql",
+#           'interval' => "10s"
+#         }
+#       ]
+#     }
+#   }
+# }
+# consul['watchers'] = {
+#   'postgresql' => {
+#     enable: false,
+#     handler: 'failover_pgbouncer'
+#   }
+# }
