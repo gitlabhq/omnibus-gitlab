@@ -1,3 +1,6 @@
 <% @databases.each do |_db, settings| %>
 "<%= settings['user'] %>" "md5<%= settings['password'] %>"
 <% end %>
+<% @users.each do |user, info| %>
+"<%= user %>" "md5<%= info['password'] %>"
+<% end %>

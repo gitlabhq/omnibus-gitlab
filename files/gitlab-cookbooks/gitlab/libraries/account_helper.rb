@@ -74,6 +74,10 @@ class AccountHelper
     node['gitlab']['prometheus']['username']
   end
 
+  def consul_user
+    node['consul']['user']
+  end
+
   def users
     %W(
         #{gitlab_user}
@@ -83,6 +87,7 @@ class AccountHelper
         #{mattermost_user}
         #{registry_user}
         #{prometheus_user}
+        #{consul_user}
       )
   end
 

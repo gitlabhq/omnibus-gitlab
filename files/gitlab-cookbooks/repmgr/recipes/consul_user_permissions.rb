@@ -13,24 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+account_helper = AccountHelper.new(node)
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/util'
+postgresql_user account_helper.consul_user do
+  notifies :run, "execute[grant read only access to repmgr]"
+end
 
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
+select_query = %(GRANT SELECT ON ALL TABLES IN SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
+usage_query = %(GRANT USAGE ON SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
 
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
-
-    class NodeError < StandardError; end
-
-    class PasswordMismatch < StandardError; end
-  end
+execute "grant read only access to repmgr" do
+  command %(gitlab-psql gitlab_repmgr -c '#{select_query}; #{usage_query};')
+  user account_helper.postgresql_user
+  action :nothing
 end

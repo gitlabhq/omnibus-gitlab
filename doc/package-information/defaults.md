@@ -37,6 +37,7 @@ by default:
 | Mattermost       | No            | Port             | X           | 8065                                   |
 | Mattermost       | No            | Port             | X           | 80 or 443                              |
 | PgBouncer        | No            | Port             | X           | 6432                                   |
+| Consul           | No            | Port             | X           | 8300, 8500                             |
 Legend:
 
 * `Component` - Name of the component.

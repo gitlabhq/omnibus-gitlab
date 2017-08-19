@@ -1,0 +1,75 @@
+#!/opt/gitlab/embedded/bin/ruby
+
+require 'resolv'
+require 'json'
+require 'logger'
+require 'open3'
+
+@log = Logger.new('<%= @log_directory %>/failover_pgbouncer.log')
+@log.level = Logger::INFO
+
+
+
+def run_command(command)
+  exit_status = 0
+
+  Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+    @log.info("Running: #{command}")
+    while line = stdout.gets
+      @log.info("STDOUT: #{line}")
+    end
+
+    while line = stderr.gets
+      @log.error("STDERR: #{line}")
+    end
+
+    exit_status = wait_thr.value
+  end
+
+  exit_status.to_i
+end
+
+def find_passing_service(data, service)
+  data.select do |x|
+    x['Checks'].find do |y|
+      y['CheckID'].eql?(service) && y['Status'].eql?('passing')
+    end
+  end
+end
+
+begin
+  data = JSON.parse($stdin.gets)
+rescue JSON::ParserError
+  @log.error('Invalid input detected')
+  Kernel.exit 1
+end
+
+begin
+  healthy_agents = find_passing_service(data, 'serfHealth')
+  masters = find_passing_service(healthy_agents, 'service:postgresql')
+rescue Exception => e
+  @log.error("Error parsing data: #{e.inspect}")
+  Kernel.exit 2
+end
+
+if masters.length > 1
+  @log.error('More than one master found, stopping pgbouncer to prevent issues.')
+  @log.error('Once the error is cleared, consul will reload pgbouncer')
+  results = run_command('gitlab-ctl pgb-kill --pg-database gitlabhq_production --user gitlab-consul')
+  Kernel.exit 3 + results
+elsif masters.empty?
+  @log.error('No master found')
+  Kernel.exit 4
+end
+
+newhost = masters.first['Node']['Node']
+begin
+  Resolv::DNS.new.getaddress(newhost)
+rescue Resolv::ResolvError
+  @log.info("#{newhost} does not resolve in DNS, using IP address of node instead")
+  newhost = masters.first['Node']['Address']
+end
+
+@log.info("Found master: #{newhost}")
+
+Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{newhost} --user gitlab-consul --hostuser gitlab-consul")

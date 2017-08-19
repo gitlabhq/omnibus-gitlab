@@ -1,12 +1,14 @@
 class RepmgrHelper
+  attr_accessor :node
+
   def initialize(node)
     @node = node
   end
 
   def pg_hba_entries
     results = []
-    replication_user = @node['repmgr']['user']
-    %W(replication #{@node['repmgr']['database']}).each do |db|
+    replication_user = node['repmgr']['user']
+    %W(replication #{node['repmgr']['database']}).each do |db|
       results.push(
         *[
           {
@@ -25,7 +27,7 @@ class RepmgrHelper
         ]
       )
 
-      @node['repmgr']['trust_auth_cidr_addresses'].each do |addr|
+      node['repmgr']['trust_auth_cidr_addresses'].each do |addr|
         results.push(
           {
             type: 'host',
@@ -38,5 +40,16 @@ class RepmgrHelper
       end
     end
     results
+  end
+
+  # node number needs to be unique (to the cluster) positive 32 bit integer.
+  # If the user doesn't provide one, generate one ourselves.
+  def generate_node_number
+    seed_data = if node['fqdn'].nil?
+                  "#{node['ipaddress']}#{node['macaddress']}#{node['ip6address']}"
+                else
+                  node['fqdn']
+                end
+    Digest::MD5.hexdigest(seed_data).unpack('L').first
   end
 end
