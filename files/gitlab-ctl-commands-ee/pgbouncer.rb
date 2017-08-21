@@ -100,7 +100,7 @@ def get_pg_options
       options['pg_database'] = db
     end
 
-    opts.on('--newhost HOSTNAME', 'The new master when updating pgbouncer') do|h|
+    opts.on('--newhost HOSTNAME', 'The new master when updating pgbouncer') do |h|
       options['newhost'] = h
     end
 

@@ -173,6 +173,24 @@ describe 'gitlab-ee::pgbouncer' do
       .with_content(%r{^"fakeuser" "md5fakemd5password"$})
   end
 
+  it 'adds arbitrary values to the databases.ini file' do
+    stub_gitlab_rb(
+      {
+        pgbouncer: {
+          enable: true,
+          databases: {
+            gitlab_db: {
+              host: 'fakehost',
+              fakefield: 'fakedata'
+            }
+          }
+        }
+      }
+    )
+    expect(chef_run).to render_file(databases_ini)
+      .with_content(/^gitlab_db = host=fakehost fakefield=fakedata$/)
+  end
+
   it 'creates arbitrary user' do
     stub_gitlab_rb(
       {
