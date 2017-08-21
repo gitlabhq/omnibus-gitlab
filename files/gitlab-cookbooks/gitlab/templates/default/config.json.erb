@@ -116,7 +116,7 @@
         "EmailBatchingInterval": <%= @email_batching_interval %>,
         "SkipServerCertificateVerification": <%= @email_skip_server_certificate_verification %>,
         "EnableSMTPAuth": <%= @email_smtp_auth %>,
-        "EmailNotificationContentType": <%= @email_notification_content_type %>
+        "EmailNotificationContentType": "<%= @email_notification_content_type %>"
     },
     "RateLimitSettings": {
         "Enable": <%= @ratelimit_enable_rate_limiter %>,
