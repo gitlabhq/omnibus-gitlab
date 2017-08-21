@@ -728,7 +728,6 @@ default['gitlab']['mattermost']['service_enable_apiv3'] = true
 default['gitlab']['mattermost']['service_goroutine_health_threshold'] = -1
 default['gitlab']['mattermost']['service_user_access_tokens'] = false
 
-
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
 default['gitlab']['mattermost']['sql_data_source_replicas'] = []
