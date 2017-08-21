@@ -726,6 +726,8 @@ default['gitlab']['mattermost']['service_enable_emoji_picker'] = true
 default['gitlab']['mattermost']['service_enable_channel_viewed_messages'] = true
 default['gitlab']['mattermost']['service_enable_apiv3'] = true
 default['gitlab']['mattermost']['service_goroutine_health_threshold'] = -1
+default['gitlab']['mattermost']['service_user_access_tokens'] = false
+
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -776,6 +778,8 @@ default['gitlab']['mattermost']['email_enable_batching'] = false
 default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
 default['gitlab']['mattermost']['email_batching_interval'] = 30
 default['gitlab']['mattermost']['email_skip_server_certificate_verification'] = false
+default['gitlab']['mattermost']['email_smtp_auth'] = false
+default['gitlab']['mattermost']['email_notification_content_type'] = "full"
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10
