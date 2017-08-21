@@ -531,6 +531,15 @@ server {
       error_page 418 = @gitlab-workhorse;
       return 418;
   }
+  
+  # Build artifacts should be submitted to this location
+  location ~ /api/v4/jobs/[0-9]+/artifacts {
+      client_max_body_size 0;
+      # 'Error' 418 is a hack to re-use the @gitlab-workhorse block
+      error_page 418 = @gitlab-workhorse;
+      return 418;
+  }
+
 
   # For protocol upgrades from HTTP/1.0 to HTTP/1.1 we need to provide Host header if its missing
   if ($http_host = "") {
