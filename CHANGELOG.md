@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
 - Add configuration options for handling repository storage failures
 - Add support for `--negate` in sidekiq-cluster
+- Update Mattermost to 4.1.0
 
 9.4.3
 
