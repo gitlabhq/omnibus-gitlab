@@ -153,8 +153,8 @@ describe 'gitlab-ee::pgbouncer' do
       }
     )
     expect(chef_run).to render_file(databases_ini).with_content { |content|
-      expect(content).to match(%r{^first = host=1\.2\.3\.4 port=6432 dbname=first auth_user=first_user$})
-      expect(content).to match(%r{^second = host=5\.6\.7\.8 port=7432 dbname=second auth_user=second_user$})
+      expect(content).to match(%r{^first = host=1\.2\.3\.4 port=6432 auth_user=first_user$})
+      expect(content).to match(%r{^second = host=5\.6\.7\.8 port=7432 auth_user=second_user$})
     }
   end
 
@@ -179,7 +179,7 @@ describe 'gitlab-ee::pgbouncer' do
       }
     )
     expect(chef_run).to render_file(databases_ini)
-      .with_content(/^gitlabhq_production = host=127\.0\.0\.1 port=5432 dbname=gitlabhq_production auth_user=fakeuser$/)
+      .with_content(/^gitlabhq_production = host=127\.0\.0\.1 port=5432 auth_user=fakeuser$/)
     expect(chef_run).to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
       .with_content(%r{^"fakeuser" "md5fakemd5password"$})
   end
