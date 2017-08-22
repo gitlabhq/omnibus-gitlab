@@ -1,8 +1,9 @@
 # Omnibus based packages and images
 
-These packages are what GitLab offers today, which are all based on our Omnibus build system. These packages include everything you need to run GitLab, nearly all of its dependencies, and provide support across a wide range of operating systems.
+Below you can find some basic information on why GitLab provides packages and
+a Docker image that come with bundled dependencies.
 
-These are the easiest methods to get started with GitLab, and are also great for physical and virtual machine installations, and simple Docker installations.
+These methods are great for physical and virtual machine installations, and simple Docker installations.
 
 ## Goals
 
@@ -12,6 +13,7 @@ We have a few core goals with these packages
 1. Wide support of cloud service providers
 
 ## GitLab Omnibus Architecture
+
 
 GitLab in its core is a Ruby on Rails project. However, GitLab as a whole
 application is more complex and has multiple components. If these components are
@@ -102,9 +104,9 @@ what was noted above:
 1. Very simple to get started.
 1. Upgrading to the latest version is extremely simple.
 1. Running separate services in multiple containers and keeping them running
-is can be more complex and might not be required for a given install
+can be more complex and might not be required for a given install
 
-This method is great for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation when they are just getting started. This method is a great introduction, and will work well for smaller organizations.
+This method is useful for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation. This method is a great introduction, and will work well for smaller organizations.
 
 [GitLab Architecture Overview]: https://docs.gitlab.com/ce/development/architecture.html#gitlab-architecture-overview
 [rubygems]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/Gemfile.lock
