@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.0.0
+- Add option to pass EXTERNAL_URL during installation d0f30ef2
+  * Saves users from manually editing gitlab.rb just to set the URL and hence
+    makes installation process easier
+
 9.5.0
 
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
