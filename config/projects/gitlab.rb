@@ -35,7 +35,7 @@ else
   conflict 'gitlab-ee'
 end
 
-maintainer 'GitLab Inc. <support@gitlab.com>'
+maintainer 'GitLab, Inc. <support@gitlab.com>'
 homepage 'https://about.gitlab.com/'
 
 license 'MIT'
