@@ -17,6 +17,15 @@
 #
 
 name 'git'
+
+# When updating the git version here, but sure to also update the following:
+# - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md#installation
+# - https://gitlab.com/gitlab-org/gitaly/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md
+# - https://gitlab.com/gitlab-org/gitlab-recipes/blob/master/install/centos/README.md
+# - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
+# - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
 default_version '2.13.5'
 
 license 'GPL-2.0'
