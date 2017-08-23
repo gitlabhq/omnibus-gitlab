@@ -15,7 +15,6 @@
 #
 
 account_helper = AccountHelper.new(node)
-pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
@@ -52,7 +51,6 @@ end
 template node['gitlab']['pgbouncer']['databases_ini'] do
   source "#{File.basename(name)}.erb"
   user node['gitlab']['pgbouncer']['databases_ini_user']
-  helper(:pgb_helper) { pgb_helper }
   variables lazy { node['gitlab']['pgbouncer'].to_hash }
   notifies :run, 'execute[reload pgbouncer]', :immediately
 end
