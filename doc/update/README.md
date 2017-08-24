@@ -190,59 +190,18 @@ If you meet all the requirements above, follow the following instructions:
 1. Verify that you can upgrade with no downtime by checking the
 "Upgrade barometer" section on the main [release blog post](https://about.gitlab.com/blog/categories/release/)
 (published on the 22nd of each month).
+1. Create a "skip-auto-migrations" file on every one of your nodes running unicorn:
+  ```
+  sudo touch /etc/gitlab/skip-auto-migrations
+  ```
+  This will prevent the upgrade from running `gitlab-ctl reconfigure` and
+  automatically migrating the database.
+1. If you have multiple nodes in an HA environment decide which node is the "deploy node".
+1. On the Deploy Node, install gitlab-ee. It will not run any migrations because of the skip-auto-migrations.
+1. On the Deploy Node run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`, to get the pre-deploy migrations in place.
+1. On all other nodes, install gitlab-ee and run a reconfigure so they can get the newest code.
+1. Once all nodes are updated, run `sudo gitlab-rake db:migrate' from the deploy node to run post deployment migrations. 
 
-2. You will have to use post-deployment migrations and in order to do this you must skip auto migrations. Create a "skip-auto-migrations" file:
-
-```
-sudo touch /etc/gitlab/skip-auto-migrations
-```
-
-This will prevent the upgrade from running `gitlab-ctl reconfigure` and
-automatically migrating the database.
-
-**For High Availability Setups**
-Follow step #2 for your primary application node. All the non-primary nodes should have `gitlab_rails['auto_migrate'] = false` in their respective `/etc/gitlab/gitlab.rb` file.
-
-3. Upgrade GitLab
-
-**For Debian/Ubuntu**
-
-```
-## Make sure the repositories are up-to-date
-sudo apt-get update
-
-## Install the package using the version you'd like to upgrade to
-## A list of all packages can be found at https://packages.gitlab.com/gitlab/
-sudo apt-get install gitlab-ee=9.x.x-ee.0
-```
-
-**For CentOS/RHEL**
-
-```
-## Make sure the repositories are up-to-date
-yum check-update
-
-## Install the package using the version you'd like to upgrade to
-## A list of all packages can be found at https://packages.gitlab.com/gitlab/
-sudo yum install gitlab-ee-9.x.x-ee.0.el7.x86_64
-```
-
-4. Reconfigure GitLab
-
-Once the package is upgraded, run the following:
-
-```
-SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-```
-
-5. Finish by running a database migration manually. If you have a high
-availability setup you will need to run these on each node. Please note there are some
-migrations that might take significant time depending on your installation
-size. You can run the migration with:
-
-```
-sudo gitlab-rake db:migrate
-```
 
 ## Updating from GitLab 8.10 and lower to 8.11 or newer
 
