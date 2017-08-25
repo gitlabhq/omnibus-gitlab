@@ -8,6 +8,9 @@ omnibus-gitlab repository.
   * Saves users from manually editing gitlab.rb just to set the URL and hence
     makes installation process easier
 
+9.5.2
+- Fix Mattermost log location
+
 9.5.0
 
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
