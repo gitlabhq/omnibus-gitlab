@@ -21,7 +21,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! For more deatils on each role, see:
 ##! <doc url here>
 ##!
-# active_roles = 'redis_sentinel_role redis_master_role'
+# active_roles 'redis_sentinel_role redis_master_role'
 
 ## Legend
 ##! The following notations at the beginning of each line may be used to
