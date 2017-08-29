@@ -1,4 +1,4 @@
 #!/bin/sh
 exec 2>&1
 <%= render("mount_point_check.erb") %>
-exec /opt/gitlab/embedded/bin/remote_syslog --no-detach --debug-level DEBUG -c <%= node['gitlab']['remote-syslog']['dir'] %>/remote_syslog.yml
+exec /opt/gitlab/embedded/bin/remote_syslog --no-detach --debug-level DEBUG -c <%= @options[:dir] %>/remote_syslog.yml <%=  "--hostname #{@options[:logging_hostname]}" if @options[:logging_hostname] %>

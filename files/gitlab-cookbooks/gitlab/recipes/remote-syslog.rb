@@ -19,6 +19,7 @@ omnibus_helper = OmnibusHelper.new(node)
 
 remote_syslog_dir = node['gitlab']['remote-syslog']['dir']
 remote_syslog_log_dir = node['gitlab']['remote-syslog']['log_directory']
+logging_hostname = node['gitlab']['logging']['udp_log_shipping_hostname']
 
 [
   remote_syslog_dir,
@@ -39,7 +40,9 @@ end
 runit_service "remote-syslog" do
   down node['gitlab']['remote-syslog']['ha']
   options({
-    :log_directory => remote_syslog_log_dir
+    :log_directory => remote_syslog_log_dir,
+    :dir => remote_syslog_dir,
+    :logging_hostname => logging_hostname,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['remote-syslog'].to_hash)
 end
