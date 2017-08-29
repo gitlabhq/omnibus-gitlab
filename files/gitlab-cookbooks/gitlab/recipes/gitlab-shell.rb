@@ -121,8 +121,8 @@ end
 # git_user is valid.
 bash "Set proper security context on ssh files for selinux" do
   code <<-EOS
-    chcon --recursive --type ssh_home_t #{ssh_dir}
-    chcon --type sshd_key_t #{authorized_keys}
+    semanage fcontext -a -t ssh_home_t '#{ssh_dir}(/.*)?'
+    restorecon -R -v '#{ssh_dir}'
   EOS
   only_if "id -Z"
 end

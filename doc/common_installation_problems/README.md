@@ -165,6 +165,10 @@ get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
 `/var/opt/gitlab/.ssh`.
 
+This behavior is fixed by the addition of the runtime dependency
+`policycoreutils-python` in RHEL6 and RHEL7, which allows context to be set
+permanently using `semanage`.
+
 #### All systems
 
 The git user is created, by default, with a locked password, shown by `'!'` in
