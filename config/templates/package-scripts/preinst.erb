@@ -7,6 +7,30 @@ mkdir -p /var/log/gitlab/reconfigure
 
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
 
+pg_check() {
+  # Check if an upgrade or installation. This file will exist only in an installation.
+  # This is a redundant check as pg_check will only be executed if $1 matches
+  # an upgrade.
+  if [ -e "/opt/gitlab/embedded/bin/psql"] ; then
+    # Check if psql version is anything except 9.6.x
+    if $(/opt/gitlab/embedded/bin/psql --version | grep -o "[0-9.]*" | grep -vEq "9\.6\.[0-9]*") ; then
+      notify
+      notify "Your version of PostgreSQL is too old and no longer supported."
+      notify "If you are on a version older than 8.15.0 and using omnibus's bundled PostgreSQL, you have to "
+      notify "upgrade to GitLab 9.0.0 first to get your PostgreSQL version automatically upgraded."
+      notify "If you are on a version newer than 8.15.0 and using omnibus's bundled PostgreSQL, you can run "
+      notify "the following command to upgrade your PostgreSQL to latest version:"
+      notify "  sudo gitlab-ctl pg-upgrade"
+      notify ""
+      notify "You can check your PostgreSQL version using the following command"
+      notify "  /opt/gitlab/embedded/bin/psql --version"
+      notify ""
+      notify "Upgrade failed. Retry the upgrade after your have upgraded your PostgreSQL version."
+      exit 1
+    fi
+  fi
+}
+
 main() {
   if [ -e "${skip_migrations_file}" ] ; then
     # The user wants us to do nothing
@@ -38,10 +62,12 @@ fi
 case "$1" in
   2)
     # Looks like an RPM upgrade
+    pg_check
     main
     ;;
   upgrade)
     # Looks like a DEB upgrade
+    pg_check
     main
     ;;
   *)
