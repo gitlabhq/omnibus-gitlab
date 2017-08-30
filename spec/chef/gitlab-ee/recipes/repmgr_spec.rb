@@ -18,7 +18,7 @@ node_name=fauxhai.local
 conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
 
 use_replication_slots=0
-loglevel=NOTICE
+loglevel=INFO
 logfacility=STDERR
 
 pg_bindir='/opt/gitlab/embedded/bin'
