@@ -16,13 +16,26 @@ cluster=gitlab_cluster
 node=1647392869
 node_name=fauxhai.local
 conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
+
+use_replication_slots=0
+loglevel=NOTICE
+logfacility=STDERR
+
 pg_bindir='/opt/gitlab/embedded/bin'
+
 service_start_command = /opt/gitlab/bin/gitlab-ctl start postgresql
 service_stop_command = /opt/gitlab/bin/gitlab-ctl stop postgresql
 service_restart_command = /opt/gitlab/bin/gitlab-ctl restart postgresql
+service_reload_command = /opt/gitlab/bin/gitlab-ctl hup postgresql
+failover = automatic
 promote_command = /opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf
 follow_command = /opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf
-failover = automatic
+monitor_interval_secs=2
+master_response_timeout=60
+reconnect_attempts=6
+reconnect_interval=10
+retry_promote_interval_secs=300
+witness_repl_nodes_sync_interval_secs=15
     EOF
   end
 

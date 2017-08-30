@@ -9,4 +9,4 @@ cd <%= node['gitlab']['postgresql']['dir'] %>
 exec chpst -P \
   -U <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['username'] %> \
   -u <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['username'] %> \
-  /opt/gitlab/embedded/bin/repmgrd -f /var/opt/gitlab/postgresql/repmgr.conf --verbose >> <%= node['repmgr']['log_directory'] %>/repmgrd.log
+  /opt/gitlab/embedded/bin/repmgrd -f /var/opt/gitlab/postgresql/repmgr.conf
