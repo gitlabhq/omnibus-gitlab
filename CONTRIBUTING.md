@@ -1,5 +1,16 @@
-These are the contributing guidelines for omnibus-gitlab issues and merge
-requests.
+## Contributing
+
+Thank you for your interest in contributing to this GitLab project! We welcome
+all contributions. By participating in this project, you agree to abide by the
+[code of conduct](#code-of-conduct).
+
+## Contributor license agreement
+
+By submitting code as an individual you agree to the [individual contributor
+license agreement][individual-agreement].
+
+By submitting code as an entity you agree to the [corporate contributor license
+agreement][corporate-agreement].
 
 ## General issue guidelines
 
@@ -7,7 +18,7 @@ If you are experiencing problems during GitLab package installation or have issu
 
 - Include the omnibus-gitlab version when discussing behavior: `dpkg-query -W "gitlab*"` or `rpm -q gitlab`.
 - Include the omnibus-gitlab configuration: `sudo gitlab-ctl show-config`
-- Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks "```".
+- Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks "``` TEXT ```".
 
 *Warning* Be careful when pasting log outputs of `gitlab-ctl reconfigure` or `gitlab-ctl show-config`; They will contain secrets like passwords and keys so *make sure to edit out all secrets before pasting the log output*.
 
@@ -35,8 +46,8 @@ all users that create issues in this repository:
 When submitting an issue that is not a feature request, please submit the following:
 
 1. Make sure that the issue is with the package itself. If your GitLab is running but you are seeing error page 500, first check https://about.gitlab.com/getting-help/ on where to ask your question
-1. Include the omnibus-gitlab package version with: dpkg-query -W
-gitlab or rpm -q gitlab
+1. Include the omnibus-gitlab package version with: `dpkg-query -W
+gitlab` or `rpm -q gitlab`
 1. Relevant sections of `/etc/gitlab/gitlab.rb` (make sure to omit any sections that start with # and passwords)
 1. Whether the problems are caused on a fresh install or an upgrade(Describe the upgrade history)
 1. Describe the OS and the system environment GitLab is installed on (Is it a clean VM, is anything else running on it, etc.)
@@ -47,10 +58,8 @@ gitlab or rpm -q gitlab
 When the maintainer suspects the reported issue is not related to the problems with omnibus-gitlab, following template can be used to respond to the issue reporter:
 
 ```
-
 Thanks for reporting this issue. I suspect that the issue you are experiencing is not related to the package or configuration of the package itself. Omnibus-gitlab repository is used for packaging GitLab. Since this looks like a problem not related to the packaging please check
 [how to get help](https://about.gitlab.com/getting-help/) for your issue. I will close this issue but if you still think this is a problem with the package please @ mention me with the steps to reproduce the problem and I will reopen the issue.
-
 ```
 
 ### Closing issues
@@ -121,3 +130,36 @@ There are multiple community driven projects for packaging, such as [GitLab CE u
 
 If you are a maintainer or point of contact for a such project, and you require
 assistance or just want to talk about GitLab, please raise [an issue in the omnibus-gitlab project](https://gitlab.com/gitlab-org/omnibus-gitlab/issues).
+
+## Code of conduct
+
+As contributors and maintainers of this project, we pledge to respect all people
+who contribute through reporting issues, posting feature requests, updating
+documentation, submitting pull requests or patches, and other activities.
+
+We are committed to making participation in this project a harassment-free
+experience for everyone, regardless of level of experience, gender, gender
+identity and expression, sexual orientation, disability, personal appearance,
+body size, race, ethnicity, age, or religion.
+
+Examples of unacceptable behavior by participants include the use of sexual
+language or imagery, derogatory comments or personal attacks, trolling, public
+or private harassment, insults, or other unprofessional conduct.
+
+Project maintainers have the right and responsibility to remove, edit, or reject
+comments, commits, code, wiki edits, issues, and other contributions that are
+not aligned to this Code of Conduct. Project maintainers who do not follow the
+Code of Conduct may be removed from the project team.
+
+This code of conduct applies both within project spaces and in public spaces
+when an individual is representing the project or its community.
+
+Instances of abusive, harassing, or otherwise unacceptable behavior can be
+reported by emailing contact@gitlab.com.
+
+This Code of Conduct is adapted from the [Contributor Covenant][contributor-covenant], version 1.1.0,
+available at [http://contributor-covenant.org/version/1/1/0/](http://contributor-covenant.org/version/1/1/0/).
+
+[contributor-covenant]: http://contributor-covenant.org
+[individual-agreement]: https://docs.gitlab.com/ee/legal/individual_contributor_license_agreement.html
+[corporate-agreement]: https://docs.gitlab.com/ee/legal/corporate_contributor_license_agreement.html
