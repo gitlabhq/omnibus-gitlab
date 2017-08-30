@@ -6,7 +6,8 @@ omnibus-gitlab repository.
 10.0.0
 - Add option to pass EXTERNAL_URL during installation d0f30ef2
   * Saves users from manually editing gitlab.rb just to set the URL and hence
-    makes installation process easier
+	makes installation process easier
+- Remove geo_bulk_notify_worker_cron 44def4b5
 
 9.5.0
 
@@ -17,7 +18,7 @@ omnibus-gitlab repository.
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 - UDP log shipping as part of CE
 - Bump Git verison to 2.13.5
-- Added Consul service in EE 
+- Added Consul service in EE
 - Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
 - Add configuration options for handling repository storage failures
 - Add support for `--negate` in sidekiq-cluster
