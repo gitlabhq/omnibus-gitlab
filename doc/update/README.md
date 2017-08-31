@@ -551,9 +551,9 @@ settings in gitlab.rb; see the [omnibus-gitlab README](../settings/README.md).
 ### Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 Unlike the previous chapter, the non-Omnibus installation is using MySQL while the Omnibus installation is using PostgreSQL.
 
-Option #1: Omnibus packages for EE can be configured to use an external [non-packaged MySQL database](../settings/database.md#using-a-mysql-database-management-server-enterprise-edition-only).
+Option \#1: Omnibus packages for EE can be configured to use an external [non-packaged MySQL database](../settings/database.md#using-a-mysql-database-management-server-enterprise-edition-only).
 
-Option #2: Convert to PostgreSQL and use the built-in server as the instructions below.
+Option \#2: Convert to PostgreSQL and use the built-in server as the instructions below.
 
 * [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system)
 * [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ce/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
