@@ -677,7 +677,7 @@ default['gitlab']['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
 default['gitlab']['mattermost']['env'] = {}
 
-default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
+default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost/'
 default['gitlab']['mattermost']['log_console_enable'] = true
 default['gitlab']['mattermost']['log_enable_webhook_debugging'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
