@@ -296,16 +296,6 @@ default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or web editor will no longer work.
-  [
-    # Cores + 1 gives good CPU utilization.
-    node['cpu']['total'].to_i + 1,
-    # See how many 300MB worker processes fit in (total RAM - 1GB). We add
-    # 128000 KB in the numerator to get rounding instead of integer truncation.
-    (node['memory']['total'].to_i - 1048576 + 128000) / 358400
-  ].min # min because we want to exceed neither CPU nor RAM
-].max # max because we need at least 2 workers
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
@@ -318,6 +308,19 @@ default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
 default['gitlab']['unicorn']['worker_memory_limit_min'] = "400 * 1 << 20"
 default['gitlab']['unicorn']['worker_memory_limit_max'] = "650 * 1 << 20"
+default['gitlab']['unicorn']['worker_processes'] = [
+  2, # Two is the minimum or web editor will no longer work.
+  [
+    # Cores + 1 gives good CPU utilization.
+    node['cpu']['total'].to_i + 1,
+    # See how many worker processes fit in (total RAM - 1.5GB).
+    # Using the formula: (t - 1.5GB + (n/2)) / n
+    # t - total ram
+    # n - per worker ram. Use a value based on worker_memory_limit_min
+    # We add (n/2) in the numerator to get rounding instead of integer truncation.
+    (node['memory']['total'].to_i - 1572864 + 204800) / 409600
+  ].min # min because we want to exceed neither CPU nor RAM
+].max # max because we need at least 2 workers
 
 ####
 # Sidekiq
