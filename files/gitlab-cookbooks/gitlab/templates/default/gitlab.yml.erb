@@ -35,7 +35,7 @@ production: &base
     user: <%= node['gitlab']['user']['username'] %>
 
     ## Date & Time settings
-    time_zone: <%= single_quote(@time_zone) %>
+    time_zone: <%= quote(@time_zone) %>
 
     ## Email settings
     # Uncomment and set to false if you need to disable email sending from GitLab (default: true)
@@ -65,7 +65,7 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com
-    issue_closing_pattern: <%= single_quote(@gitlab_issue_closing_pattern) %>
+    issue_closing_pattern: <%= quote(@gitlab_issue_closing_pattern) %>
 
     ## Default project features settings
     default_projects_features:
@@ -95,17 +95,17 @@ production: &base
 
     # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
     # The placeholder can be omitted but if present, it must appear in the "user" part of the address (before the `@`).
-    address: <%= single_quote(@incoming_email_address) %>
+    address: <%= quote(@incoming_email_address) %>
 
     # Email account username
     # With third party providers, this is usually the full email address.
     # With self-hosted email servers, this is usually the user part of the email address.
-    user: <%= single_quote(@incoming_email_email) %>
+    user: <%= quote(@incoming_email_email) %>
     # Email account password
-    password: <%= single_quote(@incoming_email_password) %>
+    password: <%= quote(@incoming_email_password) %>
 
     # IMAP server host
-    host: <%= single_quote(@incoming_email_host) %>
+    host: <%= quote(@incoming_email_host) %>
     # IMAP server port
     port: <%= @incoming_email_port %>
     # Whether the IMAP server uses SSL
@@ -114,7 +114,7 @@ production: &base
     start_tls: <%= @incoming_email_start_tls %>
 
     # The mailbox where incoming mail will end up. Usually "inbox".
-    mailbox: <%= single_quote(@incoming_email_mailbox_name) %>
+    mailbox: <%= quote(@incoming_email_mailbox_name) %>
     # The IDLE command timeout.
     idle_timeout: <%= @incoming_email_idle_timeout %>
 
@@ -125,7 +125,7 @@ production: &base
     path: <%= @artifacts_path %>
     object_store:
       enabled: <%= @artifacts_object_store_enabled %>
-      remote_directory: <%= single_quote(@artifacts_object_store_remote_directory) %>
+      remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
       connection: <%= @artifacts_object_store_connection.to_json %>
 
   ## Git LFS
@@ -162,8 +162,8 @@ production: &base
   ## For Libravatar see: https://docs.gitlab.com/ce/customization/libravatar.html
   gravatar:
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
-    plain_url: <%= single_quote(@gravatar_plain_url) %>     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
-    ssl_url:   <%= single_quote(@gravatar_ssl_url) %>    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
+    plain_url: <%= quote(@gravatar_plain_url) %>     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
+    ssl_url:   <%= quote(@gravatar_ssl_url) %>    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
 
   ## Auxiliary jobs
   # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
@@ -260,21 +260,21 @@ production: &base
       <%= provider_id %>: <%= settings.to_json %>
     <% end %>
   <% else %>
-    host: <%= single_quote(@ldap_host) %>
+    host: <%= quote(@ldap_host) %>
     port: <%= @ldap_port %>
-    uid: <%= single_quote(@ldap_uid) %>
-    method: <%= single_quote(@ldap_method) %> # "tls" or "ssl" or "plain"
-    bind_dn: <%= single_quote(@ldap_bind_dn) %>
-    password: <%= single_quote(@ldap_password) %>
+    uid: <%= quote(@ldap_uid) %>
+    method: <%= quote(@ldap_method) %> # "tls" or "ssl" or "plain"
+    bind_dn: <%= quote(@ldap_bind_dn) %>
+    password: <%= quote(@ldap_password) %>
     active_directory: <%= @ldap_active_directory %>
     allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
-    base: <%= single_quote(@ldap_base) %>
-    user_filter: <%= single_quote(@ldap_user_filter) %>
+    base: <%= quote(@ldap_base) %>
+    user_filter: <%= quote(@ldap_user_filter) %>
 
     ## EE only
-    group_base: <%= single_quote(@ldap_group_base) %>
-    admin_group: <%= single_quote(@ldap_admin_group) %>
-    sync_ssh_keys: <%= single_quote(@ldap_sync_ssh_keys) %>
+    group_base: <%= quote(@ldap_group_base) %>
+    admin_group: <%= quote(@ldap_admin_group) %>
+    sync_ssh_keys: <%= quote(@ldap_sync_ssh_keys) %>
     sync_time: <%= @ldap_sync_time %>
   <% end %>
 
@@ -392,7 +392,7 @@ production: &base
       # Fog storage connection settings, see http://fog.io/storage/ .
       connection: <%= @backup_upload_connection.to_json if @backup_upload_connection %>
       # The remote 'directory' to store your backups. For S3, this would be the bucket name.
-      remote_directory: <%= single_quote(@backup_upload_remote_directory) %>
+      remote_directory: <%= quote(@backup_upload_remote_directory) %>
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
       encryption: <%= @backup_encryption %>
       storage_class: <%= @backup_storage_class %>
@@ -446,13 +446,13 @@ production: &base
   extra:
     <% if @extra_google_analytics_id %>
     ## Google analytics. Uncomment if you want it
-    google_analytics_id: <%= single_quote(@extra_google_analytics_id) %>
+    google_analytics_id: <%= quote(@extra_google_analytics_id) %>
     <% end %>
 
     <% if @extra_piwik_url %>
     ## Piwik analytics.
-    piwik_url: <%= single_quote(@extra_piwik_url) %>
-    piwik_site_id: <%= single_quote(@extra_piwik_site_id) %>
+    piwik_url: <%= quote(@extra_piwik_url) %>
+    piwik_site_id: <%= quote(@extra_piwik_site_id) %>
     <% end %>
 
   rack_attack:
