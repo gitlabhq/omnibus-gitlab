@@ -1096,7 +1096,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['sql_query_timeout'] = 30
 
 
-# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost'
+# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost/'
 # mattermost['log_console_enable'] = true
 # mattermost['log_console_level'] = 'INFO'
 # mattermost['log_enable_file'] = false

@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.5.3
+- Fix Mattermost log location
+
 9.5.0
 
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
