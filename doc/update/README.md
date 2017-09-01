@@ -194,7 +194,7 @@ running GitLab Rails application:
   automatically running database migrations.
 1. If you have multiple nodes in an HA environment decide which node is the `Deploy Node`.
 1. On the `Deploy Node`, install gitlab-ee. Make sure that this node has the following line in `/etc/gitlab/gitlab.rb`:
-  ```ruby
+  ```
   gitlab_rails['auto_migrate'] = false
   ```
 This setting will prevent automatic database migrations within `gitlab-ctl reconfigure`.
