@@ -8,7 +8,8 @@ omnibus-gitlab repository.
   * Saves users from manually editing gitlab.rb just to set the URL and hence
     makes installation process easier
 
-9.5.2
+9.5.4
+
 - Fix Mattermost log location
 
 9.5.0
