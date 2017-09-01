@@ -43,6 +43,69 @@ and run `sudo gitlab-ctl reconfigure`.
 
 [CAcert.org]: http://www.cacert.org/
 
+## Troubleshooting
+
+If no symlinks are created in `/opt/gitlab/embedded/ssl/certs/` and you see
+the message "Skipping `cert.pem`" after running `gitlab-ctl reconfigure`, that
+means there may be one of two issues:
+
+1. The file in `/etc/gitlab/ssl/trusted-certs/` is a symlink
+2. The file is not a valid PEM or DER-encoded certificate
+
+To test whether the certificate is in a valid PEM format, you can run
+`openssl` to decode the certificate. For example:
+
+```
+/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
+```
+
+To test whether the certificate is in a valid DER format:
+
+```
+/opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
+```
+
+The output of a valid certificate will look something like the following:
+
+```
+Certificate:
+        Data:
+            Version: 1 (0x0)
+            Serial Number: 3578 (0xdfa)
+        Signature Algorithm: sha1WithRSAEncryption
+            Issuer: C=JP, ST=Tokyo, L=Chuo-ku, O=Frank4DD, OU=WebCert Support, CN=Frank4DD Web CA/emailAddress=support@frank4dd.com
+            Validity
+                Not Before: Aug 22 05:26:54 2012 GMT
+                Not After : Aug 21 05:26:54 2017 GMT
+            Subject: C=JP, ST=Tokyo, O=Frank4DD, CN=www.example.com
+            Subject Public Key Info:
+                Public Key Algorithm: rsaEncryption
+                    Public-Key: (512 bit)
+                    Modulus:
+                        00:9b:fc:66:90:79:84:42:bb:ab:13:fd:2b:7b:f8:
+                        de:15:12:e5:f1:93:e3:06:8a:7b:b8:b1:e1:9e:26:
+                        bb:95:01:bf:e7:30:ed:64:85:02:dd:15:69:a8:34:
+                        b0:06:ec:3f:35:3c:1e:1b:2b:8f:fa:8f:00:1b:df:
+                        07:c6:ac:53:07
+                    Exponent: 65537 (0x10001)
+        Signature Algorithm: sha1WithRSAEncryption
+             14:b6:4c:bb:81:79:33:e6:71:a4:da:51:6f:cb:08:1d:8d:60:
+             ec:bc:18:c7:73:47:59:b1:f2:20:48:bb:61:fa:fc:4d:ad:89:
+             8d:d1:21:eb:d5:d8:e5:ba:d6:a6:36:fd:74:50:83:b6:0f:c7:
+             1d:df:7d:e5:2e:81:7f:45:e0:9f:e2:3e:79:ee:d7:30:31:c7:
+             20:72:d9:58:2e:2a:fe:12:5a:34:45:a1:19:08:7c:89:47:5f:
+             4a:95:be:23:21:4a:53:72:da:2a:05:2f:2e:c9:70:f6:5b:fa:
+             fd:df:b4:31:b2:c1:4a:9c:06:25:43:a1:e6:b4:1e:7f:86:9b:
+             16:40
+```
+
+An invalid file will display something like:
+
+```
+unable to load certificate
+140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
+```
+
 ## Details on how GitLab and SSL work
 
 GitLab-Omnibus includes its own library of OpenSSL and links all compiled
