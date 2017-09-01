@@ -180,15 +180,11 @@ Starting with GitLab 9.1.0, it's possible to upgrade to a newer version of
 GitLab without having to take your GitLab instance offline. This can only be
 done if you are using PostgreSQL. If you are using MySQL you will still need downtime when upgrading.
 
-Upgrading without any downtime can only be done one upgrade release at a time. For example,
-if you're on 9.1.0, you can only upgrade without any downtime for 9.1.1. If you'd like to upgrade from
-9.1.5 to 9.1.15, you will have to upgrade to 9.1.6, 9.1.7., 9.1.8., etc. all the way up to 9.1.15. If 9.1.15 is the
-last release of 9.1 then you can safely upgrade from that version to 9.2.0.
+Verify that you can upgrade with no downtime by checking the
+[Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
 
 If you meet all the requirements above, follow the following instructions:
 
-1. Verify that you can upgrade with no downtime by checking the
-[Upgrade without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime).
 1. Create a "skip-auto-migrations" file on every one of your nodes
 running GitLab Rails application:
   ```
