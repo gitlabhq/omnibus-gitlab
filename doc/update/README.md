@@ -188,19 +188,23 @@ last release of 9.1 then you can safely upgrade from that version to 9.2.0.
 If you meet all the requirements above, follow the following instructions:
 
 1. Verify that you can upgrade with no downtime by checking the
-"Upgrade barometer" section on the main [release blog post](https://about.gitlab.com/blog/categories/release/)
-(published on the 22nd of each month).
-1. Create a "skip-auto-migrations" file on every one of your nodes running unicorn:
+[Upgrade without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime).
+1. Create a "skip-auto-migrations" file on every one of your nodes
+running GitLab Rails application:
   ```
   sudo touch /etc/gitlab/skip-auto-migrations
   ```
-  This will prevent the upgrade from running `gitlab-ctl reconfigure` and
-  automatically migrating the database.
-1. If you have multiple nodes in an HA environment decide which node is the "deploy node".
-1. On the Deploy Node, install gitlab-ee. It will not run any migrations because of the skip-auto-migrations.
-1. On the Deploy Node run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`, to get the pre-deploy migrations in place.
-1. On all other nodes, install gitlab-ee and run a reconfigure so they can get the newest code.
-1. Once all nodes are updated, run `sudo gitlab-rake db:migrate' from the deploy node to run post deployment migrations. 
+  This will prevent the upgrade from automatically running `gitlab-ctl reconfigure` and
+  automatically running database migrations.
+1. If you have multiple nodes in an HA environment decide which node is the `Deploy Node`.
+1. On the `Deploy Node`, install gitlab-ee. Make sure that this node has the following line in `/etc/gitlab/gitlab.rb`:
+  ```ruby
+  gitlab_rails['auto_migrate'] = false
+  ```
+This setting will prevent automatic database migrations within `gitlab-ctl reconfigure`.
+1. On the `Deploy Node` run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`, to get the pre-deploy migrations in place.
+1. On all other nodes, install gitlab-ee and run a `gitlab-ctl reconfigure` so they can get the newest code.
+1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node` to run post-deployment migrations.
 
 
 ## Updating from GitLab 8.10 and lower to 8.11 or newer
