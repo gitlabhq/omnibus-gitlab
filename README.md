@@ -24,6 +24,10 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 
 *We left the links below in the readme to preserve old links, but please use the [readme in the doc directory](doc/README.md) to browse the complete documentation.*
 
+## Contributing
+
+Please see the [contribution guidelines](CONTRIBUTING.md)
+
 ## Installation
 
 Please follow the steps on the [downloads page][downloads].
