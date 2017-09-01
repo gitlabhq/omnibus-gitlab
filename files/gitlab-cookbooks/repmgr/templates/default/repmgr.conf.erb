@@ -19,7 +19,7 @@ event_notification_command=<%= @event_notification_command %>
 event_notifications=<%= @event_notifications %>
 <% end %>
 
-pg_bindir='<%= node['package']['install-dir'] %>/embedded/bin'
+pg_bindir=<%= @pg_bindir %>
 
 service_start_command = <%= @service_start_command  %>
 service_stop_command = <%= @service_stop_command  %>

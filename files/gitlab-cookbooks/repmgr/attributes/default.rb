@@ -9,6 +9,7 @@ default['repmgr']['node_number'] = nil
 default['repmgr']['port'] = 5432
 default['repmgr']['trust_auth_cidr_addresses'] = []
 default['repmgr']['user'] = 'gitlab_repmgr'
+default['repmgr']['pg_bindir'] = '/opt/gitlab/embedded/bin'
 default['repmgr']['daemon'] = true
 default['repmgrd']['enable'] = true
 default['repmgr']['service_start_command'] = '/opt/gitlab/bin/gitlab-ctl start postgresql'

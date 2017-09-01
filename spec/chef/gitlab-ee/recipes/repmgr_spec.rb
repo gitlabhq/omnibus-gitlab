@@ -21,7 +21,7 @@ use_replication_slots=0
 loglevel=INFO
 logfacility=STDERR
 
-pg_bindir='/opt/gitlab/embedded/bin'
+pg_bindir=/opt/gitlab/embedded/bin
 
 service_start_command = /opt/gitlab/bin/gitlab-ctl start postgresql
 service_stop_command = /opt/gitlab/bin/gitlab-ctl stop postgresql
