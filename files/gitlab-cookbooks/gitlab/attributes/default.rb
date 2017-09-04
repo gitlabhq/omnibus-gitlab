@@ -113,7 +113,6 @@ default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_file_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false

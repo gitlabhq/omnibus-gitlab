@@ -1376,7 +1376,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Auxiliary cron jobs applicable to GitLab EE only
 ################################################################################
 #
-# gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
 # gitlab_rails['geo_file_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"

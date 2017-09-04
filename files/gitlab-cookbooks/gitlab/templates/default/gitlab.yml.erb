@@ -214,13 +214,6 @@ production: &base
       cron: "<%= @ldap_group_sync_worker_cron %>"
     <% end %>
 
-    # Gitlab Geo nodes notification worker
-    # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_bulk_notify_worker_cron.nil? %>
-    geo_bulk_notify_worker:
-      cron: "<%= @geo_bulk_notify_worker_cron %>"
-    <% end %>
-
     # GitLab Geo repository sync worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_repository_sync_worker_cron.nil? %>
