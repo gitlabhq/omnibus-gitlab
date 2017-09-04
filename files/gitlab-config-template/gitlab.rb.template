@@ -1575,6 +1575,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # Repmgr (EE only)
 ################################################################################
+# repmgr['enable'] = false
 # repmgr['cluster'] = 'gitlab_cluster'
 # repmgr['database'] = 'gitlab_repmgr'
 # repmgr['host'] = nil
@@ -1582,6 +1583,39 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['port'] = 5432
 # repmgr['trust_auth_cidr_addresses'] = []
 # repmgr['user'] = 'gitlab_repmgr'
+# repmgr['failover'] = 'automatic'
+# repmgr['log_directory'] = '/var/log/gitlab/repmgrd'
+# repmgr['node_name'] = nil
+# repmgr['pg_bindir'] = '/opt/gitlab/embedded/bin'
+# repmgr['service_start_command'] = '/opt/gitlab/bin/gitlab-ctl start postgresql'
+# repmgr['service_stop_command'] = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
+# repmgr['service_reload_command'] = '/opt/gitlab/bin/gitlab-ctl hup postgresql'
+# repmgr['service_restart_command'] = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
+# repmgr['service_promote_command'] = nil
+# repmgr['promote_command'] = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
+# repmgr['follow_command'] = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'
+
+# repmgr['upstream_node'] = nil
+# repmgr['use_replication_slots'] = false
+# repmgr['loglevel'] = 'INFO'
+# repmgr['logfacility'] = 'STDERR'
+# repmgr['logfile'] = nil
+
+# repmgr['event_notification_command'] = nil
+# repmgr['event_notifications'] = nil
+
+# repmgr['rsync_options'] = nil
+# repmgr['ssh_options'] = nil
+# repmgr['priority'] = nil
+
+# repmgr['retry_promote_interval_secs'] = 300
+# repmgr['witness_repl_nodes_sync_interval_secs'] = 15
+# repmgr['reconnect_attempts'] = 6
+# repmgr['reconnect_interval'] = 10
+# repmgr['monitor_interval_secs'] = 2
+# repmgr['master_response_timeout'] = 60
+# repmgr['daemon'] = true
+# repmgrd['enable'] = true
 
 ################################################################################
 # Consul (EEP only)
