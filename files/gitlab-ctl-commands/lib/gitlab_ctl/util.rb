@@ -1,4 +1,5 @@
 require 'mixlib/shellout'
+require 'io/console'
 require 'chef/mash'
 require 'chef/mixins'
 
@@ -7,8 +8,8 @@ require 'socket'
 module GitlabCtl
   module Util
     class <<self
-      def get_command_output(command)
-        shell_out = run_command(command)
+      def get_command_output(command, user = nil)
+        shell_out = run_command(command, false, user)
 
         begin
           shell_out.error!
@@ -21,8 +22,10 @@ module GitlabCtl
         shell_out.stdout
       end
 
-      def run_command(command, live: false)
-        shell_out = Mixlib::ShellOut.new(command)
+      def run_command(command, live: false, user: nil, timeout: nil)
+        timeout = Mixlib::ShellOut::DEFAULT_READ_TIMEOUT if timeout.nil?
+        shell_out = Mixlib::ShellOut.new(command, timeout: timeout)
+        shell_out.user = user unless user.nil?
         shell_out.live_stdout = $stdout if live
         shell_out.live_stderr = $stderr if live
         shell_out.run_command
@@ -48,6 +51,17 @@ module GitlabCtl
         end
 
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
+      end
+
+      def get_password
+        password = STDIN.getpass('Enter password: ')
+        password_confirm = STDIN.getpass('Confirm password: ')
+        raise GitlabCtl::Errors::PasswordMismatch unless password.eql?(password_confirm)
+        password
+      end
+
+      def userinfo(username)
+        Etc.getpwnam(username)
       end
     end
   end

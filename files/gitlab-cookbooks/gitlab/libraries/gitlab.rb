@@ -95,6 +95,7 @@ module Gitlab
   prometheus_monitoring ConfigMash.new
   pgbouncer ConfigMash.new
   repmgr ConfigMash.new
+  consul ConfigMash.new
 
   # Single-Service Roles
   # When enabled, default enabled services are disabled
@@ -236,8 +237,10 @@ module Gitlab
       end
 
       %w(
+        consul
         registry
         repmgr
+        repmgrd
       ).each do |key|
         rkey = key.tr('_', '-')
         results[rkey] = Gitlab[key]

@@ -131,7 +131,7 @@ describe PackageRepository do
           end
 
           it 'prints a message and aborts' do
-            expect { repo.upload('my-staging-repository', true) }.to output(%r{No packages found for upload. Are artifacts available?}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to raise_exception(%r{No packages found for upload. Are artifacts available?})
           end
         end
       end

@@ -28,11 +28,5 @@ source path: File.expand_path(
 )
 
 build do
-  if ee
-    ['', 'lib/'].each do |dir|
-      copy File.expand_path(
-        "files/gitlab-ctl-commands-ee/#{dir}*.rb", Omnibus::Config.project_root
-      ), "#{install_dir}/embedded/service/omnibus-ctl/#{dir}"
-    end
-  end
+  sync './', "#{install_dir}/embedded/service/omnibus-ctl-ee/" if ee
 end

@@ -113,7 +113,6 @@ default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['geo_bulk_notify_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_file_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
@@ -296,16 +295,6 @@ default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['unicorn']['enable'] = true
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or web editor will no longer work.
-  [
-    # Cores + 1 gives good CPU utilization.
-    node['cpu']['total'].to_i + 1,
-    # See how many 300MB worker processes fit in (total RAM - 1GB). We add
-    # 128000 KB in the numerator to get rounding instead of integer truncation.
-    (node['memory']['total'].to_i - 1048576 + 128000) / 358400
-  ].min # min because we want to exceed neither CPU nor RAM
-].max # max because we need at least 2 workers
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
@@ -318,6 +307,19 @@ default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
 default['gitlab']['unicorn']['worker_memory_limit_min'] = "400 * 1 << 20"
 default['gitlab']['unicorn']['worker_memory_limit_max'] = "650 * 1 << 20"
+default['gitlab']['unicorn']['worker_processes'] = [
+  2, # Two is the minimum or web editor will no longer work.
+  [
+    # Cores + 1 gives good CPU utilization.
+    node['cpu']['total'].to_i + 1,
+    # See how many worker processes fit in (total RAM - 1.5GB).
+    # Using the formula: (t - 1.5GB + (n/2)) / n
+    # t - total ram
+    # n - per worker ram. Use a value based on worker_memory_limit_min
+    # We add (n/2) in the numerator to get rounding instead of integer truncation.
+    (node['memory']['total'].to_i - 1572864 + 204800) / 409600
+  ].min # min because we want to exceed neither CPU nor RAM
+].max # max because we need at least 2 workers
 
 ####
 # Sidekiq
@@ -675,8 +677,9 @@ default['gitlab']['mattermost']['uid'] = nil
 default['gitlab']['mattermost']['gid'] = nil
 default['gitlab']['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['gitlab']['mattermost']['database_name'] = 'mattermost_production'
+default['gitlab']['mattermost']['env'] = {}
 
-default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
+default['gitlab']['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost/'
 default['gitlab']['mattermost']['log_console_enable'] = true
 default['gitlab']['mattermost']['log_enable_webhook_debugging'] = true
 default['gitlab']['mattermost']['log_console_level'] = 'INFO'
@@ -726,6 +729,7 @@ default['gitlab']['mattermost']['service_enable_emoji_picker'] = true
 default['gitlab']['mattermost']['service_enable_channel_viewed_messages'] = true
 default['gitlab']['mattermost']['service_enable_apiv3'] = true
 default['gitlab']['mattermost']['service_goroutine_health_threshold'] = -1
+default['gitlab']['mattermost']['service_user_access_tokens'] = false
 
 default['gitlab']['mattermost']['sql_driver_name'] = 'postgres'
 default['gitlab']['mattermost']['sql_data_source'] = nil
@@ -776,6 +780,8 @@ default['gitlab']['mattermost']['email_enable_batching'] = false
 default['gitlab']['mattermost']['email_batching_buffer_size'] = 256
 default['gitlab']['mattermost']['email_batching_interval'] = 30
 default['gitlab']['mattermost']['email_skip_server_certificate_verification'] = false
+default['gitlab']['mattermost']['email_smtp_auth'] = false
+default['gitlab']['mattermost']['email_notification_content_type'] = "full"
 
 default['gitlab']['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['gitlab']['mattermost']['ratelimit_per_sec'] = 10

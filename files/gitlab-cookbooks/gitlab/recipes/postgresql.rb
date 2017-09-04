@@ -111,14 +111,16 @@ template pg_hba_config do
   owner postgresql_username
   mode "0644"
   variables(lazy { node['gitlab']['postgresql'].to_hash })
-  notifies :restart, 'service[postgresql]', :immediately if should_notify
+  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
+  notifies :run, 'execute[start postgresql]', :immediately if should_notify
 end
 
 template File.join(postgresql_data_dir, 'pg_ident.conf') do
   owner postgresql_username
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]', :immediately if should_notify
+  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
+  notifies :run, 'execute[start postgresql]', :immediately if should_notify
 end
 
 runit_service "postgresql" do

@@ -3,17 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-UNRELEASED
+10.0.0
 
+- Add backup_timeout argument to geo db replication command
 - Remove sensitive params from the NGINX access logs 6983fe59
+- Add option to pass EXTERNAL_URL during installation d0f30ef2
+  * Saves users from manually editing gitlab.rb just to set the URL and hence
+	makes installation process easier
+- Remove geo_bulk_notify_worker_cron 44def4b5
+
+9.5.5
+- Add more options to repmgr.conf template
+
+9.5.4
+
+- Changing pg_hba configuration should only reload PG c99ef6
+
+9.5.3
+
+- Fix Mattermost log location 2126c7b3
+
+9.5.2
+
+- No changes
+
+9.5.1
+
+- No changes
 
 9.5.0
+
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
 - Bump openssl to 1.0.2l 04ae64d7
 - Allow deeply nested configuration settings in gitlab.rb
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 - UDP log shipping as part of CE
+- Bump Git verison to 2.13.5
+- Added Consul service in EE
+- Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
+- Add configuration options for handling repository storage failures
+- Add support for `--negate` in sidekiq-cluster
+- Update Mattermost to 4.1.0
 
 9.4.3
 

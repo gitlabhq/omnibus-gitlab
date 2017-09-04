@@ -150,7 +150,7 @@ the `git-data` parent directory by adding the following line to
 git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
 ```
 
-Starting from GitLab 8.10 you can also add more than one git data directory by
+You can also add more than one git data directory by
 adding the following lines to `/etc/gitlab/gitlab.rb` instead.
 
 ```ruby
@@ -267,6 +267,9 @@ mattermost
 
 # GitLab Registry user (only when using GitLab Registry)
 registry
+
+# GitLab Consul user (only when using GitLab Consul)
+gitlab-consul
 ```
 
 By default, omnibus-gitlab package expects that following groups exist:
@@ -292,6 +295,9 @@ mattermost
 
 # GitLab Registry group (only when using GitLab Registry)
 registry
+
+# GitLab Consul group (only when using GitLab Consul)
+gitlab-consul
 ```
 
 You can also use different user/group names but then you must specify user/group details in `/etc/gitlab/gitlab.rb`, eg.

@@ -34,6 +34,7 @@ default['gitlab']['sidekiq-cluster']['ha'] = false
 default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
 default['gitlab']['sidekiq-cluster']['interval'] = nil
 default['gitlab']['sidekiq-cluster']['queue_groups'] = []
+default['gitlab']['sidekiq-cluster']['negate'] = false
 
 ###
 # Geo: Secondary node configuration
@@ -153,15 +154,12 @@ default['gitlab']['pgbouncer']['dns_nxdomain_ttl'] = '15.0'
 default['gitlab']['pgbouncer']['admin_users'] = %w(gitlab-psql postgres pgbouncer)
 default['gitlab']['pgbouncer']['stats_users'] = %w(gitlab-psql postgres pgbouncer)
 default['gitlab']['pgbouncer']['ignore_startup_parameters'] = 'extra_float_digits'
-default['gitlab']['pgbouncer']['databases'] = {
-  gitlabhq_production: {
-    host: '127.0.0.1',
-    port: 5432,
-    user: 'pgbouncer',
-    # generate password with md5(password + username)
-    password: nil
-  }
-}
+default['gitlab']['pgbouncer']['databases_ini'] = '/var/opt/gitlab/pgbouncer/databases.ini'
+default['gitlab']['pgbouncer']['databases_ini_user'] = 'gitlab-psql'
+default['gitlab']['pgbouncer']['databases_json'] = '/var/opt/gitlab/pgbouncer/databases.json'
+default['gitlab']['pgbouncer']['databases'] = {}
+
 default['gitlab']['pgbouncer']['auth_type'] = 'md5'
 default['gitlab']['pgbouncer']['auth_hba_file'] = nil
 default['gitlab']['pgbouncer']['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
+default['gitlab']['pgbouncer']['users'] = {}

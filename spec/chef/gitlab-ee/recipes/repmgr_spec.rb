@@ -16,13 +16,26 @@ cluster=gitlab_cluster
 node=1647392869
 node_name=fauxhai.local
 conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
-pg_bindir='/opt/gitlab/embedded/bin'
+
+use_replication_slots=0
+loglevel=INFO
+logfacility=STDERR
+
+pg_bindir=/opt/gitlab/embedded/bin
+
 service_start_command = /opt/gitlab/bin/gitlab-ctl start postgresql
 service_stop_command = /opt/gitlab/bin/gitlab-ctl stop postgresql
 service_restart_command = /opt/gitlab/bin/gitlab-ctl restart postgresql
+service_reload_command = /opt/gitlab/bin/gitlab-ctl hup postgresql
+failover = automatic
 promote_command = /opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf
 follow_command = /opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf
-failover = automatic
+monitor_interval_secs=2
+master_response_timeout=60
+reconnect_attempts=6
+reconnect_interval=10
+retry_promote_interval_secs=300
+witness_repl_nodes_sync_interval_secs=15
     EOF
   end
 
@@ -30,19 +43,19 @@ failover = automatic
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  context 'disable_daemon' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::disable_daemon') }
+  context 'repmgrd_disable' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::repmgrd_disable') }
     it_behaves_like 'disabled runit service', 'repmgrd'
   end
 
-  context 'enable_daemon' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::enable_daemon') }
+  context 'repmgrd' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::repmgrd') }
     it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root'
   end
 
   context 'disable' do
-    it 'should include the repmgr::disable_daemon recipe' do
-      expect(chef_run).to include_recipe('repmgr::disable_daemon')
+    it 'should include the repmgr::repmgrd_disable recipe' do
+      expect(chef_run).to include_recipe('repmgr::repmgrd_disable')
     end
   end
 
@@ -77,7 +90,7 @@ failover = automatic
       end
 
       it 'should include the repmgr::enable_daemon recipe' do
-        expect(chef_run).to include_recipe('repmgr::enable_daemon')
+        expect(chef_run).to include_recipe('repmgr::repmgrd')
       end
 
       it 'sets up the repmgr specific entries in pg_hba.conf' do
@@ -133,6 +146,27 @@ failover = automatic
         resource = chef_run.postgresql_database('gitlab_repmgr')
         expect(resource).to notify('execute[register repmgr master node]').to(:run)
       end
+
+      context 'with consul enabled' do
+        it 'does not include the consul_user recipe without postgresql service' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+            }
+          )
+          expect(chef_run).not_to include_recipe('repmgr::consul_user')
+        end
+
+        it 'includes the consul_user recipe if the postgresql service is enabled' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              services: %w(postgresql)
+            }
+          )
+          expect(chef_run).to include_recipe('repmgr::consul_user_permissions')
+        end
+      end
     end
 
     context 'with non-default options' do
@@ -186,12 +220,38 @@ failover = automatic
         stub_gitlab_rb(
           repmgr: {
             enable: true,
-            daemon: false
+          },
+          repmgrd: {
+            enable: false
           }
         )
       end
 
+      it 'includes the repmgrd recipe' do
+        expect(chef_run).not_to include_recipe('repmgr::repmgrd')
+      end
+
       it_behaves_like 'disabled runit service', 'repmgrd'
+    end
+  end
+
+  describe 'repmgr::consul_user_permissions' do
+    before do
+      stub_gitlab_rb(
+        repmgr: {
+          enable: true
+        },
+        consul: {
+          enable: true,
+          services: %w(postgresql)
+        }
+      )
+    end
+
+    it 'creates the consul database user' do
+      expect(chef_run).to create_postgresql_user 'gitlab-consul'
+      create_resource = chef_run.postgresql_user('gitlab-consul')
+      expect(create_resource).to notify("execute[grant read only access to repmgr]").to(:run)
     end
   end
 end

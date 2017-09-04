@@ -29,8 +29,7 @@ class PackageRepository
     # For all other OSs, we only upload one package.
     upload_list = package_list(repository)
     if upload_list.empty?
-      puts "No packages found for upload. Are artifacts available?"
-      return
+      raise "No packages found for upload. Are artifacts available?"
     end
 
     upload_list.each do |pkg|

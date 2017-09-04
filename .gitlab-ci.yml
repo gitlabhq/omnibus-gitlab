@@ -156,7 +156,7 @@ variables:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 1 day
+    expire_in: 14 days
     paths:
       - pkg/
 
@@ -179,7 +179,7 @@ variables:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 1 day
+    expire_in: 14 days
     paths:
       - pkg/
   dependencies: []
@@ -577,7 +577,7 @@ SLES 12:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 1 day
+    expire_in: 14 days
     paths:
       - pkg/
   cache:

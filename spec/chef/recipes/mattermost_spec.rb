@@ -153,4 +153,12 @@ describe 'gitlab::mattermost' do
 
     it_behaves_like 'no gitlab authorization performed'
   end
+
+  context 'when a custom env variable is specified' do
+    before do
+      stub_gitlab_rb(mattermost: { env: { 'IAM' => 'CUSTOMVAR' } })
+    end
+
+    it_behaves_like "enabled mattermost env", "IAM", 'CUSTOMVAR'
+  end
 end

@@ -30,5 +30,7 @@ module GitlabCtl
     end
 
     class NodeError < StandardError; end
+
+    class PasswordMismatch < StandardError; end
   end
 end

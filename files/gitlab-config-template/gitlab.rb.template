@@ -282,7 +282,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ###! **If you want to use a single non-default directory to store git data use a
 ###!   path that doesn't contain symlinks.**
-# git_data_dirs({ "default" => { "path" => "/var/opt/gitlab/git-data", 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' } })
+# git_data_dirs({
+#   "default" => {
+#     "path" => "/mnt/nfs-01/git-data",
+#     "failure_count_threshold" => 10,
+#     "failure_wait_time" => 30,
+#     "failure_reset_time" => 1800,
+#     "storage_timeout" => 30
+#    }
+# })
 
 ### Gitaly settings
 # gitlab_rails['gitaly_token'] = 'secret token'
@@ -692,13 +700,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_temp_files'] = -1
 # postgresql['log_checkpoints'] = 'off'
 # To add custom entries to pg_hba.conf use the following
-# postgresql['custom_pg_hba_entries'][APPLICATION] = { # APPLICATION should identify what the settings are used for
-#   type: example,
-#   database: example,
-#   user: example,
-#   cidr: example,
-#   method: example,
-#   option: exmple
+# postgresql['custom_pg_hba_entries'] = {
+#   APPLICATION: { # APPLICATION should identify what the settings are used for
+#     type: example,
+#     database: example,
+#     user: example,
+#     cidr: example,
+#     method: example,
+#     option: exmple
+#   }
 # }
 # See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html for an explanation
 # of the values
@@ -1019,6 +1029,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['gid'] = nil
 # mattermost['home'] = '/var/opt/gitlab/mattermost'
 # mattermost['database_name'] = 'mattermost_production'
+# mattermost['env'] = {}
 
 # mattermost['service_use_ssl'] = false
 # mattermost['service_address'] = "127.0.0.1"
@@ -1060,6 +1071,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_channel_viewed_messages'] = true
 # mattermost['service_enable_apiv3'] = true
 # mattermost['service_goroutine_health_threshold'] = -1
+# mattermost['service_user_access_tokens'] = false
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -1085,7 +1097,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['sql_query_timeout'] = 30
 
 
-# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost'
+# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost/'
 # mattermost['log_console_enable'] = true
 # mattermost['log_console_level'] = 'INFO'
 # mattermost['log_enable_file'] = false
@@ -1123,6 +1135,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_batching_buffer_size'] = 256
 # mattermost['email_batching_interval'] = 30
 # mattermost['email_skip_server_certificate_verification'] = false
+# mattermost['email_smtp_auth'] = false
+# mattermost['email_notification_content_type'] = "full"
 
 # mattermost['file_max_file_size'] = 52428800
 # mattermost['file_driver_name'] = "local"
@@ -1362,7 +1376,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Auxiliary cron jobs applicable to GitLab EE only
 ################################################################################
 #
-# gitlab_rails['geo_bulk_notify_worker_cron'] = "*/10 * * * * *"
 # gitlab_rails['geo_file_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
@@ -1465,6 +1478,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ]
 #
 
+##! If negate is enabled then sidekiq-cluster will process all the queues that
+##! don't match those in queue_groups.
+
+# sidekiq_cluster['negate'] = false
+
 ################################################################################
 ## Additional Database Settings (EE only)
 ##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
@@ -1544,6 +1562,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
+# pgbouncer['users'] = [
+#   {
+#     name: USERNAME,
+#     password: MD5_PASSWORD_HASH
+#   }
+# ]
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
 #
@@ -1551,6 +1575,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # Repmgr (EE only)
 ################################################################################
+# repmgr['enable'] = false
 # repmgr['cluster'] = 'gitlab_cluster'
 # repmgr['database'] = 'gitlab_repmgr'
 # repmgr['host'] = nil
@@ -1558,3 +1583,76 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['port'] = 5432
 # repmgr['trust_auth_cidr_addresses'] = []
 # repmgr['user'] = 'gitlab_repmgr'
+# repmgr['failover'] = 'automatic'
+# repmgr['log_directory'] = '/var/log/gitlab/repmgrd'
+# repmgr['node_name'] = nil
+# repmgr['pg_bindir'] = '/opt/gitlab/embedded/bin'
+# repmgr['service_start_command'] = '/opt/gitlab/bin/gitlab-ctl start postgresql'
+# repmgr['service_stop_command'] = '/opt/gitlab/bin/gitlab-ctl stop postgresql'
+# repmgr['service_reload_command'] = '/opt/gitlab/bin/gitlab-ctl hup postgresql'
+# repmgr['service_restart_command'] = '/opt/gitlab/bin/gitlab-ctl restart postgresql'
+# repmgr['service_promote_command'] = nil
+# repmgr['promote_command'] = '/opt/gitlab/embedded/bin/repmgr standby promote -f /var/opt/gitlab/postgresql/repmgr.conf'
+# repmgr['follow_command'] = '/opt/gitlab/embedded/bin/repmgr standby follow -f /var/opt/gitlab/postgresql/repmgr.conf'
+
+# repmgr['upstream_node'] = nil
+# repmgr['use_replication_slots'] = false
+# repmgr['loglevel'] = 'INFO'
+# repmgr['logfacility'] = 'STDERR'
+# repmgr['logfile'] = nil
+
+# repmgr['event_notification_command'] = nil
+# repmgr['event_notifications'] = nil
+
+# repmgr['rsync_options'] = nil
+# repmgr['ssh_options'] = nil
+# repmgr['priority'] = nil
+
+# repmgr['retry_promote_interval_secs'] = 300
+# repmgr['witness_repl_nodes_sync_interval_secs'] = 15
+# repmgr['reconnect_attempts'] = 6
+# repmgr['reconnect_interval'] = 10
+# repmgr['monitor_interval_secs'] = 2
+# repmgr['master_response_timeout'] = 60
+# repmgr['daemon'] = true
+# repmgrd['enable'] = true
+
+################################################################################
+# Consul (EEP only)
+################################################################################
+# consul['enable'] = false
+# consul['dir'] = '/var/opt/gitlab/consul'
+# consul['user'] = 'gitlab-consul'
+# consul['config_file'] = '/var/opt/gitlab/consul/config.json'
+# consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
+# consul['data_dir'] = '/var/opt/gitlab/consul/data'
+# consul['log_directory'] = '/var/log/gitlab/consul'
+# consul['script_directory'] = '/var/opt/gitlab/consul/scripts'
+# consul['configuration'] = {
+#   'client_addr' => nil,
+#   'datacenter' => 'gitlab_consul',
+#   'enable_script_checks' => true,
+#   'server' => false
+# }
+# consul['services'] = []
+# consul['service_config'] = {
+#   'postgresql' => {
+#     'service' => {
+#       'name' => "postgresql",
+#       'address' => '',
+#       'port' => 5432,
+#       'checks' => [
+#         {
+#           'script' => "/var/opt/gitlab/consul/scripts/check_postgresql",
+#           'interval' => "10s"
+#         }
+#       ]
+#     }
+#   }
+# }
+# consul['watchers'] = {
+#   'postgresql' => {
+#     enable: false,
+#     handler: 'failover_pgbouncer'
+#   }
+# }

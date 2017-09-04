@@ -37,7 +37,8 @@
         "EnableEmojiPicker" : <%= @service_enable_emoji_picker %>,
         "EnableChannelViewedMessages" : <%= @service_enable_channel_viewed_messages %>,
         "EnableAPIv3" : <%= @service_enable_apiv3 %>,
-        "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>
+        "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>,
+        "EnableUserAccessTokens" : <%= @service_user_access_tokens %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -70,7 +71,7 @@
         "EnableFile": <%= @log_enable_file %>,
         "FileLevel": "<%= @log_file_level %>",
         "FileFormat": "<%= @log_file_format %>",
-        "FileLocation": "<%= @log_file_directory %>/mattermost.log",
+        "FileLocation": "<%= @log_file_directory %>",
         "EnableDiagnostics": <%= @log_enable_diagnostics %>
     },
     "FileSettings": {
@@ -113,7 +114,9 @@
         "EnableEmailBatching": <%= @email_enable_batching %>,
         "EmailBatchingBufferSize": <%= @email_batching_buffer_size %>,
         "EmailBatchingInterval": <%= @email_batching_interval %>,
-        "SkipServerCertificateVerification": <%= @email_skip_server_certificate_verification %>
+        "SkipServerCertificateVerification": <%= @email_skip_server_certificate_verification %>,
+        "EnableSMTPAuth": <%= @email_smtp_auth %>,
+        "EmailNotificationContentType": "<%= @email_notification_content_type %>"
     },
     "RateLimitSettings": {
         "Enable": <%= @ratelimit_enable_rate_limiter %>,

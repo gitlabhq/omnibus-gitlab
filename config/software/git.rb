@@ -17,7 +17,16 @@
 #
 
 name 'git'
-default_version '2.13.0'
+
+# When updating the git version here, but sure to also update the following:
+# - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md#installation
+# - https://gitlab.com/gitlab-org/gitaly/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md
+# - https://gitlab.com/gitlab-org/gitlab-recipes/blob/master/install/centos/README.md
+# - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
+# - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
+default_version '2.13.5'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -28,7 +37,7 @@ dependency 'openssl'
 dependency 'curl'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '9f2fa8040ebafc0c2caae4a9e2cb385c6f16c0525bcb0fbd84938bc796372e80'
+       sha256: 'b2bdabe9ebe1043bc37cf2ca2a1c5847dc2d933884708c670bc691d027791ad0'
 
 relative_path "git-#{version}"
 
