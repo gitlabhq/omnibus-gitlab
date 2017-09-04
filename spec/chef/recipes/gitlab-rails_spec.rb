@@ -186,7 +186,7 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it 'sets the defaults' do
-        default_json = '{"default":{"path":"/var/opt/gitlab/git-data/repositories","gitaly_address":"unix:/var/opt/gitlab/gitaly/gitaly.socket","failure_count_threshold":10,"failure_wait_time":30,"failure_reset_time":1800,"storage_timeout":5}}'
+        default_json = '{"default":{"path":"/var/opt/gitlab/git-data/repositories","gitaly_address":"unix:/var/opt/gitlab/gitaly/gitaly.socket","failure_count_threshold":10,"failure_wait_time":30,"failure_reset_time":1800,"storage_timeout":30}}'
         expect(chef_run).to render_file(gitlab_yml_path).with_content(default_json)
       end
     end
