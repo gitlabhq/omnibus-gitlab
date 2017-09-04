@@ -48,11 +48,27 @@ template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
   notifies :run, 'execute[reload pgbouncer]', :immediately
 end
 
-template node['gitlab']['pgbouncer']['databases_ini'] do
-  source "#{File.basename(name)}.erb"
-  user node['gitlab']['pgbouncer']['databases_ini_user']
-  variables lazy { node['gitlab']['pgbouncer'].to_hash }
-  notifies :run, 'execute[reload pgbouncer]', :immediately
+file 'databases.json' do
+  path lazy { node['gitlab']['pgbouncer']['databases_json'] }
+  user lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
+  group lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
+  content node['gitlab']['pgbouncer']['databases'].to_json
+  notifies :run, 'execute[generate databases.ini]', :immediately
+end
+
+execute 'generate databases.ini' do
+  command lazy {
+    <<~EOF
+    /opt/gitlab/bin/gitlab-ctl pgb-notify \
+     --databases-json #{node['gitlab']['pgbouncer']['databases_json']} \
+     --databases-ini #{node['gitlab']['pgbouncer']['databases_ini']} \
+     --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
+     --host #{node['gitlab']['pgbouncer']['listen_addr']} \
+     --port #{node['gitlab']['pgbouncer']['listen_port']} \
+     --user #{node['gitlab']['pgbouncer']['databases_ini_user']}
+    EOF
+  }
+  action :nothing
 end
 
 execute 'reload pgbouncer' do
