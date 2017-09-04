@@ -4,6 +4,8 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 10.0.0
+
+- Add backup_timeout argument to geo db replication command
 - Add option to pass EXTERNAL_URL during installation d0f30ef2
   * Saves users from manually editing gitlab.rb just to set the URL and hence
 	makes installation process easier

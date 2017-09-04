@@ -63,7 +63,7 @@ class ReplicateGeoHelpers
     run_command('rm -f /tmp/postgresql.trigger')
 
     puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
-    run_command("PGPASSFILE=#{@pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true)
+    run_command("PGPASSFILE=#{@pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true, timeout: @options[:backup_timeout])
 
     puts '* Writing recovery.conf file'.color(:green)
     create_recovery_file!
@@ -98,7 +98,8 @@ class ReplicateGeoHelpers
       force: false,
       skip_backup: false,
       slot_name: nil,
-      skip_replication_slot: false
+      skip_replication_slot: false,
+      backup_timeout: 1800
     }
 
     opts_parser = OptionParser.new do |opts|
@@ -125,6 +126,10 @@ class ReplicateGeoHelpers
 
       opts.on('--no-wait', 'Do not wait before starting the replication process') do
         @options[:now] = true
+      end
+
+      opts.on('--backup-timeout[=BACKUP_TIMEOUT]', 'Specify the timeout for the initial database backup from the primary.') do |backup_timeout|
+        @options[:backup_timeout] = backup_timeout.to_i
       end
 
       opts.on('--force', 'Disable existing database even if instance is not empty') do
@@ -207,8 +212,8 @@ class ReplicateGeoHelpers
     run_command(cmd, live: false)
   end
 
-  def run_command(cmd, live: false)
-    status = GitlabCtl::Util.run_command(cmd, live: live)
+  def run_command(cmd, live: false, timeout: nil)
+    status = GitlabCtl::Util.run_command(cmd, live: live, timeout: timeout)
     if status.error?
       puts status.stdout
       puts status.stderr
