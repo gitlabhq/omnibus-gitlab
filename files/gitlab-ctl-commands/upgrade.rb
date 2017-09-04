@@ -16,6 +16,7 @@
 #
 
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
+  # On a fresh installation, run reconfigure automatically if EXTERNAL_URL is set
   unless File.exist?("/var/opt/gitlab/bootstrapped") || external_url_unset?
     code = reconfigure
     print_welcome_and_exit if code.zero?
@@ -197,9 +198,7 @@ def print_upgrade_and_exit
   Kernel.exit 0
 end
 
-# If user already provided URL where GitLab should run, run reconfigure
-# directly. Do that only for the first installation as upgrade already
-# runs reconfigure as part of its process.
+# Check if user already provided URL where GitLab should run
 def external_url_unset?
   ENV['EXTERNAL_URL'].nil? || ENV['EXTERNAL_URL'].empty? || ENV['EXTERNAL_URL'] == "http://gitlab.example.com"
 end
