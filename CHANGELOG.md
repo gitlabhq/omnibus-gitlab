@@ -9,9 +9,17 @@ omnibus-gitlab repository.
 	makes installation process easier
 - Remove geo_bulk_notify_worker_cron 44def4b5
 
-9.5.4
+9.5.3
 
-- Fix Mattermost log location
+- Fix Mattermost log location 2126c7b3
+
+9.5.2
+
+- No changes
+
+9.5.1
+
+- No changes
 
 9.5.0
 
