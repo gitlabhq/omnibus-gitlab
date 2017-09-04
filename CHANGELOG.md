@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 	makes installation process easier
 - Remove geo_bulk_notify_worker_cron 44def4b5
 
+9.5.4
+
+- Changing pg_hba configuration should only reload PG c99ef6
+
 9.5.3
 
 - Fix Mattermost log location 2126c7b3
