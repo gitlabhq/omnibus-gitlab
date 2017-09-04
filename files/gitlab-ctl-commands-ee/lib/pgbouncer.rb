@@ -9,7 +9,7 @@ end
 
 module Pgbouncer
   class Databases
-    attr_accessor :install_path, :databases, :options, :ini_file, :template_file, :attributes
+    attr_accessor :install_path, :databases, :options, :ini_file, :json_file, :template_file, :attributes, :userinfo
     attr_reader :data_path
 
     def initialize(options, install_path, base_data_path)
@@ -17,32 +17,55 @@ module Pgbouncer
       @attributes = GitlabCtl::Util.get_node_attributes(install_path)
       @install_path = install_path
       @options = options
-      @ini_file = attributes['gitlab']['pgbouncer']['databases_ini']
+      @ini_file = options['databases_ini'] || attributes['gitlab']['pgbouncer']['databases_ini']
+      @json_file = options['databases_json'] || attributes['gitlab']['pgbouncer']['databases_json']
       @template_file = "#{@install_path}/embedded/cookbooks/gitlab-ee/templates/default/databases.ini.erb"
-      @databases = {
-        options['database'] => {
-          'host' => options['newhost'],
-          'port' => options['port'] || '5432',
-          'dbname' => options['database'] || 'gitlabhq_production',
-          'user' => 'pgbouncer'
-        }
-      }
+      @databases = update_databases(JSON.parse(File.read(@json_file)))
+      @userinfo = GitlabCtl::Util.userinfo(options['host_user']) if options['host_user']
+    end
+
+    def update_databases(original)
+      updated = {}
+      original.each do |db, settings|
+        updated[db] = ''
+        settings['host'] = options['newhost'] if options['newhost']
+        settings['port'] = options['port'] if options['port']
+        settings['auth_user'] = options['user'] if options['user']
+        settings['dbname'] =  options['pg_database'] if options['pg_database']
+        settings.each do |setting, value|
+          updated[db] << " #{setting}=#{value}"
+        end
+        updated[db].strip!
+      end
+      updated
+    end
+
+    def database_ini_template
+      <<~EOF
+        [databases]
+        <% @databases.each do |db, settings| %>
+        <%= db %> = <%= settings %>
+        <% end %>
+      EOF
     end
 
     def data_path=(path)
       full_path = "#{path}/pgbouncer"
       unless Dir.exist?(full_path)
-        raise "The directory #{full_path} does exist. Please ensure pgbouncer is configured on this node"
+        raise "The directory #{full_path} does not exist. Please ensure pgbouncer is configured on this node"
       end
       @data_path = full_path
     end
 
     def render
-      ERB.new(File.read(@template_file)).result(binding)
+      ERB.new(database_ini_template).result(binding)
     end
 
     def write
-      File.open(@ini_file, 'w') { |f| f.puts render }
+      File.open(@ini_file, 'w') do |file|
+        file.puts render
+        file.chown(userinfo.uid, userinfo.gid) if options['host_user']
+      end
     end
 
     def pgbouncer_command(command)
