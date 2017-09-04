@@ -4,7 +4,16 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 9.5.3
-- Fix Mattermost log location
+
+- Fix Mattermost log location 2126c7b3
+
+9.5.2
+
+- No changes
+
+9.5.1
+
+- No changes
 
 9.5.0
 
@@ -15,7 +24,7 @@ omnibus-gitlab repository.
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 - UDP log shipping as part of CE
 - Bump Git verison to 2.13.5
-- Added Consul service in EE 
+- Added Consul service in EE
 - Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
 - Add configuration options for handling repository storage failures
 - Add support for `--negate` in sidekiq-cluster
