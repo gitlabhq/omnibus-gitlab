@@ -16,10 +16,7 @@
 #
 
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
-  # If user already provided URL where GitLab should run, run reconfigure
-  # directly. Do that only for the first installation as upgrade already
-  # runs reconfigure as part of its process.
-  unless File.exist?("/var/opt/gitlab/bootstrapped") || ENV['EXTERNAL_URL'].empty? || ENV['EXTERNAL_URL'] == "http://gitlab.example.com"
+  unless File.exist?("/var/opt/gitlab/bootstrapped") || external_url_unset?
     code = reconfigure
     print_welcome_and_exit if code.zero?
     Kernel.exit code
@@ -198,4 +195,11 @@ def print_upgrade_and_exit
   puts "backup made during the upgrade (scroll up for the filename)."
   puts "\n"
   Kernel.exit 0
+end
+
+# If user already provided URL where GitLab should run, run reconfigure
+# directly. Do that only for the first installation as upgrade already
+# runs reconfigure as part of its process.
+def external_url_unset?
+  ENV['EXTERNAL_URL'].nil? || ENV['EXTERNAL_URL'].empty? || ENV['EXTERNAL_URL'] == "http://gitlab.example.com"
 end
