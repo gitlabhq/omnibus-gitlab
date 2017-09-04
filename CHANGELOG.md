@@ -25,6 +25,9 @@ omnibus-gitlab repository.
 
 - No changes
 
+9.5.5
+- Add more options to repmgr.conf template
+
 9.5.0
 
 - Fix the NGINX configuration for GitLab Pages with Cache-Control headers 2242884e
