@@ -18,28 +18,28 @@ gitlab-monitor:
   alternative: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
-  alternative: "https://gitlab.com/omnibus-mirror/config_guess.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git"
 omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
   alternative: "https://gitlab.com/gitlab-org/omnibus.git"
 registry:
   remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
-  alternative: "https://gitlab.com/omnibus-mirror/distribution.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/distribution.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
-  alternative: "https://gitlab.com/omnibus-mirror/rb-readline.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/rb-readline.git"
 prometheus:
   remote: "git@dev.gitlab.org:omnibus-mirror/prometheus.git"
-  alternative: "https://gitlab.com/omnibus-mirror/prometheus.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git"
 node-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/node_exporter.git"
-  alternative: "https://gitlab.com/omnibus-mirror/node_exporter.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/node_exporter.git"
 postgres-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/postgres_exporter.git"
-  alternative: "https://gitlab.com/omnibus-mirror/postgres_exporter.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/postgres_exporter.git"
 redis-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
-  alternative: "https://gitlab.com/omnibus-mirror/redis_exporter.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/redis_exporter.git"
 gitaly:
   remote: 'git@dev.gitlab.org:gitlab/gitaly'
   alternative: 'https://gitlab.com/gitlab-org/gitaly'
@@ -48,4 +48,4 @@ gitlab-elasticsearch-indexer:
   alternative: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git'
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
-  alternative: "https://gitlab.com/omnibus-mirror/logrotate.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git"

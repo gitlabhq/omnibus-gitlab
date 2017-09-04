@@ -118,6 +118,11 @@ end
 # Mattermost control service
 ###
 
+env_dir File.join(mattermost_home, 'env') do
+  variables node['gitlab']['mattermost']['env']
+  restarts ["service[mattermost]"]
+end
+
 runit_service "mattermost" do
   options({
     :log_directory => mattermost_log_dir

@@ -157,6 +157,7 @@ default['gitlab']['pgbouncer']['stats_users'] = %w(gitlab-psql postgres pgbounce
 default['gitlab']['pgbouncer']['ignore_startup_parameters'] = 'extra_float_digits'
 default['gitlab']['pgbouncer']['databases_ini'] = '/var/opt/gitlab/pgbouncer/databases.ini'
 default['gitlab']['pgbouncer']['databases_ini_user'] = 'gitlab-psql'
+default['gitlab']['pgbouncer']['databases_json'] = '/var/opt/gitlab/pgbouncer/databases.json'
 default['gitlab']['pgbouncer']['databases'] = {}
 
 default['gitlab']['pgbouncer']['auth_type'] = 'md5'

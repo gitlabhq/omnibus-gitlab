@@ -304,6 +304,19 @@ mattermost['gid'] = 1234
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
+### Setting custom environment variables
+
+If necessary you can set custom environment variables to be used by Mattermost
+via `/etc/gitlab/gitlab.rb`.  This can be useful if the Mattermost server
+is operated behind a corporate internet proxy.  In `/etc/gitlab/gitlab.rb`
+supply a `mattermost['env']` with a hash value. For example:
+
+```ruby
+mattermost['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy", "no_proxy" => "my_no_proxy"}
+```
+
+Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
 ### OAuth2 Sequence Diagram
 
 The following image is a sequence diagram for how GitLab works as an OAuth2
