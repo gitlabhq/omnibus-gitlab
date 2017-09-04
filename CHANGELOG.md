@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+9.5.5
+
+- Changing pg_hba configuration should only reload PG c99ef6
+
 9.5.3
 
 - Fix Mattermost log location 2126c7b3
