@@ -180,76 +180,27 @@ Starting with GitLab 9.1.0, it's possible to upgrade to a newer version of
 GitLab without having to take your GitLab instance offline. This can only be
 done if you are using PostgreSQL. If you are using MySQL you will still need downtime when upgrading.
 
-Upgrading without any downtime can only be done one upgrade release at a time. For example,
-if you're on 9.1.0, you can only upgrade without any downtime for 9.1.1. If you'd like to upgrade from
-9.1.5 to 9.1.15, you will have to upgrade to 9.1.6, 9.1.7., 9.1.8., etc. all the way up to 9.1.15. If 9.1.15 is the
-last release of 9.1 then you can safely upgrade from that version to 9.2.0.
+Verify that you can upgrade with no downtime by checking the
+[Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
 
 If you meet all the requirements above, follow the following instructions:
 
- 1. Verify that you can upgrade with no downtime by checking the "Upgrade
-    barometer" section on the main [release blog
-    post](https://about.gitlab.com/blog/categories/release/) (published on the
-    22nd of each month).
-
- 2. You will have to use post-deployment migrations and in order to do this you
-    must skip auto migrations. Create a "skip-auto-migrations" file:
-
-    ```
-    sudo touch /etc/gitlab/skip-auto-migrations
-    ```
-
-    This will prevent the upgrade from running `gitlab-ctl reconfigure` and
-    automatically migrating the database.
-
-    **For High Availability Setups**
-
-    Follow step #2 for your primary application node. All the non-primary nodes
-    should have `gitlab_rails['auto_migrate'] = false` in their respective
-    `/etc/gitlab/gitlab.rb` file.
-
- 3. Upgrade GitLab
-
-    **For Debian/Ubuntu**
-
-    ```
-    ## Make sure the repositories are up-to-date
-    sudo apt-get update
-
-    ## Install the package using the version you'd like to upgrade to
-    ## A list of all packages can be found at
-    ## https://packages.gitlab.com/gitlab/
-    sudo apt-get install gitlab-ee=9.x.x-ee.0
-    ```
-
-    **For CentOS/RHEL**
-
-    ```
-    ## Make sure the repositories are up-to-date
-    yum check-update
-
-    ## Install the package using the version you'd like to upgrade to
-    ## A list of all packages can be found at
-    ## https://packages.gitlab.com/gitlab/
-    sudo yum install gitlab-ee-9.x.x-ee.0.el7.x86_64
-    ```
-
- 4. Reconfigure GitLab
-
-    Once the package is upgraded, run the following:
-
-    ```
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-    ```
-
- 5. Finish by running a database migration manually. If you have a high
-    availability setup you will need to run these on each node. Please note
-    there are some migrations that might take significant time depending on
-    your installation size. You can run the migration with:
-
-    ```
-    sudo gitlab-rake db:migrate
-    ```
+1. Create a "skip-auto-migrations" file on every one of your nodes
+running GitLab Rails application:
+  ```
+  sudo touch /etc/gitlab/skip-auto-migrations
+  ```
+  This will prevent the upgrade from automatically running `gitlab-ctl reconfigure` and
+  automatically running database migrations.
+1. If you have multiple nodes in an HA environment decide which node is the `Deploy Node`.
+1. On the `Deploy Node`, install gitlab-ee. Make sure that this node has the following line in `/etc/gitlab/gitlab.rb`:
+  ```
+  gitlab_rails['auto_migrate'] = false
+  ```
+This setting will prevent automatic database migrations within `gitlab-ctl reconfigure`.
+1. On the `Deploy Node` run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`, to get the pre-deploy migrations in place.
+1. On all other nodes, install gitlab-ee and run a `gitlab-ctl reconfigure` so they can get the newest code.
+1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node` to run post-deployment migrations.
 
 ## Updating from GitLab 8.10 and lower to 8.11 or newer
 
