@@ -11,6 +11,8 @@ omnibus-gitlab repository.
   * Saves users from manually editing gitlab.rb just to set the URL and hence
 	makes installation process easier
 - Remove geo_bulk_notify_worker_cron 44def4b5
+- Rework `single_quote` helper as `quote` that can handle escaping
+  strings with embedded quotes fdc6a93
 
 9.5.5
 - Add more options to repmgr.conf template
