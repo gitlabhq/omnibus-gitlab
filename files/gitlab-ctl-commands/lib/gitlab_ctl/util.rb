@@ -9,7 +9,7 @@ module GitlabCtl
   module Util
     class <<self
       def get_command_output(command, user = nil)
-        shell_out = run_command(command, false, user)
+        shell_out = run_command(command, live: false, user: user)
 
         begin
           shell_out.error!
