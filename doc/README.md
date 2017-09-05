@@ -27,6 +27,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 **`Note`**: This section describes the commonly used configuration settings. Check [configuration](#configuring) section of the documentation for complete configuration settings.
 
 * [Installing GitLab](https://about.gitlab.com/installation/)
+  * [Manually downloading and installing a GitLab package](manual_install.md)
 * [Setting up a domain name/URL](https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab) for the GitLab Instance so that it can be accessed easily
 * [Enabling HTTPS](https://docs.gitlab.com/omnibus/settings/nginx.html#enable-https)
 * [Enabling notification EMails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
