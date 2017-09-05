@@ -122,7 +122,9 @@ end
 bash "Set proper security context on ssh files for selinux" do
   code <<-EOS
     semanage fcontext -a -t ssh_home_t '#{ssh_dir}(/.*)?'
+    semanage fcontext -a -t ssh_home_t '#{authorized_keys}'
     restorecon -R -v '#{ssh_dir}'
+    restorecon -v '#{authorized_keys}'
   EOS
   only_if "id -Z"
 end
