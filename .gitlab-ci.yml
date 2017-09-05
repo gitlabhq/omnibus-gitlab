@@ -51,6 +51,7 @@ variables:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
+  retry: 1
 
 .spec_template: &run_rspec
   stage: tests
@@ -83,6 +84,7 @@ variables:
     expire_in: 31d
     paths:
     - knapsack/
+  retry: 1
 
 ## Runs on dev.gitlab.org
 .branch_template: &branch_build
@@ -112,6 +114,7 @@ variables:
     paths:
     - cache
     - gems
+  retry: 1
 
 .rpi_branch_template: &rpi_branch_build
   stage: raspbian
@@ -136,6 +139,7 @@ variables:
     paths:
       - pkg/
   dependencies: []
+  retry: 1
 
 .tag_template: &tag_build
   stage: package
@@ -159,6 +163,7 @@ variables:
     expire_in: 14 days
     paths:
       - pkg/
+  retry: 1
 
 .rpi_tag_template: &rpi_tag_build
   stage: raspbian
@@ -183,6 +188,7 @@ variables:
     paths:
       - pkg/
   dependencies: []
+  retry: 1
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -200,6 +206,7 @@ variables:
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
+  retry: 1
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -288,6 +295,7 @@ update-knapsack:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
+  retry: 1
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
@@ -585,6 +593,7 @@ SLES 12:
     paths:
     - cache
     - gems
+  retry: 1
 
 Docker:
   stage: images
@@ -602,6 +611,7 @@ Docker:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+  retry: 1
 
 AWS:
   stage: images
@@ -617,6 +627,7 @@ AWS:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+  retry: 1
 
 QA Tag:
   stage: qa-image
@@ -635,6 +646,7 @@ QA Tag:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+  retry: 1
 
 Raspberry Pi 2 Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
@@ -713,6 +725,7 @@ Docker branch:
   only:
     - branches@gitlab/omnibus-gitlab
   dependencies: []
+  retry: 1
 
 QA Master:
   stage: qa-image
@@ -733,6 +746,7 @@ QA Master:
   only:
     - branches@gitlab/omnibus-gitlab
   dependencies: []
+  retry: 1
 
 Raspberry Pi 2 Jessie branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
