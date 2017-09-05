@@ -531,7 +531,7 @@ server {
       error_page 418 = @gitlab-workhorse;
       return 418;
   }
-  
+
   # Build artifacts should be submitted to this location
   location ~ /api/v4/jobs/[0-9]+/artifacts {
       client_max_body_size 0;
@@ -676,6 +676,21 @@ systems `sudo service nginx restart`).
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
 ['proxy_set_headers'](https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl) configuration in your `gitlab.rb` file.
+
+##### javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+
+Starting with GitLab 10, the omnibus-gitlab package no longer supports TLSv1 protocol by default.
+This can cause connection issues with some older Java based IDE clients when interacting with
+your GitLab instance.
+We strongly urge you to upgrade ciphers on your server, similar to what was mentioned
+in [this user comment](https://gitlab.com/gitlab-org/gitlab-ce/issues/624#note_299061).
+
+If it is not possible to make this server change, you can default back to the old
+behavour by changing the values in your `/etc/gitlab/gitlab.rb`:
+
+```
+nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
+```
 
 [recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
 [selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications
