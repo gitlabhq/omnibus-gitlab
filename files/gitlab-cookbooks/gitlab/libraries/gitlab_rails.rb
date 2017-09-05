@@ -38,6 +38,33 @@ module GitlabRails
       parse_repository_storage
     end
 
+    def parse_secrets
+      # Blow up when the existing configuration is ambiguous, so we don't accidentally throw away important secrets
+      ci_db_key_base = Gitlab['gitlab_ci']['db_key_base']
+      rails_db_key_base = Gitlab['gitlab_rails']['db_key_base']
+
+      if ci_db_key_base && rails_db_key_base && ci_db_key_base != rails_db_key_base
+        message = [
+          "The value of Gitlab['gitlab_ci']['db_key_base'] (#{ci_db_key_base}) does not match the value of Gitlab['gitlab_rails']['db_key_base'] (#{rails_db_key_base}).",
+          "Please back up both secrets, set Gitlab['gitlab_rails']['db_key_base'] to the value of Gitlab['gitlab_ci']['db_key_base'], and try again.",
+          "For more information, see <https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/update/README.md#migrating-legacy-secrets>"
+        ]
+
+        raise message.join("\n\n")
+      end
+
+      # Transform legacy key names to new key names
+      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
+      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
+      Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
+
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
+      Gitlab['gitlab_rails']['db_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['jws_private_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+    end
+
     def parse_external_url
       return unless Gitlab['external_url']
 
@@ -161,6 +188,10 @@ module GitlabRails
       end
     end
 
+    def load_role
+      disable_services
+    end
+
     def disable_services
       disable_services_roles if any_service_role_defined?
 
@@ -195,7 +226,7 @@ module GitlabRails
     private
 
     def any_service_role_defined?
-      Gitlab::SERVICE_ROLES.any? { |role| Gitlab["#{role}_role"]['enable'] }
+      Gitlab.roles.keys.any? { |role| Gitlab["#{role}_role"]['enable'] }
     end
 
     def disable_services_roles

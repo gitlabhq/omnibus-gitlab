@@ -24,8 +24,3 @@ if File.exists?('/etc/gitlab/gitlab.rb')
 end
 
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))
-
-# If is EE package, load EE config
-if defined?(GitlabEE) == 'constant'
-  node.consume_attributes(GitlabEE.generate_config)
-end

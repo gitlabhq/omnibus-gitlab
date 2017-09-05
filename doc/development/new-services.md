@@ -60,29 +60,24 @@ now.
 In order for user to be able to configure your service from `/etc/gitlab/gitlab.rb`
 you will need to add a top level Mash for the service.
 
-In `files/gitlab-cookbooks/gitlab/libraries/gitlab.rb` you will find the list of
-`Mash.new calls`.
+In `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` you will find the list of
+`attribute` methods.
 
-Add your service to the bottom, using an underscore to seperate words, **even if you
+If your service exists within the attributes for the gitlab cookbook, you should
+add it within the `attribute_block('gitlab')` block.  Otherwise, if your service
+has its own cookbook, add it above.
+
+Add your service as an attribute, using an underscore to separate words, **even if you
 used a hyphen in the default attributes.**
 
 ```ruby
-best_service Mash.new
+attribute('best_service')
 ```
 
-You also need to add the service a little lower down in the `generate_hash` method.
-Add your service into the array. If you service exists within the attributes for
-the gitlab cookbook, you should add it in the array that gets appended to the `gitlab`
-results, the first array. Otherwise, if your service has its own cookbook, add it
-to the second array.
+For an EE only attribute, use `ee_attribute` instead.
 
 ```ruby
-[
-  "best_service"
-].each do |key|
-  rkey = key.tr('_', '-')
-  results['gitlab'][rkey] = Gitlab[key]
-end
+ee_attribute('best_service')
 ```
 
 ### Add service configuration to the settings template
@@ -113,7 +108,7 @@ In order to allow the service to be easily enable/disabled within the recipes, i
 should be added to the [services list](../architecture/README.md#services)
 and given appropriate groups.
 
-In the `files/gitlab-cookbooks/package/libraries/services.rb` file, add the
+In the `files/gitlab-cookbooks/package/libraries/config/services.rb` file, add the
 service to the appropriate Config class, Base or EE depending on whether the
 service is only for GitLab EE.
 
@@ -240,21 +235,18 @@ end
 
 We then need to have the gitlab config call your parse_variables method.
 
-Go into `files/gitlab-cookbooks/libraries/gitlab.rb` and all a `require_relative`
-for the library.
+Go into `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` and update
+your attribute to use the library.
 
 ```ruby
-require_relative 'best-service.rb'
+attribute('best_service').use { BestService }
 ```
 
-Then below, in the `generate_config` method. Add a call to your `parse_variables`,
-above the call to `generate_hash`.
+Note that sequence for parsing variables matters. So if your library expects to
+be parsed after another service's library, you need to update your attribute with
+a `sequence` value that comes later. (The default `sequence` value is `20`)
 
 ```ruby
-BestService.parse_variables
+attribute('expected_service').use { ExpectedService }
+attribute('best_service', sequence: 25).use { BestService }
 ```
-
-Not that order in the `generate_config` method matters. So any config that the
-new service library expects to have been parsed should come first, and any other
-config parsing that depends on the new service's library should be parsed later
-in the list. Place the new service's parse method with that in mind.

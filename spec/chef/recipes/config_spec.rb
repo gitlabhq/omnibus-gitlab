@@ -34,7 +34,7 @@ describe 'gitlab::config' do
     expect do
       Gitlab.instance_eval('abc["def"]["hij"] = "top-level"')
     end.to raise_error(NoMethodError).and(
-      output(/\*ERROR\*: Encountered unsupported config key/).to_stdout
+      output(/ERROR: Encountered unsupported config key/).to_stdout
     )
   end
 

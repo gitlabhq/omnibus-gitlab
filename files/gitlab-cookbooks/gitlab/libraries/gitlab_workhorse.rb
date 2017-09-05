@@ -17,20 +17,9 @@
 
 module GitlabWorkhorse
   class << self
-    def parse_variables
-      parse_gitlab_git_http_server
-    end
-
-    def parse_gitlab_git_http_server
-      Gitlab['gitlab_git_http_server'].each do |k, v|
-        Chef::Log.warn "gitlab_git_http_server is deprecated. Please use gitlab_workhorse in gitlab.rb"
-        if Gitlab['gitlab_workhorse'][k].nil?
-          Chef::Log.warn "applying legacy setting gitlab_git_http_server[#{k.inspect}]"
-          Gitlab['gitlab_workhorse'][k] = v
-        else
-          Chef::Log.warn "ignoring legacy setting gitlab_git_http_server[#{k.inspect}]"
-        end
-      end
+    def parse_secrets
+      # gitlab-workhorse expects exactly 32 bytes, encoded with base64
+      Gitlab['gitlab_workhorse']['secret_token'] ||= SecureRandom.base64(32)
     end
   end
 end

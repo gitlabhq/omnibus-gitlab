@@ -24,6 +24,12 @@ module GitlabMattermost
       parse_gitlab_mattermost
     end
 
+    def parse_secrets
+      Gitlab['mattermost']['email_invite_salt'] ||= SecretsHelper.generate_hex(16)
+      Gitlab['mattermost']['file_public_link_salt'] ||= SecretsHelper.generate_hex(16)
+      Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= SecretsHelper.generate_hex(16)
+    end
+
     def parse_mattermost_external_url
       return unless Gitlab['mattermost_external_url']
 

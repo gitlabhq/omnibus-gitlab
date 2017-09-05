@@ -28,6 +28,13 @@ module Registry
       parse_registry_notifications
     end
 
+    def parse_secrets
+      Gitlab['registry']['http_secret'] ||= SecretsHelper.generate_hex(64)
+      gitlab_registry_crt, gitlab_registry_key = Registry.generate_registry_keypair
+      Gitlab['registry']['internal_certificate'] ||= gitlab_registry_crt
+      Gitlab['registry']['internal_key'] ||= gitlab_registry_key
+    end
+
     def parse_registry_external_url
       return unless Gitlab['registry_external_url']
 
