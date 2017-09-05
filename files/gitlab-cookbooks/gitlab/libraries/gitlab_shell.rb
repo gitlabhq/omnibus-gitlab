@@ -23,6 +23,10 @@ module GitlabShell
       parse_auth_file
     end
 
+    def parse_secrets
+      Gitlab['gitlab_shell']['secret_token'] ||= SecretsHelper.generate_hex(64)
+    end
+
     def parse_git_data_dirs
       git_data_dirs = Gitlab['git_data_dirs']
       git_data_dir = Gitlab['git_data_dir']

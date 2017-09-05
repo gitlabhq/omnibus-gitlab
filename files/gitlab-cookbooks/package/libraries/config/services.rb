@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require_relative 'helpers/services_helper.rb'
+require_relative '../helpers/services_helper.rb'
 
 module Services
   # Define the services included in every GitLab Edition

@@ -144,8 +144,3 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 
 # Recipe which handles all prometheus related services
 include_recipe "gitlab::gitlab-prometheus"
-
-# Deprecated in favor of gitlab-workhorse since 8.2
-runit_service "gitlab-git-http-server" do
-  action :disable
-end
