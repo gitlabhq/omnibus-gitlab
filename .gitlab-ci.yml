@@ -707,6 +707,7 @@ SLES 12 branch:
     expire_in: 1 day
     paths:
       - pkg/
+  retry: 1
 
 Docker branch:
   stage: images
