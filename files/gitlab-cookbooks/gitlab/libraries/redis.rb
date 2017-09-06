@@ -130,7 +130,7 @@ module Redis
     end
 
     def sentinel_daemon_enabled?
-      Gitlab['sentinel']['enable']
+      Services.enabled?('sentinel')
     end
 
     def is_gitlab_rails_redis_tcp?

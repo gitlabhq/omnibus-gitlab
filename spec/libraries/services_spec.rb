@@ -8,7 +8,7 @@ describe Services do
 
     it 'returns the gitlab service list' do
       chef_run
-      expect(Services.service_list).to have_key('gitlab_rails')
+      expect(Services.service_list).to have_key('unicorn')
       expect(Services.service_list).not_to have_key('sentinel')
     end
   end
@@ -18,7 +18,7 @@ describe Services do
 
     it 'returns the gitlab service list including gitlab-ee items' do
       chef_run
-      expect(Services.service_list).to have_key('gitlab_rails')
+      expect(Services.service_list).to have_key('unicorn')
       expect(Services.service_list).to have_key('sentinel')
     end
   end

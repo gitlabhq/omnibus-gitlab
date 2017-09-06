@@ -292,7 +292,7 @@ default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 ####
 # Unicorn
 ####
-default['gitlab']['unicorn']['enable'] = true
+default['gitlab']['unicorn']['enable'] = false
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
 default['gitlab']['unicorn']['listen'] = '127.0.0.1'
@@ -324,7 +324,7 @@ default['gitlab']['unicorn']['worker_processes'] = [
 ####
 # Sidekiq
 ####
-default['gitlab']['sidekiq']['enable'] = true
+default['gitlab']['sidekiq']['enable'] = false
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 4
@@ -349,7 +349,7 @@ default['gitlab']['gitlab-shell']['git_data_directories'] = {
 ###
 # PostgreSQL
 ###
-default['gitlab']['postgresql']['enable'] = true
+default['gitlab']['postgresql']['enable'] = false
 default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
@@ -444,7 +444,7 @@ default['gitlab']['postgresql']['archive_timeout'] = "60"
 ####
 # Redis
 ####
-default['gitlab']['redis']['enable'] = true
+default['gitlab']['redis']['enable'] = false
 default['gitlab']['redis']['ha'] = false
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
@@ -487,7 +487,7 @@ default['gitlab']['web-server']['external_users'] = []
 # gitlab-workhorse
 ####
 
-default['gitlab']['gitlab-workhorse']['enable'] = true
+default['gitlab']['gitlab-workhorse']['enable'] = false
 default['gitlab']['gitlab-workhorse']['ha'] = false
 default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
 default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
@@ -535,7 +535,7 @@ default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pag
 ####
 # Nginx
 ####
-default['gitlab']['nginx']['enable'] = true
+default['gitlab']['nginx']['enable'] = false
 default['gitlab']['nginx']['ha'] = false
 default['gitlab']['nginx']['dir'] = "/var/opt/gitlab/nginx"
 default['gitlab']['nginx']['log_directory'] = "/var/log/gitlab/nginx"
@@ -642,7 +642,7 @@ default['gitlab']['remote-syslog']['services'] = %w(redis nginx unicorn gitlab-r
 ###
 # Logrotate
 ###
-default['gitlab']['logrotate']['enable'] = true
+default['gitlab']['logrotate']['enable'] = false
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
@@ -878,7 +878,7 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 # Prometheus server
 ####
 
-default['gitlab']['prometheus']['enable'] = true
+default['gitlab']['prometheus']['enable'] = false
 default['gitlab']['prometheus']['monitor_kubernetes'] = true
 default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
 default['gitlab']['prometheus']['uid'] = nil
@@ -899,7 +899,7 @@ default['gitlab']['prometheus']['target_heap_size'] = (
 ####
 # Prometheus Node Exporter
 ####
-default['gitlab']['node-exporter']['enable'] = true
+default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
 default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
@@ -907,14 +907,14 @@ default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 ####
 # Redis exporter
 ###
-default['gitlab']['redis-exporter']['enable'] = true
+default['gitlab']['redis-exporter']['enable'] = false
 default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
 default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 
 ####
 # Postgres exporter
 ###
-default['gitlab']['postgres-exporter']['enable'] = true
+default['gitlab']['postgres-exporter']['enable'] = false
 default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
@@ -925,7 +925,7 @@ default['gitlab']['postgres-exporter']['env'] = {
 ####
 # Gitlab monitor
 ###
-default['gitlab']['gitlab-monitor']['enable'] = true
+default['gitlab']['gitlab-monitor']['enable'] = false
 default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost'
@@ -937,7 +937,7 @@ default['gitlab']['prometheus-monitoring']['enable'] = true
 ####
 # Gitaly
 ####
-default['gitlab']['gitaly']['enable'] = true
+default['gitlab']['gitaly']['enable'] = false
 default['gitlab']['gitaly']['ha'] = false
 default['gitlab']['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
 default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"

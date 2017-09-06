@@ -111,7 +111,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
 
     def service_list
       # Merge together and cache all the service lists (from the different cookbooks)
-      @service_list ||= [*cookbook_services.dup.values].inject(&:merge)
+      @service_list ||= [{}, *cookbook_services.dup.values].inject(&:merge)
     end
 
     def add_services(cookbook, services)

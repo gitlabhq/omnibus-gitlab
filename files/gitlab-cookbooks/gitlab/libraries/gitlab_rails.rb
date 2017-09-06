@@ -188,17 +188,6 @@ module GitlabRails
       end
     end
 
-    def load_role
-      disable_services
-    end
-
-    def disable_services
-      disable_services_roles if any_service_role_defined?
-
-      # Disable the rails group of services if it has been explicitly set to false
-      Services.disable_group('rails') unless Services.enabled?('gitlab_rails')
-    end
-
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
     end
@@ -221,30 +210,6 @@ module GitlabRails
                     }
       end
       Gitlab['gitaly']['storage'] = storages
-    end
-
-    private
-
-    def any_service_role_defined?
-      Gitlab.roles.keys.any? { |role| Gitlab["#{role}_role"]['enable'] }
-    end
-
-    def disable_services_roles
-      if Gitlab['redis_sentinel_role']['enable']
-        Services.disable_group(Services::ALL_GROUPS, except: 'redis')
-        Services.enable('sentinel')
-      else
-        Services.disable('sentinel')
-      end
-
-      if Gitlab['redis_master_role']['enable'] && Gitlab['redis_slave_role']['enable']
-        fail 'Cannot define both redis_master_role and redis_slave_role in the same machine.'
-      elsif Gitlab['redis_master_role']['enable'] || Gitlab['redis_slave_role']['enable']
-        Services.disable_group(Services::ALL_GROUPS, except: 'redis')
-        Services.enable('redis')
-      else
-        Services.disable('redis')
-      end
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
