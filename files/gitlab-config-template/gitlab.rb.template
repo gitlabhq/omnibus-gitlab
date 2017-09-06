@@ -917,6 +917,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! remote host to ship log messages to via UDP
 # logging['udp_log_shipping_host'] = nil
 
+##! override the hostname used when logs are shipped via UDP,
+##  by default the system hostname will be used.
+# logging['udp_log_shipping_hostname'] = nil
+
 ##! remote port to ship log messages to via UDP
 # logging['udp_log_shipping_port'] = 514
 
