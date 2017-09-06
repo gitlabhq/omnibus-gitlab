@@ -96,27 +96,6 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
-  context 'when git_data_dir is moved' do
-    before { stub_gitlab_rb({ git_data_dir: '/tmp/user/git-data' }) }
-
-    it 'creates the git data directories' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/git-data')
-    end
-
-    it 'creates the git storage directories' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/git-data/repositories')
-    end
-
-    it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /var/opt/gitlab/.ssh')
-    end
-
-    it 'creates the auth_file\'s parent directory' do
-      stub_gitlab_rb(gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' })
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
-    end
-  end
-
   context 'with redis settings' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
@@ -219,25 +198,11 @@ describe 'gitlab::gitlab-shell' do
   end
 end
 
-describe 'gitlab_shell::git_data_dir' do
+describe 'gitlab_shell::git_data_dirs' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-  end
-
-  context 'when git_data_dir is set as a single directory' do
-    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
-
-    it 'correctly sets the shell git data directories' do
-      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data' })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
-    end
   end
 
   context 'when gitaly is set to use a listen_addr instead of a socket' do

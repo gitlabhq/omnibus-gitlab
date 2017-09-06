@@ -29,8 +29,7 @@ module GitlabShell
 
     def parse_git_data_dirs
       git_data_dirs = Gitlab['git_data_dirs']
-      git_data_dir = Gitlab['git_data_dir']
-      return unless git_data_dirs.any? || git_data_dir
+      return unless git_data_dirs.any?
       gitaly_address = Gitaly.gitaly_address
 
       Gitlab['gitlab_shell']['git_data_directories'] ||=
@@ -43,8 +42,6 @@ module GitlabShell
               [name, data_directory]
             end
           end]
-        else
-          { 'default' => { 'path' => git_data_dir } }
         end
 
       Gitlab['gitlab_rails']['repositories_storages'] ||=
