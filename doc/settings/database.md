@@ -306,6 +306,7 @@ sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 ### Upgrading a GitLab HA cluster
 If you are setup your GitLab instance per the [GitLab HA documentation](https://docs.gitlab.com/ee/administration/high_availability/database.html), upgrade the database server last. It should not be necessary to perform any other extra steps.
 
+You do not need to run `pg-upgrade` on any node besides the database node, but they should be updated to the latest version of GitLab before the database is updated.
 
 #### Troubleshooting upgrades in an HA cluster
 
