@@ -247,6 +247,49 @@ describe 'gitlab::gitlab-rails' do
           }
         end
       end
+
+      context 'sync profile from omniauth provider is not configured' do
+        it 'sets the sync profile from provider to []' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content("sync_profile_from_provider: []")
+        end
+      end
+
+      context 'sync profile from omniauth provider is configured to array' do
+        it 'sets the sync profile from provider to [\'cas3\']' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: ['cas3'] })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content("sync_profile_from_provider: [\"cas3\"]")
+        end
+      end
+
+      context 'sync profile from omniauth provider is configured to true' do
+        it 'sets the sync profile from provider to true' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+              .with_content("sync_profile_from_provider: true")
+        end
+      end
+
+      context 'sync profile attributes is configured to [\"email\", \"name\"]' do
+        it 'sets the sync profile attributes to [\"email\", \"name\"]' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: %w(email name) })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                  .with_content("sync_profile_attributes: [\"email\",\"name\"]")
+        end
+      end
+
+      context 'sync profile attributes is configured to true' do
+        it 'sets the sync profile attributes to true' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                  .with_content("sync_profile_attributes: true")
+        end
+      end
     end
 
     context 'GitLab Geo settings' do
