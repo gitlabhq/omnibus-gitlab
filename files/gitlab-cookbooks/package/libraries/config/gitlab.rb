@@ -27,11 +27,12 @@ module Gitlab
   git_data_dirs ConfigMash.new
 
   ## Roles
-  role('redis_sentinel').use { GitlabRails }
-  role('redis_master')
+  role('application').use { ApplicationRole }
+  role('redis_sentinel').use { RedisSentinelRole }
+  role('redis_master').use { RedisMasterRole }
   role('redis_slave')
-  role('geo_primary')
-  role('geo_secondary')
+  role('geo_primary').use { GeoPrimaryRole }
+  role('geo_secondary').use { GeoSecondaryRole }
 
   ## Attributes directly on the node
   attribute('registry', priority: 20).use { Registry }

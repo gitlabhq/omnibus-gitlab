@@ -13,6 +13,7 @@ omnibus-gitlab repository.
     makes installation process easier
 - Remove TLSv1 from the list of accepted ssl protocols
 - Moved the settings handling into the package cookbook and reduced code duplication in settings
+- Move the GitLab HA roles into their own files, and switch default services to be enabled by a Default role
 - Remove geo_bulk_notify_worker_cron 44def4b5
 
 9.5.5
