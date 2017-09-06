@@ -205,8 +205,24 @@ describe 'gitlab_shell::git_data_dirs' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  context 'when using invalid old git_data_dir configuration' do
+    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
+
+    it 'exception is raised' do
+      expect { chef_run }.to raise_exception('Encountered unsupported config key \'git_data_dir\' in /etc/gitlab/gitlab.rb.')
+    end
+  end
+
+  context 'when using invalid old git_data_dirs configuration' do
+    before { stub_gitlab_rb(git_data_dirs: { 'default' => '/tmp/user/git-data' }) }
+
+    it 'exception is raised' do
+      expect { chef_run }.to raise_exception('Unsupported configuration detected in \'git_data_dirs\' in /etc/gitlab/gitlab.rb.')
+    end
+  end
+
   context 'when gitaly is set to use a listen_addr instead of a socket' do
-    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data', gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
+    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
@@ -255,43 +271,5 @@ describe 'gitlab_shell::git_data_dirs' do
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
                                                                                       })
     end
-  end
-
-  context 'when git_data_dirs is set with deprecated settings structure' do
-    before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         'default' => '/tmp/default/git-data',
-                         'overflow' => '/tmp/other/git-overflow-data'
-                       }
-                     })
-    end
-
-    it 'correctly sets the shell git data directories' do
-      # Allow warn to be called for other messages without failing the test
-      allow(Chef::Log).to receive(:warn)
-      expect(Chef::Log).to receive(:warn).with("Your git_data_dirs settings are deprecated. Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.")
-      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-                                                                                       'default' => { 'path' => '/tmp/default/git-data' },
-                                                                                       'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-                                                                                     })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
-                                                                                      })
-    end
-  end
-
-  it 'defaults the auth_file to be within the user\'s home directory' do
-    stub_gitlab_rb(user: { home: '/tmp/user' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
-  end
-
-  it 'uses custom auth_files set in gitlab.rb' do
-    stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
   end
 end
