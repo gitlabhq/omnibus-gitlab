@@ -303,6 +303,15 @@ you can remove the old database with:
 sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 ```
 
+### Upgrading a GitLab HA cluster
+If you are setup your GitLab instance per the [GitLab HA documentation](https://docs.gitlab.com/ee/administration/high_availability/database.html), upgrade the database server last. It should not be necessary to perform any other extra steps.
+
+
+#### Troubleshooting upgrades in an HA cluster
+
+* If at some point, PostgreSQL had been running on a node before upgrading to an HA setup, the old data directory may remain. This will cause `gitlab-ctl reconfigure` to downgrade the version of the PostgreSQL utilities it uses. Move (or remove) the directory to prevent this:
+  * `mv /var/opt/gitlab/postgresql/data/ /var/opt/gitlab/postgresql/data.$(date +%s)`
+
 ## Downgrade packaged PostgreSQL server
 
 As of GitLab 9.0, the default version of PostgreSQL is 9.6.1, but 9.2.18 is still shipped in the package.
