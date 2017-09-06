@@ -17,8 +17,9 @@ omnibus-gitlab repository.
 - Move the GitLab HA roles into their own files, and switch default services to be enabled by a Default role
 - Remove geo_bulk_notify_worker_cron 44def4b5
 - Rework `single_quote` helper as `quote` that can handle escaping
-  strings with embedded quotes fdc6a93- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+  strings with embedded quotes fdc6a93
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+- Support LFS object storage options for GitLab EEP
 
 9.5.5
 - Add more options to repmgr.conf template
