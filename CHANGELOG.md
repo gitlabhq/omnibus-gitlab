@@ -7,9 +7,11 @@ omnibus-gitlab repository.
 
 - Add backup_timeout argument to geo db replication command
 - Remove sensitive params from the NGINX access logs 6983fe59
+- Upgrade rubygems to 2.6.13 4650cd70a
 - Add option to pass EXTERNAL_URL during installation d0f30ef2
   * Saves users from manually editing gitlab.rb just to set the URL and hence
     makes installation process easier
+- Remove TLSv1 from the list of accepted ssl protocols
 - Moved the settings handling into the package cookbook and reduced code duplication in settings
 - Remove geo_bulk_notify_worker_cron 44def4b5
 
