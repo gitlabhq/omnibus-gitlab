@@ -138,7 +138,7 @@ describe 'gitlab::gitlab-rails' do
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: false\s+remote_directory: 'artifacts'\s+connection:/)
+            .with_content(/object_store:\s+enabled: false\s+remote_directory: "artifacts"\s+connection:/)
       end
 
       it 'sets the connection in YAML' do
@@ -158,7 +158,7 @@ describe 'gitlab::gitlab-rails' do
                        })
 
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+'mepmep'/)
+            .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+"mepmep"/)
         expect(chef_run).to render_file(gitlab_yml_path)
           .with_content(/connection:\s"{\\n  'provider' => 'AWS'/)
         expect(chef_run).to render_file(gitlab_yml_path)
@@ -545,7 +545,7 @@ describe 'gitlab::gitlab-rails' do
               group: 'root',
               mode: '0644'
             )
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \'\/var\/opt\/gitlab\/postgresql\'/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \"\/var\/opt\/gitlab\/postgresql\"/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: true/)
@@ -578,14 +578,14 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'creates the postgres configuration file with multi listen_address and database.yml file with one host' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "127.0.0.1"/)
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
           end
         end
 
         context 'when no postgresql listen_address is used' do
           it 'creates the postgres configuration file with empty listen_address and database.yml file with default one' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '\/var\/opt\/gitlab\/postgresql'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "\/var\/opt\/gitlab\/postgresql"/)
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
           end
         end
@@ -600,7 +600,7 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: '127.0.0.1'/)
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "127.0.0.1"/)
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
           end
 
