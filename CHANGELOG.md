@@ -12,6 +12,7 @@ omnibus-gitlab repository.
     makes installation process easier
 - Moved the settings handling into the package cookbook and reduced code duplication in settings
 - Remove geo_bulk_notify_worker_cron 44def4b5
+- Remove support for the old git_data_dir configuration option
 
 9.5.5
 - Add more options to repmgr.conf template
