@@ -50,7 +50,7 @@ describe 'gitlab-ee::geo-secondary' do
           group: 'root',
           mode: '0644'
         )
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/host: \'\/var\/opt\/gitlab\/geo-postgresql\'/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/host: \"\/var\/opt\/gitlab\/geo-postgresql\"/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/database: gitlabhq_geo_production/)
       end
 

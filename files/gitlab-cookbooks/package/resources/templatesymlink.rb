@@ -28,7 +28,7 @@ property :group, String
 property :mode, String
 property :cookbook, String
 property :variables, Hash, default: {}
-property :helpers, Module, default: SingleQuoteHelper
+property :helpers, Module, default: QuoteHelper
 property :notifies, Array
 property :restarts, Array, default: []
 property :sensitive, [true, false], default: false

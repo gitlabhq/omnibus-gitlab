@@ -1,4 +1,3 @@
-#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
@@ -15,9 +14,13 @@
 # limitations under the License.
 #
 
-require 'uri'
-require 'digest'
-require_relative 'helpers/redhat_helper'
-require_relative 'helpers/secrets_helper'
-require_relative 'helpers/version_helper'
-require_relative 'helpers/quote_helper'
+module RedisMasterRole
+  def self.load_role
+    master_role = Gitlab['redis_master_role']['enable']
+    slave_role  = Gitlab['redis_slave_role']['enable']
+
+    raise 'Cannot define both redis_master_role and redis_slave_role in the same machine.' if master_role && slave_role
+
+    Services.enable_group('redis_node') if master_role || slave_role
+  end
+end

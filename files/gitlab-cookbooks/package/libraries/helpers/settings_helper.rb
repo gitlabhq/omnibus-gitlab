@@ -132,6 +132,18 @@ module SettingsHelper
     results
   end
 
+  def load_roles
+    # System services are enabled by default
+    Services.enable_group(Services::SYSTEM_GROUP)
+
+    # Load our roles
+    DefaultRole.load_role
+    @roles.each do |key, value|
+      handler = value.handler
+      handler.load_role if handler && handler.respond_to?(:load_role)
+    end
+  end
+
   def generate_secrets(node_name)
     # guards against creating secrets on non-bootstrap node
     SecretsHelper.read_gitlab_secrets
@@ -148,16 +160,12 @@ module SettingsHelper
   def generate_config(node_name)
     generate_secrets(node_name)
 
+    load_roles
+
     # Parse all our variables using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
       handler.parse_variables if handler && handler.respond_to?(:parse_variables)
-    end
-
-    # Load our roles
-    @roles.each do |_key, value|
-      handler = value.handler
-      handler.load_role if handler && handler.respond_to?(:load_role)
     end
 
     # The last step is to convert underscores to hyphens in top-level keys

@@ -1,4 +1,3 @@
-#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
@@ -15,9 +14,8 @@
 # limitations under the License.
 #
 
-require 'uri'
-require 'digest'
-require_relative 'helpers/redhat_helper'
-require_relative 'helpers/secrets_helper'
-require_relative 'helpers/version_helper'
-require_relative 'helpers/quote_helper'
+module RedisSentinelRole
+  def self.load_role
+    Services.enable('sentinel') if Gitlab['redis_sentinel_role']['enable']
+  end
+end

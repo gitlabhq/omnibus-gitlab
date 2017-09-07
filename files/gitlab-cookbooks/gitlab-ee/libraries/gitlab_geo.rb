@@ -18,32 +18,10 @@
 module GitlabGeo
   class << self
     def parse_variables
-      parse_primary_role if geo_primary_role?
-      parse_secondary_role if geo_secondary_role?
       parse_data_dir if geo_postgresql_enabled?
     end
 
     private
-
-    def parse_primary_role
-      Gitlab['gitlab_rails']['geo_primary_role_enabled'] = true
-      Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
-      Gitlab['postgresql']['wal_level'] = 'hot_standby'
-      Gitlab['postgresql']['max_wal_senders'] ||= 10
-      Gitlab['postgresql']['wal_keep_segments'] ||= 10
-      Gitlab['postgresql']['max_replication_slots'] ||= 1
-      Gitlab['postgresql']['hot_standby'] = 'on'
-    end
-
-    def parse_secondary_role
-      Gitlab['gitlab_rails']['geo_secondary_role_enabled'] = true
-      Services.enable_group('geo')
-      Gitlab['postgresql']['wal_level'] = 'hot_standby'
-      Gitlab['postgresql']['max_wal_senders'] ||= 10
-      Gitlab['postgresql']['wal_keep_segments'] ||= 10
-      Gitlab['postgresql']['hot_standby'] = 'on'
-      Gitlab['gitlab_rails']['auto_migrate'] = false
-    end
 
     def parse_data_dir
       postgresql_data_dir = Gitlab['geo_postgresql']['data_dir'] || node['gitlab']['geo-postgresql']['data_dir']

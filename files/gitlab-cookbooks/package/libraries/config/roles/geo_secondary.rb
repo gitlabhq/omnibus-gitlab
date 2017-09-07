@@ -1,4 +1,3 @@
-#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
@@ -15,9 +14,16 @@
 # limitations under the License.
 #
 
-require 'uri'
-require 'digest'
-require_relative 'helpers/redhat_helper'
-require_relative 'helpers/secrets_helper'
-require_relative 'helpers/version_helper'
-require_relative 'helpers/quote_helper'
+module GeoSecondaryRole
+  def self.load_role
+    return unless Gitlab['geo_secondary_role']['enable']
+
+    Gitlab['gitlab_rails']['geo_secondary_role_enabled'] = true
+    Services.enable_group('geo')
+    Gitlab['postgresql']['wal_level'] = 'hot_standby'
+    Gitlab['postgresql']['max_wal_senders'] ||= 10
+    Gitlab['postgresql']['wal_keep_segments'] ||= 10
+    Gitlab['postgresql']['hot_standby'] = 'on'
+    Gitlab['gitlab_rails']['auto_migrate'] = false
+  end
+end

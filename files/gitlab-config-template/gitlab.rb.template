@@ -232,6 +232,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['omniauth_enabled'] = false
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
 # gitlab_rails['omniauth_sync_email_from_provider'] = 'saml'
+# gitlab_rails['omniauth_sync_profile_from_provider'] = ['saml']
+# gitlab_rails['omniauth_sync_profile_attributes'] = ['email']
 # gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
 # gitlab_rails['omniauth_block_auto_created_users'] = true
 # gitlab_rails['omniauth_auto_link_ldap_user'] = false
@@ -808,7 +810,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! **Recommended by: https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
 ##!                   https://cipherli.st/**
-# nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
+# nginx['ssl_protocols'] = "TLSv1.1 TLSv1.2"
 
 ##! **Recommended in: https://nginx.org/en/docs/http/ngx_http_ssl_module.html**
 # nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
@@ -916,6 +918,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! remote host to ship log messages to via UDP
 # logging['udp_log_shipping_host'] = nil
+
+##! override the hostname used when logs are shipped via UDP,
+##  by default the system hostname will be used.
+# logging['udp_log_shipping_hostname'] = nil
 
 ##! remote port to ship log messages to via UDP
 # logging['udp_log_shipping_port'] = 514
