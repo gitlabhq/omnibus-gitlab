@@ -44,12 +44,11 @@ end
   end
 end
 
-include_recipe 'gitlab-ee::ssh_keys'
-
 # Geo secondary
 if node['gitlab']['geo-postgresql']['enable']
   include_recipe 'gitlab-ee::geo-secondary'
   include_recipe 'gitlab-ee::geo_database_migrations'
+  include_recipe 'gitlab-ee::ssh_keys'
 end
 
 # pgbouncer_user and pgbouncer_user_password are settings for the account
