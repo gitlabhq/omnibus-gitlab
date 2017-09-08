@@ -68,13 +68,17 @@ module Pgbouncer
       end
     end
 
-    def pgbouncer_command(command)
+    def build_command_line
       psql = "#{install_path}/embedded/bin/psql"
       host = options['host'] || attributes['gitlab']['pgbouncer']['listen_addr']
       host = '127.0.0.1' if host.eql?('0.0.0.0')
       port = options['port'] || attributes['gitlab']['pgbouncer']['listen_port']
+      "#{psql} -d pgbouncer -h #{host} -p #{port} -U #{options['user']}"
+    end
+
+    def pgbouncer_command(command)
       GitlabCtl::Util.get_command_output(
-        "#{psql} -d pgbouncer -h #{host} -p #{port} -c '#{command}' -U #{options['user']}",
+        "#{build_command_line} -c '#{command}'",
         options['host_user']
       )
     rescue GitlabCtl::Errors::ExecutionError => results
@@ -104,6 +108,10 @@ module Pgbouncer
     def notify
       write
       reload
+    end
+
+    def console
+      exec(build_command_line)
     end
   end
 end
