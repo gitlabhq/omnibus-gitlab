@@ -65,6 +65,8 @@ end
 def get_pg_options
   options = {
     'database' => 'gitlabhq_production',
+    'databases_ini' => nil,
+    'databases_json' => nil,
     'host' => nil,
     'port' => nil,
     'user' => 'pgbouncer',
@@ -98,8 +100,16 @@ def get_pg_options
       options['pg_database'] = db
     end
 
-    opts.on('--newhost HOSTNAME', 'The new master when updating pgbouncer') do|h|
+    opts.on('--newhost HOSTNAME', 'The new master when updating pgbouncer') do |h|
       options['newhost'] = h
+    end
+
+    opts.on('--databases-json JSON', 'The location of the databases.json file') do |j|
+      options['databases_json'] = j
+    end
+
+    opts.on('--databases-ini JSON', 'The location of the databases.json file') do |j|
+      options['databases_ini'] = j
     end
   end.parse!(ARGV)
   options

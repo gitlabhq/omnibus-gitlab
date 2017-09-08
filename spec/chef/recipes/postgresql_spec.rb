@@ -425,5 +425,13 @@ describe 'postgresql 9.6' do
       expect(chef_run).to render_file(pg_hba_conf)
         .with_content('host foo bar 127.0.0.1/32 trust')
     end
+
+    it 'notifies postgresql reload' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('postgresql').and_return(true)
+      hba_resource = chef_run.template(pg_hba_conf)
+      expect(hba_resource).to notify('execute[reload postgresql]').to(:run).immediately
+      expect(hba_resource).to notify('execute[start postgresql]').to(:run).immediately
+    end
   end
 end

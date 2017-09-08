@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+9.5.5
+
+- Add more options to repmgr.conf template
+- Update pgbouncer to use one style of logging 
+- Changing pg_hba configuration should only reload PG c99ef6
+
 9.5.3
 
 - Fix Mattermost log location 2126c7b3
@@ -14,6 +21,9 @@ omnibus-gitlab repository.
 9.5.1
 
 - No changes
+
+9.5.5
+- Add more options to repmgr.conf template
 
 9.5.0
 
