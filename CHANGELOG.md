@@ -22,7 +22,9 @@ omnibus-gitlab repository.
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 
 9.5.5
+
 - Add more options to repmgr.conf template
+- Update pgbouncer to use one style of logging 
 
 9.5.4
 
