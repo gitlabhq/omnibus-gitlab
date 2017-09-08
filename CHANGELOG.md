@@ -6,6 +6,8 @@ omnibus-gitlab repository.
 
 9.5.5
 
+- Add more options to repmgr.conf template
+- Update pgbouncer to use one style of logging 
 - Changing pg_hba configuration should only reload PG c99ef6
 
 9.5.3
