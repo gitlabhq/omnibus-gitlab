@@ -1,4 +1,4 @@
 [databases]
 <% @databases.each do |db, settings| %>
-<%= db %> = <%= pgb_helper.database_config(db) %>
+<%= db %> = host=<%= settings['host'] %> port=<%= settings['port'] %> dbname=<%= db %> auth_user=<%= settings['user'] %>
 <% end %>
