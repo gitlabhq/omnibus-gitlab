@@ -18,7 +18,7 @@ require 'chef_helper'
 describe 'gitlab-ee::pgbouncer' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
   let(:pgbouncer_ini) { '/var/opt/gitlab/pgbouncer/pgbouncer.ini' }
-  let(:databases_json) { '/var/opt/gitlab/pgbouncer/databases.json' }
+  let(:databases_ini) { '/var/opt/gitlab/pgbouncer/databases.ini' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -96,38 +96,22 @@ describe 'gitlab-ee::pgbouncer' do
       end
     end
 
-    context 'databases.json' do
-      it 'creates databases.json' do
-        expect(chef_run).to create_file(databases_json)
-          .with_content("{\"gitlabhq_production\":{\"host\":\"1.2.3.4\"}}")
-          .with(user: 'gitlab-psql', group: 'gitlab-psql')
-      end
+    context 'databases.ini' do
+      let(:fake_databases) { '/fake/databases.ini' }
 
-      it 'notifies pgb-notify to generate databases.ini' do
-        json_resource = chef_run.file(databases_json)
-        expect(json_resource).to notify('execute[generate databases.ini]').to(:run).immediately
-      end
-
-      it 'stores in a different location when attribute is set' do
+      before do
         stub_gitlab_rb(
           pgbouncer: {
             enable: true,
-            databases_json: '/fakepath/fakedatabases.json'
-          }
-        )
-        expect(chef_run).to create_file('databases.json')
-          .with(path: '/fakepath/fakedatabases.json')
-      end
-
-      it 'changes the user when the attribute is changed' do
-        stub_gitlab_rb(
-          pgbouncer: {
-            enable: true,
+            databases_ini: fake_databases,
             databases_ini_user: 'fakeuser'
           }
         )
-        expect(chef_run).to create_file('databases.json')
-          .with(user: 'fakeuser', group: 'fakeuser')
+      end
+
+      it 'can be set to a non-standard path' do
+        expect(chef_run).to render_file(pgbouncer_ini).with_content(%r{^%include /fake/databases.ini})
+        expect(chef_run).to create_template(fake_databases).with(user: 'fakeuser')
       end
     end
   end
@@ -198,6 +182,24 @@ describe 'gitlab-ee::pgbouncer' do
       .with_content(/^gitlabhq_production = host=127\.0\.0\.1 port=5432 dbname=gitlabhq_production auth_user=fakeuser$/)
     expect(chef_run).to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
       .with_content(%r{^"fakeuser" "md5fakemd5password"$})
+  end
+
+  it 'adds arbitrary values to the databases.ini file' do
+    stub_gitlab_rb(
+      {
+        pgbouncer: {
+          enable: true,
+          databases: {
+            gitlab_db: {
+              host: 'fakehost',
+              fakefield: 'fakedata'
+            }
+          }
+        }
+      }
+    )
+    expect(chef_run).to render_file(databases_ini)
+      .with_content(/^gitlab_db = host=fakehost fakefield=fakedata$/)
   end
 
   it 'creates arbitrary user' do

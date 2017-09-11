@@ -58,10 +58,6 @@ module GitlabCtl
         raise GitlabCtl::Errors::PasswordMismatch unless password.eql?(password_confirm)
         password
       end
-
-      def userinfo(username)
-        Etc.getpwnam(username)
-      end
     end
   end
 end

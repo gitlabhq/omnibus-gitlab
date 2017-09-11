@@ -17,12 +17,10 @@
 require 'erb'
 require 'etc'
 
-require_relative '../../lib/gitlab_ctl'
-
 module GitlabCtl
   class PostgreSQL
     class Pgpass
-      attr_accessor :hostname, :port, :database, :username, :password, :host_user, :userinfo
+      attr_accessor :hostname, :port, :database, :username, :password, :host_user
 
       def initialize(options = {})
         @hostname = options[:hostname] || '*'
@@ -31,7 +29,6 @@ module GitlabCtl
         @username = options[:username] || '*'
         @password = options[:password] || '*'
         @host_user = options[:host_user]
-        @userinfo = GitlabCtl::Util.userinfo(host_user)
       end
 
       def pgpass_template
@@ -48,6 +45,10 @@ module GitlabCtl
 
       def filename
         "#{userinfo.dir}/.pgpass"
+      end
+
+      def userinfo
+        Etc.getpwnam(host_user)
       end
 
       def write
