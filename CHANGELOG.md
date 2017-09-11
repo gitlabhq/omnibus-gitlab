@@ -20,6 +20,7 @@ omnibus-gitlab repository.
 - Rework `single_quote` helper as `quote` that can handle escaping
   strings with embedded quotes fdc6a93- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+- Only generate a private SSH key on Geo secondaries c2f2dcba
 
 9.5.5
 
