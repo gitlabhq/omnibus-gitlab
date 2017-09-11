@@ -15,7 +15,6 @@
 #
 
 account_helper = AccountHelper.new(node)
-pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
