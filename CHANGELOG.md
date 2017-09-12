@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Added PostgreSQL support for max_worker_processes and max_parallel_workers_per_gather
 - Added PostgreSQL support for log_lock_waits and deadlock_timeout
 - Added PostgreSQL support for track_io_timing
+- Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi)
 
 10.0.2
 
