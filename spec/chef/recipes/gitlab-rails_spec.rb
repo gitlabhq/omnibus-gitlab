@@ -135,6 +135,15 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    def aws_connection_hash
+      {
+        'provider' => 'AWS',
+        'region' => 'eu-west-1',
+        'aws_access_key_id' => 'AKIAKIAKI',
+        'aws_secret_access_key' => 'secret123'
+      }
+    end
+
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to render_file(gitlab_yml_path)
@@ -142,31 +151,42 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it 'sets the connection in YAML' do
-        json = <<~JSON
-        {
-          'provider' => 'AWS',
-          'region' => 'eu-west-1',
-          'aws_access_key_id' => 'AKIAKIAKI',
-          'aws_secret_access_key' => 'secret123'
-        }
-        JSON
-
         stub_gitlab_rb(gitlab_rails: {
                          artifacts_object_store_enabled: true,
                          artifacts_object_store_remote_directory: 'mepmep',
-                         artifacts_object_store_connection: json
+                         artifacts_object_store_connection: aws_connection_hash
                        })
 
         expect(chef_run).to render_file(gitlab_yml_path)
             .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+"mepmep"/)
+
         expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/connection:\s"{\\n  'provider' => 'AWS'/)
+          .with_content(/connection:\s{"provider":"AWS"/)
         expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/'region' => 'eu-west-1'/)
+          .with_content(/"region":"eu-west-1"/)
         expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/'aws_access_key_id' => 'AKIAKIAKI'/)
+          .with_content(/"aws_access_key_id":"AKIAKIAKI"/)
         expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/'aws_secret_access_key' => 'secret123'/)
+          .with_content(/"aws_secret_access_key":"secret123"/)
+      end
+    end
+
+    context 'for settings regarding object storage for lfs' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/storage_path:\s+[-\/\w]*shared\/lfs-objects\s+object_store:\s+enabled: false\s+background_upload: true\s+remote_directory: "lfs-objects"\s+connection:/)
+      end
+
+      it 'sets the connection in YAML' do
+        stub_gitlab_rb(gitlab_rails: {
+                         lfs_object_store_enabled: true,
+                         lfs_object_store_background_upload: false,
+                         lfs_object_store_remote_directory: 'mepmep',
+                         lfs_object_store_connection: aws_connection_hash
+                       })
+
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/storage_path:\s+[-\/\w]*shared\/lfs-objects\s+object_store:\s+enabled: true\s+background_upload: false\s+remote_directory:\s+"mepmep"\s+connection:/)
       end
     end
 

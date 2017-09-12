@@ -18,8 +18,9 @@ omnibus-gitlab repository.
 - Remove geo_bulk_notify_worker_cron 44def4b5
 - Remove support for the old git_data_dir configuration option
 - Rework `single_quote` helper as `quote` that can handle escaping
-  strings with embedded quotes fdc6a93- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+  strings with embedded quotes fdc6a93
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+- Support LFS object storage options for GitLab EEP
 
 9.5.5
 
