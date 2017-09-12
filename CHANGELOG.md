@@ -25,6 +25,7 @@ omnibus-gitlab repository.
 
 - Add more options to repmgr.conf template
 - Update pgbouncer to use one style of logging 
+- Set bootstrap_expect to default to 3 for consul servers
 
 9.5.4
 
