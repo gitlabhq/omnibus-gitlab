@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 
 9.5.5
 - Add more options to repmgr.conf template
+- Add gitlab-ctl pgb-console command
 
 9.5.4
 
