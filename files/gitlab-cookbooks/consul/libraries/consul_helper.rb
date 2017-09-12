@@ -13,7 +13,7 @@ class ConsulHelper
       'server' => false
     }
     @default_server_configuration = {
-      'bootstrap_expect' => '3'
+      'bootstrap_expect' => 3
     }
   end
 
