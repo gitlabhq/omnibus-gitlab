@@ -16,13 +16,20 @@ omnibus-gitlab repository.
 - Moved the settings handling into the package cookbook and reduced code duplication in settings
 - Move the GitLab HA roles into their own files, and switch default services to be enabled by a Default role
 - Remove geo_bulk_notify_worker_cron 44def4b5
+- Remove support for the old git_data_dir configuration option
 - Rework `single_quote` helper as `quote` that can handle escaping
-  strings with embedded quotes fdc6a93- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+  strings with embedded quotes fdc6a93
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+- Only generate a private SSH key on Geo secondaries c2f2dcba
+- Support LFS object storage options for GitLab EEP
 
 9.5.5
+
 - Add more options to repmgr.conf template
 - Add gitlab-ctl pgb-console command
+- Update pgbouncer to use one style of logging 
+- Set bootstrap_expect to default to 3 for consul servers
+
 
 9.5.4
 

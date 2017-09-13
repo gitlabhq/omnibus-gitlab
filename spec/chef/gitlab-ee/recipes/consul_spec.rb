@@ -53,6 +53,12 @@ describe 'consul' do
         }
       end
 
+      it 'does not include server default values in its configuration' do
+        expect(chef_run).to render_file(consul_conf).with_content { |content|
+          expect(content).not_to match(%r{"bootstrap_expect":3})
+        }
+      end
+
       it 'creates the necessary directories' do
         expect(chef_run).to create_directory('/fake/config.d')
         expect(chef_run).to create_directory('/fake/data')
@@ -76,6 +82,7 @@ describe 'consul' do
         expect(chef_run.node['consul']['configuration']['server']).to eq true
         expect(chef_run).to render_file(consul_conf).with_content { |content|
           expect(content).to match(%r{"server":true})
+          expect(content).to match(%r{"bootstrap_expect":3})
         }
       end
 
