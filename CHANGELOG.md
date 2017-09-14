@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Remove support for the old git_data_dir configuration option
 - Rework `single_quote` helper as `quote` that can handle escaping
   strings with embedded quotes fdc6a93
+- Update pgbouncer to use one style of logging 
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Only generate a private SSH key on Geo secondaries c2f2dcba
 - Support LFS object storage options for GitLab EEP
@@ -27,7 +28,6 @@ omnibus-gitlab repository.
 
 - Add more options to repmgr.conf template
 - Add gitlab-ctl pgb-console command
-- Update pgbouncer to use one style of logging 
 - Set bootstrap_expect to default to 3 for consul servers
 
 
