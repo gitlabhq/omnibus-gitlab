@@ -17,7 +17,7 @@ pg_check() {
     # In AWK, $NF will return the last column of the version output, which is
     # the version string. By doing $NF+0, we force awk to convert it to a
     # float, so that we can do numerical comparison.
-    if $(${DEST_DIR}/embedded/bin/psql --version | awk '$NF+0 < 9.6 {exit 0}'); then
+    if ! $(${DEST_DIR}/embedded/bin/psql --version | awk '$NF+0 < 9.6 {exit 1}'); then
       notify
       notify "Your version of PostgreSQL is too old and no longer supported."
       notify "If you are on a version older than 8.15.0, and using omnibus' bundled PostgreSQL, you have to "
