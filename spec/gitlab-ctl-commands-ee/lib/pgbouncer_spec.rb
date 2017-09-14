@@ -9,6 +9,9 @@ describe Pgbouncer::Databases do
     {
       normal: {
         gitlab: {
+          'gitlab-rails': {
+            db_database: 'fake_database'
+          },
           pgbouncer: {
             databases_ini: '/fakedata/pgbouncer/databases.ini',
             databases_json: '/fakedata/pgbouncer/databases.json'
@@ -78,6 +81,19 @@ describe Pgbouncer::Databases do
     it 'renders the template' do
       expect(@obj.render).to eq(
         "[databases]\n\nfakedb = host=fakehost user=fakeuser port=8888 password=dslgkjdfgklfsd auth_user=fakeuser\n\n"
+      )
+    end
+  end
+
+  context 'with empty databases.json' do
+    before do
+      allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return({}.to_s)
+      @obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+    end
+
+    it 'should generate an databases.ini with sane defaults' do
+      expect(@obj.render).to eq(
+        "[databases]\n\nfake_database = \n\n"
       )
     end
   end
