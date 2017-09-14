@@ -21,11 +21,12 @@ omnibus-gitlab repository.
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Only generate a private SSH key on Geo secondaries c2f2dcba
 - Support LFS object storage options for GitLab EEP
+- Upgrade ruby version to 2.3.5
 
 9.5.5
 
 - Add more options to repmgr.conf template
-- Update pgbouncer to use one style of logging 
+- Update pgbouncer to use one style of logging
 - Set bootstrap_expect to default to 3 for consul servers
 - Fix bug where pgb-notify would fail when databases.json was empty
 
