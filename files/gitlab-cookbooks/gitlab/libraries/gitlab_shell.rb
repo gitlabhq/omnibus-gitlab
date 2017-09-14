@@ -28,17 +28,25 @@ module GitlabShell
     end
 
     def parse_git_data_dirs
-      # Make sure we inform the user that they are using configuration that is
-      # not supported.
-      raise 'Encountered unsupported config key \'git_data_dir\' in /etc/gitlab/gitlab.rb.' if Gitlab['git_data_dir']
-
       git_data_dirs = Gitlab['git_data_dirs']
-      return unless git_data_dirs.any?
-      git_data_dirs.select{ |k,v| raise 'Unsupported configuration detected in \'git_data_dirs\' in /etc/gitlab/gitlab.rb.' if v.is_a?(String)}
-
+      git_data_dir = Gitlab['git_data_dir']
+      return unless git_data_dirs.any? || git_data_dir
       gitaly_address = Gitaly.gitaly_address
 
-      Gitlab['gitlab_shell']['git_data_directories'] ||= git_data_dirs
+      Gitlab['gitlab_shell']['git_data_directories'] ||=
+        if git_data_dirs.any?
+          Hash[git_data_dirs.map do |name, data_directory|
+            if data_directory.is_a?(String)
+              Chef::Log.warn "Your git_data_dirs settings are deprecated. Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation."
+              [name, { 'path' => data_directory }]
+            else
+              [name, data_directory]
+            end
+          end]
+        else
+          { 'default' => { 'path' => git_data_dir } }
+        end
+
       Gitlab['gitlab_rails']['repositories_storages'] ||=
         Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, data_directory|
           shard_gitaly_address = data_directory['gitaly_address'] || gitaly_address
