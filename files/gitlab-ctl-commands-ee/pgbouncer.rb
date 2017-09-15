@@ -17,6 +17,11 @@
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/pgbouncer"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
 
+add_command_under_category('pgb-console', 'pgbouncer', 'Connect to the pgbouncer console', 2) do
+  pgb = get_client
+  pgb.console
+end
+
 add_command_under_category('pgb-notify', 'pgbouncer', 'Notify pgbouncer of an update to its database', 2) do
   pgb = get_client
   pgb.notify
