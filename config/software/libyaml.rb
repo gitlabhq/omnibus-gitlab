@@ -15,15 +15,16 @@
 #
 
 name 'libyaml'
-default_version '0.1.6'
+default_version '0.1.7'
 
 license 'MIT'
 license_file 'LICENSE'
 
 dependency 'config_guess'
 
-source url: "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz",
-       md5: '5fe00cda18ca5daeb43762b80c38e06e'
+version("0.1.7") { source sha256: "8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729" }
+
+source url: "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz"
 
 relative_path "yaml-#{version}"
 
@@ -36,7 +37,7 @@ build do
 
   # Windows had worse automake/libtool version issues.
   # Just patch the output instead.
-  if version == '0.1.6' && windows?
+  if version >= '0.1.6' && windows?
     patch source: 'v0.1.6.windows-configure.patch', plevel: 1, env: env
   end
 
