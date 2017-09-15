@@ -18,17 +18,21 @@ omnibus-gitlab repository.
 - Remove geo_bulk_notify_worker_cron 44def4b5
 - Rework `single_quote` helper as `quote` that can handle escaping
   strings with embedded quotes fdc6a93
+- Add gitlab-ctl pgb-console command
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Only generate a private SSH key on Geo secondaries c2f2dcba
 - Support LFS object storage options for GitLab EEP
+- Upgrade ruby version to 2.3.5
+- Upgrade libyaml version to 0.1.7
 
 9.5.5
 
 - Add more options to repmgr.conf template
-- Update pgbouncer to use one style of logging 
+- Update pgbouncer to use one style of logging
 - Set bootstrap_expect to default to 3 for consul servers
 - Fix bug where pgb-notify would fail when databases.json was empty
 - Restart repmgrd after nodes are registered with a cluster
+- Add --node option to gitlab-ctl repmgr standby unregister
 
 9.5.4
 
