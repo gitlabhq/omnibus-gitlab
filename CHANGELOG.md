@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.4.7
+- Upgrade ruby version to 2.3.5
+- Upgrade libyaml version to 0.1.7
+
 9.4.6
 - Upgrade Mattermost to 4.0.4
 
