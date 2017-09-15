@@ -24,7 +24,7 @@ license_file 'LEGAL'
 #   https://bugs.ruby-lang.org/issues/11869
 # - the current status of 2.3.x is that it downloads but fails to compile.
 # - verify that all ffi libs are available for your version on all platforms.
-default_version '2.3.3'
+default_version '2.3.5'
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
@@ -40,7 +40,7 @@ dependency 'libyaml'
 # and that's the only one we will ever use.
 dependency 'libiconv'
 
-version('2.3.3') { source md5: 'e485f3a55649eb24a1e2e1a40bc120df' }
+version('2.3.5') { source sha256: '5462f7bbb28beff5da7441968471ed922f964db1abdce82b8860608acc23ddcc' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
