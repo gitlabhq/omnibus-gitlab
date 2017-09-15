@@ -108,8 +108,8 @@ class RepmgrHelper
         repmgr_cmd(args, 'standby register')
       end
 
-      def unregister(args, node = nil)
-        return repmgr_cmd(args, "standby unregister --node=#{node}") unless node.nil?
+      def unregister(args)
+        return repmgr_cmd(args, "standby unregister --node=#{args[:node]}") unless args[:node].nil?
         repmgr_cmd(args, "standby unregister")
       end
 
