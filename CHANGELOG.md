@@ -31,6 +31,7 @@ omnibus-gitlab repository.
 - Update pgbouncer to use one style of logging
 - Set bootstrap_expect to default to 3 for consul servers
 - Fix bug where pgb-notify would fail when databases.json was empty
+- Add --node option to gitlab-ctl repmgr standby unregister
 
 9.5.4
 

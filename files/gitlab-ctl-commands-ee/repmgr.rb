@@ -21,7 +21,8 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
                     database:  node_attributes['repmgr']['database'],
                     directory: node_attributes['gitlab']['postgresql']['data_dir'],
                     verbose: repmgr_options[:verbose],
-                    wait: repmgr_options[:wait]
+                    wait: repmgr_options[:wait],
+                    node: repmgr_options[:node]
                   }
                 rescue NoMethodError
                   $stderr.puts "Unable to determine node attributes. Has reconfigure successfully ran?"
@@ -78,6 +79,7 @@ end
 
 def repmgr_parse_options
   options = {
+    node: nil,
     wait: true,
     verbose: ''
   }
@@ -89,6 +91,10 @@ def repmgr_parse_options
 
     opts.on('-v', '--verbose', 'Run repmgr with verbose option') do
       options[:verbose] = '-v'
+    end
+
+    opts.on('-n', '--node NUMBER', 'The node number to operate on') do |n|
+      options[:node] = n
     end
   end.parse!(ARGV)
 
