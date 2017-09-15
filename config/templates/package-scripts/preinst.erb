@@ -21,15 +21,8 @@ pg_check() {
     # float, so that we can do numerical comparison.
     if ! $(${DEST_DIR}/embedded/bin/psql --version | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
       notify
-      notify "Your version of PostgreSQL is too old and no longer supported."
-      notify "If you are on a version older than 8.15.0, and using omnibus' bundled PostgreSQL, you have to "
-      notify "upgrade to GitLab 9.x.x first to get your PostgreSQL version automatically upgraded."
-      notify "If you are on a version newer than 8.15.0, and using omnibus' bundled PostgreSQL, you can run "
-      notify "the following command to upgrade your PostgreSQL to latest version:"
-      notify "  sudo gitlab-ctl pg-upgrade"
-      notify ""
-      notify "You can check your PostgreSQL version using the following command"
-      notify "  /opt/gitlab/embedded/bin/psql --version"
+      notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version."
+      notify "Check https://docs.gitlab.com/omnibus/update/#updating-gitlab-100-or-newer for details."
       notify ""
       notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
       exit 1
