@@ -8,25 +8,30 @@ mkdir -p /var/log/gitlab/reconfigure
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
 
 pg_check() {
-  # Check if an upgrade or installation. This file will exist only in an installation.
-  # This is a redundant check as pg_check will only be executed if $1 matches
-  # an upgrade.
-  if [ -e "${DEST_DIR}/embedded/bin/psql" ] ; then
+  PG_MIN_VERSION=9.6
 
-    PG_MIN_VERSION=9.6
+  # Fetch the currently running version from the database
+  # If this doesn't work, assume this isn't a database node
+  running_version=$(gitlab-psql -d template1 -c 'SHOW server_version' -qt 2>/dev/null || echo 'none')
+  if [ "${running_version}" = "none" ] ; then
+    notify
+    notify "This node does not appear to be running a database"
+    notify "Skipping version check, if you think this is an error exit now"
+    notify
+    exit 0
+  fi
 
-    # Check if psql version is less than PG_MIN_VERSION and notify user.
-    # In AWK, $NF will return the last column of the version output, which
-    # is the version string. By doing $NF+0, we force awk to convert it to a
-    # float, so that we can do numerical comparison.
-    if ! $(${DEST_DIR}/embedded/bin/psql --version | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
-      notify
-      notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version."
-      notify "Check https://docs.gitlab.com/omnibus/update/#updating-gitlab-100-or-newer for details."
-      notify ""
-      notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
-      exit 1
-    fi
+  # Check if PostgreSQL version is less than PG_MIN_VERSION and notify user.
+  # In AWK, $NF will return the last column of the version output, which
+  # is the version string. By doing $NF+0, we force awk to convert it to a
+  # float, so that we can do numerical comparison.
+  if ! $(echo ${running_version} | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
+    notify
+    notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version."
+    notify "Check https://docs.gitlab.com/omnibus/update/#updating-gitlab-100-or-newer for details."
+    notify ""
+    notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
+    exit 1
   fi
 }
 
