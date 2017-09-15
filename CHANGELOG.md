@@ -20,6 +20,8 @@ omnibus-gitlab repository.
 - Rework `single_quote` helper as `quote` that can handle escaping
   strings with embedded quotes fdc6a93- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
+- Upgrade ruby version to 2.3.5
+- Upgrade libyaml version to 0.1.7
 
 9.5.5
 
