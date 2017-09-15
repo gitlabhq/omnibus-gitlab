@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
 - Upgrade ruby version to 2.3.5
+- Add --node option to gitlab-ctl repmgr standby unregister
 
 
 9.5.3
