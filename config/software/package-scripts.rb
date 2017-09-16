@@ -30,6 +30,7 @@ default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ p
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
   command "mkdir -p #{install_dir}/.package_util/package-scripts"
+  external_url_script = File.read(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/external_url.sh'))
 
   # Render the package script erb files
   Dir.glob(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/*.erb')).each do |package_script|
@@ -37,6 +38,9 @@ build do
     erb dest: "#{install_dir}/.package_util/package-scripts/#{script}",
         source: File.basename(package_script),
         mode: 0755,
-        vars: { install_dir: project.install_dir }
+        vars: {
+          install_dir: project.install_dir,
+          external_url_script: external_url_script
+        }
   end
 end
