@@ -140,11 +140,14 @@ sudo dpkg -r gitlab-ce
 
 # Redhat/Centos
 sudo rpm -e gitlab-ce
+
+# Reboot to make sure everything is stopped
+sudo reboot
 ```
 
-To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with `dpkg` or `yum`) run `sudo gitlab-ctl remove-accounts`. *Note* All gitlab processes need to be stopped before running the command.
 
-To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove-accounts`. *Note* All gitlab processes need to be stopped before running the command.
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
 
 ### Common installation problems
 
