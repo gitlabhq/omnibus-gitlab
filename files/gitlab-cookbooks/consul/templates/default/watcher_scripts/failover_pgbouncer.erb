@@ -72,4 +72,4 @@ end
 
 @log.info("Found master: #{newhost}")
 
-Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{newhost} --user gitlab-consul --hostuser gitlab-consul")
+Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{newhost} --user pgbouncer --hostuser gitlab-consul")
