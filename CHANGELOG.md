@@ -24,9 +24,7 @@ omnibus-gitlab repository.
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
-- Only generate a private SSH key on Geo secondaries c2f2dcba
-- Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
-- Support LFS object storage options for GitLab EEP
+- Update failover_pgbouncer script to use the pgbouncer user for the database configuration
 
 9.5.5
 
