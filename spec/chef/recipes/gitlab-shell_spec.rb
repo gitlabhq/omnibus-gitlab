@@ -14,7 +14,7 @@ describe 'gitlab::gitlab-shell' do
   context 'when NOT running on selinux' do
     before { stub_command('id -Z').and_return(false) }
 
-    it 'should not run the chcon bash command' do
+    it 'should not run the semanage bash command' do
       expect(chef_run).not_to run_bash('Set proper security context on ssh files for selinux')
     end
   end
@@ -22,7 +22,7 @@ describe 'gitlab::gitlab-shell' do
   context 'when running on selinux' do
     before { stub_command('id -Z').and_return('') }
 
-    it 'should run the chcon bash command' do
+    it 'should run the semanage bash command' do
       expect(chef_run).to run_bash('Set proper security context on ssh files for selinux')
     end
   end
