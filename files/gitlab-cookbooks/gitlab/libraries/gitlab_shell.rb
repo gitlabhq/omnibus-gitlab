@@ -32,12 +32,13 @@ module GitlabShell
       git_data_dir = Gitlab['git_data_dir']
       return unless git_data_dirs.any? || git_data_dir
       gitaly_address = Gitaly.gitaly_address
+      deprecated_key_used = 'git_data_dir' if git_data_dir
 
       Gitlab['gitlab_shell']['git_data_directories'] ||=
         if git_data_dirs.any?
           Hash[git_data_dirs.map do |name, data_directory|
             if data_directory.is_a?(String)
-              Chef::Log.warn "Your git_data_dirs settings are deprecated. Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation."
+              deprecated_key_used = 'git_data_dirs'
               [name, { 'path' => data_directory }]
             else
               [name, data_directory]
@@ -46,6 +47,22 @@ module GitlabShell
         else
           { 'default' => { 'path' => git_data_dir } }
         end
+
+      # Show deprecated warning in yellow, and give a slight pause to increase awareness
+      # @TODO these warnings should be displayed again at the end of reconfigure https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2533
+      if deprecated_key_used
+        warn_message = <<~EOS
+          Your #{deprecated_key_used} settings are deprecated.
+          Please update it to the following:
+
+          git_data_dirs(#{Chef::JSONCompat.to_json_pretty(Gitlab['gitlab_shell']['git_data_directories'])})
+
+          Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.
+        EOS
+        Chef::Log.warn warn_message
+        puts "\033[33mWARNING: #{warn_message}\033[0m"
+        sleep 5
+      end
 
       Gitlab['gitlab_rails']['repositories_storages'] ||=
         Hash[Gitlab['gitlab_shell']['git_data_directories'].map do |name, data_directory|
@@ -59,8 +76,8 @@ module GitlabShell
     end
 
     def parse_auth_file
-      Gitlab['user']['home'] ||=  Gitlab['node']['gitlab']['user']['home']
-      Gitlab['gitlab_shell']['auth_file'] ||=  File.join(Gitlab['user']['home'], '.ssh', 'authorized_keys')
+      Gitlab['user']['home'] ||= Gitlab['node']['gitlab']['user']['home']
+      Gitlab['gitlab_shell']['auth_file'] ||= File.join(Gitlab['user']['home'], '.ssh', 'authorized_keys')
     end
   end
 end
