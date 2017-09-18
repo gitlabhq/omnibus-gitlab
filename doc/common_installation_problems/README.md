@@ -99,7 +99,7 @@ To troubleshoot this error:
     ```
     $ sudo systemctl restart gitlab-runsvdir
     ```
-    
+
     Using upstart (Ubuntu <= 14.04):
 
     ```
@@ -162,8 +162,13 @@ For Nginx port changes please see [settings/nginx.md](../settings/nginx.md).
 
 On SELinux-enabled systems the git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
-gitlab-ctl reconfigure`, which will run a `chcon --recursive` command on
+gitlab-ctl reconfigure`, which will set the `ssh_home_t` security context on
 `/var/opt/gitlab/.ssh`.
+
+In GitLab 10.0 this behavior was improved by setting the context permanently using
+`semanage`. The runtime dependency `policycoreutils-python` has been added to the
+RPM package for RHEL based operating systems in order to ensure the `semanage`
+command is available.
 
 #### All systems
 
@@ -206,7 +211,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 ### Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
 By default, Postgres will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
-To fix this, you can disable postgresql's shared memory detection. Set the 
+To fix this, you can disable postgresql's shared memory detection. Set the
 following value in `/etc/gitlab/gitlab.rb`:
 
 ```ruby

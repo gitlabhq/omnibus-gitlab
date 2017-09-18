@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.0.0
 
+- Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)
 - Add option to override the hostname for remote syslog
 - Add backup_timeout argument to geo db replication command
 - Remove sensitive params from the NGINX access logs 6983fe59
@@ -19,11 +20,14 @@ omnibus-gitlab repository.
 - Rework `single_quote` helper as `quote` that can handle escaping
   strings with embedded quotes fdc6a93
 - Add gitlab-ctl pgb-console command
+- Increase warning visibility of the deprecated git_data_dir setting
 - Add omniauth sync_profile_from_provider and sync_profile_attributes configuration
 - Only generate a private SSH key on Geo secondaries c2f2dcba
 - Support LFS object storage options for GitLab EEP
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
+- Fix gitlab-ctl wrapper to allow '*' in arguments
+- Update failover_pgbouncer script to use the pgbouncer user for the database configuration
 - Update Mattermost to 4.2.0
 
 9.5.5
@@ -32,6 +36,8 @@ omnibus-gitlab repository.
 - Update pgbouncer to use one style of logging
 - Set bootstrap_expect to default to 3 for consul servers
 - Fix bug where pgb-notify would fail when databases.json was empty
+- Restart repmgrd after nodes are registered with a cluster
+- Add --node option to gitlab-ctl repmgr standby unregister
 
 9.5.4
 

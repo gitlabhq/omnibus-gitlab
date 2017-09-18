@@ -66,6 +66,8 @@ else
   runtime_dependency 'openssh-server'
 end
 
+runtime_dependency 'policycoreutils-python' if rhel?
+
 # creates required build directories
 dependency 'preparation'
 dependency 'package-scripts'
