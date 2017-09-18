@@ -51,7 +51,14 @@ module GitlabShell
       # Show deprecated warning in yellow, and give a slight pause to increase awareness
       # @TODO these warnings should be displayed again at the end of reconfigure https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2533
       if deprecated_key_used
-        warn_message = "Your #{deprecated_key_used} settings are deprecated.\nPlease update it to the following:\n\ngit_data_dirs(#{Chef::JSONCompat.to_json_pretty(Gitlab['gitlab_shell']['git_data_directories'])})\n\nPlease refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation."
+        warn_message = <<~EOS
+          Your #{deprecated_key_used} settings are deprecated.
+          Please update it to the following:
+
+          git_data_dirs(#{Chef::JSONCompat.to_json_pretty(Gitlab['gitlab_shell']['git_data_directories'])})
+
+          Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.
+        EOS
         Chef::Log.warn warn_message
         puts "\033[33mWARNING: #{warn_message}\033[0m"
         sleep 5
@@ -69,8 +76,8 @@ module GitlabShell
     end
 
     def parse_auth_file
-      Gitlab['user']['home'] ||=  Gitlab['node']['gitlab']['user']['home']
-      Gitlab['gitlab_shell']['auth_file'] ||=  File.join(Gitlab['user']['home'], '.ssh', 'authorized_keys')
+      Gitlab['user']['home'] ||= Gitlab['node']['gitlab']['user']['home']
+      Gitlab['gitlab_shell']['auth_file'] ||= File.join(Gitlab['user']['home'], '.ssh', 'authorized_keys')
     end
   end
 end
