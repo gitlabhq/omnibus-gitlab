@@ -27,6 +27,7 @@ omnibus-gitlab repository.
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
 - Fix gitlab-ctl wrapper to allow '*' in arguments
+- Update failover_pgbouncer script to use the pgbouncer user for the database configuration
 
 9.5.5
 
