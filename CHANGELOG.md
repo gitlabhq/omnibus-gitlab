@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.0.0
 
+- Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)
 - Add option to override the hostname for remote syslog
 - Add backup_timeout argument to geo db replication command
 - Remove sensitive params from the NGINX access logs 6983fe59
