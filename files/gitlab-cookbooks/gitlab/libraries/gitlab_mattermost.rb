@@ -47,7 +47,6 @@ module GitlabMattermost
       # setup gitlab auth endpoints if GitLab's external url has been provided
       if Gitlab['external_url']
         gitlab_url = Gitlab['external_url'].chomp("/")
-        Gitlab['mattermost']['service_allowed_untrusted_internal_connections']
         Gitlab['mattermost']['gitlab_auth_endpoint'] ||= "#{gitlab_url}/oauth/authorize"
         Gitlab['mattermost']['gitlab_token_endpoint'] ||= "#{gitlab_url}/oauth/token"
         Gitlab['mattermost']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v4/user"

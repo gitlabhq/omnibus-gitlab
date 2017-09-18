@@ -124,6 +124,29 @@ describe 'gitlab::mattermost' do
     expect(chef_run).to render_file('/opt/gitlab/sv/mattermost/run').with_content(/\-config \/var\/local\/gitlab\/mattermost\/config.json/)
   end
 
+  it 'includes gitlab in the list of allowed internal addresses' do
+    expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+      .with_content { |content|
+        config = JSON.parse(content)
+        expect(config).to have_key 'ServiceSettings'
+        expect(config['ServiceSettings']['AllowedUntrustedInternalConnections']).to match(/gitlab.example.com/)
+      }
+  end
+
+  it 'adds gitlab to the list of allowed internal addresses' do
+    stub_gitlab_rb(mattermost: {
+                     enable: true,
+                     service_allowed_untrusted_internal_connections: 'localhost',
+                   })
+
+    expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json')
+      .with_content { |content|
+        config = JSON.parse(content)
+        expect(config).to have_key 'ServiceSettings'
+        expect(config['ServiceSettings']['AllowedUntrustedInternalConnections']).to match(/gitlab.example.com/)
+      }
+  end
+
   shared_examples 'no gitlab authorization performed' do
     it 'does not authorize mattermost with gitlab' do
       expect(chef_run).not_to run_ruby_block('authorize mattermost with gitlab')
@@ -140,6 +163,14 @@ describe 'gitlab::mattermost' do
     before { stub_gitlab_rb(gitlab_rails: { enable: false }) }
 
     it_behaves_like 'no gitlab authorization performed'
+
+    it 'does not add gitlab automatically to the list of allowed internnal addresses' do
+      expect(chef_run).to render_file('/var/opt/gitlab/mattermost/config.json').with_content { |content|
+        config = JSON.parse(content)
+        expect(config).to have_key 'ServiceSettings'
+        expect(config['ServiceSettings']['AllowedUntrustedInternalConnections']).not_to match(/gitlab.example.com/)
+      }
+    end
   end
 
   context 'when database is not running' do
