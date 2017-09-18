@@ -17,7 +17,7 @@ pg_check() {
     notify "This node does not appear to be running a database"
     notify "Skipping version check, if you think this is an error exit now"
     notify
-    exit 0
+    return
   fi
 
   # Check if PostgreSQL version is less than PG_MIN_VERSION and notify user.
