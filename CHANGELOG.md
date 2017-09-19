@@ -37,6 +37,8 @@ omnibus-gitlab repository.
 - Fix bug where pgb-notify would fail when databases.json was empty
 - Restart repmgrd after nodes are registered with a cluster
 - Add --node option to gitlab-ctl repmgr standby unregister
+- Upgrade ruby version to 2.3.5
+- Upgrade libyaml version to 0.1.7
 
 9.5.4
 
