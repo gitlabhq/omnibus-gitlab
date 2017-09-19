@@ -50,6 +50,12 @@ module GitlabMattermost
         Gitlab['mattermost']['gitlab_auth_endpoint'] ||= "#{gitlab_url}/oauth/authorize"
         Gitlab['mattermost']['gitlab_token_endpoint'] ||= "#{gitlab_url}/oauth/token"
         Gitlab['mattermost']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v4/user"
+
+        # If mattermost is running on the same box as unicorn, allow it to communicate locally
+        if Services.enabled?('unicorn')
+          Gitlab['mattermost']['service_allowed_untrusted_internal_connections'] ||= ''
+          Gitlab['mattermost']['service_allowed_untrusted_internal_connections'] << " #{URI(gitlab_url.to_s).host}"
+        end
       end
 
       case uri.scheme
