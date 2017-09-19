@@ -202,6 +202,30 @@ This setting will prevent automatic database migrations within `gitlab-ctl recon
 1. On all other nodes, install gitlab-ee and run a `gitlab-ctl reconfigure` so they can get the newest code.
 1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node` to run post-deployment migrations.
 
+## Updating GitLab 10.0 or newer
+
+From version 10.0 GitLab requires the version of PostgreSQL to be 9.6 or
+higher.
+
+Check out [docs on upgrading packaged PostgreSQL server](https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server)
+for details.
+
+* For users running versions below 8.15 and using PostgreSQL bundled with
+  omnibus, this means they will have to first upgrade to 9.5.x, during which
+  PostgreSQL will be automatically updated to 9.6.
+* Users who are on versions above 8.15, but chose not to update PostgreSQL
+  automatically during previous upgrades, can run the following command to
+  update the bundled PostgreSQL to 9.6
+
+  ```
+  sudo gitlab-ctl pg-upgrade
+  ```
+
+Users can check their PostgreSQL version using the following command
+```
+/opt/gitlab/embedded/bin/psql --version
+```
+
 ## Updating from GitLab 8.10 and lower to 8.11 or newer
 
 GitLab 8.11 introduces new key names for several secrets, to match the GitLab
