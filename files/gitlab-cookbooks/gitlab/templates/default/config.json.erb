@@ -23,6 +23,7 @@
         "EnableTesting": <%= @service_enable_testing %>,
         "EnableSecurityFixAlert": <%= @service_enable_security_fix_alert %>,
         "EnableInsecureOutgoingConnections":  <%= @service_enable_insecure_outgoing_connections %>,
+        "AllowedUntrustedInternalConnections":  "<%= @service_allowed_untrusted_internal_connections %>",
         "AllowCorsFrom":  "<%= @service_allow_cors_from %>",
         "EnableDeveloper": <%= @service_enable_developer %>,
         "SessionLengthWebInDays" : <%= @service_session_length_web_in_days %>,
@@ -50,6 +51,7 @@
         "RestrictTeamNames": <%= @team_restrict_team_names %>,
         "RestrictDirectMessage": "<%= @team_restrict_direct_message %>",
         "MaxChannelsPerTeam": <%= @team_max_channels_per_team %>,
+        "EnableXToLeaveChannelsFromLHS": <%= @team_enable_x_to_leave_channels_from_lhs %>,
         "UserStatusAwayTimeout": <%= @team_user_status_away_timeout %>,
         "TeammateNameDisplay" : "<%= @team_teammate_name_display %>"
     },
@@ -91,7 +93,8 @@
         "AmazonS3LowercaseBucket": <%= @file_amazon_s3_lowercase_bucket %>,
         "AmazonS3SSL": <%= @file_amazon_s3_ssl %>,
         "AmazonS3SignV2" : <%= @file_amazon_s3_sign_v2 %>,
-        "EnableFileAttachments": <%= @file_enable_file_attachments %>
+        "EnableFileAttachments": <%= @file_enable_file_attachments %>,
+        "AmazonS3Trace": <%= @file_amazon_s3_trace %>
     },
     "EmailSettings": {
         "EnableSignUpWithEmail": <%= @email_enable_sign_up_with_email %>,
