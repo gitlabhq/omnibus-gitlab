@@ -177,18 +177,16 @@ For help and support around your GitLab Mattermost deployment please see:
 
 Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).  
 
+Below is a list of Mattermost versions for GitLab 9.0 and later:
+
 | GitLab Version  | Mattermost Version |
 | :------------ |:----------------|
-| 8.9 | 3.1 |
-| 8.10 | 3.2 |
-| 8.11 | 3.3 |
-| 8.12, 8.13 | 3.4 |
-| 8.14, 8.15 | 3.5 |
-| 8.16, 8.17 | 3.6 |
 | 9.0, 9.1 | 3.7 |
 | 9.2 | 3.9 |
 | 9.3 | 3.10 |
 | 9.4 |4.0 |
+| 9.5 |4.1 |
+| 10.0 |4.2 |
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
@@ -206,12 +204,13 @@ If this is not the case, there are two options:
 
 Consider these notes when upgrading GitLab Mattermost:
 
-1. Security related changes were made in Mattermost version 3.9.0 that cause any previously created team invite links, password reset links, and email verification links to no longer work. You must update any place where you have published these links.
-1. If public links are enabled, upgrading to Mattermost v3.4 will invalidate existing public links due to a security upgrade allowing admins to invalidate links by resetting a public link salt from the System Console.
-1. Upgrading from v3.2 to v3.4 will be incomplete due to a migration code not being run properly. You can either:
-    - Upgrade from v3.2 to v3.3 and then from v3.3 to v3.4, or
-    - Upgrade from v3.2 to v3.4, then run the following SQL query to make Mattermost rerun upgrade steps that were not properly completed: `UPDATE Systems SET Value = '3.1.0' WHERE Name = 'Version';`
+1. Starting in Mattermost v4.2, user-supplied URLs such as those used for Open Graph metadata, webhooks, or slash commands will no longer be allowed to connect to reserved IP addresses including loopback or link-local addresses used for internal networks by default. This change may cause private integrations to break in testing environments, which may point to a URL such as http://127.0.0.1:1021/my-command.
+    - If you point private integrations to such URLs, you may whitelist such domains, IP addresses, or CIDR notations via the [AllowedUntrustedInternalConnections config setting](https://github.com/mattermost/docs/blob/05cd1685deff85b2a2c5130d889f935b808ae159/source/administration/config-settings.rst#allow-untrusted-internal-connections-to) in your local environment. Although not recommended, you may also whitelist the addresses in your production environments.
+    - Push notification, OAuth 2.0 and WebRTC server URLs are trusted and not affected by this setting.
+1. Starting in Mattermost v4.2, Mattermost now handles multiple content-types for integrations. Make sure your integrations have been set to use the appropriate content-type.
+1. Security related changes were made in Mattermost v3.9 that cause any previously created team invite links, password reset links, and email verification links to no longer work. You must update any place where you have published these links.
 
+For a complete list of upgrade notices from older versions, see the [Mattermost documentation](https://docs.mattermost.com/administration/important-upgrade-notes.html).
 
 ## Upgrading GitLab Mattermost from versions prior to 8.9
 
