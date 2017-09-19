@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '9.2.18'
+default_version '9.6.3'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -28,8 +28,12 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '9.2.18' do
-  source md5: 'fd175eb5f29557c6ef2eeaf340330f9a'
+version '9.6.1' do
+  source sha256: 'e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd'
+end
+
+version '9.6.3' do
+  source sha256: '1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6'
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -44,11 +48,17 @@ build do
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
 
   command './configure' \
-    " --prefix=#{prefix}" \
-    ' --with-libedit-preferred' \
-    ' --with-openssl' \
-    ' --with-ossp-uuid', env: env
+          " --prefix=#{prefix}" \
+          ' --with-libedit-preferred' \
+          ' --with-openssl' \
+          ' --with-ossp-uuid', env: env
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
+
+  block 'link bin files' do
+    Dir.glob("#{prefix}/bin/*").each do |bin_file|
+      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+    end
+  end
 end
