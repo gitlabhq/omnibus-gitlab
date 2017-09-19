@@ -239,18 +239,15 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ## Upgrade packaged PostgreSQL server
 
-**As of GitLab 9.0, PostgreSQL 9.6.1 is the default database version in GitLab.**
+**As of GitLab 10.0, PostgreSQL 9.6.1 is the only database version in GitLab.**
 
-If you're still running on 9.2.18, when you upgrade to GitLab 9.0, it will attempt to upgrade your installation.
-If there are any issues, it will automatically revert you to 9.2.18 and continue with the GitLab upgrade. If this
-occurs, please raise an issue at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab). And
-include any messages you may have received.
+If you're still running on the bundled PostgreSQL 9.2.18 when you upgrade to GitLab 10.0,
+it will fail and remain on your current version.
+To ensure you're running the latest version of the bundled PostgreSQL, first upgrade GitLab to the latest 9.5.X release.
 
-If you need to postpone the database upgrade, or would rather run it separately, run the following before you upgrade GitLab:
-```
-sudo touch /etc/gitlab/skip-automigrations
-```
-Later,  you can follow these directions to upgrade to 9.6.1:
+If you had previously avoided the upgrade by touching `/etc/gitlab/skip-auto-migrations` this will no longer work.
+
+If you want to manually upgrade without upgrading GitLab, you can follow these instructions:
 
 **Note:**
 * Please fully read this section before running any commands.
@@ -305,41 +302,9 @@ sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 
 ## Downgrade packaged PostgreSQL server
 
-As of GitLab 9.0, the default version of PostgreSQL is 9.6.1, but 9.2.18 is still shipped in the package.
+As of GitLab 10.0, the default version of PostgreSQL is 9.6.1, and 9.2.18 is no longer shipped in the package.
 
-### If you need to downgrade a previously upgraded database
-
-If you run into an issue, and wish to downgrade the version of PostgreSQL, run:
-
-```
-sudo gitlab-ctl revert-pg-upgrade
-```
-Please note:
-This will revert your database and data to what was there before you upgraded
-the database. Any changes you might have made since the upgrade will be lost.
-
-### If you need to downgrade a fresh install of GitLab
-**Please note that PostgreSQL 9.2 is end of life in [September 2017](https://www.postgresql.org/support/versioning/) and will be removed from
-a future version of GitLab.**
-
-```
-sudo gitlab-ctl revert-pg-upgrade
-sudo mv /var/opt/gitlab/postgresql/data{,.9.6.1}
-sudo gitlab-ctl reconfigure
-```
-
-At this point the server should be using 9.2.18, you can copy a backup from another instance,
-and use `gitlab-rake` to restore
-
-```
-sudo gitlab-rake gitlab:backup:restore BACKUP=timestamp
-```
-
-If everything looks ok, remove the backup copy of the data directory we created:
-
-```
-sudo rm -rf /var/opt/gitlab/postgresql/data.9.6.1
-```
+If you need to run an older version of PostgreSQL, you must downgrade GitLab to an older version.
 
 ## Troubleshooting
 
