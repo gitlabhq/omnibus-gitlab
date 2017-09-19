@@ -7,3 +7,7 @@ default['consul']['data_dir'] = '/var/opt/gitlab/consul/data'
 default['consul']['log_directory'] = '/var/log/gitlab/consul'
 default['consul']['script_directory'] = '/var/opt/gitlab/consul/scripts'
 default['consul']['configuration'] = {}
+
+default['consul']['logging_filters'] = {
+  postgresql_warning: "-*agent: Check 'service:postgresql' is now critical"
+}
