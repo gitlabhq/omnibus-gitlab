@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Remove unused Grit configuration settings
 - Enable profiler for jemalloc
+- Rename Rails secret jws_private_key to openid_connect_signing_key
 
 10.0.2
 

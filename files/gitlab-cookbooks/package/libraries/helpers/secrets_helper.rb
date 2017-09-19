@@ -40,7 +40,7 @@ class SecretsHelper
         'secret_key_base' => Gitlab['gitlab_rails']['secret_key_base'],
         'db_key_base' => Gitlab['gitlab_rails']['db_key_base'],
         'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base'],
-        'jws_private_key' => Gitlab['gitlab_rails']['jws_private_key']
+        'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key']
       },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
