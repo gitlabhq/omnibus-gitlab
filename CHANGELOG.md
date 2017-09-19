@@ -28,6 +28,7 @@ omnibus-gitlab repository.
 - Upgrade libyaml version to 0.1.7
 - Fix gitlab-ctl wrapper to allow '*' in arguments
 - Update failover_pgbouncer script to use the pgbouncer user for the database configuration
+- Update Mattermost to 4.2.0
 
 9.5.5
 
