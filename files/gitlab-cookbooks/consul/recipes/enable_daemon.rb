@@ -28,4 +28,5 @@ runit_service 'consul' do
   supervisor_group account_helper.consul_user
   owner account_helper.consul_user
   group account_helper.consul_user
+  log_options node['gitlab']['logging'].to_hash.merge(node['consul'].to_hash)
 end

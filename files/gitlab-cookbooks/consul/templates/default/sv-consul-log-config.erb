@@ -4,3 +4,7 @@
 <%= "!#@svlogd_filter" if @svlogd_filter %>
 <%= "u#@svlogd_udp" if @svlogd_udp %>
 <%= "p#@svlogd_prefix" if @svlogd_prefix %>
+<% @logging_filters.each do |name, filter| %>
+# <%= name %>
+<%= filter %>
+<% end %>
