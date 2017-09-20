@@ -197,6 +197,7 @@ variables:
   stage: staging_upload
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts:
     expire_in: 7 days
@@ -216,6 +217,7 @@ variables:
   stage: release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
     - bundle exec rake repository:upload:production
   only:
     - tags@gitlab/omnibus-gitlab
@@ -814,6 +816,8 @@ OpenSUSE 42.2 staging:
     - OpenSUSE 42.2 branch
   <<: *staging_upload
 SLES 12 staging:
+  variables:
+    RUN_ONLY_EE: 'true'
   dependencies:
     - SLES 12
     - SLES 12 branch
@@ -854,6 +858,8 @@ OpenSUSE 42.2 release:
     - OpenSUSE 42.2 staging
   <<: *production_release
 SLES 12 release:
+  variables:
+    RUN_ONLY_EE: 'true'
   dependencies:
     - SLES 12 staging
   allow_failure: true
