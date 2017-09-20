@@ -1,4 +1,3 @@
-require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/pgbouncer_helper.rb'
 require 'chef_helper'
 
 describe PgbouncerHelper do
