@@ -1066,6 +1066,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_testing'] = false
 # mattermost['service_enable_security_fix_alert'] = true
 # mattermost['service_enable_insecure_outgoing_connections'] = false
+# mattermost['service_allowed_untrusted_internal_connections'] = ""
 # mattermost['service_allow_cors_from'] = ""
 # mattermost['service_enable_outgoing_webhooks'] = true
 # mattermost['service_enable_commands'] = true
@@ -1107,6 +1108,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_restrict_team_names'] = true
 # mattermost['team_restrict_direct_message'] = "any"
 # mattermost['team_max_channels_per_team'] = 2000
+# mattermost['team_enable_x_to_leave_channels_from_lhs'] = false
 # mattermost['team_user_status_away_timeout'] = 300
 # mattermost['team_teammate_name_display'] = "full_name"
 
@@ -1177,6 +1179,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost["file_amazon_s3_ssl"] = true
 # mattermost["file_amazon_s3_sign_v2"] = false
 # mattermost['file_enable_file_attachments'] = true
+# mattermost["file_amazon_s3_trace"] = false
 
 # mattermost['ratelimit_enable_rate_limiter'] = false
 # mattermost['ratelimit_per_sec'] = 10

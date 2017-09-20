@@ -160,7 +160,7 @@ variables:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 14 days
+    expire_in: 7 days
     paths:
       - pkg/
   retry: 1
@@ -184,7 +184,7 @@ variables:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 14 days
+    expire_in: 7 days
     paths:
       - pkg/
   dependencies: []
@@ -199,7 +199,7 @@ variables:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts:
-    expire_in: 14 days
+    expire_in: 7 days
     paths:
       - pkg/
   only:
@@ -585,7 +585,7 @@ SLES 12:
   only:
     - tags@gitlab/omnibus-gitlab
   artifacts:
-    expire_in: 14 days
+    expire_in: 7 days
     paths:
       - pkg/
   cache:
