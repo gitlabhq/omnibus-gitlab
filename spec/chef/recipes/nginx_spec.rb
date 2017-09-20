@@ -364,6 +364,72 @@ describe 'nginx' do
     it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
   end
 
+  context 'when NGINX RealIP module is configured' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://localhost',
+        mattermost_external_url: 'https://mattermost.localhost',
+        registry_external_url: 'https://registry.localhost',
+        pages_external_url: 'https://pages.localhost'
+      )
+    end
+
+    context 'when real_ip_header is configured' do
+      before do
+        stub_gitlab_rb(
+          nginx: { real_ip_header: 'X-FAKE' },
+          mattermost_nginx: { real_ip_header: 'X-FAKE' },
+          registry_nginx: { real_ip_header: 'X-FAKE' },
+          pages_nginx: { real_ip_header: 'X-FAKE' },
+        )
+      end
+
+      it 'populates all config with real_ip_header' do
+        http_conf.each_value do |conf|
+          expect(chef_run).to render_file(conf).with_content(/real_ip_header X-FAKE/)
+        end
+      end
+    end
+
+    context 'when real_ip_recursive is configured' do
+      before do
+        stub_gitlab_rb(
+          nginx: { real_ip_recursive: 'On' },
+          mattermost_nginx: { real_ip_recursive: 'On' },
+          registry_nginx: { real_ip_recursive: 'On' },
+          pages_nginx: { real_ip_recursive: 'On' },
+        )
+      end
+
+      it 'populates all config with real_up_recursive' do
+        http_conf.each_value do |conf|
+          expect(chef_run).to render_file(conf).with_content(/real_ip_recursive On/)
+        end
+      end
+    end
+
+    context 'when real_ip_trusted_addresses is configured' do
+      before do
+        stub_gitlab_rb(
+          nginx: { real_ip_trusted_addresses: ['one','two','three'] },
+          mattermost_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
+          registry_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
+          pages_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
+        )
+      end
+
+      it 'populates all config with all items for real_ip_trusted_addresses' do
+        http_conf.each_value do |conf|
+          expect(chef_run).to render_file(conf).with_content { |content|
+            expect(content).to match(/set_real_ip_from one/)
+            expect(content).to match(/set_real_ip_from two/)
+            expect(content).to match(/set_real_ip_from three/)
+          }
+        end
+      end
+    end
+  end
+
   def nginx_headers(additional_headers)
     basic_nginx_headers.merge(additional_headers)
   end
