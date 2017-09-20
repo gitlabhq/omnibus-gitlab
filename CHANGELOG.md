@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Support LFS object storage options for GitLab EEP
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
+- Add NGINX RealIP module configuration templating for Pages and Registry
 - Fix gitlab-ctl wrapper to allow '*' in arguments
 - Update failover_pgbouncer script to use the pgbouncer user for the database configuration
 - Update Mattermost to 4.2.0
