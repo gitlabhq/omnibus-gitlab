@@ -15,6 +15,7 @@
 #
 
 account_helper = AccountHelper.new(node)
+pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
@@ -31,7 +32,7 @@ end
 
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pg_auth" do
   source "pg_auth.erb"
-  variables node['gitlab']['pgbouncer'].to_hash
+  helper(:pgb_helper) { pgb_helper }
 end
 
 runit_service 'pgbouncer' do
