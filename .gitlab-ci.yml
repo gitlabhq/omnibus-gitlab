@@ -17,7 +17,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.6"
+  BUILDER_IMAGE_REVISION: "0.0.7"
 
 # Templates
 ## Runs on GitLab.com only
@@ -278,7 +278,7 @@ Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
-Debian 9 knapsack: *prepare_knapsack
+Debian 9.1 knapsack: *prepare_knapsack
 OpenSUSE 42.2 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
@@ -441,21 +441,21 @@ Debian 8 specs 2 3:
   <<: *run_rspec
   dependencies:
   - Debian 8 knapsack
-Debian 9 specs 0 3:
+Debian 9.1 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   <<: *run_rspec
   dependencies:
-  - Debian 9 knapsack
-Debian 9 specs 1 3:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 1 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   <<: *run_rspec
   dependencies:
-  - Debian 9 knapsack
-Debian 9 specs 2 3:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 2 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   <<: *run_rspec
   dependencies:
-  - Debian 9 knapsack
+  - Debian 9.1 knapsack
 Centos 6 specs 0 3:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
   <<: *run_rspec
@@ -536,10 +536,10 @@ Debian 8:
     - cache
     - gems
   <<: *tag_build
-Debian 9:
+Debian 9.1:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
   cache:
-    key: "Debian 9 branch"
+    key: "Debian 9.1 branch"
     paths:
     - cache
     - gems
@@ -670,7 +670,7 @@ Debian 7 branch:
 Debian 8 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_8-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-Debian 9 branch:
+Debian 9.1 branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 CentOS 6 branch:
@@ -793,10 +793,10 @@ Debian 8 staging:
     - Debian 8
     - Debian 8 branch
   <<: *staging_upload
-Debian 9 staging:
+Debian 9.1 staging:
   dependencies:
-    - Debian 9
-    - Debian 9 branch
+    - Debian 9.1
+    - Debian 9.1 branch
   <<: *staging_upload
 CentOS 6 staging:
   dependencies:
@@ -837,9 +837,9 @@ Debian 8 release:
   dependencies:
     - Debian 8 staging
   <<: *production_release
-Debian 9 release:
+Debian 9.1 release:
   dependencies:
-    - Debian 9 staging
+    - Debian 9.1 staging
   <<: *production_release
 CentOS 6 release:
   dependencies:
