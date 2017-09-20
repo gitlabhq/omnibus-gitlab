@@ -42,12 +42,6 @@ end
   end
 end
 
-# By default consul only listens on the loopback interface.
-# If we're running in server mode then this is not useful
-if node['consul']['configuration']['server']
-  node.default['consul']['configuration']['client_addr'] = node['ipaddress'] unless node['consul']['configuration'].attribute?('client_addr')
-end
-
 file "#{node['consul']['dir']}/config.json" do
   content consul_helper.configuration
   owner account_helper.consul_user
