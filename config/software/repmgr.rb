@@ -24,7 +24,7 @@ license_file 'LICENSE'
 source url: "http://www.repmgr.org/download/repmgr-#{version}.tar.gz",
        sha1: '48ed41fd552df50b597b547deccfecd8b12a5cf1'
 
-dependency 'postgresql_new'
+dependency 'postgresql'
 
 env = with_standard_compiler_flags(with_embedded_path)
 
