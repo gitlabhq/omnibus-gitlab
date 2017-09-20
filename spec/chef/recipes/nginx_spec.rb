@@ -380,7 +380,7 @@ describe 'nginx' do
           nginx: { real_ip_header: 'X-FAKE' },
           mattermost_nginx: { real_ip_header: 'X-FAKE' },
           registry_nginx: { real_ip_header: 'X-FAKE' },
-          pages_nginx: { real_ip_header: 'X-FAKE' },
+          pages_nginx: { real_ip_header: 'X-FAKE' }
         )
       end
 
@@ -397,7 +397,7 @@ describe 'nginx' do
           nginx: { real_ip_recursive: 'On' },
           mattermost_nginx: { real_ip_recursive: 'On' },
           registry_nginx: { real_ip_recursive: 'On' },
-          pages_nginx: { real_ip_recursive: 'On' },
+          pages_nginx: { real_ip_recursive: 'On' }
         )
       end
 
@@ -411,10 +411,10 @@ describe 'nginx' do
     context 'when real_ip_trusted_addresses is configured' do
       before do
         stub_gitlab_rb(
-          nginx: { real_ip_trusted_addresses: ['one','two','three'] },
-          mattermost_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
-          registry_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
-          pages_nginx: { real_ip_trusted_addresses: ['one','two','three'] },
+          nginx: { real_ip_trusted_addresses: %w(one two three) },
+          mattermost_nginx: { real_ip_trusted_addresses: %w(one two three) },
+          registry_nginx: { real_ip_trusted_addresses: %w(one two three) },
+          pages_nginx: { real_ip_trusted_addresses: %w(one two three) }
         )
       end
 
