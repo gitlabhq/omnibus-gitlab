@@ -1,6 +1,3 @@
-<% @databases.each do |_db, settings| %>
-"<%= settings['user'] %>" "md5<%= settings['password'] %>"
-<% end %>
-<% @users.each do |user, info| %>
-"<%= user %>" "md5<%= info['password'] %>"
+<% pgb_helper.pg_auth_users.each do |user, settings| %>
+"<%= user %>" "md5<%= settings['password'] %>"
 <% end %>
