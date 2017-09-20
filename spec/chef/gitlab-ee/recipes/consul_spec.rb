@@ -85,10 +85,6 @@ describe 'consul' do
           expect(content).to match(%r{"bootstrap_expect":3})
         }
       end
-
-      it 'sets client_addr when it has not been set' do
-        expect(chef_run).to render_file(consul_conf).with_content(%r{"client_addr":"10.0.0.2"})
-      end
     end
   end
 
