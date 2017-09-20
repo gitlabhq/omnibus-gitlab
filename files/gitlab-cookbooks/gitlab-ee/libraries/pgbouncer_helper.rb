@@ -14,4 +14,12 @@ class PgbouncerHelper
       "#{setting}=#{value}"
     end.join(' ').chomp
   end
+
+  def pg_auth_users
+    results = node['gitlab']['pgbouncer']['users'].to_hash
+    node['gitlab']['pgbouncer']['databases'].each do |_db, settings|
+      results[settings['user']] = { 'password' => settings['password'] }
+    end
+    results
+  end
 end
