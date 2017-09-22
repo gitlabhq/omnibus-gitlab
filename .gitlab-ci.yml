@@ -586,6 +586,8 @@ SLES 12:
     - if ./support/is_gitlab_ee.sh; then bundle exec rake release:package ; else exit 0;fi
   only:
     - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   artifacts:
     expire_in: 7 days
     paths:
@@ -612,6 +614,8 @@ Docker:
   - bundle exec rake docker:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   dependencies: []
   retry: 1
 
@@ -647,6 +651,8 @@ QA Tag:
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   dependencies: []
   retry: 1
 
@@ -700,6 +706,8 @@ SLES 12 branch:
     - if ./support/is_gitlab_ee.sh; then bundle exec rake build:project build:package:sync ; else exit 0;fi
   only:
     - branches@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -727,6 +735,8 @@ Docker branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   dependencies: []
   retry: 1
 
@@ -748,6 +758,8 @@ QA Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
   dependencies: []
   retry: 1
 
