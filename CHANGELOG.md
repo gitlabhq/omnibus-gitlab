@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.1.0
+
+- Remove unused Grit configuration settings
+
 10.0.0
 
 - Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)
