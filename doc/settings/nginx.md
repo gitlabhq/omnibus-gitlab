@@ -74,7 +74,7 @@ configuration:
 
 ```ruby
 # For GitLab
-nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.crt"
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.com.crt"
 nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
 ```
 
