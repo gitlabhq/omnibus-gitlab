@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
