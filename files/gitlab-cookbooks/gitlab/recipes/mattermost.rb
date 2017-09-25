@@ -121,6 +121,7 @@ end
 env_dir File.join(mattermost_home, 'env') do
   variables node['gitlab']['mattermost']['env']
   restarts ["service[mattermost]"]
+  action [:delete, :create]
 end
 
 runit_service "mattermost" do

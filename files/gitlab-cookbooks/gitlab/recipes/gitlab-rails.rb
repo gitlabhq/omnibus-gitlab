@@ -298,6 +298,7 @@ env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
     rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
   restarts dependent_services
+  action [:delete, :create]
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab
