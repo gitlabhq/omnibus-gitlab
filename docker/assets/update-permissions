@@ -5,8 +5,8 @@ set -x
 # chown_if_exists
 # input: matches `chown` command, see `man chown`
 # Simply, this checks that the file you're trying to chown actually exists
-# before making the chown call. DRY'ing the rest of this script's checks. 
-chown_if_exists() 
+# before making the chown call. DRY'ing the rest of this script's checks.
+chown_if_exists()
 {
 	# the last argument of chown is the file or path
 	path="${@:${#@}}"
@@ -72,5 +72,5 @@ fi
 
 # Fix registry storage
 if id -u registry; then
-    chown_if_exists -R registry:registry /var/opt/gitlab/gitlab-rails/shared/registry
+    chown_if_exists -R registry:git /var/opt/gitlab/gitlab-rails/shared/registry
 fi
