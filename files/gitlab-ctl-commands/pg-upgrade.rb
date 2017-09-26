@@ -70,20 +70,18 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
+  log 'Checking for a newer version of PostgreSQL to install'
+  if upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version}")
+    log "Upgrading PostgreSQL to #{upgrade_version}"
+  else
+    $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
+    Kernel.exit 0
+  end
+
   if progress_message('Checking if we already upgraded') do
     running_version == upgrade_version
   end
     $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
-    Kernel.exit 0
-  end
-
-  if progress_message(
-    'Checking for a newer version of PostgreSQL to install') do
-      upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version}")
-    end
-    log "Upgrading PostgreSQL to #{upgrade_version}"
-  else
-    $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     Kernel.exit 0
   end
 
