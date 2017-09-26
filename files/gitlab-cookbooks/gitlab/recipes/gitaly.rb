@@ -36,7 +36,6 @@ end
 env_dir env_directory do
   variables node['gitlab']['gitaly']['env']
   restarts ["service[gitaly]"]
-  action [:delete, :create]
 end
 
 template "Create Gitaly config.toml" do
