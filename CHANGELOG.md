@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.1.0
 
 - Remove unused Grit configuration settings
+- Enable profiler for jemalloc
 
 10.0.2
 
