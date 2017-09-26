@@ -18,9 +18,16 @@ describe Gitlab do
   end
 
   it 'properly defines roles' do
-    Gitlab.role('test_node')
+    role = Gitlab.role('test_node')
     expect(Gitlab['test_node_role']).not_to be_nil
     expect(Gitlab.hyphenate_config_keys['roles']).to include('test-node')
+    expect(role).to include(manage_services: true)
+  end
+
+  it 'supports overriding role default configuration' do
+    role = Gitlab.role('test_node', manage_services: false)
+    expect(Gitlab['test_node_role']).not_to be_nil
+    expect(role).to include(manage_services: false)
   end
 
   it 'supports overriding attribute default configuration' do

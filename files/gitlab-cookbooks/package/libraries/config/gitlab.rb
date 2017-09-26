@@ -31,8 +31,8 @@ module Gitlab
   role('redis_sentinel').use { RedisSentinelRole }
   role('redis_master').use { RedisMasterRole }
   role('redis_slave')
-  role('geo_primary').use { GeoPrimaryRole }
-  role('geo_secondary').use { GeoSecondaryRole }
+  role('geo_primary',   manage_services: false).use { GeoPrimaryRole }
+  role('geo_secondary', manage_services: false).use { GeoSecondaryRole }
 
   ## Attributes directly on the node
   attribute('registry', priority: 20).use { Registry }
