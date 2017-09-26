@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.0.2
+
+- Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use
+
 10.0.0
 
 - Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)
