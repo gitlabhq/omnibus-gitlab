@@ -33,6 +33,7 @@ relative_path "jemalloc-#{version}"
 build do
   command ['./configure',
            ' --enable-cc-silence',
+           ' --enable-prof',
            "--prefix=#{install_dir}/embedded"].join(' '), env: env
   make "-j #{workers}", env: env
   make 'install', env: env
