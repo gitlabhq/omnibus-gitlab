@@ -8,6 +8,15 @@ describe GitlabGeo do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  shared_examples 'default services' do
+    it 'remain enabled' do
+      chef_run
+      default_services = Services.find_by_group(Services::DEFAULT_GROUP).keys
+      expect(default_services.count).to be > 0
+      default_services.each { |service| expect(Services.enabled?(service)).to be(true) }
+    end
+  end
+
   context 'when geo_primary_role enabled' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do
@@ -15,6 +24,8 @@ describe GitlabGeo do
       end
       ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
+
+    it_behaves_like 'default services'
 
     context 'in geo_logcursor settings' do
       it 'is not enabled' do
@@ -58,6 +69,8 @@ describe GitlabGeo do
       end
       ChefSpec::SoloRunner.converge('gitlab-ee::default')
     end
+
+    it_behaves_like 'default services'
 
     context 'in geo_postgres settings' do
       it 'is enabled' do

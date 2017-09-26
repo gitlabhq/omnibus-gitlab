@@ -17,8 +17,8 @@
 module DefaultRole # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(DefaultRole)` at the end of the class definition)
   class << self
     def load_role
-      # Default role is only enabled if no other role is
-      return unless no_roles_enabled?
+      # Default role is only enabled if no other service role is enabled
+      return unless no_service_roles_enabled?
 
       service_exclusions = []
       service_exclusions << 'rails' if Gitlab['gitlab_rails']['enable'] == false
@@ -26,8 +26,8 @@ module DefaultRole # rubocop:disable Style/MultilineIfModifier (disabled so we c
       Services.enable_group(Services::DEFAULT_GROUP, except: service_exclusions)
     end
 
-    def no_roles_enabled?
-      Gitlab.roles.select { |key, _value| Gitlab["#{key}_role"]['enable'] }.count.zero?
+    def no_service_roles_enabled?
+      Gitlab.roles.select { |key, role| role[:manage_services] && Gitlab["#{key}_role"]['enable'] }.count.zero?
     end
   end
 end unless defined?(DefaultRole) # Prevent reloading during converge, so we can test
