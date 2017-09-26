@@ -7,6 +7,14 @@ omnibus-gitlab repository.
 
 - Remove unused Grit configuration settings
 
+10.0.2
+
+- Fix an issue where enabling a GitLab Geo role would also disable all default services
+
+10.0.1
+
+- No changes
+
 10.0.0
 
 - Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)

@@ -9,12 +9,22 @@ describe 'GitLabRoles' do
   describe 'DefaultRole' do
     before do
       allow(DefaultRole).to receive(:load_role).and_call_original
+      allow(GeoPrimaryRole).to receive(:load_role).and_call_original
     end
 
     it 'enables the default services when no other roles are active' do
       Gitlab.load_roles
 
       expect(Services).to have_received(:enable_group).with(Services::DEFAULT_GROUP, anything).once
+    end
+
+    it 'enables the default services when no "service managed" roles are active' do
+      stub_gitlab_rb(geo_primary_role: { enable: true })
+
+      Gitlab.load_roles
+
+      expect(Services).to have_received(:enable_group).with(Services::DEFAULT_GROUP, anything).once
+      expect(GeoPrimaryRole).to have_received(:load_role)
     end
 
     it 'leaves the default services disabled when another role is active' do
