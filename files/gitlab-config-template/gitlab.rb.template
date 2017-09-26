@@ -320,8 +320,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab Shell settings for GitLab
 # gitlab_rails['gitlab_shell_ssh_port'] = 22
-# gitlab_rails['git_max_size'] = 20971520
-# gitlab_rails['git_timeout'] = 10
 # gitlab_rails['gitlab_shell_git_timeout'] = 800
 
 ### Extra customization

@@ -54,12 +54,17 @@ module SettingsHelper
   end
 
   # Create a new role with the given 'name' config
+  # config options are:
+  #  manage_services - Boolean to indicate whether the role enables/disables services. Defaults to enabled.
+  #                    If enabled, the default service role is disabled when using a different role that manages services
   # Roles are configured as Gitlab['<name>_role'] and are added to the node as node['roles']['<name>']
   # ex: some_specific_role['enable'] = true
   #     will result in Gitlab['some_specific_role']['enable'] = true
   #     and node['roles']['some-specific']['enable'] = true
   def role(name, **config)
-    @roles[name] = HandledHash.new.merge!(config)
+    @roles[name] = HandledHash.new.merge!(
+      { manage_services: true }
+    ).merge(config)
     send("#{name}_role", Gitlab::ConfigMash.new)
     @roles[name]
   end

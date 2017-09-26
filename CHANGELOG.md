@@ -3,9 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.1.0
+
+- Remove unused Grit configuration settings
+
 10.0.2
 
+- Fix an issue where enabling a GitLab Geo role would also disable all default services
 - Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use
+
+10.0.1
+
+- No changes
 
 10.0.0
 
