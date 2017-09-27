@@ -70,6 +70,7 @@ execute 'generate databases.ini' do
     EOF
   }
   action :nothing
+  ignore_failure true
 end
 
 execute 'reload pgbouncer' do
