@@ -64,6 +64,11 @@ describe 'consul' do
         expect(chef_run).to create_directory('/fake/data')
         expect(chef_run).to create_directory('/var/log/gitlab/consul')
       end
+
+      it 'notifies the reload action' do
+        config_json = chef_run.file('/var/opt/gitlab/consul/config.json')
+        expect(config_json).to notify('execute[reload consul]').to(:run)
+      end
     end
 
     context 'server enabled' do

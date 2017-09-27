@@ -45,7 +45,7 @@ end
 file "#{node['consul']['dir']}/config.json" do
   content consul_helper.configuration
   owner account_helper.consul_user
-  notifies :restart, "service[consul]"
+  notifies :run, 'execute[reload consul]'
 end
 
 node['consul']['services'].each do |service|
