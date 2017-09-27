@@ -786,6 +786,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['client_output_buffer_limit_slave'] = '256mb 64mb 60'
 # redis['client_output_buffer_limit_pubsub'] = '32mb 8mb 60'
 
+#####! Redis snapshotting frequency
+#####! Set to [] to disable
+#####! Set to [''] to clear previously set values
+# redis['save'] = [ '900 1', '300 10', '60 10000' ]
+
 ################################################################################
 ## GitLab Web server
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server
