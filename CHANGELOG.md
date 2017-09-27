@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 
 - Fix an issue where enabling a GitLab Geo role would also disable all default services
 - Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use
+- Add option to configure redis snapshot frequency 400f3a54
 
 10.0.1
 
