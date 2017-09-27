@@ -17,18 +17,18 @@
 
 module RolesHelper
   class << self
-    def parse_active
-      return unless Gitlab['active_roles']
+    def parse_enabled
+      return unless Gitlab['roles']
 
       # convert hyphens to underscores to avoid user errors
       # split or space or comma (allow both to avoid user errors)
-      active        = Gitlab['active_roles'].tr('-', '_').split(/[\s,]+/)
-      valid_roles   = Gitlab.roles.keys.map { |key| "#{key}_role" }
+      active        = Gitlab['roles'].map { |role| role.tr('-', '_') }
+      valid_roles   = Gitlab.available_roles.keys.map { |key| "#{key}_role" }
       invalid_roles = active - valid_roles
 
       # Ensure all active roles exist as valid role names
       unless invalid_roles.empty?
-        raise "The following invalid roles have been set in 'active_roles': #{invalid_roles.join(', ')}"
+        raise "The following invalid roles have been set in 'roles': #{invalid_roles.join(', ')}"
       end
 
       active.each { |role_name| Gitlab[role_name]['enable'] = true }

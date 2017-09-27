@@ -12,8 +12,7 @@
 ##! https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab
 external_url 'GENERATED_EXTERNAL_URL'
 
-## Active Roles for multi-instance GitLab
-##! Uncomment a role to enable it
+## Roles for multi-instance GitLab
 ##! The default is to have no roles enabled, which results in GitLab running as an all-in-one instance.
 ##! Options:
 ##!   application_role consul_server_role database_role pgbouncer_role redis_sentinel_role
@@ -21,7 +20,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! For more deatils on each role, see:
 ##! <doc url here>
 ##!
-# active_roles 'redis_sentinel_role redis_master_role'
+# roles ['redis_sentinel_role', 'redis_master_role']
 
 ## Legend
 ##! The following notations at the beginning of each line may be used to
