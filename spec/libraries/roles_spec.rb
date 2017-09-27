@@ -6,6 +6,43 @@ describe 'GitLabRoles' do
     allow(Services).to receive(:enable_group).and_call_original
   end
 
+  after do
+    RolesHelper.disable_all
+  end
+
+  describe 'roles config array' do
+    it 'enables roles listed in the roles array' do
+      stub_gitlab_rb(roles: %w(application_role geo_primary_role))
+
+      Gitlab.load_roles
+
+      expect(Gitlab['application_role']['enable']).to be true
+      expect(Gitlab['geo_primary_role']['enable']).to be true
+    end
+
+    it 'supports providing a single role as a string' do
+      stub_gitlab_rb(roles: 'geo_secondary_role')
+
+      Gitlab.load_roles
+
+      expect(Gitlab['geo_secondary_role']['enable']).to be true
+    end
+
+    it 'handles users specifying hyphens instead of underscores' do
+      stub_gitlab_rb(roles: ['geo-primary-role'])
+
+      Gitlab.load_roles
+
+      expect(Gitlab['geo_primary_role']['enable']).to be true
+    end
+
+    it 'throws errors when an invalid role is used' do
+      stub_gitlab_rb(roles: ['some_invalid_role'])
+
+      expect { Gitlab.load_roles }.to raise_error(RuntimeError, /invalid roles have been set/)
+    end
+  end
+
   describe 'DefaultRole' do
     before do
       allow(DefaultRole).to receive(:load_role).and_call_original

@@ -22,7 +22,7 @@ module RolesHelper
 
       # convert hyphens to underscores to avoid user errors
       # split or space or comma (allow both to avoid user errors)
-      active        = Gitlab['roles'].map { |role| role.tr('-', '_') }
+      active        = [Gitlab['roles']].flatten.map { |role| role.tr('-', '_') }
       valid_roles   = Gitlab.available_roles.keys.map { |key| "#{key}_role" }
       invalid_roles = active - valid_roles
 
@@ -32,6 +32,10 @@ module RolesHelper
       end
 
       active.each { |role_name| Gitlab[role_name]['enable'] = true }
+    end
+
+    def disable_all
+      Gitlab.available_roles.each { |name, _value| Gitlab["#{name}_role"]['enable'] = false }
     end
   end
 end
