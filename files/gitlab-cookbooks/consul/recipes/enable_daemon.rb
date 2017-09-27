@@ -30,3 +30,9 @@ runit_service 'consul' do
   group account_helper.consul_user
   log_options node['gitlab']['logging'].to_hash.merge(node['consul'].to_hash)
 end
+
+execute 'reload consul' do
+  command '/opt/gitlab/bin/gitlab-ctl hup consul'
+  user account_helper.consul_user
+  action :nothing
+end

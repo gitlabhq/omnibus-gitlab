@@ -203,9 +203,15 @@ databases 16
 #
 #   save ""
 
-save 900 1
-save 300 10
-save 60 10000
+<% unless @save.empty? %>
+<% if @save.any?(&:empty?) %>
+save ""
+<% else %>
+<% @save.each do |line| %>
+<%= "save #{line}" %>
+<% end %>
+<% end %>
+<% end %>
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
