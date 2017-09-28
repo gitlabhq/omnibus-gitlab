@@ -53,6 +53,7 @@ template File.join(postgres_exporter_dir, 'queries.yaml') do
   source 'postgres-queries.yaml'
   owner postgresql_user
   mode '0644'
+  notifies :restart, 'service[postgres-exporter]'
 end
 
 if node['gitlab']['bootstrap']['enable']

@@ -1,9 +1,12 @@
 pg_replication:
-  query: "SELECT EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))::INT as lag"
+  query: "SELECT EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))::INT as lag, CASE WHEN pg_is_in_recovery() THEN 1 ELSE 0 END as is_replica"
   metrics:
     - lag:
         usage: "GAUGE"
         description: "Replication lag behind master in seconds"
+    - is_replica:
+        usage: "GAUGE"
+        description: "Indicates if this host is a slave"
 
 pg_postmaster:
   query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
@@ -11,26 +14,6 @@ pg_postmaster:
     - start_time_seconds:
         usage: "GAUGE"
         description: "Time at which postmaster started"
-
-pg_settings_shared_buffers:
-  query: "SELECT 8192*setting::bigint as bytes from pg_settings where name = 'shared_buffers'"
-  metrics:
-    - bytes:
-        usage: "GAUGE"
-        description: "Size of shared_buffers"
-
-pg_settings_checkpoint:
-  query: "select (select setting::int from pg_settings where name = 'checkpoint_segments') as segments, (select setting::int from pg_settings where name = 'checkpoint_timeout') as timeout_seconds, (select setting::float from pg_settings where name = 'checkpoint_completion_target') as completion_target"
-  metrics:
-    - segments:
-        usage: "GAUGE"
-        description: "Number of checkpoint segments"
-    - timeout_seconds:
-        usage: "GAUGE"
-        description: "Checkpoint timeout in seconds"
-    - completion_target:
-        usage: "GAUGE"
-        description: "Checkpoint completion target, ranging from 0 to 1"
 
 pg_stat_user_tables:
   query: "SELECT schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd, n_live_tup, n_dead_tup, n_mod_since_analyze, last_vacuum, last_autovacuum, last_analyze, last_autoanalyze, vacuum_count, autovacuum_count, analyze_count, autoanalyze_count FROM pg_stat_user_tables"
@@ -98,6 +81,24 @@ pg_stat_user_tables:
     - autoanalyze_count:
         usage: "COUNTER"
         description: "Number of times this table has been analyzed by the autovacuum daemon"
+
+pg_total_relation_size:
+  query: |
+    SELECT relnamespace::regnamespace as schemaname,
+           relname as relname,
+           pg_total_relation_size(oid) bytes
+      FROM pg_class
+     WHERE relkind = 'r';
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Name of the schema that this table is in"
+    - relname:
+        usage: "LABEL"
+        description: "Name of this table"
+    - bytes:
+        usage: "GAUGE"
+        description: "total disk space usage for the specified table and associated indexes"
 
 pg_blocked:
   query: |
