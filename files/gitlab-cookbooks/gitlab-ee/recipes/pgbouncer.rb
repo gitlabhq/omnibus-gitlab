@@ -15,6 +15,7 @@
 #
 
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
@@ -70,7 +71,7 @@ execute 'generate databases.ini' do
     EOF
   }
   action :nothing
-  ignore_failure true
+  only_if { omnibus_helper.service_up?('pgbouncer') }
 end
 
 execute 'reload pgbouncer' do
