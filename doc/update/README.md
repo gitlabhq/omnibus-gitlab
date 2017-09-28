@@ -530,10 +530,9 @@ Option \#1: Omnibus packages for EE can be configured to use an external [non-pa
 
 Option \#2: Convert to PostgreSQL and use the built-in server as the instructions below.
 
-* [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system)
-* [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ce/update/mysql_to_postgresql.md#converting-a-gitlab-backup-file-from-mysql-to-postgres)
-* [Restore this in the Omnibus installation](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/98b1bfb0d70082953d63abbc329cd6f2c628d3bc/README.md#restoring-an-application-backup)
-* [Rebuild database indexes](https://docs.gitlab.com/ce/update/mysql_to_postgresql.md#for-omnibus-gitlab-installations)
+* [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+* [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html#converting-a-gitlab-backup-file-from-mysql-to-postgres)
+* [Restore this in the Omnibus installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-for-omnibus-installations)
 * Enjoy!
 
 ## RPM 'package is already installed' error
