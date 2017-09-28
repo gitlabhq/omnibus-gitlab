@@ -48,6 +48,7 @@ template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
   source "#{File.basename(name)}.erb"
   variables lazy { node['gitlab']['pgbouncer'].to_hash }
   notifies :run, 'execute[reload pgbouncer]', :immediately
+  notifies :run, 'execute[start pgbouncer]', :immediately
 end
 
 file 'databases.json' do
@@ -56,6 +57,7 @@ file 'databases.json' do
   group lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
   content node['gitlab']['pgbouncer']['databases'].to_json
   notifies :run, 'execute[generate databases.ini]', :immediately
+  notifies :run, 'execute[start pgbouncer]', :immediately
 end
 
 execute 'generate databases.ini' do
@@ -75,6 +77,13 @@ execute 'generate databases.ini' do
 end
 
 execute 'reload pgbouncer' do
-  command '/opt/gitlab/embedded/bin/sv hup pgbouncer'
+  command '/opt/gitlab/bin/gitlab-ctl hup pgbouncer'
   action :nothing
+  only_if { pgb_helper.is_running? }
+end
+
+execute 'start pgbouncer' do
+  command '/opt//gitlab/bin/gitlab-ctl start pgbouncer'
+  action :nothing
+  not_if { pgb_helper.is_running? }
 end
