@@ -9,10 +9,11 @@ omnibus-gitlab repository.
 - Update pgbouncer to use one style of logging 
 - Set bootstrap_expect to default to 3 for consul servers
 - Fix bug where pgb-notify would fail when databases.json was empty
-- Changing pg_hba configuration should only reload PG c99ef6
+- Restart repmgrd after nodes are registered with a cluster
 - Upgrade ruby version to 2.3.5
 - Upgrade libyaml version to 0.1.7
 - Upgrade ruby version to 2.3.5
+- Add --node option to gitlab-ctl repmgr standby unregister
 
 
 9.5.3

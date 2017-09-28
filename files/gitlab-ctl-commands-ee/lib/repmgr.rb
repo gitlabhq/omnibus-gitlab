@@ -87,6 +87,10 @@ class RepmgrHelper
       rescue Timeout::TimeoutError
         raise TimeoutError("Timed out waiting for PostgreSQL to start")
       end
+
+      def restart_daemon
+        cmd('gitlab-ctl restart repmgrd')
+      end
     end
   end
 
@@ -106,10 +110,11 @@ class RepmgrHelper
 
       def register(args)
         repmgr_cmd(args, 'standby register')
+        restart_daemon
       end
 
-      def unregister(args, node = nil)
-        return repmgr_cmd(args, "standby unregister --node=#{node}") unless node.nil?
+      def unregister(args)
+        return repmgr_cmd(args, "standby unregister --node=#{args[:node]}") unless args[:node].nil?
         repmgr_cmd(args, "standby unregister")
       end
 
@@ -149,6 +154,7 @@ class RepmgrHelper
     class << self
       def register(args)
         repmgr_cmd(args, 'master register')
+        restart_daemon
       end
     end
   end

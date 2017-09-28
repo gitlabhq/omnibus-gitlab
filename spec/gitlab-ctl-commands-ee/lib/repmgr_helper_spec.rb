@@ -80,7 +80,7 @@ describe RepmgrHelper do
           "#{repmgr_base_cmd} standby unregister --node=1234",
           shellout_args
         )
-        described_class.send(:unregister, {}, 1234)
+        described_class.send(:unregister, { node: 1234 })
       end
     end
   end
