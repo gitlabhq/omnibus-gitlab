@@ -46,7 +46,7 @@ which should be immediately reviewed for implications of use.
 and thus should be checked for how it is used as a part of the omnibus-gitlab package
 to ensure compliance.
 
-This list is currently sourced from the [GitLab development documenation on licensing]
+This list is currently sourced from the [GitLab development documentation on licensing]
 (https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/licensing.md).
 However, due to the nature of the omnibus-gitlab package the licenses may not apply
 in the same way. Such as with `git` and `rsync`. See the [GNU License FAQ]
