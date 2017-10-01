@@ -79,11 +79,11 @@ end
 execute 'reload pgbouncer' do
   command '/opt/gitlab/bin/gitlab-ctl hup pgbouncer'
   action :nothing
-  only_if { pgb_helper.is_running? }
+  only_if { omnibus_helper.service_up?('pgbouncer') }
 end
 
 execute 'start pgbouncer' do
   command '/opt//gitlab/bin/gitlab-ctl start pgbouncer'
   action :nothing
-  not_if { pgb_helper.is_running? }
+  not_if { omnibus_helper.service_up?('pgbouncer') }
 end
