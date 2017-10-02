@@ -155,11 +155,11 @@ describe 'gitlab::gitaly' do
           gitaly: {
             concurrency: [
               {
-              'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
-              'max_per_repo' => 20
+                'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                'max_per_repo' => 20
               }, {
-              'rpc' => "/gitaly.SSHService/SSHUploadPack",
-              'max_per_repo' => 5
+                'rpc' => "/gitaly.SSHService/SSHUploadPack",
+                'max_per_repo' => 5
               }
             ]
           }
