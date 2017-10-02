@@ -174,4 +174,40 @@ describe 'gitlab::gitaly' do
         .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SSHService/SSHUploadPack"\s+max_per_repo = 5})
     end
   end
+
+  shared_examples 'empty concurrency configuration' do
+    it 'does not generate a gitaly concurrency configuration' do
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]})
+    end
+  end
+
+  context 'when not using concurrency configuration' do
+    context 'when concurrency configuration is not set' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+            }
+          }
+        )
+      end
+
+      it_behaves_like 'empty concurrency configuration'
+    end
+
+    context 'when concurrency configuration is empty' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+              concurrency: []
+            }
+          }
+        )
+      end
+
+      it_behaves_like 'empty concurrency configuration'
+    end
+  end
 end
