@@ -53,3 +53,11 @@ dir = "/opt/gitlab/embedded/service/gitaly-ruby"
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"
+<% if @concurrency %>
+  <% @concurrency.each do |endpoint| %>
+
+[[concurrency]]
+rpc = "<%= endpoint['rpc'] %>"
+max_per_repo = <%= endpoint['max_per_repo'] %>
+  <% end %>
+<% end %>

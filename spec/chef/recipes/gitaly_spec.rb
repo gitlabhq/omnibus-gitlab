@@ -147,4 +147,31 @@ describe 'gitlab::gitaly' do
       expect(chef_run).not_to create_file('/var/opt/gitlab/gitaly/config.toml')
     end
   end
+
+  context 'when using concurrency configuration' do
+    before do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            concurrency: [
+              {
+              'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+              'max_per_repo' => 20
+              }, {
+              'rpc' => "/gitaly.SSHService/SSHUploadPack",
+              'max_per_repo' => 5
+              }
+            ]
+          }
+        }
+      )
+    end
+
+    it 'populates gitaly config.toml with custom concurrency configurations' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SmartHTTPService/PostReceivePack"\s+max_per_repo = 20})
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SSHService/SSHUploadPack"\s+max_per_repo = 5})
+    end
+  end
 end
