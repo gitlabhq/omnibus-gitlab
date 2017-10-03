@@ -426,6 +426,12 @@ default['gitlab']['postgresql']['max_locks_per_transaction'] = 128
 default['gitlab']['postgresql']['log_temp_files'] = -1
 default['gitlab']['postgresql']['log_checkpoints'] = 'off'
 default['gitlab']['postgresql']['custom_pg_hba_entries'] = {}
+default['gitlab']['postgresql']['effective_io_concurrency'] = 1
+default['gitlab']['postgresql']['max_worker_processes'] = 8
+default['gitlab']['postgresql']['max_parallel_workers_per_gather'] = 0
+default['gitlab']['postgresql']['log_lock_waits'] = 1
+default['gitlab']['postgresql']['deadlock_timeout'] = '5s'
+default['gitlab']['postgresql']['track_io_timing'] = 'off'
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"

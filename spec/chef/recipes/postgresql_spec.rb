@@ -338,6 +338,54 @@ describe 'postgresql 9.6' do
         expect(chef_run).to render_file(runtime_conf)
           .with_content(/idle_in_transaction_session_timeout = 60000/)
       end
+
+      it 'sets effective_io_concurrency' do
+        expect(chef_run.node['gitlab']['postgresql']['effective_io_concurrency'])
+          .to eq(1)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/effective_io_concurrency = 1/)
+      end
+
+      it 'sets max_worker_processes' do
+        expect(chef_run.node['gitlab']['postgresql']['max_worker_processes'])
+          .to eq(8)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/max_worker_processes = 8/)
+      end
+
+      it 'sets max_parallel_workers_per_gather' do
+        expect(chef_run.node['gitlab']['postgresql']['max_parallel_workers_per_gather'])
+          .to eq(0)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/max_parallel_workers_per_gather = 0/)
+      end
+
+      it 'sets log_lock_waits' do
+        expect(chef_run.node['gitlab']['postgresql']['log_lock_waits'])
+          .to eq(1)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/log_lock_waits = 1/)
+      end
+
+      it 'sets deadlock_timeout' do
+        expect(chef_run.node['gitlab']['postgresql']['deadlock_timeout'])
+          .to eq('5s')
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/deadlock_timeout = '5s'/)
+      end
+
+      it 'sets track_io_timing' do
+        expect(chef_run.node['gitlab']['postgresql']['track_io_timing'])
+          .to eq('off')
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/track_io_timing = 'off'/)
+      end
     end
 
     it 'notifies reload postgresql when postgresql.conf changes' do

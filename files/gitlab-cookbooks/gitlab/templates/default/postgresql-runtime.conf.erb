@@ -113,6 +113,18 @@ statement_timeout = <%= @statement_timeout %>
 idle_in_transaction_session_timeout = <%= @idle_in_transaction_session_timeout %>
 <% end %>
 
+# IO settings
+effective_io_concurrency = <%= @effective_io_concurrency %>
+track_io_timing = '<%= @track_io_timing %>'
+
+# Parallel worker settings
+max_worker_processes = <%= @max_worker_processes %>
+max_parallel_workers_per_gather = <%= @max_parallel_workers_per_gather %>
+
+# Deadlock handling and logging
+deadlock_timeout = '<%= @deadlock_timeout %>'
+log_lock_waits = <%= @log_lock_waits %>
+
 # - Locale and Formatting -
 datestyle = 'iso, mdy'
 
