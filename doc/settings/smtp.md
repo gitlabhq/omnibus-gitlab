@@ -449,6 +449,20 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Office 365
+
+``` ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.office365.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_user_name'] = "user.name@company.com"
+gitlab_rails['smtp_password'] = "secret"
+gitlab_rails['smtp_domain'] = "company.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
