@@ -29,7 +29,8 @@ module Build
         else
           latest_git_tag = Info.latest_tag.strip
           latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
-          commit_sha = ENV['CI_COMMIT_SHA'][0, 8]
+          commit_sha_raw = ENV['CI_COMMIT_SHA'] || `git rev-parse HEAD`.strip
+          commit_sha = commit_sha_raw[0, 8]
           if Build::Check.add_nightly_tag?
             "#{latest_version}+rnightly.#{ENV['CI_PIPELINE_ID']}.#{commit_sha}"
           else
