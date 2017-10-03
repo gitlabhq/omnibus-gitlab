@@ -101,6 +101,12 @@ default['gitlab']['geo-postgresql']['statement_timeout'] = '60000'
 default['gitlab']['geo-postgresql']['idle_in_transaction_session_timeout'] = '60000'
 default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
 default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
+default['gitlab']['geo-postgresql']['effective_io_concurrency'] = 1
+default['gitlab']['geo-postgresql']['max_worker_processes'] = 8
+default['gitlab']['geo-postgresql']['max_parallel_workers_per_gather'] = 0
+default['gitlab']['geo-postgresql']['log_lock_waits'] = 1
+default['gitlab']['geo-postgresql']['deadlock_timeout'] = '5s'
+default['gitlab']['geo-postgresql']['track_io_timing'] = 'off'
 
 # Replication settings
 default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'

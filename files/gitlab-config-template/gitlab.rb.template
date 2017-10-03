@@ -680,6 +680,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
 # postgresql['checkpoint_completion_target'] = 0.9
+# postgresql['effective_io_concurrency'] = 1
 # postgresql['checkpoint_warning'] = "30s"
 # postgresql['effective_cache_size'] = "1MB"
 # postgresql['shmmax'] =  17179869184 # or 4294967295
@@ -696,6 +697,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['statement_timeout'] = "60000"
 # postgresql['idle_in_transaction_session_timeout'] = "60000"
 # postgresql['log_line_prefix'] = "%a"
+# postgresql['max_worker_processes'] = 8
+# postgreslq['max_parallel_workers_per_gather'] = 0
+# postgresql['log_lock_waits'] = 1
+# postgresql['deadlock_timeout'] = '5s'
+# postgresql['track_io_timing'] = 0
 
 ### Available in PostgreSQL 9.6 and later
 # postgresql['min_wal_size'] = 80MB
