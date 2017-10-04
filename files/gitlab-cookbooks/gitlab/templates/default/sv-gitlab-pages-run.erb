@@ -36,3 +36,10 @@ exec /opt/gitlab/embedded/bin/gitlab-pages \
     \
     -redirect-http=<%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
     -use-http2=<%= node['gitlab']['gitlab-pages']['use_http2'] %> \
+    \
+    <% if node['gitlab']['gitlab-pages']['artifacts_server'] %>
+    -artifacts-server="<%= node['gitlab']['gitlab-pages']['artifacts_server_url'] %>" \
+    <% if node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %>
+    -artifacts-server-timeout=<%= node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %> \
+    <% end %>
+    <% end %>

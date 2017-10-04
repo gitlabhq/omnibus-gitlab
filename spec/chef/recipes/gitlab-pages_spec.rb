@@ -9,7 +9,10 @@ describe 'gitlab::gitlab-pages' do
 
   context 'with defaults' do
     before do
-      stub_gitlab_rb(pages_external_url: 'https://pages.example.com')
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com'
+      )
     end
 
     it 'correctly renders the pages service run file' do
@@ -20,6 +23,8 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-domain="pages.example.com"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-redirect-http=false})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.example.com/api/v4"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=10})
 
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
@@ -32,13 +37,16 @@ describe 'gitlab::gitlab-pages' do
   context 'with user settings' do
     before do
       stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
         pages_external_url: 'https://pages.example.com',
         gitlab_pages: {
           external_http: ['external_pages.example.com', 'localhost:9000'],
           external_https: ['external_pages.example.com', 'localhost:9001'],
           metrics_address: 'localhost:1234',
           redirect_http: true,
-          cert: '/etc/gitlab/pages.crt'
+          cert: '/etc/gitlab/pages.crt',
+          artifacts_server_url: "https://gitlab.elsewhere.com/api/v5",
+          artifacts_server_timeout: 60
         }
       )
     end
@@ -58,6 +66,28 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="external_pages.example.com"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="localhost:9001"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.elsewhere.com/api/v5"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
+    end
+  end
+
+  context 'with artifacts server disabled' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: {
+          artifacts_server: false,
+          artifacts_server_url: 'https://gitlab.elsewhere.com/api/v5',
+          artifacts_server_timeout: 60
+        }
+      )
+    end
+
+    it 'correctly renders the pages service run file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run")
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server=})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=})
     end
   end
 end
