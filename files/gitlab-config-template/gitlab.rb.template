@@ -1023,6 +1023,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
 # gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
 
+# gitlab_pages['artifacts_server'] = true
+# gitlab_pages['artifacts_server_url'] = nil # Defaults to external_url + '/api/v4'
+# gitlab_pages['artifacts_server_timeout'] = 10
+
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
 
