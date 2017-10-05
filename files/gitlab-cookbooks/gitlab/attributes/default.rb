@@ -968,7 +968,6 @@ default['gitlab']['gitaly']['auth_token'] = nil
 default['gitlab']['gitaly']['auth_transitioning'] = false
 default['gitlab']['gitaly']['concurrency'] = nil
 
-
 ####
 # Geo (EE-only)
 ####
