@@ -49,7 +49,7 @@ describe 'secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base')
-        rsa_keys = rails_keys.values_at('jws_private_key')
+        rsa_keys = rails_keys.values_at('openid_connect_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(HEX_KEY))
@@ -58,6 +58,7 @@ describe 'secrets' do
 
       it 'does not write legacy keys' do
         expect(new_secrets).not_to have_key('gitlab_ci')
+        expect(new_secrets['gitlab_rails']).not_to have_key('jws_private_key')
       end
 
       it 'generates an appropriate secret for gitlab-workhorse' do
@@ -93,7 +94,10 @@ describe 'secrets' do
         before do
           stub_gitlab_secrets_json(
             gitlab_ci: { db_key_base: 'json_ci_db_key_base', secret_token: 'json_ci_secret_token' },
-            gitlab_rails: { secret_token: 'json_rails_secret_token' }
+            gitlab_rails: {
+              secret_token: 'json_rails_secret_token',
+              jws_private_key: 'json_rails_jws_private_key'
+            }
           )
 
           chef_run
@@ -109,6 +113,10 @@ describe 'secrets' do
 
         it 'moves gitlab_ci.db_key_base to gitlab_rails.secret_key_base' do
           expect(new_secrets['gitlab_rails']['secret_key_base']).to eq('json_ci_db_key_base')
+        end
+
+        it 'moves gitlab_rails.jws_private_key to gitlab_rails.openid_connect_signing_key' do
+          expect(new_secrets['gitlab_rails']['openid_connect_signing_key']).to eq('json_rails_jws_private_key')
         end
 
         it 'ignores other, unused, secrets' do
@@ -127,7 +135,10 @@ describe 'secrets' do
         before do
           stub_gitlab_secrets_json(
             gitlab_ci: { db_key_base: 'json_ci_db_key_base' },
-            gitlab_rails: { secret_token: 'json_rails_secret_token' }
+            gitlab_rails: {
+              secret_token: 'json_rails_secret_token',
+              jws_private_key: 'json_rails_jws_private_key'
+            }
           )
 
           stub_gitlab_rb(gitlab_ci: { db_key_base: 'rb_ci_db_key_base' })
@@ -152,7 +163,13 @@ describe 'secrets' do
           stub_gitlab_rb(gitlab_ci: { db_key_base: 'rb_ci_db_key_base',
                                       secret_token: 'rb_ci_secret_token' })
 
-          stub_gitlab_secrets_json(gitlab_rails: { secret_token: 'json_rails_secret_token' })
+          stub_gitlab_secrets_json(
+            gitlab_rails: {
+              secret_token: 'json_rails_secret_token',
+              jws_private_key: 'json_rails_jws_private_key'
+            }
+          )
+
           chef_run
         end
 
@@ -166,6 +183,10 @@ describe 'secrets' do
 
         it 'moves gitlab_ci.db_key_base to gitlab_rails.secret_key_base' do
           expect(new_secrets['gitlab_rails']['secret_key_base']).to eq('rb_ci_db_key_base')
+        end
+
+        it 'moves gitlab_rails.jws_private_key to gitlab_rails.openid_connect_signing_key' do
+          expect(new_secrets['gitlab_rails']['openid_connect_signing_key']).to eq('json_rails_jws_private_key')
         end
 
         it 'ignores other, unused, secrets' do

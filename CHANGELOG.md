@@ -13,7 +13,7 @@ omnibus-gitlab repository.
 - Added PostgreSQL support for max_worker_processes and max_parallel_workers_per_gather
 - Added PostgreSQL support for log_lock_waits and deadlock_timeout
 - Added PostgreSQL support for track_io_timing
-
+- Rename Rails secret jws_private_key to openid_connect_signing_key
 
 10.0.2
 
