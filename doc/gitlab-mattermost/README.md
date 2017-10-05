@@ -130,6 +130,7 @@ If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.r
 mattermost['email_enable_sign_in_with_email'] = false
 mattermost['email_enable_sign_up_with_email'] = false
 mattermost['email_send_email_notifications'] = true
+mattermost['email_smtp_auth'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
 mattermost['email_smtp_server'] = "smtp.example.com"
@@ -137,12 +138,16 @@ mattermost['email_smtp_port'] = "465"
 mattermost['email_connection_security'] = nil
 mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
+mattermost['email_skip_server_certificate_verification'] = false
 ```
 
 If you are using TLS, configuration can look something like this:
 
 ```ruby
 mattermost['email_enable_sign_up_with_email'] = true
+mattermost['email_enable_sign_up_with_email'] = false
+mattermost['email_send_email_notifications'] = true
+mattermost['email_smtp_auth'] = true
 mattermost['email_smtp_username'] = "username"
 mattermost['email_smtp_password'] = "password"
 mattermost['email_smtp_server'] = "smtp.example.com"
@@ -150,6 +155,7 @@ mattermost['email_smtp_port'] = "587"
 mattermost['email_connection_security'] = 'TLS' # Or 'STARTTLS'
 mattermost['email_feedback_name'] = "GitLab Mattermost"
 mattermost['email_feedback_email'] = "email@example.com"
+mattermost['email_skip_server_certificate_verification'] = false
 ```
 
 `email_connection_security` depends on your SMTP provider so you need to verify which of `TLS` or `STARTTLS` is valid for your provider.
@@ -164,6 +170,8 @@ mattermost['email_enable_batching'] = true
 ```
 
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+For additional configuration settings, see the [Mattermost documentation](https://docs.mattermost.com/administration/config-settings.html).
 
 ## Community Support Resources
 
