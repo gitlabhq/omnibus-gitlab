@@ -147,4 +147,67 @@ describe 'gitlab::gitaly' do
       expect(chef_run).not_to create_file('/var/opt/gitlab/gitaly/config.toml')
     end
   end
+
+  context 'when using concurrency configuration' do
+    before do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            concurrency: [
+              {
+                'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                'max_per_repo' => 20
+              }, {
+                'rpc' => "/gitaly.SSHService/SSHUploadPack",
+                'max_per_repo' => 5
+              }
+            ]
+          }
+        }
+      )
+    end
+
+    it 'populates gitaly config.toml with custom concurrency configurations' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SmartHTTPService/PostReceivePack"\s+max_per_repo = 20})
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SSHService/SSHUploadPack"\s+max_per_repo = 5})
+    end
+  end
+
+  shared_examples 'empty concurrency configuration' do
+    it 'does not generate a gitaly concurrency configuration' do
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]})
+    end
+  end
+
+  context 'when not using concurrency configuration' do
+    context 'when concurrency configuration is not set' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+            }
+          }
+        )
+      end
+
+      it_behaves_like 'empty concurrency configuration'
+    end
+
+    context 'when concurrency configuration is empty' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+              concurrency: []
+            }
+          }
+        )
+      end
+
+      it_behaves_like 'empty concurrency configuration'
+    end
+  end
 end

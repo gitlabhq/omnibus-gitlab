@@ -973,6 +973,9 @@ default['gitlab']['gitaly']['logging_format'] = nil
 default['gitlab']['gitaly']['logging_sentry_dsn'] = nil
 default['gitlab']['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitlab']['gitaly']['storage'] = []
+default['gitlab']['gitaly']['auth_token'] = nil
+default['gitlab']['gitaly']['auth_transitioning'] = false
+default['gitlab']['gitaly']['concurrency'] = nil
 
 ####
 # Geo (EE-only)

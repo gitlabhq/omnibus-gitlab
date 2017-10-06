@@ -1402,7 +1402,25 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 # gitaly['auth_token'] = '<secret>'
 # gitaly['auth_transitioning'] = false # When true, auth is logged to Prometheus but NOT enforced
-
+# gitaly['storage'] = [
+#   {
+#     'name' => 'default',
+#     'path' => '/tmp/path-1'
+#   },
+#   {
+#     'name' => 'nfs1',
+#     'path' => '/mnt/nfs1'
+#   }
+# ]
+# gitaly['concurrency'] = [
+#   {
+#     'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+#     'max_per_repo' => 20
+#   }, {
+#     'rpc' => "/gitaly.SSHService/SSHUploadPack",
+#     'max_per_repo' => 5
+#   }
+# ]
 
 ################################################################################
 ################################################################################
