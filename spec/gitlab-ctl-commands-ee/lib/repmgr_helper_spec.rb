@@ -107,5 +107,27 @@ describe RepmgrHelper do
         described_class.send(:register, {})
       end
     end
+
+    context '#remove' do
+      before do
+        allow(Etc).to receive(:getlogin).and_return('fakeuser')
+      end
+
+      it 'should run as the current user by default' do
+        expect(RepmgrHelper::Base).to receive(:cmd).with(
+          "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser",
+          'fakeuser'
+        ).and_return('foo')
+        described_class.send(:remove, { host: 'fake_node' })
+      end
+
+      it 'should connect as a different user when specified' do
+        expect(RepmgrHelper::Base).to receive(:cmd).with(
+          "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser2",
+          'fakeuser'
+        ).and_return('foo')
+        described_class.send(:remove, { host: 'fake_node', user: 'fakeuser2' })
+      end
+    end
   end
 end

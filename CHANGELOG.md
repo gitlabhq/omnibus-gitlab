@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.1.0
 
+- Add a gitlab-ctl command to remove master nodes from cluster
 - Remove unused Grit configuration settings
 - Enable profiler for jemalloc
 - Disable NGINX buffering with container registry
