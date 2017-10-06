@@ -17,11 +17,12 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   repmgr_args = begin
                   {
                     primary: repmgr_primary,
-                    user: node_attributes['repmgr']['user'],
+                    user: repmgr_options[:user] || node_attributes['repmgr']['user'],
                     database:  node_attributes['repmgr']['database'],
                     directory: node_attributes['gitlab']['postgresql']['data_dir'],
                     verbose: repmgr_options[:verbose],
                     wait: repmgr_options[:wait],
+                    host: repmgr_options[:host],
                     node: repmgr_options[:node]
                   }
                 rescue NoMethodError
@@ -95,6 +96,14 @@ def repmgr_parse_options
 
     opts.on('-n', '--node NUMBER', 'The node number to operate on') do |n|
       options[:node] = n
+    end
+
+    opts.on('--host HOSTNAME', 'The host name to operate on') do |h|
+      options[:host] = h
+    end
+
+    opts.on('--user USER', 'The database user to connect as') do |u|
+      options[:user] = u
     end
   end.parse!(ARGV)
 

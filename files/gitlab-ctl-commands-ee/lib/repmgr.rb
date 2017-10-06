@@ -156,6 +156,13 @@ class RepmgrHelper
         repmgr_cmd(args, 'master register')
         restart_daemon
       end
+
+      # repmgr command line does not provide a way to remove failed master nodes
+      def remove(args)
+        query = "DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='#{args[:host]}'"
+        user = args[:user] ? args[:user] : nil
+        execute_psql(database: 'gitlab_repmgr', query: query, host: '127.0.0.1', port: 5432, user: user)
+      end
     end
   end
 
