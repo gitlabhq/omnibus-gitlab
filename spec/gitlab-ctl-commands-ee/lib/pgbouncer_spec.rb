@@ -49,14 +49,14 @@ describe Pgbouncer::Databases do
 
     it 'creates the database object' do
       results = {
-        "fakedb" => "host=fakehost user=fakeuser port=9999 password=dslgkjdfgklfsd"
+        "fakedb" => "host=fakehost port=9999 auth_user=fakeuser"
       }
       expect(@obj.databases).to eq(results)
     end
 
     it 'renders the template' do
       expect(@obj.render).to eq(
-        "[databases]\n\nfakedb = host=fakehost user=fakeuser port=9999 password=dslgkjdfgklfsd\n\n"
+        "[databases]\n\nfakedb = host=fakehost port=9999 auth_user=fakeuser\n\n"
       )
     end
   end
@@ -80,7 +80,7 @@ describe Pgbouncer::Databases do
 
     it 'renders the template' do
       expect(@obj.render).to eq(
-        "[databases]\n\nfakedb = host=fakehost user=fakeuser port=8888 password=dslgkjdfgklfsd auth_user=fakeuser\n\n"
+        "[databases]\n\nfakedb = host=fakehost port=8888 auth_user=fakeuser\n\n"
       )
     end
   end

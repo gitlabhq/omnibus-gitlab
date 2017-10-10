@@ -67,13 +67,11 @@ execute 'generate databases.ini' do
      --databases-json #{node['gitlab']['pgbouncer']['databases_json']} \
      --databases-ini #{node['gitlab']['pgbouncer']['databases_ini']} \
      --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
-     --host #{node['gitlab']['pgbouncer']['listen_addr']} \
-     --port #{node['gitlab']['pgbouncer']['listen_port']} \
-     --user #{node['gitlab']['pgbouncer']['databases_ini_user']}
+     --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
+     --pg-port #{node['gitlab']['pgbouncer']['listen_port']}
     EOF
   }
   action :nothing
-  only_if { omnibus_helper.service_up?('pgbouncer') }
 end
 
 execute 'reload pgbouncer' do

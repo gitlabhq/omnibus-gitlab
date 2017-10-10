@@ -105,6 +105,14 @@ def get_pg_options
       options['pg_database'] = db
     end
 
+    opts.on('--pg-host HOST', 'Host that pgbouncer is running on') do |h|
+      options['pg_host'] = h
+    end
+
+    opts.on('--pg-port PORT', 'Port that pgbouncer is listening on') do |p|
+      options['pg_port'] = p
+    end
+
     opts.on('--newhost HOSTNAME', 'The new master when updating pgbouncer') do |h|
       options['newhost'] = h
     end

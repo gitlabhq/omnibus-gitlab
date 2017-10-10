@@ -38,9 +38,11 @@ module Pgbouncer
       end
       updated = Chef::Mixin::DeepMerge.merge(updated, original)
       original.each do |db, settings|
+        settings.delete('password')
         updated[db] = ''
         settings['host'] = options['newhost'] if options['newhost']
         settings['port'] = options['port'] if options['port']
+        settings['auth_user'] = settings.delete('user') if settings.key?('user')
         settings['auth_user'] = options['user'] if options['user']
         settings['dbname'] =  options['pg_database'] if options['pg_database']
         settings.each do |setting, value|
@@ -81,9 +83,9 @@ module Pgbouncer
 
     def build_command_line
       psql = "#{install_path}/embedded/bin/psql"
-      host = options['host'] || attributes['gitlab']['pgbouncer']['listen_addr']
+      host = options['pg_host'] || attributes['gitlab']['pgbouncer']['listen_addr']
       host = '127.0.0.1' if host.eql?('0.0.0.0')
-      port = options['port'] || attributes['gitlab']['pgbouncer']['listen_port']
+      port = options['pg_port'] || attributes['gitlab']['pgbouncer']['listen_port']
       "#{psql} -d pgbouncer -h #{host} -p #{port} -U #{options['user']}"
     end
 
@@ -102,6 +104,16 @@ module Pgbouncer
       # Attempt to connect to the pgbouncer admin interface and send the RELOAD
       # command. Assumes the current user is in the list of admin-users
       pgbouncer_command('RELOAD')
+    rescue GitlabCtl::Errors::ExecutionError
+      # If reload fails, pgbouncer might not have started yet. This should
+      # really only happen during initial setup, so we should be running as
+      # root
+      $stderr.puts "Error reloading pgbouncer, attempting to restart instead"
+      restart
+    end
+
+    def restart
+      GitlabCtl::Util.get_command_output("gitlab-ctl restart pgbouncer")
     end
 
     def suspend
