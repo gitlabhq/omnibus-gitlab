@@ -239,7 +239,7 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ## Upgrade packaged PostgreSQL server
 
-**As of GitLab 10.0, PostgreSQL 9.6.1 is the only database version in GitLab.**
+**As of GitLab 10.0, PostgreSQL 9.6.X is the only database version in GitLab.**
 
 If you're still running on the bundled PostgreSQL 9.2.18 when you upgrade to GitLab 10.0,
 it will fail and remain on your current version.
