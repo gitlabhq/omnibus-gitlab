@@ -35,8 +35,14 @@ end
 
 ruby_block "Link postgresql bin files to the correct version" do
   block do
-    pg_version = pg_helper.database_version || pg_helper.version
-    pg_path = Dir.glob("#{postgresql_install_dir}/#{pg_version}*").first
+    db_version = pg_helper.database_version
+    db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").first
+
+    # Fallback to the psql version if needed
+    pg_path = db_path || Dir.glob("#{postgresql_install_dir}/#{pg_helper.version}*").first
+
+    fail "Could not find PostgreSQL binaries" unless pg_path
+
     Dir.glob("#{pg_path}/bin/*").each do |pg_bin|
       FileUtils.ln_sf(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
     end
