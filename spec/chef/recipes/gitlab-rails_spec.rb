@@ -435,6 +435,11 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'Gitaly settings' do
+      it 'renders client_path' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(%r{gitaly:\s+client_path: /opt/gitlab/embedded/bin\s})
+      end
+
       context 'when a global token is set' do
         let(:token) { '123secret456gitaly' }
 
@@ -442,7 +447,7 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: { gitaly_token: token })
 
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+token: "#{token}"})
+            .with_content(%r{gitaly:\s+client_path: /opt/gitlab/embedded/bin\s+token: "#{token}"})
         end
       end
     end

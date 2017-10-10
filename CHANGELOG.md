@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Added PostgreSQL support for log_lock_waits and deadlock_timeout
 - Added PostgreSQL support for track_io_timing
 - Rename Rails secret jws_private_key to openid_connect_signing_key
+- Render gitaly.client_path in gitlab.yml
 
 10.0.4
 

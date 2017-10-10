@@ -392,6 +392,7 @@ production: &base
   # Eventually Gitaly use will become mandatory and
   # this option will disappear.
   gitaly:
+    client_path: /opt/gitlab/embedded/bin
     token: <%= @gitaly_token.to_s.to_json %>
 
 
