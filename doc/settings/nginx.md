@@ -289,7 +289,7 @@ nginx['proxy_set_headers'] = {
 
 Note that you may need to configure your reverse proxy or load balancer to
 forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
-`X-Forwarded-Port`) to GitLab. You may see improper redirections or errors
+`X-Forwarded-Port`) to GitLab (and Mattermost if you use one). You may see improper redirections or errors
 (e.g. "422 Unprocessable Entity", "Can't verify CSRF token authenticity") if
 you forget this step. For more information, see:
 
