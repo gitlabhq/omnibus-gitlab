@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Remove unused Grit configuration settings
 - Add concurrency configuration for Gitaly
 - Enable profiler for jemalloc
+- Increase wal_keep_segments setting from 10 to 50 for Geo primary
 - Disable NGINX buffering with container registry
 - Add -artifacts-server and -artifacts-server-timeout support to Omnibus
 - Added PostgreSQL support for effective_io_concurrency
