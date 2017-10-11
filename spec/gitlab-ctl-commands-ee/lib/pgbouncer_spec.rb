@@ -36,6 +36,7 @@ describe Pgbouncer::Databases do
     allow(GitlabCtl::Util).to receive(:fqdn).and_return('fakehost')
     allow(Dir).to receive(:exist?).and_call_original
     allow(Dir).to receive(:exist?).with('/fakedata/pgbouncer').and_return(true)
+    allow(File).to receive(:exist?).with('/fakedata/pgbouncer/databases.json').and_return(true)
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:read).with('/fakeinstall/embedded/nodes/fakehost.json').and_return(fake_ohai)
     allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return(fake_databases_json)
@@ -69,6 +70,7 @@ describe Pgbouncer::Databases do
         'port' => 8888,
         'user' => 'fakeuser'
       }
+      allow(File).to receive(:exist?).with('/another/databases.json').and_return(true)
       allow(File).to receive(:read).with('/another/databases.json').and_return(fake_databases_json)
       @obj = Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
     end

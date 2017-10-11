@@ -15,7 +15,6 @@
 #
 
 account_helper = AccountHelper.new(node)
-omnibus_helper = OmnibusHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
@@ -47,8 +46,7 @@ end
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
   source "#{File.basename(name)}.erb"
   variables lazy { node['gitlab']['pgbouncer'].to_hash }
-  notifies :run, 'execute[reload pgbouncer]', :immediately
-  notifies :run, 'execute[start pgbouncer]', :immediately
+  notifies :run, 'execute[generate databases.ini]', :immediately
 end
 
 file 'databases.json' do
@@ -57,7 +55,6 @@ file 'databases.json' do
   group lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
   content node['gitlab']['pgbouncer']['databases'].to_json
   notifies :run, 'execute[generate databases.ini]', :immediately
-  notifies :run, 'execute[start pgbouncer]', :immediately
 end
 
 execute 'generate databases.ini' do
@@ -72,16 +69,4 @@ execute 'generate databases.ini' do
     EOF
   }
   action :nothing
-end
-
-execute 'reload pgbouncer' do
-  command '/opt/gitlab/bin/gitlab-ctl hup pgbouncer'
-  action :nothing
-  only_if { omnibus_helper.service_up?('pgbouncer') }
-end
-
-execute 'start pgbouncer' do
-  command '/opt//gitlab/bin/gitlab-ctl start pgbouncer'
-  action :nothing
-  not_if { omnibus_helper.service_up?('pgbouncer') }
 end

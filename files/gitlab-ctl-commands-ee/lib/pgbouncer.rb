@@ -26,7 +26,7 @@ module Pgbouncer
                   else
                     'gitlabhq_production'
                   end
-      @databases = update_databases(JSON.parse(File.read(@json_file)))
+      @databases = update_databases(JSON.parse(File.read(@json_file))) if File.exist?(@json_file)
       @userinfo = GitlabCtl::Util.userinfo(options['host_user']) if options['host_user']
     end
 
@@ -105,11 +105,11 @@ module Pgbouncer
       # command. Assumes the current user is in the list of admin-users
       pgbouncer_command('RELOAD')
     rescue GitlabCtl::Errors::ExecutionError
-      # If reload fails, pgbouncer might not have started yet. This should
-      # really only happen during initial setup, so we should be running as
-      # root
-      $stderr.puts "Error reloading pgbouncer, attempting to restart instead"
-      restart
+      # We don't allow passwordless access to the pgbouncer console by default
+      # so pgbouncer_command might fail. PG HA does allow it for consul user,
+      # so it should be tried first.
+      $stderr.puts "There was an issue reloading pgbouncer through admin console, sending HUP"
+      GitlabCtl::Util.get_command_output("gitlab-ctl hup pgbouncer")
     end
 
     def restart
@@ -129,8 +129,15 @@ module Pgbouncer
     end
 
     def notify
+      # If we haven't written databases.json yet, don't do anything
+      return if databases.nil?
       write
-      reload
+      begin
+        reload
+      rescue GitlabCtl::Errors::ExecutionError
+        $stderr.puts "Unable to reload pgbouncer, restarting instead"
+        restart
+      end
     end
 
     def console
