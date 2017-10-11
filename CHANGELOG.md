@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 10.0.4
 
 - Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet
+- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem
 
 10.0.3
 

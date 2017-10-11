@@ -425,6 +425,54 @@ describe 'postgresql 9.6' do
         chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
       end
     end
+
+    context 'old unused data version is present' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
+        allow(File).to receive(:exists?).and_call_original
+        allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
+        allow(Dir).to receive(:glob).and_call_original
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return([])
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1*").and_return(
+          ['/opt/gitlab/embedded/postgresql/9.6.1']
+        )
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
+          %w(
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_three
+          )
+        )
+      end
+
+      it 'corrects symlinks to the correct location' do
+        allow(FileUtils).to receive(:ln_sf).and_return(true)
+        %w(foo_one foo_two foo_three).each do |pg_bin|
+          expect(FileUtils).to receive(:ln_sf).with(
+            "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/bin/#{pg_bin}"
+          )
+        end
+        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+      end
+    end
+
+    context 'the desired postgres version is missing' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2.18')
+        allow(File).to receive(:exists?).and_call_original
+        allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
+        allow(Dir).to receive(:glob).and_call_original
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return([])
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return([])
+      end
+
+      it 'throws an error' do
+        expect do
+          chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+        end.to raise_error(RuntimeError, /Could not find PostgreSQL binaries/)
+      end
+    end
   end
 
   context 'postgresql_user resource' do
