@@ -49,7 +49,7 @@ describe GitlabGeo do
       end
 
       it 'defines wal_keep_segments' do
-        expect(config_attrs['wal_keep_segments']).to eq(10)
+        expect(config_attrs['wal_keep_segments']).to eq(50)
       end
 
       it 'defines max_replication_slots' do
