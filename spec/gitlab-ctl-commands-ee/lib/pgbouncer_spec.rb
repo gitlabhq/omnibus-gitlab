@@ -36,6 +36,7 @@ describe Pgbouncer::Databases do
     allow(GitlabCtl::Util).to receive(:fqdn).and_return('fakehost')
     allow(Dir).to receive(:exist?).and_call_original
     allow(Dir).to receive(:exist?).with('/fakedata/pgbouncer').and_return(true)
+    allow(File).to receive(:exist?).with('/fakedata/pgbouncer/databases.json').and_return(true)
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:read).with('/fakeinstall/embedded/nodes/fakehost.json').and_return(fake_ohai)
     allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return(fake_databases_json)
@@ -49,14 +50,14 @@ describe Pgbouncer::Databases do
 
     it 'creates the database object' do
       results = {
-        "fakedb" => "host=fakehost user=fakeuser port=9999 password=dslgkjdfgklfsd"
+        "fakedb" => "host=fakehost port=9999 auth_user=fakeuser"
       }
       expect(@obj.databases).to eq(results)
     end
 
     it 'renders the template' do
       expect(@obj.render).to eq(
-        "[databases]\n\nfakedb = host=fakehost user=fakeuser port=9999 password=dslgkjdfgklfsd\n\n"
+        "[databases]\n\nfakedb = host=fakehost port=9999 auth_user=fakeuser\n\n"
       )
     end
   end
@@ -69,6 +70,7 @@ describe Pgbouncer::Databases do
         'port' => 8888,
         'user' => 'fakeuser'
       }
+      allow(File).to receive(:exist?).with('/another/databases.json').and_return(true)
       allow(File).to receive(:read).with('/another/databases.json').and_return(fake_databases_json)
       @obj = Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
     end
@@ -80,7 +82,7 @@ describe Pgbouncer::Databases do
 
     it 'renders the template' do
       expect(@obj.render).to eq(
-        "[databases]\n\nfakedb = host=fakehost user=fakeuser port=8888 password=dslgkjdfgklfsd auth_user=fakeuser\n\n"
+        "[databases]\n\nfakedb = host=fakehost port=8888 auth_user=fakeuser\n\n"
       )
     end
   end
