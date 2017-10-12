@@ -12,6 +12,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Package defaults](package-information/defaults.md)
 - [Deprecated Operating Systems](package-information/deprecated_os.md)
 - [Signed Packages](package-information/signed_packages.md)
+- [Deprecation Policy](package-information/deprecation_policy.md)
 
 ## Installation
 
