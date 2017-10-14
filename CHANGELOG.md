@@ -5,27 +5,32 @@ omnibus-gitlab repository.
 
 10.1.0
 
-- Add a gitlab-ctl command to remove master nodes from cluster
-- Restart Unicorn and Sidekiq on the Geo secondary if the tracking database is migrated
-- Remove unused Grit configuration settings
-- Add concurrency configuration for Gitaly
-- Enable profiler for jemalloc
-- Increase wal_keep_segments setting from 10 to 50 for Geo primary
-- Disable NGINX buffering with container registry
-- Add -artifacts-server and -artifacts-server-timeout support to Omnibus
-- Added PostgreSQL support for effective_io_concurrency
-- Added PostgreSQL support for max_worker_processes and max_parallel_workers_per_gather
-- Added PostgreSQL support for log_lock_waits and deadlock_timeout
-- Added PostgreSQL support for track_io_timing
-- Rename Rails secret jws_private_key to openid_connect_signing_key
-- Render gitaly.client_path in gitlab.yml
-- Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi)
-- Update Mattermost to 4.3.0
+- Add a gitlab-ctl command to remove master nodes from cluster b50d50478
+- Restart Unicorn and Sidekiq on the Geo secondary if the tracking database is migrated 1aaed2
+- Remove unused Grit configuration settings 90f403a26193fb
+- Add concurrency configuration for Gitaly 402f23b28
+- Enable profiler for jemalloc c40b82c4037
+- Update Postgres exporter to 0.2.3 1f847e9e96
+- Update Prometheus to 1.7.2 1f847e9e96
+- Update Redis exporter to 0.12.2 1f847e9e96
+- Increase wal_keep_segments setting from 10 to 50 for Geo primary 9b1304fe
+- Disable NGINX buffering with container registry 2413adb
+- Add -artifacts-server and -artifacts-server-timeout support to Omnibus 188def96b3
+- Introduce `roles` configuration to allow enabling of multiple sets of services 8535073e64
+- Added PostgreSQL support for effective_io_concurrency 37799aea3
+- Added PostgreSQL support for max_worker_processes and max_parallel_workers_per_gather 37799aea3
+- Added PostgreSQL support for log_lock_waits and deadlock_timeout 37799aea3
+- Added PostgreSQL support for track_io_timing 37799aea3
+- Rename Rails secret jws_private_key to openid_connect_signing_key (Markus Koller) 24d56df29b
+- Render gitaly.client_path in gitlab.yml 80a9c492e
+- Correct Registry permissions in Docker update-permissions script 0b624f8ed
+- Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi) 84a3f5c09
+- Update Mattermost to 4.3.0 (Eric Sethna) 019b2752
 
 10.0.4
 
-- Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet
-- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem
+- Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet b50d50478
+- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem 2ad74f434
 
 10.0.3
 
@@ -33,9 +38,9 @@ omnibus-gitlab repository.
 
 10.0.2
 
-- Fix an issue where enabling a GitLab Geo role would also disable all default services
+- Fix an issue where enabling a GitLab Geo role would also disable all default services 11e6dbf
 - Reload consul on config change instead of restarting 097cf5
-- Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use
+- Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use 7b80458b
 - Add option to configure redis snapshot frequency 400f3a54
 
 10.0.1
@@ -44,7 +49,7 @@ omnibus-gitlab repository.
 
 10.0.0
 
-- Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright)
+- Use semanage instead of chcon for setting SELinux security contexts (Elliot Wright) 45abda5f4
 - Add option to override the hostname for remote syslog
 - Add backup_timeout argument to geo db replication command
 - Remove sensitive params from the NGINX access logs 6983fe59
