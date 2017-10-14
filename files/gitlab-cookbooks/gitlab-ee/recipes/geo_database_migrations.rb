@@ -18,6 +18,10 @@
 omnibus_helper = OmnibusHelper.new(node)
 gitlab_geo_helper = GitlabGeoHelper.new(node)
 
+dependent_services = []
+dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
+dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
+
 bash 'migrate gitlab-geo tracking database' do
   code <<-EOH
     set -e
@@ -30,6 +34,9 @@ bash 'migrate gitlab-geo tracking database' do
   EOH
 
   notifies :run, 'execute[start geo-postgresql]', :before unless omnibus_helper.service_up?('geo-postgresql')
+  dependent_services.each do |svc|
+    notifies :restart, svc, :immediately
+  end
   not_if { gitlab_geo_helper.migrated? }
   only_if { node['gitlab']['geo-secondary']['auto_migrate'] && node['gitlab']['geo-postgresql']['enable'] }
 end
