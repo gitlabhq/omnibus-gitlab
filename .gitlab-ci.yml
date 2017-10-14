@@ -114,6 +114,8 @@ variables:
     paths:
     - cache
     - gems
+    - assets_cache
+    - node_modules
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
