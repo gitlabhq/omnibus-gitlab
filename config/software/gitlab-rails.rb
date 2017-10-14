@@ -111,6 +111,10 @@ build do
   copy 'config/database.yml.postgresql', 'config/database.yml'
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
+  # Copy asset cache and node modules from cache location to source directory
+  move "#{Omnibus::Config.project_root}/assets_cache", "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache"
+  move "#{Omnibus::Config.project_root}/node_modules", "#{Omnibus::Config.source_dir}/gitlab-rails"
+
   assets_compile_env = {
     'NODE_ENV' => 'production',
     'RAILS_ENV' => 'production',
@@ -127,8 +131,12 @@ build do
   # opportunity to complete on the pi
   bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
 
+  # Move folders for caching. GitLab CI permits only relative path for Cache
+  # and Artifacts. So we need these folder in the root directory.
+  move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
+  move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
+
   # Tear down now that gitlab:assets:compile is done.
-  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'
