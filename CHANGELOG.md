@@ -20,6 +20,7 @@ omnibus-gitlab repository.
 - Rename Rails secret jws_private_key to openid_connect_signing_key
 - Render gitaly.client_path in gitlab.yml
 - Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi)
+- Update Mattermost to 4.3.0
 
 10.0.4
 
