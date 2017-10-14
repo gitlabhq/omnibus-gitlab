@@ -27,7 +27,7 @@ module DefaultRole # rubocop:disable Style/MultilineIfModifier (disabled so we c
     end
 
     def no_service_roles_enabled?
-      Gitlab.roles.select { |key, role| role[:manage_services] && Gitlab["#{key}_role"]['enable'] }.count.zero?
+      Gitlab.available_roles.select { |key, role| role[:manage_services] && Gitlab["#{key}_role"]['enable'] }.count.zero?
     end
   end
 end unless defined?(DefaultRole) # Prevent reloading during converge, so we can test

@@ -27,11 +27,11 @@ module SettingsHelper
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
-      attr_accessor :roles
+      attr_accessor :available_roles
       attr_accessor :settings
     end
 
-    base.roles = {}
+    base.available_roles = {}
     base.settings = {}
   end
 
@@ -62,11 +62,11 @@ module SettingsHelper
   #     will result in Gitlab['some_specific_role']['enable'] = true
   #     and node['roles']['some-specific']['enable'] = true
   def role(name, **config)
-    @roles[name] = HandledHash.new.merge!(
+    @available_roles[name] = HandledHash.new.merge!(
       { manage_services: true }
     ).merge(config)
     send("#{name}_role", Gitlab::ConfigMash.new)
-    @roles[name]
+    @available_roles[name]
   end
 
   # Create a new attribute with the given 'name' and config
@@ -129,7 +129,7 @@ module SettingsHelper
     end
 
     # Add the roles the the results
-    @roles.each do |key, value|
+    @available_roles.each do |key, value|
       rkey = key.tr('_', '-')
       results['roles'][rkey] = Gitlab["#{key}_role"]
     end
@@ -140,10 +140,11 @@ module SettingsHelper
   def load_roles
     # System services are enabled by default
     Services.enable_group(Services::SYSTEM_GROUP)
+    RolesHelper.parse_enabled
 
     # Load our roles
     DefaultRole.load_role
-    @roles.each do |key, value|
+    @available_roles.each do |key, value|
       handler = value.handler
       handler.load_role if handler && handler.respond_to?(:load_role)
     end

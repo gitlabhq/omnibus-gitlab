@@ -42,6 +42,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 * [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 * [GitLab Prometheus](https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html) Set up the Prometheus
   monitoring included in the Omnibus GitLab package.
+* [GitLab High Availability Roles](roles/README.md)
 
 #### Using docker image
 
