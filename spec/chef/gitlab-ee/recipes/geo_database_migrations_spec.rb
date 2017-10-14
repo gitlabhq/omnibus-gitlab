@@ -18,12 +18,40 @@ describe 'gitlab-ee::geo-database-migrations' do
     before do
       allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
       stub_gitlab_rb(geo_postgresql: { enable: true })
+
+      %w(
+        gitlab-monitor
+        gitlab-workhorse
+        logrotate
+        nginx
+        node-exporter
+        postgres-exporter
+        postgresql
+        prometheus
+        redis
+        redis-exporter
+        sidekiq
+        unicorn
+        gitaly
+        geo-postgresql
+      ).map { |svc| stub_should_notify?(svc, true) }
     end
 
     let(:bash_block) { chef_run.bash(name) }
 
     it 'runs the migrations' do
       expect(chef_run).to run_bash(name)
+    end
+
+    # The reverse can't be tested in a unit test due to
+    # https://github.com/chefspec/chefspec/issues/546
+    context 'when database has not been migrated' do
+      it 'restarts services' do
+        allow_any_instance_of(GitlabGeoHelper).to receive(:migrated?).and_return(false)
+
+        expect(bash_block).to notify('service[unicorn]').to(:restart)
+        expect(bash_block).to notify('service[sidekiq]').to(:restart)
+      end
     end
 
     context 'places the log file' do

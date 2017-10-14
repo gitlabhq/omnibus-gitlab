@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.1.0
 
 - Add a gitlab-ctl command to remove master nodes from cluster
+- Restart Unicorn and Sidekiq on the Geo secondary if the tracking database is migrated
 - Remove unused Grit configuration settings
 - Add concurrency configuration for Gitaly
 - Enable profiler for jemalloc

@@ -1,4 +1,4 @@
-class GitlabGeoHelper
+class GitlabGeoHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(GitlabGeoHelper)` at the end of the class definition)
   REVISION_FILE ||= '/opt/gitlab/embedded/service/gitlab-rails/REVISION'.freeze
 
   attr_reader :node
@@ -35,4 +35,4 @@ class GitlabGeoHelper
 
     Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
   end
-end
+end unless defined?(GitlabGeoHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
