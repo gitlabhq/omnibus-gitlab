@@ -63,6 +63,10 @@ add_command_under_category('repmgr-check-master', 'database', 'Check if the curr
   end
 end
 
+add_command_under_category('repmgr-event-handler', 'database', 'Handle events from rpmgrd actions', 2) do
+  RepmgrHelper::Events.fire(ARGV)
+end
+
 def repmgr_help
   <<-EOF
   Available repmgr commands:

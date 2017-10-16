@@ -12,7 +12,7 @@ describe RepmgrHelper do
 
   let(:shellout_args) do
     {
-      user: 'gitlab-psql',
+      user: 'fakeuser',
       cwd: '/tmp',
       timeout: 604800
     }
@@ -20,6 +20,7 @@ describe RepmgrHelper do
 
   before do
     allow(Mixlib::ShellOut).to receive(:new).and_return(shellout)
+    allow(Etc).to receive(:getpwuid).and_return(double(name: 'fakeuser'))
   end
 
   describe RepmgrHelper::Standby do
@@ -109,10 +110,6 @@ describe RepmgrHelper do
     end
 
     context '#remove' do
-      before do
-        allow(Etc).to receive(:getlogin).and_return('fakeuser')
-      end
-
       it 'should run as the current user by default' do
         expect(RepmgrHelper::Base).to receive(:cmd).with(
           "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser",
@@ -127,6 +124,35 @@ describe RepmgrHelper do
           'fakeuser'
         ).and_return('foo')
         described_class.send(:remove, { host: 'fake_node', user: 'fakeuser2' })
+      end
+    end
+  end
+
+  describe RepmgrHelper::Events do
+    let(:args) do
+      [
+        nil, nil, nil, 1, 'fake_event', '1', 'fake timestamp', 'fake details'
+      ]
+    end
+
+    context '#fire' do
+      it 'returns nil on invalid ivents' do
+        expect(described_class.send(:fire, args)).to be nil
+      end
+
+      it 'responds to valid events' do
+        expect(described_class).to receive(:fake_event).and_return true
+        described_class.send(:fire, args)
+      end
+    end
+
+    context '#repmgrd_failover_promote' do
+      it 'adds the failed master to the consul queue' do
+        real_event = [
+          nil, nil, nil, 1, 'repmgrd-failover-promote', '1', 'real timestamp', 'node 1 promoted to master; old master 2 marked as failed'
+        ]
+        expect(ConsulHelper::Kv).to receive(:put).with('gitlab/ha/postgresql/failed_masters/2')
+        described_class.send(:fire, real_event)
       end
     end
   end
