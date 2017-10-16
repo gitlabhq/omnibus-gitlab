@@ -11,7 +11,12 @@ module Gitlab
     def build_iteration
       if Build::Check.on_tag?
         match = /[^+]*\+([^\-]*)/.match(@git_describe)
-        return match[1] if match && !match[1].empty?
+        if match && !match[1].empty?
+          # Generating version strings like rc1.ee.0 or ce.0
+          split = match[1].split(".")
+          split.insert(-2, Build::Info.edition)
+          return split.join(".")
+        end
       end
 
       # For any builds other than a tag release, built_iteration value is not of

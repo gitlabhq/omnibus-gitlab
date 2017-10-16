@@ -167,6 +167,32 @@ variables:
       - pkg/
   retry: 1
 
+.tag_template: &tag_build_ee
+  stage: package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - export ee=true
+    - export GITLAB_VERSION=$(cat VERSION)-ee
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake release:package
+    - bundle exec rake cache:bundle
+  tags:
+  - docker-builder
+  only:
+    - tags@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+  retry: 1
+
 .rpi_tag_template: &rpi_tag_build
   stage: raspbian
   script:
