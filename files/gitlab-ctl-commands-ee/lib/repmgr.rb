@@ -1,6 +1,8 @@
 require 'mixlib/shellout'
 require 'timeout'
 
+require_relative 'consul'
+
 # For testing purposes, if the first path cannot be found load the second
 begin
   require_relative '../../omnibus-ctl/lib/gitlab_ctl'
@@ -10,6 +12,8 @@ end
 
 class RepmgrHelper
   class MasterError < StandardError; end
+
+  class EventError < StandardError; end
 
   attr_accessor :command, :subcommand, :args
 
@@ -26,7 +30,12 @@ class RepmgrHelper
   class Base
     class << self
       def repmgr_cmd(args, command)
-        cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f /var/opt/gitlab/postgresql/repmgr.conf #{command}", 'gitlab-psql')
+        runas = if Etc.getpwuid.name.eql?('root')
+                  'gitlab-psql'
+                else
+                  Etc.getpwuid.name
+                end
+        cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f /var/opt/gitlab/postgresql/repmgr.conf #{command}", runas)
       end
 
       def execute_psql(options)
@@ -34,9 +43,9 @@ class RepmgrHelper
         query = options[:query]
         host = options[:host]
         port = options[:port]
-        user = options[:user] || Etc.getlogin
+        user = options[:user] || Etc.getpwuid.name
         command = %(/opt/gitlab/embedded/bin/psql -qt -d #{database} -h #{host} -p #{port} -c "#{query}" -U #{user})
-        cmd(command, Etc.getlogin).chomp.lines.map(&:strip)
+        cmd(command, Etc.getpwuid.name).chomp.lines.map(&:strip)
       end
 
       def cmd(command, user = 'root')
@@ -159,7 +168,12 @@ class RepmgrHelper
 
       # repmgr command line does not provide a way to remove failed master nodes
       def remove(args)
-        query = "DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='#{args[:host]}'"
+        query = "DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE "
+        if args.key?(:host)
+          query << "name='#{args[:host]}'"
+        elsif args.key?(:node_id)
+          query << "id='#{args[:node_id]}'"
+        end
         user = args[:user] ? args[:user] : nil
         execute_psql(database: 'gitlab_repmgr', query: query, host: '127.0.0.1', port: 5432, user: user)
       end
@@ -179,8 +193,33 @@ class RepmgrHelper
       host = attributes['gitlab']['postgresql']['unix_socket_directory']
       port = attributes['gitlab']['postgresql']['port']
       master = RepmgrHelper::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
-      raise MasterError, master if master.length != 1
+      show_count = RepmgrHelper::Base.cmd(
+        %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),
+        Etc.getpwuid.name
+      ).chomp
+      raise MasterError, "#{master} #{show_count}" if master.length != 1 || show_count != '1'
       master.first.eql?(hostname)
+    end
+  end
+
+  class Events
+    class <<self
+      def fire(args)
+        node_id, event_type, success, timestamp, details = args[3..-1]
+        event_method = event_type.tr('-', '_')
+        begin
+          send(event_method, node_id, success, timestamp, details)
+        rescue NoMethodError
+          # If the method doesn't exist, we don't handle the event
+          nil
+        end
+      end
+
+      def repmgrd_failover_promote(node_id, success, timestamp, details)
+        raise RepmgrHelper::EventError, "We tried to failover at #{timestamp}, but failed with: #{details}" unless success.eql?('1')
+        old_master = details.match(/old master (\d+) marked as failed/)[1]
+        ConsulHelper::Kv.put("gitlab/ha/postgresql/failed_masters/#{old_master}")
+      end
     end
   end
 end

@@ -20,6 +20,7 @@ conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
 use_replication_slots=0
 loglevel=INFO
 logfacility=STDERR
+event_notification_command='gitlab-ctl repmgr-event-handler  %n %e %s "%t" "%d"'
 
 pg_bindir=/opt/gitlab/embedded/bin
 

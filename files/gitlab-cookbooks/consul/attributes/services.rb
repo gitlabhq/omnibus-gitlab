@@ -11,6 +11,13 @@ default['consul']['service_config'] = {
           'interval' => "10s"
         }
       ]
-    }
+    },
+    'watches': [
+      {
+        'type': 'keyprefix',
+        'prefix': 'gitlab/ha/postgresql/failed_masters/',
+        'handler': '/opt/gitlab/bin/gitlab-ctl consul watchers handle-failed-master'
+      }
+    ]
   }
 }
