@@ -37,6 +37,10 @@ describe 'consul' do
     describe 'consul::enable' do
       it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul'
 
+      it 'creates the consul system user' do
+        expect(chef_run).to create_user 'gitlab-consul'
+      end
+
       it 'includes the postgresql_service recipe' do
         expect(chef_run).to include_recipe('consul::service_postgresql')
       end
@@ -106,8 +110,30 @@ describe 'consul' do
       )
     end
 
-    it 'creates the consul system user' do
-      expect(chef_run).to create_user 'gitlab-consul'
+    it 'renders the service configuration file' do
+      rendered = {
+        'service' => {
+          'name' => 'postgresql',
+          'address' => '',
+          'port' => 5432,
+          'checks' => [
+            {
+              'script' => '/opt/gitlab/bin/gitlab-ctl repmgr-check-master',
+              'interval' => '10s'
+            }
+          ]
+        },
+        'watches' => [
+          {
+            'type' => 'keyprefix',
+            'prefix' => 'gitlab/ha/postgresql/failed_masters/',
+            'handler' => '/opt/gitlab/bin/gitlab-ctl consul watchers handle-failed-master'
+          }
+        ]
+      }
+      expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/postgresql_service.json').with_content { |content|
+        expect(JSON.parse(content)).to eq(rendered)
+      }
     end
   end
 

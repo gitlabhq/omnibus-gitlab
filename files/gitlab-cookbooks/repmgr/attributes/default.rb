@@ -26,7 +26,7 @@ default['repmgr']['loglevel'] = 'INFO'
 default['repmgr']['logfacility'] = 'STDERR'
 default['repmgr']['logfile'] = nil
 
-default['repmgr']['event_notification_command'] = nil
+default['repmgr']['event_notification_command'] = %(gitlab-ctl repmgr-event-handler  %n %e %s "%t" "%d")
 default['repmgr']['event_notifications'] = nil
 
 default['repmgr']['rsync_options'] = nil

@@ -13,10 +13,10 @@ logfacility=<%= @logfacility %>
 logfile=<%= @logfile %>
 <% end %>
 <% if @event_notification_command %>
-event_notification_command=<%= @event_notification_command %>
+event_notification_command='<%= @event_notification_command %>'
 <% end %>
 <% if @event_notifications %>
-event_notifications=<%= @event_notifications %>
+event_notifications='<%= @event_notifications %>'
 <% end %>
 
 pg_bindir=<%= @pg_bindir %>
