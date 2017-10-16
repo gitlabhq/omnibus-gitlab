@@ -13,17 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-account_helper = AccountHelper.new(node)
 
-postgresql_user account_helper.consul_user do
-  notifies :run, "execute[grant read only access to repmgr]"
-end
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/consul"
 
-select_query = %(GRANT SELECT, DELETE ON ALL TABLES IN SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
-usage_query = %(GRANT USAGE ON SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
-
-execute "grant read only access to repmgr" do
-  command %(gitlab-psql gitlab_repmgr -c '#{select_query}; #{usage_query};')
-  user account_helper.postgresql_user
-  action :nothing
+add_command_under_category('consul', 'consul', 'Interact with the gitlab-consul cluster', 2) do
+  consul = ConsulHelper.new(ARGV, $stdin.gets)
+  consul.execute
 end
