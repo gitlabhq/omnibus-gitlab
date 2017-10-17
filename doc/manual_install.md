@@ -22,29 +22,15 @@ Locate the desired package for the version and distribution you want to use, and
 
 With the desired package downloaded, use your systems package management tool to install it. For example:
 
-* DEB based (Ubuntu, Debian, Raspberry Pi): `sudo dpkg -i gitlab-ee-9.5.2-ee.0_amd64.deb`
-* RPM based (CentOS, RHEL, Oracle, Scientific, openSUSE, SLES): `sudo rpm -i gitlab-ee-9.5.2-ee.0.el7.x86_64.rpm`
+* DEB based (Ubuntu, Debian, Raspberry Pi): `sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab-ee-9.5.2-ee.0_amd64.deb`
+* RPM based (CentOS, RHEL, Oracle, Scientific, openSUSE, SLES): `sudo EXTERNAL_URL="http://gitlab.example.com" rpm -i gitlab-ee-9.5.2-ee.0.el7.x86_64.rpm`
 
-Installation may take a few minutes to complete. Once installed, GitLab should now be configured.
-
-## Configuring GitLab
-
-With GitLab installed, the next step is to configure it and start the services. The settings for GitLab are contained in `/etc/gitlab/gitlab.rb`. There are a variety of settings which [can be configured](settings/configuration.md), but the most important is setting the [external URL](settings/configuration.md#configuring-the-external-url-for-gitlab).
+Change `http://gitlab.example.com` to the URL at which you want to access your GitLab instance. Installation will automatically configure and start GitLab at that URL.
 
 > **Note:** Enabling HTTPS will require [additional configuration](settings/nginx.html#enable-https) to specify the certificates.
 
-To configure the external URL:
-1. Edit `/etc/gitlab/gitlab.rb` in your favorite text editor
-2. Find the line near the top for `external_url`
-3. Change the URL to be the URL of your GitLab server
-4. Save the file and exit your text editor.
+## Browse to the hostname and login
 
-With the required settings configured, GitLab can now be started. To do this run:
+On your first visit, you'll be redirected to a password reset screen. Provide the password for the initial administrator account and you will be redirected back to the login screen. Use the default account's username `root` to login.
 
-```bash
-sudo gitlab-ctl reconfigure
-```
-
-This command will read the settings and apply them to the GitLab installation, then start all services. This will take a few minutes to complete, and you will see lines of white and green text appear.
-
-Once finished, your GitLab server is now ready to be accessed by the URL you configured.
+See our [documentation for detailed instructions on installing and configuration](https://docs.gitlab.com/omnibus/README.html#installation-and-configuration-using-omnibus-package).
