@@ -30,7 +30,6 @@ relative_path 'src/github.com/prometheus/node_exporter'
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/node-exporter"
-  env['GO15VENDOREXPERIMENT'] = '1' # Build machines have go 1.5.x, use vendor directory
   exporter_source_dir = "#{Omnibus::Config.source_dir}/node-exporter"
   cwd = "#{exporter_source_dir}/src/github.com/prometheus/node_exporter"
 

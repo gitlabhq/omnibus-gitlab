@@ -33,7 +33,6 @@ relative_path 'src/github.com/docker/distribution'
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/registry",
-    'GO15VENDOREXPERIMENT' => '1', # Build machines have go 1.5.x, use vendor directory
     'PREFIX' => "#{install_dir}/embedded",
     'DOCKER_BUILDTAGS' => 'include_gcs'
   }

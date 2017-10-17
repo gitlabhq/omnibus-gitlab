@@ -32,7 +32,6 @@ relative_path 'src/github.com/prometheus/prometheus'
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/prometheus",
-    'GO15VENDOREXPERIMENT' => '1' # Build machines have go 1.5.x, use vendor directory
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
   cwd = "#{exporter_source_dir}/src/github.com/prometheus/prometheus"
