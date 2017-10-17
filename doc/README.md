@@ -82,6 +82,7 @@ You can also use the docker images provided by GitLab to install and configure a
 
 ## Updating
 
+- [Upgrade support policy](https://docs.gitlab.com/ee/policy/maintenance.html)
 - [Upgrade from Community Edition to Enterprise Edition](update/README.md#from-community-edition-to-enterprise-edition)
 - [Updating to the latest version](update/README.md#updating-from-gitlab-66-and-higher-to-the-latest-version)
 - [Downgrading to an earlier version](update/README.md#reverting-to-gitlab-66x-or-later)
