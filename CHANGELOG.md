@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Correct Registry permissions in Docker update-permissions script 0b624f8ed
 - Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi) 84a3f5c09
 - Update Mattermost to 4.3.0 (Eric Sethna) 019b2752
+- Bump embedded Git version to 2.13.6 921ba935
 
 10.0.4
 
