@@ -12,16 +12,8 @@ for the service.
 
 ## Fetch and compile the software during build
 
-You need to add a [Software Definition](../architecture/README.md#software-definitions)
-for your service if it is not already included in the project.
-
-
-Software definitions, which can be found in `/config/software`, specify where omnibus
-should fetch the software, how to compile it and install it to the required folder.
-This part of the project is run when we build the Omnibus package for GitLab.
-
-See other Software services in the directory for examples on how to include your
-software service.
+You need to add a [new Software Definition](new-software-definition.md) for your
+service if it is not already included in the project.
 
 ## Add a top-level configuration object for the service
 
