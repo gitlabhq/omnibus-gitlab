@@ -66,6 +66,7 @@ describe 'gitlab-ee::pgbouncer' do
         expect(content).to match(/^listen_port = 6432$/)
         expect(content).to match(/^pool_mode = session$/)
         expect(content).to match(/^server_reset_query = DISCARD ALL$/)
+        expect(content).to match(/^application_name_add_host = 1$/)
         expect(content).to match(/^max_client_conn = 100$/)
         expect(content).to match(/^default_pool_size = 20$/)
         expect(content).to match(/^min_pool_size = 0$/)

@@ -147,6 +147,7 @@ default['gitlab']['pgbouncer']['listen_port'] = 6432
 default['gitlab']['pgbouncer']['pool_mode'] = 'session'
 default['gitlab']['pgbouncer']['server_reset_query'] = 'DISCARD ALL'
 default['gitlab']['pgbouncer']['max_client_conn'] = 100
+default['gitlab']['pgbouncer']['application_name_add_host'] = 1
 default['gitlab']['pgbouncer']['default_pool_size'] = 20
 default['gitlab']['pgbouncer']['min_pool_size'] = 0
 default['gitlab']['pgbouncer']['reserve_pool_size'] = 0

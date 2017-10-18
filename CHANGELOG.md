@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.2.0
+
+- Enable pgbouncer application_name_add_host config by default 29dab6af1
+
 10.1.0
 
 - Add a gitlab-ctl command to remove master nodes from cluster b50d50478
