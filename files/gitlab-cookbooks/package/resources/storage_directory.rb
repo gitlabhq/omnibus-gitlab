@@ -14,26 +14,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Manage the storage directory as the target owner user instead of the running
-# user in order to work with root_squash directories on NFS mounts. It will
-# fallback to using root if the target owner user doesn't have enough access
-define :storage_directory, path: nil, owner: 'root', group: nil, mode: nil do
+resource_name :storage_directory
+provides :storage_directory
+
+actions :create
+default_action :create
+
+property :path, [String, nil], default: nil
+property :owner, [String, nil], default: 'root'
+property :group, [String, nil], default: nil
+property :mode, [String, nil], default: nil
+
+action :create do
   next unless node['gitlab']['manage-storage-directories']['enable']
+  new_resource.path ||= new_resource.name
+  storage_helper = StorageDirectoryHelper.new(owner, group, mode)
 
-  params[:path] ||= params[:name]
-  storage_helper = StorageDirectoryHelper.new(params[:owner], params[:group], params[:mode])
-
-  ruby_block "directory resource: #{params[:path]}" do
+  ruby_block "directory resource: #{path}" do
     block do
       # Ensure the directory exists
-      storage_helper.ensure_directory_exists(params[:path])
+      storage_helper.ensure_directory_exists(path)
 
       # Ensure the permissions are set
-      storage_helper.ensure_permissions_set(params[:path])
+      storage_helper.ensure_permissions_set(path)
 
       # Error out if we have not achieved the target permissions
-      storage_helper.validate!(params[:path])
+      storage_helper.validate!(path)
     end
-    not_if { storage_helper.validate(params[:path]) }
+    not_if { storage_helper.validate(path) }
   end
 end

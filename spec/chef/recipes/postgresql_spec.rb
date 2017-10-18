@@ -202,7 +202,7 @@ describe 'postgresql 9.2' do
 end
 
 describe 'postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(sysctl)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 
@@ -529,5 +529,9 @@ describe 'postgresql 9.6' do
       expect(hba_resource).to notify('execute[reload postgresql]').to(:run).immediately
       expect(hba_resource).to notify('execute[start postgresql]').to(:run).immediately
     end
+  end
+
+  it 'creates sysctl files' do
+    expect(chef_run).to render_file('/opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmmax.conf').with_content("17179869184")
   end
 end

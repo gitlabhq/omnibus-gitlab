@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2015 GitLab B.V.
+# Copyright:: Copyright (c) 2016 GitLab Inc
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-define :sysctl, value: nil do
-  name = params[:name]
-  value = params[:value]
+resource_name :sysctl
+provides :sysctl
 
-  directory "create /etc/sysctl.d for #{name}" do
+actions :create
+default_action :create
+
+property :value, [Integer, Float, String, nil], default: nil
+
+action :create do
+  directory "create /etc/sysctl.d for #{new_resource.name}" do
     path "/etc/sysctl.d"
     mode "0755"
     recursive true
   end
 
-  conf_name = "90-omnibus-gitlab-#{name}.conf"
+  conf_name = "90-omnibus-gitlab-#{new_resource.name}.conf"
 
-  file "create /opt/gitlab/embedded/etc/#{conf_name} #{name}" do
+  file "create /opt/gitlab/embedded/etc/#{conf_name} #{new_resource.name}" do
     path "/opt/gitlab/embedded/etc/#{conf_name}"
-    content "#{name} = #{value}\n"
-    notifies :run, "execute[load sysctl conf #{name}]", :immediately
+    content "#{new_resource.name} = #{value}\n"
+    notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
   end
 
   link "/etc/sysctl.d/#{conf_name}" do
@@ -44,15 +48,15 @@ define :sysctl, value: nil do
     "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf",
     "/etc/sysctl.d/90-omnibus-gitlab.conf"
   ].each do |conf|
-    file "delete #{conf} #{name}" do
+    file "delete #{conf} #{new_resource.name}" do
       path conf
       action :delete
-      only_if { File.exist?(conf) }
+      only_if { ::File.exist?(conf) }
     end
   end
 
   # Load the settings right away
-  execute "load sysctl conf #{name}" do
+  execute "load sysctl conf #{new_resource.name}" do
     command "cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -"
     action :nothing
   end
