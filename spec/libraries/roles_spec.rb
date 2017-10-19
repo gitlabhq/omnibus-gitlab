@@ -7,7 +7,8 @@ describe 'GitLabRoles' do
   end
 
   after do
-    RolesHelper.disable_all
+    # Disable all roles after each test to clean the environment
+    Gitlab.available_roles.each { |name, _value| Gitlab["#{name}_role"]['enable'] = false }
   end
 
   describe 'roles config array' do
