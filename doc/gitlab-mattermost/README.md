@@ -220,6 +220,132 @@ Consider these notes when upgrading GitLab Mattermost:
 
 For a complete list of upgrade notices from older versions, see the [Mattermost documentation](https://docs.mattermost.com/administration/important-upgrade-notes.html).
 
+## Upgrading GitLab Mattermost from versions prior to 11.0
+
+With version 11.0, GitLab will introduce breaking changes regarding Mattermost configuration.
+In versions prior to GitLab 11.0 all
+Mattermost related settings were configurable from the `gitlab.rb` file, which
+generated the Mattermost `config.json` file. However, Mattermost also
+permitted configuration via its System Console. This configuration ended up in
+the same `config.json` file, which resulted in changes made via the System Console being
+overwritten when users ran `gitlab-ctl reconfigure`.
+
+To resolve this problem, `gitlab.rb` will include only the
+configuration necessary for GitLab<=>Mattermost integration. GitLab will no longer generate the `config.json` file, instead passing limited configuration settings via environment variables.
+
+The settings that will continue to be
+supported in `gitlab.rb` are:
+
+```
+# Supported settings
+mattermost_external_url
+mattermost['enable']
+mattermost['username']
+mattermost['group']
+mattermost['uid']
+mattermost['gid']
+mattermost['home']
+mattermost['database_name']
+mattermost['env']
+mattermost['service_use_ssl']
+mattermost['service_address']
+mattermost['service_port']
+mattermost['service_site_url']
+mattermost['team_site_name']
+mattermost['sql_driver_name']
+mattermost['sql_data_source']
+mattermost['log_file_directory']
+mattermost['file_directory']
+mattermost['gitlab_enable']
+mattermost['gitlab_secret']
+mattermost['gitlab_id']
+mattermost['gitlab_scope']
+mattermost['gitlab_auth_endpoint']
+mattermost['gitlab_token_endpoint']
+mattermost['gitlab_user_api_endpoint']
+```
+
+In preparation for GitLab 11.0, we recommend users to take the following actions:
+
+1. Upgrade to version 10.x which supports the new `mattermost['env']` setting.
+1. Settings that are not listed above will have to be configured through
+the `mattermost['env']` setting. Mattermost requires environment variables to be provided in
+`MM_<CATEGORY>SETTINGS_<ATTRIBUTE>` format. Below is an example of how to convert the old
+settings syntax to the new one.
+
+The following settings in `gitlab.rb`:
+
+```ruby
+mattermost['service_maximum_login_attempts'] = 10
+mattermost['team_teammate_name_display'] = "full_name"
+mattermost['sql_max_idle_conns'] = 10
+mattermost['log_file_level'] = 'INFO'
+mattermost['email_batching_interval'] = 30
+mattermost['file_enable_file_attachments'] = true
+mattermost['ratelimit_memory_store_size'] = 10000
+mattermost['support_terms_of_service_link'] = "/static/help/terms.html"
+mattermost['privacy_show_email_address'] = true
+mattermost['localization_available_locales'] = "en,es,fr,ja,pt-BR"
+mattermost['webrtc_enable'] = false
+```
+
+Would translate to:
+
+```ruby
+mattermost['env'] = {
+                    'MM_SERVICESETTINGS_MAXIMUMLOGINATTEMPTS' => 10,
+                    'MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY' => 'full_name'
+                    'MM_SQLSETTINGS_MAXIDLECONNS' => 10,
+                    'MM_LOGSETTINGS_FILELEVEL' => 'INFO',
+                    'MM_EMAILSETTINGS_BATCHINGINTERVAL' => 30,
+                    'MM_FILESETTINGS_ENABLEFILEATTACHMENTS' => true,
+                    'MM_RATELIMITSETTINGS_MEMORYSTORESIZE' => 10000,
+                    'MM_SUPPORTSETTINGS_TERMSOFSERVICELINK' => '/static/help/terms.html',
+                    'MM_PRIVACYSETTINGS_SHOWEMAILADDRESS' => true,
+                    'MM_LOCALIZATIONSETTINGS_AVAILABLELOCALES' => "en,es,fr,ja,pt-BR",
+                    'MM_WEBRTCSETTINGS_ENABLE' => false
+                   }
+```
+
+Refer to [Mattermost
+Documentation](https://docs.mattermost.com/administration/config-settings.html)
+for details about categories, configuration values etc.
+
+There are a few exceptions to this rule:
+
+ 1. `ServiceSettings.ListenAddress` configuration of Mattermost is configured
+    by `mattermost['service_address']` and `mattermost['service_port']` settings.
+ 2. Configuration settings named in an inconsistent way are given in the
+    following table. Use these mappings while converting them to environment
+    variables.
+
+|gitlab.rb configuration|Environment variable|
+|---|---|
+|mattermost['service_lets_encrypt_cert_cache_file']|MM_SERVICESETTINGS_LETSENCRYPTCERTIFICATECACHEFILE|
+|mattermost['service_user_access_tokens']|MM_SERVICESETTINGS_ENABLEUSERACCESSTOKENS|
+|mattermost['log_console_enable']|MM_LOGSETTINGS_ENABLECONSOLE|
+|mattermost['email_enable_batching']|MM_EMAILSETTINGS_ENABLEEMAILBATCHING|
+|mattermost['email_batching_buffer_size']|MM_EMAILSETTINGS_EMAILBATCHINGBUFFERSIZE|
+|mattermost['email_batching_interval']|MM_EMAILSETTINGS_EMAILBATCHINGINTERVAL|
+|mattermost['email_smtp_auth']|MM_EMAILSETTINGS_ENABLESMTPAUTH|
+|mattermost['email_notificatino_content_type']|MM_EMAILSETTINGS_NOTIFICATIONCONTENTTYPE|
+|mattermost['ratelimit_enable_ratelimiter']|MM_RATELIMITSETTINGS_ENABLE|
+|mattermost['support_email']|MM_SUPPORTSETTINGS_SUPPORTEMAIL|
+|mattermost['localization_server_locale']|MM_LOCALIZATIONSETTINGS_DEFAULTSERVERLOCALE|
+|mattermost['localization_client_locale']|MM_LOCALIZATIONSETTINGS_DEFAULTCLIENTLOCALE|
+|mattermost['webrtc_gateway_stun_uri']|MM_WEBRTCSETTINGS_STUN_URI|
+|mattermost['webrtc_gateway_turn_uri']|MM_WEBRTCSETTINGS_TURN_URI|
+|mattermost['webrtc_gateway_turn_username']|MM_WEBRTCSETTINGS_TURN_USERNAME|
+|mattermost['webrtc_gateway_turn_sharedkey']|MM_WEBRTCSETTINGS_TURN_SHAREDKEY|
+
+
+> Please note:
+GitLab no longer generates `config.json` file from the configuration specified
+in `gitlab.rb`. Users are responsible for managing this file.
+If a configuration setting is specified via both `gitlab.rb` (as env variable)
+and via `config.json` file, environment variable gets precedence.
+
+
 ## Upgrading GitLab Mattermost from versions prior to 8.9
 
 After upgrading to GitLab 8.9 additional steps are require before restarting the Mattermost server to enable multi-account support in Mattermost 3.1.
