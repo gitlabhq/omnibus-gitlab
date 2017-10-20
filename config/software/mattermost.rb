@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '4.2.1'
+default_version '4.3.2'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: 'f6f95ad781f91712466c5f2440887ab4'
+       md5: 'b9623ec20ff5f4208f1332cd4d639c8a'
 
 relative_path 'mattermost'
 
@@ -38,6 +38,7 @@ build do
   copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
   copy 'webapp', "#{install_dir}/embedded/service/mattermost/webapp"
+  copy 'client', "#{install_dir}/embedded/service/mattermost/client"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
