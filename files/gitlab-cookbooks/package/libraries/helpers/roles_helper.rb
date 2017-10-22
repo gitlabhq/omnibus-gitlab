@@ -33,9 +33,5 @@ module RolesHelper
 
       active.each { |role_name| Gitlab[role_name]['enable'] = true }
     end
-
-    def disable_all
-      Gitlab.available_roles.each { |name, _value| Gitlab["#{name}_role"]['enable'] = false }
-    end
   end
 end
