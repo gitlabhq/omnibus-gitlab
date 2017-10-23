@@ -21,10 +21,10 @@ actions :create, :remove
 default_action :create
 
 property :username, [String, nil], default: nil
-property :uid, [String, nil], default: nil
-property :ugid, [String, nil], default: nil
+property :uid, [String, Integer, nil], default: nil
+property :ugid, [String, Integer, nil], default: nil
 property :groupname, [String, nil], default: nil
-property :gid, [String, nil], default: nil
+property :gid, [String, Integer, nil], default: nil
 property :shell, [String, nil], default: nil
 property :home, [String, nil], default: nil
 property :system, [true, false], default: true
