@@ -463,6 +463,28 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 ```
 
+
+### [GMX Mail](gmx.com)
+```
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.gmx.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "my-gitlab@gmx.com"
+gitlab_rails['smtp_password'] = "Pa5svv()rD"
+gitlab_rails['smtp_domain'] = "mail.gmx.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+
+### Email Settings
+gitlab_rails['gitlab_email_enabled'] = true
+gitlab_rails['gitlab_email_from'] = 'my-gitlab@gmx.com'
+gitlab_rails['gitlab_email_display_name'] = 'My GitLab'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@gmx.com'
+```
+
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
