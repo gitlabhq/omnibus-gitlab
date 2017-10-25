@@ -1210,10 +1210,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['ratelimit_vary_by_header'] = nil
 # mattermost['ratelimit_max_burst'] = 100
 
-# mattermost['support_terms_of_service_link'] = "/static/help/terms.html"
-# mattermost['support_privacy_policy_link'] = "/static/help/privacy.html"
-# mattermost['support_about_link'] = "/static/help/about.html"
-# mattermost['support_report_a_problem_link'] =  "/static/help/report_problem.html"
+# mattermost['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
+# mattermost['support_privacy_policy_link'] = "https://about.mattermost.com/default-privacy-policy/"
+# mattermost['support_about_link'] = "https://about.mattermost.com/default-about/"
+# mattermost['support_help_link'] = "https://about.mattermost.com/default-help/"
+# mattermost['support_report_a_problem_link'] = "https://about.mattermost.com/default-report-a-problem/"
 # mattermost['support_email'] =  "support@example.com"
 
 # mattermost['privacy_show_email_address'] = true

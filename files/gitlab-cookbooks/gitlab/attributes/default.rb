@@ -829,10 +829,11 @@ default['gitlab']['mattermost']['team_max_channels_per_team'] = 2000
 default['gitlab']['mattermost']['team_user_status_away_timeout'] = 300
 default['gitlab']['mattermost']['team_teammate_name_display'] = "full_name"
 
-default['gitlab']['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
-default['gitlab']['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
-default['gitlab']['mattermost']['support_about_link'] = "/static/help/about.html"
-default['gitlab']['mattermost']['support_report_a_problem_link'] = "/static/help/report_problem.html"
+default['gitlab']['mattermost']['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
+default['gitlab']['mattermost']['support_privacy_policy_link'] = "https://about.mattermost.com/default-privacy-policy/"
+default['gitlab']['mattermost']['support_about_link'] = "https://about.mattermost.com/default-about/"
+default['gitlab']['mattermost']['support_help_link'] = "https://about.mattermost.com/default-help/"
+default['gitlab']['mattermost']['support_report_a_problem_link'] = "https://about.mattermost.com/default-report-a-problem/"
 default['gitlab']['mattermost']['support_email'] = "support@example.com"
 
 default['gitlab']['mattermost']['gitlab_enable'] = false
