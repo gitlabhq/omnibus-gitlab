@@ -398,7 +398,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_socket'] = nil
 # gitlab_rails['db_sslmode'] = nil
 # gitlab_rails['db_sslrootcert'] = nil
-# gitlab_rails['db_prepared_statements'] = true
+# gitlab_rails['db_prepared_statements'] = false
 # gitlab_rails['db_statements_limit'] = 1000
 
 
