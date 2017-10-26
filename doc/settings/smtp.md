@@ -418,7 +418,7 @@ gitlab_rails['smtp_authentication'] = "login"
 
 ### FastMail
 
-FastMail requires an 
+FastMail requires an
 [App Password](https://www.fastmail.com/help/clients/apppassword.html?u=ca68414c.oui-14827457)
 even when two-step verification is not enabled.
 
@@ -464,7 +464,7 @@ gitlab_rails['smtp_tls'] = false
 ```
 
 
-### [GMX Mail](gmx.com)
+### GMX Mail
 ```
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "mail.gmx.com"
