@@ -55,7 +55,7 @@ gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
                          false
                        end
 
-gitlab_mattermost_enabled = if node['gitlab']['mattermost']['enable']
+gitlab_mattermost_enabled = if node['mattermost']['enable']
                               node['gitlab']['mattermost-nginx']['enable']
                             else
                               false
@@ -175,7 +175,7 @@ end
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
 
 if mattermost_nginx_vars['listen_https'].nil?
-  mattermost_nginx_vars['https'] = node['gitlab']['mattermost']['service_use_ssl']
+  mattermost_nginx_vars['https'] = node['mattermost']['service_use_ssl']
 else
   mattermost_nginx_vars['https'] = mattermost_nginx_vars['listen_https']
 end
@@ -187,10 +187,10 @@ template gitlab_mattermost_http_conf do
   mode "0644"
   variables(mattermost_nginx_vars.merge(
    {
-     :fqdn => node['gitlab']['mattermost']['host'],
-     :port => node['gitlab']['mattermost']['port'],
-     :service_port => node['gitlab']['mattermost']['service_port'],
-     :service_address => node['gitlab']['mattermost']['service_address']
+     :fqdn => node['mattermost']['host'],
+     :port => node['mattermost']['port'],
+     :service_port => node['mattermost']['service_port'],
+     :service_address => node['mattermost']['service_address']
    }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")

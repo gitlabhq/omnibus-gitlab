@@ -73,13 +73,23 @@ module Postgresql
         %w{postgresql port},
         %w{mattermost database_name}
       ].each do |value|
-        attributes_values << (Gitlab[value.first][value.last] || Gitlab['node']['gitlab'][value.first][value.last])
+        # This conditional is required until postgresql is extracted to its own
+        # cookbook. Mattermost exists directly on node while postgresql exists
+        # on node['gitlab']
+        service_name_key = value.first
+        service_attribute_key = value.last
+        attribute_value = if Gitlab['node']['gitlab'].key?(service_name_key)
+                            (Gitlab[service_name_key][service_attribute_key] || Gitlab['node']['gitlab'][service_name_key][service_attribute_key])
+                          else
+                            (Gitlab[service_name_key][service_attribute_key] || Gitlab['node'][service_name_key][service_attribute_key])
+                          end
+        attributes_values << attribute_value
       end
 
       value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
 
-      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && Gitlab['node']['gitlab']['mattermost']['sql_data_source_replicas'].empty?
+      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && Gitlab['node']['mattermost']['sql_data_source_replicas'].empty?
         Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
       end
     end

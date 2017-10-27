@@ -120,7 +120,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   "remote-syslog",
   "logrotate",
   "bootstrap",
-  "mattermost",
   "gitlab-pages",
 ].each do |service|
   if node["gitlab"][service]["enable"]
@@ -132,6 +131,7 @@ end
 
 %w(
   registry
+  mattermost
 ).each do |service|
   if node[service]["enable"]
     include_recipe "#{service}::enable"

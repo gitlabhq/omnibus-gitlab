@@ -14,14 +14,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-mattermost_user = node['gitlab']['mattermost']['username']
-mattermost_group = node['gitlab']['mattermost']['group']
-mattermost_uid = node['gitlab']['mattermost']['uid']
-mattermost_gid = node['gitlab']['mattermost']['gid']
-mattermost_home = node['gitlab']['mattermost']['home']
-mattermost_log_dir = node['gitlab']['mattermost']['log_file_directory']
-mattermost_storage_directory = node['gitlab']['mattermost']['file_directory']
+
+mattermost_user = node['mattermost']['username']
+mattermost_group = node['mattermost']['group']
+mattermost_uid = node['mattermost']['uid']
+mattermost_gid = node['mattermost']['gid']
+mattermost_home = node['mattermost']['home']
+mattermost_log_dir = node['mattermost']['log_file_directory']
+mattermost_storage_directory = node['mattermost']['file_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
@@ -71,8 +71,8 @@ end
 pg_helper = PgHelper.new(node)
 bin_dir = "/opt/gitlab/embedded/bin"
 
-mysql_adapter = node['gitlab']['mattermost']['sql_driver_name'] == 'mysql' ? true : false
-db_name = node['gitlab']['mattermost']['database_name']
+mysql_adapter = node['mattermost']['sql_driver_name'] == 'mysql' ? true : false
+db_name = node['mattermost']['database_name']
 sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
 
 postgresql_user sql_user do
@@ -90,7 +90,7 @@ end
 ###
 # Populate mattermost configuration options
 ###
-unless node['gitlab']['mattermost']['gitlab_enable']
+unless node['mattermost']['gitlab_enable']
   ruby_block "authorize mattermost with gitlab" do
     block do
       MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
@@ -109,7 +109,7 @@ end
 template config_file_path do
   source "config.json.erb"
   owner mattermost_user
-  variables lazy { node['gitlab']['mattermost'].to_hash.merge(node['gitlab']['postgresql']).to_hash }
+  variables lazy { node['mattermost'].to_hash.merge(node['gitlab']['postgresql']).to_hash }
   mode "0644"
   notifies :restart, "service[mattermost]"
 end
@@ -119,13 +119,13 @@ end
 ###
 
 env_dir File.join(mattermost_home, 'env') do
-  variables node['gitlab']['mattermost']['env']
+  variables node['mattermost']['env']
   restarts ["service[mattermost]"]
 end
 
 runit_service "mattermost" do
   options({
-    :log_directory => mattermost_log_dir
+    log_directory: mattermost_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mattermost'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['mattermost'].to_hash)
 end

@@ -55,11 +55,11 @@ class AccountHelper
   end
 
   def mattermost_user
-    node['gitlab']['mattermost']['username']
+    node['mattermost']['username']
   end
 
   def mattermost_group
-    node['gitlab']['mattermost']['group']
+    node['mattermost']['group']
   end
 
   def registry_user

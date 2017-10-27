@@ -18,4 +18,3 @@
 
 require_relative 'helpers/pg_helper'
 require_relative 'helpers/geo_pg_helper'
-require_relative 'helpers/mattermost_helper'
