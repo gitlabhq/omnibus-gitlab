@@ -4,7 +4,9 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 10.0.3
+
 - Update Mattermost to 4.2.1
+- Upgrade curl to 7.56.1
 
 10.0.2
 
