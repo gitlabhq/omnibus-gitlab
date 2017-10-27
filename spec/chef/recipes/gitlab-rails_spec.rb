@@ -195,18 +195,16 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(
           git_data_dirs: {
             "second_storage" => {
-              "path" => "tmp/storage",
-              "failure_count_threshold" => 15,
+              "path" => "tmp/storage"
             }
           }
         )
 
         expect(chef_run).to render_file(gitlab_yml_path).with_content('"path":"tmp/storage/repositories"')
-        expect(chef_run).to render_file(gitlab_yml_path).with_content('"failure_count_threshold":15')
       end
 
       it 'sets the defaults' do
-        default_json = '{"default":{"path":"/var/opt/gitlab/git-data/repositories","gitaly_address":"unix:/var/opt/gitlab/gitaly/gitaly.socket","failure_count_threshold":10,"failure_wait_time":30,"failure_reset_time":1800,"storage_timeout":30}}'
+        default_json = '{"default":{"path":"/var/opt/gitlab/git-data/repositories","gitaly_address":"unix:/var/opt/gitlab/gitaly/gitaly.socket"}}'
         expect(chef_run).to render_file(gitlab_yml_path).with_content(default_json)
       end
     end
