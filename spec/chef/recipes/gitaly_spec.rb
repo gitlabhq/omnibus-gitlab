@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::gitaly' do
+describe 'gitaly' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(env_dir)).converge('gitlab::default') }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
@@ -209,5 +209,23 @@ describe 'gitlab::gitaly' do
 
       it_behaves_like 'empty concurrency configuration'
     end
+  end
+
+  context 'populates default env variables' do
+    it_behaves_like "enabled gitaly env", "TZ", ':/etc/localtime'
+    it_behaves_like "enabled gitaly env", "HOME", '/var/opt/gitlab'
+  end
+
+  context 'computes env variables based on other values' do
+    before do
+      stub_gitlab_rb(
+        {
+          user: {
+            home: "/my/random/path"
+          }
+        }
+      )
+    end
+    it_behaves_like "enabled gitaly env", "HOME", '/my/random/path'
   end
 end

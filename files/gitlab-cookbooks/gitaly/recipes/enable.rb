@@ -16,9 +16,9 @@
 #
 account_helper = AccountHelper.new(node)
 
-working_dir = node['gitlab']['gitaly']['dir']
-log_directory = node['gitlab']['gitaly']['log_directory']
-env_directory = node['gitlab']['gitaly']['env_directory']
+working_dir = node['gitaly']['dir']
+log_directory = node['gitaly']['log_directory']
+env_directory = node['gitaly']['env_directory']
 config_path = File.join(working_dir, "config.toml")
 
 directory working_dir do
@@ -33,8 +33,19 @@ directory log_directory do
   recursive true
 end
 
+# Doing this in attributes/default.rb will need gitlab cookbook to be loaded
+# before gitaly cookbook. This means gitaly cookbook has to depend on gitlab
+# cookbook.  Since gitlab cookbook already depends on gitaly cookbook, this
+# causes a circular dependency. To avoid it, the default value is set in the
+# recipe itself.
+node.default.gitaly.env = {
+  'HOME' => node['gitlab']['user']['home'],
+  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
+  'TZ' => ':/etc/localtime'
+}
+
 env_dir env_directory do
-  variables node['gitlab']['gitaly']['env']
+  variables node['gitaly']['env']
   restarts ["service[gitaly]"]
 end
 
@@ -44,21 +55,21 @@ template "Create Gitaly config.toml" do
   owner "root"
   group "root"
   mode "0644"
-  variables node['gitlab']['gitaly'].to_hash
+  variables node['gitaly'].to_hash
   notifies :restart, "service[gitaly]"
 end
 
 runit_service 'gitaly' do
-  down node['gitlab']['gitaly']['ha']
+  down node['gitaly']['ha']
   options({
     user: account_helper.gitlab_user,
     working_dir: working_dir,
     env_dir: env_directory,
-    bin_path: node['gitlab']['gitaly']['bin_path'],
+    bin_path: node['gitaly']['bin_path'],
     config_path: config_path,
     log_directory: log_directory
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitaly'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitaly'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']

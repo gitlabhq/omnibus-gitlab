@@ -13,7 +13,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['unicorn']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
-      expect(node['gitlab']['gitaly']['enable']).to eq false
+      expect(node['gitaly']['enable']).to eq false
       expect(node['gitlab']['nginx']['enable']).to eq false
       expect(node['gitlab']['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false

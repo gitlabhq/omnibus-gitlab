@@ -15,7 +15,7 @@
 #
 
 require_relative 'nginx.rb'
-require_relative 'gitaly.rb'
+require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
   class << self

@@ -6,14 +6,14 @@ describe Gitaly do
 
   describe 'by default' do
     it 'provides settings needed for gitaly to run' do
-      expect(chef_run.node['gitlab']['gitaly']['env']).to include(
+      expect(chef_run.node['gitaly']['env']).to include(
         'HOME' => '/var/opt/gitlab',
         'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin'
       )
     end
 
     it 'does not include known settings in the environment' do
-      expect(chef_run.node['gitlab']['gitaly']['env']).not_to include('GITALY_ENABLE')
+      expect(chef_run.node['gitaly']['env']).not_to include('GITALY_ENABLE')
     end
   end
 end
