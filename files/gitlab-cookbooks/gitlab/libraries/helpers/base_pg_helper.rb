@@ -35,6 +35,24 @@ class BasePgHelper
       "|grep -x #{db_user}"])
   end
 
+  def user_hashed_password(db_user)
+    db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
+    do_shell_out(
+      %(/opt/gitlab/bin/#{service_cmd} -d template1 -c "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'" -tA)
+    ).stdout.chomp
+  end
+
+  def user_password_match?(db_user, db_pass)
+    if db_pass.nil? || /^md5.{32}$/.match(db_pass)
+      # if the password is in the MD5 hashed format or is empty, do a simple compare
+      db_pass.to_s == user_hashed_password(db_user)
+    else
+      # if password is in plain-text, convert to MD5 format before doing comparison
+      hashed = Digest::MD5.hexdigest("#{db_pass}#{db_user}")
+      "md5#{hashed}" == user_hashed_password(db_user)
+    end
+  end
+
   def is_slave?
     psql_cmd(["-d 'template1'",
       "-c 'select pg_is_in_recovery()' -A",
