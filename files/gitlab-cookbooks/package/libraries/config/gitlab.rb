@@ -40,6 +40,7 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
+  attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
 
   ## Attributes under node['gitlab']
   attribute_block 'gitlab' do
@@ -60,7 +61,6 @@ module Gitlab
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('gitlab_pages',     priority: 20).use { GitlabPages }
     attribute('prometheus',       priority: 20).use { Prometheus }
-    attribute('mattermost',       priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
     attribute('external_url',            default: nil)
     attribute('registry_external_url',   default: nil)

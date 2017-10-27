@@ -1,6 +1,7 @@
-require_relative 'authorizer_helper'
+require_relative '../../gitlab/libraries/helpers/authorizer_helper'
+require_relative '../../package/libraries/helpers/shell_out_helper'
 
-class MattermostHelper
+class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(MattermostHelper)` at the end of the class definition)
   extend ShellOutHelper
   extend AuthorizeHelper
 
@@ -10,8 +11,7 @@ class MattermostHelper
 
     o = query_gitlab_rails(redirect_uri, app_name)
 
-    app_id, app_secret = nil
-    if o.exitstatus == 0
+    if o.exitstatus.zero?
       app_id, app_secret = o.stdout.chomp.split(" ")
 
       Gitlab['mattermost']['gitlab_enable'] = true
@@ -25,4 +25,4 @@ class MattermostHelper
       warn('Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.')
     end
   end
-end
+end unless defined?(MattermostHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

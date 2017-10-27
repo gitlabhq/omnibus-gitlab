@@ -8,6 +8,7 @@ Knapsack::Adapters::RSpecAdapter.bind if ENV['USE_KNAPSACK']
 # Load our cookbook libraries so we can stub them in our tests
 Dir[File.join(__dir__, '../files/gitlab-cookbooks/package/libraries/**/*.rb')].each { |f| require f }
 Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab/libraries/*.rb')].each { |f| require f }
+Dir[File.join(__dir__, '../files/gitlab-cookbooks/mattermost/libraries/*.rb')].each { |f| require f }
 Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab-ee/libraries/*.rb')].each { |f| require f }
 
 # Load support libraries to provide common convenience methods for our tests

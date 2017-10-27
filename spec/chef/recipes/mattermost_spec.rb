@@ -53,7 +53,7 @@ describe 'gitlab::mattermost' do
     chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
     chef_run.ruby_block('populate mattermost configuration options').old_run_action(:run)
 
-    expect(chef_run.node['gitlab']['mattermost']['gitlab_id']).to eq 'new'
+    expect(chef_run.node['mattermost']['gitlab_id']).to eq 'new'
   end
 
   it 'creates mattermost configuration file with gitlab settings' do

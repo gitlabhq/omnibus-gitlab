@@ -55,7 +55,16 @@ module Nginx
           next
         end
 
-        default_set_gitlab_port = Gitlab['node']['gitlab'][right.first.gsub('_', '-')][right.last]
+        # This conditional is required until all services are extracted to
+        # their own cookbook. Mattermost exists directly on node while
+        # others exists on node['gitlab']
+        service_name_key = right.first.tr('_', '-')
+        service_attribute_key = right.last
+        default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(service_name_key)
+                                    Gitlab['node']['gitlab'][service_name_key][service_attribute_key]
+                                  else
+                                    Gitlab['node'][service_name_key][service_attribute_key]
+                                  end
         user_set_gitlab_port = Gitlab[right.first][right.last]
 
         Gitlab[left.first][left.last] = user_set_gitlab_port || default_set_gitlab_port
