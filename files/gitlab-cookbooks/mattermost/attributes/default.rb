@@ -157,10 +157,11 @@ default['mattermost']['team_max_channels_per_team'] = 2000
 default['mattermost']['team_user_status_away_timeout'] = 300
 default['mattermost']['team_teammate_name_display'] = "full_name"
 
-default['mattermost']['support_terms_of_service_link'] = "/static/help/terms.html"
-default['mattermost']['support_privacy_policy_link'] = "/static/help/privacy.html"
-default['mattermost']['support_about_link'] = "/static/help/about.html"
-default['mattermost']['support_report_a_problem_link'] = "/static/help/report_problem.html"
+default['mattermost']['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
+default['mattermost']['support_privacy_policy_link'] = "https://about.mattermost.com/default-privacy-policy/"
+default['mattermost']['support_about_link'] = "https://about.mattermost.com/default-about/"
+default['mattermost']['support_help_link'] = "https://about.mattermost.com/default-help/"
+default['mattermost']['support_report_a_problem_link'] = "https://about.mattermost.com/default-report-a-problem/"
 default['mattermost']['support_email'] = "support@example.com"
 
 default['mattermost']['gitlab_enable'] = false
