@@ -17,6 +17,7 @@ RuboCop::RakeTask.new(:rubocop) do |t|
                'files/gitlab-cookbooks/runit',
                'files/gitlab-cookbooks/package',
                'files/gitlab-cookbooks/registry',
+               'files/gitlab-cookbooks/gitaly',
                'files/gitlab-cookbooks/repmgr',
                'files/gitlab-cookbooks/mattermost',
                'files/gitlab-cookbooks/gitlab/attributes',

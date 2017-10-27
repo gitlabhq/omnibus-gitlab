@@ -782,31 +782,6 @@ default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
 default['gitlab']['prometheus-monitoring']['enable'] = true
 
 ####
-# Gitaly
-####
-default['gitlab']['gitaly']['enable'] = false
-default['gitlab']['gitaly']['ha'] = false
-default['gitlab']['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
-default['gitlab']['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
-default['gitlab']['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
-default['gitlab']['gitaly']['env'] = {
-  'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'HOME' => node['gitlab']['user']['home'],
-  'TZ' => ':/etc/localtime'
-}
-default['gitlab']['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
-default['gitlab']['gitaly']['socket_path'] = "#{node['gitlab']['gitaly']['dir']}/gitaly.socket"
-default['gitlab']['gitaly']['listen_addr'] = nil
-default['gitlab']['gitaly']['prometheus_listen_addr'] = nil
-default['gitlab']['gitaly']['logging_format'] = nil
-default['gitlab']['gitaly']['logging_sentry_dsn'] = nil
-default['gitlab']['gitaly']['prometheus_grpc_latency_buckets'] = nil
-default['gitlab']['gitaly']['storage'] = []
-default['gitlab']['gitaly']['auth_token'] = nil
-default['gitlab']['gitaly']['auth_transitioning'] = false
-default['gitlab']['gitaly']['concurrency'] = nil
-
-####
 # Geo (EE-only)
 ####
 default['gitlab']['gitlab-rails']['geo_primary_role_enabled'] = false

@@ -26,8 +26,6 @@ module Gitaly
         "unix:#{socket_path}"
       elsif listen_addr && !listen_addr.empty?
         "tcp://#{listen_addr}"
-      else
-        nil
       end
     end
 
@@ -38,7 +36,7 @@ module Gitaly
     end
 
     def package_default
-      Gitlab['node']['gitlab']['gitaly'].to_hash
+      Gitlab['node']['gitaly'].to_hash
     end
   end
 end

@@ -13,3 +13,4 @@ depends "package"
 depends 'registry'
 depends 'mattermost'
 depends 'consul'
+depends 'gitaly'

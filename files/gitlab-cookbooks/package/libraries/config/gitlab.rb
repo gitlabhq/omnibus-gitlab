@@ -40,6 +40,7 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
+  attribute('gitaly')
   attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
 
   ## Attributes under node['gitlab']
@@ -81,7 +82,6 @@ module Gitlab
     attribute('logrotate')
     attribute('high_availability')
     attribute('web_server')
-    attribute('gitaly')
     attribute('node_exporter')
     attribute('redis_exporter')
     attribute('postgres_exporter')

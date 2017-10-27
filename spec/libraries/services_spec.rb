@@ -80,7 +80,7 @@ describe Services do
         Services.disable('redis', 'postgresql', 'gitaly')
         expect(node['gitlab']['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be false
-        expect(node['gitlab']['gitaly']['enable']).to be false
+        expect(node['gitaly']['enable']).to be false
 
         Services.enable('mattermost', 'registry', 'mailroom')
         expect(node['mattermost']['enable']).to be true
@@ -99,7 +99,7 @@ describe Services do
         Services.disable('redis', 'postgresql', 'gitaly', except: 'postgresql')
         expect(node['gitlab']['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
-        expect(node['gitlab']['gitaly']['enable']).to be false
+        expect(node['gitaly']['enable']).to be false
       end
 
       it 'supports multiple exceptions' do
@@ -113,7 +113,7 @@ describe Services do
         Services.disable('redis', 'postgresql', 'gitaly', except: %w(postgresql gitaly))
         expect(node['gitlab']['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
-        expect(node['gitlab']['gitaly']['enable']).to be true
+        expect(node['gitaly']['enable']).to be true
       end
 
       it 'ignores disable on system services' do
@@ -157,7 +157,7 @@ describe Services do
         Services.enable(Services::ALL_SERVICES, except: %w(registry mailroom))
         expect(node['gitlab']['redis']['enable']).to be true
         expect(node['gitlab']['postgresql']['enable']).to be true
-        expect(node['gitlab']['gitaly']['enable']).to be true
+        expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be true
         expect(node['gitlab']['mailroom']['enable']).to be false
         expect(node['registry']['enable']).to be false
@@ -168,7 +168,7 @@ describe Services do
         Services.disable(Services::ALL_SERVICES, except: %w(postgresql gitaly))
         expect(node['gitlab']['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
-        expect(node['gitlab']['gitaly']['enable']).to be true
+        expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
         expect(node['gitlab']['mailroom']['enable']).to be false
         expect(node['registry']['enable']).to be false
