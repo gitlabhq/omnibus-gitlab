@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 9.5.6
 
 - Update Mattermost to 4.1.2
+- Upgrade curl to 7.56.1
 
 9.5.5
 
