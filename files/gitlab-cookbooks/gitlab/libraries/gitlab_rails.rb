@@ -143,11 +143,7 @@ module GitlabRails
       Gitlab['gitlab_rails']['repositories_storages'] ||= {
         "default" => {
           "path" => "/var/opt/gitlab/git-data/repositories",
-          "gitaly_address" => gitaly_address,
-          "failure_count_threshold" => 10,
-          "failure_wait_time" => 30,
-          "failure_reset_time" => 1800,
-          "storage_timeout" => 30
+          "gitaly_address" => gitaly_address
         }
       }
     end
