@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.2.0
 
 - Enable pgbouncer application_name_add_host config by default 29dab6af1
+- Upgrade curl to 7.56.1
 - Update backup directory management with better support for non-root NFS
 - Disable prepared statements by default
 
