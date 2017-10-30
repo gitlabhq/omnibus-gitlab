@@ -11,6 +11,10 @@ omnibus-gitlab repository.
 - Update backup directory management with better support for non-root NFS
 - Disable prepared statements by default
 
+10.1.1
+
+- Bump embedded Git version to 2.13.6 921ba935
+
 10.1.0
 
 - Add a gitlab-ctl command to remove master nodes from cluster b50d50478
@@ -33,7 +37,6 @@ omnibus-gitlab repository.
 - Render gitaly.client_path in gitlab.yml 80a9c492e
 - Correct Registry permissions in Docker update-permissions script 0b624f8ed
 - Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi) 84a3f5c09
-- Bump embedded Git version to 2.13.6 921ba935
 
 10.0.4
 
