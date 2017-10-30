@@ -44,6 +44,14 @@ omnibus-gitlab repository.
 
 - No changes
 
+10.0.4
+
+- Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet
+
+10.0.3
+
+- No changes
+
 10.0.2
 
 - Fix an issue where enabling a GitLab Geo role would also disable all default services 11e6dbf
