@@ -44,15 +44,17 @@ namespace :qa do
         Build::Image.push_to_dockerhub("#{Build::Info.edition}-latest", "qa")
       end
     end
+
+    desc "Push triggered version of QA to GitLab Registry"
+    task :triggered do
+      Build::Image.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], 'https://registry.gitlab.com/v2/')
+      push(ENV['IMAGE_TAG'])
+      puts "Pushed tag: #{ENV['IMAGE_TAG']}"
+    end
   end
 
   desc "Run QA tests"
-  task test: "qa:build" do # Requires the QA image to be built first
-    release_package = Build::Info.package
-
-    # Get the docker image which was built on the previous stage of pipeline
-    image = "#{ENV['CI_REGISTRY_IMAGE']}/#{release_package}:#{ENV['IMAGE_TAG']}"
-
+  task test: ["qa:build", "qa:push:triggered"] do # Requires the QA image to be built and pushed first
     tests = [
       "Test::Instance::Image",         # Test whether instance starts correctly
       "Test::Omnibus::Image",          # Test whether image works correctly
@@ -63,9 +65,21 @@ namespace :qa do
     tests.push('Test::Integration::Geo') if Build::Check.is_ee?
 
     tests.each do |task|
+      # Get the docker image which was built on the previous stage of pipeline
       Gitlab::QA::Scenario
         .const_get(task)
-        .perform(image)
+        .perform(image_registry_address(with_tag: true))
     end
+  end
+
+  def image_registry_address(with_tag: false)
+    address = "#{ENV['CI_REGISTRY_IMAGE']}/#{Build::QA.image_name}"
+    address << ":#{ENV['IMAGE_TAG']}" if with_tag
+
+    address
+  end
+
+  def push(docker_tag)
+    DockerOperations.tag_and_push(image_registry_address, image_registry_address, 'latest', docker_tag)
   end
 end
