@@ -323,6 +323,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ce/development/shared_files.html
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
+### Wait for file system to be mounted
+###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted
+# high_availability['mountpoint'] = ["/var/opt/gitlab/git-data", "/var/opt/gitlab/gitlab-rails/shared"]
+
 ### GitLab Shell settings for GitLab
 # gitlab_rails['gitlab_shell_ssh_port'] = 22
 # gitlab_rails['gitlab_shell_git_timeout'] = 800
