@@ -21,9 +21,11 @@ module Build
       end
 
       def tag_triggered_qa
+        return unless ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+
         # For triggered builds, we need the QA image's tag to match the docker
         # tag. So, we are retagging the image.
-        DockerOperations.tag("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{Info.edition}-latest", "#{Info.edition}-#{ENV['IMAGE_TAG']}") if ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
+        DockerOperations.tag(QA.image_name, QA.image_name, 'latest', ENV['IMAGE_TAG'])
       end
 
       def write_release_file

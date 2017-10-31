@@ -31,6 +31,10 @@ module Build
 
         system("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet #{version}")
       end
+
+      def image_name
+        "gitlab/#{Info.package}-qa"
+      end
     end
   end
 end

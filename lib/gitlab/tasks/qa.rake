@@ -10,8 +10,7 @@ namespace :qa do
   desc "Build QA Docker image"
   task :build do
     location = Build::QA.get_gitlab_repo
-    edition = Build::Info.edition
-    DockerOperations.build(location, "gitlab/gitlab-qa", "#{edition}-latest")
+    DockerOperations.build(location, Build::QA.image_name, 'latest')
     Build::Image.tag_triggered_qa # Check if triggered QA and retag if necessary
   end
 
