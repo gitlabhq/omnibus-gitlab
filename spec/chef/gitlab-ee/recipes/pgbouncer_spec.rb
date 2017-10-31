@@ -90,10 +90,11 @@ describe 'gitlab-ee::pgbouncer' do
     context 'pgbouncer.ini template changes' do
       let(:template) { chef_run.template(pgbouncer_ini) }
 
-      it 'reloads pgbouncer if pgbouncer is already running' do
+      it 'reloads pgbouncer and starts pgbouncer if it is not running' do
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('pgbouncer').and_return(true)
-        expect(template).to notify('execute[generate databases.ini]').to(:run).immediately
+        expect(template).to notify('execute[reload pgbouncer]').to(:run).immediately
+        expect(template).to notify('execute[start pgbouncer]').to(:run).immediately
       end
     end
 
