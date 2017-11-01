@@ -1,6 +1,6 @@
-## Development Setup
+# Omnibus GitLab Development Setup
 
-### Requirements
+## Requirements
 
 An all-in-one install of OpenShift will require at least 5Gb of free RAM on your
 computer in order to test GitLab.
@@ -14,7 +14,7 @@ computer in order to test GitLab.
    - RHEL/CentOS/Fedora/Atomic
 
 
-### Setup OpenShift Origin
+## Setup OpenShift Origin
 
 The first thing you need to interact with OpenShift Origin, are the `oc` client tools for your terminal:
 
@@ -26,7 +26,7 @@ Next you need to setup an OpenShift Origin environment. To setup the environment
 on a cloud machine, use minishift on your local machine (uses kvm or xhyve), or setup an instance
 using docker for the master, and your own machine as the slave using `oc cluster up`
 
-#### Minishift
+### Minishift
 
 Installation instructions for Minishift can be found at https://docs.openshift.org/latest/minishift/getting-started/installing.html
 
@@ -44,7 +44,7 @@ Installation instructions for Minishift can be found at https://docs.openshift.o
 1. You can login to the UI at `https://<your_local_minishift_ip>:8443/console/`
    - Your minishift IP was shown after starting minishift, but you can also find it later by running `minishift ip`
 
-#### Docker oc cluster up
+### Docker oc cluster up
 
 If you have Docker installed, you can setup OpenShift Origin on your local machine: https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md
 
@@ -126,7 +126,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 1. You can now login to the UI at https://localhost:8443/console/
 
-#### Production Ansible Installer
+### Production Ansible Installer
 
 You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. Follow the [advanded install docs](https://docs.openshift.org/latest/install_config/install/advanced_install.html).
 
@@ -142,13 +142,13 @@ In order to finish setting up the cluster, you need to create a project and allo
 And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker_oc_cluster_up)
 
 
-### Add the GitLab template to OpenShift
+## Add the GitLab template to OpenShift
 
 Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required)
    - `oc login -u system:admin` for the docker cluster up
    - From the root of your omnibus-gitlab repo, `oc create -f docker/openshift-template.json -n openshift`
 
-### Install GitLab
+## Install GitLab
 
 After having setup the template:
 
@@ -156,13 +156,13 @@ After having setup the template:
 2. Create a new project or use an existing one that doesn't already have GitLab
 3. Add to Project, and add the GitLab-Ce template
 
-### Removing the GitLab template
+## Removing the GitLab template
 
 In case you want to upload a new version of it:
 
 `oc delete template/gitlab-ce -n openshift`
 
-### Known Issues
+## Known Issues
 
  1. If running `oc cluster up` from your dev machine, newer versions of Docker are not yet supported. (The 17.xx version scheme)
 

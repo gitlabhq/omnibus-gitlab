@@ -1,19 +1,19 @@
-#### Preparing a build environment
+# Preparing a build environment for Omnibus GitLab
 
 See [doc/build/README.md.](build/README.md#preparing-a-build-environment)
 
-#### Usage
+## Usage
 
 See [doc/build/README.md.](build/README.md#usage)
 
-#### Build
+## Build
 
 See [doc/build/README.md.](build/README.md#build)
 
-#### Clean
+## Clean
 
 See [doc/build/README.md.](build/README.md#clean)
 
-#### Help
+## Help
 
 See [doc/build/README.md.](build/README.md#help)

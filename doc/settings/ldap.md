@@ -1,4 +1,4 @@
-### Setting up LDAP sign-in
+# Setting up LDAP sign-in
 
 If you have an LDAP directory service such as Active Directory, you can
 configure GitLab so that your users can sign in with their LDAP credentials.
