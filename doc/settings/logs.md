@@ -1,6 +1,6 @@
-## Logs
+# Omnibus GitLab Logs
 
-### Tail logs in a console on the server
+## Tail logs in a console on the server
 
 If you want to 'tail', i.e. view live log updates of GitLab logs you can use
 `gitlab-ctl tail`.
@@ -16,7 +16,7 @@ sudo gitlab-ctl tail gitlab-rails
 sudo gitlab-ctl tail nginx/gitlab_error.log
 ```
 
-### Configure default log directories
+## Configure default log directories
 
 In your `/etc/gitlab/gitlab.rb` file, there are many `log_directory` keys for
 the various types of logs. Uncomment and update the values for all the logs
@@ -32,7 +32,7 @@ registry['log_directory'] = "/var/log/gitlab/registry"
 
 Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings.
 
-### Runit logs
+## Runit logs
 
 The Runit-managed services in omnibus-gitlab generate log data using
 [svlogd][svlogd]. See the [svlogd documentation][svlogd] for more information
@@ -53,7 +53,7 @@ logging['svlogd_prefix'] = nil # custom prefix for log messages
 nginx['svlogd_prefix'] = "nginx"
 ```
 
-### Logrotate
+## Logrotate
 
 Starting with omnibus-gitlab 7.4 there is a built-in logrotate service in
 omnibus-gitlab. This service will rotate, compress and eventually delete the
@@ -80,7 +80,7 @@ nginx['logrotate_size'] = "200M"
 logrotate['enable'] = false
 ```
 
-### UDP log forwarding
+## UDP log forwarding
 
 In case you have a central server where all your infra logs are gathered,
 you can configure Omnibus GitLab to send syslog-ish log messages via UDP:
@@ -102,7 +102,7 @@ Jun 26 06:33:46 ubuntu1204-test gitlab_access.log: 172.16.228.1 - - [26/Jun/2014
 2014-06-26_13:33:46.52608 ubuntu1204-test sidekiq: 2014-06-26T13:33:46Z 18107 TID-7muoc RepositoryImportWorker JID-57ee926c3655fcfa062338ae INFO: start
 ```
 
-### Using a custom NGINX log format
+## Using a custom NGINX log format
 
 By default the NGINX access logs will use a version of the 'combined' NGINX
 format, designed to hide potentially sensitive information embedded in query strings.
