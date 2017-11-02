@@ -20,12 +20,12 @@ namespace :docker do
     task :staging do
       registry = ENV['CI_REGISTRY']
       Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      push(tag, ENV['CI_REGISTRY_IMAGE'])
+      Build::Image.push(Build::Info.docker_tag)
     end
 
     task :stable do
       Build::Image.authenticate
-      Build::Image.push_to_dockerhub(tag)
+      Build::Image.push_to_dockerhub(Build::Info.docker_tag)
     end
 
     # Special tags
@@ -57,7 +57,7 @@ namespace :docker do
       registry = "https://registry.gitlab.com/v2/"
       docker_tag = ENV['IMAGE_TAG']
       Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      push(docker_tag, ENV["CI_REGISTRY_IMAGE"])
+      Build::Image.push(docker_tag)
       puts "Pushed tag: #{docker_tag}"
     end
   end
@@ -65,23 +65,9 @@ namespace :docker do
   desc "Pull Docker Image from Registry"
   namespace :pull do
     task :staging do
-      registry = ENV['CI_REGISTRY']
-      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      Docker::Image.create('fromImage' => "#{Build::Info.image_name}:#{tag}")
-      puts "Pulled tag: #{tag}"
+      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], ENV['CI_REGISTRY'])
+      Docker::Image.create('fromImage' => "#{Build::Info.image_name}:#{Build::Info.docker_tag}")
+      puts "Pulled tag: #{Build::Info.docker_tag}"
     end
-  end
-
-  def tag
-    Build::Info.docker_tag
-  end
-
-  def release_package
-    Build::Info.package
-  end
-
-  def push(docker_tag, repository = 'gitlab')
-    namespace = "#{repository}/#{release_package}"
-    DockerOperations.tag_and_push(namespace, namespace, "latest", docker_tag)
   end
 end

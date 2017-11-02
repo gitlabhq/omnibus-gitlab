@@ -20,6 +20,10 @@ module Build
         puts "Pushed tag: #{final_tag}"
       end
 
+      def push(docker_tag)
+        DockerOperations.tag_and_push(Info.image_name, Info.image_name, 'latest', docker_tag)
+      end
+
       def tag_triggered_qa
         return unless ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
 
