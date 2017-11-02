@@ -47,8 +47,8 @@ namespace :qa do
 
     desc "Push triggered version of QA to GitLab Registry"
     task :triggered do
-      Build::Image.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], 'https://registry.gitlab.com/v2/')
-      push(ENV['IMAGE_TAG'])
+      Build::Image.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], ENV['CI_REGISTRY'])
+      Build::QA.push(ENV['IMAGE_TAG'])
       puts "Pushed tag: #{ENV['IMAGE_TAG']}"
     end
   end
@@ -68,18 +68,7 @@ namespace :qa do
       # Get the docker image which was built on the previous stage of pipeline
       Gitlab::QA::Scenario
         .const_get(task)
-        .perform(image_registry_address(with_tag: true))
+        .perform(Build::Info.gitlab_registry_image_address(tag: ENV['IMAGE_TAG']))
     end
-  end
-
-  def image_registry_address(with_tag: false)
-    address = "#{ENV['CI_REGISTRY_IMAGE']}/#{Build::QA.image_name}"
-    address << ":#{ENV['IMAGE_TAG']}" if with_tag
-
-    address
-  end
-
-  def push(docker_tag)
-    DockerOperations.tag_and_push(image_registry_address, image_registry_address, 'latest', docker_tag)
   end
 end

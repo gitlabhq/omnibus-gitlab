@@ -35,6 +35,17 @@ module Build
       def image_name
         "gitlab/#{Info.package}-qa"
       end
+
+      def image_address(tag: nil)
+        address = "#{ENV['CI_REGISTRY_IMAGE']}/#{QA.image_name}"
+        address << ":#{tag}" if tag
+
+        address
+      end
+
+      def push(docker_tag)
+        DockerOperations.tag_and_push(QA.image_address, QA.image_address, 'latest', docker_tag)
+      end
     end
   end
 end
