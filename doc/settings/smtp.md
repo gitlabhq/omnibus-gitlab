@@ -484,6 +484,20 @@ gitlab_rails['gitlab_email_display_name'] = 'My GitLab'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@gmx.com'
 ```
 
+### Hetzner
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.your-server.de"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "user@example.com"
+gitlab_rails['smtp_password'] = "mypassword"
+gitlab_rails['smtp_domain'] = "mail.your-server.de"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+```
+
 
 ### More examples are welcome
 
