@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Update backup directory management with better support for non-root NFS
 - Disable prepared statements by default
 - Add options to enable SSL with PostgreSQL
+- Change the default pgbouncer settings to be suitable for larger environments
 
 10.1.1
 
