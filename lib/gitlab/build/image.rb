@@ -10,26 +10,14 @@ module Build
         DockerOperations.authenticate(user, token, registry)
       end
 
-      def push_to_dockerhub(final_tag, type = "gitlab")
-        # Create different tags and push to dockerhub
-        if type == "qa"
-          DockerOperations.tag_and_push("gitlab/gitlab-qa", "gitlab/gitlab-qa", "#{Info.edition}-latest", final_tag)
-        else
-          DockerOperations.tag_and_push(Info.image_name, "gitlab/#{Info.package}", Info.docker_tag, final_tag)
-        end
-        puts "Pushed tag: #{final_tag}"
+      def tag_and_push_to_dockerhub(final_tag)
+        DockerOperations.tag_and_push(Info.gitlab_registry_image_address, Info.dockerhub_image_name, Info.docker_tag, final_tag)
+        puts "Pushed tag: #{final_tag} to Docker Hub"
       end
 
-      def push(docker_tag)
-        DockerOperations.tag_and_push(Info.image_name, Info.image_name, 'latest', docker_tag)
-      end
-
-      def tag_triggered_qa
-        return unless ENV['IMAGE_TAG'] && !ENV['IMAGE_TAG'].empty?
-
-        # For triggered builds, we need the QA image's tag to match the docker
-        # tag. So, we are retagging the image.
-        DockerOperations.tag(QA.image_name, QA.image_name, 'latest', ENV['IMAGE_TAG'])
+      def tag_and_push_to_gitlab_registry(final_tag)
+        DockerOperations.tag_and_push(Info.gitlab_registry_image_address, Info.gitlab_registry_image_address, 'latest', final_tag)
+        puts "Pushed tag: #{final_tag} to #{Info.gitlab_registry_image_address}"
       end
 
       def write_release_file

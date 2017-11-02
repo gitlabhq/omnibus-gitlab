@@ -12,6 +12,7 @@ describe 'qa', type: :rake do
       Rake::Task['qa:build'].reenable
 
       allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
       allow(Build::Info).to receive(:package).and_return('gitlab-ce')
       allow(DockerOperations).to receive(:build).and_call_original
@@ -20,8 +21,8 @@ describe 'qa', type: :rake do
     it 'calls build method with correct parameters' do
       allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return(nil)
 
-      expect(DockerOperations).to receive(:build).with("/tmp/gitlab.1234/qa", "gitlab/gitlab-qa", "ce-latest")
-      expect(Docker::Image).to receive(:build_from_dir).with("/tmp/gitlab.1234/qa", { t: "gitlab/gitlab-qa:ce-latest", pull: true })
+      expect(DockerOperations).to receive(:build).with("/tmp/gitlab.1234/qa", "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa", "ce-latest")
+      expect(Docker::Image).to receive(:build_from_dir).with("/tmp/gitlab.1234/qa", { t: "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa:ce-latest", pull: true })
       Rake::Task['qa:build'].invoke
     end
 
@@ -30,11 +31,11 @@ describe 'qa', type: :rake do
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Docker::Image).to receive(:build_from_dir).and_return(true)
       allow(Docker::Image).to receive(:get).and_return(dummy_image)
-      allow(Build::Image).to receive(:tag_triggered_qa).and_call_original
+      allow(Build::QA).to receive(:tag_triggered_qa).and_call_original
       allow(DockerOperations).to receive(:tag).and_call_original
 
-      expect(Build::Image).to receive(:tag_triggered_qa)
-      expect(DockerOperations).to receive(:tag).with("gitlab/gitlab-qa", "gitlab/gitlab-qa", "ce-latest", "ce-omnibus-12345")
+      expect(Build::QA).to receive(:tag_triggered_qa)
+      expect(DockerOperations).to receive(:tag).with("dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa", "gitlab/gitlab-qa", "ce-latest", "ce-omnibus-12345")
       expect(dummy_image).to receive(:tag).with(repo: "gitlab/gitlab-qa", tag: "ce-omnibus-12345", force: true)
       Rake::Task['qa:build'].invoke
     end

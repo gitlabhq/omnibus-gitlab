@@ -10,22 +10,22 @@ namespace :qa do
   desc "Build QA Docker image"
   task :build do
     location = Build::QA.get_gitlab_repo
-    DockerOperations.build(location, Build::QA.image_name, 'latest')
-    Build::Image.tag_triggered_qa # Check if triggered QA and retag if necessary
+    DockerOperations.build(location, Build::QA.gitlab_registry_image_address, Build::QA.latest_tag)
+    Build::QA.tag_triggered_qa # Check if triggered QA and retag if necessary
   end
 
   namespace :push do
     desc "Push stable version of QA"
     task :stable do
       Build::Image.authenticate
-      Build::Image.push_to_dockerhub(Build::Info.docker_tag, "qa")
+      Build::QA.tag_and_push_to_dockerhub(Build::Info.docker_tag)
     end
 
     desc "Push rc version of QA"
     task :rc do
       if Build::Check.add_rc_tag?
         Build::Image.authenticate
-        Build::Image.push_to_dockerhub("#{Build::Info.edition}-rc", "qa")
+        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-rc")
       end
     end
 
@@ -33,7 +33,7 @@ namespace :qa do
     task :nightly do
       if Build::Check.add_nightly_tag?
         Build::Image.authenticate
-        Build::Image.push_to_dockerhub("#{Build::Info.edition}-nightly", "qa")
+        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-nightly")
       end
     end
 
@@ -41,15 +41,14 @@ namespace :qa do
     task :latest do
       if Build::Check.add_latest_tag?
         Build::Image.authenticate
-        Build::Image.push_to_dockerhub("#{Build::Info.edition}-latest", "qa")
+        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-latest")
       end
     end
 
     desc "Push triggered version of QA to GitLab Registry"
     task :triggered do
       Build::Image.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], ENV['CI_REGISTRY'])
-      Build::QA.push(ENV['IMAGE_TAG'])
-      puts "Pushed tag: #{ENV['IMAGE_TAG']}"
+      Build::QA.tag_and_push_to_gitlab_registry(ENV['IMAGE_TAG'])
     end
   end
 
