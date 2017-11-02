@@ -19,6 +19,126 @@ If you are planning to use MySQL/MariaDB, make sure to read the [introductory
 paragraph](#using-a-mysql-database-management-server-enterprise-edition-only)
 before proceeding, as it contains some useful information.
 
+## Enabling SSL
+
+To enable SSL, you first need to have a number of files:
+
+1. The public SSL certificate for the database (`server.crt`).
+2. The corresponding private key for the SSL certificate (`server.key`).
+3. Optional: A root certificate bundle that validates the server's certificate
+(`root.crt`). By default, Omnibus GitLab will use the embedded certificate
+bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`.
+
+Note that the location of these files can be configurable, but the private key
+MUST be readable by the `gitlab-psql` user. Note that private keys stored in
+`/etc/gitlab/ssl` currently cannot be read by this user, so the key may need
+to be copied to another location and assigned the proper permissions.
+
+For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.6/static/ssl-tcp.html).
+
+Note that `server.crt` and `server.key` may be different from the default SSL
+certificates used to access GitLab. For example, suppose the external hostname
+of your database is `database.example.com`, and your external GitLab hostname
+is `gitlab.example.com`. You will either need a wildcard certificate for
+`*.example.com` or two different SSL certificates.
+
+With these files in hand, enable SSL:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    postgresql['ssl'] = 'on'
+    ```
+
+    Note that this does NOT enforce SSL connections on the server side. Enforcing SSL
+    requires using the `hostssl` configuration in `pg_hba.conf`. See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html
+    for more details.
+
+1. Optional: Customize the location of the required SSL files in `/etc/gitlab/gitlab.rb`. For example:
+
+    ```ruby
+    postgresql['ssl_cert_file'] = 'server.crt'
+    postgresql['ssl_key_file'] = 'server.key'
+    postgresql['ssl_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+    ```
+
+    Using a relative path will cause PostgreSQL to look inside its data
+    directory (`/var/opt/gitlab/postgresql/data` by default).
+
+1. Optional: Copy the required SSL files into the PostgreSQL data directory. For example:
+
+    ```sh
+    cp server.crt server.key /var/opt/gitlab/postgresql/data
+    cd /var/opt/gitlab/postgresql/data
+    chown gitlab-psql:gitlab-psql server.crt server.key
+    ```
+
+    Note that the PostgreSQL user (by default `gitlab-psql`) must have read access to these files,
+    or PostgreSQL will fail to start.
+
+1. [Reconfigure GitLab][] to apply the configuration changes.
+
+1. Restart PostgreSQL for the changes to take effect:
+
+    ```sh
+    gitlab-ctl restart postgresql
+    ```
+
+   If PostgreSQL fails to start, check the logs
+   (e.g. `/var/log/gitlab/postgresql/current`) for more details.
+
+### Verifying that SSL is being used
+
+To check whether SSL is being used by clients, you can run:
+
+```sh
+gitlab-rails dbconsole
+```
+
+At startup, you should see a banner as the following:
+
+```
+psql (9.6.5)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: on)
+Type "help" for help.
+```
+
+To check whether clients are using SSL, you can issue this SQL query:
+
+```sql
+SELECT * FROM pg_stat_ssl;
+```
+
+For example:
+
+```
+gitlabhq_production=> SELECT * FROM pg_stat_ssl;
+  pid  | ssl | version |           cipher            | bits | compression | clientdn
+-------+-----+---------+-----------------------------+------+-------------+----------
+ 47506 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47509 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47510 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47527 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47528 | f   |         |                             |      |             |
+ 47537 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47560 | f   |         |                             |      |             |
+ 47561 | f   |         |                             |      |             |
+ 47563 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47564 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47565 | f   |         |                             |      |             |
+ 47569 | f   |         |                             |      |             |
+ 47570 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47573 | f   |         |                             |      |             |
+ 47585 | f   |         |                             |      |             |
+ 47586 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47618 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 47628 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+ 55812 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
+(19 rows)
+```
+
+Rows that have `t` listed under the `ssl` column are enabled.
+
 ## Enabling PostgreSQL WAL (Write Ahead Log) Archiving
 
 By default WAL archiving of the packaged PostgreSQL is not enabled. Please consider the following when
