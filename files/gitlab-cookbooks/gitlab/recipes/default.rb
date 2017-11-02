@@ -144,3 +144,14 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 
 # Recipe which handles all prometheus related services
 include_recipe "gitlab::gitlab-prometheus"
+
+# Report on any deprecations we encountered at the end of the run
+Chef.event_handler do
+  on :run_completed do
+    LoggingHelper.report
+  end
+
+  on :run_failed do
+    LoggingHelper.report
+  end
+end

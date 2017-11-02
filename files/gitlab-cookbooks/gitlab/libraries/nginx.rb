@@ -40,7 +40,7 @@ module Nginx
       # The user specified a custom NGINX listen address with the legacy
       # listen_address option. We have to convert it to the new
       # listen_addresses setting.
-      Chef::Log.warn "nginx['listen_address'] is deprecated. Please use nginx['listen_addresses']"
+      LoggingHelper.deprecation "nginx['listen_address'] is deprecated. Please use nginx['listen_addresses']"
       Gitlab['nginx']['listen_addresses'] = [Gitlab['nginx']['listen_address']]
     end
 

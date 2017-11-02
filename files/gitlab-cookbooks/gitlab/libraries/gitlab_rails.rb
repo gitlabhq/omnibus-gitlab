@@ -181,7 +181,7 @@ module GitlabRails
       if Gitlab['gitlab_rails']['stuck_ci_builds_worker_cron']
         warning = ["Legacy config value gitlab_rails['stuck_ci_builds_worker_cron'] found; it is DEPRECATED",
                    "Please use gitlab_rails['stuck_ci_jobs_worker_cron'] from now on"]
-        Chef::Log.warn(warning.join("\n"))
+        LoggingHelper.deprecation(warning.join("\n"))
       end
     end
 
