@@ -377,6 +377,14 @@ default['gitlab']['postgresql']['listen_address'] = nil
 default['gitlab']['postgresql']['max_connections'] = 200
 default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
+
+default['gitlab']['postgresql']['ssl'] = 'off'
+default['gitlab']['postgresql']['ssl_ciphers'] = nil
+default['gitlab']['postgresql']['ssl_cert_file'] = 'server.crt'
+default['gitlab']['postgresql']['ssl_key_file'] = 'server.key'
+default['gitlab']['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
+default['gitlab']['postgresql']['ssl_crl_file'] = nil
+
 default['gitlab']['postgresql']['shmmax'] = node['kernel']['machine'] =~ /x86_64/ ? 17179869184 : 4294967295
 default['gitlab']['postgresql']['shmall'] = node['kernel']['machine'] =~ /x86_64/ ? 4194304 : 1048575
 default['gitlab']['postgresql']['semmsl'] = 250

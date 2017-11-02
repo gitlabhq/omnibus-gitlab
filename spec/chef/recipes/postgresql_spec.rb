@@ -65,6 +65,54 @@ describe 'postgresql 9.2' do
         ).with_content(/archive_mode = on/)
       end
     end
+
+    context 'sets SSL settings' do
+      it 'disables SSL by default' do
+        expect(chef_run.node['gitlab']['postgresql']['ssl'])
+          .to eq('off')
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl = off/)
+        expect(chef_run).not_to render_file(
+          postgresql_conf
+        ).with_content(/ssl_ciphers = /)
+      end
+
+      it 'activates SSL' do
+        stub_gitlab_rb(postgresql: {
+                         ssl: 'on',
+                         ssl_crl_file: 'revoke.crl'
+                       })
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl = on/)
+        expect(chef_run).not_to render_file(
+          postgresql_conf
+        ).with_content(/ssl_ciphers = /)
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl_cert_file = 'server.crt'/)
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl_key_file = 'server.key'/)
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl_ca_file = '\/opt\/gitlab\/embedded\/ssl\/certs\/cacert.pem'/)
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl_crl_file = 'revoke.crl'/)
+      end
+
+      it 'sets SSL ciphers' do
+        stub_gitlab_rb(postgresql: { ssl_ciphers: 'ALL' })
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl_ciphers = 'ALL'/)
+      end
+    end
   end
 
   context 'renders runtime.conf' do

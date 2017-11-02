@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Upgrade curl to 7.56.1
 - Update backup directory management with better support for non-root NFS
 - Disable prepared statements by default
+- Add options to enable SSL with PostgreSQL
 
 10.1.1
 

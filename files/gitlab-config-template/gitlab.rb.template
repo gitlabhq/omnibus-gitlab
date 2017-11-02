@@ -672,6 +672,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['dynamic_shared_memory_type'] = nil
 # postgresql['hot_standby'] = "off"
 
+### SSL settings
+# See https://www.postgresql.org/docs/9.6/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details
+# postgresql['ssl'] = 'off'
+# postgresql['ssl_ciphers'] = nil
+# postgresql['ssl_cert_file'] = 'server.crt'
+# postgresql['ssl_key_file'] = 'server.key'
+# postgresql['ssl_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+# postgresql['ssl_crl_file'] = nil
+
 ### Replication settings
 ###! Note, some replication settings do not require a full restart. They are documented below.
 # postgresql['wal_level'] = "hot_standby"
