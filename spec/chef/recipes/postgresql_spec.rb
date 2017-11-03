@@ -541,6 +541,21 @@ describe 'postgresql 9.6' do
     it 'should create the gitlab_replicator user with replication permissions' do
       expect(chef_run).to create_postgresql_user('gitlab_replicator').with(options: %w(replication))
     end
+
+    context 'when database is a secondary' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:is_slave?).and_return(true)
+      end
+
+      it 'should not create users' do
+        expect(chef_run).not_to create_postgresql_user('gitlab')
+        expect(chef_run).not_to create_postgresql_user('gitlab_replicator')
+      end
+
+      it 'should not activate pg_trgm' do
+        expect(chef_run).not_to run_execute('enable pg_trgm extension')
+      end
+    end
   end
 
   context 'pg_hba.conf' do
