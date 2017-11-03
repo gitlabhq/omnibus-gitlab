@@ -28,7 +28,7 @@ default_version version.print
 source git: version.remote
 
 combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
-gemdir_cmd = "#{install_dir}/embedded/bin/gem environment gemdir"
+gemcontents_cmd = "#{install_dir}/embedded/bin/gem contents"
 
 license 'MIT'
 license_file 'LICENSE'
@@ -103,7 +103,7 @@ build do
     'gitlab-markup_gem-markups.patch'
   )
   # Not using the patch DSL as we need the path to the gems directory
-  command "cat #{patch_file_path} | patch -p1 \"$(#{gemdir_cmd})/gems/gitlab-markup-1.6.3/lib/github/markups.rb\""
+  command "cat #{patch_file_path} | patch -p1 \"$(#{gemcontents_cmd} gitlab-markup | grep lib/github/markups.rb)\""
 
   # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
