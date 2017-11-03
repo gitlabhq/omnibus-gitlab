@@ -168,18 +168,20 @@ if node['gitlab']['gitlab-rails']['enable']
   postgresql_user gitlab_sql_user do
     password "md5#{gitlab_sql_user_password}" unless gitlab_sql_user_password.nil?
     action :create
+    not_if { pg_helper.is_slave? }
   end
 
   execute "create #{database_name} database" do
     command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
     user postgresql_username
     retries 30
-    not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) }
+    not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) || pg_helper.is_slave? }
   end
 
   postgresql_user sql_replication_user do
     options %w(replication)
     action :create
+    not_if { pg_helper.is_slave? }
   end
 end
 
