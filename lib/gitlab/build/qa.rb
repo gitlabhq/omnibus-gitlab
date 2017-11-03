@@ -1,4 +1,5 @@
 require_relative 'info.rb'
+require_relative 'check.rb'
 
 # To use PROCESS_ID instead of $$ to randomize the target directory for cloning
 # GitLab repository. Rubocop requirement to increase readability.
@@ -23,7 +24,12 @@ module Build
       def checkout_gitlab_rails
         # Checking out the cloned repo to the specific commit (well, without doing
         # a to-and-fro `cd`).
-        system("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet #{Info.gitlab_version}")
+        version = Info.gitlab_version
+
+        # Tags have a 'v' prepended to them, which is not present in VERSION file.
+        version = "v#{version}" if Check.on_tag?
+
+        system("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet #{version}")
       end
     end
   end
