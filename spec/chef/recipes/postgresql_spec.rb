@@ -444,6 +444,20 @@ describe 'postgresql 9.6' do
       expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
 
+    it 'creates the pg_trgm extension when it does not exist' do
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(PgHelper).to receive(:is_slave?).and_return(false)
+      allow_any_instance_of(PgHelper).to receive(:extension_enabled?).with('pg_trgm', 'gitlabhq_production').and_return(false)
+      expect(chef_run).to run_execute('enable pg_trgm extension')
+    end
+
+    it 'does not create the pg_trgm extension if it already exists' do
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(PgHelper).to receive(:is_slave?).and_return(false)
+      allow_any_instance_of(PgHelper).to receive(:extension_enabled?).with('pg_trgm', 'gitlabhq_production').and_return(true)
+      expect(chef_run).not_to run_execute('enable pg_trgm extension')
+    end
+
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')

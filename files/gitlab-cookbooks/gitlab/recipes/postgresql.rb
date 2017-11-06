@@ -189,7 +189,7 @@ execute "enable pg_trgm extension" do
   command "/opt/gitlab/bin/gitlab-psql -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
   user postgresql_username
   retries 20
-  action :nothing
+  action :run
   not_if { !pg_helper.is_running? || pg_helper.is_slave? || pg_helper.extension_enabled?('pg_trgm', database_name) }
 end
 

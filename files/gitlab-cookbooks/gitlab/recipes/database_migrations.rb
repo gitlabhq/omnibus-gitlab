@@ -59,7 +59,6 @@ bash "migrate gitlab-rails database" do
     exit $STATUS
   EOH
   environment env_variables unless env_variables.empty?
-  notifies :run, 'execute[enable pg_trgm extension]', :before if omnibus_helper.service_enabled?('postgresql')
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
