@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Upgrade curl to 7.56.1
 - Update backup directory management with better support for non-root NFS
 - Disable prepared statements by default
+- Remove deprecated settings from gitlab.yml template: geo_primary_role, geo_secondary_role
 - Add options to enable SSL with PostgreSQL
 - Change the default pgbouncer settings to be suitable for larger environments
 
