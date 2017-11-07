@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.0.3
+- Update Mattermost to 4.2.1
+
 10.0.2
 
 - Fix an issue where enabling a GitLab Geo role would also disable all default services
