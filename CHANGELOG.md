@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Remove deprecated settings from gitlab.yml template: geo_primary_role, geo_secondary_role
 - Add options to enable SSL with PostgreSQL
 - Change the default pgbouncer settings to be suitable for larger environments
+- Bump openssl to 1.0.2m (Takuya Noguchi)
 
 10.1.1
 
