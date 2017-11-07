@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+9.5.6
+
+- Update Mattermost to 4.1.2
+
 9.5.5
 
 - Add more options to repmgr.conf template
