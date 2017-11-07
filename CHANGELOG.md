@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Remove deprecated settings from gitlab.yml template: geo_primary_role, geo_secondary_role
 - Add options to enable SSL with PostgreSQL
 - Change the default pgbouncer settings to be suitable for larger environments
+- Stop creating SSH keys for Geo secondaries f7147d8b
 
 10.1.1
 
