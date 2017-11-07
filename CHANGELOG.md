@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.1.1
 
 - Bump embedded Git version to 2.13.6 921ba935
+- Update Mattermost to 4.2.1
 
 10.1.0
 
