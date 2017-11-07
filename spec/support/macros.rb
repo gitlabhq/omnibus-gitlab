@@ -43,18 +43,6 @@ module GitlabSpec
       stub_is_ee_env(value)
     end
 
-    # a small helper function that creates a SHA1 fingerprint from a private or
-    # public key.
-    def create_fingerprint_from_key(key, passphrase = nil)
-      new_key = OpenSSL::PKey::RSA.new(key, passphrase)
-      new_key_digest = OpenSSL::Digest::SHA1.new(new_key.public_key.to_der).to_s.scan(/../).join(':')
-      new_key_digest
-    end
-
-    def create_fingerprint_from_public_key(public_key)
-      ::SSHKeygen::PublicKeyReader.new(public_key).key_fingerprint
-    end
-
     def converge_config(*recipes, ee: false)
       Gitlab[:node] = nil
       Services.add_services('gitlab-ee', Services::EEServices.list) if ee
