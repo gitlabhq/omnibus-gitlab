@@ -55,9 +55,10 @@ namespace :qa do
     image = "#{ENV['CI_REGISTRY_IMAGE']}/#{release_package}:#{ENV['IMAGE_TAG']}"
 
     [
-      "Test::Instance::Image", # Test whether instance starts correctly
-      "Test::Omnibus::Image",  # Test whether image works correctly
-      "Test::Omnibus::Upgrade" # Test whether upgrade is done
+      "Test::Instance::Image",         # Test whether instance starts correctly
+      "Test::Omnibus::Image",          # Test whether image works correctly
+      "Test::Omnibus::Upgrade",        # Test whether upgrade is done
+      "Test::Integration::Mattermost"  # Test whether image works correctly with Mattermost
     ].each do |task|
       Gitlab::QA::Scenario
         .const_get(task)
