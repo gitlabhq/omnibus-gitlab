@@ -42,6 +42,33 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9168
+  - job_name: kubernetes-cadvisor
+    scheme: https
+    tls_config:
+      ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecure_skip_verify: true
+    bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    kubernetes_sd_configs:
+    - role: node
+      api_server: https://kubernetes.default.svc:443
+      tls_config:
+        ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    relabel_configs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+    - target_label: __address__
+      replacement: kubernetes.default.svc:443
+    - source_labels:
+      - __meta_kubernetes_node_name
+      regex: "(.+)"
+      target_label: __metrics_path__
+      replacement: "/api/v1/nodes/${1}/proxy/metrics/cadvisor"
+    metric_relabel_configs:
+    - source_labels:
+      - pod_name
+      target_label: environment
+      regex: "(.+)-.+-.+"
   - job_name: kubernetes-nodes
     scheme: https
     tls_config:
