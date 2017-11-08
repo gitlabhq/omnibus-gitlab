@@ -2,6 +2,8 @@ require 'fileutils'
 require_relative "../build.rb"
 require_relative "../build/info.rb"
 require_relative "../ohai_helper.rb"
+require 'net/http'
+require 'json'
 
 namespace :build do
   desc 'Start project build'
@@ -41,6 +43,27 @@ namespace :build do
       files.each do |file|
         puts file.gsub('pkg', "https://#{release_bucket}.s3.amazonaws.com").gsub('+', '%2B')
       end
+    end
+  end
+
+  desc "Trigger package and QA builds"
+  task :trigger do
+    uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/trigger/pipeline")
+    params = {
+      "ref" => ENV["CI_COMMIT_REF_NAME"],
+      "token" => ENV["BUILD_TRIGGER_TOKEN"],
+      "variables[ALTERNATIVE_SOURCES]" => true,
+      "variables[ee]" => ENV["ee"] || "false"
+    }
+
+    res = Net::HTTP.post_form(uri, params)
+    pipeline_id = JSON.parse(res.body)['id']
+
+    if pipeline_id.nil?
+      puts "Trigger failed. The response from trigger is: "
+      puts res.body
+    else
+      puts "Triggered pipeline can be found at #{ENV['CI_PROJECT_URL']}/pipelines/#{pipeline_id}"
     end
   end
 end

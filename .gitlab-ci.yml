@@ -362,7 +362,7 @@ Trigger:ce-package:
   when: manual
   before_script: []
   script:
-    - support/trigger-build
+    - bundle exec rake build:trigger
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
@@ -377,7 +377,7 @@ Trigger:ee-package:
   variables:
     ee: "true"
   script:
-    - support/trigger-build
+    - bundle exec rake build:trigger
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
