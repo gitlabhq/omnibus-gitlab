@@ -1,0 +1,53 @@
+require 'io/console'
+
+class PostgreSQL
+  class Replication
+    def initialize(ctl)
+      @ctl = ctl
+    end
+
+    def set_password!
+      unless @ctl.service_enabled?('postgresql')
+        puts 'There is no PostgreSQL instance enabled in Omnibus, exiting...'
+        exit 1
+      end
+
+      run_command <<~CMD
+        #{@ctl.base_path}/bin/gitlab-psql -d template1 -c
+        "ALTER USER #{replication_user} WITH ENCRYPTED PASSWORD '#{ask_password}'"
+      CMD
+    end
+
+    private
+
+    def run_command(cmd)
+      GitlabCtl::Util.run_command(cmd).tap do |status|
+        if status.error?
+          puts status.stdout
+          puts status.stderr
+          puts "[ERROR] Failed to execute: #{cmd} -- be sure to run this command as root!"
+          exit 1
+        end
+      end
+    end
+
+    def ask_password
+      if STDIN.tty?
+        STDIN.getpass("Please enter password: ")
+      else
+        STDIN.gets.chomp
+      end
+    end
+
+    def replication_user
+      configured_user = GitlabCtl::Util.get_node_attributes
+        .dig('gitlab', 'postgresql', 'sql_replication_user').to_s
+
+      configured_user.tap do |user|
+        if user.strip.empty?
+          raise ArgumentError, 'Replication user not defined in `sql_replication_user`!'
+        end
+      end
+    end
+  end
+end
