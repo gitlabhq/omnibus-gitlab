@@ -20,7 +20,8 @@ class GeoReplicationCommand
       skip_backup: false,
       slot_name: nil,
       skip_replication_slot: false,
-      backup_timeout: 1800
+      backup_timeout: 1800,
+      sslmode: 'verify-full',
     }
 
     parse_options!
@@ -77,6 +78,10 @@ class GeoReplicationCommand
 
       opts.on('--skip-replication-slot', 'Skip the check and creation of replication slot') do
         @options[:skip_replication_slot] = true
+      end
+
+      opts.on('--sslmode', 'Choose the level of protection the connection between primary and secondary has.') do |sslmode|
+        @options[:sslmode] = sslmode
       end
 
       opts.on_tail('-h', '--help', 'Show this message') do

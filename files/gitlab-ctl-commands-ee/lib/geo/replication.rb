@@ -67,7 +67,7 @@ module Geo
       puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
       run_command("PGPASSFILE=#{@pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true, timeout: @options[:backup_timeout])
 
-      puts '* Writing recovery.conf file'.color(:green)
+      puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]}".color(:green)
       create_recovery_file!
 
       puts '* Restoring postgresql.conf'.color(:green)
@@ -115,7 +115,7 @@ module Geo
       File.open(recovery_file, 'w', 0640) do |file|
         file.write(<<~EOF
           standby_mode = 'on'
-          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]}'
+          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]}'
           trigger_file = '/tmp/postgresql.trigger'
         EOF
         )
