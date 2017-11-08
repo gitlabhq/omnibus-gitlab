@@ -360,7 +360,6 @@ Trigger:ce-package:
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
-  before_script: []
   script:
     - bundle exec rake build:trigger
   only:
@@ -373,7 +372,6 @@ Trigger:ee-package:
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
-  before_script: []
   variables:
     ee: "true"
   script:
