@@ -356,30 +356,28 @@ Trigger:qa:
   dependencies: []
 
 Trigger:ce-package:
+  image: "ruby:2.1"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
   before_script: []
   script:
-    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
-    # may have same tag and hence overwrite each other.
-    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
-    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
+    - support/trigger-build
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
     - triggers
 
 Trigger:ee-package:
+  image: "ruby:2.1"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
   before_script: []
+  variables:
+    ee: "true"
   script:
-    # We explicitly pass IMAGE_TAG variable because otherwise multiple images
-    # may have same tag and hence overwrite each other.
-    - pipeline_id=$(curl -s -X POST -F token=${BUILD_TRIGGER_TOKEN} -F ref=${CI_COMMIT_REF_NAME} -F "variables[ALTERNATIVE_SOURCES]=true" -F "variables[IMAGE_TAG]=omnibus-${CI_COMMIT_SHA}" -F "variables[ee]=true" https://gitlab.com/api/v4/projects/20699/trigger/pipeline | ruby -e "require 'json'; puts JSON.parse(STDIN.read)['id']") > /dev/null
-    - echo "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/${pipeline_id}"
+    - support/trigger-build
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
