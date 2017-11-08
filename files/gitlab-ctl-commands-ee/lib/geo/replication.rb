@@ -128,7 +128,7 @@ module Geo
       if STDIN.tty?
         STDIN.getpass("#{text}: ")
       else
-        STDIN.gets
+        STDIN.gets.chomp
       end
     end
 
