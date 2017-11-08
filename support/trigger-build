@@ -14,9 +14,9 @@ params = {
 res = Net::HTTP.post_form(uri, params)
 pipeline_id = JSON.parse(res.body)['id']
 
-unless pipeline_id.nil?
-  puts "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/#{pipeline_id}"
-else
+if pipeline_id.nil?
   puts "Trigger failed. The response from trigger is: "
   puts res.body
+else
+  puts "Triggered pipeline can be found at https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines/#{pipeline_id}"
 end
