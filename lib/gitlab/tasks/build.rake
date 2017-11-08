@@ -53,6 +53,7 @@ namespace :build do
       "ref" => ENV["CI_COMMIT_REF_NAME"],
       "token" => ENV["BUILD_TRIGGER_TOKEN"],
       "variables[ALTERNATIVE_SOURCES]" => true,
+      "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
       "variables[ee]" => ENV["ee"] || "false"
     }
 
