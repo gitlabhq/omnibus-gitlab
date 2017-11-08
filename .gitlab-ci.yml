@@ -356,7 +356,7 @@ Trigger:qa:
   dependencies: []
 
 Trigger:ce-package:
-  image: "ruby:2.1"
+  image: "ruby:2.3"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
@@ -368,7 +368,7 @@ Trigger:ce-package:
     - triggers
 
 Trigger:ee-package:
-  image: "ruby:2.1"
+  image: "ruby:2.3"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
