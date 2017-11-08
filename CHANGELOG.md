@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Change the default pgbouncer settings to be suitable for larger environments
 - Bump openssl to 1.0.2m (Takuya Noguchi)
 - Stop creating SSH keys for Geo secondaries f7147d8b
+- Make postgresql replication client sslmode configurable 1e2be156
 
 10.1.1
 
