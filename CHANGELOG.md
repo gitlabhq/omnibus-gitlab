@@ -3,21 +3,32 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.0.7
+
+- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem a712c
+
+10.0.6
+
+- Upgrade curl to 7.56.1 17ea571
+- Update Mattermost to 4.2.1 640c88
+
+10.0.5
+
+- No changes
+
 10.0.4
 
-- Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet
-- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem
+- Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet b50d50478
 
 10.0.3
 
-- Update Mattermost to 4.2.1
-- Upgrade curl to 7.56.1
+- No changes
 
 10.0.2
 
-- Fix an issue where enabling a GitLab Geo role would also disable all default services
+- Fix an issue where enabling a GitLab Geo role would also disable all default services 11e6dbf
 - Reload consul on config change instead of restarting 097cf5
-- Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use
+- Update pg-upgrade output to be more clear when a bundled PostgreSQL is not in use 7b80458b  
 - Add option to configure redis snapshot frequency 400f3a54
 
 10.0.1
