@@ -20,7 +20,7 @@ omnibus-gitlab repository.
 10.1.1
 
 - Bump embedded Git version to 2.13.6 921ba935
-- Update Mattermost to 4.2.1
+- Update Mattermost to 4.2.1 640c88
 
 10.1.0
 
@@ -45,10 +45,22 @@ omnibus-gitlab repository.
 - Correct Registry permissions in Docker update-permissions script 0b624f8ed
 - Upgrade PostgreSQL to 9.6.5 (Takuya Noguchi) 84a3f5c09
 
+10.0.7
+
+- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem a712c
+
+10.0.6
+
+- Upgrade curl to 7.56.1 17ea571
+- Update Mattermost to 4.2.1 640c88
+
+10.0.5
+
+- No changes
+
 10.0.4
 
 - Ensure pgbouncer doesn't fail reconfigure if database isn't ready yet b50d50478
-- Fix an issue causing symlinking against system binaries if old PostgreSQL data was present on the filesystem 2ad74f434
 
 10.0.3
 
