@@ -13,7 +13,7 @@ class PostgreSQL
       end
 
       run_command <<~CMD
-        #{@ctl.base_path}/bin/gitlab-psql -d template1 -c
+        #{@ctl.base_path}/bin/gitlab-psql -d template1 -c \
         "ALTER USER #{replication_user} WITH ENCRYPTED PASSWORD '#{ask_password}'"
       CMD
     end
@@ -40,7 +40,7 @@ class PostgreSQL
     end
 
     def replication_user
-      configured_user = GitlabCtl::Util.get_node_attributes
+      configured_user = GitlabCtl::Util.get_node_attributes(@ctl.base_path)
         .dig('gitlab', 'postgresql', 'sql_replication_user').to_s
 
       configured_user.tap do |user|
