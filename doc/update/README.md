@@ -183,21 +183,21 @@ done if you are using PostgreSQL. If you are using MySQL you will still need dow
 Verify that you can upgrade with no downtime by checking the
 [Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
 
-If you meet all the requirements above, follow the following instructions:
+If you meet all the requirements above, follow these instructions:
 
 1. Create a "skip-auto-migrations" file on every one of your nodes
 running GitLab Rails application:
   ```
   sudo touch /etc/gitlab/skip-auto-migrations
   ```
-  This will prevent the upgrade from automatically running `gitlab-ctl reconfigure` and
+  During software installation only, this will prevent the upgrade from running `gitlab-ctl reconfigure` and
   automatically running database migrations.
 1. If you have multiple nodes in an HA environment decide which node is the `Deploy Node`.
 1. On the `Deploy Node`, install gitlab-ee. Make sure that this node has the following line in `/etc/gitlab/gitlab.rb`:
   ```
   gitlab_rails['auto_migrate'] = false
   ```
-This setting will prevent automatic database migrations within `gitlab-ctl reconfigure`.
+This setting will prevent automatic database migrations when running `gitlab-ctl reconfigure`.
 1. On the `Deploy Node` run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`, to get the pre-deploy migrations in place.
 1. On all other nodes, install gitlab-ee and run a `gitlab-ctl reconfigure` so they can get the newest code.
 1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node` to run post-deployment migrations.
