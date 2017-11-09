@@ -54,7 +54,7 @@ describe Geo::Replication, '#execute' do
       subject.execute
 
       expect(file).to have_received(:write).with("::*::pass\n")
-      expect(file).to have_received(:write).with(/password=pass'\ntrigger_file/)
+      expect(file).to have_received(:write).with(/password=pass sslmode='\n/)
     end
   end
 end
