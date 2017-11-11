@@ -233,7 +233,8 @@ the same `config.json` file, which resulted in changes made via the System Conso
 overwritten when users ran `gitlab-ctl reconfigure`.
 
 To resolve this problem, `gitlab.rb` will include only the
-configuration necessary for GitLab<=>Mattermost integration. GitLab will no longer generate the `config.json` file, instead passing limited configuration settings via environment variables.
+configuration necessary for GitLab<=>Mattermost integration in 11.0. GitLab will no longer 
+generate the `config.json` file, instead passing limited configuration settings via environment variables.
 
 The settings that will continue to be
 supported in `gitlab.rb` are:
@@ -311,7 +312,7 @@ mattermost['env'] = {
 
 Refer to [Mattermost
 Documentation](https://docs.mattermost.com/administration/config-settings.html)
-for details about categories, configuration values etc.
+for details about categories, configuration values, etc.
 
 There are a few exceptions to this rule:
 
@@ -342,8 +343,9 @@ There are a few exceptions to this rule:
 
 
 > Please note:
-GitLab no longer generates `config.json` file from the configuration specified
-in `gitlab.rb`. Users are responsible for managing this file.
+GitLab 11.0 will no longer generate `config.json` file from the configuration specified
+in `gitlab.rb`. Users are responsible for managing this file which can be done via
+Mattermost System System Console or manually.
 If a configuration setting is specified via both `gitlab.rb` (as env variable)
 and via `config.json` file, environment variable gets precedence.
 
