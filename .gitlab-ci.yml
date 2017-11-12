@@ -210,6 +210,8 @@ variables:
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
   retry: 1
+  tags:
+  - promotion
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -224,6 +226,8 @@ variables:
   only:
     - tags@gitlab/omnibus-gitlab
   when: manual
+  tags:
+  - promotion
 
 before_script:
   - echo $NIGHTLY
@@ -1010,6 +1014,8 @@ Raspberry Pi 2 Jessie release:
   when: manual
   dependencies:
     - Raspberry Pi 2 Jessie
+  tags:
+  - promotion
 
 Docker Release:
   stage: docker_release
