@@ -18,10 +18,19 @@ omnibus-gitlab repository.
 - Make postgresql replication client sslmode configurable 1e2be156
 - Update default gitlab-shell git timeout to 3 hours 7a232ffa
 
-10.1.1
+
+10.1.3
+
+- No changes
+
+10.1.2
 
 - Bump embedded Git version to 2.13.6 921ba935
 - Update Mattermost to 4.2.1 640c88
+
+10.1.1
+
+- No changes
 
 10.1.0
 
