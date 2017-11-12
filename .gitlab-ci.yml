@@ -321,6 +321,13 @@ Trigger:package:
     expire_in: 1 day
     paths:
       - pkg/ubuntu-xenial/gitlab.deb
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - node_modules
   tags:
     - triggered-packages
 
