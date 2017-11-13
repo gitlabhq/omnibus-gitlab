@@ -61,12 +61,12 @@ module Build
 
       def tag_and_push_to_dockerhub(final_tag)
         DockerOperations.tag_and_push(QA.gitlab_registry_image_address, QA.dockerhub_image_name, latest_tag, final_tag)
-        puts "Pushed tag: #{final_tag} to Docker Hub"
+        puts "Pushed tag: #{QA.dockerhub_image_name}:#{final_tag} to Docker Hub"
       end
 
       def tag_and_push_to_gitlab_registry(final_tag)
         DockerOperations.tag_and_push(QA.gitlab_registry_image_address, QA.gitlab_registry_image_address, latest_tag, final_tag)
-        puts "Pushed tag: #{final_tag} to #{QA.gitlab_registry_image_address}"
+        puts "Pushed tag: #{QA.gitlab_registry_image_address}:#{final_tag}"
       end
     end
   end

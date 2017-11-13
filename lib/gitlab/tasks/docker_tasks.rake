@@ -18,8 +18,7 @@ namespace :docker do
   namespace :push do
     # Only runs on dev.gitlab.org
     task :staging do
-      registry = ENV['CI_REGISTRY']
-      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
+      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], ENV['CI_REGISTRY'])
       Build::Image.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
     end
 
@@ -54,11 +53,8 @@ namespace :docker do
 
     desc "Push triggered Docker Image to GitLab Registry"
     task :triggered do
-      registry = "https://registry.gitlab.com/v2/"
-      docker_tag = ENV['IMAGE_TAG']
-      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], registry)
-      Build::Image.tag_and_push_to_gitlab_registry(docker_tag)
-      puts "Pushed tag: #{docker_tag}"
+      Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], ENV['CI_REGISTRY'])
+      Build::Image.tag_and_push_to_gitlab_registry(ENV['IMAGE_TAG'])
     end
   end
 
@@ -66,8 +62,7 @@ namespace :docker do
   namespace :pull do
     task :staging do
       Build::Image.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], ENV['CI_REGISTRY'])
-      Docker::Image.create('fromImage' => "#{Build::Info.gitlab_registry_image_address}:#{Build::Info.docker_tag}")
-      puts "Pulled tag: #{Build::Info.docker_tag}"
+      Build::Image.pull
     end
   end
 end

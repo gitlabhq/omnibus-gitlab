@@ -12,12 +12,17 @@ module Build
 
       def tag_and_push_to_dockerhub(final_tag)
         DockerOperations.tag_and_push(Info.gitlab_registry_image_address, Info.dockerhub_image_name, Info.docker_tag, final_tag)
-        puts "Pushed tag: #{final_tag} to Docker Hub"
+        puts "Pushed tag: #{Info.dockerhub_image_name}:#{final_tag} to Docker Hub"
       end
 
       def tag_and_push_to_gitlab_registry(final_tag)
         DockerOperations.tag_and_push(Info.gitlab_registry_image_address, Info.gitlab_registry_image_address, 'latest', final_tag)
-        puts "Pushed tag: #{final_tag} to #{Info.gitlab_registry_image_address}"
+        puts "Pushed tag: #{Info.gitlab_registry_image_address}:#{final_tag}"
+      end
+
+      def pull
+        Docker::Image.create('fromImage' => "#{Build::Info.gitlab_registry_image_address}:#{Build::Info.docker_tag}")
+        puts "Pulled tag: #{Build::Info.docker_tag}"
       end
 
       def write_release_file
