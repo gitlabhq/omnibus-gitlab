@@ -33,22 +33,19 @@ module Build
       end
 
       def dockerhub_image_name
-        'gitlab/gitlab-qa'
+        "#{Info.dockerhub_image_name}-qa"
       end
 
       def gitlab_registry_image_name
-        'gitlab-qa'
+        "#{Info.package}-qa"
       end
 
       def latest_tag
-        "#{Info.edition}-latest"
+        'latest'
       end
 
-      def gitlab_registry_image_address(tag: nil)
-        address = "#{ENV['CI_REGISTRY_IMAGE']}/#{QA.gitlab_registry_image_name}"
-        address << ":#{tag}" if tag
-
-        address
+      def gitlab_registry_image_address
+        "#{ENV['CI_REGISTRY_IMAGE']}/#{QA.gitlab_registry_image_name}"
       end
 
       def tag_triggered_qa
@@ -56,7 +53,7 @@ module Build
 
         # For triggered builds, we need the QA image's tag to match the docker
         # tag. So, we are retagging the image.
-        DockerOperations.tag(QA.gitlab_registry_image_address, QA.dockerhub_image_name, latest_tag, "#{Info.edition}-#{ENV['IMAGE_TAG']}")
+        DockerOperations.tag(QA.gitlab_registry_image_address, QA.dockerhub_image_name, latest_tag, ENV['IMAGE_TAG'])
       end
 
       def tag_and_push_to_dockerhub(final_tag)

@@ -25,7 +25,7 @@ namespace :qa do
     task :rc do
       if Build::Check.add_rc_tag?
         Build::Image.authenticate
-        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-rc")
+        Build::QA.tag_and_push_to_dockerhub('rc')
       end
     end
 
@@ -33,7 +33,7 @@ namespace :qa do
     task :nightly do
       if Build::Check.add_nightly_tag?
         Build::Image.authenticate
-        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-nightly")
+        Build::QA.tag_and_push_to_dockerhub('nightly')
       end
     end
 
@@ -41,7 +41,7 @@ namespace :qa do
     task :latest do
       if Build::Check.add_latest_tag?
         Build::Image.authenticate
-        Build::QA.tag_and_push_to_dockerhub("#{Build::Info.edition}-latest")
+        Build::QA.tag_and_push_to_dockerhub('latest')
       end
     end
 

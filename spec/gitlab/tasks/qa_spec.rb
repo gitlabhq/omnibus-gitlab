@@ -21,8 +21,8 @@ describe 'qa', type: :rake do
     it 'calls build method with correct parameters' do
       allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return(nil)
 
-      expect(DockerOperations).to receive(:build).with("/tmp/gitlab.1234/qa", "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa", "ce-latest")
-      expect(Docker::Image).to receive(:build_from_dir).with("/tmp/gitlab.1234/qa", { t: "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa:ce-latest", pull: true })
+      expect(DockerOperations).to receive(:build).with("/tmp/gitlab.1234/qa", "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa", "latest")
+      expect(Docker::Image).to receive(:build_from_dir).with("/tmp/gitlab.1234/qa", { t: "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa:latest", pull: true })
       Rake::Task['qa:build'].invoke
     end
 
@@ -35,8 +35,8 @@ describe 'qa', type: :rake do
       allow(DockerOperations).to receive(:tag).and_call_original
 
       expect(Build::QA).to receive(:tag_triggered_qa)
-      expect(DockerOperations).to receive(:tag).with("dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-qa", "gitlab/gitlab-qa", "ce-latest", "ce-omnibus-12345")
-      expect(dummy_image).to receive(:tag).with(repo: "gitlab/gitlab-qa", tag: "ce-omnibus-12345", force: true)
+      expect(DockerOperations).to receive(:tag).with("dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa", "gitlab/gitlab-ce-qa", "latest", "omnibus-12345")
+      expect(dummy_image).to receive(:tag).with(repo: "gitlab/gitlab-ce-qa", tag: "omnibus-12345", force: true)
       Rake::Task['qa:build'].invoke
     end
   end
@@ -63,21 +63,21 @@ describe 'qa', type: :rake do
     it 'pushes nightly images correctly' do
       allow(Build::Check).to receive(:add_nightly_tag?).and_return(true)
 
-      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-qa:ce-nightly')
+      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce-qa:nightly')
       Rake::Task['qa:push:nightly'].invoke
     end
 
     it 'pushes latest images correctly' do
       allow(Build::Check).to receive(:add_latest_tag?).and_return(true)
 
-      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-qa:ce-latest')
+      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce-qa:latest')
       Rake::Task['qa:push:latest'].invoke
     end
 
     it 'pushes rc images correctly' do
       allow(Build::Check).to receive(:add_rc_tag?).and_return(true)
 
-      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-qa:ce-rc')
+      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce-qa:rc')
       Rake::Task['qa:push:rc'].invoke
     end
   end
