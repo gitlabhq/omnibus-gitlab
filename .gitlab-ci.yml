@@ -307,10 +307,12 @@ update-knapsack:
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
-  <<: *dedicated-runner
   stage: trigger-package
   script:
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
     - bundle exec rake build:project
+    - bundle exec rake cache:bundle
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
   only:
@@ -319,6 +321,15 @@ Trigger:package:
     expire_in: 1 day
     paths:
       - pkg/ubuntu-xenial/gitlab.deb
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - node_modules
+  tags:
+    - triggered-packages
 
 Trigger:docker:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
