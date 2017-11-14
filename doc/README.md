@@ -124,3 +124,4 @@ You can also use the docker images provided by GitLab to install and configure a
 - [Release process](release/README.md)
 - [Building your own package](build/README.md)
 - [Building a package from a custom branch](build/README.md#building-a-package-from-a-custom-branch)
+- [Adding deprecation messages](development/adding-deprecation-messages.md)

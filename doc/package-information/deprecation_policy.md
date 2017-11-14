@@ -70,7 +70,7 @@ The final comment in the issue **has to have**:
 
 1. Text snippet for the release blog post section
 1. Documentation MR ( or snippet ) for introducing the change
-1. WIP MR removing the configuration OR details on what needs to be done
+1. WIP MR removing the configuration OR details on what needs to be done.  See [Adding deprecation messages](../development/adding-deprecation-messages.md) for more on this
 
 ## Example
 
