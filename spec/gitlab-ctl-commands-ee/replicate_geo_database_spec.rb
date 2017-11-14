@@ -20,10 +20,15 @@ describe 'gitlab-ctl replicate-geo-database' do
   end
 
   it 'executes the geo replication command when called' do
-    arguments = %w(--host=gitlab-primary.geo --slot-name=gitlab_primary_geo)
+    arguments = %w(--host=gitlab-primary.geo --slot-name=gitlab_primary_geo --sslmode=disable)
 
     allow_any_instance_of(Omnibus::Ctl::GeoReplicationCommand)
       .to receive(:arguments).and_return(arguments)
+
+    expect(Geo::Replication).to receive(:new).and_call_original
+      .with(subject, hash_including(host: 'gitlab-primary.geo',
+                                    slot_name: 'gitlab_primary_geo',
+                                    sslmode: 'disable'))
 
     expect_any_instance_of(Geo::Replication).to receive(:execute)
 
