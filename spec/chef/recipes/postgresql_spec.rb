@@ -74,9 +74,6 @@ describe 'postgresql 9.2' do
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/ssl = off/)
-        expect(chef_run).not_to render_file(
-          postgresql_conf
-        ).with_content(/ssl_ciphers = /)
       end
 
       it 'activates SSL' do
@@ -88,9 +85,9 @@ describe 'postgresql 9.2' do
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/ssl = on/)
-        expect(chef_run).not_to render_file(
+        expect(chef_run).to render_file(
           postgresql_conf
-        ).with_content(/ssl_ciphers = /)
+        ).with_content(%r{ssl_ciphers = 'HIGH:MEDIUM:\+3DES:!aNULL:!SSLv3:!TLSv1'})
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/ssl_cert_file = 'server.crt'/)
