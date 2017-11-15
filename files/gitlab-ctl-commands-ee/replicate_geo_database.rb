@@ -80,7 +80,7 @@ class GeoReplicationCommand
         @options[:skip_replication_slot] = true
       end
 
-      opts.on('--sslmode', 'Choose the level of protection the connection between primary and secondary has.') do |sslmode|
+      opts.on('--sslmode=MODE', 'Choose the level of protection the connection between primary and secondary has.') do |sslmode|
         @options[:sslmode] = sslmode
       end
 

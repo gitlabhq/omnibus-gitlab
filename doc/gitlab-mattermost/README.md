@@ -102,18 +102,31 @@ To reauthorise GitLab Mattermost you will first need to revoke access of the exi
 
 Place the ssl certificate and ssl certificate key inside of `/etc/gitlab/ssl` directory. If directory doesn't exist, create one.
 
+```bash
+sudo mkdir -p /etc/gitlab/ssl
+sudo chmod 700 /etc/gitlab/ssl
+sudo cp mattermost.gitlab.example.key mattermost.gitlab.example.crt /etc/gitlab/ssl/
+```
+
 In `/etc/gitlab/gitlab.rb` specify the following configuration:
 
 ```ruby
 mattermost_external_url 'https://mattermost.gitlab.example'
 
 mattermost_nginx['redirect_http_to_https'] = true
+```
+
+If you haven't named your certificate and key like `mattermost.gitlab.example.crt`
+and `mattermost.gitlab.example.key` then you'll need to also add the full paths
+like shown below.
+
+```
 mattermost_nginx['ssl_certificate'] = "/etc/gitlab/ssl/mattermost-nginx.crt"
 mattermost_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/mattermost-nginx.key"
-mattermost['service_use_ssl'] = true
 ```
 
 where `mattermost-nginx.crt` and `mattermost-nginx.key` are ssl cert and key, respectively.
+
 Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 ## Email Notifications

@@ -17,7 +17,7 @@ omnibus-gitlab repository.
 - Stop creating SSH keys for Geo secondaries f7147d8b
 - Make postgresql replication client sslmode configurable 1e2be156
 - Update default gitlab-shell git timeout to 3 hours 7a232ffa
-
+- Disable TLSv1 and SSLv3 ciphers for postgresql 7ab9004f
 
 10.1.3
 
