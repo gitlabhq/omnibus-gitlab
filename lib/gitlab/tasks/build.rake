@@ -49,14 +49,7 @@ namespace :build do
   desc "Trigger package and QA builds"
   task :trigger do
     uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/trigger/pipeline")
-    params = {
-      "ref" => ENV["CI_COMMIT_REF_NAME"],
-      "token" => ENV["BUILD_TRIGGER_TOKEN"],
-      "variables[ALTERNATIVE_SOURCES]" => true,
-      "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
-      "variables[ee]" => ENV["ee"] || "false"
-    }
-
+    params = Build::Info.get_trigger_params
     res = Net::HTTP.post_form(uri, params)
     pipeline_id = JSON.parse(res.body)['id']
 
