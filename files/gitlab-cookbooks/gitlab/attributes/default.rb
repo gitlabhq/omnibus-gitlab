@@ -379,7 +379,7 @@ default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
 
 default['gitlab']['postgresql']['ssl'] = 'off'
-default['gitlab']['postgresql']['ssl_ciphers'] = nil
+default['gitlab']['postgresql']['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
 default['gitlab']['postgresql']['ssl_cert_file'] = 'server.crt'
 default['gitlab']['postgresql']['ssl_key_file'] = 'server.key'
 default['gitlab']['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
