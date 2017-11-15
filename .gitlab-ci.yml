@@ -326,6 +326,7 @@ Trigger:docker:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -355,6 +356,11 @@ Trigger:qa:
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
     - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
     - bundle exec rake qa:test
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
   only:
     - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
@@ -767,6 +773,7 @@ QA Tag:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -774,6 +781,11 @@ QA Tag:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake release:qa
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
@@ -851,6 +863,7 @@ Docker branch:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -881,6 +894,11 @@ QA Master:
     - bundle exec rake qa:build
     - bundle exec rake qa:push:stable
     - bundle exec rake qa:push:nightly
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
