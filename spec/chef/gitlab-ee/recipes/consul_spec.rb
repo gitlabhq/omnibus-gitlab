@@ -75,6 +75,36 @@ describe 'consul' do
       end
     end
 
+    context 'with default options' do
+      it 'allows the user to specify node name' do
+        stub_gitlab_rb(
+          consul: {
+            enable: true
+          }
+        )
+        expect(chef_run).to render_file(consul_conf).with_content { |content|
+          expect(content).to match(%r{"datacenter":"gitlab_consul"})
+          expect(content).to match(%r{"disable_update_check":true})
+          expect(content).to match(%r{"enable_script_checks":true})
+          expect(content).to match(%r{"node_name":"fauxhai.local"})
+          expect(content).to match(%r{"rejoin_after_leave":true})
+          expect(content).to match(%r{"server":false})
+        }
+      end
+    end
+
+    context 'with non-default options' do
+      it 'allows the user to specify node name' do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+            node_name: 'fakenodename'
+          }
+        )
+        expect(chef_run).to render_file(consul_conf).with_content('"node_name":"fakenodename"')
+      end
+    end
+
     context 'server enabled' do
       before do
         stub_gitlab_rb(
