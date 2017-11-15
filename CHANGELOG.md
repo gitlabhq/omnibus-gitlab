@@ -16,6 +16,16 @@ omnibus-gitlab repository.
 - Bump openssl to 1.0.2m (Takuya Noguchi)
 - Stop creating SSH keys for Geo secondaries f7147d8b
 - Make postgresql replication client sslmode configurable 1e2be156
+- Disable TLSv1 and SSLv3 ciphers for postgresql 7ab9004f
+
+10.1.3
+
+- No changes
+
+10.1.2
+
+- Bump embedded Git version to 2.13.6 921ba935
+- Update Mattermost to 4.2.1 640c88
 
 10.1.1
 
