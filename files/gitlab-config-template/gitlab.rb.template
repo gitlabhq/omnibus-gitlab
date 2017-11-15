@@ -1689,6 +1689,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
 # consul['data_dir'] = '/var/opt/gitlab/consul/data'
 # consul['log_directory'] = '/var/log/gitlab/consul'
+# consul['node_name'] = nil
 # consul['script_directory'] = '/var/opt/gitlab/consul/scripts'
 # consul['configuration'] = {
 #   'client_addr' => nil,

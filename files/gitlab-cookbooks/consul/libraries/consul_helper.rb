@@ -8,7 +8,7 @@ class ConsulHelper
       'datacenter' => 'gitlab_consul',
       'disable_update_check' => true,
       'enable_script_checks' => true,
-      'node_name' => node['fqdn'],
+      'node_name' => node['consul']['node_name'] || node['fqdn'],
       'rejoin_after_leave' => true,
       'server' => false
     }
