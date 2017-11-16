@@ -126,6 +126,7 @@ module Prometheus
       gitlab_monitor_scrape_configs
       sidekiq_scrape_config
       unicorn_scrape_configs
+      workhorse_scrape_config
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
       exporter_scrape_config('redis')
@@ -214,6 +215,29 @@ module Prometheus
                         'metrics_path' => '/-/metrics',
                         'static_configs' => [
                           'targets' => [prometheus_target],
+                        ]
+                      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def workhorse_scrape_config
+      # Don't parse if workhorse is explicitly disabled
+      return unless Services.enabled?('gitlab_workhorse')
+
+      default_config = Gitlab['node']['gitlab']['gitlab-workhorse'].to_hash
+      user_config = Gitlab['gitlab_workhorse']
+
+      # Don't enable a scrape config if the listen address is empty.
+      return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
+
+      listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
+
+      scrape_config = {
+                        'job_name' => 'gitlab-workhorse',
+                        'static_configs' => [
+                          'targets' => [listen_address],
                         ]
                       }
 

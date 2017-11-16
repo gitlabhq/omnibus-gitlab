@@ -22,6 +22,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9100
+  - job_name: gitlab-workhorse
+    static_configs:
+    - targets:
+      - localhost:9229
   - job_name: gitlab-unicorn
     metrics_path: "/-/metrics"
     static_configs:

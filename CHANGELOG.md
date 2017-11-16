@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.3.0
 
+- Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
 
 10.2.0
