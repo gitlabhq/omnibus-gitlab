@@ -50,6 +50,10 @@ describe 'gitlab-ee::pgbouncer' do
       expect(chef_run).to include_recipe('gitlab::postgresql_user')
     end
 
+    it 'does not include the consul recipe by default' do
+      expect(chef_run).not_to include_recipe('consul::enable')
+    end
+
     it_behaves_like 'enabled runit service', 'pgbouncer', 'root', 'root'
 
     it 'creates the appropriate directories' do
@@ -130,6 +134,20 @@ describe 'gitlab-ee::pgbouncer' do
         )
         expect(chef_run).to create_file('databases.json')
           .with(user: 'fakeuser', group: 'fakeuser')
+      end
+    end
+
+    context 'consul is enabled' do
+      before do
+        stub_gitlab_rb(
+          consul: {
+            enable: true
+          }
+        )
+      end
+
+      it 'should include the consul::enable recipe' do
+        expect(chef_run).to include_recipe('consul::enable')
       end
     end
   end

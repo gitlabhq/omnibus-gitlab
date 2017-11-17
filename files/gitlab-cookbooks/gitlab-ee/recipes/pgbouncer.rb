@@ -20,6 +20,9 @@ pgb_helper = PgbouncerHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
+# If consul is enabled, it needs to run before pgbouncer
+include_recipe 'consul::enable' if node['consul']['enable']
+
 [
   node['gitlab']['pgbouncer']['log_directory'],
   node['gitlab']['pgbouncer']['data_directory']
