@@ -34,6 +34,9 @@ Omnibus-gitlab package will attempt to automatically authorise GitLab Mattermost
 This is because automatic authorisation requires access to GitLab database.
 If GitLab database is not available you will need to manually authorise GitLab Mattermost for access to GitLab.
 
+> **Note:** Upgrading the `omnibus-gitlab` package will override any Mattermost setting changes 
+made outside of `gitlab.rb`, see [upgrade section](#upgrading-gitlab-mattermost) for more details.
+
 ## Running GitLab Mattermost on its own server
 
 If you want to run GitLab and GitLab Mattermost on two separate servers you
