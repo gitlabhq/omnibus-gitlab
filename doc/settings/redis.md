@@ -104,6 +104,13 @@ GitLab includes support for running with separate redis instances for different 
     gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
     gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
     ```
+
+    **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
+    Where
+    * PASSWORD is the plaintext password for the Redis instance
+    * REDIS_HOST is the hostname or IP address of the host
+    * REDIS_PORT is the port Redis is listening on, the default is 6379
+
 1. Run `gitlab-ctl reconfigure`
 
 ## Using a Redis HA setup
