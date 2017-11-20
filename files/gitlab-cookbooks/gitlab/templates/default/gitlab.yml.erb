@@ -450,6 +450,11 @@ production: &base
 <% @monitoring_whitelist.each do |entry| %>
       - <%= entry %>
 <% end %>
+    # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
+    sidekiq_exporter:
+      enabled: <%= @sidekiq['metrics_enabled'] %>
+      address: <%= @sidekiq['listen_address'] %>
+      port: <%= @sidekiq['listen_port'] %>
 
   #
   # 5. Extra customization

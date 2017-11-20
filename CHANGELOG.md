@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.3.0
+
+- Add sidekiq metrics to Prometheus
+
 10.2.0
 
 - Enable pgbouncer application_name_add_host config by default 29dab6af1
