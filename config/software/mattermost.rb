@@ -37,7 +37,6 @@ build do
   copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
   copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
-  copy 'webapp', "#{install_dir}/embedded/service/mattermost/webapp"
   copy 'client', "#{install_dir}/embedded/service/mattermost/client"
 
   block do
