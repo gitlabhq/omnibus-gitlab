@@ -1,3 +1,4 @@
+require 'English'
 require_relative 'build/info.rb'
 
 class PackageRepository
@@ -40,7 +41,12 @@ class PackageRepository
       if dry_run
         puts cmd
       else
-        raise "Upload to package server failed!." unless system(cmd)
+        result = `#{cmd}`
+
+        if $CHILD_STATUS.exitstatus == 1
+          raise "Upload to package server failed!." unless result =~ /filename: has already been taken/
+          puts "Package #{pkg} has already been uploaded, skipping.\n"
+        end
       end
     end
   end
