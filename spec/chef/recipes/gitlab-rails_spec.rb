@@ -433,7 +433,7 @@ describe 'gitlab::gitlab-rails' do
       context 'when git_timeout is not configured' do
         it 'sets git_timeout value to default' do
           expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/git_timeout:\s+10800/)
+            .with_content(/git_timeout:\s+800/)
         end
       end
     end
