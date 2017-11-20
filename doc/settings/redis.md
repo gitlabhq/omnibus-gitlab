@@ -57,12 +57,12 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
     # If you wish to use Redis authentication (recommended)
     redis['password'] = 'Redis Password'
     gitlab_rails['redis_password'] = 'Redis Password'
-    
+
     # Disable automatic database migrations
     #   Only the primary GitLab application server should handle migrations
     gitlab_rails['auto_migrate'] = false
     ```
-    
+
     > **Note:** The `redis_master_role['enable']` option is only available as of
     GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
     to understand which services are automatically disabled via that option.
@@ -84,13 +84,34 @@ redis['maxclients'] = 20000
 
 The following settings are to enable a more performant Redis server instance. 'tcp_timeout' is
 a value set in seconds that the Redis server waits before terminating an IDLE TCP connection.
-The 'tcp_keepalive' is a tunable setting in seconds to TCP ACKs to clients in absence of 
+The 'tcp_keepalive' is a tunable setting in seconds to TCP ACKs to clients in absence of
 communication.
 
 ```ruby
 redis['tcp_timeout'] = "60"
 redis['tcp_keepalive'] = "300"
 ```
+
+## Running with multiple Redis instances
+
+GitLab includes support for running with separate redis instances for different persistence classes, currently: cache, queues, and shared_state.
+
+1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server][]
+1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
+
+    ```
+    gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
+    gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
+    gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
+    ```
+
+    **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
+    Where
+    * PASSWORD is the plaintext password for the Redis instance
+    * REDIS_HOST is the hostname or IP address of the host
+    * REDIS_PORT is the port Redis is listening on, the default is 6379
+
+1. Run `gitlab-ctl reconfigure`
 
 ## Using a Redis HA setup
 

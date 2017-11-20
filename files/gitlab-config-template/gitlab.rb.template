@@ -409,6 +409,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   {'host' => '127.0.0.1', 'port' => 26379},
 # ]
 
+#### Separate instances support
+###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html#running-with-multiple-redis-instances
+# gitlab_rails['redis_cache_instance'] = nil
+# gitlab_rails['redis_queues_instance'] = nil
+# gitlab_rails['redis_shared_state_instance'] = nil
+
 ### GitLab email server settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
 ###! **Use smtp instead of sendmail/postfix.**

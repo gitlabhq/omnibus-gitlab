@@ -2,6 +2,8 @@ require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir storage_directory)).converge('gitlab::default') }
+  let(:redis_instances) { %w(cache queues shared_state) }
+  let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -89,6 +91,12 @@ describe 'gitlab::gitlab-rails' do
         expect(chef_run).to render_file(config_file)
                               .with_content(%r{url: unix:/var/opt/gitlab/redis/redis.socket})
       end
+
+      it 'does not render the separate instance configurations' do
+        redis_instances.each do |instance|
+          expect(chef_run).not_to render_file("#{config_dir}redis.#{instance}.yml")
+        end
+      end
     end
 
     context 'and custom configuration' do
@@ -106,6 +114,29 @@ describe 'gitlab::gitlab-rails' do
       it 'creates the config file with custom host, port, password and database' do
         expect(chef_run).to render_file(config_file)
                               .with_content(%r{url: redis://:mypass@redis.example.com:8888/2})
+      end
+    end
+
+    context 'with multiple instances' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_cache_instance: "url: redis://:fakepass@fake.redis.cache.com:8888/2",
+            redis_queues_instance: "url: redis://:fakepass@fake.redis.queues.com:8888/2",
+            redis_shared_state_instance: "url: redis://:fakepass@fake.redis.shared_state.com:8888/2"
+          }
+        )
+      end
+
+      it 'render separate config files' do
+        redis_instances.each do |instance|
+          expect(chef_run).to render_file("#{config_dir}redis.#{instance}.yml")
+            .with_content(%r{url: redis://:fakepass@fake.redis.#{instance}.com:8888/2})
+        end
+      end
+
+      it 'still renders the default configuration file' do
+        expect(chef_run).to render_file(config_file)
       end
     end
   end

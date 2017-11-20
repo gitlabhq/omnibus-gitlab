@@ -189,6 +189,22 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   restarts dependent_services
 end
 
+%w(cache queues shared_state).each do |instance|
+  filename = "redis.#{instance}.yml"
+  url = node['gitlab']['gitlab-rails']["redis_#{instance}_instance"]
+  templatesymlink "Create a #{filename} and create a symlink to Rails root" do
+    link_from File.join(gitlab_rails_source_dir, "config/#{filename}")
+    link_to File.join(gitlab_rails_etc_dir, filename)
+    source 'resque.yml.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    variables(redis_url: url, redis_sentinels: [])
+    restarts dependent_services
+    not_if { url.nil? }
+  end
+end
+
 templatesymlink "Create a aws.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/aws.yml")
   link_to File.join(gitlab_rails_etc_dir, "aws.yml")
