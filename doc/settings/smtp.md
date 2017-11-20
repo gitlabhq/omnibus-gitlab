@@ -265,7 +265,9 @@ gitlab_rails['smtp_port'] = 587
 gitlab_rails['smtp_user_name'] = "login"
 gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_domain'] = "yourdomain_or_yandex.ru"
+gitlab_rails['gitlab_email_from'] = 'login_or_login@yandex.ru'
 gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ````
