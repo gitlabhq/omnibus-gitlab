@@ -600,6 +600,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['concurrency'] = 25
+# sidekiq['metrics_enabled'] = true
+# sidekiq['listen_address'] = 127.0.0.1
+# sidekiq['listen_port'] = 8082
 
 ################################################################################
 ## gitlab-shell

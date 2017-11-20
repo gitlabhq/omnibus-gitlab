@@ -27,6 +27,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - 127.0.0.1:8080
+  - job_name: gitlab-sidekiq
+    static_configs:
+    - targets:
+      - 127.0.0.1:8082
   - job_name: gitlab_monitor_database
     metrics_path: "/database"
     static_configs:

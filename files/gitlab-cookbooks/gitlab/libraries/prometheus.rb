@@ -124,6 +124,7 @@ module Prometheus
       # Don't parse if prometheus is explicitly disabled
       return unless Services.enabled?('prometheus')
       gitlab_monitor_scrape_configs
+      sidekiq_scrape_config
       unicorn_scrape_configs
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
@@ -166,6 +167,34 @@ module Prometheus
                 }
 
       default_scrape_configs = [] << database << sidekiq << process << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def sidekiq_scrape_config
+      # Don't parse if sidekiq is explicitly disabled
+      return unless (Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster'))
+
+      default_config = Gitlab['node']['gitlab']['sidekiq'].to_hash
+      user_config = Gitlab['sidekiq']
+
+      # Don't enable unless the exporter is enabled
+      return unless default_config['metrics_enabled'] || user_config['metrics_enabled']
+
+      listen_address = user_config['listen_address'] || default_config['listen_address']
+      listen_port = user_config['listen_port'] || default_config['listen_port']
+      prometheus_target = [ listen_address, listen_port ].join(':')
+
+      # Don't enable if the target is empty.
+      return if prometheus_target.empty?
+
+      scrape_config = {
+                        'job_name' => 'gitlab-sidekiq',
+                        'static_configs' => [
+                          'targets' => [prometheus_target],
+                        ]
+                      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
