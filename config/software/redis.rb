@@ -20,10 +20,10 @@ license 'BSD-3-Clause'
 license_file 'COPYING'
 
 dependency 'config_guess'
-default_version '3.2.5'
+default_version '3.2.11'
 
-version '3.2.5' do
-  source md5: 'd3d2b4dd4b2a3e07ee6f63c526b66b08'
+version '3.2.11' do
+  source md5: '27dd679aa8dc8ff6fbba48e82cfa6b42'
 end
 
 source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"

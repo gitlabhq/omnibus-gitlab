@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.3.0
 
 - Add sidekiq metrics to Prometheus
+- Update Redis to 3.2.11 (Takuya Noguchi)
 
 10.2.0
 
