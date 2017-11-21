@@ -29,11 +29,21 @@ get_details_from_ec2()
   fi
 }
 
+set_protocol()
+{
+  # Checking if EXTERNAL_URL starts with http:// or https://
+  if ! $(echo ${EXTERNAL_URL} | awk '$0 !~ /^http[s]?:\/\// {exit 1}'); then
+    EXTERNAL_URL="http://${EXTERNAL_URL}"
+  fi
+}
+
 if [ -z "${EXTERNAL_URL}" ]; then
   check_if_ec2
   if [ $? -eq 0 ]  ; then
     get_details_from_ec2
   fi
+else
+    set_protocol
 fi
 
 if [ -z "${EXTERNAL_URL}" ]; then
