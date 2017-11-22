@@ -44,7 +44,7 @@ describe 'gitlab::gitlab-workhorse' do
 
   context 'without prometheus listen address' do
     before do
-      stub_gitlab_rb(gitlab_workhorse: {})
+      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: '' })
     end
 
     it 'correctly renders out the workhorse service file' do
@@ -55,11 +55,11 @@ describe 'gitlab::gitlab-workhorse' do
 
   context 'with prometheus listen address' do
     before do
-      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9100' })
+      stub_gitlab_rb(gitlab_workhorse: { prometheus_listen_addr: ':9229' })
     end
 
     it 'correctly renders out the workhorse service file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr :9100 \\/)
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-prometheusListenAddr :9229 \\/)
     end
   end
 

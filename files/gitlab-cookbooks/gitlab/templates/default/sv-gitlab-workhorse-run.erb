@@ -31,7 +31,7 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['api_queue_limit'] %>
     -apiQueueLimit <%= node['gitlab']['gitlab-workhorse']['api_queue_limit'] %> \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %>
+    <% unless node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'].empty? %>
     -prometheusListenAddr <%= node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %> \
     <% end %>
     -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
