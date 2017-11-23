@@ -5,6 +5,7 @@
 # sudo gitlab-ctl reconfigure
 
 socket_path = '<%= @socket_path %>'
+bin_dir = '/opt/gitlab/embedded/bin'
 
 <% if @listen_addr %>
 # Optional: listen on a TCP socket. This is insecure (no authentication)

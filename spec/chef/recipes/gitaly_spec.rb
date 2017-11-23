@@ -32,6 +32,8 @@ describe 'gitaly' do
     it 'populates gitaly config.toml with defaults' do
       expect(chef_run).to render_file(config_path)
         .with_content("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
+      expect(chef_run).to render_file(config_path)
+        .with_content("bin_dir = '/opt/gitlab/embedded/bin'")
       expect(chef_run).not_to render_file(config_path)
         .with_content("listen_addr = '#{listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
@@ -71,6 +73,8 @@ describe 'gitaly' do
     it 'populates gitaly config.toml with custom values' do
       expect(chef_run).to render_file(config_path)
         .with_content("socket_path = '#{socket_path}'")
+      expect(chef_run).to render_file(config_path)
+        .with_content("bin_dir = '/opt/gitlab/embedded/bin'")
       expect(chef_run).to render_file(config_path)
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
