@@ -26,6 +26,8 @@ dependency 'omnibus-ctl'
 source path: File.expand_path('files/gitlab-ctl-commands', Omnibus::Config.project_root)
 
 build do
+  command "mkdir -p #{install_dir}/bin/"
+
   block do
     open("#{install_dir}/bin/gitlab-ctl", 'w') do |file|
       file.print <<-EOH
