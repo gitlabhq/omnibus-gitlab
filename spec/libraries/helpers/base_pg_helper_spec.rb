@@ -89,5 +89,20 @@ describe BasePgHelper do
     it 'returns false when wrong password is in MD5 format' do
       expect(subject.user_password_match?('gitlab', 'md5b599de4332636c03a60fca13be1edb5f')).to be_falsey
     end
+
+    it 'returns false when password is not supplied' do
+      expect(subject.user_password_match?('gitlab', nil)).to be_falsey
+    end
+
+    context 'nil password' do
+      before do
+        # user: gitlab pass: unset
+        allow(subject).to receive(:user_hashed_password) { '' }
+      end
+
+      it 'returns true when the password is nil' do
+        expect(subject.user_password_match?('gitlab', nil)).to be_truthy
+      end
+    end
   end
 end
