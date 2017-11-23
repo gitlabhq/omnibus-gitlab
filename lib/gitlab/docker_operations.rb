@@ -21,7 +21,7 @@ class DockerOperations
 
   # namespace - registry project. Can be one of:
   # 1. gitlab/gitlab-{ce,ee}
-  # 2. gitlab/gitlab-qa
+  # 2. gitlab/gitlab-{ce,ee}-qa
   # 3. omnibus-gitlab/gitlab-{ce,ee}
   #
   # initial_tag - specifies the tag used while building the image. Can be one of:

@@ -19,6 +19,10 @@ namespace :qa do
     task :stable do
       Build::Image.authenticate
       Build::QA.tag_and_push_to_dockerhub(Build::Info.docker_tag)
+
+      Build::Image.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], ENV['CI_REGISTRY'])
+      # Allows to have gitlab/gitlab-{ce,ee}-qa:10.2.0-ee without the build number
+      Build::QA.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
     end
 
     desc "Push rc version of QA"
