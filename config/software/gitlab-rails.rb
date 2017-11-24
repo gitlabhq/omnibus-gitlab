@@ -163,7 +163,7 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features']
+  sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features', 'qa', 'rubocop']
 
   # This directory will be deleted after all the licenses copied to it are
   # handled by the DependencyInformation task of omnibus. It won't be part
