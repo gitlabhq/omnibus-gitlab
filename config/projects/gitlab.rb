@@ -78,31 +78,39 @@ dependency 'redis'
 dependency 'nginx'
 dependency 'mixlib-log'
 dependency 'chef-zero'
-dependency 'consul' if ee
 dependency 'ohai'
 dependency 'chef-gem'
 dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
-dependency 'gitlab-rails'
-dependency 'gitlab-shell'
-dependency 'gitlab-workhorse'
+if ee
+  dependency 'consul'
+  dependency 'gitlab-ctl-ee'
+  dependency 'gitlab-geo-psql'
+end
 dependency 'gitlab-ctl'
-dependency 'gitlab-ctl-ee' if ee
 dependency 'gitlab-psql'
-dependency 'gitlab-geo-psql' if ee
 dependency 'gitlab-healthcheck'
 dependency 'gitlab-cookbooks'
 dependency 'gitlab-selinux'
 dependency 'gitlab-scripts'
 dependency 'gitlab-config-template'
-dependency 'gitaly'
 dependency 'mattermost'
-dependency 'node-exporter'
 dependency 'prometheus'
+dependency 'node-exporter'
 dependency 'redis-exporter'
 dependency 'postgres-exporter'
 dependency 'gitlab-monitor'
+dependency 'gitlab-workhorse'
+dependency 'gitlab-shell'
+
+# gitaly needs grpc to work correctly. These native extensions are built as part
+# of gitlab-rails build. So, gitlab-rails has to be built before gitaly. But
+# making gitaly depend on gitlab-rails will cause it to be built earlier,
+# because of the way omnibus-gitlab detects and builds transitive depends. So
+# we have to maintain this order of requirement here.
+dependency 'gitlab-rails'
+dependency 'gitaly'
 
 # version manifest file
 dependency 'version-manifest'

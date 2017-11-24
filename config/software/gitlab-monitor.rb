@@ -24,6 +24,7 @@ license_file 'LICENSE'
 
 dependency 'ruby'
 dependency 'rubygems'
+dependency 'postgresql'
 
 source git: version.remote
 
