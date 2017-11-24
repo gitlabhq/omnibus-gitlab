@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
+- Remove duplicated shared object files from grpc gem (Takuya Noguchi)
 
 10.2.0
 
@@ -941,15 +942,15 @@ are not the same (O Schwede) c4e83c5
 
 8.8.5
 
- - No changes
+- No changes
 
 8.8.4
 
- - No changes
+- No changes
 
 8.8.3
 
- - Add gitlab_default_projects_features_container_registry variable
+- Add gitlab_default_projects_features_container_registry variable
 
 8.8.2
 
