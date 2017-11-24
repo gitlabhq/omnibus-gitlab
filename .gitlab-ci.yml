@@ -936,6 +936,9 @@ notify:slack-fail:
     - tags@gitlab/omnibus-gitlab
   except:
     - triggers@gitlab-org/omnibus-gitlab
+  tags:
+  - promotion
+  dependencies: []
 
 # Staging upload
 Ubuntu 14.04 staging:
