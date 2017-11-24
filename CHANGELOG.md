@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
 - Remove duplicated shared object files from grpc gem (Takuya Noguchi)
+- Update default gitlab-shell git timeout to 3 hours ec9ed900
 
 10.2.0
 
