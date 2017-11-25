@@ -69,7 +69,7 @@ To enable integrations with GitLab, add the following on the GitLab Server:
 gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
 ```
 
-Optionally, you can set `mattermost['email_enable_sign_up_with_email'] = false` to force all users to sign-up with GitLab only. See Mattermost [documentation on GitLab SSO](https://docs.mattermost.com/deployment/sso-gitlab.html).
+By default GitLab Mattermost will force all users to sign-up with GitLab and disable sign-up by email option. See Mattermost [documentation on GitLab SSO](https://docs.mattermost.com/deployment/sso-gitlab.html).
 
 ## Manually (re)authorising GitLab Mattermost with GitLab
 
@@ -136,8 +136,6 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 ### Setting up SMTP for GitLab Mattermost
 
-By default, `mattermost['email_enable_sign_up_with_email'] = true` which allows team creation and account signup using email and password. This should be `false` if you're using only an external authentication source such as GitLab.
-
 SMTP configuration depends on SMTP provider used.  Note that the configuration keys used are not the same as the ones that the main GitLab application uses, for example the SMTP user in Mattermost is `email_smtp_username` and not `smtp_user_name`.
 
 If you are using SMTP without TLS minimal configuration in `/etc/gitlab/gitlab.rb` contains:
@@ -160,7 +158,7 @@ mattermost['email_skip_server_certificate_verification'] = false
 If you are using TLS, configuration can look something like this:
 
 ```ruby
-mattermost['email_enable_sign_up_with_email'] = true
+mattermost['email_enable_sign_in_with_email'] = true
 mattermost['email_enable_sign_up_with_email'] = false
 mattermost['email_send_email_notifications'] = true
 mattermost['email_smtp_auth'] = true
