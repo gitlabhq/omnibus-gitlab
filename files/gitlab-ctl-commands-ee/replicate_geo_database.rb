@@ -60,7 +60,7 @@ class GeoReplicationCommand
         @options[:slot_name] = slot_name
       end
 
-      opts.on('--no-wait', 'Do not wait before starting the replication process') do
+      opts.on('--no-wait', 'Do not ask for confirmation before starting the replication process') do
         @options[:now] = true
       end
 

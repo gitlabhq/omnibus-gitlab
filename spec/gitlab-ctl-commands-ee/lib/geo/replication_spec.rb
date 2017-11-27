@@ -11,6 +11,7 @@ describe Geo::Replication, '#execute' do
 
   before do
     allow(STDOUT).to receive(:puts)
+    allow(subject).to receive(:print)
     allow(File).to receive(:open).and_yield(file)
 
     stub_const('GitlabCtl::Util', command)
@@ -55,6 +56,20 @@ describe Geo::Replication, '#execute' do
 
       expect(file).to have_received(:write).with("::*::pass\n")
       expect(file).to have_received(:write).with(/password=pass sslmode='\n/)
+    end
+  end
+
+  context 'when user has to provide a confirmation text' do
+    let(:options) { { now: false } }
+
+    it 'asks for confirmation string' do
+      allow(subject).to receive(:ask_pass).and_return('mypass')
+      expect(STDIN).to receive(:gets).and_return('replicate!')
+
+      subject.execute
+
+      expect(command).to have_received(:run_command)
+        .with(%r{/embedded/bin/pg_basebackup}, anything)
     end
   end
 end

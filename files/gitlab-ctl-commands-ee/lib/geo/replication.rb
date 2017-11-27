@@ -39,9 +39,18 @@ module Geo
       puts
 
       unless @options[:now]
-        puts '*** You have 30 seconds to hit CTRL-C ***'.color(:yellow)
-        puts
-        sleep 30
+        puts '*** Please enter confirmation text `replicate!` if you are sure you want to do this! ***'.color(:yellow)
+        puts '*** If you want to abort you can hit CTRL-C now! ***'.color(:yellow)
+
+        loop do
+          print 'Confirmation: '
+          confirmation = STDIN.gets.to_s.strip
+
+          break if confirmation == 'replicate!'
+
+          puts "*** You entered `#{confirmation}` instead of `replicate!`. " \
+               'Please try again or abort with CTRL-C! ***'.color(:red)
+        end
       end
 
       create_gitlab_backup!
