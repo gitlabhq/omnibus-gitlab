@@ -19,6 +19,8 @@ repmgr_helper = RepmgrHelper.new(node)
 replication_user = node['repmgr']['user']
 repmgr_conf = "#{node['gitlab']['postgresql']['dir']}/repmgr.conf"
 
+pg_helper = PgHelper.new(node)
+
 log_directory = node['repmgr']['log_directory']
 
 node.default['gitlab']['postgresql']['custom_pg_hba_entries']['repmgr'] = repmgr_helper.pg_hba_entries
@@ -38,6 +40,7 @@ end
 
 postgresql_user replication_user do
   options %w(SUPERUSER)
+  not_if { pg_helper.is_slave? }
 end
 
 postgresql_database node['repmgr']['database'] do
