@@ -114,19 +114,15 @@ module Build
         "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
       end
 
-      def dockerhub_image_name
-        "gitlab/#{Info.package}"
-      end
-
-      def gitlab_registry_image_name
-        Info.package
-      end
-
-      def gitlab_registry_image_address(tag: nil)
-        address = "#{ENV['CI_REGISTRY_IMAGE']}/#{gitlab_registry_image_name}"
-        address << ":#{tag}" if tag
-
-        address
+      def fetch_artifact_url(project_id, pipeline_id)
+        uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
+        req = Net::HTTP::Get.new(uri)
+        req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        http.use_ssl = true
+        res = http.request(req)
+        output = JSON.parse(res.body)
+        output.find { |job| job['name'] == 'Trigger:package' }['id']
       end
 
       def triggered_build_package_url
@@ -134,7 +130,7 @@ module Build
         pipeline_id = ENV['CI_PIPELINE_ID']
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
-        id = Image.fetch_artifact_url(project_id, pipeline_id)
+        id = fetch_artifact_url(project_id, pipeline_id)
         "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-xenial/gitlab.deb"
       end
 

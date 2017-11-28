@@ -15,8 +15,8 @@ class DockerOperations
     end
   end
 
-  def self.authenticate(username, password, serveraddress)
-    Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
+  def self.authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
+    Docker.authenticate!(username: username, password: password, serveraddress: registry)
   end
 
   # namespace - registry project. Can be one of:
