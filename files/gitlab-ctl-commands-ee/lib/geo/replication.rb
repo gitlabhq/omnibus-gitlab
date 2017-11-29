@@ -34,22 +34,21 @@ module Geo
       puts 'WARNING: Make sure this script is run from the secondary server'.color(:yellow)
       puts '---------------------------------------------------------------'.color(:yellow)
       puts
-      puts 'This script will disable your local PostgreSQL database, and start '
-      puts "a backup/restore from the primary node at '#{@options[:host]}'"
+      puts '*** You are about to delete your local PostgreSQL database, and replicate the primary database. ***'.color(:yellow)
+      puts "*** The primary geo node is `#{@options[:host]}` ***".color(:yellow)
       puts
 
       unless @options[:now]
-        puts '*** Please enter confirmation text `replicate!` if you are sure you want to do this! ***'.color(:yellow)
-        puts '*** If you want to abort you can hit CTRL-C now! ***'.color(:yellow)
+        puts '*** Are you sure you want to continue (replicate/no)? ***'.color(:yellow)
 
         loop do
           print 'Confirmation: '
-          confirmation = STDIN.gets.to_s.strip
+          answer = STDIN.gets.to_s.strip
 
-          break if confirmation == 'replicate!'
+          break if answer == 'replicate'
+          exit 0 if answer == 'no'
 
-          puts "*** You entered `#{confirmation}` instead of `replicate!`. " \
-               'Please try again or abort with CTRL-C! ***'.color(:red)
+          puts "*** You entered `#{answer}` instead of `replicate` or `no`.".color(:red)
         end
       end
 

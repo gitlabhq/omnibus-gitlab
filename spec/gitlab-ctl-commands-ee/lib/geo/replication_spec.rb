@@ -64,7 +64,7 @@ describe Geo::Replication, '#execute' do
 
     it 'asks for confirmation string' do
       allow(subject).to receive(:ask_pass).and_return('mypass')
-      expect(STDIN).to receive(:gets).and_return('replicate!')
+      expect(STDIN).to receive(:gets).and_return('replicate')
 
       subject.execute
 
