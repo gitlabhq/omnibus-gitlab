@@ -54,6 +54,9 @@ You can also use the docker images provided by GitLab to install and configure a
 - [Starting and stopping](maintenance/README.md#starting-and-stopping)
 - [Invoking Rake tasks](maintenance/README.md#invoking-rake-tasks)
 - [Starting a Rails console session](maintenance/README.md#starting-a-rails-console-session)
+- [Starting a Postgres superuser psql session](maintenance/README.md#starting-a-postgres-superuser-psql-session)
+- [Container registry garbage collection](maintenance/README.md#container-registry-garbage-collection)
+
 
 ## Configuring
 
