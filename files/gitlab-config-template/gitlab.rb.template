@@ -1007,7 +1007,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # omnibus_gitconfig['system'] = {
 #  "pack" => ["threads = 1"],
-#  "receive" => ["fsckObjects = true"],
+#  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
 #  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
 # }

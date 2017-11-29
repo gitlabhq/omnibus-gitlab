@@ -24,7 +24,7 @@ describe 'gitlab::default' do
     )
 
     gitconfig_hash = {
-      "receive" => ["fsckObjects = true"],
+      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
       "pack" => ["threads = 1"],
       "repack" => ["writeBitmaps = true"],
       "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
@@ -36,7 +36,7 @@ describe 'gitlab::default' do
   end
 
   it 'creates the system gitconfig directory and file' do
-    stub_gitlab_rb(omnibus_gitconfig: { system: { receive: ["fsckObjects = true"], pack: ["threads = 2"] } })
+    stub_gitlab_rb(omnibus_gitconfig: { system: { receive: ["fsckObjects = true", "advertisePushOptions = true"], pack: ["threads = 2"] } })
 
     expect(chef_run).to create_directory('/opt/gitlab/embedded/etc').with(
       user: 'root',
@@ -45,7 +45,7 @@ describe 'gitlab::default' do
     )
 
     gitconfig_hash = {
-      "receive" => ["fsckObjects = true"],
+      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
       "pack" => ["threads = 2"],
       "repack" => ["writeBitmaps = true"],
       "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
