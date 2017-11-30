@@ -21,12 +21,13 @@ describe Build::Image do
     allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.com/group/repo')
     allow(ENV).to receive(:[]).with('DOCKERHUB_USERNAME').and_return('john')
     allow(ENV).to receive(:[]).with('DOCKERHUB_PASSWORD').and_return('secret')
+    allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
   end
 
   describe '.pull' do
     it 'creates an image from the local one' do
       expect(Docker::Image).to receive(:create).with(
-        'fromImage' => "#{ComponentImage.gitlab_registry_image_address}:#{Build::Info.docker_tag}"
+        'fromImage' => "#{ComponentImage.gitlab_registry_image_address}:9.0.0"
       )
 
       ComponentImage.pull
@@ -65,7 +66,7 @@ describe Build::Image do
       expect(DockerOperations).to receive(:tag_and_push).with(
         ComponentImage.gitlab_registry_image_address,
         ComponentImage.dockerhub_image_name,
-        Build::Info.docker_tag,
+        '9.0.0',
         'foo'
       )
 
