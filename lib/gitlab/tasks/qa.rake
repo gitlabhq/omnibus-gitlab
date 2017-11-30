@@ -1,9 +1,9 @@
 require 'docker'
-require_relative '../docker_operations.rb'
-require_relative '../build/qa.rb'
-require_relative '../build/check.rb'
-require_relative '../build/info.rb'
-require_relative '../build/image.rb'
+require_relative '../docker_operations'
+require_relative '../build/qa'
+require_relative '../build/check'
+require_relative '../build/info'
+require_relative '../build/qa_image'
 require 'gitlab/qa'
 
 namespace :qa do
