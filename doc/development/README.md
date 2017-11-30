@@ -78,6 +78,16 @@ up a Build Environment](../build/prepare-build-environment.md).
     sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
     ```
 
+  6. Docker container specific items
+
+     Before running `reconfigure`, you need to start runsv.
+
+     ```
+     /opt/gitlab/embedded/bin/runsvdir-start &
+     ```
+
+     After running `reconfigure`, you may have sysctl errors. There is a workaround in the [common installation problems doc](../common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
+
 Now, you can make necessary changes in the
 `~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
 for those changes to take effect.

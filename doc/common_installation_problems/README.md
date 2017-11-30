@@ -289,6 +289,26 @@ Another variation of this error reports the file system is read-only and shows f
 
 This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
 
+Also note you may need to repeat this process for a couple other lines, e.g. reconfigure will fail 3 times and you will eventually have added something like this to `/etc/sysctl.conf`:
+
+```
+kernel.shmall = 4194304
+kernel.sem = 250 32000 32 262
+net.core.somaxconn = 1024
+```
+
+Tip: You may find it easier to look at the line in the Chef output than to find the file (since the file is different for each error). See the last line of this snippet.
+
+```
+* file[create /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf kernel.shmall] action create
+  - create new file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf
+  - update content in file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf from none to 6d765d
+  --- /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf	2017-11-28 19:09:46.864364952 +0000
+  +++ /opt/gitlab/embedded/etc/.chef-90-omnibus-gitlab-kernel.shmall.conf kernel.shmall20171128-13622-sduqoj	2017-11-28 19:09:46.864364952 +0000
+  @@ -1 +1,2 @@
+  +kernel.shmall = 4194304
+```
+
 ### I am unable to install omnibus-gitlab without root access
 
 Occasionally people ask if they can install GitLab without root access.
