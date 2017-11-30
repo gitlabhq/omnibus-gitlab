@@ -1,7 +1,5 @@
 require_relative 'info'
 require_relative '../docker_operations'
-require 'net/http'
-require 'json'
 
 module Build
   module Image

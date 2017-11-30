@@ -11,7 +11,7 @@ namespace :qa do
   task :build do
     DockerOperations.build(
       Build::QA.get_gitlab_repo,
-      Build::QA.gitlab_registry_image_address,
+      Build::QAImage.gitlab_registry_image_address,
       'latest'
     )
   end

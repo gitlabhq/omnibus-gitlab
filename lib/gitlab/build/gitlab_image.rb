@@ -1,6 +1,5 @@
-require_relative 'info'
 require_relative 'image'
-require 'json'
+require_relative 'info'
 
 module Build
   class GitlabImage
