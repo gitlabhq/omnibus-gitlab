@@ -8,7 +8,7 @@ namespace :docker do
   namespace :build do
     desc "Build Docker All in one image"
     task :image do
-      Build::Image.write_release_file
+      Build::GitlabImage.write_release_file
       location = File.absolute_path(File.join(File.dirname(File.expand_path(__FILE__)), "../../../docker"))
       DockerOperations.build(
         location,
