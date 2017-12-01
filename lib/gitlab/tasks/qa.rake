@@ -61,7 +61,7 @@ namespace :qa do
       "Test::Integration::Mattermost"  # Test whether image works correctly with Mattermost
     ]
 
-    tests.push('Test::Integration::Geo') if ENV['ee']
+    tests.push('Test::Integration::Geo') if Build::Check.is_ee?
 
     tests.each do |task|
       Gitlab::QA::Scenario
