@@ -9,7 +9,10 @@ omnibus-gitlab repository.
 - Add sidekiq metrics to Prometheus
 - Remove duplicated shared object files from grpc gem (Takuya Noguchi)
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
-- Enable support for git push options in the git config (Romain Maffina) 08edd3e4 
+- Enable support for git push options in the git config (Romain Maffina) 08edd3e4
+
+10.2.3
+- Adjust number of unicorn workers if running a Geo secondary node
 
 10.2.0
 

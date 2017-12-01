@@ -29,5 +29,29 @@ module Unicorn
         Gitlab['gitlab_workhorse']['auth_socket'] = unicorn_socket
       end
     end
+
+    def workers(total_memory = Gitlab['node']['memory']['total'].to_i)
+      [
+        2, # Two is the minimum or web editor will no longer work.
+        [
+          self.worker_cpus,
+          self.worker_memory(total_memory)
+        ].min # min because we want to exceed neither CPU nor RAM
+      ].max # max because we need at least 2 workers
+    end
+
+    # Number of cpus to use for a worker.  Cores + 1 gives good CPU utilization.
+    def worker_cpus
+      Gitlab['node']['cpu']['total'].to_i + 1
+    end
+
+    # See how many worker processes fit in (total RAM - 1.5GB).
+    # Using the formula: (t - 1.5GB + (n/2)) / n
+    # t - total ram
+    # n - per worker ram. Use a value based on worker_memory_limit_min
+    # We add (n/2) in the numerator to get rounding instead of integer truncation.
+    def worker_memory(total_memory)
+      (total_memory - 1572864 + 204800) / 409600
+    end
   end
 end
