@@ -54,12 +54,16 @@ namespace :qa do
     # Get the docker image which was built on the previous stage of pipeline
     image = "#{ENV['CI_REGISTRY_IMAGE']}/#{release_package}:#{ENV['IMAGE_TAG']}"
 
-    [
+    tests = [
       "Test::Instance::Image",         # Test whether instance starts correctly
       "Test::Omnibus::Image",          # Test whether image works correctly
       "Test::Omnibus::Upgrade",        # Test whether upgrade is done
       "Test::Integration::Mattermost"  # Test whether image works correctly with Mattermost
-    ].each do |task|
+    ]
+
+    tests.push('Test::Integration::Geo') if ENV['ee']
+
+    tests.each do |task|
       Gitlab::QA::Scenario
         .const_get(task)
         .perform(image)
