@@ -76,16 +76,23 @@ describe 'qa', type: :rake do
   describe 'qa:test' do
     before do
       Rake::Task['qa:test'].reenable
+      Rake::Task['qa:build'].reenable
       Rake::Task['qa:push:triggered'].reenable
 
       allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return(image_tag)
     end
 
     it 'tags triggered QA correctly and run QA scenarios' do
-      qa_image = double
+      # qa:build
+      expect(Build::QA).to receive(:get_gitlab_repo)
+      expect(Build::QAImage).to receive(:gitlab_registry_image_address)
+      expect(DockerOperations).to receive(:build)
 
+      # qa:push:triggered
       expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(image_tag)
-      expect(Build::QAImage).to receive(:gitlab_registry_image_address).exactly(4).times.with(tag: image_tag).and_return(qa_image)
+
+      qa_image = double
+      expect(Build::GitlabImage).to receive(:gitlab_registry_image_address).exactly(4).times.with(tag: image_tag).and_return(qa_image)
 
       {
         'Test::Instance::Image' => double,

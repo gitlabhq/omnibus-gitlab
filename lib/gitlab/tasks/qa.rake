@@ -3,6 +3,7 @@ require_relative '../docker_operations'
 require_relative '../build/qa'
 require_relative '../build/check'
 require_relative '../build/info'
+require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require 'gitlab/qa'
 
@@ -62,9 +63,9 @@ namespace :qa do
 
     tests.each do |task|
       # Get the docker image which was built on the previous stage of pipeline
-      Gitlab::QA::Scenario
-        .const_get(task)
-        .perform(Build::QAImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG']))
+      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
+      $stdout.puts "Running Gitlab::QA::Scenario::#{task} with the following image: #{image_address}"
+      Gitlab::QA::Scenario.const_get(task).perform(image_address)
     end
   end
 end
