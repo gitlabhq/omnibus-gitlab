@@ -337,7 +337,6 @@ Trigger:docker:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
-    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -358,6 +357,7 @@ Trigger:qa:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -870,7 +870,6 @@ Docker branch:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
-    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -892,6 +891,7 @@ QA Master:
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
