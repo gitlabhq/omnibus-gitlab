@@ -38,7 +38,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
     * You will require SSL certificates for the domain used for container registry
 * [Enabling GitLab Pages](https://docs.gitlab.com/ce/administration/pages/)
     * If you want HTTPS enabled, you will have to get wildcard certificates
-* [Enabling ElasticSearch](https://docs.gitlab.com/ee/integration/elasticsearch.html)
+* [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html)
 * [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 * [GitLab Prometheus](https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html) Set up the Prometheus
   monitoring included in the Omnibus GitLab package.
