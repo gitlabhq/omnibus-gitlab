@@ -205,14 +205,17 @@ module Geo
     end
 
     def teardown(cmd)
-      puts '*** Initial replication failed! ***'.color(:red)
-      puts
-      puts 'Replication tool returned with a non zero exit status!'.color(:red)
-      puts
-      puts 'Please check your trust settings `md5_auth_cidr_addresses` in `gitlab.rb` on the primary node.'.color(:red)
-      puts
-      puts "Failed to execute: #{cmd} -- be sure to run this command as root".color(:red)
-      puts
+      puts <<~MESSAGE.color(:red)
+        *** Initial replication failed! ***
+
+        Replication tool returned with a non zero exit status!
+
+        Troubleshooting tips:
+          - replication should be run by root user
+          - check your trust settings `md5_auth_cidr_addresses` in `gitlab.rb` on the primary node
+
+        Failed to execute: #{cmd}
+      MESSAGE
 
       exit 1
     end
