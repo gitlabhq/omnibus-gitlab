@@ -32,11 +32,10 @@ class PostgreSQL
     end
 
     def ask_password
-      if STDIN.tty?
-        STDIN.getpass("Please enter password: ")
-      else
-        STDIN.gets.chomp
-      end
+      GitlabCtl::Util.get_password
+    rescue GitlabCtl::Errors::PasswordMismatch
+      $stderr.puts "Passwords do not match"
+      Kernel.exit 1
     end
 
     def replication_user

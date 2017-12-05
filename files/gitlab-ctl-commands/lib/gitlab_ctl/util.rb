@@ -53,10 +53,16 @@ module GitlabCtl
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
       end
 
-      def get_password
-        password = STDIN.getpass('Enter password: ')
-        password_confirm = STDIN.getpass('Confirm password: ')
-        raise GitlabCtl::Errors::PasswordMismatch unless password.eql?(password_confirm)
+      def get_password(input_text: 'Enter password: ', do_confirm: true)
+        return STDIN.gets.chomp unless STDIN.tty?
+
+        password = STDIN.getpass(input_text)
+
+        if do_confirm
+          password_confirm = STDIN.getpass('Confirm password: ')
+          raise GitlabCtl::Errors::PasswordMismatch unless password.eql?(password_confirm)
+        end
+
         password
       end
 

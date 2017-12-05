@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade Ruby version to 2.3.6
 - Add support for enabling FDW for GitLab Geo
+- Request confirmation of Geo replication user password
 - Add warning to LoggingHelper
 
 10.3.0
