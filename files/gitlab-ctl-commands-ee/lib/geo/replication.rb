@@ -160,9 +160,7 @@ module Geo
       if status.error?
         puts status.stdout
         puts status.stderr
-        puts "[ERROR] Failed to execute: #{cmd} -- be sure to run this command as root".color(:red)
-        puts
-        exit 1
+        teardown(cmd)
       end
 
       status
@@ -204,6 +202,22 @@ module Geo
 
     def db_name
       'gitlabhq_production'
+    end
+
+    def teardown(cmd)
+      puts <<~MESSAGE.color(:red)
+        *** Initial replication failed! ***
+
+        Replication tool returned with a non zero exit status!
+
+        Troubleshooting tips:
+          - replication should be run by root user
+          - check your trust settings `md5_auth_cidr_addresses` in `gitlab.rb` on the primary node
+
+        Failed to execute: #{cmd}
+      MESSAGE
+
+      exit 1
     end
   end
 end
