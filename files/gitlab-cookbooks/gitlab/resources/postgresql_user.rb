@@ -18,14 +18,30 @@ action :create do
     not_if { !helper.is_running? || helper.user_exists?(username) }
   end
 
-  query = %(ALTER USER \\"#{username}\\" #{options.join(' ')})
-  query << %( WITH PASSWORD '#{password}') unless password.nil?
+  if property_is_set?(:password)
+    query = %(ALTER USER \\"#{username}\\" #{options.join(' ')})
+    query << if password.nil?
+               %( WITH PASSWORD NULL )
+             else
+               %( WITH PASSWORD '#{password}')
+             end
 
-  execute "set password for #{username} postgresql user" do
+    execute "set password for #{username} postgresql user" do
+      command %(/opt/gitlab/bin/#{helper.service_cmd} -d template1 -c "#{query}")
+      user account_helper.postgresql_user
+      # Added retries to give the service time to start on slower systems
+      retries 20
+      not_if { !helper.is_running? || !helper.user_exists?(username) || helper.user_password_match?(username, password) }
+    end
+  end
+
+  query = %(ALTER USER \\"#{username}\\" #{options.join(' ')})
+
+  execute "set options for #{username} postgresql user" do
     command %(/opt/gitlab/bin/#{helper.service_cmd} -d template1 -c "#{query}")
     user account_helper.postgresql_user
     # Added retries to give the service time to start on slower systems
     retries 20
-    not_if { !helper.is_running? || !helper.user_exists?(username) || helper.user_password_match?(username, password) }
+    not_if { !helper.is_running? || !helper.user_exists?(username) || helper.user_options_set?(username, options) }
   end
 end

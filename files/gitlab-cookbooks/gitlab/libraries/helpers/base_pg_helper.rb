@@ -35,6 +35,28 @@ class BasePgHelper
       "|grep -x #{db_user}"])
   end
 
+  def user_options(db_user)
+    db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
+    query = "SELECT usecreatedb, usesuper, userepl, usebypassrls FROM pg_shadow WHERE usename='#{db_user_safe}'"
+    values = do_shell_out(
+      %(/opt/gitlab/bin/#{service_cmd} -d template1 -c "#{query}" -tA)
+    ).stdout.chomp.split('|').map { |v| v == 't' }
+    options = %w(CREATEDB SUPERUSER REPLICATION BYPASSRLS)
+    Hash[options.zip(values)]
+  end
+
+  def user_options_set?(db_user, options)
+    active_options = user_options(db_user)
+    options.map(&:upcase).each do |option|
+      if option =~ /^NO(.*)/
+        return false if active_options[$1]
+      else
+        return false if !active_options[option]
+      end
+   end
+   true
+  end
+
   def user_hashed_password(db_user)
     db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
     do_shell_out(
