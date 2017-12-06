@@ -339,24 +339,24 @@ There are a few exceptions to this rule:
     following table. Use these mappings while converting them to environment
     variables.
 
-|gitlab.rb configuration|Environment variable|
+|`gitlab.rb` configuration|Environment variable|
 |---|---|
-|mattermost['service_lets_encrypt_cert_cache_file']|MM_SERVICESETTINGS_LETSENCRYPTCERTIFICATECACHEFILE|
-|mattermost['service_user_access_tokens']|MM_SERVICESETTINGS_ENABLEUSERACCESSTOKENS|
-|mattermost['log_console_enable']|MM_LOGSETTINGS_ENABLECONSOLE|
-|mattermost['email_enable_batching']|MM_EMAILSETTINGS_ENABLEEMAILBATCHING|
-|mattermost['email_batching_buffer_size']|MM_EMAILSETTINGS_EMAILBATCHINGBUFFERSIZE|
-|mattermost['email_batching_interval']|MM_EMAILSETTINGS_EMAILBATCHINGINTERVAL|
-|mattermost['email_smtp_auth']|MM_EMAILSETTINGS_ENABLESMTPAUTH|
-|mattermost['email_notificatino_content_type']|MM_EMAILSETTINGS_NOTIFICATIONCONTENTTYPE|
-|mattermost['ratelimit_enable_ratelimiter']|MM_RATELIMITSETTINGS_ENABLE|
-|mattermost['support_email']|MM_SUPPORTSETTINGS_SUPPORTEMAIL|
-|mattermost['localization_server_locale']|MM_LOCALIZATIONSETTINGS_DEFAULTSERVERLOCALE|
-|mattermost['localization_client_locale']|MM_LOCALIZATIONSETTINGS_DEFAULTCLIENTLOCALE|
-|mattermost['webrtc_gateway_stun_uri']|MM_WEBRTCSETTINGS_STUN_URI|
-|mattermost['webrtc_gateway_turn_uri']|MM_WEBRTCSETTINGS_TURN_URI|
-|mattermost['webrtc_gateway_turn_username']|MM_WEBRTCSETTINGS_TURN_USERNAME|
-|mattermost['webrtc_gateway_turn_sharedkey']|MM_WEBRTCSETTINGS_TURN_SHAREDKEY|
+|`mattermost['service_lets_encrypt_cert_cache_file']`|`MM_SERVICESETTINGS_LETSENCRYPTCERTIFICATECACHEFILE`|
+|`mattermost['service_user_access_tokens']`|`MM_SERVICESETTINGS_ENABLEUSERACCESSTOKENS`|
+|`mattermost['log_console_enable']`|`MM_LOGSETTINGS_ENABLECONSOLE`|
+|`mattermost['email_enable_batching']`|`MM_EMAILSETTINGS_ENABLEEMAILBATCHING`|
+|`mattermost['email_batching_buffer_size']`|`MM_EMAILSETTINGS_EMAILBATCHINGBUFFERSIZE`|
+|`mattermost['email_batching_interval']`|`MM_EMAILSETTINGS_EMAILBATCHINGINTERVAL`|
+|`mattermost['email_smtp_auth']`|`MM_EMAILSETTINGS_ENABLESMTPAUTH`|
+|`mattermost['email_notificatino_content_type']`|`MM_EMAILSETTINGS_NOTIFICATIONCONTENTTYPE`|
+|`mattermost['ratelimit_enable_ratelimiter']`|`MM_RATELIMITSETTINGS_ENABLE`|
+|`mattermost['support_email']`|`MM_SUPPORTSETTINGS_SUPPORTEMAIL`|
+|`mattermost['localization_server_locale']`|`MM_LOCALIZATIONSETTINGS_DEFAULTSERVERLOCALE`|
+|`mattermost['localization_client_locale']`|`MM_LOCALIZATIONSETTINGS_DEFAULTCLIENTLOCALE`|
+|`mattermost['webrtc_gateway_stun_uri']`|`MM_WEBRTCSETTINGS_STUN_URI`|
+|`mattermost['webrtc_gateway_turn_uri']`|`MM_WEBRTCSETTINGS_TURN_URI`|
+|`mattermost['webrtc_gateway_turn_username']`|`MM_WEBRTCSETTINGS_TURN_USERNAME`|
+|`mattermost['webrtc_gateway_turn_sharedkey']`|`MM_WEBRTCSETTINGS_TURN_SHAREDKEY`|
 
 
 > Please note:
@@ -414,7 +414,7 @@ If you choose to upgrade Mattermost outside of GitLab's omnibus automation, plea
 
 There are multiple ways to send notifications depending on how much control you'd like over the messages.
 
-If you are using the Omnibus edition, enable incoming webhooks from the gitlab.rb file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
+If you are using the Omnibus edition, enable incoming webhooks from the `gitlab.rb` file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
 
 ```ruby
 mattermost['service_enable_incoming_webhooks'] = true
