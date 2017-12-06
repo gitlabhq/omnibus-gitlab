@@ -1632,12 +1632,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
-# pgbouncer['users'] = [
+# pgbouncer['users'] = {
 #   {
 #     name: USERNAME,
 #     password: MD5_PASSWORD_HASH
 #   }
-# ]
+# }
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
 #
