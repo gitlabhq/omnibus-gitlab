@@ -16,7 +16,7 @@
 account_helper = AccountHelper.new(node)
 
 postgresql_user account_helper.consul_user do
-  notifies :run, "execute[grant read only access to repmgr]"
+  notifies :run, "execute[grant read only access to repmgr]", :immediately
 end
 
 select_query = %(GRANT SELECT, DELETE ON ALL TABLES IN SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
