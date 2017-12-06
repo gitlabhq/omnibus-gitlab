@@ -313,18 +313,18 @@ Would translate to:
 
 ```ruby
 mattermost['env'] = {
-                    'MM_SERVICESETTINGS_MAXIMUMLOGINATTEMPTS' => 10,
-                    'MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY' => 'full_name'
-                    'MM_SQLSETTINGS_MAXIDLECONNS' => 10,
+                    'MM_SERVICESETTINGS_MAXIMUMLOGINATTEMPTS' => '10',
+                    'MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY' => 'full_name',
+                    'MM_SQLSETTINGS_MAXIDLECONNS' => '10',
                     'MM_LOGSETTINGS_FILELEVEL' => 'INFO',
-                    'MM_EMAILSETTINGS_BATCHINGINTERVAL' => 30,
-                    'MM_FILESETTINGS_ENABLEFILEATTACHMENTS' => true,
-                    'MM_RATELIMITSETTINGS_MEMORYSTORESIZE' => 10000,
+                    'MM_EMAILSETTINGS_BATCHINGINTERVAL' => '30',
+                    'MM_FILESETTINGS_ENABLEFILEATTACHMENTS' => 'true',
+                    'MM_RATELIMITSETTINGS_MEMORYSTORESIZE' => '10000',
                     'MM_SUPPORTSETTINGS_TERMSOFSERVICELINK' => '/static/help/terms.html',
-                    'MM_PRIVACYSETTINGS_SHOWEMAILADDRESS' => true,
-                    'MM_LOCALIZATIONSETTINGS_AVAILABLELOCALES' => "en,es,fr,ja,pt-BR",
-                    'MM_WEBRTCSETTINGS_ENABLE' => false
-                   }
+                    'MM_PRIVACYSETTINGS_SHOWEMAILADDRESS' => 'true',
+                    'MM_LOCALIZATIONSETTINGS_AVAILABLELOCALES' => 'en,es,fr,ja,pt-BR',
+                    'MM_WEBRTCSETTINGS_ENABLE' => 'false'
+                    }
 ```
 
 Refer to [Mattermost
