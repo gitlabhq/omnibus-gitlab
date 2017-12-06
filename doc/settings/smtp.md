@@ -172,6 +172,20 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Office365
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.office365.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@yourdomain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
+
 ### Online.net
 
 ```ruby
