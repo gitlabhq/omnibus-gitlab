@@ -21,6 +21,23 @@ class PrometheusHelper
     @node = node
   end
 
+  def kingpin_flags(service)
+    config = []
+
+    node['gitlab'][service]['flags'].each do |flag_key, flag_value|
+      next if flag_value.empty?
+      if flag_value == true
+        config += "--#{flag_key}"
+      elsif flag_value == false
+        config += "--no-#{flag_key}"
+      else
+        config << "--#{flag_key}=#{flag_value}"
+      end
+    end
+
+    config.join(" ")
+  end
+
   def flags(service)
     config = []
 
