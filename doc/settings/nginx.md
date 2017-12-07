@@ -32,6 +32,13 @@ sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
 Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
 GitLab instance should be reachable at `https://gitlab.example.com`.
 
+>
+If the `certificate.key` file is password protected, Nginx will not ask for
+the password when `sudo gitlab-ctl reconfigure` is executed.
+In that case, Omnibus GitLab will fail silently with no error messages.
+To remove the password from the key, use the following command:
+`openssl rsa -in certificate_before.key -out certificate_after.key`.
+
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
 
