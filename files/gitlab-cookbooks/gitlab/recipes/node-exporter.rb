@@ -36,7 +36,7 @@ directory textfile_dir do
   recursive true
 end
 
-runtime_flags = PrometheusHelper.new(node).flags('node-exporter')
+runtime_flags = PrometheusHelper.new(node).kingpin_flags('node-exporter')
 runit_service 'node-exporter' do
   options({
     log_directory: node_exporter_log_dir,

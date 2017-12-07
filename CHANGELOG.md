@@ -7,6 +7,9 @@ omnibus-gitlab repository.
 
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
+- Upgrade node-exporter to 0.15.2
+- Upgrade postgres-exporter to 0.4.1
+- Upgrade prometheus to 1.8.2
 - Remove duplicated shared object files from grpc gem (Takuya Noguchi)
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
