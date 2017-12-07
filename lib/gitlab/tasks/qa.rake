@@ -27,20 +27,22 @@ namespace :qa do
 
     desc "Push rc version of QA"
     task :rc do
-      Build::QAImage.tag_and_push_to_dockerhub('rc') if Build::Check.add_rc_tag?
+      if Build::Check.add_rc_tag?
+        Build::QAImage.tag_and_push_to_dockerhub('rc', initial_tag: 'latest')
+      end
     end
 
     desc "Push nightly version of QA"
     task :nightly do
       if Build::Check.add_nightly_tag?
-        Build::QAImage.tag_and_push_to_dockerhub('nightly')
+        Build::QAImage.tag_and_push_to_dockerhub('nightly', initial_tag: 'latest')
       end
     end
 
     desc "Push latest version of QA"
     task :latest do
       if Build::Check.add_latest_tag?
-        Build::QAImage.tag_and_push_to_dockerhub('latest')
+        Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest')
       end
     end
 

@@ -72,6 +72,20 @@ describe Build::Image do
 
       ComponentImage.tag_and_push_to_dockerhub('foo')
     end
+
+    context 'with a initial_tag given' do
+      it 'calls DockerOperations.authenticate and DockerOperations.tag_and_push' do
+        expect(DockerOperations).to receive(:authenticate).with('john', 'secret')
+        expect(DockerOperations).to receive(:tag_and_push).with(
+          ComponentImage.gitlab_registry_image_address,
+          ComponentImage.dockerhub_image_name,
+          'latest',
+          'foo'
+        )
+
+        ComponentImage.tag_and_push_to_dockerhub('foo', initial_tag: 'latest')
+      end
+    end
   end
 
   describe '.write_release_file' do

@@ -28,12 +28,12 @@ module Build
       puts "Pushed #{gitlab_registry_image_address}:#{final_tag}"
     end
 
-    def tag_and_push_to_dockerhub(final_tag)
+    def tag_and_push_to_dockerhub(final_tag, initial_tag: Build::Info.docker_tag)
       DockerOperations.authenticate(ENV['DOCKERHUB_USERNAME'], ENV['DOCKERHUB_PASSWORD'])
       DockerOperations.tag_and_push(
         gitlab_registry_image_address,
         dockerhub_image_name,
-        Build::Info.docker_tag,
+        initial_tag,
         final_tag
       )
       puts "Pushed #{dockerhub_image_name}:#{final_tag} to Docker Hub"
