@@ -1,4 +1,5 @@
 require 'chef_helper'
+
 describe 'qa', type: :rake do
   let(:gitlab_registry_image_address) { 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa' }
   let(:gitlab_version) { '10.2.0' }
@@ -82,30 +83,40 @@ describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return(image_tag)
     end
 
-    it 'tags triggered QA correctly and run QA scenarios' do
-      # qa:build
-      expect(Build::QA).to receive(:get_gitlab_repo)
-      expect(Build::QAImage).to receive(:gitlab_registry_image_address)
-      expect(DockerOperations).to receive(:build)
+    shared_examples 'qa:test command run' do |ee: false|
+      it 'tags triggered QA correctly and run QA scenarios' do
+        # qa:build
+        expect(Build::QA).to receive(:get_gitlab_repo)
+        expect(Build::QAImage).to receive(:gitlab_registry_image_address)
+        expect(DockerOperations).to receive(:build)
 
-      # qa:push:triggered
-      expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(image_tag)
+        # qa:push:triggered
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(image_tag)
 
-      qa_image = double
-      expect(Build::GitlabImage).to receive(:gitlab_registry_image_address).exactly(4).times.with(tag: image_tag).and_return(qa_image)
+        expect(Build::Check).to receive(:is_ee?).and_return(ee)
 
-      {
-        'Test::Instance::Image' => double,
-        'Test::Omnibus::Image' => double,
-        'Test::Omnibus::Upgrade' => double,
-        'Test::Integration::Mattermost' => double
-      }.each do |scenario, scenario_stub|
-        scenario_stub = double
-        expect(Gitlab::QA::Scenario).to receive(:const_get).with(scenario).and_return(scenario_stub)
-        expect(scenario_stub).to receive(:perform).with(qa_image)
+        tests = {
+          'Test::Instance::Image' => double,
+          'Test::Omnibus::Image' => double,
+          'Test::Omnibus::Upgrade' => double,
+          'Test::Integration::Mattermost' => double
+        }
+        tests['Test::Integration::Geo'] = double if ee
+
+        qa_image = double
+        expect(Build::GitlabImage).to receive(:gitlab_registry_image_address).exactly(tests.size).times.with(tag: image_tag).and_return(qa_image)
+
+        tests.each do |scenario, scenario_stub|
+          scenario_stub = double
+          expect(Gitlab::QA::Scenario).to receive(:const_get).with(scenario).and_return(scenario_stub)
+          expect(scenario_stub).to receive(:perform).with(qa_image)
+        end
+
+        Rake::Task['qa:test'].invoke
       end
-
-      Rake::Task['qa:test'].invoke
     end
+
+    it_behaves_like 'qa:test command run', ee: false
+    it_behaves_like 'qa:test command run', ee: true
   end
 end
