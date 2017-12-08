@@ -1120,6 +1120,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_apiv3'] = true
 # mattermost['service_goroutine_health_threshold'] = -1
 # mattermost['service_user_access_tokens'] = false
+# mattermost['service_close_unused_direct_messages'] = false
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -1134,6 +1135,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_max_channels_per_team'] = 2000
 # mattermost['team_enable_x_to_leave_channels_from_lhs'] = false
 # mattermost['team_user_status_away_timeout'] = 300
+# mattermost['team_enable_confirm_notifications_to_channel'] = true
 # mattermost['team_teammate_name_display'] = "full_name"
 
 # mattermost['sql_driver_name'] = 'mysql'
@@ -1234,6 +1236,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['webrtc_gateway_turn_uri'] = nil
 # mattermost['webrtc_gateway_turn_username'] = nil
 # mattermost['webrtc_gateway_turn_shared_key'] = nil
+
+# mattermost['job_run_jobs'] = true
+# mattermost['job_run_scheduler'] = true
+
+# mattermost['plugin_enable'] = true
+# mattermost['plugin_enable_uploads'] = false
+# mattermost['plugin_directory'] = "/var/opt/gitlab/mattermost/plugins"
+# mattermost['plugin_client_directory'] = "/var/opt/gitlab/mattermost/client-plugins"
+# mattermost['plugin_plugins'] = {}
+# mattermost['plugin_plugin_states'] = {}
 
 ################################################################################
 ## Mattermost NGINX
