@@ -34,6 +34,9 @@ module Gitlab
   role('redis_slave')
   role('geo_primary',   manage_services: false).use { GeoPrimaryRole }
   role('geo_secondary', manage_services: false).use { GeoSecondaryRole }
+  role('postgres').use { PostgresRole }
+  role('pgbouncer').use { PgbouncerRole }
+  role('consul').use { ConsulRole }
 
   ## Attributes directly on the node
   attribute('registry', priority: 20).use { Registry }
