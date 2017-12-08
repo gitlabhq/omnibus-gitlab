@@ -125,6 +125,7 @@ production: &base
     path: <%= @artifacts_path %>
     object_store:
       enabled: <%= @artifacts_object_store_enabled %>
+      background_upload: <%= @artifacts_object_store_background_upload %>
       remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
       connection: <%= @artifacts_object_store_connection.to_json %>
 
