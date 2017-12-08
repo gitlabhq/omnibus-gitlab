@@ -22,6 +22,8 @@ mattermost_gid = node['mattermost']['gid']
 mattermost_home = node['mattermost']['home']
 mattermost_log_dir = node['mattermost']['log_file_directory']
 mattermost_storage_directory = node['mattermost']['file_directory']
+mattermost_plugin_directory_server = node['mattermost']['plugin_directory']
+mattermost_plugin_directory_web = node['mattermost']['plugin_client_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
@@ -49,7 +51,9 @@ end
 [
   mattermost_home,
   mattermost_log_dir,
-  mattermost_storage_directory
+  mattermost_storage_directory,
+  mattermost_plugin_directory_server,
+  mattermost_plugin_directory_web
 ].compact.each do |dir|
   directory dir do
     owner mattermost_user

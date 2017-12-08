@@ -75,6 +75,7 @@ default['mattermost']['service_enable_channel_viewed_messages'] = true
 default['mattermost']['service_enable_apiv3'] = true
 default['mattermost']['service_goroutine_health_threshold'] = -1
 default['mattermost']['service_user_access_tokens'] = false
+default['mattermost']['service_close_unused_direct_messages'] = false
 
 default['mattermost']['sql_driver_name'] = 'postgres'
 default['mattermost']['sql_data_source'] = nil
@@ -155,6 +156,7 @@ default['mattermost']['team_restrict_team_names'] = true
 default['mattermost']['team_restrict_direct_message'] = "any"
 default['mattermost']['team_max_channels_per_team'] = 2000
 default['mattermost']['team_user_status_away_timeout'] = 300
+default['mattermost']['team_enable_confirm_notifications_to_channel'] = true
 default['mattermost']['team_teammate_name_display'] = "full_name"
 
 default['mattermost']['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
@@ -180,3 +182,13 @@ default['mattermost']['webrtc_gateway_stun_uri'] = nil
 default['mattermost']['webrtc_gateway_turn_uri'] = nil
 default['mattermost']['webrtc_gateway_turn_username'] = nil
 default['mattermost']['webrtc_gateway_turn_shared_key'] = nil
+
+default['mattermost']['job_run_jobs'] = true
+default['mattermost']['job_run_scheduler'] = true
+
+default['mattermost']['plugin_enable'] = true
+default['mattermost']['plugin_enable_uploads'] = false
+default['mattermost']['plugin_directory'] = "/var/opt/gitlab/mattermost/plugins"
+default['mattermost']['plugin_client_directory'] = "/var/opt/gitlab/mattermost/client-plugins"
+default['mattermost']['plugin_plugins'] = {}
+default['mattermost']['plugin_plugin_states'] = {}
