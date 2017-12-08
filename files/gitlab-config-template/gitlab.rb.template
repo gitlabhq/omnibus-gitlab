@@ -152,6 +152,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/mnt/storage/artifacts"
 # gitlab_rails['artifacts_object_store_enabled'] = false # EE only
+# gitlab_rails['artifacts_object_store_background_upload'] = true
 # gitlab_rails['artifacts_object_store_remote_directory'] = "artifacts"
 # gitlab_rails['artifacts_object_store_connection'] = {
 #   'provider' => 'AWS',
