@@ -21,7 +21,7 @@ class GeoReplicationCommand
       slot_name: nil,
       skip_replication_slot: false,
       backup_timeout: 1800,
-      sslmode: 'verify-full',
+      sslmode: 'verify-ca',
     }
 
     parse_options!

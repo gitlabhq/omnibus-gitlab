@@ -23,6 +23,12 @@ module Postgresql
       parse_mattermost_postgresql_settings
     end
 
+    def parse_secrets
+      gitlab_postgresql_crt, gitlab_postgresql_key = generate_postgresql_keypair
+      Gitlab['postgresql']['internal_certificate'] ||= gitlab_postgresql_crt
+      Gitlab['postgresql']['internal_key'] ||= gitlab_postgresql_key
+    end
+
     def parse_postgresql_settings
       # If the user wants to run the internal Postgres service using an alternative
       # DB username, host or port, then those settings should also be applied to
@@ -96,6 +102,16 @@ module Postgresql
 
     def postgresql_managed?
       Services.enabled?('postgresql')
+    end
+
+    def generate_postgresql_keypair
+      key, cert = SecretsHelper.generate_keypair(
+        bits: 4096,
+        subject: "/C=USA/O=GitLab/OU=Database/CN=PostgreSQL",
+        validity: 365 * 10 # ten years from now
+      )
+
+      [cert.to_pem, key.to_pem]
     end
   end
 end

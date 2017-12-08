@@ -374,7 +374,7 @@ default['gitlab']['postgresql']['max_connections'] = 200
 default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
 
-default['gitlab']['postgresql']['ssl'] = 'off'
+default['gitlab']['postgresql']['ssl'] = 'on'
 default['gitlab']['postgresql']['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
 default['gitlab']['postgresql']['ssl_cert_file'] = 'server.crt'
 default['gitlab']['postgresql']['ssl_key_file'] = 'server.key'

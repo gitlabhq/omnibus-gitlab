@@ -19,20 +19,31 @@ If you are planning to use MySQL/MariaDB, make sure to read the [introductory
 paragraph](#using-a-mysql-database-management-server-enterprise-edition-only)
 before proceeding, as it contains some useful information.
 
-## Enabling SSL
+## Configuring SSL
 
-To enable SSL, you first need to have a number of files:
+Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
+both encrypted and unencrypted connections by default. Enforcing SSL requires
+using the `hostssl` configuration in `pg_hba.conf`. See
+https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html
+for more details.
+
+SSL support depends on a number of files:
 
 1. The public SSL certificate for the database (`server.crt`).
 2. The corresponding private key for the SSL certificate (`server.key`).
-3. Optional: A root certificate bundle that validates the server's certificate
+3. A root certificate bundle that validates the server's certificate
 (`root.crt`). By default, Omnibus GitLab will use the embedded certificate
-bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`.
+bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`. This is not required for
+self-signed certificates
+
+A self-signed certificate and private key will be automatically generated for
+use. If you'd prefer to use a CA-signed certificate, follow the steps below.
 
 Note that the location of these files can be configurable, but the private key
-MUST be readable by the `gitlab-psql` user. Note that private keys stored in
-`/etc/gitlab/ssl` currently cannot be read by this user, so the key may need
-to be copied to another location and assigned the proper permissions.
+MUST be readable by the `gitlab-psql` user. Omnibus will automatically manage
+the permissions of the files for you, but you *must* ensure that the
+`gitlab-psql` can access the directory the files are placed in, if the paths
+are customized.
 
 For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.6/static/ssl-tcp.html).
 
@@ -47,34 +58,40 @@ With these files in hand, enable SSL:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
     ```ruby
-    postgresql['ssl'] = 'on'
+    postgresql['ssl_cert_file'] = '/custom/path/to/server.crt'
+    postgresql['ssl_key_file'] = '/custom/path/to/server.key'
+    postgresql['ssl_ca_file'] = '/custom/path/to/bundle.pem'
+    postgresql['internal_certificate'] = "-----BEGIN CERTIFICATE-----
+    ...base64-encoded certificate...
+    -----END CERTIFICATE-----
+    "
+    postgresql['internal_key'] = "-----BEGIN RSA PRIVATE KEY-----
+    ...base64-encoded private key...
+    -----END RSA PRIVATE KEY-----
+    "
     ```
 
-    Note that this does NOT enforce SSL connections on the server side. Enforcing SSL
-    requires using the `hostssl` configuration in `pg_hba.conf`. See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html
-    for more details.
+    Relative paths will be rooted from the PostgreSQL data directory
+    (`/var/opt/gitlab/postgresql/data` by default).
 
-1. Optional: Customize the location of the required SSL files in `/etc/gitlab/gitlab.rb`. For example:
+1. [Reconfigure GitLab][] to apply the configuration changes.
 
-    ```ruby
-    postgresql['ssl_cert_file'] = 'server.crt'
-    postgresql['ssl_key_file'] = 'server.key'
-    postgresql['ssl_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
-    ```
-
-    Using a relative path will cause PostgreSQL to look inside its data
-    directory (`/var/opt/gitlab/postgresql/data` by default).
-
-1. Optional: Copy the required SSL files into the PostgreSQL data directory. For example:
+1. Restart PostgreSQL for the changes to take effect:
 
     ```sh
-    cp server.crt server.key /var/opt/gitlab/postgresql/data
-    cd /var/opt/gitlab/postgresql/data
-    chown gitlab-psql:gitlab-psql server.crt server.key
+    gitlab-ctl restart postgresql
     ```
 
-    Note that the PostgreSQL user (by default `gitlab-psql`) must have read access to these files,
-    or PostgreSQL will fail to start.
+   If PostgreSQL fails to start, check the logs
+   (e.g. `/var/log/gitlab/postgresql/current`) for more details.
+
+### Disabling SSL
+
+1. Add the following to `/etc/gitlab/gitlab.rb`:
+
+```ruby
+postgresql['ssl'] = 'off'
+```
 
 1. [Reconfigure GitLab][] to apply the configuration changes.
 

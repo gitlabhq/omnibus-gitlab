@@ -114,17 +114,11 @@ module Registry
     end
 
     def generate_registry_keypair
-      key = SecretsHelper.generate_rsa(4096)
-      subject = "/C=USA/O=GitLab/OU=Container/CN=Registry"
-
-      cert = OpenSSL::X509::Certificate.new
-      cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
-      cert.not_before = Time.now
-      cert.not_after = (DateTime.now + 365 * 10).to_time
-      cert.public_key = key.public_key
-      cert.serial = 0x0
-      cert.version = 2
-      cert.sign key, OpenSSL::Digest::SHA256.new
+      key, cert = SecretsHelper.generate_keypair(
+        bits: 4096,
+        subject: "/C=USA/O=GitLab/OU=Container/CN=Registry",
+        validity: 365 * 10 # ten years from now
+      )
 
       [cert.to_pem, key.to_pem]
     end
