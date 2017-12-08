@@ -39,7 +39,8 @@
         "EnableChannelViewedMessages" : <%= @service_enable_channel_viewed_messages %>,
         "EnableAPIv3" : <%= @service_enable_apiv3 %>,
         "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>,
-        "EnableUserAccessTokens" : <%= @service_user_access_tokens %>
+        "EnableUserAccessTokens" : <%= @service_user_access_tokens %>,
+        "CloseUnusedDirectMessages" : <%= @service_close_unused_direct_messages %>
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -53,6 +54,7 @@
         "MaxChannelsPerTeam": <%= @team_max_channels_per_team %>,
         "EnableXToLeaveChannelsFromLHS": <%= @team_enable_x_to_leave_channels_from_lhs %>,
         "UserStatusAwayTimeout": <%= @team_user_status_away_timeout %>,
+        "EnableConfirmNotificationsToChannel": <%= @team_enable_confirm_notifications_to_channel %>,
         "TeammateNameDisplay" : "<%= @team_teammate_name_display %>"
     },
     "SqlSettings": {
@@ -164,5 +166,17 @@
         "TurnURI": "<%= @webrtc_gateway_turn_uri %>",
         "TurnUsername": "<%= @webrtc_gateway_turn_username %>",
         "TurnSharedKey": "<%= @webrtc_gateway_turn_shared_key %>"
+    },
+    "JobSettings": {
+        "RunJobs": <%= @job_run_jobs %>,
+        "RunScheduler": <%= @job_run_scheduler %>
+    },
+    "PluginSettings": {
+        "Enable": <%= @plugin_enable %>,
+        "EnableUploads": <%= @plugin_enable_uploads %>,
+        "Directory": "<%= @plugin_directory %>",
+        "ClientDirectory": "<%= @plugin_client_directory %>",
+        "Plugins": <%= @plugin_plugins.to_json %>,
+        "PluginStates": <%= @plugin_plugin_states.to_json %>
     }
 }

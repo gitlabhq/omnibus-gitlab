@@ -178,18 +178,19 @@ describe 'gitlab::gitlab-rails' do
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: false\s+remote_directory: "artifacts"\s+connection:/)
+            .with_content(/object_store:\s+enabled: false\s+background_upload: true\s+remote_directory: "artifacts"\s+connection:/)
       end
 
       it 'sets the connection in YAML' do
         stub_gitlab_rb(gitlab_rails: {
                          artifacts_object_store_enabled: true,
+                         artifacts_object_store_background_upload: false,
                          artifacts_object_store_remote_directory: 'mepmep',
                          artifacts_object_store_connection: aws_connection_hash
                        })
 
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: true\s+remote_directory:\s+"mepmep"/)
+          .with_content(/object_store:\s+enabled: true\s+background_upload: false\s+remote_directory:\s+"mepmep"/)
 
         expect(chef_run).to render_file(gitlab_yml_path)
           .with_content(/connection:\s{"provider":"AWS"/)

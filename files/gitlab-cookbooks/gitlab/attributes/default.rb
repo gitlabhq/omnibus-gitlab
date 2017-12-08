@@ -128,6 +128,7 @@ default['gitlab']['gitlab-rails']['incoming_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['artifacts_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['artifacts_object_store_remote_directory'] = 'artifacts'
 default['gitlab']['gitlab-rails']['artifacts_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['lfs_enabled'] = nil
@@ -373,7 +374,7 @@ default['gitlab']['postgresql']['max_connections'] = 200
 default['gitlab']['postgresql']['md5_auth_cidr_addresses'] = []
 default['gitlab']['postgresql']['trust_auth_cidr_addresses'] = []
 
-default['gitlab']['postgresql']['ssl'] = 'off'
+default['gitlab']['postgresql']['ssl'] = 'on'
 default['gitlab']['postgresql']['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
 default['gitlab']['postgresql']['ssl_cert_file'] = 'server.crt'
 default['gitlab']['postgresql']['ssl_key_file'] = 'server.key'
