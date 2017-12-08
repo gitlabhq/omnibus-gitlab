@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Remove duplicated shared object files from grpc gem (Takuya Noguchi)
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
+- Turn on postgresql SSL by default b18597e3
 
 10.2.3
 - Adjust number of unicorn workers if running a Geo secondary node

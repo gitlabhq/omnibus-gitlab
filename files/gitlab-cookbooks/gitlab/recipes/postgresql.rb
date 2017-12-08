@@ -80,6 +80,29 @@ execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   not_if { pg_helper.bootstrapped? }
 end
 
+
+##
+# Create SSL cert + key in the defined location. Paths are relative to postgresql_data_dir
+##
+ssl_cert_file = File.absolute_path(node['gitlab']['postgresql']['ssl_cert_file'], postgresql_data_dir)
+ssl_key_file = File.absolute_path(node['gitlab']['postgresql']['ssl_key_file'], postgresql_data_dir)
+
+file ssl_cert_file do
+  content node['gitlab']['postgresql']['internal_certificate']
+  owner postgresql_username
+  group postgresql_username
+  mode 0400
+  only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
+end
+
+file ssl_key_file do
+  content node['gitlab']['postgresql']['internal_key']
+  owner postgresql_username
+  group postgresql_username
+  mode 0400
+  only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
+end
+
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 postgresql_runtime_config = File.join(postgresql_data_dir, 'runtime.conf')
 should_notify = omnibus_helper.should_notify?("postgresql")

@@ -2,7 +2,10 @@ require 'chef_helper'
 
 describe 'postgresql 9.2' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
-  let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
+  let(:postgresql_data_dir) { '/var/opt/gitlab/postgresql/data' }
+  let(:postgresql_ssl_cert) { File.join(postgresql_data_dir, 'server.crt') }
+  let(:postgresql_ssl_key) { File.join(postgresql_data_dir, 'server.key') }
+  let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 
   before do
@@ -67,20 +70,52 @@ describe 'postgresql 9.2' do
     end
 
     context 'sets SSL settings' do
-      it 'disables SSL by default' do
+      it 'enables SSL by default' do
         expect(chef_run.node['gitlab']['postgresql']['ssl'])
-          .to eq('off')
+          .to eq('on')
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/ssl = on/)
+      end
+
+      it 'generates a self-signed certificate and key' do
+        stub_gitlab_rb(postgresql: { ssl_cert_file: 'certfile', ssl_key_file: 'keyfile' })
+
+        absolute_cert_path = File.join(postgresql_data_dir, 'certfile')
+        absolute_key_path = File.join(postgresql_data_dir, 'keyfile')
+
+        expect(chef_run).to create_file(absolute_cert_path).with(
+          user: 'gitlab-psql',
+          group: 'gitlab-psql',
+          mode: 0400
+        )
+
+        expect(chef_run).to create_file(absolute_key_path).with(
+          user: 'gitlab-psql',
+          group: 'gitlab-psql',
+          mode: 0400
+        )
+
+        expect(chef_run).to render_file(absolute_cert_path)
+          .with_content(/-----BEGIN CERTIFICATE-----/)
+        expect(chef_run).to render_file(absolute_key_path)
+          .with_content(/-----BEGIN RSA PRIVATE KEY-----/)
+      end
+
+      it 'disables SSL' do
+        stub_gitlab_rb(postgresql: { ssl: 'off' })
 
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/ssl = off/)
+
+        expect(chef_run).not_to render_file(postgresql_ssl_cert)
+        expect(chef_run).not_to render_file(postgresql_ssl_key)
       end
 
       it 'activates SSL' do
-        stub_gitlab_rb(postgresql: {
-                         ssl: 'on',
-                         ssl_crl_file: 'revoke.crl'
-                       })
+        stub_gitlab_rb(postgresql: { ssl_crl_file: 'revoke.crl' })
 
         expect(chef_run).to render_file(
           postgresql_conf
@@ -96,7 +131,7 @@ describe 'postgresql 9.2' do
         ).with_content(/ssl_key_file = 'server.key'/)
         expect(chef_run).to render_file(
           postgresql_conf
-        ).with_content(/ssl_ca_file = '\/opt\/gitlab\/embedded\/ssl\/certs\/cacert.pem'/)
+        ).with_content(%r{ssl_ca_file = '/opt/gitlab/embedded/ssl/certs/cacert.pem'})
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/ssl_crl_file = 'revoke.crl'/)

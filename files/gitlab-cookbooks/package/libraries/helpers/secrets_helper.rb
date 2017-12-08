@@ -9,6 +9,26 @@ class SecretsHelper
     OpenSSL::PKey::RSA.new(bits)
   end
 
+  def self.generate_x509(subject:, validity:, key:)
+    cert = OpenSSL::X509::Certificate.new
+    cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
+    cert.not_before = Time.now
+    cert.not_after = (DateTime.now + validity).to_time
+    cert.public_key = key.public_key
+    cert.serial = 0x0
+    cert.version = 2
+    cert.sign(key, OpenSSL::Digest::SHA256.new)
+
+    cert
+  end
+
+  def self.generate_keypair(bits:, subject:, validity:)
+    key = generate_rsa(bits)
+    cert = generate_x509(subject: subject, validity: validity, key: key)
+
+    [key, cert]
+  end
+
   def self.read_gitlab_secrets
     existing_secrets ||= {}
 
@@ -23,7 +43,7 @@ class SecretsHelper
           Gitlab[k][pk] ||= p
         end
       else
-        warn("Ignoring section #{k} in /etc/gitlab/giltab-secrets.json, does not exist in gitlab.rb")
+        warn("Ignoring section #{k} in /etc/gitlab/gitlab-secrets.json, does not exist in gitlab.rb")
       end
     end
   end
@@ -52,6 +72,10 @@ class SecretsHelper
         'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],
         'file_public_link_salt' => Gitlab['mattermost']['file_public_link_salt'],
         'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key']
+      },
+      'postgresql' => {
+        'internal_certificate' => Gitlab['postgresql']['internal_certificate'],
+        'internal_key' => Gitlab['postgresql']['internal_key']
       }
     }
 
