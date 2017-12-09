@@ -469,6 +469,14 @@ mattermost['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy", "n
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
+### Connecting to the bundled PostgreSQL database
+
+If you need to connect to the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can connect as the Postgres superuser:
+
+```
+sudo gitlab-psql -d mattermost_production
+```
+
 ### OAuth2 Sequence Diagram
 
 The following image is a sequence diagram for how GitLab works as an OAuth2
