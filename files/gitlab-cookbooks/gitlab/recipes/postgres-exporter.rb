@@ -40,7 +40,7 @@ env_dir File.join(postgres_exporter_static_etc_dir, 'env') do
   restarts ["service[postgres-exporter]"]
 end
 
-runtime_flags = PrometheusHelper.new(node).flags('postgres-exporter')
+runtime_flags = PrometheusHelper.new(node).kingpin_flags('postgres-exporter')
 runit_service 'postgres-exporter' do
   options({
     log_directory: postgres_exporter_log_dir,
