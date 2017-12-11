@@ -57,6 +57,14 @@ describe 'postgresql_user' do
   end
 
   context 'options' do
+    context 'unspecified' do
+      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::options_unspecified') }
+
+      it 'does not set options' do
+        expect(chef_run).not_to run_execute('set options for example postgresql user')
+      end
+    end
+
     context 'SUPERUSER' do
       let(:chef_run) { runner.converge('test_gitlab_postgresql_user::options_superuser') }
 
