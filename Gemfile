@@ -16,7 +16,7 @@ gem 'rubocop'
 gem 'docker-api'
 gem 'aws-sdk'
 gem 'rubocop-rspec'
-gem 'gitlab-qa', git: 'https://gitlab.com/gitlab-org/gitlab-qa.git', branch: '105-allow-to-use-any-gitlab-qa-image-tag'
+gem 'gitlab-qa'
 
 group :test do
   gem 'byebug'
