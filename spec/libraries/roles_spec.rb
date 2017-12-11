@@ -22,11 +22,11 @@ describe 'GitLabRoles' do
     end
 
     it 'supports providing a single role as a string' do
-      stub_gitlab_rb(roles: 'geo_secondary_role')
+      stub_gitlab_rb(roles: 'application_role')
 
       Gitlab.load_roles
 
-      expect(Gitlab['geo_secondary_role']['enable']).to be true
+      expect(Gitlab['application_role']['enable']).to be true
     end
 
     it 'handles users specifying hyphens instead of underscores' do
