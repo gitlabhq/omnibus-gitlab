@@ -36,8 +36,7 @@ class BasePgHelper
   end
 
   def user_options(db_user)
-    db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
-    query = "SELECT usecreatedb, usesuper, userepl, usebypassrls FROM pg_shadow WHERE usename='#{db_user_safe}'"
+    query = "SELECT usecreatedb, usesuper, userepl, usebypassrls FROM pg_shadow WHERE usename='#{db_user}'"
     values = do_shell_out(
       %(/opt/gitlab/bin/#{service_cmd} -d template1 -c "#{query}" -tA)
     ).stdout.chomp.split('|').map { |v| v == 't' }
