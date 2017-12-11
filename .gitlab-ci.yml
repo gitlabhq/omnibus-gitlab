@@ -899,7 +899,6 @@ QA Master:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build
-    - bundle exec rake qa:push:stable
     - bundle exec rake qa:push:nightly
   artifacts:
     when: on_failure
