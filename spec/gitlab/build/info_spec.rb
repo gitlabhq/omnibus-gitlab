@@ -1,8 +1,8 @@
-require_relative '../../../lib/gitlab/build/info.rb'
+require_relative '../../../lib/gitlab/build/info'
 require 'chef_helper'
 
 describe Build::Info do
-  describe 'package' do
+  describe '.package' do
     describe 'shows EE' do
       it 'when ee=true' do
         stub_is_ee_env(true)
@@ -23,7 +23,7 @@ describe Build::Info do
     end
   end
 
-  describe 'release_version' do
+  describe '.release_version' do
     before do
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow_any_instance_of(Omnibus::BuildVersion).to receive(:semver).and_return('12.121.12')
@@ -51,7 +51,7 @@ describe Build::Info do
     end
   end
 
-  describe 'docker_tag' do
+  describe '.docker_tag' do
     before do
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow_any_instance_of(Omnibus::BuildVersion).to receive(:semver).and_return('12.121.12')
@@ -66,7 +66,7 @@ describe Build::Info do
   # Specs for latest_tag and for latest_stable_tag are really useful since we
   # are stubbing out shell out to git.
   # However, they are showing what we expect to see.
-  describe 'latest_tag' do
+  describe '.latest_tag' do
     describe 'for CE' do
       before do
         stub_is_ee(false)
@@ -90,7 +90,7 @@ describe Build::Info do
     end
   end
 
-  describe 'latest_stable_tag' do
+  describe '.latest_stable_tag' do
     describe 'for CE' do
       before do
         stub_is_ee(nil)
@@ -114,7 +114,7 @@ describe Build::Info do
     end
   end
 
-  describe 'gitlab_version' do
+  describe '.gitlab_version' do
     describe 'GITLAB_VERSION variable specified' do
       it 'returns passed value' do
         allow(ENV).to receive(:[]).with("GITLAB_VERSION").and_return("9.0.0")
@@ -130,7 +130,7 @@ describe Build::Info do
     end
   end
 
-  describe 'gitlab_rails repo' do
+  describe '.gitlab_rails repo' do
     describe 'ALTERNATIVE_SOURCES variable specified' do
       before do
         allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")

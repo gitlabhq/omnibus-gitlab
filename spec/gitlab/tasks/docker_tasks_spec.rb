@@ -15,7 +15,7 @@ describe 'docker', type: :rake do
     it 'calls build command with correct parameters' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
       allow(Build::Info).to receive(:package).and_return('gitlab-ce')
-      allow(Build::Image).to receive(:write_release_file).and_return(true)
+      allow(Build::GitlabImage).to receive(:write_release_file).and_return(true)
       allow(File).to receive(:expand_path).and_return('/tmp/omnibus-gitlab/lib/gitlab/tasks/docker_tasks.rake')
       allow(DockerOperations).to receive(:build).and_call_original
 

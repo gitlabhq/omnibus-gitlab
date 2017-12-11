@@ -1,11 +1,10 @@
-require_relative "../build_iteration.rb"
-require_relative "check.rb"
-require_relative "image.rb"
 require 'omnibus'
+require 'net/http'
+require 'json'
 
-# To use PROCESS_ID instead of $$ to randomize the target directory for cloning
-# GitLab repository. Rubocop requirement to increase readability.
-require 'English'
+require_relative '../build_iteration'
+require_relative 'check'
+require_relative 'image'
 
 module Build
   class Info
@@ -114,8 +113,15 @@ module Build
         "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
       end
 
-      def image_name
-        "#{ENV['CI_REGISTRY_IMAGE']}/#{Info.package}"
+      def fetch_artifact_url(project_id, pipeline_id)
+        uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
+        req = Net::HTTP::Get.new(uri)
+        req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        http.use_ssl = true
+        res = http.request(req)
+        output = JSON.parse(res.body)
+        output.find { |job| job['name'] == 'Trigger:package' }['id']
       end
 
       def triggered_build_package_url
@@ -123,7 +129,7 @@ module Build
         pipeline_id = ENV['CI_PIPELINE_ID']
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
-        id = Image.fetch_artifact_url(project_id, pipeline_id)
+        id = fetch_artifact_url(project_id, pipeline_id)
         "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-xenial/gitlab.deb"
       end
 
