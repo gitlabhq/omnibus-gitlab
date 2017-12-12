@@ -57,11 +57,14 @@ namespace :qa do
     tests = [
       "Test::Instance::Image",         # Test whether instance starts correctly
       "Test::Omnibus::Image",          # Test whether image works correctly
-      "Test::Omnibus::Upgrade",        # Test whether upgrade is done
       "Test::Integration::Mattermost"  # Test whether image works correctly with Mattermost
     ]
 
-    tests.push('Test::Integration::Geo') if Build::Check.is_ee?
+    if Build::Check.is_ee?
+      tests.push('Test::Integration::Geo') ## EE Geo tests
+    else
+      tests.push('Test::Omnibus::Upgrade') ## CE -> EE upgrade tests
+    end
 
     tests.each do |task|
       # Get the docker image which was built on the previous stage of pipeline
