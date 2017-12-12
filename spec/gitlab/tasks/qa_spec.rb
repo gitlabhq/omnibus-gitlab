@@ -98,17 +98,26 @@ describe 'qa', type: :rake do
         tests = {
           'Test::Instance::Image' => double,
           'Test::Omnibus::Image' => double,
-          'Test::Omnibus::Upgrade' => double,
           'Test::Integration::Mattermost' => double
         }
-        tests['Test::Integration::Geo'] = double if ee
+
+        if ee
+          tests['Test::Integration::Geo'] = double
+        else
+          tests['Test::Omnibus::Upgrade'] = double
+        end
 
         qa_image = double
-        expect(Build::GitlabImage).to receive(:gitlab_registry_image_address).exactly(tests.size).times.with(tag: image_tag).and_return(qa_image)
+        expect(Build::GitlabImage)
+          .to receive(:gitlab_registry_image_address)
+          .exactly(tests.size).times
+          .with(tag: image_tag)
+          .and_return(qa_image)
 
         tests.each do |scenario, scenario_stub|
           scenario_stub = double
-          expect(Gitlab::QA::Scenario).to receive(:const_get).with(scenario).and_return(scenario_stub)
+          expect(Gitlab::QA::Scenario).to receive(:const_get)
+            .with(scenario).and_return(scenario_stub)
           expect(scenario_stub).to receive(:perform).with(qa_image)
         end
 
