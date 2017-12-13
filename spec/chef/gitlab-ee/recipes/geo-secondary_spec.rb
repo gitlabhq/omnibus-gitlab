@@ -5,10 +5,10 @@ describe 'gitlab-ee::geo-secondary' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  describe 'when geo-postgresql is disabled' do
+  describe 'when geo_secondary_role is disabled' do
     let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
-    before { stub_gitlab_rb(geo_postgresql: { enable: false }) }
+    before { stub_gitlab_rb(geo_secondary_role: { enable: false }) }
 
     it 'does not render the geo-secondary files' do
       expect(chef_run).not_to render_file('/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
@@ -16,9 +16,61 @@ describe 'gitlab-ee::geo-secondary' do
     end
   end
 
-  context 'when geo-postgresql is enabled' do
+  describe 'when geo_secondary_role is disabled but geo-postgresql enabled' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
     before do
-      stub_gitlab_rb(geo_postgresql: { enable: true })
+      stub_gitlab_rb(geo_secondary_role: { enable: false },
+                     geo_postgresql: { enable: true })
+    end
+
+    it 'does not render the geo-secondary files' do
+      expect(chef_run).not_to render_file('/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
+      expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml')
+    end
+  end
+
+  context 'when geo_secondary_role is enabled but geo-postgresql is disabled' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_postgresql: { enable: false },
+                     geo_secondary: {
+                       db_host: '1.1.1.1',
+                       db_password: 'password',
+                       db_port: '5431'
+                     })
+    end
+
+    describe 'migrations' do
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+      it 'does not run the migrations' do
+        expect(chef_run).not_to run_bash('migrate gitlab-geo tracking database')
+      end
+    end
+
+    describe 'database.yml' do
+      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+
+      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
+      let(:templatesymlink_link) { chef_run.link('Link /opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml to /var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
+
+      it 'creates the template' do
+        expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
+          owner: 'root',
+          group: 'root',
+          mode: '0644'
+        )
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/host: \"1.1.1.1\"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/port: 5431/)
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/database: gitlabhq_geo_production/)
+      end
+    end
+  end
+
+  context 'when geo_secondary_role is enabled' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       %w(
         gitlab-monitor
@@ -35,6 +87,7 @@ describe 'gitlab-ee::geo-secondary' do
         unicorn
         gitaly
         geo-postgresql
+        geo-logcursor
       ).map { |svc| stub_should_notify?(svc, true) }
     end
 
@@ -65,6 +118,24 @@ describe 'gitlab-ee::geo-secondary' do
 
       it 'includes the Geo tracking DB recipe' do
         expect(chef_run).to include_recipe('gitlab-ee::geo-postgresql')
+      end
+
+      it 'includes the Geo secondary recipes for Rails' do
+        expect(chef_run).to include_recipe('gitlab-ee::geo-secondary')
+        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
+      end
+
+      it 'does not include the Geo secondary recipes if Rails not needed' do
+        stub_gitlab_rb(geo_secondary_role: { enable: true },
+                       nginx: { enable: false },
+                       unicorn: { enable: false },
+                       sidekiq: { enable: false },
+                       postgresql: { enable: false },
+                       geo_logcursor: { enable: false },
+                       redis: { enable: true })
+
+        expect(chef_run).not_to include_recipe('gitlab-ee::geo-secondary')
+        expect(chef_run).not_to include_recipe('gitlab-ee::geo_database_migrations')
       end
     end
 

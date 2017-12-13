@@ -45,7 +45,7 @@ end
 end
 
 # Geo secondary
-if node['gitlab']['geo-postgresql']['enable']
+if node['gitlab']['geo-secondary']['enable'] && node['gitlab']['gitlab-rails']['enable']
   include_recipe 'gitlab-ee::geo-secondary'
   include_recipe 'gitlab-ee::geo_database_migrations'
 end

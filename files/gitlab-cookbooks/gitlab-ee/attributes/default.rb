@@ -39,6 +39,7 @@ default['gitlab']['sidekiq-cluster']['negate'] = false
 ###
 # Geo: Secondary node configuration
 ###
+default['gitlab']['geo-secondary']['enable'] = false
 default['gitlab']['geo-secondary']['auto_migrate'] = true
 default['gitlab']['geo-secondary']['db_adapter'] = "postgresql"
 default['gitlab']['geo-secondary']['db_encoding'] = "unicode"
