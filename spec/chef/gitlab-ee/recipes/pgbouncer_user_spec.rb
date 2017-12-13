@@ -30,6 +30,8 @@ describe 'gitlab-ee::pgbouncer_user' do
         }
       }
     )
+    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+    allow_any_instance_of(PgHelper).to receive(:user_exists?).with('pgbouncer').and_return(false)
   end
 
   context 'inital run' do
@@ -39,7 +41,8 @@ describe 'gitlab-ee::pgbouncer_user' do
     end
 
     it 'should create the pg_shadow_lookup function' do
-      expect(chef_run).to run_execute('Add pgbouncer auth function')
+      postgresql_user = chef_run.postgresql_user('pgbouncer')
+      expect(postgresql_user).to notify('execute[Add pgbouncer auth function]')
     end
   end
 
