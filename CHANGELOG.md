@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Update Redis to 3.2.11 (Takuya Noguchi)
 - Turn on postgresql SSL by default b18597e3
 - [GitLab Geo] Add a command to promote secondary node to primary
+- Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
 
 10.2.3
 
