@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Turn on postgresql SSL by default b18597e3
 - [GitLab Geo] Add a command to promote secondary node to primary
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
+- Added roles to ease HA Postgres configuration d7d0f32a
 
 10.2.3
 
