@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Update pgbouncer and repmgr recipes to prevent errors on reconfigure
 - Add a command to promote secondary node to primary for GitLab Geo
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
+- Added roles to ease HA Postgres configuration d7d0f32a
 
 
 10.2.3
