@@ -40,7 +40,7 @@ made outside of `gitlab.rb`, see [upgrade section](#upgrading-gitlab-mattermost)
 ## Running GitLab Mattermost on its own server
 
 If you want to run GitLab and GitLab Mattermost on two separate servers you
-can use the following settings on the GitLab Mattermost server to effectively disable
+can use the following settings and configuration details on the GitLab Mattermost server to effectively disable
 the GitLab service bundled into the Omnibus package. The GitLab services will
 still be set up on your GitLab Mattermost server, but they will not accept user requests or
 consume system resources.
@@ -48,21 +48,11 @@ consume system resources.
 ```ruby
 mattermost_external_url 'http://mattermost.example.com'
 
-# Tell GitLab Mattermost to integrate with gitlab.example.com
-
-mattermost['gitlab_enable'] = true
-mattermost['gitlab_id'] = "12345656"
-mattermost['gitlab_secret'] = "123456789"
-mattermost['gitlab_scope'] = ""
-mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
-mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
-mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
-
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
 ```
 
-where `Secret` and `Id` are `application secret` and `application id` received when creating new `Application` authorization in GitLab admin section.
+Then following the details in [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
 
 To enable integrations with GitLab, add the following on the GitLab Server:
 ```ruby
@@ -75,13 +65,18 @@ By default GitLab Mattermost will force all users to sign-up with GitLab and dis
 
 ### Authorise GitLab Mattermost
 
-To do this, using browser navigate to the `admin area` of GitLab, `Application` section. Create a new application and for the callback URL use: `http://mattermost.example.com/signup/gitlab/complete` and `http://mattermost.example.com/login/gitlab/complete` (replace http with https if you use https).
+To do this, using browser navigate to the Admin area of GitLab, `Application` section. Create a new application and for the `Redirect URI` use: 
 
-Once the application is created you will receive an `Application ID` and `Secret`. One other information needed is the URL of GitLab instance.
+```
+http://mattermost.example.com/signup/gitlab/complete
+http://mattermost.example.com/login/gitlab/complete
+```
+(replace `http` with `https` if you use https).
 
-Now, go to the GitLab server and edit the `/etc/gitlab/gitlab.rb` configuration file.
+Once the application is created you will receive an `Application ID` and `Secret`. One other piece of information needed is the URL of GitLab instance.
 
-In `gitlab.rb` use the values you've received above:
+Now, go to the server running GitLab Mattermost and edit the `/etc/gitlab/gitlab.rb` 
+configuration file as follows using the values you've received above:
 
 ```
 mattermost['gitlab_enable'] = true
@@ -99,7 +94,9 @@ If there are no errors your GitLab and GitLab Mattermost should be configured co
 
 ### Reauthorise GitLab Mattermost
 
-To reauthorise GitLab Mattermost you will first need to revoke access of the existing authorisation. This can be done in the Admin area of GitLab under `Applications`. Once that is done follow the steps in the `Authorise GitLab Mattermost` section.
+To reauthorise GitLab Mattermost you will first need to revoke access of the existing
+authorisation. This can be done in the Admin area of GitLab under `Applications`. 
+Once that is done follow the steps in the [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
 
 ## Running GitLab Mattermost with HTTPS
 
