@@ -229,6 +229,7 @@ DEPENDENCIES
   omnibus!
   omnibus-ctl (= 0.3.6)
   package_cloud
+  rainbow (~> 2.1.0)
   rake
   rspec
   rubocop
