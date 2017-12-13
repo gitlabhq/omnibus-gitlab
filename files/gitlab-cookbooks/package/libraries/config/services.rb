@@ -29,10 +29,10 @@ module Services
     service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']
     service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'prometheus']
-    service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres']
+    service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role']
     service 'nginx',              groups: [DEFAULT_GROUP]
     service 'prometheus',         groups: [DEFAULT_GROUP, 'prometheus']
-    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'prometheus', 'postgres']
+    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'prometheus', 'postgres', 'postgres_role']
     service 'mailroom'
     service 'gitlab_pages'
     service 'mattermost'
@@ -44,9 +44,9 @@ module Services
     service 'sentinel',         groups: ['redis']
     service 'geo_logcursor',    groups: ['geo']
     service 'geo_postgresql',   groups: %w(geo postgres)
-    service 'pgbouncer',        groups: ['postgres']
-    service 'repmgrd',          groups: ['postgres']
-    service 'consul',           groups: ['ha']
+    service 'pgbouncer',        groups: %w(postgres pgbouncer_role)
+    service 'repmgrd',          groups: %w(postgres postgres_role)
+    service 'consul',           groups: %w(consul_role ha pgbouncer_role postgres_role)
     service 'sidekiq_cluster',  groups: ['sidekiq']
   end
 end

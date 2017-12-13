@@ -74,3 +74,23 @@ for configuration steps.
   application as a Geo Secondary
 
   *By default, enables all of GitLab's default single node services. (Nginx, Unicorn, Redis, Sidekiq, etc)*
+
+### Postgres Roles
+
+Documentation on the user of the Postgres Roles can be found in [Configuring Postgres HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
+
+- **postgres_role**
+
+  Enables the postgresql, repmgr, and consul services on the machine
+
+  *By default, enables no other services.*
+- **pgbouncer_role**
+
+  Enables the pbouncer and consul services on the machine
+
+  *By default, enables no other services.*
+- **consul_role**
+
+  Enables the consul service on the machine
+
+  *By default, enables no other services.*
