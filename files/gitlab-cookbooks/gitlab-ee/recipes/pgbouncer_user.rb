@@ -22,6 +22,7 @@ database = node['gitlab']['gitlab-rails']['db_database']
 postgresql_user node['gitlab']['postgresql']['pgbouncer_user'] do
   password "md5#{node['gitlab']['postgresql']['pgbouncer_user_password']}"
   action :create
+  notifies :run, "execute[Add pgbouncer auth function]", :immediately
 end
 
 pgbouncer_auth_function = pg_helper.pg_shadow_lookup
@@ -31,4 +32,5 @@ execute 'Add pgbouncer auth function' do
   user account_helper.postgresql_user
   not_if { pg_helper.has_function?(database, "pg_shadow_lookup") }
   only_if { node.default['gitlab']['pgbouncer']['auth_query'].eql?(node['gitlab']['pgbouncer']['auth_query']) }
+  action :nothing
 end
