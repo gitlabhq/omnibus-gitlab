@@ -247,6 +247,8 @@ witness_repl_nodes_sync_interval_secs=15
           services: %w(postgresql)
         }
       )
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(PgHelper).to receive(:user_exists?).with('gitlab-consul').and_return(false)
     end
 
     it 'creates the consul database user' do

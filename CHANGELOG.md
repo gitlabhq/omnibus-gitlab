@@ -16,8 +16,10 @@ omnibus-gitlab repository.
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
 - Update Redis to 3.2.11 (Takuya Noguchi)
 - Turn on postgresql SSL by default b18597e3
-- [GitLab Geo] Add a command to promote secondary node to primary
+- Update pgbouncer and repmgr recipes to prevent errors on reconfigure
+- Add a command to promote secondary node to primary for GitLab Geo
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
+
 
 10.2.3
 
