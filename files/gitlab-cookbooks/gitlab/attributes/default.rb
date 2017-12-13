@@ -784,9 +784,3 @@ default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
-
-####
-# Geo (EE-only)
-####
-default['gitlab']['gitlab-rails']['geo_primary_role_enabled'] = false
-default['gitlab']['gitlab-rails']['geo_secondary_role_enabled'] = false

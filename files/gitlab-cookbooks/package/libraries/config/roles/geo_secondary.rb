@@ -18,18 +18,26 @@ module GeoSecondaryRole
   def self.load_role
     return unless Gitlab['geo_secondary_role']['enable']
 
-    Gitlab['gitlab_rails']['geo_secondary_role_enabled'] = true
     Services.enable_group('geo')
+    Gitlab['geo_secondary']['enable'] = true
     Gitlab['postgresql']['wal_level'] = 'hot_standby'
     Gitlab['postgresql']['max_wal_senders'] ||= 10
     Gitlab['postgresql']['wal_keep_segments'] ||= 10
     Gitlab['postgresql']['hot_standby'] = 'on'
     Gitlab['gitlab_rails']['auto_migrate'] = false
+    Gitlab['gitlab_rails']['enable'] = rails_needed?
 
     # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).
     # allow more memory for them by reducing the number of Unicorn workers.  Each one is minimum
     # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
     memory = Gitlab['node']['memory']['total'].to_i - 1258291
     Gitlab['unicorn']['worker_processes'] = Unicorn.workers(memory)
+  end
+
+  def self.rails_needed?
+    Gitlab['unicorn']['enable'] ||
+      Gitlab['sidekiq']['enable'] ||
+      Gitlab['sidekiq_cluster']['enable'] ||
+      Gitlab['geo_logcursor']['enable']
   end
 end

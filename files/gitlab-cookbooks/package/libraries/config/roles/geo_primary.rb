@@ -18,7 +18,6 @@ module GeoPrimaryRole
   def self.load_role
     return unless Gitlab['geo_primary_role']['enable']
 
-    Gitlab['gitlab_rails']['geo_primary_role_enabled'] = true
     Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
     Gitlab['postgresql']['wal_level'] = 'hot_standby'
     Gitlab['postgresql']['max_wal_senders'] ||= 10
