@@ -17,6 +17,10 @@
 #
 account_helper = AccountHelper.new(node)
 
+unless node['gitlab']['unicorn']['worker_processes']
+  node.default['gitlab']['unicorn']['worker_processes'] = Unicorn.workers
+end
+
 unicorn_service 'unicorn' do
   rails_app 'gitlab-rails'
   user account_helper.gitlab_user

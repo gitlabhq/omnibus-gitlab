@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+10.2.5
+- Adjust number of unicorn workers if running a Geo secondary node
+
 10.2.0
 
 - Enable pgbouncer application_name_add_host config by default 29dab6af1

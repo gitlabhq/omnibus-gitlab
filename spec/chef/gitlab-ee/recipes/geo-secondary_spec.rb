@@ -76,4 +76,25 @@ describe 'gitlab-ee::geo-secondary' do
       end
     end
   end
+
+  context 'unicorn worker_processes' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new do |node|
+        node.automatic['cpu']['total'] = 16
+        node.automatic['memory']['total'] = '8388608KB' # 8GB
+      end.converge('gitlab-ee::default')
+    end
+
+    it 'reduces the number of unicorn workers on secondary node' do
+      stub_gitlab_rb(geo_secondary_role: { enable: true })
+
+      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 14
+    end
+
+    it 'does not reduce the number of unicorn workers on primary node' do
+      stub_gitlab_rb(geo_primary_role: { enable: true })
+
+      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 17
+    end
+  end
 end
