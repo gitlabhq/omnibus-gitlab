@@ -309,6 +309,7 @@ Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   stage: trigger-package
   script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
     - bundle exec rake build:project
@@ -340,6 +341,7 @@ Trigger:docker:
   services:
   - docker:dind
   script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
     # variable, which will be used to tag the final Docker image.
     # So, if IMAGE_TAG variable is empty, it means the trigger happened from
@@ -361,6 +363,7 @@ Trigger:qa:
   services:
   - docker:dind
   script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
