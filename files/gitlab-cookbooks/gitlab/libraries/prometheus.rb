@@ -123,6 +123,7 @@ module Prometheus
     def parse_scrape_configs
       # Don't parse if prometheus is explicitly disabled
       return unless Services.enabled?('prometheus')
+      gitaly_scrape_config
       gitlab_monitor_scrape_configs
       sidekiq_scrape_config
       unicorn_scrape_configs
@@ -131,6 +132,29 @@ module Prometheus
       exporter_scrape_config('postgres')
       exporter_scrape_config('redis')
       prometheus_scrape_configs
+    end
+
+    def gitaly_scrape_config
+      # Don't parse if gitaly is explicitly disabled
+      return unless Services.enabled?('gitaly')
+
+      default_config = Gitlab['node']['gitaly'].to_hash
+      user_config = Gitlab['gitaly']
+
+      # Don't enable a scrape config if the listen address is empty.
+      return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
+
+      listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
+
+      scrape_config = {
+                        'job_name' => 'gitaly',
+                        'static_configs' => [
+                          'targets' => [listen_address],
+                        ]
+                      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
     def gitlab_monitor_scrape_configs

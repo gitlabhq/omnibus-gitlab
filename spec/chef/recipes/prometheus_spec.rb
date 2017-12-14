@@ -50,6 +50,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9168
+  - job_name: gitaly
+    static_configs:
+    - targets:
+      - localhost:9236
   - job_name: kubernetes-cadvisor
     scheme: https
     tls_config:
@@ -228,6 +232,9 @@ describe 'gitlab::prometheus' do
               ]
             }
           ]
+        },
+        gitaly: {
+          prometheus_listen_addr: 'testhost:2345',
         }
       )
     end
@@ -267,6 +274,8 @@ describe 'gitlab::prometheus' do
         .with_content(/scrape_interval: 11/)
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{- job_name: gitaly\s+static_configs:\s+- targets:\s+- testhost:2345})
     end
 
     context 'when kubernetes monitoring is disabled' do

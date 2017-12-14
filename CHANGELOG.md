@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
 - Make it possible to configure an external Geo tracking database
+- Add gitaly metrics to Prometheus
 - Upgrade node-exporter to 0.15.2
 - Upgrade postgres-exporter to 0.4.1
 - Upgrade prometheus to 1.8.2
