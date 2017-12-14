@@ -27,6 +27,8 @@ omnibus-gitlab repository.
 - Add a command to promote secondary node to primary for GitLab Geo
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
 - Added roles to ease HA Postgres configuration d7d0f32a
+- Add a runit service to probe repository storages
+- Bump bundled git version to 2.14.3 a2b4bedf
 
 
 10.2.3
