@@ -5,6 +5,7 @@ require_relative '../build/check'
 require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
+require_relative '../build/qa_trigger'
 require 'gitlab/qa'
 
 namespace :qa do
@@ -54,23 +55,7 @@ namespace :qa do
 
   desc "Run QA tests"
   task test: ["qa:build", "qa:push:triggered"] do # Requires the QA image to be built and pushed first
-    tests = [
-      "Test::Instance::Image",         # Test whether instance starts correctly
-      "Test::Omnibus::Image",          # Test whether image works correctly
-      "Test::Integration::Mattermost"  # Test whether image works correctly with Mattermost
-    ]
-
-    if Build::Check.is_ee?
-      tests.push('Test::Integration::Geo') ## EE Geo tests
-    else
-      tests.push('Test::Omnibus::Upgrade') ## CE -> EE upgrade tests
-    end
-
-    tests.each do |task|
-      # Get the docker image which was built on the previous stage of pipeline
-      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
-      $stdout.puts "Running Gitlab::QA::Scenario::#{task} with the following image: #{image_address}"
-      Gitlab::QA::Scenario.const_get(task).perform(image_address)
-    end
+    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
+    Build::QATrigger.new(image: image_address).invoke!.wait!
   end
 end

@@ -163,7 +163,10 @@ module Build
           "token" => ENV["BUILD_TRIGGER_TOKEN"],
           "variables[ALTERNATIVE_SOURCES]" => true,
           "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
-          "variables[ee]" => ENV["ee"] || "false"
+          "variables[ee]" => ENV["ee"] || "false",
+          "variables[TRIGGERED_USER]" => ENV["GITLAB_USER_NAME"],
+          "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/#{ENV['CI_JOB_ID']}"
+
         }
       end
     end
