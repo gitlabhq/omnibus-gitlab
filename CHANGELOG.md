@@ -20,6 +20,7 @@ omnibus-gitlab repository.
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
 - Update Redis to 3.2.11 (Takuya Noguchi)
+- Remove unused redis bin gitlab-shell configuration
 - Turn on postgresql SSL by default b18597e3
 - Process reconfigure failures and print out a message
 - Update pgbouncer and repmgr recipes to prevent errors on reconfigure

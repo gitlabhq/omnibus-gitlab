@@ -100,8 +100,6 @@ describe 'gitlab::gitlab-shell' do
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-          .with_content(/bin: \/opt\/gitlab\/embedded\/bin\/redis-cli/)
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/host: 127.0.0.1/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/port: /)
@@ -129,8 +127,6 @@ describe 'gitlab::gitlab-shell' do
       end
 
       it 'creates the config file with the required redis settings' do
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-          .with_content(/bin: \/opt\/gitlab\/embedded\/bin\/redis-cli/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/host: redis.example.com/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
@@ -163,8 +159,6 @@ describe 'gitlab::gitlab-shell' do
       end
 
       it 'creates the config file with the required redis settings' do
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-          .with_content(/bin: \/opt\/gitlab\/embedded\/bin\/redis-cli/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
           .with_content(/host: sentinel-master/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
