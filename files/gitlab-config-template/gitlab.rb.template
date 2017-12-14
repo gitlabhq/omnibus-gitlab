@@ -1450,6 +1450,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ]
 
 ################################################################################
+# Storage check
+################################################################################
+# storage_check['enable'] = false
+# storage_check['target'] = 'unix:///var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+# storage_check['log_directory'] = '/var/log/gitlab/storage-check'
+
+################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##
 ################################################################################

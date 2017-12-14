@@ -120,6 +120,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   "logrotate",
   "bootstrap",
   "gitlab-pages",
+  "storage-check"
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"
