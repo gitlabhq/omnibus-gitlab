@@ -48,6 +48,7 @@ dependency 'registry'
 dependency 'gitlab-pages'
 dependency 'unzip'
 dependency 'libre2'
+dependency 'gpgme'
 
 if EE
   dependency 'mysql-client'
@@ -70,6 +71,7 @@ build do
   bundle_without = %w(development test)
   bundle_without << 'mysql' unless EE
   bundle 'config build.rugged --no-use-system-libraries', env: env
+  bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   # One of our gems, google-protobuf is known to have issues with older gcc versions
