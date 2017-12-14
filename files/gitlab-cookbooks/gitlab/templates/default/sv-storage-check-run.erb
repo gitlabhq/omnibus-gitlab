@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e # fail on errors
+
+cd <%= @options[:working_dir] %>
+
+exec chpst -P \
+-U <%= @options[:user] %> \
+-u <%= @options[:user] %> \
+<%= File.join(@options[:working_dir], 'bin', 'storage_check') %> -t <%= @options[:storage_check_target] %>
