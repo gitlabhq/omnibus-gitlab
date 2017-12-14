@@ -236,7 +236,7 @@ attribute('best_service').use { BestService }
 
 Note that sequence for parsing variables matters. So if your library expects to
 be parsed after another service's library, you need to update your attribute with
-a `sequence` value that comes later. (The default `sequence` value is `20`)
+a `priority` value that comes later. (The default `priority` value is `20`)
 
 ```ruby
 attribute('expected_service').use { ExpectedService }

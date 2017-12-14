@@ -784,3 +784,10 @@ default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
+
+####
+# Storage check
+####
+default['gitlab']['storage-check']['enable'] = false
+default['gitlab']['storage-check']['target'] = nil
+default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
