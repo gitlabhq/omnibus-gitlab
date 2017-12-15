@@ -1,7 +1,5 @@
-resource_name :postgresql_database
-
 property :database, String, name_property: true
-property :owner, String, default: lazy { node['gitlab']['postgresql']['user'] }
+property :owner, String, default: lazy { node['gitlab']['postgresql']['sql_user'] }
 property :helper, default: lazy { PgHelper.new(node) }
 property :database_port, Integer, default: lazy { node['gitlab']['postgresql']['port'] }
 property :database_socket, String, default: lazy { node['gitlab']['postgresql']['unix_socket_directory'] }
