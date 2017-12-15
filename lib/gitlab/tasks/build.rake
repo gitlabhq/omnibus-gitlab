@@ -8,7 +8,7 @@ require 'json'
 namespace :build do
   desc 'Start project build'
   task project: ["cache:purge", "check:no_changes"] do
-    Build.exec('gitlab')
+    Build.exec('gitlab') || raise('Build failed')
     Rake::Task["license:check"].invoke
     Rake::Task["build:package:move_to_platform_dir"].invoke
   end
