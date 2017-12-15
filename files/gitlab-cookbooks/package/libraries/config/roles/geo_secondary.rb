@@ -25,5 +25,11 @@ module GeoSecondaryRole
     Gitlab['postgresql']['wal_keep_segments'] ||= 10
     Gitlab['postgresql']['hot_standby'] = 'on'
     Gitlab['gitlab_rails']['auto_migrate'] = false
+
+    # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).
+    # allow more memory for them by reducing the number of Unicorn workers.  Each one is minimum
+    # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
+    memory = Gitlab['node']['memory']['total'].to_i - 1258291
+    Gitlab['unicorn']['worker_processes'] = Unicorn.workers(memory)
   end
 end

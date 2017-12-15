@@ -314,19 +314,7 @@ default['gitlab']['unicorn']['somaxconn'] = 1024
 default['gitlab']['unicorn']['worker_timeout'] = 60
 default['gitlab']['unicorn']['worker_memory_limit_min'] = "400 * 1 << 20"
 default['gitlab']['unicorn']['worker_memory_limit_max'] = "650 * 1 << 20"
-default['gitlab']['unicorn']['worker_processes'] = [
-  2, # Two is the minimum or web editor will no longer work.
-  [
-    # Cores + 1 gives good CPU utilization.
-    node['cpu']['total'].to_i + 1,
-    # See how many worker processes fit in (total RAM - 1.5GB).
-    # Using the formula: (t - 1.5GB + (n/2)) / n
-    # t - total ram
-    # n - per worker ram. Use a value based on worker_memory_limit_min
-    # We add (n/2) in the numerator to get rounding instead of integer truncation.
-    (node['memory']['total'].to_i - 1572864 + 204800) / 409600
-  ].min # min because we want to exceed neither CPU nor RAM
-].max # max because we need at least 2 workers
+default['gitlab']['unicorn']['worker_processes'] = nil
 
 ####
 # Sidekiq

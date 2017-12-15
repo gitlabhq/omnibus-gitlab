@@ -82,6 +82,40 @@ Now, you can make necessary changes in the
 `~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
 for those changes to take effect.
 
+## Run GitLab QA Against Your Development Environment
+
+You can run [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa) tests against your development instance.
+
+This ensures that your new work is behaving as expected, and not breaking anything else. You can even add your own tests to QA to validate what you are working on.
+
+1. Create a user account on your development instance for GitLab QA to use
+
+   Then, from any machine that can reach your development instance:
+
+1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab-qa) repository
+
+    ```
+    $ git clone git@gitlab.com:gitlab-org/gitlab-ee.git
+    ```
+
+1. Change to the `qa` directory
+
+    ```
+    $ cd gitlab-ee/qa
+    ```
+
+1. Install the required gems
+
+   ```
+   $ bundle install
+   ```
+
+1. Run the tests
+
+   ```
+   $ GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
+   ```
+
 ## Openshift GitLab Development Setup
 
 See [openshift/README.md.](openshift/README.md#development-setup)
