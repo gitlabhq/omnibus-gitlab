@@ -21,6 +21,7 @@ dependency 'libassuan'
 dependency 'npth'
 dependency 'libgcrypt'
 dependency 'libksba'
+dependency 'zlib'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LGPL3'
@@ -33,7 +34,7 @@ relative_path "gnupg-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+    "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr", env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env
