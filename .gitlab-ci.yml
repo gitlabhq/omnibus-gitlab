@@ -332,7 +332,7 @@ Trigger:package:
   tags:
     - triggered-packages
 
-Trigger:docker:
+Trigger:gitlab-docker:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   stage: trigger-docker
   variables:
@@ -353,13 +353,12 @@ Trigger:docker:
   only:
     - triggers@gitlab-org/omnibus-gitlab
 
-Trigger:qa:
-  stage: trigger-qa
+Trigger:qa-docker:
+  stage: trigger-docker
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
-    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   services:
   - docker:dind
   script:
@@ -369,12 +368,20 @@ Trigger:qa:
     - chmod -R 0600 ~/.ssh/
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
     - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
+    - bundle exec rake qa:build
+    - bundle exec rake qa:push:triggered
+  only:
+    - triggers@gitlab-org/omnibus-gitlab
+  dependencies: []
+
+Trigger:qa-test:
+  stage: trigger-qa
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
+    - if [ -z "$IMAGE_TAG" ] ; then export IMAGE_TAG=$GITLAB_VERSION ;  fi
     - bundle exec rake qa:test
-  artifacts:
-    when: on_failure
-    expire_in: 7d
-    paths:
-    - screenshots/
   only:
     - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
