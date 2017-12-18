@@ -27,7 +27,7 @@ omnibus-gitlab repository.
 - Add a runit service to probe repository storages
 - Bump bundled git version to 2.14.3 a2b4bedf
 - Render gitaly-ruby memory settings
-
+- Update pgbouncer recipe to better handle initial configuration
 
 10.2.3
 
