@@ -18,10 +18,10 @@ RuboCop::RakeTask.new(:rubocop) do |t|
                'files/gitlab-cookbooks/package',
                'files/gitlab-cookbooks/registry',
                'files/gitlab-cookbooks/gitaly',
+               'files/gitlab-cookbooks/postgresql',
                'files/gitlab-cookbooks/repmgr',
                'files/gitlab-cookbooks/mattermost',
                'files/gitlab-cookbooks/gitlab/attributes',
                'files/gitlab-cookbooks/gitlab/definitions',
-               'files/gitlab-cookbooks/gitlab/resources',
                'files/gitlab-cookbooks/gitlab/templates']
 end
