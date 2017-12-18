@@ -98,7 +98,6 @@ describe 'gitlab-ee::pgbouncer' do
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('pgbouncer').and_return(true)
         expect(template).to notify('execute[reload pgbouncer]').to(:run).immediately
-        expect(template).to notify('execute[start pgbouncer]').to(:run).immediately
       end
     end
 
