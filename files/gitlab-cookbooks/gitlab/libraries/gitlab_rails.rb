@@ -183,6 +183,14 @@ module GitlabRails
                    "Please use gitlab_rails['stuck_ci_jobs_worker_cron'] from now on"]
         LoggingHelper.deprecation(warning.join("\n"))
       end
+
+      if Gitlab['gitlab_rails']['git_max_size']
+        LoggingHelper.deprecation("gitlab_rails['git_max_size'] setting is deprecated and will not have any effect.")
+      end
+
+      if Gitlab['gitlab_rails']['git_timeout']
+        LoggingHelper.deprecation("gitlab_rails['git_timeout'] setting is deprecated and will not have any effect.")
+      end
     end
 
     def public_path
