@@ -13,4 +13,7 @@ default['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitaly']['storage'] = []
 default['gitaly']['auth_token'] = nil
 default['gitaly']['auth_transitioning'] = false
+default['gitaly']['ruby_max_rss'] = nil
+default['gitaly']['ruby_graceful_restart_timeout'] = nil
+default['gitaly']['ruby_restart_delay'] = nil
 default['gitaly']['concurrency'] = nil

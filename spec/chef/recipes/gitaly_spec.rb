@@ -14,6 +14,9 @@ describe 'gitaly' do
   end
   let(:auth_token) { '123secret456' }
   let(:auth_transitioning) { true }
+  let(:ruby_max_rss) { 1000000 }
+  let(:ruby_graceful_restart_timeout) { '30m' }
+  let(:ruby_restart_delay) { '10m' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -46,6 +49,12 @@ describe 'gitaly' do
         .with_content(%r{\[auth\]\s+token = })
       expect(chef_run).not_to render_file(config_path)
         .with_content('transitioning =')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('max_rss =')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('graceful_restart_timeout =')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('restart_delay =')
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -66,6 +75,9 @@ describe 'gitaly' do
           prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
           auth_token: auth_token,
           auth_transitioning: auth_transitioning,
+          ruby_max_rss: ruby_max_rss,
+          ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
+          ruby_restart_delay: ruby_restart_delay,
         }
       )
     end
@@ -85,6 +97,16 @@ describe 'gitaly' do
         .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[auth\]\s+token = '#{Regexp.escape(auth_token)}'\s+transitioning = true})
+
+      gitaly_ruby_section = Regexp.new([
+        %r{\[gitaly-ruby\]},
+        %r{dir = "/opt/gitlab/embedded/service/gitaly-ruby"},
+        %r{max_rss = #{ruby_max_rss}},
+        %r{graceful_restart_timeout = '#{Regexp.escape(ruby_graceful_restart_timeout)}'},
+        %r{restart_delay = '#{Regexp.escape(ruby_restart_delay)}'},
+      ].map(&:to_s).join('\s+'))
+      expect(chef_run).to render_file(config_path)
+        .with_content(gitaly_ruby_section)
     end
 
     context 'when using gitaly storage configuration' do
