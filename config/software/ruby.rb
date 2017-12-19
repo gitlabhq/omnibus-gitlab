@@ -40,7 +40,7 @@ dependency 'libyaml'
 # and that's the only one we will ever use.
 dependency 'libiconv'
 
-version('2.3.6') { source sha256: '07aa3ed3bffbfb97b6fc5296a86621e6bb5349c6f8e549bd0db7f61e3e210fd0' }
+version('2.3.6') { source sha256: '8322513279f9edfa612d445bc111a87894fac1128eaa539301cebfc0dd51571e' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
