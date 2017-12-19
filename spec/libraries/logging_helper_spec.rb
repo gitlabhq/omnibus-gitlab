@@ -52,6 +52,18 @@ describe LoggingHelper do
     end
   end
 
+  context '.warning' do
+    it 'calls Chef::Log.warn' do
+      subject.deprecation('hello')
+      expect(log).to have_received(:warn).with('hello')
+    end
+
+    it 'adds the kind :warning' do
+      subject.warning('basic')
+      expect(subject.messages).to contain_exactly(hash_including(kind: :warning))
+    end
+  end
+
   context '.report' do
     it 'prints nothing if nothing happened' do
       expect { subject.report }.not_to output.to_stdout
@@ -66,6 +78,26 @@ describe LoggingHelper do
       subject.deprecation('one')
       subject.deprecation('two')
       expect { subject.report }.to output(/\nDeprecations:\n\none\n---\n\ntwo\n\n/).to_stdout
+    end
+
+    it 'prints a warning header, then warning' do
+      subject.warning('one')
+      expect { subject.report }. to output(/\nWarnings:\n\none\n/).to_stdout
+    end
+
+    it 'prints a warning header, then warnings' do
+      subject.warning('one')
+      subject.warning('two')
+      expect { subject.report }.to output(/\nWarnings:\n\none\n---\n\ntwo\n\n/).to_stdout
+    end
+
+    it 'prints a deprecation header, deprecations, warning header, then warnings' do
+      subject.deprecation('one')
+      subject.deprecation('two')
+      subject.warning('three')
+      subject.warning('four')
+      expect { subject.report }
+        .to output(/\nDeprecations:\n\none\n---\n\ntwo\n\n\nWarnings:\n\nthree\n---\n\nfour/).to_stdout
     end
   end
 end
