@@ -28,6 +28,7 @@ omnibus-gitlab repository.
 - Bump bundled git version to 2.14.3 a2b4bedf
 - Render gitaly-ruby memory settings
 - Update pgbouncer recipe to better handle initial configuration
+- Add warning to LoggingHelper
 
 10.2.3
 
