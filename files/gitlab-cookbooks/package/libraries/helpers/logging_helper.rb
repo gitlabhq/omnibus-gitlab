@@ -55,7 +55,7 @@ module LoggingHelper
     return unless generated.any?
 
     puts
-    puts "#{type.capitalize}:"
+    puts "#{type.capitalize}s:"
     puts
 
     new_messages = generated.map { |m| m[:message] }
