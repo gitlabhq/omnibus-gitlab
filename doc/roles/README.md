@@ -77,7 +77,7 @@ for configuration steps.
 
 ### Postgres Roles
 
-Documentation on the user of the Postgres Roles can be found in [Configuring Postgres HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
+Documentation on the usage of the Postgres Roles can be found in [Configuring Postgres HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
 
 - **postgres_role**
 
