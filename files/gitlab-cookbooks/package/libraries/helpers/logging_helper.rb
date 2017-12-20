@@ -37,20 +37,36 @@ module LoggingHelper
     log(message, kind: :deprecation)
   end
 
-  # Reports on the actions the user should take
+  # Records a message as warning, logging as we see it.
   #
+  # @param message [String] A message to give the user
+  # @return [void]
+  def warning(message)
+    Chef::Log.warn message
+    log(message, kind: :warning)
+  end
+
+  # Prints a report for the specified message type
+  #
+  # @param type [Symbol] The type of message to print a report for
   # @return [true]
+  def print_report(type)
+    generated = @messages.select { |m| m[:kind] == type }
+    return unless generated.any?
+
+    puts
+    puts "#{type.capitalize}s:"
+    puts
+
+    new_messages = generated.map { |m| m[:message] }
+    puts new_messages.join("\n---\n\n")
+    puts
+  end
+
+  # Report on any messages generated during reconfigure
   def report
-    deprecations = @messages.select { |m| m[:kind] == :deprecation }
-
-    if deprecations.any?
-      puts
-      puts "Deprecations:"
-      puts
-
-      messages = deprecations.map { |m| m[:message] }
-      puts messages.join("\n---\n\n")
-      puts
+    [:deprecation, :warning].each do |type|
+      print_report(type)
     end
 
     # code blocks in chef report callbacks are expected to yield true
