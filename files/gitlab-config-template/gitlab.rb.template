@@ -1120,6 +1120,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_apiv3'] = true
 # mattermost['service_goroutine_health_threshold'] = -1
 # mattermost['service_user_access_tokens'] = false
+# mattermost['service_enable_preview_features'] = true
 # mattermost['service_close_unused_direct_messages'] = false
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
@@ -1147,7 +1148,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['sql_data_source_search_replicas'] = []
 # mattermost['sql_query_timeout'] = 30
 
-
 # mattermost['log_file_directory'] = '/var/log/gitlab/mattermost/'
 # mattermost['log_console_enable'] = true
 # mattermost['log_console_level'] = 'INFO'
@@ -1170,6 +1170,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_enable_sign_in_with_email'] = true
 # mattermost['email_enable_sign_in_with_username'] = false
 # mattermost['email_send_email_notifications'] = false
+# mattermost['email_use_channel_in_email_notifications'] = true
 # mattermost['email_require_email_verification'] = false
 # mattermost['email_smtp_username'] = nil
 # mattermost['email_smtp_password'] = nil

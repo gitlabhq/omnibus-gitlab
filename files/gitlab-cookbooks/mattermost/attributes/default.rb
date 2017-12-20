@@ -75,6 +75,7 @@ default['mattermost']['service_enable_channel_viewed_messages'] = true
 default['mattermost']['service_enable_apiv3'] = true
 default['mattermost']['service_goroutine_health_threshold'] = -1
 default['mattermost']['service_user_access_tokens'] = false
+default['mattermost']['service_enable_preview_features'] = true
 default['mattermost']['service_close_unused_direct_messages'] = false
 
 default['mattermost']['sql_driver_name'] = 'postgres'
@@ -110,6 +111,7 @@ default['mattermost']['email_enable_sign_up_with_email'] = false
 default['mattermost']['email_enable_sign_in_with_email'] = true
 default['mattermost']['email_enable_sign_in_with_username'] = false
 default['mattermost']['email_send_email_notifications'] = false
+default['mattermost']['email_use_channel_in_email_notifications'] = true
 default['mattermost']['email_require_email_verification'] = false
 default['mattermost']['email_feedback_name'] = nil
 default['mattermost']['email_feedback_email'] = nil

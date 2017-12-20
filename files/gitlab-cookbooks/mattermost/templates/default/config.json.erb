@@ -40,6 +40,7 @@
         "EnableAPIv3" : <%= @service_enable_apiv3 %>,
         "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>,
         "EnableUserAccessTokens" : <%= @service_user_access_tokens %>,
+        "EnablePreviewFeatures": <%= @service_enable_preview_features %>,
         "CloseUnusedDirectMessages" : <%= @service_close_unused_direct_messages %>
     },
     "TeamSettings": {
@@ -103,6 +104,7 @@
         "EnableSignInWithEmail": <%= @email_enable_sign_in_with_email %>,
         "EnableSignInWithUsername": <%= @email_enable_sign_in_with_username %>,
         "SendEmailNotifications": <%= @email_send_email_notifications %>,
+        "UseChannelInEmailNotifications": <%= @email_use_channel_in_email_notifications %>,
         "RequireEmailVerification": <%= @email_require_email_verification %>,
         "FeedbackName": "<%= @email_feedback_name %>",
         "FeedbackEmail": "<%= @email_feedback_email %>",
