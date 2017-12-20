@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.4.0
 
 - Upgrade Ruby version to 2.3.6
+- Add warning to LoggingHelper
 
 10.3.0
 
