@@ -746,6 +746,8 @@ SLES 12:
     paths:
     - cache
     - gems
+    - assets_cache
+    - node_modules
   retry: 1
 
 Docker:
@@ -818,6 +820,8 @@ Raspberry Pi 2 Jessie:
     paths:
     - cache
     - gems
+    - assets_cache
+    - node_modules
   <<: *rpi_tag_build
 
 ## Building from branch
@@ -868,6 +872,8 @@ SLES 12 branch:
     paths:
     - cache
     - gems
+    - assets_cache
+    - node_modules
   artifacts:
     expire_in: 1 day
     paths:
@@ -930,6 +936,8 @@ Raspberry Pi 2 Jessie branch:
     paths:
     - cache
     - gems
+    - assets_cache
+    - node_modules
   <<: *rpi_branch_build
 
 notify:slack-fail:
