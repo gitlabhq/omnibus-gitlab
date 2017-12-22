@@ -125,7 +125,7 @@ describe 'gitlab-ee::geo-secondary' do
         expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
       end
 
-      it 'does not include the Geo secondary recipes if Rails not needed' do
+      it 'does not include the Geo database migrations recipe if Rails not needed' do
         stub_gitlab_rb(geo_secondary_role: { enable: true },
                        nginx: { enable: false },
                        unicorn: { enable: false },
@@ -134,7 +134,6 @@ describe 'gitlab-ee::geo-secondary' do
                        geo_logcursor: { enable: false },
                        redis: { enable: true })
 
-        expect(chef_run).not_to include_recipe('gitlab-ee::geo-secondary')
         expect(chef_run).not_to include_recipe('gitlab-ee::geo_database_migrations')
       end
     end
