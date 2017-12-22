@@ -44,6 +44,11 @@ describe 'geo postgresql 9.2' do
     end
 
     context 'renders postgresql.conf' do
+      it 'includes runtime.conf in postgreslq.conf' do
+        expect(chef_run).to render_file(postgresql_conf)
+          .with_content(/include 'runtime.conf'/)
+      end
+
       it 'correctly sets the shared_preload_libraries default setting' do
         expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to be_nil
 
@@ -243,6 +248,40 @@ describe 'geo postgresql 9.6' do
           postgresql_conf
         ).with_content(/synchronous_standby_names = ''/)
       end
+
+      it 'does not set dynamic_shared_memory_type by default' do
+        expect(chef_run).not_to render_file(
+          postgresql_conf
+        ).with_content(/^dynamic_shared_memory_type = /)
+      end
+
+      it 'sets the max_locks_per_transaction setting' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['max_locks_per_transaction'])
+          .to eq(128)
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/max_locks_per_transaction = 128/)
+      end
+
+      context 'when dynamic_shared_memory_type is none' do
+        let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+        before do
+          stub_gitlab_rb(
+            geo_postgresql: {
+              enable: true,
+              dynamic_shared_memory_type: 'none'
+            }
+          )
+        end
+
+        it 'sets the dynamic_shared_memory_type' do
+          expect(chef_run).to render_file(
+            postgresql_conf
+          ).with_content(/^dynamic_shared_memory_type = none/)
+        end
+      end
     end
 
     context 'renders runtime.conf' do
@@ -261,6 +300,41 @@ describe 'geo postgresql 9.6' do
         expect(chef_run).to render_file(
           runtime_conf
         ).with_content(/hot_standby_feedback = off/)
+      end
+
+      it 'sets the random_page_cost setting' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['random_page_cost'])
+          .to eq(2.0)
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/random_page_cost = 2\.0/)
+      end
+
+      it 'sets the log_temp_files setting' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['log_temp_files'])
+          .to eq(-1)
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_temp_files = -1/)
+      end
+
+      it 'sets the log_checkpoints setting' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['log_checkpoints'])
+          .to eq('off')
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_checkpoints = off/)
+      end
+
+      it 'sets idle_in_transaction_session_timeout' do
+        expect(chef_run.node['gitlab']['geo-postgresql']['idle_in_transaction_session_timeout'])
+          .to eq('60000')
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/idle_in_transaction_session_timeout = 60000/)
       end
 
       it 'sets effective_io_concurrency' do
@@ -324,6 +398,91 @@ describe 'geo postgresql 9.6' do
     it 'adds users custom entries to pg_hba.conf' do
       expect(chef_run).to render_file(pg_hba_conf)
         .with_content('host foo bar 127.0.0.1/32 trust')
+    end
+  end
+
+  context 'FDW support' do
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            sql_user: 'mygeodbuser'
+          },
+          geo_secondary: {
+            db_database: 'gitlab_geodb'
+          },
+          gitlab_rails: {
+            db_host: '10.0.0.1',
+            db_port: 5430,
+            db_username: 'mydbuser',
+            db_database: 'gitlab_myorg',
+            db_password: 'custompass'
+          }
+        )
+      end
+
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
+    end
+
+    it 'creates a postgresql fdw connection in the geo-postgresql database' do
+      params = {
+        db_name: 'gitlab_geodb',
+        external_host: '10.0.0.1',
+        external_port: 5430,
+        external_name: 'gitlab_myorg'
+      }
+
+      expect(chef_run).to create_postgresql_fdw('gitlab_secondary').with(params)
+    end
+
+    it 'creates a postgresql fdw user mapping in the geo-postgresql database' do
+      params = {
+        db_user: 'mygeodbuser',
+        db_name: 'gitlab_geodb',
+        external_user: 'mydbuser',
+        external_password: 'custompass'
+      }
+      expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
+    end
+
+    context 'when secondary database is empty' do
+      it 'does not refreshes foreign table definintion' do
+        expect(chef_run).not_to run_bash('refresh foreign table definition')
+      end
+    end
+
+    context 'when secondary database is populated and running' do
+      let(:chef_run) do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            sql_user: 'mygeodbuser'
+          },
+          geo_secondary: {
+            db_database: 'gitlab_geodb'
+          },
+          gitlab_rails: {
+            db_host: '10.0.0.1',
+            db_port: 5430,
+            db_username: 'mydbuser',
+            db_database: 'gitlab_myorg',
+            db_password: 'custompass'
+          }
+        )
+
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        allow_any_instance_of(PgHelper).to receive(:database_empty?).and_return(false)
+        allow_any_instance_of(GeoPgHelper).to receive(:is_offline_or_readonly?).and_return(false)
+        allow_any_instance_of(GitlabGeoHelper).to receive(:geo_database_configured?).and_return(true)
+        ChefSpec::SoloRunner.converge('gitlab-ee::default')
+      end
+
+      it 'refreshes foreign table definintion' do
+        expect(chef_run).to run_bash('refresh foreign table definition')
+      end
     end
   end
 end

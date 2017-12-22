@@ -8,17 +8,37 @@ class GitlabGeoHelper # rubocop:disable Style/MultilineIfModifier (disabled so w
   end
 
   def migrated?
-    ::File.exist?(db_migrate_status_file) && IO.read(db_migrate_status_file).chomp == '0'
+    check_status_file(db_migrate_status_file)
+  end
+
+  def fdw_synced?
+    check_status_file(fdw_sync_status_file)
   end
 
   def db_migrate_status_file
-    @status_file ||= begin
+    @migrate_status_file ||= begin
       upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'upgrade-status')
       ::File.join(upgrade_status_dir, "geo-db-migrate-#{connection_digest}-#{revision}")
     end
   end
 
+  def fdw_sync_status_file
+    @sync_status_file ||= begin
+      upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'upgrade-status')
+      ::File.join(upgrade_status_dir, "geo-fdw-sync-#{connection_digest}-#{revision}")
+    end
+  end
+
+  def geo_database_configured?
+    database_geo_yml = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'etc', 'database_geo.yml')
+    ::File.exist?(database_geo_yml)
+  end
+
   private
+
+  def check_status_file(file)
+    ::File.exist?(file) && IO.read(file).chomp == '0'
+  end
 
   def revision
     @revision ||= IO.read(REVISION_FILE).chomp if ::File.exist?(REVISION_FILE)

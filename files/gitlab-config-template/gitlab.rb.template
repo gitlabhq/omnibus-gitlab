@@ -724,6 +724,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
+# postgresql['sql_replication_password'] = "md5 hash of postgresql password" # You can generate with `gitlab-ctl pg-password-md5 <dbuser>`
 # postgresql['wal_keep_segments'] = 10
 # postgresql['max_standby_archive_delay'] = "30s"
 # postgresql['max_standby_streaming_delay'] = "30s"

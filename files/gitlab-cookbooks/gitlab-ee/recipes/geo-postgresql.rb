@@ -17,6 +17,7 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+gitlab_geo_helper = GitlabGeoHelper.new(node)
 
 postgresql_dir = node['gitlab']['geo-postgresql']['dir']
 postgresql_data_dir = node['gitlab']['geo-postgresql']['data_dir']
@@ -25,7 +26,8 @@ postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['geo-postgresql']['unix_socket_directory']
 postgresql_username = account_helper.postgresql_user
 
-pg_helper = GeoPgHelper.new(node)
+geo_pg_helper = GeoPgHelper.new(node)
+pg_helper = PgHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
@@ -53,7 +55,7 @@ end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_username
-  not_if { pg_helper.bootstrapped? }
+  not_if { geo_pg_helper.bootstrapped? }
 end
 
 postgresql_config = File.join(postgresql_data_dir, 'postgresql.conf')
@@ -65,7 +67,7 @@ template postgresql_config do
   source 'postgresql.conf.erb'
   owner postgresql_username
   mode '0644'
-  helper(:pg_helper) { pg_helper }
+  helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
   cookbook 'gitlab'
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
@@ -75,7 +77,7 @@ template postgresql_runtime_config do
   source 'postgresql-runtime.conf.erb'
   owner postgresql_username
   mode '0644'
-  helper(:pg_helper) { pg_helper }
+  helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
   cookbook 'gitlab'
   notifies :run, 'execute[reload postgresql]', :immediately if should_notify
@@ -133,42 +135,93 @@ template '/opt/gitlab/etc/gitlab-geo-psql-rc' do
   group 'root'
 end
 
-pg_port = node['gitlab']['geo-postgresql']['port']
-gitlab_sql_user = node['gitlab']['geo-postgresql']['sql_user']
-database_name = node['gitlab']['geo-secondary']['db_database']
+geo_pg_port = node['gitlab']['geo-postgresql']['port']
+geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
+geo_database_name = node['gitlab']['geo-secondary']['db_database']
+
+# Foreign Data Wrapper specific (credentials for the secondary - readonly pg instance)
+fdw_user = node['gitlab']['gitlab-rails']['db_username']
+fdw_password = node['gitlab']['gitlab-rails']['db_password']
+fdw_host = node['gitlab']['gitlab-rails']['db_host']
+fdw_port = node['gitlab']['gitlab-rails']['db_port']
+fdw_dbname = node['gitlab']['gitlab-rails']['db_database']
 
 if node['gitlab']['geo-postgresql']['enable']
-  postgresql_user gitlab_sql_user do
-    helper pg_helper
+  postgresql_user geo_pg_user do
+    helper geo_pg_helper
     action :create
   end
 
-  execute "create #{database_name} database" do
-    command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
+  execute "create #{geo_database_name} database" do
+    command "/opt/gitlab/embedded/bin/createdb --port #{geo_pg_port} -h #{postgresql_socket_dir} -O #{geo_pg_user} #{geo_database_name}"
     user postgresql_username
     retries 30
-    not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) }
+    not_if { !geo_pg_helper.is_running? || geo_pg_helper.database_exists?(geo_database_name) }
   end
 
-  execute 'enable pg_trgm extension on geo-postgresql' do
-    command "/opt/gitlab/bin/gitlab-geo-psql -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
-    user postgresql_username
-    retries 20
+  postgresql_query 'enable pg_trgm extension on geo-postgresql' do
+    query "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+    db_name geo_database_name
+    helper geo_pg_helper
     action :run
-    not_if { !pg_helper.is_running? || pg_helper.is_slave? || pg_helper.extension_enabled?('pg_trgm', database_name) }
+
+    not_if { geo_pg_helper.is_offline_or_readonly? || geo_pg_helper.extension_enabled?('pg_trgm', geo_database_name) }
+  end
+
+  postgresql_query 'create gitlab_secondary schema on geo-postgresql' do
+    query "CREATE SCHEMA gitlab_secondary;"
+    db_name geo_database_name
+    helper geo_pg_helper
+    action :nothing
+
+    not_if { geo_pg_helper.is_offline_or_readonly? || geo_pg_helper.schema_exists?('gitlab_secondary', geo_database_name) }
+  end
+
+  postgresql_fdw 'gitlab_secondary' do
+    db_name geo_database_name
+    external_host fdw_host
+    external_port fdw_port
+    external_name fdw_dbname
+    helper geo_pg_helper
+    action :create
+  end
+
+  postgresql_fdw_user_mapping 'gitlab_secondary' do
+    db_user geo_pg_user
+    db_name geo_database_name
+    external_user fdw_user
+    external_password fdw_password
+    helper geo_pg_helper
+    action :create
+
+    not_if { fdw_password.nil? }
+  end
+
+  bash 'refresh foreign table definition' do
+    code <<-EOF
+      umask 077
+      function safeRun() {
+        /opt/gitlab/bin/gitlab-rake geo:db:refresh_foreign_tables
+        STATUS=$?
+        echo $STATUS > #{gitlab_geo_helper.fdw_sync_status_file}
+      }
+      safeRun # we always return 0 so we don't block reconfigure flow
+    EOF
+
+    not_if { !gitlab_geo_helper.geo_database_configured? || !pg_helper.is_running? || pg_helper.database_empty?(fdw_dbname) || geo_pg_helper.is_offline_or_readonly? || gitlab_geo_helper.fdw_synced? }
   end
 end
 
-execute 'reload postgresql' do
+execute 'reload geo-postgresql' do
   command %(/opt/gitlab/bin/gitlab-ctl hup geo-postgresql)
   retries 20
   action :nothing
-  only_if { pg_helper.is_running? }
+  only_if { geo_pg_helper.is_running? }
 end
 
-execute 'start postgresql' do
+execute 'start geo-postgresql again' do
   command %(/opt/gitlab/bin/gitlab-ctl start geo-postgresql)
   retries 20
   action :nothing
-  not_if { pg_helper.is_running? }
+  not_if { geo_pg_helper.is_running? }
 end
