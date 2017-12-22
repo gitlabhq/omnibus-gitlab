@@ -574,7 +574,8 @@ describe 'postgresql 9.6' do
       stub_gitlab_rb(
         {
           postgresql: {
-            sql_user_password: 'fakepassword'
+            sql_user_password: 'fakepassword',
+            sql_replication_password: 'fakepassword'
           }
         }
       )
@@ -585,7 +586,10 @@ describe 'postgresql 9.6' do
     end
 
     it 'should create the gitlab_replicator user with replication permissions' do
-      expect(chef_run).to create_postgresql_user('gitlab_replicator').with(options: %w(replication))
+      expect(chef_run).to create_postgresql_user('gitlab_replicator').with(
+        options: %w(replication),
+        password: 'md5fakepassword'
+      )
     end
 
     context 'when database is a secondary' do

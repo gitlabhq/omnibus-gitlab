@@ -105,4 +105,31 @@ describe BasePgHelper do
       end
     end
   end
+
+  describe '#parse_pghash' do
+    let(:payload) { '{host=127.0.0.1,dbname=gitlabhq_production,port=5432}' }
+
+    it 'returns a hash' do
+      expect(subject.parse_pghash(payload)).to be_a(Hash)
+    end
+
+    it 'when content is empty still return a hash' do
+      expect(subject.parse_pghash('')).to be_a(Hash)
+      expect(subject.parse_pghash('{}')).to be_a(Hash)
+    end
+
+    it 'returns hash with expected keys' do
+      hash = subject.parse_pghash(payload)
+
+      expect(hash).to have_key(:host)
+      expect(hash).to have_key(:dbname)
+      expect(hash).to have_key(:port)
+    end
+
+    it 'returns hash with expected values' do
+      hash = subject.parse_pghash(payload)
+
+      expect(hash.values).to include('127.0.0.1', 'gitlabhq_production', '5432')
+    end
+  end
 end

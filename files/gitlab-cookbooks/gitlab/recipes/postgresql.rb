@@ -186,6 +186,7 @@ database_name = node['gitlab']['gitlab-rails']['db_database']
 gitlab_sql_user = node['gitlab']['postgresql']['sql_user']
 gitlab_sql_user_password = node['gitlab']['postgresql']['sql_user_password']
 sql_replication_user = node['gitlab']['postgresql']['sql_replication_user']
+sql_replication_password = node['gitlab']['postgresql']['sql_replication_password']
 
 if node['gitlab']['gitlab-rails']['enable']
   postgresql_user gitlab_sql_user do
@@ -202,6 +203,7 @@ if node['gitlab']['gitlab-rails']['enable']
   end
 
   postgresql_user sql_replication_user do
+    password "md5#{sql_replication_password}" unless sql_replication_password.nil?
     options %w(replication)
     action :create
     not_if { pg_helper.is_slave? }

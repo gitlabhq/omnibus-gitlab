@@ -3,6 +3,8 @@ class BasePgHelper
   include ShellOutHelper
   attr_reader :node
 
+  PG_HASH_PATTERN ||= /\{(.*)\}/
+
   def initialize(node)
     @node = node
   end
@@ -15,6 +17,12 @@ class BasePgHelper
     psql_cmd(["-d 'template1'",
       "-c 'select datname from pg_database' -A",
       "| grep -x #{db_name}"])
+  end
+
+  def database_empty?(db_name)
+    psql_cmd(["-d '#{db_name}'",
+              "-c '\\dt' -A",
+              "| grep -x 'No relations found.'"])
   end
 
   def extension_exists?(extension_name)
@@ -56,11 +64,52 @@ class BasePgHelper
    true
   end
 
+  def schema_exists?(schema_name, db_name)
+    psql_cmd(["-d '#{db_name}'",
+              "-c 'select schema_name from information_schema.schemata' -A",
+              "| grep -x #{schema_name}"])
+  end
+
+  def fdw_server_exists?(server_name, db_name)
+    psql_cmd(["-d '#{db_name}'",
+              "-c 'select srvname from pg_foreign_server' -tA",
+              "| grep -x #{server_name}"])
+  end
+
+  def fdw_user_mapping_exists?(user, server_name, db_name)
+    psql_cmd(["-d '#{db_name}'",
+              %(-c "select usename from pg_user_mappings where srvname='#{server_name}'" -tA),
+              "| grep -x #{user}"])
+  end
+
+  def fdw_user_has_server_privilege?(user, server_name, db_name, permission)
+    psql_cmd(["-d '#{db_name}'",
+              %(-c "select has_server_privilege('#{user}', '#{server_name}', '#{permission}');" -tA),
+              "| grep -x t"])
+  end
+
+  def fdw_server_options_changed?(server_name, db_name, options={})
+    options = stringify_hash_values(options)
+    raw_content = psql_query(db_name, "SELECT srvoptions FROM pg_foreign_server WHERE srvname='#{server_name}'")
+    server_options = parse_pghash(raw_content)
+
+    # return whether options is not a subset of server_options
+    # this allows us to ignore additional params on server and look only to the ones informed in the method
+    !(options <= server_options)
+  end
+
+  def fdw_user_mapping_changed?(user, server_name, db_name, options={})
+    raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
+    user_mapping_options = parse_pghash(raw_content)
+
+    # return whether options is not a subset of server_options
+    # this allows us to ignore additional params on server and look only to the ones informed in the method
+    !(options <= user_mapping_options)
+  end
+
   def user_hashed_password(db_user)
     db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
-    do_shell_out(
-      %(/opt/gitlab/bin/#{service_cmd} -d template1 -c "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'" -tA)
-    ).stdout.chomp
+    psql_query('template1', "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'")
   end
 
   def user_password_match?(db_user, db_pass)
@@ -74,10 +123,34 @@ class BasePgHelper
     end
   end
 
+  # Parses hash type content from PostgreSQL and return a ruby hash
+  #
+  # @param [String] raw_content from command-line output
+  # @return [Hash] hash with key and values from parsed content
+  def parse_pghash(raw_content)
+    content = PG_HASH_PATTERN.match(raw_content)
+
+    if content
+      tuples = content[1].split(',')
+      tuples.reduce({}) do |hash, tuple|
+        key,value = tuple.split('=')
+        hash[key.to_sym] = value
+
+        hash
+      end
+    else
+      {}
+    end
+  end
+
   def is_slave?
     psql_cmd(["-d 'template1'",
       "-c 'select pg_is_in_recovery()' -A",
       "|grep -x t"])
+  end
+
+  def is_offline_or_readonly?
+    !is_running? || is_slave?
   end
 
   # Returns an array of function names for the given database
@@ -104,6 +177,12 @@ class BasePgHelper
   def psql_cmd(cmd_list)
     cmd = ["/opt/gitlab/bin/#{service_cmd}", cmd_list.join(' ')].join(' ')
     success?(cmd)
+  end
+
+  def psql_query(db_name, query)
+    do_shell_out(
+      %(/opt/gitlab/bin/#{service_cmd} -d '#{db_name}' -c "#{query}" -tA)
+    ).stdout.chomp
   end
 
   def version
@@ -140,5 +219,10 @@ class BasePgHelper
 
   def service_cmd
     raise NotImplementedError
+  end
+
+  private
+  def stringify_hash_values(options)
+    options.each_with_object({}) {|(k, v), hash| hash[k] = v.to_s}
   end
 end
