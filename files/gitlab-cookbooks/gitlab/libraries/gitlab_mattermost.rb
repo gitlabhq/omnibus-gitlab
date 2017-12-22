@@ -97,6 +97,7 @@ module GitlabMattermost
          env
          host
          port
+         svlogd_prefix
          service_site_url
          service_address
          service_port
