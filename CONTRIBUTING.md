@@ -17,6 +17,16 @@ terms.
 
 _This notice should stay as the first item in the CONTRIBUTING.md file._
 
+## Definition of done
+
+The omnibus-gitlab project uses the [definition of done as noted in GitLab Community Edition (and Enterprise Edition)](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CONTRIBUTING.md#definition-of-done).
+
+As this project is a wrapper around GitLab CE/EE, some additions to the definition apply:
+
+1. Integration tests using [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa).
+1. Green pipelines in both [gitlab.com pipelines](https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines) (Specs) and
+[dev.gitlab.org pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines) (Package builds). This rule is at minimum applicable to the reviewers.
+
 
 ## General issue guidelines
 
