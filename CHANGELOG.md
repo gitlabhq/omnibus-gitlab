@@ -3,12 +3,27 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.4.0
+
+- Upgrade Ruby version to 2.3.6
+- Add support for enabling FDW for GitLab Geo
+- Add warning to LoggingHelper
+
+10.3.1
+
+- Make it possible to configure an external Geo tracking database
+- Process reconfigure failures and print out a message
+- Remove unused redis bin gitlab-shell configuration
+- Bump bundled git version to 2.14.3 a2b4bedf
+- Update pgbouncer recipe to better handle initial configuration
+- Render gitaly-ruby memory settings
+- Add a runit service to probe repository storages
+
 10.3.0
 
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
 - Include gpgme, gnupg and their dependencies
-- Make it possible to configure an external Geo tracking database
 - Add gitaly metrics to Prometheus
 - Upgrade node-exporter to 0.15.2
 - Upgrade postgres-exporter to 0.4.1
@@ -17,17 +32,11 @@ omnibus-gitlab repository.
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
 - Update Redis to 3.2.11 (Takuya Noguchi)
-- Remove unused redis bin gitlab-shell configuration
 - Turn on postgresql SSL by default b18597e3
-- Process reconfigure failures and print out a message
 - Update pgbouncer and repmgr recipes to prevent errors on reconfigure
 - Add a command to promote secondary node to primary for GitLab Geo
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
 - Added roles to ease HA Postgres configuration d7d0f32a
-- Add a runit service to probe repository storages
-- Bump bundled git version to 2.14.3 a2b4bedf
-- Render gitaly-ruby memory settings
-- Update pgbouncer recipe to better handle initial configuration
 
 10.2.3
 
