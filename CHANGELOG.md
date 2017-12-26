@@ -17,12 +17,17 @@ omnibus-gitlab repository.
 - Update default gitlab-shell git timeout to 3 hours ec9ed900
 - Enable support for git push options in the git config (Romain Maffina) 08edd3e4
 - Update Redis to 3.2.11 (Takuya Noguchi)
+- Remove unused redis bin gitlab-shell configuration
 - Turn on postgresql SSL by default b18597e3
+- Process reconfigure failures and print out a message
 - Update pgbouncer and repmgr recipes to prevent errors on reconfigure
 - Add a command to promote secondary node to primary for GitLab Geo
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
 - Added roles to ease HA Postgres configuration d7d0f32a
-
+- Add a runit service to probe repository storages
+- Bump bundled git version to 2.14.3 a2b4bedf
+- Render gitaly-ruby memory settings
+- Update pgbouncer recipe to better handle initial configuration
 
 10.2.3
 

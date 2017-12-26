@@ -1,3 +1,4 @@
+#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
@@ -12,17 +13,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-module GeoPrimaryRole
-  def self.load_role
-    return unless Gitlab['geo_primary_role']['enable']
+account_helper = AccountHelper.new(node)
 
-    Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
-    Gitlab['postgresql']['wal_level'] = 'hot_standby'
-    Gitlab['postgresql']['max_wal_senders'] ||= 10
-    Gitlab['postgresql']['wal_keep_segments'] ||= 50
-    Gitlab['postgresql']['max_replication_slots'] ||= 1
-    Gitlab['postgresql']['hot_standby'] = 'on'
-  end
+working_dir = "/opt/gitlab/embedded/service/gitlab-rails"
+log_directory = node['gitlab']['storage-check']['log_directory']
+
+directory log_directory do
+  owner account_helper.gitlab_user
+  mode '0700'
+  recursive true
+end
+
+runit_service 'storage-check' do
+  options({
+    user: account_helper.gitlab_user,
+    working_dir: working_dir,
+    log_directory: log_directory,
+    storage_check_target: node['gitlab']['storage-check']['target']
+  }.merge(params))
+
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['storage-check'].to_hash)
 end

@@ -37,6 +37,7 @@ module Services
     service 'gitlab_pages'
     service 'mattermost'
     service 'registry'
+    service 'storage_check'
   end
 
   # Define the services included in the EE edition of GitLab

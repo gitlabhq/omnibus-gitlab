@@ -1,5 +1,5 @@
+#
 # Copyright:: Copyright (c) 2017 GitLab Inc.
-# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
 # limitations under the License.
 #
 
-module GeoPrimaryRole
-  def self.load_role
-    return unless Gitlab['geo_primary_role']['enable']
+require 'chef/handler'
+require 'rainbow'
 
-    Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
-    Gitlab['postgresql']['wal_level'] = 'hot_standby'
-    Gitlab['postgresql']['max_wal_senders'] ||= 10
-    Gitlab['postgresql']['wal_keep_segments'] ||= 50
-    Gitlab['postgresql']['max_replication_slots'] ||= 1
-    Gitlab['postgresql']['hot_standby'] = 'on'
+module GitLabHandler
+  class Exception < Chef::Handler
+    def report
+      return unless run_status.failed?
+
+      $stderr.puts Rainbow('There was an error running gitlab-ctl reconfigure:').red
+      $stderr.puts
+      $stderr.puts Rainbow(run_status.exception.message).red
+      $stderr.puts
+    end
   end
 end

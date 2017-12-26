@@ -786,7 +786,8 @@ default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
 default['gitlab']['prometheus-monitoring']['enable'] = true
 
 ####
-# Geo (EE-only)
+# Storage check
 ####
-default['gitlab']['gitlab-rails']['geo_primary_role_enabled'] = false
-default['gitlab']['gitlab-rails']['geo_secondary_role_enabled'] = false
+default['gitlab']['storage-check']['enable'] = false
+default['gitlab']['storage-check']['target'] = nil
+default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'

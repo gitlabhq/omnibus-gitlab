@@ -33,7 +33,7 @@ bash 'migrate gitlab-geo tracking database' do
     exit $STATUS
   EOH
 
-  notifies :run, 'execute[start geo-postgresql]', :before unless omnibus_helper.service_up?('geo-postgresql')
+  notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.should_notify?('geo-postgresql')
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end

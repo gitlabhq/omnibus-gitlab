@@ -17,7 +17,7 @@ describe 'gitlab-ee::geo-database-migrations' do
   context 'when migration should run' do
     before do
       allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
-      stub_gitlab_rb(geo_postgresql: { enable: true })
+      stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       %w(
         gitlab-monitor
@@ -34,6 +34,7 @@ describe 'gitlab-ee::geo-database-migrations' do
         unicorn
         gitaly
         geo-postgresql
+        geo-logcursor
       ).map { |svc| stub_should_notify?(svc, true) }
     end
 
