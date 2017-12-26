@@ -3,15 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-10.3.1
-
-- Make it possible to configure an external Geo tracking database
-
 10.3.0
 
 - Add workhorse metrics to Prometheus
 - Add sidekiq metrics to Prometheus
 - Include gpgme, gnupg and their dependencies
+- Make it possible to configure an external Geo tracking database
 - Add gitaly metrics to Prometheus
 - Upgrade node-exporter to 0.15.2
 - Upgrade postgres-exporter to 0.4.1
