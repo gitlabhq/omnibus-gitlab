@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-version = Gitlab::Version.new('gitlab-monitor', '1.9.0')
+version = Gitlab::Version.new('gitlab-monitor', '2.4.0')
 
 default_version version.print
 
