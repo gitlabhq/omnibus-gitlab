@@ -17,8 +17,10 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'config_guess'
-version = Gitlab::Version.new('config_guess', 'master')
-default_version 'master'
+
+# Locking version to a specific commit so that cache doesn't get invalidated unannounced
+version = Gitlab::Version.new('config_guess', 'c9092d05347c925a26f6887980e185206e13f9d6')
+default_version version.print(false)
 
 # occasionally http protocol downloads get 500s, so we use git://
 source git: version.remote
