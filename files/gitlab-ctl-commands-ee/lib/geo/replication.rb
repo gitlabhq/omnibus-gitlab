@@ -57,7 +57,7 @@ module Geo
       puts '* Stopping PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl stop')
 
-      @options[:password] = ask_pass("Enter the password for #{@options[:user]}@#{@options[:host]}")
+      @options[:password] = ask_pass
       @pgpass = "#{data_path}/postgresql/.pgpass"
       create_pgpass_file!
 
@@ -132,12 +132,8 @@ module Geo
       run_command("chown gitlab-psql #{recovery_file}")
     end
 
-    def ask_pass(text)
-      if STDIN.tty?
-        STDIN.getpass("#{text}: ")
-      else
-        STDIN.gets.chomp
-      end
+    def ask_pass
+      GitlabCtl::Util.get_password(input_text: "Enter the password for #{@options[:user]}@#{@options[:host]}: ", do_confirm: false)
     end
 
     def replication_slot_exists?

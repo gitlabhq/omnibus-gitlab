@@ -31,16 +31,6 @@ describe PostgreSQL::Replication do
       .with(%r{WITH ENCRYPTED PASSWORD 'mypass'})
   end
 
-  it 'strips a new line character from the password' do
-    allow(STDIN).to receive(:tty?).and_return(false)
-    allow(STDIN).to receive(:gets).and_return("mypass\n")
-
-    subject.set_password!
-
-    expect(util).to have_received(:run_command)
-      .with(%r{WITH ENCRYPTED PASSWORD 'mypass'})
-  end
-
   it 'sets a password for user defined in `sql_replication_user` attribute' do
     allow(subject).to receive(:ask_password).and_return('mypass')
     allow(attributes).to receive(:to_s).and_return('myuser')

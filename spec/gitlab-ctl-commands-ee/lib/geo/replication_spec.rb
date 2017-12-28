@@ -1,5 +1,8 @@
 $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
+$LOAD_PATH << './files/gitlab-ctl-commands/lib'
+
 require 'geo/replication'
+require 'gitlab_ctl/util'
 
 describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
@@ -14,16 +17,15 @@ describe Geo::Replication, '#execute' do
     allow(subject).to receive(:print)
     allow(File).to receive(:open).and_yield(file)
 
-    stub_const('GitlabCtl::Util', command)
+    allow(GitlabCtl::Util).to receive(:run_command).and_return(command)
   end
 
   it 'replicates geo database' do
     expect(subject).to receive(:ask_pass).and_return('password')
+    expect(GitlabCtl::Util).to receive(:run_command)
+      .with(%r{/embedded/bin/pg_basebackup}, anything)
 
     subject.execute
-
-    expect(command).to have_received(:run_command)
-      .with(%r{/embedded/bin/pg_basebackup}, anything)
   end
 
   context 'when there is TTY available' do
@@ -31,7 +33,7 @@ describe Geo::Replication, '#execute' do
       allow(STDIN).to receive(:tty?).and_return(true)
     end
 
-    it 'asks for database password in an internative mode' do
+    it 'asks for database password in an interactive mode' do
       expect(STDIN).to receive(:getpass).and_return('password')
 
       subject.execute
@@ -65,11 +67,10 @@ describe Geo::Replication, '#execute' do
     it 'asks for confirmation string' do
       allow(subject).to receive(:ask_pass).and_return('mypass')
       expect(STDIN).to receive(:gets).and_return('replicate')
+      expect(GitlabCtl::Util).to receive(:run_command)
+        .with(%r{/embedded/bin/pg_basebackup}, anything)
 
       subject.execute
-
-      expect(command).to have_received(:run_command)
-        .with(%r{/embedded/bin/pg_basebackup}, anything)
     end
   end
 end
