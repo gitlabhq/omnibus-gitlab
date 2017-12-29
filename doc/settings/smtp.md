@@ -528,6 +528,21 @@ gitlab_rails['gitlab_email_from'] = "example@example.com"
 gitlab_rails['gitlab_email_reply_to'] = "example@example.com"
 ```
 
+### JangoSMTP
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "express-relay.jangosmtp.net"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_user_name'] = "your.username"
+gitlab_rails['smtp_password'] = "your.password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
+```
+
 
 ### More examples are welcome
 
