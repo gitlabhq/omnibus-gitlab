@@ -473,7 +473,7 @@ Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 ### Mattermost Command Line Tools (CLI)
 
-Should you need to use the [Mattermost Ccommand Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html),
+Should you need to use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html),
 you must be in the following directory when you run CLI commands: `/opt/gitlab/embedded/service/mattermost`.
 Also, you must run the commands as the user `mattermost` and specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
 
@@ -482,7 +482,7 @@ cd /opt/gitlab/embedded/service/mattermost
 sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
 ```
 
-For more details see [Mattermost Ccommand Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
+For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
 
 ### OAuth2 Sequence Diagram
 
