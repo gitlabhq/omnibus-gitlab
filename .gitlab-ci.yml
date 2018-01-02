@@ -17,7 +17,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.9"
+  BUILDER_IMAGE_REVISION: "0.0.10"
 
 # Templates
 ## Runs on GitLab.com only
