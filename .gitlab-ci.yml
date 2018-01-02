@@ -17,7 +17,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.10"
+  BUILDER_IMAGE_REVISION: "0.0.11"
 
 # Templates
 ## Runs on GitLab.com only
@@ -294,7 +294,7 @@ Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
 Debian 9.1 knapsack: *prepare_knapsack
-OpenSUSE 42.2 knapsack: *prepare_knapsack
+OpenSUSE 42.3 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 
@@ -629,36 +629,36 @@ Centos 7 specs 5 6:
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
-OpenSUSE 42.2 specs 0 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+OpenSUSE 42.3 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
   dependencies:
-  - OpenSUSE 42.2 knapsack
+  - OpenSUSE 42.3 knapsack
 
 # dev.gitlab.org only
 # Release build
@@ -683,8 +683,8 @@ CentOS-6:
 CentOS-7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-OpenSUSE-42.2:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
+OpenSUSE-42.3:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.3-${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 SLES-12:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
@@ -820,8 +820,8 @@ CentOS-6-branch:
 CentOS-7-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-OpenSUSE-42.2-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-${BUILDER_IMAGE_REVISION}"
+OpenSUSE-42.3-branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.3-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 SLES-12-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:sles_12sp2-${BUILDER_IMAGE_REVISION}"
@@ -974,10 +974,10 @@ CentOS-7-staging:
     - CentOS-7
     - CentOS-7-branch
   <<: *staging_upload
-OpenSUSE-42.2-staging:
+OpenSUSE-42.3-staging:
   dependencies:
-    - OpenSUSE-42.2
-    - OpenSUSE-42.2-branch
+    - OpenSUSE-42.3
+    - OpenSUSE-42.3-branch
   <<: *staging_upload
 SLES-12-staging:
   variables:
@@ -1017,9 +1017,9 @@ CentOS-7-release:
   dependencies:
     - CentOS-7-staging
   <<: *production_release
-OpenSUSE-42.2-release:
+OpenSUSE-42.3-release:
   dependencies:
-    - OpenSUSE-42.2-staging
+    - OpenSUSE-42.3-staging
   <<: *production_release
 SLES-12-release:
   variables:
