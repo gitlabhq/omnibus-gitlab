@@ -159,13 +159,10 @@ if node['gitlab']['geo-postgresql']['enable']
     not_if { !geo_pg_helper.is_running? || geo_pg_helper.database_exists?(geo_database_name) }
   end
 
-  postgresql_query 'enable pg_trgm extension on geo-postgresql' do
-    query "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
-    db_name geo_database_name
+  postgresql_extension 'pg_trgm' do
+    database geo_database_name
     helper geo_pg_helper
-    action :run
-
-    not_if { geo_pg_helper.is_offline_or_readonly? || geo_pg_helper.extension_enabled?('pg_trgm', geo_database_name) }
+    action :enable
   end
 
   postgresql_query 'create gitlab_secondary schema on geo-postgresql' do

@@ -480,7 +480,7 @@ describe 'postgresql 9.6' do
       allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
       allow_any_instance_of(PgHelper).to receive(:is_slave?).and_return(false)
       allow_any_instance_of(PgHelper).to receive(:extension_enabled?).with('pg_trgm', 'gitlabhq_production').and_return(false)
-      expect(chef_run).to run_execute('enable pg_trgm extension')
+      expect(chef_run).to enable_postgresql_extension('pg_trgm')
     end
 
     it 'does not create the pg_trgm extension if it already exists' do
