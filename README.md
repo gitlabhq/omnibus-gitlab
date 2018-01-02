@@ -133,6 +133,10 @@ installation are in the [update doc](doc/update/README.md).
 
 ### Uninstalling omnibus-gitlab
 
+To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with `dpkg` or `yum`) run `sudo gitlab-ctl remove-accounts`. *Note* All gitlab processes need to be stopped before running the command.
+
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
 
 ```
@@ -145,10 +149,6 @@ sudo dpkg -r gitlab-ce
 # Redhat/Centos
 sudo rpm -e gitlab-ce
 ```
-
-To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
-
-To remove all users and groups created by omnibus-gitlab, before removing the gitlab package (with dpkg or yum) run `sudo gitlab-ctl remove-accounts`. *Note* All gitlab processes need to be stopped before running the command.
 
 ### Common installation problems
 
