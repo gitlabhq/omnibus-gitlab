@@ -19,3 +19,7 @@ end
 def run_bash(description)
   ChefSpec::Matchers::ResourceMatcher.new(:bash, :run, description)
 end
+
+def enable_postgresql_extension(extension)
+  ChefSpec::Matchers::ResourceMatcher.new(:postgresql_extension, :enable, extension)
+end

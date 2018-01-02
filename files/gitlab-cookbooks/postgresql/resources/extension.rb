@@ -1,0 +1,13 @@
+property :extension, String, name_property: true
+property :database, String
+property :helper, default: lazy { PgHelper.new(node) }
+
+action :enable do
+  postgresql_query "enable #{new_resource.extension} extension" do
+    query %(CREATE EXTENSION IF NOT EXISTS #{new_resource.extension})
+    db_name new_resource.database
+    helper new_resource.helper
+    action :run
+    not_if { !helper.is_running? || helper.is_slave? || helper.extension_enabled?(new_resource.extension, database) }
+  end
+end
