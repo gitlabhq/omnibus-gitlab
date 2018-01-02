@@ -34,7 +34,7 @@ Omnibus-gitlab package will attempt to automatically authorise GitLab Mattermost
 This is because automatic authorisation requires access to GitLab database.
 If GitLab database is not available you will need to manually authorise GitLab Mattermost for access to GitLab.
 
-> **Note:** Upgrading the `omnibus-gitlab` package will override any Mattermost setting changes 
+> **Note:** Upgrading the `omnibus-gitlab` package will override any Mattermost setting changes
 made outside of `gitlab.rb`, see [upgrade section](#upgrading-gitlab-mattermost) for more details.
 
 ## Running GitLab Mattermost on its own server
@@ -65,7 +65,7 @@ By default GitLab Mattermost will force all users to sign-up with GitLab and dis
 
 ### Authorise GitLab Mattermost
 
-To do this, using browser navigate to the Admin area of GitLab, `Application` section. Create a new application and for the `Redirect URI` use: 
+To do this, using browser navigate to the Admin area of GitLab, `Application` section. Create a new application and for the `Redirect URI` use:
 
 ```
 http://mattermost.example.com/signup/gitlab/complete
@@ -75,7 +75,7 @@ http://mattermost.example.com/login/gitlab/complete
 
 Once the application is created you will receive an `Application ID` and `Secret`. One other piece of information needed is the URL of GitLab instance.
 
-Now, go to the server running GitLab Mattermost and edit the `/etc/gitlab/gitlab.rb` 
+Now, go to the server running GitLab Mattermost and edit the `/etc/gitlab/gitlab.rb`
 configuration file as follows using the values you've received above:
 
 ```
@@ -95,7 +95,7 @@ If there are no errors your GitLab and GitLab Mattermost should be configured co
 ### Reauthorise GitLab Mattermost
 
 To reauthorise GitLab Mattermost you will first need to revoke access of the existing
-authorisation. This can be done in the Admin area of GitLab under `Applications`. 
+authorisation. This can be done in the Admin area of GitLab under `Applications`.
 Once that is done follow the steps in the [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
 
 ## Running GitLab Mattermost with HTTPS
@@ -245,7 +245,7 @@ the same `config.json` file, which resulted in changes made via the System Conso
 overwritten when users ran `gitlab-ctl reconfigure`.
 
 To resolve this problem, `gitlab.rb` will include only the
-configuration necessary for GitLab<=>Mattermost integration in 11.0. GitLab will no longer 
+configuration necessary for GitLab<=>Mattermost integration in 11.0. GitLab will no longer
 generate the `config.json` file, instead passing limited configuration settings via environment variables.
 
 The settings that will continue to be
@@ -473,6 +473,20 @@ If you need to connect to the bundled PostgreSQL database and are using the defa
 ```
 sudo gitlab-psql -d mattermost_production
 ```
+
+### Mattermost Command Line Tools (CLI)
+
+Should you need to use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html),
+you must be in the following directory when you run CLI commands: `/opt/gitlab/embedded/service/mattermost`.
+Also, you must run the commands as the user `mattermost` and specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
+
+```
+cd /opt/gitlab/embedded/service/mattermost
+sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
+```
+
+For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
+
 
 ### OAuth2 Sequence Diagram
 
