@@ -514,7 +514,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 gitlab_rails['gitlab_email_from'] = "example@example.com"
 ```
-### SNEL (snel.com)
+### Snel.com
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
