@@ -88,6 +88,7 @@ describe 'gitlab-ee::geo-secondary' do
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       %w(
+        alertmanager
         gitlab-monitor
         gitlab-workhorse
         logrotate

@@ -1412,6 +1412,23 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['listen_address'] = 'localhost:9090'
 
 ################################################################################
+## Prometheus Alertmanager
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/alertmanager.html
+################################################################################
+
+# alertmanager['enable'] = true
+# alertmanager['home'] = '/var/opt/gitlab/alertmanager'
+# alertmanager['log_directory'] = '/var/log/gitlab/alertmanager'
+# alertmanager['flags'] = {
+#   'web.listen-address' => "#{node['gitlab']['alertmanager']['listen_address']}"
+#   'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data"
+#   'config.file' => "#{node['gitlab']['alertmanager']['home']}/alertmanager.yml"
+# }
+
+##! Advanced settings. Should be changed only if absolutely needed.
+# alertmanager['listen_address'] = 'localhost:9093'
+
+################################################################################
 ## Prometheus Node Exporter
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
 ################################################################################

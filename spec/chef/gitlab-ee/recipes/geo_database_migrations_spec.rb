@@ -20,6 +20,7 @@ describe 'gitlab-ee::geo-database-migrations' do
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       %w(
+        alertmanager
         gitlab-monitor
         gitlab-workhorse
         logrotate
