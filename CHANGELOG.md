@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Upgrade Ruby version to 2.3.6
 - Add support for enabling FDW for GitLab Geo
 - Request confirmation of Geo replication user password
+- Make sure db/geo/schema.rb is writable when node is a Geo secondary
 - Add warning to LoggingHelper
 - Update gitlab-monitor to 2.4.0 92312d6
 - Update CA certificates bundle to one from 2017.09.20 a8f56b7f
