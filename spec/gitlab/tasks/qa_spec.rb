@@ -36,7 +36,7 @@ describe 'qa', type: :rake do
 
     it 'pushes stable images correctly' do
       expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
-      expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with(gitlab_version)
+      expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with(gitlab_version, initial_tag: 'latest')
 
       Rake::Task['qa:push:stable'].invoke
     end

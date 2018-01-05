@@ -22,7 +22,7 @@ namespace :qa do
     task :stable do
       # Allows to have gitlab/gitlab-{ce,ee}-qa:10.2.0-ee without the build number
       Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
-      Build::QAImage.tag_and_push_to_dockerhub(Build::Info.gitlab_version)
+      Build::QAImage.tag_and_push_to_dockerhub(Build::Info.gitlab_version, initial_tag: 'latest')
     end
 
     desc "Push rc version of QA"
