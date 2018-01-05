@@ -343,7 +343,7 @@ There are a few exceptions to this rule:
 |`mattermost['email_batching_buffer_size']`|`MM_EMAILSETTINGS_EMAILBATCHINGBUFFERSIZE`|
 |`mattermost['email_batching_interval']`|`MM_EMAILSETTINGS_EMAILBATCHINGINTERVAL`|
 |`mattermost['email_smtp_auth']`|`MM_EMAILSETTINGS_ENABLESMTPAUTH`|
-|`mattermost['email_notificatino_content_type']`|`MM_EMAILSETTINGS_NOTIFICATIONCONTENTTYPE`|
+|`mattermost['email_notification_content_type']`|`MM_EMAILSETTINGS_NOTIFICATIONCONTENTTYPE`|
 |`mattermost['ratelimit_enable_ratelimiter']`|`MM_RATELIMITSETTINGS_ENABLE`|
 |`mattermost['support_email']`|`MM_SUPPORTSETTINGS_SUPPORTEMAIL`|
 |`mattermost['localization_server_locale']`|`MM_LOCALIZATIONSETTINGS_DEFAULTSERVERLOCALE`|
