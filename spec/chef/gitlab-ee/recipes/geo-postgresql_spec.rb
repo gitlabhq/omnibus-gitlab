@@ -494,5 +494,36 @@ describe 'geo postgresql 9.6' do
         expect(chef_run).to run_bash('refresh foreign table definition')
       end
     end
+
+    context 'when secondary database is populated but primary is on another node' do
+      let(:chef_run) do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            sql_user: 'mygeodbuser'
+          },
+          geo_secondary: {
+            db_database: 'gitlab_geodb'
+          },
+          gitlab_rails: {
+            db_host: '10.0.0.1',
+            db_port: 5430,
+            db_username: 'mydbuser',
+            db_database: 'gitlab_myorg',
+            db_password: 'custompass'
+          }
+        )
+
+        allow_any_instance_of(PgHelper).to receive(:is_enabled?).and_return(false)
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(false)
+        allow_any_instance_of(GeoPgHelper).to receive(:is_offline_or_readonly?).and_return(false)
+        allow_any_instance_of(GitlabGeoHelper).to receive(:geo_database_configured?).and_return(true)
+        ChefSpec::SoloRunner.converge('gitlab-ee::default')
+      end
+
+      it 'refreshes foreign table definintion' do
+        expect(chef_run).to run_bash('refresh foreign table definition')
+      end
+    end
   end
 end

@@ -205,7 +205,7 @@ if node['gitlab']['geo-postgresql']['enable']
       safeRun # we always return 0 so we don't block reconfigure flow
     EOF
 
-    not_if { !gitlab_geo_helper.geo_database_configured? || !pg_helper.is_running? || pg_helper.database_empty?(fdw_dbname) || geo_pg_helper.is_offline_or_readonly? || gitlab_geo_helper.fdw_synced? }
+    not_if { !gitlab_geo_helper.geo_database_configured? || (pg_helper.is_enabled? && !pg_helper.is_running?) || pg_helper.database_empty?(fdw_dbname) || geo_pg_helper.is_offline_or_readonly? || gitlab_geo_helper.fdw_synced? }
   end
 end
 
