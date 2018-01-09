@@ -69,7 +69,6 @@ end
 runtime_dependency 'policycoreutils-python' if rhel?
 
 # creates required build directories
-dependency 'preparation'
 dependency 'package-scripts'
 
 dependency 'git'
