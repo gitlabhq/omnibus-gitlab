@@ -298,7 +298,6 @@ Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
 Debian 9.1 knapsack: *prepare_knapsack
-OpenSUSE 42.2 knapsack: *prepare_knapsack
 OpenSUSE 42.3 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
@@ -634,36 +633,6 @@ Centos 7 specs 5 6:
   <<: *run_rspec
   dependencies:
   - Centos 7 knapsack
-OpenSUSE 42.2 specs 0 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
-OpenSUSE 42.2 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.2"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.2 knapsack
 OpenSUSE 42.3 specs 0 6:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
   <<: *run_rspec
@@ -717,9 +686,6 @@ CentOS-6:
   <<: *tag_build
 CentOS-7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-OpenSUSE-42.2:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-0.0.10"
   <<: *tag_build
 OpenSUSE-42.3:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.3-${BUILDER_IMAGE_REVISION}"
@@ -857,9 +823,6 @@ CentOS-6-branch:
   <<: *branch_build
 CentOS-7-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:centos_7-${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
-OpenSUSE-42.2-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.2-0.0.10"
   <<: *branch_build
 OpenSUSE-42.3-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:opensuse_42.3-${BUILDER_IMAGE_REVISION}"
@@ -1015,11 +978,6 @@ CentOS-7-staging:
     - CentOS-7
     - CentOS-7-branch
   <<: *staging_upload
-OpenSUSE-42.2-staging:
-  dependencies:
-    - OpenSUSE-42.2
-    - OpenSUSE-42.2-branch
-  <<: *staging_upload
 OpenSUSE-42.3-staging:
   dependencies:
     - OpenSUSE-42.3
@@ -1062,10 +1020,6 @@ CentOS-6-release:
 CentOS-7-release:
   dependencies:
     - CentOS-7-staging
-  <<: *production_release
-OpenSUSE-42.2-release:
-  dependencies:
-    - OpenSUSE-42.2-staging
   <<: *production_release
 OpenSUSE-42.3-release:
   dependencies:
