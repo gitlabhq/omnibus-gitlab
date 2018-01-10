@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.2.6
+
+- Update Mattermost to 4.3.4
 
 10.2.5
 - Adjust number of unicorn workers if running a Geo secondary node
