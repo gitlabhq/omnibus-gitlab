@@ -1,6 +1,7 @@
 require 'fileutils'
 require_relative "../build.rb"
 require_relative "../build/info.rb"
+require_relative '../build/omnibus_trigger'
 require_relative "../ohai_helper.rb"
 require 'net/http'
 require 'json'
@@ -48,16 +49,6 @@ namespace :build do
 
   desc "Trigger package and QA builds"
   task :trigger do
-    uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/trigger/pipeline")
-    params = Build::Info.get_trigger_params
-    res = Net::HTTP.post_form(uri, params)
-    pipeline_id = JSON.parse(res.body)['id']
-
-    if pipeline_id.nil?
-      puts "Trigger failed. The response from trigger is: "
-      puts res.body
-    else
-      puts "Triggered pipeline can be found at #{ENV['CI_PROJECT_URL']}/pipelines/#{pipeline_id}"
-    end
+    Build::OmnibusTrigger.invoke!.wait!
   end
 end
