@@ -4,6 +4,7 @@ describe 'qa', type: :rake do
   let(:gitlab_registry_image_address) { 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa' }
   let(:gitlab_version) { '10.2.0' }
   let(:image_tag) { 'omnibus-12345' }
+  let(:version_manifest) { { "software": { "gitlab-rails": { "locked_version": "123445" } } } }
 
   before(:all) do
     Rake.application.rake_require 'gitlab/tasks/qa'
@@ -15,6 +16,7 @@ describe 'qa', type: :rake do
 
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
       allow(Build::QAImage).to receive(:gitlab_registry_image_address).and_return(gitlab_registry_image_address)
+      allow(JSON).to receive(:parse).and_return(version_manifest)
     end
 
     it 'calls build method with correct parameters' do
