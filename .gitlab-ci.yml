@@ -332,7 +332,7 @@ Trigger:package:
   artifacts:
     expire_in: 1 day
     paths:
-      - pkg/ubuntu-xenial/gitlab.deb
+      - pkg/
   cache:
     key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -383,7 +383,8 @@ Trigger:qa-docker:
     - bundle exec rake qa:push:triggered
   only:
     - triggers@gitlab-org/omnibus-gitlab
-  dependencies: []
+  dependencies:
+    - Trigger:package
 
 Trigger:qa-test:
   stage: trigger-qa
@@ -788,7 +789,8 @@ QA-Tag:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
-  dependencies: []
+  dependencies:
+    - Ubuntu-16.04
   retry: 1
 
 Raspberry-Pi-2-Jessie:
@@ -911,7 +913,8 @@ QA-Master:
     - branches@gitlab/omnibus-gitlab
   tags:
   - docker-builder
-  dependencies: []
+  dependencies:
+    - Ubuntu-16.04-branch
   retry: 1
 
 Raspberry-Pi-2-Jessie-branch:

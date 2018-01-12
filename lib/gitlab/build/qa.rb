@@ -24,13 +24,28 @@ module Build
       system("git clone #{Build::Info.gitlab_rails_repo} #{repo_path}")
     end
 
+    def self.get_gitlab_rails_sha
+      # Finding out which commit was the package built from
+      begin
+        version_manifest = JSON.parse(File.read("pkg/ubuntu-xenial/version-manifest.json"))
+        version = version_manifest['software']['gitlab-rails']['locked_version']
+      rescue Errno::ENOENT, JSON::ParserError
+        puts "Failed to get commit from version-manifest file"
+        # Fall back to using gitlab_version
+        version = Build::Info.gitlab_version
+
+        # Tags have a 'v' prepended to them, which is not present in VERSION file.
+        version = "v#{version}" if Build::Check.on_tag?
+      end
+
+      version
+    end
+
     def self.checkout_gitlab_rails
       # Checking out the cloned repo to the specific commit (well, without doing
       # a to-and-fro `cd`).
-      version = Build::Info.gitlab_version
-
-      # Tags have a 'v' prepended to them, which is not present in VERSION file.
-      version = "v#{version}" if Build::Check.on_tag?
+      version = get_gitlab_rails_sha
+      puts "Building from #{Build::Info.package} commit #{version}"
 
       system("git --git-dir=#{repo_path}/.git --work-tree=#{repo_path} checkout --quiet #{version}")
     end
