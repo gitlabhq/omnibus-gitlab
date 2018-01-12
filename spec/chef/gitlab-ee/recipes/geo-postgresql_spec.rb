@@ -8,6 +8,11 @@ describe 'geo postgresql 9.2' do
     allow(Gitlab).to receive(:[]).and_call_original
     allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.2.18')
     allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.2')
+
+    # Workaround for Chef reloading instances across different examples
+    allow_any_instance_of(GeoPgHelper).to receive(:bootstrapped?).and_return(true)
+    allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+    allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('geo-postgresql').and_return(true)
   end
 
   context 'when geo postgres is disabled' do
@@ -176,6 +181,11 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to render_file(
         runtime_conf
       ).with_content(/archive_timeout = 120/)
+    end
+
+    it 'notifies geo-postgresql reload' do
+      runtime_resource = chef_run.template(runtime_conf)
+      expect(runtime_resource).to notify('execute[reload geo-postgresql]').to(:run).immediately
     end
   end
 end
