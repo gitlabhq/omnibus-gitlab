@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe BasePgHelper do
-  let(:chef_run) { converge_config }
+  cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { described_class.new(node) }
 
@@ -130,6 +130,58 @@ describe BasePgHelper do
       hash = subject.parse_pghash(payload)
 
       expect(hash.values).to include('127.0.0.1', 'gitlabhq_production', '5432')
+    end
+  end
+
+  describe '#is_running?' do
+    it 'returns true when postgres is running' do
+      stub_service_success_status('postgresql', true)
+
+      expect(subject.is_running?).to be_truthy
+    end
+
+    it 'returns false when postgres is not running' do
+      stub_service_success_status('postgresql', false)
+
+      expect(subject.is_running?).to be_falsey
+    end
+  end
+
+  describe '#is_enabled?' do
+    it 'returns true when managed postgres is enabled' do
+      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
+
+      expect(subject.is_enabled?).to be_truthy
+    end
+
+    it 'returns false when managed postgres is disabled' do
+      chef_run.node.normal['gitlab']['postgresql']['enable'] = false
+
+      expect(subject.is_enabled?).to be_falsey
+    end
+  end
+
+  describe '#is_managed_and_offline?' do
+    it 'returns true when conditions are met' do
+      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
+      stub_service_success_status('postgresql', false)
+
+      expect(subject.is_managed_and_offline?).to be_truthy
+    end
+
+    it 'returns false when condtions are not met' do
+      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
+      stub_service_success_status('postgresql', true)
+
+      expect(subject.is_managed_and_offline?).to be_falsey
+
+      chef_run.node.normal['gitlab']['postgresql']['enable'] = false
+      stub_service_success_status('postgresql', true)
+
+      expect(subject.is_managed_and_offline?).to be_falsey
+
+      stub_service_success_status('postgresql', false)
+      expect(subject.is_managed_and_offline?).to be_falsey
     end
   end
 end

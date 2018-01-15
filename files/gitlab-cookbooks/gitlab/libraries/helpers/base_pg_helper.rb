@@ -17,6 +17,10 @@ class BasePgHelper
     OmnibusHelper.new(node).service_up?(service_name)
   end
 
+  def is_managed_and_offline?
+    is_enabled? && !is_running?
+  end
+
   def database_exists?(db_name)
     psql_cmd(["-d 'template1'",
       "-c 'select datname from pg_database' -A",
