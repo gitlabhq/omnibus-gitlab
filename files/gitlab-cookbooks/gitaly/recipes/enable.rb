@@ -15,11 +15,31 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+git_user = account_helper.gitlab_user
 
 working_dir = node['gitaly']['dir']
 log_directory = node['gitaly']['log_directory']
 env_directory = node['gitaly']['env_directory']
 config_path = File.join(working_dir, "config.toml")
+
+# Holds git-data, by default one shard at /var/opt/gitlab/git-data
+# Can be changed by user using git_data_dirs option
+Gitaly.converted_git_data_dirs.each do |_name, git_data_directory|
+  storage_directory git_data_directory['path'] do
+    owner git_user
+    mode "0700"
+  end
+end
+
+# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
+# Should not be changed by user. Different permissions to git_data_dir set.
+repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
+repositories_storages.each do |_name, repositories_storage|
+  storage_directory repositories_storage['path'] do
+    owner git_user
+    mode "2770"
+  end
+end
 
 directory working_dir do
   owner account_helper.gitlab_user

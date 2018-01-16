@@ -21,31 +21,10 @@ git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
-git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
-repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
-hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
-
-# Holds git-data, by default one shard at /var/opt/gitlab/git-data
-# Can be changed by user using git_data_dirs option
-git_data_directories.each do |_name, git_data_directory|
-  storage_directory git_data_directory['path'] do
-    owner git_user
-    mode "0700"
-  end
-end
-
-# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
-# Should not be changed by user. Different permissions to git_data_dir set.
-repositories_storages.each do |_name, repositories_storage|
-  storage_directory repositories_storage['path'] do
-    owner git_user
-    mode "2770"
-  end
-end
 
 # Creates `.ssh` directory to hold authorized_keys
 [

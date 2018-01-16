@@ -11,6 +11,16 @@ describe 'gitlab::gitlab-shell' do
     expect(chef_run).to run_execute('/opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-keys check-permissions')
   end
 
+  it 'defaults the auth_file to be within the user\'s home directory' do
+    stub_gitlab_rb(user: { home: '/tmp/user' })
+    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
+  end
+
+  it 'uses custom auth_files set in gitlab.rb' do
+    stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
+    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
+  end
+
   context 'when NOT running on selinux' do
     before { stub_command('id -Z').and_return(false) }
 
@@ -189,120 +199,5 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
         .with_content(%r{custom_hooks_dir: "/fake/dir"})
     end
-  end
-end
-
-describe 'gitlab_shell::git_data_dirs' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default') }
-
-  before do
-    allow(Gitlab).to receive(:[]).and_call_original
-  end
-
-  context 'when git_data_dir is set as a single directory' do
-    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
-
-    it 'correctly sets the shell git data directories' do
-      # Allow warn to be called for other messages without failing the test
-      allow(Chef::Log).to receive(:warn)
-      expect(Chef::Log).to receive(:warn).with(/Your git_data_dir settings are deprecated/)
-      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data' })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
-    end
-  end
-
-  context 'when gitaly is set to use a listen_addr instead of a socket' do
-    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' })
-    end
-  end
-
-  context 'when git_data_dirs is set to multiple directories' do
-    before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         'default' => { 'path' => '/tmp/default/git-data' },
-                         'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-                       }
-                     })
-    end
-
-    it 'correctly sets the shell git data directories' do
-      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-                                                                                       'default' => { 'path' => '/tmp/default/git-data' },
-                                                                                       'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-                                                                                     })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
-                                                                                      })
-    end
-  end
-
-  context 'when git_data_dirs is set to multiple directories with different gitaly addresses' do
-    before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         'default' => { 'path' => '/tmp/default/git-data' },
-                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
-                       }
-                     })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
-                                                                                      })
-    end
-  end
-
-  context 'when git_data_dirs is set with deprecated settings structure' do
-    before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         'default' => '/tmp/default/git-data',
-                         'overflow' => '/tmp/other/git-overflow-data'
-                       }
-                     })
-    end
-
-    it 'correctly sets the shell git data directories' do
-      # Allow warn to be called for other messages without failing the test
-      allow(Chef::Log).to receive(:warn)
-      expect(Chef::Log).to receive(:warn).with(/Your git_data_dirs settings are deprecated/)
-      expect(chef_run.node['gitlab']['gitlab-shell']['git_data_directories']).to eql({
-                                                                                       'default' => { 'path' => '/tmp/default/git-data' },
-                                                                                       'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
-                                                                                     })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
-                                                                                      })
-    end
-  end
-
-  it 'defaults the auth_file to be within the user\'s home directory' do
-    stub_gitlab_rb(user: { home: '/tmp/user' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
-  end
-
-  it 'uses custom auth_files set in gitlab.rb' do
-    stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
   end
 end
