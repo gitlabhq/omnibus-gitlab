@@ -28,7 +28,9 @@ describe Geo::PromoteToPrimary, '#execute' do
   it 'calls all the subcommands' do
     stub_env
 
-    is_expected.to receive(:run_command).exactly(3).times
+    is_expected.to receive(:run_command).with('gitlab-ctl reconfigure', live: true).once
+    is_expected.to receive(:run_command).with('gitlab-rake geo:set_secondary_as_primary', live: true).once
+    is_expected.to receive(:run_command).with("touch #{postgres_trigger_file_path}").once
 
     command.execute
   end

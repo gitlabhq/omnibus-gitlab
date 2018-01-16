@@ -76,18 +76,19 @@ module Geo
       puts 'Reconfiguring...'.color(:yellow)
       puts
 
-      run_command('gitlab-ctl reconfigure')
+      run_command('gitlab-ctl reconfigure', live: true)
     end
 
     def promote_to_primary
       puts
       puts 'Running gitlab-rake geo:set_secondary_as_primary...'.color(:yellow)
       puts
-      run_command('gitlab-rake geo:set_secondary_as_primary')
+
+      run_command('gitlab-rake geo:set_secondary_as_primary', live: true)
     end
 
-    def run_command(cmd)
-      GitlabCtl::Util.run_command(cmd)
+    def run_command(cmd, live: false)
+      GitlabCtl::Util.run_command(cmd, live: live)
     end
 
     def key_path
