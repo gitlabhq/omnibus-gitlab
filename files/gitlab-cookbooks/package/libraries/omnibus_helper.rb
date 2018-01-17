@@ -36,6 +36,10 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     failure?("/opt/gitlab/init/#{service_name} status")
   end
 
+  def is_managed_and_offline?(service_name)
+    service_enabled?(service_name) && service_down?(service_name)
+  end
+
   def user_exists?(username)
     success?("id -u #{username}")
   end

@@ -18,7 +18,7 @@ class BasePgHelper
   end
 
   def is_managed_and_offline?
-    is_enabled? && !is_running?
+    OmnibusHelper.new(node).is_managed_and_offline?(service_name)
   end
 
   def database_exists?(db_name)
