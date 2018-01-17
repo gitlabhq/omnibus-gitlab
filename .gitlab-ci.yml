@@ -998,41 +998,41 @@ SLES-12-staging:
 # Release
 Ubuntu-14.04-release:
   dependencies:
-    - Ubuntu-14.04-staging
+    - Ubuntu-14.04
   <<: *production_release
 Ubuntu-16.04-release:
   dependencies:
-    - Ubuntu-16.04-staging
+    - Ubuntu-16.04
   <<: *production_release
 Debian-7-release:
   dependencies:
-    - Debian-7-staging
+    - Debian-7
   <<: *production_release
 Debian-8-release:
   dependencies:
-    - Debian-8-staging
+    - Debian-8
   <<: *production_release
 Debian-9.1-release:
   dependencies:
-    - Debian-9.1-staging
+    - Debian-9.1
   <<: *production_release
 CentOS-6-release:
   dependencies:
-    - CentOS-6-staging
+    - CentOS-6
   <<: *production_release
 CentOS-7-release:
   dependencies:
-    - CentOS-7-staging
+    - CentOS-7
   <<: *production_release
 OpenSUSE-42.3-release:
   dependencies:
-    - OpenSUSE-42.3-staging
+    - OpenSUSE-42.3
   <<: *production_release
 SLES-12-release:
   variables:
     RUN_ONLY_EE: 'true'
   dependencies:
-    - SLES-12-staging
+    - SLES-12
   allow_failure: true
   <<: *production_release
 
