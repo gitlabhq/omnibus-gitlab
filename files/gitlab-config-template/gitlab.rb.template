@@ -1190,6 +1190,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['email_skip_server_certificate_verification'] = false
 # mattermost['email_smtp_auth'] = false
 # mattermost['email_notification_content_type'] = "full"
+# mattermost['email_login_button_color'] = ""
+# mattermost['email_login_button_border_color'] = ""
+# mattermost['email_login_button_text_color'] = ""
 
 # mattermost['file_max_file_size'] = 52428800
 # mattermost['file_driver_name'] = "local"
