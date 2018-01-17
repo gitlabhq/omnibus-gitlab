@@ -1,15 +1,16 @@
 site = URI(node['gitlab']['external-url']).host
 
 node.default['gitlab']['nginx']['redirect_http_to_https'] = true
-include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"
 
 # If this is the first run, then nginx won't be working due to missing certificates
 acme_selfsigned site do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
   chain node['letsencrypt']['chain']
-  notifies :restart, "service[nginx]", :immediate
+  notifies :run, "execute[reload nginx]", :immediate
 end
+
+include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"
 
 execute 'reload nginx' do
   command 'gitlab-ctl hup nginx'

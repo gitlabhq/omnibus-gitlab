@@ -32,3 +32,7 @@ end
 def create_acme_selfsigned(certificate_name)
   ChefSpec::Matchers::ResourceMatcher.new(:acme_selfsigned, :create, certificate_name)
 end
+
+def create_acme_certificate(certificate_name)
+  ChefSpec::Matchers::ResourceMatcher.new(:acme_certificate, :create, certificate_name)
+end

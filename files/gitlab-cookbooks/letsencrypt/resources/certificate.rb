@@ -2,6 +2,8 @@ property :cn, String, name_property: true
 property :crt, String
 property :key, String
 property :chain, String
+property :contact, Array, default: []
+property :owner, String
 property :wwwroot, String
 
 action :create do
@@ -12,7 +14,7 @@ action :create do
     owner new_resource.owner
     endpoint 'https://acme-staging.api.letsencrypt.org/'
     wwwroot new_resource.wwwroot
-    contact [new_resource.contact]
+    contact new_resource.contact
   end
 
   acme_certificate 'production' do
@@ -21,7 +23,7 @@ action :create do
     key new_resource.key
     owner new_resource.owner
     wwwroot new_resource.wwwroot
-    contact [new_resource.contact]
+    contact new_resource.contact
   end
 
   execute 'gitlab-ctl hup nginx'

@@ -4,6 +4,19 @@ describe 'gitlab::letsencrypt' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
 
+  let(:redirect_block) do
+    <<-EOF
+server {
+  listen *:80;
+  server_name fakehost.example.com;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  return 301 https://fakehost.example.com:443$request_uri;
+  access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
+  error_log   /var/log/gitlab/nginx/gitlab_error.log;
+}
+   EOF
+  end
+
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -28,8 +41,10 @@ describe 'gitlab::letsencrypt' do
       expect(chef_run).to include_recipe('letsencrypt::enable')
     end
 
-    it 'sets redirect-http_to_https' do
+    it 'sets redirect_http_to_https' do
       expect(node['gitlab']['nginx']['redirect_http_to_https']).to be_truthy
+      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf')
+        .with_content(redirect_block)
     end
 
     it 'uses http authorization by default' do
@@ -61,21 +76,18 @@ end
 
 # This should work standalone for renewal purposes
 describe 'letsencrypt::enable' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('letsencrypt::enable') }
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new do |node|
+      node.normal['gitlab']['external-url'] = 'https://standalone.fakehost.com'
+    end.converge('letsencrypt::enable')
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      external_url: 'https://fakehost.example.com',
-      letsencrypt: {
-        enable: true,
-      }
-    )
   end
 
   it 'executes letsencrypt_certificate' do
-    pending('not ready yet')
-    expect(chef_run).to create_letsencrypt_certificate('fakehost.example.com')
+    expect(chef_run).to create_letsencrypt_certificate('standalone.fakehost.com')
   end
 end
 
@@ -95,26 +107,24 @@ describe 'gitlab::letsencrypt' do
     )
   end
 
-  it 'reloads nginx' do
-    pending('not ready yet')
-    expect(chef_run).to run_execute('gitlab-ctl hup nginx')
-  end
-
   it 'creates a staging certificate' do
-    pending('not ready yet')
     expect(chef_run).to create_acme_certificate('staging').with(
       crt: '/etc/gitlab/ssl/fakehost.example.com.crt-staging',
       key: '/etc/gitlab/ssl/fakehost.example.com.key-staging',
-      wwwroot: '/var/opt/gitlab/nginx/www'
+      wwwroot: '/var/opt/gitlab/nginx/www',
+      endpoint: 'https://acme-staging.api.letsencrypt.org/'
     )
   end
 
   it 'creates a production certificate' do
-    pending('not ready yet')
     expect(chef_run).to create_acme_certificate('production').with(
       crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
       key: '/etc/gitlab/ssl/fakehost.example.com.key',
       wwwroot: '/var/opt/gitlab/nginx/www'
     )
+  end
+
+  it 'reloads nginx' do
+    expect(chef_run).to run_execute('gitlab-ctl hup nginx')
   end
 end
