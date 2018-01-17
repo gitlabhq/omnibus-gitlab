@@ -15,7 +15,7 @@
 #
 
 name 'chef-acme'
-version = Gitlab::Version.new(name, 'acme-client-poc')
+version = Gitlab::Version.new(name, 'update-http-auth')
 default_version version.print(false)
 
 license 'Apache-2.0'
