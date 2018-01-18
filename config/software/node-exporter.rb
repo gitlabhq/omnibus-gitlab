@@ -28,11 +28,9 @@ source git: version.remote
 relative_path 'src/github.com/prometheus/node_exporter'
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  env['GOPATH'] = "#{Omnibus::Config.source_dir}/node-exporter"
-  exporter_source_dir = "#{Omnibus::Config.source_dir}/node-exporter"
-  cwd = "#{exporter_source_dir}/src/github.com/prometheus/node_exporter"
-
-  command 'go build', env: env, cwd: cwd
+  env = {
+    'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
+  }
+  command 'go build', env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
 end
