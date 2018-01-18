@@ -13,7 +13,7 @@ server {
   server_tokens off; ## Don't show the nginx version number, a security best practice
 
   location /.well-known {
-    root /var/opt/gitlab/nginx/www/.well-known;
+    root /var/opt/gitlab/nginx/www/;
   }
 
   location / {
@@ -136,6 +136,7 @@ describe 'gitlab::letsencrypt' do
   end
 
   it 'reloads nginx' do
-    expect(chef_run).to run_execute('gitlab-ctl hup nginx')
+    prod_cert = chef_run.acme_certificate('production')
+    expect(prod_cert).to notify('execute[reload nginx]').to(:run)
   end
 end

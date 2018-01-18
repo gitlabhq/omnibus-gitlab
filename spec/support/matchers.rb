@@ -1,5 +1,6 @@
 ChefSpec.define_matcher :postgresql_user
 ChefSpec.define_matcher :letsencrypt_certificate
+ChefSpec.define_matcher :acme_certificate
 
 def create_postgresql_user(password)
   ChefSpec::Matchers::ResourceMatcher.new(:postgresql_user, :create, password)

@@ -18,10 +18,17 @@ acme_selfsigned site do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
   chain node['letsencrypt']['chain']
-  notifies :start, 'service[nginx]', :immediately
+  notifies :run, 'execute[restart nginx]', :immediately
 end
 
 include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"
+
+# Until nginx is in a dedicated cookbook, we can't notify the chef service since it would
+# require a circular dependency between this and the gitlab cookbook
+execute 'restart nginx' do
+  command 'gitlab-ctl restart nginx'
+  action :nothing
+end
 
 execute 'reload nginx' do
   command 'gitlab-ctl hup nginx'
