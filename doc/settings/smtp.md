@@ -36,6 +36,20 @@ This configuration, which simply enables SMTP and otherwise uses the default set
 gitlab_rails['smtp_enable'] = true
 ```
 
+### SMTP without SSL
+By default SSL is enabled for SMTP. If your SMTP server do not support communication over SSL use following settings:
+```ruby
+gitlab_rails['smtp_enable'] = true;
+gitlab_rails['smtp_address'] = 'localhost';
+gitlab_rails['smtp_port'] = 25;
+gitlab_rails['smtp_domain'] = 'localhost';
+gitlab_rails['smtp_tls'] = false;
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_ssl'] = false
+gitlab_rails['smtp_force_ssl'] = false
+```
+
 ### Gmail
 
 >**Note:**
