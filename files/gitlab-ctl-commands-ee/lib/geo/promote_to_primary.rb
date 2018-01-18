@@ -20,8 +20,6 @@ module Geo
       reconfigure
 
       promote_to_primary
-
-      notification_about_rsync
     end
 
     private
@@ -86,14 +84,6 @@ module Geo
       puts 'Running gitlab-rake geo:set_secondary_as_primary...'.color(:yellow)
       puts
       run_command('gitlab-rake geo:set_secondary_as_primary')
-    end
-
-    def notification_about_rsync
-      puts
-      puts '---------------------------------------'.color(:yellow)
-      puts 'Note: Rsync everything in /var/opt/gitlab/gitlab-rails/uploads and /var/opt/gitlab/gitlab-rails/shared from your old node to the new one !!!'.color(:yellow)
-      puts '---------------------------------------'.color(:yellow)
-      puts
     end
 
     def run_command(cmd)

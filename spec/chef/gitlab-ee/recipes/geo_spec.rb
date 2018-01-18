@@ -1,7 +1,6 @@
-require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/gitlab_geo.rb'
 require 'chef_helper'
 
-describe GitlabGeo do
+describe 'gitlab-ee::geo' do
   let(:node) { chef_run.node }
 
   before do

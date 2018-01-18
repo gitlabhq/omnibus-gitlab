@@ -60,7 +60,7 @@ end
 
 postgresql_config = File.join(postgresql_data_dir, 'postgresql.conf')
 postgresql_runtime_config = File.join(postgresql_data_dir, 'runtime.conf')
-bootstrapping = node['gitlab']['geo-postgresql']['bootstrap']
+bootstrapping = !geo_pg_helper.bootstrapped?
 should_notify = omnibus_helper.should_notify?('geo-postgresql') && !bootstrapping
 
 template postgresql_config do
@@ -80,7 +80,7 @@ template postgresql_runtime_config do
   helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
   cookbook 'gitlab'
-  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
+  notifies :run, 'execute[reload geo-postgresql]', :immediately if should_notify
 end
 
 pg_hba_config = File.join(postgresql_data_dir, 'pg_hba.conf')
