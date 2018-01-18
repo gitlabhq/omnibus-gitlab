@@ -1,13 +1,24 @@
 site = URI(node['gitlab']['external-url']).host
 
+# If we're using SSL, force http redirection to https
 node.default['gitlab']['nginx']['redirect_http_to_https'] = true
+
+# We assume that the certificate and key will be stored in the same directory
+ssl_dir = File.dirname(node['gitlab']['nginx']['ssl_certificate'])
+
+directory ssl_dir do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
 
 # If this is the first run, then nginx won't be working due to missing certificates
 acme_selfsigned site do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
   chain node['letsencrypt']['chain']
-  notifies :run, "execute[reload nginx]", :immediate
+  notifies :start, 'service[nginx]', :immediately
 end
 
 include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"
@@ -17,7 +28,9 @@ execute 'reload nginx' do
   action :nothing
 end
 
-ruby 'display_le_message' do
-  LoggingHelper.warning("Let's Encrypt has been configured. Please see http://foo for more information")
+ruby_block 'display_le_message' do
+  block do
+    LoggingHelper.warning("Let's Encrypt has been configured. Please see http://foo for more information")
+  end
   action :nothing
 end

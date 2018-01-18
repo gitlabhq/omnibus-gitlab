@@ -8,9 +8,18 @@ describe 'gitlab::letsencrypt' do
     <<-EOF
 server {
   listen *:80;
+
   server_name fakehost.example.com;
   server_tokens off; ## Don't show the nginx version number, a security best practice
-  return 301 https://fakehost.example.com:443$request_uri;
+
+  location /.well-known {
+    root /var/opt/gitlab/nginx/www/.well-known;
+  }
+
+  location / {
+    return 301 https://fakehost.example.com:443$request_uri;
+  }
+
   access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
   error_log   /var/log/gitlab/nginx/gitlab_error.log;
 }
@@ -41,7 +50,7 @@ server {
       expect(chef_run).to include_recipe('letsencrypt::enable')
     end
 
-    it 'sets redirect_http_to_https' do
+    it 'Updates nginx configuration' do
       expect(node['gitlab']['nginx']['redirect_http_to_https']).to be_truthy
       expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf')
         .with_content(redirect_block)
@@ -69,7 +78,7 @@ server {
 
     it 'warns the user' do
       prod_cert = chef_run.letsencrypt_certificate('fakehost.example.com')
-      expect(prod_cert).to notify('ruby[display_le_message]').to(:run)
+      expect(prod_cert).to notify('ruby_block[display_le_message]').to(:run)
     end
   end
 end
@@ -79,6 +88,8 @@ describe 'letsencrypt::enable' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
       node.normal['gitlab']['external-url'] = 'https://standalone.fakehost.com'
+      node.normal['gitlab']['nginx']['ssl_certificate'] = '/fake/path/cert.crt'
+      node.normal['gitlab']['nginx']['ssl_certificate_key'] = '/fake/path/cert.key'
     end.converge('letsencrypt::enable')
   end
 
