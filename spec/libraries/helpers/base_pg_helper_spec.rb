@@ -10,6 +10,81 @@ describe BasePgHelper do
     allow(subject).to receive(:service_cmd) { 'gitlab-psql' }
   end
 
+  describe '#database_exists?' do
+    it 'calls out to psql_cmd' do
+      expect(subject).to receive(:psql_cmd).with(
+        [
+          "-d 'template1'",
+          "-c 'select datname from pg_database' -A",
+          '| grep -x example'
+        ])
+      subject.database_exists?('example')
+    end
+
+    context 'database present' do
+      it 'truthy' do
+        allow(subject).to receive(:psql_cmd) { true }
+        expect(subject.database_exists?('example')).to be_truthy
+      end
+
+      it 'falsey' do
+        allow(subject).to receive(:psql_cmd) { false }
+        expect(subject.database_exists?('example')).to be_falsey
+      end
+    end
+  end
+
+  describe '#extension_enabled?' do
+    it 'will check with psql_cmd when database present' do
+      expect(subject).to receive(:psql_cmd).with(
+        [
+          "-d 'database'",
+          "-c 'select extname from pg_extension' -A",
+          '| grep -x extension'
+        ])
+      subject.extension_enabled?('extension', 'database')
+    end
+
+    context 'extension present' do
+      it 'truthy' do
+        allow(subject).to receive(:psql_cmd) { true }
+        expect(subject.extension_enabled?('extension', 'database')).to be_truthy
+      end
+
+      it 'falsey' do
+        allow(subject).to receive(:psql_cmd) { false }
+        expect(subject.extension_enabled?('extension', 'database')).to be_falsey
+      end
+    end
+  end
+
+  describe '#extension_can_be_enabled?' do
+    before do
+      allow(subject).to receive(:is_running?).and_return(true)
+      allow(subject).to receive(:is_slave?).and_return(false)
+      allow(subject).to receive(:extension_enabled?).and_return(false)
+    end
+
+    it 'can be enabled' do
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_truthy
+    end
+
+    it 'needs to be running' do
+      allow(subject).to receive(:is_running?).and_return(false)
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
+    end
+
+    it 'cannot be done on a slave' do
+      allow(subject).to receive(:is_slave?).and_return(true)
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
+    end
+
+    it 'should not enable twice' do
+      allow(subject).to receive(:extension_enabled?).and_return(true)
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
+    end
+  end
+
   describe '#user_options' do
     before do
       result = spy('shellout')
