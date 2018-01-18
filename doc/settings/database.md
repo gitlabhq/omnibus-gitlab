@@ -200,7 +200,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
     gitlab_rails['db_adapter'] = 'postgresql'
     gitlab_rails['db_encoding'] = 'utf8'
     gitlab_rails['db_host'] = '127.0.0.1'
-    gitlab_rails['db_port'] = '5432'
+    gitlab_rails['db_port'] = 5432
     gitlab_rails['db_username'] = 'USERNAME'
     gitlab_rails['db_password'] = 'PASSWORD'
     ```
@@ -307,7 +307,7 @@ If you are connecting Omnibus GitLab to an existing GitLab database you should
     gitlab_rails['db_adapter'] = 'mysql2'
     gitlab_rails['db_encoding'] = 'utf8'
     gitlab_rails['db_host'] = '127.0.0.1'
-    gitlab_rails['db_port'] = '3306'
+    gitlab_rails['db_port'] = 3306
     gitlab_rails['db_username'] = 'USERNAME'
     gitlab_rails['db_password'] = 'PASSWORD'
     ```
