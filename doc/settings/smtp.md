@@ -479,9 +479,9 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 ```
 
-
 ### GMX Mail
-```
+
+```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "mail.gmx.com"
 gitlab_rails['smtp_port'] = 465
