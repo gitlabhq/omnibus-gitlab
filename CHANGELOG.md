@@ -43,6 +43,10 @@ omnibus-gitlab repository.
 - Fixed behaviour of postgres_user provider with unspecified passwords/options 8bd2e615
 - Added roles to ease HA Postgres configuration d7d0f32a
 
+10.2.6
+
+- Update Mattermost to 4.3.4
+
 10.2.3
 
 - Adjust number of unicorn workers if running a Geo secondary node
@@ -63,6 +67,10 @@ omnibus-gitlab repository.
 - Make postgresql replication client sslmode configurable 1e2be156
 - Disable TLSv1 and SSLv3 ciphers for postgresql 7ab9004f
 - Add support for multiple Redis instances f6af9a81
+
+10.1.6
+
+- Update Mattermost to 4.2.2
 
 10.1.3
 
