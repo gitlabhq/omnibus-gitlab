@@ -485,6 +485,7 @@ describe 'geo postgresql 9.6' do
           }
         )
 
+        allow_any_instance_of(PgHelper).to receive(:is_managed_and_offline?).and_return(false)
         allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
         allow_any_instance_of(PgHelper).to receive(:database_empty?).and_return(false)
         allow_any_instance_of(GeoPgHelper).to receive(:is_offline_or_readonly?).and_return(false)
@@ -519,8 +520,7 @@ describe 'geo postgresql 9.6' do
         allow_any_instance_of(GitlabGeoHelper).to receive(:geo_database_configured?).and_return(true)
 
         # not managed (using external database)
-        allow_any_instance_of(PgHelper).to receive(:is_enabled?).and_return(false)
-        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(false)
+        allow_any_instance_of(PgHelper).to receive(:is_managed_and_offline?).and_return(false)
 
         ChefSpec::SoloRunner.converge('gitlab-ee::default')
       end

@@ -9,10 +9,6 @@ class BasePgHelper
     @node = node
   end
 
-  def is_enabled?
-    OmnibusHelper.new(node).service_enabled?(service_name)
-  end
-
   def is_running?
     OmnibusHelper.new(node).service_up?(service_name)
   end

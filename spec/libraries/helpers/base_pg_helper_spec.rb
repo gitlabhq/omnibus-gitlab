@@ -147,20 +147,6 @@ describe BasePgHelper do
     end
   end
 
-  describe '#is_enabled?' do
-    it 'returns true when managed postgres is enabled' do
-      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
-
-      expect(subject.is_enabled?).to be_truthy
-    end
-
-    it 'returns false when managed postgres is disabled' do
-      chef_run.node.normal['gitlab']['postgresql']['enable'] = false
-
-      expect(subject.is_enabled?).to be_falsey
-    end
-  end
-
   describe '#is_managed_and_offline?' do
     it 'returns true when conditions are met' do
       chef_run.node.normal['gitlab']['postgresql']['enable'] = true
