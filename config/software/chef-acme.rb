@@ -23,6 +23,7 @@ license_file 'LICENSE'
 
 source git: version.remote
 
+dependency 'gitlab-cookbooks'
 dependency 'acme-client'
 dependency 'compat_resource'
 
