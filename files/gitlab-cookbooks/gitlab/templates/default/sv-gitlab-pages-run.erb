@@ -33,6 +33,9 @@ exec /opt/gitlab/embedded/bin/gitlab-pages \
     \
     -pages-domain="<%= node['gitlab']['gitlab-pages']['domain'] %>" \
     -pages-root="<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
+    <% if node['gitlab']['gitlab-pages']['status_uri'] %>
+    -pages-status="<%= node['gitlab']['gitlab-pages']['status_uri'] %>" \
+    <% end %>
     \
     -redirect-http=<%= node['gitlab']['gitlab-pages']['redirect_http'] %> \
     -use-http2=<%= node['gitlab']['gitlab-pages']['use_http2'] %> \
