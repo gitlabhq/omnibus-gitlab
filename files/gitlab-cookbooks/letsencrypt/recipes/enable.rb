@@ -44,7 +44,7 @@ end
 
 ruby_block 'display_le_message' do
   block do
-    LoggingHelper.warning("Let's Encrypt has been configured. Please see http://foo for more information")
+    LoggingHelper.warning("Let's Encrypt has been configured. Please see https://docs.gitlab.com/omnibus/settings/ssl.html#lets-encrypt-integration for more information")
   end
   action :nothing
 end
