@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.4.1
+
+- Add GitLab pages status page configuration
+
 10.4.0
 
 - Upgrade Ruby version to 2.3.6
