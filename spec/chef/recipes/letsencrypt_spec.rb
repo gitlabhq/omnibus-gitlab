@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::letsencrypt' do
+describe 'letsencrypt::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
 
@@ -79,6 +79,21 @@ server {
     it 'warns the user' do
       prod_cert = chef_run.letsencrypt_certificate('fakehost.example.com')
       expect(prod_cert).to notify('ruby_block[display_le_message]').to(:run)
+    end
+
+    context 'external_url uses http' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://plainhost.example.com',
+          letsencrypt: {
+            enable: true
+          }
+        )
+      end
+
+      it 'logs a warning' do
+        expect(chef_run).to run_ruby_block('http external-url')
+      end
     end
   end
 end

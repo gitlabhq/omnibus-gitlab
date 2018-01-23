@@ -1,4 +1,11 @@
-site = URI(node['gitlab']['external-url']).host
+site = URI(node['gitlab']['external-url'])
+
+ruby_block 'http external-url' do
+  block do
+    LoggingHelper.warning("Let's Encrypt is enabled, but external_url is using http")
+  end
+  only_if { site.port == 80 }
+end
 
 # If we're using SSL, force http redirection to https
 node.default['gitlab']['nginx']['redirect_http_to_https'] = true
@@ -14,7 +21,7 @@ directory ssl_dir do
 end
 
 # If this is the first run, then nginx won't be working due to missing certificates
-acme_selfsigned site do
+acme_selfsigned site.host do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
   chain node['letsencrypt']['chain']
