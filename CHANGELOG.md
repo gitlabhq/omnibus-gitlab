@@ -4,7 +4,10 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 10.4.1
+
 - Update gitlab-monitor to 2.5.0
+- Add GitLab pages status page configuration
+
 
 10.4.0
 
