@@ -19,6 +19,11 @@ omnibus-gitlab repository.
 - Update gitlab-monitor to 2.4.0 92312d6
 - Update CA certificates bundle to one from 2017.09.20 a8f56b7f
 
+10.3.6
+
+- Specify initial tag of QA image for pushing to dockerhub
+- Use dash instead of spaces in cache keys and build jobs
+
 10.3.1
 
 - Make it possible to configure an external Geo tracking database
