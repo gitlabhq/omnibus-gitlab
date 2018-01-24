@@ -92,7 +92,7 @@ module Geo
       return if @options[:skip_replication_slot]
 
       puts "* Checking for replication slot #{@options[:slot_name]}".color(:green)
-      unless replication_slot_exists?
+      unless replication_slot_exists? # rubocop:disable Style/GuardClause
         puts "* Creating replication slot #{@options[:slot_name]}".color(:green)
         create_replication_slot!
       end
@@ -113,7 +113,7 @@ module Geo
         file.write(<<~EOF
           #{@options[:host]}:#{@options[:port]}:*:#{@options[:user]}:#{@options[:password]}
         EOF
-        )
+                  )
       end
       run_command("chown gitlab-psql #{@pgpass}")
     end
@@ -126,7 +126,7 @@ module Geo
           primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]}'
           trigger_file = '/tmp/postgresql.trigger'
         EOF
-        )
+                  )
         file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
       end
       run_command("chown gitlab-psql #{recovery_file}")

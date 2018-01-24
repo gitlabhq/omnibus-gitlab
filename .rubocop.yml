@@ -540,7 +540,7 @@ Style/WordArray:
 # branches, and conditions.
 Metrics/AbcSize:
   Enabled: true
-  Max: 60
+  Max: 100
 
 # This cop checks if the length of a block exceeds some maximum value.
 Metrics/BlockLength:

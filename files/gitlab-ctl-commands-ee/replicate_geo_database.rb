@@ -92,10 +92,10 @@ class GeoReplicationCommand
 
     opts_parser.parse!(arguments)
 
-    raise OptionParser::MissingArgument.new(:host) unless @options.fetch(:host)
-    raise OptionParser::MissingArgument.new('--slot-name') unless @options[:skip_replication_slot] || @options.fetch(:slot_name)
+    raise OptionParser::MissingArgument, :host unless @options.fetch(:host)
+    raise OptionParser::MissingArgument, '--slot-name' unless @options[:skip_replication_slot] || @options.fetch(:slot_name)
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-    puts $!.to_s
+    puts $ERROR_INFO.to_s
     puts opts_parser
     exit 1
   end

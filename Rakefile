@@ -6,7 +6,6 @@ Knapsack.load_tasks
 
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop) do |t|
-
   # This will be removed once everything is made Rubocop friendly.
   t.options = ['-D', 'config',
                'lib',
