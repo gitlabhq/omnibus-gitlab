@@ -154,4 +154,22 @@ describe 'gitlab::letsencrypt' do
     prod_cert = chef_run.acme_certificate('production')
     expect(prod_cert).to notify('execute[reload nginx]').to(:run)
   end
+
+  context 'with extra options' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://fakehost.example.com',
+        letsencrypt: {
+          enable: true,
+          alt_names: %w(one.example.com two.example.com)
+        }
+      )
+    end
+
+    it 'adds alt_names to the certificate resource' do
+      expect(chef_run).to create_acme_certificate('production').with(
+        alt_names: %w(one.example.com two.example.com)
+      )
+    end
+  end
 end
