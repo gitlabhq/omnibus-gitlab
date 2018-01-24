@@ -19,7 +19,7 @@ runit_service "logrotate" do
   down node['gitlab']['logrotate']['ha']
   control ['t']
   options({
-    :log_directory => node['gitlab']['logrotate']['log_directory']
+    log_directory: node['gitlab']['logrotate']['log_directory']
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['logrotate'].to_hash)
 end

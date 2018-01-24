@@ -19,7 +19,6 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
-gitlab_shell_source_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 gitlab_rails_static_etc_dir = "/opt/gitlab/etc/gitlab-rails"
@@ -33,9 +32,6 @@ upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
 node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
-
-ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
-known_hosts = File.join(ssh_dir, "known_hosts")
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
@@ -188,12 +184,12 @@ templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   group "root"
   mode "0644"
   sensitive true
-  variables('secrets' => { 'production' =>  {
-    'db_key_base' => node['gitlab']['gitlab-rails']['db_key_base'],
-    'secret_key_base' => node['gitlab']['gitlab-rails']['secret_key_base'],
-    'otp_key_base' => node['gitlab']['gitlab-rails']['otp_key_base'],
-    'openid_connect_signing_key' => node['gitlab']['gitlab-rails']['openid_connect_signing_key']
-  }})
+  variables('secrets' => { 'production' => {
+              'db_key_base' => node['gitlab']['gitlab-rails']['db_key_base'],
+              'secret_key_base' => node['gitlab']['gitlab-rails']['secret_key_base'],
+              'otp_key_base' => node['gitlab']['gitlab-rails']['otp_key_base'],
+              'openid_connect_signing_key' => node['gitlab']['gitlab-rails']['openid_connect_signing_key']
+            } })
   restarts dependent_services
 end
 
@@ -204,7 +200,7 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
-  variables(:redis_url => redis_url, :redis_sentinels => redis_sentinels)
+  variables(redis_url: redis_url, redis_sentinels: redis_sentinels)
   restarts dependent_services
 end
 
@@ -233,9 +229,7 @@ templatesymlink "Create a aws.yml and create a symlink to Rails root" do
   variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
 
-  unless node['gitlab']['gitlab-rails']['aws_enable']
-    action :delete
-  end
+  action :delete unless node['gitlab']['gitlab-rails']['aws_enable']
 end
 
 templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" do
@@ -247,9 +241,7 @@ templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" d
   variables(node['gitlab']['gitlab-rails'].to_hash)
   restarts dependent_services
 
-  unless node['gitlab']['gitlab-rails']['smtp_enable']
-    action :delete
-  end
+  action :delete unless node['gitlab']['gitlab-rails']['smtp_enable']
 end
 
 templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
@@ -326,7 +318,7 @@ gitlab_relative_url = node['gitlab']['gitlab-rails']['gitlab_relative_url']
 rails_env['RAILS_RELATIVE_URL_ROOT'] = gitlab_relative_url if gitlab_relative_url
 
 if node['gitlab']['gitlab-rails']['enable_jemalloc']
-  rails_env.merge!({'LD_PRELOAD' => "/opt/gitlab/embedded/lib/libjemalloc.so"})
+  rails_env['LD_PRELOAD'] = "/opt/gitlab/embedded/lib/libjemalloc.so"
 end
 
 env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
@@ -350,7 +342,7 @@ end
 legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
 link legacy_sidekiq_log_file do
   to File.join(node['gitlab']['sidekiq']['log_directory'], 'current')
-  not_if { File.exists?(legacy_sidekiq_log_file) }
+  not_if { File.exist?(legacy_sidekiq_log_file) }
 end
 
 # Make schema.rb writable for when we run `rake db:migrate`

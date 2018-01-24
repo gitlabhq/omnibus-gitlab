@@ -29,4 +29,3 @@ end
 sysctl "net.core.somaxconn" do
   value node['gitlab']['unicorn']['somaxconn']
 end
-

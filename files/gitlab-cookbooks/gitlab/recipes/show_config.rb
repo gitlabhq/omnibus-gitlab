@@ -16,9 +16,9 @@
 # limitations under the License.
 #
 
-if File.exists?("/etc/gitlab/gitlab.rb")
-	Gitlab[:node] = node
-	Gitlab.from_file("/etc/gitlab/gitlab.rb")
+if File.exist?("/etc/gitlab/gitlab.rb")
+  Gitlab[:node] = node
+  Gitlab.from_file("/etc/gitlab/gitlab.rb")
 end
 config = Gitlab.generate_config(node['fqdn'])
 

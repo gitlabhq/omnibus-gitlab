@@ -47,7 +47,7 @@ end
 runit_service 'gitlab-workhorse' do
   down node['gitlab']['gitlab-workhorse']['ha']
   options({
-    :log_directory => log_directory
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
@@ -67,6 +67,6 @@ config_file_path = File.join(working_dir, "config.toml")
 template config_file_path do
   source "workhorse-config.toml.erb"
   owner account_helper.gitlab_user
-  variables(:redis_url => redis_url, :password => redis_password, :sentinels => redis_sentinels, :sentinel_master => redis_sentinel_master, :master_password => redis_sentinel_master_password)
+  variables(redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
   notifies :restart, "service[gitlab-workhorse]"
 end
