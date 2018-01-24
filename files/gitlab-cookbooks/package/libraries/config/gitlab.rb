@@ -93,6 +93,6 @@ module Gitlab
     attribute('gitlab_monitor')
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
-    attribute('sentinel')
+    attribute('sentinel').use { Sentinel }
   end
 end
