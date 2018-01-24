@@ -9,6 +9,11 @@ omnibus-gitlab repository.
 - Add support for enabling FDW for GitLab Geo
 - Add warning to LoggingHelper
 
+10.3.6
+
+- Specify initial tag of QA image for pushing to dockerhub
+- Use dash instead of spaces in cache keys and build jobs
+
 10.3.1
 
 - Make it possible to configure an external Geo tracking database
