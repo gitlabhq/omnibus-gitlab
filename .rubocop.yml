@@ -12,6 +12,11 @@ AllCops:
   # -S/--display-style-guide option.
   DisplayStyleGuide: false
   # Exclude some GitLab files
+  Exclude:
+    - 'gems'
+    - '.bundle'
+    - 'cache'
+    - 'node_modules'
 
 Style/NumericLiteralPrefix:
   Enabled: false
