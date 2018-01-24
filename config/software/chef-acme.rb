@@ -15,13 +15,12 @@
 #
 
 name 'chef-acme'
-version = Gitlab::Version.new(name, 'update-http-auth')
-default_version version.print(false)
+default_version 'b49c28d'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
 
-source git: version.remote
+source git: 'https://github.com/schubergphilis/chef-acme'
 
 dependency 'gitlab-cookbooks'
 dependency 'acme-client'
