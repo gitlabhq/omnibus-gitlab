@@ -36,11 +36,11 @@ module Postgresql
       [
         # %w{gitlab_rails db_username} corresponds to
         # Gitlab['gitlab_rails']['db_username'], etc.
-        [%w{gitlab_rails db_username}, %w{postgresql sql_user}],
-        [%w{gitlab_rails db_host}, %w{postgresql listen_address}],
-        [%w{gitlab_rails db_port}, %w{postgresql port}],
+        [%w(gitlab_rails db_username), %w(postgresql sql_user)],
+        [%w(gitlab_rails db_host), %w(postgresql listen_address)],
+        [%w(gitlab_rails db_port), %w(postgresql port)],
       ].each do |left, right|
-        if ! Gitlab[left.first][left.last].nil?
+        unless Gitlab[left.first][left.last].nil?
           # If the user explicitly sets a value for e.g.
           # gitlab_rails['db_port'] in gitlab.rb then we should never override
           # that.
@@ -48,7 +48,7 @@ module Postgresql
         end
 
         better_value_from_gitlab_rb = Gitlab[right.first][right.last]
-        default_from_attributes = Gitlab['node']['gitlab'][left.first.gsub('_', '-')][left.last]
+        default_from_attributes = Gitlab['node']['gitlab'][left.first.tr('_', '-')][left.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
       end
     end
@@ -59,7 +59,7 @@ module Postgresql
       db_host = Gitlab['gitlab_rails']['db_host']
       return if db_host.nil?
 
-      if db_host.include?(',')
+      if db_host.include?(',') # rubocop:disable Style/GuardClause
         Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
         warning = [
           "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
@@ -74,10 +74,10 @@ module Postgresql
 
       attributes_values = []
       [
-        %w{postgresql sql_mattermost_user},
-        %w{postgresql unix_socket_directory},
-        %w{postgresql port},
-        %w{mattermost database_name}
+        %w(postgresql sql_mattermost_user),
+        %w(postgresql unix_socket_directory),
+        %w(postgresql port),
+        %w(mattermost database_name)
       ].each do |value|
         # This conditional is required until postgresql is extracted to its own
         # cookbook. Mattermost exists directly on node while postgresql exists
@@ -95,9 +95,7 @@ module Postgresql
       value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
 
-      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && Gitlab['node']['mattermost']['sql_data_source_replicas'].empty?
-        Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
-      end
+      Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']] if Gitlab['mattermost']['sql_data_source_replicas'].nil? && Gitlab['node']['mattermost']['sql_data_source_replicas'].empty?
     end
 
     def postgresql_managed?

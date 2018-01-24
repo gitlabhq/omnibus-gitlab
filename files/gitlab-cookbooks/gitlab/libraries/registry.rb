@@ -48,7 +48,7 @@ module Registry
       Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
 
       Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
-      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/,'')
+      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/, '')
       Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
       Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
       Gitlab['gitlab_rails']['registry_host'] = uri.host
@@ -71,9 +71,7 @@ module Registry
         raise "Unsupported GitLab Registry external URL path: #{uri.path}"
       end
 
-      unless [80, 443].include?(uri.port)
-        Gitlab['gitlab_rails']['registry_port'] = uri.port
-      end
+      Gitlab['gitlab_rails']['registry_port'] = uri.port unless [80, 443].include?(uri.port)
     end
 
     def parse_registry
@@ -86,8 +84,8 @@ module Registry
         'filesystem' => { 'rootdirectory' => Gitlab['gitlab_rails']['registry_path'] }
       }
 
-      Gitlab['registry']['storage']['cache'] ||= {'blobdescriptor'=>'inmemory'}
-      Gitlab['registry']['storage']['delete'] ||= {'enabled' => Gitlab['registry']['storage_delete_enabled']}
+      Gitlab['registry']['storage']['cache'] ||= { 'blobdescriptor' => 'inmemory' }
+      Gitlab['registry']['storage']['delete'] ||= { 'enabled' => Gitlab['registry']['storage_delete_enabled'] }
     end
 
     def parse_registry_notifications
@@ -97,8 +95,8 @@ module Registry
       gitlab_configuration = Gitlab['node']['registry']
 
       # Use the registry defaults configured by the user but use the defaults from gitlab if they were not set
-      user_configuration['default_notifications_timeout'] ||=  gitlab_configuration['default_notifications_timeout']
-      user_configuration['default_notifications_threshold'] ||=  gitlab_configuration['default_notifications_threshold']
+      user_configuration['default_notifications_timeout'] ||= gitlab_configuration['default_notifications_timeout']
+      user_configuration['default_notifications_threshold'] ||= gitlab_configuration['default_notifications_threshold']
       user_configuration['default_notifications_backoff'] ||=  gitlab_configuration['default_notifications_backoff']
       user_configuration['default_notifications_headers'] ||=  gitlab_configuration['default_notifications_headers']
 

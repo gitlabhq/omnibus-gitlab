@@ -147,11 +147,11 @@ module Prometheus
       listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
 
       scrape_config = {
-                        'job_name' => 'gitaly',
-                        'static_configs' => [
-                          'targets' => [listen_address],
-                        ]
-                      }
+        'job_name' => 'gitaly',
+        'static_configs' => [
+          'targets' => [listen_address],
+        ]
+      }
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -166,30 +166,30 @@ module Prometheus
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
       listen_port = user_config['listen_port'] || default_config['listen_port']
-      prometheus_target = [ listen_address, listen_port ].join(':')
+      prometheus_target = [listen_address, listen_port].join(':')
 
       # Include gitlab-monitor defaults scrape config.
-      database =  {
-                    'job_name' => 'gitlab_monitor_database',
-                    'metrics_path' => '/database',
-                    'static_configs' => [
-                      'targets' => [prometheus_target],
-                    ]
-                  }
+      database = {
+        'job_name' => 'gitlab_monitor_database',
+        'metrics_path' => '/database',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
       sidekiq = {
-                  'job_name' => 'gitlab_monitor_sidekiq',
-                  'metrics_path' => '/sidekiq',
-                  'static_configs' => [
-                    'targets' => [prometheus_target],
-                  ]
-                }
+        'job_name' => 'gitlab_monitor_sidekiq',
+        'metrics_path' => '/sidekiq',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
       process = {
-                  'job_name' => 'gitlab_monitor_process',
-                  'metrics_path' => '/process',
-                  'static_configs' => [
-                    'targets' => [prometheus_target],
-                  ]
-                }
+        'job_name' => 'gitlab_monitor_process',
+        'metrics_path' => '/process',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
 
       default_scrape_configs = [] << database << sidekiq << process << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -197,7 +197,7 @@ module Prometheus
 
     def sidekiq_scrape_config
       # Don't parse if sidekiq is explicitly disabled
-      return unless (Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster'))
+      return unless Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster')
 
       default_config = Gitlab['node']['gitlab']['sidekiq'].to_hash
       user_config = Gitlab['sidekiq']
@@ -207,17 +207,17 @@ module Prometheus
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
       listen_port = user_config['listen_port'] || default_config['listen_port']
-      prometheus_target = [ listen_address, listen_port ].join(':')
+      prometheus_target = [listen_address, listen_port].join(':')
 
       # Don't enable if the target is empty.
       return if prometheus_target.empty?
 
       scrape_config = {
-                        'job_name' => 'gitlab-sidekiq',
-                        'static_configs' => [
-                          'targets' => [prometheus_target],
-                        ]
-                      }
+        'job_name' => 'gitlab-sidekiq',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -232,15 +232,15 @@ module Prometheus
 
       listen_address = user_config['listen'] || default_config['listen']
       listen_port = user_config['port'] || default_config['port']
-      prometheus_target = [ listen_address, listen_port ].join(':')
+      prometheus_target = [listen_address, listen_port].join(':')
 
       scrape_config = {
-                        'job_name' => 'gitlab-unicorn',
-                        'metrics_path' => '/-/metrics',
-                        'static_configs' => [
-                          'targets' => [prometheus_target],
-                        ]
-                      }
+        'job_name' => 'gitlab-unicorn',
+        'metrics_path' => '/-/metrics',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -259,11 +259,11 @@ module Prometheus
       listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
 
       scrape_config = {
-                        'job_name' => 'gitlab-workhorse',
-                        'static_configs' => [
-                          'targets' => [listen_address],
-                        ]
-                      }
+        'job_name' => 'gitlab-workhorse',
+        'static_configs' => [
+          'targets' => [listen_address],
+        ]
+      }
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -279,11 +279,11 @@ module Prometheus
       listen_address = user_config['listen_address'] || default_config['listen_address']
 
       default_config = {
-                          'job_name' => exporter,
-                          'static_configs' => [
-                            'targets' => [listen_address],
-                          ],
-                        }
+        'job_name' => exporter,
+        'static_configs' => [
+          'targets' => [listen_address],
+        ],
+      }
 
       default_scrape_configs = [] << default_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -296,150 +296,150 @@ module Prometheus
       listen_address = user_config['listen_address'] || default_config['listen_address']
 
       prometheus = {
-                'job_name' => 'prometheus',
-                'static_configs' => [
-                  'targets' => [listen_address],
-                ],
-              }
+        'job_name' => 'prometheus',
+        'static_configs' => [
+          'targets' => [listen_address],
+        ],
+      }
 
       k8s_cadvisor = {
-          'job_name' => 'kubernetes-cadvisor',
-          'scheme' => 'https',
-          'tls_config' => {
-            'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-            'insecure_skip_verify' => true,
+        'job_name' => 'kubernetes-cadvisor',
+        'scheme' => 'https',
+        'tls_config' => {
+          'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+          'insecure_skip_verify' => true,
+        },
+        'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
+        'kubernetes_sd_configs' => [
+          {
+            'role' => 'node',
+            'api_server' => 'https://kubernetes.default.svc:443',
+            'tls_config' => {
+              'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+            },
+            'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
           },
-          'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-          'kubernetes_sd_configs' => [
-            {
-              'role' => 'node',
-              'api_server' => 'https://kubernetes.default.svc:443',
-              'tls_config' => {
-                'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-              },
-              'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-            },
-          ],
-          'relabel_configs' => [
-            {
-              'action' => 'labelmap',
-              'regex' => '__meta_kubernetes_node_label_(.+)',
-            },
-            {
-              'target_label' => '__address__',
-              'replacement' => 'kubernetes.default.svc:443',
-            },
-            {
-              'source_labels' => ['__meta_kubernetes_node_name'],
-              'regex' => '(.+)',
-              'target_label' => '__metrics_path__',
-              'replacement' => '/api/v1/nodes/${1}/proxy/metrics/cadvisor',
-            },
-          ],
-          'metric_relabel_configs' => [
-            {
-              'source_labels' => ['pod_name'],
-              'target_label' => 'environment',
-              'regex' => '(.+)-.+-.+',
-            },
-          ],
-        }
+        ],
+        'relabel_configs' => [
+          {
+            'action' => 'labelmap',
+            'regex' => '__meta_kubernetes_node_label_(.+)',
+          },
+          {
+            'target_label' => '__address__',
+            'replacement' => 'kubernetes.default.svc:443',
+          },
+          {
+            'source_labels' => ['__meta_kubernetes_node_name'],
+            'regex' => '(.+)',
+            'target_label' => '__metrics_path__',
+            'replacement' => '/api/v1/nodes/${1}/proxy/metrics/cadvisor',
+          },
+        ],
+        'metric_relabel_configs' => [
+          {
+            'source_labels' => ['pod_name'],
+            'target_label' => 'environment',
+            'regex' => '(.+)-.+-.+',
+          },
+        ],
+      }
 
       k8s_nodes = {
-          'job_name' => 'kubernetes-nodes',
-          'scheme' => 'https',
-          'tls_config' => {
-            'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-            'insecure_skip_verify' => true,
+        'job_name' => 'kubernetes-nodes',
+        'scheme' => 'https',
+        'tls_config' => {
+          'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+          'insecure_skip_verify' => true,
+        },
+        'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
+        'kubernetes_sd_configs' => [
+          {
+            'role' => 'node',
+            'api_server' => 'https://kubernetes.default.svc:443',
+            'tls_config' => {
+              'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+            },
+            'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
           },
-          'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-          'kubernetes_sd_configs' => [
-            {
-              'role' => 'node',
-              'api_server' => 'https://kubernetes.default.svc:443',
-              'tls_config' => {
-                'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-              },
-              'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-            },
-          ],
-          'relabel_configs' => [
-            {
-              'action' => 'labelmap',
-              'regex' => '__meta_kubernetes_node_label_(.+)',
-            },
-            {
-              'target_label' => '__address__',
-              'replacement' => 'kubernetes.default.svc:443',
-            },
-            {
-              'source_labels' => ['__meta_kubernetes_node_name'],
-              'regex' => '(.+)',
-              'target_label' => '__metrics_path__',
-              'replacement' => '/api/v1/nodes/${1}/proxy/metrics',
-            },
-          ],
-          'metric_relabel_configs' => [
-            {
-              'source_labels' => ['pod_name'],
-              'target_label' => 'environment',
-              'regex' => '(.+)-.+-.+',
-            },
-          ],
-        }
+        ],
+        'relabel_configs' => [
+          {
+            'action' => 'labelmap',
+            'regex' => '__meta_kubernetes_node_label_(.+)',
+          },
+          {
+            'target_label' => '__address__',
+            'replacement' => 'kubernetes.default.svc:443',
+          },
+          {
+            'source_labels' => ['__meta_kubernetes_node_name'],
+            'regex' => '(.+)',
+            'target_label' => '__metrics_path__',
+            'replacement' => '/api/v1/nodes/${1}/proxy/metrics',
+          },
+        ],
+        'metric_relabel_configs' => [
+          {
+            'source_labels' => ['pod_name'],
+            'target_label' => 'environment',
+            'regex' => '(.+)-.+-.+',
+          },
+        ],
+      }
 
       k8s_pods = {
-          'job_name' => 'kubernetes-pods',
-          'tls_config' => {
-            'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-            'insecure_skip_verify' => true,
+        'job_name' => 'kubernetes-pods',
+        'tls_config' => {
+          'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+          'insecure_skip_verify' => true,
+        },
+        'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
+        'kubernetes_sd_configs' => [
+          {
+            'role' => 'pod',
+            'api_server' => 'https://kubernetes.default.svc:443',
+            'tls_config' => {
+              'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+            },
+            'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
           },
-          'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-          'kubernetes_sd_configs' => [
-            {
-              'role' => 'pod',
-              'api_server' => 'https://kubernetes.default.svc:443',
-              'tls_config' => {
-                'ca_file' => '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-              },
-              'bearer_token_file' => '/var/run/secrets/kubernetes.io/serviceaccount/token',
-            },
-          ],
-          'relabel_configs' => [
-            {
-              'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_scrape'],
-              'action' => 'keep',
-              'regex' => 'true',
-            },
-            {
-              'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_path'],
-              'action' => 'replace',
-              'target_label' => '__metrics_path__',
-              'regex' => '(.+)',
-            },
-            {
-              'source_labels' => ['__address__', '__meta_kubernetes_pod_annotation_prometheus_io_port'],
-              'action' => 'replace',
-              'regex' => '([^:]+)(?::[0-9]+)?;([0-9]+)',
-              'replacement' => '$1:$2',
-              'target_label' => '__address__',
-            },
-            {
-              'action' => 'labelmap',
-              'regex' => '__meta_kubernetes_pod_label_(.+)',
-            },
-            {
-              'source_labels' => ['__meta_kubernetes_namespace'],
-              'action' => 'replace',
-              'target_label' => 'kubernetes_namespace',
-            },
-            {
-              'source_labels' => ['__meta_kubernetes_pod_name'],
-              'action' => 'replace',
-              'target_label' => 'kubernetes_pod_name',
-            },
-          ],
-        }
+        ],
+        'relabel_configs' => [
+          {
+            'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_scrape'],
+            'action' => 'keep',
+            'regex' => 'true',
+          },
+          {
+            'source_labels' => ['__meta_kubernetes_pod_annotation_prometheus_io_path'],
+            'action' => 'replace',
+            'target_label' => '__metrics_path__',
+            'regex' => '(.+)',
+          },
+          {
+            'source_labels' => %w(__address__ __meta_kubernetes_pod_annotation_prometheus_io_port),
+            'action' => 'replace',
+            'regex' => '([^:]+)(?::[0-9]+)?;([0-9]+)',
+            'replacement' => '$1:$2',
+            'target_label' => '__address__',
+          },
+          {
+            'action' => 'labelmap',
+            'regex' => '__meta_kubernetes_pod_label_(.+)',
+          },
+          {
+            'source_labels' => ['__meta_kubernetes_namespace'],
+            'action' => 'replace',
+            'target_label' => 'kubernetes_namespace',
+          },
+          {
+            'source_labels' => ['__meta_kubernetes_pod_name'],
+            'action' => 'replace',
+            'target_label' => 'kubernetes_pod_name',
+          },
+        ],
+      }
 
       default_scrape_configs = [] << prometheus << Gitlab['prometheus']['scrape_configs']
       default_scrape_configs = default_scrape_configs << k8s_cadvisor << k8s_nodes << k8s_pods unless Gitlab['prometheus']['monitor_kubernetes'] == false

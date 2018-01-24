@@ -80,25 +80,25 @@ class AccountHelper
 
   def users
     %W(
-        #{gitlab_user}
-        #{web_server_user}
-        #{redis_user}
-        #{postgresql_user}
-        #{mattermost_user}
-        #{registry_user}
-        #{prometheus_user}
-        #{consul_user}
-      )
+      #{gitlab_user}
+      #{web_server_user}
+      #{redis_user}
+      #{postgresql_user}
+      #{mattermost_user}
+      #{registry_user}
+      #{prometheus_user}
+      #{consul_user}
+    )
   end
 
   def groups
     %W(
-        #{gitlab_group}
-        #{web_server_group}
-        #{redis_group}
-        #{postgresql_group}
-        #{mattermost_group}
-        #{registry_group}
-      )
+      #{gitlab_group}
+      #{web_server_group}
+      #{redis_group}
+      #{postgresql_group}
+      #{mattermost_group}
+      #{registry_group}
+    )
   end
 end
