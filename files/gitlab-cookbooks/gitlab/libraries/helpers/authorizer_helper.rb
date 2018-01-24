@@ -7,15 +7,15 @@ module AuthorizeHelper
   end
 
   def create_or_find_authorization(uri, name)
-    args = %Q(redirect_uri: "#{uri}", name: "#{name}")
+    args = %(redirect_uri: "#{uri}", name: "#{name}")
 
-    app = %Q(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+    app = %(app = Doorkeeper::Application.where(#{args}).first_or_create;)
 
-    output = %Q(puts app.uid.concat(" ").concat(app.secret);)
+    output = %(puts app.uid.concat(" ").concat(app.secret);)
 
     %W(
-    #{app}
-    #{output}
+      #{app}
+      #{output}
     ).join
   end
 
