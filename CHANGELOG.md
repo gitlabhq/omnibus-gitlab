@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
+- Add `announce-ip` and `announce-port` options for Redis and Sentinel (Borja Aparicio)
 
 10.5.4
 
@@ -356,7 +357,6 @@ omnibus-gitlab repository.
 9.3.0
 
 - Ensure PostgreSQL user is created for Geo installations 4bedc5f1
-- Add `announce-ip` and `announce-port` options for Redis and Sentinel (Borja Aparicio)
 - Add a --skip-backup option in Geo replicate-geo-database command 22a01a23
 - Rename geo_download_dispatch worker configuration
 - Rename geo_backfill worker configuration

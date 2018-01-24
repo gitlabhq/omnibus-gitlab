@@ -22,9 +22,9 @@ module Sentinel
     end
 
     def parse_sentinel_settings
-      # If sentinel['announce_ip'] is not definen, we infer the value from redis['announce_ip']
+      # If sentinel['announce_ip'] is not defined, we infer the value from redis['announce_ip']
       Gitlab['sentinel']['announce_ip'] ||= Gitlab['redis']['announce_ip']
-      # If sentinel['announce_port'] is not definen, we infer the value from sentinel['port']
+      # If sentinel['announce_port'] is not defined, we infer the value from sentinel['port']
       Gitlab['sentinel']['announce_port'] ||= Gitlab['sentinel']['port']
     end
 
