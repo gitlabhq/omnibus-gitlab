@@ -427,12 +427,9 @@ Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 
 ## Configuring Rack Attack
 
-To prevent abusive clients doing damage GitLab uses rack-attack gem.
-Check [this page](https://gitlab.com/help/security/rack_attack.md)
+To prevent abusive clients doing damage, GitLab uses the Rack Attack gem.
+Check [this page](https://docs.gitlab.com/ee/security/rack_attack.html)
 for more information.
-
-File `config/initializers/rack_attack.rb` is managed by omnibus-gitlab
-and must be configured in `/etc/gitlab/gitlab.rb`.
 
 ## Disabling automatic cache cleaning during installation
 
