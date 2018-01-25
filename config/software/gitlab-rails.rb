@@ -171,7 +171,7 @@ build do
   # keep a copy of schema.rb around in case we need it. (I am looking at you,
   # mysql-postgresql-converter.)
   copy 'db/schema.rb', 'db/schema.rb.bundled'
-  copy 'db/geo/schema.rb', 'db/geo/schema.rb.bundled' if EE
+  copy 'ee/db/geo/schema.rb', 'ee/db/geo/schema.rb.bundled' if EE
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features', 'qa', 'rubocop']

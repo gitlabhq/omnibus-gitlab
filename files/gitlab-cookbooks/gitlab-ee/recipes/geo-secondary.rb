@@ -40,6 +40,6 @@ templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' d
 end
 
 # Make schema.rb writable for when we run `rake geo:db:migrate`
-file '/opt/gitlab/embedded/service/gitlab-rails/db/geo/schema.rb' do
+file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/schema.rb' do
   owner gitlab_user
 end
