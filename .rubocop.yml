@@ -13,10 +13,10 @@ AllCops:
   DisplayStyleGuide: false
   # Exclude some GitLab files
   Exclude:
-    - 'gems'
-    - '.bundle'
-    - 'cache'
-    - 'node_modules'
+    - 'gems/**/*'
+    - '.bundle/**/*'
+    - 'cache/**/*'
+    - 'node_modules/**/*'
 
 Style/NumericLiteralPrefix:
   Enabled: false
