@@ -6,7 +6,7 @@
 
 Omnibus GitLab includes various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
-are disabled, and Omnibus GitLab is configured to run as single node installation.
+are disabled, and Omnibus GitLab is configured to run as a single node installation.
 Each service can be enabled or disabled using configuration settings in `/etc/gitlab/gitlab.rb`,
 but the introduction of `roles` allows you to easily enable a group of services,
 and provides better default configuration based on the high availability roles you
@@ -92,7 +92,7 @@ Documentation on the usage of the Postgres Roles can be found in [Configuring Po
   *By default, enables no other services.*
 - **pgbouncer_role**
 
-  Enables the pbouncer and consul services on the machine
+  Enables the pgbouncer and consul services on the machine
 
   *By default, enables no other services.*
 - **consul_role**
