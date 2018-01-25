@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.0
+
+- Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
+
 10.4.1
 
 - Update gitlab-monitor to 2.5.0
