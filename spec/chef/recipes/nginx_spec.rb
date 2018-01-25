@@ -29,6 +29,8 @@ describe 'gitlab::nginx' do
     }
   end
 
+  it_behaves_like 'enabled runit service', 'nginxnnnn', 'root', 'root'
+
   it 'creates a custom error_page entry when a custom error is defined' do
     allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors })
 
