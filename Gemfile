@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 require_relative "lib/gitlab/version"
 
-omnibus_gem_version = Gitlab::Version.new('omnibus', "gitlab-omnibus-ad5d3f98")
+omnibus_gem_version = Gitlab::Version.new('omnibus', "gitlab-omnibus-v5.6.2")
 
 gem 'omnibus', git: omnibus_gem_version.remote, branch: omnibus_gem_version.print(false)
 gem 'ohai'

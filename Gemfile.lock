@@ -1,9 +1,9 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: 407191194b275688a5992d0d8edbe8af24ea5b4e
-  branch: gitlab-omnibus-ad5d3f98
+  revision: a2313d4d14bdb2286cbc4a089234fae09ca25182
+  branch: gitlab-omnibus-v5.6.2
   specs:
-    omnibus (5.5.0)
+    omnibus (5.6.2)
       aws-sdk (~> 2)
       chef-sugar (~> 3.3)
       cleanroom (~> 1.0)
@@ -20,7 +20,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.3.0)
-    awesome_print (1.7.0)
+    awesome_print (1.8.0)
     aws-sdk (2.6.33)
       aws-sdk-resources (= 2.6.33)
     aws-sdk-core (2.6.33)
@@ -63,7 +63,7 @@ GEM
       fuzzyurl
       mixlib-config (~> 2.0)
       mixlib-shellout (~> 2.0)
-    chef-sugar (3.4.0)
+    chef-sugar (3.6.0)
     chef-zero (4.9.0)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 4.0)
@@ -115,7 +115,7 @@ GEM
     mixlib-config (2.2.4)
     mixlib-log (1.7.1)
     mixlib-shellout (2.2.7)
-    mixlib-versioning (1.1.0)
+    mixlib-versioning (1.2.2)
     multi_json (1.12.1)
     multipart-post (2.0.0)
     net-scp (1.2.1)
@@ -158,7 +158,7 @@ GEM
       zhexdump (>= 0.0.2)
     plist (3.2.0)
     powerpack (0.1.1)
-    progressbar (1.8.2)
+    progressbar (1.9.0)
     proxifier (1.0.3)
     rack (1.6.4)
     rainbow (2.1.0)
