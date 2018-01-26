@@ -466,6 +466,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['registry_http_addr'] = "localhost:5000"
 # registry['debug_addr'] = "localhost:5001"
 # registry['log_directory'] = "/var/log/gitlab/registry"
+# registry['env_directory'] = "/opt/gitlab/etc/registry/env"
+# registry['env'] = {}
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['storage_delete_enabled'] = true

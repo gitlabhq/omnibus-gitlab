@@ -6,7 +6,7 @@ exec 2>&1
 
 cd <%= node['registry']['dir'] %>
 
-exec chpst -P \
+exec chpst -e <%= node['registry']['env_directory'] %> -P \
   -U <%= node['registry']['username'] %>:<%= node['registry']['group'] %> \
   -u <%= node['registry']['username'] %>:<%= node['registry']['group'] %> \
   /opt/gitlab/embedded/bin/registry serve ./config.yml
