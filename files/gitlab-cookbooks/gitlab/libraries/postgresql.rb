@@ -57,16 +57,14 @@ module Postgresql
       # Postgres allow multiple listen addresses, comma-separated values
       # In case of multi listen_address, will use the first address from list
       db_host = Gitlab['gitlab_rails']['db_host']
-      return if db_host.nil?
+      return unless db_host&.include?(',')
 
-      if db_host.include?(',') # rubocop:disable Style/GuardClause - False positive
-        Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
-        warning = [
-          "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
-          "First listen_address '#{Gitlab['gitlab_rails']['db_host']}' will be used."
-        ].join("\n  ")
-        warn(warning)
-      end
+      Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
+      warning = [
+        "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
+        "First listen_address '#{Gitlab['gitlab_rails']['db_host']}' will be used."
+      ].join("\n  ")
+      warn(warning)
     end
 
     def parse_mattermost_postgresql_settings
