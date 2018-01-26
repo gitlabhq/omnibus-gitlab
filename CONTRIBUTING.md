@@ -137,7 +137,12 @@ their applicability:
  5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](files/gitlab-config-template/gitlab.rb.template)
  6. Changelog entry to inform about the change, if necessary.
 
-**`Note:`** CI jobs that run the tests are restricted to the [original omnibus-gitlab repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and hence, they will not be run on its forks. Contributors who develop on their own forks should configure the CI jobs (refer `.gitlab-ci.yml` file for details) themselves.
+**`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
+
+[^1]:
+  1. Go to Settings -> CI/CD
+  1. Expand Runners settings
+  1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"
 
 ### Unofficial packaging point of contact
 
