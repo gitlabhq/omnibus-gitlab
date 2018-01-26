@@ -59,7 +59,7 @@ module Postgresql
       db_host = Gitlab['gitlab_rails']['db_host']
       return if db_host.nil?
 
-      if db_host.include?(',') # rubocop:disable Style/GuardClause
+      if db_host.include?(',') # rubocop:disable Style/GuardClause - False positive
         Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
         warning = [
           "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
@@ -95,7 +95,10 @@ module Postgresql
       value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
 
-      Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']] if Gitlab['mattermost']['sql_data_source_replicas'].nil? && Gitlab['node']['mattermost']['sql_data_source_replicas'].empty?
+      if Gitlab['mattermost']['sql_data_source_replicas'].nil? && \
+          Gitlab['node']['mattermost']['sql_data_source_replicas'].empty?
+        Gitlab['mattermost']['sql_data_source_replicas'] = [Gitlab['mattermost']['sql_data_source']]
+      end
     end
 
     def postgresql_managed?
