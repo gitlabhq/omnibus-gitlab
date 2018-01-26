@@ -47,14 +47,14 @@ module Redis
       # based on sentinels node data
       parse_sentinels! if has_sentinels?
 
-      if is_gitlab_rails_redis_tcp? # rubocop:disable Style/GuardClause - False positive
-        # The user wants to connect to a Redis instance via TCP.
-        # It can be either a non-bundled instance or a Sentinel based one.
-        # Overriding redis_socket to false signals that gitlab-rails
-        # should connect to Redis via TCP instead of a Unix domain socket.
-        Gitlab['gitlab_rails']['redis_port'] ||= 6379
-        Gitlab['gitlab_rails']['redis_socket'] = false
-      end
+      return unless is_gitlab_rails_redis_tcp?
+
+      # The user wants to connect to a Redis instance via TCP.
+      # It can be either a non-bundled instance or a Sentinel based one.
+      # Overriding redis_socket to false signals that gitlab-rails
+      # should connect to Redis via TCP instead of a Unix domain socket.
+      Gitlab['gitlab_rails']['redis_port'] ||= 6379
+      Gitlab['gitlab_rails']['redis_socket'] = false
     end
 
     def redis_managed?
@@ -83,11 +83,10 @@ module Redis
         Chef::Log.warn "gitlab-rails 'redis_port' will be ignored as sentinel is defined."
       end
 
-      if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password'] # rubocop:disable Style/GuardClause - False positive
-        Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
+      return unless Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
 
-        Chef::Log.warn "gitlab-rails 'redis_password' will be ignored as sentinel is defined."
-      end
+      Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
+      Chef::Log.warn "gitlab-rails 'redis_password' will be ignored as sentinel is defined."
     end
 
     def parse_redis_daemon!

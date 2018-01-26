@@ -92,10 +92,10 @@ module Geo
       return if @options[:skip_replication_slot]
 
       puts "* Checking for replication slot #{@options[:slot_name]}".color(:green)
-      unless replication_slot_exists? # rubocop:disable Style/GuardClause - False positive
-        puts "* Creating replication slot #{@options[:slot_name]}".color(:green)
-        create_replication_slot!
-      end
+      return if replication_slot_exists?
+
+      puts "* Creating replication slot #{@options[:slot_name]}".color(:green)
+      create_replication_slot!
     end
 
     private
