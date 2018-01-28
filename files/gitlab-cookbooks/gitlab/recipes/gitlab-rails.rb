@@ -40,6 +40,25 @@ known_hosts = File.join(ssh_dir, "known_hosts")
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
 
+# Holds git-data, by default one shard at /var/opt/gitlab/git-data
+# Can be changed by user using git_data_dirs option
+Gitaly.converted_git_data_dirs.each do |_name, git_data_directory|
+  storage_directory git_data_directory['path'] do
+    owner gitlab_user
+    mode "0700"
+  end
+end
+
+# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
+# Should not be changed by user. Different permissions to git_data_dir set.
+repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
+repositories_storages.each do |_name, repositories_storage|
+  storage_directory repositories_storage['path'] do
+    owner gitlab_user
+    mode "2770"
+  end
+end
+
 # Explicitly try to create directory holding the logs to make sure
 # that the directory is created with correct permissions and not fallback
 # on umask of the process

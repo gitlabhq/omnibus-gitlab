@@ -26,7 +26,6 @@ module GitlabRails
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
-      parse_gitaly_variables
     end
 
     def parse_directories
@@ -197,24 +196,5 @@ module GitlabRails
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
     end
 
-    def parse_gitaly_variables
-      parse_gitaly_storages
-    end
-
-    # This method cannot be inside of libraries/gitaly.rb for now
-    # because storage gets parsed in libraries/gitlab_shell.rb
-    # and libraries/gitlab_rails.rb
-    def parse_gitaly_storages
-      return unless Gitlab['gitaly']['storage'].nil?
-
-      storages = []
-      Gitlab['gitlab_rails']['repositories_storages'].each do |key, value|
-        storages << {
-                      'name' => key,
-                      'path' => value['path']
-                    }
-      end
-      Gitlab['gitaly']['storage'] = storages
-    end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
