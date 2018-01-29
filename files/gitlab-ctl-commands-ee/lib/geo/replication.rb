@@ -14,21 +14,38 @@ module Geo
       @options = options
     end
 
-    def execute
-      if gitlab_is_active?
-        if @options[:force]
-          puts "Found data inside the #{db_name} database! Proceeding because --force was supplied".color(:yellow)
-        else
-          puts "Found data inside the #{db_name} database! If you are sure you are in the secondary server, override with --force".color(:red)
-          exit 1
-        end
+    def check_gitlab_active?
+      return unless gitlab_is_active?
+      if @options[:force]
+        puts "Found data inside the #{db_name} database! Proceeding because --force was supplied".color(:yellow)
+      else
+        puts "Found data inside the #{db_name} database! If you are sure you are in the secondary server, override with --force".color(:red)
+        exit 1
       end
+    end
 
-      unless ctl.service_enabled?('postgresql')
-        puts 'There is no PostgreSQL instance enabled in omnibus, exiting...'.color(:red)
-        Kernel.exit 1
+    def check_service_enabled?
+      return if ctl.service_enabled?('postgresql')
+      puts 'There is no PostgreSQL instance enabled in omnibus, exiting...'.color(:red)
+      Kernel.exit 1
+    end
+
+    def confirm_replication
+      return if @options[:now]
+      puts '*** Are you sure you want to continue (replicate/no)? ***'.color(:yellow)
+
+      loop do
+        print 'Confirmation: '
+        answer = STDIN.gets.to_s.strip
+
+        break if answer == 'replicate'
+        exit 0 if answer == 'no'
+
+        puts "*** You entered `#{answer}` instead of `replicate` or `no`.".color(:red)
       end
+    end
 
+    def print_warning
       puts
       puts '---------------------------------------------------------------'.color(:yellow)
       puts 'WARNING: Make sure this script is run from the secondary server'.color(:yellow)
@@ -37,21 +54,14 @@ module Geo
       puts '*** You are about to delete your local PostgreSQL database, and replicate the primary database. ***'.color(:yellow)
       puts "*** The primary geo node is `#{@options[:host]}` ***".color(:yellow)
       puts
+    end
 
-      unless @options[:now]
-        puts '*** Are you sure you want to continue (replicate/no)? ***'.color(:yellow)
+    def execute
+      check_gitlab_active?
+      check_service_enabled?
 
-        loop do
-          print 'Confirmation: '
-          answer = STDIN.gets.to_s.strip
-
-          break if answer == 'replicate'
-          exit 0 if answer == 'no'
-
-          puts "*** You entered `#{answer}` instead of `replicate` or `no`.".color(:red)
-        end
-      end
-
+      print_warning
+      confirm_replication
       create_gitlab_backup!
 
       puts '* Stopping PostgreSQL and all GitLab services'.color(:green)
