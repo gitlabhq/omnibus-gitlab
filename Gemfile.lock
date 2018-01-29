@@ -1,9 +1,9 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: a2313d4d14bdb2286cbc4a089234fae09ca25182
-  branch: gitlab-omnibus-v5.6.2
+  revision: 339c4197f933c19fe8d7e82d51dff4ee5847cc1d
+  branch: gitlab-omnibus-v5.6.3
   specs:
-    omnibus (5.6.2)
+    omnibus (5.6.3)
       aws-sdk (~> 2)
       chef-sugar (~> 3.3)
       cleanroom (~> 1.0)
