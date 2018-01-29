@@ -13,6 +13,7 @@ AllCops:
   DisplayStyleGuide: false
   # Exclude some GitLab files
   Exclude:
+    - 'bin/*'
     - 'gems/**/*'
     - '.bundle/**/*'
     - 'cache/**/*'
@@ -545,7 +546,7 @@ Style/WordArray:
 # branches, and conditions.
 Metrics/AbcSize:
   Enabled: true
-  Max: 100
+  Max: 54.28
 
 # This cop checks if the length of a block exceeds some maximum value.
 Metrics/BlockLength:
