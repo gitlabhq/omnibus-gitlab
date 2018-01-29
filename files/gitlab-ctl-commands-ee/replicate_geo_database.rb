@@ -1,5 +1,6 @@
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/replication"
 require 'optparse'
+require 'English'
 
 add_command_under_category('replicate-geo-database', 'gitlab-geo', 'Replicate Geo database', 2) do |_cmd_name, *args|
   GeoReplicationCommand.new(self, ARGV).execute!
