@@ -54,6 +54,12 @@ module Registry
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
 
+      set_ssl
+    end
+
+    def set_ssl
+      uri = URI(Gitlab['registry_external_url'].to_s)
+
       case uri.scheme
       when "http"
         Gitlab['registry_nginx']['https'] ||= false
