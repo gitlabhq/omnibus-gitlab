@@ -222,6 +222,26 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'for settings regarding object storage for uploads' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+[-\/\w]+\s+object_store:\s+enabled: false\s+background_upload: true\s+remote_directory: "lfs-objects"\s+connection:/)
+      end
+
+      it 'sets the connection in YAML' do
+        stub_gitlab_rb(gitlab_rails: {
+                         uploads_base_dir: 'mapmap',
+                         uploads_object_store_enabled: true,
+                         uploads_object_store_background_upload: false,
+                         uploads_object_store_remote_directory: 'mepmep',
+                         uploads_object_store_connection: aws_connection_hash
+                       })
+
+        expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+"mapmap"\s+object_store:\s+enabled: true\s+background_upload: false\s+remote_directory:\s+"mepmep"\s+connection:/)
+      end
+    end
+
     describe 'repositories storages' do
       it 'sets specified properties' do
         stub_gitlab_rb(

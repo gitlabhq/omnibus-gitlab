@@ -140,6 +140,17 @@ production: &base
       remote_directory: <%= quote(@lfs_object_store_remote_directory) %>
       connection: <%= @lfs_object_store_connection.to_json %>
 
+  ## Uploads
+  uploads:
+    # The location where uploads objects are stored (default: public/).
+    storage_path: <%= @uploads_storage_path %>
+    base_dir: <%= @uploads_base_dir %>
+    object_store:
+      enabled: <%= @uploads_object_store_enabled %>
+      background_upload: <%= @uploads_object_store_background_upload %>
+      remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
+      connection: <%= @uploads_object_store_connection.to_json %>
+
   ## Container Registry
   registry:
     enabled: <%= @registry_enabled %>
