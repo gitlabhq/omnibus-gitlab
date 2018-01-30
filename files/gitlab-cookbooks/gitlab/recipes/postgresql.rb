@@ -67,12 +67,12 @@ sysctl "kernel.shmall" do
   value node['gitlab']['postgresql']['shmall']
 end
 
-sem = %w(
-  node['gitlab']['postgresql']['semmsl']
-  node['gitlab']['postgresql']['semmns']
-  node['gitlab']['postgresql']['semopm']
-  node['gitlab']['postgresql']['semmni']
-).join(" ")
+sem = [
+  node['gitlab']['postgresql']['semmsl'],
+  node['gitlab']['postgresql']['semmns'],
+  node['gitlab']['postgresql']['semopm'],
+  node['gitlab']['postgresql']['semmni'],
+].join(" ")
 sysctl "kernel.sem" do
   value sem
 end
