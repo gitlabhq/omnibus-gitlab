@@ -34,12 +34,12 @@ directory prometheus_log_dir do
 end
 
 configuration = Prometheus.hash_to_yaml({
-                  'global' => {
-                    'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
-                    'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
-                  },
-                  'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
-                })
+                                          'global' => {
+                                            'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
+                                            'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
+                                          },
+                                          'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
+                                        })
 
 file 'Prometheus config' do
   path File.join(prometheus_dir, 'prometheus.yml')

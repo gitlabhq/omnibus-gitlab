@@ -15,8 +15,8 @@ class BasePgHelper
 
   def database_exists?(db_name)
     psql_cmd(["-d 'template1'",
-      "-c 'select datname from pg_database' -A",
-      "| grep -x #{db_name}"])
+              "-c 'select datname from pg_database' -A",
+              "| grep -x #{db_name}"])
   end
 
   def database_empty?(db_name)
@@ -27,20 +27,20 @@ class BasePgHelper
 
   def extension_exists?(extension_name)
     psql_cmd(["-d 'template1'",
-      "-c 'select name from pg_available_extensions' -A",
-      "| grep -x #{extension_name}"])
+              "-c 'select name from pg_available_extensions' -A",
+              "| grep -x #{extension_name}"])
   end
 
   def extension_enabled?(extension_name, db_name)
     psql_cmd(["-d '#{db_name}'",
-      "-c 'select extname from pg_extension' -A",
-      "| grep -x #{extension_name}"])
+              "-c 'select extname from pg_extension' -A",
+              "| grep -x #{extension_name}"])
   end
 
   def user_exists?(db_user)
     psql_cmd(["-d 'template1'",
-      "-c 'select usename from pg_user' -A",
-      "|grep -x #{db_user}"])
+              "-c 'select usename from pg_user' -A",
+              "|grep -x #{db_user}"])
   end
 
   def user_options(db_user)
@@ -56,12 +56,12 @@ class BasePgHelper
     active_options = user_options(db_user)
     options.map(&:upcase).each do |option|
       if option =~ /^NO(.*)/
-        return false if active_options[$1]
+        return false if active_options[Regexp.last_match(1)]
       else
-        return false if !active_options[option]
+        return false unless active_options[option]
       end
-   end
-   true
+    end
+    true
   end
 
   def schema_exists?(schema_name, db_name)
@@ -88,7 +88,7 @@ class BasePgHelper
               "| grep -x t"])
   end
 
-  def fdw_server_options_changed?(server_name, db_name, options={})
+  def fdw_server_options_changed?(server_name, db_name, options = {})
     options = stringify_hash_values(options)
     raw_content = psql_query(db_name, "SELECT srvoptions FROM pg_foreign_server WHERE srvname='#{server_name}'")
     server_options = parse_pghash(raw_content)
@@ -98,7 +98,7 @@ class BasePgHelper
     !(options <= server_options)
   end
 
-  def fdw_user_mapping_changed?(user, server_name, db_name, options={})
+  def fdw_user_mapping_changed?(user, server_name, db_name, options = {})
     raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
     user_mapping_options = parse_pghash(raw_content)
 
@@ -132,11 +132,9 @@ class BasePgHelper
 
     if content
       tuples = content[1].split(',')
-      tuples.reduce({}) do |hash, tuple|
-        key,value = tuple.split('=')
+      tuples.each_with_object({}) do |tuple, hash|
+        key, value = tuple.split('=')
         hash[key.to_sym] = value
-
-        hash
       end
     else
       {}
@@ -145,8 +143,8 @@ class BasePgHelper
 
   def is_slave?
     psql_cmd(["-d 'template1'",
-      "-c 'select pg_is_in_recovery()' -A",
-      "|grep -x t"])
+              "-c 'select pg_is_in_recovery()' -A",
+              "|grep -x t"])
   end
 
   def is_offline_or_readonly?
@@ -171,7 +169,7 @@ class BasePgHelper
   end
 
   def bootstrapped?
-    File.exists?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION'))
+    File.exist?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION'))
   end
 
   def psql_cmd(cmd_list)
@@ -191,11 +189,7 @@ class BasePgHelper
 
   def database_version
     version_file = "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION"
-    if File.exist?(version_file)
-      File.read(version_file).chomp
-    else
-      nil
-    end
+    File.read(version_file).chomp if File.exist?(version_file)
   end
 
   def pg_shadow_lookup
@@ -222,7 +216,8 @@ class BasePgHelper
   end
 
   private
+
   def stringify_hash_values(options)
-    options.each_with_object({}) {|(k, v), hash| hash[k] = v.to_s}
+    options.each_with_object({}) { |(k, v), hash| hash[k] = v.to_s }
   end
 end

@@ -31,9 +31,9 @@ end
 runit_service 'mailroom' do
   finish_script true
   options({
-    :user => user,
-    :log_directory => mailroom_log_dir,
-    :mail_room_config => mail_room_config
+    user: user,
+    log_directory: mailroom_log_dir,
+    mail_room_config: mail_room_config
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mailroom'].to_hash)
 end

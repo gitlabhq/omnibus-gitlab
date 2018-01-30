@@ -32,8 +32,8 @@ directory "/etc/gitlab" do
   only_if { node['gitlab']['manage-storage-directories']['manage_etc'] }
 end.run_action(:create)
 
-if File.exists?("/var/opt/gitlab/bootstrapped")
-	node.default['gitlab']['bootstrap']['enable'] = false
+if File.exist?("/var/opt/gitlab/bootstrapped")
+  node.default['gitlab']['bootstrap']['enable'] = false
 end
 
 directory "Create /var/opt/gitlab" do
@@ -76,11 +76,11 @@ include_recipe "gitlab::add_trusted_certs"
 
 # Create dummy unicorn and sidekiq services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
-[
-  "unicorn",
-  "sidekiq",
-  "mailroom"
-].each do |dummy|
+%w(
+  unicorn
+  sidekiq
+  mailroom
+).each do |dummy|
   service "create a temporary #{dummy} service" do
     service_name dummy
     supports []

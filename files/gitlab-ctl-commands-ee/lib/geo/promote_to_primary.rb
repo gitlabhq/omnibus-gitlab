@@ -41,9 +41,7 @@ module Geo
 
       print '*** Are you sure? (N/y): '.color(:green)
 
-      unless STDIN.gets.chomp.downcase == 'y'
-        raise 'Exited because primary node must be down'
-      end
+      raise 'Exited because primary node must be down' unless STDIN.gets.chomp.casecmp('y').zero?
     end
 
     def promote_postgresql_to_primary
@@ -61,9 +59,7 @@ module Geo
         puts
         puts 'SSH keys detected! Remove? See https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-a-secondary-node for more information [Y/n]'.color(:yellow)
 
-        if STDIN.gets.chomp.downcase == 'n'
-          return true
-        end
+        return true if STDIN.gets.chomp.casecmp('n').zero?
       end
 
       [key_path, public_key_path].each do |path|
@@ -96,7 +92,7 @@ module Geo
     end
 
     def public_key_path
-      @public_key_path ||= File.join(git_user_home ,'.ssh/id_rsa.pub')
+      @public_key_path ||= File.join(git_user_home, '.ssh/id_rsa.pub')
     end
   end
 end

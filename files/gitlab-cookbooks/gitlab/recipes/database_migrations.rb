@@ -25,19 +25,17 @@ dependent_services = []
 dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
 dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
-connection_attributes = [
-  'db_adapter',
-  'db_database',
-  'db_host',
-  'db_port',
-  'db_socket'
-].collect { |attribute| node['gitlab']['gitlab-rails'][attribute] }
+connection_attributes = %w(
+  db_adapter
+  db_database
+  db_host
+  db_port
+  db_socket
+).collect { |attribute| node['gitlab']['gitlab-rails'][attribute] }
 connection_digest = Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
 
 revision_file = "/opt/gitlab/embedded/service/gitlab-rails/REVISION"
-if ::File.exist?(revision_file)
-  revision = IO.read(revision_file).chomp
-end
+revision = IO.read(revision_file).chomp if ::File.exist?(revision_file)
 upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
 db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
 

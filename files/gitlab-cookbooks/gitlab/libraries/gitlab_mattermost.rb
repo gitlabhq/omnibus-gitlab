@@ -59,6 +59,12 @@ module GitlabMattermost
         end
       end
 
+      set_ssl
+    end
+
+    def set_ssl
+      uri = URI(Gitlab['mattermost_external_url'].to_s)
+
       case uri.scheme
       when "http"
         Gitlab['mattermost']['service_use_ssl'] = false

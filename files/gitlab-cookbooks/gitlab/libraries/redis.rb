@@ -29,38 +29,32 @@ module Redis
 
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon
-        unless has_sentinels?
-          parse_redis_daemon!
-        end
+        parse_redis_daemon! unless has_sentinels?
       end
 
-      if Gitlab['redis_slave_role']['enable']
-        Gitlab['redis']['master'] = false
-      end
+      Gitlab['redis']['master'] = false if Gitlab['redis_slave_role']['enable']
 
       if redis_managed? && (sentinel_daemon_enabled? || is_redis_slave? || Gitlab['redis_master_role']['enable'])
         Gitlab['redis']['master_password'] ||= Gitlab['redis']['password']
       end
 
       if sentinel_daemon_enabled? || is_redis_slave?
-        fail "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
-        fail "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
+        raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
+        raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
       end
 
       # Try to discover gitlab_rails redis connection params
       # based on sentinels node data
-      if has_sentinels?
-        parse_sentinels!
-      end
+      parse_sentinels! if has_sentinels?
 
-      if is_gitlab_rails_redis_tcp?
-        # The user wants to connect to a Redis instance via TCP.
-        # It can be either a non-bundled instance or a Sentinel based one.
-        # Overriding redis_socket to false signals that gitlab-rails
-        # should connect to Redis via TCP instead of a Unix domain socket.
-        Gitlab['gitlab_rails']['redis_port'] ||= 6379
-        Gitlab['gitlab_rails']['redis_socket'] = false
-      end
+      return unless is_gitlab_rails_redis_tcp?
+
+      # The user wants to connect to a Redis instance via TCP.
+      # It can be either a non-bundled instance or a Sentinel based one.
+      # Overriding redis_socket to false signals that gitlab-rails
+      # should connect to Redis via TCP instead of a Unix domain socket.
+      Gitlab['gitlab_rails']['redis_port'] ||= 6379
+      Gitlab['gitlab_rails']['redis_socket'] = false
     end
 
     def redis_managed?
@@ -89,11 +83,10 @@ module Redis
         Chef::Log.warn "gitlab-rails 'redis_port' will be ignored as sentinel is defined."
       end
 
-      if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
-        Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
+      return unless Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
 
-        Chef::Log.warn "gitlab-rails 'redis_password' will be ignored as sentinel is defined."
-      end
+      Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
+      Chef::Log.warn "gitlab-rails 'redis_password' will be ignored as sentinel is defined."
     end
 
     def parse_redis_daemon!
@@ -112,9 +105,7 @@ module Redis
         Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?"
       end
 
-      if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
-        Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?"
-      end
+      Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?" if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
     end
 
     def node
@@ -122,7 +113,7 @@ module Redis
     end
 
     def is_redis_tcp?
-      Gitlab['redis']['port'] && Gitlab['redis']['port'] > 0
+      Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?
     end
 
     def is_redis_slave?

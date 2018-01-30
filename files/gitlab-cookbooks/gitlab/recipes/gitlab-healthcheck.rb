@@ -30,11 +30,10 @@ else
   host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
 end
 
-
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   owner 'root'
   group 'root'
-  variables (
+  variables(
     {
       use_socket: use_socket,
       socket_path: use_socket ? node['gitlab']['gitlab-workhorse']['listen_addr'] : '',
