@@ -3,7 +3,6 @@ property :crt, String, required: true
 property :key, String, required: true
 property :owner, String, default: lazy { node['letsencrypt']['owner'] }
 property :chain, String, default: lazy { node['letsencrypt']['chain'] }
-property :contact, Array, default: lazy { node['letsencrypt']['contact'] }
 property :wwwroot, String, default: lazy { node['letsencrypt']['wwwroot'] }
 property :alt_names, Array, default: lazy { node['letsencrypt']['alt_names'] }
 property :key_size, Integer, default: lazy { node['letsencrypt']['key_size'] }
@@ -15,13 +14,15 @@ action :create do
   # If that succeeds, then fetch a certificate from production
   # This helps protect users from hitting Let's Encrypt rate limits if
   # they provide invalid data
+  helper = LetsEncryptHelper.new(node)
+  contact_info = helper.contact
   acme_certificate 'staging' do
     alt_names new_resource.alt_names unless new_resource.alt_names.empty?
     key_size new_resource.key_size unless new_resource.key_size.nil?
     fullchain new_resource.fullchain unless new_resource.fullchain.nil?
     group new_resource.group unless new_resource.group.nil?
     owner new_resource.owner unless new_resource.owner.nil?
-    contact new_resource.contact unless new_resource.contact.empty?
+    contact contact_info
     chain "#{new_resource.chain}-staging"
     crt "#{new_resource.crt}-staging"
     cn new_resource.cn
@@ -36,7 +37,7 @@ action :create do
     fullchain new_resource.fullchain unless new_resource.fullchain.nil?
     group new_resource.group unless new_resource.group.nil?
     owner new_resource.owner unless new_resource.owner.nil?
-    contact new_resource.contact unless new_resource.contact.empty?
+    contact contact_info
     chain new_resource.chain
     crt new_resource.crt
     cn new_resource.cn

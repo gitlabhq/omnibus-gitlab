@@ -161,14 +161,16 @@ describe 'gitlab::letsencrypt' do
         external_url: 'https://fakehost.example.com',
         letsencrypt: {
           enable: true,
-          alt_names: %w(one.example.com two.example.com)
+          alt_names: %w(one.example.com two.example.com),
+          contact_emails: %w(foo@bar.com one@two.com)
         }
       )
     end
 
     it 'adds alt_names to the certificate resource' do
       expect(chef_run).to create_acme_certificate('production').with(
-        alt_names: %w(one.example.com two.example.com)
+        alt_names: %w(one.example.com two.example.com),
+        contact: %w(mailto:foo@bar.com mailto:one@two.com)
       )
     end
   end
