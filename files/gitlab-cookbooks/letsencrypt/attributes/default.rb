@@ -6,4 +6,5 @@ default['letsencrypt']['enable'] = false
 default['letsencrypt']['fullchain'] = nil
 default['letsencrypt']['group'] = nil
 default['letsencrypt']['key_size'] = nil
+default['letsencrypt']['owner'] = nil
 default['letsencrypt']['wwwroot'] = '/var/opt/gitlab/nginx/www'

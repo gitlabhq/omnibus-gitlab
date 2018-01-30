@@ -1465,6 +1465,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # storage_check['log_directory'] = '/var/log/gitlab/storage-check'
 
 ################################################################################
+# Let's Encrypt integration
+################################################################################
+# letsencrypt['enable'] = false
+# letsencrypt['fullchain'] = nil
+# letsencrypt['group'] = 'root'
+# letsencrypt['key_size'] = 2048
+# letsencrypt['owner'] = 'root'
+# letsencrypt['wwwroot'] = '/var/opt/gitlab/nginx/www'
+
+################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##
 ################################################################################
