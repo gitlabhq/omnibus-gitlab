@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.0
+
+- Add support for setting environment variables for Registry
+
 10.4.1
 
 - Update gitlab-monitor to 2.5.0
