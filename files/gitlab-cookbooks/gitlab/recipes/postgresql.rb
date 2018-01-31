@@ -67,10 +67,12 @@ sysctl "kernel.shmall" do
   value node['gitlab']['postgresql']['shmall']
 end
 
-sem = "#{node['gitlab']['postgresql']['semmsl']} "
-sem += "#{node['gitlab']['postgresql']['semmns']} "
-sem += "#{node['gitlab']['postgresql']['semopm']} "
-sem += "#{node['gitlab']['postgresql']['semmni']}"
+sem = [
+  node['gitlab']['postgresql']['semmsl'],
+  node['gitlab']['postgresql']['semmns'],
+  node['gitlab']['postgresql']['semopm'],
+  node['gitlab']['postgresql']['semmni'],
+].join(" ")
 sysctl "kernel.sem" do
   value sem
 end
@@ -79,7 +81,6 @@ execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_username
   not_if { pg_helper.bootstrapped? }
 end
-
 
 ##
 # Create SSL cert + key in the defined location. Paths are relative to postgresql_data_dir
@@ -152,7 +153,7 @@ runit_service "postgresql" do
   supervisor_group postgresql_username
   control(['t'])
   options({
-    :log_directory => postgresql_log_dir
+    log_directory: postgresql_log_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['postgresql'].to_hash)
 end

@@ -2,8 +2,8 @@ require_relative 'package/libraries/handlers/gitlab'
 require_relative 'package/libraries/formatters/gitlab'
 CURRENT_PATH = File.expand_path(File.dirname(__FILE__))
 TIME = Time.now.to_i
-LOG_PATH = '/var/log/gitlab/reconfigure'
-Dir.exists?(LOG_PATH) || FileUtils.mkdir_p(LOG_PATH)
+LOG_PATH = '/var/log/gitlab/reconfigure'.freeze
+Dir.exist?(LOG_PATH) || FileUtils.mkdir_p(LOG_PATH)
 add_formatter :gitlab
 file_cache_path "#{CURRENT_PATH}/cache"
 cookbook_path CURRENT_PATH
@@ -21,36 +21,36 @@ log_level :info
 # disable it. For example, ':Groovy,' is uncommented because omnibus-gitlab
 # does not care about Groovy.
 ohai.disabled_plugins = [
-:Azure,
-:Cloud,
-:CloudV2,
-:DMI,
-:DigitalOcean,
-:EC2,
-:Erlang,
-:Elixir,
-:Eucalyptus,
-:GCE,
-:Groovy,
-:Go,
-:Java,
-:Joyent,
-:Linode,
-:Lua,
-:Mono,
-:NetworkListeners,
-:NetworkRoutes,
-:Nodejs,
-:Openstack,
-:Perl,
-:PHP,
-:Powershell,
-:Python,
-:Rackspace,
-:Rust,
-:Virtualbox,
-:VMware,
-:SystemProfile,
-:Zpools,
-:Virtualization
+  :Azure,
+  :Cloud,
+  :CloudV2,
+  :DMI,
+  :DigitalOcean,
+  :EC2,
+  :Erlang,
+  :Elixir,
+  :Eucalyptus,
+  :GCE,
+  :Groovy,
+  :Go,
+  :Java,
+  :Joyent,
+  :Linode,
+  :Lua,
+  :Mono,
+  :NetworkListeners,
+  :NetworkRoutes,
+  :Nodejs,
+  :Openstack,
+  :Perl,
+  :PHP,
+  :Powershell,
+  :Python,
+  :Rackspace,
+  :Rust,
+  :Virtualbox,
+  :VMware,
+  :SystemProfile,
+  :Zpools,
+  :Virtualization
 ]

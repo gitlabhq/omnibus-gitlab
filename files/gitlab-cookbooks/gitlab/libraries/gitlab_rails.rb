@@ -17,7 +17,11 @@
 require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 
-module GitlabRails
+module GitlabRails # rubocop:disable Style/MultilineIfModifier
+  # The guard clause at the end of this module is used only to get the tests
+  # running. It prevents reloading of the module during converging, so tests
+  # pass. Hence, disabling the cop.
+
   class << self
     def parse_variables
       handle_legacy_variables
@@ -26,7 +30,6 @@ module GitlabRails
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
-      parse_gitaly_variables
     end
 
     def parse_directories
@@ -163,17 +166,15 @@ module GitlabRails
       end
 
       # append urls to the list but without relative_url
-      if Gitlab['gitlab_rails']['gitlab_relative_url']
-        paths_without_relative_url = []
-        Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path|
-          if path.start_with?(Gitlab['gitlab_rails']['gitlab_relative_url'] + '/')
-            stripped_path = path.sub(Gitlab['gitlab_rails']['gitlab_relative_url'], '')
-            paths_without_relative_url.push(stripped_path)
-          end
+      return unless Gitlab['gitlab_rails']['gitlab_relative_url']
+      paths_without_relative_url = []
+      Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path|
+        if path.start_with?(Gitlab['gitlab_rails']['gitlab_relative_url'] + '/')
+          stripped_path = path.sub(Gitlab['gitlab_rails']['gitlab_relative_url'], '')
+          paths_without_relative_url.push(stripped_path)
         end
-        Gitlab['gitlab_rails']['rack_attack_protected_paths'].concat(paths_without_relative_url)
       end
-
+      Gitlab['gitlab_rails']['rack_attack_protected_paths'].concat(paths_without_relative_url)
     end
 
     def handle_legacy_variables
@@ -188,33 +189,12 @@ module GitlabRails
         LoggingHelper.deprecation("gitlab_rails['git_max_size'] setting is deprecated and will not have any effect.")
       end
 
-      if Gitlab['gitlab_rails']['git_timeout']
-        LoggingHelper.deprecation("gitlab_rails['git_timeout'] setting is deprecated and will not have any effect.")
-      end
+      return unless Gitlab['gitlab_rails']['git_timeout']
+      LoggingHelper.deprecation("gitlab_rails['git_timeout'] setting is deprecated and will not have any effect.")
     end
 
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
-    end
-
-    def parse_gitaly_variables
-      parse_gitaly_storages
-    end
-
-    # This method cannot be inside of libraries/gitaly.rb for now
-    # because storage gets parsed in libraries/gitlab_shell.rb
-    # and libraries/gitlab_rails.rb
-    def parse_gitaly_storages
-      return unless Gitlab['gitaly']['storage'].nil?
-
-      storages = []
-      Gitlab['gitlab_rails']['repositories_storages'].each do |key, value|
-        storages << {
-                      'name' => key,
-                      'path' => value['path']
-                    }
-      end
-      Gitlab['gitaly']['storage'] = storages
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test

@@ -140,10 +140,10 @@ describe 'gitaly' do
         stub_gitlab_rb(
           {
             git_data_dirs:
-             {
-               'default' => { 'path' => '/tmp/default/git-data' },
-               'nfs1' => { 'path' => '/mnt/nfs1' }
-             }
+            {
+              'default' => { 'path' => '/tmp/default/git-data' },
+              'nfs1' => { 'path' => '/mnt/nfs1' }
+            }
           }
         )
       end
@@ -253,5 +253,94 @@ describe 'gitaly' do
       )
     end
     it_behaves_like "enabled gitaly env", "HOME", '/my/random/path'
+  end
+end
+
+describe 'gitaly::git_data_dirs' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default') }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when user has not specified git_data_dir' do
+    it 'defaults to correct path' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/var/opt/gitlab/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
+    end
+  end
+
+  context 'when git_data_dir is set as a single directory' do
+    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
+
+    it 'correctly sets the repository storage directories' do
+      allow(Chef::Log).to receive(:warn)
+      expect(Chef::Log).to receive(:warn).with(/Your git_data_dir settings are deprecated/)
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
+    end
+  end
+
+  context 'when gitaly is set to use a listen_addr instead of a socket' do
+    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' })
+    end
+  end
+
+  context 'when git_data_dirs is set to multiple directories' do
+    before do
+      stub_gitlab_rb({
+                       git_data_dirs: {
+                         'default' => { 'path' => '/tmp/default/git-data' },
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data' }
+                       }
+                     })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
+                                                                                      })
+    end
+  end
+
+  context 'when git_data_dirs is set to multiple directories with different gitaly addresses' do
+    before do
+      stub_gitlab_rb({
+                       git_data_dirs: {
+                         'default' => { 'path' => '/tmp/default/git-data' },
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
+                       }
+                     })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
+                                                                                      })
+    end
+  end
+
+  context 'when git_data_dirs is set with deprecated settings structure' do
+    before do
+      stub_gitlab_rb({
+                       git_data_dirs: {
+                         'default' => '/tmp/default/git-data',
+                         'overflow' => '/tmp/other/git-overflow-data'
+                       }
+                     })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
+                                                                                      })
+    end
   end
 end

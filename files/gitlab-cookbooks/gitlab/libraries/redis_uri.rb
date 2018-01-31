@@ -28,7 +28,7 @@ module URI
     @@schemes['REDIS'] = Redis
 
     def self.build(args)
-      super(Util::make_components_hash(self, args))
+      super(Util.make_components_hash(self, args))
     end
 
     # We are overriding this class to point to CUSTOM_COMPONENT instead of COMPONENT
@@ -50,7 +50,7 @@ module URI
 
     protected
 
-     def check_password(value)
+    def check_password(value)
       value.nil? || !value.empty?
     end
   end

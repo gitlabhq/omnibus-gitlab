@@ -68,43 +68,41 @@ gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
                        end
 
 gitlab_registry_enabled = if node['registry']['enable']
-                         node['gitlab']['registry-nginx']['enable']
-                       else
-                         false
-                       end
+                            node['gitlab']['registry-nginx']['enable']
+                          else
+                            false
+                          end
 
 nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
 
 # Include the config file for gitlab-rails in nginx.conf later
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
-               :gitlab_http_config => gitlab_rails_enabled ? gitlab_rails_http_conf : nil
-             })
+                                                     gitlab_http_config: gitlab_rails_enabled ? gitlab_rails_http_conf : nil
+                                                   })
 
 # Include the config file for gitlab mattermost in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
-               :gitlab_mattermost_http_config => gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
-             })
+                                         gitlab_mattermost_http_config: gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
+                                       })
 
 # Include the config file for gitlab pages in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
-                                         :gitlab_pages_http_config => gitlab_pages_enabled ? gitlab_pages_http_conf : nil
+                                         gitlab_pages_http_config: gitlab_pages_enabled ? gitlab_pages_http_conf : nil
                                        })
 
 nginx_vars = nginx_vars.to_hash.merge!({
-                                         :gitlab_registry_http_config => gitlab_registry_enabled ? gitlab_registry_http_conf : nil
+                                         gitlab_registry_http_config: gitlab_registry_enabled ? gitlab_registry_http_conf : nil
                                        })
 
 nginx_vars = nginx_vars.to_hash.merge!({
-                                         :nginx_status_config => nginx_status_enabled ? nginx_status_conf : nil
+                                         nginx_status_config: nginx_status_enabled ? nginx_status_conf : nil
                                        })
 
-
-
-if nginx_vars['listen_https'].nil?
-  nginx_vars['https'] = node['gitlab']['gitlab-rails']['gitlab_https']
-else
-  nginx_vars['https'] = nginx_vars['listen_https']
-end
+nginx_vars['https'] = if nginx_vars['listen_https'].nil?
+                        node['gitlab']['gitlab-rails']['gitlab_https']
+                      else
+                        nginx_vars['listen_https']
+                      end
 
 template gitlab_rails_http_conf do
   source "nginx-gitlab-http.conf.erb"
@@ -112,16 +110,16 @@ template gitlab_rails_http_conf do
   group "root"
   mode "0644"
   variables(nginx_vars.merge(
-    {
-      :fqdn => node['gitlab']['gitlab-rails']['gitlab_host'],
-      :port => node['gitlab']['gitlab-rails']['gitlab_port'],
-      :relative_url => node['gitlab']['gitlab-rails']['gitlab_relative_url'],
-      :kerberos_enabled => node['gitlab']['gitlab-rails']['kerberos_enabled'],
-      :kerberos_use_dedicated_port => node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
-      :kerberos_port => node['gitlab']['gitlab-rails']['kerberos_port'],
-      :kerberos_https => node['gitlab']['gitlab-rails']['kerberos_https'],
-      :registry_api_url => node['gitlab']['gitlab-rails']['registry_api_url']
-    }
+              {
+                fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
+                port: node['gitlab']['gitlab-rails']['gitlab_port'],
+                relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
+                kerberos_enabled: node['gitlab']['gitlab-rails']['kerberos_enabled'],
+                kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
+                kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
+                kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
+                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url']
+              }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_rails_enabled ? :create : :delete
@@ -129,11 +127,11 @@ end
 
 pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash
 
-if pages_nginx_vars['listen_https'].nil?
-  pages_nginx_vars['https'] = node['gitlab']['gitlab-rails']['pages_https']
-else
-  pages_nginx_vars['https'] = pages_nginx_vars['listen_https']
-end
+pages_nginx_vars['https'] = if pages_nginx_vars['listen_https'].nil?
+                              node['gitlab']['gitlab-rails']['pages_https']
+                            else
+                              pages_nginx_vars['listen_https']
+                            end
 
 template gitlab_pages_http_conf do
   source "nginx-gitlab-pages-http.conf.erb"
@@ -141,10 +139,10 @@ template gitlab_pages_http_conf do
   group "root"
   mode "0644"
   variables(pages_nginx_vars.merge(
-    {
-      pages_path: node['gitlab']['gitlab-rails']['pages_path'],
-      pages_listen_proxy: node['gitlab']['gitlab-pages']['listen_proxy']
-    }
+              {
+                pages_path: node['gitlab']['gitlab-rails']['pages_path'],
+                pages_listen_proxy: node['gitlab']['gitlab-pages']['listen_proxy']
+              }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_pages_enabled ? :create : :delete
@@ -162,11 +160,11 @@ template gitlab_registry_http_conf do
   group "root"
   mode "0644"
   variables(registry_nginx_vars.merge(
-    {
-      registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-      registry_host: node['gitlab']['gitlab-rails']['registry_host'],
-      registry_http_addr: node['registry']['registry_http_addr']
-    }
+              {
+                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+                registry_host: node['gitlab']['gitlab-rails']['registry_host'],
+                registry_http_addr: node['registry']['registry_http_addr']
+              }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_registry_enabled ? :create : :delete
@@ -174,11 +172,11 @@ end
 
 mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
 
-if mattermost_nginx_vars['listen_https'].nil?
-  mattermost_nginx_vars['https'] = node['mattermost']['service_use_ssl']
-else
-  mattermost_nginx_vars['https'] = mattermost_nginx_vars['listen_https']
-end
+mattermost_nginx_vars['https'] = if mattermost_nginx_vars['listen_https'].nil?
+                                   node['mattermost']['service_use_ssl']
+                                 else
+                                   mattermost_nginx_vars['listen_https']
+                                 end
 
 template gitlab_mattermost_http_conf do
   source "nginx-gitlab-mattermost-http.conf.erb"
@@ -186,12 +184,12 @@ template gitlab_mattermost_http_conf do
   group "root"
   mode "0644"
   variables(mattermost_nginx_vars.merge(
-   {
-     :fqdn => node['mattermost']['host'],
-     :port => node['mattermost']['port'],
-     :service_port => node['mattermost']['service_port'],
-     :service_address => node['mattermost']['service_address']
-   }
+              {
+                fqdn: node['mattermost']['host'],
+                port: node['mattermost']['port'],
+                service_port: node['mattermost']['service_port'],
+                service_address: node['mattermost']['service_address']
+              }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_mattermost_enabled ? :create : :delete
@@ -202,12 +200,12 @@ template nginx_status_conf do
   owner "root"
   group "root"
   mode "0644"
-  variables ({
-    :listen_addresses => nginx_vars['status']['listen_addresses'],
-    :fqdn => nginx_vars['status']['fqdn'],
-    :port => nginx_vars['status']['port'],
-    :options => nginx_vars['status']['options']
-  })
+  variables({
+              listen_addresses: nginx_vars['status']['listen_addresses'],
+              fqdn: nginx_vars['status']['fqdn'],
+              port: nginx_vars['status']['port'],
+              options: nginx_vars['status']['options']
+            })
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action nginx_status_enabled ? :create : :delete
 end
@@ -232,10 +230,10 @@ if nginx_vars.key?('custom_error_pages')
       group "root"
       mode "0644"
       variables(
-        :code => code,
-        :title => nginx_vars['custom_error_pages'][code]['title'],
-        :header => nginx_vars['custom_error_pages'][code]['header'],
-        :message => nginx_vars['custom_error_pages'][code]['message']
+        code: code,
+        title: nginx_vars['custom_error_pages'][code]['title'],
+        header: nginx_vars['custom_error_pages'][code]['header'],
+        message: nginx_vars['custom_error_pages'][code]['message']
       )
       notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
     end
@@ -245,7 +243,7 @@ end
 runit_service "nginx" do
   down node['gitlab']['nginx']['ha']
   options({
-    :log_directory => nginx_log_dir
+    log_directory: nginx_log_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['nginx'].to_hash)
 end

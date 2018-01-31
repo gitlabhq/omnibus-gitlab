@@ -32,7 +32,6 @@ gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
   end
 end
 
-
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
   notifies :restart, "service[gitlab-pages]"
@@ -40,7 +39,7 @@ end
 
 runit_service 'gitlab-pages' do
   options({
-    :log_directory => log_directory
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end

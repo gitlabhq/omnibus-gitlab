@@ -46,14 +46,12 @@ module Nginx
 
     def parse_nginx_listen_ports
       [
-        [%w{nginx listen_port}, %w{gitlab_rails gitlab_port}],
-        [%w{mattermost_nginx listen_port}, %w{mattermost port}],
-        [%w{pages_nginx listen_port}, %w{gitlab_rails pages_port}],
+        [%w(nginx listen_port), %w(gitlab_rails gitlab_port)],
+        [%w(mattermost_nginx listen_port), %w(mattermost port)],
+        [%w(pages_nginx listen_port), %w(gitlab_rails pages_port)],
 
       ].each do |left, right|
-        if !Gitlab[left.first][left.last].nil?
-          next
-        end
+        next unless Gitlab[left.first][left.last].nil?
 
         # This conditional is required until all services are extracted to
         # their own cookbook. Mattermost exists directly on node while
@@ -73,17 +71,17 @@ module Nginx
 
     def parse_proxy_headers(app, https)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
-      default_from_attributes = Gitlab['node']['gitlab'][app.gsub('_', '-')]['proxy_set_headers'].to_hash
+      default_from_attributes = Gitlab['node']['gitlab'][app.tr('_', '-')]['proxy_set_headers'].to_hash
 
       default_from_attributes = if https
                                   default_from_attributes.merge({
-                                                                 'X-Forwarded-Proto' => "https",
-                                                                 'X-Forwarded-Ssl' => "on"
-                                                               })
+                                                                  'X-Forwarded-Proto' => "https",
+                                                                  'X-Forwarded-Ssl' => "on"
+                                                                })
                                 else
                                   default_from_attributes.merge({
-                                                                 "X-Forwarded-Proto" => "http"
-                                                               })
+                                                                  "X-Forwarded-Proto" => "http"
+                                                                })
                                 end
 
       if values_from_gitlab_rb
@@ -99,7 +97,7 @@ module Nginx
 
     def parse_error_pages
       # At the least, provide error pages for 404, 402, 500, 502 errors
-      errors = Hash[%w(404 422 500 502).map {|x| [x, "#{x}.html"]}]
+      errors = Hash[%w(404 422 500 502).map { |x| [x, "#{x}.html"] }]
       if Gitlab['nginx'].key?('custom_error_pages')
         Gitlab['nginx']['custom_error_pages'].each_key do |err|
           errors[err] = "#{err}-custom.html"

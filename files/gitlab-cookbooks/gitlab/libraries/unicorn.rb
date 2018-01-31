@@ -23,19 +23,18 @@ module Unicorn
 
     def parse_unicorn_listen_address
       unicorn_socket = Gitlab['unicorn']['socket'] || Gitlab['node']['gitlab']['unicorn']['socket']
-      if Gitlab['gitlab_workhorse']['auth_backend'].nil?
-        # The user has no custom settings for connecting workhorse to unicorn. Let's
-        # do what we think is best.
-        Gitlab['gitlab_workhorse']['auth_socket'] = unicorn_socket
-      end
+
+      # The user has no custom settings for connecting workhorse to unicorn. Let's
+      # do what we think is best.
+      Gitlab['gitlab_workhorse']['auth_socket'] = unicorn_socket if Gitlab['gitlab_workhorse']['auth_backend'].nil?
     end
 
     def workers(total_memory = Gitlab['node']['memory']['total'].to_i)
       [
         2, # Two is the minimum or web editor will no longer work.
         [
-          self.worker_cpus,
-          self.worker_memory(total_memory)
+          worker_cpus,
+          worker_memory(total_memory)
         ].min # min because we want to exceed neither CPU nor RAM
       ].max # max because we need at least 2 workers
     end

@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.5.0
 
+- Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
 - Add support for setting environment variables for Registry
 
 10.4.1

@@ -1,5 +1,6 @@
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/replication"
 require 'optparse'
+require 'English'
 
 add_command_under_category('replicate-geo-database', 'gitlab-geo', 'Replicate Geo database', 2) do |_cmd_name, *args|
   GeoReplicationCommand.new(self, ARGV).execute!
@@ -92,10 +93,10 @@ class GeoReplicationCommand
 
     opts_parser.parse!(arguments)
 
-    raise OptionParser::MissingArgument.new(:host) unless @options.fetch(:host)
-    raise OptionParser::MissingArgument.new('--slot-name') unless @options[:skip_replication_slot] || @options.fetch(:slot_name)
+    raise OptionParser::MissingArgument, :host unless @options.fetch(:host)
+    raise OptionParser::MissingArgument, '--slot-name' unless @options[:skip_replication_slot] || @options.fetch(:slot_name)
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-    puts $!.to_s
+    puts $ERROR_INFO.to_s
     puts opts_parser
     exit 1
   end

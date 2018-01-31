@@ -21,31 +21,10 @@ git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
-git_data_directories = node['gitlab']['gitlab-shell']['git_data_directories']
-repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
-hooks_directory = node['gitlab']['gitlab-rails']['gitlab_shell_hooks_path']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
-
-# Holds git-data, by default one shard at /var/opt/gitlab/git-data
-# Can be changed by user using git_data_dirs option
-git_data_directories.each do |_name, git_data_directory|
-  storage_directory git_data_directory['path'] do
-    owner git_user
-    mode "0700"
-  end
-end
-
-# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
-# Should not be changed by user. Different permissions to git_data_dir set.
-repositories_storages.each do |_name, repositories_storage|
-  storage_directory repositories_storage['path'] do
-    owner git_user
-    mode "2770"
-  end
-end
 
 # Creates `.ssh` directory to hold authorized_keys
 [
@@ -75,35 +54,35 @@ api_url = node['gitlab']['gitlab-rails']['internal_api_url']
 api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}#{node['gitlab']['unicorn']['relative_url']}"
 
 redis_port = node['gitlab']['gitlab-rails']['redis_port']
-if redis_port
-  # Leave out redis socket setting because in gitlab-shell, setting a Redis socket
-  # overrides TCP connection settings.
-  redis_socket = nil
-else
-  redis_socket = node['gitlab']['gitlab-rails']['redis_socket']
-end
+redis_socket = if redis_port
+                 # Leave out redis socket setting because in gitlab-shell, setting a Redis socket
+                 # overrides TCP connection settings.
+                 nil
+               else
+                 node['gitlab']['gitlab-rails']['redis_socket']
+               end
 
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
   link_to File.join(gitlab_shell_var_dir, "config.yml")
   source "gitlab-shell-config.yml.erb"
   variables({
-    :user => git_user,
-    :api_url => api_url,
-    :authorized_keys => authorized_keys,
-    :redis_host => node['gitlab']['gitlab-rails']['redis_host'],
-    :redis_port => redis_port,
-    :redis_socket => redis_socket,
-    :redis_password => node['gitlab']['gitlab-rails']['redis_password'],
-    :redis_database => node['gitlab']['gitlab-rails']['redis_database'],
-    :redis_sentinels => node['gitlab']['gitlab-rails']['redis_sentinels'],
-    :log_file => File.join(log_directory, "gitlab-shell.log"),
-    :log_level => node['gitlab']['gitlab-shell']['log_level'],
-    :audit_usernames => node['gitlab']['gitlab-shell']['audit_usernames'],
-    :http_settings => node['gitlab']['gitlab-shell']['http_settings'],
-    :git_trace_log_file => node['gitlab']['gitlab-shell']['git_trace_log_file'],
-    :custom_hooks_dir => node['gitlab']['gitlab-shell']['custom_hooks_dir']
-  })
+              user: git_user,
+              api_url: api_url,
+              authorized_keys: authorized_keys,
+              redis_host: node['gitlab']['gitlab-rails']['redis_host'],
+              redis_port: redis_port,
+              redis_socket: redis_socket,
+              redis_password: node['gitlab']['gitlab-rails']['redis_password'],
+              redis_database: node['gitlab']['gitlab-rails']['redis_database'],
+              redis_sentinels: node['gitlab']['gitlab-rails']['redis_sentinels'],
+              log_file: File.join(log_directory, "gitlab-shell.log"),
+              log_level: node['gitlab']['gitlab-shell']['log_level'],
+              audit_usernames: node['gitlab']['gitlab-shell']['audit_usernames'],
+              http_settings: node['gitlab']['gitlab-shell']['http_settings'],
+              git_trace_log_file: node['gitlab']['gitlab-shell']['git_trace_log_file'],
+              custom_hooks_dir: node['gitlab']['gitlab-shell']['custom_hooks_dir']
+            })
 end
 
 link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
