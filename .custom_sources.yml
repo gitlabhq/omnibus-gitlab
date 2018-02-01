@@ -50,5 +50,5 @@ logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git"
 chef-acme:
-  remote: "git@dev.gitlab.org:ibaum/chef-acme.git"
+  remote: "git@gitlab.com:ibaum/chef-acme.git"
   alternative: "https://gitlab.com/ibaum/chef-acme.git"
