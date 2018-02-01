@@ -6,12 +6,12 @@ omnibus-gitlab repository.
 10.5.0
 
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
+- Support authorized_keys database lookups with SELinux on CentOS 7.4
 
 10.4.1
 
 - Update gitlab-monitor to 2.5.0
 - Add GitLab pages status page configuration
-
 
 10.4.0
 

@@ -25,6 +25,10 @@ ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
 gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
+gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
+gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
+gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
 
 # Creates `.ssh` directory to hold authorized_keys
 [
@@ -64,7 +68,7 @@ redis_socket = if redis_port
 
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
-  link_to File.join(gitlab_shell_var_dir, "config.yml")
+  link_to gitlab_shell_config_file
   source "gitlab-shell-config.yml.erb"
   variables({
               user: git_user,
@@ -97,11 +101,16 @@ end
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
 # git_user is valid.
 bash "Set proper security context on ssh files for selinux" do
-  code <<-EOS
+  code <<~EOS
     semanage fcontext -a -t ssh_home_t '#{ssh_dir}(/.*)?'
     semanage fcontext -a -t ssh_home_t '#{authorized_keys}'
+    semanage fcontext -a -t ssh_home_t '#{gitlab_shell_config_file}'
+    semanage fcontext -a -t ssh_home_t '#{gitlab_shell_secret_file}'
     restorecon -R -v '#{ssh_dir}'
-    restorecon -v '#{authorized_keys}'
+    restorecon -v '#{authorized_keys}' '#{gitlab_shell_config_file}'
+    # On new installs, the gitlab_shell_secret file may not exist until the
+    # gitlab-rails recipe runs, so we can safely move along if the file doesn't exist.
+    restorecon -v -i '#{gitlab_shell_secret_file}'
   EOS
   only_if "id -Z"
 end

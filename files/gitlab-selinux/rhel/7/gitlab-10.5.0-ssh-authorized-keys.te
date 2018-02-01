@@ -1,0 +1,14 @@
+
+module gitlab-10.5.0-ssh-authorized-keys 1.0;
+
+require {
+        type var_log_t;
+        type sshd_t;
+        type http_cache_port_t;
+        class tcp_socket name_connect;
+        class file { open read };
+}
+
+#============= sshd_t ==============
+allow sshd_t http_cache_port_t:tcp_socket name_connect;
+allow sshd_t var_log_t:file open;
