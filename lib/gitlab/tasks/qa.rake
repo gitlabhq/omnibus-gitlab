@@ -6,7 +6,6 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
-require 'gitlab/qa'
 
 namespace :qa do
   desc "Build QA Docker image"
