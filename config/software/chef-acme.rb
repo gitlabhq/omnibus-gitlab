@@ -15,7 +15,7 @@
 #
 
 name 'chef-acme'
-default_version 'b49c28d'
+default_version '42c1caf'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
