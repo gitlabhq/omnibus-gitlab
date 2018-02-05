@@ -137,7 +137,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     end
 
     def parse_uploads_dir
-      Gitlab['gitlab-rails']['uploads_storage_path'] ||= public_path
+      Gitlab['gitlab_rails']['uploads_storage_path'] ||= public_path
     end
 
     def parse_pages_dir
