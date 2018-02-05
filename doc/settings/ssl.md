@@ -62,7 +62,7 @@ By default, when `gitlab-ctl reconfigure` is run, if the certificate is within 3
 
 We also provide a tool `TBD` to perform only the renewal step. We recommend adding a scheduled task to your favorite task scheduler to automate the renewal process.
 
-Both tools will only perform a request to Let's Encrypt if the certificates are near expiration, so you don't need to be concerned about hitting any rate limits.
+Both tools will only perform a request to Let's Encrypt if the certificates are near expiration, so you don't need to be concerned about hitting any [rate limits](https://letsencrypt.org/docs/rate-limits/).
 
 ## Troubleshooting
 
