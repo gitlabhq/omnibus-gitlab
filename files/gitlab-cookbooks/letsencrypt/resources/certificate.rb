@@ -16,6 +16,7 @@ action :create do
   # they provide invalid data
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
+
   acme_certificate 'staging' do
     alt_names new_resource.alt_names unless new_resource.alt_names.empty?
     key_size new_resource.key_size unless new_resource.key_size.nil?
@@ -29,6 +30,12 @@ action :create do
     key "#{new_resource.key}-staging"
     endpoint 'https://acme-staging.api.letsencrypt.org/'
     wwwroot new_resource.wwwroot
+  end
+
+  ruby_block 'reset private key' do
+    block do
+      node.normal['acme']['private_key'] = nil
+    end
   end
 
   acme_certificate 'production' do

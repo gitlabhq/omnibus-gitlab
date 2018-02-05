@@ -142,6 +142,10 @@ describe 'gitlab::letsencrypt' do
     )
   end
 
+  it "updates the node['acme']['private_key'] attribute" do
+    expect(chef_run).to run_ruby_block('reset private key')
+  end
+
   it 'creates a production certificate' do
     expect(chef_run).to create_acme_certificate('production').with(
       crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
