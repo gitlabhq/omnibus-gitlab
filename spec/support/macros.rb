@@ -9,10 +9,14 @@ module GitlabSpec
       end
     end
 
+    # @param [String] service internal name of the service (on-disk)
+    # @param [Boolean] value status command succeed?
     def stub_service_success_status(service, value)
       allow_any_instance_of(OmnibusHelper).to receive(:success?).with("/opt/gitlab/init/#{service} status").and_return(value)
     end
 
+    # @param [String] service internal name of the service (on-disk)
+    # @param [Boolean] value status command failed?
     def stub_service_failure_status(service, value)
       allow_any_instance_of(OmnibusHelper).to receive(:failure?).with("/opt/gitlab/init/#{service} status").and_return(value)
     end

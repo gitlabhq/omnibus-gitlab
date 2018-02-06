@@ -525,6 +525,22 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    context 'GitLab LDAP settings' do
+      context 'when ldap lowercase_usernames setting is' do
+        it 'set, sets the setting value' do
+          stub_gitlab_rb(gitlab_rails: { ldap_lowercase_usernames: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/lowercase_usernames: true/)
+        end
+
+        it 'not set, sets default value to blank' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/lowercase_usernames:\s$/)
+        end
+      end
+    end
   end
 
   context 'with environment variables' do

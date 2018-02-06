@@ -5,7 +5,11 @@ omnibus-gitlab repository.
 
 10.5.0
 
+- Extends rspec to `gitlab-ctl consul`'s helper class, and refactors to avoid
+  namespace conflicts.
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
+- Set PostgreSQL archive_timeout to 0 by default
+- Added LDAP configuration option for lowercase_usernames
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
 
 10.4.1

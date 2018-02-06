@@ -25,12 +25,12 @@ class PrometheusHelper
     config = []
 
     node['gitlab'][service]['flags'].each do |flag_key, flag_value|
-      next if flag_value.empty?
       if flag_value == true
-        config += "--#{flag_key}"
+        config << "--#{flag_key}"
       elsif flag_value == false
-        config += "--no-#{flag_key}"
+        config << "--no-#{flag_key}"
       else
+        next if flag_value.empty?
         config << "--#{flag_key}=#{flag_value}"
       end
     end

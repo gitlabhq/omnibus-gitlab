@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe OmnibusHelper do
-  let(:chef_run) { converge_config }
+  cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
 
   subject { described_class.new(chef_run.node) }
@@ -35,6 +35,7 @@ describe OmnibusHelper do
   end
 
   describe '#not_listening?' do
+    let(:chef_run) { converge_config }
     context 'when Redis is disabled' do
       before do
         stub_gitlab_rb(
@@ -73,7 +74,6 @@ describe OmnibusHelper do
       before do
         chef_run.node.normal['gitlab']['old_service']['enable'] = true
         chef_run.node.normal['new_service']['enable'] = true
-        chef_run.converge('gitlab::config')
       end
 
       it 'should return true' do
@@ -86,12 +86,48 @@ describe OmnibusHelper do
       before do
         chef_run.node.normal['gitlab']['old_service']['enable'] = false
         chef_run.node.normal['new_service']['enable'] = false
-        chef_run.converge('gitlab::config')
       end
 
       it 'should return false' do
         expect(subject.service_enabled?('old_service')).to be_falsey
         expect(subject.service_enabled?('new_service')).to be_falsey
+      end
+    end
+  end
+
+  describe '#is_managed_and_offline?' do
+    context 'services are disabled' do
+      before do
+        chef_run.node.normal['gitlab']['old_service']['enable'] = false
+        chef_run.node.normal['new_service']['enable'] = false
+      end
+
+      it 'returns false' do
+        expect(subject.is_managed_and_offline?('old_service')).to be_falsey
+        expect(subject.is_managed_and_offline?('new_service')).to be_falsey
+      end
+    end
+
+    context 'services are enabled' do
+      before do
+        chef_run.node.normal['gitlab']['old_service']['enable'] = true
+        chef_run.node.normal['new_service']['enable'] = true
+      end
+
+      it 'returns true when services are offline' do
+        stub_service_failure_status('old_service', true)
+        stub_service_failure_status('new_service', true)
+
+        expect(subject.is_managed_and_offline?('old_service')).to be_truthy
+        expect(subject.is_managed_and_offline?('new_service')).to be_truthy
+      end
+
+      it 'returns false when services are online ' do
+        stub_service_failure_status('old_service', false)
+        stub_service_failure_status('new_service', false)
+
+        expect(subject.is_managed_and_offline?('old_service')).to be_falsey
+        expect(subject.is_managed_and_offline?('new_service')).to be_falsey
       end
     end
   end

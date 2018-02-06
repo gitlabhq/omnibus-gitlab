@@ -168,6 +168,7 @@ default['gitlab']['gitlab-rails']['ldap_method'] = nil
 default['gitlab']['gitlab-rails']['ldap_bind_dn'] = nil
 default['gitlab']['gitlab-rails']['ldap_password'] = nil
 default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = nil
+default['gitlab']['gitlab-rails']['ldap_lowercase_usernames'] = nil
 default['gitlab']['gitlab-rails']['ldap_user_filter'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
@@ -453,7 +454,7 @@ default['gitlab']['postgresql']['hot_standby_feedback'] = 'off'
 # Backup/Archive settings
 default['gitlab']['postgresql']['archive_mode'] = "off"
 default['gitlab']['postgresql']['archive_command'] = nil
-default['gitlab']['postgresql']['archive_timeout'] = "60"
+default['gitlab']['postgresql']['archive_timeout'] = "0"
 
 ####
 # Redis

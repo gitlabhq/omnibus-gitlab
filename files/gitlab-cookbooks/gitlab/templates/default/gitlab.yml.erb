@@ -275,6 +275,7 @@ production: &base
     password: <%= quote(@ldap_password) %>
     active_directory: <%= @ldap_active_directory %>
     allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
+    lowercase_usernames: <%= @ldap_lowercase_usernames %>
     base: <%= quote(@ldap_base) %>
     user_filter: <%= quote(@ldap_user_filter) %>
 

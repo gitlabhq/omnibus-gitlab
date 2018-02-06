@@ -2,7 +2,7 @@ require 'mixlib/shellout'
 
 require_relative 'repmgr'
 
-class ConsulHelper
+class Consul
   class WatcherError < StandardError; end
 
   attr_accessor :command, :subcommand, :input
@@ -57,7 +57,7 @@ class ConsulHelper
         begin
           data = JSON.parse(input)
         rescue JSON::ParserError
-          raise ConsulHelper::WatcherError, "Invalid input detected: '#{input}'"
+          raise Consul::WatcherError, "Invalid input detected: '#{input}'"
         end
 
         data.each do |fm|
@@ -65,9 +65,9 @@ class ConsulHelper
           begin
             RepmgrHelper::Master.remove(node_id: node_id, user: 'gitlab-consul')
           rescue StandardError
-            ConsulHelper::Kv.put(fm['Key'])
+            Consul::Kv.put(fm['Key'])
           else
-            ConsulHelper::Kv.delete(fm['Key'])
+            Consul::Kv.delete(fm['Key'])
           end
         end
       end
