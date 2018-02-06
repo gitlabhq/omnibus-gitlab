@@ -84,7 +84,8 @@ describe 'gitlab::node-exporter' do
       stub_gitlab_rb(
         node_exporter: {
           flags: {
-            'collector.textfile.directory' => '/tmp'
+            'collector.textfile.directory' => '/tmp',
+            'collector.arp' => false
           },
           listen_address: 'localhost:9899',
           enable: true
@@ -97,6 +98,8 @@ describe 'gitlab::node-exporter' do
         .with_content(/web.listen-address=localhost:9899/)
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
         .with_content(/collector.textfile.directory=\/tmp/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
+        .with_content(/--no-collector.arp/)
     end
   end
 end
