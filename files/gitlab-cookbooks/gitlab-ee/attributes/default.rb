@@ -56,6 +56,7 @@ default['gitlab']['geo-secondary']['db_socket'] = nil
 default['gitlab']['geo-secondary']['db_sslmode'] = nil
 default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
 default['gitlab']['geo-secondary']['db_sslca'] = nil
+default['gitlab']['geo-secondary']['db_fdw'] = nil
 
 ###
 # Geo: PostgreSQL (Tracking database)
