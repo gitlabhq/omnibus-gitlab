@@ -125,7 +125,7 @@ default['gitlab']['geo-postgresql']['hot_standby_feedback'] = 'off'
 # Backup/Archive settings
 default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
-default['gitlab']['geo-postgresql']['archive_timeout'] = '60'
+default['gitlab']['geo-postgresql']['archive_timeout'] = '0'
 
 ###
 # Geo: LogCursor (replication)

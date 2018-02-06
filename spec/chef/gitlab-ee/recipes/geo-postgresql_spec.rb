@@ -116,7 +116,7 @@ describe 'geo postgresql 9.2' do
         ).with_content(/archive_command = ''/)
         expect(chef_run).to render_file(
           runtime_conf
-        ).with_content(/archive_timeout = 60/)
+        ).with_content(/archive_timeout = 0/)
       end
 
       context 'version specific settings' do
