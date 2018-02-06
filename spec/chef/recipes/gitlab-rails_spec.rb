@@ -634,6 +634,7 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 1000/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/fdw:\s*$/)
         end
 
         it 'template triggers notifications' do
@@ -736,6 +737,16 @@ describe 'gitlab::gitlab-rails' do
           it 'uses provided value in database.yml' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 12345/)
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
+          end
+        end
+
+        context 'when fdw is specified' do
+          before do
+            stub_gitlab_rb(gitlab_rails: { db_fdw: true })
+          end
+
+          it 'uses provided value in database.yml' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/fdw: true/)
           end
         end
       end
