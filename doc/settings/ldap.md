@@ -46,6 +46,9 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   # disable this setting, because the userPrincipalName contains an '@'.
   allow_username_or_email_login: false
 
+  # If lowercase_usernames is enabled, GitLab will lower case the username.
+  lowercase_usernames: false
+
   # Base where we can search for users
   #
   #   Ex. ou=People,dc=gitlab,dc=example
@@ -79,6 +82,7 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   password: '_the_password_of_the_bind_user'
   active_directory: true
   allow_username_or_email_login: false
+  lowercase_usernames: false
   block_auto_created_users: false
   base: ''
   user_filter: ''
@@ -97,6 +101,7 @@ secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
   password: '_the_password_of_the_bind_user'
   active_directory: true
   allow_username_or_email_login: false
+  lowercase_usernames: false
   block_auto_created_users: false
   base: ''
   user_filter: ''

@@ -210,6 +210,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     lowercase_usernames: false
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
@@ -229,6 +230,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     lowercase_usernames: false
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
