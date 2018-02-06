@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.5.0
 
+- Add support to configure the `fdw` parameter in database_geo.yml
 - Extends rspec to `gitlab-ctl consul`'s helper class, and refactors to avoid
   namespace conflicts.
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
