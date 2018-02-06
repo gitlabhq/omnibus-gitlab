@@ -722,7 +722,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_command'] = nil
-# default['gitlab']['postgresql']['archive_timeout'] = "60"
+# default['gitlab']['postgresql']['archive_timeout'] = "0"
 
 ### Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"

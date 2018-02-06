@@ -454,7 +454,7 @@ default['gitlab']['postgresql']['hot_standby_feedback'] = 'off'
 # Backup/Archive settings
 default['gitlab']['postgresql']['archive_mode'] = "off"
 default['gitlab']['postgresql']['archive_command'] = nil
-default['gitlab']['postgresql']['archive_timeout'] = "60"
+default['gitlab']['postgresql']['archive_timeout'] = "0"
 
 ####
 # Redis
