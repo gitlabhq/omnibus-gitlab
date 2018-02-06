@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -126,7 +126,7 @@ describe 'registry recipe' do
 end
 
 describe 'registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -349,6 +349,14 @@ describe 'registry' do
         expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content('notifications:')
       end
+    end
+
+    context 'when registry has custom environment variables configured' do
+      before do
+        stub_gitlab_rb(registry: { env: { 'HTTP_PROXY' => 'my-proxy' } })
+      end
+
+      it_behaves_like "enabled registry env", "HTTP_PROXY", "my-proxy"
     end
   end
 end

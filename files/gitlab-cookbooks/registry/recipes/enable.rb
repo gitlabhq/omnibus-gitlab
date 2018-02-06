@@ -20,6 +20,7 @@ registry_gid = node['registry']['gid']
 
 working_dir = node['registry']['dir']
 log_directory = node['registry']['log_directory']
+env_directory = node['registry']['env_directory']
 
 directory "create #{working_dir}" do
   path working_dir
@@ -47,6 +48,11 @@ end
     mode '0700'
     recursive true
   end
+end
+
+env_dir env_directory do
+  variables node['registry']['env']
+  restarts ["service[registry]"]
 end
 
 directory node['gitlab']['gitlab-rails']['registry_path'] do
