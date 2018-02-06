@@ -182,7 +182,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
-### Git Uploads
+### GitLab uploads
 # gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false # EE only

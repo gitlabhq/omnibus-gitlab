@@ -144,7 +144,9 @@ production: &base
   uploads:
     # The location where uploads objects are stored (default: public/).
     storage_path: <%= @uploads_storage_path %>
+    <% unless @uploads_base_dir.nil? %>
     base_dir: <%= @uploads_base_dir %>
+    <% end %>
     object_store:
       enabled: <%= @uploads_object_store_enabled %>
       background_upload: <%= @uploads_object_store_background_upload %>
