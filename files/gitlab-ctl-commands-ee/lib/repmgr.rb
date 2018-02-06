@@ -218,7 +218,7 @@ class RepmgrHelper
       def repmgrd_failover_promote(node_id, success, timestamp, details)
         raise RepmgrHelper::EventError, "We tried to failover at #{timestamp}, but failed with: #{details}" unless success.eql?('1')
         old_master = details.match(/old master (\d+) marked as failed/)[1]
-        ConsulHelper::Kv.put("gitlab/ha/postgresql/failed_masters/#{old_master}")
+        Consul::Kv.put("gitlab/ha/postgresql/failed_masters/#{old_master}")
       end
     end
   end

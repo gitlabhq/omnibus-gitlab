@@ -151,7 +151,7 @@ describe RepmgrHelper do
         real_event = [
           nil, nil, nil, 1, 'repmgrd-failover-promote', '1', 'real timestamp', 'node 1 promoted to master; old master 2 marked as failed'
         ]
-        expect(ConsulHelper::Kv).to receive(:put).with('gitlab/ha/postgresql/failed_masters/2')
+        expect(Consul::Kv).to receive(:put).with('gitlab/ha/postgresql/failed_masters/2')
         described_class.send(:fire, real_event)
       end
     end
