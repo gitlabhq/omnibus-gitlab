@@ -52,7 +52,7 @@ Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt
 To enable, ensure your `external_url` specifies `https` as the protocol, and add the following to your `/etc/gitlab/gitlab.rb`
 ```ruby
 letsencrypt['enable'] = true
-letsencrypt['contact'] = ['mailto:foo@email.com'] # Optional
+letsencrypt['contact_emails'] = ['mailto:foo@email.com'] # Optional
 ```
 
 While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing expiration.
