@@ -14,6 +14,8 @@ omnibus-gitlab repository.
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
 - Add support for setting environment variables for Registry (Anthony Dong)
 - Add object storage support for uploads
+- Do not attempt to load postgresql_extension if database in question doesn't
+  exist.
 
 10.4.1
 

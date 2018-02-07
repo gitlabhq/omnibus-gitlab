@@ -62,6 +62,8 @@ describe BasePgHelper do
     before do
       allow(subject).to receive(:is_running?).and_return(true)
       allow(subject).to receive(:is_slave?).and_return(false)
+      allow(subject).to receive(:extension_exists?).and_return(true)
+      allow(subject).to receive(:database_exists?).and_return(true)
       allow(subject).to receive(:extension_enabled?).and_return(false)
     end
 
@@ -76,6 +78,16 @@ describe BasePgHelper do
 
     it 'cannot be done on a slave' do
       allow(subject).to receive(:is_slave?).and_return(true)
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
+    end
+
+    it 'needs to have the extension available' do
+      allow(subject).to receive(:extension_exists?).and_return(false)
+      expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
+    end
+
+    it 'needs the database to load the extension into' do
+      allow(subject).to receive(:database_exists?).and_return(false)
       expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
     end
 

@@ -44,6 +44,8 @@ class BasePgHelper
   def extension_can_be_enabled?(extension_name, db_name)
     is_running? &&
       !is_slave? &&
+      extension_exists?(extension_name) &&
+      database_exists?(db_name) &&
       !extension_enabled?(extension_name, db_name)
   end
 
