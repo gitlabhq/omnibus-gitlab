@@ -73,8 +73,11 @@ module Geo
 
       check_and_create_replication_slot!
 
-      puts '* Backing up postgresql.conf'.color(:green)
-      run_command("mv #{data_path}/postgresql/data/postgresql.conf #{data_path}/postgresql/")
+      orig_conf = "#{data_path}/postgresql/data/postgresql.conf"
+      if File.exist?(orig_conf)
+        puts '* Backing up postgresql.conf'.color(:green)
+        run_command("mv #{orig_conf} #{data_path}/postgresql/")
+      end
 
       bkp_dir = "#{data_path}/postgresql/data.#{Time.now.to_i}"
       puts "* Moving old data directory to '#{bkp_dir}'".color(:green)
