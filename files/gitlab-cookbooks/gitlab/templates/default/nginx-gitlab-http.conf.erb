@@ -40,9 +40,20 @@ server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
 <% end %>
+
   server_name <%= @fqdn %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
-  return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+
+  <% if @letsencrypt_enable %>
+  location /.well-known {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
+  location / {
+    return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+  }
+
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
 }
@@ -72,7 +83,7 @@ server {
   ssl_certificate_key <%= @ssl_certificate_key %>;
   <% if @ssl_client_certificate %>
   ssl_client_certificate <%= @ssl_client_certificate%>;
- 	<% end %>
+  <% end %>
   <% if @ssl_verify_client %>
   ssl_verify_client <%= @ssl_verify_client%>;
   ssl_verify_depth <%= @ssl_verify_depth%>;

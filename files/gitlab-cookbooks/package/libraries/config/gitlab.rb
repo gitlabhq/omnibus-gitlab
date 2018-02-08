@@ -45,6 +45,7 @@ module Gitlab
   attribute('consul')
   attribute('gitaly').use { Gitaly }
   attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
+  attribute('letsencrypt')
 
   ## Attributes under node['gitlab']
   attribute_block 'gitlab' do
