@@ -86,7 +86,9 @@ module Geo
       run_command('rm -f /tmp/postgresql.trigger')
 
       puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
-      run_command("PGPASSFILE=#{@pgpass} #{base_path}/embedded/bin/pg_basebackup -h #{@options[:host]} -p #{@options[:port]} -D #{data_path}/postgresql/data -U #{@options[:user]} -v -x -P", live: true, timeout: @options[:backup_timeout])
+
+      run_command(pg_basebackup_command,
+                  live: true, timeout: @options[:backup_timeout])
 
       puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]}".color(:green)
       create_recovery_file!
@@ -157,6 +159,27 @@ module Geo
     def create_replication_slot!
       status = run_psql_command("SELECT slot_name FROM pg_create_physical_replication_slot('#{@options[:slot_name]}');")
       status.stdout.include?(@options[:slot_name])
+    end
+
+    def pg_basebackup_command
+      slot_arguments =
+        if @options[:skip_replication_slot]
+          ''
+        else
+          "-S #{@options[:slot_name]}"
+        end
+
+      %W(
+        PGPASSFILE=#{@pgpass} #{@base_path}/embedded/bin/pg_basebackup
+        -h #{@options[:host]}
+        -p #{@options[:port]}
+        -D #{@data_path}/postgresql/data
+        -U #{@options[:user]}
+        -v
+        -P
+        -X stream
+        #{slot_arguments}
+      ).join(' ')
     end
 
     def run_psql_command(query)
