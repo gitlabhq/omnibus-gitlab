@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
+- Add support for generating Let's Encrypt certificates as part of reconfigure
 
 10.4.1
 
