@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Set PostgreSQL archive_timeout to 0 by default
 - Added LDAP configuration option for lowercase_usernames
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
+- Add support for generating Let's Encrypt certificates as part of reconfigure
 - Add support for setting environment variables for Registry (Anthony Dong)
 
 10.4.1
