@@ -137,6 +137,12 @@ default['gitlab']['gitlab-rails']['lfs_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_object_store_background_upload'] = true # TODO: Deprecate once direct upload is implemented
 default['gitlab']['gitlab-rails']['lfs_object_store_remote_directory'] = 'lfs-objects'
 default['gitlab']['gitlab-rails']['lfs_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['uploads_storage_path'] = nil
+default['gitlab']['gitlab-rails']['uploads_base_dir'] = nil
+default['gitlab']['gitlab-rails']['uploads_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['uploads_object_store_background_upload'] = true
+default['gitlab']['gitlab-rails']['uploads_object_store_remote_directory'] = 'uploads'
+default['gitlab']['gitlab-rails']['uploads_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
@@ -168,6 +174,7 @@ default['gitlab']['gitlab-rails']['ldap_method'] = nil
 default['gitlab']['gitlab-rails']['ldap_bind_dn'] = nil
 default['gitlab']['gitlab-rails']['ldap_password'] = nil
 default['gitlab']['gitlab-rails']['ldap_allow_username_or_email_login'] = nil
+default['gitlab']['gitlab-rails']['ldap_lowercase_usernames'] = nil
 default['gitlab']['gitlab-rails']['ldap_user_filter'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_base'] = nil
 default['gitlab']['gitlab-rails']['ldap_admin_group'] = nil
@@ -257,6 +264,7 @@ default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
+default['gitlab']['gitlab-rails']['db_fdw'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
@@ -453,7 +461,7 @@ default['gitlab']['postgresql']['hot_standby_feedback'] = 'off'
 # Backup/Archive settings
 default['gitlab']['postgresql']['archive_mode'] = "off"
 default['gitlab']['postgresql']['archive_command'] = nil
-default['gitlab']['postgresql']['archive_timeout'] = "60"
+default['gitlab']['postgresql']['archive_timeout'] = "0"
 
 ####
 # Redis

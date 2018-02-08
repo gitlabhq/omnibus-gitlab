@@ -27,7 +27,7 @@ postgresql_socket_dir = node['gitlab']['geo-postgresql']['unix_socket_directory'
 postgresql_username = account_helper.postgresql_user
 
 geo_pg_helper = GeoPgHelper.new(node)
-pg_helper = PgHelper.new(node)
+fdw_helper = FdwHelper.new(node)
 
 include_recipe 'gitlab::postgresql_user'
 
@@ -205,7 +205,7 @@ if node['gitlab']['geo-postgresql']['enable']
       safeRun # we always return 0 so we don't block reconfigure flow
     EOF
 
-    not_if { !gitlab_geo_helper.geo_database_configured? || !pg_helper.is_running? || pg_helper.database_empty?(fdw_dbname) || geo_pg_helper.is_offline_or_readonly? || gitlab_geo_helper.fdw_synced? }
+    only_if { fdw_helper.fdw_can_refresh? }
   end
 end
 

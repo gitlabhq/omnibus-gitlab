@@ -13,6 +13,18 @@ module Build
         system("git describe --exact-match --match #{tag}")
       end
 
+      def is_patch_release?
+        # Major and minor releases have patch component as zero
+        Info.semver_version.split(".")[-1] != "0"
+      end
+
+      def is_an_upgrade?
+        apt_output = `apt-cache policy gitlab-ee | grep Installed`.strip
+        existing_version = apt_output.split(' ')[-1]
+        raise "GitLab EE not installed" if existing_version == "(none)"
+        Gem::Version.new(Info.release_version) > Gem::Version.new(existing_version)
+      end
+
       def add_latest_tag?
         match_tag?(Info.latest_stable_tag)
       end

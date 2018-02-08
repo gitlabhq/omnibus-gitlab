@@ -30,6 +30,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
+      parse_rack_attack_enabled
     end
 
     def parse_directories
@@ -37,6 +38,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_shared_dir
       parse_artifacts_dir
       parse_lfs_objects_dir
+      parse_uploads_dir
       parse_pages_dir
       parse_repository_storage
     end
@@ -134,6 +136,10 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       Gitlab['gitlab_rails']['lfs_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'lfs-objects')
     end
 
+    def parse_uploads_dir
+      Gitlab['gitlab_rails']['uploads_storage_path'] ||= public_path
+    end
+
     def parse_pages_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
@@ -154,6 +160,19 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
+    end
+
+    def parse_rack_attack_enabled
+      return unless Gitlab.dig('gitlab_rails', 'rack_attack_git_basic_auth', 'enabled').nil?
+
+      message = <<~MSG
+            Starting with GitLab 11.0, Rack Attack will be disabled by default. To continue using this feature,
+            please enable it in your gitlab.rb by setting gitlab_rails['rack_attack_git_basic_auth'] = true.
+
+            Check https://docs.gitlab.com/ee/security/rack_attack.html#rack-attack for more details.
+            MSG
+
+      LoggingHelper.deprecation(message)
     end
 
     def parse_rack_attack_protected_paths

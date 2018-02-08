@@ -182,6 +182,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### GitLab uploads
+###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
+# gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
+# gitlab_rails['uploads_base_dir'] = "uploads/-/system"
+# gitlab_rails['uploads_object_store_enabled'] = false # EE only
+# gitlab_rails['uploads_object_store_background_upload'] = true
+# gitlab_rails['uploads_object_store_remote_directory'] = "uploads"
+# gitlab_rails['uploads_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'host' => 's3.amazonaws.com',
+#   # 'endpoint' => nil,
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
@@ -210,6 +228,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     lowercase_usernames: false
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
@@ -229,6 +248,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
+#     lowercase_usernames: false
 #     block_auto_created_users: false
 #     base: ''
 #     user_filter: ''
@@ -466,6 +486,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['registry_http_addr'] = "localhost:5000"
 # registry['debug_addr'] = "localhost:5001"
 # registry['log_directory'] = "/var/log/gitlab/registry"
+# registry['env_directory'] = "/opt/gitlab/etc/registry/env"
+# registry['env'] = {}
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['storage_delete_enabled'] = true
@@ -720,7 +742,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # Backup/Archive settings
 # default['gitlab']['postgresql']['archive_command'] = nil
-# default['gitlab']['postgresql']['archive_timeout'] = "60"
+# default['gitlab']['postgresql']['archive_timeout'] = "0"
 
 ### Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
@@ -1623,6 +1645,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_secondary['db_sslmode'] = nil
 # geo_secondary['db_sslrootcert'] = nil
 # geo_secondary['db_sslca'] = nil
+# geo_secondary['db_fdw'] = nil
 
 ################################################################################
 ## GitLab Geo Secondary Tracking Database (EE only)

@@ -56,6 +56,7 @@ default['gitlab']['geo-secondary']['db_socket'] = nil
 default['gitlab']['geo-secondary']['db_sslmode'] = nil
 default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
 default['gitlab']['geo-secondary']['db_sslca'] = nil
+default['gitlab']['geo-secondary']['db_fdw'] = nil
 
 ###
 # Geo: PostgreSQL (Tracking database)
@@ -125,7 +126,7 @@ default['gitlab']['geo-postgresql']['hot_standby_feedback'] = 'off'
 # Backup/Archive settings
 default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
-default['gitlab']['geo-postgresql']['archive_timeout'] = '60'
+default['gitlab']['geo-postgresql']['archive_timeout'] = '0'
 
 ###
 # Geo: LogCursor (replication)

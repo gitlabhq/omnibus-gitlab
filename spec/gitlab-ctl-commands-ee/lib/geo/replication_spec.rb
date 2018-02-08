@@ -6,13 +6,14 @@ require 'gitlab_ctl/util'
 
 describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
-  let(:ctl) { spy('gitlab ctl spy') }
+  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
   let(:file) { spy('file spy') }
-  let(:options) { { now: true } }
+  let(:options) { { now: true, host: 'localhost', port: 9999, user: 'my-user' } }
 
-  subject { described_class.new(ctl, options) }
+  subject { described_class.new(instance, options) }
 
   before do
+    allow(instance).to receive(:service_enabled?).and_return(true)
     allow(STDOUT).to receive(:puts)
     allow(subject).to receive(:print)
     allow(File).to receive(:open).and_yield(file)
@@ -56,19 +57,20 @@ describe Geo::Replication, '#execute' do
 
       subject.execute
 
-      expect(file).to have_received(:write).with("::*::pass\n")
+      expect(file).to have_received(:write).with("localhost:9999:*:my-user:pass\n")
       expect(file).to have_received(:write).with(/password=pass sslmode='\n/)
     end
   end
 
   context 'when user has to provide a confirmation text' do
-    let(:options) { { now: false } }
+    let(:options) { { now: false, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo' } }
 
     it 'asks for confirmation string' do
       allow(subject).to receive(:ask_pass).and_return('mypass')
       expect(STDIN).to receive(:gets).and_return('replicate')
       expect(GitlabCtl::Util).to receive(:run_command)
-        .with(%r{/embedded/bin/pg_basebackup}, anything)
+        .with("PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/embedded/bin/pg_basebackup -h localhost -p 9999 -D /var/opt/gitlab/postgresql/data/postgresql/data -U my-user -v -P -X stream -S foo",
+              anything)
 
       subject.execute
     end
