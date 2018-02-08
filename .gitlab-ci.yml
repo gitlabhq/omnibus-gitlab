@@ -15,6 +15,7 @@ stages:
   - raspbian
   - raspbian_release
   - notification_fail
+  - metrics
 
 variables:
   BUILDER_IMAGE_REVISION: "0.0.12"
@@ -1064,3 +1065,13 @@ Docker-Release:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
   when: manual
+
+upgrade:
+  stage: metrics
+  script:
+    - bundle exec rake metrics:upgrade_package
+  allow_failure: true
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - metrics
