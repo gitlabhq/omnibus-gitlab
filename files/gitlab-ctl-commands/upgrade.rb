@@ -119,15 +119,17 @@ end
 
 # Check for stale files from previous/failed installs, and advise the user to remove them.
 def stale_files_check
-  stale_sprocket_files = Dir.glob('#{base_path}/embedded/service/gitlab-rails/public/assets/.sprockets-manifest*').sort_by{ |f| File.ctime(f) }
-  if stale_sprocket_files.size > 1
-    puts "WARNING:"    
-    puts "GitLab discovered multiple stale files that need to be cleaned up."
-    puts "The stale files that you will need to manually clean are located here:"
-    puts "\n"
-    puts stale_sprocket_files.take (stale_sprocket_files.size - 1)
-    puts "\n"
-  end
+  # The ctime will always be reflective of when the file was installed, where mtime is not being
+  #  set when the file is extracted from a package. By using ctime to sort the files, the newest
+  #  file is always the file to keep, and it's name is excluded from the output to the user.
+  sprocket_files = Dir.glob("#{base_path}/embedded/service/gitlab-rails/public/assets/.sprockets-manifest*").sort_by { |f| File.ctime(f) }
+  return unless sprocket_files.size > 1
+  puts "WARNING:"
+  puts "GitLab discovered stale file(s) from a previous install that need to be cleaned up."
+  puts "The following files need to be removed:"
+  puts "\n"
+  puts sprocket_files.take(sprocket_files.size - 1)
+  puts "\n"
 end
 
 def get_color_strings
