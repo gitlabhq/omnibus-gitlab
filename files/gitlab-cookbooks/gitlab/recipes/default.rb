@@ -148,6 +148,9 @@ include_recipe "gitlab::gitlab-prometheus"
 
 include_recipe 'letsencrypt::enable' if node['letsencrypt']['enable']
 
+# Deprecate skip-auto-migrations control file
+include_recipe "gitlab::deprecate-skip-auto-migrations"
+
 # Report on any deprecations we encountered at the end of the run
 Chef.event_handler do
   on :run_completed do
