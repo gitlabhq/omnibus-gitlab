@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Extends rspec to `gitlab-ctl consul`'s helper class, and refactors to avoid
   namespace conflicts.
 - Geo: Use a background WAL receiver and replication slot to improve initial sync
+- Support Redis as an LRU cache
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
 - Set PostgreSQL archive_timeout to 0 by default
 - Added LDAP configuration option for lowercase_usernames
