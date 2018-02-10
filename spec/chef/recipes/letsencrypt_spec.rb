@@ -103,8 +103,10 @@ describe 'letsencrypt::enable' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
       node.normal['gitlab']['external-url'] = 'https://standalone.fakehost.com'
+      node.normal['gitlab']['nginx']['log_directory'] = '/fake/dir'
       node.normal['gitlab']['nginx']['ssl_certificate'] = '/fake/path/cert.crt'
       node.normal['gitlab']['nginx']['ssl_certificate_key'] = '/fake/path/cert.key'
+      node.normal['gitlab']['logging'] = {}
     end.converge('letsencrypt::enable')
   end
 
