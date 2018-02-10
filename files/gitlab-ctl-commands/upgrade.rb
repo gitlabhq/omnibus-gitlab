@@ -117,6 +117,21 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   print_upgrade_and_exit
 end
 
+# Check for stale files from previous/failed installs, and advise the user to remove them.
+def stale_files_check
+  # The ctime will always be reflective of when the file was installed, where mtime is not being
+  #  set when the file is extracted from a package. By using ctime to sort the files, the newest
+  #  file is always the file to keep, and it's name is excluded from the output to the user.
+  sprocket_files = Dir.glob("#{base_path}/embedded/service/gitlab-rails/public/assets/.sprockets-manifest*").sort_by { |f| File.ctime(f) }
+  return unless sprocket_files.size > 1
+  puts "WARNING:"
+  puts "GitLab discovered stale file(s) from a previous install that need to be cleaned up."
+  puts "The following files need to be removed:"
+  puts "\n"
+  puts sprocket_files.take(sprocket_files.size - 1)
+  puts "\n"
+end
+
 def get_color_strings
   # Check if terminal supports colored outputs.
   if system("which tput > /dev/null") && `tput colors`.strip.to_i >= 8
@@ -184,6 +199,7 @@ def print_welcome_and_exit
 
   puts "\nFor a comprehensive list of configuration options please see the Omnibus GitLab readme"
   puts "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md\n\n"
+  stale_files_check
   Kernel.exit 0
 end
 
@@ -195,6 +211,7 @@ def print_upgrade_and_exit
   puts "If you need to roll back to the previous version you can use the database"
   puts "backup made during the upgrade (scroll up for the filename)."
   puts "\n"
+  stale_files_check
   Kernel.exit 0
 end
 
