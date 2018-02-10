@@ -1,5 +1,5 @@
 #!/bin/sh
 exec 2>&1
-<%= render("mount_point_check.erb", options: { cookbook: 'gitlab' }) %>
+<%= render("mount_point_check.erb", cookbook: 'gitlab') %>
 cd <%= node['gitlab']['nginx']['dir'] %>
 exec chpst -P /opt/gitlab/embedded/sbin/nginx -p <%= node['gitlab']['nginx']['dir'] %>
