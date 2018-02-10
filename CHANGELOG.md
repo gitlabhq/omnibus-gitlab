@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.6.0
+
+- Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
+
 10.5.0
 
 - Add support to configure the `fdw` parameter in database_geo.yml
