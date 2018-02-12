@@ -8,11 +8,17 @@ omnibus-gitlab repository.
 - Add support to configure the `fdw` parameter in database_geo.yml
 - Extends rspec to `gitlab-ctl consul`'s helper class, and refactors to avoid
   namespace conflicts.
+- Geo: Use a background WAL receiver and replication slot to improve initial sync
 - Remove usage of gitlab_shell['git_data_directories'] configuration 2003bc5d
 - Set PostgreSQL archive_timeout to 0 by default
 - Added LDAP configuration option for lowercase_usernames
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
+- Add support for generating Let's Encrypt certificates as part of reconfigure
 - Add support for setting environment variables for Registry (Anthony Dong)
+- Don't attempt to backup non-existent PostgreSQL data file in gitlab-ctl replicate-geo-database
+- Add object storage support for uploads
+- Do not attempt to load postgresql_extension if database in question doesn't
+  exist.
 
 10.4.1
 

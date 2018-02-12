@@ -118,7 +118,10 @@ template gitlab_rails_http_conf do
                 kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
                 kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
                 kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
-                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url']
+                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+                letsencrypt_enable: node['letsencrypt']['enable'],
+                # lazy evaluate here since letsencrypt::enable sets this to true
+                redirect_http_to_https: lazy { node['gitlab']['redirect_http_to_https'] }
               }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
