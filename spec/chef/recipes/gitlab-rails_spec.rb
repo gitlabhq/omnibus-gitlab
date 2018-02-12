@@ -163,6 +163,8 @@ describe 'gitlab::gitlab-rails' do
   context 'creating gitlab.yml' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
     let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
+    let(:gitlab_yml_templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
+
     let(:aws_connection_hash) do
       {
         'provider' => 'AWS',
@@ -193,15 +195,15 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it 'should notify rails cache clear resource' do
-        expect(gitlab_yml).to notify('execute[clear the gitlab-rails cache]')
+        expect(gitlab_yml_templatesymlink).to notify('execute[clear the gitlab-rails cache]')
       end
 
       it 'should still notify rails cache clear resource if disabled' do
         stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
 
-        expect(gitlab_yml).to notify(
+        expect(gitlab_yml_templatesymlink).to notify(
           'execute[clear the gitlab-rails cache]')
-        expect(gitlab_yml).not_to run_execute(
+        expect(chef_run).not_to run_execute(
           'clear the gitlab-rails cache')
       end
     end

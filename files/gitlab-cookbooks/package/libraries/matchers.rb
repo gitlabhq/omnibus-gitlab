@@ -1,4 +1,6 @@
 if defined?(ChefSpec)
+  ChefSpec.define_matcher :templatesymlink
+
   def create_templatesymlink(message)
     ChefSpec::Matchers::ResourceMatcher.new(:templatesymlink, :create, message)
   end
