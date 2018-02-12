@@ -8,6 +8,6 @@ action :enable do
     db_name new_resource.database
     helper new_resource.helper
     action :run
-    not_if { !helper.is_running? || helper.is_slave? || helper.extension_enabled?(new_resource.extension, database) }
+    only_if { new_resource.helper.extension_can_be_enabled?(new_resource.extension, new_resource.database) }
   end
 end

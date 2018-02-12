@@ -15,6 +15,10 @@ omnibus-gitlab repository.
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
 - Add support for generating Let's Encrypt certificates as part of reconfigure
 - Add support for setting environment variables for Registry (Anthony Dong)
+- Don't attempt to backup non-existent PostgreSQL data file in gitlab-ctl replicate-geo-database
+- Add object storage support for uploads
+- Do not attempt to load postgresql_extension if database in question doesn't
+  exist.
 
 10.4.1
 
