@@ -243,13 +243,7 @@ if nginx_vars.key?('custom_error_pages')
   end
 end
 
-runit_service "nginx" do
-  down node['gitlab']['nginx']['ha']
-  options({
-    log_directory: nginx_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['nginx'].to_hash)
-end
+include_recipe 'nginx::enable'
 
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start nginx" do
