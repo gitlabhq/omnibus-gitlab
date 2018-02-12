@@ -21,6 +21,8 @@ omnibus-gitlab repository.
 - Add support for setting environment variables for Registry (Anthony Dong)
 - Don't attempt to backup non-existent PostgreSQL data file in gitlab-ctl replicate-geo-database
 - Add object storage support for uploads
+- Do not attempt to load postgresql_extension if database in question doesn't
+  exist.
 
 10.4.1
 
