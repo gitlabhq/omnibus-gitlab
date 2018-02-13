@@ -1,0 +1,6 @@
+#!/bin/sh
+
+<%= render("make_metrics_rundir.erb") %>
+
+echo "Received HUP from runit, sending to process group (-PID)"
+kill -1 -- -$(cat /opt/gitlab/service/<%= @options[:service] %>/supervise/pid)
