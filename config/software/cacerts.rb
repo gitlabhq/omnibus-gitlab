@@ -20,13 +20,13 @@ license 'MPL-2.0'
 license_file 'https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt'
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version '2017.09.20'
+default_version '2018.01.17'
 
-version '2017.09.20' do
-  source md5: '2aeba46562a9b9117a9217520f67adc0'
+version '2018.01.17' do
+  source md5: 'df0df092f7590ce0cc636986f1ae084b'
 end
 
-# Source URL looks like https://curl.haxx.se/ca/cacert-2017-09-20.pem. The
+# Source URL looks like https://curl.haxx.se/ca/cacert-2018-01-17.pem. The
 # version part has periods replaced with dashes.
 source url: "https://curl.haxx.se/ca/cacert-#{version.tr('.', '-')}.pem"
 
