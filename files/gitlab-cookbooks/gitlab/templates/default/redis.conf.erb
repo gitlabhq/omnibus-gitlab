@@ -547,6 +547,7 @@ maxclients <%= @maxclients %>
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
+maxmemory <%= @maxmemory %>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached. You can select among five behaviors:
@@ -570,6 +571,7 @@ maxclients <%= @maxclients %>
 # The default is:
 #
 # maxmemory-policy noeviction
+maxmemory-policy <%= @maxmemory_policy %>
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can tune it for speed or
@@ -581,6 +583,7 @@ maxclients <%= @maxclients %>
 # true LRU but costs a bit more CPU. 3 is very fast but not very accurate.
 #
 # maxmemory-samples 5
+maxmemory-samples <%= @maxmemory_samples %>
 
 ############################## APPEND ONLY MODE ###############################
 

@@ -113,6 +113,22 @@ GitLab includes support for running with separate redis instances for different 
 
 1. Run `gitlab-ctl reconfigure`
 
+## Setting the Redis Cache instance as an LRU
+
+Using multiple Redis instances allows you to configure Redis as a [Least
+Recently Used cache](https://redis.io/topics/lru-cache). Note you should only
+do this for the Redis cache class; the Redis queues and shared state cache
+should never be configured as an LRU, since they contain data (e.g. Sidekiq
+jobs) that is expected to be persistent.
+
+To cap memory usage at 32GB, you can use:
+
+```ruby
+redis['maxmemory'] = "32gb"
+redis['maxmemory_policy'] = "allkeys-lru"
+redis['maxmemory_samples'] = 5
+```
+
 ## Using a Redis HA setup
 
 See <https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
