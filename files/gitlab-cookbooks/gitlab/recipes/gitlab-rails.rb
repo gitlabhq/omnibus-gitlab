@@ -207,6 +207,7 @@ end
 %w(cache queues shared_state).each do |instance|
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab-rails']["redis_#{instance}_instance"]
+  sentinels = node['gitlab']['gitlab-rails']["redis_#{instance}_sentinels"]
   templatesymlink "Create a #{filename} and create a symlink to Rails root" do
     link_from File.join(gitlab_rails_source_dir, "config/#{filename}")
     link_to File.join(gitlab_rails_etc_dir, filename)
@@ -214,7 +215,7 @@ end
     owner 'root'
     group 'root'
     mode '0644'
-    variables(redis_url: url, redis_sentinels: [])
+    variables(redis_url: url, redis_sentinels: sentinels)
     restarts dependent_services
     not_if { url.nil? }
   end

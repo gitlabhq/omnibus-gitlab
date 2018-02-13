@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Added LDAP configuration option for lowercase_usernames
 - Support authorized_keys database lookups with SELinux on CentOS 7.4
 - Add support for generating Let's Encrypt certificates as part of reconfigure
+- Support configuration of Redis Sentinels by persistence class
 - Add support for setting environment variables for Registry (Anthony Dong)
 - Don't attempt to backup non-existent PostgreSQL data file in gitlab-ctl replicate-geo-database
 - Add object storage support for uploads

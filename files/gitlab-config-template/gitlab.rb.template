@@ -415,8 +415,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Separate instances support
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html#running-with-multiple-redis-instances
 # gitlab_rails['redis_cache_instance'] = nil
+# gitlab_rails['redis_cache_sentinels'] = nil
 # gitlab_rails['redis_queues_instance'] = nil
+# gitlab_rails['redis_queues_sentinels'] = nil
 # gitlab_rails['redis_shared_state_instance'] = nil
+# gitlab_rails['redis_shared_sentinels'] = nil
 
 ### GitLab email server settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
