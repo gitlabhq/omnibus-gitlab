@@ -272,8 +272,11 @@ default['gitlab']['gitlab-rails']['redis_password'] = nil
 default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['gitlab-rails']['redis_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_cache_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_cache_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_queues_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_queues_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_shared_state_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_shared_state_sentinels'] = []
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil

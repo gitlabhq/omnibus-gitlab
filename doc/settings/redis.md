@@ -99,7 +99,7 @@ GitLab includes support for running with separate redis instances for different 
 1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server][]
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
 
-    ```
+    ```ruby
     gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
     gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
     gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
@@ -110,6 +110,14 @@ GitLab includes support for running with separate redis instances for different 
     * PASSWORD is the plaintext password for the Redis instance
     * REDIS_HOST is the hostname or IP address of the host
     * REDIS_PORT is the port Redis is listening on, the default is 6379
+1. If you are using Redis Sentinels, you may configure them for each persistence class as well.
+   Include an array of hashes with host/port combinations, such as the following:
+
+    ```ruby
+    gitlab_rails['redis_cache_sentinels'] = [ { host: REDIS_CACHE_SENTINEL_HOST, port: PORT1 }, { host: REDIS_CACHE_SENTINEL_HOST2, port: PORT2 } ]
+    gitlab_rails['redis_queues_sentinels'] = [ { host: REDIS_QUEUES_SENTINEL_HOST, port: PORT1 }, { host: REDIS_QUEUES_SENTINEL_HOST2, port: PORT2 } ]
+    gitlab_rails['redis_shared_state_sentinels'] = [ { host: SHARED_STATE_SENTINEL_HOST, port: PORT1 }, { host: SHARED_STATE_SENTINEL_HOST2, port: PORT2 } ]
+    ```
 
 1. Run `gitlab-ctl reconfigure`
 
