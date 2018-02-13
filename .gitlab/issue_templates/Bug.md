@@ -50,7 +50,7 @@ Please remove this notice if you're confident your issue isn't a duplicate.
 `dpkg-query -l "gitlab-*"`)
 
 (For RHEL based systems (CentOS, RHEL, OL, Scientific, OpenSUSE, SLES), paste the output of:
-`rpm -qa gitlab`)
+`rpm -qa | grep 'gitlab'`)
 
 (If you can't provide these details, see https://about.gitlab.com/getting-help/ page on where to ask your question.)
 
