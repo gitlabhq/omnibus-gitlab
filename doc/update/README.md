@@ -187,7 +187,7 @@ If you meet all the requirements above, follow these instructions:
 
 1. If you have multiple nodes in a highly available/scaled environment, decide 
    which node is the `Deploy Node`. On this node create an empty file at 
-   `/etc/gitlab/skip-auto-migrations`. During software installation only, this 
+   `/etc/gitlab/skip-auto-reconfigure`. During software installation only, this 
    will prevent the upgrade from running `gitlab-ctl reconfigure` and
    automatically running database migrations. 
 1. On every other node **except** the `Deploy Node` ensure that 
@@ -279,7 +279,7 @@ to be performed automatically please run the following command before upgrading
 your GitLab instance:
 
 ```
-sudo touch /etc/gitlab/skip-auto-migrations
+sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
 Alternatively if you just want to prevent DB migrations add `gitlab_rails['auto_migrate'] = false`

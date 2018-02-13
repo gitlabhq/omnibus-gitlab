@@ -6,6 +6,7 @@ DEST_DIR=<%= install_dir %>
 mkdir -p /var/log/gitlab/reconfigure
 
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
+skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
 
 pg_check() {
   PG_MIN_VERSION=9.6
@@ -35,7 +36,7 @@ pg_check() {
 }
 
 main() {
-  if [ -e "${skip_migrations_file}" ] ; then
+  if [ -e "${skip_migrations_file}" ] || [ -e "${skip_reconfigure_file}" ] ; then
     # The user wants us to do nothing
     return
   fi

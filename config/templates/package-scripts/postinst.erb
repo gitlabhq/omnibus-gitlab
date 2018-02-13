@@ -39,10 +39,20 @@ fi
 
 print_upgrade_info()
 {
+  # Moving towards GitLab 11 we're deprecating skip-auto-migrations in favour of
+  # skip-auto-reconfigure.  In the meantime check for both and populate skip_file.
+  if [ -e "/etc/gitlab/skip-auto-migrations" ]; then
+    skip_file="/etc/gitlab/skip-auto-migrations"
+  elif [ -e "/etc/gitlab/skip-auto-reconfigure" ]; then
+    skip_file="/etc/gitlab/skip-auto-reconfigure"
+  else
+    skip_file=""
+  fi
+
   # As of 9.0, we're updating PostgreSQL by default.
   # But, if /etc/gitlab/skip-auto-migrations exists we won't do anything.
   # Here we'll warn users with out of date databases.
-  if [ -e "/etc/gitlab/skip-auto-migrations" ]
+  if [ -n "${skip_file}" ]
   then
     local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null || true)
     local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
@@ -51,8 +61,8 @@ print_upgrade_info()
       echo
       notify "WARNING:"
       notify "GitLab now ships with a newer version of PostgreSQL (${new_version}) by default"
-      notify "We did not upgrade since /etc/gitlab/skip-automigrations exists"
-      notify "To manuall upgrade, RUN THE FOLLOWING COMMAND:"
+      notify "We did not upgrade since ${skip_file} exists"
+      notify "To manually upgrade, RUN THE FOLLOWING COMMAND:"
       echo
       echo "sudo gitlab-ctl pg-upgrade"
       echo
