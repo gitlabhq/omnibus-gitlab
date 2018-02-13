@@ -91,7 +91,7 @@ gitlab_rails['backup_path'] = '/mnt/backups'
 
 ## Creating backups for GitLab instances in Docker containers
 
-Backups can scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
+Backups can be scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
 
 Backup application:
 
