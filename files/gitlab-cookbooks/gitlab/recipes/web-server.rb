@@ -34,6 +34,6 @@ account "Webserver user and group" do
   home node['gitlab']['web-server']['home']
   append_to_group external_webserver_users.any?
   group_members external_webserver_users
-  user_supports manage_home: false
+  manage_home false
   manage node['gitlab']['manage-accounts']['enable']
 end
