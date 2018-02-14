@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Upgrades Chef to 12.21.31
 - Update python to 3.4.8
+- Update chef to 13.6.4
 
 10.5.0
 

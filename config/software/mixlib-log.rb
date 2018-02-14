@@ -14,11 +14,10 @@
 # limitations under the License.
 #
 
-# We are pinning to 1.6 because 1.7 wasn't compatible with our version of chef,
-# and our chef-gem dependency will pull anything in 1.x range for mixlib-log
-
 name 'mixlib-log'
-default_version '1.6.0'
+# The version here should be in agreement with /Gemfile.lock so that our rspec
+# testing stays consistent with the package contents.
+default_version '1.7.1'
 
 license 'Apache-2.0'
 license_file 'https://raw.githubusercontent.com/chef/mixlib-log/master/LICENSE'

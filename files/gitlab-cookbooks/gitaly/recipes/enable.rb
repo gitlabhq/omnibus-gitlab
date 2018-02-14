@@ -38,7 +38,7 @@ end
 # cookbook.  Since gitlab cookbook already depends on gitaly cookbook, this
 # causes a circular dependency. To avoid it, the default value is set in the
 # recipe itself.
-node.default.gitaly.env = {
+node.default['gitaly']['env'] = {
   'HOME' => node['gitlab']['user']['home'],
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'TZ' => ':/etc/localtime'

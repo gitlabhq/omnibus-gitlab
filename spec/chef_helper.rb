@@ -6,21 +6,22 @@ require 'knapsack'
 Knapsack::Adapters::RSpecAdapter.bind if ENV['USE_KNAPSACK']
 
 # Load our cookbook libraries so we can stub them in our tests
-Dir[File.join(__dir__, '../files/gitlab-cookbooks/package/libraries/**/*.rb')].each { |f| require f }
-Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab/libraries/*.rb')].each { |f| require f }
-Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitaly/libraries/*.rb')].each { |f| require f }
-Dir[File.join(__dir__, '../files/gitlab-cookbooks/mattermost/libraries/*.rb')].each { |f| require f }
-Dir[File.join(__dir__, '../files/gitlab-cookbooks/gitlab-ee/libraries/*.rb')].each { |f| require f }
+cookbooks = %w(package gitlab gitaly mattermost gitlab-ee)
+cookbooks.each do |cookbook|
+  Dir[File.join(__dir__, "../files/gitlab-cookbooks/#{cookbook}/libraries/**/*.rb")].each { |f| require f }
+end
 
 # Load support libraries to provide common convenience methods for our tests
 Dir[File.join(__dir__, 'support/*.rb')].each { |f| require f }
 
-RSpec.configure do |config|
-  def mock_file_load(file)
-    allow(Kernel).to receive(:load).and_call_original
-    allow(Kernel).to receive(:load).with(file).and_return(true)
-  end
+def deep_clone(obj)
+  Marshal.load(Marshal.dump(obj)) # rubocop:disable Security/MarshalLoad
+end
 
+# Save the empty state of the Gitlab config singleton
+initial_gitlab = deep_clone(Gitlab.save)
+
+RSpec.configure do |config|
   Ohai::Config[:log_level] = :error
 
   ohai_data = Ohai::System.new.tap { |ohai| ohai.all_plugins(['platform']) }.data
@@ -60,12 +61,31 @@ RSpec.configure do |config|
     allow_any_instance_of(Chef::Recipe).to receive(:system).with('systemctl | grep "\-\.mount"')
     # ChefSpec::SoloRunner doesn't support Chef.event_handler, so stub it
     allow(Chef).to receive(:event_handler)
-    # Prevent chef converge from reloading the storage helper library, which would override our helper stub
-    mock_file_load(%r{gitlab/libraries/storage_directory_helper})
-    mock_file_load(%r{gitlab/libraries/helper})
+
+    # Prevent chef converge from reloading any of our previously loaded libraries
+    allow(Kernel).to receive(:load).and_call_original
+    cookbooks.each do |cookbook|
+      allow(Kernel).to receive(:load).with(%r{#{cookbook}/libraries}).and_return(true)
+    end
+
+    # Default attributes are frozen;  as that's sometimes a class we really want
+    # to mock, just intercept the .freeze call so mocking/unmocking still works
+    [PgHelper, GeoPgHelper, GitlabGeoHelper, OmnibusHelper].each do |helper_class|
+      allow_any_instance_of(helper_class).to receive(:freeze)
+    end
+
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return("9.2")
 
     stub_expected_owner?
+
+    # Reset the Gitlab config singelton
+    #
+    # Gitlab.reset (from mixlib-config) should be enough, but we end up
+    # undefining properties.
+    initial_gitlab.each do |k, v|
+      Gitlab[k] = deep_clone(v)
+    end
+
     # Clear services list before each test
     Services.reset_list
   end
