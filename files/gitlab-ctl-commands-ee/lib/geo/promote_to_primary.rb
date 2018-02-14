@@ -3,8 +3,6 @@ require 'rainbow/ext/string'
 
 module Geo
   class PromoteToPrimary
-    TRIGGER_FILE_PATH = '/tmp/postgresql.trigger'.freeze
-
     def initialize(base_path, options)
       @base_path = base_path
       @options = options
@@ -35,7 +33,7 @@ module Geo
       puts '---------------------------------------'.color(:yellow)
       puts 'WARNING: Make sure your primary is down and also be aware that'.color(:yellow)
       puts 'this command only works for setups with one secondary.'.color(:yellow)
-      puts 'If you have more of them please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.md#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
+      puts 'If you have more of them please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
       puts 'There may be data saved to the primary that was not been replicated to the secondary before the primary went offline. This data should be treated as lost if you proceed.'.color(:yellow)
       puts '---------------------------------------'.color(:yellow)
       puts
@@ -47,10 +45,10 @@ module Geo
 
     def promote_postgresql_to_primary
       puts
-      puts 'Promoting the Postgres to primary...'.color(:yellow)
+      puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
       puts
 
-      run_command("touch #{TRIGGER_FILE_PATH}")
+      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote")
     end
 
     def remove_ssh_keys
