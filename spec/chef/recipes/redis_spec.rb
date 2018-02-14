@@ -21,6 +21,12 @@ describe 'gitlab::redis' do
         .with_content(/^save 300 10/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^save 60 10000/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory 0/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory-policy noeviction/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory-samples 5/)
     end
   end
 
@@ -31,7 +37,10 @@ describe 'gitlab::redis' do
           client_output_buffer_limit_normal: "5 5 5",
           client_output_buffer_limit_slave: "512mb 128mb 120",
           client_output_buffer_limit_pubsub: "64mb 16mb 120",
-          save: ["10 15000"]
+          save: ["10 15000"],
+          maxmemory: "32gb",
+          maxmemory_policy: "allkeys-url",
+          maxmemory_samples: 10
         }
       )
     end
@@ -45,6 +54,12 @@ describe 'gitlab::redis' do
         .with_content(/client-output-buffer-limit pubsub 64mb 16mb 120/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^save 10 15000/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory 32gb/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory-policy allkeys-url/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^maxmemory-samples 10/)
     end
   end
 
