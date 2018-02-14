@@ -33,7 +33,7 @@ action :create do
 
   file "create /opt/gitlab/embedded/etc/#{conf_name} #{new_resource.name}" do
     path "/opt/gitlab/embedded/etc/#{conf_name}"
-    content "#{new_resource.name} = #{value}\n"
+    content "#{new_resource.name} = #{new_resource.value}\n"
     notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
   end
 

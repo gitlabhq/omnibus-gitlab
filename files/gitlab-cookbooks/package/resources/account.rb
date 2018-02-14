@@ -34,20 +34,20 @@ property :manage_home, [true, false], default: false
 property :manage, [true, false, nil], default: nil
 
 action :create do
-  if manage && groupname
+  if new_resource.manage && new_resource.groupname
     group new_resource.name do
-      group_name groupname
+      group_name new_resource.groupname
       gid new_resource.gid
       system new_resource.system
-      if append_to_group
+      if new_resource.append_to_group
         append true
-        members group_members
+        members new_resource.group_members
       end
       action :create
     end
   end
 
-  if manage && new_resource.username
+  if new_resource.manage && new_resource.username
     user new_resource.name do
       username new_resource.username
       shell new_resource.shell
@@ -62,14 +62,14 @@ action :create do
 end
 
 action :remove do
-  if manage && groupname
-    group groupname do
-      group_name groupname
+  if new_resource.manage && new_resource.groupname
+    group new_resource.groupname do
+      group_name new_resource.groupname
       action :remove
     end
   end
 
-  if manage && username
+  if new_resource.manage && new_resource.username
     user new_resource.username do
       username new_resource.username
       action :remove

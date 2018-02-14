@@ -28,19 +28,19 @@ property :mode, [String, nil], default: nil
 action :create do
   next unless node['gitlab']['manage-storage-directories']['enable']
   new_resource.path ||= new_resource.name
-  storage_helper = StorageDirectoryHelper.new(owner, group, mode)
+  storage_helper = StorageDirectoryHelper.new(new_resource.owner, new_resource.group, new_resource.mode)
 
-  ruby_block "directory resource: #{path}" do
+  ruby_block "directory resource: #{new_resource.path}" do
     block do
       # Ensure the directory exists
-      storage_helper.ensure_directory_exists(path)
+      storage_helper.ensure_directory_exists(new_resource.path)
 
       # Ensure the permissions are set
-      storage_helper.ensure_permissions_set(path)
+      storage_helper.ensure_permissions_set(new_resource.path)
 
       # Error out if we have not achieved the target permissions
-      storage_helper.validate!(path)
+      storage_helper.validate!(new_resource.path)
     end
-    not_if { storage_helper.validate(path) }
+    not_if { storage_helper.validate(new_resource.path) }
   end
 end

@@ -8,10 +8,10 @@ property :helper, default: PgHelper.new(node)
 action :run do
   account_helper = AccountHelper.new(node)
 
-  execute "#{description} (#{helper.service_cmd})" do
-    command %(/opt/gitlab/bin/#{helper.service_cmd} -d #{db_name} -c "#{query}")
+  execute "#{new_resource.description} (#{new_resource.helper.service_cmd})" do
+    command %(/opt/gitlab/bin/#{new_resource.helper.service_cmd} -d #{new_resource.db_name} -c "#{new_resource.query}")
     user account_helper.postgresql_user
     retries 20
-    not_if { helper.is_offline_or_readonly? }
+    not_if { new_resource.helper.is_offline_or_readonly? }
   end
 end
