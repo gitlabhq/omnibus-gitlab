@@ -269,7 +269,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
     )
   )
   restarts dependent_services
-  notifies [:run, 'execute[clear the gitlab-rails cache]']
+  notifies :run, 'execute[clear the gitlab-rails cache]'
 end
 
 templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
