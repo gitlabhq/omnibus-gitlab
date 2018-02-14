@@ -10,13 +10,9 @@ describe Geo::PromoteToPrimary, '#execute' do
   subject(:command) { described_class.new(nil, {}) }
 
   let(:temp_directory) { Dir.mktmpdir }
-  let(:postgres_trigger_file_path) { File.join(temp_directory, 'test_trigger') }
   let(:gitlab_config_path) { File.join(temp_directory, 'gitlab.rb') }
-  let(:key_path) { File.join(temp_directory, 'id_rsa') }
-  let(:public_key_path) { File.join(temp_directory, 'id_rsa.pub') }
 
   before do
-    allow(STDIN).to receive(:gets).and_return('y')
     allow(command).to receive(:puts)
     allow(command).to receive(:print)
   end
@@ -25,50 +21,29 @@ describe Geo::PromoteToPrimary, '#execute' do
     FileUtils.rm_rf(temp_directory)
   end
 
-  it 'calls all the subcommands' do
-    stub_env
-
-    is_expected.to receive(:run_command).with('gitlab-ctl reconfigure', live: true).once
-    is_expected.to receive(:run_command).with('gitlab-rake geo:set_secondary_as_primary', live: true).once
-    is_expected.to receive(:run_command).with("touch #{postgres_trigger_file_path}").once
-
-    command.execute
-  end
-
-  it 'applies all the changes' do
-    stub_env
-
-    allow(command).to receive(:run_command) do |cmd|
-      fake_run_command(cmd)
+  context 'when confirmation is accepted' do
+    before do
+      allow(STDIN).to receive(:gets).and_return('y')
     end
 
-    command.execute
+    it 'calls all the subcommands' do
+      is_expected.to receive(:run_command).with('gitlab-ctl reconfigure', live: true).once
+      is_expected.to receive(:run_command).with('gitlab-rake geo:set_secondary_as_primary', live: true).once
+      is_expected.to receive(:run_command).with("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote").once
 
-    expect(@reconfigure_has_been_run).to be_truthy
-    expect(@rake_task_has_been_run).to be_truthy
-    expect(File.exist?(postgres_trigger_file_path)).to be_truthy
-    expect(File.exist?(key_path)).to be_falsey
-    expect(File.exist?(public_key_path)).to be_falsey
+      command.execute
+    end
   end
 
-  def stub_env
-    FileUtils.rm_f(postgres_trigger_file_path)
-    stub_const("Geo::PromoteToPrimary::TRIGGER_FILE_PATH", postgres_trigger_file_path)
-    allow(subject).to receive(:key_path).and_return(key_path)
-    allow(subject).to receive(:public_key_path).and_return(public_key_path)
-  end
-
-  def fake_run_command(cmd)
-    if cmd == 'gitlab-ctl reconfigure'
-      @reconfigure_has_been_run = true
-      return
+  context 'when confirmation is refused' do
+    before do
+      allow(STDIN).to receive(:gets).and_return('n')
     end
 
-    if cmd == 'gitlab-rake geo:set_secondary_as_primary'
-      @rake_task_has_been_run = true
-      return
-    end
+    it 'calls all the subcommands' do
+      is_expected.not_to receive(:run_command)
 
-    GitlabCtl::Util.run_command(cmd)
+      expect { command.execute }.to raise_error RuntimeError, 'Exited because primary node must be down'
+    end
   end
 end

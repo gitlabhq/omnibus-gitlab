@@ -13,8 +13,6 @@ module Geo
 
       promote_postgresql_to_primary
 
-      remove_ssh_keys
-
       reconfigure
 
       promote_to_primary
@@ -51,21 +49,6 @@ module Geo
       run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote")
     end
 
-    def remove_ssh_keys
-      return nil unless File.exist?(key_path) || File.exist?(public_key_path)
-
-      unless @options[:confirm_removing_keys]
-        puts
-        puts 'SSH keys detected! Remove? See https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-a-secondary-node for more information [Y/n]'.color(:yellow)
-
-        return true if STDIN.gets.chomp.casecmp('n').zero?
-      end
-
-      [key_path, public_key_path].each do |path|
-        File.delete(path) if File.exist?(path)
-      end
-    end
-
     def reconfigure
       puts
       puts 'Reconfiguring...'.color(:yellow)
@@ -84,14 +67,6 @@ module Geo
 
     def run_command(cmd, live: false)
       GitlabCtl::Util.run_command(cmd, live: live)
-    end
-
-    def key_path
-      @key_path ||= File.join(git_user_home, '.ssh/id_rsa')
-    end
-
-    def public_key_path
-      @public_key_path ||= File.join(git_user_home, '.ssh/id_rsa.pub')
     end
   end
 end
