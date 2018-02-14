@@ -121,9 +121,21 @@ describe 'gitlab::gitlab-rails' do
       before do
         stub_gitlab_rb(
           gitlab_rails: {
-            redis_cache_instance: "url: redis://:fakepass@fake.redis.cache.com:8888/2",
-            redis_queues_instance: "url: redis://:fakepass@fake.redis.queues.com:8888/2",
-            redis_shared_state_instance: "url: redis://:fakepass@fake.redis.shared_state.com:8888/2"
+            redis_cache_instance: "redis://:fakepass@fake.redis.cache.com:8888/2",
+            redis_cache_sentinels: [
+              { host: 'cache', port: '1234' },
+              { host: 'cache', port: '3456' }
+            ],
+            redis_queues_instance: "redis://:fakepass@fake.redis.queues.com:8888/2",
+            redis_queues_sentinels: [
+              { host: 'queues', port: '1234' },
+              { host: 'queues', port: '3456' }
+            ],
+            redis_shared_state_instance: "redis://:fakepass@fake.redis.shared_state.com:8888/2",
+            redis_shared_state_sentinels: [
+              { host: 'shared_state', port: '1234' },
+              { host: 'shared_state', port: '3456' }
+            ]
           }
         )
       end
@@ -131,7 +143,14 @@ describe 'gitlab::gitlab-rails' do
       it 'render separate config files' do
         redis_instances.each do |instance|
           expect(chef_run).to render_file("#{config_dir}redis.#{instance}.yml")
-            .with_content(%r{url: redis://:fakepass@fake.redis.#{instance}.com:8888/2})
+            .with_content(%r{^\s*url: redis://:fakepass@fake.redis.#{instance}.com:8888/2})
+        end
+      end
+
+      it 'renders Sentinel config in files' do
+        redis_instances.each do |instance|
+          expect(chef_run).to render_file("#{config_dir}redis.#{instance}.yml")
+            .with_content(%r{^\s*sentinels:\n.*-.*\n.*host: #{instance}\n.*port: 1234\n.*\n.*host: #{instance}\n.*port: 3456})
         end
       end
 
