@@ -27,6 +27,7 @@ omnibus-gitlab repository.
 - Add object storage support for uploads
 - Do not attempt to load postgresql_extension if database in question doesn't
   exist.
+- Honor the `unicorn['worker_processes']` setting for a Geo secondary node
 
 10.4.1
 
