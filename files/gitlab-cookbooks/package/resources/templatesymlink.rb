@@ -29,12 +29,10 @@ property :mode, String
 property :cookbook, String
 property :variables, Hash, default: {}
 property :helpers, Module, default: QuoteHelper
-property :notifies, Array
 property :restarts, Array, default: []
-property :sensitive, [true, false], default: false
 
 action :create do
-  template link_to do
+  t = template link_to do
     source new_resource.source
     owner new_resource.owner
     group new_resource.group
@@ -42,13 +40,17 @@ action :create do
     cookbook new_resource.cookbook if new_resource.cookbook
     variables new_resource.variables
     helpers new_resource.helpers
-    notifies(*new_resource.notifies) if new_resource.notifies
     sensitive new_resource.sensitive
     restarts.each do |resource|
       notifies :restart, resource
     end
-    action :create
+    action :nothing
   end
+
+  t.run_action(:create)
+
+  # This resource changed if the template create changed
+  new_resource.updated_by_last_action(t.updated_by_last_action?)
 
   link "Link #{link_from} to #{link_to}" do
     target_file link_from

@@ -30,7 +30,7 @@ property :home, [String, nil], default: nil
 property :system, [true, false], default: true
 property :append_to_group, [true, false], default: false
 property :group_members, Array, default: []
-property :user_supports, Hash, default: {}
+property :manage_home, [true, false], default: false
 property :manage, [true, false, nil], default: nil
 
 action :create do
@@ -55,7 +55,7 @@ action :create do
       uid new_resource.uid
       gid new_resource.ugid
       system new_resource.system
-      supports user_supports
+      manage_home new_resource.manage_home
       action :create
     end
   end
