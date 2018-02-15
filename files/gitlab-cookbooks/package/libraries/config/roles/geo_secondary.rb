@@ -26,12 +26,7 @@ module GeoSecondaryRole
     Gitlab['postgresql']['hot_standby'] = 'on'
     Gitlab['gitlab_rails']['auto_migrate'] = false
     Gitlab['gitlab_rails']['enable'] = rails_needed?
-
-    # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).
-    # allow more memory for them by reducing the number of Unicorn workers.  Each one is minimum
-    # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
-    memory = Gitlab['node']['memory']['total'].to_i - 1258291
-    Gitlab['unicorn']['worker_processes'] = Unicorn.workers(memory)
+    Gitlab['unicorn']['worker_processes'] ||= number_of_worker_processes
   end
 
   def self.rails_needed?
@@ -39,5 +34,13 @@ module GeoSecondaryRole
       Gitlab['sidekiq']['enable'] ||
       Gitlab['sidekiq_cluster']['enable'] ||
       Gitlab['geo_logcursor']['enable']
+  end
+
+  # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).
+  # allow more memory for them by reducing the number of Unicorn workers.  Each one is minimum
+  # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
+  def self.number_of_worker_processes
+    memory = Gitlab['node']['memory']['total'].to_i - 1258291
+    Unicorn.workers(memory)
   end
 end

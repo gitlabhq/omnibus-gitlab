@@ -21,6 +21,8 @@ RSpec.configure do |config|
     allow(Kernel).to receive(:load).with(file).and_return(true)
   end
 
+  Ohai::Config[:log_level] = :error
+
   ohai_data = Ohai::System.new.tap { |ohai| ohai.all_plugins(['platform']) }.data
   platform, version = *ohai_data.values_at('platform', 'platform_version')
 
