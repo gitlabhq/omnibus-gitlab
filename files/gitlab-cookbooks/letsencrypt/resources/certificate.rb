@@ -1,13 +1,13 @@
 property :cn, String, name_property: true
 property :crt, String, required: true
 property :key, String, required: true
-property :owner, String, default: lazy { node['letsencrypt']['owner'] }
+property :owner, [String, nil], default: lazy { node['letsencrypt']['owner'] }
 property :chain, String, default: lazy { node['letsencrypt']['chain'] }
 property :wwwroot, String, default: lazy { node['letsencrypt']['wwwroot'] }
 property :alt_names, Array, default: lazy { node['letsencrypt']['alt_names'] }
-property :key_size, Integer, default: lazy { node['letsencrypt']['key_size'] }
-property :fullchain, String, default: lazy { node['letsencrypt']['fullchain'] }
-property :group, String, default: lazy { node['letsencrypt']['group'] }
+property :key_size, [Integer, nil], default: lazy { node['letsencrypt']['key_size'] }
+property :fullchain, [String, nil], default: lazy { node['letsencrypt']['fullchain'] }
+property :group, [String, nil], default: lazy { node['letsencrypt']['group'] }
 
 action :create do
   # Attempt to fetch a certificate from Let's Encrypt staging instance
