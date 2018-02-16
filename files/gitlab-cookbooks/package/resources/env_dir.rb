@@ -25,26 +25,26 @@ property :restarts, Array, default: []
 
 action :create do
   # Cleaning up non-existent variables
-  if ::File.directory?(name)
-    deleted_env_vars = Dir.entries(name) - variables.keys - %w(. ..)
+  if ::File.directory?(new_resource.name)
+    deleted_env_vars = Dir.entries(new_resource.name) - new_resource.variables.keys - %w(. ..)
     deleted_env_vars.each do |deleted_var|
-      file ::File.join(name, deleted_var) do
+      file ::File.join(new_resource.name, deleted_var) do
         action :delete
-        restarts.each do |svc|
+        new_resource.restarts.each do |svc|
           notifies :restart, svc
         end
       end
     end
   end
 
-  directory name do
+  directory new_resource.name do
     recursive true
   end
 
-  variables.each do |key, value|
-    file ::File.join(name, key) do
+  new_resource.variables.each do |key, value|
+    file ::File.join(new_resource.name, key) do
       content value
-      restarts.each do |svc|
+      new_resource.restarts.each do |svc|
         notifies :restart, svc
       end
     end

@@ -32,7 +32,7 @@ property :helpers, Module, default: QuoteHelper
 property :restarts, Array, default: []
 
 action :create do
-  t = template link_to do
+  t = template new_resource.link_to do
     source new_resource.source
     owner new_resource.owner
     group new_resource.group
@@ -41,7 +41,7 @@ action :create do
     variables new_resource.variables
     helpers new_resource.helpers
     sensitive new_resource.sensitive
-    restarts.each do |resource|
+    new_resource.restarts.each do |resource|
       notifies :restart, resource
     end
     action :nothing
@@ -52,22 +52,22 @@ action :create do
   # This resource changed if the template create changed
   new_resource.updated_by_last_action(t.updated_by_last_action?)
 
-  link "Link #{link_from} to #{link_to}" do
-    target_file link_from
-    to link_to
+  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
+    target_file new_resource.link_from
+    to new_resource.link_to
     action :create
-    restarts.each do |resource|
+    new_resource.restarts.each do |resource|
       notifies :restart, resource
     end
   end
 end
 
 action :delete do
-  template link_to do
+  template new_resource.link_to do
     action :delete
   end
 
-  link "Link #{link_from} to #{link_to}" do
+  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
     action :delete
   end
 end
