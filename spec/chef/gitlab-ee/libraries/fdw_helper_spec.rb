@@ -2,15 +2,24 @@ require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/fdw_hel
 require 'chef_helper'
 
 describe FdwHelper do
-  cached(:chef_run) do
-    RSpec::Mocks.with_temporary_scope do
+  let(:chef_run) { converge_config(ee: true) }
+  subject { described_class.new(chef_run.node) }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  describe '#fdw_can_refresh?' do
+    before do
       stub_gitlab_rb(
         geo_postgresql: {
           enable: true,
           sql_user: 'mygeodbuser'
         },
         geo_secondary: {
-          db_database: 'gitlab_geodb'
+          enable: true,
+          db_database: 'gitlab_geodb',
+          db_fdw: true
         },
         gitlab_rails: {
           db_host: '10.0.0.1',
@@ -22,11 +31,6 @@ describe FdwHelper do
       )
     end
 
-    converge_config(ee: true)
-  end
-  subject { described_class.new(chef_run.node) }
-
-  describe '#fdw_can_refresh?' do
     context 'when fdw has all required states to be refreshed' do
       before do
         allow_any_instance_of(PgHelper).to receive(:is_managed_and_offline?).and_return(false)
