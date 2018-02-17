@@ -51,7 +51,7 @@ describe 'geo postgresql 9.2' do
     end
 
     context 'renders postgresql.conf' do
-      it 'includes runtime.conf in postgreslq.conf' do
+      it 'includes runtime.conf in postgresql.conf' do
         expect(chef_run).to render_file(postgresql_conf)
           .with_content(/include 'runtime.conf'/)
       end

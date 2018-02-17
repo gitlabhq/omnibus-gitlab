@@ -734,7 +734,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['idle_in_transaction_session_timeout'] = "60000"
 # postgresql['log_line_prefix'] = "%a"
 # postgresql['max_worker_processes'] = 8
-# postgreslq['max_parallel_workers_per_gather'] = 0
+# postgresql['max_parallel_workers_per_gather'] = 0
 # postgresql['log_lock_waits'] = 1
 # postgresql['deadlock_timeout'] = '5s'
 # postgresql['track_io_timing'] = 0
