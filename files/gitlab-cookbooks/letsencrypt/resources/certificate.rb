@@ -30,6 +30,7 @@ action :create do
     key "#{new_resource.key}-staging"
     endpoint 'https://acme-staging.api.letsencrypt.org/'
     wwwroot new_resource.wwwroot
+    sensitive true
   end
 
   ruby_block 'reset private key' do
@@ -51,5 +52,6 @@ action :create do
     key new_resource.key
     wwwroot new_resource.wwwroot
     notifies :run, 'execute[reload nginx]'
+    sensitive true
   end
 end
