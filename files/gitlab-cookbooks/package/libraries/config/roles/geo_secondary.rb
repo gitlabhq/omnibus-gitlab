@@ -25,7 +25,7 @@ module GeoSecondaryRole
     Gitlab['postgresql']['wal_keep_segments'] ||= 10
     Gitlab['postgresql']['hot_standby'] = 'on'
     Gitlab['gitlab_rails']['auto_migrate'] = false
-    Gitlab['gitlab_rails']['enable'] = rails_needed?
+    Gitlab['gitlab_rails']['enable'] = rails_needed? if Gitlab['gitlab_rails']['enable'].nil?
     Gitlab['unicorn']['worker_processes'] ||= number_of_worker_processes
   end
 
