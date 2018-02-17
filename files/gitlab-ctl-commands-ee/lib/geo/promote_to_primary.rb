@@ -20,10 +20,6 @@ module Geo
 
     private
 
-    def git_user_home
-      GitlabCtl::Util.get_node_attributes(@base_path)['gitlab']['user']['home']
-    end
-
     def make_sure_primary_is_down
       return true if @options[:confirm_primary_is_down]
 
