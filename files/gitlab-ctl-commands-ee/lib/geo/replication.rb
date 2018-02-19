@@ -124,7 +124,6 @@ module Geo
         file.write(<<~EOF
           standby_mode = 'on'
           primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]}'
-          trigger_file = '/tmp/postgresql.trigger'
         EOF
         )
         file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
