@@ -99,19 +99,19 @@ server {
 end
 
 # This should work standalone for renewal purposes
-describe 'letsencrypt::enable' do
+describe 'letsencrypt::renew' do
   let(:chef_run) do
-    ChefSpec::SoloRunner.new do |node|
-      node.normal['gitlab']['external-url'] = 'https://standalone.fakehost.com'
-      node.normal['gitlab']['nginx']['log_directory'] = '/fake/dir'
-      node.normal['gitlab']['nginx']['ssl_certificate'] = '/fake/path/cert.crt'
-      node.normal['gitlab']['nginx']['ssl_certificate_key'] = '/fake/path/cert.key'
-      node.normal['gitlab']['logging'] = {}
-    end.converge('letsencrypt::enable')
+    ChefSpec::SoloRunner.converge('gitlab::letsencrypt_renew')
   end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      external_url: 'https://standalone.fakehost.com',
+      letsencrypt: {
+        enable: true
+      }
+    )
   end
 
   it 'executes letsencrypt_certificate' do

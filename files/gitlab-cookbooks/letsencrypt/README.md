@@ -10,7 +10,7 @@ Fetches or renews a Let's Encrypt certificate
 
 #### properties
 
-* `cn`: The Comman Name of the certificate. Name property
+* `cn`: The Common Name of the certificate. Name property
 * `crt`: The path to the certificate file. Required
 * `key`: The path to the key file. Required
 * `chain`: The path to the certificate chain

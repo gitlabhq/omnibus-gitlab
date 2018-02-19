@@ -29,7 +29,7 @@ action :create do
       user account_helper.postgresql_user
       # Added retries to give the service time to start on slower systems
       retries 20
-      not_if { !helper.is_running? || !helper.user_exists?(username) || helper.user_password_match?(username, password) }
+      not_if { !helper.is_running? || !helper.user_exists?(username) || helper.user_password_match?(username, new_resource.password) }
     end
   end
 
