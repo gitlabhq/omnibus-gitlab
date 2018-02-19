@@ -59,9 +59,19 @@ While the contact information is optional, it is recommended. You will receive a
 
 ### Renewing
 
-By default, when `gitlab-ctl reconfigure` is run, if the certificate is within 30 days of expiring, it will automatically be renewed.
+There are two commands that can be used to renew your Let's Encrypt certificates.
 
-Both tools will only perform a request to Let's Encrypt if the certificates are near expiration, so you don't need to be concerned about hitting any [rate limits](https://letsencrypt.org/docs/rate-limits/).
+1. `gitlab-ctl reconfigure`
+1. `gitlab-ctl renew-le-certs`
+
+Both commands require root privileges and will only perform a request to Let's Encrypt if the certificates are close to expiration date. Please consider [LE rate limits](https://letsencrypt.org/docs/rate-limits/) if you get an error during renewal.
+
+It is recommended to setup a scheduled task to run `gitlab-ctl le-renew-certs` to ensure your Let's Encrypt certificates stay up to date automatically.
+
+An example cron entry to check daily
+```sh
+0 0 * * * /opt/gitlab/bin/gitlab-ctl le-renew-certs > /dev/null
+```
 
 ## Troubleshooting
 
