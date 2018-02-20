@@ -17,7 +17,7 @@
 #
 
 name 'python3'
-default_version '3.4.5'
+default_version '3.4.8'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -28,8 +28,8 @@ dependency 'bzip2'
 license 'Python-2.0'
 license_file 'LICENSE'
 
-source url: "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       md5: '5f2ef90b1adef35a64df14d4bb7af733'
+source url: "https://python.org/ftp/python/#{version}/Python-#{version}.tgz",
+       sha256: '8b1a1ce043e132082d29a5d09f2841f193c77b631282a82f98895a5dbaba1639'
 
 relative_path "Python-#{version}"
 
