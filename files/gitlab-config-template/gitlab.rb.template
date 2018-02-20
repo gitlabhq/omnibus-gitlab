@@ -95,6 +95,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
+# gitlab_rails['pages_domain_verification_cron_worker'] = "*/15 * * * *"
 
 ### Webhook Settings
 ###! Number of seconds to wait for HTTP response after sending webhook HTTP POST
