@@ -583,6 +583,23 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    context 'GitLab Pages verification cron job settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the value' do
+          stub_gitlab_rb(gitlab_rails: { pages_domain_verification_cron_worker: '1 0 * * *' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pages_domain_verification_cron_worker:\s+cron:\s+"1 0 \* \* \*"/)
+        end
+      end
+      context 'when pages domain verification cron worker is not configured' do
+        it ' sets no value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pages_domain_verification_cron_worker:\s+cron:\s[^"]+/)
+        end
+      end
+    end
   end
 
   context 'with environment variables' do
