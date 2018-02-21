@@ -7,7 +7,6 @@ omnibus-gitlab repository.
 
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
-- Upgrades Chef to 12.21.31
 - Update python to 3.4.8
 
 10.5.0
@@ -29,6 +28,7 @@ omnibus-gitlab repository.
 - Do not attempt to load postgresql_extension if database in question doesn't
   exist.
 - Honor the `unicorn['worker_processes']` setting for a Geo secondary node
+- Upgrades Chef to 12.21.31
 
 10.4.1
 
