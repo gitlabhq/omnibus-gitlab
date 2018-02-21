@@ -13,6 +13,7 @@
     "instance_type": "m3.medium",
     "ssh_username": "ubuntu",
     "ami_name": "GitLab EE {{user `version`}}",
+    "ami_description": "Official GitLab EE {{user `version`}} AMI. https://about.gitlab.com/",
     "ami_groups": ["all"],
     "tags": {
         "Type": "GitLab Enterprise Edition",
