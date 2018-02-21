@@ -2,12 +2,20 @@
 
 ## Enable HTTPS
 
+By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
+gitlab.example.com, there are two options:
+
+1. [Free and automated HTTPS with Let's Encrypt](ssl.md#let-39-s-encrypt-integration)
+1. [Manually configuring HTTPS with your own certificates](#manually-configuring-https)
+
 ### Warning
 
 The Nginx config will tell browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 24 months. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
+
+## Manually configuring HTTPS
 
 By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
 gitlab.example.com, add the following statement to `/etc/gitlab/gitlab.rb`:
