@@ -45,7 +45,7 @@ and run `sudo gitlab-ctl reconfigure`.
 
 ## Let's Encrypt Integration
 
-Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you
+Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you. Currently only the primary GitLab domain is supported. Other services like pages, registry, and Mattermost will be supported in a future release.
 
 ### Enabling
 
@@ -55,7 +55,7 @@ letsencrypt['enable'] = true
 letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
-While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing expiration.
+While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing its 3 month expiration.
 
 ### Renewing
 
