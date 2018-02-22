@@ -66,7 +66,7 @@ There are two commands that can be used to renew your Let's Encrypt certificates
 
 Both commands require root privileges and will only perform a request to Let's Encrypt if the certificates are close to expiration date. Please consider [LE rate limits](https://letsencrypt.org/docs/rate-limits/) if you get an error during renewal.
 
-It is recommended to setup a scheduled task to run `gitlab-ctl le-renew-certs` to ensure your Let's Encrypt certificates stay up to date automatically.
+It is recommended to setup a scheduled task to run `gitlab-ctl renew-le-certs` to ensure your Let's Encrypt certificates stay up to date automatically.
 
 An example cron entry to check daily
 ```sh
