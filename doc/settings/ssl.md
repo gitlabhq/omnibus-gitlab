@@ -70,7 +70,7 @@ It is recommended to setup a scheduled task to run `gitlab-ctl le-renew-certs` t
 
 An example cron entry to check daily
 ```sh
-0 0 * * * /opt/gitlab/bin/gitlab-ctl le-renew-certs > /dev/null
+0 0 * * * /opt/gitlab/bin/gitlab-ctl renew-le-certs > /dev/null
 ```
 
 ## Troubleshooting
