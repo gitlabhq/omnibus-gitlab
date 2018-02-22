@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require 'chef/mash'
+
 module Gitaly
   class << self
     def parse_variables
@@ -72,13 +74,13 @@ module Gitaly
       return { "default" => { "path" => "/var/opt/gitlab/git-data" } } unless git_data_dirs.any? || git_data_dir
 
       if git_data_dirs.any?
-        Hash[git_data_dirs.map do |name, data_directory|
+        Mash.new(Hash[git_data_dirs.map do |name, data_directory|
           if data_directory.is_a?(String)
             [name, { 'path' => data_directory }]
           else
             [name, data_directory]
           end
-        end]
+        end])
       else
         { 'default' => { 'path' => git_data_dir } }
       end
