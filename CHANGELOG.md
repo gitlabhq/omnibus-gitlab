@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 
+10.5.1
+
+- Fix regression where using new Hash format for git_data_dirs broke reconfigure 542aea4aa
+
 10.5.0
 
 - Add support to configure the `fdw` parameter in database_geo.yml
