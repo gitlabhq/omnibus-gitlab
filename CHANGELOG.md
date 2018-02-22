@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.1
+
+- Fix regression where using new Hash format for git_data_dirs broke reconfigure 542aea4aa
+
 10.5.0
 
 - Upgrades Chef to 12.21.31
