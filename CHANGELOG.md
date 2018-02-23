@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 10.5.2
 
 - Fix regression where `redirect_http_to_https` was always on for hosts using https
+- Geo: Add support to configure a custom PostgreSQL FDW external user on the tracking database
 
 10.5.1
 

@@ -51,7 +51,7 @@ module Gitlab
   attribute_block 'gitlab' do
     # EE attributes
     ee_attribute('sidekiq_cluster', priority: 20).use { SidekiqCluster }
-    ee_attribute('geo_postgresql',  priority: 20)
+    ee_attribute('geo_postgresql',  priority: 20).use { GeoPostgresql }
     ee_attribute('geo_secondary')
     ee_attribute('geo_logcursor')
 
