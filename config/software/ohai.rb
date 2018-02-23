@@ -15,7 +15,9 @@
 #
 
 name 'ohai'
-default_version '8.26.1'
+# The version here should be in agreement with /Gemfile.lock so that our rspec
+# testing stays consistent with the package contents.
+default_version '13.7.1'
 
 license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/chef/ohai/v#{version}/LICENSE"

@@ -29,10 +29,7 @@ describe Services do
 
   describe 'service' do
     cached(:runner) { ChefSpec::SoloRunner.new }
-    cached(:chef_run) do
-      Gitlab[:node] = nil
-      runner.converge('gitlab::config')
-    end
+    let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }
@@ -178,10 +175,7 @@ describe Services do
 
   describe 'group' do
     cached(:runner) { ChefSpec::SoloRunner.new }
-    cached(:chef_run) do
-      Gitlab[:node] = nil
-      runner.converge('gitlab::config')
-    end
+    let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }

@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
+- Update chef to 13.6.4
 
 10.5.2
 
