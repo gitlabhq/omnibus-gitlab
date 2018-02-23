@@ -9,6 +9,10 @@ omnibus-gitlab repository.
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 
+10.5.2
+
+- Fix regression where `redirect_http_to_https` was always on for hosts using https
+
 10.5.1
 
 - Fix regression where using new Hash format for git_data_dirs broke reconfigure 542aea4aa
