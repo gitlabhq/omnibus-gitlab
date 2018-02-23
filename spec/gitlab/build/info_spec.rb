@@ -1,5 +1,5 @@
-require_relative '../../../lib/gitlab/build/info'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build/info'
 
 describe Build::Info do
   describe '.package' do

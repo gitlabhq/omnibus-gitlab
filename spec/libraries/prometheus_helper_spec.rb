@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-require_relative '../../files/gitlab-cookbooks/gitlab/libraries/prometheus_helper.rb'
 require 'chef_helper'
 
 describe PrometheusHelper do

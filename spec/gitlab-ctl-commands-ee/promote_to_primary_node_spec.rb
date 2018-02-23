@@ -1,5 +1,5 @@
+require 'spec_helper'
 require 'omnibus-ctl'
-require 'chef_helper'
 
 describe 'gitlab-ctl promote-to-primary-node' do
   subject(:ctl) { Omnibus::Ctl.new('testing-ctl') }

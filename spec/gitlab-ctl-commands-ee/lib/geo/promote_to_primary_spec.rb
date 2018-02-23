@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 

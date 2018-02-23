@@ -1,4 +1,3 @@
-require_relative '../../files/gitlab-cookbooks/gitlab/libraries/redis_helper.rb'
 require 'chef_helper'
 
 describe RedisHelper do

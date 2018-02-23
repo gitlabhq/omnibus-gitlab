@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 require_relative '../../../lib/gitlab/docker_operations.rb'
 
 describe 'docker', type: :rake do

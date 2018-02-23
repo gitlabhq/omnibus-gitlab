@@ -1,5 +1,5 @@
-require_relative '../../lib/gitlab/version.rb'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/version'
 
 describe Gitlab::Version do
   describe :remote do
