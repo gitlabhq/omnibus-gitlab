@@ -130,6 +130,10 @@ describe 'geo postgresql 9.2' do
         end
       end
     end
+
+    it 'does not creates a mapping with no DB password' do
+      expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
+    end
   end
 
   context 'when user settings are set' do
@@ -463,6 +467,35 @@ describe 'geo postgresql 9.6' do
     context 'when secondary database is empty' do
       it 'does not refreshes foreign table definintion' do
         expect(chef_run).not_to run_bash('refresh foreign table definition')
+      end
+    end
+
+    context 'when a custom external FDW user is used' do
+      let(:chef_run) do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            sql_user: 'mygeodbuser',
+            fdw_external_user: 'fdw_user',
+            fdw_external_password: 'my-fdw-password'
+          },
+          geo_secondary: {
+            db_database: 'gitlab_geodb',
+          }
+        )
+
+        allow_any_instance_of(FdwHelper).to receive(:fdw_can_refresh?).and_return(true)
+        ChefSpec::SoloRunner.converge('gitlab-ee::default')
+      end
+
+      it 'creates a mapping with custom external user' do
+        params = {
+          db_user: 'mygeodbuser',
+          db_name: 'gitlab_geodb',
+          external_user: 'fdw_user',
+          external_password: 'my-fdw-password'
+        }
+        expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
       end
     end
 

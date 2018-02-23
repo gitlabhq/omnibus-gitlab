@@ -140,8 +140,9 @@ geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
 geo_database_name = node['gitlab']['geo-secondary']['db_database']
 
 # Foreign Data Wrapper specific (credentials for the secondary - readonly pg instance)
-fdw_user = node['gitlab']['gitlab-rails']['db_username']
-fdw_password = node['gitlab']['gitlab-rails']['db_password']
+fdw_user = node['gitlab']['geo-postgresql']['fdw_external_user']
+fdw_password = node['gitlab']['geo-postgresql']['fdw_external_password']
+
 fdw_host = node['gitlab']['gitlab-rails']['db_host']
 fdw_port = node['gitlab']['gitlab-rails']['db_port']
 fdw_dbname = node['gitlab']['gitlab-rails']['db_database']
