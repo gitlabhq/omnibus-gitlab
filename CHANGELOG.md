@@ -5,10 +5,6 @@ omnibus-gitlab repository.
 
 10.5.2
 
-- Upgrades Chef to 12.21.31
-
-10.5.2
-
 - Fix regression where `redirect_http_to_https` was always on for hosts using https
 
 10.5.1
