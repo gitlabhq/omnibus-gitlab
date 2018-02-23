@@ -343,4 +343,22 @@ describe 'gitaly::git_data_dirs' do
                                                                                       })
     end
   end
+
+  context 'when git_data_dirs is set with symbol keys rather than string keys' do
+    before do
+      stub_gitlab_rb({
+                       git_data_dirs: {
+                         default: { path: '/tmp/default/git-data' },
+                         overflow: { path: '/tmp/other/git-overflow-data' }
+                       }
+                     })
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
+                                                                                      })
+    end
+  end
 end
