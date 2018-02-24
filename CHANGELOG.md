@@ -3,13 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.2
+
+- Fix regression where `redirect_http_to_https` was always on for hosts using https
+- Geo: Add support to configure a custom PostgreSQL FDW external user on the tracking database
+
 10.5.1
 
 - Fix regression where using new Hash format for git_data_dirs broke reconfigure 542aea4aa
 
 10.5.0
 
-- Upgrades Chef to 12.21.31
 - Add support to configure the `fdw` parameter in database_geo.yml
 - Extends rspec to `gitlab-ctl consul`'s helper class, and refactors to avoid
   namespace conflicts.
@@ -27,6 +31,7 @@ omnibus-gitlab repository.
 - Do not attempt to load postgresql_extension if database in question doesn't
   exist.
 - Honor the `unicorn['worker_processes']` setting for a Geo secondary node
+- Upgrades Chef to 12.21.31
 
 10.4.1
 

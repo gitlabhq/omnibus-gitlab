@@ -332,6 +332,19 @@ describe 'nginx' do
       stub_gitlab_rb("nginx" => { "status" => { "enable" => false } })
       expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content(nginx_status_config)
     end
+
+    it 'defaults to redirect_http_to_https off' do
+      expect(chef_run.node['gitlab']['nginx']['redirect_http_to_https']).to be false
+      expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+        expect(content).not_to include('return 301 https://fauxhai.local:80$request_uri;')
+      }
+    end
+
+    it 'enables redirect when redirect_http_to_https is true' do
+      stub_gitlab_rb(nginx: { listen_https: true, redirect_http_to_https: true })
+      expect(chef_run.node['gitlab']['nginx']['redirect_http_to_https']).to be true
+      expect(chef_run).to render_file(gitlab_http_config).with_content('return 301 https://fauxhai.local:80$request_uri;')
+    end
   end
 
   context 'when is disabled' do
