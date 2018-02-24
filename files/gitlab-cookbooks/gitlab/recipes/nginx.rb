@@ -109,21 +109,25 @@ template gitlab_rails_http_conf do
   owner "root"
   group "root"
   mode "0644"
-  variables(nginx_vars.merge(
-              {
-                fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
-                port: node['gitlab']['gitlab-rails']['gitlab_port'],
-                relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
-                kerberos_enabled: node['gitlab']['gitlab-rails']['kerberos_enabled'],
-                kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
-                kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
-                kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
-                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-                letsencrypt_enable: node['letsencrypt']['enable'],
-                # lazy evaluate here since letsencrypt::enable sets this to true
-                redirect_http_to_https: lazy { node['gitlab']['redirect_http_to_https'] }
-              }
-  ))
+  variables(
+    # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
+    lazy do
+      nginx_vars.merge(
+        {
+          fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
+          port: node['gitlab']['gitlab-rails']['gitlab_port'],
+          relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
+          kerberos_enabled: node['gitlab']['gitlab-rails']['kerberos_enabled'],
+          kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
+          kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
+          kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
+          registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+          letsencrypt_enable: node['letsencrypt']['enable'],
+          redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
+        }
+      )
+    end
+  )
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_rails_enabled ? :create : :delete
 end
