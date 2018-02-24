@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2017 GitLab Inc.
-# License:: Apache License, Version 2.0
+# Copyright 2016 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +14,19 @@
 # limitations under the License.
 #
 
-require 'uri'
-require 'digest'
-require_relative 'helpers/redhat_helper'
-require_relative 'helpers/secrets_helper'
-require_relative 'helpers/version_helper'
-require_relative 'helpers/output_helper'
-require_relative 'helpers/logging_helper'
+name 'awesome_print'
+default_version '1.8.0'
+
+license 'MIT'
+license_file "https://github.com/awesome-print/awesome_print/blob/v#{version}/LICENSE"
+
+dependency 'ruby'
+dependency 'rubygems'
+
+build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  gem 'install awesome_print' \
+      " --version '#{version}'" \
+      ' --no-ri --no-rdoc', env: env
+end

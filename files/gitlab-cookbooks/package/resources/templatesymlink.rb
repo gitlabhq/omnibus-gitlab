@@ -28,7 +28,7 @@ property :group, String
 property :mode, String
 property :cookbook, String
 property :variables, Hash, default: {}
-property :helpers, Module, default: QuoteHelper
+property :helpers, Module, default: OutputHelper
 property :restarts, Array, default: []
 
 action :create do
