@@ -29,7 +29,7 @@ postgresql_username = account_helper.postgresql_user
 geo_pg_helper = GeoPgHelper.new(node)
 fdw_helper = FdwHelper.new(node)
 
-include_recipe 'gitlab::postgresql_user'
+include_recipe 'postgresql::user'
 
 directory postgresql_dir do
   owner postgresql_username
@@ -69,7 +69,7 @@ template postgresql_config do
   mode '0644'
   helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
-  cookbook 'gitlab'
+  cookbook 'postgresql'
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end
 
@@ -79,7 +79,7 @@ template postgresql_runtime_config do
   mode '0644'
   helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
-  cookbook 'gitlab'
+  cookbook 'postgresql'
   notifies :run, 'execute[reload geo-postgresql]', :immediately if should_notify
 end
 
@@ -90,7 +90,7 @@ template pg_hba_config do
   owner postgresql_username
   mode '0644'
   variables(lazy { node['gitlab']['geo-postgresql'].to_hash })
-  cookbook 'gitlab'
+  cookbook 'postgresql'
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end
 
@@ -98,7 +98,7 @@ template File.join(postgresql_data_dir, 'pg_ident.conf') do
   owner postgresql_username
   mode '0644'
   variables(node['gitlab']['geo-postgresql'].to_hash)
-  cookbook 'gitlab'
+  cookbook 'postgresql'
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end
 
@@ -116,7 +116,7 @@ end
 # to ensure the correct running version of PostgreSQL
 # Only exception to this rule is "initdb" call few lines up because this should
 # run only on new installation at which point we expect to have correct binaries.
-include_recipe 'gitlab::postgresql-bin'
+include_recipe 'postgresql::bin'
 
 execute 'start geo-postgresql' do
   command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'

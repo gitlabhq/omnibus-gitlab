@@ -21,7 +21,7 @@ postgres_exporter_log_dir = node['gitlab']['postgres-exporter']['log_directory']
 postgres_exporter_static_etc_dir = "/opt/gitlab/etc/postgres-exporter"
 postgres_exporter_dir = node['gitlab']['postgres-exporter']['home']
 
-include_recipe 'gitlab::postgresql_user'
+include_recipe 'postgresql::user'
 
 directory postgres_exporter_log_dir do
   owner postgresql_user
