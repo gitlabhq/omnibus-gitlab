@@ -102,9 +102,9 @@ include_recipe "runit"
 end
 
 # Postgresql depends on Redis because of `rake db:seed_fu`
-%w{
+%w(
   postgresql
-}.each do |service|
+).each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "#{service}::enable"
   else
