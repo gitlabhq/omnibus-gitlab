@@ -9,6 +9,8 @@ omnibus-gitlab repository.
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 - Update chef to 13.6.4
+- Unsets `RUBYLIB` in `gitlab-rails`, `gitlab-rake`, and `gitlab-ctl` to avoid
+  interactions with system ruby libraries.
 
 10.5.2
 

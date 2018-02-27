@@ -53,6 +53,7 @@ build do
 # Ensure the calling environment (disapproval look Bundler) does not infect our
 # Ruby environment if gitlab-ctl is called from a Ruby script.
 for ruby_env_var in RUBYOPT \\
+                    RUBYLIB \\
                     BUNDLE_BIN_PATH \\
                     BUNDLE_GEMFILE \\
                     GEM_PATH \\

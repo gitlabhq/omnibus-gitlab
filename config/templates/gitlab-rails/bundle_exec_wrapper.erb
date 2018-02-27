@@ -1,8 +1,9 @@
 #!/bin/sh
 
 # Unset ENV variables that might interfere with
-# omnibus-gitlab ruby env (looking at you rvm)
+# omnibus-gitlab ruby env (looking at you rvm, and bundler)
 for ruby_env_var in RUBYOPT \
+                    RUBYLIB \
                     BUNDLE_BIN_PATH \
                     BUNDLE_GEMFILE \
                     GEM_PATH \
