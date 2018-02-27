@@ -160,6 +160,10 @@ git_data_dirs({
 })
 ```
 
+If you're running Gitaly on its own server remember to also include the
+`gitaly_address` for each git data directory. See [the documentation on
+configuring Gitaly](https://docs.gitlab.com/ee/administration/gitaly/#gitaly-server-configuration).
+
 Note that the target directories and any of its subpaths must not be a symlink.
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
