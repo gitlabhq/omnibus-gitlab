@@ -14,13 +14,10 @@
 # limitations under the License.
 #
 
-# We are pinning chef-zero because version 4.6.0 intorduced very verbose
-# output in info log level.
-# Introduced by https://github.com/chef/chef-zero/pull/199
-# When changing this version, make sure that the verbosity went down.
-
 name 'chef-zero'
-default_version '5.3.2'
+# The version here should be in agreement with /Gemfile.lock so that our rspec
+# testing stays consistent with the package contents.
+default_version '13.1.0'
 
 license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"

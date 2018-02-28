@@ -11,8 +11,24 @@ cache_path "#{CURRENT_PATH}/cache"
 exception_handlers << GitLabHandler::Exception.new
 verbose_logging false
 ssl_verify_mode :verify_peer
+
+# Log to the reconfigure log
 log_location "#{LOG_PATH}/#{TIME}.log"
 log_level :info
+
+# This monkey-patch is a workaround for https://github.com/chef/chef/issues/6889
+# We do not want an additional logger attached to STDOUT as the `gitlab`
+# formatter manages STDOUT
+class ::Chef::Application
+  def want_additional_logger?
+    false
+  end
+end
+
+# Don't fork, and run just once
+client_fork false
+once true
+
 # Omnibus-GitLab only needs to know very little about the system it is running
 # on. We want to disable as many Ohai plugins as we can to avoid plugin bugs
 # and speed up 'gitlab-ctl reconfigure'.

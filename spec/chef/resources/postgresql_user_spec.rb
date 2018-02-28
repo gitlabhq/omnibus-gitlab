@@ -31,7 +31,6 @@ describe 'postgresql_user' do
       let(:chef_run) { runner.converge('test_gitlab_postgresql_user::password_nil') }
 
       it 'does set the password of the nil_password user' do
-        pending 'upgrade to chef 13'
         expect(chef_run).to run_execute('set password for nil_password postgresql user')
           .with(command: /PASSWORD NULL/)
       end

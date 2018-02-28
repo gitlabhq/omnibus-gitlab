@@ -22,4 +22,8 @@ Here's an example from the `nginx` cookbook:
     end
 ~~~
 
+If we need to print Ruby objects, we can make use of the [`print_ruby_object`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/helpers/output_helper.rb#L8-10) helper method. This needs `OutputHelper` class to be
+included in your code. Take a look at [gitaly library](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitaly/libraries/gitaly.rb)
+for an example.
+
 [deprecation policy]: https://docs.gitlab.com/omnibus/package-information/deprecation_policy.html

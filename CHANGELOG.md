@@ -9,10 +9,17 @@ omnibus-gitlab repository.
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 - Update jemalloc to 5.0.1
+- Update chef to 13.6.4
+- Unsets `RUBYLIB` in `gitlab-rails`, `gitlab-rake`, and `gitlab-ctl` to avoid
+  interactions with system ruby libraries.
+- Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
+- Use awesome_print gem to print Ruby objects to the user 761a1e6a
+- Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 
 10.5.2
 
 - Fix regression where `redirect_http_to_https` was always on for hosts using https
+- Geo: Add support to configure a custom PostgreSQL FDW external user on the tracking database
 
 10.5.1
 

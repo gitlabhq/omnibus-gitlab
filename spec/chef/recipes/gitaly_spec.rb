@@ -346,12 +346,12 @@ describe 'gitaly::git_data_dirs' do
 
   context 'when git_data_dirs is set with symbol keys rather than string keys' do
     before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         default: { path: '/tmp/default/git-data' },
-                         overflow: { path: '/tmp/other/git-overflow-data' }
-                       }
-                     })
+      with_symbol_keys = {
+        default: { path: '/tmp/default/git-data' },
+        overflow: { path: '/tmp/other/git-overflow-data' }
+      }
+
+      allow(Gitlab).to receive(:[]).with('git_data_dirs').and_return(with_symbol_keys)
     end
 
     it 'correctly sets the repository storage directories' do

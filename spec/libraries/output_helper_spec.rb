@@ -1,7 +1,7 @@
 require 'chef_helper'
 
-describe QuoteHelper do
-  include QuoteHelper
+describe OutputHelper do
+  include OutputHelper
 
   describe "#quote" do
     context 'handling nil' do

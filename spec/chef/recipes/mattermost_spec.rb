@@ -38,7 +38,7 @@ describe 'gitlab::mattermost' do
     expect(MattermostHelper).to receive(:authorize_with_gitlab)
       .with 'http://gitlab.example.com'
 
-    chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
+    chef_run.ruby_block('authorize mattermost with gitlab').block.call
   end
 
   it 'populates mattermost configuration options to node attributes' do
@@ -50,8 +50,8 @@ describe 'gitlab::mattermost' do
     expect(chef_run).to run_ruby_block('populate mattermost configuration options')
       .at_converge_time
 
-    chef_run.ruby_block('authorize mattermost with gitlab').old_run_action(:run)
-    chef_run.ruby_block('populate mattermost configuration options').old_run_action(:run)
+    chef_run.ruby_block('authorize mattermost with gitlab').block.call
+    chef_run.ruby_block('populate mattermost configuration options').block.call
 
     expect(chef_run.node['mattermost']['gitlab_id']).to eq 'new'
   end

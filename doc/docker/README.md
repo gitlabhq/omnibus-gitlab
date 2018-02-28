@@ -158,6 +158,9 @@ After starting a container you can visit <http://localhost/> or
 <http://192.168.59.103> if you use boot2docker. It might take a while before
 the Docker container starts to respond to queries.
 
+**Note:** The initialization process may take a long time. You can track this
+process with the command `sudo docker logs -f gitlab`
+
 The very first time you visit GitLab, you will be asked to set up the admin
 password. After you change it, you can login with username `root` and the
 password you set up.

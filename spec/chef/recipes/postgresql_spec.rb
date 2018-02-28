@@ -275,7 +275,7 @@ describe 'postgresql 9.2' do
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end
-        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+        chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
       end
     end
   end
@@ -512,7 +512,7 @@ describe 'postgresql 9.6' do
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end
-        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+        chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
       end
     end
 
@@ -543,7 +543,7 @@ describe 'postgresql 9.6' do
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end
-        chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+        chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
       end
     end
 
@@ -559,7 +559,7 @@ describe 'postgresql 9.6' do
 
       it 'throws an error' do
         expect do
-          chef_run.ruby_block('Link postgresql bin files to the correct version').old_run_action(:run)
+          chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
         end.to raise_error(RuntimeError, /Could not find PostgreSQL binaries/)
       end
     end
