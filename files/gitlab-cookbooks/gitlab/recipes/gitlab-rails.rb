@@ -315,6 +315,16 @@ rails_env = {
   'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
 }
 
+# Explicitly deleting relative_urls.rb file and link that was used prior to
+# version 9.3.0
+link File.join(gitlab_rails_source_dir, "config/initializers/relative_url.rb") do
+  action :delete
+end
+
+file File.join(gitlab_rails_etc_dir, "relative_url.rb") do
+  action :delete
+end
+
 gitlab_relative_url = node['gitlab']['gitlab-rails']['gitlab_relative_url']
 rails_env['RAILS_RELATIVE_URL_ROOT'] = gitlab_relative_url if gitlab_relative_url
 
