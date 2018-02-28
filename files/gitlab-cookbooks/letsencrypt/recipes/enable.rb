@@ -26,7 +26,6 @@ end
 acme_selfsigned site.host do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
-  chain node['letsencrypt']['chain']
   notifies :restart, 'service[nginx]', :immediately
 end
 
