@@ -16,7 +16,7 @@ gem 'omnibus', git: omnibus_gem_version.remote, branch: omnibus_gem_version.prin
 gem 'chef', '13.6.4'
 gem 'ohai'
 gem 'package_cloud'
-gem 'rainbow', '~> 2.1.0' # This is used by gitlab-ctl and the chef formatter
+gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
 gem 'thor', '0.18.1' # This specific version is required by package_cloud
 gem 'json'
 gem 'rspec'
