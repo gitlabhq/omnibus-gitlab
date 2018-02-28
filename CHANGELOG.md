@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Unsets `RUBYLIB` in `gitlab-rails`, `gitlab-rake`, and `gitlab-ctl` to avoid
   interactions with system ruby libraries.
 - Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
+- Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 
 10.5.2
 
