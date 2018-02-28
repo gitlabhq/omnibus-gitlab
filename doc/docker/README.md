@@ -247,6 +247,8 @@ GitLab will occupy by default the following ports inside the container:
 > **Note:**
 The format for publishing ports is `hostPort:containerPort`. Read more in
 Docker's documentation about [exposing incoming ports][docker-ports].
+For the web interface, `containerPort` in the `docker run` command should
+be the same with the port in `external_url`.
 
 > **Warning:**
 Do NOT use port `8080` otherwise there will be conflicts. This port is already
@@ -262,7 +264,7 @@ port `2289`, use the following `docker run` command:
 ```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
-	--publish 8929:80 --publish 2289:22 \
+	--publish 8929:8929 --publish 2289:22 \
 	--name gitlab \
 	--restart always \
 	--volume /srv/gitlab/config:/etc/gitlab \
@@ -298,6 +300,7 @@ web browser under `<hostIP>:8929` and push using SSH under the port `2289`.
 
 A `docker-compose.yml` example that uses different ports can be found in the
 [docker-compose](#install-gitlab-using-docker-compose) section.
+
 
 ## Diagnose potential problems
 
