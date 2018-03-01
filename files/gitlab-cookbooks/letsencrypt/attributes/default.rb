@@ -4,7 +4,6 @@ default['letsencrypt']['chain'] = nil
 default['letsencrypt']['contact_emails'] = []
 default['letsencrypt']['crt'] = nil
 default['letsencrypt']['enable'] = false
-default['letsencrypt']['fullchain'] = nil
 default['letsencrypt']['group'] = nil
 default['letsencrypt']['key_size'] = nil
 default['letsencrypt']['owner'] = nil
