@@ -1,5 +1,5 @@
 property :cn, String, name_property: true
-property :fullchain, [String, nil], required: true
+property :fullchain, String, required: true
 property :key, String, required: true
 property :owner, [String, nil], default: lazy { node['letsencrypt']['owner'] }
 property :chain, [String, nil], default: lazy { node['letsencrypt']['chain'] }
