@@ -140,9 +140,9 @@ unable to load certificate
 
 #### Certificate signed by unknown authority issues
 
-The initial implementation of Let's Encrypt integration only used the certificate, and not the intermediate certificate.
+The initial implementation of Let's Encrypt integration only used the certificate, and not the full certificate chain.
 
-Starting in 10.5.4, the intermediate certificate will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
+Starting in 10.5.4, the full certificate chain will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
 
 ```shell
 # rm /etc/gitlab/ssl/HOSTNAME*
