@@ -17,6 +17,10 @@ omnibus-gitlab repository.
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 
+10.5.4
+
+- Update Let's Encrypt to use fullchain instead of certificate
+
 10.5.2
 
 - Fix regression where `redirect_http_to_https` was always on for hosts using https
