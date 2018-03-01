@@ -1,4 +1,5 @@
-require 'chef_helper'
+require 'spec_helper'
+require_relative '../../files/gitlab-cookbooks/package/libraries/config/gitlab'
 
 describe Gitlab do
   context 'when using an attribute_block' do

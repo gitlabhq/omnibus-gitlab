@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 
 describe 'license:check', type: :rake do
   before :all do

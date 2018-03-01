@@ -1,4 +1,5 @@
-require 'chef_helper'
+require 'spec_helper'
+require_relative '../../files/gitlab-cookbooks/package/libraries/helpers/output_helper'
 
 describe OutputHelper do
   include OutputHelper

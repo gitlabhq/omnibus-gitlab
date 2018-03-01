@@ -1,5 +1,5 @@
-require_relative '../../lib/gitlab/build.rb'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build'
 
 describe Build do
   describe 'cmd' do

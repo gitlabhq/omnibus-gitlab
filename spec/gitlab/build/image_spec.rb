@@ -1,5 +1,5 @@
-require_relative '../../../lib/gitlab/build/image'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build/image'
 
 describe Build::Image do
   ComponentImage = Class.new do

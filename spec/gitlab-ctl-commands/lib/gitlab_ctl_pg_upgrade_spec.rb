@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 
 $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 

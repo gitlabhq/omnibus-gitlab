@@ -1,5 +1,5 @@
-require_relative '../../../lib/gitlab/build/qa'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build/qa'
 
 describe Build::QA do
   describe '.repo_path' do

@@ -1,18 +1,15 @@
+# `chef_helper` is a superset of `spec_helper` that configures `chefspec` for
+# testing our cookbooks.
+
+require 'spec_helper'
 require 'chefspec'
 require 'ohai'
-require 'fantaskspec'
-require 'knapsack'
-
-Knapsack::Adapters::RSpecAdapter.bind if ENV['USE_KNAPSACK']
 
 # Load our cookbook libraries so we can stub them in our tests
 cookbooks = %w(package gitlab gitaly mattermost gitlab-ee)
 cookbooks.each do |cookbook|
   Dir[File.join(__dir__, "../files/gitlab-cookbooks/#{cookbook}/libraries/**/*.rb")].each { |f| require f }
 end
-
-# Load support libraries to provide common convenience methods for our tests
-Dir[File.join(__dir__, 'support/*.rb')].each { |f| require f }
 
 def deep_clone(obj)
   Marshal.load(Marshal.dump(obj)) # rubocop:disable Security/MarshalLoad
@@ -41,11 +38,6 @@ RSpec.configure do |config|
   config.cookbook_path = ['files/gitlab-cookbooks/', 'spec/fixtures/cookbooks']
   config.log_level = :error
 
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
-
-  config.include(GitlabSpec::Macros)
-
   config.before do
     stub_command('id -Z').and_return(false)
     stub_command("grep 'CS:123456:respawn:/opt/gitlab/embedded/bin/runsvdir-start' /etc/inittab").and_return('')
@@ -57,8 +49,8 @@ RSpec.configure do |config|
     stub_command('/opt/gitlab/embedded/bin/psql --version').and_return("fake_version")
     allow(VersionHelper).to receive(:version).and_call_original
     allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version').and_return('fake_psql_version')
-    allow_any_instance_of(Chef::Recipe).to receive(:system).with('/sbin/init --version | grep upstart')
-    allow_any_instance_of(Chef::Recipe).to receive(:system).with('systemctl | grep "\-\.mount"')
+    stub_command('/sbin/init --version | grep upstart')
+    stub_command('systemctl | grep "\-\.mount"')
     # ChefSpec::SoloRunner doesn't support Chef.event_handler, so stub it
     allow(Chef).to receive(:event_handler)
 

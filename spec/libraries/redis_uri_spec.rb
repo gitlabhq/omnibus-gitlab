@@ -1,6 +1,7 @@
 # This spec is to test the Redis helper and whether the values parsed
 # are the ones we expect
 
+require 'spec_helper'
 require_relative '../../files/gitlab-cookbooks/gitlab/libraries/redis_uri.rb'
 
 describe URI::Redis do

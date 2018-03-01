@@ -1,4 +1,3 @@
-require_relative '../../files/gitlab-cookbooks/gitlab-ee/libraries/sentinel_helper.rb'
 require 'chef_helper'
 
 describe SentinelHelper do

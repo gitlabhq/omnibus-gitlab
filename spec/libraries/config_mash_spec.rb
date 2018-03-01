@@ -1,4 +1,5 @@
-require 'chef_helper'
+require 'spec_helper'
+require_relative '../../files/gitlab-cookbooks/package/libraries/config_mash'
 
 describe Gitlab::ConfigMash do
   let(:mash) { Gitlab::ConfigMash.new }

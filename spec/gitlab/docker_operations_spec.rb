@@ -1,5 +1,5 @@
-require_relative '../../lib/gitlab/docker_operations'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/docker_operations'
 
 describe DockerOperations do
   describe '.set_timeout' do
