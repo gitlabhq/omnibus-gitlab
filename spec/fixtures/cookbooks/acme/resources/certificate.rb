@@ -1,5 +1,5 @@
 property :contact, Array
-property :crt, String
+property :fullchain, String
 property :key, String
 property :endpoint, String
 
