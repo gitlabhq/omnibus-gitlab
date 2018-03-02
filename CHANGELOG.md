@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 - Support the `-logFormat` option in Workhorse
 - Update rubocop to 0.52.1 (Takuya Noguchi)
+- Restart geo-logcursor when database_geo.yml is updated
 
 10.5.4
 
