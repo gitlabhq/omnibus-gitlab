@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 
 describe 'qa', type: :rake do
   let(:gitlab_registry_image_address) { 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa' }

@@ -1,5 +1,5 @@
-require_relative '../../lib/gitlab/package_repository.rb'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/package_repository'
 
 describe PackageRepository do
   let(:repo) { PackageRepository.new }

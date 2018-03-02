@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 
 Struct.new("Image", :image_id, :name, :tags)
 Struct.new("Region", :region_name)

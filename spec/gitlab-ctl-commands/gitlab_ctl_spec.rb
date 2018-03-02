@@ -1,5 +1,5 @@
+require 'spec_helper'
 require 'omnibus-ctl'
-require 'chef_helper'
 
 describe 'gitlab-ctl' do
   before do

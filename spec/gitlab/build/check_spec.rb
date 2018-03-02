@@ -1,5 +1,5 @@
-require_relative '../../../lib/gitlab/build/check.rb'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build/check'
 
 describe Build::Check do
   describe 'is_ee?' do

@@ -304,10 +304,6 @@ configuration to `gitlab.rb`:
 ```ruby
 nginx['listen_port'] = 80
 nginx['listen_https'] = false
-nginx['proxy_set_headers'] = {
-  "X-Forwarded-Proto" => "https",
-  "X-Forwarded-Ssl" => "on"
-}
 ```
 
 Note that you may need to configure your reverse proxy or load balancer to

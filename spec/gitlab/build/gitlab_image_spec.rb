@@ -1,5 +1,5 @@
-require_relative '../../../lib/gitlab/build/gitlab_image'
-require 'chef_helper'
+require 'spec_helper'
+require 'gitlab/build/gitlab_image'
 
 describe Build::GitlabImage do
   before do

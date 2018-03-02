@@ -16,9 +16,12 @@
 #
 
 require 'chef/mash'
+require_relative '../../package/libraries/helpers/output_helper.rb'
 
 module Gitaly
   class << self
+    include OutputHelper
+
     def parse_variables
       parse_git_data_dirs
       parse_gitaly_storages
@@ -54,7 +57,7 @@ module Gitaly
           Your #{deprecated_key_used} settings are deprecated.
           Please update it to the following:
 
-          git_data_dirs(#{Chef::JSONCompat.to_json_pretty(converted_git_data_dirs)})
+          git_data_dirs(#{print_ruby_object(converted_git_data_dirs)})
 
           Please refer to https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory for updated documentation.
         EOS

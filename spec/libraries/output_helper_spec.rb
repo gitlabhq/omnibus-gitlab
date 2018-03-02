@@ -1,7 +1,8 @@
-require 'chef_helper'
+require 'spec_helper'
+require_relative '../../files/gitlab-cookbooks/package/libraries/helpers/output_helper'
 
-describe QuoteHelper do
-  include QuoteHelper
+describe OutputHelper do
+  include OutputHelper
 
   describe "#quote" do
     context 'handling nil' do
