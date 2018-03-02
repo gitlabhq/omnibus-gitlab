@@ -564,6 +564,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Long polling duration for job requesting for runners
 # gitlab_workhorse['api_ci_long_polling_duration'] = "60s"
 
+##! Log format: default is text, can also be json or none.
+# gitlab_workhorse['log_format'] = "json"
+
 # gitlab_workhorse['env'] = {
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
 # }
