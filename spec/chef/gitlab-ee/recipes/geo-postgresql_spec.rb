@@ -562,12 +562,14 @@ describe 'geo postgresql 9.6' do
         expect(chef_run).to run_bash('refresh foreign table definition')
       end
 
-      it 'does not refresh foreign table definition' do
+      it 'does not attempt to setup refresh foreign table definition' do
         stub_gitlab_rb(geo_secondary: {
                          db_database: 'gitlab_geodb',
                          db_fdw: false
                        })
 
+        expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
+        expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
         expect(chef_run).not_to run_bash('refresh foreign table definition')
       end
     end
