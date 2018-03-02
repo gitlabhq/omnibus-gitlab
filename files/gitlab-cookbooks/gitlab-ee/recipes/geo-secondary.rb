@@ -24,8 +24,13 @@ gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = []
-dependent_services << 'service[unicorn]' if omnibus_helper.should_notify?('unicorn')
-dependent_services << 'service[sidekiq]' if omnibus_helper.should_notify?('sidekiq')
+%w(
+  unicorn
+  sidekiq
+  geo-logcursor
+).each do |svc|
+  dependent_services << "service[#{svc}]" if omnibus_helper.should_notify?(svc)
+end
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')

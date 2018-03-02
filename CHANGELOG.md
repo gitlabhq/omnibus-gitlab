@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 - Update rubocop to 0.52.1 (Takuya Noguchi)
+- Restart geo-logcursor when database_geo.yml is updated
 
 10.5.4
 

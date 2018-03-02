@@ -108,8 +108,13 @@ describe 'gitlab-ee::geo-secondary' do
       end
 
       it 'template triggers notifications' do
-        expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
-        expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+        %w(
+          unicorn
+          sidekiq
+          geo-logcursor
+        ).each do |svc|
+          expect(templatesymlink_template).to notify("service[#{svc}]").to(:restart).delayed
+        end
       end
     end
 
