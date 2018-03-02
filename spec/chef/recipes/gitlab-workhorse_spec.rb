@@ -79,6 +79,16 @@ describe 'gitlab::gitlab-workhorse' do
     end
   end
 
+  context 'with log format defined' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { log_format: "json" })
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-logFormat json/)
+    end
+  end
+
   context 'with default value for working directory' do
     it 'should generate config file in the correct directory' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml")

@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
+- Support the `-logFormat` option in Workhorse
 - Update rubocop to 0.52.1 (Takuya Noguchi)
 
 10.5.4
