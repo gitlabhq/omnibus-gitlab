@@ -186,7 +186,7 @@ describe 'Redis' do
                 enable: true,
               },
               redis: {
-                password: redis_password,
+                master_password: redis_password,
                 master_ip: '10.0.0.0',
                 port: redis_port,
                 announce_ip: redis_announce_ip
