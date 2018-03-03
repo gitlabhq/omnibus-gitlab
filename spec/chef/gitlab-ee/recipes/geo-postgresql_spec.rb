@@ -131,8 +131,11 @@ describe 'geo postgresql 9.2' do
       end
     end
 
-    it 'does not creates a mapping with no DB password' do
+    it 'does not create foreign table mapping' do
+      expect(chef_run).not_to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+      expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
+      expect(chef_run).not_to run_bash('refresh foreign table definition')
     end
   end
 
@@ -417,6 +420,41 @@ describe 'geo postgresql 9.6' do
     end
   end
 
+  context 'FDW is disabled' do
+    cached(:chef_run) do
+      RSpec::Mocks.with_temporary_scope do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            sql_user: 'mygeodbuser'
+          },
+          geo_secondary: {
+            db_database: 'gitlab_geodb',
+            db_fdw: false
+          },
+          gitlab_rails: {
+            db_host: '10.0.0.1',
+            db_port: 5430,
+            db_username: 'mydbuser',
+            db_database: 'gitlab_myorg',
+            db_password: 'custompass'
+          }
+        )
+      end
+
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
+    end
+
+    it 'does not setup foreign table mapping' do
+      expect(chef_run).not_to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+      expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
+      expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
+      expect(chef_run).not_to run_bash('refresh foreign table definition')
+    end
+  end
+
   context 'FDW support' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do
@@ -558,19 +596,11 @@ describe 'geo postgresql 9.6' do
         ChefSpec::SoloRunner.converge('gitlab-ee::default')
       end
 
-      it 'refreshes foreign table definition' do
+      it 'creates foreign table mapping' do
+        expect(chef_run).to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+        expect(chef_run).to create_postgresql_fdw('gitlab_secondary')
+        expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary')
         expect(chef_run).to run_bash('refresh foreign table definition')
-      end
-
-      it 'does not attempt to setup refresh foreign table definition' do
-        stub_gitlab_rb(geo_secondary: {
-                         db_database: 'gitlab_geodb',
-                         db_fdw: false
-                       })
-
-        expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
-        expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
-        expect(chef_run).not_to run_bash('refresh foreign table definition')
       end
     end
   end
