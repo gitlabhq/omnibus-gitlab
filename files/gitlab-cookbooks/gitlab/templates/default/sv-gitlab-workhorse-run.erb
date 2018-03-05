@@ -38,6 +38,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %>
     -apiCiLongPollingDuration <%= node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %> \
     <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['log_format'] %>
+    -logFormat <%= node['gitlab']['gitlab-workhorse']['log_format'] %> \
+    <% end %>
     -config config.toml \
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.
