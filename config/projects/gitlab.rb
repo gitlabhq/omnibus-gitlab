@@ -122,6 +122,18 @@ dependency 'version-manifest'
 exclude "\.git*"
 exclude "bundler\/git"
 
+# don't ship static libraries or header files
+exclude 'embedded/lib/*.a'
+exclude 'embedded/lib/*.la'
+exclude 'embedded/include'
+
+# exclude manpages and documentation
+exclude 'embedded/man'
+exclude 'embedded/share/doc'
+exclude 'embedded/share/gtk-doc'
+exclude 'embedded/share/info'
+exclude 'embedded/share/man'
+
 # Enable signing packages
 package :rpm do
   signing_passphrase ENV['GPG_PASSPHRASE']

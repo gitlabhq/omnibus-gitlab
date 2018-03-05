@@ -36,3 +36,5 @@ build do
   make "-j #{workers}", env: env
   make 'install', env: env
 end
+
+project.exclude 'embedded/bin/gpgme-config'

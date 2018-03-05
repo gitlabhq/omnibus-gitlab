@@ -43,3 +43,7 @@ build do
   make env: env
   make 'install', env: env
 end
+
+project.exclude 'embedded/share/libtool'
+project.exclude 'embedded/bin/libtool'
+project.exclude 'embedded/bin/libtoolize'
