@@ -22,9 +22,17 @@ default['gitlab']['sentinel']['log_directory'] = '/var/log/gitlab/sentinel'
 default['gitlab']['sentinel']['ha'] = false
 default['gitlab']['sentinel']['port'] = 26379
 default['gitlab']['sentinel']['quorum'] = 1
+default['gitlab']['sentinel']['announce_ip'] = nil
+default['gitlab']['sentinel']['announce_port'] = nil
 default['gitlab']['sentinel']['down_after_milliseconds'] = 10000
 default['gitlab']['sentinel']['failover_timeout'] = 60000
 default['gitlab']['sentinel']['myid'] = nil
+
+####
+# Redis Settings for EE
+####
+default['gitlab']['redis']['announce_ip'] = nil
+default['gitlab']['redis']['announce_port'] = nil
 
 ####
 # Sidekiq Cluster

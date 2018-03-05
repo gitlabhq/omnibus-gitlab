@@ -34,6 +34,13 @@ module Redis
 
       Gitlab['redis']['master'] = false if Gitlab['redis_slave_role']['enable']
 
+      # When announce-ip is defined and announce-port not, infer the later from the main redis_port
+      # This functionality makes sense for redis slaves but with sentinel, the redis role can swap
+      # We introduce the option regardless the user defined de redis node as master or slave
+      if Gitlab['redis']['announce_ip']
+        Gitlab['redis']['announce_port'] ||= Gitlab['redis']['port']
+      end
+
       if redis_managed? && (sentinel_daemon_enabled? || is_redis_slave? || Gitlab['redis_master_role']['enable'])
         Gitlab['redis']['master_password'] ||= Gitlab['redis']['password']
       end

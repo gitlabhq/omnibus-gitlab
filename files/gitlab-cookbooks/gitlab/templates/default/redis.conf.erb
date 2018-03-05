@@ -473,8 +473,8 @@ slave-priority 100
 # There is no need to use both the options if you need to override just
 # the port or the IP address.
 #
-# slave-announce-ip 5.5.5.5
-# slave-announce-port 1234
+<%= "slave-announce-ip #{@announce_ip}" if @announce_ip %>
+<%= "slave-announce-port #{@announce_port}" if @announce_port %>
 
 ################################## SECURITY ###################################
 

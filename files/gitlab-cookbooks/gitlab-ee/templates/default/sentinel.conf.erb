@@ -23,8 +23,8 @@ bind <%= @sentinel['bind'] %>
 # The port that this sentinel instance will run on
 port <%= @sentinel['port'] %>
 
-# sentinel announce-ip <ip>
-# sentinel announce-port <port>
+<%= "sentinel announce-ip #{@sentinel['announce_ip']}" if @sentinel['announce_ip'] %>
+<%= "sentinel announce-port #{@sentinel['announce_port']}" if @sentinel['announce_port'] %>
 #
 # The above two configuration directives are useful in environments where,
 # because of NAT, Sentinel is reachable from outside via a non-local address.

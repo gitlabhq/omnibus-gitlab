@@ -176,6 +176,30 @@ describe 'Redis' do
         it 'master_password is autofilled based on redis current password' do
           expect(node['gitlab']['redis']['master_password']).to eq redis_password
         end
+
+        context 'announce_ip is defined' do
+          let(:redis_port) { 6379 }
+          let(:redis_announce_ip) { '10.10.10.10' }
+          before do
+            stub_gitlab_rb(
+              redis_sentinel_role: {
+                enable: true,
+              },
+              redis: {
+                master_password: redis_password,
+                master_ip: '10.0.0.0',
+                port: redis_port,
+                announce_ip: redis_announce_ip
+              }
+            )
+          end
+
+          it 'Redis announce_port is autofilled based on redis current port' do
+            expect(node['gitlab']['redis']['announce_port']).to eq redis_port
+
+            subject.parse_redis_settings
+          end
+        end
       end
 
       context 'when both password and master_password are present' do
