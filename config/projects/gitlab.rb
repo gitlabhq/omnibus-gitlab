@@ -108,8 +108,10 @@ dependency 'gitlab-shell'
 # gitaly needs grpc to work correctly. These native extensions are built as part
 # of gitlab-rails build. So, gitlab-rails has to be built before gitaly. But
 # making gitaly depend on gitlab-rails will cause it to be built earlier,
-# because of the way omnibus-gitlab detects and builds transitive depends. So
-# we have to maintain this order of requirement here.
+# because of the ordering omnibus applies to transitive dependencies.  Building
+# gitlab-rails earlier in the sequence is a problem as we expect this component to
+# churn a lot, invalidating the build cache for later component builds.
+# https://github.com/chef/omnibus/blob/master/docs/Build%20Cache.md
 dependency 'gitlab-rails'
 dependency 'gitaly'
 
