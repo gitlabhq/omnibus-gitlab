@@ -54,6 +54,7 @@ module Gitlab
     ee_attribute('geo_postgresql',  priority: 20).use { GeoPostgresql }
     ee_attribute('geo_secondary')
     ee_attribute('geo_logcursor')
+    ee_attribute('sentinel').use { Sentinel }
 
     # Base GitLab attributes
     attribute('gitlab_shell',     priority: 10).use { GitlabShell } # Parse shell before rails for data dir settings
@@ -93,6 +94,5 @@ module Gitlab
     attribute('gitlab_monitor')
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
-    attribute('sentinel').use { Sentinel }
   end
 end
