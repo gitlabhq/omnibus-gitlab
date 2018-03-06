@@ -20,6 +20,7 @@ omnibus-gitlab repository.
 - Support the `-logFormat` option in Workhorse
 - Update rubocop to 0.52.1 (Takuya Noguchi)
 - Restart geo-logcursor when database_geo.yml is updated
+- Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
 
 10.5.4
 
