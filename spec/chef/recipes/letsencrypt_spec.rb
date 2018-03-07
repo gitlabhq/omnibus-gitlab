@@ -62,17 +62,15 @@ server {
 
     it 'creates a self signed certificate' do
       expect(chef_run).to create_acme_selfsigned('fakehost.example.com').with(
-        crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
-        chain: '/etc/gitlab/ssl/chain.pem'
+        crt: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )
     end
 
     it 'creates a letsencrypt certificate' do
       expect(chef_run).to create_letsencrypt_certificate('fakehost.example.com').with(
-        crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
-        chain: '/etc/gitlab/ssl/chain.pem'
+        fullchain: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )
     end
 
