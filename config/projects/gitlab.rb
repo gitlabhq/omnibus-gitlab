@@ -87,6 +87,7 @@ if ee
   dependency 'consul'
   dependency 'gitlab-ctl-ee'
   dependency 'gitlab-geo-psql'
+  dependency 'gitlab-pg-ctl'
 end
 dependency 'gitlab-ctl'
 dependency 'gitlab-psql'

@@ -3,8 +3,6 @@ require 'rainbow/ext/string'
 
 module Geo
   class PromoteToPrimary
-    TRIGGER_FILE_PATH = '/tmp/postgresql.trigger'.freeze
-
     def initialize(base_path, options)
       @base_path = base_path
       @options = options
@@ -15,18 +13,12 @@ module Geo
 
       promote_postgresql_to_primary
 
-      remove_ssh_keys
-
       reconfigure
 
       promote_to_primary
     end
 
     private
-
-    def git_user_home
-      GitlabCtl::Util.get_node_attributes(@base_path)['gitlab']['user']['home']
-    end
 
     def make_sure_primary_is_down
       return true if @options[:confirm_primary_is_down]
@@ -35,7 +27,7 @@ module Geo
       puts '---------------------------------------'.color(:yellow)
       puts 'WARNING: Make sure your primary is down and also be aware that'.color(:yellow)
       puts 'this command only works for setups with one secondary.'.color(:yellow)
-      puts 'If you have more of them please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.md#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
+      puts 'If you have more of them please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
       puts 'There may be data saved to the primary that was not been replicated to the secondary before the primary went offline. This data should be treated as lost if you proceed.'.color(:yellow)
       puts '---------------------------------------'.color(:yellow)
       puts
@@ -47,25 +39,10 @@ module Geo
 
     def promote_postgresql_to_primary
       puts
-      puts 'Promoting the Postgres to primary...'.color(:yellow)
+      puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
       puts
 
-      run_command("touch #{TRIGGER_FILE_PATH}")
-    end
-
-    def remove_ssh_keys
-      return nil unless File.exist?(key_path) || File.exist?(public_key_path)
-
-      unless @options[:confirm_removing_keys]
-        puts
-        puts 'SSH keys detected! Remove? See https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-a-secondary-node for more information [Y/n]'.color(:yellow)
-
-        return true if STDIN.gets.chomp.casecmp('n').zero?
-      end
-
-      [key_path, public_key_path].each do |path|
-        File.delete(path) if File.exist?(path)
-      end
+      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote")
     end
 
     def reconfigure
@@ -86,14 +63,6 @@ module Geo
 
     def run_command(cmd, live: false)
       GitlabCtl::Util.run_command(cmd, live: live)
-    end
-
-    def key_path
-      @key_path ||= File.join(git_user_home, '.ssh/id_rsa')
-    end
-
-    def public_key_path
-      @public_key_path ||= File.join(git_user_home, '.ssh/id_rsa.pub')
     end
   end
 end
