@@ -21,6 +21,8 @@ omnibus-gitlab repository.
 - Update rubocop to 0.52.1 (Takuya Noguchi)
 - Restart geo-logcursor when database_geo.yml is updated
 - Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
+- Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
+  directories.
 
 10.5.4
 

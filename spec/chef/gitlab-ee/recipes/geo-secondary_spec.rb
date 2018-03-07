@@ -30,6 +30,24 @@ describe 'gitlab-ee::geo-secondary' do
     end
   end
 
+  describe 'when gitlab_rails is enabled' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_postgresql: { enable: true },
+                     unicorn: { enable: false },
+                     sidekiq: { enable: false },
+                     sidekiq_cluster: { enable: false },
+                     geo_logcursor: { enable: false },
+                     gitlab_rails: { enable: true })
+    end
+
+    it 'allows gitlab_rails to be overriden' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['enable']).to be true
+    end
+  end
+
   context 'when geo_secondary_role is enabled but geo-postgresql is disabled' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: true },
