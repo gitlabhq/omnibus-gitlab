@@ -136,6 +136,22 @@ unable to load certificate
 140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
 ```
 
+### Let's Encrypt issues
+
+#### Certificate signed by unknown authority issues
+
+The initial implementation of Let's Encrypt integration only used the certificate, and not the full certificate chain.
+
+Starting in 10.5.4, the full certificate chain will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
+
+```shell
+# rm /etc/gitlab/ssl/HOSTNAME*
+# gitlab-ctl reconfigure
+```
+
+Where HOSTNAME is the hostname of the certificate.
+
+
 ## Details on how GitLab and SSL work
 
 GitLab-Omnibus includes its own library of OpenSSL and links all compiled

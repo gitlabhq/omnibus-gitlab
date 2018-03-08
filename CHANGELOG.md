@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.4
+
+- Update Let's Encrypt to use fullchain instead of certificate
+
 10.5.2
 
 - Fix regression where `redirect_http_to_https` was always on for hosts using https
