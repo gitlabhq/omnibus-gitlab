@@ -87,12 +87,24 @@ describe 'gitlab-ee::pgbouncer' do
         expect(content).to match(/^admin_users = gitlab-psql, postgres, pgbouncer$/)
         expect(content).to match(/^stats_users = gitlab-psql, postgres, pgbouncer$/)
         expect(content).to match(/^ignore_startup_parameters = extra_float_digits$/)
+        expect(content).to match(%r{^unix_socket_dir = /var/opt/gitlab/pgbouncer$})
         expect(content).to match(%r{^%include /var/opt/gitlab/pgbouncer/databases.ini})
       }
     end
 
     context 'pgbouncer.ini template changes' do
       let(:template) { chef_run.template(pgbouncer_ini) }
+
+      it 'stores the socket directory in a different location when set' do
+        stub_gitlab_rb(
+          pgbouncer: {
+            enable: true,
+            unix_socket_dir: '/fake/dir'
+          }
+        )
+        expect(chef_run).to render_file(pgbouncer_ini)
+          .with_content(%r{^unix_socket_dir = /fake/dir$})
+      end
 
       it 'reloads pgbouncer and starts pgbouncer if it is not running' do
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
