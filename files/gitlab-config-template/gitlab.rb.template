@@ -1716,6 +1716,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   ...
 # }
 # pgbouncer['logfile'] = nil
+# pgbouncer['unix_socket_dir'] = nil
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'

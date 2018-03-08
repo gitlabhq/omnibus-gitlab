@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.6.0
 
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
+- Geo: Don't attempt to refresh FDW tables if FDW is not enabled
 - Bump git to 2.16.2
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
@@ -20,6 +21,7 @@ omnibus-gitlab repository.
 - Support the `-logFormat` option in Workhorse
 - Update rubocop to 0.52.1 (Takuya Noguchi)
 - Restart geo-logcursor when database_geo.yml is updated
+- Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
 - Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
   directories.
 
