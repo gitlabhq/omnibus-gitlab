@@ -38,7 +38,7 @@ build do
   touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
 
   block 'delete grpc shared objects' do
-    # Delete unsed shared objects included in grpc gem
+    # Delete unused shared objects included in grpc gem
     grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env, cwd: ruby_build_dir).stdout.strip
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
     command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"

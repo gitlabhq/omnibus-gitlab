@@ -85,7 +85,7 @@ build do
     shellout!("#{embedded_bin('gem')} uninstall --force google-protobuf", env: env)
     shellout!("#{embedded_bin('gem')} install google-protobuf --version #{protobuf_version} --platform=ruby", env: env)
 
-    # Delete unsed shared objects included in grpc gem
+    # Delete unused shared objects included in grpc gem
     grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env).stdout.strip
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
     command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
