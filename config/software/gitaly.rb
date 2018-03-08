@@ -37,6 +37,13 @@ build do
   bundle 'install', env: env, cwd: ruby_build_dir
   touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
 
+  block 'delete grpc shared objects' do
+    # Delete unused shared objects included in grpc gem
+    grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env, cwd: ruby_build_dir).stdout.strip
+    ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
+    command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
+  end
+
   ruby_install_dir = "#{install_dir}/embedded/service/gitaly-ruby"
   command "mkdir -p #{ruby_install_dir}"
   sync './ruby/', "#{ruby_install_dir}/", exclude: ['.git', '.gitignore', 'spec', 'features']
