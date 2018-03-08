@@ -23,6 +23,9 @@ module GeoSecondaryRole
     Gitlab['postgresql']['wal_level'] = 'hot_standby'
     Gitlab['postgresql']['max_wal_senders'] ||= 10
     Gitlab['postgresql']['wal_keep_segments'] ||= 10
+    # This helps prevent query conflicts
+    Gitlab['postgresql']['max_standby_archive_delay'] ||= '60s'
+    Gitlab['postgresql']['max_standby_streaming_delay'] ||= '60s'
     Gitlab['postgresql']['hot_standby'] = 'on'
     Gitlab['gitlab_rails']['auto_migrate'] = false
     Gitlab['gitlab_rails']['enable'] = rails_needed? if Gitlab['gitlab_rails']['enable'].nil?
