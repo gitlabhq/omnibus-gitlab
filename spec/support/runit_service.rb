@@ -37,6 +37,10 @@ shared_examples 'enabled runit service' do |svc_name, owner, group|
       group: group,
       mode: nil # 0755 is an octal value. 493 is the decimal conversion.
     )
+
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/run").with_content(%r{.*})
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/run").with_content(%r{.*})
+    expect(chef_run).to render_file("/var/log/gitlab/#{svc_name}/config").with_content(%r{.*})
   end
 
   it 'creates the symlink to the service directory' do
