@@ -619,11 +619,11 @@ Don't forget to update 'git.example.com' in the above example to be your server 
 ```
 then, 'sudo service nginx reload'
 
-### Enabling/Disabling nginx_status
+## Enabling/Disabling nginx_status
 
 By default you will have an nginx health-check endpoint configured at 127.0.0.1:8060/nginx_status to monitor your Nginx server status.
 
-#### The following information will be displayed:
+### The following information will be displayed:
 
 ```
 Active connections: 1
@@ -640,7 +640,7 @@ Reading: 0 Writing: 1 Waiting: 0
 * Writing: Nginx reads request bodies, processes requests, or writes responses to a client
 * Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
 
-## Configuration
+### Configuration options
 
 Edit `/etc/gitlab/gitlab.rb`:
 
@@ -668,8 +668,6 @@ nginx['status'] = {
 
 Make sure you run sudo gitlab-ctl reconfigure for the changes to take effect.
 
-
-
 #### Warning
 
 To ensure that user uploads are accessible your Nginx user (usually `www-data`)
@@ -679,7 +677,7 @@ should be added to the `gitlab-www` group. This can be done using the following 
 sudo usermod -aG gitlab-www www-data
 ```
 
-#### Templates
+## Templates
 
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to :
@@ -689,14 +687,14 @@ Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 Don't forget to restart Nginx to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
 
-#### Troubleshooting
+## Troubleshooting
 
-##### 400 Bad Request: too many Host headers
+### 400 Bad Request: too many Host headers
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
 ['proxy_set_headers'](https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl) configuration in your `gitlab.rb` file.
 
-##### javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+### javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
 
 Starting with GitLab 10, the omnibus-gitlab package no longer supports TLSv1 protocol by default.
 This can cause connection issues with some older Java based IDE clients when interacting with
