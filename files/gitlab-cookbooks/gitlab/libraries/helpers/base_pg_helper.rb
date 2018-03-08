@@ -5,11 +5,6 @@ class BasePgHelper
 
   PG_HASH_PATTERN ||= /\{(.*)\}/
 
-  # Attributes which should be considered safe for other services to know
-  SAFE_ATTRIBUTES = %w(
-    data_dir
-  ).freeze
-
   def initialize(node)
     @node = node
   end
@@ -233,9 +228,20 @@ class BasePgHelper
   end
 
   def safe_attributes
-    node['gitlab'][service_name].select do |key, value|
-      SAFE_ATTRIBUTES.include?(key)
-    end
+    # Attributes which should be considered safe for other services to know
+    attributes = %w(
+      data_dir
+      unix_socket_directory
+      port
+    )
+
+    {
+      'gitlab' => {
+        service_name => node['gitlab'][service_name].select do |key, value|
+                          attributes.include?(key)
+                        end
+      }
+    }
   end
 
   private

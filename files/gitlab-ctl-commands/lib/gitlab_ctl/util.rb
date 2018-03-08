@@ -37,20 +37,29 @@ module GitlabCtl
         results.stdout.chomp
       end
 
+      def parse_json_file(file)
+        begin
+          data = JSON.parse(File.read(file))
+        rescue JSON::ParserError
+          raise GitlabCtl::Errors::NodeError(
+            "Error reading #{file}, has reconfigure been run yet?"
+          )
+        end
+        data
+      end
+
       def get_node_attributes(base_path)
         # reconfigure creates a json file containing all of the attributes of
         # the node after a chef run, indexed by priority. Merge an return those
         # as a single level Hash
         attribute_file = "#{base_path}/embedded/nodes/#{fqdn}.json"
-        begin
-          data = JSON.parse(File.read(attribute_file))
-        rescue JSON::ParserError
-          raise GitlabCtl::Errors::NodeError(
-            "Error reading #{attribute_file}, has reconfigure been run yet?"
-          )
-        end
-
+        data = parse_json_file(attribute_file)
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
+      end
+
+      def get_safe_node_attributes
+        attribute_file = '/var/opt/gitlab/safe_attributes.json'
+        parse_json_file(attribute_file)
       end
 
       def get_password(input_text: 'Enter password: ', do_confirm: true)

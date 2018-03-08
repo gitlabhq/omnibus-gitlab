@@ -6,7 +6,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   repmgr_subcommand = ARGV[4]
   repmgr_primary = ARGV[5]
   begin
-    node_attributes = GitlabCtl::Util.get_node_attributes(base_path)
+    node_attributes = GitlabCtl::Util.get_safe_node_attributes
   rescue GitlabCtl::Errors::NodeError => e
     log e.message
   end
