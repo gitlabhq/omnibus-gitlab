@@ -28,4 +28,15 @@ module GitLabHandler
       $stderr.puts
     end
   end
+
+  class Attributes < Chef::Handler
+    # Generate a JSON file of attributes which non-root users need access to
+    def report
+      File.open('/var/opt/gitlab/safe_attributes.json', 'w', 0644) do |file|
+        [PgHelper].each do |help|
+          file.puts help.send(:new, node).safe_attributes.to_json
+        end
+      end
+    end
+  end
 end
