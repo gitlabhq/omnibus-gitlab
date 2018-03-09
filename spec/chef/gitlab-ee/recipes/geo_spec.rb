@@ -105,6 +105,11 @@ describe 'gitlab-ee::geo' do
       it 'defines hot_standby' do
         expect(config_attrs['hot_standby']).to eq('on')
       end
+
+      it 'defines standby settings' do
+        expect(config_attrs['max_standby_archive_delay']).to eq('60s')
+        expect(config_attrs['max_standby_streaming_delay']).to eq('60s')
+      end
     end
 
     context 'in gitlab-rails' do

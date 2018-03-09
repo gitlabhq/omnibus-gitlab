@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.7.0
+- Geo: Increase default WAL standby settings from 30s to 60s
+
 10.6.0
 
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
