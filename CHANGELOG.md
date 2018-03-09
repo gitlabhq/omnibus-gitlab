@@ -7,7 +7,6 @@ omnibus-gitlab repository.
 
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Geo: Don't attempt to refresh FDW tables if FDW is not enabled
-- Bump git to 2.16.2
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 - Update jemalloc to 5.0.1
@@ -24,6 +23,9 @@ omnibus-gitlab repository.
 - Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
 - Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
   directories.
+- Updated Mattermost to 4.7.3
+- Add `proxy_download` options to object storage
+- Add `lfs_object_store_direct_upload` option
 
 10.5.4
 

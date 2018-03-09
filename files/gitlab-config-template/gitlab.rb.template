@@ -154,6 +154,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"
 # gitlab_rails['artifacts_object_store_enabled'] = false # EE only
 # gitlab_rails['artifacts_object_store_background_upload'] = true
+# gitlab_rails['artifacts_object_store_proxy_download'] = false
 # gitlab_rails['artifacts_object_store_remote_directory'] = "artifacts"
 # gitlab_rails['artifacts_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -170,7 +171,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
 # gitlab_rails['lfs_object_store_enabled'] = false # EE only
+# gitlab_rails['lfs_object_store_direct_upload'] = false
 # gitlab_rails['lfs_object_store_background_upload'] = true
+# gitlab_rails['lfs_object_store_proxy_download'] = false
 # gitlab_rails['lfs_object_store_remote_directory'] = "lfs-objects"
 # gitlab_rails['lfs_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -189,6 +192,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false # EE only
 # gitlab_rails['uploads_object_store_background_upload'] = true
+# gitlab_rails['uploads_object_store_proxy_download'] = false
 # gitlab_rails['uploads_object_store_remote_directory'] = "uploads"
 # gitlab_rails['uploads_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -1163,6 +1167,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_user_access_tokens'] = false
 # mattermost['service_enable_preview_features'] = true
 # mattermost['service_close_unused_direct_messages'] = false
+# mattermost['service_image_proxy_type'] = ''
+# mattermost['service_image_proxy_options'] = ''
+# mattermost['service_image_proxy_url'] = ''
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
@@ -1254,10 +1261,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # mattermost['ratelimit_enable_rate_limiter'] = false
 # mattermost['ratelimit_per_sec'] = 10
+# mattermost['ratelimit_max_burst'] = 100
 # mattermost['ratelimit_memory_store_size'] = 10000
 # mattermost['ratelimit_vary_by_remote_addr'] = true
+# mattermost['ratelimit_vary_by_user'] = false
 # mattermost['ratelimit_vary_by_header'] = nil
-# mattermost['ratelimit_max_burst'] = 100
 
 # mattermost['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
 # mattermost['support_privacy_policy_link'] = "https://about.mattermost.com/default-privacy-policy/"
