@@ -5,6 +5,8 @@ omnibus-gitlab repository.
 
 10.7.0
 - Geo: Increase default WAL standby settings from 30s to 60s
+- Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
+  registry (Takuya Noguchi)
 
 10.6.0
 
@@ -93,7 +95,6 @@ omnibus-gitlab repository.
 - Update pgbouncer recipe to better handle initial configuration
 - Render gitaly-ruby memory settings
 - Add a runit service to probe repository storages
-
 
 10.3.0
 
@@ -1656,7 +1657,6 @@ are not the same (O Schwede) c4e83c5
 - Added kerberos lib to support gitlab dependency 66fd3a85cce74754e850034894a87d554fdb04b7
 - gitlab.rb now lists all available configuration options 6080f125697f9fe7113af1dc80e0a7bc9ddb284e
 - Add option to insert configuration settings in nginx template (Sander Boom) 5ba0485a489549a0bb33531e027a206b1775b3c0
-
 
 7.5.0
 - Use system UIDs and GIDs when creating accounts (Tim Bishop) cfc04342129a4c4dca5c4827d541c8888adadad3
