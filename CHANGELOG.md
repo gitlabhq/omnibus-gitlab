@@ -25,6 +25,8 @@ omnibus-gitlab repository.
 - Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
   directories.
 - Updated Mattermost to 4.7.3
+- Add `proxy_download` options to object storage
+- Add `lfs_object_store_direct_upload` option
 
 10.5.4
 
