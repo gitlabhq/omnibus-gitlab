@@ -38,12 +38,12 @@ describe 'geo postgresql 9.2' do
 
     it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
 
-    it 'includes the postgresql-bin recipe' do
-      expect(chef_run).to include_recipe('gitlab::postgresql-bin')
+    it 'includes the postgresql::bin recipe' do
+      expect(chef_run).to include_recipe('postgresql::bin')
     end
 
     it 'includes the postgresql_user recipe' do
-      expect(chef_run).to include_recipe('gitlab::postgresql_user')
+      expect(chef_run).to include_recipe('postgresql::user')
     end
 
     it 'creates the gitlab_geo role in the geo-postgresql database' do

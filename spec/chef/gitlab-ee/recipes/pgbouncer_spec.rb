@@ -47,7 +47,7 @@ describe 'gitlab-ee::pgbouncer' do
     end
 
     it 'includes the postgresql user recipe' do
-      expect(chef_run).to include_recipe('gitlab::postgresql_user')
+      expect(chef_run).to include_recipe('postgresql::user')
     end
 
     it 'does not include the consul recipe by default' do

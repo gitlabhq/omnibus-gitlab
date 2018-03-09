@@ -79,7 +79,7 @@ describe 'gitlab::postgres-exporter' do
     end
 
     it 'includes the postgresql_user recipe' do
-      expect(chef_run).to include_recipe('gitlab::postgresql_user')
+      expect(chef_run).to include_recipe('postgresql::user')
     end
   end
 
