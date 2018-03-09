@@ -1517,7 +1517,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # Let's Encrypt integration
 ################################################################################
-# letsencrypt['enable'] = false
+# letsencrypt['enable'] = nil
 # letsencrypt['contact_emails'] = [] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048
