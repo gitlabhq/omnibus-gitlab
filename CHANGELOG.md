@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
 - Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
   directories.
+- Updated Mattermost to 4.7.3
 
 10.5.4
 
