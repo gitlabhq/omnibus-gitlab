@@ -18,10 +18,6 @@ shared_examples 'enabled runit service' do |svc_name, owner, group|
   end
 
   it 'creates files' do
-    expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/run")
-    expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/log/run")
-    expect(chef_run).to create_template("/var/log/gitlab/#{svc_name}/config")
-
     expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/run").with(
       owner: owner,
       group: group,
@@ -37,6 +33,10 @@ shared_examples 'enabled runit service' do |svc_name, owner, group|
       group: group,
       mode: nil # 0755 is an octal value. 493 is the decimal conversion.
     )
+
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/run").with_content(%r{.*})
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/run").with_content(%r{.*})
+    expect(chef_run).to render_file("/var/log/gitlab/#{svc_name}/config").with_content(%r{.*})
   end
 
   it 'creates the symlink to the service directory' do
