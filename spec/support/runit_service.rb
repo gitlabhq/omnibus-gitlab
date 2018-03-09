@@ -18,10 +18,6 @@ shared_examples 'enabled runit service' do |svc_name, owner, group|
   end
 
   it 'creates files' do
-    expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/run")
-    expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/log/run")
-    expect(chef_run).to create_template("/var/log/gitlab/#{svc_name}/config")
-
     expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/run").with(
       owner: owner,
       group: group,
