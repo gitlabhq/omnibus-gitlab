@@ -6,7 +6,6 @@ omnibus-gitlab repository.
 10.6.0
 
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
-- Bump git to 2.16.2
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
 - Update python to 3.4.8
 - Update jemalloc to 5.0.1
