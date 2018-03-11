@@ -268,8 +268,10 @@ rubocop:
   stage: check
   <<: *dedicated-runner
   image: ruby:2.3.3
+  before_script:
+    - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
-    - bundle exec rake rubocop
+    - bundle exec rubocop --parallel
   except:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
