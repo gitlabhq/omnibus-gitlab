@@ -18,6 +18,8 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
 
+node.default['gitlab']['pgbouncer']['unix_socket_dir'] ||= node['gitlab']['pgbouncer']['data_directory']
+
 include_recipe 'gitlab::postgresql_user'
 
 # If consul is enabled, it needs to run before pgbouncer

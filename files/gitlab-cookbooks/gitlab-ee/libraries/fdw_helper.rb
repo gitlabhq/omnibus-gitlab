@@ -6,7 +6,8 @@ class FdwHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can 
   end
 
   def fdw_can_refresh?
-    gitlab_geo_helper.geo_database_configured? &&
+    fdw_enabled? &&
+      gitlab_geo_helper.geo_database_configured? &&
       !pg_helper.is_managed_and_offline? &&
       !pg_helper.database_empty?(fdw_dbname) &&
       !geo_pg_helper.is_offline_or_readonly? &&
@@ -25,6 +26,10 @@ class FdwHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can 
 
   def pg_helper
     @pg_helper ||= PgHelper.new(node)
+  end
+
+  def fdw_enabled?
+    node['gitlab']['geo-secondary']['db_fdw']
   end
 
   def fdw_dbname
