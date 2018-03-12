@@ -18,6 +18,7 @@ omnibus-gitlab repository.
   interactions with system ruby libraries.
 - Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
+- Update postgresql to 9.6.8
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 - Add `announce-ip` and `announce-port` options for Redis and Sentinel (Borja Aparicio)
 - Support the `-logFormat` option in Workhorse
