@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '9.6.5'
+default_version '9.6.8'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -28,8 +28,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '9.6.5' do
-  source sha256: '06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c'
+version '9.6.8' do
+  source sha256: 'eafdb3b912e9ec34bdd28b651d00226a6253ba65036cb9a41cad2d9e82e3eb70'
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
