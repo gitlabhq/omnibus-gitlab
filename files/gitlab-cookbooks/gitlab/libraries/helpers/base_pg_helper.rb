@@ -1,13 +1,11 @@
 # This is a base class to be inherited by PG Helpers
-class BasePgHelper
+require_relative 'base_helper'
+
+class BasePgHelper < BaseHelper
   include ShellOutHelper
   attr_reader :node
 
   PG_HASH_PATTERN ||= /\{(.*)\}/
-
-  def initialize(node)
-    @node = node
-  end
 
   def is_running?
     OmnibusHelper.new(node).service_up?(service_name)
@@ -225,23 +223,6 @@ class BasePgHelper
 
   def service_cmd
     raise NotImplementedError
-  end
-
-  def public_attributes
-    # Attributes which should be considered safe for other services to know
-    attributes = %w(
-      data_dir
-      unix_socket_directory
-      port
-    )
-
-    {
-      'gitlab' => {
-        service_name => node['gitlab'][service_name].select do |key, value|
-                          attributes.include?(key)
-                        end
-      }
-    }
   end
 
   private

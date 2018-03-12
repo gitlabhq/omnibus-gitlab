@@ -33,10 +33,11 @@ module GitLabHandler
     # Generate a JSON file of attributes which non-root users need access to
     def report
       data = {}
-      [PgHelper, RepmgrHelper].each do |klass|
-        Chef::Mixin::DeepMerge.deep_merge!(data, klass.send(:new, node).public_attributes) if defined?(klass)
+      BaseHelper.descendants.each do |klass|
+        k = klass.send(:new, node)
+        Chef::Mixin::DeepMerge.deep_merge!(k.public_attributes, data) if k.respond_to?(:public_attributes)
       end
-      File.open('/var/opt/gitlab/safe_attributes.json', 'w', 0644) { |file| file.puts data.to_json }
+      File.open('/var/opt/gitlab/public_attributes.json', 'w', 0644) { |file| file.puts data.to_json }
     end
   end
 end
