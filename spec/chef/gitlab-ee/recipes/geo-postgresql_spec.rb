@@ -528,14 +528,15 @@ describe 'geo postgresql 9.6' do
     end
 
     context 'when secondary database is not managed' do
-      let(:chef_run) do
+      before do
         stub_gitlab_rb(
           geo_postgresql: {
             enable: true,
             sql_user: 'mygeodbuser'
           },
           geo_secondary: {
-            db_database: 'gitlab_geodb'
+            db_database: 'gitlab_geodb',
+            db_fdw: true
           },
           gitlab_rails: {
             db_host: '10.0.0.10',
@@ -545,6 +546,9 @@ describe 'geo postgresql 9.6' do
             db_password: 'custompass'
           }
         )
+      end
+
+      let(:chef_run) do
         allow_any_instance_of(GeoPgHelper).to receive(:is_offline_or_readonly?).and_return(false)
         allow_any_instance_of(GitlabGeoHelper).to receive(:geo_database_configured?).and_return(true)
 
@@ -554,8 +558,17 @@ describe 'geo postgresql 9.6' do
         ChefSpec::SoloRunner.converge('gitlab-ee::default')
       end
 
-      it 'refreshes foreign table definintion' do
+      it 'refreshes foreign table definition' do
         expect(chef_run).to run_bash('refresh foreign table definition')
+      end
+
+      it 'does not refresh foreign table definition' do
+        stub_gitlab_rb(geo_secondary: {
+                         db_database: 'gitlab_geodb',
+                         db_fdw: false
+                       })
+
+        expect(chef_run).not_to run_bash('refresh foreign table definition')
       end
     end
   end

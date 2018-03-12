@@ -182,6 +182,7 @@ default['gitlab']['pgbouncer']['databases_ini_user'] = 'gitlab-psql'
 default['gitlab']['pgbouncer']['databases_json'] = '/var/opt/gitlab/pgbouncer/databases.json'
 default['gitlab']['pgbouncer']['databases'] = {}
 default['gitlab']['pgbouncer']['logfile'] = nil
+default['gitlab']['pgbouncer']['unix_socket_dir'] = nil
 
 default['gitlab']['pgbouncer']['auth_type'] = 'md5'
 default['gitlab']['pgbouncer']['auth_hba_file'] = nil
