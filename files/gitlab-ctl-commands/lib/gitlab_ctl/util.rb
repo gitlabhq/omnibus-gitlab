@@ -57,8 +57,8 @@ module GitlabCtl
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
       end
 
-      def get_safe_node_attributes
-        attribute_file = '/var/opt/gitlab/safe_attributes.json'
+      def get_public_node_attributes
+        attribute_file = '/var/opt/gitlab/public_attributes.json'
         parse_json_file(attribute_file)
       end
 

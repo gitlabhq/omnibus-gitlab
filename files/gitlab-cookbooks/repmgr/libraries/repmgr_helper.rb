@@ -53,7 +53,7 @@ class RepmgrHelper
     Digest::MD5.hexdigest(seed_data).unpack('L').first
   end
 
-  def safe_attributes
+  def public_attributes
     {
       'repmgr' => node['repmgr'].select do |key, value|
                     %w(user database node_name).include?(key)

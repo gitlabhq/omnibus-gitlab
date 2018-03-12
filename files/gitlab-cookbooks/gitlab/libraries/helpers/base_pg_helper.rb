@@ -227,7 +227,7 @@ class BasePgHelper
     raise NotImplementedError
   end
 
-  def safe_attributes
+  def public_attributes
     # Attributes which should be considered safe for other services to know
     attributes = %w(
       data_dir
