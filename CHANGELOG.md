@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Updated Mattermost to 4.7.3
 - Add `proxy_download` options to object storage
 - Add `lfs_object_store_direct_upload` option
+- Render the gitlab-pages '-log-format' option
 
 10.5.4
 
