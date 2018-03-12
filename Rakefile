@@ -3,6 +3,3 @@
 require 'knapsack'
 Rake.add_rakelib 'lib/gitlab/tasks'
 Knapsack.load_tasks
-
-require 'rubocop/rake_task'
-RuboCop::RakeTask.new(:rubocop)
