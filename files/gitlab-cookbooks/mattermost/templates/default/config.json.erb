@@ -41,7 +41,10 @@
         "GoroutineHealthThreshold" : <%= @service_goroutine_health_threshold %>,
         "EnableUserAccessTokens" : <%= @service_user_access_tokens %>,
         "EnablePreviewFeatures": <%= @service_enable_preview_features %>,
-        "CloseUnusedDirectMessages" : <%= @service_close_unused_direct_messages %>
+        "CloseUnusedDirectMessages": <%= @service_close_unused_direct_messages %>,
+        "ImageProxyType": "<%= @service_image_proxy_type %>",
+        "ImageProxyOptions": "<%= @service_image_proxy_options %>",
+        "ImageProxyURL": "<%= @service_image_proxy_url %>"
     },
     "TeamSettings": {
         "SiteName": "<%= @team_site_name %>",
@@ -134,6 +137,7 @@
         "MaxBurst": <%= @ratelimit_max_burst %>,
         "MemoryStoreSize": <%= @ratelimit_memory_store_size %>,
         "VaryByRemoteAddr": <%= @ratelimit_vary_by_remote_addr %>,
+        "VaryByUser": <%= @ratelimit_vary_by_user %>,
         "VaryByHeader": "<%= @ratelimit_vary_by_header %>"
     },
     "PrivacySettings": {
