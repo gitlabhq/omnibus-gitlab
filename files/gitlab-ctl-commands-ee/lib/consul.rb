@@ -47,7 +47,7 @@ class Consul
       def handle_failed_master(input)
         return if input.chomp.eql?('null')
 
-        node = RepmgrHelper::Node.new
+        node = Repmgr::Node.new
         unless node.is_master?
           # wait 5 seconds for the actual master node to handle the removal
           sleep 5
@@ -63,7 +63,7 @@ class Consul
         data.each do |fm|
           node_id = fm['Key'].split('/').last
           begin
-            RepmgrHelper::Master.remove(node_id: node_id, user: 'gitlab-consul')
+            Repmgr::Master.remove(node_id: node_id, user: 'gitlab-consul')
           rescue StandardError
             Consul::Kv.put(fm['Key'])
           else

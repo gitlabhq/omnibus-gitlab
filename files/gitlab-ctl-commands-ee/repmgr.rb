@@ -30,7 +30,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
                   exit 1
                 end
   begin
-    repmgr_obj = RepmgrHelper.new(repmgr_command, repmgr_subcommand, repmgr_args)
+    repmgr_obj = Repmgr.new(repmgr_command, repmgr_subcommand, repmgr_args)
     results = repmgr_obj.execute
   rescue Mixlib::ShellOut::ShellCommandFailed
     exit 1
@@ -50,21 +50,21 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
 end
 
 add_command_under_category('repmgr-check-master', 'database', 'Check if the current node is the repmgr master', 2) do
-  node = RepmgrHelper::Node.new
+  node = Repmgr::Node.new
   begin
     if node.is_master?
       Kernel.exit 0
     else
       Kernel.exit 2
     end
-  rescue RepmgrHelper::MasterError => se
+  rescue Repmgr::MasterError => se
     $stderr.puts "Error checking for master: #{se}"
     Kernel.exit 3
   end
 end
 
 add_command_under_category('repmgr-event-handler', 'database', 'Handle events from rpmgrd actions', 2) do
-  RepmgrHelper::Events.fire(ARGV)
+  Repmgr::Events.fire(ARGV)
 end
 
 def repmgr_help

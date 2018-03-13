@@ -10,7 +10,7 @@ rescue LoadError
   require_relative '../../gitlab-ctl-commands/lib/gitlab_ctl'
 end
 
-class RepmgrHelper
+class Repmgr
   class MasterError < StandardError; end
 
   class EventError < StandardError; end
@@ -192,8 +192,8 @@ class RepmgrHelper
       query = "SELECT name FROM repmgr_gitlab_cluster.repl_nodes WHERE type='master' AND active != 'f'"
       host = attributes['gitlab']['postgresql']['unix_socket_directory']
       port = attributes['gitlab']['postgresql']['port']
-      master = RepmgrHelper::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
-      show_count = RepmgrHelper::Base.cmd(
+      master = Repmgr::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
+      show_count = Repmgr::Base.cmd(
         %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),
         Etc.getpwuid.name
       ).chomp
@@ -216,7 +216,7 @@ class RepmgrHelper
       end
 
       def repmgrd_failover_promote(node_id, success, timestamp, details)
-        raise RepmgrHelper::EventError, "We tried to failover at #{timestamp}, but failed with: #{details}" unless success.eql?('1')
+        raise Repmgr::EventError, "We tried to failover at #{timestamp}, but failed with: #{details}" unless success.eql?('1')
         old_master = details.match(/old master (\d+) marked as failed/)[1]
         Consul::Kv.put("gitlab/ha/postgresql/failed_masters/#{old_master}")
       end
