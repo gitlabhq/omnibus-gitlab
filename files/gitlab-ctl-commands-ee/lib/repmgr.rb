@@ -184,7 +184,7 @@ class RepmgrHelper
     attr_accessor :attributes
 
     def initialize
-      @attributes = GitlabCtl::Util.get_safe_node_attributes
+      @attributes = GitlabCtl::Util.get_public_node_attributes
     end
 
     def is_master?

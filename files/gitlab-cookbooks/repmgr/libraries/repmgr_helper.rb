@@ -1,9 +1,5 @@
-class RepmgrHelper
+class RepmgrHelper < BaseHelper
   attr_accessor :node
-
-  def initialize(node)
-    @node = node
-  end
 
   def pg_hba_entries
     results = []

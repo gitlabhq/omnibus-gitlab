@@ -22,4 +22,11 @@ class BaseHelper
   def self.descendants
     ObjectSpace.each_object(Class).select { |klass| klass < self }
   end
+
+  # Returns the attributes this helper wants to be made public.  Implement in your subclass.
+  #
+  # @return [Hash] the attributes that this helper wants to make public
+  def public_attributes
+    {}
+  end
 end
