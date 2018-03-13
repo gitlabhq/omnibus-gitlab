@@ -22,4 +22,10 @@ class PgbouncerHelper
     end
     results
   end
+
+  def create_pgbouncer_user?(db)
+    node['gitlab'][db]['enable'] &&
+      !node['gitlab'][db]['pgbouncer_user'].nil? &&
+      !node['gitlab'][db]['pgbouncer_user_password'].nil?
+  end
 end
