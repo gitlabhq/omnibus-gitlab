@@ -446,6 +446,40 @@ describe 'gitlab::gitlab-rails' do
           }
         end
       end
+
+      context 'when repository verification primary batch worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_repository_verification_primary_batch_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/geo_repository_verification_primary_batch_worker:\s+cron:\s+"1 2 3 4 5"/)
+        end
+      end
+
+      context 'when repository verification primary batch worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('geo_repository_verification_primary_batch_worker')
+          }
+        end
+      end
+
+      context 'when repository verification secondary scheduler worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_repository_verification_secondary_scheduler_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/geo_repository_verification_secondary_scheduler_worker:\s+cron:\s+"1 2 3 4 5"/)
+        end
+      end
+
+      context 'when repository verification secondary scheduler worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('geo_repository_verification_secondary_scheduler_worker')
+          }
+        end
+      end
     end
 
     context 'Scheduled Pipeline settings' do
