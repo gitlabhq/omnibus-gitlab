@@ -1688,6 +1688,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['ha'] = false
 # geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
 # geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
+# geo_postgresql['pgbouncer_user'] = nil
+# geo_postgresql['pgbouncer_user_password'] = nil
 
 ################################################################################
 # Pgbouncer (EE only)

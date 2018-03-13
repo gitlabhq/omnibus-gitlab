@@ -50,10 +50,5 @@ if node['gitlab']['geo-secondary']['enable']
   include_recipe 'gitlab-ee::geo_database_migrations' if node['gitlab']['gitlab-rails']['enable']
 end
 
-# pgbouncer_user and pgbouncer_user_password are settings for the account
-# pgbouncer will use to authenticate to the database.
-if node['gitlab']['postgresql']['enable'] &&
-    !node['gitlab']['postgresql']['pgbouncer_user'].nil? &&
-    !node['gitlab']['postgresql']['pgbouncer_user_password'].nil?
-  include_recipe 'gitlab-ee::pgbouncer_user'
-end
+# Create the pgbouncer users
+include_recipe 'gitlab-ee::pgbouncer_user'

@@ -18,38 +18,32 @@ require 'chef_helper'
 
 describe 'gitlab-ee::pgbouncer_user' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      {
-        postgresql: {
-          enable: true,
-          pgbouncer_user: 'pgbouncer',
-          pgbouncer_user_password: 'fakepassword'
+  end
+
+  context 'create the rails pgbouncer user' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+      stub_gitlab_rb(
+        {
+          postgresql: {
+            enable: true,
+            pgbouncer_user: 'pgbouncer-rails',
+            pgbouncer_user_password: 'fakepassword'
+          }
         }
-      }
-    )
-    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
-    allow_any_instance_of(PgHelper).to receive(:user_exists?).with('pgbouncer').and_return(false)
-  end
-
-  context 'inital run' do
-    it 'should create the pgbouncer user' do
-      expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_user')
-      expect(chef_run).to create_postgresql_user('pgbouncer')
+      )
     end
 
-    it 'should create the pg_shadow_lookup function' do
-      postgresql_user = chef_run.postgresql_user('pgbouncer')
-      expect(postgresql_user).to notify('execute[Add pgbouncer auth function]')
-    end
-  end
-
-  context 'function already exist' do
-    it 'should not try and recreate the function' do
-      allow_any_instance_of(PgHelper).to receive(:has_function?).with('gitlabhq_production', 'pg_shadow_lookup').and_return(true)
-      expect(chef_run).not_to run_execute('Add pgbouncer auth function')
+    it 'should call pgbouncer_user with the correct values for rails' do
+      expect(chef_run).to create_pgbouncer_user('rails').with(
+        database: 'gitlabhq_production',
+        password: 'fakepassword',
+        user: 'pgbouncer-rails',
+        add_auth_function: true
+      )
+      expect(chef_run).not_to create_pgbouncer_user('geo')
     end
   end
 
@@ -59,13 +53,66 @@ describe 'gitlab-ee::pgbouncer_user' do
         {
           pgbouncer: {
             auth_query: 'SELECT * FROM FAKETABLE'
+          },
+          postgresql: {
+            enable: true,
+            pgbouncer_user: 'pgbouncer-rails',
+            pgbouncer_user_password: 'fakepassword'
           }
         }
       )
     end
 
     it 'should not create the pg_shadow_lookup function' do
-      expect(chef_run).not_to run_execute('Add pgbouncer auth function')
+      expect(chef_run).to create_pgbouncer_user('rails').with(
+        add_auth_function: false
+      )
+    end
+  end
+
+  context 'no pgbouncer user' do
+    before do
+      stub_gitlab_rb(
+        {
+          postgresql: {
+            enable: true,
+          },
+          geo_postgresql: {
+            enable: true,
+          }
+        }
+      )
+    end
+
+    it 'should not create the pgbouncer user' do
+      expect(chef_run).not_to create_pgbouncer_user('rails')
+      expect(chef_run).not_to create_pgbouncer_user('geo')
+    end
+  end
+
+  context 'create the geo pgbouncer user' do
+    before do
+      stub_gitlab_rb(
+        {
+          geo_postgresql: {
+            enable: true,
+            pgbouncer_user: 'pgbouncer-geo',
+            pgbouncer_user_password: 'fakepassword'
+          }
+        }
+      )
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+      allow_any_instance_of(PgHelper).to receive(:user_exists?).with('pgbouncer-geo').and_return(false)
+    end
+
+    it 'should call pgbouncer_user with the correct values for geo' do
+      expect(chef_run).to create_pgbouncer_user('geo').with(
+        database: 'gitlabhq_geo_production',
+        password: 'fakepassword',
+        user: 'pgbouncer-geo',
+        add_auth_function: true
+      )
+      expect(chef_run).not_to create_pgbouncer_user('rails')
     end
   end
 end
