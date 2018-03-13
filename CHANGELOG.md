@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 10.6.0
 
+- Geo: Add cron configuration for repository verification workers
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Geo: Don't attempt to refresh FDW tables if FDW is not enabled
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
