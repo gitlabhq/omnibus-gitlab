@@ -24,6 +24,7 @@ gem 'rake'
 gem 'knapsack'
 gem 'docker-api'
 gem 'aws-sdk'
+gem 'google_drive'
 
 group :rubocop do
   gem 'rubocop'

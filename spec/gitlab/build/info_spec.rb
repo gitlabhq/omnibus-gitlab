@@ -130,6 +130,14 @@ describe Build::Info do
     end
   end
 
+  describe '.previous_version' do
+    it 'detects previous version correctly' do
+      allow(Build::Info).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
+
+      expect(described_class.previous_version).to eq("10.3.5-ee.0")
+    end
+  end
+
   describe '.gitlab_rails repo' do
     describe 'ALTERNATIVE_SOURCES variable specified' do
       before do

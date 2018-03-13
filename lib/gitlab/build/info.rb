@@ -49,8 +49,10 @@ module Build
         `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | head -1`
       end
 
-      def latest_stable_tag
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -1`
+      def latest_stable_tag(level: 1)
+        # Level decides tag at which position you want. Level one gives you
+        # latest stable tag, two gives you the one just before it and so on.
+        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`.split("\n").last
       end
 
       def docker_tag
@@ -67,6 +69,12 @@ module Build
         else
           ENV['GITLAB_VERSION']
         end
+      end
+
+      def previous_version
+        # Get the second latest git tag
+        previous_tag = Info.latest_stable_tag(level: 2)
+        previous_tag.tr("+", "-")
       end
 
       def gitlab_rails_repo
