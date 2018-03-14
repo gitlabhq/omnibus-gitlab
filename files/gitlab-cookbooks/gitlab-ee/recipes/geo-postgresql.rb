@@ -170,7 +170,6 @@ if node['gitlab']['geo-postgresql']['enable']
     query "CREATE SCHEMA gitlab_secondary;"
     db_name geo_database_name
     helper geo_pg_helper
-    action :run
 
     not_if { !fdw_helper.fdw_enabled? || geo_pg_helper.is_offline_or_readonly? || geo_pg_helper.schema_exists?('gitlab_secondary', geo_database_name) }
   end
