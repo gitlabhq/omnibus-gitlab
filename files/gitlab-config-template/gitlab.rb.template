@@ -1419,6 +1419,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # alertmanager['enable'] = true
 # alertmanager['home'] = '/var/opt/gitlab/alertmanager'
 # alertmanager['log_directory'] = '/var/log/gitlab/alertmanager'
+# alertmanager['admin_email'] = 'admin@example.com'
 # alertmanager['flags'] = {
 #   'web.listen-address' => "#{node['gitlab']['alertmanager']['listen_address']}"
 #   'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data"

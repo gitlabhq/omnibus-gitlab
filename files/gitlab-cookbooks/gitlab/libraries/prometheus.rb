@@ -147,19 +147,29 @@ module Prometheus
       global = {}
 
       if rails_config['smtp_enable']
-        global['smtp_from'] = rails_config['gitlab_email_from']
-        global['smtp_smarthost'] = "#{rails_config['smtp_address']}:#{rails_config['smtp_port']}"
+        global['smtp_from'] = rails_config['gitlab_email_from'] || 'unconfigured'
+        global['smtp_smarthost'] = "#{rails_config['smtp_address'] || 'unconfigured'}:#{rails_config['smtp_port'] || '25'}"
         if %w(login plain).include?(rails_config['smtp_authentication'])
           global['smtp_auth_username'] = rails_config['smtp_user_name']
           global['smtp_auth_password'] = rails_config['smtp_password']
         end
       end
 
+      default_email_receiver = {
+        'name' => 'default-receiver',
+      }
+      default_email_receiver['email_configs'] = ['to' => user_config['admin_email']] unless user_config['admin_email'].nil?
+
+      default_inhibit_rules = [] << Gitlab['alertmanager']['inhibit_rules']
+      default_receivers = [] << default_email_receiver << Gitlab['alertmanager']['receivers']
+      default_routes = [] << Gitlab['alertmanager']['routes']
+      default_templates = [] << Gitlab['alertmanager']['templates']
+
       Gitlab['alertmanager']['global'] = global
-      Gitlab['alertmanager']['templates'] = []
-      Gitlab['alertmanager']['routes'] = []
-      Gitlab['alertmanager']['receivers'] = []
-      Gitlab['alertmanager']['inhibit_rules'] = []
+      Gitlab['alertmanager']['inhibit_rules'] = default_inhibit_rules.compact.flatten
+      Gitlab['alertmanager']['receivers'] = default_receivers.compact.flatten
+      Gitlab['alertmanager']['routes'] = default_routes.compact.flatten
+      Gitlab['alertmanager']['templates'] = default_templates.compact.flatten
       Gitlab['alertmanager']['default_receiver'] = user_config['default_receiver'] || 'default-receiver'
     end
 

@@ -785,6 +785,11 @@ default['gitlab']['alertmanager']['enable'] = false
 default['gitlab']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
 default['gitlab']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
 default['gitlab']['alertmanager']['listen_address'] = 'localhost:9093'
+default['gitlab']['alertmanager']['admin_email'] = nil
+default['gitlab']['alertmanager']['inhibit_rules'] = []
+default['gitlab']['alertmanager']['receivers'] = []
+default['gitlab']['alertmanager']['routes'] = []
+default['gitlab']['alertmanager']['templates'] = []
 
 ####
 # Prometheus Node Exporter

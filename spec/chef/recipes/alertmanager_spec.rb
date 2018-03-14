@@ -9,7 +9,10 @@ alertmanager_yml_output = <<-ALERTMANAGERYML
   route:
     receiver: default-receiver
     routes: []
-  receivers: []
+  receivers:
+  - name: default-receiver
+    email_configs:
+    - to: admin@example.com
   inhibit_rules: []
 ALERTMANAGERYML
 
@@ -26,7 +29,10 @@ describe 'gitlab::alertmanager' do
     before do
       stub_gitlab_rb(
         prometheus: { enable: true },
-        alertmanager: { enable: true },
+        alertmanager: {
+          enable: true,
+          admin_email: 'admin@example.com',
+        },
         gitlab_rails: {
           gitlab_email_from: 'gitlab-omnibus',
           smtp_enable: true,
