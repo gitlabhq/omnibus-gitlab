@@ -1,4 +1,6 @@
 class GitlabRailsHelper < BaseHelper
+  attr_accessor :node
+
   def public_attributes
     {
       'gitlab' => {

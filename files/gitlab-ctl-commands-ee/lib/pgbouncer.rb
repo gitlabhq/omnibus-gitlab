@@ -15,7 +15,7 @@ module Pgbouncer
 
     def initialize(options, install_path, base_data_path)
       self.data_path = base_data_path
-      @attributes = GitlabCtl::Util.get_node_attributes(install_path)
+      @attributes = GitlabCtl::Util.get_public_node_attributes
       @install_path = install_path
       @options = options
       @ini_file = options['databases_ini'] || attributes['gitlab']['pgbouncer']['databases_ini']
