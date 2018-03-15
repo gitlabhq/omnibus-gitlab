@@ -1,13 +1,11 @@
 # This is a base class to be inherited by PG Helpers
-class BasePgHelper
+require_relative 'base_helper'
+
+class BasePgHelper < BaseHelper
   include ShellOutHelper
   attr_reader :node
 
   PG_HASH_PATTERN ||= /\{(.*)\}/
-
-  def initialize(node)
-    @node = node
-  end
 
   def is_running?
     OmnibusHelper.new(node).service_up?(service_name)
