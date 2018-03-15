@@ -139,13 +139,6 @@ geo_pg_port = node['gitlab']['geo-postgresql']['port']
 geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
 geo_database_name = node['gitlab']['geo-secondary']['db_database']
 
-# Foreign Data Wrapper specific (credentials for the secondary - readonly pg instance)
-fdw_user = node['gitlab']['geo-postgresql']['fdw_external_user']
-fdw_password = node['gitlab']['geo-postgresql']['fdw_external_password']
-
-fdw_host = node['gitlab']['gitlab-rails']['db_host']
-fdw_port = node['gitlab']['gitlab-rails']['db_port']
-fdw_dbname = node['gitlab']['gitlab-rails']['db_database']
 
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user geo_pg_user do
@@ -176,22 +169,22 @@ if node['gitlab']['geo-postgresql']['enable']
 
   postgresql_fdw 'gitlab_secondary' do
     db_name geo_database_name
-    external_host fdw_host
-    external_port fdw_port
-    external_name fdw_dbname
+    external_host fdw_helper.fdw_host
+    external_port fdw_helper.fdw_port
+    external_name fdw_helper.fdw_dbname
     helper geo_pg_helper
     action :create
-    only_if { fdw_helper.fdw_enabled? && fdw_password }
+    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
   end
 
   postgresql_fdw_user_mapping 'gitlab_secondary' do
     db_user geo_pg_user
     db_name geo_database_name
-    external_user fdw_user
-    external_password fdw_password
+    external_user fdw_helper.fdw_user
+    external_password fdw_helper.fdw_password
     helper geo_pg_helper
     action :create
-    only_if { fdw_helper.fdw_enabled? && fdw_password }
+    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
   end
 
   bash 'refresh foreign table definition' do
