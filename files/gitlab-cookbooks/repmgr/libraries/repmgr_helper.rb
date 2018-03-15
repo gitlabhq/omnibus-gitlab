@@ -1,9 +1,5 @@
-class RepmgrHelper
+class RepmgrHelper < BaseHelper
   attr_accessor :node
-
-  def initialize(node)
-    @node = node
-  end
 
   def pg_hba_entries
     results = []
@@ -51,5 +47,13 @@ class RepmgrHelper
                   node['fqdn']
                 end
     Digest::MD5.hexdigest(seed_data).unpack('L').first
+  end
+
+  def public_attributes
+    {
+      'repmgr' => node['repmgr'].select do |key, value|
+                    %w(user database node_name).include?(key)
+                  end
+    }
   end
 end

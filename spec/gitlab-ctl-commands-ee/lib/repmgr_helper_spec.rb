@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'repmgr'
 
-describe RepmgrHelper do
+describe Repmgr do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
   let(:shellout) do
     double('shellout', error!: nil, stdout: 'xxxx', stderr: 'yyyy', run_command: nil)
@@ -23,7 +23,7 @@ describe RepmgrHelper do
     allow(Etc).to receive(:getpwuid).and_return(double(name: 'fakeuser'))
   end
 
-  describe RepmgrHelper::Standby do
+  describe Repmgr::Standby do
     context '#follow' do
       it 'calls repmgr with the correct arguments' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -86,7 +86,7 @@ describe RepmgrHelper do
     end
   end
 
-  describe RepmgrHelper::Cluster do
+  describe Repmgr::Cluster do
     context '#show' do
       it 'should call the correct command' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -98,7 +98,7 @@ describe RepmgrHelper do
     end
   end
 
-  describe RepmgrHelper::Master do
+  describe Repmgr::Master do
     context '#register' do
       it 'should register the master node' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -111,7 +111,7 @@ describe RepmgrHelper do
 
     context '#remove' do
       it 'should run as the current user by default' do
-        expect(RepmgrHelper::Base).to receive(:cmd).with(
+        expect(Repmgr::Base).to receive(:cmd).with(
           "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser",
           'fakeuser'
         ).and_return('foo')
@@ -119,7 +119,7 @@ describe RepmgrHelper do
       end
 
       it 'should connect as a different user when specified' do
-        expect(RepmgrHelper::Base).to receive(:cmd).with(
+        expect(Repmgr::Base).to receive(:cmd).with(
           "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser2",
           'fakeuser'
         ).and_return('foo')
@@ -128,7 +128,7 @@ describe RepmgrHelper do
     end
   end
 
-  describe RepmgrHelper::Events do
+  describe Repmgr::Events do
     let(:args) do
       [
         nil, nil, nil, 1, 'fake_event', '1', 'fake timestamp', 'fake details'
