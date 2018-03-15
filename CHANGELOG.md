@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.5
+
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
+
 10.5.4
 
 - Update Let's Encrypt to use fullchain instead of certificate
