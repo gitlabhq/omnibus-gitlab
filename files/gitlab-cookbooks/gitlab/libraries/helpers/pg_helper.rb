@@ -11,4 +11,21 @@ class PgHelper < BasePgHelper
   def service_cmd
     'gitlab-psql'
   end
+
+  def public_attributes
+    # Attributes which should be considered ok for other services to know
+    attributes = %w(
+      data_dir
+      unix_socket_directory
+      port
+    )
+
+    {
+      'gitlab' => {
+        service_name => node['gitlab'][service_name].select do |key, value|
+                          attributes.include?(key)
+                        end
+      }
+    }
+  end
 end
