@@ -150,11 +150,12 @@ if node['gitlab']['geo-postgresql']['enable']
     action :create
   end
 
-  execute "create #{geo_database_name} database" do
-    command "/opt/gitlab/embedded/bin/createdb --port #{geo_pg_port} -h #{postgresql_socket_dir} -O #{geo_pg_user} #{geo_database_name}"
-    user postgresql_username
-    retries 30
-    not_if { !geo_pg_helper.is_running? || geo_pg_helper.database_exists?(geo_database_name) }
+  postgresql_database geo_database_name do
+    owner geo_pg_user
+    database_port geo_pg_port
+    database_socket postgresql_socket_dir
+    helper geo_pg_helper
+    action :create
   end
 
   postgresql_extension 'pg_trgm' do
@@ -163,12 +164,12 @@ if node['gitlab']['geo-postgresql']['enable']
     action :enable
   end
 
-  postgresql_query 'create gitlab_secondary schema on geo-postgresql' do
-    query "CREATE SCHEMA gitlab_secondary;"
-    db_name geo_database_name
+  postgresql_schema 'gitlab_secondary' do
+    database geo_database_name
+    owner geo_pg_user
     helper geo_pg_helper
-
-    not_if { !fdw_helper.fdw_enabled? || geo_pg_helper.is_offline_or_readonly? || geo_pg_helper.schema_exists?('gitlab_secondary', geo_database_name) }
+    action :create
+    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
   end
 
   postgresql_fdw 'gitlab_secondary' do

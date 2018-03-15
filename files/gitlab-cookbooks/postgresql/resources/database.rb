@@ -10,6 +10,7 @@ action :create do
   execute "create database #{database}" do
     command %(/opt/gitlab/embedded/bin/createdb --port #{database_port} -h #{database_socket} -O #{owner} #{database})
     user account_helper.postgresql_user
+    retries 30
     not_if { !helper.is_running? || helper.database_exists?(database) }
   end
 end
