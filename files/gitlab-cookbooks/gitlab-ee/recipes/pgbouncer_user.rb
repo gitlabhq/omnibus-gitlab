@@ -14,23 +14,31 @@
 # limitations under the License.
 #
 
-account_helper = AccountHelper.new(node)
-pg_helper = PgHelper.new(node)
+# pgbouncer_user and pgbouncer_user_password are settings for the account
+# pgbouncer will use to authenticate to the database.
 
-database = node['gitlab']['gitlab-rails']['db_database']
+pgb_helper = PgbouncerHelper.new(node)
+default_auth_query = node.default['gitlab']['pgbouncer']['auth_query']
+auth_query = node['gitlab']['pgbouncer']['auth_query']
 
-postgresql_user node['gitlab']['postgresql']['pgbouncer_user'] do
-  password "md5#{node['gitlab']['postgresql']['pgbouncer_user_password']}"
-  action :create
-  notifies :run, "execute[Add pgbouncer auth function]", :immediately
+if pgb_helper.create_pgbouncer_user?('geo-postgresql')
+  pgbouncer_user 'geo' do
+    pg_helper GeoPgHelper.new(node)
+    user node['gitlab']['geo-postgresql']['pgbouncer_user']
+    password node['gitlab']['geo-postgresql']['pgbouncer_user_password']
+    database node['gitlab']['geo-secondary']['db_database']
+    add_auth_function default_auth_query.eql?(auth_query)
+    action :create
+  end
 end
 
-pgbouncer_auth_function = pg_helper.pg_shadow_lookup
-
-execute 'Add pgbouncer auth function' do
-  command %(/opt/gitlab/bin/gitlab-psql -d #{database} -c '#{pgbouncer_auth_function}')
-  user account_helper.postgresql_user
-  not_if { pg_helper.has_function?(database, "pg_shadow_lookup") }
-  only_if { node.default['gitlab']['pgbouncer']['auth_query'].eql?(node['gitlab']['pgbouncer']['auth_query']) }
-  action :nothing
+if pgb_helper.create_pgbouncer_user?('postgresql')
+  pgbouncer_user 'rails' do
+    pg_helper PgHelper.new(node)
+    user node['gitlab']['postgresql']['pgbouncer_user']
+    password node['gitlab']['postgresql']['pgbouncer_user_password']
+    database node['gitlab']['gitlab-rails']['db_database']
+    add_auth_function default_auth_query.eql?(auth_query)
+    action :create
+  end
 end

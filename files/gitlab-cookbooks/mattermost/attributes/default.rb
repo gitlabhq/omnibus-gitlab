@@ -77,6 +77,9 @@ default['mattermost']['service_goroutine_health_threshold'] = -1
 default['mattermost']['service_user_access_tokens'] = false
 default['mattermost']['service_enable_preview_features'] = true
 default['mattermost']['service_close_unused_direct_messages'] = false
+default['mattermost']['service_image_proxy_type'] = ''
+default['mattermost']['service_image_proxy_type'] = ''
+default['mattermost']['service_image_proxy_url'] = ''
 
 default['mattermost']['sql_driver_name'] = 'postgres'
 default['mattermost']['sql_data_source'] = nil
@@ -133,10 +136,11 @@ default['mattermost']['email_notification_content_type'] = "full"
 
 default['mattermost']['ratelimit_enable_rate_limiter'] = false
 default['mattermost']['ratelimit_per_sec'] = 10
+default['mattermost']['ratelimit_max_burst'] = 100
 default['mattermost']['ratelimit_memory_store_size'] = 10000
 default['mattermost']['ratelimit_vary_by_remote_addr'] = true
+default['mattermost']['ratelimit_vary_by_user'] = false
 default['mattermost']['ratelimit_vary_by_header'] = nil
-default['mattermost']['ratelimit_max_burst'] = 100
 
 default['mattermost']['privacy_show_email_address'] = true
 default['mattermost']['privacy_show_full_name'] = true

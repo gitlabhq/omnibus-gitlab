@@ -141,6 +141,10 @@ default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
 default['gitlab']['geo-postgresql']['archive_command'] = nil
 default['gitlab']['geo-postgresql']['archive_timeout'] = '0'
 
+# pgbouncer settings
+default['gitlab']['geo-postgresql']['pgbouncer_user'] = 'pgbouncer'
+default['gitlab']['geo-postgresql']['pgbouncer_user_password'] = nil
+
 ###
 # Geo: LogCursor (replication)
 ###

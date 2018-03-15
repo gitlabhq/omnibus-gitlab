@@ -20,7 +20,7 @@ pgb_helper = PgbouncerHelper.new(node)
 
 node.default['gitlab']['pgbouncer']['unix_socket_dir'] ||= node['gitlab']['pgbouncer']['data_directory']
 
-include_recipe 'gitlab::postgresql_user'
+include_recipe 'postgresql::user'
 
 # If consul is enabled, it needs to run before pgbouncer
 include_recipe 'consul::enable' if node['consul']['enable']

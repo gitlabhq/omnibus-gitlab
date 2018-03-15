@@ -126,6 +126,7 @@ production: &base
     object_store:
       enabled: <%= @artifacts_object_store_enabled %>
       background_upload: <%= @artifacts_object_store_background_upload %>
+      proxy_download: <%= @artifacts_object_store_proxy_download %>
       remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
       connection: <%= @artifacts_object_store_connection.to_json %>
 
@@ -136,7 +137,9 @@ production: &base
     storage_path: <%= @lfs_storage_path %>
     object_store:
       enabled: <%= @lfs_object_store_enabled %>
+      direct_upload: <%= @lfs_object_store_direct_upload %>
       background_upload: <%= @lfs_object_store_background_upload %>
+      proxy_download: <%= @lfs_object_store_proxy_download %>
       remote_directory: <%= quote(@lfs_object_store_remote_directory) %>
       connection: <%= @lfs_object_store_connection.to_json %>
 
@@ -150,6 +153,7 @@ production: &base
     object_store:
       enabled: <%= @uploads_object_store_enabled %>
       background_upload: <%= @uploads_object_store_background_upload %>
+      proxy_download: <%= @uploads_object_store_proxy_download %>
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
@@ -250,6 +254,20 @@ production: &base
     <% unless @geo_file_download_dispatch_worker_cron.nil? %>
     geo_file_download_dispatch_worker:
       cron: "<%= @geo_file_download_dispatch_worker_cron %>"
+    <% end %>
+
+    # GitLab Geo repository verification primary batch worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_repository_verification_primary_batch_worker_cron.nil? %>
+    geo_repository_verification_primary_batch_worker:
+      cron: "<%= @geo_repository_verification_primary_batch_worker_cron %>"
+    <% end %>
+
+    # GitLab Geo repository verification secondary scheduler worker
+    # NOTE: This will only take effect if Geo is enabled
+    <% unless @geo_repository_verification_secondary_scheduler_worker_cron.nil? %>
+    geo_repository_verification_secondary_scheduler_worker:
+      cron: "<%= @geo_repository_verification_secondary_scheduler_worker_cron %>"
     <% end %>
 
   #

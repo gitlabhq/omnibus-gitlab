@@ -83,43 +83,4 @@ describe Build::Check do
       expect(described_class.is_patch_release?).to be_falsey
     end
   end
-
-  describe '.is_an_upgrade?' do
-    it 'raises error if gitlab-ee not installed' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: (none)")
-
-      expect(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed")
-      expect { described_class.is_an_upgrade? }.to raise_error(RuntimeError, "GitLab EE not installed")
-    end
-
-    it 'detects a new version from earlier series' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: 10.0.0-ce.0")
-      allow(Build::Info).to receive(:release_version).and_return("9.13.5-ce.0")
-      expect(described_class.is_an_upgrade?).to be_falsey
-    end
-
-    it 'detects a patch upgrade correctly' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: 10.0.0-ce.0")
-      allow(Build::Info).to receive(:release_version).and_return("10.0.1-ce.0")
-      expect(described_class.is_an_upgrade?).to be_truthy
-    end
-
-    it 'detects a minor upgrade correctly' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: 10.0.5-ce.0")
-      allow(Build::Info).to receive(:release_version).and_return("10.1.0-ce.0")
-      expect(described_class.is_an_upgrade?).to be_truthy
-    end
-
-    it 'detects a major upgrade correctly' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: 10.5.4-ce.0")
-      allow(Build::Info).to receive(:release_version).and_return("11.0.0-ce.0")
-      expect(described_class.is_an_upgrade?).to be_truthy
-    end
-
-    it 'detects a revision upgrade correctly' do
-      allow(described_class).to receive(:`).with("apt-cache policy gitlab-ee | grep Installed").and_return("Installed: 10.5.4-ce.0")
-      allow(Build::Info).to receive(:release_version).and_return("10.5.4-ce.1")
-      expect(described_class.is_an_upgrade?).to be_truthy
-    end
-  end
 end

@@ -268,8 +268,10 @@ rubocop:
   stage: check
   <<: *dedicated-runner
   image: ruby:2.3.3
+  before_script:
+    - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
-    - bundle exec rake rubocop
+    - bundle exec rubocop --parallel
   except:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
@@ -1068,10 +1070,12 @@ Docker-Release:
 
 upgrade:
   stage: metrics
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   script:
+    - echo $GCP_SERVICE_ACCOUNT > service_account.json
     - bundle exec rake metrics:upgrade_package
   allow_failure: true
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
-  - metrics
+  - gitlab-org

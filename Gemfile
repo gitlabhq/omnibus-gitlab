@@ -22,10 +22,14 @@ gem 'json'
 gem 'rspec'
 gem 'rake'
 gem 'knapsack'
-gem 'rubocop'
 gem 'docker-api'
 gem 'aws-sdk'
-gem 'rubocop-rspec'
+gem 'google_drive'
+
+group :rubocop do
+  gem 'rubocop'
+  gem 'rubocop-rspec'
+end
 
 group :test do
   gem 'byebug'

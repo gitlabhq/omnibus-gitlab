@@ -47,7 +47,7 @@ describe 'gitlab-ee::pgbouncer' do
     end
 
     it 'includes the postgresql user recipe' do
-      expect(chef_run).to include_recipe('gitlab::postgresql_user')
+      expect(chef_run).to include_recipe('postgresql::user')
     end
 
     it 'does not include the consul recipe by default' do
@@ -249,11 +249,8 @@ describe 'gitlab-ee::default' do
 
   it 'should create the pgbouncer user on the database' do
     expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_user')
-    expect(chef_run).to create_postgresql_user('fakeuser').with(password: 'md5fakeuserpassword')
-  end
-
-  it 'should create the pg_shadow_lookup function on the database' do
-    pg_user = chef_run.postgresql_user('fakeuser')
-    expect(pg_user).to notify('execute[Add pgbouncer auth function]')
+    expect(chef_run).to create_pgbouncer_user('rails').with(
+      password: 'fakeuserpassword'
+    )
   end
 end

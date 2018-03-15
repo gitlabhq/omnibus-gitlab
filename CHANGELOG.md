@@ -3,19 +3,27 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.7.0
+- Geo: Increase default WAL standby settings from 30s to 60s
+- Geo: Add support for creating a user for the  pgbouncer on the Geo DB
+- Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
+  registry (Takuya Noguchi)
+- Internal: Speed up rubocop job (Takuya Noguchi)
+
 10.6.0
 
+- Geo: Add cron configuration for repository verification workers
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Geo: Don't attempt to refresh FDW tables if FDW is not enabled
-- Bump git to 2.16.2
 - Deprecate `/etc/gitlab/skip-auto-migrations` for `/etc/gitlab/skip-auto-reconfigure`
-- Update python to 3.4.8
+- Update python to 3.4.8 (Takuya Noguchi)
 - Update jemalloc to 5.0.1
 - Update chef to 13.6.4
 - Unsets `RUBYLIB` in `gitlab-rails`, `gitlab-rake`, and `gitlab-ctl` to avoid
   interactions with system ruby libraries.
 - Update rainbow to 2.2.2, package_cloud to 0.3.04 and rest-client to 2.0.2 (Takuya Noguchi)
 - Use awesome_print gem to print Ruby objects to the user 761a1e6a
+- Update postgresql to 9.6.8
 - Remove possible remains of relative_url.rb file that was used in earlier versions 88de20f18
 - Add `announce-ip` and `announce-port` options for Redis and Sentinel (Borja Aparicio)
 - Support the `-logFormat` option in Workhorse
@@ -24,6 +32,10 @@ omnibus-gitlab repository.
 - Change the default location of pgbouncer socket to /var/opt/gitlab/pgbouncer
 - Excludes unused `/opt/gitlab/embedded/service/gitlab-shell/{go,go_build}`
   directories.
+- Updated Mattermost to 4.7.3
+- Add `proxy_download` options to object storage
+- Add `lfs_object_store_direct_upload` option
+- Render the gitlab-pages '-log-format' option
 
 10.5.4
 
@@ -88,7 +100,6 @@ omnibus-gitlab repository.
 - Update pgbouncer recipe to better handle initial configuration
 - Render gitaly-ruby memory settings
 - Add a runit service to probe repository storages
-
 
 10.3.0
 
@@ -1651,7 +1662,6 @@ are not the same (O Schwede) c4e83c5
 - Added kerberos lib to support gitlab dependency 66fd3a85cce74754e850034894a87d554fdb04b7
 - gitlab.rb now lists all available configuration options 6080f125697f9fe7113af1dc80e0a7bc9ddb284e
 - Add option to insert configuration settings in nginx template (Sander Boom) 5ba0485a489549a0bb33531e027a206b1775b3c0
-
 
 7.5.0
 - Use system UIDs and GIDs when creating accounts (Tim Bishop) cfc04342129a4c4dca5c4827d541c8888adadad3
