@@ -7,18 +7,16 @@ require 'pgbouncer'
 describe Pgbouncer::Databases do
   let(:fake_ohai) do
     {
-      normal: {
-        gitlab: {
-          'gitlab-rails': {
-            db_database: 'fake_database'
-          },
-          pgbouncer: {
-            databases_ini: '/fakedata/pgbouncer/databases.ini',
-            databases_json: '/fakedata/pgbouncer/databases.json'
-          }
+      'gitlab' => {
+        'gitlab-rails' => {
+          'db_database' => 'fake_database'
+        },
+        'pgbouncer' => {
+          'databases_ini' => '/fakedata/pgbouncer/databases.ini',
+          'databases_json' => '/fakedata/pgbouncer/databases.json'
         }
       }
-    }.to_json.to_s
+    }
   end
 
   let(:fake_databases_json) do
@@ -38,7 +36,7 @@ describe Pgbouncer::Databases do
     allow(Dir).to receive(:exist?).with('/fakedata/pgbouncer').and_return(true)
     allow(File).to receive(:exist?).with('/fakedata/pgbouncer/databases.json').and_return(true)
     allow(File).to receive(:read).and_call_original
-    allow(File).to receive(:read).with('/fakeinstall/embedded/nodes/fakehost.json').and_return(fake_ohai)
+    allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(fake_ohai)
     allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return(fake_databases_json)
     @obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
   end
