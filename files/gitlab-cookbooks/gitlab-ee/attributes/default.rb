@@ -123,6 +123,7 @@ default['gitlab']['geo-postgresql']['max_parallel_workers_per_gather'] = 0
 default['gitlab']['geo-postgresql']['log_lock_waits'] = 1
 default['gitlab']['geo-postgresql']['deadlock_timeout'] = '5s'
 default['gitlab']['geo-postgresql']['track_io_timing'] = 'off'
+default['gitlab']['geo-postgresql']['custom_pg_hba_entries'] = {}
 
 # Replication settings
 default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
