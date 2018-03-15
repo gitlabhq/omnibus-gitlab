@@ -1,9 +1,5 @@
-class PgbouncerHelper
+class PgbouncerHelper < BaseHelper
   attr_reader :node
-
-  def initialize(node)
-    @node = node
-  end
 
   def database_config(database)
     settings = node['gitlab']['pgbouncer']['databases'][database].to_hash
@@ -21,5 +17,21 @@ class PgbouncerHelper
       results[settings['user']] = { 'password' => settings['password'] }
     end
     results
+  end
+
+  def create_pgbouncer_user?(db)
+    node['gitlab'][db]['enable'] &&
+      !node['gitlab'][db]['pgbouncer_user'].nil? &&
+      !node['gitlab'][db]['pgbouncer_user_password'].nil?
+  end
+
+  def public_attributes
+    {
+      'gitlab' => {
+        'pgbouncer' => node['gitlab']['pgbouncer'].select do |key, value|
+          %w(databases_ini databases_json listen_addr listen_port).include?(key)
+        end
+      }
+    }
   end
 end
