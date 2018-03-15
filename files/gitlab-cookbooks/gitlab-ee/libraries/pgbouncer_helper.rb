@@ -23,7 +23,7 @@ class PgbouncerHelper < BaseHelper
     {
       'gitlab' => {
         'pgbouncer' => node['gitlab']['pgbouncer'].select do |key, value|
-          %w(databases_ini databases_json listen_addr listen_port)
+          %w(databases_ini databases_json listen_addr listen_port).include?(key)
         end
       }
     }

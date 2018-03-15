@@ -5,7 +5,7 @@ class GitlabRailsHelper < BaseHelper
     {
       'gitlab' => {
         'gitlab-rails' => node['gitlab']['gitlab-rails'].select do |key, value|
-          %w(db_database)
+          %w(db_database).include?(key)
         end
       }
     }

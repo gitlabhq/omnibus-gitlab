@@ -59,7 +59,11 @@ module GitlabCtl
 
       def get_public_node_attributes
         attribute_file = '/var/opt/gitlab/public_attributes.json'
-        parse_json_file(attribute_file)
+        begin
+          parse_json_file(attribute_file)
+        rescue Errno::ENOENT
+          {}
+        end
       end
 
       def get_password(input_text: 'Enter password: ', do_confirm: true)
