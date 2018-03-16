@@ -50,6 +50,13 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to create_postgresql_user('gitlab_geo')
     end
 
+    it 'creates gitlabhq_geo_production database' do
+      params = {
+        owner: 'gitlab_geo'
+      }
+      expect(chef_run).to create_postgresql_database('gitlabhq_geo_production').with(params)
+    end
+
     context 'renders postgresql.conf' do
       it 'includes runtime.conf in postgresql.conf' do
         expect(chef_run).to render_file(postgresql_conf)
@@ -132,7 +139,7 @@ describe 'geo postgresql 9.2' do
     end
 
     it 'does not create foreign table mapping' do
-      expect(chef_run).not_to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+      expect(chef_run).not_to create_postgresql_schema('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
       expect(chef_run).not_to run_bash('refresh foreign table definition')
@@ -448,7 +455,7 @@ describe 'geo postgresql 9.6' do
     end
 
     it 'does not setup foreign table mapping' do
-      expect(chef_run).not_to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+      expect(chef_run).not_to create_postgresql_schema('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
       expect(chef_run).not_to run_bash('refresh foreign table definition')
@@ -479,6 +486,15 @@ describe 'geo postgresql 9.6' do
       allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
       allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
       ChefSpec::SoloRunner.converge('gitlab-ee::default')
+    end
+
+    it 'creates gitlab_secondary schema' do
+      params = {
+        schema: 'gitlab_secondary',
+        database: 'gitlab_geodb',
+        owner: 'mygeodbuser'
+      }
+      expect(chef_run).to create_postgresql_schema('gitlab_secondary').with(params)
     end
 
     it 'creates a postgresql fdw connection in the geo-postgresql database' do
@@ -597,7 +613,7 @@ describe 'geo postgresql 9.6' do
       end
 
       it 'creates foreign table mapping' do
-        expect(chef_run).to run_postgresql_query('create gitlab_secondary schema on geo-postgresql')
+        expect(chef_run).to create_postgresql_schema('gitlab_secondary')
         expect(chef_run).to create_postgresql_fdw('gitlab_secondary')
         expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary')
         expect(chef_run).to run_bash('refresh foreign table definition')
