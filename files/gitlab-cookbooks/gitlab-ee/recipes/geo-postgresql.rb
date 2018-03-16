@@ -169,7 +169,7 @@ if node['gitlab']['geo-postgresql']['enable']
     owner geo_pg_user
     helper geo_pg_helper
     action :create
-    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
+    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
   end
 
   postgresql_fdw 'gitlab_secondary' do
@@ -179,7 +179,7 @@ if node['gitlab']['geo-postgresql']['enable']
     external_name fdw_helper.fdw_dbname
     helper geo_pg_helper
     action :create
-    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
+    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
   end
 
   postgresql_fdw_user_mapping 'gitlab_secondary' do
@@ -189,7 +189,7 @@ if node['gitlab']['geo-postgresql']['enable']
     external_password fdw_helper.fdw_password
     helper geo_pg_helper
     action :create
-    only_if { fdw_helper.fdw_enabled? && fdw_helper.fdw_password }
+    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
   end
 
   bash 'refresh foreign table definition' do
