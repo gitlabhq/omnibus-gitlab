@@ -39,14 +39,17 @@ class FdwHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can 
   end
 
   def pg_hba_entries
-    [
-      {
-        type: 'host',
-        database: fdw_dbname,
-        user: fdw_user,
-        method: 'md5'
-      }
-    ]
+    entries = []
+    node['gitlab']['postgresql']['md5_auth_cidr_addresses'].each do |cidr|
+      entries.push({
+                     type: 'host',
+                     database: fdw_dbname,
+                     user: fdw_user,
+                     cidr: cidr,
+                     method: 'md5'
+                   })
+    end
+    entries
   end
 
   private

@@ -46,6 +46,52 @@ describe FdwHelper do
     end
   end
 
+  describe '#pg_hba_entries' do
+    before do
+      stub_gitlab_rb(
+        geo_postgresql: {
+          enable: true,
+          sql_user: 'mygeodbuser'
+        },
+        geo_secondary: {
+          enable: true,
+          db_database: 'gitlab_geodb',
+          db_fdw: true
+        },
+        gitlab_rails: {
+          db_host: '10.0.0.1',
+          db_port: 5430,
+          db_username: 'mydbuser',
+          db_database: 'gitlab_myorg',
+          db_password: 'custompass'
+        },
+        postgresql: {
+          md5_auth_cidr_addresses: %w(10.0.0.1/32 10.0.0.2/32)
+        }
+      )
+    end
+
+    it 'returns array of hashes with expected keys' do
+      pg_hba_entries = [
+        {
+          type: 'host',
+          database: 'gitlab_myorg',
+          user: 'mydbuser',
+          cidr: '10.0.0.1/32',
+          method: 'md5'
+        },
+        {
+          type: 'host',
+          database: 'gitlab_myorg',
+          user: 'mydbuser',
+          cidr: '10.0.0.2/32',
+          method: 'md5'
+        }
+      ]
+      expect(subject.pg_hba_entries).to eq(pg_hba_entries)
+    end
+  end
+
   context 'when fdw has a lack of any of the required states to be refreshed' do
     it 'returns false' do
       expect(subject.fdw_can_refresh?).to be_falsey
