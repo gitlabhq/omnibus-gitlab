@@ -31,7 +31,7 @@ action :create do
   end
 
   postgresql_query "update fdw #{new_resource.server_name} on #{new_resource.db_name}" do
-    query "ALTER SERVER #{server_name} OPTIONS (SET host '#{new_resource.external_host}', SET port '#{new_resource.external_port}', SET dbname '#{new_resource.external_name}');"
+    query "ALTER SERVER #{new_resource.server_name} OPTIONS (SET host '#{new_resource.external_host}', SET port '#{new_resource.external_port}', SET dbname '#{new_resource.external_name}');"
     db_name new_resource.db_name
     helper new_resource.helper
 
