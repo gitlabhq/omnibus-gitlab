@@ -79,13 +79,31 @@ describe 'gitlab::gitlab-workhorse' do
     end
   end
 
-  context 'with log format defined' do
+  context 'with log format defined as json' do
     before do
       stub_gitlab_rb(gitlab_workhorse: { log_format: "json" })
     end
 
     it 'correctly renders out the workhorse service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-logFormat json/)
+    end
+
+    it 'renders svlogd file which will not prepend timestamp' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/log/run").with_content(/\-tt/)
+    end
+  end
+
+  context 'with log format defined as text' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { log_format: "text" })
+    end
+
+    it 'correctly renders out the workhorse service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-logFormat text/)
+    end
+
+    it 'renders svlogd file which will prepend timestamp' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/log/run").with_content(/\-tt/)
     end
   end
 
