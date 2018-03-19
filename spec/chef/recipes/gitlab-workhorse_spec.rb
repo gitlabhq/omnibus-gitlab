@@ -87,6 +87,10 @@ describe 'gitlab::gitlab-workhorse' do
     it 'correctly renders out the workhorse service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-logFormat json/)
     end
+
+    it 'renders svlogd file which will not prepend timestamp' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-workhorse/log/run").with_content(/\-tt/)
+    end
   end
 
   context 'with default value for working directory' do
