@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
+- Workhorse: if logformat set to json, do not update timestamps with svlogd.
 
 10.6.0
 
