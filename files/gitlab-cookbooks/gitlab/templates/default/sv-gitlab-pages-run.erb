@@ -11,7 +11,8 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 <% external_http = [ node['gitlab']['gitlab-pages']['external_http'] ].flatten.compact  %>
 <% external_https = [ node['gitlab']['gitlab-pages']['external_https'] ].flatten.compact  %>
 
-exec /opt/gitlab/embedded/bin/gitlab-pages \
+exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
+    /opt/gitlab/embedded/bin/gitlab-pages \
     <% if node['gitlab']['pages-nginx']['enable'] && node['gitlab']['gitlab-pages']['listen_proxy'] %>
     -listen-proxy="<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
     <% end %>
