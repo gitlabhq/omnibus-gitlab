@@ -37,6 +37,10 @@ omnibus-gitlab repository.
 - Add `lfs_object_store_direct_upload` option
 - Render the gitlab-pages '-log-format' option
 
+10.5.5
+
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
+
 10.5.4
 
 - Update Let's Encrypt to use fullchain instead of certificate
