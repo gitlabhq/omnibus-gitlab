@@ -36,6 +36,7 @@ omnibus-gitlab repository.
 - Add `proxy_download` options to object storage
 - Add `lfs_object_store_direct_upload` option
 - Render the gitlab-pages '-log-format' option
+- Workhorse: if logformat set to json, do not update timestamps with svlogd.
 
 10.5.5
 
