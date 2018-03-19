@@ -9,7 +9,6 @@ omnibus-gitlab repository.
 - Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
-- Workhorse: if logformat set to json, do not update timestamps with svlogd.
 
 10.6.0
 
@@ -37,6 +36,7 @@ omnibus-gitlab repository.
 - Add `proxy_download` options to object storage
 - Add `lfs_object_store_direct_upload` option
 - Render the gitlab-pages '-log-format' option
+- Workhorse: if logformat set to json, do not update timestamps with svlogd.
 
 10.5.4
 
