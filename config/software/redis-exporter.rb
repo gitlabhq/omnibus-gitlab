@@ -19,8 +19,8 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'redis-exporter'
-version = Gitlab::Version.new('redis-exporter', '0.14')
-default_version version.print
+version = Gitlab::Version.new('redis-exporter', 'gitlab-0.14')
+default_version version.print(false)
 
 license 'MIT'
 license_file 'LICENSE'
