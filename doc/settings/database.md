@@ -1,3 +1,4 @@
+
 # Database settings
 
 >**Note:**
@@ -267,6 +268,79 @@ non-packaged PostgreSQL:
 After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup][rake-backup] and
 [restore][rake-restore] tasks.
+
+## Configure packaged PostreSQL server to listen on TCP/IP
+
+The packaged PostgreSQL server can be configured to listen for TCP/IP connections,
+with the caveat that some non-critical scripts expect UNIX sockets and may misbehave.
+
+In order to configure the use of TCP/IP for the database service, changes will
+need to be made to both `postgresql` and `gitlab_rails` sections of `gitlab.rb`.
+
+### Configure postgresql block
+
+The following settings are affected in the `postgresql` block:
+- `listen_address` controls the address on which PostgreSQL will listen.
+- `port` controls the port on which PostgreSQL will listen, and _must be set_ if `listen_address` is.
+- `md5_auth_cidr_adresses` is a list of CIDR address blocks which are allowed to
+connect to the server, after authentication via password.
+- `trust_auth_cidr_addresses` is a list of CIDR address blocks which are allowed
+to connect to the server, without authentication of any kind. _Be very careful
+with this setting._ It is suggest that this be limited to the loopback address of
+`127.0.0.1/24` or even `127.0.0.1/32`.
+- `sql_user` costrols the expected username for MD5 authentication. This defaults
+to `gitlab`, and is not a required setting.
+- `sql_user_password` csets the password that PostgrSQL will accept for MD5
+authentication. Replace `securesqlpassword` in the example below with an acceptable
+password.
+
+```Ruby
+postgresql['listen_address'] = '0.0.0.0'
+postgresql['port'] = 5432
+postgresql['md5_auth_cidr_addresses'] = %w()
+postgresql['trust_auth_cidr_addresses'] = %w(127.0.0.1/24)
+postgresql['sql_user'] = "gitlab"
+postgresql['sql_user_password'] = Digest::MD5.hexdigest "securesqlpassword" << postgresql['sql_user']
+```
+
+Any client or GitLab service which will connect over the network will need to
+provide the values of `sql_user` for the username, and password provided to the
+configuration when connecting to the PostgreSQL server. They must also be within the network block provided to `md5_auth_cidr_addresses`
+
+### Configure gitlab-rails block
+
+To configure the `gitlab-rails` application to connect to the PostgreSQL database
+over the network, several settings must be confgured.
+- `db_host` needs to be set to the IP address of the database sever. If this is
+on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
+not require_ password authentication.
+- `db_port` sets the port on the PostgreSQL server to connect to, and _must be set_
+if `db_host` is set.
+- `db_username` configures the username with which to connect to PostgreSQL. This
+defaults to `gitlab`.
+- `db_password` must be provided if connecting to PostgreSQL over TCP/IP, and from
+an instance in the `postgresql['md5_auth_cidr_addresses']` block from settings
+above. This is not required if you are connecting to `127.0.0.1` and have configured
+`postgresql['trust_auth_cidr_addresses']` to include it.
+
+```
+gitlab_rails['db_host'] = '127.0.0.1'
+gitlab_rails['db_port'] = 5432
+gitlab_rails['db_username'] = "gitlab"
+gitlab_rails['db_password'] = "securesqlpassword"
+```
+
+### Apply and restart services
+
+After making the changes above, an administrator should run `gitlab-ctl reconfigure`.
+If you experience any issues in regards to the service not listening on TCP, try
+directly restarting the service with `gitlab-ctl restart postgresql`
+
+> **Note:**
+Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
+connections to Postgres to be handled over the UNIX socket, and may not function
+properly. You can enable TCP/IP without disabling UNIX sockets.
+
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
