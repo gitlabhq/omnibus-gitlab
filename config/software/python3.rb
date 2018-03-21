@@ -62,3 +62,5 @@ build do
   delete("#{install_dir}/embedded/lib/python3.4/test")
   command "find #{install_dir}/embedded/lib/python3.4 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
+
+project.exclude "embedded/bin/python3*-config"

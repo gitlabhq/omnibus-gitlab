@@ -43,3 +43,6 @@ build do
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
 end
+
+project.exclude 'embedded/bin/pkg-config'
+project.exclude 'embedded/lib/pkgconfig'

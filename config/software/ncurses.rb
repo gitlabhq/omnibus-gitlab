@@ -155,3 +155,6 @@ build do
     link "#{install_dir}/embedded/lib/libcurses.so", "#{install_dir}/embedded/lib/libcurses.so.1"
   end
 end
+
+project.exclude "embedded/bin/ncurses5-config"
+project.exclude "embedded/bin/ncursesw5-config"

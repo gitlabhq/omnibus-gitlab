@@ -53,3 +53,7 @@ build do
   make "-j #{workers}", env: env
   make 'install', env: env
 end
+
+project.exclude 'embedded/lib/xml2Conf.sh'
+project.exclude 'embedded/bin/xml2-config'
+project.exclude 'embedded/lib/cmake/libxml2/libxml2-config.cmake'

@@ -43,3 +43,5 @@ build do
   make " -j #{workers}", env: env, cwd: cwd
   make 'install', env: env, cwd: cwd
 end
+
+project.exclude "embedded/bin/krb5-config"

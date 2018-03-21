@@ -63,3 +63,6 @@ build do
   make "-j #{workers}", env: env
   make 'install', env: env
 end
+
+project.exclude 'embedded/lib/xsltConf.sh'
+project.exclude 'embedded/bin/xslt-config'

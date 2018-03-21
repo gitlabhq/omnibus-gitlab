@@ -42,3 +42,5 @@ build do
 
   link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current", force: true
 end
+
+project.exclude 'embedded/bin/icu-config'
