@@ -82,6 +82,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               redis_sentinels: node['gitlab']['gitlab-rails']['redis_sentinels'],
               log_file: File.join(log_directory, "gitlab-shell.log"),
               log_level: node['gitlab']['gitlab-shell']['log_level'],
+              log_format: node['gitlab']['gitlab-shell']['log_format'],
               audit_usernames: node['gitlab']['gitlab-shell']['audit_usernames'],
               http_settings: node['gitlab']['gitlab-shell']['http_settings'],
               git_trace_log_file: node['gitlab']['gitlab-shell']['git_trace_log_file'],
