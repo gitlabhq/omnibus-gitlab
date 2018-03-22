@@ -16,6 +16,10 @@ When adding a component that should be fetched from git the clone address of the
 repositories of the local mirror and upstream should be added to
 `/.custom_sources.yml`.
 
+The local mirror should be created in the https://dev.gitlab.org/omnibus-mirror
+project by a member of the Distribution team.  It should have the
+`omnibus-builder deploy key` enabled.
+
 See other Software services in the directory for examples on how to include your
 software service.
 
