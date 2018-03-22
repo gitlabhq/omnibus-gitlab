@@ -10,6 +10,7 @@ omnibus-gitlab repository.
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
 - Excludes static libraries, header files, and `*-config` binaries from package.
+- Render gitlab-shell log_format option
 
 10.6.0
 
