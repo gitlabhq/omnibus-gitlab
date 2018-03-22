@@ -10,6 +10,7 @@ omnibus-gitlab repository.
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
 - Excludes static libraries, header files, and `*-config` binaries from package.
+- Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
 
 10.6.0
 
