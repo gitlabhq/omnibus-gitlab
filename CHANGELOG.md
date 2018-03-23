@@ -13,6 +13,10 @@ omnibus-gitlab repository.
 - Render gitlab-shell log_format option
 - Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
 
+10.6.1
+
+- Pages: if logformat set to json, do not append timestamps with svlogd.
+
 10.6.0
 
 - Geo: When upgrading we keep geo-postgresql up to run database migrations
