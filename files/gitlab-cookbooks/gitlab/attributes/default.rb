@@ -354,6 +354,7 @@ default['gitlab']['sidekiq']['listen_port'] = 8082
 default['gitlab']['gitlab-shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
 default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
 default['gitlab']['gitlab-shell']['log_level'] = nil
+default['gitlab']['gitlab-shell']['log_format'] = nil
 default['gitlab']['gitlab-shell']['audit_usernames'] = nil
 default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
