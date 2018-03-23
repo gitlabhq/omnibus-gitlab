@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+10.6.1
+
+- Pages: if logformat set to json, do not append timestamps with svlogd.
+
 10.6.0
 
 - Geo: When upgrading we keep geo-postgresql up to run database migrations
