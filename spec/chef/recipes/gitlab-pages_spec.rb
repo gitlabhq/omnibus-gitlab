@@ -34,6 +34,10 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-status-uri})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format})
     end
+
+    it 'correctly renders the pages log run file' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{exec svlogd -tt /var/log/gitlab/gitlab-pages})
+    end
   end
 
   context 'with user settings' do
@@ -74,6 +78,10 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-status="/@status"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format="json"})
+    end
+
+    it 'correctly renders the pages log run file' do
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{exec svlogd /var/log/gitlab/gitlab-pages})
     end
   end
 
