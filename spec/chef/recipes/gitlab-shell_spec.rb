@@ -65,6 +65,7 @@ describe 'gitlab::gitlab-shell' do
             %r{log_file: "/var/log/gitlab/gitlab-shell/gitlab-shell.log"}
           )
           expect(content).not_to match(/^custom_hooks_dir: /)
+          expect(content).not_to match(/^log_format: /)
         }
     end
   end
@@ -206,11 +207,13 @@ describe 'gitlab::gitlab-shell' do
       end
     end
   end
-  context 'with non-default gitlab_hooks setting' do
+
+  context 'with custom settings' do
     before do
       stub_gitlab_rb(
         gitlab_shell: {
-          custom_hooks_dir: '/fake/dir'
+          custom_hooks_dir: '/fake/dir',
+          log_format: 'json'
         }
       )
     end
@@ -218,6 +221,8 @@ describe 'gitlab::gitlab-shell' do
     it 'populates with custom values' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
         .with_content(%r{custom_hooks_dir: "/fake/dir"})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
+        .with_content(%r{log_format: json})
     end
   end
 end
