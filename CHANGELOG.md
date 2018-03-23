@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Excludes static libraries, header files, and `*-config` binaries from package.
 - Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
 
+10.6.1
+
+- Pages: if logformat set to json, do not update timestamps with svlogd.
+
 10.6.0
 
 - Geo: When upgrading we keep geo-postgresql up to run database migrations
