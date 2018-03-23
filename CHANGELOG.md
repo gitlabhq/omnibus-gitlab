@@ -14,7 +14,7 @@ omnibus-gitlab repository.
 
 10.6.1
 
-- Pages: if logformat set to json, do not update timestamps with svlogd.
+- Pages: if logformat set to json, do not append timestamps with svlogd.
 
 10.6.0
 
