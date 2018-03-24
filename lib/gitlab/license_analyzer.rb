@@ -108,7 +108,7 @@ class LicenseAnalyzer
         level = 1
         name = dependency['name']
         license = dependency['license'].strip.delete('"').delete("'")
-        version = library['version']
+        version = dependency['version']
         status, reason = acceptable?(name, license.strip)
         print_status(name, version, license, status, reason, level)
       end
