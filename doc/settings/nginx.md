@@ -306,6 +306,20 @@ nginx['listen_port'] = 80
 nginx['listen_https'] = false
 ```
 
+Other bundled components (Registry, Pages, etc) use a similar strategy for
+proxied SSL. Set the particular component's `*_external_url` with `https://` and
+prefix the `nginx[...]` configuration with the component name. For example, for
+Registry use the following configuration:
+
+```ruby
+registry_external_url 'https://registry.example.com'
+
+registry_nginx['listen_port'] = 80
+registry_nginx['listen_https'] = false
+```
+
+The same format can be used for Pages (`pages_` prefix) and Mattermost (`mattermost_` prefix).
+
 Note that you may need to configure your reverse proxy or load balancer to
 forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
 `X-Forwarded-Port`) to GitLab (and Mattermost if you use one). You may see improper redirections or errors
