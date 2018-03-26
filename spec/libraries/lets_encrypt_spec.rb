@@ -49,6 +49,8 @@ describe LetsEncrypt do
   end
 
   context '.should_auto_enable?' do
+    let(:node) { Mash.new(gitlab: { nginx: {} }) }
+
     before do
       stub_gitlab_rb(
         gitlab_rails: {
@@ -60,6 +62,7 @@ describe LetsEncrypt do
         }
       )
 
+      allow(Gitlab).to receive(:[]).with(:node).and_return(node)
       allow(File).to receive(:exist?).with('example.key').and_return(false)
       allow(File).to receive(:exist?).with('example.crt').and_return(false)
     end
@@ -76,6 +79,12 @@ describe LetsEncrypt do
 
     it 'is false when nginx is not enabled' do
       stub_gitlab_rb(nginx: { enable: false })
+
+      expect(subject.should_auto_enable?).to be_falsey
+    end
+
+    it 'is false when nginx is disabled by roles' do
+      allow(node['gitlab']['nginx']).to receive(:[]).with('enable').and_return(false)
 
       expect(subject.should_auto_enable?).to be_falsey
     end
