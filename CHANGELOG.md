@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
+- Bump redis_exporter to 0.17.1
 - Excludes static libraries, header files, and `*-config` binaries from package.
 - Render gitlab-shell log_format option
 - Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
