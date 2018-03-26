@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 10.6.1
 
 - Pages: if logformat set to json, do not append timestamps with svlogd.
+- Downgrade jemalloc to 4.2.1 to avoid segfaults in Ruby
 
 10.6.0
 
