@@ -3,8 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+
+10.6.1
+
+- Pages: if logformat set to json, do not append timestamps with svlogd.
+
 10.6.0
 
+- Geo: When upgrading we keep geo-postgresql up to run database migrations
 - Geo: Add cron configuration for repository verification workers
 - Warn users of stale sprockets manifest file after install 8d4cd46c (David Haltinner)
 - Geo: Don't attempt to refresh FDW tables if FDW is not enabled
