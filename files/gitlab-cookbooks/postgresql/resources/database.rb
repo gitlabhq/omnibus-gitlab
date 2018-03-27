@@ -7,9 +7,10 @@ property :database_socket, String, default: lazy { node['gitlab']['postgresql'][
 action :create do
   account_helper = AccountHelper.new(node)
 
-  execute "create database #{database}" do
-    command %(/opt/gitlab/embedded/bin/createdb --port #{database_port} -h #{database_socket} -O #{owner} #{database})
+  execute "create database #{new_resource.database}" do
+    command %(/opt/gitlab/embedded/bin/createdb --port #{new_resource.database_port} -h #{new_resource.database_socket} -O #{new_resource.owner} #{new_resource.database})
     user account_helper.postgresql_user
-    not_if { !helper.is_running? || helper.database_exists?(database) }
+    retries 30
+    not_if { !new_resource.helper.is_running? || new_resource.helper.database_exists?(new_resource.database) }
   end
 end
