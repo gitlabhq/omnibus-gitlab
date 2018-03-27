@@ -8,7 +8,7 @@ property :helper, default: PgHelper.new(node)
 action :run do
   account_helper = AccountHelper.new(node)
 
-  execute "#{new_resource.description} (#{new_resource.helper.service_cmd})" do
+  execute "#{new_resource.description} (#{new_resource.helper.service_name})" do
     command %(/opt/gitlab/bin/#{new_resource.helper.service_cmd} -d #{new_resource.db_name} -c "#{new_resource.query}")
     user account_helper.postgresql_user
     retries 20
