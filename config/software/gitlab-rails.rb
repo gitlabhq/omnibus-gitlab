@@ -75,6 +75,12 @@ build do
   bundle "config build.nokogiri --use-system-libraries --with-xml2-dir=#{install_dir}/embedded --with-xslt-dir=#{install_dir}/embedded", env: env
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
+  block 'correct omniauth-jwt permissions' do
+    # omniauth-jwt has some of its files 0600, make them 0644
+    path = shellout!("#{embedded_bin('bundle')} show omniauth-jwt", env: env).stdout.strip
+    command "chmod -R g=u-w,o=u-w #{path}"
+  end
+
   # One of our gems, google-protobuf is known to have issues with older gcc versions
   # when using the pre-built extensions. We will remove it and rebuild it here.
   block 'reinstall google-protobuf gem' do
