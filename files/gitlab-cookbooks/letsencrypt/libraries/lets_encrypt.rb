@@ -42,13 +42,11 @@ class LetsEncrypt
     def should_auto_enable?
       (
         Gitlab['gitlab_rails']['gitlab_https'] &&
-        (
-          Gitlab['nginx']['enable'].nil? ||
-          Gitlab['nginx']['enable']
-        ) && (
-          Gitlab[:node]['gitlab']['nginx']['enable'].nil? ||
-          Gitlab[:node]['gitlab']['nginx']['enable']
-        ) && (
+        [
+          Gitlab['nginx']['enable'],
+          Gitlab[:node]['gitlab']['nginx']['enable'],
+          true
+        ].find { |e| !e.nil? } && (
           Gitlab['nginx']['listen_https'].nil? ||
           Gitlab['nginx']['listen_https']
         ) && (
