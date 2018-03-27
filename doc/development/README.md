@@ -11,13 +11,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     every change, it is preferred to use a Virtual Machine for development. The
     following example uses docker on a Debian host with a Debian Jessie image.
     The steps are similar for other OSs; only the commands differ.
-    1. Installing docker
-
-        ```
-        sudo apt-get install docker
-        ```
-    For information about installing Docker on other OSs, visit
-    [official Docker installation docs](https://docs.docker.com/engine/installation).
+    1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/engine/installation).
 
     2. Pulling a Debian Jessie image
 
