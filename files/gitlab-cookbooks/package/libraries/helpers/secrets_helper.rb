@@ -29,12 +29,22 @@ class SecretsHelper
     [key, cert]
   end
 
-  def self.read_gitlab_secrets
-    existing_secrets ||= {}
+  # Load the secrets from disk
+  #
+  # @return [Hash]  empty if no secrets
+  def self.load_gitlab_secrets
+    existing_secrets = {}
 
     if File.exist?("/etc/gitlab/gitlab-secrets.json")
       existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
     end
+
+    existing_secrets
+  end
+
+  # Reads the secrets into the Gitlab config singleton
+  def self.read_gitlab_secrets
+    existing_secrets = load_gitlab_secrets
 
     existing_secrets.each do |k, v|
       if Gitlab[k]
@@ -66,7 +76,9 @@ class SecretsHelper
         'http_secret' => Gitlab['registry']['http_secret'],
         'internal_certificate' => Gitlab['registry']['internal_certificate'],
         'internal_key' => Gitlab['registry']['internal_key']
-
+      },
+      'letsencrypt' => {
+        'auto_enabled' => Gitlab['letsencrypt']['auto_enabled']
       },
       'mattermost' => {
         'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],

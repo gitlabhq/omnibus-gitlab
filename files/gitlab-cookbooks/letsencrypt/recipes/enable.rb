@@ -37,3 +37,9 @@ ruby_block 'display_le_message' do
   end
   action :nothing
 end
+
+ruby_block 'save_auto_enabled' do
+  block do
+    LetsEncrypt.save_auto_enabled
+  end
+end

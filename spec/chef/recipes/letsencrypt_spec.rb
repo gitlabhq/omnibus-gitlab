@@ -1,5 +1,42 @@
 require 'chef_helper'
 
+describe 'enabling letsencrypt' do
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(external_url: 'https://fakehost.example.com')
+  end
+
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+
+  context 'unspecified uses LetsEncrypt.should_auto_enable?' do
+    it 'true' do
+      allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(true)
+
+      expect(chef_run).to include_recipe('letsencrypt::enable')
+    end
+
+    it 'false' do
+      allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(false)
+
+      expect(chef_run).not_to include_recipe('letsencrypt::enable')
+    end
+  end
+
+  context 'specified' do
+    it 'true' do
+      stub_gitlab_rb(letsencrypt: { enable: true })
+
+      expect(chef_run).to include_recipe('letsencrypt::enable')
+    end
+
+    it 'false' do
+      stub_gitlab_rb(letsencrypt: { enable: false })
+
+      expect(chef_run).not_to include_recipe('letsencrypt::enable')
+    end
+  end
+end
+
 describe 'letsencrypt::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
@@ -28,6 +65,7 @@ server {
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(false)
   end
 
   context 'default' do
