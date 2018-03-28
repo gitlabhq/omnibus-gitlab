@@ -770,14 +770,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_checkpoints'] = 'off'
 # To add custom entries to pg_hba.conf use the following
 # postgresql['custom_pg_hba_entries'] = {
-#   APPLICATION: { # APPLICATION should identify what the settings are used for
-#     type: example,
-#     database: example,
-#     user: example,
-#     cidr: example,
-#     method: example,
-#     option: exmple
-#   }
+#   APPLICATION: [ # APPLICATION should identify what the settings are used for
+#     {
+#       type: example,
+#       database: example,
+#       user: example,
+#       cidr: example,
+#       method: example,
+#       option: example
+#     }
+#   ]
 # }
 # See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html for an explanation
 # of the values
