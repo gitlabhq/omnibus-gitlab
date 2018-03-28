@@ -4,6 +4,10 @@ The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
 
+10.6.2
+- Geo: many fixes in FDW support, making it enabled by default in Secondary node.
+- Fixed omnibus deprecations in PostgreSQL resources DSL
+
 10.6.1
 
 - Pages: if logformat set to json, do not append timestamps with svlogd.
