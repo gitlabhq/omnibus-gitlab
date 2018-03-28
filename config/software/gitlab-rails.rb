@@ -77,8 +77,11 @@ build do
 
   block 'correct omniauth-jwt permissions' do
     # omniauth-jwt has some of its files 0600, make them 0644
-    path = shellout!("#{embedded_bin('bundle')} show omniauth-jwt", env: env).stdout.strip
-    command "chmod -R g=u-w,o=u-w #{path}"
+    show = shellout!("#{embedded_bin('bundle')} show omniauth-jwt", env: env, returns: [0, 7])
+    if show.exitstatus.zero?
+      path = show.stdout.strip
+      command "chmod -R g=u-w,o=u-w #{path}"
+    end
   end
 
   # One of our gems, google-protobuf is known to have issues with older gcc versions
