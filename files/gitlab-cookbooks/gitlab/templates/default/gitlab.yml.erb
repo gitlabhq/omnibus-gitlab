@@ -270,6 +270,13 @@ production: &base
       cron: "<%= @geo_repository_verification_secondary_scheduler_worker_cron %>"
     <% end %>
 
+    # GitLab Geo migrated local files clean up worker
+    # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
+    <% unless @geo_migrated_local_files_clean_up_worker_cron.nil? %>
+    geo_migrated_local_files_clean_up_worker:
+      cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
+    <% end %>
+
   #
   # 2. GitLab CI settings
   # ==========================

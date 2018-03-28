@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.7.0
 - Geo: Increase default WAL standby settings from 30s to 60s
 - Geo: Add support for creating a user for the  pgbouncer on the Geo DB
+- Geo: Add cron job for migrated local files worker
 - Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
   registry (Takuya Noguchi)
 - Internal: Speed up rubocop job (Takuya Noguchi)
