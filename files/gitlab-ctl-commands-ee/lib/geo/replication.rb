@@ -83,7 +83,6 @@ module Geo
       puts "* Moving old data directory to '#{bkp_dir}'".color(:green)
 
       run_command("mv #{data_path}/postgresql/data #{bkp_dir}")
-      run_command('rm -f /tmp/postgresql.trigger')
 
       puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
 
