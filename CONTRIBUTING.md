@@ -91,6 +91,17 @@ try upgrading to the latest version. If the issue persists, reopen this issue
 with the relevant information.
 ```
 
+### Hand testing built packages
+
+Once you have a have a green pipeline for the package build as discussed in the
+[Definition of done](#definition-of-done), deploy the package to a VM and ensure
+that everything still works.
+
+Some of the interactions of the components are not fully covered by the
+unit/acceptance tests, so testing here can reveal issues such as invalid service
+configuration being generated.  Issues found should be fed back into the test
+suites where possible as part of the review process.
+
 ## Developer Guidelines
 
 ### Setting up development environment
