@@ -25,9 +25,8 @@ module Geo
 
       puts
       puts '---------------------------------------'.color(:yellow)
-      puts 'WARNING: Make sure your primary is down and also be aware that'.color(:yellow)
-      puts 'this command only works for setups with one secondary.'.color(:yellow)
-      puts 'If you have more of them please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
+      puts 'WARNING: Make sure your primary is down'.color(:yellow)
+      puts 'If you have more than one secondary please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
       puts 'There may be data saved to the primary that was not been replicated to the secondary before the primary went offline. This data should be treated as lost if you proceed.'.color(:yellow)
       puts '---------------------------------------'.color(:yellow)
       puts
