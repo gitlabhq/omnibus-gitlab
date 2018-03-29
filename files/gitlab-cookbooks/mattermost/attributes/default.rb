@@ -37,6 +37,7 @@ default['mattermost']['service_address'] = "127.0.0.1"
 default['mattermost']['service_port'] = "8065"
 
 default['mattermost']['service_site_url'] = nil
+default['mattermost']['service_websocket_url'] = nil
 default['mattermost']['service_maximum_login_attempts'] = 10
 default['mattermost']['service_google_developer_key'] = nil
 default['mattermost']['service_enable_incoming_webhooks'] = false
@@ -47,6 +48,7 @@ default['mattermost']['service_enable_security_fix_alert'] = true
 default['mattermost']['service_enable_insecure_outgoing_connections'] = false
 default['mattermost']['service_allowed_untrusted_internal_connections'] = nil
 default['mattermost']['service_allow_cors_from'] = nil
+default['mattermost']['service_allow_cookies_from_subdomains'] = false
 default['mattermost']['service_enable_outgoing_webhooks'] = false
 default['mattermost']['service_enable_commands'] = true
 default['mattermost']['service_enable_custom_emoji'] = false

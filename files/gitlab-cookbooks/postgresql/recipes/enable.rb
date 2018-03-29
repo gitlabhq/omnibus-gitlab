@@ -93,6 +93,7 @@ file ssl_cert_file do
   owner postgresql_username
   group postgresql_username
   mode 0400
+  sensitive true
   only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
 end
 
@@ -101,6 +102,7 @@ file ssl_key_file do
   owner postgresql_username
   group postgresql_username
   mode 0400
+  sensitive true
   only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
 end
 

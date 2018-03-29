@@ -131,6 +131,7 @@ file key_file_path do
   owner gitlab_user
   group gitlab_group
   only_if { node['gitlab']['gitlab-rails']['registry_enabled'] && node['registry']['internal_key'] }
+  sensitive true
 end
 
 template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")

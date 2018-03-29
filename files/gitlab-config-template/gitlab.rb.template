@@ -1133,6 +1133,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_address'] = "127.0.0.1"
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
+# mattermost['service_websocket_url'] = nil
 # mattermost['service_maximum_login_attempts'] = 10
 # mattermost['service_google_developer_key'] = nil
 # mattermost['service_enable_incoming_webhooks'] = true
@@ -1143,6 +1144,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_insecure_outgoing_connections'] = false
 # mattermost['service_allowed_untrusted_internal_connections'] = ""
 # mattermost['service_allow_cors_from'] = ""
+# mattermost['service_allow_cookies_from_subdomains'] = false
 # mattermost['service_enable_outgoing_webhooks'] = true
 # mattermost['service_enable_commands'] = true
 # mattermost['service_enable_custom_emoji'] = false

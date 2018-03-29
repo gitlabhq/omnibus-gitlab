@@ -1,6 +1,7 @@
 {
     "ServiceSettings": {
         "SiteURL": "<%= @service_site_url %>",
+        "WebsocketURL": "<%= @service_websocket_url %>",
         "ListenAddress": "<%= @service_address %>:<%= @service_port %>",
         "ConnectionSecurity": "<%= @service_connection_security %>",
         "TLSCertFile": "<%= @service_tls_cert_file %>",
@@ -25,6 +26,7 @@
         "EnableInsecureOutgoingConnections":  <%= @service_enable_insecure_outgoing_connections %>,
         "AllowedUntrustedInternalConnections":  "<%= @service_allowed_untrusted_internal_connections %>",
         "AllowCorsFrom":  "<%= @service_allow_cors_from %>",
+        "AllowCookiesForSubdomains": <%= @service_allow_cookies_from_subdomains %>,
         "EnableDeveloper": <%= @service_enable_developer %>,
         "SessionLengthWebInDays" : <%= @service_session_length_web_in_days %>,
         "SessionLengthMobileInDays" : <%= @service_session_length_mobile_in_days %>,

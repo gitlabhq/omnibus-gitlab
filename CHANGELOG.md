@@ -18,6 +18,10 @@ omnibus-gitlab repository.
   is of the https protocol, we are terminating ssl with the embedded
   nginx, and certficate files are absent.
 
+10.6.2
+- Geo: many fixes in FDW support, making it enabled by default in Secondary node.
+- Fixed omnibus deprecations in PostgreSQL resources DSL
+
 10.6.1
 
 - Pages: if logformat set to json, do not append timestamps with svlogd.
