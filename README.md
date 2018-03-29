@@ -18,7 +18,7 @@ The documentation overview is in the [readme in the doc directory](doc/README.md
 
 ## Omnibus fork
 
-Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus).
+Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus).  For additional information see the comments in the [Gemfile](/Gemfile).
 
 # Deprecated links
 

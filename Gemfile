@@ -4,6 +4,15 @@ require_relative "lib/gitlab/version"
 
 omnibus_gem_version = Gitlab::Version.new('omnibus', "gitlab-omnibus-v5.6.10")
 
+# Note that omnibus is from a fork with additional gitlab changes.  You can
+# check what they are with the following comparison link:
+
+# https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10
+#
+# * Adds code to generate dependency_licenses.json
+# * Modifies generation of #{install_dir}/LICENSE to be a combination of all
+#   component licenses.
+
 # When updating gem versions:
 # 1. Edit this file to specify pinning if needed
 # 2. `bundle upgrade GEM`
