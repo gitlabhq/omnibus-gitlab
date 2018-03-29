@@ -69,6 +69,7 @@ file cert_file_path do
   content node['registry']['internal_certificate']
   owner account_helper.registry_user
   group account_helper.registry_group
+  sensitive true
 end
 
 template "#{working_dir}/config.yml" do
