@@ -28,6 +28,8 @@ gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_direct
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
+gitlab_rails_shared_tmp_dir = File.join(node['gitlab']['gitlab-rails']['shared_path'], 'tmp')
+gitlab_rails_shared_cache_dir = File.join(node['gitlab']['gitlab-rails']['shared_path'], 'cache')
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
@@ -76,7 +78,9 @@ end
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
   gitlab_rails_public_uploads_dir,
-  gitlab_ci_builds_dir
+  gitlab_ci_builds_dir,
+  gitlab_rails_shared_cache_dir,
+  gitlab_rails_shared_tmp_dir
 ].compact.each do |dir_name|
   storage_directory dir_name do
     owner gitlab_user

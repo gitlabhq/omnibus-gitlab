@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Auto-enable Let's Encrypt certificate management when `external_url`
   is of the https protocol, we are terminating ssl with the embedded
   nginx, and certficate files are absent.
+- Create shared/{tmp,cache} directories when manage-storage-directories is enabled
 
 10.6.2
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.
