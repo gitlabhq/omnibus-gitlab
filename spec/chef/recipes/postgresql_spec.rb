@@ -169,6 +169,11 @@ psql_port='5432'
           .with_content(/log_line_prefix = ''/)
       end
 
+      it 'does not include log_statement by default' do
+        expect(chef_run).not_to render_file(runtime_conf)
+          .with_content(/log_statement = /)
+      end
+
       it 'sets max_standby settings' do
         expect(chef_run).to render_file(
           runtime_conf
@@ -192,6 +197,7 @@ psql_port='5432'
       before do
         stub_gitlab_rb(postgresql: {
                          log_line_prefix: '%a',
+                         log_statement: 'all',
                          max_standby_archive_delay: '60s',
                          max_standby_streaming_delay: '120s',
                          archive_command: 'command',
@@ -205,6 +211,14 @@ psql_port='5432'
 
         expect(chef_run).to render_file(runtime_conf)
           .with_content(/log_line_prefix = '%a'/)
+      end
+
+      it 'correctly sets the log_line_prefix setting' do
+        expect(chef_run.node['gitlab']['postgresql']['log_statement'])
+          .to eql('all')
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/log_statement = 'all'/)
       end
 
       it 'sets max_standby settings' do

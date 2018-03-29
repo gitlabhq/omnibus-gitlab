@@ -83,6 +83,10 @@ log_temp_files = <%= @log_temp_files %>      # log temporary files equal or larg
           # -1 disables, 0 logs all temp files
 <% end %>
 
+<% if @log_statement %>
+log_statement = '<%= @log_statement %>' # none, ddl, mod, all
+<% end %>
+
 # - Autovacuum parameters -
 autovacuum = <%= @autovacuum %> # Enable autovacuum subprocess?  'on'
           # requires track_counts to also be on.
