@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Geo: Add cron job for migrated local files worker
 - Disable 3DES ssl_ciphers of nginx for gitlab-rails, mattermost, pages, and
   registry (Takuya Noguchi)
+- Add option to configure log_statement config in PostgreSQL
 - Internal: Speed up rubocop job (Takuya Noguchi)
 - Bump redis_exporter to 0.17.1
 - Excludes static libraries, header files, and `*-config` binaries from package.

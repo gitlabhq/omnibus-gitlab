@@ -694,6 +694,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['wal_buffers'] = "-1"
 # postgresql['autovacuum_max_workers'] = "3"
 # postgresql['autovacuum_freeze_max_age'] = "200000000"
+# postgresql['log_statement'] = nil
 # postgresql['track_activity_query_size'] = "1024"
 # postgresql['shared_preload_libraries'] = nil
 # postgresql['dynamic_shared_memory_type'] = nil
