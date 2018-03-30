@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'license:check', type: :rake do
+  let(:f) { double("Mocked file object") }
+
   before :all do
     Rake.application.rake_require 'gitlab/tasks/license_check'
   end
@@ -8,6 +10,10 @@ describe 'license:check', type: :rake do
   before do
     Rake::Task['license:check'].reenable
     allow(File).to receive(:exist?).and_return(true)
+    allow(File).to receive(:open).and_call_original
+    allow(File).to receive(:open).with("pkg/license-status.txt", "w").and_return(f)
+    allow(f).to receive(:write).and_return(true)
+    allow(f).to receive(:close).and_return(true)
   end
 
   it 'detects good licenses correctly' do

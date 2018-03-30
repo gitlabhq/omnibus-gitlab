@@ -66,28 +66,31 @@ class LicenseAnalyzer
     ['unacceptable', 'Unknown license']
   end
 
-  def self.print_status(dependency, version, license, status, reason, level)
+  def self.status_string(dependency, version, license, status, reason, level)
     # level is used to properly align the output. First level dependencies
     # (level-0) have no indentation. Their dependencies, the level-1 ones,
     # are indented.
+    string = ""
     case status
     when 'acceptable'
       if reason == 'Acceptable license'
-        puts "\t" * level + "✓ #{dependency} - #{version} uses #{license} - #{reason}"
+        string = "\t" * level + "✓ #{dependency} - #{version} uses #{license} - #{reason}\n"
       elsif reason == 'Whitelisted software'
-        puts "\t" * level + "# #{dependency} - #{version} uses #{license} - #{reason}"
+        string = "\t" * level + "# #{dependency} - #{version} uses #{license} - #{reason}\n"
       end
     when 'unacceptable'
-      if reason == 'Unknown license'
-        puts "\t" * level + "! #{dependency} - #{version} uses #{license} - #{reason}"
-      else
-        puts "\t" * level + "⨉ #{dependency} - #{version} uses #{license} - #{reason}"
-      end
+      string = if reason == 'Unknown license'
+                 "\t" * level + "! #{dependency} - #{version} uses #{license} - #{reason}\n"
+               else
+                 "\t" * level + "⨉ #{dependency} - #{version} uses #{license} - #{reason}\n"
+               end
     end
+    string
   end
 
   def self.analyze(json_data)
     violations = []
+    output_file = File.open("pkg/license-status.txt", "w")
 
     # We are currently considering dependencies in a two-level view only. This
     # means some information will be repeated as there are softwares that are
@@ -100,7 +103,9 @@ class LicenseAnalyzer
       license = library['license'].strip.delete('"').delete("'")
       version = library['version']
       status, reason = acceptable?(name, license.strip)
-      print_status(name, version, license, status, reason, level)
+      message = status_string(name, version, license, status, reason, level)
+      puts message
+      output_file.write(message)
       violations << "#{name} - #{version} - #{license} - #{reason}" if status == 'unacceptable'
 
       # Handling level-1 dependencies
@@ -110,9 +115,12 @@ class LicenseAnalyzer
         license = dependency['license'].strip.delete('"').delete("'")
         version = dependency['version']
         status, reason = acceptable?(name, license.strip)
-        print_status(name, version, license, status, reason, level)
+        message = status_string(name, version, license, status, reason, level)
+        puts message
+        output_file.write(message)
       end
     end
+    output_file.close
 
     violations
   end
