@@ -56,7 +56,7 @@ runit_service "gitlab-monitor" do
   options({
     log_directory: gitlab_monitor_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-monitor'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
