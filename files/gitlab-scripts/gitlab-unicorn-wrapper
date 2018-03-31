@@ -39,6 +39,7 @@ assert_non_empty unicorn_rb
 readonly oldbin_pidfile=${current_pidfile}.oldbin
 readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
+readonly unicorn_kill_timeout=5 # time on seconds
 
 function main
 {
@@ -109,8 +110,12 @@ function trap_signals
   # Forward all common runit signals except:
   # - HUP which we handle below;
   # - KILL which cannot be caught.
-  for sig in STOP CONT ALRM INT QUIT USR1 USR2 TERM; do
+  for sig in STOP CONT ALRM QUIT USR1 USR2; do
     trap "forward_signal ${sig}" ${sig}
+  done
+
+  for sig in INT TERM; do
+    trap "forward_signal_and_kill_unicorn ${sig}" ${sig}
   done
 
   # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
@@ -125,11 +130,33 @@ function forward_signal
   kill -$1 ${unicorn_pid}
 }
 
+function forward_signal_and_kill_unicorn
+{
+  forward_signal $1
+  kill_unicorn_if_running
+}
+
 function wait_for_unicorn_to_exit
 {
   while sleep ${unicorn_poll_alive}; do
     alive ${unicorn_pid} || break
   done
+}
+
+function kill_unicorn_if_running
+{
+  counter=0
+  while (alive ${unicorn_pid}) && [[ $counter -lt ${unicorn_kill_timeout} ]]; do
+    echo "Waiting for unicorn to die..."
+    let counter++
+    sleep ${unicorn_poll_alive}
+  done
+
+  # Forcibly kill if still running
+  if alive ${unicorn_pid}; then
+     echo "Forcibly killing unicorn"
+     kill -9 ${unicorn_pid}
+  fi
 }
 
 main
