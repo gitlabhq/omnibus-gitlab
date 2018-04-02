@@ -789,6 +789,7 @@ AWS:
   allow_failure: true
   tags:
   - docker-builder
+  when: manual
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
@@ -1101,6 +1102,7 @@ upgrade:
     - echo $GCP_SERVICE_ACCOUNT > service_account.json
     - bundle exec rake metrics:upgrade_package
   allow_failure: true
+  when: manual
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
