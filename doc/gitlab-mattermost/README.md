@@ -200,15 +200,18 @@ Below is a list of Mattermost versions for GitLab 9.0 and later:
 
 | GitLab Version  | Mattermost Version |
 | :------------ |:----------------|
-| 9.0 | 3.7 |
-| 9.1 | 3.7 |
+| 9.0, 9.1 | 3.7 |
 | 9.2 | 3.9 |
 | 9.3 | 3.10 |
 | 9.4 |4.0 |
 | 9.5 |4.1 |
-| 10.0 |4.2 |
-| 10.1 |4.2 |
+| 10.0, 10.1 |4.2 |
 | 10.2 |4.3 |
+| 10.3 |4.4 |
+| 10.4 |4.5 |
+| 10.5 |4.6 |
+| 10.6 |4.7 |
+| 10.7 |4.8 |
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
@@ -230,7 +233,6 @@ Consider these notes when upgrading GitLab Mattermost:
     - If you point private integrations to such URLs, you may whitelist such domains, IP addresses, or CIDR notations via the [AllowedUntrustedInternalConnections config setting](https://github.com/mattermost/docs/blob/05cd1685deff85b2a2c5130d889f935b808ae159/source/administration/config-settings.rst#allow-untrusted-internal-connections-to) in your local environment. Although not recommended, you may also whitelist the addresses in your production environments.
     - Push notification, OAuth 2.0 and WebRTC server URLs are trusted and not affected by this setting.
 1. Starting in Mattermost v4.2, Mattermost now handles multiple content-types for integrations. Make sure your integrations have been set to use the appropriate content-type.
-1. Security related changes were made in Mattermost v3.9 that cause any previously created team invite links, password reset links, and email verification links to no longer work. You must update any place where you have published these links.
 
 For a complete list of upgrade notices from older versions, see the [Mattermost documentation](https://docs.mattermost.com/administration/important-upgrade-notes.html).
 
