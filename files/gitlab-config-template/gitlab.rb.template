@@ -717,7 +717,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_locks_per_transaction'] = 128
 
 # Backup/Archive settings
-# default['gitlab']['postgresql']['archive_mode'] = "off"
+# postgresql['archive_mode'] = "off"
 
 ###! Changing any of these settings only requires a reload of postgresql. You do not need to
 ###! restart postgresql if you change any of these and run reconfigure.
@@ -754,8 +754,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['max_wal_size'] = 1GB
 
 # Backup/Archive settings
-# default['gitlab']['postgresql']['archive_command'] = nil
-# default['gitlab']['postgresql']['archive_timeout'] = "0"
+# postgresql['archive_command'] = nil
+# postgresql['archive_timeout'] = "0"
 
 ### Replication settings
 # postgresql['sql_replication_user'] = "gitlab_replicator"
