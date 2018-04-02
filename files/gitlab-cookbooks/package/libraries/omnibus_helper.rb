@@ -59,4 +59,23 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def expected_owner?(file, user, group)
     expected_user?(file, user) && expected_group?(file, group)
   end
+
+  def self.is_deprecated_os?
+    deprecated_os = { 'debian-7' => 'GitLab 11.0' }
+    ohai ||= Ohai::System.new.tap do |oh|
+      oh.all_plugins(['platform'])
+    end.data
+    os_string = "#{ohai['platform']}-#{ohai['platform_version']}"
+
+    # Find list of deprecated OS that may match the system OS. Like debian-7.11 matching debian-7
+    matching_list = deprecated_os.keys.select { |x| os_string =~ Regexp.new(x) }
+
+    return if matching_list.empty?
+    message = <<~EOS
+      Your OS, #{os_string}, will be deprecated soon.
+      Staring with #{deprecated_os[matching_list.first]}, packages will not be built for it.
+    EOS
+
+    LoggingHelper.deprecation(message)
+  end
 end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
