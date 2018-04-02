@@ -48,6 +48,7 @@ and run `sudo gitlab-ctl reconfigure`.
 Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you. Currently only the primary GitLab domain is supported. Other services like pages, registry, and Mattermost will be supported in a future release.
 
 ### Enabling
+> **Note**: For GitLab 10.5 and 10.6, you will need to also set `letsencrypt['enable'] = true`.
 
 To enable, ensure your `external_url` specifies `https` as the protocol, and add the following to your `/etc/gitlab/gitlab.rb`
 ```ruby
