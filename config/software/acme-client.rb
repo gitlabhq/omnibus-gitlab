@@ -17,7 +17,7 @@
 name 'acme-client'
 default_version '0.4.0'
 
-license 'Apache-2.0'
+license 'MIT'
 license_file 'LICENSE.txt'
 
 dependency 'ruby'
