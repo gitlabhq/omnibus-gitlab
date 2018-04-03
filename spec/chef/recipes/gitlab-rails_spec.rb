@@ -406,6 +406,22 @@ describe 'gitlab::gitlab-rails' do
                                   .with_content("sync_profile_attributes: true")
         end
       end
+
+      context 'Sidekiq log_format' do
+        it 'sets the Sidekiq log_format to default' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                  .with_content("log_format: default")
+          expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
+        end
+
+        it 'sets the Sidekiq log_format to json' do
+          stub_gitlab_rb(sidekiq: { log_format: 'json' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+                                  .with_content("log_format: json")
+          expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+        end
+      end
     end
 
     context 'GitLab Geo settings' do

@@ -342,10 +342,11 @@ default['gitlab']['unicorn']['worker_processes'] = nil
 default['gitlab']['sidekiq']['enable'] = false
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
+default['gitlab']['sidekiq']['log_format'] = "default"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 4
 default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['metrics_enabled'] = true
-# Sidekiq http listner
+# Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
