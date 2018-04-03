@@ -37,7 +37,7 @@ end
 
 env_dir File.join(postgres_exporter_static_etc_dir, 'env') do
   variables node['gitlab']['postgres-exporter']['env']
-  restarts ["service[postgres-exporter]"]
+  notifies :restart, "service[postgres-exporter]"
 end
 
 runtime_flags = PrometheusHelper.new(node).kingpin_flags('postgres-exporter')

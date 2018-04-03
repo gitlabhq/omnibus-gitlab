@@ -171,7 +171,7 @@ templatesymlink "Create a database.yml and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables node['gitlab']['gitlab-rails'].to_hash
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 redis_url = RedisHelper.new(node).redis_url
@@ -191,7 +191,7 @@ templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
               'otp_key_base' => node['gitlab']['gitlab-rails']['otp_key_base'],
               'openid_connect_signing_key' => node['gitlab']['gitlab-rails']['openid_connect_signing_key']
             } })
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 templatesymlink "Create a resque.yml and create a symlink to Rails root" do
@@ -202,7 +202,7 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables(redis_url: redis_url, redis_sentinels: redis_sentinels)
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 %w(cache queues shared_state).each do |instance|
@@ -217,7 +217,7 @@ end
     group 'root'
     mode '0644'
     variables(redis_url: url, redis_sentinels: sentinels)
-    restarts dependent_services
+    dependent_services.each { |svc| notifies :restart, svc }
     not_if { url.nil? }
   end
 end
@@ -229,7 +229,7 @@ templatesymlink "Create a aws.yml and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 
   action :delete unless node['gitlab']['gitlab-rails']['aws_enable']
 end
@@ -241,7 +241,7 @@ templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" d
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 
   action :delete unless node['gitlab']['gitlab-rails']['smtp_enable']
 end
@@ -269,7 +269,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       sidekiq: node['gitlab']['sidekiq']
     )
   )
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
   notifies :run, 'execute[clear the gitlab-rails cache]'
 end
 
@@ -281,7 +281,7 @@ templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
   group "root"
   mode "0644"
   variables(node['gitlab']['gitlab-rails'].to_hash)
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 gitlab_workhorse_services = dependent_services
@@ -296,7 +296,7 @@ templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails 
   mode "0644"
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-workhorse']['secret_token'])
-  restarts gitlab_workhorse_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root" do
@@ -308,7 +308,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   mode "0644"
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 rails_env = {
@@ -337,7 +337,7 @@ env_dir File.join(gitlab_rails_static_etc_dir, 'env') do
   variables(
     rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
-  restarts dependent_services
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 # replace empty directories in the Git repo with symlinks to /var/opt/gitlab

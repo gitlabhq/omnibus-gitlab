@@ -29,7 +29,6 @@ property :mode, String
 property :cookbook, String
 property :variables, Hash, default: {}
 property :helpers, Module, default: OutputHelper
-property :restarts, Array, default: []
 
 action :create do
   t = template new_resource.link_to do
@@ -41,25 +40,17 @@ action :create do
     variables new_resource.variables
     helpers new_resource.helpers
     sensitive new_resource.sensitive
-    new_resource.restarts.each do |resource|
-      notifies :restart, resource
-    end
-    action :nothing
+    action :create
   end
 
-  t.run_action(:create)
-
-  # This resource changed if the template create changed
-  new_resource.updated_by_last_action(t.updated_by_last_action?)
-
-  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
+  l = link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
     target_file new_resource.link_from
     to new_resource.link_to
     action :create
-    new_resource.restarts.each do |resource|
-      notifies :restart, resource
-    end
   end
+
+  # This resource changed if the template create changed or link moved
+  new_resource.updated_by_last_action(t.updated_by_last_action? || l.updated_by_last_action?)
 end
 
 action :delete do
