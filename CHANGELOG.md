@@ -19,6 +19,7 @@ omnibus-gitlab repository.
   is of the https protocol, we are terminating ssl with the embedded
   nginx, and certficate files are absent.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
+- Fix bug in error reporting of `gitlab-ctl renew-le-certs` #3389
 
 10.6.2
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.

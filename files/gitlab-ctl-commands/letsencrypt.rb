@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+require 'rainbow'
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
 add_command_under_category('renew-le-certs', "Let's Encrypt", "Renew the existing Let's Encrypt certificates", 2) do
