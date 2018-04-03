@@ -748,8 +748,7 @@ describe 'gitlab::gitlab-rails' do
     end
 
     describe 'database.yml' do
-      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database.yml') }
-      let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml") }
+      let(:templatesymlink) { chef_run.templatesymlink('Create a database.yml and create a symlink to Rails root') }
 
       context 'by default' do
         cached(:chef_run) do
@@ -772,10 +771,10 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink_template).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_template).not_to notify('service[nginx]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
         end
 
         it 'creates the symlink' do
@@ -783,10 +782,10 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'linking triggers notifications' do
-          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink_link).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_link).not_to notify('service[nginx]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
         end
       end
 
@@ -824,10 +823,10 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'template triggers notifications' do
-            expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
-            expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
-            expect(templatesymlink_template).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-            expect(templatesymlink_template).not_to notify('service[nginx]').to(:restart).delayed
+            expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+            expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
           end
 
           it 'creates the symlink' do
@@ -835,10 +834,10 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'linking triggers notifications' do
-            expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
-            expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
-            expect(templatesymlink_link).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-            expect(templatesymlink_link).not_to notify('service[nginx]').to(:restart).delayed
+            expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+            expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
           end
         end
 
@@ -887,8 +886,7 @@ describe 'gitlab::gitlab-rails' do
     end
 
     describe 'gitlab_workhorse_secret' do
-      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret') }
-      let(:templatesymlink_link) { chef_run.link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret") }
+      let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_workhorse_secret and create a symlink to Rails root') }
 
       context 'by default' do
         cached(:chef_run) do
@@ -905,9 +903,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
         end
 
         it 'creates the symlink' do
@@ -915,9 +913,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'linking triggers notifications' do
-          expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
         end
       end
 
@@ -945,9 +943,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink_template).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_template).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_template).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
         end
 
         it 'creates the symlink' do
@@ -955,9 +953,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'linking triggers notifications' do
-          expect(templatesymlink_link).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink_link).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink_link).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
         end
       end
     end
