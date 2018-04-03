@@ -32,10 +32,10 @@ action :create do
       end
     end
   end
+
   directory new_resource.name do
     recursive true
   end
-
 
   new_resource.variables.each do |key, value|
     file ::File.join(new_resource.name, key) do
