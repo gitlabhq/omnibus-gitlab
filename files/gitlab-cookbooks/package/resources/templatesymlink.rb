@@ -31,7 +31,7 @@ property :variables, Hash, default: {}
 property :helpers, Module, default: OutputHelper
 
 action :create do
-  t = template new_resource.link_to do
+  template new_resource.link_to do
     source new_resource.source
     owner new_resource.owner
     group new_resource.group
@@ -43,14 +43,11 @@ action :create do
     action :create
   end
 
-  l = link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
+  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
     target_file new_resource.link_from
     to new_resource.link_to
     action :create
   end
-
-  # This resource changed if the template create changed or link moved
-  new_resource.updated_by_last_action(t.updated_by_last_action? || l.updated_by_last_action?)
 end
 
 action :delete do

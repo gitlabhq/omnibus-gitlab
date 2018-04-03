@@ -23,8 +23,6 @@ default_action :create
 property :variables, Hash, default: {}
 
 action :create do
-  resource_updated = false
-
   # Cleaning up non-existent variables
   if ::File.directory?(new_resource.name)
     deleted_env_vars = Dir.entries(new_resource.name) - new_resource.variables.keys - %w(. ..)
@@ -33,21 +31,15 @@ action :create do
         action :delete
       end
     end
-    resource_updated ||= !deleted_env_vars.empty?
   end
-
-  d = directory new_resource.name do
+  directory new_resource.name do
     recursive true
   end
-  resource_updated ||= d.updated_by_last_action?
+
 
   new_resource.variables.each do |key, value|
-    f = file ::File.join(new_resource.name, key) do
+    file ::File.join(new_resource.name, key) do
       content value
     end
-    resource_updated ||= f.updated_by_last_action?
   end
-
-  # This resource changed if the template create changed
-  new_resource.updated_by_last_action(resource_updated)
 end
