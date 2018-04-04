@@ -180,7 +180,7 @@ variables:
     - node_modules
   retry: 1
 
-Scan dependencies:
+dependency_scanning:
   image: alpine:3.7
   stage: scan-dependencies
   allow_failure: true
@@ -188,7 +188,7 @@ Scan dependencies:
     TERM: xterm-256color
     REPORT_PATH: ./
   before_script:
-    - apk update && apk add curl jq bash
+    - apk update && apk add curl jq bash bc coreutils
   script:
     - ./scripts/gitlab-depscan.sh pkg/ubuntu-xenial/version-manifest.json
   only:
@@ -200,6 +200,7 @@ Scan dependencies:
     when: on_failure
     paths:
       - dependency_report.txt
+      - gl-dependency-scanning-report.json
 
 .rpi_tag_template: &rpi_tag_build
   stage: raspbian

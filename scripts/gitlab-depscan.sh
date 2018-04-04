@@ -22,7 +22,8 @@ base_url=https://cve.circl.lu/api/search
 
 counter=0;
 
-vulnerabilities=""
+readable_report=""
+json_report="["
 short_descriptions=""
 REPORT_PATH=${REPORT_PATH-/tmp}
 
@@ -36,32 +37,51 @@ do
     printf "%-70s \033[0;32m%-10s\e[0m\n" ${dependency} Secure;
   else
     printf "%-70s \033[0;31m%-10s\e[0m\n" ${dependency} Vulnerable;
-    vulnerabilities="$vulnerabilities\n$dependency: "
+    readable_report="$readable_report\n$dependency: "
     short_descriptions="$short_descriptions\n$dependency: "
     for row in $(echo "${response}" | jq -r '.[] | @base64'); do
       _jq(){
-        echo ${row} | base64 -d | jq -r ${1}
+        echo ${row} | base64 --decode | jq -r ${1}
       }
       vulnerability=$(_jq '.')
-      vulnerabilities="$vulnerabilities
-        $(echo $vulnerability |  jq -r '.id')
-        Severity: $(echo $vulnerability | jq -r '.cvss')
-        Summary: $(echo $vulnerability |  jq -r '.summary')
-        References:
-          $(echo $vulnerability | jq -r '.references[1,2]' | tr '\n' ' ')"
+      id=$(echo $vulnerability | jq -r '.id')
+      severity=$(echo $vulnerability | jq -r '.cvss')
 
+      if [ $(echo "${severity}<4" | bc -l) -eq "1" ]; then
+        priority=Low
+      elif [ $(echo "${severity}<7" | bc -l) -eq "1" ]; then
+        priority=Medium
+      else
+        priority=High
+      fi
+
+      summary=$(echo $vulnerability | jq  '.summary')
+      reference=$(echo $vulnerability | jq -r '.references[1]')
+
+      readable_report="$readable_report
+        $id
+        Severity: $severity
+        Summary: $summary
+        References:
+          $reference"
+
+      json_report=$(printf '%s {\"tool\":\"%s\",\"message\":%s,\"url\":\"%s\",\"priority\":\"%s\"},' "$json_report" "$dependency" "$summary" "$reference" "$priority")
       short_descriptions="$short_descriptions
-        - $(echo $vulnerability | jq -r '.id')"
+        - $id"
       counter=$((counter+1));
     done
-    vulnerabilities="$vulnerabilities\n"
+
+    readable_report="$readable_report\n"
   fi
 done
+
+json_report="${json_report%,}]"
 
 if [ "$counter" -gt "0" ]; then
   echo -e "\033[0;31m$counter vulnerabilities were found\e[0m";
   echo -e "\033[0;31m$short_descriptions\e[0m";
-  IFS= && echo -e $vulnerabilities > $REPORT_PATH/dependency_report.txt
+  echo $json_report > $REPORT_PATH/gl-dependency-scanning-report.json
+  IFS= && echo -e $readable_report > $REPORT_PATH/dependency_report.txt
   echo "Full dependency scanning report can be found at $REPORT_PATH/dependency_report.txt"
   exit 1;
 else
