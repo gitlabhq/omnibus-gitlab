@@ -22,6 +22,10 @@ omnibus-gitlab repository.
 - Updated Mattermost to 4.8.0
 - Create shared/{tmp,cache} directories when manage-storage-directories is enabled
 
+10.6.4
+
+- Fixes an issue where unicorn and sidekiq services weren't being restarted after their configuration changed.
+
 10.6.2
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.
 - Fixed omnibus deprecations in PostgreSQL resources DSL

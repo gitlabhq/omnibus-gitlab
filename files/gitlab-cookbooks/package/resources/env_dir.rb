@@ -21,7 +21,6 @@ actions :create
 default_action :create
 
 property :variables, Hash, default: {}
-property :restarts, Array, default: []
 
 action :create do
   # Cleaning up non-existent variables
@@ -30,9 +29,6 @@ action :create do
     deleted_env_vars.each do |deleted_var|
       file ::File.join(new_resource.name, deleted_var) do
         action :delete
-        new_resource.restarts.each do |svc|
-          notifies :restart, svc
-        end
       end
     end
   end
@@ -44,9 +40,6 @@ action :create do
   new_resource.variables.each do |key, value|
     file ::File.join(new_resource.name, key) do
       content value
-      new_resource.restarts.each do |svc|
-        notifies :restart, svc
-      end
     end
   end
 end
