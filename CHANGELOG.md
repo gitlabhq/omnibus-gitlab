@@ -20,7 +20,7 @@ omnibus-gitlab repository.
   nginx, and certficate files are absent.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
 
-10.6.3
+10.6.4
 
 - Fixes an issue where unicorn and sidekiq services weren't being restarted after their configuration changed.
 
