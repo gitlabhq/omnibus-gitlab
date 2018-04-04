@@ -1106,4 +1106,4 @@ upgrade:
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
-  - gitlab-org
+  - docker-builder
