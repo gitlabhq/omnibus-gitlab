@@ -20,6 +20,7 @@ omnibus-gitlab repository.
   nginx, and certficate files are absent.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
 - Updated Mattermost to 4.8.0
+- Create shared/{tmp,cache} directories when manage-storage-directories is enabled
 
 10.6.2
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.
