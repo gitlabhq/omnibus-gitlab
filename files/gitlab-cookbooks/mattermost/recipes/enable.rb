@@ -124,7 +124,7 @@ end
 
 env_dir File.join(mattermost_home, 'env') do
   variables node['mattermost']['env']
-  restarts ["service[mattermost]"]
+  notifies :restart, "service[mattermost]"
 end
 
 runit_service "mattermost" do

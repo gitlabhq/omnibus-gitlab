@@ -46,7 +46,7 @@ node.default['gitaly']['env'] = {
 
 env_dir env_directory do
   variables node['gitaly']['env']
-  restarts ["service[gitaly]"]
+  notifies :restart, "service[gitaly]"
 end
 
 template "Create Gitaly config.toml" do

@@ -29,7 +29,7 @@ env_dir env_directory do
   variables(
     rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
-  restarts ['service[geo-logcursor]']
+  notifies :restart, 'service[geo-logcursor]'
 end
 
 directory log_directory do
