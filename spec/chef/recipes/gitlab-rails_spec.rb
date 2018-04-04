@@ -81,6 +81,14 @@ describe 'gitlab::gitlab-rails' do
     it 'creates the GitLab pages directory' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/pages')
     end
+
+    it 'creates the shared tmp directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/tmp').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the shared cache directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/cache').with(owner: 'git', mode: '0700')
+    end
   end
 
   context 'with redis settings' do
