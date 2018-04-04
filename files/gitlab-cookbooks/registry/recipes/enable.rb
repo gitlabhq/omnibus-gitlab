@@ -52,7 +52,7 @@ end
 
 env_dir env_directory do
   variables node['registry']['env']
-  restarts ["service[registry]"]
+  notifies :restart, "service[registry]"
 end
 
 directory node['gitlab']['gitlab-rails']['registry_path'] do
