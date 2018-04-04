@@ -70,9 +70,6 @@ describe 'gitlab-ee::geo-secondary' do
     describe 'database.yml' do
       let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
 
-      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
-      let(:templatesymlink_link) { chef_run.link('Link /opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml to /var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
-
       it 'creates the template' do
         expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
           owner: 'root',
@@ -112,8 +109,7 @@ describe 'gitlab-ee::geo-secondary' do
     describe 'database.yml' do
       let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
 
-      let(:templatesymlink_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
-      let(:templatesymlink_link) { chef_run.link('Link /opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml to /var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
+      let(:templatesymlink) { chef_run.templatesymlink('Create a database_geo.yml and create a symlink to Rails root') }
 
       it 'creates the template' do
         expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
@@ -131,7 +127,7 @@ describe 'gitlab-ee::geo-secondary' do
           sidekiq
           geo-logcursor
         ).each do |svc|
-          expect(templatesymlink_template).to notify("service[#{svc}]").to(:restart).delayed
+          expect(templatesymlink).to notify("service[#{svc}]").to(:restart).delayed
         end
       end
     end
