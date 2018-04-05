@@ -631,6 +631,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
+# sidekiq['log_format'] = "default"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['concurrency'] = 25
 # sidekiq['metrics_enabled'] = true

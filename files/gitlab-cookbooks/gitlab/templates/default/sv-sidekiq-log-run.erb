@@ -1,2 +1,2 @@
 #!/bin/sh
-exec svlogd -tt <%= @options[:log_directory] %>
+exec svlogd <% unless node['gitlab']['sidekiq']['log_format'].eql?('json') %>-tt <% end %><%= @options[:log_directory] %>
