@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add pgbouncer_exporter
 - Automatically restart Gitaly when its VERSION file changes
 - Bump minimum version required for upgrade to 10.8 2df263267
+- Geo: Only create database_geo.yml and run migrations if Rails is enabled
 - Render gitlab-pages admin settings
 - Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
