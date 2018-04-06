@@ -20,7 +20,7 @@ omnibus-gitlab repository.
   is of the https protocol, we are terminating ssl with the embedded
   nginx, and certficate files are absent.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
-- Updated Mattermost to 4.8.0
+- Updated Mattermost to 4.8.1
 - Create shared/{tmp,cache} directories when manage-storage-directories is enabled
 
 10.6.4
