@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
 - Updated Mattermost to 4.8.1
 - Create shared/{tmp,cache} directories when manage-storage-directories is enabled
+- Render Gitaly logging_ruby_sentry_dsn config option
 
 10.6.4
 
