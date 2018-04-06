@@ -56,6 +56,8 @@ class OhaiHelper
           version = 'trusty'
         when /^16\.04/
           version = 'xenial'
+        when /^18\.04/
+          version = 'bionic'
         end
       when 'debian', 'raspbian'
         case ohai['platform_version']

@@ -331,6 +331,7 @@ Debian 9.1 knapsack: *prepare_knapsack
 OpenSUSE 42.3 knapsack: *prepare_knapsack
 Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
+Ubuntu 18.04 knapsack: *prepare_knapsack
 
 update-knapsack:
   <<: *knapsack-state
@@ -514,6 +515,36 @@ Ubuntu 16.04 specs 5 6:
   <<: *run_rspec
   dependencies:
   - Ubuntu 16.04 knapsack
+Ubuntu 18.04 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
 Debian 7 specs 0 6:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
   <<: *run_rspec
@@ -703,6 +734,9 @@ Ubuntu-14.04:
 Ubuntu-16.04:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Ubuntu-18.04:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_18.04-${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 Debian-7:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -841,6 +875,9 @@ Ubuntu-14.04-branch:
   <<: *branch_build
 Ubuntu-16.04-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Ubuntu-18.04-branch:
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_18.04-${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-7-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:debian_7-${BUILDER_IMAGE_REVISION}"
@@ -987,6 +1024,11 @@ Ubuntu-16.04-staging:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
   <<: *staging_upload
+Ubuntu-18.04-staging:
+  dependencies:
+    - Ubuntu-18.04
+    - Ubuntu-18.04-branch
+  <<: *staging_upload
 Debian-7-staging:
   dependencies:
     - Debian-7
@@ -1034,6 +1076,10 @@ Ubuntu-14.04-release:
 Ubuntu-16.04-release:
   dependencies:
     - Ubuntu-16.04
+  <<: *production_release
+Ubuntu-18.04-release:
+  dependencies:
+    - Ubuntu-18.04
   <<: *production_release
 Debian-7-release:
   dependencies:
@@ -1107,4 +1153,4 @@ upgrade:
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
-  - gitlab-org
+  - docker-builder
