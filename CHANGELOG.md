@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.8.0
+- Bump git to 2.16.3
+
 10.7.0
 - Geo: Increase default WAL standby settings from 30s to 60s
 - Geo: Add support for creating a user for the  pgbouncer on the Geo DB
@@ -22,7 +25,6 @@ omnibus-gitlab repository.
 - Fix bug where changing log directory of gitlab-monitor had no effect 1e451dc2
 - Updated Mattermost to 4.8.1
 - Create shared/{tmp,cache} directories when manage-storage-directories is enabled
-- Bump git to 2.16.2
 
 10.6.4
 
