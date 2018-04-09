@@ -9,6 +9,7 @@ default['gitaly']['listen_addr'] = nil
 default['gitaly']['prometheus_listen_addr'] = "localhost:9236"
 default['gitaly']['logging_format'] = nil
 default['gitaly']['logging_sentry_dsn'] = nil
+default['gitaly']['logging_ruby_sentry_dsn'] = nil
 default['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitaly']['storage'] = []
 default['gitaly']['auth_token'] = nil
