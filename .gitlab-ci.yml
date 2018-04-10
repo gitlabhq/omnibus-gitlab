@@ -8,15 +8,16 @@ stages:
   - post-test
   - package
   - scan-dependencies
-  - staging_upload
-  - release
   - images
-  - docker_release
-  - qa-image
+  - staging_upload
+  - trigger-packages
+  - package-release
+  - trigger-images
+  - image-release
+  - metrics
   - raspbian
   - raspbian_release
   - notification_fail
-  - metrics
 
 variables:
   BUILDER_IMAGE_REVISION: "0.0.15"
@@ -193,8 +194,11 @@ dependency_scanning:
     - ./scripts/gitlab-depscan.sh pkg/ubuntu-xenial/version-manifest.json
   only:
     - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
   dependencies:
     - Ubuntu-16.04
+    - Ubuntu-16.04-branch
   artifacts:
     expire_in: 7 days
     when: on_failure
@@ -253,7 +257,7 @@ dependency_scanning:
 ### 2. It will upload the package to public, user facing repositories
 ### 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
-  stage: release
+  stage: package-release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
@@ -813,51 +817,6 @@ Docker:
   dependencies: []
   retry: 1
 
-AWS:
-  stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
-  script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - bundle exec rake aws:process
-  allow_failure: true
-  tags:
-  - docker-builder
-  when: manual
-  only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-  retry: 1
-
-QA-Tag:
-  stage: qa-image
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
-  services:
-  - docker:dind
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - bundle exec rake release:qa
-  artifacts:
-    when: on_failure
-    expire_in: 7d
-    paths:
-    - screenshots/
-  allow_failure: true
-  only:
-    - tags@gitlab/omnibus-gitlab
-  tags:
-  - docker-builder
-  dependencies:
-    - Ubuntu-16.04
-  retry: 1
-
 Raspberry-Pi-2-Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:rpi_8-${BUILDER_IMAGE_REVISION}"
   cache:
@@ -957,7 +916,7 @@ Docker-branch:
   retry: 1
 
 QA-Master:
-  stage: qa-image
+  stage: images
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
@@ -1128,7 +1087,7 @@ Raspberry-Pi-2-Jessie-release:
   - promotion
 
 Docker-Release:
-  stage: docker_release
+  stage: image-release
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
@@ -1142,6 +1101,51 @@ Docker-Release:
   dependencies: []
   when: manual
 
+AWS:
+  stage: image-release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:jessie_packer-${BUILDER_IMAGE_REVISION}"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - bundle exec rake aws:process
+  allow_failure: true
+  tags:
+  - docker-builder
+  when: manual
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  retry: 1
+
+QA-Tag:
+  stage: image-release
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
+  services:
+  - docker:dind
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake release:qa
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
+  allow_failure: true
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-16.04
+  retry: 1
+
 upgrade:
   stage: metrics
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder:ubuntu_16.04-${BUILDER_IMAGE_REVISION}"
@@ -1154,3 +1158,22 @@ upgrade:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+
+release:packages:
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  stage: trigger-packages
+  script:
+    - bundle exec ruby support/trigger-release.rb package-release
+  when: manual
+  only:
+    - tags@gitlab/omnibus-gitlab
+
+release:images:
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-${BUILDER_IMAGE_REVISION}"
+  stage: trigger-images
+  script:
+    - bundle exec ruby support/trigger-release.rb image-release
+    - bundle exec ruby support/trigger-release.rb metrics
+  when: manual
+  only:
+    - tags@gitlab/omnibus-gitlab
