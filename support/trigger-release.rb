@@ -11,7 +11,7 @@ stage = ARGV[0]
 
 uri = URI("https://dev.gitlab.org/api/v4/projects/#{ENV['CI_PROJECT_ID']}/pipelines/#{ENV['CI_PIPELINE_ID']}/jobs?scope[]=manual&scope[]=created")
 req = Net::HTTP::Get.new(uri)
-req['PRIVATE-TOKEN'] = ENV['TRIGGER_PRIVATE_TOKEN']
+req['PRIVATE-TOKEN'] = ENV['RELEASE_TRIGGER_TOKEN']
 http = Net::HTTP.new(uri.hostname, uri.port)
 http.use_ssl = true
 res = http.request(req)
@@ -23,7 +23,7 @@ release_jobs.each do |job|
     puts "Playing job: #{job['name']}"
     post_uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/jobs/#{job['id']}/play")
     post_req = Net::HTTP::Post.new(post_uri)
-    post_req['PRIVATE-TOKEN'] = ENV['TRIGGER_PRIVATE_TOKEN']
+    post_req['PRIVATE-TOKEN'] = ENV['RELEASE_TRIGGER_TOKEN']
     post_http = Net::HTTP.new(post_uri.hostname, post_uri.port)
     post_http.use_ssl = true
     post_http.request(post_req)
