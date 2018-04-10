@@ -23,6 +23,7 @@ omnibus-gitlab repository.
 - Updated Mattermost to 4.8.1
 - Create shared/{tmp,cache} directories when manage-storage-directories is enabled
 - Render Gitaly logging_ruby_sentry_dsn config option
+- Fix bug in error reporting of `gitlab-ctl renew-le-certs` #3389
 
 10.6.4
 
