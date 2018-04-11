@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Excludes static libraries, header files, and `*-config` binaries from package.
 - Support Sidekiq log_format option
 - Render gitlab-shell log_format option
+- Support `direct_upload` for Artifacts and Uploads
 - Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
 - Auto-enable Let's Encrypt certificate management when `external_url`
   is of the https protocol, we are terminating ssl with the embedded
