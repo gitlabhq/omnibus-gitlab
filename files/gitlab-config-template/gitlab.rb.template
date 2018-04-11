@@ -153,6 +153,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"
 # gitlab_rails['artifacts_object_store_enabled'] = false # EE only
+# gitlab_rails['artifacts_object_store_direct_upload'] = false
 # gitlab_rails['artifacts_object_store_background_upload'] = true
 # gitlab_rails['artifacts_object_store_proxy_download'] = false
 # gitlab_rails['artifacts_object_store_remote_directory'] = "artifacts"
@@ -191,6 +192,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false # EE only
+# gitlab_rails['uploads_object_store_direct_upload'] = false
 # gitlab_rails['uploads_object_store_background_upload'] = true
 # gitlab_rails['uploads_object_store_proxy_download'] = false
 # gitlab_rails['uploads_object_store_remote_directory'] = "uploads"

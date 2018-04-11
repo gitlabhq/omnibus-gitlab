@@ -219,13 +219,14 @@ describe 'gitlab::gitlab-rails' do
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "artifacts"\s+connection:/)
+            .with_content(/object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "artifacts"\s+connection:/)
       end
 
       context 'with values' do
         before do
           stub_gitlab_rb(gitlab_rails: {
                            artifacts_object_store_enabled: true,
+                           artifacts_object_store_direct_upload: true,
                            artifacts_object_store_background_upload: false,
                            artifacts_object_store_proxy_download: true,
                            artifacts_object_store_remote_directory: 'mepmep',
@@ -235,7 +236,7 @@ describe 'gitlab::gitlab-rails' do
 
         it "sets the object storage values" do
           expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/object_store:\s+enabled: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"/)
+          .with_content(/object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"/)
         end
 
         include_examples 'sets the connection in YAML'
@@ -272,7 +273,7 @@ describe 'gitlab::gitlab-rails' do
     context 'for settings regarding object storage for uploads' do
       it 'allows not setting any values' do
         expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{storage_path: [-/\w]*public\s+object_store:\s+enabled: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "uploads"\s+connection:})
+            .with_content(%r{storage_path: [-/\w]*public\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "uploads"\s+connection:})
       end
 
       context 'with values' do
@@ -280,6 +281,7 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: {
                            uploads_base_dir: 'mapmap',
                            uploads_object_store_enabled: true,
+                           uploads_object_store_direct_upload: true,
                            uploads_object_store_background_upload: false,
                            uploads_object_store_proxy_download: true,
                            uploads_object_store_remote_directory: 'mepmep',
@@ -289,7 +291,7 @@ describe 'gitlab::gitlab-rails' do
 
         it "sets the object storage values" do
           expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+mapmap\s+object_store:\s+enabled: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+          .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+mapmap\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
         end
 
         include_examples 'sets the connection in YAML'
