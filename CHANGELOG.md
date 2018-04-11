@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 10.8.0
 
 - Upgrade Ruby version to 2.3.7
+- Bump git to 2.16.3
 
 10.7.0
 

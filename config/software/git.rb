@@ -26,7 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-default_version '2.14.3'
+default_version '2.16.3'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -37,7 +37,7 @@ dependency 'openssl'
 dependency 'curl'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '023ffff6d3ba8a1bea779dfecc0ed0bb4ad68ab8601d14435dd8c08416f78d7f'
+       sha256: 'dda229e9c73f4fbb7d4324e0d993e11311673df03f73b194c554c2e9451e17cd'
 
 relative_path "git-#{version}"
 
