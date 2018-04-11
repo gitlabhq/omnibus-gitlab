@@ -3,7 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.8.0
+
+- Upgrade Ruby version to 2.3.7
+
 10.7.0
+
 - Geo: Increase default WAL standby settings from 30s to 60s
 - Geo: Add support for creating a user for the  pgbouncer on the Geo DB
 - Geo: Add cron job for migrated local files worker
