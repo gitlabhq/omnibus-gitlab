@@ -82,6 +82,31 @@ An example cron entry to check daily
 0 0 * * * /opt/gitlab/bin/gitlab-ctl renew-le-certs > /dev/null
 ```
 
+### Automatic renewal
+
+From 10.7 we will set a scheduled task up for you to do the renewal.
+
+Without configuration the renewal will be scheduled to be at a selected minute
+after midnight, every 4th day.   The minute is selected based on the hostname of
+your `external_url`, so not all gitlab instances will request renewals from the
+upstream letsencrypt servers at the same time.  You can specify the minute
+explicitly using the `letsencrypt['auto_renew_minute']` setting.
+
+For example, to specify the schedule we mentioned earlier you can add this to the
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+letsencrypt['auto_renew_minute'] = 0
+letsencrypt['auto_renew_day_of_month'] = "*"
+```
+
+To disable the auto-renewing by omnibus-gitlab you can add the following to your
+`/etc/gitlab/gitlab.rb`:
+
+```ruby
+letsencrypt['auto_renew'] = false
+```
+
 ## Troubleshooting
 
 If no symlinks are created in `/opt/gitlab/embedded/ssl/certs/` and you see

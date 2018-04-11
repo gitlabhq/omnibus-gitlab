@@ -38,6 +38,7 @@ module Services
     service 'mattermost'
     service 'registry'
     service 'storage_check'
+    service 'go-crond'
   end
 
   # Define the services included in the EE edition of GitLab

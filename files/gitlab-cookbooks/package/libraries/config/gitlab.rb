@@ -46,6 +46,7 @@ module Gitlab
   attribute('gitaly').use { Gitaly }
   attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
   attribute('letsencrypt', priority: 20).use { LetsEncrypt } # After GitlabRails
+  attribute('go-crond')
 
   ## Attributes under node['gitlab']
   attribute_block 'gitlab' do

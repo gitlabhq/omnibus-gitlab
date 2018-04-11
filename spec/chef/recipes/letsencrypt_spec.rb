@@ -117,6 +117,20 @@ server {
       expect(prod_cert).to notify('ruby_block[display_le_message]').to(:run)
     end
 
+    it 'enables go-crond' do
+      expect(chef_run).to include_recipe('go-crond::enable')
+    end
+
+    it 'adds a cron job' do
+      expect(chef_run).to create_go_crond_job('letsencrypt-renew').with(
+        user: "root",
+        hour: 0,
+        minute: 31,
+        day_of_month: "*/4",
+        command: "/opt/gitlab/bin/gitlab-ctl renew-le-certs"
+      )
+    end
+
     context 'external_url uses http' do
       before do
         stub_gitlab_rb(

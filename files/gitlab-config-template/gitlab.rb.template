@@ -1532,6 +1532,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['key_size'] = 2048
 # letsencrypt['owner'] = 'root'
 # letsencrypt['wwwroot'] = '/var/opt/gitlab/nginx/www'
+# See http://docs.gitlab.com/omnibus/settings/ssl.html#automatic-renewal for more on these sesttings
+# letsencrypt['auto_renew'] = true
+# letsencrypt['auto_renew_hour'] = 0
+# letsencrypt['auto_renew_minute'] = nil # Should be a number or cron expression, if specified.
+# letsencrypt['auto_renew_day_of_month'] = "*/4"
 
 ################################################################################
 ################################################################################
