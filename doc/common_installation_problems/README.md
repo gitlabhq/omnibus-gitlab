@@ -27,6 +27,27 @@ curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gi
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
 
+### Installation on openSUSE and SLES platforms warns about unknown key signature
+
+Omnibus GitLab packages are [signed with GPG
+keys](https://docs.gitlab.com/omnibus/update/package_signatures.html) in
+addition to the package repositories providing signed metadata. This ensures
+authenticity and integrity of the packages that are distributed to the users.
+However, the package manager used in openSUSE and SLES operating systems may
+sometime raise false warnings with these signatures, similar to
+```
+File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no):
+File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no): yes
+```
+
+This is a known bug with zypper where zypper ignores the `gpgkey` keyword in the
+repo configuration file. With later versions of Packagecloud, there may be
+improvements regarding this, but currently users have to manually agree to
+package installation.
+
+So, in openSUSE or SLES systems, if such a warning is displayed, it is safe to
+continue installation.
+
 ### Reconfigure shows an error: NoMethodError - undefined method '[]=' for nil:NilClass
 
 You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
