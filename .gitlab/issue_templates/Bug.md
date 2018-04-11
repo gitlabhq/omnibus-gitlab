@@ -79,7 +79,8 @@ Please remove this notice if you're confident your issue isn't a duplicate.
 <details>
 <summary> Provide the relevant sections of `/etc/gitlab/gitlab.rb` </summary>
 <pre>
-(Paste the details but omit lines starting with `#`. Also sanitize sensitive configuration such as
-  passwords and secrets.)
+(Paste the details but omit lines starting with `#`. Relevant lines can be retrieved by
+ running `grep -v -e '^#' -e '^$' /etc/gitlab/gitlab.rb`. Be certain to sanitize sensitive
+ configuration such as passwords and secrets.)
 </pre>
 </details>
