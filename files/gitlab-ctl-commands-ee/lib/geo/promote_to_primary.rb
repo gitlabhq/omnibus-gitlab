@@ -41,7 +41,7 @@ module Geo
       puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
       puts
 
-      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote")
+      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote", live: true).error!
     end
 
     def reconfigure
