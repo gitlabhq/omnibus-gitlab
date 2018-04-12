@@ -45,17 +45,15 @@ if node['letsencrypt']['auto_renew']
     day_of_month node['letsencrypt']['auto_renew_day_of_month']
     command "/opt/gitlab/bin/gitlab-ctl renew-le-certs"
   end
+end
 
-  ruby_block 'display_le_message' do
-    action :nothing
-  end
-else
-  ruby_block 'display_le_message' do
-    block do
+ruby_block 'display_le_message' do
+  block do
+    unless node['letsencrypt']['auto_renew']
       LoggingHelper.warning("Let's Encrypt integration does not setup any automatic renewal. Please see https://docs.gitlab.com/omnibus/settings/ssl.html#lets-encrypt-integration for more information")
     end
-    action :nothing
   end
+  action :nothing
 end
 
 ruby_block 'save_auto_enabled' do
