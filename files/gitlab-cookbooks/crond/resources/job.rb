@@ -16,18 +16,18 @@ action :create do
     new_resource.day_of_week,
   ].join(" ")
 
-  file "#{node['go-crond']['cron_d']}/#{new_resource.title}" do
+  file "#{node['crond']['cron_d']}/#{new_resource.title}" do
     owner "root"
     group "root"
     content "#{schedule} #{new_resource.user} #{new_resource.command}\n"
-    notifies :restart, 'service[go-crond]' if node['go-crond']['enable']
-    only_if { node['go-crond']['enable'] }
+    notifies :restart, 'service[crond]' if node['crond']['enable']
+    only_if { node['crond']['enable'] }
   end
 end
 
 action :delete do
-  file "#{node['go-crond']['cron_d']}/#{new_resource.title}" do
+  file "#{node['crond']['cron_d']}/#{new_resource.title}" do
     action :delete
-    notifies :restart, 'service[go-crond]' if node['go-crond']['enable']
+    notifies :restart, 'service[crond]' if node['crond']['enable']
   end
 end

@@ -1,4 +1,4 @@
-name 'go-crond'
+name 'crond'
 maintainer 'GitLab.com'
 maintainer_email 'support@gitlab.com'
 license 'Apache-2.0'

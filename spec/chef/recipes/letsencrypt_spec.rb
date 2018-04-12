@@ -117,12 +117,12 @@ server {
       expect(prod_cert).to notify('ruby_block[display_le_message]').to(:run)
     end
 
-    it 'enables go-crond' do
-      expect(chef_run).to include_recipe('go-crond::enable')
+    it 'enables crond' do
+      expect(chef_run).to include_recipe('crond::enable')
     end
 
-    it 'adds a cron job' do
-      expect(chef_run).to create_go_crond_job('letsencrypt-renew').with(
+    it 'adds a crond_job' do
+      expect(chef_run).to create_crond_job('letsencrypt-renew').with(
         user: "root",
         hour: 0,
         minute: 31,

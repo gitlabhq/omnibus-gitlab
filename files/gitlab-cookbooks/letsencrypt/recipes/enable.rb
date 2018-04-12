@@ -32,13 +32,13 @@ end
 include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"
 
 if node['letsencrypt']['auto_renew']
-  include_recipe "go-crond::enable"
+  include_recipe "crond::enable"
 
   # We seed with the sha1 of the hostname, so we'll default with the same minute
   # until external_url changes
   chosen_minute = Random.new(Digest::SHA1.hexdigest(site.host).hex).rand(60)
 
-  go_crond_job 'letsencrypt-renew' do
+  crond_job 'letsencrypt-renew' do
     user "root"
     hour node['letsencrypt']['auto_renew_hour']
     minute node['letsencrypt']['auto_renew_minute'] || chosen_minute
