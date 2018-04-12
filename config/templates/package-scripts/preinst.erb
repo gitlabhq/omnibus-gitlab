@@ -13,7 +13,7 @@ pg_check() {
 
   # Fetch the currently running version from the database
   # If this doesn't work, assume this isn't a database node
-  if ! running_version=$(gitlab-psql -d template1 -c 'SHOW server_version' -qt 2>/dev/null); then
+  if ! running_version=$(${DEST_DIR}/bin/gitlab-psql -d template1 -c 'SHOW server_version' -qt 2>/dev/null); then
     notify
     notify "This node does not appear to be running a database"
     notify "Skipping version check, if you think this is an error exit now"
