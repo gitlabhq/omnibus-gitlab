@@ -125,6 +125,7 @@ production: &base
     path: <%= @artifacts_path %>
     object_store:
       enabled: <%= @artifacts_object_store_enabled %>
+      direct_upload: <%= @artifacts_object_store_direct_upload %>
       background_upload: <%= @artifacts_object_store_background_upload %>
       proxy_download: <%= @artifacts_object_store_proxy_download %>
       remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
@@ -152,6 +153,7 @@ production: &base
     <% end %>
     object_store:
       enabled: <%= @uploads_object_store_enabled %>
+      direct_upload: <%= @uploads_object_store_direct_upload %>
       background_upload: <%= @uploads_object_store_background_upload %>
       proxy_download: <%= @uploads_object_store_proxy_download %>
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
