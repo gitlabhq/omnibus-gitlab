@@ -83,6 +83,8 @@ dependency 'chef-gem'
 dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
+dependency 'go-crond'
+
 if ee
   dependency 'consul'
   dependency 'gitlab-ctl-ee'

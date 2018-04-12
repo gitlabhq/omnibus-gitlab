@@ -1,3 +1,7 @@
+default['letsencrypt']['auto_renew'] = true
+default['letsencrypt']['auto_renew_hour'] = 0
+default['letsencrypt']['auto_renew_minute'] = nil
+default['letsencrypt']['auto_renew_day_of_month'] = "*/4"
 default['letsencrypt']['alt_names'] = []
 default['letsencrypt']['authorization_method'] = 'http'
 default['letsencrypt']['chain'] = nil

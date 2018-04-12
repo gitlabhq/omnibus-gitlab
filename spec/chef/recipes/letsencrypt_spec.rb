@@ -117,6 +117,42 @@ server {
       expect(prod_cert).to notify('ruby_block[display_le_message]').to(:run)
     end
 
+    context 'auto_renew' do
+      context 'default' do
+        it 'enables crond' do
+          expect(chef_run).to include_recipe('crond::enable')
+        end
+
+        it 'adds a crond_job' do
+          expect(chef_run).to create_crond_job('letsencrypt-renew').with(
+            user: "root",
+            hour: 0,
+            minute: 31,
+            day_of_month: "*/4",
+            command: "/opt/gitlab/bin/gitlab-ctl renew-le-certs"
+          )
+        end
+
+        it 'does not log a warning' do
+          expect(LoggingHelper).not_to receive(:warning)
+          chef_run.ruby_block('display_le_message').block.call
+        end
+      end
+
+      context 'false' do
+        before { stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false }) }
+
+        it 'does not enable crond' do
+          expect(chef_run).not_to include_recipe('crond::enable')
+        end
+
+        it 'warns that we do not setup automatic renewal' do
+          expect(LoggingHelper).to receive(:warning).with(/does not setup/)
+          chef_run.ruby_block('display_le_message').block.call
+        end
+      end
+    end
+
     context 'external_url uses http' do
       before do
         stub_gitlab_rb(
