@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade Ruby version to 2.3.7
 - Bump git to 2.16.3
+- Do not ship cached gem archives. #3235
 
 10.7.0
 
