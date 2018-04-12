@@ -1145,6 +1145,7 @@ QA-Tag:
   dependencies:
     - Ubuntu-16.04
   retry: 1
+  when: manual
 
 upgrade:
   stage: metrics
