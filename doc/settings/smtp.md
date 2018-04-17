@@ -261,7 +261,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.exmail.qq.com"
-gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_port'] = 465
 gitlab_rails['smtp_user_name'] = "xxxx@xx.com"
 gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_authentication'] = "login"
