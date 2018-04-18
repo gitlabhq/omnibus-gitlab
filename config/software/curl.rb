@@ -15,7 +15,7 @@
 #
 
 name 'curl'
-default_version '7.56.1'
+default_version '7.59.0'
 
 # Runtime dependency
 dependency 'zlib'
@@ -25,7 +25,7 @@ license 'MIT'
 license_file 'COPYING'
 
 source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-       sha256: '961a25531d72a843dfcce87b290e7a882f2d376f3b88de11df009710019c5b16'
+       sha256: '099d9c32dc7b8958ca592597c9fabccdf4c08cfb7c114ff1afbbc4c6f13c9e9e'
 
 relative_path "curl-#{version}"
 
