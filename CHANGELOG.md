@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade Ruby version to 2.3.7
 - Bump git to 2.16.3
+- Bump openssl to 1.0.2o 1fe9f4ef2
 
 10.7.0
 
