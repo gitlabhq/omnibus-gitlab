@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade Ruby version to 2.3.7
 - Bump git to 2.16.3
+- Bump rubygems to 2.6.14 84b2510fd
 
 10.7.0
 
