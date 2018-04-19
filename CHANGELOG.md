@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Upgrade Ruby version to 2.3.7
 - Bump git to 2.16.3
 - Bump curl to 7.59.0 aab088263
+- Bump pcre to 8.42 07c83a5ab
 
 10.7.0
 
