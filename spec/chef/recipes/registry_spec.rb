@@ -27,7 +27,7 @@ describe 'registry recipe' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitlab-rails/shared/registry').with(
         owner: 'registry',
         group: 'git',
-        mode: '0750'
+        mode: '0770'
       )
     end
 

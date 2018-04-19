@@ -58,7 +58,7 @@ end
 directory node['gitlab']['gitlab-rails']['registry_path'] do
   owner account_helper.registry_user
   group account_helper.gitlab_group
-  mode '0750'
+  mode '0770'
   recursive true
   only_if { node['gitlab']['manage-storage-directories']['enable'] }
 end
