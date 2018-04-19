@@ -136,6 +136,11 @@ exclude 'embedded/share/gtk-doc'
 exclude 'embedded/share/info'
 exclude 'embedded/share/man'
 
+# exclude rubygems build cache
+# Revisit this path as part of
+# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3414
+exclude 'embedded/lib/ruby/gems/2.3.0/cache'
+
 # Enable signing packages
 package :rpm do
   signing_passphrase ENV['GPG_PASSPHRASE']
