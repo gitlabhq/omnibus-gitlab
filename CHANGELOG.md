@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Bump git to 2.16.3
 - Bump curl to 7.59.0 aab088263
 - Bump pcre to 8.42 07c83a5ab
+- Bump rubygems to 2.6.14 84b2510fd
 
 10.7.0
 
