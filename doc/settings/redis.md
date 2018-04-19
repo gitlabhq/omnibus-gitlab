@@ -110,16 +110,13 @@ GitLab includes support for running with separate redis instances for different 
     * PASSWORD is the plaintext password for the Redis instance
     * REDIS_HOST is the hostname or IP address of the host
     * REDIS_PORT is the port Redis is listening on, the default is 6379
-1. If you are using Redis Sentinels, you may configure them for each persistence class as well.
-   Include an array of hashes with host/port combinations, such as the following:
-
-    ```ruby
-    gitlab_rails['redis_cache_sentinels'] = [ { host: REDIS_CACHE_SENTINEL_HOST, port: PORT1 }, { host: REDIS_CACHE_SENTINEL_HOST2, port: PORT2 } ]
-    gitlab_rails['redis_queues_sentinels'] = [ { host: REDIS_QUEUES_SENTINEL_HOST, port: PORT1 }, { host: REDIS_QUEUES_SENTINEL_HOST2, port: PORT2 } ]
-    gitlab_rails['redis_shared_state_sentinels'] = [ { host: SHARED_STATE_SENTINEL_HOST, port: PORT1 }, { host: SHARED_STATE_SENTINEL_HOST2, port: PORT2 } ]
-    ```
 
 1. Run `gitlab-ctl reconfigure`
+
+## Redis Sentinel
+
+For details on configuring Redis Sentinel, see
+https://docs.gitlab.com/ce/administration/high_availability/redis.html.
 
 ## Setting the Redis Cache instance as an LRU
 
