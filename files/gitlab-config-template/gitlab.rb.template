@@ -500,6 +500,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['env'] = {}
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
+# registry['health_storagedriver_enabled'] = true
 # registry['storage_delete_enabled'] = true
 
 ### Registry backend storage

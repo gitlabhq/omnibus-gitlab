@@ -16,7 +16,7 @@ http:
   <% end %>
 health:
   storagedriver:
-    enabled: true
+    enabled: <%= @health_storagedriver_enabled %>
     interval: 10s
     threshold: 3
 auth:
