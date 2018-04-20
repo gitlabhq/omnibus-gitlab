@@ -58,7 +58,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     run_sv_command_for_service('stop', sv_name)
   end
 
-  MIGRATION_SERVICES = %w(postgresql redis geo-postgresql).freeze
+  MIGRATION_SERVICES = %w(postgresql redis geo-postgresql gitaly).freeze
   MIGRATION_SERVICES.each do |sv_name|
     # If the service is disabled, e.g. because we are using an external
     # Postgres server, then this command is a no-op.
