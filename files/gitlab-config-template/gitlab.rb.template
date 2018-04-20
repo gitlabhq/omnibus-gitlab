@@ -1152,7 +1152,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_enable_outgoing_webhooks'] = true
 # mattermost['service_enable_commands'] = true
 # mattermost['service_enable_custom_emoji'] = false
-# mattermost['service_enable_only_admin_integrations'] = true
 # mattermost['service_enable_oauth_service_provider'] = false
 # mattermost['service_enable_developer'] = false
 # mattermost['service_session_length_web_in_days'] = 30
@@ -1185,7 +1184,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['team_max_users_per_team'] = 150
-# mattermost['team_enable_team_creation'] = true
 # mattermost['team_enable_user_creation'] = true
 # mattermost['team_enable_open_server'] = false
 # mattermost['team_allow_public_link'] = true

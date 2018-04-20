@@ -52,7 +52,6 @@ default['mattermost']['service_allow_cookies_from_subdomains'] = false
 default['mattermost']['service_enable_outgoing_webhooks'] = false
 default['mattermost']['service_enable_commands'] = true
 default['mattermost']['service_enable_custom_emoji'] = false
-default['mattermost']['service_enable_only_admin_integrations'] = true
 default['mattermost']['service_enable_oauth_service_provider'] = false
 default['mattermost']['service_enable_developer'] = false
 default['mattermost']['service_session_length_web_in_days'] = 30
@@ -152,7 +151,6 @@ default['mattermost']['localization_client_locale'] = "en"
 default['mattermost']['localization_available_locales'] = ""
 
 default['mattermost']['team_site_name'] = "GitLab Mattermost"
-default['mattermost']['team_enable_team_creation'] = true
 default['mattermost']['team_enable_user_creation'] = true
 default['mattermost']['team_enable_open_server'] = false
 default['mattermost']['team_enable_x_to_leave_channels_from_lhs'] = false
