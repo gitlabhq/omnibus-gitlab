@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Do not ship cached gem archives. #3235
 - Excludes source assets from gitlab-rails component.  #3238
 - Keep gitaly service running during package upgrades 034992fbc
+- Geo: Error when primary promotion fails
 
 10.7.0
 

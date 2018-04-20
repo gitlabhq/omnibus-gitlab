@@ -31,7 +31,9 @@ describe Geo::PromoteToPrimary, '#execute' do
     it 'calls all the subcommands' do
       is_expected.to receive(:run_command).with('gitlab-ctl reconfigure', live: true).once
       is_expected.to receive(:run_command).with('gitlab-rake geo:set_secondary_as_primary', live: true).once
-      is_expected.to receive(:run_command).with("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote").once
+
+      shell_out_object = double.tap { |shell_out_object| expect(shell_out_object).to receive(:error!) }
+      is_expected.to receive(:run_command).with("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote", live: true).once.and_return(shell_out_object)
 
       command.execute
     end
