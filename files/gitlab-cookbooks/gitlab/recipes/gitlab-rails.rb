@@ -268,6 +268,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
       pages_artifacts_server: node['gitlab']['gitlab-pages']['artifacts_server'],
+      pages_admin_https_cert: node['gitlab']['gitlab-pages']['admin_https_cert'],
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq']
@@ -313,6 +314,21 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
   dependent_services.each { |svc| notifies :restart, svc }
+end
+
+gitlab_pages_services = dependent_services
+gitlab_pages_services += ['service[gitlab-pages]'] if omnibus_helper.should_notify?('gitlab-pages')
+
+templatesymlink "Create a gitlab_pages_secret and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, ".gitlab_pages_secret")
+  link_to File.join(gitlab_rails_etc_dir, "gitlab_pages_secret")
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  sensitive true
+  variables(secret_token: node['gitlab']['gitlab-pages']['admin_secret_token'])
+  gitlab_pages_services.each { |svc| notifies :restart, svc }
 end
 
 rails_env = {

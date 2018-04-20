@@ -72,6 +72,9 @@ class SecretsHelper
         'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base'],
         'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key']
       },
+      'gitlab_pages' => {
+        'admin_secret_token' => Gitlab['gitlab_pages']['admin_secret_token']
+      },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
         'internal_certificate' => Gitlab['registry']['internal_certificate'],

@@ -19,6 +19,7 @@ account_helper = AccountHelper.new(node)
 working_dir = node['gitlab']['gitlab-pages']['dir']
 log_directory = node['gitlab']['gitlab-pages']['log_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
+admin_secret_path = "/var/opt/gitlab/gitlab-pages/admin.secret"
 
 [
   working_dir,
@@ -34,6 +35,15 @@ end
 
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
+  notifies :restart, "service[gitlab-pages]"
+end
+
+template admin_secret_path do
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(secret_token: node['gitlab']['gitlab-pages']['admin_secret_token'])
   notifies :restart, "service[gitlab-pages]"
 end
 
