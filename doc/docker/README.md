@@ -25,6 +25,8 @@ Docker installation is required, see the [official installation docs](https://do
 
 **Note:** Using a native Docker install instead of Docker Toolbox is recommended in order to use the persisted volumes
 
+**Warning:** We do not support running on Docker for windows. Please see our [getting help page](https://about.gitlab.com/getting-help/) for links to other resources.
+
 ## Run the image
 
 Run the image:
