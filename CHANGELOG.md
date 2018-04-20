@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Excludes source assets from gitlab-rails component.  #3238
 - Keep gitaly service running during package upgrades 034992fbc
 - Geo: Error when primary promotion fails
+- Add option to disable healthcheck for storagedriver in registry
 
 10.7.0
 
@@ -30,8 +31,6 @@ omnibus-gitlab repository.
 - Support Sidekiq log_format option
 - Render gitlab-shell log_format option
 - Support `direct_upload` for Artifacts and Uploads
-- Disable health check for storage driver
-- Add option to disable healthcheck for storagedriver in registry
 - Set proxy_http_version to ensure request buffering is disabled for GitLab Container Registry
 - Auto-enable Let's Encrypt certificate management when `external_url`
   is of the https protocol, we are terminating ssl with the embedded
