@@ -174,7 +174,17 @@ build do
   copy 'ee/db/geo/schema.rb', 'ee/db/geo/schema.rb.bundled' if EE
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
-  sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: ['.git', '.gitignore', 'spec', 'features', 'qa', 'rubocop']
+  sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(
+    .git
+    .gitignore
+    spec
+    features
+    qa
+    rubocop
+    app/assets
+    vendor/assets
+    ee/app/assets
+  )
 
   # This directory will be deleted after all the licenses copied to it are
   # handled by the DependencyInformation task of omnibus. It won't be part
