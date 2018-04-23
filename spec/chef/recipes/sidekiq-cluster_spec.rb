@@ -75,4 +75,31 @@ describe 'gitlab-ee::sidekiq-cluster' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run").with_content(/\-i 10/)
     end
   end
+
+  describe 'when specifying sidekiq.log_format' do
+    before do
+      stub_gitlab_rb(
+        sidekiq_cluster: {
+          enable: true,
+          queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+        }
+      )
+    end
+
+    context 'when default' do
+      it 'sets the svlogd -tt option' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/log/run")
+          .with_content(/svlogd -tt/)
+      end
+    end
+
+    context 'when json' do
+      before { stub_gitlab_rb(sidekiq: { log_format: 'json' }) }
+
+      it 'does not set the svlogd -tt option' do
+        expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq-cluster/log/run")
+          .with_content(/-tt/)
+      end
+    end
+  end
 end
