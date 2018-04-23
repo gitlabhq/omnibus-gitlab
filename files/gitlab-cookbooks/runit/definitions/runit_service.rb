@@ -75,6 +75,7 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       if params[:options].respond_to?(:has_key?)
         variables options: params[:options]
       end
+      notifies :create, "ruby_block[restart #{params[:name]} svlogd configuration]"
     end
 
     template File.join(params[:options][:log_directory], "config") do
@@ -90,6 +91,15 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
       block do
         File.open(File.join(sv_dir_name, "log/supervise/control"), "w") do |control|
           control.print "h"
+        end
+      end
+      action :nothing
+    end
+
+    ruby_block "restart #{params[:name]} svlogd configuration" do
+      block do
+        File.open(File.join(sv_dir_name, "log/supervise/control"), "w") do |control|
+          control.print "k"
         end
       end
       action :nothing

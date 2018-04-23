@@ -16,6 +16,7 @@ omnibus-gitlab repository.
 - Keep gitaly service running during package upgrades 034992fbc
 - Geo: Error when primary promotion fails
 - Add option to disable healthcheck for storagedriver in registry
+- Restart runsv when log directory is changed 0a784647b
 
 10.7.0
 
