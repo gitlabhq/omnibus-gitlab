@@ -13,6 +13,9 @@ omnibus-gitlab repository.
 - Bump openssl to 1.0.2o 1fe9f4ef2
 - Do not ship cached gem archives. #3235
 - Excludes source assets from gitlab-rails component.  #3238
+- Keep gitaly service running during package upgrades 034992fbc
+- Geo: Error when primary promotion fails
+- Add option to disable healthcheck for storagedriver in registry
 
 10.7.0
 

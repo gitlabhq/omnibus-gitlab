@@ -25,6 +25,7 @@ default['registry']['env_directory'] = "/opt/gitlab/etc/registry/env"
 default['registry']['env'] = {}
 default['registry']['log_level'] = "info"
 default['registry']['rootcertbundle'] = nil
+default['registry']['health_storagedriver_enabled'] = true
 default['registry']['storage_delete_enabled'] = nil
 default['registry']['storage'] = nil
 default['registry']['debug_addr'] = nil

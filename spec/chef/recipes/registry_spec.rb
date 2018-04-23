@@ -80,6 +80,16 @@ describe 'registry recipe' do
         .with_content(/addr: localhost:5000/)
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(/health:\s*storagedriver:\s*enabled:\s*true/)
+    end
+
+    context 'when registry storagedriver health check is disabled' do
+      before { stub_gitlab_rb(registry: { health_storagedriver_enabled: false }) }
+      it 'creates registry config with specified value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/health:\s*storagedriver:\s*enabled:\s*false/)
+      end
     end
 
     it 'creates a default VERSION file' do
