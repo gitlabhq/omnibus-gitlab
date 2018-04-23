@@ -20,13 +20,13 @@ release_jobs = output.select { |item| item['stage'] == stage }
 failed = []
 release_jobs.each do |job|
   begin
-    puts "Playing job: #{job['name']}"
-    post_uri = URI("https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/jobs/#{job['id']}/play")
+    post_uri = URI("https://dev.gitlab.org/api/v4/projects/#{ENV['CI_PROJECT_ID']}/jobs/#{job['id']}/play")
     post_req = Net::HTTP::Post.new(post_uri)
     post_req['PRIVATE-TOKEN'] = ENV['RELEASE_TRIGGER_TOKEN']
     post_http = Net::HTTP.new(post_uri.hostname, post_uri.port)
     post_http.use_ssl = true
     post_http.request(post_req)
+    puts "Played job: #{job['name']}"
   rescue StandardError
     failed << job['name']
     next
