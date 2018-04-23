@@ -21,6 +21,8 @@ omnibus-gitlab repository.
 - Restart runsv when log directory is changed 0a784647b
 - Bump rsync to 3.1.3 f539aa946
 - Patch bzip2 against CVE-2016-3189 552730bfa
+- Bump libxslt to 1.1.32 f584de1d7
+- Bump libxml2 to 2.9.8 e3a117275
 
 10.7.0
 
