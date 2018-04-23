@@ -20,7 +20,7 @@ stages:
   - notification_fail
 
 variables:
-  BUILDER_IMAGE_REVISION: "0.0.15"
+  BUILDER_IMAGE_REVISION: "0.0.17"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
 
