@@ -3,12 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.6.5 
+
+- Update Mattermost to 4.7.4
 
 10.6.4
 
 - Fixes an issue where unicorn and sidekiq services weren't being restarted after their configuration changed.
 
 10.6.2
+
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.
 - Fixed omnibus deprecations in PostgreSQL resources DSL
 
@@ -45,6 +49,22 @@ omnibus-gitlab repository.
 - Add `lfs_object_store_direct_upload` option
 - Render the gitlab-pages '-log-format' option
 - Workhorse: if logformat set to json, do not update timestamps with svlogd.
+
+10.5.8
+
+- Update Mattermost to 4.6.3
+
+10.5.7
+
+- No changes
+
+10.5.6
+
+- No changes
+
+10.5.5
+
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node 
 
 10.5.4
 
