@@ -30,6 +30,7 @@ module Prometheus
     def parse_variables
       parse_exporter_enabled
       parse_monitoring_enabled
+      parse_alertmanager_config
       parse_scrape_configs
       parse_flags
     end
@@ -47,6 +48,7 @@ module Prometheus
 
     def parse_flags
       parse_prometheus_flags
+      parse_alertmanager_flags
       parse_node_exporter_flags
       parse_postgres_exporter_flags
       parse_redis_exporter_flags
@@ -71,6 +73,24 @@ module Prometheus
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['prometheus']['flags'] = default_config['flags']
+    end
+
+    def parse_alertmanager_flags
+      default_config = Gitlab['node']['gitlab']['alertmanager'].to_hash
+      user_config = Gitlab['alertmanager']
+
+      home_directory = user_config['home'] || default_config['home']
+      listen_address = user_config['listen_address'] || default_config['listen_address']
+
+      default_config['flags'] = {
+        'web.listen-address' => listen_address,
+        'storage.path' => File.join(home_directory, 'data'),
+        'config.file' => File.join(home_directory, 'alertmanager.yml')
+      }
+
+      default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
+
+      Gitlab['alertmanager']['flags'] = default_config['flags']
     end
 
     def parse_node_exporter_flags
@@ -118,6 +138,39 @@ module Prometheus
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['postgres_exporter']['flags'] = default_config['flags']
+    end
+
+    def parse_alertmanager_config
+      user_config = Gitlab['alertmanager']
+      rails_config = Gitlab['gitlab_rails']
+
+      global = {}
+
+      if rails_config['smtp_enable']
+        global['smtp_from'] = rails_config['gitlab_email_from'] || 'unconfigured'
+        global['smtp_smarthost'] = "#{rails_config['smtp_address'] || 'unconfigured'}:#{rails_config['smtp_port'] || '25'}"
+        if %w(login plain).include?(rails_config['smtp_authentication'])
+          global['smtp_auth_username'] = rails_config['smtp_user_name']
+          global['smtp_auth_password'] = rails_config['smtp_password']
+        end
+      end
+
+      default_email_receiver = {
+        'name' => 'default-receiver',
+      }
+      default_email_receiver['email_configs'] = ['to' => user_config['admin_email']] unless user_config['admin_email'].nil?
+
+      default_inhibit_rules = [] << Gitlab['alertmanager']['inhibit_rules']
+      default_receivers = [] << default_email_receiver << Gitlab['alertmanager']['receivers']
+      default_routes = [] << Gitlab['alertmanager']['routes']
+      default_templates = [] << Gitlab['alertmanager']['templates']
+
+      Gitlab['alertmanager']['global'] = global
+      Gitlab['alertmanager']['inhibit_rules'] = default_inhibit_rules.compact.flatten
+      Gitlab['alertmanager']['receivers'] = default_receivers.compact.flatten
+      Gitlab['alertmanager']['routes'] = default_routes.compact.flatten
+      Gitlab['alertmanager']['templates'] = default_templates.compact.flatten
+      Gitlab['alertmanager']['default_receiver'] = user_config['default_receiver'] || 'default-receiver'
     end
 
     def parse_scrape_configs

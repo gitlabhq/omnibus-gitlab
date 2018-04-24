@@ -32,6 +32,7 @@ module Services
     service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role']
     service 'nginx',              groups: [DEFAULT_GROUP]
     service 'prometheus',         groups: [DEFAULT_GROUP, 'prometheus']
+    service 'alertmanager',       groups: [DEFAULT_GROUP, 'prometheus']
     service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'prometheus', 'postgres', 'postgres_role']
     service 'mailroom'
     service 'gitlab_pages'

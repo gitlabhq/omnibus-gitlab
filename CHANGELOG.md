@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Force kill unicorn process if it is still running after a TERM or INT signal
 - Upgrade Ruby version to 2.3.7
+- Add Prometheus Alertmanager
 - Bump git to 2.16.3
 - Bump curl to 7.59.0 aab088263
 - Bump pcre to 8.42 07c83a5ab

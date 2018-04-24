@@ -31,6 +31,9 @@ rb-readline:
 prometheus:
   remote: "git@dev.gitlab.org:omnibus-mirror/prometheus.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git"
+alertmanager:
+  remote: "git@dev.gitlab.org:omnibus-mirror/alertmanager.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/alertmanager.git"
 node-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/node_exporter.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/node_exporter.git"

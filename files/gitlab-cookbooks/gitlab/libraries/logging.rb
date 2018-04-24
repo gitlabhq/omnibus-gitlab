@@ -36,6 +36,7 @@ module Logging
       end
 
       %w(
+        alertmanager
         geo-logcursor
         geo-postgresql
         gitaly
