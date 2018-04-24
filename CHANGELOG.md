@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.5.8
+
+- Update Mattermost to 4.6.3
+
+10.5.7
+
+- No changes
+
+10.5.6
+
+- No changes
+
 10.5.5
 
 - Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
