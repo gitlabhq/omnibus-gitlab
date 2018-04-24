@@ -15,15 +15,15 @@
 #
 
 name 'rsync'
-default_version '3.1.2'
+default_version '3.1.3'
 
 license 'GPL v3'
 license_file 'COPYING'
 
 dependency 'popt'
 
-version '3.1.2' do
-  source md5: '0f758d7e000c0f7f7d3792610fad70cb'
+version '3.1.3' do
+  source md5: '1581a588fde9d89f6bc6201e8129afaf'
 end
 
 source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"
