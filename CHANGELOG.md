@@ -85,6 +85,17 @@ omnibus-gitlab repository.
 - Add `lfs_object_store_direct_upload` option
 - Render the gitlab-pages '-log-format' option
 - Workhorse: if logformat set to json, do not update timestamps with svlogd.
+10.5.8
+
+- Update Mattermost to 4.6.3
+
+10.5.7
+
+- No changes
+
+10.5.6
+
+- No changes
 
 10.5.5
 
