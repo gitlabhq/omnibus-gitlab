@@ -45,10 +45,16 @@ omnibus-gitlab repository.
 - Adds go-crond to the package #3251
 - Auto-renew LetsEncrypt with go-crond #3251
 
+10.6.5 
+
+- Update Mattermost to 4.7.4
 
 10.6.4
 
 - Fixes an issue where unicorn and sidekiq services weren't being restarted after their configuration changed.
+
+10.6.2
+
 - Geo: many fixes in FDW support, making it enabled by default in Secondary node.
 - Fixed omnibus deprecations in PostgreSQL resources DSL
 
@@ -100,6 +106,22 @@ omnibus-gitlab repository.
 10.5.5
 
 - Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
+
+10.5.8
+
+- Update Mattermost to 4.6.3
+
+10.5.7
+
+- No changes
+
+10.5.6
+
+- No changes
+
+10.5.5
+
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node 
 
 10.5.4
 
