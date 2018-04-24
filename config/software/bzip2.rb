@@ -44,6 +44,7 @@ build do
 
   patch source: 'makefile_take_env_vars.patch', env: env
   patch source: 'soname_install_dir.patch', env: env if mac_os_x?
+  patch source: 'CVE-2016-3189.patch', env: env
 
   make args.to_s, env: env
   make "#{args} -f Makefile-libbz2_so", env: env
