@@ -139,7 +139,9 @@ build do
   bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
 
   # Sync assets to S3 bucket if ASSET_SYNC_ENABLED env variable is set
-  bundle 'exec rake assets:sync', env: assets_compile_env if ENV['ASSET_SYNC_ENABLED'] == 'true'
+  # Disabled until we can use it in production. For details,
+  # check https://gitlab.com/gitlab-org/distribution/team-tasks/issues/90
+  # bundle 'exec rake assets:sync', env: assets_compile_env if ENV['ASSET_SYNC_ENABLED'] == 'true'
 
   # Move folders for caching. GitLab CI permits only relative path for Cache
   # and Artifacts. So we need these folder in the root directory.
