@@ -68,44 +68,36 @@ letsencrypt['enable'] = false
 
 ### Renewing
 
-There are two commands that can be used to renew your Let's Encrypt certificates.
+#### Automatic renewal
+> **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
 
-1. `gitlab-ctl reconfigure`
-1. `gitlab-ctl renew-le-certs`
+A scheduled task is set up by default for you to perform the renewal.
 
-Both commands require root privileges and will only perform a request to Let's Encrypt if the certificates are close to expiration date. Please consider [LE rate limits](https://letsencrypt.org/docs/rate-limits/) if you get an error during renewal.
+By default the renewal will be scheduled after midnight every 4th day. The minute is based on the hostname of your `external_url`, to distribute the load on the
+upstream Let's Encrypt servers. You can specify the minute explicitly using the `letsencrypt['auto_renew_minute']` setting.
 
-It is recommended to setup a scheduled task to run `gitlab-ctl renew-le-certs` to ensure your Let's Encrypt certificates stay up to date automatically.
-
-An example cron entry to check daily
-```sh
-0 0 * * * /opt/gitlab/bin/gitlab-ctl renew-le-certs > /dev/null
-```
-
-### Automatic renewal
-
-From 10.7 we will set a scheduled task up for you to do the renewal.
-
-Without configuration the renewal will be scheduled to be at a selected minute
-after midnight, every 4th day.   The minute is selected based on the hostname of
-your `external_url`, so not all gitlab instances will request renewals from the
-upstream letsencrypt servers at the same time.  You can specify the minute
-explicitly using the `letsencrypt['auto_renew_minute']` setting.
-
-For example, to specify the schedule we mentioned earlier you can add this to the
-`/etc/gitlab/gitlab.rb`:
+The renewal frequency can be configured by setting the desired schedule in `/etc/gitlab/gitlab.rb`. For example, every 7th day at 12:30 could be configured as below:
 
 ```ruby
-letsencrypt['auto_renew_minute'] = 0
-letsencrypt['auto_renew_day_of_month'] = "*"
+letsencrypt['auto_renew_hour'] = "12"
+letsencrypt['auto_renew_minute'] = "30"
+letsencrypt['auto_renew_day_of_month'] = "*/7"
 ```
 
-To disable the auto-renewing by omnibus-gitlab you can add the following to your
-`/etc/gitlab/gitlab.rb`:
+To disable auto-renewal add the following to `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 letsencrypt['auto_renew'] = false
 ```
+
+#### Manual renewal
+
+There are two commands that can be used to manually renew your Let's Encrypt certificates.
+
+1. `gitlab-ctl reconfigure`
+1. `gitlab-ctl renew-le-certs`
+
+Both commands require root privileges and will only generate a renewal request to Let's Encrypt if the certificates are close to the expiration date. Please consider [LE rate limits](https://letsencrypt.org/docs/rate-limits/) if you get an error during renewal.
 
 ## Troubleshooting
 
