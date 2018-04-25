@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Keep gitaly service running during package upgrades 034992fbc
 - Geo: Error when primary promotion fails
 - Add option to disable healthcheck for storagedriver in registry
+- Enable gzip by default
 - Restart runsv when log directory is changed 0a784647b
 - Bump rsync to 3.1.3 f539aa946
 - Patch bzip2 against CVE-2016-3189 552730bfa
