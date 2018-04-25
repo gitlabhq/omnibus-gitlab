@@ -33,6 +33,10 @@ admin_secret_path = File.join(working_dir, "admin.secret")
   end
 end
 
+ruby_block "authorize pages with gitlab" do
+  GitlabPages.authorize_with_gitlab
+end
+
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
   notifies :restart, "service[gitlab-pages]"

@@ -15,8 +15,14 @@
 # limitations under the License.
 #
 
+require_relative '../../gitlab/libraries/helpers/authorizer_helper'
+require_relative '../../package/libraries/helpers/shell_out_helper'
+
 module GitlabPages
   class << self
+    include ShellOutHelper
+    include AuthorizeHelper
+
     def parse_variables
       parse_pages_external_url
       parse_gitlab_pages_daemon
@@ -73,6 +79,31 @@ module GitlabPages
 
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['external_url'].chomp('/') + '/api/v4'
+
+      Gitlab['gitlab_pages']['auth_redirect_uri'] = Gitlab['pages_external_url'].to_s.chomp('/') + '/auth'
+      Gitlab['gitlab_pages']['auth_server'] = Gitlab['external_url']
+    end
+
+    def parse_secrets
+      Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64)
+    end
+
+    def authorize_with_gitlab
+      redirect_uri = "#{Gitlab['pages_external_url'].to_s.chomp('/')}/auth"
+      app_name = 'GitLab Pages'
+
+      o = query_gitlab_rails(redirect_uri, app_name)
+      if o.exitstatus.zero?
+        app_id, app_secret = o.stdout.chomp.split(" ")
+
+        Gitlab['gitlab_pages']['gitlab_secret'] = app_secret
+        Gitlab['gitlab_pages']['gitlab_id'] = app_id
+
+        SecretsHelper.write_to_gitlab_secrets
+        info('Updated the gitlab-secrets.json file.')
+      else
+        warn('Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.')
+      end
     end
 
     def parse_secrets
