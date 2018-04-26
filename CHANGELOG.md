@@ -55,6 +55,7 @@ omnibus-gitlab repository.
 10.6.4
 
 - Fixes an issue where unicorn and sidekiq services weren't being restarted after their configuration changed.
+- Added missing Mattermost settings to gitlab.rb
 
 10.6.2
 
