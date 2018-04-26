@@ -1159,6 +1159,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_session_length_mobile_in_days'] = 30
 # mattermost['service_session_length_sso_in_days'] = 30
 # mattermost['service_session_cache_in_minutes'] = 10
+# mattermost['service_session_idle_timeout_in_minutes'] = 0
+# mattermost['service_websocket_secure_port'] = 443
+# mattermost['service_websocket_port'] = 80
+# mattermost['service_webserver_mode'] = 'gzip'
 # mattermost['service_connection_security'] = nil
 # mattermost['service_tls_cert_file'] = nil
 # mattermost['service_tls_key_file'] = nil
@@ -1190,9 +1194,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['team_allow_public_link'] = true
 # mattermost['team_allow_valet_default'] = false
 # mattermost['team_restrict_creation_to_domains'] = "gmail.com"
-# mattermost['team_restrict_team_names'] = true
 # mattermost['team_restrict_direct_message'] = "any"
 # mattermost['team_max_channels_per_team'] = 2000
+# mattermost['team_max_notifications_per_channel'] = 1000
 # mattermost['team_enable_x_to_leave_channels_from_lhs'] = false
 # mattermost['team_user_status_away_timeout'] = 300
 # mattermost['team_enable_confirm_notifications_to_channel'] = true
@@ -1262,9 +1266,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['file_amazon_s3_secret_access_key'] = nil
 # mattermost['file_amazon_s3_region'] = nil
 # mattermost["file_amazon_s3_endpoint"] = nil
-# mattermost["file_amazon_s3_bucket_endpoint"] = nil
-# mattermost["file_amazon_s3_location_constraint"] = false
-# mattermost["file_amazon_s3_lowercase_bucket"] = false
 # mattermost["file_amazon_s3_ssl"] = true
 # mattermost["file_amazon_s3_sign_v2"] = false
 # mattermost['file_enable_file_attachments'] = true
@@ -1300,6 +1301,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['webrtc_gateway_turn_uri'] = nil
 # mattermost['webrtc_gateway_turn_username'] = nil
 # mattermost['webrtc_gateway_turn_shared_key'] = nil
+
+# mattermost['native_app_app_download_link'] = "https://about.mattermost.com/downloads/"
+# mattermost['native_app_android_app_download_link'] = "https://about.mattermost.com/mattermost-android-app/"
+# mattermost['native_app_ios_app_download_link'] = "https://about.mattermost.com/mattermost-ios-app/"
 
 # mattermost['job_run_jobs'] = true
 # mattermost['job_run_scheduler'] = true
