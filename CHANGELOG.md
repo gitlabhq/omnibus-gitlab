@@ -23,6 +23,18 @@ omnibus-gitlab repository.
 - Bump rsync to 3.1.3 f539aa946
 - Patch bzip2 against CVE-2016-3189 552730bfa
 
+10.7.3
+
+- Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
+
+10.7.2
+
+- No changes
+
+10.7.1
+
+- No changes
+
 10.7.0
 
 - Geo: Increase default WAL standby settings from 30s to 60s
