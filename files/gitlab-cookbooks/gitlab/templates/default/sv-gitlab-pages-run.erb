@@ -31,6 +31,7 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% end %>
     -daemon-uid="$(id -u "<%= node['gitlab']['user']['username'] %>")" \
     -daemon-gid="$(id -g "<%= node['gitlab']['user']['username'] %>")" \
+    -daemon-inplace-chroot=<%= !!node['gitlab']['gitlab-pages']['inplace_chroot'] %> \
     \
     -pages-domain="<%= node['gitlab']['gitlab-pages']['domain'] %>" \
     -pages-root="<%= node['gitlab']['gitlab-pages']['pages_root'] %>" \
