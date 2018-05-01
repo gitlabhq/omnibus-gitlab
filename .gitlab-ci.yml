@@ -294,7 +294,7 @@ before_script:
 rubocop:
   stage: check
   <<: *dedicated-runner
-  image: ruby:2.3.3
+  image: ruby:2.3
   before_script:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
