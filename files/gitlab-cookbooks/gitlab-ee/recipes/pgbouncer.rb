@@ -63,8 +63,6 @@ file 'databases.json' do
   notifies :run, 'execute[generate databases.ini]', :immediately
 end
 
-ini_user = node['gitlab']['postgresql']['pgbouncer_user'] || node['gitlab']['pgbouncer']['databases_ini_user']
-
 execute 'generate databases.ini' do
   command lazy {
     <<~EOF
@@ -74,7 +72,7 @@ execute 'generate databases.ini' do
      --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
      --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
      --pg-port #{node['gitlab']['pgbouncer']['listen_port']} \
-     --user #{ini_user}
+     --user #{node['gitlab']['postgresql']['pgbouncer_user']}
     EOF
   }
   action :nothing
