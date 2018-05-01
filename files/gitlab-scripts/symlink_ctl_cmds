@@ -1,15 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Symlink the ctl commands
 DEST_DIR=${1:-/opt/gitlab}
 
-usr_bin_symlinks="\
-  ${DEST_DIR}/bin/gitlab-ctl \
-  ${DEST_DIR}/bin/gitlab-rake \
-  ${DEST_DIR}/bin/gitlab-rails \
-  ${DEST_DIR}/bin/gitlab-psql \
-"
-symlink_command="ln -sf ${usr_bin_symlinks} /usr/bin/"
+usr_bin_symlinks=(
+  "${DEST_DIR}/bin/gitlab-ctl"
+  "${DEST_DIR}/bin/gitlab-rake"
+  "${DEST_DIR}/bin/gitlab-rails"
+  "${DEST_DIR}/bin/gitlab-psql"
+  "${DEST_DIR}/bin/gitlab-geo-psql"
+)
 
 error_exit()
 {
@@ -19,7 +19,12 @@ error_exit()
 
 create_symlinks()
 {
-  ${symlink_command} || error_exit "Failed to create symlinks in /usr/bin"
+  for symlink in "${usr_bin_symlinks[@]}"
+  do
+    if [ -f $symlink ]; then
+      ln -sf $symlink /usr/bin || error_exit "Failed to create symlinks in /usr/bin"
+    fi
+  done
 }
 
 create_symlinks
