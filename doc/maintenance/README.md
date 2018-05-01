@@ -110,6 +110,17 @@ could not change directory to "/root"
 
 This is normal behavior and it can be ignored.
 
+#### Starting a Postgres superuser psql session in Geo tracking database
+
+Similar to the previous command, if you need superuser access to the bundled
+Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
+It takes the same arguments as the regular `psql` command.
+
+```shell
+# Superuser psql access to GitLab's Geo tracking database
+sudo gitlab-geo-psql -d gitlabhq_geo_production
+```
+
 ### Container registry garbage collection
 
 Container registry can use considerable amounts of disk space. To clear up
