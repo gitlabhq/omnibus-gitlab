@@ -25,6 +25,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.example.com/api/v4"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=10})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=false})
 
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
@@ -54,6 +55,7 @@ describe 'gitlab::gitlab-pages' do
           artifacts_server_url: "https://gitlab.elsewhere.com/api/v5",
           artifacts_server_timeout: 60,
           status_uri: '/@status',
+          inplace_chroot: true,
           log_format: 'json'
         }
       )
@@ -77,6 +79,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.elsewhere.com/api/v5"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-status="/@status"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=true})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format="json"})
     end
 

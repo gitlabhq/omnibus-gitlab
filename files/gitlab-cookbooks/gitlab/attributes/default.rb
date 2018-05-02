@@ -579,6 +579,7 @@ default['gitlab']['gitlab-pages']['log_format'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server'] = true
 default['gitlab']['gitlab-pages']['artifacts_server_url'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server_timeout'] = 10
+default['gitlab']['gitlab-pages']['inplace_chroot'] = false
 
 ####
 # Nginx
