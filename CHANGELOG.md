@@ -23,6 +23,7 @@ omnibus-gitlab repository.
 - Bump rsync to 3.1.3 f539aa946
 - Patch bzip2 against CVE-2016-3189 552730bfa
 - Fix pgbouncer recipe to use the correct user for standalone instances
+- Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
 
 10.7.3
 
