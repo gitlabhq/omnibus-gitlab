@@ -106,10 +106,10 @@
       "spec": {
         "tags": [
           {
-            "name": "gitlab-10.7.0",
+            "name": "gitlab-10.7.2",
             "from": {
               "kind": "DockerImage",
-              "name": "gitlab/gitlab-ce:10.7.0-ce.0"
+              "name": "gitlab/gitlab-ce:10.7.2-ce.0"
             }
           }
         ]
@@ -171,7 +171,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${APPLICATION_NAME}:gitlab-10.7.0"
+                "name": "${APPLICATION_NAME}:gitlab-10.7.2"
               }
             }
           }
