@@ -97,6 +97,20 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 1
   end
 
+  # The current instance needs to be running, start it if it isn't
+  unless @db_worker.running?
+    log 'Starting the database'
+
+    begin
+      @db_worker.start
+    rescue Mixlib::ShellOut::ShellCommandFailed => scf
+      log "Error starting the database. Please fix the error before continuing"
+      log "STDOUT: #{scf.stdout}"
+      log "STDERR: #{scf.stderr}"
+      Kernel.exit 1
+    end
+  end
+
   # All tests have passed, this should be an upgradable instance.
   maintenance_mode('enable')
 
