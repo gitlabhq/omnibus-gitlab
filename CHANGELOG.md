@@ -24,6 +24,18 @@ omnibus-gitlab repository.
 - Patch bzip2 against CVE-2016-3189 552730bfa
 - Fix pgbouncer recipe to use the correct user for standalone instances
 
+10.7.3
+
+- Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
+
+10.7.2
+
+- No changes
+
+10.7.1
+
+- No changes
+
 10.7.0
 
 - Geo: Increase default WAL standby settings from 30s to 60s
