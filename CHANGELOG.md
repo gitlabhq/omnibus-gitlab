@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.8.0
+
+- Force kill unicorn process if it is still running after a TERM or INT signal
+- Upgrade Ruby version to 2.3.7
+- Update gitlab-monitor to 2.13.0
+- Add Prometheus Alertmanager
+- Bump git to 2.16.3
+- Bump curl to 7.59.0 aab088263
+- Bump pcre to 8.42 07c83a5ab
+- Bump rubygems to 2.6.14 84b2510fd
+- Bump openssl to 1.0.2o 1fe9f4ef2
+- Do not ship cached gem archives. #3235
+- Excludes source assets from gitlab-rails component.  #3238
+- Keep gitaly service running during package upgrades 034992fbc
+- Geo: Error when primary promotion fails
+- Add option to disable healthcheck for storagedriver in registry
+- Restart runsv when log directory is changed 0a784647b
+- Bump rsync to 3.1.3 f539aa946
+- Patch bzip2 against CVE-2016-3189 552730bfa
+- Fix pgbouncer recipe to use the correct user for standalone instances
+
+10.7.3
+
+- Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
+
+10.7.2
+
+- No changes
+
+10.7.1
+
+- No changes
+
 10.7.0
 - Geo: Increase default WAL standby settings from 30s to 60s
 - Geo: Add support for creating a user for the  pgbouncer on the Geo DB
