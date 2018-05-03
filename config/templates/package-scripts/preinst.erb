@@ -2,11 +2,45 @@
 # GitLab pre-install script
 
 DEST_DIR=<%= install_dir %>
+NEW_MAJOR_VERSION=<%= build_version.split(".")[0] %>
 
 mkdir -p /var/log/gitlab/reconfigure
 
 skip_migrations_file=/etc/gitlab/skip-auto-migrations
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
+
+upgrade_check() {
+  if [ -e "${DEST_DIR}/version-manifest.json" ] ; then
+    OLD_VERSION_STRING=$(grep -i "build_version" ${DEST_DIR}/version-manifest.json | awk -F ': ' '{print $2}' | tr -d '",')
+
+    # Getting the Major and Major.Minor format of existing version string
+    OLD_MAJOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1}')
+    OLD_MINOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1"."$2}')
+
+    # Minimum version from which jumps are permitted to current version. This
+    # points to the last minor version from previous series.
+    MIN_VERSION=9.5
+
+    # Checking
+    # (i) if it is a major version jump
+    # (ii) if existing version is less than required minimum version
+    if test ${OLD_MAJOR_VERSION} -lt ${NEW_MAJOR_VERSION}; then
+      if ! $(echo ${OLD_MINOR_VERSION} | awk -v MIN_VERSION="$MIN_VERSION" '$NF+0 < MIN_VERSION {exit 1}'); then
+        notify "It seems you are upgrading from ${OLD_MAJOR_VERSION}.x version series"
+        notify "to ${NEW_MAJOR_VERSION}.x series. It is recommended to upgrade"
+        notify "to the last minor version in a major version series first before"
+        notify "jumping to the next major version."
+        notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
+        notify "and upgrade to ${MIN_VERSION} first."
+        if [ -n "${FORCE_UPGRADE}" ] && [ ${FORCE_UPGRADE} = "true" ] ; then
+          notify "Detected FORCE_UPGRADE variable. Forcing upgrade anyway."
+        else
+          exit 1
+        fi
+      fi
+    fi
+  fi
+}
 
 pg_check() {
   PG_MIN_VERSION=9.6
@@ -66,11 +100,13 @@ fi
 case "$1" in
   2)
     # Looks like an RPM upgrade
+    upgrade_check
     pg_check
     main
     ;;
   upgrade)
     # Looks like a DEB upgrade
+    upgrade_check
     pg_check
     main
     ;;

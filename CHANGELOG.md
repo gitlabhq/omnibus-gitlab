@@ -25,6 +25,7 @@ omnibus-gitlab repository.
 - Fix pgbouncer recipe to use the correct user for standalone instances
 - Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
 - Make pg-upgrade start the bundled postgresql server if it isn't already running
+- Enforce upgrade paths for package upgrades 56a250b1a
 
 10.7.3
 
