@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Patch bzip2 against CVE-2016-3189 552730bfa
 - Fix pgbouncer recipe to use the correct user for standalone instances
 - Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
+- Enforce upgrade paths for package upgrades 56a250b1a
 
 10.7.3
 
