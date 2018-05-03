@@ -105,8 +105,7 @@ add_command_under_category 'pg-upgrade', 'database',
       @db_worker.start
     rescue Mixlib::ShellOut::ShellCommandFailed => scf
       log "Error starting the database. Please fix the error before continuing"
-      log "STDOUT: #{scf.stdout}"
-      log "STDERR: #{scf.stderr}"
+      log scf.message
       Kernel.exit 1
     end
   end
