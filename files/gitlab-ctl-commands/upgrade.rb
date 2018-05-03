@@ -59,6 +59,13 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     run_sv_command_for_service('stop', sv_name)
   end
 
+  log 'Ensuring the required services are running'
+  MIGRATION_SERVICES.each do |sv_name|
+    # If the service is disabled, e.g. because we are using an external
+    # Postgres server, or it is already running, then this command is a no-op.
+    run_sv_command_for_service('start', sv_name)
+  end
+
   # in case of downgrades, it might be necessary to remove the redis dump
   redis_dump = '/var/opt/gitlab/redis/dump.rdb'
   try_redis_restart = File.exist? redis_dump
