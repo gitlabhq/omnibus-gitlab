@@ -28,7 +28,7 @@ the above commands.
 
 From version 10.8 onwards, upgrade paths are enforced for package upgrades by
 default. This restricts performing direct upgrades that skip major versions (for
-example 6.3 to 10.7 in one jump) which can result in breakage of the GItLab
+example 6.3 to 10.7 in one jump) which can result in breakage of the GitLab
 installations due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
 the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
