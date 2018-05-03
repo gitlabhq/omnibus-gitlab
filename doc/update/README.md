@@ -27,7 +27,7 @@ If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in
 the above commands.
 
 From version 10.8 onwards, upgrade paths are enforced for package upgrades by
-default. This restricts performing direct upgrades skipping major versions (for
+default. This restricts performing direct upgrades that skip major versions (for
 example 6.3 to 10.7 in one jump) which can result in breakage of the GItLab
 installations due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
