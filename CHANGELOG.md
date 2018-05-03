@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Restart runsv when log directory is changed 0a784647b
 - Bump rsync to 3.1.3 f539aa946
 - Patch bzip2 against CVE-2016-3189 552730bfa
+- Update Mattermost to 4.9.1
 
 10.7.0
 
