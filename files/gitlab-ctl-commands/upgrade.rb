@@ -54,15 +54,9 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   log 'Shutting down all GitLab services except those needed for migrations'
-  get_all_services.each do |sv_name|
-    run_sv_command_for_service('stop', sv_name)
-  end
-
   MIGRATION_SERVICES = %w(postgresql redis geo-postgresql gitaly).freeze
-  MIGRATION_SERVICES.each do |sv_name|
-    # If the service is disabled, e.g. because we are using an external
-    # Postgres server, then this command is a no-op.
-    run_sv_command_for_service('start', sv_name)
+  (get_all_services - MIGRATION_SERVICES).each do |sv_name|
+    run_sv_command_for_service('stop', sv_name)
   end
 
   # in case of downgrades, it might be necessary to remove the redis dump
