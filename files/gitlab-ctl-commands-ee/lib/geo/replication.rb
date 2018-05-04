@@ -89,7 +89,7 @@ module Geo
       run_command(pg_basebackup_command,
                   live: true, timeout: @options[:backup_timeout])
 
-      puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]}".color(:green)
+      puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]} and sslcompression=#{@options[:sslcompression]}".color(:green)
       create_recovery_file!
 
       puts '* Restoring postgresql.conf'.color(:green)
@@ -137,7 +137,7 @@ module Geo
       File.open(recovery_file, 'w', 0640) do |file|
         file.write(<<~EOF
           standby_mode = 'on'
-          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]}'
+          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]} sslcompression=#{@options[:sslcompression]}'
         EOF
                   )
         file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
