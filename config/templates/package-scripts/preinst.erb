@@ -32,11 +32,7 @@ upgrade_check() {
         notify "jumping to the next major version."
         notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
         notify "and upgrade to ${MIN_VERSION} first."
-        if [ -n "${FORCE_UPGRADE}" ] && [ ${FORCE_UPGRADE} = "true" ] ; then
-          notify "Detected FORCE_UPGRADE variable. Forcing upgrade anyway."
-        else
-          exit 1
-        fi
+        exit 1
       fi
     fi
   fi
