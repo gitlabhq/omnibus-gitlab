@@ -6,6 +6,16 @@ This document will help you update Omnibus GitLab.
 
 Please make sure you are viewing this file on the master branch.
 
+## Mandatory upgrade paths for version upgrades
+
+From version 10.8 onwards, upgrade paths are enforced for version upgrades by
+default. This restricts performing direct upgrades that skip major versions (for
+example 10.3 to 12.7 in one jump) which can result in breakage of the GitLab
+installations due to multiple reasons like deprecated or removed configuration
+settings, upgrade of internal tools and libraries etc. Users will have to follow
+the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+while upgrading their GitLab instances.
+
 ## Updating using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/downloads)
@@ -49,27 +59,6 @@ download the package and install it manually.
 
     If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
     in the above commands.
-
-## Mandatory upgrade paths for version upgrades
-
-From version 10.8 onwards, upgrade paths are enforced for version upgrades by
-default. This restricts performing direct upgrades that skip major versions (for
-example 10.3 to 12.7 in one jump) which can result in breakage of the GitLab
-installations due to multiple reasons like deprecated or removed configuration
-settings, upgrade of internal tools and libraries etc. Users will have to follow
-the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
-while upgrading their GitLab instances.
-
-This restriction can be overridden by using `FORCE_UPGRADE` environment
-variable. However, users are warned to use it on their own risk.
-
-```
-# Debian/Ubuntu
-$ sudo FORCE_UPGRADE=true apt-get install gitlab-ce
-
-# CentOS/RHEL
-$ sudo FORCE_UPGRADE=true yum install gitlab-ce
-```
 
 ## From Community Edition to Enterprise Edition
 
