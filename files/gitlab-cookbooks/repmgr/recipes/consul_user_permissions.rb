@@ -18,7 +18,7 @@ pg_helper = PgHelper.new(node)
 repmgr_db = node['repmgr']['database']
 
 postgresql_user account_helper.consul_user do
-  notifies :run, "execute[grant read only access to repmgr]", :immediately
+  notifies :run, "execute[grant read only access to repmgr]"
   only_if { pg_helper.is_running? && !pg_helper.user_exists?(account_helper.consul_user) }
   subscribes :create, "postgresql_datbase[#{node['repmgr']['database']}]", :immediately
 end
@@ -27,7 +27,7 @@ select_query = %(GRANT SELECT, DELETE ON ALL TABLES IN SCHEMA repmgr_#{node['rep
 usage_query = %(GRANT USAGE ON SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
 
 execute "grant read only access to repmgr" do
-  command %(gitlab-psql gitlab_repmgr -c '#{select_query}; #{usage_query};')
+  command %(gitlab-psql -d gitlab_repmgr -c '#{select_query}; #{usage_query};')
   user account_helper.postgresql_user
   only_if { pg_helper.is_running? && pg_helper.database_exists?(repmgr_db) }
   action :nothing
