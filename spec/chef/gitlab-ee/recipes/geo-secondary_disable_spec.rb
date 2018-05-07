@@ -12,7 +12,8 @@ describe 'gitlab-ee::geo-secondary_disable' do
 
     it 'removes database_geo.yml symlink' do
       expect(chef_run).to delete_templatesymlink('Removes database_geo.yml symlink')
-                            .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml')
+                            .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
+                                  link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
     end
   end
 end

@@ -55,7 +55,7 @@ action :delete do
     action :delete
   end
 
-  link new_resource.link_to do
+  link new_resource.link_from do
     action :delete
   end
 end
