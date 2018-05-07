@@ -170,10 +170,10 @@ function quit_old_unicorn_if_running
 {
   local old_unicorn_pid=$(cat oldbin_pidfile 2>/dev/null)
 
-  if ! [[ (alive ${old_unicorn_pid}) && (alive ${unicorn_pid}) ]]; then
+  if ! (alive ${old_unicorn_pid}) && (alive ${unicorn_pid}); then
     echo "Waiting for new unicorn to reexec..."
     sleep ${unicorn_wait_reexec}
-  done
+  fi
 
   # At this point, the new unicorn should be alive. It could be that the
   # old unicorn died anyway, so let's not keep waiting.
