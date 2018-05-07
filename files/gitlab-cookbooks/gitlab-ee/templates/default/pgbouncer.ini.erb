@@ -29,7 +29,10 @@
 <% if @logfile %>
 logfile = <%= @logfile %>
 <% end %>
-pidfile = <%= @data_directory %>/pgbouncer.pid
+
+<% if @pidfile %>
+pidfile = <%= @pidfile %>
+<% end %>
 
 ;;;
 ;;; Where to wait for clients

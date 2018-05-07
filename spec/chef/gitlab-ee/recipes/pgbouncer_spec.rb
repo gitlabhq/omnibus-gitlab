@@ -65,7 +65,6 @@ describe 'gitlab-ee::pgbouncer' do
       # Default values are pulled from:
       # https://github.com/pgbouncer/pgbouncer/blob/6ef66f0139b9c8a5c0747f2a6157d008b87bf0c5/etc/pgbouncer.ini
       expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
-        expect(content).to match(%r{^pidfile = /var/opt/gitlab/pgbouncer/pgbouncer\.pid$})
         expect(content).to match(/^listen_addr = 0\.0\.0\.0$/)
         expect(content).to match(/^listen_port = 6432$/)
         expect(content).to match(/^pool_mode = transaction$/)
@@ -89,6 +88,8 @@ describe 'gitlab-ee::pgbouncer' do
         expect(content).to match(/^ignore_startup_parameters = extra_float_digits$/)
         expect(content).to match(%r{^unix_socket_dir = /var/opt/gitlab/pgbouncer$})
         expect(content).to match(%r{^%include /var/opt/gitlab/pgbouncer/databases.ini})
+        expect(content).not_to match(/^logfile =/)
+        expect(content).not_to match(/^pidfile =/)
       }
     end
 
@@ -104,6 +105,17 @@ describe 'gitlab-ee::pgbouncer' do
         )
         expect(chef_run).to render_file(pgbouncer_ini)
           .with_content(%r{^unix_socket_dir = /fake/dir$})
+      end
+
+      it 'stores the pid file' do
+        stub_gitlab_rb(
+          pgbouncer: {
+            enable: true,
+            pidfile: '/tmp/pidfile.txt'
+          }
+        )
+        expect(chef_run).to render_file(pgbouncer_ini)
+          .with_content(%r{^pidfile = /tmp/pidfile.txt$})
       end
 
       it 'reloads pgbouncer and starts pgbouncer if it is not running' do

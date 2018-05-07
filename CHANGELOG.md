@@ -35,6 +35,7 @@ omnibus-gitlab repository.
 
 - Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
 - Only create gitlab-consul database user after repmgr database has been created
+- Disable PgBouncer PID file by default
 
 10.7.3
 
