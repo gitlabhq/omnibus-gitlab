@@ -5,6 +5,7 @@ See our page on [Upgrade Recommendations](https://docs.gitlab.com/ee/policy/main
 See our page on upgrading from a non-Omnibus installation [to an Omnibus installation](convert-to-omnibus.md)
 
 ## Updating methods
+
 ### Updating using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/installation/?version=ce#)
@@ -196,8 +197,8 @@ If you meet all the requirements above, follow these instructions:
 1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node`
    to run post-deployment migrations.
 
-
 ## Version specific changes
+
 ### GitLab 10
 
 From version 10.0 GitLab requires the version of PostgreSQL to be 9.6 or
@@ -369,7 +370,6 @@ sudo gitlab-ctl start
 
 Done!
 
-
 ## Downgrading
 
 This section contains general information on how to revert to an earlier version of a package.
@@ -390,7 +390,6 @@ See example below:
 First download a GitLab 6.x.x [CE](https://www.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
-
 
 ### Stop GitLab
 
@@ -490,6 +489,3 @@ You can override this version check with the `--oldpackage` option:
 ```
 rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
-
-
-============================================================================
