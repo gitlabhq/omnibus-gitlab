@@ -41,6 +41,7 @@ readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
 readonly unicorn_kill_timeout=5 # time on seconds
 readonly unicorn_wait_reexec=5 # time on seconds
+readonly unicorn_wait_old_pid=60 # time on seconds
 
 function main
 {
@@ -168,23 +169,46 @@ function kill_unicorn_if_running
 
 function quit_old_unicorn_if_running
 {
-  local old_unicorn_pid=$(cat oldbin_pidfile 2>/dev/null)
+  local old_unicorn_pid=$(cat $oldbin_pidfile 2>/dev/null)
+  counter=0
 
-  if ! (alive ${old_unicorn_pid}) && (alive ${unicorn_pid}); then
-    echo "Waiting for new unicorn to reexec..."
-    sleep ${unicorn_wait_reexec}
+  while [ ! -f ${oldbin_pidfile} ]; do
+    sleep 1
+    old_unicorn_pid=$(cat $oldbin_pidfile 2>/dev/null)
+    let counter++
+
+    if [[ $counter -gt ${unicorn_wait_old_pid} ]]; then
+      break
+    fi
+  done
+
+  if [ ! -f ${oldbin_pidfile} ]; then
+    echo "No old PID found..."
+    return 1
   fi
+
+  counter=0
+
+  while ! (alive ${old_unicorn_pid}) && (alive ${unicorn_pid}); do
+    echo "Waiting for new unicorn to reexec..."
+    let counter++
+    sleep 1
+
+    if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
+      break
+    fi
+  done
 
   # At this point, the new unicorn should be alive. It could be that the
   # old unicorn died anyway, so let's not keep waiting.
-  if alive ${old_unicorn_pid} && is_unicorn ${old_unicorn_pid}; then
+  if alive ${old_unicorn_pid}; then
     echo "Sending QUIT signal to old unicorn..."
     kill -QUIT ${old_unicorn_pid}
   fi
 
   counter=0
 
-  while (alive ${old_unicorn_pid}) && [[ $counter -lt ${unicorn_kill_timeout} ]]; do
+  while (alive ${old_unicorn_pid}) && [[ $counter -lt ${unicorn_wait_reexec} ]]; do
     echo "Waiting for old unicorn to die..."
     let counter++
     sleep ${unicorn_poll_alive}
