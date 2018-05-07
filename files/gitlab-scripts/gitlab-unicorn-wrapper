@@ -121,7 +121,7 @@ function trap_signals
 
   # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
   # To allow for reloading unicorn from the command line, translate HUP to
-  # USR2.
+  # USR2, then QUIT the old unicorn.
   trap "echo 'wrapper received HUP'; forward_usr2_and_quit_old_unicorn" HUP
 }
 
