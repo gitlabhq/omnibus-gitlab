@@ -143,7 +143,6 @@ function forward_usr2_and_quit_old_unicorn
   quit_old_unicorn_if_running
 }
 
-
 function wait_for_unicorn_to_exit
 {
   while sleep ${unicorn_poll_alive}; do
@@ -178,7 +177,6 @@ function quit_old_unicorn_if_running
 
   # At this point, the new unicorn should be alive. It could be that the
   # old unicorn died anyway, so let's not keep waiting.
-
   if alive ${old_unicorn_pid} && is_unicorn ${old_unicorn_pid}; then
     echo "Sending QUIT signal to old unicorn..."
     kill -QUIT ${old_unicorn_pid}
