@@ -15,6 +15,13 @@
 #
 
 name 'rsync'
+
+# This version is affected by CVE-2017-16548. However, rsync is not directly
+# used by GitLab codebase. It is provided to be used in two manual tasks -
+# backup/restore rake task and wrapper script for moving repositories to a new
+# location. Since the scope of this vulnerability is limited, we decided to
+# wait for next release of rsync rather than patching it. For details, check
+# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3391
 default_version '3.1.3'
 
 license 'GPL v3'
