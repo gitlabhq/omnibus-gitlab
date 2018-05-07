@@ -20,6 +20,7 @@ repmgr_db = node['repmgr']['database']
 postgresql_user account_helper.consul_user do
   notifies :run, "execute[grant read only access to repmgr]", :immediately
   only_if { pg_helper.is_running? && !pg_helper.user_exists?(account_helper.consul_user) }
+  subscribes :create, "postgresql_datbase[#{node['repmgr']['database']}]", :immediately
 end
 
 select_query = %(GRANT SELECT, DELETE ON ALL TABLES IN SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
