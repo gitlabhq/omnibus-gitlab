@@ -159,7 +159,6 @@ witness_repl_nodes_sync_interval_secs=15
         end
 
         it 'includes the consul_user_permissions recipe if the postgresql service is enabled' do
-
           stub_gitlab_rb(
             consul: {
               enable: true,
@@ -169,7 +168,6 @@ witness_repl_nodes_sync_interval_secs=15
 
           expect(chef_run).to include_recipe('repmgr::consul_user_permissions')
         end
-
       end
     end
 
