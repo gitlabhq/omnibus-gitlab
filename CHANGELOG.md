@@ -39,6 +39,8 @@ omnibus-gitlab repository.
 10.7.1
 
 - No changes
+- Bump libxslt to 1.1.32 f584de1d7
+- Bump libxml2 to 2.9.8 e3a117275
 
 10.7.0
 
