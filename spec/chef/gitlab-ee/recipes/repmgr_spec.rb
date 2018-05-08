@@ -158,15 +158,18 @@ witness_repl_nodes_sync_interval_secs=15
           expect(chef_run).not_to include_recipe('repmgr::consul_user')
         end
 
-        it 'includes the consul_user recipe if the postgresql service is enabled' do
+        it 'includes the consul_user_permissions recipe if the postgresql service is enabled' do
+
           stub_gitlab_rb(
             consul: {
               enable: true,
               services: %w(postgresql)
             }
           )
+
           expect(chef_run).to include_recipe('repmgr::consul_user_permissions')
         end
+
       end
     end
 
@@ -251,10 +254,16 @@ witness_repl_nodes_sync_interval_secs=15
       allow_any_instance_of(PgHelper).to receive(:user_exists?).with('gitlab-consul').and_return(false)
     end
 
+    let(:postgresql_user) { chef_run.postgresql_user('gitlab-consul') }
+
     it 'creates the consul database user' do
       expect(chef_run).to create_postgresql_user 'gitlab-consul'
       create_resource = chef_run.postgresql_user('gitlab-consul')
       expect(create_resource).to notify("execute[grant read only access to repmgr]").to(:run)
+    end
+
+    it 'grants the appropriate permissions on the gitlab_repmgr database to the gitlab-consul user' do
+      expect(postgresql_user).to notify('execute[grant read only access to repmgr]').to(:run)
     end
   end
 end
