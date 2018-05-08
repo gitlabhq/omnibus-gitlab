@@ -28,6 +28,7 @@ omnibus-gitlab repository.
 - Make pg-upgrade start the bundled postgresql server if it isn't already running
 - Enforce upgrade paths for package upgrades 56a250b1a
 - Patch unzip to fix multiple CVEs cefd5b1b6
+- Geo: Success message for `gitlab-ctl promote-to-primary-node` command
 
 10.7.3
 
@@ -69,7 +70,7 @@ omnibus-gitlab repository.
 - Adds go-crond to the package #3251
 - Auto-renew LetsEncrypt with go-crond #3251
 
-10.6.5 
+10.6.5
 
 - Update Mattermost to 4.7.4
 
@@ -146,7 +147,7 @@ omnibus-gitlab repository.
 
 10.5.5
 
-- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node 
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
 
 10.5.4
 

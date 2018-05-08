@@ -16,6 +16,8 @@ module Geo
       reconfigure
 
       promote_to_primary
+
+      success_message
     end
 
     private
@@ -58,6 +60,11 @@ module Geo
       puts
 
       run_command('gitlab-rake geo:set_secondary_as_primary', live: true)
+    end
+
+    def success_message
+      puts
+      puts 'You successfully promoted this node!'.color(:green)
     end
 
     def run_command(cmd, live: false)
