@@ -27,6 +27,7 @@ omnibus-gitlab repository.
 - Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
 - Make pg-upgrade start the bundled postgresql server if it isn't already running
 - Enforce upgrade paths for package upgrades 56a250b1a
+- Patch unzip to fix multiple CVEs cefd5b1b6
 
 10.7.3
 
