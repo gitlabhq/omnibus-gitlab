@@ -30,6 +30,12 @@ relative_path 'unzip60'
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  patch source: '0-gitlab-source.patch'
+  patch source: '1-cve-2014-9636-test-compr-eb.patch'
+  patch source: '2-cve-2015-7696.patch'
+  patch source: '3-cve-2015-7697.patch'
+  patch source: '4-cve-2014-9913-unzip-buffer-overflow.patch'
+  patch source: '5-cve-2016-9844-zipinfo-buffer-overflow.patch'
   make '-f unix/Makefile clean', env: env
   make "-j #{workers} -f unix/Makefile generic", env: env
   make "-f unix/Makefile prefix=#{install_dir}/embedded install", env: env
