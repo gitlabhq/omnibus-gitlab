@@ -1,8 +1,9 @@
-# Updating GitLab installed with the omnibus-gitlab package
+# Updating GitLab installed with the Omnibus GitLab package
 
-See our page on [Upgrade Recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations) for suggestions on when to upgrade
+See the [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+for suggestions on when to upgrade.
 
-See our page on upgrading from a non-Omnibus installation [to an Omnibus installation](convert-to-omnibus.md)
+Upgrading from a non-Omnibus installation [to an Omnibus installation](convert_to_omnibus.md).
 
 ## Mandatory upgrade paths for version upgrades
 
@@ -16,6 +17,11 @@ while upgrading their GitLab instances.
 
 ## Updating methods
 
+There are two ways to update Omnibus GitLab:
+
+- Using the official repositories
+- Manually download the package
+
 ### Updating using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/installation/?version=ce#)
@@ -24,7 +30,7 @@ official GitLab repository should have already been set up for you.
 
 To update to a newer GitLab version, all you have to do is:
 
-```
+```sh
 # Debian/Ubuntu
 sudo apt-get update
 sudo apt-get install gitlab-ce
@@ -36,7 +42,7 @@ sudo yum install gitlab-ce
 If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in
 the above commands.
 
-### Updating manually installed package
+### Updating using a manually downloaded package
 
 If for some reason you don't use the official repositories, it is possible to
 download the package and install it manually.
@@ -49,7 +55,7 @@ download the package and install it manually.
 1. Once the GitLab package is downloaded, install it using the following
    commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
 
-    ```
+    ```sh
     # Debian/Ubuntu
     dpkg -i gitlab-ce-XXX.deb
 
@@ -75,7 +81,7 @@ The steps can be summed up to:
 
     **For Debian/Ubuntu**
 
-    ```
+    ```sh
     sudo apt-cache policy gitlab-ce | grep Installed
     ```
 
@@ -87,7 +93,7 @@ The steps can be summed up to:
 
     **For CentOS/RHEL**
 
-    ```
+    ```sh
     sudo rpm -q gitlab-ce
     ```
 
@@ -99,13 +105,13 @@ The steps can be summed up to:
 
     **For Debian/Ubuntu**
 
-    ```
+    ```sh
     curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
     ```
 
     **For CentOS/RHEL**
 
-    ```
+    ```sh
     curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
     ```
 
@@ -123,7 +129,7 @@ The steps can be summed up to:
 
     **For Debian/Ubuntu**
 
-    ```
+    ```sh
     ## Make sure the repositories are up-to-date
     sudo apt-get update
 
@@ -136,7 +142,7 @@ The steps can be summed up to:
 
     **For CentOS/RHEL**
 
-    ```
+    ```sh
     ## Install the package using the version you wrote down from step 1
     sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
 
@@ -144,7 +150,7 @@ The steps can be summed up to:
     sudo gitlab-ctl reconfigure
     ```
 
-    > **Note:**
+    NOTE: **Note:**
     If you want to upgrade to EE and at the same time also update GitLab to the
     latest version, you can omit the version check in the above commands. For
     Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
@@ -158,7 +164,7 @@ The steps can be summed up to:
 
     **For Debian/Ubuntu**
 
-    ```
+    ```sh
     sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
     ```
 
@@ -166,7 +172,7 @@ The steps can be summed up to:
 
     **For CentOS/RHEL**
 
-    ```
+    ```sh
     sudo rm /etc/yum.repos.d/gitlab_gitlab-ce.repo
     ```
 
@@ -174,14 +180,15 @@ That's it! You can now use GitLab Enterprise Edition! To update to a newer
 version follow the section on
 [Updating using the official repositories](#updating-using-the-official-repositories).
 
->**Note:**
+NOTE: **Note:**
 If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
 step to find the current GitLab version and then follow the steps in
 [Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages).
 
 ## Zero downtime updates
 
-**Note:** This is only available in GitLab 9.1.0 or newer
+NOTE: **Note:**
+This is only available in GitLab 9.1.0 or newer.
 
 It's possible to upgrade to a newer version of
 GitLab without having to take your GitLab instance offline. This can only be
@@ -217,25 +224,26 @@ higher.
 Check out [docs on upgrading packaged PostgreSQL server](https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server)
 for details.
 
-* For users running versions below 8.15 and using PostgreSQL bundled with
+- For users running versions below 8.15 and using PostgreSQL bundled with
   omnibus, this means they will have to first upgrade to 9.5.x, during which
   PostgreSQL will be automatically updated to 9.6.
-* Users who are on versions above 8.15, but chose not to update PostgreSQL
+- Users who are on versions above 8.15, but chose not to update PostgreSQL
   automatically during previous upgrades, can run the following command to
   update the bundled PostgreSQL to 9.6
 
-  ```
+  ```sh
   sudo gitlab-ctl pg-upgrade
   ```
 
-Users can check their PostgreSQL version using the following command
-```
+You can check the PostgreSQL version with:
+
+```sh
 /opt/gitlab/embedded/bin/psql --version
 ```
 
 ### GitLab 8
 
-#### Updating from GitLab 8.10 and lower to 8.11 or newer
+#### Updating from GitLab `8.10` and lower to `8.11` or newer
 
 GitLab 8.11 introduces new key names for several secrets, to match the GitLab
 Rails app and clarify the use of the secrets. For most installations, this
@@ -265,7 +273,7 @@ These keys were not used any more, and have simply been removed:
 
 ### GitLab 7
 
-#### Updating from GitLab 6.6 and higher to 7.10 or newer
+#### Updating from GitLab `6.6` and higher to `7.10` or newer
 
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
 configured the packages to run this command automatically after the new package
@@ -291,7 +299,7 @@ If you do not want the DB-only backup, automatic start/stop and DB migrations
 to be performed automatically please run the following command before upgrading
 your GitLab instance:
 
-```
+```sh
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
@@ -300,158 +308,163 @@ to your `gitlab.rb` file.
 
 ### GitLab 6
 
-#### Updating from GitLab 6.6 and higher to the latest version
+#### Updating from GitLab `6.6` and higher to the latest version
 
-The procedure can also be used to upgrade from a CE omnibus package to an EE omnibus package.
+NOT: **Note:**
+The procedure can also be used to upgrade from a CE Omnibus package to an EE
+Omnibus package.
 
 First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
-[EE (license key required)](https://about.gitlab.com/downloads-ee/)
+[EE (license key required)](https://about.gitlab.com/installation/)
 package to your GitLab server.
 
-##### Stop services but leave postgresql running for the database migrations and create a backup
+1. Stop services, but leave postgres running for the database migrations and
+   create a backup:
 
-```shell
-sudo gitlab-ctl stop unicorn
-sudo gitlab-ctl stop sidekiq
-sudo gitlab-ctl stop nginx
-sudo gitlab-rake gitlab:backup:create
-```
+    ```sh
+    sudo gitlab-ctl stop unicorn
+    sudo gitlab-ctl stop sidekiq
+    sudo gitlab-ctl stop nginx
+    sudo gitlab-rake gitlab:backup:create
+    ```
 
-##### Install the latest package
+1. Install the latest package:
 
-```
-# Debian/Ubuntu:
-sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
+    ```sh
+    # Debian/Ubuntu:
+    sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 
-# CentOS:
-sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
-```
+    # CentOS:
+    sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
+    ```
 
-##### Reconfigure GitLab (includes running database migrations) and restart all services
+1. Reconfigure GitLab (includes running database migrations) and restart all
+   services:
 
-```
-sudo gitlab-ctl reconfigure
-sudo gitlab-ctl restart
-```
+    ```sh
+    sudo gitlab-ctl reconfigure
+    sudo gitlab-ctl restart
+    ```
 
-Done!
+### Updating from GitLab `6.6.0.pre1` to `6.6.4`
 
-### Updating from GitLab 6.6.0.pre1 to 6.6.4
+1. First, download the latest package from https://about.gitlab.com/downloads/
+   to your GitLab server.
 
-First, download the latest package from https://www.gitlab.com/downloads/ to your GitLab server.
 
+1. Stop unicorn and Sidekiq so we can do database migrations:
 
-##### Stop unicorn and sidekiq so we can do database migrations
+    ```sh
+    sudo gitlab-ctl stop unicorn
+    sudo gitlab-ctl stop sidekiq
+    ```
 
-```shell
-sudo gitlab-ctl stop unicorn
-sudo gitlab-ctl stop sidekiq
-```
+1. Perform a one-time migration because some directories were changed since
+   `6.6.0.pre1`:
 
-##### One-time migration because we changed some directories since 6.6.0.pre1
+    ```sh
+    sudo mkdir -p /var/opt/gitlab/git-data
+    sudo mv /var/opt/gitlab/{repositories,gitlab-satellites} /var/opt/gitlab/git-data/
+    sudo mv /var/opt/gitlab/uploads /var/opt/gitlab/gitlab-rails/
+    ```
 
-```
-sudo mkdir -p /var/opt/gitlab/git-data
-sudo mv /var/opt/gitlab/{repositories,gitlab-satellites} /var/opt/gitlab/git-data/
-sudo mv /var/opt/gitlab/uploads /var/opt/gitlab/gitlab-rails/
-```
+1. Install the latest package:
 
-##### Install the latest package
+    ```sh
+    # Ubuntu:
+    sudo dpkg -i gitlab_6.6.4-omnibus.xxx.deb
 
-```
-# Ubuntu:
-sudo dpkg -i gitlab_6.6.4-omnibus.xxx.deb
+    # CentOS:
+    sudo rpm -Uvh gitlab-6.6.4_xxx.rpm
+    ```
 
-# CentOS:
-sudo rpm -Uvh gitlab-6.6.4_xxx.rpm
-```
+1. Reconfigure GitLab (includes database migrations):
 
-##### Reconfigure GitLab (includes database migrations)
+    ```sh
+    sudo gitlab-ctl reconfigure
+    ```
 
-```
-sudo gitlab-ctl reconfigure
-```
+1. Start unicorn and Sidekiq:
 
-##### Start unicorn and sidekiq
-
-```
-sudo gitlab-ctl start
-```
-
-Done!
+    ```sh
+    sudo gitlab-ctl start
+    ```
 
 ## Downgrading
 
-This section contains general information on how to revert to an earlier version of a package.
+This section contains general information on how to revert to an earlier version
+of a package.
 
-*NOTE* This guide assumes that you have a backup archive created under the version you are reverting to.
+NOTE: **Note:**
+This guide assumes that you have a backup archive created under the version you
+are reverting to.
 
 These steps consist of:
 
-* Download the package of a target version.(example below uses GitLab 6.x.x)
-* Stop GitLab
-* Install the old package
-* Reconfigure GitLab
-* Restoring the backup
-* Starting GitLab
+- Download the package of a target version.(example below uses GitLab 6.x.x)
+- Stop GitLab
+- Install the old package
+- Reconfigure GitLab
+- Restoring the backup
+- Starting GitLab
 
 See example below:
 
-First download a GitLab 6.x.x [CE](https://www.gitlab.com/downloads/archives/) or
+First download a GitLab 6.x.x [CE](https://about.gitlab.com/downloads/archives/) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
 
-### Stop GitLab
+Steps:
 
-```
-sudo gitlab-ctl stop unicorn
-sudo gitlab-ctl stop sidekiq
-```
+1. Stop GitLab:
 
-### Downgrade GitLab to 6.x
+    ```sh
+    sudo gitlab-ctl stop unicorn
+    sudo gitlab-ctl stop sidekiq
+    ```
 
-```
-# Ubuntu
-sudo dpkg -r gitlab
-sudo dpkg -i gitlab-6.x.x-yyy.deb
+1. Downgrade GitLab to 6.x:
 
-# CentOS:
-sudo rpm -e gitlab
-sudo rpm -ivh gitlab-6.x.x-yyy.rpm
-```
+    ```sh
+    # Ubuntu
+    sudo dpkg -r gitlab
+    sudo dpkg -i gitlab-6.x.x-yyy.deb
 
-### Prepare GitLab for receiving the backup restore
+    # CentOS:
+    sudo rpm -e gitlab
+    sudo rpm -ivh gitlab-6.x.x-yyy.rpm
+    ```
 
-Due to a backup restore bug in versions earlier than GitLab 6.8.0, it is needed to drop the database
-_before_ running `gitlab-ctl reconfigure`, only if you are downgrading to 6.7.x or less.
+1. Prepare GitLab for receiving the backup restore. Due to a backup restore bug
+   in versions earlier than GitLab 6.8.0, it is needed to drop the database
+   _before_ running `gitlab-ctl reconfigure`, only if you are downgrading to
+   6.7.x or less:
 
-```
-sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
-```
+    ```sh
+    sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
+    ```
 
-### Reconfigure GitLab (includes database migrations)
+1. Reconfigure GitLab (includes database migrations):
 
-```
-sudo gitlab-ctl reconfigure
-```
+    ```sh
+    sudo gitlab-ctl reconfigure
+    ```
 
-### Restore your backup
+1. Restore your backup:
 
-```
-sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
-```
+    ```sh
+    sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
+    ```
 
-### Start GitLab
+1. Start GitLab:
 
-```
-sudo gitlab-ctl start
-```
+    ```sh
+    sudo gitlab-ctl start
+    ```
 
-### Updating GitLab CI via omnibus-gitlab
+## Updating GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
 
-#### Updating from GitLab CI version prior to 5.4.0 to version 7.14
-
->**Warning:**
+CAUTION: **Warning:**
 Omnibus GitLab 7.14 was the last version where CI was bundled in the package.
 Starting from GitLab 8.0, CI was merged into GitLab, thus it's no longer a
 separate application included in the Omnibus package.
@@ -465,12 +478,11 @@ Under Applications create a new a application which will generate the `app_id` a
 
 In `/etc/gitlab/gitlab.rb`:
 
-```
+```ruby
 gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
-
 ```
 
-where `url` is the url to the GitLab instance.
+Where `url` is the url to the GitLab instance.
 
 Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 
@@ -478,24 +490,24 @@ Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 
 ### Getting the status of a GitLab installation
 
-```
+```sh
 sudo gitlab-ctl status
 sudo gitlab-rake gitlab:check SANITIZE=true
 ```
 
-+ Information on using `gitlab-ctl` to perform maintenance tasks - [maintenance/README.md.](../maintenance/README.md)
-+ Information on using `gitlab-rake` to check the configuration - [Maintenance - Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/maintenance.html#check-gitlab-configuration).
+- Information on using `gitlab-ctl` to perform [maintenance tasks](../maintenance/README.md).
+- Information on using `gitlab-rake` to [check the configuration](https://docs.gitlab.com/ee/administration/raketasks/maintenance.html#check-gitlab-configuration).
 
 ### RPM 'package is already installed' error
 
 If you are using RPM and you are upgrading from GitLab Community Edition to GitLab Enterprise Edition you may get an error like this:
 
-```
+```sh
 package gitlab-7.5.2_omnibus.5.2.1.ci-1.el7.x86_64 (which is newer than gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64) is already installed
 ```
 
 You can override this version check with the `--oldpackage` option:
 
-```
-rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
+```sh
+sudo rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
