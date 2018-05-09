@@ -913,6 +913,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['hsts_max_age'] = 31536000
 # nginx['hsts_include_subdomains'] = false
 
+##! **Docs: http://nginx.org/en/docs/http/ngx_http_gzip_module.html**
+# nginx['gzip_enabled'] = true
+
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
 # nginx['listen_port'] = nil
