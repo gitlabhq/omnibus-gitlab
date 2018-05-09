@@ -40,7 +40,8 @@ build do
         mode: 0755,
         vars: {
           install_dir: project.install_dir,
-          external_url_script: external_url_script
+          external_url_script: external_url_script,
+          build_version: project.build_version
         }
   end
 end

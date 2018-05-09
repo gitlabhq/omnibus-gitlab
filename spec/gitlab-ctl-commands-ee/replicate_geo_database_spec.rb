@@ -31,10 +31,40 @@ describe 'gitlab-ctl replicate-geo-database' do
     expect(Geo::Replication).to receive(:new).and_call_original
       .with(subject, hash_including(host: 'gitlab-primary.geo',
                                     slot_name: 'gitlab_primary_geo',
-                                    sslmode: 'disable', now: true))
+                                    sslmode: 'disable',
+                                    sslcompression: 0,
+                                    now: true))
 
     expect_any_instance_of(Geo::Replication).to receive(:execute)
 
     subject.replicate_geo_database
+  end
+
+  context 'with SSL compression enabled' do
+    let(:arguments) do
+      %w(--host=gitlab-primary.geo
+         --slot-name=gitlab_primary_geo
+         --sslmode=disable
+         --sslcompression=1
+         --no-wait)
+    end
+
+    before do
+      allow_any_instance_of(Omnibus::Ctl::GeoReplicationCommand)
+        .to receive(:arguments).and_return(arguments)
+    end
+
+    it 'enables SSL compression' do
+      expect(Geo::Replication).to receive(:new).and_call_original
+        .with(subject, hash_including(host: 'gitlab-primary.geo',
+                                      slot_name: 'gitlab_primary_geo',
+                                      sslmode: 'disable',
+                                      sslcompression: 1,
+                                      now: true))
+
+      expect_any_instance_of(Geo::Replication).to receive(:execute)
+
+      subject.replicate_geo_database
+    end
   end
 end

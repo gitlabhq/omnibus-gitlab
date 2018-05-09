@@ -15,7 +15,7 @@
 #
 
 name 'libxml2'
-default_version '2.9.6'
+default_version '2.9.8'
 
 license 'MIT'
 license_file 'COPYING'
@@ -25,8 +25,8 @@ dependency 'libiconv'
 dependency 'liblzma'
 dependency 'config_guess'
 
-version '2.9.6' do
-  source md5: 'dbae8327d8471941bf0472e273473e36'
+version '2.9.8' do
+  source md5: 'b786e353e2aa1b872d70d5d1ca0c740d'
 end
 
 source url: "ftp://xmlsoft.org/libxml2/libxml2-#{version}.tar.gz"

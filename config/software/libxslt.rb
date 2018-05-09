@@ -15,7 +15,7 @@
 #
 
 name 'libxslt'
-default_version '1.1.29'
+default_version '1.1.32'
 
 license 'MIT'
 license_file 'COPYING'
@@ -26,8 +26,8 @@ dependency 'config_guess'
 dependency 'libtool' if solaris_10?
 dependency 'patch' if solaris_10?
 
-version '1.1.29' do
-  source md5: 'a129d3c44c022de3b9dcf6d6f288d72e'
+version '1.1.32' do
+  source md5: '1fc72f98e98bf4443f1651165f3aa146'
 end
 
 source url: "ftp://xmlsoft.org/libxml2/libxslt-#{version}.tar.gz"
@@ -47,8 +47,6 @@ build do
   # style path to accomodate
   configure_commands = [
     "--with-libxml-prefix=#{install_dir.sub('C:', '/C')}/embedded",
-    "--with-libxml-include-prefix=#{install_dir}/embedded/include",
-    "--with-libxml-libs-prefix=#{install_dir}/embedded/lib",
     '--without-python',
     '--without-crypto'
   ]
