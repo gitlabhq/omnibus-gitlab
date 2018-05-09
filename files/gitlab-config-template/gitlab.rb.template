@@ -304,7 +304,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'provider' => 'AWS',
 #   'region' => 'eu-west-1',
 #   'aws_access_key_id' => 'AKIAKIAKI',
-#   'aws_secret_access_key' => 'secret123'
+#   'aws_secret_access_key' => 'secret123',
+#   # # If IAM profile use is enabled, remove aws_access_key_id and aws_secret_access_key
+#   'use_iam_profile' => false
 # }
 # gitlab_rails['backup_upload_remote_directory'] = 'my.s3.bucket'
 # gitlab_rails['backup_multipart_chunk_size'] = 104857600
@@ -505,11 +507,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Registry backend storage
 ###! Docs: https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
+###! Excluding accesskey and secretkey will cause the registry to use the IAM profile
 # registry['storage'] = {
 #   's3' => {
 #     'accesskey' => 'AKIAKIAKI',
 #     'secretkey' => 'secret123',
-#     'bucket' => 'gitlab-registry-bucket-AKIAKIAKI'
+#     'bucket' => 'gitlab-registry-bucket-AKIAKIAKI',
+#     'region' => 'eu-west-1'
 #   }
 # }
 
