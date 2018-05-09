@@ -138,16 +138,14 @@ end
 def get_color_strings
   # Check if terminal supports colored outputs.
   if system("which tput > /dev/null") && `tput colors`.strip.to_i >= 8
-    # ANSI color codes for red and yellow. For printing beautiful ASCII art.
-    red_string = "\e[31m%s"
+    # ANSI color codes for yellow and reset color. For printing beautiful ASCII art.
     yellow_string = "\e[33m%s"
     no_color_string = "\e(B\e[m%s"
   else
-    red_string = "%s"
     yellow_string = "%s"
     no_color_string = "%s"
   end
-  [red_string, yellow_string, no_color_string]
+  [yellow_string, no_color_string]
 end
 
 def print_tanuki_art
@@ -166,7 +164,7 @@ def print_tanuki_art
                 ,*,.
   '
   # Get the proper color strings if terminal supports them
-  _red_string, yellow_string, no_color_string = get_color_strings
+  yellow_string, no_color_string = get_color_strings
   puts yellow_string % tanuki_art
   puts no_color_string % "\n"
 end
@@ -179,8 +177,8 @@ def print_gitlab_art
   / /_/ / / /_/ /___/ /_/ / /_/ /
   \____/_/\__/_____/\__,_/_.___/
   '
-  red_string, _yellow_string, no_color_string = get_color_strings
-  puts red_string % gitlab_art
+  yellow_string, no_color_string = get_color_strings
+  puts yellow_string % gitlab_art
   puts no_color_string % "\n"
 end
 

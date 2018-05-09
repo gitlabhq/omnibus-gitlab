@@ -10,7 +10,7 @@ describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
   let(:file) { spy('file spy') }
-  let(:options) { { now: true, host: 'localhost', port: 9999, user: 'my-user' } }
+  let(:options) { { now: true, host: 'localhost', port: 9999, user: 'my-user', sslmode: 'disable', sslcompression: 1 } }
 
   subject { described_class.new(instance, options) }
 
@@ -60,7 +60,7 @@ describe Geo::Replication, '#execute' do
       subject.execute
 
       expect(file).to have_received(:write).with("localhost:9999:*:my-user:pass\n")
-      expect(file).to have_received(:write).with(/password=pass sslmode='\n/)
+      expect(file).to have_received(:write).with(/password=pass sslmode=disable sslcompression=1'\n/)
     end
   end
 

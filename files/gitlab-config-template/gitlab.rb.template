@@ -1094,6 +1094,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['artifacts_server_url'] = nil # Defaults to external_url + '/api/v4'
 # gitlab_pages['artifacts_server_timeout'] = 10
 
+##! Environments that do not support bind-mounting should set this parameter to
+##! true. This is incompatible with the artifacts server
+# gitlab_pages['inplace_chroot'] = false
+
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
 

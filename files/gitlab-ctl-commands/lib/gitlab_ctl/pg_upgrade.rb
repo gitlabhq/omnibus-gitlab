@@ -54,5 +54,13 @@ module GitlabCtl
     def fetch_data_version
       File.read("#{data_dir}/PG_VERSION").strip
     end
+
+    def running?
+      !GitlabCtl::Util.run_command('gitlab-ctl status postgresql').error?
+    end
+
+    def start
+      GitlabCtl::Util.run_command('gitlab-ctl start postgresql').error!
+    end
   end
 end

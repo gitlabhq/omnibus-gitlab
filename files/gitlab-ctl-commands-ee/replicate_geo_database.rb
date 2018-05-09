@@ -23,6 +23,7 @@ class GeoReplicationCommand
       skip_replication_slot: false,
       backup_timeout: 1800,
       sslmode: 'verify-ca',
+      sslcompression: 0
     }
 
     parse_options!
@@ -83,6 +84,10 @@ class GeoReplicationCommand
 
       opts.on('--sslmode=MODE', 'Choose the level of protection the connection between primary and secondary has.') do |sslmode|
         @options[:sslmode] = sslmode
+      end
+
+      opts.on('--sslcompression=1', 'Enable SSL compression (disabled by default for performance and security).') do |sslcompression|
+        @options[:sslcompression] = sslcompression.to_i
       end
 
       opts.on_tail('-h', '--help', 'Show this message') do

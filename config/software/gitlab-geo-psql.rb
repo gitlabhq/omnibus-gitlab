@@ -54,7 +54,7 @@ else
   privilege_drop="-u ${psql_user}"
 fi
 
-exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} "$@"
+cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} -d ${psql_dbname} "$@"
        EOH
     end
   end

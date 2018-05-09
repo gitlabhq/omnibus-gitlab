@@ -101,15 +101,6 @@ least once. The `gitlab-psql` command cannot be used to connect to a
 remote Postgres server, nor to connect to a local non-Omnibus Postgres
 server.
 
-If you start gitlab-psql from a directory that is not world-readable
-(like /root) then `psql` will print a warning message:
-
-```
-could not change directory to "/root"
-```
-
-This is normal behavior and it can be ignored.
-
 #### Starting a Postgres superuser psql session in Geo tracking database
 
 Similar to the previous command, if you need superuser access to the bundled
