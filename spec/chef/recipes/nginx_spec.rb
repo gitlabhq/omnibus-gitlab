@@ -363,6 +363,15 @@ describe 'nginx' do
 
   it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=31536000";/) }
 
+  context 'when gzip is disabled' do
+    before do
+      stub_gitlab_rb(nginx: { gzip_enabled: false })
+    end
+    it { is_expected.not_to render_file(gitlab_http_config).with_content(/gzip on;/) }
+  end
+
+  it { is_expected.to render_file(gitlab_http_config).with_content(/gzip on;/) }
+
   context 'when include_subdomains is enabled' do
     before do
       stub_gitlab_rb(nginx: { hsts_include_subdomains: true })

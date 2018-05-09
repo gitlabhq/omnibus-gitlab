@@ -346,6 +346,15 @@ Setting `max_age` to 0 will disable this feature. For more information see:
 
 * https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
 
+## Disabling GZIP compression
+
+By default, GitLab enables GZIP compression for text data over 10240 bytes. To
+disable this behavior:
+
+```ruby
+nginx['gzip_enabled'] = false
+```
+
 ## Using custom SSL ciphers
 
 By default GitLab is using SSL ciphers that are combination of testing on gitlab.com and various best practices contributed by the GitLab community.
