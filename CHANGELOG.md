@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Excludes source assets from gitlab-rails component.  #3238
 - Keep gitaly service running during package upgrades 034992fbc
 - Geo: Error when primary promotion fails
+- Geo: Disable SSL compression by default in generating recovery.conf
 - Add option to disable healthcheck for storagedriver in registry
 - Restart runsv when log directory is changed 0a784647b
 - Bump rsync to 3.1.3 f539aa946
@@ -26,6 +27,8 @@ omnibus-gitlab repository.
 - Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
 - Make pg-upgrade start the bundled postgresql server if it isn't already running
 - Enforce upgrade paths for package upgrades 56a250b1a
+- Patch unzip to fix multiple CVEs cefd5b1b6
+- Geo: Success message for `gitlab-ctl promote-to-primary-node` command
 
 10.7.3
 
@@ -38,6 +41,9 @@ omnibus-gitlab repository.
 10.7.1
 
 - No changes
+- Bump libxslt to 1.1.32 f584de1d7
+- Bump libxml2 to 2.9.8 e3a117275
+- Update Mattermost to 4.9.1
 
 10.7.0
 
@@ -65,7 +71,7 @@ omnibus-gitlab repository.
 - Adds go-crond to the package #3251
 - Auto-renew LetsEncrypt with go-crond #3251
 
-10.6.5 
+10.6.5
 
 - Update Mattermost to 4.7.4
 
@@ -142,7 +148,7 @@ omnibus-gitlab repository.
 
 10.5.5
 
-- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node 
+- Resolve "consul service postgresql_service failing on db host - no access to /opt/gitlab/embedded/node
 
 10.5.4
 

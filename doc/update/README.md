@@ -4,6 +4,16 @@ See our page on [Upgrade Recommendations](https://docs.gitlab.com/ee/policy/main
 
 See our page on upgrading from a non-Omnibus installation [to an Omnibus installation](convert-to-omnibus.md)
 
+## Mandatory upgrade paths for version upgrades
+
+From version 10.8 onwards, upgrade paths are enforced for version upgrades by
+default. This restricts performing direct upgrades that skip major versions (for
+example 10.3 to 12.7 in one jump) which can result in breakage of the GitLab
+installations due to multiple reasons like deprecated or removed configuration
+settings, upgrade of internal tools and libraries etc. Users will have to follow
+the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+while upgrading their GitLab instances.
+
 ## Updating methods
 
 ### Updating using the official repositories
