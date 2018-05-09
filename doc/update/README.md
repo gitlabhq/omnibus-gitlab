@@ -2,8 +2,18 @@
 
 See the [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
 for suggestions on when to upgrade.
+If you are upgrading from a non-Omnibus installation to an Omnibus installation,
+[check this guide](convert_to_omnibus.md).
 
-Upgrading from a non-Omnibus installation [to an Omnibus installation](convert_to_omnibus.md).
+## Version specific changes
+
+Updating to major versions might need some manual intervention. For more info,
+check the version your are updating to:
+
+- [GitLab 10](gitlab_10_changes.md)
+- [GitLab 8](gitlab_8_changes.md)
+- [GitLab 7](gitlab_7_changes.md)
+- [GitLab 6](gitlab_6_changes.md)
 
 ## Mandatory upgrade paths for version upgrades
 
@@ -213,182 +223,6 @@ If you meet all the requirements above, follow these instructions:
    so these nodes get the newest code.
 1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node`
    to run post-deployment migrations.
-
-## Version specific changes
-
-### GitLab 10
-
-From version 10.0 GitLab requires the version of PostgreSQL to be 9.6 or
-higher.
-
-Check out [docs on upgrading packaged PostgreSQL server](https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server)
-for details.
-
-- For users running versions below 8.15 and using PostgreSQL bundled with
-  omnibus, this means they will have to first upgrade to 9.5.x, during which
-  PostgreSQL will be automatically updated to 9.6.
-- Users who are on versions above 8.15, but chose not to update PostgreSQL
-  automatically during previous upgrades, can run the following command to
-  update the bundled PostgreSQL to 9.6
-
-  ```sh
-  sudo gitlab-ctl pg-upgrade
-  ```
-
-You can check the PostgreSQL version with:
-
-```sh
-/opt/gitlab/embedded/bin/psql --version
-```
-
-### GitLab 8
-
-#### Updating from GitLab `8.10` and lower to `8.11` or newer
-
-GitLab 8.11 introduces new key names for several secrets, to match the GitLab
-Rails app and clarify the use of the secrets. For most installations, this
-process should be transparent as the 8.11 and higher packages will try to
-migrate the existing secrets to the new key names.
-
-##### Migrating legacy secrets
-
-These keys have been migrated from old names:
-
-- `gitlab_rails['otp_key_base']` is used for encrypting the OTP secrets in the
-  database. Changing this secret will stop two-factor auth from working for all
-  users. Previously called `gitlab_rails['secret_token']`
-- `gitlab_rails['db_key_base']` is used for encrypting import credentials and CI
-  secret variables. Previously called `gitlab_ci['db_key_base']`; **note** that
-  `gitlab_rails['db_key_base']` was not previously used for this - setting it
-  would have no effect
-- `gitlab_rails['secret_key_base']` is used for password reset links, and other
-  'standard' auth features. Previously called `gitlab_ci['db_key_base']`;
-  **note** that `gitlab_rails['secret_token']` was not previously used for this,
-  despite the name
-
-These keys were not used any more, and have simply been removed:
-
-- `gitlab_ci['secret_token']`
-- `gitlab_ci['secret_key_base']`
-
-### GitLab 7
-
-#### Updating from GitLab `6.6` and higher to `7.10` or newer
-
-In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
-configured the packages to run this command automatically after the new package
-is installed. If you are installing GitLab 7.9 or earlier, please see the
-[procedure below](#updating-from-gitlab-66-and-higher-to-the-latest-version).
-
-If you installed using the package server all you need to do is run `sudo apt-get update && sudo apt-get install gitlab-ce` (for Debian/Ubuntu) or `sudo yum install gitlab-ce` (for CentOS/Enterprise Linux).
-
-If you are not using the package server, consider [upgrading to the package repository](https://about.gitlab.com/upgrade-to-package-repository). Otherwise, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
-[EE (subscribers only)](https://packages.gitlab.com/gitlab/gitlab-ee)
-package to your GitLab server then all you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
--Uvh gitlab-ce-XXX.rpm` (for CentOS/Enterprise Linux). After the package has
-been unpacked, GitLab will automatically:
-
-- Stop all GitLab services;
-- Create a backup using your current, old GitLab version. This is a 'light'
-  backup that **only backs up the SQL database**;
-- Run `gitlab-ctl reconfigure`, which will perform any necessary database
-  migrations (using the new GitLab version);
-- Restart the services that were running when the upgrade script was invoked.
-
-If you do not want the DB-only backup, automatic start/stop and DB migrations
-to be performed automatically please run the following command before upgrading
-your GitLab instance:
-
-```sh
-sudo touch /etc/gitlab/skip-auto-reconfigure
-```
-
-Alternatively if you just want to prevent DB migrations add `gitlab_rails['auto_migrate'] = false`
-to your `gitlab.rb` file.
-
-### GitLab 6
-
-#### Updating from GitLab `6.6` and higher to the latest version
-
-NOT: **Note:**
-The procedure can also be used to upgrade from a CE Omnibus package to an EE
-Omnibus package.
-
-First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
-[EE (license key required)](https://about.gitlab.com/installation/)
-package to your GitLab server.
-
-1. Stop services, but leave postgres running for the database migrations and
-   create a backup:
-
-    ```sh
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    sudo gitlab-ctl stop nginx
-    sudo gitlab-rake gitlab:backup:create
-    ```
-
-1. Install the latest package:
-
-    ```sh
-    # Debian/Ubuntu:
-    sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
-
-    # CentOS:
-    sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
-    ```
-
-1. Reconfigure GitLab (includes running database migrations) and restart all
-   services:
-
-    ```sh
-    sudo gitlab-ctl reconfigure
-    sudo gitlab-ctl restart
-    ```
-
-### Updating from GitLab `6.6.0.pre1` to `6.6.4`
-
-1. First, download the latest package from https://about.gitlab.com/downloads/
-   to your GitLab server.
-
-
-1. Stop unicorn and Sidekiq so we can do database migrations:
-
-    ```sh
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    ```
-
-1. Perform a one-time migration because some directories were changed since
-   `6.6.0.pre1`:
-
-    ```sh
-    sudo mkdir -p /var/opt/gitlab/git-data
-    sudo mv /var/opt/gitlab/{repositories,gitlab-satellites} /var/opt/gitlab/git-data/
-    sudo mv /var/opt/gitlab/uploads /var/opt/gitlab/gitlab-rails/
-    ```
-
-1. Install the latest package:
-
-    ```sh
-    # Ubuntu:
-    sudo dpkg -i gitlab_6.6.4-omnibus.xxx.deb
-
-    # CentOS:
-    sudo rpm -Uvh gitlab-6.6.4_xxx.rpm
-    ```
-
-1. Reconfigure GitLab (includes database migrations):
-
-    ```sh
-    sudo gitlab-ctl reconfigure
-    ```
-
-1. Start unicorn and Sidekiq:
-
-    ```sh
-    sudo gitlab-ctl start
-    ```
 
 ## Downgrading
 
