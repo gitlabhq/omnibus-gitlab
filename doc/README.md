@@ -26,7 +26,9 @@ Omnibus is a way to package different services and tools required to run GitLab,
 
 #### Installation and Configuration using omnibus package
 
-**`Note`**: This section describes the commonly used configuration settings. Check [configuration](#configuring) section of the documentation for complete configuration settings.
+NOTE: **Note:**
+This section describes the commonly used configuration settings. Check
+[configuration](#configuring) section of the documentation for complete configuration settings.
 
 * [Installing GitLab](https://about.gitlab.com/installation/)
   * [Manually downloading and installing a GitLab package](manual_install.md)
@@ -58,7 +60,6 @@ You can also use the docker images provided by GitLab to install and configure a
 - [Starting a Postgres superuser psql session](maintenance/README.md#starting-a-postgres-superuser-psql-session)
 - [Container registry garbage collection](maintenance/README.md#container-registry-garbage-collection)
 
-
 ## Configuring
 
 - [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
@@ -88,16 +89,15 @@ You can also use the docker images provided by GitLab to install and configure a
 ## Updating
 
 - [Upgrade support policy](https://docs.gitlab.com/ee/policy/maintenance.html)
-- [Upgrade from Community Edition to Enterprise Edition](update/README.md#from-community-edition-to-enterprise-edition)
-- [Updating to the latest version](update/README.md#updating-from-gitlab-66-and-higher-to-the-latest-version)
-- [Downgrading to an earlier version](update/README.md#reverting-to-gitlab-66x-or-later)
-- [Upgrading from a non-Omnibus installation to an Omnibus installation using a backup](update/README.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-- [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/README.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-- [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/README.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
-- [RPM error: 'package is already installed' ](update/README.md#rpm-package-is-already-installed-error)
-- [Note about updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-660pre1-to-664)
-- [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-from-gitlab-ci-version-prior-to-540-to-the-latest-version)
+- [Upgrade from Community Edition to Enterprise Edition](update/README.md#updating-community-edition-to-enterprise-edition)
+- [Updating to the latest version](update/README.md#updating-using-the-official-repositories)
+- [Downgrading to an earlier version](update/README.md#downgrading)
+- [Upgrading from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
+- [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
+- [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-6-8)
+- [Updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-6-6-and-higher-to-7-10-or-newer)
+- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-6-6-0-pre1-to-6-6-4)
+- [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-gitlab-ci-from-prior-5-4-0-to-version-7-14-via-omnibus-gitlab)
 
 ## Troubleshooting
 
