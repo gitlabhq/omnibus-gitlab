@@ -52,6 +52,9 @@ describe Geo::Replication, '#execute' do
       expect(STDIN).to receive(:gets).and_return('pass')
 
       subject.execute
+
+      expect(file).to have_received(:write).with(/standby_mode = 'on'/)
+      expect(file).to have_received(:write).with(/recovery_target_timeline = 'latest'/)
     end
 
     it 'strips the password' do

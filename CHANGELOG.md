@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Disable PgBouncer PID file by default
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
+- Geo: Set recovery_target_timeline to latest by default
 
 10.8.0
 
