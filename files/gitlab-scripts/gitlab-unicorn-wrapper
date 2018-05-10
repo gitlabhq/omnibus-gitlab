@@ -189,7 +189,9 @@ function quit_old_unicorn_if_running
 
   counter=0
 
-  while ! (alive ${old_unicorn_pid}) && (alive ${unicorn_pid}); do
+  local new_pid=$(cat $current_pidfile 2>/dev/null)
+
+  while [ "$old_unicorn_pid" == "$new_pid" ]; do
     echo "Waiting for new unicorn to reexec..."
     let counter++
     sleep 1
@@ -197,6 +199,8 @@ function quit_old_unicorn_if_running
     if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
       break
     fi
+
+    new_pid=$(cat $current_pidfile 2>/dev/null)
   done
 
   # At this point, the new unicorn should be alive. It could be that the
