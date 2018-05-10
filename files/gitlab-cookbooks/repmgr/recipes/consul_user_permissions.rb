@@ -26,7 +26,7 @@ select_query = %(GRANT SELECT, DELETE ON ALL TABLES IN SCHEMA repmgr_#{node['rep
 usage_query = %(GRANT USAGE ON SCHEMA repmgr_#{node['repmgr']['cluster']} TO "#{node['consul']['user']}")
 
 execute "grant read only access to repmgr" do
-  command %(gitlab-psql -d gitlab_repmgr -c '#{select_query}; #{usage_query};')
+  command %(gitlab-psql -d #{repmgr_db} -c '#{select_query}; #{usage_query};')
   user account_helper.postgresql_user
   only_if { pg_helper.is_running? && pg_helper.database_exists?(repmgr_db) }
   action :nothing

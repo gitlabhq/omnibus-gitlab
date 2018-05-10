@@ -256,12 +256,10 @@ witness_repl_nodes_sync_interval_secs=15
 
     it 'creates the consul database user' do
       expect(chef_run).to create_postgresql_user 'gitlab-consul'
-      create_resource = chef_run.postgresql_user('gitlab-consul')
-      expect(create_resource).to notify("execute[grant read only access to repmgr]").to(:run)
     end
 
     it 'grants the appropriate permissions on the gitlab_repmgr database to the gitlab-consul user' do
-      expect(postgresql_user).to notify('execute[grant read only access to repmgr]').to(:run)
+      expect(postgresql_user).to notify('execute[grant read only access to repmgr]').to(:run).delayed
     end
   end
 end
