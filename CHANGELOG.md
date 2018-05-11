@@ -25,6 +25,10 @@ omnibus-gitlab repository.
 - Fix pgbouncer recipe to use the correct user for standalone instances
 - Commands `gitlab-psql` and `gitlab-geo-psql` will use respective GitLab databases by default. #3485
 
+10.7.4
+
+- Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
+
 10.7.3
 
 - Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
