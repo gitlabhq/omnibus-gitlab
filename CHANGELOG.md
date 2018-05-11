@@ -31,6 +31,10 @@ omnibus-gitlab repository.
 - Patch unzip to fix multiple CVEs cefd5b1b6
 - Geo: Success message for `gitlab-ctl promote-to-primary-node` command
 
+10.7.4
+
+- Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
+
 10.7.3
 
 - Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
