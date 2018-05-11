@@ -160,6 +160,6 @@ class CertificateHelper
   end
 
   def raise_msg(file)
-    raise "ERROR: Not a certificate: #{file} -> #{File.realpath(file)}"
+    raise "ERROR: Not a certificate: #{File.realpath(file)}. Move it from #{File.realpath('..', file)} to a different location and reconfigure again."
   end
 end

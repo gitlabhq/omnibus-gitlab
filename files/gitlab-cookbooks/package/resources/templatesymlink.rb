@@ -51,11 +51,11 @@ action :create do
 end
 
 action :delete do
-  template new_resource.link_to do
+  file new_resource.link_to do
     action :delete
   end
 
-  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
+  link new_resource.link_from do
     action :delete
   end
 end

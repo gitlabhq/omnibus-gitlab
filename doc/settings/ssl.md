@@ -29,7 +29,7 @@ to `/etc/gitlab/trusted-certs`. If the directory contains any other files,
 reconfigure run will fail with:
 
 ```
-ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE -> /opt/gitlab/embedded/ssl/certs/FILE
+ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt/gitlab/embedded/ssl/certs to a different location and reconfigure again.
 ```
 
 Move the files that are not certificates out of `/opt/gitlab/embedded/ssl/certs`

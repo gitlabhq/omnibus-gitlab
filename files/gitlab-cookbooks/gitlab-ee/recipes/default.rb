@@ -48,6 +48,8 @@ end
 if node['gitlab']['geo-secondary']['enable']
   include_recipe 'gitlab-ee::geo-secondary'
   include_recipe 'gitlab-ee::geo_database_migrations' if node['gitlab']['gitlab-rails']['enable']
+else
+  include_recipe 'gitlab-ee::geo-secondary_disable'
 end
 
 # Create the pgbouncer users
