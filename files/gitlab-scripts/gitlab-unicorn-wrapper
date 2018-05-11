@@ -40,7 +40,7 @@ readonly oldbin_pidfile=${current_pidfile}.oldbin
 readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
 readonly unicorn_kill_timeout=5 # time on seconds
-readonly unicorn_wait_reexec=5 # time on seconds
+readonly unicorn_wait_reexec=120 # time on seconds
 readonly unicorn_wait_old_pid=60 # time on seconds
 
 function main
@@ -189,18 +189,13 @@ function quit_old_unicorn_if_running
 
   counter=0
 
-  local new_pid=$(cat $current_pidfile 2>/dev/null)
-
-  while [ "$old_unicorn_pid" == "$new_pid" ]; do
-    echo "Waiting for new unicorn to reexec..."
-    let counter++
+  while [ ! -f ${current_pidfile} ]; do
     sleep 1
+    let counter++
 
     if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
       break
     fi
-
-    new_pid=$(cat $current_pidfile 2>/dev/null)
   done
 
   # At this point, the new unicorn should be alive. It could be that the
