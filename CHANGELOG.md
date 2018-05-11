@@ -34,6 +34,7 @@ omnibus-gitlab repository.
 10.7.4
 
 - Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
+- Only create gitlab-consul database user after repmgr database has been created
 
 10.7.3
 
