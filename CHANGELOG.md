@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.0.0
+
+- Disable PgBouncer PID file by default
+
 10.8.0
 
 - Force kill unicorn process if it is still running after a TERM or INT signal
@@ -35,7 +39,6 @@ omnibus-gitlab repository.
 
 - Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
 - Only create gitlab-consul database user after repmgr database has been created
-- Disable PgBouncer PID file by default
 
 10.7.3
 
