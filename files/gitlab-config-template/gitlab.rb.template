@@ -1776,7 +1776,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   ...
 # }
 # pgbouncer['logfile'] = nil
-# pgbouncer['pidfile'] = nil
 # pgbouncer['unix_socket_dir'] = nil
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil

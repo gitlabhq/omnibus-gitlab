@@ -107,17 +107,6 @@ describe 'gitlab-ee::pgbouncer' do
           .with_content(%r{^unix_socket_dir = /fake/dir$})
       end
 
-      it 'stores the pid file' do
-        stub_gitlab_rb(
-          pgbouncer: {
-            enable: true,
-            pidfile: '/tmp/pidfile.txt'
-          }
-        )
-        expect(chef_run).to render_file(pgbouncer_ini)
-          .with_content(%r{^pidfile = /tmp/pidfile.txt$})
-      end
-
       it 'reloads pgbouncer and starts pgbouncer if it is not running' do
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
         allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('pgbouncer').and_return(true)
