@@ -15,3 +15,5 @@ Vagrantfile
 *.log
 docker/RELEASE
 *.swp
+tags
+*.tags
