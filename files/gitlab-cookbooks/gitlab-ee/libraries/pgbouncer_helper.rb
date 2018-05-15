@@ -3,12 +3,19 @@ class PgbouncerHelper < BaseHelper
 
   def database_config(database)
     settings = node['gitlab']['pgbouncer']['databases'][database].to_hash
-    # The recipe uses user and passowrd for the auth_user option and the pg_auth file
+    # The recipe uses user and password for the auth_user option and the pg_auth file
     settings['auth_user'] = settings.delete('user') if settings.key?('user')
     settings.delete('password') if settings.key?('password')
     settings.map do |setting, value|
       "#{setting}=#{value}"
     end.join(' ').chomp
+  end
+
+  def pgbouncer_admin_config
+    user = node['gitlab']['postgresql']['pgbouncer_user']
+    port = node['gitlab']['pgbouncer']['listen_port']
+    unix_socket_dir = node['gitlab']['pgbouncer']['data_directory']
+    "user=#{user} dbname=pgbouncer sslmode=disable port=#{port} host=#{unix_socket_dir}"
   end
 
   def pg_auth_users

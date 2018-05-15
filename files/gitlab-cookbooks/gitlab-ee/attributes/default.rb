@@ -193,3 +193,10 @@ default['gitlab']['pgbouncer']['auth_type'] = 'md5'
 default['gitlab']['pgbouncer']['auth_hba_file'] = nil
 default['gitlab']['pgbouncer']['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
 default['gitlab']['pgbouncer']['users'] = {}
+
+####
+# PgBouncer exporter
+###
+default['gitlab']['pgbouncer-exporter']['enable'] = false
+default['gitlab']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+default['gitlab']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'

@@ -1481,6 +1481,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgres_exporter['listen_address'] = 'localhost:9187'
 
 ################################################################################
+## Prometheus PgBouncer exporter (EE only)
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/pgbouncer_exporter.html
+################################################################################
+
+# pgbouncer-exporter['enable'] = false
+# pgbouncer-exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+# pgbouncer-exporter['listen_address'] = 'localhost:9188'
+
+################################################################################
 ## Prometheus Gitlab monitor
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_monitor_exporter.html
 ################################################################################
