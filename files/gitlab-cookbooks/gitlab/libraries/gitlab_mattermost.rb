@@ -16,6 +16,7 @@
 #
 
 require_relative 'nginx.rb'
+require_relative '../../package/libraries/deprecations'
 
 module GitlabMattermost
   class << self
@@ -91,43 +92,8 @@ module GitlabMattermost
       Gitlab['mattermost_nginx']['enable'] = true if Gitlab['mattermost_nginx']['enable'].nil?
     end
 
-    def supported_configuration
-      # List of necessary settings that are supported
-      %w(enable
-         username
-         group
-         uid
-         gid
-         home
-         database_name
-         env
-         host
-         port
-         svlogd_prefix
-         service_site_url
-         service_address
-         service_port
-         service_use_ssl
-         team_site_name
-         sql_driver_name
-         sql_data_source
-         sql_data_source_replicas
-         sql_at_rest_encrypt_key
-         log_file_directory
-         file_directory
-         gitlab_enable
-         gitlab_secret
-         gitlab_id
-         gitlab_scope
-         gitlab_auth_endpoint
-         gitlab_token_endpoint
-         gitlab_user_api_endpoint
-         email_invite_salt
-         file_public_link_salt)
-    end
-
     def detect_deprecated_settings
-      deprecated_list = Gitlab['mattermost'].keys - supported_configuration
+      deprecated_list = Gitlab['mattermost'].keys - Gitlab::Deprecations.mattermost_supported_keys
       deprecated_list = deprecated_list.map { |n| "mattermost['#{n}']" }
       unless deprecated_list.empty? # rubocop:disable Style/GuardClause
         LoggingHelper.deprecation "* Mattermost\n" \
