@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.0.0
 
 - Disable PgBouncer PID file by default
+- Bump minimum version required for upgrade to 10.8 2df263267
 
 10.8.0
 
