@@ -1,5 +1,13 @@
 # Adding deprecation messages
 
+We store a list of deprecations associated with it in the `list` method of
+[Gitlab::Deprecations class](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/deprecations.rb)
+If a configuration has to be deprecated, it has to be added to that list with
+proper details.
+
+Note: The process described below will become obsolete soon, with our new
+deprecation management logic.
+
 As part of our [deprecation policy][] we may need to add
 messages to `gitlab-ctl reconfigure` that advise the user of any deprecated
 settings they are using.
