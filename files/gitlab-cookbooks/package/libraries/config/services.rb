@@ -44,12 +44,13 @@ module Services
 
   # Define the services included in the EE edition of GitLab
   class EEServices < ::Services::Config
-    service 'sentinel',         groups: ['redis']
-    service 'geo_logcursor',    groups: ['geo']
-    service 'geo_postgresql',   groups: %w(geo postgres)
-    service 'pgbouncer',        groups: %w(postgres pgbouncer_role)
-    service 'repmgrd',          groups: %w(postgres postgres_role)
-    service 'consul',           groups: %w(consul_role ha pgbouncer_role postgres_role)
-    service 'sidekiq_cluster',  groups: ['sidekiq']
+    service 'sentinel',           groups: ['redis']
+    service 'geo_logcursor',      groups: ['geo']
+    service 'geo_postgresql',     groups: %w(geo postgres)
+    service 'pgbouncer',          groups: %w(postgres pgbouncer_role)
+    service 'pgbouncer_exporter', groups: %w(pgbouncer_role)
+    service 'repmgrd',            groups: %w(postgres postgres_role)
+    service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role)
+    service 'sidekiq_cluster',    groups: ['sidekiq']
   end
 end

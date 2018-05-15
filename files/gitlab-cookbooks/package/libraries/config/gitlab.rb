@@ -96,5 +96,6 @@ module Gitlab
     attribute('gitlab_monitor')
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
+    attribute('pgbouncer_exporter')
   end
 end

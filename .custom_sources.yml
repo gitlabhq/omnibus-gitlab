@@ -43,6 +43,9 @@ postgres-exporter:
 redis-exporter:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis_exporter.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/redis_exporter.git"
+pgbouncer-exporter:
+  remote: "git@dev.gitlab.org:omnibus-mirror/pgbouncer_exporter.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer_exporter.git"
 gitaly:
   remote: 'git@dev.gitlab.org:gitlab/gitaly'
   alternative: 'https://gitlab.com/gitlab-org/gitaly'

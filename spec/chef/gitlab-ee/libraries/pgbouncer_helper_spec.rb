@@ -8,6 +8,32 @@ describe PgbouncerHelper do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  describe '#pgbouncer_admin_config' do
+    context 'by default' do
+      it 'by default' do
+        expect(subject.pgbouncer_admin_config).to eq('user=pgbouncer dbname=pgbouncer sslmode=disable port=6432 host=/var/opt/gitlab/pgbouncer')
+      end
+    end
+
+    context 'with custom sttings' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            pgbouncer_user: 'tester',
+          },
+          pgbouncer: {
+            listen_port: 1234,
+            data_directory: '/tmp'
+          }
+        )
+      end
+
+      it 'uses custom settings' do
+        expect(subject.pgbouncer_admin_config).to eq('user=tester dbname=pgbouncer sslmode=disable port=1234 host=/tmp')
+      end
+    end
+  end
+
   describe '#pg_auth_users' do
     context 'by default' do
       it 'by default' do
