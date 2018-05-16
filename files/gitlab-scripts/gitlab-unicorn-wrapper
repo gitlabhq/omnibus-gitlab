@@ -198,6 +198,21 @@ function quit_old_unicorn_if_running
     fi
   done
 
+  counter=0
+  local new_pid=$(cat $current_pidfile 2>/dev/null)
+
+  # Wait until the workers are forked for the new PID
+  while [[ $(ps --no-headers -o pid --ppid=$new_pid | wc -w) -lt 1 ]]; do
+    sleep 1
+    let counter++
+
+    if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
+      break
+    fi
+  done
+
+  sleep 1
+
   # At this point, the new unicorn should be alive. It could be that the
   # old unicorn died anyway, so let's not keep waiting.
   if alive ${old_unicorn_pid}; then
