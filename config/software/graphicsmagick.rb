@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.26'
+default_version '1.3.29'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -24,7 +24,7 @@ dependency 'libpng'
 dependency 'zlib'
 
 source url: "http://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
-       sha256: 'ab06d07cda5181f7829714c9f5641c0a93a0c3af2dacd747ed48d534e1ed0b3a'
+       sha256: 'de820cd10597205941a7e9d02c2e679231e92e8e769c204ef09034d2279ad453'
 
 relative_path "GraphicsMagick-#{version}"
 
