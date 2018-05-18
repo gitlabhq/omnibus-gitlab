@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Disable PgBouncer PID file by default
 - Bump minimum version required for upgrade to 10.8 2df263267
+- Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 
 10.8.0
 
@@ -102,7 +103,6 @@ omnibus-gitlab repository.
 
 - Pages: if logformat set to json, do not append timestamps with svlogd.
 - Downgrade jemalloc to 4.2.1 to avoid segfaults in Ruby
-- Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 
 10.6.0
 
