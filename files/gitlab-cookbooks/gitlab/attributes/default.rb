@@ -315,7 +315,7 @@ default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] =
 default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
 # List of ips and subnets that are allowed to access Gitlab monitoring endpoints
-default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8']
+default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 
 ####

@@ -498,7 +498,7 @@ production: &base
     # IP whitelist controlling access to monitoring endpoints
     ip_whitelist:
 <% @monitoring_whitelist.each do |entry| %>
-      - <%= entry %>
+      - "<%= entry %>"
 <% end %>
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:

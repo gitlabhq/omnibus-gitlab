@@ -547,7 +547,7 @@ describe 'gitlab::gitlab-rails' do
       context 'by default' do
         it 'whitelists local subnet' do
           expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 127.0.0.0/8})
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- "127.0.0.0/8"\s+- "::1/128"})
         end
         it 'sampler will sample every 10s' do
           expect(chef_run).to render_file(gitlab_yml_path)
@@ -561,7 +561,7 @@ describe 'gitlab::gitlab-rails' do
         end
         it 'sets the whitelist' do
           expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- 1.0.0.0\s+- 2.0.0.0})
+                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- "1.0.0.0"\s+- "2.0.0.0"})
         end
       end
 
