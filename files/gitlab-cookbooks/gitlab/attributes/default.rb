@@ -324,7 +324,7 @@ default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['unicorn']['enable'] = false
 default['gitlab']['unicorn']['ha'] = false
 default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['listen'] = '127.0.0.1'
+default['gitlab']['unicorn']['listen'] = "localhost"
 default['gitlab']['unicorn']['port'] = 8080
 default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 # Path to the unicorn server Process ID file
@@ -349,7 +349,7 @@ default['gitlab']['sidekiq']['shutdown_timeout'] = 4
 default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['metrics_enabled'] = true
 # Sidekiq http listener
-default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
+default['gitlab']['sidekiq']['listen_address'] = "localhost"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
 ###
