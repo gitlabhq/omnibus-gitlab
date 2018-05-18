@@ -40,8 +40,8 @@ readonly oldbin_pidfile=${current_pidfile}.oldbin
 readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
 readonly unicorn_kill_timeout=5 # time on seconds
-readonly unicorn_wait_reexec=60 # time on seconds
-readonly unicorn_wait_old_pid=60 # time on seconds
+readonly unicorn_wait_reexec=120 # time on seconds
+readonly unicorn_wait_old_pid=90 # time on seconds
 
 function main
 {
@@ -173,6 +173,8 @@ function quit_old_unicorn_if_running
   counter=0
 
   while [ ! -f ${oldbin_pidfile} ]; do
+    echo "Waiting for old unicorn PID to appear..."
+
     sleep 1
     old_unicorn_pid=$(cat $oldbin_pidfile 2>/dev/null)
     let counter++
@@ -190,6 +192,8 @@ function quit_old_unicorn_if_running
   counter=0
 
   while [ ! -f ${current_pidfile} ]; do
+    echo "Waiting for new unicorn to reexec..."
+
     sleep 1
     let counter++
 
@@ -201,8 +205,9 @@ function quit_old_unicorn_if_running
   counter=0
   local new_pid=$(cat $current_pidfile 2>/dev/null)
 
-  # Wait until the workers are forked for the new PID
   while [[ $(ps --no-headers -o pid --ppid=$new_pid | wc -w) -lt 1 ]]; do
+    echo "Waiting until $new_pid forks new workers..."
+
     sleep 1
     let counter++
 
