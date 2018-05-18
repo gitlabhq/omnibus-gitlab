@@ -96,10 +96,6 @@ class SecretsHelper
         'gitlab_enable' => Gitlab['mattermost']['gitlab_enable'],
         'gitlab_secret' => Gitlab['mattermost']['gitlab_secret'],
         'gitlab_id' => Gitlab['mattermost']['gitlab_id'],
-        'gitlab_scope' => Gitlab['mattermost']['gitlab_scope'],
-        'gitlab_auth_endpoint' => Gitlab['mattermost']['gitlab_auth_endpoint'],
-        'gitlab_token_endpoint' => Gitlab['mattermost']['gitlab_token_endpoint'],
-        'gitlab_user_api_endpoint' => Gitlab['mattermost']['gitlab_user_api_endpoint']
       }
       secret_tokens['mattermost'].merge!(gitlab_oauth)
     end
