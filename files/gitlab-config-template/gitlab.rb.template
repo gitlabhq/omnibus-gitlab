@@ -111,7 +111,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Monitoring settings
 ###! IP whitelist controlling access to monitoring endpoints
-# gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8']
+# gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 ###! Time between sampling of unicorn socket metrics, in seconds
 # gitlab_rails['monitoring_unicorn_sampler_interval'] = 10
 
@@ -610,7 +610,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # unicorn['worker_processes'] = 2
 
 ### Advanced settings
-# unicorn['listen'] = '127.0.0.1'
+# unicorn['listen'] = 'localhost'
 # unicorn['port'] = 8080
 # unicorn['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 # unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
@@ -638,7 +638,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['concurrency'] = 25
 # sidekiq['metrics_enabled'] = true
-# sidekiq['listen_address'] = 127.0.0.1
+# sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 
 ################################################################################
