@@ -33,6 +33,13 @@ describe 'gitaly' do
       expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/PATH')
     end
 
+    it 'creates a default VERSION file' do
+      expect(chef_run).to create_file('/var/opt/gitlab/gitaly/VERSION').with(
+        user: nil,
+        group: nil
+      )
+    end
+
     it 'populates gitaly config.toml with defaults' do
       expect(chef_run).to render_file(config_path)
         .with_content("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
