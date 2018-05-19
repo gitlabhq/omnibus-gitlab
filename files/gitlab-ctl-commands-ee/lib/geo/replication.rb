@@ -137,7 +137,7 @@ module Geo
       File.open(recovery_file, 'w', 0640) do |file|
         file.write(<<~EOF
           standby_mode = 'on'
-          recovery_target_timeline = 'latest'
+          recovery_target_timeline = '#{@options[:recovery_target_timeline]}'
           primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]} sslcompression=#{@options[:sslcompression]}'
         EOF
                   )
