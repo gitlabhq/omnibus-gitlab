@@ -31,6 +31,12 @@ module Gitlab
             removal: '11.0',
             note: "Use git_data_dirs instead."
           },
+          {
+            config_keys: %w(gitlab git-data-dir),
+            deprecation: '8.10',
+            removal: '11.0',
+            note: "Use git_data_dirs instead."
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['mattermost'], mattermost_supported_keys, "10.2", "11.0") if existing_config
