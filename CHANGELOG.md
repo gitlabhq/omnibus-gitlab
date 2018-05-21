@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Disable PgBouncer PID file by default
 - Add pgbouncer_exporter
 - Bump minimum version required for upgrade to 10.8 2df263267
+- Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 
 10.8.0
