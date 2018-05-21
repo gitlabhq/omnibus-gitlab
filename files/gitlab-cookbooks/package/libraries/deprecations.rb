@@ -114,7 +114,9 @@ module Gitlab
         puts "Checking for deprecated configuration failed."
       end
 
-      def check_config(incoming_version, existing_config)
+      def applicable_deprecations(incoming_version, existing_config, type)
+        # Return the list of deprecations or removals that are applicable with
+        # a given list of configuration for a specific version.
         incoming_version = next_major_version if incoming_version.empty?
         return [] unless incoming_version
 
@@ -122,10 +124,13 @@ module Gitlab
 
         # Getting settings from gitlab.rb that are in deprecations list and
         # has been removed in incoming or a previous version.
-        current_deprecations = list(existing_config).select { |deprecation| version >= Gem::Version.new(deprecation[:removal]) }
-        deprecated_config = current_deprecations.select { |deprecation| existing_config.dig(*deprecation[:config_keys]) }
+        current_deprecations = list(existing_config).select { |deprecation| version >= Gem::Version.new(deprecation[type]) }
+        current_deprecations.select { |deprecation| existing_config.dig(*deprecation[:config_keys]) }
+      end
 
+      def check_config(incoming_version, existing_config, type = :removal)
         messages = []
+        deprecated_config = applicable_deprecations(incoming_version, existing_config, type)
         deprecated_config.each do |deprecation|
           config_keys = deprecation[:config_keys].dup
           config_keys.shift if config_keys[0] == 'gitlab'
@@ -135,7 +140,11 @@ module Gitlab
                   "#{config_keys[0].tr('-', '_')}['#{config_keys.drop(1).join("']['")}']"
                 end
 
-          message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and removed in #{deprecation[:removal]}."
+          if type == :deprecation
+            message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and will be removed in #{deprecation[:removal]}"
+          elsif type == :removal
+            message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and was removed in #{deprecation[:removal]}."
+          end
           message += " " + deprecation[:note] if deprecation[:note]
           messages << message
         end

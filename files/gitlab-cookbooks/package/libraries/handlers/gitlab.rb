@@ -26,6 +26,8 @@ module GitLabHandler
       $stderr.puts
       $stderr.puts Rainbow(run_status.exception.message).red
       $stderr.puts
+
+      OmnibusHelper.on_exit
     end
   end
 

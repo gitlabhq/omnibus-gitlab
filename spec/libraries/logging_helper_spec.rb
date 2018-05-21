@@ -69,35 +69,48 @@ describe LoggingHelper do
       expect { subject.report }.not_to output.to_stdout
     end
 
+    it 'prints a removal header, then removal' do
+      subject.removal('one')
+      expect { subject.report }.to output(/\nRemovals:\none/).to_stdout
+    end
+
+    it 'prints a removal header, then removals' do
+      subject.removal('one')
+      subject.removal('two')
+      expect { subject.report }.to output(/\nRemovals:\none\ntwo/).to_stdout
+    end
+
     it 'prints a deprecation header, then deprecation' do
       subject.deprecation('one')
-      expect { subject.report }.to output(/\nDeprecations:\n\none\n/).to_stdout
+      expect { subject.report }.to output(/\nDeprecations:\none/).to_stdout
     end
 
     it 'prints a deprecation header, then deprecations' do
       subject.deprecation('one')
       subject.deprecation('two')
-      expect { subject.report }.to output(/\nDeprecations:\n\none\n---\n\ntwo\n\n/).to_stdout
+      expect { subject.report }.to output(/\nDeprecations:\none\ntwo/).to_stdout
     end
 
     it 'prints a warning header, then warning' do
       subject.warning('one')
-      expect { subject.report }. to output(/\nWarnings:\n\none\n/).to_stdout
+      expect { subject.report }. to output(/\nWarnings:\none/).to_stdout
     end
 
     it 'prints a warning header, then warnings' do
       subject.warning('one')
       subject.warning('two')
-      expect { subject.report }.to output(/\nWarnings:\n\none\n---\n\ntwo\n\n/).to_stdout
+      expect { subject.report }.to output(/\nWarnings:\none\ntwo/).to_stdout
     end
 
-    it 'prints a deprecation header, deprecations, warning header, then warnings' do
-      subject.deprecation('one')
-      subject.deprecation('two')
-      subject.warning('three')
-      subject.warning('four')
+    it 'prints a removal header, removals, deprecation header, deprecations, warning header, then warnings' do
+      subject.removal('one')
+      subject.removal('two')
+      subject.deprecation('three')
+      subject.deprecation('four')
+      subject.warning('five')
+      subject.warning('six')
       expect { subject.report }
-        .to output(/\nDeprecations:\n\none\n---\n\ntwo\n\n\nWarnings:\n\nthree\n---\n\nfour/).to_stdout
+        .to output(/\nRemovals:\none\ntwo\n\n\nDeprecations:\nthree\nfour\n\n\nWarnings:\nfive\nsix/).to_stdout
     end
   end
 end

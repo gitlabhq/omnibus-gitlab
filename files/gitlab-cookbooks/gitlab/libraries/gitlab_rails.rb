@@ -198,18 +198,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def handle_legacy_variables
       Gitlab['gitlab_rails']['stuck_ci_jobs_worker_cron'] ||= Gitlab['gitlab_rails']['stuck_ci_builds_worker_cron']
-      if Gitlab['gitlab_rails']['stuck_ci_builds_worker_cron']
-        warning = ["Legacy config value gitlab_rails['stuck_ci_builds_worker_cron'] found; it is DEPRECATED",
-                   "Please use gitlab_rails['stuck_ci_jobs_worker_cron'] from now on"]
-        LoggingHelper.deprecation(warning.join("\n"))
-      end
-
-      if Gitlab['gitlab_rails']['git_max_size']
-        LoggingHelper.deprecation("gitlab_rails['git_max_size'] setting is deprecated and will not have any effect.")
-      end
-
-      return unless Gitlab['gitlab_rails']['git_timeout']
-      LoggingHelper.deprecation("gitlab_rails['git_timeout'] setting is deprecated and will not have any effect.")
     end
 
     def public_path

@@ -37,6 +37,15 @@ module LoggingHelper
     log(message, kind: :deprecation)
   end
 
+  # Records a message as removal, logging as we see it.
+  #
+  # @param message [String] A message to give the user
+  # @return [void]
+  def removal(message)
+    Chef::Log.warn message
+    log(message, kind: :removal)
+  end
+
   # Records a message as warning, logging as we see it.
   #
   # @param message [String] A message to give the user
@@ -56,16 +65,15 @@ module LoggingHelper
 
     puts
     puts "#{type.capitalize}s:"
-    puts
 
     new_messages = generated.map { |m| m[:message] }
-    puts new_messages.join("\n---\n\n")
+    puts new_messages.join("\n")
     puts
   end
 
   # Report on any messages generated during reconfigure
   def report
-    [:deprecation, :warning].each do |type|
+    [:removal, :deprecation, :warning].each do |type|
       print_report(type)
     end
 

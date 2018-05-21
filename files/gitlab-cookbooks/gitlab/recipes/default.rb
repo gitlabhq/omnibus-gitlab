@@ -25,6 +25,8 @@ ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
 include_recipe 'gitlab::config'
 
+OmnibusHelper.check_deprecations
+
 directory "/etc/gitlab" do
   owner "root"
   group "root"
@@ -165,12 +167,18 @@ include_recipe "gitlab::deprecate-skip-auto-migrations"
 OmnibusHelper.is_deprecated_os?
 
 # Report on any deprecations we encountered at the end of the run
+# There are three possible exits for a reconfigure run
+# 1. Normal chef-client run completion
+# 2. chef-client failed due to an exception
+# 3. chef-client failed for some other reason
+# 1 and 3 are handled below. 2 is handled in our custom exception handler
+# defined at files/gitlab-cookbooks/package/libraries/handlers/gitlab.rb
 Chef.event_handler do
   on :run_completed do
-    LoggingHelper.report
+    OmnibusHelper.on_exit
   end
 
   on :run_failed do
-    LoggingHelper.report
+    OmnibusHelper.on_exit
   end
 end
