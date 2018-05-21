@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add pgbouncer_exporter
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
+- Bump PgBouncer to 1.8.1
 
 10.8.0
 

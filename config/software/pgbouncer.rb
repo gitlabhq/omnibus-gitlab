@@ -15,7 +15,7 @@
 #
 
 name 'pgbouncer'
-default_version '1.7.2'
+default_version '1.8.1'
 
 license 'ISC'
 license_file 'COPYRIGHT'
@@ -23,8 +23,8 @@ license_file 'COPYRIGHT'
 dependency 'libevent'
 dependency 'openssl'
 
-version '1.7.2' do
-  source sha256: 'de36b318fe4a2f20a5f60d1c5ea62c1ca331f6813d2c484866ecb59265a160ba'
+version '1.8.1' do
+  source sha256: 'fa8bde2a2d2c8c80d53a859f8e48bc6713cf127e31c77d8f787bbc1d673e8dc8'
 end
 
 source url: "https://pgbouncer.github.io/downloads/files/#{version}/pgbouncer-#{version}.tar.gz"
