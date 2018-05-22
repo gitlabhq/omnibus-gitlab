@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 
+10.8.1
+
+- Add git_data_dir to the deprecation list 7d04ed06b
+
 10.8.0
 
 - Force kill unicorn process if it is still running after a TERM or INT signal
