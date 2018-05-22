@@ -77,3 +77,8 @@ if node['gitlab']['bootstrap']['enable']
     retries 20
   end
 end
+
+file File.join(working_dir, "VERSION") do
+  content VersionHelper.version("/opt/gitlab/embedded/bin/gitaly --version")
+  notifies :restart, "service[gitaly]"
+end
