@@ -27,9 +27,10 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   v_opts = "--version '#{version}'" unless version.nil?
+
   gem [
     'install bundler',
     v_opts,
-    '--no-ri --no-rdoc'
+    '--no-ri --no-rdoc --force'
   ].compact.join(' '), env: env
 end

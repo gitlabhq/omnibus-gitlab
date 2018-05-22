@@ -208,7 +208,4 @@ build do
 
   command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
-  # According to https://github.com/ruby/ruby/commit/9bd24907851e390607d0d85365d0f00ed47a2a16#diff-3b3a6ec97232deb43dc14319a73872c1
-  # it is safe to remove. With Ruby 2.4, this will be done by ruby build itself.
-  delete "#{install_dir}/embedded/lib/libruby-static.a"
 end
