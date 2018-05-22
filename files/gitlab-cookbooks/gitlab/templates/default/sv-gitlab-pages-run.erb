@@ -48,6 +48,6 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% if node['gitlab']['gitlab-pages']['artifacts_server'] %>
     -artifacts-server="<%= node['gitlab']['gitlab-pages']['artifacts_server_url'] %>" \
     <% if node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %>
-    -artifacts-server-timeout=<%= node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %> \
+    -artifacts-server-timeout=<%= node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %>
     <% end %>
     <% end %>
