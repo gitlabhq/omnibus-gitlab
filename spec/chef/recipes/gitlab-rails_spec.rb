@@ -948,6 +948,13 @@ describe 'gitlab::gitlab-rails' do
 
       context 'by default' do
         cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com'
+            )
+          end
+
           ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
         end
 
@@ -974,7 +981,13 @@ describe 'gitlab::gitlab-rails' do
       context 'with specific gitlab_pages_secret' do
         cached(:chef_run) do
           RSpec::Mocks.with_temporary_scope do
-            stub_gitlab_rb(gitlab_pages: { admin_secret_token: 'abc123-gitlab-pages' })
+            stub_gitlab_rb(
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com',
+              gitlab_pages: {
+                admin_secret_token: 'abc123-gitlab-pages'
+              }
+            )
           end
 
           ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
