@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Disable PgBouncer PID file by default
 - Add pgbouncer_exporter
+- Automatically restart Gitaly when its VERSION file changes
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
