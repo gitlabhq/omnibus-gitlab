@@ -13,7 +13,7 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
 exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     /opt/gitlab/embedded/bin/gitlab-pages \
-    <% if node['gitlab']['pages-nginx']['enable'] && node['gitlab']['gitlab-pages']['listen_proxy'] %>
+    <% if node['gitlab']['gitlab-pages']['listen_proxy'] %>
     -listen-proxy="<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
     <% end %>
     <% external_http.each do |spec| %>
