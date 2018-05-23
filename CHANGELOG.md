@@ -11,6 +11,8 @@ omnibus-gitlab repository.
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
+- Use localhost hostname for unicorn and sidekiq listeners
+- Add ipv6 loopback to monitoring whitelist
 
 10.8.1
 
