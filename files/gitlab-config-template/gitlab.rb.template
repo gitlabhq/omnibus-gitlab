@@ -686,6 +686,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['dir'] = "/var/opt/gitlab/postgresql"
 # postgresql['log_directory'] = "/var/log/gitlab/postgresql"
 # postgresql['username'] = "gitlab-psql"
+# postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
 # postgresql['uid'] = nil
 # postgresql['gid'] = nil
 # postgresql['shell'] = "/bin/sh"
