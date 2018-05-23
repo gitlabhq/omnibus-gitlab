@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 
 10.8.1
 
+- Update gitlab-monitor to 2.16.0
 - Add git_data_dir to the deprecation list 7d04ed06b
 - Geo: Set recovery_target_timeline to latest by default
 
