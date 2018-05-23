@@ -135,7 +135,7 @@ function forward_signal
 function forward_signal_and_kill_unicorn
 {
   forward_signal $1
-  kill_unicorn_if_running
+  kill_unicorn_if_running $1
 }
 
 function forward_usr2_and_quit_old_unicorn
@@ -164,6 +164,31 @@ function kill_unicorn_if_running
   if alive ${unicorn_pid}; then
      echo "Forcibly killing unicorn"
      kill -9 ${unicorn_pid}
+  fi
+
+  if [ ! -f ${current_pidfile} ]; then
+    return 0
+  fi
+
+  local new_unicorn_pid=$(cat $current_pidfile 2>/dev/null)
+
+  if alive ${new_unicorn_pid}; then
+    echo "Sending $1 signal to new unicorn..."
+    kill -$1 ${new_unicorn_pid}
+  fi
+
+  counter=0
+
+  while (alive ${new_unicorn_pid}) && [[ $counter -lt ${unicorn_wait_reexec} ]]; do
+    echo "Waiting for new unicorn to die..."
+    let counter++
+    sleep ${unicorn_poll_alive}
+  done
+
+  # Forcibly kill if still running
+  if alive ${new_unicorn_pid}; then
+     echo "Forcibly killing new unicorn"
+     kill -9 ${new_unicorn_pid}
   fi
 }
 
