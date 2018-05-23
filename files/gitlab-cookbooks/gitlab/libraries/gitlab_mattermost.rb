@@ -21,7 +21,6 @@ require_relative '../../package/libraries/deprecations'
 module GitlabMattermost
   class << self
     def parse_variables
-      detect_deprecated_settings
       parse_mattermost_external_url
       parse_gitlab_mattermost
     end
@@ -90,17 +89,6 @@ module GitlabMattermost
       return unless Gitlab['mattermost']['enable']
 
       Gitlab['mattermost_nginx']['enable'] = true if Gitlab['mattermost_nginx']['enable'].nil?
-    end
-
-    def detect_deprecated_settings
-      deprecated_list = Gitlab['mattermost'].keys - Gitlab::Deprecations.mattermost_supported_keys
-      deprecated_list = deprecated_list.map { |n| "mattermost['#{n}']" }
-      unless deprecated_list.empty? # rubocop:disable Style/GuardClause
-        LoggingHelper.deprecation "* Mattermost\n" \
-          "\tDetected deprecated Mattermost settings. Starting with GitLab 11.0, these settings are no longer supported.\n" \
-          "\tCheck http://docs.gitlab.com/omnibus/gitlab-mattermost/#upgrading-gitlab-mattermost-from-versions-prior-to-11-0 for details. \n\n\t* " +
-          deprecated_list.join("\n\t* ")
-      end
     end
   end
 end

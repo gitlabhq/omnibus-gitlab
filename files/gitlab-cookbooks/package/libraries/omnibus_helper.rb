@@ -1,5 +1,6 @@
 require 'mixlib/shellout'
 require_relative 'helper'
+require_relative 'deprecations'
 
 class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(OmnibusHelper)` at the end of the class definition)
   include ShellOutHelper
@@ -60,6 +61,10 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     expected_user?(file, user) && expected_group?(file, group)
   end
 
+  def self.on_exit
+    LoggingHelper.report
+  end
+
   def self.is_deprecated_os?
     deprecated_os = { 'debian-7' => 'GitLab 11.0' }
     ohai ||= Ohai::System.new.tap do |oh|
@@ -77,5 +82,35 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     EOS
 
     LoggingHelper.deprecation(message)
+  end
+
+  def self.parse_current_version
+    return unless File.exist?("/opt/gitlab/version-manifest.json")
+    version_manifest = JSON.parse(File.read("/opt/gitlab/version-manifest.json"))
+    version_components = version_manifest['build_version'].split(".")
+    version_components[0, 2].join(".")
+  end
+
+  def self.check_deprecations
+    current_version = parse_current_version
+    return unless current_version
+
+    # We need configuration from /etc/gitlab/gitlab.rb in a structure similar
+    # to what will be stored in /opt/gitlab/nodes/{fqdn}.json. This means
+    # config keys should have `gitlab` as their parent key (for example,
+    # nginx['listen_address'] should become `gitlab['nginx']['listen_address']`
+    # We are doing something similar in check_config command.
+    gitlab_rb_config = Gitlab['node'].normal
+
+    removal_messages = Gitlab::Deprecations.check_config(current_version, gitlab_rb_config, :removal)
+    removal_messages.each do |msg|
+      LoggingHelper.removal(msg)
+    end
+    raise "Removed configurations found in gitlab.rb. Aborting reconfigure." unless removal_messages.empty?
+
+    deprecation_messages = Gitlab::Deprecations.check_config(current_version, gitlab_rb_config, :deprecation)
+    deprecation_messages.each do |msg|
+      LoggingHelper.deprecation(msg)
+    end
   end
 end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

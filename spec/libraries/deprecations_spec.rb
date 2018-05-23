@@ -47,14 +47,43 @@ describe Gitlab::Deprecations do
     allow(Gitlab::Deprecations).to receive(:list).and_return(deprecation_list)
   end
 
+  describe '.applicable_deprecations' do
+    it 'detects valid configuration' do
+      expect(described_class.applicable_deprecations("11.0", valid_config, :deprecation)).to eq([])
+    end
+
+    it 'distinguishes from deprecated and removed configuration' do
+      conf1 = {
+        config_keys: %w[gitlab nginx listen_address],
+        deprecation: "8.10",
+        removal: "11.0",
+        note: "Use nginx['listen_addresses'] instead."
+      }
+      conf2 = {
+        config_keys: ["gitlab", "gitlab-rails", "stuck_ci_builds_worker_cron"],
+        deprecation: "9.0",
+        removal: "12.0",
+        note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
+      }
+
+      expect(described_class.applicable_deprecations("11.0", invalid_config, :deprecation)).to include(conf1)
+      expect(described_class.applicable_deprecations("11.0", invalid_config, :deprecation)).to include(conf2)
+      expect(described_class.applicable_deprecations("12.0", invalid_config, :deprecation)).to include(conf1)
+      expect(described_class.applicable_deprecations("12.0", invalid_config, :deprecation)).to include(conf2)
+
+      expect(described_class.applicable_deprecations("11.0", invalid_config, :removal)).not_to include(conf2)
+      expect(described_class.applicable_deprecations("12.0", invalid_config, :removal)).to include(conf2)
+    end
+  end
+
   describe '.check_config' do
     it 'detects valid_config configuration' do
       expect(described_class.check_config("11.0", valid_config)).to eq([])
     end
 
     it 'detects deprecated configuration for specified version and ignores not yet deprecated ones' do
-      message_1 = "* nginx['listen_address'] has been deprecated since 8.10 and removed in 11.0. Use nginx['listen_addresses'] instead."
-      message_2 = "* gitlab_rails['stuck_ci_builds_worker_cron'] has been deprecated since 9.0 and removed in 12.0. Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
+      message_1 = "* nginx['listen_address'] has been deprecated since 8.10 and was removed in 11.0. Use nginx['listen_addresses'] instead."
+      message_2 = "* gitlab_rails['stuck_ci_builds_worker_cron'] has been deprecated since 9.0 and was removed in 12.0. Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
 
       expect(described_class.check_config("11.0", invalid_config)).to include(message_1)
       expect(described_class.check_config("11.0", invalid_config)).not_to include(message_2)

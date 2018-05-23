@@ -37,7 +37,7 @@ add_command 'check-config', 'Check if there are any configuration in gitlab.rb t
   end
   existing_config = node_json['normal']
 
-  messages = Gitlab::Deprecations.check_config(parse_version, existing_config)
+  messages = Gitlab::Deprecations.check_config(parse_version, existing_config, :removal)
   Kernel.exit 0 if messages.empty?
 
   log messages.join("\n")
