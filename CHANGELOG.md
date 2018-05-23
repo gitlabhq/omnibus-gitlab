@@ -6,6 +6,21 @@ omnibus-gitlab repository.
 10.8.2
 
 - Upgrade git to 2.16.4
+- Disable PgBouncer PID file by default
+- Add pgbouncer_exporter
+- Automatically restart Gitaly when its VERSION file changes
+- Bump minimum version required for upgrade to 10.8 2df263267
+- Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
+- Bump PgBouncer to 1.8.1
+
+10.8.2
+
+- Update gitlab-monitor to 2.16.0
+ 
+10.8.1
+
+- Add git_data_dir to the deprecation list 7d04ed06b
+- Geo: Set recovery_target_timeline to latest by default
 
 10.8.0
 
