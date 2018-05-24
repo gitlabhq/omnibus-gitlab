@@ -40,6 +40,8 @@ readonly oldbin_pidfile=${current_pidfile}.oldbin
 readonly unicorn_wait_start=1 # time in seconds
 readonly unicorn_poll_alive=1 # time in seconds
 readonly unicorn_kill_timeout=5 # time on seconds
+readonly unicorn_wait_reexec=120 # time on seconds
+readonly unicorn_wait_old_pid=90 # time on seconds
 
 function main
 {
@@ -120,8 +122,8 @@ function trap_signals
 
   # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
   # To allow for reloading unicorn from the command line, translate HUP to
-  # USR2.
-  trap "echo 'wrapper received HUP'; forward_signal USR2" HUP
+  # USR2, then QUIT the old unicorn.
+  trap "echo 'wrapper received HUP'; forward_usr2_and_quit_old_unicorn" HUP
 }
 
 function forward_signal
@@ -133,7 +135,13 @@ function forward_signal
 function forward_signal_and_kill_unicorn
 {
   forward_signal $1
-  kill_unicorn_if_running
+  kill_unicorn_if_running $1
+}
+
+function forward_usr2_and_quit_old_unicorn
+{
+  forward_signal USR2
+  quit_old_unicorn_if_running
 }
 
 function wait_for_unicorn_to_exit
@@ -156,6 +164,106 @@ function kill_unicorn_if_running
   if alive ${unicorn_pid}; then
      echo "Forcibly killing unicorn"
      kill -9 ${unicorn_pid}
+  fi
+
+  # If a new process has been reexecuted, forward the same signal
+  # and forcibly kill it if it does not respond.
+  if [ ! -f ${current_pidfile} ]; then
+    return 0
+  fi
+
+  local new_unicorn_pid=$(cat $current_pidfile 2>/dev/null)
+
+  if alive ${new_unicorn_pid}; then
+    echo "Sending $1 signal to new unicorn..."
+    kill -$1 ${new_unicorn_pid}
+  fi
+
+  counter=0
+
+  while (alive ${new_unicorn_pid}) && [[ $counter -lt ${unicorn_wait_reexec} ]]; do
+    echo "Waiting for new unicorn to die..."
+    let counter++
+    sleep ${unicorn_poll_alive}
+  done
+
+  # Forcibly kill if still running
+  if alive ${new_unicorn_pid}; then
+     echo "Forcibly killing new unicorn"
+     kill -9 ${new_unicorn_pid}
+  fi
+}
+
+function quit_old_unicorn_if_running
+{
+  local old_unicorn_pid=$(cat $oldbin_pidfile 2>/dev/null)
+  counter=0
+
+  while [ ! -f ${oldbin_pidfile} ]; do
+    echo "Waiting for old unicorn PID to appear..."
+
+    sleep 1
+    old_unicorn_pid=$(cat $oldbin_pidfile 2>/dev/null)
+    let counter++
+
+    if [[ $counter -gt ${unicorn_wait_old_pid} ]]; then
+      break
+    fi
+  done
+
+  if [ ! -f ${oldbin_pidfile} ]; then
+    echo "No old PID found..."
+    return 1
+  fi
+
+  counter=0
+
+  while [ ! -f ${current_pidfile} ]; do
+    echo "Waiting for new unicorn to reexec..."
+
+    sleep 1
+    let counter++
+
+    if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
+      break
+    fi
+  done
+
+  counter=0
+  local new_pid=$(cat $current_pidfile 2>/dev/null)
+
+  while [[ $(ps --no-headers -o pid --ppid=$new_pid | wc -w) -lt 1 ]]; do
+    echo "Waiting until $new_pid forks new workers..."
+
+    sleep 1
+    let counter++
+
+    if [[ $counter -gt ${unicorn_wait_reexec} ]]; then
+      break
+    fi
+  done
+
+  sleep 1
+
+  # At this point, the new unicorn should be alive. It could be that the
+  # old unicorn died anyway, so let's not keep waiting.
+  if alive ${old_unicorn_pid}; then
+    echo "Sending QUIT signal to old unicorn..."
+    kill -QUIT ${old_unicorn_pid}
+  fi
+
+  counter=0
+
+  while (alive ${old_unicorn_pid}) && [[ $counter -lt ${unicorn_wait_reexec} ]]; do
+    echo "Waiting for old unicorn to die..."
+    let counter++
+    sleep ${unicorn_poll_alive}
+  done
+
+  # Forcibly kill if still running
+  if alive ${old_unicorn_pid}; then
+     echo "Forcibly killing old unicorn"
+     kill -9 ${old_unicorn_pid}
   fi
 }
 
