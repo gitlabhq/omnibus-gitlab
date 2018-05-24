@@ -15,7 +15,8 @@ omnibus-gitlab repository.
 10.8.2
 
 - Update gitlab-monitor to 2.16.0
- 
+- No need to patch `lib/gitlab.rb` anymore since it now reads the REVISION file if present
+
 10.8.1
 
 - Add git_data_dir to the deprecation list 7d04ed06b
