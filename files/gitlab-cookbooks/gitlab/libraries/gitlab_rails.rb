@@ -24,8 +24,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
   class << self
     def parse_variables
-      handle_legacy_variables
-
       parse_external_url
       parse_directories
       parse_gitlab_trusted_proxies
@@ -194,10 +192,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
         end
       end
       Gitlab['gitlab_rails']['rack_attack_protected_paths'].concat(paths_without_relative_url)
-    end
-
-    def handle_legacy_variables
-      Gitlab['gitlab_rails']['stuck_ci_jobs_worker_cron'] ||= Gitlab['gitlab_rails']['stuck_ci_builds_worker_cron']
     end
 
     def public_path

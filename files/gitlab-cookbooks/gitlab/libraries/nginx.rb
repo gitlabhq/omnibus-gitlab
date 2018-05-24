@@ -18,7 +18,6 @@
 module Nginx
   class << self
     def parse_variables
-      parse_nginx_listen_address
       parse_nginx_listen_ports
     end
 
@@ -32,16 +31,6 @@ module Nginx
       end
 
       header
-    end
-
-    def parse_nginx_listen_address
-      return unless Gitlab['nginx']['listen_address']
-
-      # The user specified a custom NGINX listen address with the legacy
-      # listen_address option. We have to convert it to the new
-      # listen_addresses setting.
-      LoggingHelper.deprecation "nginx['listen_address'] is deprecated. Please use nginx['listen_addresses']"
-      Gitlab['nginx']['listen_addresses'] = [Gitlab['nginx']['listen_address']]
     end
 
     def parse_nginx_listen_ports

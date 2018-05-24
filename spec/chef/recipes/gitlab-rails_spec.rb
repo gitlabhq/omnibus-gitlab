@@ -613,19 +613,6 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'when there is a legacy GitLab Rails stuck_ci_builds_worker_cron key' do
-      before do
-        allow(Gitlab).to receive(:[]).and_call_original
-        stub_gitlab_rb(gitlab_rails: { stuck_ci_builds_worker_cron: '0 1 2 * *' })
-      end
-
-      it 'copies legacy value from legacy key to new one' do
-        chef_run
-
-        expect(Gitlab['gitlab_rails']['stuck_ci_jobs_worker_cron']).to eq('0 1 2 * *')
-      end
-    end
-
     context 'GitLab LDAP cron_jobs settings' do
       context 'when ldap user sync worker is configured' do
         it 'sets the cron value' do
