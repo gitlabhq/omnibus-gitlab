@@ -40,7 +40,7 @@ gitlab_group = account_helper.gitlab_group
 
 # Holds git-data, by default one shard at /var/opt/gitlab/git-data
 # Can be changed by user using git_data_dirs option
-Gitaly.converted_git_data_dirs.each do |_name, git_data_directory|
+Mash.new(Gitlab['git_data_dirs']).each do |_name, git_data_directory|
   storage_directory git_data_directory['path'] do
     owner gitlab_user
     mode "0700"

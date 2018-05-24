@@ -20,6 +20,8 @@ omnibus-gitlab repository.
 
 - Add git_data_dir to the deprecation list 7d04ed06b
 - Geo: Set recovery_target_timeline to latest by default
+- Remove deprecated git_data_dir configuration and old hash format of
+  git_data_dirs configuration !2520
 
 10.8.0
 

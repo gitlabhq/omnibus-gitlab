@@ -281,17 +281,6 @@ describe 'gitaly::git_data_dirs' do
     end
   end
 
-  context 'when git_data_dir is set as a single directory' do
-    before { stub_gitlab_rb(git_data_dir: '/tmp/user/git-data') }
-
-    it 'correctly sets the repository storage directories' do
-      allow(Chef::Log).to receive(:warn)
-      expect(Chef::Log).to receive(:warn).with(/Your git_data_dir settings are deprecated/)
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
-        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
-    end
-  end
-
   context 'when gitaly is set to use a listen_addr instead of a socket' do
     before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
 
@@ -333,24 +322,6 @@ describe 'gitaly::git_data_dirs' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
-                                                                                      })
-    end
-  end
-
-  context 'when git_data_dirs is set with deprecated settings structure' do
-    before do
-      stub_gitlab_rb({
-                       git_data_dirs: {
-                         'default' => '/tmp/default/git-data',
-                         'overflow' => '/tmp/other/git-overflow-data'
-                       }
-                     })
-    end
-
-    it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
-                                                                                        'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
                                                                                       })
     end
   end
