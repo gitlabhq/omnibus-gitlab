@@ -11,6 +11,8 @@ omnibus-gitlab repository.
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
+- Automatically add registry hostname to the to alt_name of the 
+  LetsEncrypt certificate #3343
 
 10.8.2
 

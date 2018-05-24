@@ -24,6 +24,7 @@ end
 
 # If this is the first run, then nginx won't be working due to missing certificates
 acme_selfsigned site.host do
+  alt_names node['letsencrypt']['alt_names']
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
   notifies :restart, 'service[nginx]', :immediately

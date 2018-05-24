@@ -45,7 +45,7 @@ and run `sudo gitlab-ctl reconfigure`.
 
 ## Let's Encrypt Integration
 
-Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you. Currently only the primary GitLab domain is supported. Other services like pages, registry, and Mattermost will be supported in a future release.
+Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you. Currently only the primary GitLab domain, and the registry are supported. Other services like pages, and Mattermost will be supported in a future release.
 
 ### Enabling
 > **Note**: For GitLab 10.5 and 10.6, you will need to also set `letsencrypt['enable'] = true`.
@@ -56,6 +56,14 @@ letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
 While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing its 3 month expiration.
+
+### Enabling for the registry
+
+> **Note**: Available in GitLab 11.0 and onwards.
+
+We will automatically add the host address specified in the `registry_external_url` as an alternate name to the certificate managed by LetsEncrypt, and use the same certificate for both services.
+
+This will be enabled when the `registry_external_url` uses the `https` protocol, and the `registry_nginx['ssl_certificate']` is absent from your `/etc/gitlab/gitlab.rb`.
 
 ### Disabling auto-configuration
 
