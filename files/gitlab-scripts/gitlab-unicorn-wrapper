@@ -166,6 +166,8 @@ function kill_unicorn_if_running
      kill -9 ${unicorn_pid}
   fi
 
+  # If a new process has been reexecuted, forward the same signal
+  # and forcibly kill it if it does not respond.
   if [ ! -f ${current_pidfile} ]; then
     return 0
   fi
