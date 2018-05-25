@@ -1141,91 +1141,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['database_name'] = 'mattermost_production'
 # mattermost['env'] = {}
 
-# mattermost['service_use_ssl'] = false
 # mattermost['service_address'] = "127.0.0.1"
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
-# mattermost['service_websocket_url'] = nil
-# mattermost['service_maximum_login_attempts'] = 10
-# mattermost['service_google_developer_key'] = nil
-# mattermost['service_enable_incoming_webhooks'] = true
-# mattermost['service_enable_post_username_override'] = true
-# mattermost['service_enable_post_icon_override'] = true
-# mattermost['service_enable_testing'] = false
-# mattermost['service_enable_security_fix_alert'] = true
-# mattermost['service_enable_insecure_outgoing_connections'] = false
 # mattermost['service_allowed_untrusted_internal_connections'] = ""
-# mattermost['service_allow_cors_from'] = ""
-# mattermost['service_allow_cookies_from_subdomains'] = false
-# mattermost['service_enable_outgoing_webhooks'] = true
-# mattermost['service_enable_commands'] = true
-# mattermost['service_enable_custom_emoji'] = false
-# mattermost['service_enable_oauth_service_provider'] = false
-# mattermost['service_enable_developer'] = false
-# mattermost['service_session_length_web_in_days'] = 30
-# mattermost['service_session_length_mobile_in_days'] = 30
-# mattermost['service_session_length_sso_in_days'] = 30
-# mattermost['service_session_cache_in_minutes'] = 10
-# mattermost['service_session_idle_timeout_in_minutes'] = 0
-# mattermost['service_websocket_secure_port'] = 443
-# mattermost['service_websocket_port'] = 80
-# mattermost['service_webserver_mode'] = 'gzip'
-# mattermost['service_connection_security'] = nil
-# mattermost['service_tls_cert_file'] = nil
-# mattermost['service_tls_key_file'] = nil
-# mattermost['service_use_lets_encrypt'] = false
-# mattermost['service_lets_encrypt_cert_cache_file'] = "./config/letsencrypt.cache"
-# mattermost['service_forward_80_to_443'] = false
-# mattermost['service_read_timeout'] = 300
-# mattermost['service_write_timeout'] = 300
-# mattermost['service_time_between_user_typing_updates_milliseconds'] = 5000
-# mattermost['service_enable_link_previews'] = false
-# mattermost['service_enable_user_typing_messages'] = true
-# mattermost['service_enable_post_search'] = true
-# mattermost['service_enable_user_statuses'] = true
-# mattermost['service_enable_emoji_picker'] = true
-# mattermost['service_enable_channel_viewed_messages'] = true
-# mattermost['service_enable_apiv3'] = true
-# mattermost['service_goroutine_health_threshold'] = -1
-# mattermost['service_user_access_tokens'] = false
-# mattermost['service_enable_preview_features'] = true
-# mattermost['service_close_unused_direct_messages'] = false
-# mattermost['service_image_proxy_type'] = ''
-# mattermost['service_image_proxy_options'] = ''
-# mattermost['service_image_proxy_url'] = ''
-
 # mattermost['team_site_name'] = "GitLab Mattermost"
-# mattermost['team_max_users_per_team'] = 150
-# mattermost['team_enable_user_creation'] = true
-# mattermost['team_enable_open_server'] = false
-# mattermost['team_allow_public_link'] = true
-# mattermost['team_allow_valet_default'] = false
-# mattermost['team_restrict_creation_to_domains'] = "gmail.com"
-# mattermost['team_restrict_direct_message'] = "any"
-# mattermost['team_max_channels_per_team'] = 2000
-# mattermost['team_max_notifications_per_channel'] = 1000
-# mattermost['team_enable_x_to_leave_channels_from_lhs'] = false
-# mattermost['team_user_status_away_timeout'] = 300
-# mattermost['team_enable_confirm_notifications_to_channel'] = true
-# mattermost['team_teammate_name_display'] = "full_name"
-
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"
-# mattermost['sql_data_source_replicas'] = ["mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"]
-# mattermost['sql_max_idle_conns'] = 10
-# mattermost['sql_max_open_conns'] = 10
-# mattermost['sql_trace'] = false
-# mattermost['sql_data_source_search_replicas'] = []
-# mattermost['sql_query_timeout'] = 30
-
 # mattermost['log_file_directory'] = '/var/log/gitlab/mattermost/'
-# mattermost['log_console_enable'] = true
-# mattermost['log_console_level'] = 'INFO'
-# mattermost['log_enable_file'] = false
-# mattermost['log_file_level'] = 'INFO'
-# mattermost['log_file_format'] = nil
-# mattermost['log_enable_diagnostics'] = true
-
 # mattermost['gitlab_enable'] = false
 # mattermost['gitlab_id'] = "12345656"
 # mattermost['gitlab_secret'] = "123456789"
@@ -1233,95 +1156,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
 # mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
 # mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
-
-# mattermost['aws'] = {'S3AccessKeyId' => '123', 'S3SecretAccessKey' => '123', 'S3Bucket' => 'aa', 'S3Region' => 'bb'}
-
-# mattermost['email_enable_sign_up_with_email'] = true
-# mattermost['email_enable_sign_in_with_email'] = true
-# mattermost['email_enable_sign_in_with_username'] = false
-# mattermost['email_send_email_notifications'] = false
-# mattermost['email_use_channel_in_email_notifications'] = true
-# mattermost['email_require_email_verification'] = false
-# mattermost['email_smtp_username'] = nil
-# mattermost['email_smtp_password'] = nil
-# mattermost['email_smtp_server'] = nil
-# mattermost['email_smtp_port'] = nil
-# mattermost['email_connection_security'] = nil
-# mattermost['email_feedback_name'] = nil
-# mattermost['email_feedback_email'] = nil
-# mattermost['email_feedback_organization'] = nil
-# mattermost['email_send_push_notifications'] = true
-# mattermost['email_push_notification_server'] = ""
-# mattermost['email_push_notification_contents'] = "generic"
-# mattermost['email_enable_batching'] = false
-# mattermost['email_batching_buffer_size'] = 256
-# mattermost['email_batching_interval'] = 30
-# mattermost['email_skip_server_certificate_verification'] = false
-# mattermost['email_smtp_auth'] = false
-# mattermost['email_notification_content_type'] = "full"
-# mattermost['email_login_button_color'] = ""
-# mattermost['email_login_button_border_color'] = ""
-# mattermost['email_login_button_text_color'] = ""
-
-# mattermost['file_max_file_size'] = 52428800
-# mattermost['file_driver_name'] = "local"
 # mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
-# mattermost['file_enable_public_link'] = true
-# mattermost['file_initial_font'] = 'luximbi.ttf'
-# mattermost['file_amazon_s3_access_key_id'] = nil
-# mattermost['file_amazon_s3_bucket'] = nil
-# mattermost['file_amazon_s3_secret_access_key'] = nil
-# mattermost['file_amazon_s3_region'] = nil
-# mattermost["file_amazon_s3_endpoint"] = nil
-# mattermost["file_amazon_s3_ssl"] = true
-# mattermost["file_amazon_s3_sign_v2"] = false
-# mattermost['file_enable_file_attachments'] = true
-# mattermost["file_amazon_s3_trace"] = false
-
-# mattermost['ratelimit_enable_rate_limiter'] = false
-# mattermost['ratelimit_per_sec'] = 10
-# mattermost['ratelimit_max_burst'] = 100
-# mattermost['ratelimit_memory_store_size'] = 10000
-# mattermost['ratelimit_vary_by_remote_addr'] = true
-# mattermost['ratelimit_vary_by_user'] = false
-# mattermost['ratelimit_vary_by_header'] = nil
-
-# mattermost['support_terms_of_service_link'] = "https://about.mattermost.com/default-terms/"
-# mattermost['support_privacy_policy_link'] = "https://about.mattermost.com/default-privacy-policy/"
-# mattermost['support_about_link'] = "https://about.mattermost.com/default-about/"
-# mattermost['support_help_link'] = "https://about.mattermost.com/default-help/"
-# mattermost['support_report_a_problem_link'] = "https://about.mattermost.com/default-report-a-problem/"
-# mattermost['support_email'] =  "support@example.com"
-
-# mattermost['privacy_show_email_address'] = true
-# mattermost['privacy_show_full_name'] = true
-
-# mattermost['localization_server_locale'] = "en"
-# mattermost['localization_client_locale'] = "en"
-# mattermost['localization_available_locales'] = "en,es,fr,ja,pt-BR"
-
-# mattermost['webrtc_enable'] = false
-# mattermost['webrtc_gateway_websocket_url'] = nil
-# mattermost['webrtc_gateway_admin_url'] = nil
-# mattermost['webrtc_gateway_admin_secret'] = nil
-# mattermost['webrtc_gateway_stun_uri'] = nil
-# mattermost['webrtc_gateway_turn_uri'] = nil
-# mattermost['webrtc_gateway_turn_username'] = nil
-# mattermost['webrtc_gateway_turn_shared_key'] = nil
-
-# mattermost['native_app_app_download_link'] = "https://about.mattermost.com/downloads/"
-# mattermost['native_app_android_app_download_link'] = "https://about.mattermost.com/mattermost-android-app/"
-# mattermost['native_app_ios_app_download_link'] = "https://about.mattermost.com/mattermost-ios-app/"
-
-# mattermost['job_run_jobs'] = true
-# mattermost['job_run_scheduler'] = true
-
-# mattermost['plugin_enable'] = true
-# mattermost['plugin_enable_uploads'] = false
-# mattermost['plugin_directory'] = "/var/opt/gitlab/mattermost/plugins"
-# mattermost['plugin_client_directory'] = "/var/opt/gitlab/mattermost/client-plugins"
-# mattermost['plugin_plugins'] = {}
-# mattermost['plugin_plugin_states'] = {}
 
 ################################################################################
 ## Mattermost NGINX

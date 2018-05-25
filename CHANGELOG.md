@@ -16,6 +16,8 @@ omnibus-gitlab repository.
   LetsEncrypt certificate #3343
 - Use localhost hostname for unicorn and sidekiq listeners
 - Add ipv6 loopback to monitoring whitelist
+- Remove deprecated Mattermost settings and use environment variables to set
+  supported ones. !2522
 
 10.8.2
 

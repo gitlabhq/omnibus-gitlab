@@ -38,6 +38,7 @@ build do
   copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
   copy 'client', "#{install_dir}/embedded/service/mattermost/client"
+  copy 'config/config.json', "#{install_dir}/embedded/service/mattermost/config.json.template"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
