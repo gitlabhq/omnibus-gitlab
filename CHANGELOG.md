@@ -24,6 +24,10 @@ omnibus-gitlab repository.
 - Patch bzip2 against CVE-2016-3189 552730bfa
 - Fix pgbouncer recipe to use the correct user for standalone instances
 
+10.7.5
+
+- Upgrade Git to 2.14.4
+
 10.7.3
 
 - Add support for the `-daemon-inplace-chroot` command-line flag to GitLab Pages
