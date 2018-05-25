@@ -25,4 +25,25 @@ class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so 
       warn('Something went wrong while trying to update gitlab-secrets.json. Check the file permissions and try reconfiguring again.')
     end
   end
+
+  def self.get_env_variables(node)
+    {
+      'MM_SERVICESETTINGS_SITEURL' => node['mattermost']['service_site_url'].to_s,
+      'MM_SERVICESETTINGS_LISTENADDRESS' => "#{node['mattermost']['service_address']}:#{node['mattermost']['service_port']}",
+      'MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS' => node['mattermost']['service_allowed_untrusted_internal_connections'],
+      'MM_TEAMSETTINGS_SITENAME' => node['mattermost']['team_site_name'].to_s,
+      'MM_SQLSETTINGS_DRIVERNAME' => node['mattermost']['sql_driver_name'],
+      'MM_SQLSETTINGS_DATASOURCE' => node['mattermost']['sql_data_source'].to_s,
+      'MM_SQLSETTINGS_ATRESTENCRYPTKEY' => node['mattermost']['sql_at_rest_encrypt_key'].to_s,
+      'MM_LOGSETTINGS_FILELOCATION' => (node['mattermost']['log_file_directory']).to_s,
+      'MM_FILESETTINGS_DIRECTORY' => node['mattermost']['file_directory'].to_s,
+      'MM_GITLABSETTINGS_ENABLE' => node['mattermost']['gitlab_enable'].to_s,
+      'MM_GITLABSETTINGS_SECRET' => node['mattermost']['gitlab_secret'].to_s,
+      'MM_GITLABSETTINGS_ID' => node['mattermost']['gitlab_id'].to_s,
+      'MM_GITLABSETTINGS_SCOPE' => node['mattermost']['gitlab_scope'].to_s,
+      'MM_GITLABSETTINGS_AUTHENDPOINT' => node['mattermost']['gitlab_auth_endpoint'].to_s,
+      'MM_GITLABSETTINGS_TOKENENDPOINT' => node['mattermost']['gitlab_token_endpoint'].to_s,
+      'MM_GITLABSETTINGS_USERAPIENDPOINT' => node['mattermost']['gitlab_user_api_endpoint'].to_s,
+    }
+  end
 end unless defined?(MattermostHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
