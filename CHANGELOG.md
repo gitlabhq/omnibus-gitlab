@@ -14,6 +14,8 @@ omnibus-gitlab repository.
 - Bump PgBouncer to 1.8.1
 - Automatically add registry hostname to the to alt_name of the 
   LetsEncrypt certificate #3343
+- Use localhost hostname for unicorn and sidekiq listeners
+- Add ipv6 loopback to monitoring whitelist
 
 10.8.2
 
