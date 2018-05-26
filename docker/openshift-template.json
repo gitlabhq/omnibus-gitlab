@@ -496,8 +496,8 @@
                     "memory": "512Mi"
                   },
                   "requests": {
-                    "cpu": "300m",
-                    "memory": "300Mi"
+                    "cpu": "1",
+                    "memory": "512Mi"
                   }
                 },
                 "volumeMounts": [
