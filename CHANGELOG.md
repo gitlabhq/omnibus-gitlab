@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+10.8.2
+
+- Upgrade git to 2.16.4
+
 10.8.0
 
 - Force kill unicorn process if it is still running after a TERM or INT signal
