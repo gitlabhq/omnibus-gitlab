@@ -23,6 +23,7 @@ omnibus-gitlab repository.
 
 - Update gitlab-monitor to 2.16.0
 - No need to patch `lib/gitlab.rb` anymore since it now reads the REVISION file if present
+- Upgrade git to 2.16.4
 
 10.8.1
 
@@ -58,6 +59,10 @@ omnibus-gitlab repository.
 - Enforce upgrade paths for package upgrades 56a250b1a
 - Patch unzip to fix multiple CVEs cefd5b1b6
 - Geo: Success message for `gitlab-ctl promote-to-primary-node` command
+
+10.7.5
+
+- Upgrade Git to 2.14.4
 
 10.7.4
 
@@ -105,6 +110,10 @@ omnibus-gitlab repository.
 - Fix bug in error reporting of `gitlab-ctl renew-le-certs` #3389
 - Adds go-crond to the package #3251
 - Auto-renew LetsEncrypt with go-crond #3251
+
+10.6.6
+
+- Update Git to 2.14.4
 
 10.6.5
 
