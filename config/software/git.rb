@@ -35,6 +35,7 @@ license_file 'COPYING'
 dependency 'zlib'
 dependency 'openssl'
 dependency 'curl'
+dependency 'pcre2'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
        sha256: 'dda229e9c73f4fbb7d4324e0d993e11311673df03f73b194c554c2e9451e17cd'
@@ -48,6 +49,7 @@ build do
            "--prefix=#{install_dir}/embedded",
            "--with-curl=#{install_dir}/embedded",
            "--with-ssl=#{install_dir}/embedded",
+           "--with-libpcre2=#{install_dir}/embedded",
            "--with-zlib=#{install_dir}/embedded"].join(' '), env: env
 
   # Ugly hack because ./configure does not pick these up from the env
