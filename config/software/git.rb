@@ -26,7 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-default_version 'v2.16.4'
+default_version '2.16.4'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -35,28 +35,17 @@ license_file 'COPYING'
 dependency 'zlib'
 dependency 'openssl'
 dependency 'curl'
-<<<<<<< HEAD
 dependency 'pcre2'
-=======
 dependency 'libiconv'
->>>>>>> e0e7c0000... Merge branch 'security-git-2.16.4' into 'master'
 
-source git: 'git@dev.gitlab.org:security/cabal.git'
+source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
+       sha256: 'e8709ebcda3d793cd933ca55004814959bb8e6fa518b5b37f602d9881e489d2e'
+
+relative_path "git-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-<<<<<<< HEAD
-  command ['./configure',
-           "--prefix=#{install_dir}/embedded",
-           "--with-curl=#{install_dir}/embedded",
-           "--with-ssl=#{install_dir}/embedded",
-           "--with-libpcre2=#{install_dir}/embedded",
-           "--with-zlib=#{install_dir}/embedded"].join(' '), env: env
-
-  # Ugly hack because ./configure does not pick these up from the env
-=======
->>>>>>> e0e7c0000... Merge branch 'security-git-2.16.4' into 'master'
   block do
     open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
