@@ -26,7 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-default_version '2.16.3'
+default_version '2.16.4'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -36,37 +36,36 @@ dependency 'zlib'
 dependency 'openssl'
 dependency 'curl'
 dependency 'pcre2'
+dependency 'libiconv'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: 'dda229e9c73f4fbb7d4324e0d993e11311673df03f73b194c554c2e9451e17cd'
+       sha256: 'e8709ebcda3d793cd933ca55004814959bb8e6fa518b5b37f602d9881e489d2e'
 
 relative_path "git-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command ['./configure',
-           "--prefix=#{install_dir}/embedded",
-           "--with-curl=#{install_dir}/embedded",
-           "--with-ssl=#{install_dir}/embedded",
-           "--with-libpcre2=#{install_dir}/embedded",
-           "--with-zlib=#{install_dir}/embedded"].join(' '), env: env
-
-  # Ugly hack because ./configure does not pick these up from the env
   block do
-    open(File.join(project_dir, 'config.mak.autogen'), 'a') do |file|
+    open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
 # Added by Omnibus git software definition git.rb
+CURLDIR=#{install_dir}/embedded
+ICONVDIR=#{install_dir}/embedded
+OPENSSLDIR=#{install_dir}/embedded
+ZLIB_PATH=#{install_dir}/embedded
+NEEDS_LIBICONV=YesPlease
 NO_PERL=YesPlease
 NO_EXPAT=YesPlease
 NO_TCLTK=YesPlease
 NO_GETTEXT=YesPlease
 NO_PYTHON=YesPlease
 NO_INSTALL_HARDLINKS=YesPlease
+NO_R_TO_GCC_LINKER=YesPlease
       EOH
     end
   end
 
-  command "make -j #{workers}", env: env
-  command 'make install'
+  command "make -j #{workers} prefix=#{install_dir}/embedded", env: env
+  command "make install prefix=#{install_dir}/embedded", env: env
 end
