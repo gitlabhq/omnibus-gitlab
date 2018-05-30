@@ -17,6 +17,7 @@
 
 require_relative 'nginx.rb'
 require_relative '../../package/libraries/deprecations'
+require_relative '../../letsencrypt/libraries/helper'
 
 module GitlabMattermost
   class << self
@@ -73,6 +74,9 @@ module GitlabMattermost
         Gitlab['mattermost']['service_use_ssl'] = true
         Gitlab['mattermost_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['mattermost_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+
+        LetsEncryptHelper.add_service_alt_name("mattermost")
+
         Nginx.parse_proxy_headers('mattermost_nginx', true)
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"

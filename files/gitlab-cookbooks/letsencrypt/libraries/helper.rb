@@ -24,4 +24,22 @@ class LetsEncryptHelper
   def contact
     node['letsencrypt']['contact_emails'].map { |x| "mailto:#{x}" }
   end
+
+  def self.add_service_alt_name(service)
+    # Adds a service's external URL to the certificate's alt_name list so the
+    # generated certificate is applicable to that domain also.
+
+    uri = URI(Gitlab["#{service}_external_url"].to_s)
+
+    return if !Gitlab['external_url'] || File.exist?(Gitlab["#{service}_nginx"]["ssl_certificate"])
+
+    # If the default certficate file is missing, configure as an alt_name
+    # of the letsencrypt managed certificate
+    Gitlab['letsencrypt']['alt_names'] ||= []
+    Gitlab['letsencrypt']['alt_names'] << uri.host
+
+    external_uri = URI(Gitlab['external_url'])
+    Gitlab["#{service}_nginx"]["ssl_certificate"] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
+    Gitlab["#{service}_nginx"]["ssl_certificate_key"] = "/etc/gitlab/ssl/#{external_uri.host}.key"
+  end
 end
