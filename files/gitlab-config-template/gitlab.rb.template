@@ -152,7 +152,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"
-# gitlab_rails['artifacts_object_store_enabled'] = false # EE only
+####! Job artifacts Object Store
+####! Docs: https://docs.gitlab.com/ee/administration/job_artifacts.html#using-object-storage
+# gitlab_rails['artifacts_object_store_enabled'] = false
 # gitlab_rails['artifacts_object_store_direct_upload'] = false
 # gitlab_rails['artifacts_object_store_background_upload'] = true
 # gitlab_rails['artifacts_object_store_proxy_download'] = false
