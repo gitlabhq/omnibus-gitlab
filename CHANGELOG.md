@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Add ipv6 loopback to monitoring whitelist
 - Remove deprecated Mattermost settings and use environment variables to set
   supported ones. !2522
+- Bump git to 2.17.1 !2552
 
 10.8.2
 

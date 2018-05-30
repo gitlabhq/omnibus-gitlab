@@ -26,7 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-default_version '2.16.4'
+default_version '2.17.1'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -39,7 +39,7 @@ dependency 'pcre2'
 dependency 'libiconv'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: 'e8709ebcda3d793cd933ca55004814959bb8e6fa518b5b37f602d9881e489d2e'
+       sha256: 'ec6452f0c8d5c1f3bcceabd7070b8a8a5eea11d4e2a04955c139b5065fd7d09a'
 
 relative_path "git-#{version}"
 
@@ -55,6 +55,7 @@ ICONVDIR=#{install_dir}/embedded
 OPENSSLDIR=#{install_dir}/embedded
 ZLIB_PATH=#{install_dir}/embedded
 NEEDS_LIBICONV=YesPlease
+USE_LIBPCRE2=YesPlease
 NO_PERL=YesPlease
 NO_EXPAT=YesPlease
 NO_TCLTK=YesPlease
