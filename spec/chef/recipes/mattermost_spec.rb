@@ -142,4 +142,47 @@ describe 'gitlab::mattermost' do
 
     it_behaves_like "enabled mattermost env", "IAM", 'CUSTOMVAR'
   end
+
+  context 'letsencrypt alt_names' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        mattermost_external_url: 'https://mattermost.example.com'
+      )
+
+      allow(File).to receive(:exist?).and_call_original
+    end
+
+    context 'default certificate file is missing' do
+      before do
+        allow(File).to receive(:exist?).with('/etc/gitlab/ssl/mattermost.example.com.crt').and_return(false)
+      end
+
+      it 'adds itself to letsencrypt alt_names' do
+        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['mattermost.example.com'])
+      end
+
+      it 'is reflected in the acme_selfsigned' do
+        expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
+          alt_names: ['mattermost.example.com']
+        )
+      end
+    end
+
+    context 'default certificate file is present' do
+      before do
+        allow(File).to receive(:exist?).with('/etc/gitlab/ssl/mattermost.example.com.crt').and_return(true)
+      end
+
+      it 'does not alter letsencrypt alt_names' do
+        expect(chef_run.node['letsencrypt']['alt_names']).to eql([])
+      end
+
+      it 'is reflected in the acme_selfsigned' do
+        expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
+          alt_names: []
+        )
+      end
+    end
+  end
 end
