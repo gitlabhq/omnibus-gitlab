@@ -75,6 +75,7 @@ module Gitlab
     attribute('mattermost_external_url', default: nil)
     attribute('pages_external_url',      default: nil)
     attribute('runtime_dir',             default: nil)
+    attribute('git_data_dir',            default: nil)
     attribute('bootstrap')
     attribute('omnibus_gitconfig')
     attribute('manage_accounts')
