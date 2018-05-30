@@ -26,7 +26,11 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
+<<<<<<< HEAD
 default_version 'v2.16.4'
+=======
+default_version '2.17.1'
+>>>>>>> origin/master
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -35,9 +39,19 @@ license_file 'COPYING'
 dependency 'zlib'
 dependency 'openssl'
 dependency 'curl'
+<<<<<<< HEAD
 dependency 'libiconv'
 
 source git: 'git@dev.gitlab.org:security/cabal.git'
+=======
+dependency 'pcre2'
+dependency 'libiconv'
+
+source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
+       sha256: 'ec6452f0c8d5c1f3bcceabd7070b8a8a5eea11d4e2a04955c139b5065fd7d09a'
+
+relative_path "git-#{version}"
+>>>>>>> origin/master
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -51,6 +65,10 @@ ICONVDIR=#{install_dir}/embedded
 OPENSSLDIR=#{install_dir}/embedded
 ZLIB_PATH=#{install_dir}/embedded
 NEEDS_LIBICONV=YesPlease
+<<<<<<< HEAD
+=======
+USE_LIBPCRE2=YesPlease
+>>>>>>> origin/master
 NO_PERL=YesPlease
 NO_EXPAT=YesPlease
 NO_TCLTK=YesPlease

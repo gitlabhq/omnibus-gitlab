@@ -57,13 +57,27 @@ letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 
 While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing its 3 month expiration.
 
-### Enabling for the registry
+### Enabling for other services
 
 > **Note**: Available in GitLab 11.0 and onwards.
 
-We will automatically add the host address specified in the `registry_external_url` as an alternate name to the certificate managed by LetsEncrypt, and use the same certificate for both services.
+#### Registry
 
-This will be enabled when the `registry_external_url` uses the `https` protocol, and the `registry_nginx['ssl_certificate']` is absent from your `/etc/gitlab/gitlab.rb`.
+We will automatically add the host address specified in the
+`registry_external_url` as an alternate name to the certificate managed by
+LetsEncrypt, and use the same certificate for both services.
+
+This will be enabled when the `registry_external_url` uses the `https` protocol,
+and the `registry_nginx['ssl_certificate']` is absent from your
+`/etc/gitlab/gitlab.rb`.
+
+#### Mattermost
+
+Similar to registry, `mattermost_external_url` will be added as an alternate
+name to the certificate maanged by LetsEncrypt. This is enabled when
+`mattermost_external_url` uses `https` protocol and no ssl certificate is
+specified for Mattermost (`mattermost_nginx['ssl_certificate']` in
+`/etc/gitlab/gitlab.rb`)
 
 ### Disabling auto-configuration
 
