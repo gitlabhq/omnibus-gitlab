@@ -169,6 +169,9 @@ build do
   copy 'db/schema.rb', 'db/schema.rb.bundled'
   copy 'ee/db/geo/schema.rb', 'ee/db/geo/schema.rb.bundled' if EE
 
+  # Set installation type to omnibus
+  command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
+
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(
     .git
