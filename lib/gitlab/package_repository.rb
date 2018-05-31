@@ -2,6 +2,8 @@ require 'English'
 require_relative 'build/info.rb'
 
 class PackageRepository
+  PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
+
   def target
     # Override
     return ENV['PACKAGECLOUD_REPO'] if ENV['PACKAGECLOUD_REPO'] && !ENV['PACKAGECLOUD_REPO'].empty?
@@ -20,6 +22,18 @@ class PackageRepository
     "unstable" if system('git describe | grep -q -e rc')
   end
 
+  def validate(dry_run)
+    Dir.glob(PACKAGE_GLOB).each do |pkg|
+      checksum_filename = pkg + '.sha256'
+
+      raise "Package #{pkg} is missing its checksum file #{checksum_filename}" unless dry_run || File.exist?(checksum_filename)
+
+      success = verify_checksum(checksum_filename, dry_run)
+
+      raise "Aborting, package #{pkg} has an invalid checksum!" unless success
+    end
+  end
+
   def upload(repository = nil, dry_run = false)
     if upload_user.nil?
       puts "User for uploading to package server not specified!"
@@ -32,6 +46,8 @@ class PackageRepository
     if upload_list.empty?
       raise "No packages found for upload. Are artifacts available?"
     end
+
+    validate(dry_run)
 
     upload_list.each do |pkg|
       # bin/package_cloud push gitlab/unstable/ubuntu/xenial gitlab-ce.deb  --url=https://packages.gitlab.com
@@ -56,7 +72,7 @@ class PackageRepository
   def package_list(repository)
     list = []
 
-    Dir.glob("pkg/**/*.{deb,rpm}").each do |path|
+    Dir.glob(PACKAGE_GLOB).each do |path|
       platform_path = path.split("/") # ['pkg', 'ubuntu-xenial', 'gitlab-ce.deb']
 
       if platform_path.size != 3
@@ -88,5 +104,16 @@ class PackageRepository
 
   def upload_user
     ENV['PACKAGECLOUD_USER'] if ENV['PACKAGECLOUD_USER'] && !ENV['PACKAGECLOUD_USER'].empty?
+  end
+
+  def verify_checksum(filename, dry_run)
+    cmd = "sha256sum -c \"#{filename}\""
+
+    if dry_run
+      puts cmd
+      true
+    else
+      system(cmd)
+    end
   end
 end
