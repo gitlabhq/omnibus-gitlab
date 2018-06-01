@@ -99,6 +99,34 @@ describe PackageRepository do
     end
   end
 
+  describe :validate do
+    context 'with artifacts available' do
+      before do
+        allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return(['pkg/el-6/gitlab-ce.rpm'])
+      end
+
+      it 'in dry run mode prints the checksum commands' do
+        expect { repo.validate(true) }.to output("sha256sum -c \"pkg/el-6/gitlab-ce.rpm.sha256\"\n").to_stdout
+      end
+
+      it 'raises an exception when there is a mismatch' do
+        expect(repo).to receive(:verify_checksum).with('pkg/el-6/gitlab-ce.rpm.sha256', true).and_return(false)
+
+        expect { repo.validate(true) }.to raise_error(%r{Aborting, package .* has an invalid checksum!})
+      end
+    end
+
+    context 'with artifacts unavailable' do
+      before do
+        allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return([])
+      end
+
+      it 'prints nothing' do
+        expect { repo.validate(true) }.to output('').to_stdout
+      end
+    end
+  end
+
   describe :upload do
     describe 'with staging repository' do
       context 'when upload user is not specified' do
@@ -114,7 +142,7 @@ describe PackageRepository do
 
         context 'with artifacts available' do
           before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/el-6/gitlab-ce.rpm'])
+            allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return(['pkg/el-6/gitlab-ce.rpm'])
           end
 
           it 'in dry run mode prints the upload commands' do

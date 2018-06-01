@@ -12,6 +12,7 @@ namespace :build do
     Build.exec('gitlab') || raise('Build failed')
     Rake::Task["license:check"].invoke
     Rake::Task["build:package:move_to_platform_dir"].invoke
+    Rake::Task["build:package:generate_checksums"].invoke
   end
 
   namespace :docker do
@@ -33,6 +34,15 @@ namespace :build do
       FileUtils.mv("pkg", platform_dir)
       FileUtils.mkdir("pkg")
       FileUtils.mv(platform_dir, "pkg")
+    end
+
+    desc "Generate checksums for each file"
+    task :generate_checksums do
+      files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
+
+      files.each do |file|
+        system("sha256sum \"#{file}\" > \"#{file}.sha256\"")
+      end
     end
 
     desc "Sync packages to aws"
