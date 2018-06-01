@@ -8,7 +8,26 @@ wanting to clone externally hosted repositories directly into gitlab.  In
 example:
 
 ```ruby
-gitlab_rails['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy"}
+gitlab_rails['env'] = {
+    "http_proxy" => "my_proxy",
+    "https_proxy" => "my_proxy"
+}
+```
+
+You can also override environment variables from other GitLab components which
+might be required if you are behind a proxy:
+
+```ruby
+gitlab_workhorse['env'] = {
+    "http_proxy" => "my_proxy",
+    "https_proxy" => "my_proxy"
+}
+
+# If you use the docker registry
+registry['env'] = {
+    "http_proxy" => "my_proxy",
+    "https_proxy" => "my_proxy"
+}
 ```
 
 ## Applying the changes
