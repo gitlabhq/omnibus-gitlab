@@ -32,6 +32,9 @@ omnibus-gitlab repository.
 - Geo: Set recovery_target_timeline to latest by default
 - Remove deprecated git_data_dir configuration and old hash format of
   git_data_dirs configuration !2520
+- Upgrade Ruby version to 2.4.4
+- Upgrade Bundler version to 1.16.2
+- Upgrade Rubygems version to 2.7.6
 
 10.8.0
 
