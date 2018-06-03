@@ -60,7 +60,7 @@ class PackageRepository
         result = `#{cmd}`
 
         if $CHILD_STATUS.exitstatus == 1
-          raise "Upload to package server failed!." unless result =~ /filename: has already been taken/
+          raise "Upload to package server failed!." unless /filename: has already been taken/.match?(result)
           puts "Package #{pkg} has already been uploaded, skipping.\n"
         end
       end

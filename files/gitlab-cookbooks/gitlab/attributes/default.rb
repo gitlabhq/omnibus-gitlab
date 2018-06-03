@@ -419,8 +419,8 @@ default['gitlab']['postgresql']['ssl_key_file'] = 'server.key'
 default['gitlab']['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 default['gitlab']['postgresql']['ssl_crl_file'] = nil
 
-default['gitlab']['postgresql']['shmmax'] = node['kernel']['machine'] =~ /x86_64/ ? 17179869184 : 4294967295
-default['gitlab']['postgresql']['shmall'] = node['kernel']['machine'] =~ /x86_64/ ? 4194304 : 1048575
+default['gitlab']['postgresql']['shmmax'] = /x86_64/.match?(node['kernel']['machine']) ? 17179869184 : 4294967295
+default['gitlab']['postgresql']['shmall'] = /x86_64/.match?(node['kernel']['machine']) ? 4194304 : 1048575
 default['gitlab']['postgresql']['semmsl'] = 250
 default['gitlab']['postgresql']['semmns'] = 32000
 default['gitlab']['postgresql']['semopm'] = 32

@@ -18,7 +18,7 @@ class SentinelHelper
 
   # Restore from node definition (gitlab.rb)
   def restore_from_node
-    unless MYID_PATTERN =~ sentinel['myid']
+    unless MYID_PATTERN.match?(sentinel['myid'])
       raise 'Sentinel myid must be exactly 40 hex-characters lowercase'
     end
 

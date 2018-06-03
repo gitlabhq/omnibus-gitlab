@@ -101,7 +101,7 @@ class OhaiHelper
       # Since we don't officially release  arm packages, it should be safe to
       # assume that if we are on a Debian machine on arm, we are building for
       # Raspbian.
-      if ohai['kernel']['machine'] =~ /armv/
+      if /armv/.match?(ohai['kernel']['machine'])
         'raspbian'
       else
         ohai['platform']

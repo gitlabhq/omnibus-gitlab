@@ -69,7 +69,7 @@ module Gitlab
         # If it satisfy both, it is probably a branch name or a SHA
         # commit of one of our own component so it doesn't need `v` prepended
         if components_files.key?(@software)
-          unless @read_version =~ Regexp.compile(/^\d+\.\d+\.\d+(-rc\d+)?(-ee)?$/)
+          unless /^\d+\.\d+\.\d+(-rc\d+)?(-ee)?$/.match?(@read_version)
             return @read_version
           end
         end
