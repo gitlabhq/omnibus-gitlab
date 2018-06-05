@@ -42,7 +42,7 @@ template admin_secret_path do
   source "secret_token.erb"
   owner "root"
   group "root"
-  mode "0644"
+  mode "0640"
   variables(secret_token: node['gitlab']['gitlab-pages']['admin_secret_token'])
   notifies :restart, "service[gitlab-pages]"
 end

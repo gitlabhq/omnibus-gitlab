@@ -325,7 +325,7 @@ templatesymlink "Create a gitlab_pages_secret and create a symlink to Rails root
   source "secret_token.erb"
   owner "root"
   group "root"
-  mode "0644"
+  mode "0640"
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-pages']['admin_secret_token'])
   gitlab_pages_services.each { |svc| notifies :restart, svc }
