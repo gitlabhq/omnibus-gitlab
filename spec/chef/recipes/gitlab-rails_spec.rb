@@ -963,7 +963,7 @@ describe 'gitlab::gitlab-rails' do
             .with(
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0640'
             )
         end
 
@@ -1003,7 +1003,7 @@ describe 'gitlab::gitlab-rails' do
             .with(
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0640'
             )
         end
 
