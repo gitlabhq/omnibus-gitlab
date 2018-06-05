@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add pgbouncer_exporter
 - Automatically restart Gitaly when its VERSION file changes
 - Bump minimum version required for upgrade to 10.8 2df263267
+- Render gitlab-pages admin settings
 - Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
@@ -36,7 +37,6 @@ omnibus-gitlab repository.
 - Upgrade Ruby version to 2.4.4
 - Upgrade Bundler version to 1.16.2
 - Upgrade Rubygems version to 2.7.6
-- Render gitlab-pages admin settings
 
 10.8.0
 
