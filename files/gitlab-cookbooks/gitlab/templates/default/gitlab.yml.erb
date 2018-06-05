@@ -183,6 +183,9 @@ production: &base
     external_http: <%= @pages_external_http.to_json %>
     external_https: <%= @pages_external_https.to_json %>
     artifacts_server: <%= @pages_artifacts_server %>
+    admin:
+      address: <%= @pages_admin_address %>
+      certificate: <%= @pages_admin_certificate %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ce/customization/libravatar.html

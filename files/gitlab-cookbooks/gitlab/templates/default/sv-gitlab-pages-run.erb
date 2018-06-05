@@ -51,3 +51,15 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     -artifacts-server-timeout=<%= node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %> \
     <% end %>
     <% end %>
+    \
+    <% if node['gitlab']['gitlab-pages']['admin_https_cert'] %>
+    -admin-https-cert="<%= node['gitlab']['gitlab-pages']['admin_https_cert'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['admin_https_key'] %>
+    -admin-https-key="<%= node['gitlab']['gitlab-pages']['admin_https_key'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['admin_https_listener'] %>
+    -admin-https-listener="<%= node['gitlab']['gitlab-pages']['admin_https_listener'] %>" \
+    <% end %>
+    -admin-secret-path="/var/opt/gitlab/gitlab-pages/admin.secret" \
+    -admin-unix-listener="/var/opt/gitlab/gitlab-pages/admin.socket" \
