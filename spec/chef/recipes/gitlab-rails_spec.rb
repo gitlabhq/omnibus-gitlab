@@ -962,7 +962,7 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to create_template(pages_secret_path)
             .with(
               owner: 'root',
-              group: 'root',
+              group: 'git',
               mode: '0640'
             )
         end
@@ -1002,7 +1002,7 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to create_template(pages_secret_path)
             .with(
               owner: 'root',
-              group: 'root',
+              group: 'git',
               mode: '0640'
             )
         end

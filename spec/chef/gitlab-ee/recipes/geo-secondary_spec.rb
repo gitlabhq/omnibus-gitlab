@@ -103,6 +103,7 @@ describe 'gitlab-ee::geo-secondary' do
         unicorn
         gitaly
         geo-postgresql
+        gitlab-pages
         geo-logcursor
       ).map { |svc| stub_should_notify?(svc, true) }
     end
