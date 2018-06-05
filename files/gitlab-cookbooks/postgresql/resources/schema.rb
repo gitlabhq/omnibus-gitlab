@@ -14,4 +14,16 @@ action :create do
         new_resource.helper.schema_exists?(new_resource.schema, new_resource.database)
     end
   end
+
+  postgresql_query "modify #{new_resource.schema} schema owner on #{new_resource.database}" do
+    query %(ALTER SCHEMA #{new_resource.schema} OWNER TO "#{new_resource.owner}")
+    db_name new_resource.database
+    helper new_resource.helper
+
+    not_if do
+      new_resource.helper.is_offline_or_readonly? ||
+        !new_resource.helper.schema_exists?(new_resource.schema, new_resource.database) ||
+        new_resource.helper.schema_owner?(new_resource.schema, new_resource.database, new_resource.owner)
+    end
+  end
 end
