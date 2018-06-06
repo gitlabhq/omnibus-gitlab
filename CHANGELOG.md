@@ -20,6 +20,7 @@ omnibus-gitlab repository.
   supported ones. !2522
 - Bump git to 2.17.1 !2552
 - Updated Mattermost to 4.10.1
+- Add graphicsmagick dependency
 
 10.8.2
 
