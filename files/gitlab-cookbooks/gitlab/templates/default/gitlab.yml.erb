@@ -224,8 +224,8 @@ production: &base
       cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
 
     # Archive live traces which have not been archived yet
-    ci_rescue_stale_live_trace_worker:
-      cron:<% if @ci_rescue_stale_live_trace_worker_cron %> "<%= @ci_rescue_stale_live_trace_worker_cron %>"<% end %>
+    ci_archive_traces_cron_worker:
+      cron:<% if @ci_archive_traces_cron_worker_cron %> "<%= @ci_archive_traces_cron_worker_cron %>"<% end %>
 
     # Verify custom GitLab Pages domains
     pages_domain_verification_cron_worker:

@@ -92,7 +92,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 # gitlab_rails['pipeline_schedule_worker_cron'] = "41 * * * *"
-# gitlab_rails['ci_rescue_stale_live_trace_worker_cron'] = "17 * * * *"
+# gitlab_rails['ci_archive_traces_cron_worker_cron'] = "17 * * * *"
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
