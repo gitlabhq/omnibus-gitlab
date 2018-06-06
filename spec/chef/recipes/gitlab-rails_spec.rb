@@ -665,6 +665,24 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Rescue stale live trace settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { ci_archive_traces_cron_worker_cron: '17 * * * *' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s+"17/)
+        end
+      end
+
+      context 'when the cron pattern is not configured' do
+        it 'sets no value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s[^"]+/)
+        end
+      end
+    end
+
     context 'GitLab Pages verification cron job settings' do
       context 'when the cron pattern is configured' do
         it 'sets the value' do
