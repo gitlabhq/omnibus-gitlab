@@ -9,4 +9,4 @@ sudo apt-get update
 sudo apt-get install -y gitlab-ce
 
 # Set install type to aws
-echo "GitLab AWS AMI" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null
+echo "gitlab-aws-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null

@@ -61,6 +61,8 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   command "echo $(git log --pretty=format:'%h' -n 1) > REVISION"
+  # Set installation type to omnibus
+  command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
   bundle_without = %w(development test)
   bundle_without << 'mysql' unless EE
@@ -168,9 +170,6 @@ build do
   # mysql-postgresql-converter.)
   copy 'db/schema.rb', 'db/schema.rb.bundled'
   copy 'ee/db/geo/schema.rb', 'ee/db/geo/schema.rb.bundled' if EE
-
-  # Set installation type to omnibus
-  command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
   command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(

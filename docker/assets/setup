@@ -26,7 +26,7 @@ sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/co
 sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/cookbooks/gitlab/recipes/config.rb
 
 # Set install type to docker
-echo 'GitLab Docker Image' > /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE
+echo 'gitlab-docker' > /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE
 
 # Create groups
 groupadd -g 998 git
