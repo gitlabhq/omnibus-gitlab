@@ -4,7 +4,7 @@ class LicenseAnalyzer
                                       /Unlicense/i, /Artistic/i, /MPL/i, /AFL/i,
                                       /CC-BY-[0-9]*/, /^project_license$/, /OpenSSL/i,
                                       /ZLib/i, /jemalloc/i, /Python/i, /PostgreSQL/i,
-                                      /Info-Zip/i])
+                                      /Info-Zip/i, /Libpng/i])
   # TODO: Re-confirm that licenses Python, Info-Zip, OpenSSL and CC-BY are
   # OK to be shipped. https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2448
 

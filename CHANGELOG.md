@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Updated Mattermost to 4.10.1
 - Render gitaly-ruby num_workers config
 - Set installation type information to be used by usage ping - !2561
+- Add graphicsmagick dependency
 
 10.8.2
 

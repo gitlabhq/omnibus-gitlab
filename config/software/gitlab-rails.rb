@@ -49,6 +49,7 @@ dependency 'gitlab-pages'
 dependency 'unzip'
 dependency 'libre2'
 dependency 'gpgme'
+dependency 'graphicsmagick'
 
 if EE
   dependency 'mysql-client'
