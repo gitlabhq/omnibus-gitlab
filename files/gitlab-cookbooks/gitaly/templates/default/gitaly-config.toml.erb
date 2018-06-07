@@ -63,6 +63,9 @@ graceful_restart_timeout = '<%= @ruby_graceful_restart_timeout %>'
 <% if @ruby_restart_delay %>
 restart_delay = '<%= @ruby_restart_delay %>'
 <% end %>
+<% if @ruby_num_workers %>
+num_workers = <%= @ruby_num_workers %>
+<% end %>
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"

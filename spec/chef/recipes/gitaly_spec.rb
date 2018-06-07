@@ -18,6 +18,7 @@ describe 'gitaly' do
   let(:ruby_max_rss) { 1000000 }
   let(:ruby_graceful_restart_timeout) { '30m' }
   let(:ruby_restart_delay) { '10m' }
+  let(:ruby_num_workers) { 5 }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -65,6 +66,8 @@ describe 'gitaly' do
         .with_content('graceful_restart_timeout =')
       expect(chef_run).not_to render_file(config_path)
         .with_content('restart_delay =')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('num_workers =')
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -89,6 +92,7 @@ describe 'gitaly' do
           ruby_max_rss: ruby_max_rss,
           ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
           ruby_restart_delay: ruby_restart_delay,
+          ruby_num_workers: ruby_num_workers,
         }
       )
     end
@@ -115,6 +119,7 @@ describe 'gitaly' do
         %r{max_rss = #{ruby_max_rss}},
         %r{graceful_restart_timeout = '#{Regexp.escape(ruby_graceful_restart_timeout)}'},
         %r{restart_delay = '#{Regexp.escape(ruby_restart_delay)}'},
+        %r{num_workers = #{ruby_num_workers}},
       ].map(&:to_s).join('\s+'))
       expect(chef_run).to render_file(config_path)
         .with_content(gitaly_ruby_section)
