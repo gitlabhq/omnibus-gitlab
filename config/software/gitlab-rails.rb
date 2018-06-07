@@ -61,6 +61,8 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   command "echo $(git log --pretty=format:'%h' -n 1) > REVISION"
+  # Set installation type to omnibus
+  command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
   bundle_without = %w(development test)
   bundle_without << 'mysql' unless EE

@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Bump git to 2.17.1 !2552
 - Updated Mattermost to 4.10.1
 - Render gitaly-ruby num_workers config
+- Set installation type information to be used by usage ping - !2561
 
 10.8.2
 
