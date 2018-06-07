@@ -92,6 +92,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 # gitlab_rails['pipeline_schedule_worker_cron'] = "41 * * * *"
+# gitlab_rails['ci_archive_traces_cron_worker_cron'] = "17 * * * *"
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
@@ -1107,6 +1108,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
+
+##! Configure the pages admin API
+# gitlab_pages['admin_secret_token'] = 'custom secret'
+# gitlab_pages['admin_https_listener'] = '0.0.0.0:5678'
+# gitlab_pages['admin_https_cert'] = '/etc/gitlab/pages-admin.crt'
+# gitlab_pages['admin_https_key'] = '/etc/gitlab/pages-admin.key'
+
+##! Client side configuration for gitlab-pages admin API, in case pages runs on a different host
+# gitlab_rails['pages_admin_address'] = 'pages.gitlab.example.com:5678'
+# gitlab_rails['pages_admin_certificate'] = '/etc/gitlab/pages-admin.crt'
 
 ################################################################################
 ## GitLab Pages NGINX

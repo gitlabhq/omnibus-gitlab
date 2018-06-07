@@ -20,6 +20,9 @@ module GitlabPages
     def parse_variables
       parse_pages_external_url
       parse_gitlab_pages_daemon
+      parse_secrets
+      parse_admin_socket
+      parse_admin_certificate
     end
 
     def parse_pages_external_url
@@ -70,6 +73,18 @@ module GitlabPages
 
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['external_url'].chomp('/') + '/api/v4'
+    end
+
+    def parse_secrets
+      Gitlab['gitlab_pages']['admin_secret_token'] ||= SecretsHelper.generate_hex(64)
+    end
+
+    def parse_admin_socket
+      Gitlab['gitlab_rails']['pages_admin_address'] ||= 'unix:/var/opt/gitlab/gitlab-pages/admin.socket'
+    end
+
+    def parse_admin_certificate
+      Gitlab['gitlab_rails']['pages_admin_certificate'] ||= Gitlab['gitlab_pages']['admin_https_cert']
     end
   end
 end

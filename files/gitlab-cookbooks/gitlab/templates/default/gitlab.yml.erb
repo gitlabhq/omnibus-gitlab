@@ -183,6 +183,9 @@ production: &base
     external_http: <%= @pages_external_http.to_json %>
     external_https: <%= @pages_external_https.to_json %>
     artifacts_server: <%= @pages_artifacts_server %>
+    admin:
+      address: <%= @pages_admin_address %>
+      certificate: <%= @pages_admin_certificate %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ce/customization/libravatar.html
@@ -219,6 +222,10 @@ production: &base
     # Remove outdated repository archives
     repository_archive_cache_worker:
       cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
+
+    # Archive live traces which have not been archived yet
+    ci_archive_traces_cron_worker:
+      cron:<% if @ci_archive_traces_cron_worker_cron %> "<%= @ci_archive_traces_cron_worker_cron %>"<% end %>
 
     # Verify custom GitLab Pages domains
     pages_domain_verification_cron_worker:

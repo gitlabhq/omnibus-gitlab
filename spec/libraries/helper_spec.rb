@@ -91,6 +91,7 @@ describe OmnibusHelper do
       redis-exporter
       postgres-exporter
       gitlab-monitor
+      gitlab-pages
       gitaly
     ).freeze
   end

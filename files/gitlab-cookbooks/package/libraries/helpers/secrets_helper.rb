@@ -58,7 +58,7 @@ class SecretsHelper
     end
   end
 
-  def self.write_to_gitlab_secrets
+  def self.gather_gitlab_secrets
     secret_tokens = {
       'gitlab_workhorse' => {
         'secret_token' => Gitlab['gitlab_workhorse']['secret_token'],
@@ -71,6 +71,9 @@ class SecretsHelper
         'db_key_base' => Gitlab['gitlab_rails']['db_key_base'],
         'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base'],
         'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key']
+      },
+      'gitlab_pages' => {
+        'admin_secret_token' => Gitlab['gitlab_pages']['admin_secret_token']
       },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
@@ -99,6 +102,12 @@ class SecretsHelper
       }
       secret_tokens['mattermost'].merge!(gitlab_oauth)
     end
+
+    secret_tokens
+  end
+
+  def self.write_to_gitlab_secrets
+    secret_tokens = gather_gitlab_secrets
 
     if File.directory?('/etc/gitlab')
       File.open('/etc/gitlab/gitlab-secrets.json', 'w', 0600) do |f|

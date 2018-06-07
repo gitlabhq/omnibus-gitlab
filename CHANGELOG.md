@@ -7,8 +7,8 @@ omnibus-gitlab repository.
 
 - Disable PgBouncer PID file by default
 - Add pgbouncer_exporter
-- Automatically restart Gitaly when its VERSION file changes
 - Bump minimum version required for upgrade to 10.8 2df263267
+- Render gitlab-pages admin settings
 - Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
@@ -19,9 +19,11 @@ omnibus-gitlab repository.
 - Remove deprecated Mattermost settings and use environment variables to set
   supported ones. !2522
 - Bump git to 2.17.1 !2552
+- Updated Mattermost to 4.10.1
 
 10.8.2
 
+- Automatically restart Gitaly when its VERSION file changes
 - Update gitlab-monitor to 2.16.0
 - No need to patch `lib/gitlab.rb` anymore since it now reads the REVISION file if present
 - Upgrade git to 2.16.4
@@ -32,6 +34,9 @@ omnibus-gitlab repository.
 - Geo: Set recovery_target_timeline to latest by default
 - Remove deprecated git_data_dir configuration and old hash format of
   git_data_dirs configuration !2520
+- Upgrade Ruby version to 2.4.4
+- Upgrade Bundler version to 1.16.2
+- Upgrade Rubygems version to 2.7.6
 
 10.8.0
 

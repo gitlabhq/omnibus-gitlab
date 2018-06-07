@@ -191,7 +191,7 @@ dependency_scanning:
   before_script:
     - apk update && apk add curl jq bash bc coreutils
   script:
-    - ./scripts/gitlab-depscan.sh pkg/ubuntu-xenial/version-manifest.json
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
   only:
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
