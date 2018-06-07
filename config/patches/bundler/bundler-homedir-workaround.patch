@@ -1,0 +1,16 @@
+--- a/lib/bundler.rb 2018-05-22 22:35:01.055974629 +0000
++++ b/lib/bundler.rb 2018-05-22 22:51:09.745935567 +0000
+@@ -159,12 +159,13 @@
+     def user_home
+       @user_home ||= begin
+         home = Bundler.rubygems.user_home
++        dotbundle = home ? File.join(home, '.bundle') : nil
+
+         warning = if home.nil?
+           "Your home directory is not set."
+         elsif !File.directory?(home)
+           "`#{home}` is not a directory."
+-        elsif !File.writable?(home)
++        elsif !File.writable?(home) && (!File.directory?(dotbundle) || !File.writable?(dotbundle))
+           "`#{home}` is not writable."
+         end

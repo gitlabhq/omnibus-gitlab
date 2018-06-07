@@ -110,6 +110,7 @@ default['gitlab']['gitlab-rails']['pipeline_schedule_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
@@ -580,6 +581,7 @@ default['gitlab']['gitlab-pages']['artifacts_server'] = true
 default['gitlab']['gitlab-pages']['artifacts_server_url'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server_timeout'] = 10
 default['gitlab']['gitlab-pages']['inplace_chroot'] = false
+default['gitlab']['gitlab-pages']['admin_secret_token'] = nil
 
 ####
 # Nginx

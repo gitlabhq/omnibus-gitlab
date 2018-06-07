@@ -665,6 +665,24 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Rescue stale live trace settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { ci_archive_traces_cron_worker_cron: '17 * * * *' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s+"17/)
+        end
+      end
+
+      context 'when the cron pattern is not configured' do
+        it 'sets no value' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s[^"]+/)
+        end
+      end
+    end
+
     context 'GitLab Pages verification cron job settings' do
       context 'when the cron pattern is configured' do
         it 'sets the value' do
@@ -739,6 +757,7 @@ describe 'gitlab::gitlab-rails' do
       %w(
         alertmanager
         gitlab-monitor
+        gitlab-pages
         gitlab-workhorse
         logrotate
         nginx
@@ -940,7 +959,85 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'gitlab_pages_secret' do
+      let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root') }
+      let(:pages_secret_path) { '/var/opt/gitlab/gitlab-rails/etc/gitlab_pages_secret' }
+
+      context 'by default' do
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com'
+            )
+          end
+
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_template(pages_secret_path)
+            .with(
+              owner: 'root',
+              group: 'git',
+              mode: '0640'
+            )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+        end
+
+        it 'creates the symlink' do
+          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_pages_secret to #{pages_secret_path}")
+        end
+      end
+
+      context 'with specific gitlab_pages_secret' do
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com',
+              gitlab_pages: {
+                admin_secret_token: 'abc123-gitlab-pages'
+              }
+            )
+          end
+
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+        end
+
+        it 'renders the correct node attribute' do
+          expect(chef_run).to render_file(pages_secret_path)
+            .with_content('abc123-gitlab-pages')
+        end
+
+        it 'uses the correct owner and permissions' do
+          expect(chef_run).to create_template(pages_secret_path)
+            .with(
+              owner: 'root',
+              group: 'git',
+              mode: '0640'
+            )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+        end
+
+        it 'creates the symlink' do
+          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_pages_secret to #{pages_secret_path}")
+        end
+      end
+    end
   end
+
   context 'gitlab registry' do
     describe 'registry is disabled' do
       it 'does not generate gitlab-registry.key file' do

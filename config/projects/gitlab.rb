@@ -141,7 +141,7 @@ exclude 'embedded/share/man'
 # exclude rubygems build cache
 # Revisit this path as part of
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3414
-exclude 'embedded/lib/ruby/gems/2.3.0/cache'
+exclude 'embedded/lib/ruby/gems/2.4.0/cache'
 
 # Enable signing packages
 package :rpm do

@@ -44,3 +44,10 @@ template File.join(gitlab_home, ".gitconfig") do
   mode "0644"
   variables(node['gitlab']['user'].to_hash)
 end
+
+# The directory will remain empty in Omnibus GitLab use-case.
+# We still need it to prevent bundler printing warning.
+directory File.join(gitlab_home, ".bundle") do
+  owner gitlab_username
+  group gitlab_group
+end
