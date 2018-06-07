@@ -7,7 +7,6 @@ omnibus-gitlab repository.
 
 - Disable PgBouncer PID file by default
 - Add pgbouncer_exporter
-- Automatically restart Gitaly when its VERSION file changes
 - Bump minimum version required for upgrade to 10.8 2df263267
 - Render gitlab-pages admin settings
 - Fix old unicorn master not quitting after a new process is running
@@ -24,6 +23,7 @@ omnibus-gitlab repository.
 
 10.8.2
 
+- Automatically restart Gitaly when its VERSION file changes
 - Update gitlab-monitor to 2.16.0
 - No need to patch `lib/gitlab.rb` anymore since it now reads the REVISION file if present
 - Upgrade git to 2.16.4
