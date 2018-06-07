@@ -17,4 +17,5 @@ default['gitaly']['auth_transitioning'] = false
 default['gitaly']['ruby_max_rss'] = nil
 default['gitaly']['ruby_graceful_restart_timeout'] = nil
 default['gitaly']['ruby_restart_delay'] = nil
+default['gitaly']['ruby_num_workers'] = nil
 default['gitaly']['concurrency'] = nil
