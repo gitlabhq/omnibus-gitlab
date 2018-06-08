@@ -488,12 +488,9 @@ production: &base
   ## Pseudonymizer settings
   pseudonymizer:
     enabled: <%= @pseudonymizer_enabled %>
-    # Manifest that specifies the fields to extract and pseudonymize.
     manifest: <%= quote(@pseudonymizer_manifest) %>
     upload:
-      # The remote 'directory' to store your backups. For S3, this would be the bucket name.
       remote_directory: <%= quote(@pseudonymizer_upload_remote_directory) %>
-      # Fog storage connection settings, see http://fog.io/storage/ .
       connection: <%= @pseudonymizer_upload_connection.to_json if @pseudonymize_upload_connection %>
 
   ## GitLab Shell settings
