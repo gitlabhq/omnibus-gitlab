@@ -207,22 +207,251 @@ done if you are using PostgreSQL. If you are using MySQL you will still need dow
 Verify that you can upgrade with no downtime by checking the
 [Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
 
-If you meet all the requirements above, follow these instructions:
+If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
+<br/><br/>
 
-1. If you have multiple nodes in a highly available/scaled environment, decide
-   which node is the `Deploy Node`. On this node create an empty file at
-   `/etc/gitlab/skip-auto-reconfigure`. During software installation only, this
-   will prevent the upgrade from running `gitlab-ctl reconfigure` and
-   automatically running database migrations.
-1. On every other node **except** the `Deploy Node` ensure that
-   `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
-1. On the `Deploy Node`, update the GitLab package.
-1. On the `Deploy Node` run `SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure`
-   to get the regular migrations in place.
-1. On all other nodes, update the GitLab package and run `gitlab-ctl reconfigure`
-   so these nodes get the newest code.
-1. Once all nodes are updated, run `gitlab-rake db:migrate` from the `Deploy Node`
-   to run post-deployment migrations.
+| Deployment type                              | Description                    |
+| -------------------------------------------- | ------------------------------ |
+| [Single](#single-deployment)                 | GitLab CE/EE on a single node  |
+| [Multi-node / HA](#multi-node-ha-deployment) | GitLab CE/EE on multiple nodes |
+| [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
+
+<br/>
+### Single deployment
+
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+   installation only, this will prevent the upgrade from running
+   `gitlab-ctl reconfigure` and automatically running database migrations
+
+    ```sh
+    sudo touch /etc/gitlab/skip-auto-reconfigure
+    ```
+
+1. Update the GitLab package
+
+    ```sh
+    # Debian/Ubuntu
+    sudo apt-get update && sudo apt-get install gitlab-ce
+
+    # Centos/RHEL
+    sudo yum install gitlab-ce
+    ```
+
+    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+1. To get the regular migrations in place, run
+
+    ```sh
+    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+    ```
+
+1. Once the node is updated and reconfigure finished successfully, complete the migrations with
+
+    ```sh
+    sudo gitlab-rake db:migrate
+    ```
+
+1. Hot reload `unicorn` and `sidekiq` services
+
+    ```sh
+    sudo gitlab-ctl hup unicorn
+    sudo gitlab-ctl hup sidekiq
+    ```
+
+<br/>
+### Multi-node / HA deployment
+
+Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
+node throughout the process.
+
+<br/>
+
+**Deploy node**
+
+* Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+   installation only, this will prevent the upgrade from running
+   `gitlab-ctl reconfigure` and automatically running database migrations
+
+    ```sh
+    sudo touch /etc/gitlab/skip-auto-reconfigure
+    ```
+
+**All other nodes (not the Deploy node)**
+
+* Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+
+**Deploy node**
+
+* Update the GitLab package
+
+    ```sh
+    # Debian/Ubuntu
+    sudo apt-get update && sudo apt-get install gitlab-ce
+
+    # Centos/RHEL
+    sudo yum install gitlab-ce
+    ```
+
+    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+* To get the regular database migrations in place, run
+
+    ```sh
+    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+    ```
+
+**All other nodes (not the Deploy node)**
+
+* Update the GitLab package
+
+    ```sh
+    sudo apt-get update && sudo apt-get install gitlab-ce
+    ```
+
+    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+* Ensure nodes are running the latest code
+
+    ```sh
+    sudo gitlab-ctl reconfigure
+    ```
+
+**Deploy node**
+
+* Once all nodes are updated, run the following to run post-deployment database migrations
+
+    ```sh
+    sudo gitlab-rake db:migrate
+    ```
+
+**For nodes that run unicorn or sidekiq**
+
+* Hot reload `unicorn` and `sidekiq` services
+
+    ```sh
+    sudo gitlab-ctl hup unicorn
+    sudo gitlab-ctl hup sidekiq
+    ```
+
+<br/>
+### Geo deployment
+
+**Primary node**
+
+On the Primary node, executing the following:
+
+1. Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+   installation only, this will prevent the upgrade from running
+   `gitlab-ctl reconfigure` and automatically running database migrations
+
+    ```sh
+    sudo touch /etc/gitlab/skip-auto-reconfigure
+    ```
+
+1. Update the GitLab package
+
+    ```sh
+    # Debian/Ubuntu
+    sudo apt-get update && sudo apt-get install gitlab-ee
+
+    # Centos/RHEL
+    sudo yum install gitlab-ee
+    ```
+
+1. To get the database migrations in place, run
+
+    ```sh
+    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+    ```
+
+1. Run non post-deployment database migrations
+
+    ```sh
+    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-rake db:migrate
+    ```
+
+1. Run post-deployment database migrations
+
+    ```sh
+    sudo gitlab-rake db:migrate
+    ```
+
+1. Hot reload `unicorn` and `sidekiq` services
+
+    ```sh
+    sudo gitlab-ctl hup unicorn
+    sudo gitlab-ctl hup sidekiq
+    ```
+
+1. Verify Geo configuration and dependencies
+
+    ```sh
+    sudo gitlab-rake gitlab:geo:check
+    ```
+
+<br/>
+**Secondary node(s)**
+
+<br/>
+
+NOTE: **Note:**
+Only proceed if you have successfully completed all steps on the Primary node.
+
+On all Secondary nodes, executing the following:
+
+1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+   installation only, this will prevent the upgrade from running
+   `gitlab-ctl reconfigure` and automatically running database migrations
+
+    ```sh
+    sudo touch /etc/gitlab/skip-auto-reconfigure
+    ```
+
+1. Update the GitLab package
+
+    ```sh
+    # Debian/Ubuntu
+    sudo apt-get update && sudo apt-get install gitlab-ee
+
+    # Centos/RHEL
+    sudo yum install gitlab-ee
+    ```
+
+1. To get the database migrations in place, run
+
+    ```sh
+    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+    ```
+
+1. Run post-deployment database migrations, specific to the Geo database
+
+    ```sh
+    sudo gitlab-rake geo:db:migrate
+    ```
+
+1. Hot reload `unicorn`, `sidekiq` and restart `geo-logcursor` services
+
+    ```sh
+    sudo gitlab-ctl hup unicorn
+    sudo gitlab-ctl hup sidekiq
+    sudo gitlab-ctl restart geo-logcursor
+    ```
+
+1. Verify Geo configuration and dependencies
+
+    ```sh
+    sudo gitlab-rake gitlab:geo:check
+    ```
+
+1. Verify Geo status
+
+    ```sh
+    sudo gitlab-rake geo:status
+    ```
 
 ## Downgrading
 
