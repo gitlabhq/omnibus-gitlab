@@ -321,6 +321,21 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
+
+### Pseudonymizer Settings
+### TODO: Docs
+###! Docs: https://docs.gitlab.com/omnibus/settings/backups.html
+# gitlab_rails['pseudonymizer_enabled'] = false
+# gitlab_rails['pseudonymizer_manifest'] = 'lib/pseudonymizer/manifest.yml'
+# gitlab_rails['pseudonymizer_upload_remote_directory'] = 'gitlab-elt'
+# gitlab_rails['pseudonymizer_upload_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AKIAKIAKI',
+#   'aws_secret_access_key' => 'secret123'
+# }
+
+
 ### For setting up different data storing directory
 ###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
 ###! **If you want to use a single non-default directory to store git data use a

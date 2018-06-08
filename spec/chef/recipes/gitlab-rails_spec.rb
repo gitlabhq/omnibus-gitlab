@@ -298,6 +298,46 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'pseudonymizer settings' do
+      it 'allows not setting any values' do
+        pseudonymizer_spec = Regexp.new([
+          'pseudonymizer:',
+          'enabled:\s+false',
+          'manifest:\s+"lib/pseudonymizer/manifest.yml"',
+          'upload:',
+          'remote_directory:\s+"gitlab-elt"',
+          'connection:\s+{\s+}'
+        ].join('\s+'))
+
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           pseudonymizer_enabled: true,
+                           pseudonymizer_manifest: 'another/path/manifest.yml',
+                           pseudonymizer_upload_connection: aws_connection_hash,
+                           pseudonymizer_upload_remote_directory: 'gitlab-pseudo',
+                         })
+        end
+
+        it "sets the object storage values" do
+          pseudonymizer_spec = Regexp.new([
+            'pseudonymizer:',
+            'enabled:\s+true',
+            'manifest:\s+"another/path/manifest.yml"',
+            'upload:',
+            'remote_directory:\s+"gitlab-pseudo"',
+          ].join('\s+'))
+
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+        end
+
+        include_examples 'sets the connection in YAML'
+      end
+    end
+
     describe 'repositories storages' do
       it 'sets specified properties' do
         stub_gitlab_rb(
