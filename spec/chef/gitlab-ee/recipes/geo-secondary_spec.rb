@@ -30,6 +30,19 @@ describe 'gitlab-ee::geo-secondary' do
     end
   end
 
+  describe 'when gitlab_rails is disabled, but geo_secondary_role is enabled' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     gitlab_rails: { enable: false })
+    end
+
+    it 'does not render the geo-secondary files' do
+      expect(chef_run).not_to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root')
+    end
+  end
+
   describe 'when gitlab_rails is enabled' do
     let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
