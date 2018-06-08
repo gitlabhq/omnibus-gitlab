@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Render gitaly-ruby num_workers config
 - Set installation type information to be used by usage ping - !2561
 - Add graphicsmagick dependency
+- Add cron job for archiving-trace worker
 
 10.8.2
 
