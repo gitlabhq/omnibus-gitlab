@@ -303,10 +303,10 @@ describe 'gitlab::gitlab-rails' do
         pseudonymizer_spec = Regexp.new([
           'pseudonymizer:',
           'enabled:\s+false',
-          'manifest:\s+"lib/pseudonymizer/manifest.yml"',
+          'manifest:',
           'upload:',
           'remote_directory:\s+"gitlab-elt"',
-          'connection:\s+{\s+}'
+          'connection:\s+{}'
         ].join('\s+'))
 
         expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
@@ -317,8 +317,8 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: {
                            pseudonymizer_enabled: true,
                            pseudonymizer_manifest: 'another/path/manifest.yml',
-                           pseudonymizer_upload_connection: aws_connection_hash,
                            pseudonymizer_upload_remote_directory: 'gitlab-pseudo',
+                           pseudonymizer_upload_connection: aws_connection_hash,
                          })
         end
 

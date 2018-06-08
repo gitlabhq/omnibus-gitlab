@@ -491,7 +491,7 @@ production: &base
     manifest: <%= quote(@pseudonymizer_manifest) %>
     upload:
       remote_directory: <%= quote(@pseudonymizer_upload_remote_directory) %>
-      connection: <%= @pseudonymizer_upload_connection.to_json if @pseudonymize_upload_connection %>
+      connection: <%= @pseudonymizer_upload_connection.to_json %>
 
   ## GitLab Shell settings
   gitlab_shell:

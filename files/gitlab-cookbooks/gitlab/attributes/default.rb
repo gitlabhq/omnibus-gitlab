@@ -233,7 +233,7 @@ default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
 
 default['gitlab']['gitlab-rails']['pseudonymizer_enabled'] = false
 default['gitlab']['gitlab-rails']['pseudonymizer_manifest'] = nil
-default['gitlab']['gitlab-rails']['pseudonymizer_upload_remote_directory'] = nil
+default['gitlab']['gitlab-rails']['pseudonymizer_upload_remote_directory'] = 'gitlab-elt'
 default['gitlab']['gitlab-rails']['pseudonymizer_upload_connection'] = {}
 
 # Path to the GitLab Shell installation
