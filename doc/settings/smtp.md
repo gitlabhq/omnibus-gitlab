@@ -573,6 +573,18 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 ```
 
+### ALL-INKL.COM
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "<userserver>.kasserver.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "<username>"
+gitlab_rails['smtp_password'] = "<password>"
+gitlab_rails['smtp_domain'] = "<your.domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_tls'] = true
+```
 
 ### More examples are welcome
 
