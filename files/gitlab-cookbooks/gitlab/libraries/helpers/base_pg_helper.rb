@@ -74,10 +74,28 @@ class BasePgHelper < BaseHelper
     true
   end
 
+  # Check if database schema exists for specified database
+  #
+  # @param [Object] schema_name database schema name
+  # @param [Object] db_name database name
   def schema_exists?(schema_name, db_name)
     psql_cmd(["-d '#{db_name}'",
               "-c 'select schema_name from information_schema.schemata' -A",
               "| grep -x #{schema_name}"])
+  end
+
+  # Check if database user is owner of specified schema
+  #
+  # You need to check if schema exists before running this
+  #
+  # @param [String] schema_name database schema name
+  # @param [String] db_name database name
+  # @param [String] owner the database user to be checked as owner
+  # @return [Boolean] whether specified database user is the owner
+  def schema_owner?(schema_name, db_name, owner)
+    psql_cmd(["-d '#{db_name}'",
+              %(-c "select schema_owner from information_schema.schemata where schema_name='#{schema_name}'" -A),
+              "| grep -x #{owner}"])
   end
 
   def fdw_server_exists?(server_name, db_name)
