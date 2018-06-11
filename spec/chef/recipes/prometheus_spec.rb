@@ -5,6 +5,8 @@ prometheus_yml_output = <<-PROMYML
   global:
     scrape_interval: 15s
     scrape_timeout: 15s
+  rule_files:
+  - "/var/opt/gitlab/prometheus/rules/*.rules"
   scrape_configs:
   - job_name: prometheus
     static_configs:

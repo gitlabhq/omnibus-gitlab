@@ -64,6 +64,20 @@ describe 'gitlab::node-exporter' do
     end
   end
 
+  context 'when node-exporter is enabled and prometheus is enabled' do
+    before do
+      stub_gitlab_rb(
+        prometheus: { enable: true },
+        node_exporter: { enable: true }
+      )
+    end
+
+    it 'creates a node.rules file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/rules/node.rules')
+        .with_content(/instance:node_cpus:count/)
+    end
+  end
+
   context 'when log dir is changed' do
     before do
       stub_gitlab_rb(

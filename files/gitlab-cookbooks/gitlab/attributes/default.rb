@@ -772,6 +772,7 @@ default['gitlab']['prometheus']['gid'] = nil
 default['gitlab']['prometheus']['shell'] = '/bin/sh'
 default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
+default['gitlab']['prometheus']['rules_directory'] = "#{node['gitlab']['prometheus']['home']}/rules"
 default['gitlab']['prometheus']['scrape_interval'] = 15
 default['gitlab']['prometheus']['scrape_timeout'] = 15
 default['gitlab']['prometheus']['scrape_configs'] = []
