@@ -34,7 +34,7 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/registry",
     'PREFIX' => "#{install_dir}/embedded",
-    'DOCKER_BUILDTAGS' => 'include_gcs'
+    'DOCKER_BUILDTAGS' => 'include_gcs include_oss'
   }
   registry_source_dir = "#{Omnibus::Config.source_dir}/registry"
   cwd = "#{registry_source_dir}/src/github.com/docker/distribution"
