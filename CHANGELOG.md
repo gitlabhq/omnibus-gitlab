@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.0.0
 
+- Fix Prometheus Unicorn metrics not coming back after a HUP
 - Disable PgBouncer PID file by default
 - Add pgbouncer_exporter
 - Bump minimum version required for upgrade to 10.8 2df263267

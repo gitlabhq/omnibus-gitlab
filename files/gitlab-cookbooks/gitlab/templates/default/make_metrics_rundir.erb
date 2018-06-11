@@ -3,7 +3,9 @@ export prometheus_run_dir=''
 <% else -%>
 # Setup run directory.
 mkdir -p <%= @options[:metrics_dir] %>
+<% if @options[:clean_metrics_dir] -%>
 rm <%= File.join(@options[:metrics_dir], '*.db') %> 2> /dev/null
+<% end -%>
 chmod 0700 <%= @options[:metrics_dir] %>
 chown <%= @options[:user] %> <%= @options[:metrics_dir] %>
 export prometheus_run_dir='<%= @options[:metrics_dir] %>'
