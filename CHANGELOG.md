@@ -42,6 +42,7 @@ omnibus-gitlab repository.
 - Upgrade Ruby version to 2.4.4
 - Upgrade Bundler version to 1.16.2
 - Upgrade Rubygems version to 2.7.6
+- Add support for Prometheus rules files
 
 10.8.0
 

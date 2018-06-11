@@ -32,6 +32,7 @@ module Prometheus
       parse_monitoring_enabled
       parse_alertmanager_config
       parse_scrape_configs
+      parse_rules_files
       parse_flags
     end
 
@@ -171,6 +172,20 @@ module Prometheus
       Gitlab['alertmanager']['routes'] = default_routes.compact.flatten
       Gitlab['alertmanager']['templates'] = default_templates.compact.flatten
       Gitlab['alertmanager']['default_receiver'] = user_config['default_receiver'] || 'default-receiver'
+    end
+
+    def parse_rules_files
+      # Don't parse if prometheus is explicitly disabled
+      return unless Services.enabled?('prometheus')
+
+      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      user_config = Gitlab['prometheus']
+
+      default_rules_dir = user_config['rules_directory'] || default_config['rules_directory']
+
+      rules_files = user_config['rules_files'] || [File.join(default_rules_dir, '*.rules')]
+
+      Gitlab['prometheus']['rules_files'] = rules_files
     end
 
     def parse_scrape_configs

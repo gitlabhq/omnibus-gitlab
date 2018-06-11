@@ -11,3 +11,4 @@
 - [Database](database.md)
 - [Logs](logs.md)
 - [Backups](backups.md)
+- [Prometheus Monitoring](prometheus.md)

@@ -18,10 +18,17 @@ account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
 prometheus_dir = node['gitlab']['prometheus']['home']
+prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
 
 include_recipe 'gitlab::prometheus_user'
 
 directory prometheus_dir do
+  owner prometheus_user
+  mode '0750'
+  recursive true
+end
+
+directory prometheus_rules_dir do
   owner prometheus_user
   mode '0750'
   recursive true
@@ -38,6 +45,7 @@ configuration = Prometheus.hash_to_yaml({
                                             'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
                                             'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
                                           },
+                                          'rule_files' => node['gitlab']['prometheus']['rules_files'],
                                           'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
                                         })
 
@@ -64,4 +72,11 @@ if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start prometheus" do
     retries 20
   end
+end
+
+template File.join(prometheus_rules_dir, 'node.rules') do
+  source 'prometheus/rules/node.rules.erb'
+  owner prometheus_user
+  mode '0644'
+  only_if { node['gitlab']['prometheus']['enable'] }
 end

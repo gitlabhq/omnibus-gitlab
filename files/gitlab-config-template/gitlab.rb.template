@@ -1227,6 +1227,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['shell'] = '/bin/sh'
 # prometheus['home'] = '/var/opt/gitlab/prometheus'
 # prometheus['log_directory'] = '/var/log/gitlab/prometheus'
+# prometheus['rules_files'] = ['/var/opt/gitlab/prometheus/rules/*.rules']
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
 # prometheus['chunk_encoding_version'] = 2
