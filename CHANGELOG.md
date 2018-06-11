@@ -23,6 +23,7 @@ omnibus-gitlab repository.
 - Set TZ environment variable for gitlab-rails to ':/etc/localtime' to decrease
   number of system callse - !2600
 - Don't add timestamp to gitaly logs if logging format is json !2615
+- Update Mattermost to 5.0.0
 
 11.0.2
 

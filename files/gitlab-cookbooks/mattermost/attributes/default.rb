@@ -29,6 +29,7 @@ default['mattermost']['service_address'] = "127.0.0.1"
 default['mattermost']['service_port'] = "8065"
 default['mattermost']['service_site_url'] = nil
 default['mattermost']['service_allowed_untrusted_internal_connections'] = nil
+default['mattermost']['service_enable_api_team_deletion'] = true
 default['mattermost']['sql_driver_name'] = 'postgres'
 default['mattermost']['sql_data_source'] = nil
 default['mattermost']['gitlab'] = {}

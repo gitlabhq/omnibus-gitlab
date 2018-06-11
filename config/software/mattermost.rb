@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '4.10.1'
+default_version '5.0.0'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: 'ea5ace8c35c4a5b0725be135a21af301'
+       md5: 'bd80548b238be27e99083e32abfb354a'
 
 relative_path 'mattermost'
 
@@ -31,7 +31,7 @@ license 'MIT with Trademark Protection'
 license_file license_path
 
 build do
-  move 'bin/platform', "#{install_dir}/embedded/bin/mattermost"
+  move 'bin/mattermost', "#{install_dir}/embedded/bin/mattermost"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
   copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
