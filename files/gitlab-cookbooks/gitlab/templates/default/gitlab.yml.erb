@@ -255,6 +255,13 @@ production: &base
       cron: "<%= @ldap_group_sync_worker_cron %>"
     <% end %>
 
+    # GitLab Geo prune event log worker
+    # NOTE: This will only take effect if Geo is enabled (primary node only)
+    <% unless @geo_prune_event_log_worker_cron.nil? %>
+    geo_prune_event_log_worker:
+      cron: "<%= @geo_prune_event_log_worker_cron %>"
+    <% end %>
+
     # GitLab Geo repository sync worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_repository_sync_worker_cron.nil? %>

@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.0
+
+- Set the default for geo_prune_event_log_worker_cron to once/2hours
+
 11.0.0
 
 - Disable PgBouncer PID file by default
@@ -13,7 +17,7 @@ omnibus-gitlab repository.
 - Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
-- Automatically add registry hostname to the to alt_name of the 
+- Automatically add registry hostname to the to alt_name of the
   LetsEncrypt certificate #3343
 - Use localhost hostname for unicorn and sidekiq listeners
 - Add ipv6 loopback to monitoring whitelist
