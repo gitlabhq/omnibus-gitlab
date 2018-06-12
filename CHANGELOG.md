@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.0
+
+- Include OSS driver for object storage support in the registry
+
 11.0.0
 
 - Disable PgBouncer PID file by default
@@ -25,7 +29,7 @@ omnibus-gitlab repository.
 - Set installation type information to be used by usage ping - !2561
 - Add graphicsmagick dependency
 - Add cron job for archiving-trace worker
-- Include OSS driver for object storage support in the registry
+
 
 10.8.2
 
