@@ -113,7 +113,7 @@ end
 remote_file config_file_path do
   source "file:////opt/gitlab/embedded/service/mattermost/config.json.template"
   owner mattermost_user
-  mode "0644"
+  mode "0600"
   action :create_if_missing
 end
 
