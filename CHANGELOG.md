@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 11.0.1
 
 - Fix Prometheus Unicorn metrics not coming back after a HUP
+- Set the default for geo_prune_event_log_worker_cron to once/2hours
 
 11.0.0
 
