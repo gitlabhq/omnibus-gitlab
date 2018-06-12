@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-define :unicorn_config, listen: nil, working_directory: nil, worker_timeout: 60, worker_memory_limit_min: nil, worker_memory_limit_max: nil, preload_app: false, worker_processes: 4, before_fork: nil, after_fork: nil, pid: nil, stderr_path: nil, stdout_path: nil, relative_url: nil, notifies: nil, owner: nil, group: nil, mode: nil do
+define :unicorn_config, listen: nil, working_directory: nil, worker_timeout: 60, worker_memory_limit_min: nil, worker_memory_limit_max: nil, preload_app: false, worker_processes: 4, before_exec: nil, before_fork: nil, after_fork: nil, pid: nil, stderr_path: nil, stdout_path: nil, relative_url: nil, notifies: nil, owner: nil, group: nil, mode: nil do
   config_dir = File.dirname(params[:name])
 
   directory config_dir do

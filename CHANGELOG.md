@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 11.1.0
 
 - Include OSS driver for object storage support in the registry
+11.0.1
+
+- Fix Prometheus Unicorn metrics not coming back after a HUP
 
 11.0.0
 
