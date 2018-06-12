@@ -39,3 +39,6 @@ default['repmgr']['reconnect_attempts'] = 6
 default['repmgr']['reconnect_interval'] = 10
 default['repmgr']['monitor_interval_secs'] = 2
 default['repmgr']['master_response_timeout'] = 60
+
+# HA setting to specify if a node should attempt to be master on initialization
+default['repmgr']['master_on_initialization'] = true

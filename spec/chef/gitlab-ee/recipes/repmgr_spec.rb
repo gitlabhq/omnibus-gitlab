@@ -215,6 +215,17 @@ witness_repl_nodes_sync_interval_secs=15
           %(conninfo='host=fauxhai.local port=7777 user=gitlab_repmgr dbname=gitlab_repmgr')
         )
       end
+
+      it 'does not attempt to register node as master if user specified so' do
+        stub_gitlab_rb(
+          repmgr: {
+            enable: true,
+            master_on_initialization: false
+          }
+        )
+        resource = chef_run.postgresql_database('gitlab_repmgr')
+        expect(resource).not_to notify('execute[register repmgr master node]').to(:run)
+      end
     end
 
     context 'user disabled the daemon' do
@@ -260,6 +271,25 @@ witness_repl_nodes_sync_interval_secs=15
 
     it 'grants the appropriate permissions on the gitlab_repmgr database to the gitlab-consul user' do
       expect(postgresql_user).to notify('execute[grant read only access to repmgr]').to(:run).delayed
+    end
+  end
+
+  context 'user specifically disabled master node registration' do
+    before do
+      stub_gitlab_rb(
+        repmgr: {
+          enable: true,
+          master_on_initialization: false
+        },
+        consul: {
+          enable: true,
+          services: %w(postgresql)
+        }
+      )
+    end
+
+    it 'does not include consul_user_permissions recipe on standby node' do
+      expect(chef_run).not_to include_recipe('repmgr::consul_user_permissions')
     end
   end
 end

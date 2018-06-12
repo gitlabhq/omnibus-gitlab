@@ -45,7 +45,7 @@ end
 
 postgresql_database node['repmgr']['database'] do
   owner replication_user
-  notifies :run, "execute[register repmgr master node]", :immediately
+  notifies :run, "execute[register repmgr master node]", :immediately if node['repmgr']['master_on_initialization']
 end
 
 execute 'register repmgr master node' do

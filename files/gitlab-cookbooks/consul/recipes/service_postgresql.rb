@@ -20,4 +20,4 @@ file "#{node['consul']['config_dir']}/postgresql_service.json" do
   owner account_helper.consul_user
 end
 
-include_recipe 'repmgr::consul_user_permissions'
+include_recipe 'repmgr::consul_user_permissions' if node['repmgr']['master_on_initialization']
