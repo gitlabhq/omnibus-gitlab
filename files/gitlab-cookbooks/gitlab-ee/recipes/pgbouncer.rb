@@ -52,6 +52,9 @@ end
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
   source "#{File.basename(name)}.erb"
   variables lazy { node['gitlab']['pgbouncer'].to_hash }
+  owner account_helper.postgresql_user
+  group account_helper.postgresql_group
+  mode '0600'
   notifies :run, 'execute[reload pgbouncer]', :immediately
 end
 
@@ -59,6 +62,7 @@ file 'databases.json' do
   path lazy { node['gitlab']['pgbouncer']['databases_json'] }
   user lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
   group lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
+  mode '0600'
   content node['gitlab']['pgbouncer']['databases'].to_json
   notifies :run, 'execute[generate databases.ini]', :immediately
 end
