@@ -70,6 +70,9 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
   link_to gitlab_shell_config_file
   source "gitlab-shell-config.yml.erb"
+  mode "0640"
+  owner "root"
+  group git_group
   variables({
               user: git_user,
               api_url: api_url,
