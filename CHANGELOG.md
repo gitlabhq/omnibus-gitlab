@@ -22,6 +22,9 @@ omnibus-gitlab repository.
 11.0.1
 
 - No changes
+11.0.1
+
+- Fix Prometheus Unicorn metrics not coming back after a HUP
 
 11.0.0
 

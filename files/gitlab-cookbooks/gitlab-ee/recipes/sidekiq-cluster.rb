@@ -32,6 +32,7 @@ runit_service 'sidekiq-cluster' do
     user: account_helper.gitlab_user,
     log_directory: log_directory,
     metrics_dir: metrics_dir,
+    clean_metrics_dir: true
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['sidekiq-cluster'].to_hash)
 end

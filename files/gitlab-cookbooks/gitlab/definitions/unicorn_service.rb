@@ -73,6 +73,12 @@ define :unicorn_service, rails_app: nil, user: nil do
     stdout_path File.join(unicorn_log_dir, "unicorn_stdout.log")
     relative_url node['gitlab'][svc]['relative_url']
     pid unicorn_pidfile
+    before_exec <<-'EOS'
+      if ENV['prometheus_multiproc_dir']
+        old_metrics = Dir[File.join(ENV['prometheus_multiproc_dir'], '*.db')]
+        FileUtils.rm_rf(old_metrics)
+      end
+    EOS
     before_fork <<-'EOS'
       old_pid = "#{server.config[:pid]}.oldbin"
       if old_pid != server.pid
@@ -107,7 +113,8 @@ define :unicorn_service, rails_app: nil, user: nil do
       rails_app: rails_app,
       unicorn_rb: unicorn_rb,
       log_directory: unicorn_log_dir,
-      metrics_dir: metrics_dir
+      metrics_dir: metrics_dir,
+      clean_metrics_dir: false
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
   end

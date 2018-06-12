@@ -20,12 +20,20 @@ describe 'gitlab::unicorn' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
         .with_content { |content|
           expect(content).not_to match(/export prometheus_run_dir=\'\'/)
+          expect(content).not_to match(/rm \/run\/gitlab\/unicorn/)
           expect(content).to match(/mkdir -p \/run\/gitlab\/unicorn/)
-          expect(content).to match(/rm \/run\/gitlab\/unicorn/)
           expect(content).to match(/chmod 0700 \/run\/gitlab\/unicorn/)
           expect(content).to match(/chown git \/run\/gitlab\/unicorn/)
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/unicorn\'/)
         }
+    end
+
+    it 'renders the unicorn.rb file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/unicorn.rb').with_content { |content|
+        expect(content).to match(/^before_exec/)
+        expect(content).to match(/^before_fork/)
+        expect(content).to match(/^after_fork/)
+      }
     end
   end
 end
