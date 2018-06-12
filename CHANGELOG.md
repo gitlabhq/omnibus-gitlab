@@ -25,6 +25,8 @@ omnibus-gitlab repository.
 - Set installation type information to be used by usage ping - !2561
 - Add graphicsmagick dependency
 - Add cron job for archiving-trace worker
+- Add attribute to control automatic registration of a database node as master
+  on initialization !2571
 
 10.8.5
 - Geo: Make sure gitlab_secondary schema has the correct owner
