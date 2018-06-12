@@ -1685,6 +1685,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['rsync_options'] = nil
 # repmgr['ssh_options'] = nil
 # repmgr['priority'] = nil
+#
+# HA setting to specify if a node should attempt to be master on initialization
+# repmgr['master_on_initialization'] = true
 
 # repmgr['retry_promote_interval_secs'] = 300
 # repmgr['witness_repl_nodes_sync_interval_secs'] = 15
