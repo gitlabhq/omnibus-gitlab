@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.0
+
+- Include OSS driver for object storage support in the registry
+
 11.0.0
 
 - Disable PgBouncer PID file by default
@@ -13,7 +17,7 @@ omnibus-gitlab repository.
 - Fix old unicorn master not quitting after a new process is running
 - Mattermost: Fix reconfiguration of GitLab OAuth configuration settings
 - Bump PgBouncer to 1.8.1
-- Automatically add registry hostname to the to alt_name of the 
+- Automatically add registry hostname to the to alt_name of the
   LetsEncrypt certificate #3343
 - Use localhost hostname for unicorn and sidekiq listeners
 - Add ipv6 loopback to monitoring whitelist
@@ -30,6 +34,7 @@ omnibus-gitlab repository.
 
 10.8.5
 - Geo: Make sure gitlab_secondary schema has the correct owner
+
 
 10.8.2
 
