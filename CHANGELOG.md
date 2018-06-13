@@ -6,6 +6,8 @@ omnibus-gitlab repository.
 11.1.0
 
 - Include OSS driver for object storage support in the registry
+- Don't attempt to modify PostgreSQL users if database is in read-only mode
+
 11.0.1
 
 - Fix Prometheus Unicorn metrics not coming back after a HUP
