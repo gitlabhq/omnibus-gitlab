@@ -583,6 +583,7 @@ default['gitlab']['gitlab-pages']['artifacts_server_url'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server_timeout'] = 10
 default['gitlab']['gitlab-pages']['inplace_chroot'] = false
 default['gitlab']['gitlab-pages']['admin_secret_token'] = nil
+default['gitlab']['gitlab-pages']['log_verbose'] = false
 
 ####
 # Nginx
