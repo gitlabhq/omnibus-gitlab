@@ -48,3 +48,13 @@ runit_service 'geo-logcursor' do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-logcursor'].to_hash)
 end
+
+dependent_services = node['gitlab']['gitlab-rails']['dependent_services']
+
+# This approach was taken to avoid the need to alter the runit service provider
+#
+execute 'restart geo-logcursor' do
+  command '/opt/gitlab/bin/gitlab-ctl restart geo-logcursor'
+  action :nothing
+  dependent_services.map { |svc| subscribes :run, "service[#{svc}]" }
+end
