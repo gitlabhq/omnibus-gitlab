@@ -141,9 +141,11 @@ end
 template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 
 dependent_services = []
-dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
-dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable']
+
+node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
+  dependent_services << "service[#{name}]" if omnibus_helper.should_notify?(name)
+end
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")

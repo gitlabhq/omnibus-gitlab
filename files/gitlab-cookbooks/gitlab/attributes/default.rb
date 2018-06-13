@@ -319,6 +319,9 @@ default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 
+# Default dependent services to restart in the event that files-of-interest change
+default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn sidekiq}
+
 ####
 # Unicorn
 ####
