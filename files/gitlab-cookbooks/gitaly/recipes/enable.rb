@@ -53,8 +53,8 @@ template "Create Gitaly config.toml" do
   path config_path
   source "gitaly-config.toml.erb"
   owner "root"
-  group "root"
-  mode "0644"
+  group account_helper.gitlab_group
+  mode "0640"
   variables node['gitaly'].to_hash
   notifies :restart, "service[gitaly]"
 end
