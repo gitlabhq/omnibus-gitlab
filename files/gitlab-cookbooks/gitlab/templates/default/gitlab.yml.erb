@@ -297,6 +297,12 @@ production: &base
       cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
     <% end %>
 
+    # Export pseudonymized data in CSV format for analysis
+    <% unless @pseudonymizer_worker_cron.nil? %>
+    pseudonymizer_worker:
+      cron: "<%= @pseudonymizer_worker_cron %>"
+    <% end %>
+
   #
   # 2. GitLab CI settings
   # ==========================

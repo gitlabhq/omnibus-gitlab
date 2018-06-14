@@ -580,6 +580,23 @@ describe 'gitlab::gitlab-rails' do
           }
         end
       end
+
+      context 'when pseudonymizer worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { pseudonymizer_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pseudonymizer_worker:\s+cron:\s+"1 2 3 4 5"/)
+        end
+      end
+
+      context 'when pseudonymizer worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('pseudonymizer_worker')
+          }
+        end
+      end
     end
 
     context 'Scheduled Pipeline settings' do
