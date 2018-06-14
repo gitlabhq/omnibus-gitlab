@@ -65,6 +65,7 @@ describe 'gitlab::gitlab-pages' do
           admin_https_cert: '/etc/gitlab/pages-admin.crt',
           admin_https_key: '/etc/gitlab/pages-admin.key',
           admin_https_listener: 'localhost:2345',
+          log_verbose: true
         }
       )
     end
@@ -92,6 +93,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-cert="/etc/gitlab/pages-admin.crt"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-key="/etc/gitlab/pages-admin.key"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-listener="localhost:2345"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-verbose})
     end
 
     it 'correctly renders the pages log run file' do

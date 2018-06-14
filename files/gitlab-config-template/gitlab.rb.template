@@ -1092,6 +1092,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Configure to use JSON structured logging in GitLab Pages
 # gitlab_pages['log_format'] = "json"
 
+##! Configure verbose logging for GitLab Pages
+# gitlab_pages['log_verbose'] = false
+
 # gitlab_pages['listen_proxy'] = "localhost:8090"
 # gitlab_pages['redirect_http'] = true
 # gitlab_pages['use_http2'] = true
