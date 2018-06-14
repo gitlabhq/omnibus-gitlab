@@ -6,10 +6,9 @@ omnibus-gitlab repository.
 11.1.0
 
 - Include OSS driver for object storage support in the registry
-11.0.1
-
 - Fix Prometheus Unicorn metrics not coming back after a HUP
 - Set the default for geo_prune_event_log_worker_cron to once/2hours
+- Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 
 11.0.0
 
