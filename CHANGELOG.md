@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.0
+
+- Restart geo-logcursor when unicorn or sidekiq are updated
+
 11.0.0
 
 - Disable PgBouncer PID file by default
