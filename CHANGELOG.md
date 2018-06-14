@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Include OSS driver for object storage support in the registry
 - Tighten permission on Mattermost's config.json file !2587
+- Tighten permission on gitlab-shell's config.yml file !2585
 
 11.0.1
 
