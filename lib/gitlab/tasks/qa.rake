@@ -18,35 +18,41 @@ namespace :qa do
   end
 
   namespace :push do
-    desc "Push stable version of QA"
+    # Only runs on dev.gitlab.org
+    desc "Push unstable version of gitlab-{ce,ee}-qa to the GitLab registry"
+    task :staging do
+      Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
+    end
+
+    desc "Push stable version of gitlab-{ce,ee}-qa to the GitLab registry and Docker Hub"
     task :stable do
       # Allows to have gitlab/gitlab-{ce,ee}-qa:10.2.0-ee without the build number
       Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
       Build::QAImage.tag_and_push_to_dockerhub(Build::Info.gitlab_version, initial_tag: 'latest')
     end
 
-    desc "Push rc version of QA"
+    desc "Push rc version of gitlab-{ce,ee}-qa to Docker Hub"
     task :rc do
       if Build::Check.add_rc_tag?
         Build::QAImage.tag_and_push_to_dockerhub('rc', initial_tag: 'latest')
       end
     end
 
-    desc "Push nightly version of QA"
+    desc "Push nightly version of gitlab-{ce,ee}-qa to Docker Hub"
     task :nightly do
       if Build::Check.add_nightly_tag?
         Build::QAImage.tag_and_push_to_dockerhub('nightly', initial_tag: 'latest')
       end
     end
 
-    desc "Push latest version of QA"
+    desc "Push latest version of gitlab-{ce,ee}-qa to Docker Hub"
     task :latest do
       if Build::Check.add_latest_tag?
         Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest')
       end
     end
 
-    desc "Push triggered version of QA to GitLab Registry"
+    desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :triggered do
       Build::QAImage.tag_and_push_to_gitlab_registry(ENV['IMAGE_TAG'])
     end

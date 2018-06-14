@@ -817,6 +817,23 @@ Docker:
   dependencies: []
   retry: 1
 
+Docker-QA:
+  stage: images
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind
+  script:
+    - bundle exec rake qa:build qa:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
 Raspberry-Pi-2-Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/rpi_8:${BUILDER_IMAGE_REVISION}"
   cache:

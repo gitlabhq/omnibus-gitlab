@@ -36,6 +36,12 @@ describe 'qa', type: :rake do
       allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
     end
 
+    it 'pushes staging images correctly' do
+      expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
+
+      Rake::Task['qa:push:staging'].invoke
+    end
+
     it 'pushes stable images correctly' do
       expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
       expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with(gitlab_version, initial_tag: 'latest')
