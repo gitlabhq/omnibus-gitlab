@@ -412,6 +412,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_port'] = 5432
 # gitlab_rails['db_socket'] = nil
 # gitlab_rails['db_sslmode'] = nil
+# gitlab_rails['db_sslcompression'] = 0
 # gitlab_rails['db_sslrootcert'] = nil
 # gitlab_rails['db_prepared_statements'] = false
 # gitlab_rails['db_statements_limit'] = 1000
@@ -1588,6 +1589,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_secondary['db_port'] = 5431
 # geo_secondary['db_socket'] = nil
 # geo_secondary['db_sslmode'] = nil
+# geo_secondary['db_sslcompression'] = 0
 # geo_secondary['db_sslrootcert'] = nil
 # geo_secondary['db_sslca'] = nil
 # geo_secondary['db_fdw'] = true
