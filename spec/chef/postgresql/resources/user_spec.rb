@@ -2,7 +2,7 @@ require 'chef_helper'
 
 describe 'postgresql_user' do
   before do
-    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+    allow_any_instance_of(PgHelper).to receive(:is_offline_or_readonly?).and_return(false)
     allow_any_instance_of(PgHelper).to receive(:user_exists?).and_return(false, true)
     allow_any_instance_of(PgHelper).to receive(:user_password_match?).and_return(false)
     allow_any_instance_of(PgHelper).to receive(:user_options_set?).and_return(false)

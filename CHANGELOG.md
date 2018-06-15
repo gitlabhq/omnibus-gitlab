@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Tighten permission on Gitaly's config.toml file !2589
 - Tighten permission on gitlab-shell's config.yml file !2585
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
+- Don't attempt to modify PostgreSQL users if database is in read-only mode
 
 11.0.1
 
