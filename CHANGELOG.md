@@ -3,6 +3,23 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.0
+
+- Include OSS driver for object storage support in the registry
+- Tighten permission on Mattermost's config.json file !2587
+- Tighten permission on Gitaly's config.toml file !2589
+- Tighten permission on gitlab-shell's config.yml file !2585
+- Add an option to activate verbose logging for GitLab Pages (maxmeyer)
+- Don't attempt to modify PostgreSQL users if database is in read-only mode
+
+11.0.1
+
+- Fix Prometheus Unicorn metrics not coming back after a HUP
+- Set the default for geo_prune_event_log_worker_cron to once/2hours
+- Restart geo-logcursor when unicorn or sidekiq are updated
+- Fix Prometheus Unicorn metrics not coming back after a HUP
+- Set the default for geo_prune_event_log_worker_cron to once/2hours
+
 11.0.0
 
 - Disable PgBouncer PID file by default

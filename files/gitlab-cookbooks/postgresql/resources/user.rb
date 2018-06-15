@@ -13,7 +13,7 @@ action :create do
     user account_helper.postgresql_user
     # Added retries to give the service time to start on slower systems
     retries 20
-    not_if { !new_resource.helper.is_running? || new_resource.helper.user_exists?(new_resource.username) }
+    not_if { new_resource.helper.is_offline_or_readonly? || new_resource.helper.user_exists?(new_resource.username) }
   end
 
   if property_is_set?(:password)
@@ -29,7 +29,7 @@ action :create do
       user account_helper.postgresql_user
       # Added retries to give the service time to start on slower systems
       retries 20
-      not_if { !new_resource.helper.is_running? || !new_resource.helper.user_exists?(new_resource.username) || new_resource.helper.user_password_match?(new_resource.username, new_resource.password) }
+      not_if { new_resource.helper.is_offline_or_readonly? || !new_resource.helper.user_exists?(new_resource.username) || new_resource.helper.user_password_match?(new_resource.username, new_resource.password) }
     end
   end
 
@@ -41,7 +41,7 @@ action :create do
       user account_helper.postgresql_user
       # Added retries to give the service time to start on slower systems
       retries 20
-      not_if { !new_resource.helper.is_running? || !new_resource.helper.user_exists?(new_resource.username) || new_resource.helper.user_options_set?(new_resource.username, new_resource.options) }
+      not_if { new_resource.helper.is_offline_or_readonly? || !new_resource.helper.user_exists?(new_resource.username) || new_resource.helper.user_options_set?(new_resource.username, new_resource.options) }
     end
   end
 end
