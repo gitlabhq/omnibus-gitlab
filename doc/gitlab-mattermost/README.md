@@ -34,9 +34,6 @@ Omnibus-gitlab package will attempt to automatically authorise GitLab Mattermost
 This is because automatic authorisation requires access to GitLab database.
 If GitLab database is not available you will need to manually authorise GitLab Mattermost for access to GitLab.
 
-> **Note:** Upgrading the `omnibus-gitlab` package will override any Mattermost setting changes
-made outside of `gitlab.rb`, see [upgrade section](#upgrading-gitlab-mattermost) for more details.
-
 ## Running GitLab Mattermost on its own server
 
 If you want to run GitLab and GitLab Mattermost on two separate servers you
@@ -98,6 +95,25 @@ To reauthorise GitLab Mattermost you will first need to revoke access of the exi
 authorisation. This can be done in the Admin area of GitLab under `Applications`.
 Once that is done follow the steps in the [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
 
+## Configuring Mattermost
+
+### With GitLab 11.0
+
+Starting in GitLab 11.0, Mattermost can be configured using the Mattermost System Console. An extensive list of
+Mattermost settings and where they can be set is available [in the Mattermost documentation](https://docs.mattermost.com/administration/config-settings.html).
+
+While using the System Console is recommended, you can also configure Mattermost using one of the following:
+1. You can edit the Mattermost configuration directly through `/var/opt/gitlab/mattermost/config.json`.
+1. You can specify environment variables used to run Mattermost by changing the `mattermost['env']` setting in
+`gitlab.rb`. Any settings configured in this way will be disabled from the System Console and cannot be changed
+without restarting Mattermost.
+
+### Prior to GitLab 11.0
+
+Before GitLab 11.0, Mattermost should be configured through `gitlab.rb`. Changes could also be made through the
+System Console, but any changes made outside of `gitlab.rb` would be overwritten. See [the upgrade section](#upgrading-gitlab-mattermost)
+for more details.
+
 ## Running GitLab Mattermost with HTTPS
 
 Place the ssl certificate and ssl certificate key inside of `/etc/gitlab/ssl` directory. If directory doesn't exist, create one.
@@ -132,6 +148,17 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 ## Email Notifications
 
 ### Setting up SMTP for GitLab Mattermost
+
+#### With GitLab 11.0
+
+As of GitLab 11.0, these settings are configured through the Mattermost **System Console** by a user logged
+into Mattermost as a System Administrator. On  the **Notifications** > **Email** tab of the **System Console**,
+you can enter the SMTP credentials given by your SMTP provider. More information on the specific settings
+that are needed is available in the [Mattermost documentation](https://docs.mattermost.com/install/smtp-email-setup.html).
+
+These settings can also be configured in `/var/opt/gitlab/mattermost/config.json`.
+
+#### Prior to GitLab 11.0
 
 SMTP configuration depends on SMTP provider used.  Note that the configuration keys used are not the same as the ones that the main GitLab application uses, for example the SMTP user in Mattermost is `email_smtp_username` and not `smtp_user_name`.
 
@@ -173,6 +200,24 @@ mattermost['email_skip_server_certificate_verification'] = false
 
 ### Email Batching
 
+#### With GitLab 11.0
+
+Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL,
+including protocol and port, is required:
+
+```ruby
+mattermost['service_site_url'] = 'https://mattermost.example.com'
+```
+
+Then, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+With the site URL configured, email batching can be enabled in the Mattermost **System Console** by going to the **Notifications** > **Email**
+tab, and setting the `Enable Email Batching` setting to true
+
+This setting can also be configured in `/var/opt/gitlab/mattermost/config.json`.
+
+#### Prior to GitLab 11.0
+
 Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
 
 ```ruby
@@ -194,7 +239,7 @@ For help and support around your GitLab Mattermost deployment please see:
 
 ## Upgrading GitLab Mattermost
 
-Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).  
+> Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).
 
 Below is a list of Mattermost versions for GitLab 9.0 and later:
 
@@ -217,9 +262,9 @@ Below is a list of Mattermost versions for GitLab 9.0 and later:
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
-GitLab Mattermost can be upgraded through the regular GitLab omnibus update process provided Mattermost configuration settings have not been changed outside of GitLab. This means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
+Starting with GitLab 11.0, GitLab Mattermost can be upgraded through the regular GitLab omnibus update process. When upgrading GitLab prior to that, that process can only be used if Mattermost configuration settings have not been changed outside of GitLab. This means no changes to Mattermost's `config.json` file have been made, either directly or via the Mattermost **System Console** which saves back changes to `config.json`.
 
-If this is the case, upgrading GitLab using omnibus and running `gitlab-ctl reconfigure` should upgrade GitLab Mattermost to the next version.
+If you are upgrading to at least GitLab 11.0 or have only configured Mattermost using `gitlab.rb`, you can upgrade GitLab using omnibus and then run `gitlab-ctl reconfigure` to upgrade GitLab Mattermost to the latest version.
 
 If this is not the case, there are two options:
 
@@ -284,13 +329,16 @@ mattermost['gitlab_token_endpoint']
 mattermost['gitlab_user_api_endpoint']
 ```
 
-In preparation for GitLab 11.0, we recommend users to take the following actions:
+With GitLab 11.0, other Mattermost settings can be configured through Mattermost's System Console,
+by editing `/var/opt/gitlab/mattermost/config.json`, or by using `mattermost['env']` in `gitlab.rb`.
+
+If you would like to keep configuring Mattermost using `gitlab.rb`, you can take the following actions
+in preparation for GitLab 11.0:
 
 1. Upgrade to version 10.x which supports the new `mattermost['env']` setting.
-1. Settings that are not listed above will have to be configured through
-the `mattermost['env']` setting. Mattermost requires environment variables to be provided in
-`MM_<CATEGORY>SETTINGS_<ATTRIBUTE>` format. Below is an example of how to convert the old
-settings syntax to the new one.
+1. Configure any settings not listed above through the `mattermost['env']` setting. Mattermost requires
+environment variables to be provided in `MM_<CATEGORY>SETTINGS_<ATTRIBUTE>` format. Below is an example
+of how to convert the old settings syntax to the new one.
 
 The following settings in `gitlab.rb`:
 
@@ -413,7 +461,10 @@ If you choose to upgrade Mattermost outside of GitLab's omnibus automation, plea
 
 There are multiple ways to send notifications depending on how much control you'd like over the messages.
 
-If you are using the Omnibus edition, enable incoming webhooks from the `gitlab.rb` file not the System Console or your settings will be lost the next time you upgrade GitLab Omnibus.
+If you are using GitLab 11.0 or newer, you can enable incoming webhooks from the **Integrations > Custom Integrations** section of
+the Mattermost **System Console**.
+
+If you are using an older version of GitLab Omnibus, enable incoming webhooks from the `gitlab.rb` file.
 
 ```ruby
 mattermost['service_enable_incoming_webhooks'] = true
@@ -421,12 +472,12 @@ mattermost['service_enable_incoming_webhooks'] = true
 
 #### Setting up Mattermost as a Slack project service integration:
 
-Mattermost is "Slack-compatible, not Slack-limited" so if you like Slack's default formatting you can use their project service option to set up Mattermost integration:
+Mattermost webhooks are Slack-compatible, so you can use their project service option to set up Mattermost integration:
 
-1. In Mattermost, go to **System Console** → **Service Settings** and turn on **Enable Incoming Webhooks**
-1. Go to **Account Settings** → **Integrations** → **Incoming Webhooks**
-2. Select a channel and click **Add* and copy the `Webhook URL`
-3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** → **Services** → **Slack**
+1. In Mattermost, go to **System Console** > **Integration Settings** > **Custom Integrations** and turn on **Enable Incoming Webhooks**
+1. Exit the system console, and then go to **Integrations** > **Incoming Webhooks** from the main menu
+2. Select a channel and click **Add** and copy the `Webhook URL`
+3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Services** > **Slack**
 4. Enter **Username** for how you would like to name the account that posts the notifications
 4. Select **Triggers** for GitLab events on which you'd like to receive notifications
 6. Click **Save changes** then **Test settings** to make sure everything is working
