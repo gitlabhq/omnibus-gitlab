@@ -15,7 +15,7 @@ describe 'repmgr' do
 cluster=gitlab_cluster
 node=1647392869
 node_name=fauxhai.local
-conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr'
+conninfo='host=fauxhai.local port=5432 user=gitlab_repmgr dbname=gitlab_repmgr sslmode=prefer sslcompression=0'
 
 use_replication_slots=0
 loglevel=INFO
@@ -200,7 +200,7 @@ witness_repl_nodes_sync_interval_secs=15
           }
         )
         expect(chef_run).to render_file(repmgr_conf).with_content(
-          %(conninfo='host=fakehostname port=5432 user=gitlab_repmgr dbname=gitlab_repmgr')
+          %(conninfo='host=fakehostname port=5432 user=gitlab_repmgr dbname=gitlab_repmgr sslmode=prefer sslcompression=0')
         )
       end
 
@@ -212,7 +212,7 @@ witness_repl_nodes_sync_interval_secs=15
           }
         )
         expect(chef_run).to render_file(repmgr_conf).with_content(
-          %(conninfo='host=fauxhai.local port=7777 user=gitlab_repmgr dbname=gitlab_repmgr')
+          %(conninfo='host=fauxhai.local port=7777 user=gitlab_repmgr dbname=gitlab_repmgr sslmode=prefer sslcompression=0')
         )
       end
 

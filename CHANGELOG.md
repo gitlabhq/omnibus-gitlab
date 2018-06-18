@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.1.0
 
 - Include OSS driver for object storage support in the registry
+- Support setting of PostgreSQL SSL mode and compression in repmgr conninfo
 - Tighten permission on Mattermost's config.json file !2587
 - Tighten permission on Gitaly's config.toml file !2589
 - Tighten permission on gitlab-shell's config.yml file !2585

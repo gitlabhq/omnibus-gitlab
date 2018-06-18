@@ -1666,6 +1666,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['port'] = 5432
 # repmgr['trust_auth_cidr_addresses'] = []
 # repmgr['user'] = 'gitlab_repmgr'
+# repmgr['sslmode'] = 'prefer'
+# repmgr['sslcompression'] = 0
 # repmgr['failover'] = 'automatic'
 # repmgr['log_directory'] = '/var/log/gitlab/repmgrd'
 # repmgr['node_name'] = nil
