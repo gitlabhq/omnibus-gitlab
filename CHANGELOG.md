@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Tighten permission on gitlab-shell's config.yml file !2585
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
+- Add support for Prometheus remote read/write services.
 
 11.0.1
 
