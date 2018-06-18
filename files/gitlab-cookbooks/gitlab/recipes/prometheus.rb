@@ -45,6 +45,8 @@ configuration = Prometheus.hash_to_yaml({
                                             'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
                                             'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
                                           },
+                                          'remote_read' => node['gitlab']['prometheus']['remote_read'],
+                                          'remote_write' => node['gitlab']['prometheus']['remote_write'],
                                           'rule_files' => node['gitlab']['prometheus']['rules_files'],
                                           'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
                                         })

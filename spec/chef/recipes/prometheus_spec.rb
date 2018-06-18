@@ -5,6 +5,8 @@ prometheus_yml_output = <<-PROMYML
   global:
     scrape_interval: 15s
     scrape_timeout: 15s
+  remote_read: []
+  remote_write: []
   rule_files:
   - "/var/opt/gitlab/prometheus/rules/*.rules"
   scrape_configs:
@@ -224,6 +226,14 @@ describe 'gitlab::prometheus' do
           scrape_interval: 11,
           scrape_timeout: 8888,
           enable: true,
+          remote_write: [
+            {
+              url: 'https://prom-write-service',
+              basic_auth: {
+                password: 'secret'
+              }
+            }
+          ],
           scrape_configs: [
             {
               job_name: 'test',
@@ -278,6 +288,8 @@ describe 'gitlab::prometheus' do
         .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(%r{- job_name: gitaly\s+static_configs:\s+- targets:\s+- testhost:2345})
+      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+        .with_content(%r{remote_write:\s+- url: https://prom-write-service\s+basic_auth:\s+password: secret})
     end
 
     context 'when kubernetes monitoring is disabled' do
