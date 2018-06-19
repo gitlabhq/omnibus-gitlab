@@ -802,8 +802,8 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
             .with(
               owner: 'root',
-              group: 'root',
-              mode: '0644'
+              group: 'git',
+              mode: '0640'
             )
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \"\/var\/opt\/gitlab\/postgresql\"/)
           expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)

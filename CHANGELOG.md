@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
 - Tighten permission on gitlab.yml file !2591
+- Tighten permission on database.yml file !2592
 
 11.0.1
 
