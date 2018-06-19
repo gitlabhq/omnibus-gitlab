@@ -6,6 +6,7 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
+require_relative '../build/ha_validate_trigger'
 
 namespace :qa do
   desc "Build QA Docker image"
@@ -62,5 +63,10 @@ namespace :qa do
   task :test do
     image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
     Build::QATrigger.invoke!(image: image_address).wait!
+  end
+
+  desc "Validate HA setup"
+  task :ha_validate do
+    Build::HAValidateTrigger.invoke!
   end
 end
