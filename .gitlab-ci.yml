@@ -1,6 +1,7 @@
 stages:
   - trigger-package
   - trigger-docker
+  - trigger-ha-validate
   - trigger-qa
   - check
   - prepare
@@ -458,6 +459,17 @@ Trigger:ee-package:
     - branches@gitlab-org/omnibus-gitlab
   except:
     - triggers
+
+Trigger:ha-validate:
+  stage: trigger-ha-validate
+  image: "ruby:2.3"
+  when: manual
+  script:
+      - bundle exec rake qa:ha_validate
+  only:
+    - triggers@gitlab-org/omnibus-gitlab
+  dependencies:
+    - Trigger:ee-package
 
 Ubuntu 14.04 specs 0 6:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"

@@ -121,15 +121,23 @@ module Build
         "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
       end
 
-      def fetch_artifact_url(project_id, pipeline_id)
-        uri = URI("https://gitlab.com/api/v4/projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
+      def get_api(path, token: nil)
+        uri = URI("https://gitlab.com/api/v4/#{path}")
         req = Net::HTTP::Get.new(uri)
-        req['PRIVATE-TOKEN'] = ENV["TRIGGER_PRIVATE_TOKEN"]
+        req['PRIVATE-TOKEN'] = token || ENV['TRIGGER_PRIVATE_TOKEN']
         http = Net::HTTP.new(uri.hostname, uri.port)
         http.use_ssl = true
         res = http.request(req)
-        output = JSON.parse(res.body)
+        JSON.parse(res.body)
+      end
+
+      def fetch_artifact_url(project_id, pipeline_id)
+        output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
         output.find { |job| job['name'] == 'Trigger:package' }['id']
+      end
+
+      def fetch_pipeline_jobs(project_id, pipeline_id, token)
+        get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
       end
 
       def triggered_build_package_url
