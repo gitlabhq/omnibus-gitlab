@@ -757,6 +757,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_lock_waits'] = 1
 # postgresql['deadlock_timeout'] = '5s'
 # postgresql['track_io_timing'] = 0
+# postgresql['default_statistics_target'] = 1000
 
 ### Available in PostgreSQL 9.6 and later
 # postgresql['min_wal_size'] = 80MB

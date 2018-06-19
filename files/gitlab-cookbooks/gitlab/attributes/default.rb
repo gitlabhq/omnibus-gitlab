@@ -465,6 +465,7 @@ default['gitlab']['postgresql']['max_parallel_workers_per_gather'] = 0
 default['gitlab']['postgresql']['log_lock_waits'] = 1
 default['gitlab']['postgresql']['deadlock_timeout'] = '5s'
 default['gitlab']['postgresql']['track_io_timing'] = 'off'
+default['gitlab']['postgresql']['default_statistics_target'] = 1000
 
 # Replication settings
 default['gitlab']['postgresql']['sql_replication_user'] = "gitlab_replicator"
