@@ -21,7 +21,9 @@ by default:
 | <a name="node-exporter"></a>       Node exporter    | Yes           | Port             | X           | 9100                                   |
 | <a name="redis-exporter"></a>      Redis exporter   | Yes           | Port             | X           | 9121                                   |
 | <a name="postgres-exporter"></a>   Postgres exporter| Yes           | Port             | X           | 9187                                   |
+| <a name="pgbouncer-exporter"></a> PgBouncer exporter| No            | Port             | X           | 9188                                   |
 | <a name="gitlab-monitor"></a>      Gitlab monitor   | Yes           | Port             | X           | 9168                                   |
+| <a name="sidekiq-exporter"></a>    Sidekiq exporter | Yes           | Port             | X           | 8082                                   |
 | <a name="geo-postgresql"></a>      Geo PostgreSQL   | No            | Socket           | Port (5431) | X                                      |
 | <a name="redis-sentinel"></a>      Redis Sentinel   | No            | Port             | X           | 26379                                  |
 | <a name="incoming-email"></a>      Incoming email   | No            | Port             | X           | 143                                    |
