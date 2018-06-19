@@ -110,6 +110,9 @@ autovacuum_vacuum_cost_limit = <%= @autovacuum_vacuum_cost_limit %> # default va
           # autovacuum, -1 means use
           # vacuum_cost_limit
 
+# Parameters for gathering statistics
+default_statistics_target = <%= @default_statistics_target %>
+
 # - Client connection timeouts
 statement_timeout = <%= @statement_timeout %>
 
