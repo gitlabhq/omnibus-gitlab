@@ -44,7 +44,7 @@ redis_url = RedisHelper.new(node).redis_url
 template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   source "gitlab-monitor.yml.erb"
   owner gitlab_user
-  mode "0644"
+  mode "0600"
   notifies :restart, "service[gitlab-monitor]"
   variables(
     redis_url: redis_url,
