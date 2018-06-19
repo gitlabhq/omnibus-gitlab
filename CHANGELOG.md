@@ -45,6 +45,7 @@ omnibus-gitlab repository.
 - Add cron job for archiving-trace worker
 - Add attribute to control automatic registration of a database node as master
   on initialization !2571
+- Add PostgreSQL support for default_statistics_target
 
 10.8.5
 - Geo: Make sure gitlab_secondary schema has the correct owner

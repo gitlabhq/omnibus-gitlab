@@ -492,6 +492,14 @@ describe 'postgresql 9.6' do
         expect(chef_run).to render_file(runtime_conf)
           .with_content(/track_io_timing = 'off'/)
       end
+
+      it 'sets default_statistics_target' do
+        expect(chef_run.node['gitlab']['postgresql']['default_statistics_target'])
+          .to eq(1000)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/default_statistics_target = 1000/)
+      end
     end
 
     it 'notifies reload postgresql when postgresql.conf changes' do
