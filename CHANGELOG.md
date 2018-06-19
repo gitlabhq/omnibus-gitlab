@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
+- Tighten permission on gitlab.yml file !2591
 
 11.0.1
 

@@ -257,8 +257,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   link_to File.join(gitlab_rails_etc_dir, "gitlab.yml")
   source "gitlab.yml.erb"
   owner "root"
-  group "root"
-  mode "0644"
+  group gitlab_group
+  mode "0640"
 
   mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab-rails']['mattermost_host']
 
