@@ -126,6 +126,7 @@ build do
     'USE_DB' => 'false',
     'SKIP_STORAGE_VALIDATION' => 'true'
   }
+  assets_compile_env['NO_SOURCEMAPS'] = 'true' if ENV['NO_SOURCEMAPS']
   command 'yarn install --pure-lockfile --production'
 
   # process PO files and generate MO and JSON files
