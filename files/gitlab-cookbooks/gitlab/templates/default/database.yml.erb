@@ -14,6 +14,7 @@ production:
   port: <%= @db_port %>
   socket: <%= quote(@db_socket) %>
   sslmode: <%= quote(@db_sslmode) %>
+  sslcompression: <%= @db_sslcompression %>
   sslrootcert: <%= quote(@db_sslrootcert) || quote(@db_sslca) %>
   sslca: <%= quote(@db_sslca) || quote(@db_sslrootcert) %>
   load_balancing: <%= @db_load_balancing.to_json %>

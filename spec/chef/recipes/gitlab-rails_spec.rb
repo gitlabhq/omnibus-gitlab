@@ -805,12 +805,15 @@ describe 'gitlab::gitlab-rails' do
               group: 'git',
               mode: '0640'
             )
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: \"\/var\/opt\/gitlab\/postgresql\"/)
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/database: gitlabhq_production/)
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\[\]}/)
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 1000/)
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/fdw:\s*$/)
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content { |content|
+            expect(content).to match(/host: \"\/var\/opt\/gitlab\/postgresql\"/)
+            expect(content).to match(/database: gitlabhq_production/)
+            expect(content).to match(/load_balancing: {"hosts":\[\]}/)
+            expect(content).to match(/prepared_statements: false/)
+            expect(content).to match(/statements_limit: 1000/)
+            expect(content).to match(/sslcompression: 0/)
+            expect(content).to match(/fdw:\s*$/)
+          }
         end
 
         it 'template triggers notifications' do
@@ -899,6 +902,16 @@ describe 'gitlab::gitlab-rails' do
           it 'uses provided value in database.yml' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 12345/)
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
+          end
+        end
+
+        context 'when SSL compression is enabled' do
+          before do
+            stub_gitlab_rb(gitlab_rails: { db_sslcompression: 1 })
+          end
+
+          it 'uses provided value in database.yml' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/sslcompression: 1/)
           end
         end
 

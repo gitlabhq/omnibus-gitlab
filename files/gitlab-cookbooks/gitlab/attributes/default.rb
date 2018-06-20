@@ -272,6 +272,7 @@ default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
+default['gitlab']['gitlab-rails']['db_sslcompression'] = 0
 default['gitlab']['gitlab-rails']['db_sslrootcert'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false

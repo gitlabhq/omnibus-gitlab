@@ -62,6 +62,7 @@ default['gitlab']['geo-secondary']['db_host'] = "/var/opt/gitlab/geo-postgresql"
 default['gitlab']['geo-secondary']['db_port'] = 5431
 default['gitlab']['geo-secondary']['db_socket'] = nil
 default['gitlab']['geo-secondary']['db_sslmode'] = nil
+default['gitlab']['geo-secondary']['db_sslcompression'] = 0
 default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
 default['gitlab']['geo-secondary']['db_sslca'] = nil
 default['gitlab']['geo-secondary']['db_fdw'] = true
