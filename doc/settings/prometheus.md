@@ -1,5 +1,30 @@
 # Prometheus Settings
 
+## Remote read/write
+
+Prometheus supports reading and writing to remote services.
+
+To configure a remote remote read or write service, you can include the following in `gitlab.rb`.
+
+    prometheus['remote_write'] = [
+      {
+        url: 'https://some-remote-write-service.example.com',
+        basic_auth: {
+          password: 'remote write secret password'
+        }
+      }
+    ]
+    prometheus['remote_read'] = [
+      {
+        url: 'https://some-remote-write-service.example.com'
+      }
+    ]
+
+For more documentation on the options available, see the [remote write] and [remote read] sections of the official documentation.
+
+[remote read]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_read%3E
+[remote write]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_write%3E
+
 ## Rules files
 
 Prometheus allows for [recording] and [alerting] rules.

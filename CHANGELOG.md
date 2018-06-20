@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
 - Tighten permission on gitlab.yml file !2591
 - Tighten permission on database.yml file !2592
+- Add support for Prometheus remote read/write services.
 
 11.0.1
 
