@@ -851,6 +851,16 @@ Docker-QA:
   dependencies: []
   retry: 1
 
+HA-Validate-Tagged:
+  stage: validate
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake qa:ha:tag
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  allow_failure: true
+
 Raspberry-Pi-2-Jessie:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/rpi_8:${BUILDER_IMAGE_REVISION}"
   cache:
@@ -986,7 +996,6 @@ HA-Validate-Nightly:
     - bundle exec rake qa:ha:nightly
   only:
     - schedules@gitlab/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
   dependencies: []
   allow_failure: true
 
