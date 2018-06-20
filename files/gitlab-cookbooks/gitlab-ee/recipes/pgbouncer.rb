@@ -61,7 +61,7 @@ end
 file 'databases.json' do
   path lazy { node['gitlab']['pgbouncer']['databases_json'] }
   user lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
-  group lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
+  group account_helper.postgresql_group
   mode '0600'
   content node['gitlab']['pgbouncer']['databases'].to_json
   notifies :run, 'execute[generate databases.ini]', :immediately
@@ -74,6 +74,7 @@ execute 'generate databases.ini' do
      --databases-json #{node['gitlab']['pgbouncer']['databases_json']} \
      --databases-ini #{node['gitlab']['pgbouncer']['databases_ini']} \
      --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
+     --hostgroup #{node['gitlab']['postgresql']['username']} \
      --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
      --pg-port #{node['gitlab']['pgbouncer']['listen_port']} \
      --user #{node['gitlab']['postgresql']['pgbouncer_user']}
