@@ -126,6 +126,8 @@ variables:
 
 .rpi_branch_template: &rpi_branch_build
   stage: raspbian
+  variables:
+    NO_SOURCEMAPS: "true"
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -209,6 +211,8 @@ dependency_scanning:
 
 .rpi_tag_template: &rpi_tag_build
   stage: raspbian
+  variables:
+    NO_SOURCEMAPS: "true"
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
