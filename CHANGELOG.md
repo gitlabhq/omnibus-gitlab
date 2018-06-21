@@ -18,13 +18,16 @@ omnibus-gitlab repository.
 - Tighten permission on database.yml file !2592
 - Add support for Prometheus remote read/write services.
 
-11.0.1
+11.0.2
 
-- Fix Prometheus Unicorn metrics not coming back after a HUP
 - Set the default for geo_prune_event_log_worker_cron to once/2hours
 - Restart geo-logcursor when unicorn or sidekiq are updated
 - Fix Prometheus Unicorn metrics not coming back after a HUP
 - Set the default for geo_prune_event_log_worker_cron to once/2hours
+
+11.0.1
+
+- No changes
 
 11.0.0
 
