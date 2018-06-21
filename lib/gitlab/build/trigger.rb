@@ -63,6 +63,10 @@ module Build
         end
 
         JSON.parse(res.body)['status'].to_s.to_sym
+      rescue JSON::ParserError
+        # Ignore GitLab API hiccups. If GitLab is really down, we'll hit the job
+        # timeout anyway.
+        :running
       end
     end
   end
