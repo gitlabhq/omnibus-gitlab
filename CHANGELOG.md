@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Tighten permission on gitlab-shell's config.yml file !2585
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
+- Remove NGINX custom page for 422 errors
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
 - Tighten permission on gitlab.yml file !2591
 - Tighten permission on database.yml file !2592
