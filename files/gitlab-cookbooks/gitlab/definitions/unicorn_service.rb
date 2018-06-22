@@ -95,6 +95,8 @@ define :unicorn_service, rails_app: nil, user: nil do
       ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
       defined?(::Prometheus::Client.reinitialize_on_pid_change) &&
         Prometheus::Client.reinitialize_on_pid_change
+      defined?(Gitlab::Database::LoadBalancing) &&
+        Gitlab::Database::LoadBalancing.start_service_discovery
     EOS
     owner "root"
     group "root"
