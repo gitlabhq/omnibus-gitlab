@@ -493,7 +493,6 @@ production: &base
 
   ## Pseudonymizer settings
   pseudonymizer:
-    enabled: <%= @pseudonymizer_enabled %>
     manifest: <%= quote(@pseudonymizer_manifest) %>
     upload:
       remote_directory: <%= quote(@pseudonymizer_upload_remote_directory) %>

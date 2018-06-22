@@ -302,7 +302,6 @@ describe 'gitlab::gitlab-rails' do
       it 'allows not setting any values' do
         pseudonymizer_spec = Regexp.new([
           'pseudonymizer:',
-          'enabled:\s+false',
           'manifest:',
           'upload:',
           'remote_directory:\s+"gitlab-elt"',
@@ -315,7 +314,6 @@ describe 'gitlab::gitlab-rails' do
       context 'with values' do
         before do
           stub_gitlab_rb(gitlab_rails: {
-                           pseudonymizer_enabled: true,
                            pseudonymizer_manifest: 'another/path/manifest.yml',
                            pseudonymizer_upload_remote_directory: 'gitlab-pseudo',
                            pseudonymizer_upload_connection: aws_connection_hash,
@@ -325,7 +323,6 @@ describe 'gitlab::gitlab-rails' do
         it "sets the object storage values" do
           pseudonymizer_spec = Regexp.new([
             'pseudonymizer:',
-            'enabled:\s+true',
             'manifest:\s+"another/path/manifest.yml"',
             'upload:',
             'remote_directory:\s+"gitlab-pseudo"',

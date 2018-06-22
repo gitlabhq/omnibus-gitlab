@@ -323,7 +323,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 
 ### Pseudonymizer Settings
-# gitlab_rails['pseudonymizer_enabled'] = false
 # gitlab_rails['pseudonymizer_manifest'] = 'config/pseudonymizer.yml'
 # gitlab_rails['pseudonymizer_upload_remote_directory'] = 'gitlab-elt'
 # gitlab_rails['pseudonymizer_upload_connection'] = {
