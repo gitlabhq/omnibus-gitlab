@@ -573,6 +573,20 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 ```
 
+### Mailcow
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.example.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "yourmail@example.com"
+gitlab_rails['smtp_password'] = "yourpassword"
+gitlab_rails['smtp_domain'] = "smtp.example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
 
 ### More examples are welcome
 
