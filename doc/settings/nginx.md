@@ -306,6 +306,7 @@ You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
 
 ```ruby
 nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
+registry_nginx['listen_addresses'] = ['*', '[::]'] # IPv6 for the registry
 ```
 
 ## Setting the NGINX listen port
