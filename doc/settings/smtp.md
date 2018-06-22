@@ -601,6 +601,21 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_tls'] = true
 ```
 
+### webgo.de
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "sXX.goserver.host" # or serverXX.webgo24.de
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "webXXXpX"
+gitlab_rails['smtp_password'] = "Your Password"
+gitlab_rails['smtp_domain'] = "s90.goserver.host"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = 'Your Mail Adress'
+gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Adress'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
