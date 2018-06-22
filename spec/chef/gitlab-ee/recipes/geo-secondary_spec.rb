@@ -86,8 +86,8 @@ describe 'gitlab-ee::geo-secondary' do
       it 'creates the template' do
         expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
           owner: 'root',
-          group: 'root',
-          mode: '0644'
+          group: 'git',
+          mode: '0640'
         )
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content { |content|
           expect(content).to match(/host: \"1.1.1.1\"/)
@@ -142,8 +142,8 @@ describe 'gitlab-ee::geo-secondary' do
       it 'creates the template' do
         expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
           owner: 'root',
-          group: 'root',
-          mode: '0644'
+          group: 'git',
+          mode: '0640'
         )
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/host: \"\/var\/opt\/gitlab\/geo-postgresql\"/)
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/database: gitlabhq_geo_production/)

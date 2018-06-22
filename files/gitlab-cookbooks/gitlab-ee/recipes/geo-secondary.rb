@@ -38,8 +38,8 @@ templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' d
   source 'database.yml.erb'
   cookbook 'gitlab'
   owner 'root'
-  group 'root'
-  mode '0644'
+  group account_helper.gitlab_group
+  mode '0640'
   variables node['gitlab']['geo-secondary'].to_hash
   dependent_services.each { |svc| notifies :restart, svc }
 end
