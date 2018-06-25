@@ -72,6 +72,9 @@ default['gitlab']['gitlab-rails']['env'] = {
   'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages",
   # Prevent ExecJS from complaining that Node is not installed in production
   'EXECJS_RUNTIME' => 'Disabled',
+  # Prevent excessive system calls: #3530,
+  # Details: https://blog.packagecloud.io/eng/2017/02/21/set-environment-variable-save-thousands-of-system-calls/
+  'TZ' => ':/etc/localtime'
 }
 default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 

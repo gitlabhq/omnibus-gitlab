@@ -20,6 +20,8 @@ omnibus-gitlab repository.
 - Add support for Prometheus remote read/write services.
 - Add support for database service discovery
 - Tighten permission on geo's database_geo.yml file !2590
+- Set TZ environment variable for gitlab-rails to ':/etc/localtime' to decrease
+  number of system callse - !2600
 
 11.0.2
 
