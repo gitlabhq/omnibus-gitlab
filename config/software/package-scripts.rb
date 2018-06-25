@@ -16,16 +16,13 @@
 # limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
 name 'package-scripts'
 
 license 'Apache-2.0'
 license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
-# Help omnibus-ruby to cache the build product of this software. This is a
-# workaround for the deprecation of `always_build true`. What happens now is
-# that we build only if the contents of the specified directory have changed
-# according to git.
-default_version `git ls-tree HEAD -- config/templates/package-scripts | awk '{ print $3 }'`.strip
+default_version Build::Info.latest_stable_tag
 
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.

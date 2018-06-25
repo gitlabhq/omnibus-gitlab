@@ -68,9 +68,6 @@ end
 
 runtime_dependency 'policycoreutils-python' if rhel?
 
-# creates required build directories
-dependency 'package-scripts'
-
 dependency 'git'
 dependency 'jemalloc'
 dependency 'redis'
@@ -109,6 +106,7 @@ dependency 'postgres-exporter'
 dependency 'gitlab-monitor'
 dependency 'gitlab-workhorse'
 dependency 'gitlab-shell'
+dependency 'package-scripts'
 
 # gitaly needs grpc to work correctly. These native extensions are built as part
 # of gitlab-rails build. So, gitlab-rails has to be built before gitaly. But
