@@ -15,6 +15,7 @@ stages:
   - package-release
   - trigger-images
   - image-release
+  - validate
   - metrics
   - raspbian
   - raspbian_release
@@ -469,7 +470,7 @@ Trigger:ha-validate:
   image: "ruby:2.3"
   when: manual
   script:
-      - bundle exec rake qa:ha_validate
+      - bundle exec rake qa:ha:validate
   only:
     - triggers@gitlab-org/omnibus-gitlab
   dependencies:
@@ -976,6 +977,18 @@ QA-Master:
   dependencies:
     - Ubuntu-16.04-branch
   retry: 1
+
+HA-Validate-Nightly:
+  stage: validate
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - '[[ -n "${NIGHTLY}" ]] || exit 0'
+    - bundle exec rake qa:ha:nightly
+  only:
+    - schedules@gitlab/omnibus-gitlab
+    - branches@gitlab/omnibus-gitlab
+  dependencies: []
+  allow_failure: true
 
 Raspberry-Pi-2-Jessie-branch:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/rpi_8:${BUILDER_IMAGE_REVISION}"
