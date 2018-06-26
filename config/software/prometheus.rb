@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 require 'time'
 
 name 'prometheus'
@@ -37,17 +38,8 @@ build do
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
   cwd = "#{exporter_source_dir}/src/github.com/prometheus/prometheus"
 
-  common_version = "github.com/prometheus/prometheus/vendor/github.com/prometheus/common/version"
-  revision = `git rev-parse HEAD`.strip
-  build_time = Time.now.iso8601
-  ldflags = [
-    "-X #{common_version}.Version=#{version.print(false)}",
-    "-X #{common_version}.Revision=#{revision}",
-    "-X #{common_version}.Branch=master",
-    "-X #{common_version}.BuildUser=GitLab-Omnibus",
-    "-X #{common_version}.BuildDate=#{build_time}",
-  ].join(' ')
+  prom_version = Prometheus::VersionFlags.new(name, version)
 
-  command "go build -ldflags '#{ldflags}' ./cmd/prometheus", env: env, cwd: cwd
+  command "go build -ldflags '#{prom_version.ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/"
 end

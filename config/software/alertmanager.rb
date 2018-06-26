@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'alertmanager'
 version = Gitlab::Version.new('alertmanager', '0.15.0')
@@ -36,6 +37,8 @@ build do
   exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
   cwd = "#{exporter_source_dir}/src/github.com/prometheus/alertmanager"
 
-  command 'go build ./cmd/alertmanager', env: env, cwd: cwd
+  prom_version = Prometheus::VersionFlags.new(name, version)
+
+  command "go build -ldflags '#{prom_version.ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
   copy 'alertmanager', "#{install_dir}/embedded/bin/"
 end
