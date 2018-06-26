@@ -74,6 +74,11 @@ describe 'gitaly' do
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/var/opt/gitlab/git-data/repositories'})
     end
+
+    it 'populates sv related log files' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
+        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/gitaly/)
+    end
   end
 
   context 'with user settings' do
@@ -123,6 +128,11 @@ describe 'gitaly' do
       ].map(&:to_s).join('\s+'))
       expect(chef_run).to render_file(config_path)
         .with_content(gitaly_ruby_section)
+    end
+
+    it 'does not append timestamp in logs if logging format is json' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
+        .with_content(/exec svlogd \/var\/log\/gitlab\/gitaly/)
     end
 
     context 'when using gitaly storage configuration' do
