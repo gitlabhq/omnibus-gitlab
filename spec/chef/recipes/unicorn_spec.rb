@@ -11,6 +11,8 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(File).to receive(:directory?).and_call_original
+    allow(File).to receive(:directory?).with('/run').and_return(true)
   end
 
   context 'when unicorn is enabled' do
@@ -49,6 +51,8 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(File).to receive(:directory?).and_call_original
+    allow(File).to receive(:directory?).with('/run').and_return(false)
   end
 
   context 'when unicorn is enabled on a node with no /run tmpfs' do
