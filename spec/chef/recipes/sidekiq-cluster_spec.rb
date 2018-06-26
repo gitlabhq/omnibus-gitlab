@@ -27,6 +27,8 @@ describe 'gitlab-ee::sidekiq-cluster' do
                        enable: true,
                        queue_groups: ['process_commit,post_receive', 'gitlab_shell']
                      })
+      allow(File).to receive(:directory?).and_call_original
+      allow(File).to receive(:directory?).with('/run').and_return(true)
     end
 
     it 'correctly renders out the sidekiq-cluster service file' do

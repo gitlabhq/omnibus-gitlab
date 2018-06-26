@@ -11,6 +11,8 @@ describe 'gitlab::sidekiq' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(File).to receive(:directory?).and_call_original
+    allow(File).to receive(:directory?).with('/run').and_return(true)
   end
 
   context 'with default values' do
