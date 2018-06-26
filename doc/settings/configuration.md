@@ -572,3 +572,8 @@ See [doc/settings/nginx.md](nginx.md).
 ## Enable nginx_status
 
 See [doc/settings/nginx.md](nginx.md).
+
+## Pseudonymizer settings
+
+Pseudonymizer configuration is documented in
+[docs.gitlab.com](https://docs.gitlab.com/ee/administration/pseudonymizer.html).
