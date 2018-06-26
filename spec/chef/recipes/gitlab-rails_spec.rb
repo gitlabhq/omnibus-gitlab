@@ -304,7 +304,7 @@ describe 'gitlab::gitlab-rails' do
           'pseudonymizer:',
           'manifest:',
           'upload:',
-          'remote_directory:\s+"gitlab-elt"',
+          'remote_directory:',
           'connection:\s+{}'
         ].join('\s+'))
 
