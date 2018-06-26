@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Tighten permission on geo's database_geo.yml file !2590
 - Set TZ environment variable for gitlab-rails to ':/etc/localtime' to decrease
   number of system callse - !2600
+- Don't add timestamp to gitaly logs if logging format is json !2615
 
 11.0.2
 
