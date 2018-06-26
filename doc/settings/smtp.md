@@ -609,11 +609,11 @@ gitlab_rails['smtp_address'] = "sXX.goserver.host" # or serverXX.webgo24.de
 gitlab_rails['smtp_port'] = 587
 gitlab_rails['smtp_user_name'] = "webXXXpX"
 gitlab_rails['smtp_password'] = "Your Password"
-gitlab_rails['smtp_domain'] = "s90.goserver.host"
+gitlab_rails['smtp_domain'] = "sXX.goserver.host" # or serverXX.webgo24.de
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['gitlab_email_from'] = 'Your Mail Adress'
-gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Adress'
+gitlab_rails['gitlab_email_from'] = 'Your Mail Address'
+gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Address'
 ```
 
 ### More examples are welcome
