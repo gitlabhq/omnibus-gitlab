@@ -22,6 +22,7 @@ stages:
   - notification_fail
 
 variables:
+  BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
   BUILDER_IMAGE_REVISION: "0.0.19"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
@@ -750,34 +751,34 @@ OpenSUSE 42.3 specs 5 6:
 # dev.gitlab.org only
 # Release build
 Ubuntu-14.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Ubuntu-16.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Ubuntu-18.04:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-7:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_7:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-8:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-9.1:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 CentOS-6:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/centos_6:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 CentOS-7:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/centos_7:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 OpenSUSE-42.3:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 SLES-12:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -816,7 +817,7 @@ SLES-12:
 
 Docker:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -836,7 +837,7 @@ Docker:
 
 Docker-QA:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -852,7 +853,7 @@ Docker-QA:
   retry: 1
 
 Raspberry-Pi-2-Jessie:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/rpi_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
   cache:
     key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -864,34 +865,34 @@ Raspberry-Pi-2-Jessie:
 
 ## Building from branch
 Ubuntu-14.04-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Ubuntu-16.04-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Ubuntu-18.04-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-7-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_7:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-8-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-9.1-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 CentOS-6-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/centos_6:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 CentOS-7-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/centos_7:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 OpenSUSE-42.3-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 SLES-12-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -930,7 +931,7 @@ SLES-12-branch:
 
 Docker-branch:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -951,7 +952,7 @@ Docker-branch:
 
 QA-Master:
   stage: images
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -980,7 +981,7 @@ QA-Master:
 
 HA-Validate-Nightly:
   stage: validate
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - '[[ -n "${NIGHTLY}" ]] || exit 0'
     - bundle exec rake qa:ha:nightly
@@ -991,7 +992,7 @@ HA-Validate-Nightly:
   allow_failure: true
 
 Raspberry-Pi-2-Jessie-branch:
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/rpi_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -1134,7 +1135,7 @@ Raspberry-Pi-2-Jessie-release:
 
 Docker-Release:
   stage: image-release
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -1149,7 +1150,7 @@ Docker-Release:
 
 AWS:
   stage: image-release
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
   script:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
   - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
@@ -1166,7 +1167,7 @@ AWS:
 
 QA-Tag:
   stage: image-release
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay
     DOCKER_HOST: tcp://docker:2375
@@ -1195,7 +1196,7 @@ QA-Tag:
 
 upgrade:
   stage: metrics
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - echo $GCP_SERVICE_ACCOUNT > service_account.json
     - bundle exec rake metrics:upgrade_package
