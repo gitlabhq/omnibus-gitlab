@@ -6,8 +6,7 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
-require_relative '../build/ha_validate/trigger'
-require_relative '../build/ha_validate/nightly'
+require_relative '../build/ha_validate'
 
 namespace :qa do
   desc "Build QA Docker image"
@@ -69,12 +68,17 @@ namespace :qa do
   namespace :ha do
     desc "Validate HA setup"
     task :validate do
-      Build::HA::ValidateTrigger.invoke!
+      Build::HA::ValidateTrigger.invoke!.wait!
     end
 
     desc 'Validate nightly build'
     task :nightly do
-      Build::HA::ValidateNightly.invoke!
+      Build::HA::ValidateNightly.invoke!.wait!
+    end
+
+    desc 'Validate tagged build'
+    task :tag do
+      Build::HA::ValidateTag.invoke!
     end
   end
 end
