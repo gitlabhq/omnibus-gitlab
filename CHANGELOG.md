@@ -24,6 +24,7 @@ omnibus-gitlab repository.
   number of system callse - !2600
 - Don't add timestamp to gitaly logs if logging format is json !2615
 - Tighten permission on gitlab-workhorse's config.toml file !2586
+- Tighten permission on pgbouncer and consul related config files !2588
 
 11.0.2
 
