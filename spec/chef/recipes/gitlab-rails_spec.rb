@@ -298,6 +298,43 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'pseudonymizer settings' do
+      it 'allows not setting any values' do
+        pseudonymizer_spec = Regexp.new([
+          'pseudonymizer:',
+          'manifest:',
+          'upload:',
+          'remote_directory:',
+          'connection:\s+{}'
+        ].join('\s+'))
+
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           pseudonymizer_manifest: 'another/path/manifest.yml',
+                           pseudonymizer_upload_remote_directory: 'gitlab-pseudo',
+                           pseudonymizer_upload_connection: aws_connection_hash,
+                         })
+        end
+
+        it "sets the object storage values" do
+          pseudonymizer_spec = Regexp.new([
+            'pseudonymizer:',
+            'manifest:\s+"another/path/manifest.yml"',
+            'upload:',
+            'remote_directory:\s+"gitlab-pseudo"',
+          ].join('\s+'))
+
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+        end
+
+        include_examples 'sets the connection in YAML'
+      end
+    end
+
     describe 'repositories storages' do
       it 'sets specified properties' do
         stub_gitlab_rb(
@@ -537,6 +574,23 @@ describe 'gitlab::gitlab-rails' do
         it 'does not set the cron value' do
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
             expect(content).not_to include('geo_migrated_local_files_clean_up_worker')
+          }
+        end
+      end
+
+      context 'when pseudonymizer worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { pseudonymizer_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pseudonymizer_worker:\s+cron:\s+"1 2 3 4 5"/)
+        end
+      end
+
+      context 'when pseudonymizer worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to include('pseudonymizer_worker')
           }
         end
       end

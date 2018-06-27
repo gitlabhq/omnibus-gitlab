@@ -24,6 +24,7 @@ omnibus-gitlab repository.
   number of system callse - !2600
 - Don't add timestamp to gitaly logs if logging format is json !2615
 - Tighten permission on gitlab-workhorse's config.toml file !2586
+- Add pseudonymizer data collection worker
 
 11.0.2
 
@@ -64,7 +65,6 @@ omnibus-gitlab repository.
 
 10.8.5
 - Geo: Make sure gitlab_secondary schema has the correct owner
-
 
 10.8.2
 
