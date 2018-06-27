@@ -1,9 +1,9 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: 2ab28fbfc86a76e3f0d80411a86e6e10dcb79655
-  branch: gitlab-omnibus-v5.6.10
+  revision: b6d67e8db5c594d4e2b3970d8536141e8afee51d
+  branch: gitlab-omnibus-v5.6.12
   specs:
-    omnibus (5.6.10)
+    omnibus (5.6.12)
       aws-sdk (~> 2)
       chef-sugar (~> 3.3)
       cleanroom (~> 1.0)
@@ -141,7 +141,7 @@ GEM
       rake
       timecop (>= 0.1.0)
     libyajl2 (1.2.0)
-    license_scout (1.0.0)
+    license_scout (1.0.10)
       ffi-yajl (~> 2.2)
       mixlib-shellout (~> 2.2)
       toml-rb (~> 1.0)

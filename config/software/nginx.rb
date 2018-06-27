@@ -37,6 +37,9 @@ source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 relative_path "nginx-#{version}"
 
 build do
+  # Patch nginx to work with gcc 7.
+  # For details: https://trac.nginx.org/nginx/ticket/1259
+  patch source: 'gcc7.patch'
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--with-http_ssl_module',
