@@ -65,8 +65,6 @@ omnibus-gitlab repository.
 10.8.5
 - Geo: Make sure gitlab_secondary schema has the correct owner
 
-- Add pseudonymizer export worker
-
 10.8.2
 
 - Automatically restart Gitaly when its VERSION file changes
