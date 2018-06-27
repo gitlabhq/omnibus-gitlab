@@ -66,7 +66,9 @@ config_file_path = File.join(working_dir, "config.toml")
 
 template config_file_path do
   source "workhorse-config.toml.erb"
-  owner account_helper.gitlab_user
+  owner "root"
+  group account_helper.gitlab_group
+  mode "0640"
   variables(redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
   notifies :restart, "service[gitlab-workhorse]"
 end
