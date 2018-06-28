@@ -19,7 +19,7 @@ account_helper = AccountHelper.new(node)
 working_dir = node['gitlab']['gitlab-pages']['dir']
 log_directory = node['gitlab']['gitlab-pages']['log_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
-admin_secret_path = "/var/opt/gitlab/gitlab-pages/admin.secret"
+admin_secret_path = File.join(working_dir, "admin.secret")
 
 [
   working_dir,
