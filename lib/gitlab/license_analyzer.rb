@@ -45,9 +45,9 @@ class LicenseAnalyzer
   end
 
   def self.license_check(license)
-    if license.match(@license_acceptable)
+    if @license_acceptable.match?(license)
       ['acceptable', 'Acceptable license']
-    elsif license.match(@license_unacceptable)
+    elsif @license_unacceptable.match?(license)
       ['unacceptable', 'Unacceptable license']
     end
   end

@@ -113,7 +113,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
-    if /^run: #{sv_name}:/ =~ service_statuses
+    if /^run: #{sv_name}:/.match?(service_statuses)
       run_sv_command_for_service('start', sv_name)
     end
   end

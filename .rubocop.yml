@@ -2,7 +2,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
   # Cop names are displayed in offense messages by default. Change behavior
   # by overriding DisplayCopNames, or by giving the `--no-display-cop-names`
   # option.
@@ -910,6 +910,10 @@ Performance/RedundantMerge:
 
 # Use `sort` instead of `sort_by { |x| x }`.
 Performance/RedundantSortBy:
+  Enabled: true
+
+# Use `match?` instead of `Regexp#match`, `String#match`, `Symbol#match` or `=~` when `MatchData` is not used.
+Performance/RegexpMatch:
   Enabled: true
 
 # Use `start_with?` instead of a regex match anchored to the beginning of a

@@ -301,7 +301,7 @@ before_script:
 rubocop:
   stage: check
   <<: *dedicated-runner
-  image: ruby:2.3
+  image: ruby:2.4
   before_script:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
@@ -441,7 +441,7 @@ Trigger:qa-test:
   dependencies: []
 
 Trigger:ce-package:
-  image: "ruby:2.3"
+  image: "ruby:2.4"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual
@@ -453,7 +453,7 @@ Trigger:ce-package:
     - triggers
 
 Trigger:ee-package:
-  image: "ruby:2.3"
+  image: "ruby:2.4"
   stage: trigger-package
   <<: *dedicated-runner
   when: manual

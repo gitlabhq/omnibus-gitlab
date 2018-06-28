@@ -108,7 +108,7 @@ build do
                          "-R#{install_dir}/embedded/lib",
                          '-static-libgcc'].join(' ')
                       when 'solaris2'
-                        if ohai['kernel']['machine'] =~ /sun/
+                        if /sun/.match?(ohai['kernel']['machine'])
                           ['/bin/sh ./Configure',
                            'solaris-sparcv9-gcc',
                            common_args,
