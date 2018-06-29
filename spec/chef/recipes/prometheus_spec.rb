@@ -30,11 +30,23 @@ prometheus_yml_output = <<-PROMYML
     metrics_path: "/-/metrics"
     static_configs:
     - targets:
-      - localhost:8080
+      - 127.0.0.1:8080
+    relabel_configs:
+    - source_labels:
+      - __address__
+      regex: 127.0.0.1:(.*)
+      replacement: localhost:$1
+      target_label: instance
   - job_name: gitlab-sidekiq
     static_configs:
     - targets:
-      - localhost:8082
+      - 127.0.0.1:8082
+    relabel_configs:
+    - source_labels:
+      - __address__
+      regex: 127.0.0.1:(.*)
+      replacement: localhost:$1
+      target_label: instance
   - job_name: gitlab_monitor_database
     metrics_path: "/database"
     static_configs:

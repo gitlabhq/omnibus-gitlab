@@ -12,6 +12,11 @@ omnibus-gitlab repository.
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 
+11.0.3
+
+- Revert change to default unicorn/sidekiq listen address.
+- Add Prometheus relabel configs to change display from 127.0.0.1 to localhost
+
 11.0.2
 
 - Set the default for geo_prune_event_log_worker_cron to once/2hours
