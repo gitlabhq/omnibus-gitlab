@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
+- Run GitLab service after systemd multi-user.target !2632
 
 11.1.1
 

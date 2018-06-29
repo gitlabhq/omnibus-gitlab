@@ -34,6 +34,10 @@ file "/etc/systemd/system/default.target.wants/gitlab-runsvdir.service" do
   action :delete
 end
 
+file "/etc/systemd/system/basic.target.wants/gitlab-runsvdir.service" do
+  action :delete
+end
+
 execute "systemctl daemon-reload" do
   action :nothing
 end
