@@ -26,6 +26,11 @@ omnibus-gitlab repository.
 - Tighten permission on gitlab-workhorse's config.toml file !2586
 - Add pseudonymizer data collection worker
 
+11.0.3
+
+- Revert change to default unicorn/sidekiq listen address.
+- Add Prometheus relabel configs to change display from 127.0.0.1 to localhost
+
 11.0.2
 
 - Set the default for geo_prune_event_log_worker_cron to once/2hours
