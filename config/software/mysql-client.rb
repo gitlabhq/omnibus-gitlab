@@ -41,6 +41,11 @@ if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^5/
   env['CXX'] = 'g++44'
 end
 
+if ohai['platform'] =~ /ubuntu/ && ohai['platform_version'] =~ /^18\.04/
+  env['CC'] = '/usr/bin/gcc-6'
+  env['CXX'] = '/usr/bin/g++-6'
+end
+
 build do
   command [
     'cmake',
