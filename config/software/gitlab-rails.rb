@@ -69,7 +69,7 @@ build do
   bundle_without << 'mysql' unless EE
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env
-  bundle "config build.nokogiri --use-system-libraries --with-xml2-dir=#{install_dir}/embedded --with-xslt-dir=#{install_dir}/embedded", env: env
+  bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do
