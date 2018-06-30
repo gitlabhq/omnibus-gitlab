@@ -74,7 +74,7 @@ execute 'generate databases.ini' do
      --databases-json #{node['gitlab']['pgbouncer']['databases_json']} \
      --databases-ini #{node['gitlab']['pgbouncer']['databases_ini']} \
      --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
-     --hostgroup account_helper.postgresql_group \
+     --hostgroup #{account_helper.postgresql_group} \
      --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
      --pg-port #{node['gitlab']['pgbouncer']['listen_port']} \
      --user #{node['gitlab']['postgresql']['pgbouncer_user']}
