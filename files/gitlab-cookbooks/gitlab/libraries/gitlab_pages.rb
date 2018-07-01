@@ -80,7 +80,8 @@ module GitlabPages
     end
 
     def parse_admin_socket
-      Gitlab['gitlab_rails']['pages_admin_address'] ||= 'unix:' + File.join(Gitlab['gitlab_pages']['dir'], 'admin.socket')
+      pages_dir = Gitlab['gitlab_pages']['dir'] || Gitlab['node']['gitlab']['gitlab-pages']['dir']
+      Gitlab['gitlab_rails']['pages_admin_address'] ||= 'unix:' + File.join(pages_dir, 'admin.socket')
     end
 
     def parse_admin_certificate

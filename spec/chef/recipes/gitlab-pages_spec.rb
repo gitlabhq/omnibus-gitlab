@@ -56,6 +56,7 @@ describe 'gitlab::gitlab-pages' do
           external_https: ['external_pages.example.com', 'localhost:9001'],
           metrics_address: 'localhost:1234',
           redirect_http: true,
+          dir: '/var/opt/gitlab/pages',
           cert: '/etc/gitlab/pages.crt',
           artifacts_server_url: "https://gitlab.elsewhere.com/api/v5",
           artifacts_server_timeout: 60,
@@ -87,6 +88,8 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.elsewhere.com/api/v5"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-secret-path="/var/opt/gitlab/pages/admin.secret"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-unix-listener="/var/opt/gitlab/pages/admin.socket"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-status="/@status"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=true})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format="json"})
