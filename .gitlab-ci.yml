@@ -23,7 +23,7 @@ stages:
 
 variables:
   BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "0.0.22"
+  BUILDER_IMAGE_REVISION: "0.0.23"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
 
@@ -844,6 +844,9 @@ Docker-QA:
   services:
     - docker:dind
   script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
