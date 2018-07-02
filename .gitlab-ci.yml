@@ -17,6 +17,7 @@ stages:
   - image-release
   - validate
   - metrics
+  - slow_jobs
   - raspbian
   - raspbian_release
   - notification_fail
@@ -127,7 +128,7 @@ variables:
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
-  stage: raspbian
+  stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
   script:
@@ -993,7 +994,7 @@ QA-Master:
   retry: 1
 
 HA-Validate-Nightly:
-  stage: validate
+  stage: slow_jobs
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - '[[ -n "${NIGHTLY}" ]] || exit 0'
@@ -1001,7 +1002,6 @@ HA-Validate-Nightly:
   only:
     - schedules@gitlab/omnibus-gitlab
   dependencies: []
-  allow_failure: true
 
 Raspberry-Pi-2-Jessie-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
