@@ -30,6 +30,7 @@ relative_path 'src/github.com/prometheus/node_exporter'
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
+    'CGO_ENABLED' => '0' # Details: https://github.com/prometheus/node_exporter/issues/870
   }
   command 'go build', env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
