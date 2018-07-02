@@ -844,6 +844,9 @@ Docker-QA:
   services:
     - docker:dind
   script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
