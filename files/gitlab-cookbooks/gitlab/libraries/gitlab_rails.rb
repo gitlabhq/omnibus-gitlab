@@ -106,13 +106,18 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def parse_runtime_dir
       Gitlab['runtime_dir'] ||= '/run'
-
       run_dir = Gitlab['runtime_dir']
 
-      return if File.directory?(run_dir)
-
-      Chef::Log.warn "Runtime directory '#{run_dir}' does not exist. Prometheus metrics will be disabled."
-      Gitlab['runtime_dir'] = nil
+      if Gitlab['node']['filesystem2'].nil?
+        Chef::Log.warn 'No filesystem2 variables in Ohai, disabling runtime_dir'
+        Gitlab['runtime_dir'] = nil
+      else
+        fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]
+        unless fs && ['tmpfs', 'overlay'].include?(fs['fs_type'])
+          Chef::Log.warn "Runtime directory '#{run_dir}' is not a tmpfs."
+          Gitlab['runtime_dir'] = nil
+        end
+      end
     end
 
     def parse_shared_dir
