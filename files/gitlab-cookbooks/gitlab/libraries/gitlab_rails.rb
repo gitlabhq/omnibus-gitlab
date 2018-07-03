@@ -113,7 +113,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
         Gitlab['runtime_dir'] = nil
       else
         fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]
-        unless fs && ['tmpfs', 'overlay'].include?(fs['fs_type'])
+        unless fs && %w(tmpfs overlay).include?(fs['fs_type'])
           Chef::Log.warn "Runtime directory '#{run_dir}' is not a tmpfs."
           Gitlab['runtime_dir'] = nil
         end
