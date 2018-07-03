@@ -31,6 +31,7 @@ omnibus-gitlab repository.
 
 - Revert change to default unicorn/sidekiq listen address.
 - Add Prometheus relabel configs to change display from 127.0.0.1 to localhost
+- Tighten permission on pgbouncer and consul related config files !2588
 
 11.0.2
 

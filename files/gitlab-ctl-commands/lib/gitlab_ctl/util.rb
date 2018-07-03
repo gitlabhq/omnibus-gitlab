@@ -83,6 +83,10 @@ module GitlabCtl
         Etc.getpwnam(username)
       end
 
+      def groupinfo(groupname)
+        Etc.getgrnam(groupname)
+      end
+
       def chef_run(config, attribs)
         cookbook_path = "/opt/gitlab/embedded/cookbooks"
         run_command("/opt/gitlab/embedded/bin/chef-client -z -c #{cookbook_path}/#{config} -j #{cookbook_path}/#{attribs}")

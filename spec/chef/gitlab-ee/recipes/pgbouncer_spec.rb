@@ -118,7 +118,7 @@ describe 'gitlab-ee::pgbouncer' do
       it 'creates databases.json' do
         expect(chef_run).to create_file(databases_json)
           .with_content("{\"gitlabhq_production\":{\"host\":\"1.2.3.4\"}}")
-          .with(user: 'gitlab-psql', group: 'gitlab-psql')
+          .with(user: 'root', group: 'gitlab-psql')
       end
 
       it 'notifies pgb-notify to generate databases.ini' do
@@ -145,7 +145,7 @@ describe 'gitlab-ee::pgbouncer' do
           }
         )
         expect(chef_run).to create_file('databases.json')
-          .with(user: 'fakeuser', group: 'fakeuser')
+          .with(user: 'fakeuser', group: 'gitlab-psql')
       end
     end
 
