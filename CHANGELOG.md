@@ -23,6 +23,7 @@ omnibus-gitlab repository.
 - Set TZ environment variable for gitlab-rails to ':/etc/localtime' to decrease
   number of system callse - !2600
 - Don't add timestamp to gitaly logs if logging format is json !2615
+- Remove hardcoded path for pages secrets (julien MILLAU)
 - Tighten permission on gitlab-workhorse's config.toml file !2586
 - Add pseudonymizer data collection worker
 
