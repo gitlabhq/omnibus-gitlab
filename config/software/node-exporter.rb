@@ -17,7 +17,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'node-exporter'
-version = Gitlab::Version.new('node-exporter', '0.15.2')
+version = Gitlab::Version.new('node-exporter', '0.16.0')
 default_version version.print
 
 license 'APACHE-2.0'
