@@ -21,6 +21,13 @@ preload_app <%= @preload_app %>
 # How many worker processes
 worker_processes <%= @worker_processes %>
 
+<%- if @before_exec %>
+# What to do before we exec the binary
+before_exec do |server|
+  <%= @before_exec %>
+end
+
+<%- end %>
 <%- if @before_fork %>
 # What to do before we fork a worker
 before_fork do |server, worker|

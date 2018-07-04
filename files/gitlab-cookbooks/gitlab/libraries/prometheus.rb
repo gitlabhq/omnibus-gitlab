@@ -269,6 +269,14 @@ module Prometheus
         'job_name' => 'gitlab-sidekiq',
         'static_configs' => [
           'targets' => [prometheus_target],
+        ],
+        'relabel_configs' => [
+          {
+            "source_labels" => ["__address__"],
+            "regex" => "127.0.0.1:(.*)",
+            "replacement" => "localhost:$1",
+            "target_label" => "instance"
+          }
         ]
       }
 
@@ -292,6 +300,14 @@ module Prometheus
         'metrics_path' => '/-/metrics',
         'static_configs' => [
           'targets' => [prometheus_target],
+        ],
+        'relabel_configs' => [
+          {
+            "source_labels" => ["__address__"],
+            "regex" => "127.0.0.1:(.*)",
+            "replacement" => "localhost:$1",
+            "target_label" => "instance"
+          }
         ]
       }
 

@@ -10,6 +10,7 @@ If you are upgrading from a non-Omnibus installation to an Omnibus installation,
 Updating to major versions might need some manual intervention. For more info,
 check the version your are updating to:
 
+- [GitLab 11](gitlab_11_changes.md)
 - [GitLab 10](gitlab_10_changes.md)
 - [GitLab 8](gitlab_8_changes.md)
 - [GitLab 7](gitlab_7_changes.md)
