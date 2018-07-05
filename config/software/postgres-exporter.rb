@@ -33,6 +33,6 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/postgres-exporter",
   }
-  command 'go build', env: env
+  command 'go run mage.go binary', env: env
   copy 'postgres_exporter', "#{install_dir}/embedded/bin/"
 end
