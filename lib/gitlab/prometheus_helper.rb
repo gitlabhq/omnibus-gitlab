@@ -11,7 +11,11 @@ module Prometheus
         "-X #{common_version}.Branch=master",
         "-X #{common_version}.BuildUser=GitLab-Omnibus",
         "-X #{common_version}.BuildDate=#{build_time}",
-      ].join(' ')
+      ]
+    end
+
+    def print_ldflags
+      @ldflags.join(' ')
     end
   end
 end

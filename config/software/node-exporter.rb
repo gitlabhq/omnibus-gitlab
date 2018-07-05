@@ -34,10 +34,9 @@ build do
     'CGO_ENABLED' => '0' # Details: https://github.com/prometheus/node_exporter/issues/870
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
-  cwd = "#{exporter_source_dir}/src/github.com/prometheus/node_exporter"
 
   prom_version = Prometheus::VersionFlags.new('node_exporter', version)
 
-  command "go build -ldflags '#{prom_version.ldflags}'", env: env, cwd: cwd
+  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
 end

@@ -40,6 +40,6 @@ build do
 
   prom_version = Prometheus::VersionFlags.new(name, version)
 
-  command "go build -ldflags '#{prom_version.ldflags}' ./cmd/prometheus", env: env, cwd: cwd
+  command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/"
 end
