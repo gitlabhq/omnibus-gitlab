@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Update gitlab-monitor to 2.17.0
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
+- Update Mattermost to 5.1
 
 11.1.1
 
