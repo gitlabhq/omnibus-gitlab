@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'pgbouncer-exporter'
 version = Gitlab::Version.new('pgbouncer-exporter', '0.2-gitlab')
@@ -27,14 +28,16 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/stanhu/pgbouncer_exporter'
+go_source = 'github.com/stanhu/pgbouncer_exporter'
+relative_path "src/#{go_source}"
 
 build do
   cwd = "#{Omnibus::Config.source_dir}/pgbouncer-exporter"
   env = {
     'GOPATH' => cwd
   }
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
   command 'go get -d ...', env: env, cwd: cwd
-  command 'make', env: env
+  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'pgbouncer_exporter', "#{install_dir}/embedded/bin/"
 end

@@ -1,7 +1,9 @@
+require 'time'
+
 module Prometheus
   class VersionFlags
-    def initialize(software_name, version)
-      common_version = "github.com/prometheus/#{software_name}/vendor/github.com/prometheus/common/version"
+    def initialize(go_source, version)
+      common_version = "#{go_source}/vendor/github.com/prometheus/common/version"
       revision = `git rev-parse HEAD`.strip
       build_time = Time.now.iso8601
 

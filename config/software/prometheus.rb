@@ -18,7 +18,6 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
-require 'time'
 
 name 'prometheus'
 version = Gitlab::Version.new('prometheus', '1.8.2')
@@ -29,16 +28,17 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/prometheus/prometheus'
+go_source = 'github.com/prometheus/prometheus'
+relative_path "src/#{go_source}"
 
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/prometheus",
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
-  cwd = "#{exporter_source_dir}/src/github.com/prometheus/prometheus"
+  cwd = "#{exporter_source_dir}/src/#{go_source}"
 
-  prom_version = Prometheus::VersionFlags.new(name, version)
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
 
   command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/"

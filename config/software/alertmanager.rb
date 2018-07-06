@@ -28,16 +28,17 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/prometheus/alertmanager'
+go_source = 'github.com/prometheus/alertmanager'
+relative_path "src/#{go_source}"
 
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/alertmanager",
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
-  cwd = "#{exporter_source_dir}/src/github.com/prometheus/alertmanager"
+  cwd = "#{exporter_source_dir}/src/#{go_source}"
 
-  prom_version = Prometheus::VersionFlags.new(name, version)
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
 
   command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
   copy 'alertmanager', "#{install_dir}/embedded/bin/"

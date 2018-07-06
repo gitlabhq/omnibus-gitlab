@@ -26,16 +26,16 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/prometheus/node_exporter'
+go_source = 'github.com/prometheus/node_exporter'
+relative_path "src/#{go_source}"
 
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
     'CGO_ENABLED' => '0' # Details: https://github.com/prometheus/node_exporter/issues/870
   }
-  exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
 
-  prom_version = Prometheus::VersionFlags.new('node_exporter', version)
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
 
   command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
