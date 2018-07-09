@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'postgres-exporter'
-version = Gitlab::Version.new('postgres-exporter', '0.4.1')
+version = Gitlab::Version.new('postgres-exporter', '0.4.6')
 default_version version.print
 
 license 'Apache-2.0'
@@ -33,6 +33,6 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/postgres-exporter",
   }
-  command 'go build', env: env
+  command 'go run mage.go binary', env: env
   copy 'postgres_exporter', "#{install_dir}/embedded/bin/"
 end
