@@ -1182,6 +1182,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
 # mattermost['service_allowed_untrusted_internal_connections'] = ""
+# mattermost['service_enable_api_team_deletion'] = true
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"

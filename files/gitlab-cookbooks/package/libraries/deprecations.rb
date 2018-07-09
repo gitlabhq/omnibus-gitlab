@@ -88,6 +88,7 @@ module Gitlab
            service_port
            service_use_ssl
            service_allowed_untrusted_internal_connections
+           service_enable_api_team_deletion
            team_site_name
            sql_driver_name
            sql_data_source
