@@ -18,7 +18,7 @@ stages:
   - validate
   - metrics
   - slow_jobs
-  - raspbian_release
+  - raspbian-release
   - notification_fail
 
 variables:
@@ -1131,7 +1131,7 @@ SLES-12-release:
   <<: *production_release
 
 Raspberry-Pi-2-Jessie-release:
-  stage: raspbian_release
+  stage: raspbian-release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - export RASPBERRY_REPO=raspberry-pi2
