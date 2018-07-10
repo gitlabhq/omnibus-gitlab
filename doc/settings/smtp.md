@@ -616,6 +616,21 @@ gitlab_rails['gitlab_email_from'] = 'Your Mail Adress'
 gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Adress'
 ```
 
+### mxhichina.com
+
+```ruby
+gitlab_rails['gitlab_email_from'] = "username@company.com"
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.mxhichina.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@company.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "mxhichina.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
