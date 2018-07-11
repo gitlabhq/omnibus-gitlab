@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'alertmanager'
-version = Gitlab::Version.new('alertmanager', '0.14.0')
+version = Gitlab::Version.new('alertmanager', '0.15.0')
 default_version version.print
 
 license 'APACHE-2.0'
