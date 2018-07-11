@@ -27,6 +27,7 @@ omnibus-gitlab repository.
 - Remove hardcoded path for pages secrets (julien MILLAU)
 - Tighten permission on gitlab-workhorse's config.toml file !2586
 - Add pseudonymizer data collection worker
+- Update postgres_exporter to 0.4.6 !2641
 
 11.0.3
 
