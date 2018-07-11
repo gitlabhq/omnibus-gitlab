@@ -30,6 +30,7 @@ omnibus-gitlab repository.
 - Update node_exporter to 0.16.0, metric names have been changed !2639
 - Update alertmanager to 0.15.0 !2639
 - Update redis_exporter to 0.20.2 !2639
+- Update postgres_exporter to 0.4.6 !2641
 
 11.0.3
 
