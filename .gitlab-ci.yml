@@ -1167,7 +1167,7 @@ Raspberry-Pi-2-Jessie-release:
   - promotion
 
 Raspberry-Pi-2-Stretch-release:
-  stage: raspbian_release
+  stage: raspbian-release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - export RASPBERRY_REPO=raspberry-pi2
