@@ -166,8 +166,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
+#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'host' => 's3.amazonaws.com',
-#   # 'endpoint' => nil,
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
@@ -185,8 +186,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
+#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'host' => 's3.amazonaws.com',
-#   # 'endpoint' => nil,
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
@@ -206,7 +208,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
 #   # 'host' => 's3.amazonaws.com',
-#   # 'endpoint' => nil,
+#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
@@ -1179,6 +1182,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
 # mattermost['service_allowed_untrusted_internal_connections'] = ""
+# mattermost['service_enable_api_team_deletion'] = true
 # mattermost['team_site_name'] = "GitLab Mattermost"
 # mattermost['sql_driver_name'] = 'mysql'
 # mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"

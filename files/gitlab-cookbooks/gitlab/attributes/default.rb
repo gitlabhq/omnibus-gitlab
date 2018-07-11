@@ -262,11 +262,6 @@ default['gitlab']['gitlab-rails']['rack_attack_protected_paths'] = [
   '/unsubscribes/',
   '/import/github/personal_access_token'
 ]
-default['gitlab']['gitlab-rails']['aws_enable'] = false
-default['gitlab']['gitlab-rails']['aws_access_key_id'] = nil
-default['gitlab']['gitlab-rails']['aws_secret_access_key'] = nil
-default['gitlab']['gitlab-rails']['aws_bucket'] = nil
-default['gitlab']['gitlab-rails']['aws_region'] = nil
 
 default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
