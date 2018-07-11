@@ -45,6 +45,7 @@ end
 file "#{node['consul']['dir']}/config.json" do
   content consul_helper.configuration
   owner account_helper.consul_user
+  mode '0600'
   notifies :run, 'execute[reload consul]'
 end
 

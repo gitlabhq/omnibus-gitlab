@@ -10,7 +10,7 @@ end
 
 module Pgbouncer
   class Databases
-    attr_accessor :install_path, :databases, :options, :ini_file, :json_file, :template_file, :attributes, :userinfo, :database
+    attr_accessor :install_path, :databases, :options, :ini_file, :json_file, :template_file, :attributes, :userinfo, :groupinfo, :database
     attr_reader :data_path
 
     def initialize(options, install_path, base_data_path)
@@ -28,6 +28,7 @@ module Pgbouncer
                   end
       @databases = update_databases(JSON.parse(File.read(@json_file))) if File.exist?(@json_file)
       @userinfo = GitlabCtl::Util.userinfo(options['host_user']) if options['host_user']
+      @groupinfo = GitlabCtl::Util.groupinfo(options['host_group']) if options['host_group']
     end
 
     def update_databases(original)
@@ -77,7 +78,7 @@ module Pgbouncer
     def write
       File.open(@ini_file, 'w') do |file|
         file.puts render
-        file.chown(userinfo.uid, userinfo.gid) if options['host_user']
+        file.chown(userinfo.uid, groupinfo.gid) if options['host_user'] && options['host_group']
       end
     end
 

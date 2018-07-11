@@ -106,14 +106,14 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def parse_runtime_dir
       Gitlab['runtime_dir'] ||= '/run'
-
       run_dir = Gitlab['runtime_dir']
+
       if Gitlab['node']['filesystem2'].nil?
         Chef::Log.warn 'No filesystem2 variables in Ohai, disabling runtime_dir'
         Gitlab['runtime_dir'] = nil
       else
         fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]
-        if fs.nil? || fs['fs_type'] != 'tmpfs'
+        unless fs && %w(tmpfs overlay).include?(fs['fs_type'])
           Chef::Log.warn "Runtime directory '#{run_dir}' is not a tmpfs."
           Gitlab['runtime_dir'] = nil
         end

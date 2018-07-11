@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Tighten permission on Gitaly's config.toml file !2589
 - Tighten permission on gitlab-shell's config.yml file !2585
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
+- Fix Prometheus metrics not working out of the box in Docker
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 - Remove NGINX custom page for 422 errors
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
@@ -23,6 +24,7 @@ omnibus-gitlab repository.
 - Set TZ environment variable for gitlab-rails to ':/etc/localtime' to decrease
   number of system callse - !2600
 - Don't add timestamp to gitaly logs if logging format is json !2615
+- Remove hardcoded path for pages secrets (julien MILLAU)
 - Tighten permission on gitlab-workhorse's config.toml file !2586
 - Add pseudonymizer data collection worker
 
@@ -30,6 +32,8 @@ omnibus-gitlab repository.
 
 - Revert change to default unicorn/sidekiq listen address.
 - Add Prometheus relabel configs to change display from 127.0.0.1 to localhost
+- Tighten permission on pgbouncer and consul related config files !2588
+- Update Mattermost to 5.0.0
 
 11.0.2
 

@@ -31,6 +31,7 @@ class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so 
       'MM_SERVICESETTINGS_SITEURL' => node['mattermost']['service_site_url'].to_s,
       'MM_SERVICESETTINGS_LISTENADDRESS' => "#{node['mattermost']['service_address']}:#{node['mattermost']['service_port']}",
       'MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS' => node['mattermost']['service_allowed_untrusted_internal_connections'],
+      'MM_SERVICESETTINGS_ENABLEAPITEAMDELETION' => node['mattermost']['service_enable_api_team_deletion'].to_s,
       'MM_TEAMSETTINGS_SITENAME' => node['mattermost']['team_site_name'].to_s,
       'MM_SQLSETTINGS_DRIVERNAME' => node['mattermost']['sql_driver_name'],
       'MM_SQLSETTINGS_DATASOURCE' => node['mattermost']['sql_data_source'].to_s,

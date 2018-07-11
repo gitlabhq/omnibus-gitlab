@@ -228,18 +228,6 @@ end
   end
 end
 
-templatesymlink "Create a aws.yml and create a symlink to Rails root" do
-  link_from File.join(gitlab_rails_source_dir, "config/aws.yml")
-  link_to File.join(gitlab_rails_etc_dir, "aws.yml")
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
-  dependent_services.each { |svc| notifies :restart, svc }
-
-  action :delete unless node['gitlab']['gitlab-rails']['aws_enable']
-end
-
 templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
   link_to File.join(gitlab_rails_etc_dir, "smtp_settings.rb")

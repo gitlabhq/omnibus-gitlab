@@ -62,7 +62,8 @@ add_command_under_category('write-pgpass', 'database', 'Write a pgpass file for 
     database: options['database'],
     username: options['user'],
     password: password,
-    host_user: options['host_user']
+    host_user: options['host_user'],
+    host_group: options['host_group']
   )
   pgpass.write
 end
@@ -77,7 +78,8 @@ def get_pg_options
     'user' => 'pgbouncer',
     'pg_database' => nil,
     'newhost' => nil,
-    'host_user' => nil
+    'host_user' => nil,
+    'host_group' => nil
   }
 
   OptionParser.new do |opts|
@@ -99,6 +101,10 @@ def get_pg_options
 
     opts.on('--hostuser USERNAME', 'User to write the pgpass file for') do |h|
       options['host_user'] = h
+    end
+
+    opts.on('--hostgroup GROUP', 'Group to write the pgpass file for') do |h|
+      options['host_group'] = h
     end
 
     opts.on('--pg-database DATABASE', 'Pgbouncer database to modify') do |db|
