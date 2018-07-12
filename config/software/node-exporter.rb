@@ -15,6 +15,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'node-exporter'
 version = Gitlab::Version.new('node-exporter', '0.16.0')
@@ -25,13 +26,17 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/prometheus/node_exporter'
+go_source = 'github.com/prometheus/node_exporter'
+relative_path "src/#{go_source}"
 
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
     'CGO_ENABLED' => '0' # Details: https://github.com/prometheus/node_exporter/issues/870
   }
-  command 'go build', env: env
+
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
+
+  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
 end

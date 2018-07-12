@@ -31,6 +31,7 @@ omnibus-gitlab repository.
 - Update alertmanager to 0.15.0 !2639
 - Update redis_exporter to 0.20.2 !2639
 - Update postgres_exporter to 0.4.6 !2641
+- Update pgbouncer_exporter to 0.0.3-gitlab !2617
 
 11.0.3
 
