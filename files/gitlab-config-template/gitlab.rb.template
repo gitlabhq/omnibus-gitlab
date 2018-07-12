@@ -1399,6 +1399,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['prometheus_listen_addr'] = "localhost:9236"
+# gitaly['logging_level'] = "warn"
 # gitaly['logging_format'] = "json"
 # gitaly['logging_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # gitaly['logging_ruby_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"

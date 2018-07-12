@@ -7,6 +7,7 @@ describe 'gitaly' do
   let(:socket_path) { '/tmp/gitaly.socket' }
   let(:listen_addr) { 'localhost:7777' }
   let(:prometheus_listen_addr) { 'localhost:9000' }
+  let(:logging_level) { 'warn' }
   let(:logging_format) { 'json' }
   let(:logging_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
   let(:logging_ruby_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project-ruby' }
@@ -51,6 +52,8 @@ describe 'gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[logging\]\s+level = '#{logging_level}'})
+      expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'})
@@ -88,6 +91,7 @@ describe 'gitaly' do
           socket_path: socket_path,
           listen_addr: listen_addr,
           prometheus_listen_addr: prometheus_listen_addr,
+          logging_level: logging_level,
           logging_format: logging_format,
           logging_sentry_dsn: logging_sentry_dsn,
           logging_ruby_sentry_dsn: logging_ruby_sentry_dsn,
@@ -111,6 +115,8 @@ describe 'gitaly' do
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[logging\]\s+level = '#{logging_level}')
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'\s+ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'})
       expect(chef_run).to render_file(config_path)
