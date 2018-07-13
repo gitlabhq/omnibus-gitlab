@@ -20,14 +20,14 @@ ALERT FilesystemAlmostFull
   IF instance:node_filesystem_avail:ratio * 100 < 5
   FOR 10m
   ANNOTATIONS {
-    summary = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} is almost full"
-    description "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} has {{ $value | printf '%.2f' }}% space available."
+    summary = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} is almost full",
+    description = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} has {{ $value | printf '%.2f' }}% space available.",
   }
 
 ALERT FilesystemFullIn1Day
   IF predict_linear(node_filesystem_avail_bytes[6h], 24 * 3600) < 0
   FOR 30m
   ANNOTATIONS {
-    summary = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} will be full within 24 hours"
-    description "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} will be full in the next 24 hours."
+    summary = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} will be full within 24 hours",
+    description = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} will be full in the next 24 hours.",
   }
