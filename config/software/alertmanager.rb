@@ -17,9 +17,10 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'alertmanager'
-version = Gitlab::Version.new('alertmanager', '0.14.0')
+version = Gitlab::Version.new('alertmanager', '0.15.0')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -27,15 +28,18 @@ license_file 'LICENSE'
 
 source git: version.remote
 
-relative_path 'src/github.com/prometheus/alertmanager'
+go_source = 'github.com/prometheus/alertmanager'
+relative_path "src/#{go_source}"
 
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/alertmanager",
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
-  cwd = "#{exporter_source_dir}/src/github.com/prometheus/alertmanager"
+  cwd = "#{exporter_source_dir}/src/#{go_source}"
 
-  command 'go build ./cmd/alertmanager', env: env, cwd: cwd
+  prom_version = Prometheus::VersionFlags.new(go_source, version)
+
+  command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
   copy 'alertmanager', "#{install_dir}/embedded/bin/"
 end

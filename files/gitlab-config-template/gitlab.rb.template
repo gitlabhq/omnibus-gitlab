@@ -175,7 +175,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Git LFS
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
-# gitlab_rails['lfs_object_store_enabled'] = false # EE only
+# gitlab_rails['lfs_object_store_enabled'] = false
 # gitlab_rails['lfs_object_store_direct_upload'] = false
 # gitlab_rails['lfs_object_store_background_upload'] = true
 # gitlab_rails['lfs_object_store_proxy_download'] = false
@@ -196,7 +196,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
 # gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
-# gitlab_rails['uploads_object_store_enabled'] = false # EE only
+# gitlab_rails['uploads_object_store_enabled'] = false
 # gitlab_rails['uploads_object_store_direct_upload'] = false
 # gitlab_rails['uploads_object_store_background_upload'] = true
 # gitlab_rails['uploads_object_store_proxy_download'] = false
@@ -1399,6 +1399,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['prometheus_listen_addr'] = "localhost:9236"
+# gitaly['logging_level'] = "warn"
 # gitaly['logging_format'] = "json"
 # gitaly['logging_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # gitaly['logging_ruby_sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
