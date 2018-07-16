@@ -28,6 +28,9 @@ path = '<%= shard['path'] %>'
 <% end %>
 
 [logging]
+<% if @logging_level %>
+level = '<%= @logging_level %>'
+<% end %>
 <% if @logging_format %>
 format = '<%= @logging_format %>'
 <% end %>
