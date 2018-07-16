@@ -7,6 +7,7 @@ default['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
 default['gitaly']['socket_path'] = "#{node['gitaly']['dir']}/gitaly.socket"
 default['gitaly']['listen_addr'] = nil
 default['gitaly']['prometheus_listen_addr'] = "localhost:9236"
+default['gitaly']['logging_level'] = "warn"
 default['gitaly']['logging_format'] = nil
 default['gitaly']['logging_sentry_dsn'] = nil
 default['gitaly']['logging_ruby_sentry_dsn'] = nil
