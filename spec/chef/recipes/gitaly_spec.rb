@@ -115,10 +115,17 @@ describe 'gitaly' do
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
+
+      gitaly_logging_section = Regexp.new([
+        %r{\[logging\]},
+        %r{level = '#{logging_level}'},
+        %r{format = '#{logging_format}'},
+        %r{sentry_dsn = '#{logging_sentry_dsn}'},
+        %r{ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'},
+      ].map(&:to_s).join('\s+'))
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[logging\]\s+level = '#{logging_level}'})
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'\s+ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'})
+        .with_content(gitaly_logging_section)
+
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
       expect(chef_run).to render_file(config_path)
