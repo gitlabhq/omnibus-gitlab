@@ -51,7 +51,7 @@ describe 'gitaly' do
         .with_content("listen_addr = '#{listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
-      expect(chef_run).not_to render_file(config_path)
+      expect(chef_run).to render_file(config_path)
         .with_content(%r{\[logging\]\s+level = '#{logging_level}'})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'})
