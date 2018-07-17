@@ -27,6 +27,8 @@ describe 'gitlab::redis' do
         .with_content(/^maxmemory-policy noeviction/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^maxmemory-samples 5/)
+      expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^slaveof/)
     end
   end
 
@@ -89,6 +91,57 @@ describe 'gitlab::redis' do
     it 'creates redis config without save setting' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^save ""/)
+    end
+  end
+
+  context 'with a slave configured' do
+    let(:redis_host) { '1.2.3.4' }
+    let(:redis_port) { 6370 }
+    let(:master_ip) { '10.0.0.0' }
+    let(:master_port) { 6371 }
+
+    before do
+      stub_gitlab_rb(
+        redis: {
+          bind: redis_host,
+          port: redis_port,
+          master_ip: master_ip,
+          master_port: master_port,
+          master_password: 'password',
+          master: false
+        }
+      )
+    end
+
+    it 'includes slaveof' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^slaveof #{master_ip} #{master_port}/)
+    end
+  end
+
+  context 'in HA mode with Sentinels' do
+    let(:redis_host) { '1.2.3.4' }
+    let(:redis_port) { 6370 }
+    let(:master_ip) { '10.0.0.0' }
+    let(:master_port) { 6371 }
+
+    before do
+      stub_gitlab_rb(
+        redis: {
+          bind: redis_host,
+          port: redis_port,
+          ha: true,
+          master_ip: master_ip,
+          master_port: master_port,
+          master_password: 'password',
+          master: false
+        }
+      )
+    end
+
+    it 'omits slaveof' do
+      expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^slaveof/)
     end
   end
 end
