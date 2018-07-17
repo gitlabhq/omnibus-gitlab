@@ -17,6 +17,9 @@
 #
 
 name 'python3'
+# If bumping from 3.4.x to something higher, be sure to update the following files with the new path:
+# files/gitlab-cookbooks/gitaly/recipes/enable.rb
+# files/gitlab-cookbooks/gitlab/attributes/default.rb
 default_version '3.4.8'
 
 dependency 'libedit'
