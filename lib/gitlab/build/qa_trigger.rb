@@ -16,7 +16,8 @@ module Build
         "token" => ENV['QA_TRIGGER_TOKEN'],
         "variables[RELEASE]" => image,
         "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],
-        "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/#{ENV['CI_JOB_ID']}"
+        "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/#{ENV['CI_JOB_ID']}",
+        "variables[UPSTREAM_TRIGGER_SOURCE]" => ENV['TRIGGER_SOURCE']
       }
     end
 
