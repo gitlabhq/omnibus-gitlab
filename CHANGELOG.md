@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.1.1
+
+- Update Mattermost to 5.0.2
+
 11.1.0
 
 - Include OSS driver for object storage support in the registry
@@ -32,13 +36,13 @@ omnibus-gitlab repository.
 - Update redis_exporter to 0.20.2 !2639
 - Update postgres_exporter to 0.4.6 !2641
 - Update pgbouncer_exporter to 0.0.3-gitlab !2617
+- Update Mattermost to 5.0.0
 
 11.0.3
 
 - Revert change to default unicorn/sidekiq listen address.
 - Add Prometheus relabel configs to change display from 127.0.0.1 to localhost
 - Tighten permission on pgbouncer and consul related config files !2588
-- Update Mattermost to 5.0.0
 
 11.0.2
 
