@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 
 - Include OSS driver for object storage support in the registry
 - Support setting of PostgreSQL SSL mode and compression in repmgr conninfo
+- Omit SLAVEOF if Redis is in an HA environment !2651
 - Disable PostgreSQL SSL compression by default
 - Tighten permission on Mattermost's config.json file !2587
 - Tighten permission on Gitaly's config.toml file !2589
