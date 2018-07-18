@@ -273,7 +273,7 @@ dir <%= %Q("#{@dir}") %>
 #    and resynchronize with them.
 #
 # slaveof <masterip> <masterport>
-<%= "slaveof #{@master_ip} #{@master_port}" if @is_slave %>
+<%= "slaveof #{@master_ip} #{@master_port}" if @is_slave && !@ha %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
