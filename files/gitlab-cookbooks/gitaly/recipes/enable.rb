@@ -41,7 +41,12 @@ end
 node.default['gitaly']['env'] = {
   'HOME' => node['gitlab']['user']['home'],
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'TZ' => ':/etc/localtime'
+  'TZ' => ':/etc/localtime',
+  # This is needed by gitlab-markup to import Python docutils
+  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.4/site-packages",
+  # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
+  # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
+  'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current"
 }
 
 env_dir env_directory do
