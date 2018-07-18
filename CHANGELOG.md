@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.2.0
+
+- Bump git to 2.18.0 !2636
+
 11.1.0
 
 - Include OSS driver for object storage support in the registry
