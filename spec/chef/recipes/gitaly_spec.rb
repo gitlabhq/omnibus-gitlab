@@ -279,6 +279,8 @@ describe 'gitaly' do
   context 'populates default env variables' do
     it_behaves_like "enabled gitaly env", "TZ", ':/etc/localtime'
     it_behaves_like "enabled gitaly env", "HOME", '/var/opt/gitlab'
+    it_behaves_like "enabled gitaly env", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
+    it_behaves_like "enabled gitaly env", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
   end
 
   context 'computes env variables based on other values' do
