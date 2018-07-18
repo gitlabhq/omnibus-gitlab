@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.2.0
 
 - Bump git to 2.18.0 !2636
+- Update gitlab-monitor to 2.17.0
 
 11.1.0
 
