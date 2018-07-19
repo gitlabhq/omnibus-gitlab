@@ -7,15 +7,17 @@ omnibus-gitlab repository.
 
 - Bump git to 2.18.0 !2636
 - Update gitlab-monitor to 2.17.0
+
 11.1.1
 
 - Update Mattermost to 5.0.2
+- Omit SLAVEOF if Redis is in an HA environment !2651
+- Export PYTHONPATH and ICU_DATA to gitaly !2650
 
 11.1.0
 
 - Include OSS driver for object storage support in the registry
 - Support setting of PostgreSQL SSL mode and compression in repmgr conninfo
-- Omit SLAVEOF if Redis is in an HA environment !2651
 - Disable PostgreSQL SSL compression by default
 - Tighten permission on Mattermost's config.json file !2587
 - Tighten permission on Gitaly's config.toml file !2589
@@ -27,7 +29,6 @@ omnibus-gitlab repository.
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584
 - Tighten permission on gitlab.yml file !2591
 - Tighten permission on database.yml file !2592
-- Export PYTHONPATH and ICU_DATA to gitaly !2650
 - Add support for Prometheus remote read/write services.
 - Add support for database service discovery
 - Tighten permission on geo's database_geo.yml file !2590
