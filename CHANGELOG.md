@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.2.0
 
 - Bump git to 2.18.0 !2636
+- Bump Prometheus Alertmanager to 0.15.1 !2664
 - Update gitlab-monitor to 2.18.0 !2662
 - Update gitlab-monitor to 2.17.0
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
