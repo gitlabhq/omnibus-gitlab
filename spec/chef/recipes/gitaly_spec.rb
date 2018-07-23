@@ -51,8 +51,6 @@ describe 'gitaly' do
         .with_content("listen_addr = '#{listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[logging\]\s+level = '#{logging_level}'})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+level = '#{logging_level}'\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'})
       expect(chef_run).not_to render_file(config_path)
@@ -71,6 +69,8 @@ describe 'gitaly' do
         .with_content('restart_delay =')
       expect(chef_run).not_to render_file(config_path)
         .with_content('num_workers =')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[logging\]\s+level})
     end
 
     it 'populates gitaly config.toml with default storages' do

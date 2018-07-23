@@ -13,6 +13,9 @@ omnibus-gitlab repository.
 11.1.1
 
 - Update Mattermost to 5.0.2
+- Omit SLAVEOF if Redis is in an HA environment !2651
+- Export PYTHONPATH and ICU_DATA to gitaly !2650
+- Restore gitaly default log level to 'info' !2661
 
 11.1.0
 
