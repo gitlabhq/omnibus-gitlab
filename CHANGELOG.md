@@ -7,6 +7,8 @@ omnibus-gitlab repository.
 
 - Bump git to 2.18.0 !2636
 - Update gitlab-monitor to 2.17.0
+- Fix Prometheus metrics not working out of the box in Docker
+
 11.1.1
 
 - Update Mattermost to 5.0.2
@@ -21,7 +23,6 @@ omnibus-gitlab repository.
 - Tighten permission on Gitaly's config.toml file !2589
 - Tighten permission on gitlab-shell's config.yml file !2585
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
-- Fix Prometheus metrics not working out of the box in Docker
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 - Remove NGINX custom page for 422 errors
 - Tighten permission on gitlab-monitor's gitlab-monitor.yml file !2584

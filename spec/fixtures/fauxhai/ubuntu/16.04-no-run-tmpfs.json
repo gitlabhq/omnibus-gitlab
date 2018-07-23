@@ -264,7 +264,6 @@
           "gid=1002"
         ],
         "mounts": [
-          "/dev/shm",
           "/run/lock",
           "/sys/fs/cgroup",
           "/run/user/1001"
@@ -1610,25 +1609,6 @@
           "/dev/sda1"
         ]
       },
-      "/dev/shm": {
-        "kb_size": "1894124",
-        "kb_used": "0",
-        "kb_available": "1894124",
-        "percent_used": "0%",
-        "total_inodes": "473531",
-        "inodes_used": "1",
-        "inodes_available": "473530",
-        "inodes_percent_used": "1%",
-        "fs_type": "tmpfs",
-        "mount_options": [
-          "rw",
-          "nosuid",
-          "nodev"
-        ],
-        "devices": [
-          "tmpfs"
-        ]
-      },
       "/run/lock": {
         "kb_size": "5120",
         "kb_used": "0",
@@ -2045,24 +2025,6 @@
         ],
         "uuid": "67e1c0a6-cdc9-4247-b2e5-dd20ef042025",
         "label": "cloudimg-rootfs"
-      },
-      "tmpfs,/dev/shm": {
-        "device": "tmpfs",
-        "kb_size": "1894124",
-        "kb_used": "0",
-        "kb_available": "1894124",
-        "percent_used": "0%",
-        "mount": "/dev/shm",
-        "total_inodes": "473531",
-        "inodes_used": "1",
-        "inodes_available": "473530",
-        "inodes_percent_used": "1%",
-        "fs_type": "tmpfs",
-        "mount_options": [
-          "rw",
-          "nosuid",
-          "nodev"
-        ]
       },
       "tmpfs,/run/lock": {
         "device": "tmpfs",
