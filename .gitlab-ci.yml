@@ -859,7 +859,7 @@ HA-Validate-Tagged:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
-    - '! ./support/is_gitlab_ee.sh || exit 0'
+    - './support/is_gitlab_ee.sh || exit 0'
     - bundle exec rake qa:ha:tag
   only:
     - tags@gitlab/omnibus-gitlab
@@ -1008,7 +1008,7 @@ HA-Validate-Nightly:
   stage: slow_jobs
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
-    - '! ./support/is_gitlab_ee.sh || exit 0'
+    - './support/is_gitlab_ee.sh || exit 0'
     - '[[ -n "${NIGHTLY}" ]] || exit 0'
     - bundle exec rake qa:ha:nightly
   only:
