@@ -334,6 +334,20 @@ docs-check-links:
     - tags@gitlab/omnibus-gitlab
     - triggers
 
+danger-review:
+  # Dockerfile in https://gitlab.com/gitlab-org/gitaly/blob/master/_support/dangercontainer/Dockerfile
+  # For now, reuse existing container to avoid duplicating effort. In future we might consider using one specific for this repository
+  image: registry.gitlab.com/gitlab-org/gitaly/dangercontainer:latest
+  stage: check
+  cache: {}
+  dependencies: []
+  before_script: []
+  only:
+    refs:
+      - branches@gitlab-org/omnibus-gitlab
+  script:
+    - danger --fail-on-errors=true
+
 Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 7 knapsack: *prepare_knapsack

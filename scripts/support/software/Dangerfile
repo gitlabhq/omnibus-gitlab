@@ -1,0 +1,48 @@
+# rubocop:disable Style/SignalException
+
+QA_LABELS = %w[backstage QA test].freeze
+
+MESSAGE = <<~MSG.freeze
+You've made some changes to the software definitions.
+Any change in software definition requires package rebuild to verify that
+builds across the supported platforms are successful.
+It is also required to execute a manual verification to confirm
+that the package is installable.
+If the change is a comment or an edit that does not affect exiting
+functionality, add %<labels>s labels.
+MSG
+
+LIBRARY_FILES = [
+  'config/patches/',
+  'config/projects/',
+  'config/software/',
+  'config/templates/'
+].freeze
+
+def qa_labels
+  QA_LABELS.map { |label| "~#{label}" }.join(', ')
+end
+
+def library_paths_requiring_review(files)
+  to_review = []
+
+  files.each do |file|
+    review = LIBRARY_FILES.any? do |pattern|
+      file.start_with?(pattern)
+    end
+
+    to_review << file if review
+  end
+
+  to_review
+end
+
+all_files = git.added_files + git.modified_files
+has_config_changes = !library_paths_requiring_review(all_files).empty?
+manual_check_needed = (gitlab.mr_labels & QA_LABELS).empty?
+
+if has_config_changes && !manual_check_needed
+  fail format(MESSAGE, labels: qa_labels)
+end
+
+# rubocop:enable Style/SignalException
