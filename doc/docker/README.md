@@ -385,6 +385,76 @@ Provided you [installed GitLab using docker-compose](#install-gitlab-using-docke
 all you have to do is run `docker-compose pull` and `docker-compose up -d` to
 download a new release and upgrade your GitLab instance.
 
+## Deploy GitLab in a Docker swarm
+
+With [Docker swarm](https://docs.docker.com/engine/swarm/) you can easily configure and deploy your 
+Docker-based GitLab installation in a swarm cluster.
+
+In swarm mode you can leverage [Docker secrets](https://docs.docker.com/engine/swarm/secrets/)
+and [Docker configs](https://docs.docker.com/engine/swarm/configs/) to efficiently and securely deploy your GitLab instance.
+Secrets can be used to securely pass your initial root password without exposing it as an environment variable.
+Configs can help you to keep your GitLab image as generic as possible.
+
+Here's an example that deploys GitLab with four runners as a [stack](https://docs.docker.com/get-started/part5/), using secrets and configs:
+
+1. [Setup a Docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/)
+2. Create a `docker-compose.yml` file:
+
+    ```yml
+    version: "3.6"
+    services:
+      gitlab:
+        image: gitlab/gitlab-ce:latest
+        ports:
+          - "22:22"
+          - "80:80"
+          - "443:443"
+        volumes:
+          - /srv/gitlab/data:/var/opt/gitlab
+          - /srv/gitlab/logs:/var/log/gitlab
+          - /srv/gitlab/config:/etc/gitlab
+        environment:
+          GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+        configs:
+          - source: gitlab
+            target: /omnibus_config.rb
+        secrets:
+          - gitlab_root_password
+      gitlab-runner:
+        image: gitlab/gitlab-runner:alpine
+        deploy:
+          mode: replicated
+          replicas: 4
+    configs:
+      gitlab:
+        file: ./gitlab.rb
+    secrets:
+      gitlab_root_password:
+        file: ./root_password.txt
+    ```
+    
+    For simplicity reasons, the `network` configuration was omitted.
+    More information can be found in the official [Compose file reference](https://docs.docker.com/compose/compose-file/).
+
+3. Create a `gitlab.rb` file:
+
+    ```ruby
+    external_url 'https://my.domain.com/'
+    gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_root_password')
+    ```
+
+4. Create a `root_password.txt` file:
+
+    ```
+    MySuperSecretAndSecurePass0rd!
+    ```
+    
+5. Make sure you are in the same directory as `docker-compose.yml` and run:
+
+    ```
+    docker stack deploy --compose-file docker-compose.yml mystack
+    ```
+
 ## Install GitLab into a cluster
 
 The GitLab Docker images can also be deployed to various container scheduling platforms.
