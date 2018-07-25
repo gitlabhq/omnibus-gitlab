@@ -28,7 +28,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
-      parse_rack_attack_enabled
     end
 
     def parse_directories
@@ -158,19 +157,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
-    end
-
-    def parse_rack_attack_enabled
-      return unless Gitlab.dig('gitlab_rails', 'rack_attack_git_basic_auth', 'enabled').nil?
-
-      message = <<~MSG
-            Starting with GitLab 11.0, Rack Attack will be disabled by default. To continue using this feature,
-            please enable it in your gitlab.rb by setting gitlab_rails['rack_attack_git_basic_auth'] = true.
-
-            Check https://docs.gitlab.com/ee/security/rack_attack.html#rack-attack for more details.
-            MSG
-
-      LoggingHelper.deprecation(message)
     end
 
     def parse_rack_attack_protected_paths
