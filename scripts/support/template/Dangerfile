@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+# All the files/directories that could contain a user facing configuration change.
+ATTRIBUTE_FILES = [
+  'files/gitlab-cookbooks/consul/attributes/default.rb',
+  'files/gitlab-cookbooks/consul/attributes/services.rb',
+  'files/gitlab-cookbooks/consul/attributes/watchers.rb',
+  'files/gitlab-cookbooks/consul/libraries/',
+  'files/gitlab-cookbooks/crond/attributes/default.rb',
+  'files/gitlab-cookbooks/gitaly/attributes/default.rb',
+  'files/gitlab-cookbooks/gitaly/libraries/',
+  'files/gitlab-cookbooks/gitlab/attributes/default.rb',
+  'files/gitlab-cookbooks/gitlab/libraries/',
+  'files/gitlab-cookbooks/gitlab-ee/attributes/default.rb',
+  'files/gitlab-cookbooks/gitlab-ee/libraries/',
+  'files/gitlab-cookbooks/letsencrypt/attributes/default.rb',
+  'files/gitlab-cookbooks/letsencrypt/libraries/',
+  'files/gitlab-cookbooks/mattermost/attributes/default.rb',
+  'files/gitlab-cookbooks/mattermost/libraries/',
+  'files/gitlab-cookbooks/package/attributes/default.rb',
+  'files/gitlab-cookbooks/package/libraries/',
+  'files/gitlab-cookbooks/registry/attributes/default.rb',
+  'files/gitlab-cookbooks/repmgr/attributes/default.rb',
+  'files/gitlab-cookbooks/repmgr/attributes/external.rb',
+  'files/gitlab-cookbooks/repmgr/libraries/',
+  'files/gitlab-cookbooks/runit/attributes/external.rb'
+].freeze
+
+def user_configuration_paths_requiring_review(files)
+  to_review = []
+
+  files.each do |file|
+    review = ATTRIBUTE_FILES.any? do |pattern|
+      file.start_with?(pattern)
+    end
+
+    to_review << file if review
+  end
+
+  to_review
+end
+
+all_files = git.added_files + git.modified_files
+
+configuration_paths_to_review = user_configuration_paths_requiring_review(all_files)
+
+NO_TEMPLATE_CHANGE_MESSAGE = <<~MSG
+You've made some changes at the locations which contain user facing configuration.
+That's OK as long as you're refactoring existing code and not adding any new
+configuration. If you are adding new user facing configuration, consider adding
+to gitlab.rb.template located in files/gitlab-config-template/gitlab.rb.template .
+Otherwise, please consider adding the ~backstage label in that case.
+MSG
+
+unless configuration_paths_to_review.empty?
+  warn NO_TEMPLATE_CHANGE_MESSAGE, sticky: false
+end
