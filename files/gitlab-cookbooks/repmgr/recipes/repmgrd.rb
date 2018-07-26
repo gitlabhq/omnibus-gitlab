@@ -19,7 +19,7 @@ log_directory = node['repmgr']['log_directory']
 
 runit_service 'repmgrd' do
   supervisor_owner account_helper.postgresql_user
-  supervisor_group account_helper.postgresql_user
+  supervisor_group account_helper.postgresql_group
   options({
     log_directory: log_directory,
   }.merge(params))
