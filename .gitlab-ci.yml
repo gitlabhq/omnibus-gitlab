@@ -335,9 +335,7 @@ docs-check-links:
     - triggers
 
 danger-review:
-  # Dockerfile in https://gitlab.com/gitlab-org/gitaly/blob/master/_support/dangercontainer/Dockerfile
-  # For now, reuse existing container to avoid duplicating effort. In future we might consider using one specific for this repository
-  image: registry.gitlab.com/gitlab-org/gitaly/dangercontainer:latest
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: check
   cache: {}
   dependencies: []
