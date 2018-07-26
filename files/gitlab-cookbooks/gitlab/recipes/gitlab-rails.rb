@@ -174,7 +174,7 @@ templatesymlink "Create a database.yml and create a symlink to Rails root" do
   link_to File.join(gitlab_rails_etc_dir, "database.yml")
   source "database.yml.erb"
   owner "root"
-  group gitlab_user
+  group gitlab_group
   mode "0640"
   variables node['gitlab']['gitlab-rails'].to_hash
   dependent_services.each { |svc| notifies :restart, svc }
