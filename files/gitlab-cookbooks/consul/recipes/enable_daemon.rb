@@ -25,9 +25,9 @@ runit_service 'consul' do
             user: node['consul']['user']
           })
   supervisor_owner account_helper.consul_user
-  supervisor_group account_helper.consul_user
+  supervisor_group account_helper.consul_group
   owner account_helper.consul_user
-  group account_helper.consul_user
+  group account_helper.consul_group
   log_options node['gitlab']['logging'].to_hash.merge(node['consul'].to_hash)
 end
 

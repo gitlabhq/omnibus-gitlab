@@ -78,6 +78,10 @@ class AccountHelper
     node['consul']['user']
   end
 
+  def consul_group
+    node['consul']['user']
+  end
+
   def users
     %W(
       #{gitlab_user}
