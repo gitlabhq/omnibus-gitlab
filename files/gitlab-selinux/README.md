@@ -4,7 +4,7 @@
 
 The following files are named by the GitLab version they were first
 introduced. For example, `gitlab-7.2.0-ssh-keygen` maps to GitLab v7.2. Both
-.te (Type Enforcmenet) and .pp (Project Policy) files are included.
+.te (Type Enforcement) and .pp (Project Policy) files are included.
 
 For reference, we created the .pp files from the .te files by using the
 following commands on CentOS:
