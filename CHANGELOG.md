@@ -10,11 +10,21 @@ omnibus-gitlab repository.
 11.1.1
 
 - Update Mattermost to 5.0.2
+- Fix database.yml group setting to point at the proper user['group']
+- Fix Prometheus metrics not working out of the box in Docker
+
+11.1.1
+
+- Update Mattermost to 5.0.2
+- Omit SLAVEOF if Redis is in an HA environment !2651
+- Export PYTHONPATH and ICU_DATA to gitaly !2650
+- Restore gitaly default log level to 'info' !2661
 
 11.1.0
 
 - Include OSS driver for object storage support in the registry
 - Support setting of PostgreSQL SSL mode and compression in repmgr conninfo
+- Omit SLAVEOF if Redis is in an HA environment !2651
 - Disable PostgreSQL SSL compression by default
 - Tighten permission on Mattermost's config.json file !2587
 - Tighten permission on Gitaly's config.toml file !2589

@@ -20,8 +20,8 @@ consul_helper = ConsulHelper.new(node)
 account "Consul user and group" do
   username account_helper.consul_user
   uid node['consul']['uid']
-  ugid account_helper.consul_user
-  groupname account_helper.consul_user
+  ugid account_helper.consul_group
+  groupname account_helper.consul_group
   gid node['consul']['gid']
   home node['consul']['dir']
   manage node['gitlab']['manage-accounts']['enable']
