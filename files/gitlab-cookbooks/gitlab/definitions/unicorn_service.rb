@@ -92,6 +92,8 @@ define :unicorn_service, rails_app: nil, user: nil do
       ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord::Base)
     EOS
     after_fork <<-'EOS'
+      require 'rbtrace' if ENV['ENABLE_RBTRACE']
+
       ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
       defined?(::Prometheus::Client.reinitialize_on_pid_change) &&
         Prometheus::Client.reinitialize_on_pid_change
