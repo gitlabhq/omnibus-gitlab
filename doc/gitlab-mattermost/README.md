@@ -153,7 +153,8 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 As of GitLab 11.0, these settings are configured through the Mattermost **System Console** by a user logged
 into Mattermost as a System Administrator. On  the **Notifications** > **Email** tab of the **System Console**,
-you can enter the SMTP credentials given by your SMTP provider. More information on the specific settings
+you can enter the SMTP credentials given by your SMTP provider or `127.0.0.1` and port `25` to use `sendmail`.
+More information on the specific settings
 that are needed is available in the [Mattermost documentation](https://docs.mattermost.com/install/smtp-email-setup.html).
 
 These settings can also be configured in `/var/opt/gitlab/mattermost/config.json`.
