@@ -138,7 +138,7 @@ class Repmgr
         $stdout.puts "Stopping the database"
         cmd("gitlab-ctl stop postgresql")
         $stdout.puts "Removing the data"
-        cmd("rm -rf /var/opt/gitlab/postgresql/data")
+        cmd("rm -rf #{GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['data_dir']}")
         $stdout.puts "Cloning the data"
         clone(args)
         $stdout.puts "Starting the database"

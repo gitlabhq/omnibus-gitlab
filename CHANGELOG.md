@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.3.0
+
+- Make gitlab-ctl repmgr standby setup honor postgresql['data_dir'] 
+
 11.2.0
 
 - Bump git to 2.18.0 !2636
