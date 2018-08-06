@@ -480,7 +480,7 @@ Trigger:ee-package:
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
-  image: "ruby:2.3"
+  image: "ruby:2.4"
   when: manual
   script:
       - bundle exec rake qa:ha:validate
