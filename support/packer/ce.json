@@ -2,7 +2,8 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
-    "version": ""
+    "version": "",
+    "download_url": ""
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -23,6 +24,7 @@
   }],
   "provisioners": [{
     "type": "shell",
-    "script": "update-script-ce.sh"
+    "script": "update-script-ce.sh",
+    "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}"]
   }]
 }
