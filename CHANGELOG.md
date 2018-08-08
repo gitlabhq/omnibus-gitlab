@@ -5,7 +5,6 @@ omnibus-gitlab repository.
 
 11.3.0
 
-- Make gitlab-ctl repmgr standby setup honor postgresql['data_dir'] 
 
 11.2.0
 
@@ -16,6 +15,7 @@ omnibus-gitlab repository.
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
+- Make gitlab-ctl repmgr standby setup honor postgresql['data_dir']
 - Update Mattermost to 5.1.1
 
 11.1.1
