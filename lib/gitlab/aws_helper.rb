@@ -1,4 +1,5 @@
 require 'aws-sdk'
+require_relative 'build/info.rb'
 
 class AWSHelper
   VERSION_REGEX = /\A(?<version>\d+\.\d+\.\d+)-?(?<type>(ee|ce))?\z/
@@ -10,6 +11,7 @@ class AWSHelper
     @version = version
     @type = type || 'ce'
     @clients = {}
+    @download_url = Build::Info.package_download_url
   end
 
   def ec2_client(region)
@@ -83,7 +85,7 @@ class AWSHelper
   end
 
   def create_ami
-    system("support/packer/packer_ami.sh #{@version} #{@type}")
+    system("support/packer/packer_ami.sh #{@version} #{@type} #{@download_url}")
   end
 
   def process
