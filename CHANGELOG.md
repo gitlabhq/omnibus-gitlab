@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
+- Update Mattermost to 5.1.1
 
 11.1.1
 
