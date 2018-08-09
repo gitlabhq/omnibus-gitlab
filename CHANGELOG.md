@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Fix Prometheus metrics not working out of the box in Docker
 - Make gitlab-ctl repmgr standby setup honor postgresql['data_dir']
 - Update Mattermost to 5.1.1
+- Update repmgr-check-master to exit 1 for standby nodes 
 
 11.1.1
 
