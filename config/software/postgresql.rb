@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '9.6.8'
+default_version '9.6.10'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -34,13 +34,19 @@ version '9.6.8' do
   source sha256: 'eafdb3b912e9ec34bdd28b651d00226a6253ba65036cb9a41cad2d9e82e3eb70'
 end
 
+version '9.6.10' do
+  source sha256: '8615acc56646401f0ede97a767dfd27ce07a8ae9c952afdb57163b7234fe8426'
+end
+
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
 relative_path "postgresql-#{version}"
 
+major_version = version.gsub(/(\d)+\.(\d)+\.(\d)+/, "\\1.\\2")
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  prefix = "#{install_dir}/embedded/postgresql/#{version}"
+  prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
   update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
@@ -63,7 +69,7 @@ end
 
 # exclude headers and static libraries from package
 project.exclude "embedded/bin/pg_config"
-project.exclude "embedded/postgresql/#{version}/include"
-project.exclude "embedded/postgresql/#{version}/lib/*.a"
-project.exclude "embedded/postgresql/#{version}/lib/pgxs"
-project.exclude "embedded/postgresql/#{version}/lib/pkgconfig"
+project.exclude "embedded/postgresql/#{major_version}/include"
+project.exclude "embedded/postgresql/#{major_version}/lib/*.a"
+project.exclude "embedded/postgresql/#{major_version}/lib/pgxs"
+project.exclude "embedded/postgresql/#{major_version}/lib/pkgconfig"
