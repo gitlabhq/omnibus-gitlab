@@ -55,7 +55,7 @@ add_command_under_category('repmgr-check-master', 'database', 'Check if the curr
     if node.is_master?
       Kernel.exit 0
     else
-      Kernel.exit 2
+      Kernel.exit 1
     end
   rescue Repmgr::MasterError => se
     $stderr.puts "Error checking for master: #{se}"
