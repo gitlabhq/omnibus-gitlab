@@ -68,10 +68,10 @@ build do
   # will fail to start due to an obscure error caused by the database not able
   # to read time zone data: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3388.
   # To avoid this problem, we can symlink the deprecated prefix directories to
-  # point to this major version.
+  # point to the major version.
   block 'link old versions' do
     if major_version == '9.6'
-      ['9.6.8', '9.6.5'].each do |old_version|
+      ['9.6.10', '9.6.8', '9.6.5'].each do |old_version|
         link prefix, "#{install_dir}/embedded/postgresql/#{old_version}"
       end
     end
