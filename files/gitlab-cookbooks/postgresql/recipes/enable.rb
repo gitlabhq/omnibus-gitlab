@@ -52,22 +52,6 @@ link postgresql_data_dir_symlink do
   not_if { postgresql_data_dir == postgresql_data_dir_symlink }
 end
 
-# If you upgrade 9.6.8 to 9.6.10 without restarting PostgreSQL, applications
-# will fail to start due to an obscure error caused by the database not able
-# to read time zone data: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3388.
-# To avoid this problem, we can symlink the deprecated prefix directories to
-# point to the major version.
-install_dir = node['package']['install-dir']
-postgresql_prefix = File.join(install_dir, 'embedded/postgresql')
-postgresql_9_6_dir = File.join(postgresql_prefix, '9.6')
-
-['9.6.8', '9.6.5'].each do |old_version|
-  link File.join(postgresql_prefix, old_version) do
-    to postgresql_9_6_dir
-    only_if { File.directory?(postgresql_9_6_dir) }
-  end
-end
-
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
   owner postgresql_username
   mode "0600"
