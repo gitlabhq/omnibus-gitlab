@@ -36,6 +36,9 @@ end
 
 # PostgreSQL 10 should have a major version of 10, not 10.0.
 # See: https://www.postgresql.org/support/versioning
+#
+# Be sure to update files/gitlab-cookbooks/postgresql/recipes/enable.rb when
+# upgrading.
 major_version = '9.6'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -61,19 +64,6 @@ build do
   block 'link bin files' do
     Dir.glob("#{prefix}/bin/*").each do |bin_file|
       link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
-
-  # If you upgrade 9.6.8 to 9.6.10 without restarting PostgreSQL, applications
-  # will fail to start due to an obscure error caused by the database not able
-  # to read time zone data: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3388.
-  # To avoid this problem, we can symlink the deprecated prefix directories to
-  # point to the major version.
-  block 'link old versions' do
-    if major_version == '9.6'
-      ['9.6.10', '9.6.8', '9.6.5'].each do |old_version|
-        link prefix, "#{install_dir}/embedded/postgresql/#{old_version}"
-      end
     end
   end
 end
