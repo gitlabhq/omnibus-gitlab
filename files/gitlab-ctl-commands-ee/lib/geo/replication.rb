@@ -186,7 +186,6 @@ module Geo
       run_command(cmd, live: false)
     end
 
-
     def run_command(cmd, live: false, timeout: nil)
       status = GitlabCtl::Util.run_command(cmd, live: live, timeout: timeout)
       if status.error?
