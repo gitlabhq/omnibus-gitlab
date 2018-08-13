@@ -67,6 +67,22 @@ describe Geo::Replication, '#execute' do
     end
   end
 
+  context 'with a custom port' do
+    let(:options) { { now: true, skip_backup: true, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo' } }
+    let(:cmd) { %q(PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/bin/gitlab-psql -h localhost -p 9999 -U my-user -d gitlabhq_production -t -c "SELECT slot_name FROM pg_create_physical_replication_slot('foo');") }
+    let(:status) { double(error?: false, stdout: '') }
+
+    it 'executes a gitlab-psql call to check replication slots' do
+      expect(subject).to receive(:check_gitlab_active?).and_return(true)
+      expect(subject).to receive(:ask_pass).and_return('mypassword')
+
+      allow(GitlabCtl::Util).to receive(:run_command).and_return(status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(cmd, anything).and_return(status)
+
+      subject.execute
+    end
+  end
+
   context 'when user has to provide a confirmation text' do
     let(:options) { { now: false, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo' } }
 
