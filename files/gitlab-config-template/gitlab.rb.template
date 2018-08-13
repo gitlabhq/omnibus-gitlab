@@ -1413,11 +1413,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['storage'] = [
 #   {
 #     'name' => 'default',
-#     'path' => '/tmp/path-1'
+#     'path' => '/mnt/nfs-01/git-data/repositories'
 #   },
 #   {
-#     'name' => 'nfs1',
-#     'path' => '/mnt/nfs1'
+#     'name' => 'secondary',
+#     'path' => '/mnt/nfs-02/git-data/repositories'
 #   }
 # ]
 # gitaly['concurrency'] = [
