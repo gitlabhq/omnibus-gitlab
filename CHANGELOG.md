@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Make gitlab-ctl repmgr standby setup honor postgresql['data_dir']
 - Update Mattermost to 5.1.1
 - Update repmgr-check-master to exit 1 for standby nodes 
+- Run GitLab service after systemd multi-user.target !2632
 
 11.1.1
 
