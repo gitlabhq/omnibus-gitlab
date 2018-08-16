@@ -182,7 +182,7 @@ module Geo
     end
 
     def run_psql_command(query)
-      cmd = %(PGPASSFILE=#{@pgpass} #{base_path}/bin/gitlab-psql -h #{@options[:host]} -U #{@options[:user]} -d #{db_name} -t -c "#{query}")
+      cmd = %(PGPASSFILE=#{@pgpass} #{base_path}/bin/gitlab-psql -h #{@options[:host]} -p #{@options[:port]} -U #{@options[:user]} -d #{db_name} -t -c "#{query}")
       run_command(cmd, live: false)
     end
 
