@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.3.0
 
+- Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
 
 11.2.0
 
@@ -17,7 +18,7 @@ omnibus-gitlab repository.
 - Fix Prometheus metrics not working out of the box in Docker
 - Make gitlab-ctl repmgr standby setup honor postgresql['data_dir']
 - Update Mattermost to 5.1.1
-- Update repmgr-check-master to exit 1 for standby nodes 
+- Update repmgr-check-master to exit 1 for standby nodes
 - Run GitLab service after systemd multi-user.target !2632
 - Update repmgr-check-master to exit 1 for standby nodes
 - Geo: Fix replicate-geo-database not working with a custom port
