@@ -80,16 +80,13 @@ module GitlabPages
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['external_url'].chomp('/') + '/api/v4'
 
-      Gitlab['gitlab_pages']['auth_redirect_uri'] = Gitlab['pages_external_url'].to_s.chomp('/') + '/auth'
-      Gitlab['gitlab_pages']['auth_server'] = Gitlab['external_url']
-    end
-
-    def parse_secrets
-      Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64)
+      pages_uri = URI(Gitlab['pages_external_url'].to_s)
+      Gitlab['gitlab_pages']['auth_redirect_uri'] ||= pages_uri.scheme + '://projects.' + pages_uri.host + '/auth'
+      Gitlab['gitlab_pages']['auth_server'] ||= Gitlab['external_url']
     end
 
     def authorize_with_gitlab
-      redirect_uri = "#{Gitlab['pages_external_url'].to_s.chomp('/')}/auth"
+      redirect_uri = Gitlab['gitlab_pages']['auth_redirect_uri']
       app_name = 'GitLab Pages'
 
       o = query_gitlab_rails(redirect_uri, app_name)
@@ -108,6 +105,7 @@ module GitlabPages
 
     def parse_secrets
       Gitlab['gitlab_pages']['admin_secret_token'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64)
     end
 
     def parse_admin_socket
