@@ -34,6 +34,10 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
     end
 
+    it 'does not create the packages storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/packages')
+    end
+
     it 'does not create the uploads storage directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
@@ -68,6 +72,10 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the lfs storage directory' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
+    end
+
+    it 'creates the packages directory' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/packages')
     end
 
     it 'creates the uploads directory' do
@@ -292,6 +300,33 @@ describe 'gitlab::gitlab-rails' do
         it "sets the object storage values" do
           expect(chef_run).to render_file(gitlab_yml_path)
           .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+mapmap\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+        end
+
+        include_examples 'sets the connection in YAML'
+      end
+    end
+
+    context 'for settings regarding object storage for packages' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "packages"\s+connection:/)
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           packages_object_store_enabled: true,
+                           packages_object_store_direct_upload: true,
+                           packages_object_store_background_upload: false,
+                           packages_object_store_proxy_download: true,
+                           packages_object_store_remote_directory: 'mepmep',
+                           packages_object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
         end
 
         include_examples 'sets the connection in YAML'
