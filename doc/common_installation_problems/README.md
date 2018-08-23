@@ -595,6 +595,84 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [disable storage directory management](../settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
+### gitlab-runsvdir not starting
+
+This applies to operating systems using systemd (e.g. Ubuntu 16.04+, CentOS, etc.).
+
+Since GitLab 11.2, the gitlab-runsvdir starts during the `multi-user.target`
+instead of `basic.target`.  If you are having trouble starting this service
+after upgrading GitLab, you may need to check that your system has properly
+booted all the required services for `multi-user.target` via the command:
+
+```bash
+systemctl -t target
+```
+
+If everything is working properly, the output should show look something like this:
+
+```
+UNIT                   LOAD   ACTIVE SUB    DESCRIPTION
+basic.target           loaded active active Basic System
+cloud-config.target    loaded active active Cloud-config availability
+cloud-init.target      loaded active active Cloud-init target
+cryptsetup.target      loaded active active Encrypted Volumes
+getty.target           loaded active active Login Prompts
+graphical.target       loaded active active Graphical Interface
+local-fs-pre.target    loaded active active Local File Systems (Pre)
+local-fs.target        loaded active active Local File Systems
+multi-user.target      loaded active active Multi-User System
+network-online.target  loaded active active Network is Online
+network-pre.target     loaded active active Network (Pre)
+network.target         loaded active active Network
+nss-user-lookup.target loaded active active User and Group Name Lookups
+paths.target           loaded active active Paths
+remote-fs-pre.target   loaded active active Remote File Systems (Pre)
+remote-fs.target       loaded active active Remote File Systems
+slices.target          loaded active active Slices
+sockets.target         loaded active active Sockets
+swap.target            loaded active active Swap
+sysinit.target         loaded active active System Initialization
+time-sync.target       loaded active active System Time Synchronized
+timers.target          loaded active active Timers
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+22 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+```
+
+Every line should show `loaded active active`. As seen in the line below, if
+you see `inactive dead`, this means there may be something wrong:
+
+```
+multi-user.target      loaded inactive dead   start Multi-User System
+```
+
+To examine which jobs may be queued by systemd, run:
+
+```bash
+systemctl list-jobs
+```
+
+If you see a `running` job, a service may be stuck and thus blocking GitLab
+from starting. For example, some users have had trouble with Plymouth not
+starting:
+
+```
+  1 graphical.target                     start waiting
+107 plymouth-quit-wait.service           start running
+  2 multi-user.target                    start waiting
+169 ureadahead-stop.timer                start waiting
+121 gitlab-runsvdir.service              start waiting
+151 system-getty.slice                   start waiting
+ 31 setvtrgb.service                     start waiting
+122 systemd-update-utmp-runlevel.service start waiting
+```
+
+In this case, consider uninstalling Plymouth.
+
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [Change the default proxy headers section of nginx doc]: ../settings/nginx.md
