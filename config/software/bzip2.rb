@@ -29,7 +29,7 @@ dependency 'openssl'
 version '1.0.6' do
   source md5: '00b516f4704d4a7cb50a1d97e6e8e15b'
 end
-source url: "http://www.bzip.org/#{version}/#{name}-#{version}.tar.gz"
+source url: "https://fossies.org/linux/misc/#{name}-#{version}.tar.gz"
 
 relative_path "#{name}-#{version}"
 
