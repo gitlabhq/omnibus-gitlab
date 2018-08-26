@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Bump Prometheus Alertmanager to 0.15.1 !2664
 - Update gitlab-monitor to 2.18.0 !2662
 - Update gitlab-monitor to 2.17.0
+- Increase Sidekiq RSS memory limit from 1 GB to 2 GB
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
