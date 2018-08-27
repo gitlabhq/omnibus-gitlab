@@ -27,6 +27,8 @@ describe 'gitlab::redis' do
         .with_content(/^maxmemory-policy noeviction/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^maxmemory-samples 5/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^tcp-backlog 511/)
       expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof/)
     end
@@ -42,7 +44,8 @@ describe 'gitlab::redis' do
           save: ["10 15000"],
           maxmemory: "32gb",
           maxmemory_policy: "allkeys-url",
-          maxmemory_samples: 10
+          maxmemory_samples: 10,
+          tcp_backlog: 1024
         }
       )
     end
@@ -62,6 +65,8 @@ describe 'gitlab::redis' do
         .with_content(/^maxmemory-policy allkeys-url/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^maxmemory-samples 10/)
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content(/^tcp-backlog 1024/)
     end
   end
 

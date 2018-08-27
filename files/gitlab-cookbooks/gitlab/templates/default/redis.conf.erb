@@ -94,7 +94,7 @@ port <%= @port %>
 # will silently truncate it to the value of /proc/sys/net/core/somaxconn so
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
-# tcp-backlog 511
+tcp-backlog <%= @tcp_backlog %>
 
 # Unix socket.
 #
