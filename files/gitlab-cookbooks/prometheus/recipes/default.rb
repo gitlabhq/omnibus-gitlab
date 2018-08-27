@@ -17,9 +17,22 @@
 
 # Configure Prometheus Services
 Prometheus.services.each do |service|
-  if node['gitlab'][service]['enable']
-    include_recipe "gitlab::#{service}"
-  else
-    include_recipe "gitlab::#{service}_disable"
+  # Prometheus has its own namespace now
+  if service == 'prometheus'
+    if node['prometheus']['enable']
+      include_recipe "prometheus::#{service}"
+    else
+      include_recipe "prometheus::#{service}_disable"
+    end
+
+    next
   end
+
+  if node['prometheus'][service]['enable']
+    include_recipe "prometheus::#{service}"
+  else
+    include_recipe "prometheus::#{service}_disable"
+  end
+
+  next
 end

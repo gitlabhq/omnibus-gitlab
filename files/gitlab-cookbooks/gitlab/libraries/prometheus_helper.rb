@@ -24,7 +24,7 @@ class PrometheusHelper
   def kingpin_flags(service)
     config = []
 
-    node['gitlab'][service]['flags'].each do |flag_key, flag_value|
+    node_service(service)['flags'].each do |flag_key, flag_value|
       if flag_value == true
         config << "--#{flag_key}"
       elsif flag_value == false
@@ -41,7 +41,7 @@ class PrometheusHelper
   def flags(service)
     config = []
 
-    node['gitlab'][service]['flags'].each do |flag_key, flag_value|
+    node_service(service)['flags'].each do |flag_key, flag_value|
       next if flag_value.empty?
       config << "--#{flag_key}=#{flag_value}"
     end
@@ -51,5 +51,15 @@ class PrometheusHelper
 
   def is_running?
     OmnibusHelper.new(node).service_up?("prometheus")
+  end
+
+  private
+
+  def node_service(service)
+    if service == 'prometheus'
+      node['prometheus']
+    else
+      node['gitlab'][service] || node['prometheus'][service]
+    end
   end
 end

@@ -58,7 +58,7 @@ module Prometheus
     end
 
     def parse_prometheus_flags
-      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      default_config = Gitlab['node']['prometheus'].to_hash
       user_config = Gitlab['prometheus']
 
       home_directory = user_config['home'] || default_config['home']
@@ -206,7 +206,7 @@ module Prometheus
       # Don't parse if prometheus is explicitly disabled
       return unless Services.enabled?('prometheus')
 
-      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      default_config = Gitlab['node']['prometheus'].to_hash
       user_config = Gitlab['prometheus']
 
       home_directory = user_config['home'] || default_config['home']
@@ -516,7 +516,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ['prometheus'] }]
         }
       else
-        default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+        default_config = Gitlab['node']['prometheus'].to_hash
         user_config = Gitlab['prometheus']
 
         listen_address = user_config['listen_address'] || default_config['listen_address']

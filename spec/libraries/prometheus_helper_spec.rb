@@ -33,7 +33,7 @@ describe PrometheusHelper do
       before { allow(Gitlab).to receive(:[]).and_call_original }
 
       it 'does not return the correct string if any attributes have been changed' do
-        chef_run.node.normal['gitlab']['prometheus']['home'] = '/fake/dir'
+        chef_run.node.normal['prometheus']['home'] = '/fake/dir'
         chef_run.converge('gitlab::default')
 
         expect(subject.flags('prometheus')).to eq(

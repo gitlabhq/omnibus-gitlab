@@ -5,4 +5,4 @@ umask 077
 exec chpst -P -e <%= @options[:env_dir] %> \
   -U <%= node['prometheus']['username'] %>:<%= node['prometheus']['group'] %> \
   -u <%= node['prometheus']['username'] %>:<%= node['prometheus']['group'] %> \
-  /opt/gitlab/embedded/bin/node_exporter <%= @options[:flags] %>
+  /opt/gitlab/embedded/bin/prometheus <%= @options[:flags] %>

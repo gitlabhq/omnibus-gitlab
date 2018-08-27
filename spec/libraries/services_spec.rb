@@ -244,7 +244,7 @@ describe Services do
         Services.disable_group('redis', 'prometheus', except: 'postgres')
         expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgres-exporter']['enable']).to be true
-        expect(node['gitlab']['prometheus']['enable']).to be false
+        expect(node['prometheus']['enable']).to be false
       end
 
       it 'supports multiple exceptions' do
@@ -307,7 +307,7 @@ describe Services do
       it 'disables all others' do
         Services.enable_group('redis', 'rails')
         Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
-        expect(node['gitlab']['prometheus']['enable']).to be false
+        expect(node['prometheus']['enable']).to be false
         expect(node['redis']['enable']).to be true
         expect(node['gitlab']['sidekiq']['enable']).to be true
       end

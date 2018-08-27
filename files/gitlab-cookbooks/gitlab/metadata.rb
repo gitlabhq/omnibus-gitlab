@@ -12,6 +12,7 @@ supports "ubuntu"
 depends "package"
 depends 'postgresql'
 depends 'redis'
+depends 'prometheus'
 depends 'registry'
 depends 'mattermost'
 depends 'consul'

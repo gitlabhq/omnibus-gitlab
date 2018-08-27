@@ -71,11 +71,11 @@ class AccountHelper
   end
 
   def prometheus_user
-    node['gitlab']['prometheus']['username']
+    node['prometheus']['username']
   end
 
   def prometheus_group
-    node['gitlab']['prometheus']['group']
+    node['prometheus']['group']
   end
 
   def consul_user

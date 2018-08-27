@@ -19,7 +19,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['mailroom']['enable']).to eq false
       expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
       expect(node['gitlab']['postgres-exporter']['enable']).to eq false
-      expect(node['gitlab']['prometheus']['enable']).to eq false
+      expect(node['prometheus']['enable']).to eq false
     end
   end
 
@@ -58,7 +58,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['nginx']['enable']).to eq true
       expect(node['postgresql']['enable']).to eq true
       expect(node['redis']['enable']).to eq true
-      expect(node['gitlab']['prometheus']['enable']).to eq true
+      expect(node['prometheus']['enable']).to eq true
       expect(node['gitlab']['alertmanager']['enable']).to eq true
       expect(node['gitlab']['node-exporter']['enable']).to eq true
       expect(node['gitlab']['redis-exporter']['enable']).to eq true

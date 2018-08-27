@@ -177,7 +177,7 @@ prometheus_yml_output = <<-PROMYML
         - localhost:9093
 PROMYML
 
-describe 'gitlab::prometheus' do
+describe 'prometheus::prometheus' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {

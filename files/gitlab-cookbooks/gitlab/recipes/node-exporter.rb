@@ -23,7 +23,7 @@ node_exporter_static_etc_dir = node['gitlab']['node-exporter']['env_directory']
 
 # node-exporter runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
-include_recipe 'gitlab::prometheus_user'
+include_recipe 'prometheus::user'
 
 directory node_exporter_log_dir do
   owner prometheus_user

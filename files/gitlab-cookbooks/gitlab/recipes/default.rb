@@ -151,7 +151,7 @@ end
 include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab-workhorse"]["enable"]
 
 # Recipe which handles all prometheus related services
-include_recipe "gitlab::gitlab-prometheus"
+include_recipe "prometheus"
 
 include_recipe 'letsencrypt::enable' if node['letsencrypt']['enable']
 

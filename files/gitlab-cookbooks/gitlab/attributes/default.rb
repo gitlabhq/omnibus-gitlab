@@ -720,30 +720,6 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 }
 
 ####
-# Prometheus server
-####
-
-default['gitlab']['prometheus']['enable'] = false
-default['gitlab']['prometheus']['monitor_kubernetes'] = true
-default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
-default['gitlab']['prometheus']['group'] = 'gitlab-prometheus'
-default['gitlab']['prometheus']['uid'] = nil
-default['gitlab']['prometheus']['gid'] = nil
-default['gitlab']['prometheus']['shell'] = '/bin/sh'
-default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
-default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
-default['gitlab']['prometheus']['env_directory'] = '/opt/gitlab/etc/prometheus/env'
-default['gitlab']['prometheus']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
-}
-default['gitlab']['prometheus']['remote_read'] = []
-default['gitlab']['prometheus']['remote_write'] = []
-default['gitlab']['prometheus']['rules_directory'] = "/var/opt/gitlab/prometheus/rules"
-default['gitlab']['prometheus']['scrape_interval'] = 15
-default['gitlab']['prometheus']['scrape_timeout'] = 15
-default['gitlab']['prometheus']['scrape_configs'] = []
-default['gitlab']['prometheus']['listen_address'] = 'localhost:9090'
-default['gitlab']['prometheus']['alertmanagers'] = nil
 
 ####
 # Prometheus Alertmanager
@@ -810,39 +786,6 @@ default['gitlab']['gitlab-monitor']['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
-
-####
-# Grafana
-###
-default['gitlab']['grafana']['enable'] = false
-default['gitlab']['grafana']['log_directory'] = '/var/log/gitlab/grafana'
-default['gitlab']['grafana']['home'] = '/var/opt/gitlab/grafana'
-default['gitlab']['grafana']['http_addr'] = 'localhost'
-default['gitlab']['grafana']['http_port'] = 3000
-default['gitlab']['grafana']['admin_password'] = nil
-default['gitlab']['grafana']['allow_user_sign_up'] = false
-default['gitlab']['grafana']['gitlab_application_id'] = nil
-default['gitlab']['grafana']['gitlab_secret'] = nil
-default['gitlab']['grafana']['allowed_groups'] = []
-default['gitlab']['grafana']['gitlab_auth_sign_up'] = true
-default['gitlab']['grafana']['dashboards'] = [
-  {
-    'name' => 'GitLab Omnibus',
-    'orgId' => 1,
-    'folder' => 'GitLab Omnibus',
-    'type' => 'file',
-    'disableDeletion' => true,
-    'updateIntervalSeconds' => 600,
-    'options' => {
-      'path' => '/opt/gitlab/embedded/service/grafana-dashboards',
-    },
-  }
-]
-default['gitlab']['grafana']['datasources'] = nil
-default['gitlab']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env'
-default['gitlab']['grafana']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
-}
 
 ####
 # Storage check
