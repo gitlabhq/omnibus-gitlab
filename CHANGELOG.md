@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Add an option to activate verbose logging for GitLab Pages (maxmeyer)
 - Don't attempt to modify PostgreSQL users if database is in read-only mode
 
+11.0.4
+
+- Update Mattermost to 4.10.3
+
 11.0.3
 
 - Revert change to default unicorn/sidekiq listen address.
