@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
 
+11.2.3
+
+- Fix custom runtime_dir not working
+
 11.2.1
 
 - Fix bzip2 download source
