@@ -39,6 +39,7 @@ action :create do
 
   link "/etc/sysctl.d/#{conf_name}" do
     to "/opt/gitlab/embedded/etc/#{conf_name}"
+    notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
   end
 
   # Remove old (not-used) configs
