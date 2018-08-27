@@ -824,6 +824,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['maxmemory'] = "0"
 # redis['maxmemory_policy'] = "noeviction"
 # redis['maxmemory_samples'] = "5"
+# redis['tcp_backlog'] = 511
 # redis['tcp_timeout'] = "60"
 # redis['tcp_keepalive'] = "300"
 # redis['uid'] = nil

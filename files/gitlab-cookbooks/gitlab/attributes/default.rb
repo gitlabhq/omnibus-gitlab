@@ -516,6 +516,7 @@ default['gitlab']['redis']['maxclients'] = "10000"
 default['gitlab']['redis']['maxmemory'] = "0"
 default['gitlab']['redis']['maxmemory_policy'] = "noeviction"
 default['gitlab']['redis']['maxmemory_samples'] = 5
+default['gitlab']['redis']['tcp_backlog'] = 511
 default['gitlab']['redis']['tcp_timeout'] = 60
 default['gitlab']['redis']['tcp_keepalive'] = 300
 default['gitlab']['redis']['password'] = nil

@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.3.0
 
+- Support Redis tcp-backlog parameter
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
 
 11.2.1
