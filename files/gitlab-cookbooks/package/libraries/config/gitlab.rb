@@ -55,6 +55,11 @@ module Gitlab
 
   attribute_block 'prometheus' do
     attribute('grafana', priority: 30).use { Grafana }
+    attribute('alertmanager', priority: 30)
+    attribute('node_exporter')
+    attribute('redis_exporter')
+    attribute('postgres_exporter')
+    attribute('gitlab_monitor').use { GitlabMonitor }
   end
 
   ## Attributes under node['gitlab']
@@ -97,11 +102,6 @@ module Gitlab
     attribute('logrotate')
     attribute('high_availability')
     attribute('web_server')
-    attribute('alertmanager')
-    attribute('node_exporter')
-    attribute('redis_exporter')
-    attribute('postgres_exporter')
-    attribute('gitlab_monitor').use { GitlabMonitor }
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
     attribute('pgbouncer_exporter')

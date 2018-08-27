@@ -24,6 +24,71 @@ default['prometheus']['scrape_configs'] = []
 default['prometheus']['listen_address'] = 'localhost:9090'
 default['prometheus']['alertmanagers'] = nil
 
+####
+# Prometheus Alertmanager
+####
+
+default['prometheus']['alertmanager']['enable'] = false
+default['prometheus']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
+default['prometheus']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
+default['prometheus']['alertmanager']['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
+default['prometheus']['alertmanager']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+default['prometheus']['alertmanager']['listen_address'] = 'localhost:9093'
+default['prometheus']['alertmanager']['admin_email'] = nil
+default['prometheus']['alertmanager']['inhibit_rules'] = []
+default['prometheus']['alertmanager']['receivers'] = []
+default['prometheus']['alertmanager']['routes'] = []
+default['prometheus']['alertmanager']['templates'] = []
+
+####
+# Prometheus Node Exporter
+####
+default['prometheus']['node-exporter']['enable'] = false
+default['prometheus']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
+default['prometheus']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['prometheus']['node-exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
+default['prometheus']['node-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+default['prometheus']['node-exporter']['listen_address'] = 'localhost:9100'
+
+####
+# Redis exporter
+###
+default['prometheus']['redis-exporter']['enable'] = false
+default['prometheus']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['prometheus']['redis-exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
+default['prometheus']['redis-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+default['prometheus']['redis-exporter']['listen_address'] = 'localhost:9121'
+
+####
+# Postgres exporter
+###
+default['prometheus']['postgres-exporter']['enable'] = false
+default['prometheus']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
+default['prometheus']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
+default['prometheus']['postgres-exporter']['listen_address'] = 'localhost:9187'
+default['prometheus']['postgres-exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
+default['prometheus']['postgres-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+
+####
+# Gitlab monitor
+###
+default['prometheus']['gitlab-monitor']['enable'] = false
+default['prometheus']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
+default['prometheus']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
+default['prometheus']['gitlab-monitor']['listen_address'] = 'localhost'
+default['prometheus']['gitlab-monitor']['listen_port'] = '9168'
+default['prometheus']['gitlab-monitor']['probe_sidekiq'] = true
+
+# To completely disable prometheus, and all of it's exporters, set to false
+default['gitlab']['prometheus-monitoring']['enable'] = true
 
 ####
 # Grafana

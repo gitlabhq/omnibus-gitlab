@@ -16,9 +16,9 @@
 
 account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-alertmanager_log_dir = node['gitlab']['alertmanager']['log_directory']
-alertmanager_dir = node['gitlab']['alertmanager']['home']
-alertmanager_static_etc_dir = node['gitlab']['alertmanager']['env_directory']
+alertmanager_log_dir = node['prometheus']['alertmanager']['log_directory']
+alertmanager_dir = node['prometheus']['alertmanager']['home']
+alertmanager_static_etc_dir = node['prometheus']['alertmanager']['env_directory']
 
 # alertmanager runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
@@ -43,19 +43,19 @@ directory alertmanager_static_etc_dir do
 end
 
 env_dir alertmanager_static_etc_dir do
-  variables node['gitlab']['alertmanager']['env']
+  variables node['prometheus']['alertmanager']['env']
   notifies :restart, "service[alertmanager]"
 end
 
 configuration = {
-  'global' => node['gitlab']['alertmanager']['global'],
-  'templates' => node['gitlab']['alertmanager']['templates'],
+  'global' => node['prometheus']['alertmanager']['global'],
+  'templates' => node['prometheus']['alertmanager']['templates'],
   'route' => {
-    'receiver' => node['gitlab']['alertmanager']['default_receiver'],
-    'routes' => node['gitlab']['alertmanager']['routes'],
+    'receiver' => node['prometheus']['alertmanager']['default_receiver'],
+    'routes' => node['prometheus']['alertmanager']['routes'],
   },
-  'receivers' => node['gitlab']['alertmanager']['receivers'],
-  'inhibit_rules' => node['gitlab']['alertmanager']['inhibit_rules'],
+  'receivers' => node['prometheus']['alertmanager']['receivers'],
+  'inhibit_rules' => node['prometheus']['alertmanager']['inhibit_rules'],
 }
 
 file 'Alertmanager config' do
@@ -74,7 +74,7 @@ runit_service 'alertmanager' do
     env_dir: alertmanager_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['gitlab']['alertmanager'].to_hash
+    node['prometheus']['alertmanager'].to_hash
   )
 end
 

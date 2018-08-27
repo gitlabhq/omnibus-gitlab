@@ -17,8 +17,8 @@
 #
 account_helper = AccountHelper.new(node)
 redis_user = account_helper.redis_user
-redis_exporter_log_dir = node['gitlab']['redis-exporter']['log_directory']
-redis_exporter_static_etc_dir = node['gitlab']['redis-exporter']['env_directory']
+redis_exporter_log_dir = node['prometheus']['redis-exporter']['log_directory']
+redis_exporter_static_etc_dir = node['prometheus']['redis-exporter']['env_directory']
 
 directory redis_exporter_log_dir do
   owner redis_user
@@ -33,7 +33,7 @@ directory redis_exporter_static_etc_dir do
 end
 
 env_dir redis_exporter_static_etc_dir do
-  variables node['gitlab']['redis-exporter']['env']
+  variables node['prometheus']['redis-exporter']['env']
   notifies :restart, "service[redis-exporter]"
 end
 

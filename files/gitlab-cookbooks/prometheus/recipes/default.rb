@@ -33,6 +33,4 @@ Prometheus.services.each do |service|
   else
     include_recipe "prometheus::#{service}_disable"
   end
-
-  next
 end

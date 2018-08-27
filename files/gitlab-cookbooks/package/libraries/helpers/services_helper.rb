@@ -146,7 +146,14 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
     # Reads/Writes the service enable value in the node.default attributes
     def service_status(service, value = nil)
       rservice = service.tr('_', '-')
-      service_path = Gitlab[:node].attribute?(rservice) ? [rservice] : ['gitlab', rservice]
+
+      service_path = if Gitlab[:node].attribute?(rservice)
+                       [rservice]
+                     elsif Gitlab[:node]['prometheus']&.attribute?(rservice)
+                       ['prometheus', rservice]
+                     else
+                       ['gitlab', rservice]
+                     end
 
       if value.nil?
         Gitlab[:node].read(*service_path, 'enable')

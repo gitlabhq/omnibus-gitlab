@@ -90,7 +90,7 @@ runit_service 'prometheus' do
     env_dir: prometheus_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['prometheus'].to_hash
+    { log_directory: node['prometheus']['log_directory'] }
   )
 end
 

@@ -17,11 +17,11 @@
 #
 account_helper = AccountHelper.new(node)
 postgresql_user = account_helper.postgresql_user
-postgres_exporter_log_dir = node['gitlab']['postgres-exporter']['log_directory']
-postgres_exporter_env_dir = node['gitlab']['postgres-exporter']['env_directory']
-postgres_exporter_dir = node['gitlab']['postgres-exporter']['home']
+postgres_exporter_log_dir = node['prometheus']['postgres-exporter']['log_directory']
+postgres_exporter_env_dir = node['prometheus']['postgres-exporter']['env_directory']
+postgres_exporter_dir = node['prometheus']['postgres-exporter']['home']
 
-node.default['gitlab']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['postgresql']['username']} " \
+node.default['prometheus']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['postgresql']['username']} " \
                                                                          "host=#{node['gitlab']['gitlab-rails']['db_host']} " \
                                                                          "database=postgres sslmode=allow"
 
@@ -40,7 +40,7 @@ directory postgres_exporter_dir do
 end
 
 env_dir postgres_exporter_env_dir do
-  variables node['gitlab']['postgres-exporter']['env']
+  variables node['prometheus']['postgres-exporter']['env']
   notifies :restart, "service[postgres-exporter]"
 end
 

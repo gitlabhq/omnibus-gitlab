@@ -17,8 +17,8 @@ describe 'gitlab::config' do
       expect(node['gitlab']['nginx']['enable']).to eq false
       expect(node['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
-      expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
-      expect(node['gitlab']['postgres-exporter']['enable']).to eq false
+      expect(node['prometheus']['gitlab-monitor']['enable']).to eq false
+      expect(node['prometheus']['postgres-exporter']['enable']).to eq false
       expect(node['prometheus']['enable']).to eq false
     end
   end
@@ -51,7 +51,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['unicorn']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
-      expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
+      expect(node['prometheus']['gitlab-monitor']['enable']).to eq false
     end
 
     it 'still leaves other default service enabled' do
@@ -59,11 +59,11 @@ describe 'gitlab::config' do
       expect(node['postgresql']['enable']).to eq true
       expect(node['redis']['enable']).to eq true
       expect(node['prometheus']['enable']).to eq true
-      expect(node['gitlab']['alertmanager']['enable']).to eq true
-      expect(node['gitlab']['node-exporter']['enable']).to eq true
-      expect(node['gitlab']['redis-exporter']['enable']).to eq true
+      expect(node['prometheus']['alertmanager']['enable']).to eq true
+      expect(node['prometheus']['node-exporter']['enable']).to eq true
+      expect(node['prometheus']['redis-exporter']['enable']).to eq true
       expect(node['gitlab']['logrotate']['enable']).to eq true
-      expect(node['gitlab']['postgres-exporter']['enable']).to eq true
+      expect(node['prometheus']['postgres-exporter']['enable']).to eq true
     end
   end
 
@@ -87,8 +87,8 @@ describe 'gitlab::config' do
       it 'only sentinel is enabled' do
         expect(node['gitlab']['sentinel']['enable']).to eq true
         expect(node['redis']['enable']).to eq false
-        expect(node['gitlab']['redis-exporter']['enable']).to eq false
-        expect(node['gitlab']['node-exporter']['enable']).to eq true
+        expect(node['prometheus']['redis-exporter']['enable']).to eq false
+        expect(node['prometheus']['node-exporter']['enable']).to eq true
         expect(node['gitlab']['logrotate']['enable']).to eq true
       end
 
@@ -110,8 +110,8 @@ describe 'gitlab::config' do
         it 'redis and sentinel are enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['redis']['enable']).to eq true
-          expect(node['gitlab']['redis-exporter']['enable']).to eq true
-          expect(node['gitlab']['node-exporter']['enable']).to eq true
+          expect(node['prometheus']['redis-exporter']['enable']).to eq true
+          expect(node['prometheus']['node-exporter']['enable']).to eq true
           expect(node['gitlab']['logrotate']['enable']).to eq true
         end
       end
@@ -139,8 +139,8 @@ describe 'gitlab::config' do
         it 'only redis is enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['redis']['enable']).to eq true
-          expect(node['gitlab']['redis-exporter']['enable']).to eq true
-          expect(node['gitlab']['node-exporter']['enable']).to eq true
+          expect(node['prometheus']['redis-exporter']['enable']).to eq true
+          expect(node['prometheus']['node-exporter']['enable']).to eq true
           expect(node['gitlab']['logrotate']['enable']).to eq true
         end
       end
@@ -161,8 +161,8 @@ describe 'gitlab::config' do
       it 'only redis is enabled' do
         expect(node['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
-        expect(node['gitlab']['redis-exporter']['enable']).to eq true
-        expect(node['gitlab']['node-exporter']['enable']).to eq true
+        expect(node['prometheus']['redis-exporter']['enable']).to eq true
+        expect(node['prometheus']['node-exporter']['enable']).to eq true
         expect(node['gitlab']['logrotate']['enable']).to eq true
       end
     end
