@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 11.2.1
 
 - Fix bzip2 download source
+- Allow configuration of maven package repository
 
 11.2.0
 
