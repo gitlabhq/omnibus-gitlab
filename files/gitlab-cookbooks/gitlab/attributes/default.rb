@@ -503,6 +503,7 @@ default['gitlab']['postgresql']['archive_timeout'] = "0"
 ####
 default['gitlab']['redis']['enable'] = false
 default['gitlab']['redis']['ha'] = false
+default['gitlab']['redis']['hz'] = 10
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
 default['gitlab']['redis']['username'] = "gitlab-redis"
