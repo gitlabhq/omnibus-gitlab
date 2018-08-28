@@ -6,6 +6,8 @@ omnibus-gitlab repository.
 11.3.0
 
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
+- Update libiconv to 1.15
+- Update libiconv zlib and makedepend build recipe to improve build cache reuse
 
 11.2.1
 
