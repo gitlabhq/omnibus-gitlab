@@ -320,8 +320,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256'
 
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
-###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and
-###!   'REDUCED_REDUNDANCY'**
+###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
 
