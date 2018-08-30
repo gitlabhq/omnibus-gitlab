@@ -77,6 +77,7 @@ end
 [
   node['gitlab']['gitlab-rails']['artifacts_path'],
   node['gitlab']['gitlab-rails']['lfs_storage_path'],
+  node['gitlab']['gitlab-rails']['packages_storage_path'],
   gitlab_rails_public_uploads_dir,
   gitlab_ci_builds_dir,
   gitlab_rails_shared_cache_dir,
