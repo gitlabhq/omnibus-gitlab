@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
 - Increase Sidekiq RSS memory limit from 1 GB to 2 GB
 - Reload sysctl if a new symlink is created in /etc/sysctl.d
+- Update Mattermost to 5.2.1
 
 11.2.1
 
