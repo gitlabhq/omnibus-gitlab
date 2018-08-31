@@ -305,6 +305,7 @@ DEPENDENCIES
   rainbow (~> 2.2)
   rake
   rspec
+  rspec_junit_formatter
   rubocop
   rubocop-rspec
   thor (= 0.18.1)

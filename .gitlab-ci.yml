@@ -79,7 +79,7 @@ variables:
     - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
-    - bundle exec rake knapsack:rspec
+    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml]"
   except:
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
@@ -92,6 +92,8 @@ variables:
     expire_in: 31d
     paths:
     - knapsack/
+    reports:
+      junit: junit_rspec.xml
   retry: 1
 
 ## Runs on dev.gitlab.org

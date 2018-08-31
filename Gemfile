@@ -45,4 +45,5 @@ group :test do
   gem 'chefspec'
   gem 'omnibus-ctl', '0.3.6'
   gem 'fantaskspec'
+  gem 'rspec_junit_formatter'
 end
