@@ -1304,3 +1304,35 @@ release:images:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+
+license-upload:
+  stage: metrics
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake license:generate_index
+  allow_failure: true
+  when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-18.04
+
+pages:
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:alpine-aws
+  stage: prepare
+  script:
+    - echo -e "[default]\naws_access_key_id = $LICENSE_AWS_ACCESS_KEY_ID\naws_secret_access_key = $LICENSE_AWS_SECRET_ACCESS_KEY"  > ~/.aws/config
+    - aws s3 sync s3://${LICENSE_S3_BUCKET} public
+    - cp support/webpages/* public
+  artifacts:
+    paths:
+      - public
+  only:
+    - schedules@gitlab-org/omnibus-gitlab

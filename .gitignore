@@ -17,3 +17,5 @@ docker/RELEASE
 *.swp
 tags
 *.tags
+gitlab-licenses/*
+public/*
