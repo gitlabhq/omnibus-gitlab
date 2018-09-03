@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.3.0
 
+- Support max_concurrency option in sidekiq_cluster
 - Support Redis hz parameter
 - Support Redis tcp-backlog parameter
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
