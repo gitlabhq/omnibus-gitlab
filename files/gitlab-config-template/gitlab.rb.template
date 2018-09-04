@@ -320,8 +320,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_encryption'] = 'AES256'
 
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
-###!   include 'STANDARD', 'STANDARD_IA', 'GLACIER', and
-###!   'REDUCED_REDUNDANCY'**
+###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
 
@@ -1595,6 +1594,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq_cluster['ha'] = false
 # sidekiq_cluster['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
 # sidekiq_cluster['interval'] = 5 # The number of seconds to wait between worker checks
+# sidekiq_cluster['max_concurrency'] = 50 # The maximum number of threads each Sidekiq process should run
 
 ##! Each entry in the queue_groups array denotes a group of queues that have to be processed by a
 ##! Sidekiq process. Multiple queues can be processed by the same process by

@@ -4,7 +4,7 @@ describe 'license:check', type: :rake do
   let(:f) { double("Mocked file object") }
 
   before :all do
-    Rake.application.rake_require 'gitlab/tasks/license_check'
+    Rake.application.rake_require 'gitlab/tasks/license'
   end
 
   before do

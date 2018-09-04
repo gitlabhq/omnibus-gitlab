@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+        <title>Licenses of bundled libraries | omnibus-gitlab </title>
+        <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+        <% editions = {"gitlab-ce" => "GitLab Community Edition", "gitlab-ee" => "GitLab Enterprise Edition"} %>
+        <h1>Licenses for bundled libraries in omnibus-gitlab package</h1>
+        <h2><%= editions[@edition] %></h2>
+        <div class="content">
+                <% Dir.glob(File.join(@licenses_path, @edition, "*")).sort.each do |minor_version| %>
+                        <h3><%= File.basename(minor_version) %></h3>
+                        <ul>
+                                <% Dir.glob(File.join(minor_version, "*")).each do |license_file| %>
+                                        <% url = "#{@edition}/#{File.basename(minor_version)}/#{File.basename(license_file).gsub('+', '%2B')}" %>
+                                        <% title = File.basename(license_file).gsub(".license.txt", "") %>
+                                        <li><a href='<%= url %>'><%= title %></a></li>
+                                <% end %>
+                        </ul>
+        </div>
+<% end %>
+
+</body>
+</html>

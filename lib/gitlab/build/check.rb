@@ -18,6 +18,10 @@ module Build
         Info.semver_version.split(".")[-1] != "0"
       end
 
+      def is_rc_release?
+        `git describe --exact-match`.include?("+rc")
+      end
+
       def add_latest_tag?
         match_tag?(Info.latest_stable_tag)
       end
