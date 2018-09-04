@@ -13,6 +13,10 @@ omnibus-gitlab repository.
 - Reload sysctl if a new symlink is created in /etc/sysctl.d
 - Bump omnibus-ctl to v0.6.0 !2715
 
+11.2.3
+
+- Fix custom runtime_dir not working
+
 11.2.1
 
 - Fix bzip2 download source
