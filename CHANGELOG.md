@@ -31,6 +31,8 @@ omnibus-gitlab repository.
 - Run GitLab service after systemd multi-user.target !2632
 - Update repmgr-check-master to exit 1 for standby nodes
 - Geo: Fix replicate-geo-database not working with a custom port
+- Update repmgr-check-master to exit 1 for standby nodes 
+- Run GitLab service after systemd multi-user.target !2632
 
 11.1.1
 
