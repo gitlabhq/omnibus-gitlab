@@ -1694,6 +1694,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # pgbouncer['logfile'] = nil
 # pgbouncer['unix_socket_dir'] = nil
+# pgbouncer['unix_socket_mode'] = '0777'
+# pgbouncer['unix_socket_group'] = nil
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
@@ -1705,7 +1707,56 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # postgresql['pgbouncer_user'] = nil
 # postgresql['pgbouncer_user_password'] = nil
+# pgbouncer['server_reset_query_always'] = 0
+# pgbouncer['server_check_query'] = 'select 1'
+# pgbouncer['server_check_delay'] = 30
+# pgbouncer['max_db_connections'] = nil
+# pgbouncer['max_user_connections'] = nil
+# pgbouncer['syslog'] = 0
+# pgbouncer['syslog_facility'] = 'daemon'
+# pgbouncer['syslog_ident'] = 'pgbouncer'
+# pgbouncer['log_disconnections'] = 1
+# pgbouncer['log_pooler_errors'] = 1
+# pgbouncer['stats_period'] = 60
+# pgbouncer['verbose'] = 0
+# pgbouncer['server_lifetime'] = 3600
+# pgbouncer['server_connect_timeout'] = 15
+# pgbouncer['server_login_retry'] = 15
+# pgbouncer['query_timeout'] = 0
+# pgbouncer['query_wait_timeout'] = 120
+# pgbouncer['client_idle_timeout'] = 0
+# pgbouncer['client_login_timeout'] = 60
+# pgbouncer['autodb_idle_timeout'] = 3600
+# pgbouncer['suspend_timeout'] = 10
+# pgbouncer['idle_transaction_timeout'] = 0
+# pgbouncer['pkt_buf'] = 4096
+# pgbouncer['listen_backlog'] = 128
+# pgbouncer['sbuf_loopcnt'] = 5
+# pgbouncer['max_packet_size'] = 2147483647
+# pgbouncer['tcp_defer_accept'] = 0
+# pgbouncer['tcp_socket_buffer'] = 0
+# pgbouncer['tcp_keepalive'] = 1
+# pgbouncer['tcp_keepcnt'] = 0
+# pgbouncer['tcp_keepidle'] = 0
+# pgbouncer['tcp_keepintvl'] = 0
+# pgbouncer['disable_pqexec'] = 0
+
+## Pgbouncer client TLS options
+# pgbouncer['client_tls_sslmode'] = 'disable'
+# pgbouncer['client_tls_ca_file'] = nil
+# pgbouncer['client_tls_key_file'] = nil
+# pgbouncer['client_tls_cert_file'] = nil
+# pgbouncer['client_tls_protocols'] = 'all'
+# pgbouncer['client_tls_dheparams'] = 'auto'
+# pgbouncer['client_tls_ecdhcurve'] = 'auto'
 #
+## Pgbouncer server  TLS options
+# pgbouncer['server_tls_sslmode'] = 'disable'
+# pgbouncer['server_tls_ca_file'] = nil
+# pgbouncer['server_tls_key_file'] = nil
+# pgbouncer['server_tls_cert_file'] = nil
+# pgbouncer['server_tls_protocols'] = 'all'
+# pgbouncer['server_tls_ciphers'] = 'fast'
 
 ################################################################################
 # Repmgr (EE only)

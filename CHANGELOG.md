@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Increase Sidekiq RSS memory limit from 1 GB to 2 GB
 - Reload sysctl if a new symlink is created in /etc/sysctl.d
 - Bump omnibus-ctl to v0.6.0 !2715
+- Add missing pgbouncer options
 
 11.2.3
 
