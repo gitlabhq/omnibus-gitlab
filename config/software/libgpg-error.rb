@@ -20,6 +20,8 @@ default_version '1.27'
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-#{version}.tar.bz2",
        sha256: '4f93aac6fecb7da2b92871bb9ee33032be6a87b174f54abf8ddf0911a22d29d2'
 

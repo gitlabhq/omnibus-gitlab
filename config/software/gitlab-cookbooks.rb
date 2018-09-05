@@ -21,6 +21,8 @@ name 'gitlab-cookbooks'
 license 'Apache-2.0'
 license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
+skip_transitive_dependency_licensing true
+
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
 source path: File.expand_path('files/gitlab-cookbooks', Omnibus::Config.project_root)

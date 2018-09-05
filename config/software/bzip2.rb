@@ -23,6 +23,8 @@ default_version '1.0.6'
 license 'BSD-2-Clause'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'zlib'
 dependency 'openssl'
 

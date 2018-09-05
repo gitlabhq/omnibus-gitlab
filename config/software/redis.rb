@@ -19,6 +19,8 @@ name 'redis'
 license 'BSD-3-Clause'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 default_version '3.2.11'
 

@@ -23,6 +23,8 @@ default_version '1.14'
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 dependency 'patch' if solaris_10?
 

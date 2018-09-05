@@ -20,6 +20,8 @@ default_version '2.4'
 license 'GPL-2.0'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 
 # NOTE: 2.4.6 2.4.2 do not compile on solaris2 yet

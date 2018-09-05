@@ -20,6 +20,8 @@ default_version '1.6.2'
 license 'MIT'
 license_file 'README'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 
 version '1.6.2' do

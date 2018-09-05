@@ -20,6 +20,8 @@ default_version '2.4.4'
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-#{version}.tar.bz2",
        sha256: '9e69a102272324de0bb56025779f84fd44901afcc6eac51505f6a63ea5737ca1'
 

@@ -23,6 +23,8 @@ default_version 'v0.2.1'
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libicu'
 
 source git: version.remote

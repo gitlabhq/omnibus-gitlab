@@ -20,6 +20,8 @@ default_version '1.1.32'
 license 'MIT'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libxml2'
 dependency 'liblzma'
 dependency 'config_guess'

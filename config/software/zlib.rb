@@ -26,6 +26,8 @@ source url: "http://downloads.sourceforge.net/project/libpng/zlib/#{version}/zli
 license 'Zlib'
 license_file 'README'
 
+skip_transitive_dependency_licensing true
+
 relative_path "zlib-#{version}"
 
 build do

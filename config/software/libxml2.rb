@@ -20,6 +20,8 @@ default_version '2.9.8'
 license 'MIT'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'zlib'
 dependency 'libiconv'
 dependency 'liblzma'

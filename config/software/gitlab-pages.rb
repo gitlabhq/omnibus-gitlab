@@ -22,6 +22,8 @@ default_version version.print
 
 license 'MIT'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 relative_path 'src/gitlab.com/gitlab-org/gitlab-pages'
 

@@ -20,6 +20,8 @@ default_version '2.1.8'
 license 'BSD-3-Clause'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 version '2.1.8' do
   source sha256: '965cc5a8bb46ce4199a47e9b2c9e1cae3b137e8356ffdad6d94d3b9069b71dc2'
 end

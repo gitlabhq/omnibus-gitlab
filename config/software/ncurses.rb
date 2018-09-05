@@ -20,6 +20,8 @@ default_version '5.9'
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libtool' if aix?
 dependency 'patch' if solaris2?
 
