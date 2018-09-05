@@ -24,6 +24,8 @@ default_version version.print
 license 'APACHE-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 go_source = 'github.com/prometheus/node_exporter'
