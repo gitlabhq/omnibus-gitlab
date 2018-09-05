@@ -78,6 +78,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Download location
 ###! When a user clicks e.g. 'Download zip' on a project, a temporary zip file
 ###! is created in the following directory.
+###! Should not be the same path, or a sub directory of any of the `git_data_dirs`
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
 
 ### Gravatar Settings
