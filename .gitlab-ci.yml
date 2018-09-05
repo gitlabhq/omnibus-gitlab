@@ -56,6 +56,7 @@ variables:
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -81,6 +82,7 @@ variables:
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml]"
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -309,6 +311,7 @@ rubocop:
   script:
     - bundle exec rubocop --parallel
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -332,6 +335,7 @@ docs-check-links:
     # Check the internal links
     - bundle exec nanoc check internal_links
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -345,6 +349,8 @@ danger-review:
   only:
     refs:
       - branches@gitlab-org/omnibus-gitlab
+  except:
+    - schedules@gitlab-org/omnibus-gitlab
   script:
     - danger --fail-on-errors=true
 
@@ -367,6 +373,7 @@ update-knapsack:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -1329,7 +1336,9 @@ license-upload:
 pages:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:alpine-aws
   stage: prepare
+  before_script: []
   script:
+    - mkdir -p ~/.aws
     - echo -e "[default]\naws_access_key_id = $LICENSE_AWS_ACCESS_KEY_ID\naws_secret_access_key = $LICENSE_AWS_SECRET_ACCESS_KEY"  > ~/.aws/config
     - aws s3 sync s3://${LICENSE_S3_BUCKET} public
     - cp support/webpages/* public

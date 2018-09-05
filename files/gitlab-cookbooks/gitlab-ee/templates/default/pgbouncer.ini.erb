@@ -41,56 +41,70 @@ listen_port = <%= @listen_port %>
 ; unix socket is also used for -R.
 ; On debian it should be /var/run/postgresql
 unix_socket_dir = <%= @unix_socket_dir %>
-;unix_socket_mode = 0777
-;unix_socket_group =
+unix_socket_mode = <%= @unix_socket_mode %>
+<% if @unix_socket_group %>
+unix_socket_group = <%= @unix_socket_group %>
+<% end %>
 
 ;;;
 ;;; TLS settings for accepring clients
 ;;;
 
 ;; disable, allow, require, verify-ca, verify-full
-;client_tls_sslmode = disable
+client_tls_sslmode = <%= @client_tls_sslmode %>
 
 ;; Path to file that contains trusted CA certs
-;client_tls_ca_file = <system default>
+<% if @client_tls_ca_file %>
+client_tls_ca_file = <%= @client_tls_ca_file %>
+<% end %>
 
 ;; Private key and cert to present to clients.
 ;; Required for accepting TLS connections from clients.
-;client_tls_key_file =
-;client_tls_cert_file =
+<% if @client_tls_key_file %>
+client_tls_key_file = <%= @client_tls_key_file %>
+<% end %>
+<% if @client_tls_cert_file %>
+client_tls_cert_file = <%= @client_tls_cert_file %>
+<% end %>
 
 ;; fast, normal, secure, legacy, <ciphersuite string>
-;client_tls_ciphers = fast
+client_tls_ciphers = <%= @client_tls_ciphers %>
 
 ;; all, secure, tlsv1.0, tlsv1.1, tlsv1.2
-;client_tls_protocols = all
+client_tls_protocols = <%= @client_tls_protocols %>
 
 ;; none, auto, legacy
-;client_tls_dheparams = auto
+client_tls_dheparams = <%= @client_tls_dheparams %>
 
 ;; none, auto, <curve name>
-;client_tls_ecdhcurve = auto
+client_tls_ecdhcurve = <%= @client_tls_ecdhcurve %>
 
 ;;;
 ;;; TLS settings for connecting to backend databases
 ;;;
 
 ;; disable, allow, require, verify-ca, verify-full
-;server_tls_sslmode = disable
+server_tls_sslmode = <%= @server_tls_sslmode %>
 
 ;; Path to that contains trusted CA certs
-;server_tls_ca_file = <system default>
+<% if @server_tls_ca_file %>
+server_tls_ca_file = <%= @server_tls_ca_file %>
+<% end %>
 
 ;; Private key and cert to present to backend.
 ;; Needed only if backend server require client cert.
-;server_tls_key_file =
-;server_tls_cert_file =
+<% if @server_tls_key_file %>
+server_tls_key_file = <%= @server_tls_key_file %>
+<% end %>
+<% if @server_tls_cert_file %>
+server_tls_cert_file = <%= @server_tls_cert_file %>
+<% end %>
 
 ;; all, secure, tlsv1.0, tlsv1.1, tlsv1.2
-;server_tls_protocols = all
+server_tls_protocols = <%= @server_tls_protocols %>
 
 ;; fast, normal, secure, legacy, <ciphersuite string>
-;server_tls_ciphers = fast
+server_tls_ciphers = <%= @server_tls_ciphers %>
 
 ;;;
 ;;; Authentication settings
@@ -147,7 +161,7 @@ server_reset_query = <%= @server_reset_query %>
 
 ; Whether server_reset_query should run in all pooling modes.
 ; If it is off, server_reset_query is used only for session-pooling.
-;server_reset_query_always = 0
+server_reset_query_always = <%= @server_reset_query_always %>
 
 ;
 ; Comma-separated list of parameters to ignore when given
@@ -160,11 +174,11 @@ ignore_startup_parameters = <%= @ignore_startup_parameters %>
 ; When taking idle server into use, this query is ran first.
 ;   SELECT 1
 ;
-;server_check_query = select 1
+server_check_query = <%= @server_check_query %>
 
 ; If server was used more recently that this many seconds ago,
 ; skip the check query.  Value 0 may or may not run in immediately.
-;server_check_delay = 30
+server_check_delay = <%= @server_check_delay %>
 
 ;; Use <appname - host> as application_name on server.
 application_name_add_host = <%= @application_name_add_host %>
@@ -191,8 +205,12 @@ reserve_pool_size = <%= @reserve_pool_size %>
 reserve_pool_timeout = <%= @reserve_pool_timeout %>
 
 ; how many total connections to a single database to allow from all pools
-;max_db_connections = 50
-;max_user_connections = 50
+<% if @max_db_connections %>
+max_db_connections = <%= @max_db_connections %>
+<% end %>
+<% if @max_user_connections %>
+max_user_connections = <%= @max_user_connections %>
+<% end %>
 
 ; If off, then server connections are reused in LIFO manner
 server_round_robin = <%= @server_round_robin %>
@@ -202,113 +220,113 @@ server_round_robin = <%= @server_round_robin %>
 ;;;
 
 ;; Syslog settings
-;syslog = 0
-;syslog_facility = daemon
-;syslog_ident = pgbouncer
+syslog = <%= @syslog %>
+syslog_facility = <%= @syslog_facility %>
+syslog_ident = <%= @syslog_ident %>
 
 ; log if client connects or server connection is made
 log_connections = <%= @log_connections %>
 
 ; log if and why connection was closed
-;log_disconnections = 1
+log_disconnections = <%= @log_disconnections %>
 
 ; log error messages pooler sends to clients
-;log_pooler_errors = 1
+log_pooler_errors = <%= @log_pooler_errors %>
 
 ;; Period for writing aggregated stats into log.
-;stats_period = 60
+stats_period = <%= @stats_period %>
 
 ;; Logging verbosity.  Same as -v switch on command line.
-;verbose=0
+verbose = <%= @verbose %>
 
 ;;;
 ;;; Timeouts
 ;;;
 
 ;; Close server connection if its been connected longer.
-;server_lifetime = 1200
+server_lifetime = <%= @server_lifetime %>
 
 ;; Close server connection if its not been used in this time.
 ;; Allows to clean unnecessary connections from pool after peak.
 server_idle_timeout = <%= @server_idle_timeout %>
 
 ;; Cancel connection attempt if server does not answer takes longer.
-;server_connect_timeout = 15
+server_connect_timeout = <%= @server_connect_timeout %>
 
 ;; If server login failed (server_connect_timeout or auth failure)
 ;; then wait this many second.
-;server_login_retry = 15
+server_login_retry = <%= @server_login_retry %>
 
 ;; Dangerous.  Server connection is closed if query does not return
 ;; in this time.  Should be used to survive network problems,
 ;; _not_ as statement_timeout. (default: 0)
-;query_timeout = 0
+query_timeout = <%= @query_timeout %>
 
 ;; Dangerous.  Client connection is closed if the query is not assigned
 ;; to a server in this time.  Should be used to limit the number of queued
 ;; queries in case of a database or network failure. (default: 120)
-;query_wait_timeout = 120
+query_wait_timeout = <%= @query_wait_timeout %>
 
 ;; Dangerous.  Client connection is closed if no activity in this time.
 ;; Should be used to survive network problems. (default: 0)
-;client_idle_timeout = 0
+client_idle_timeout = <%= @client_idle_timeout %>
 
 ;; Disconnect clients who have not managed to log in after connecting
 ;; in this many seconds.
-;client_login_timeout = 60
+client_login_timeout = <%= @client_login_timeout %>
 
 ;; Clean automatically created database entries (via "*") if they
 ;; stay unused in this many seconds.
-; autodb_idle_timeout = 3600
+autodb_idle_timeout = <%= @autodb_idle_timeout %>
 
 ;; How long SUSPEND/-R waits for buffer flush before closing connection.
-;suspend_timeout = 10
+suspend_timeout = <%= @suspend_timeout %>
 
 ;; Close connections which are in "IDLE in transaction" state longer than
 ;; this many seconds.
-;idle_transaction_timeout = 0
+idle_transaction_timeout = <%= @idle_transaction_timeout %>
 
 ;;;
 ;;; Low-level tuning options
 ;;;
 
 ;; buffer for streaming packets
-;pkt_buf = 4096
+pkt_buf = <%= @pkt_buf %>
 
 ;; man 2 listen
-;listen_backlog = 128
+listen_backlog = <%= @listen_backlog %>
 
 ;; Max number pkt_buf to process in one event loop.
-;sbuf_loopcnt = 5
+sbuf_loopcnt = <%= @sbuf_loopcnt %>
 
 ;; Maximum Postgres protocol packet size.
-;max_packet_size = 2147483647
+max_packet_size = <%= @max_packet_size %>
 
 ;; networking options, for info: man 7 tcp
 
 ;; Linux: notify program about new connection only if there
 ;; is also data received.  (Seconds to wait.)
 ;; On Linux the default is 45, on other OS'es 0.
-;tcp_defer_accept = 0
+tcp_defer_accept = <%= @tcp_defer_accept %>
 
 ;; In-kernel buffer size (Linux default: 4096)
-;tcp_socket_buffer = 0
+tcp_socket_buffer = <%= @tcp_socket_buffer %>
 
 ;; whether tcp keepalive should be turned on (0/1)
-;tcp_keepalive = 1
+tcp_keepalive = <%= @tcp_keepalive %>
 
 ;; following options are Linux-specific.
 ;; they also require tcp_keepalive=1
 
 ;; count of keepaliva packets
-;tcp_keepcnt = 0
+tcp_keepcnt = <%= @tcp_keepcnt %>
 
 ;; how long the connection can be idle,
 ;; before sending keepalive packets
-;tcp_keepidle = 0
+tcp_keepidle = <%= @tcp_keepidle %>
 
 ;; The time between individual keepalive probes.
-;tcp_keepintvl = 0
+tcp_keepintvl = <%= @tcp_keepintvl %>
 
 ;; DNS lookup caching time
 dns_max_ttl = <%= @dns_max_ttl %>
@@ -325,7 +343,7 @@ dns_nxdomain_ttl = <%= @dns_nxdomain_ttl %>
 
 ;; Hackish security feature.  Helps against SQL-injection - when PQexec is disabled,
 ;; multi-statement cannot be made.
-;disable_pqexec=0
+disable_pqexec = <%= @disable_pqexec %>
 
 ;; Config file to use for next RELOAD/SIGHUP.
 ;; By default contains config file from command line.
