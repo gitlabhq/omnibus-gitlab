@@ -30,6 +30,8 @@ license_path = File.join(install_dir, 'embedded/service/mattermost', license_nam
 license 'MIT with Trademark Protection'
 license_file license_path
 
+skip_transitive_dependency_licensing true
+
 build do
   move 'bin/mattermost', "#{install_dir}/embedded/bin/mattermost"
 
