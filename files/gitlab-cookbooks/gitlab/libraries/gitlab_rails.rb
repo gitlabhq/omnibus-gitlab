@@ -111,12 +111,9 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
         return
       end
 
-      search_dirs =
-        if Gitlab['runtime_dir']
-          Gitlab['runtime_dir']
-        else
-          ['/run', '/dev/shm']
-        end
+      return if Gitlab['runtime_dir']
+
+      search_dirs = ['/run', '/dev/shm']
 
       search_dirs.each do |run_dir|
         fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]

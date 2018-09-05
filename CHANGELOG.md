@@ -5,11 +5,18 @@ omnibus-gitlab repository.
 
 11.3.0
 
+- Support max_concurrency option in sidekiq_cluster
 - Support Redis hz parameter
 - Support Redis tcp-backlog parameter
 - Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
 - Increase Sidekiq RSS memory limit from 1 GB to 2 GB
 - Reload sysctl if a new symlink is created in /etc/sysctl.d
+- Bump omnibus-ctl to v0.6.0 !2715
+- Add missing pgbouncer options
+
+11.2.3
+
+- Fix custom runtime_dir not working
 
 11.2.1
 
