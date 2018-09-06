@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 11.2.3
 
 - Fix custom runtime_dir not working
+- Geo Secondary: ensure rails enabled when Gitaly enabled !2720
 
 11.2.1
 
