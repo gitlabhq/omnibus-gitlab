@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '5.1.1'
+default_version '5.2.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: '5eaa48affa4a21890c546e687224da3d'
+       md5: '435f91eb6068b1676256b08704b152c6'
 
 relative_path 'mattermost'
 
@@ -39,6 +39,7 @@ build do
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
   copy 'client', "#{install_dir}/embedded/service/mattermost/client"
   copy 'config/config.json', "#{install_dir}/embedded/service/mattermost/config.json.template"
+  copy 'prepackaged_plugins', "#{install_dir}/embedded/service/mattermost/prepackaged_plugins"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
