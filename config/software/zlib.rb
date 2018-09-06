@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2015 Chef Software, Inc.
+# Copyright 2012-2018 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ version '1.2.11' do
   source sha256: 'c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1'
 end
 
-source url: "http://downloads.sourceforge.net/project/libpng/zlib/#{version}/zlib-#{version}.tar.gz"
+source url: "https://zlib.net/fossils/zlib-#{version}.tar.gz"
 
 license 'Zlib'
 license_file 'README'
+skip_transitive_dependency_licensing true
 
 relative_path "zlib-#{version}"
 
@@ -66,10 +67,7 @@ build do
     # configure script cannot handle.
     # TODO: Do other OSes need this?  Is this strictly a mac thing?
     env = with_standard_compiler_flags
-    if solaris_10?
-      # For some reason zlib needs this flag on solaris (cargocult warning?)
-      env['CFLAGS'] << ' -DNO_VIZ'
-    elsif freebsd?
+    if freebsd?
       # FreeBSD 10+ gets cranky if zlib is not compiled in a
       # position-independent way.
       env['CFLAGS'] << ' -fPIC'

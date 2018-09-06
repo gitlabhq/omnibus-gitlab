@@ -20,6 +20,8 @@ omnibus-gitlab repository.
 - Fix custom runtime_dir not working
 - Geo Secondary: ensure rails enabled when Gitaly enabled !2720
 - Update Mattermost to 5.2.1
+- Update libiconv to 1.15
+- Update libiconv zlib and makedepend build recipe to improve build cache reuse
 
 11.2.1
 
