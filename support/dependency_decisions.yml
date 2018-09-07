@@ -185,3 +185,9 @@
   - :who: Balasankar C
     :why: https://github.com/matttproud/golang_protobuf_extensions/blob/master/LICENSE
     :when: 2018-09-05 17:48:47.084496785 Z
+- - :license
+  - gitlab.com/lupine/icu
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://gitlab.com/lupine/icu/blob/master/README.md#licence
+    :when: 2018-09-07 17:56:19.747794167 Z
