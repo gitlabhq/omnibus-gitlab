@@ -26,6 +26,8 @@ dependency 'zlib'
 license 'LGPL-2.1'
 license_file 'COPYING.LGPL3'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
        sha256: 'c28c1a208f1b8ad63bdb6b88d252f6734ff4d33de6b54e38494b11d49e00ffdd'
 

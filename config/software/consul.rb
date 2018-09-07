@@ -26,6 +26,8 @@ end
 
 source git: 'https://github.com/hashicorp/consul.git'
 
+skip_transitive_dependency_licensing true
+
 relative_path 'src/github.com/hashicorp/consul'
 
 build do

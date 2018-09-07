@@ -20,6 +20,8 @@ license_file 'BSDL'
 license_file 'COPYING'
 license_file 'LEGAL'
 
+skip_transitive_dependency_licensing true
+
 # - chef-client cannot use 2.2.x yet due to a bug in IRB that affects chef-shell on linux:
 #   https://bugs.ruby-lang.org/issues/11869
 # - the current status of 2.3.x is that it downloads but fails to compile.

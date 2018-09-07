@@ -27,6 +27,8 @@ license 'Zlib'
 license_file 'README'
 skip_transitive_dependency_licensing true
 
+skip_transitive_dependency_licensing true
+
 relative_path "zlib-#{version}"
 
 build do

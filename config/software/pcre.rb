@@ -20,6 +20,8 @@ default_version '8.42'
 license 'BSD-2-Clause'
 license_file 'LICENCE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libedit'
 dependency 'ncurses'
 dependency 'config_guess'

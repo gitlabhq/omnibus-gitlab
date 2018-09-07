@@ -29,6 +29,8 @@ source git: version.remote
 license 'GPL-3.0 (with exception)'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 relative_path "config_guess-#{version.print}"
 
 build do

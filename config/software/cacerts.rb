@@ -19,6 +19,8 @@ name 'cacerts'
 license 'MPL-2.0'
 license_file 'https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt'
 
+skip_transitive_dependency_licensing true
+
 # Date of the file is in a comment at the start, or in the changelog
 default_version '2018.01.17'
 

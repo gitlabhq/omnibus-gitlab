@@ -22,6 +22,8 @@ dependency 'libgpg-error'
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-#{version}.tar.bz2",
        sha256: '7a2875f8b1ae0301732e878c0cca2c9664ff09ef71408f085c50e332656a78b3'
 

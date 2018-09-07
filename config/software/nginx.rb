@@ -22,6 +22,8 @@ default_version '1.12.1'
 license 'BSD-2-Clause'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
 # Runtime dependencies
 dependency 'pcre'

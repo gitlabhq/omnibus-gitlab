@@ -22,6 +22,8 @@ dependency 'libgpg-error'
 license 'LGPL-3'
 license_file 'COPYING.LGPLv3'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/libksba/libksba-#{version}.tar.bz2",
        sha256: '41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340'
 

@@ -24,6 +24,8 @@ license 'LGPL-2.1'
 license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 
 source url: "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-#{version}.tar.gz",

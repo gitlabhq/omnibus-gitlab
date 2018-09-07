@@ -25,6 +25,8 @@ default_version version.print
 license 'Apache-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 relative_path 'src/github.com/wrouesnel/postgres_exporter'

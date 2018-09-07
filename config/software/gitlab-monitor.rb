@@ -22,6 +22,8 @@ name 'gitlab-monitor'
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'rubygems'
 dependency 'postgresql'

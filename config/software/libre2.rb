@@ -22,6 +22,8 @@ default_version '2016-02-01'
 license 'BSD'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 version '2016-02-01' do
   source sha256: 'f246c43897ac341568a7460622138ec0dd8de9b6f5459686376fa23e9d8c1bb8'
 end

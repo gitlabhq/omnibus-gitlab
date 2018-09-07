@@ -27,6 +27,8 @@ default_version '3.1.3'
 license 'GPL v3'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'popt'
 
 version '3.1.3' do
