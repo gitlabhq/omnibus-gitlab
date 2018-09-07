@@ -86,7 +86,7 @@ describe 'license:check', type: :rake do
           {
             "name": "sample",
             "version": "1.0.0",
-            "license": "GPL-3.0"
+            "license": "LGPL"
           }
         ]
       }

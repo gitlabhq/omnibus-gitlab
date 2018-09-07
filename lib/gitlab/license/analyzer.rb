@@ -5,7 +5,7 @@ module License
                                         /Unlicense/i, /Artistic/i, /MPL/i, /AFL/i,
                                         /CC-BY-[0-9]*/, /^project_license$/, /OpenSSL/i,
                                         /ZLib/i, /jemalloc/i, /Python/i, /PostgreSQL/i,
-                                        /Info-Zip/i, /Libpng/i])
+                                        /Info-Zip/i, /Libpng/i, /Mozilla Public/i, /WTFPL/, /CC0/])
     # TODO: Re-confirm that licenses Python, Info-Zip, OpenSSL and CC-BY are
     # OK to be shipped. https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2448
 
@@ -119,11 +119,12 @@ module License
           message = status_string(name, version, license, status, reason, level)
           puts message
           output_file.write(message)
+          violations << "#{name} - #{version} - #{license} - #{reason}" if status == 'unacceptable'
         end
       end
       output_file.close
 
-      violations
+      violations.uniq
     end
   end
 end
