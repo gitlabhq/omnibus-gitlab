@@ -189,7 +189,7 @@ build do
   # This directory will be deleted after all the licenses copied to it are
   # handled by the DependencyInformation task of omnibus. It won't be part
   # of the final package, thus causing a redundancy.
-  command "mkdir -p #{install_dir}/licenses"
+  # TODO: Instead of relying on upstream provided file, run license_finder here
   copy 'vendor/licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
 
   # Create a wrapper for the rake tasks of the Rails app

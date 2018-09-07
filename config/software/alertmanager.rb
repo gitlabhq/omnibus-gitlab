@@ -42,4 +42,7 @@ build do
 
   command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
   copy 'alertmanager', "#{install_dir}/embedded/bin/"
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/alertmanager.csv"
 end

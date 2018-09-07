@@ -1,0 +1,187 @@
+---
+- - :license
+  - github.com/beevik/ntp
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/beevik/ntp/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/coreos/go-systemd
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/coreos/go-systemd/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/garyburd/redigo
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/garyburd/redigo/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/godbus/dbus
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/godbus/dbus/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/gomodule/redigo
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/gomodule/redigo/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/gorilla/handlers
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/gorilla/handlers/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/hashicorp/consul
+  - MPL
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/influxdata/influxdb
+  - MIT
+  - :who: Balasankar C
+    :why: https://github.com/influxdata/influxdb/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/karrick/godirwalk
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/karrick/godirwalk/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/spf13/cobra
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/spf13/cobra/blob/master/LICENSE.txt
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/syndtr/goleveldb
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/syndtr/goleveldb/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/yvasiyarov/gorelic
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/yvasiyarov/gorelic/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/api/compute
+  - BSD-3-Clause
+  - :who: Balasankar C
+    :why: https://github.com/google/google-api-go-client/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/codes
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/credentials
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/credentials
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/health
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/health
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/metadata
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/reflection
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/resolver
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - google.golang.org/grpc/status
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - gopkg.in/check.v1
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/go-check/check/blob/v1/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - k8s.io/client-go/kubernetes
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - k8s.io/client-go/pkg
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - k8s.io/client-go/rest
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - k8s.io/client-go/tools
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/docker/go-connections
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/docker/go-connections/blob/master/LICENSE
+    :when: 2018-09-05 14:20:10.089350919 Z
+- - :license
+  - github.com/elazarl/go-bindata-assetfs
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/elazarl/go-bindata-assetfs/blob/master/LICENSE
+    :when: 2018-09-05 14:20:39.642552381 Z
+- - :license
+  - github.com/shirou/gopsutil
+  - BSD-3-Clause
+  - :who: Balasankar C
+    :why: https://github.com/shirou/gopsutil/blob/master/LICENSE
+    :when: 2018-09-05 14:21:19.937703316 Z
+- - :license
+  - github.com/matttproud/golang_protobuf_extensions
+  - Apache-2.0
+  - :who: Balasankar C
+    :why: https://github.com/matttproud/golang_protobuf_extensions/blob/master/LICENSE
+    :when: 2018-09-05 17:48:47.084496785 Z

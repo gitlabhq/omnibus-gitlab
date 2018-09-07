@@ -34,4 +34,7 @@ build do
   env['PATH'] = "#{ENV['PATH']}:#{env['GOPATH']}/bin"
   command 'make dev', env: env
   copy 'bin/consul', "#{install_dir}/embedded/bin/"
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/consul.csv"
 end
