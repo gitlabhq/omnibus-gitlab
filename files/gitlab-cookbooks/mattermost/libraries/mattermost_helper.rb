@@ -26,7 +26,7 @@ class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so 
     end
   end
 
-  def self.get_env_variables(node)
+  def self.get_env_variables(node) # rubocop:disable Metrics/AbcSize (disabled because it is false positive)
     {
       'MM_SERVICESETTINGS_SITEURL' => node['mattermost']['service_site_url'].to_s,
       'MM_SERVICESETTINGS_LISTENADDRESS' => "#{node['mattermost']['service_address']}:#{node['mattermost']['service_port']}",
@@ -45,6 +45,8 @@ class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so 
       'MM_GITLABSETTINGS_AUTHENDPOINT' => node['mattermost']['gitlab_auth_endpoint'].to_s,
       'MM_GITLABSETTINGS_TOKENENDPOINT' => node['mattermost']['gitlab_token_endpoint'].to_s,
       'MM_GITLABSETTINGS_USERAPIENDPOINT' => node['mattermost']['gitlab_user_api_endpoint'].to_s,
+      'MM_PLUGINSETTINGS_DIRECTORY' => node['mattermost']['plugin_directory'].to_s,
+      'MM_PLUGINSETTINGS_CLIENTDIRECTORY' => node['mattermost']['plugin_client_directory'].to_s
     }
   end
 end unless defined?(MattermostHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

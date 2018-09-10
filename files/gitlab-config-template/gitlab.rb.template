@@ -1200,6 +1200,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
 # mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
 # mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
+# mattermost['plugin_directory'] = "/var/opt/gitlab/mattermost/plugins"
+# mattermost['plugin_client_directory'] = "/var/opt/gitlab/mattermost/client-plugins"
 
 ################################################################################
 ## Mattermost NGINX
