@@ -20,6 +20,8 @@ default_version '20120601-3.0'
 license 'BSD-3-Clause'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ncurses'
 dependency 'config_guess'
 

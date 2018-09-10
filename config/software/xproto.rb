@@ -26,6 +26,8 @@ source url: "https://www.x.org/releases/individual/proto/xproto-#{version}.tar.g
 license 'MIT'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 relative_path "xproto-#{version}"
 
 build do

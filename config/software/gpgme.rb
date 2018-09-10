@@ -23,6 +23,8 @@ dependency 'gnupg'
 license 'LGPL-2.1'
 license_file 'COPYING.LESSER'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
        sha256: '1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb'
 

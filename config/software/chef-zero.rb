@@ -22,6 +22,8 @@ default_version '13.1.0'
 license 'Apache-2.0'
 license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'rubygems'
 

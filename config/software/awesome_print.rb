@@ -20,6 +20,8 @@ default_version '1.8.0'
 license 'MIT'
 license_file "https://github.com/awesome-print/awesome_print/blob/v#{version}/LICENSE"
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'rubygems'
 
