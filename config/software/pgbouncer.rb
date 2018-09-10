@@ -20,6 +20,8 @@ default_version '1.8.1'
 license 'ISC'
 license_file 'COPYRIGHT'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libevent'
 dependency 'openssl'
 

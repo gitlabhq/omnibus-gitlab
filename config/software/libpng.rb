@@ -20,6 +20,8 @@ default_version '1.6.34'
 license 'Libpng'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'zlib'
 
 source url: "https://download.sourceforge.net/libpng/libpng-#{version}.tar.gz",

@@ -21,6 +21,8 @@ default_version '3.3.2'
 license 'GPL-3.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source url: "http://www.repmgr.org/download/repmgr-#{version}.tar.gz",
        sha1: '48ed41fd552df50b597b547deccfecd8b12a5cf1'
 

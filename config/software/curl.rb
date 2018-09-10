@@ -24,6 +24,8 @@ dependency 'openssl'
 license 'MIT'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz",
        sha256: '099d9c32dc7b8958ca592597c9fabccdf4c08cfb7c114ff1afbbc4c6f13c9e9e'
 

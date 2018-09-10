@@ -21,6 +21,8 @@ default_version version.print(false)
 license 'GPL-2.0'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'popt'
 
 source git: version.remote

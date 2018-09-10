@@ -24,6 +24,8 @@ default_version version.print
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 
 source git: version.remote

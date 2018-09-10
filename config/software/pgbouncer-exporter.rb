@@ -26,6 +26,8 @@ default_version version.print
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 go_source = 'github.com/stanhu/pgbouncer_exporter'
@@ -39,4 +41,7 @@ build do
 
   command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'pgbouncer_exporter', "#{install_dir}/embedded/bin/"
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/pgbouncer-exporter.csv"
 end

@@ -20,6 +20,8 @@ default_version '2.7.6'
 license 'MIT'
 license_file 'https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE.txt'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 
 if version && !source

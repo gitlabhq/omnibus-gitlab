@@ -20,6 +20,8 @@ default_version '0.4.0'
 license 'MIT'
 license_file 'LICENSE.txt'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 
 build do

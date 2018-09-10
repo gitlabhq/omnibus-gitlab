@@ -23,6 +23,8 @@ default_version version.print
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 build do

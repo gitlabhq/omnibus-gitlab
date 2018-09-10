@@ -20,6 +20,8 @@ default_version '1.3.29'
 license 'MIT'
 license_file 'Copyright.txt'
 
+skip_transitive_dependency_licensing true
+
 dependency 'libpng'
 dependency 'zlib'
 

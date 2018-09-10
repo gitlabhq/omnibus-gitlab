@@ -20,6 +20,8 @@ default_version '0.1.7'
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
 
 version("0.1.7") { source sha256: "8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729" }
