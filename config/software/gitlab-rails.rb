@@ -127,7 +127,7 @@ build do
     'SKIP_STORAGE_VALIDATION' => 'true'
   }
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if ENV['NO_SOURCEMAPS']
-  command 'yarn install --pure-lockfile --production'
+  command 'yarn install --pure-lockfile --production --cache-folder .yarn-cache'
 
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
