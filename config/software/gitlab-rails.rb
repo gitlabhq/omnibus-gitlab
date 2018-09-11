@@ -117,7 +117,7 @@ build do
 
   # Copy asset cache and node modules from cache location to source directory
   move "#{Omnibus::Config.project_root}/assets_cache", "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache"
-  move "#{Omnibus::Config.project_root}/node_modules", "#{Omnibus::Config.source_dir}/gitlab-rails"
+  move "#{Omnibus::Config.project_root}/.yarn-cache", "#{Omnibus::Config.source_dir}/gitlab-rails"
 
   assets_compile_env = {
     'NODE_ENV' => 'production',
@@ -127,7 +127,7 @@ build do
     'SKIP_STORAGE_VALIDATION' => 'true'
   }
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if ENV['NO_SOURCEMAPS']
-  command 'yarn install --pure-lockfile --production'
+  command 'yarn install --pure-lockfile --production --cache-folder .yarn-cache'
 
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
@@ -144,9 +144,10 @@ build do
   # Move folders for caching. GitLab CI permits only relative path for Cache
   # and Artifacts. So we need these folder in the root directory.
   move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
-  move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
+  move "#{Omnibus::Config.source_dir}/gitlab-rails/.yarn-cache", Omnibus::Config.project_root.to_s
 
   # Tear down now that gitlab:assets:compile is done.
+  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'
