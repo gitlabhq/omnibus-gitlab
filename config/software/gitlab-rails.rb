@@ -147,6 +147,7 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/.yarn-cache", Omnibus::Config.project_root.to_s
 
   # Tear down now that gitlab:assets:compile is done.
+  delete 'node_modules'
   delete 'config/gitlab.yml'
   delete 'config/database.yml'
   delete 'config/secrets.yml'
