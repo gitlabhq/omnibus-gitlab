@@ -128,7 +128,7 @@ variables:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -188,7 +188,7 @@ variables:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 dependency_scanning:
@@ -403,7 +403,7 @@ Trigger:package:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   tags:
     - triggered-packages
 
@@ -834,7 +834,7 @@ SLES-12:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 Docker:
@@ -896,7 +896,7 @@ Raspberry-Pi-2-Jessie:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch:
@@ -907,7 +907,7 @@ Raspberry-Pi-2-Stretch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_tag_build
 
 ## Building from branch
@@ -969,7 +969,7 @@ SLES-12-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   artifacts:
     expire_in: 1 day
     paths:
@@ -1045,7 +1045,7 @@ Raspberry-Pi-2-Jessie-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_branch_build
 
 Raspberry-Pi-2-Stretch-branch:
@@ -1056,7 +1056,7 @@ Raspberry-Pi-2-Stretch-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_branch_build
 
 notify:slack-fail:
