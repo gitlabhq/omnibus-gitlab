@@ -274,7 +274,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
-# gitlab_rails['omniauth_enabled'] = false
+# gitlab_rails['omniauth_enabled'] = nil
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
 # gitlab_rails['omniauth_sync_email_from_provider'] = 'saml'
 # gitlab_rails['omniauth_sync_profile_from_provider'] = ['saml']

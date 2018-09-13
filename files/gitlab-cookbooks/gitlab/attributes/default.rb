@@ -214,7 +214,7 @@ default['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_https'] = nil
 
-default['gitlab']['gitlab-rails']['omniauth_enabled'] = false
+default['gitlab']['gitlab-rails']['omniauth_enabled'] = nil
 default['gitlab']['gitlab-rails']['omniauth_allow_single_sign_on'] = ['saml']
 default['gitlab']['gitlab-rails']['omniauth_sync_email_from_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_sync_profile_from_provider'] = nil

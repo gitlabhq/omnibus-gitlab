@@ -429,6 +429,27 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'omniauth settings' do
+      context 'enabled setting' do
+        it 'defaults to nil (enabled)' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: \n/)
+        end
+
+        it 'can be explicitly enabled' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: true\n/)
+        end
+
+        it 'can be disabled' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: false })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: false\n/)
+        end
+      end
+
       context 'sync email from omniauth provider is configured' do
         it 'sets the omniauth provider' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })

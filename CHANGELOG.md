@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.4.0
+
+- Enable omniauth by default !2728
+
 11.3.0
 
 - Support max_concurrency option in sidekiq_cluster
