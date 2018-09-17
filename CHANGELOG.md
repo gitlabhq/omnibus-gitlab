@@ -14,6 +14,8 @@ omnibus-gitlab repository.
 - Reload sysctl if a new symlink is created in /etc/sysctl.d
 - Bump omnibus-ctl to v0.6.0 !2715
 - Add missing pgbouncer options
+- Add plugin_directory and plugin_client_directory to supported Mattermost
+  settings !2649
 
 11.2.3
 
