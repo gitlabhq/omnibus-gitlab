@@ -1,4 +1,3 @@
-
 # Database settings
 
 >**Note:**
@@ -288,9 +287,9 @@ connect to the server, after authentication via password.
 to connect to the server, without authentication of any kind. _Be very careful
 with this setting._ It is suggest that this be limited to the loopback address of
 `127.0.0.1/24` or even `127.0.0.1/32`.
-- `sql_user` costrols the expected username for MD5 authentication. This defaults
+- `sql_user` controls the expected username for MD5 authentication. This defaults
 to `gitlab`, and is not a required setting.
-- `sql_user_password` csets the password that PostgrSQL will accept for MD5
+- `sql_user_password` sets the password that PostgrSQL will accept for MD5
 authentication. Replace `securesqlpassword` in the example below with an acceptable
 password.
 
