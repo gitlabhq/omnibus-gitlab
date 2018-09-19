@@ -262,6 +262,7 @@ Below is a list of Mattermost versions for GitLab 9.0 and later:
 | 11.1 | 5.0 |
 | 11.2 | 5.1 |
 | 11.3 | 5.2 |
+| 11.4 | 5.3 |
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 

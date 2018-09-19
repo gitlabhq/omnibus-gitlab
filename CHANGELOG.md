@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.4.0
 
 - Enable omniauth by default !2728
+- Update Mattermost to 5.3.1
 
 11.3.0
 
