@@ -8,6 +8,10 @@ omnibus-gitlab repository.
 - Enable omniauth by default !2728
 - Fix identification of Prometheus's rule directory !2736
 
+11.3.1
+
+- Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
+
 11.3.0
 
 - Support max_concurrency option in sidekiq_cluster
