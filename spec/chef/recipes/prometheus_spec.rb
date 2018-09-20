@@ -192,10 +192,10 @@ describe 'gitlab::prometheus' do
 
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content { |content|
-          expect(content).to match(/exec chpst -P/)
-          expect(content).to match(/\/opt\/gitlab\/embedded\/bin\/prometheus/)
-          expect(content).to match(/prometheus.yml/)
-        }
+                            expect(content).to match(/exec chpst -P/)
+                            expect(content).to match(/\/opt\/gitlab\/embedded\/bin\/prometheus/)
+                            expect(content).to match(/prometheus.yml/)
+                          }
 
       expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
         .with_content(prometheus_yml_output.gsub(/^ {2}/, ''))
@@ -227,164 +227,195 @@ describe 'gitlab::prometheus' do
     end
   end
 
-  context 'with user provided settings' do
-    before do
-      stub_gitlab_rb(
-        prometheus: {
-          flags: {
-            'storage.local.path' => 'foo'
-          },
-          listen_address: 'localhost:9898',
-          scrape_interval: 11,
-          scrape_timeout: 8888,
-          enable: true,
-          remote_write: [
-            {
-              url: 'https://prom-write-service',
-              basic_auth: {
-                password: 'secret'
-              }
-            }
-          ],
-          scrape_configs: [
-            {
-              job_name: 'test',
-              static_configs: [
-                targets: [
-                  'testhost:1234'
-                ]
-              ]
-            }
-          ]
-        },
-        gitaly: {
-          prometheus_listen_addr: 'testhost:2345',
-        }
-      )
-    end
-
-    it 'populates the files with expected configuration' do
-      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
-        .with_content(/web.listen-address=localhost:9898/)
-      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
-        .with_content(/storage.local.path=foo/)
-    end
-
-    it 'keeps the defaults that the user did not override' do
-      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
-        .with_content(/storage.local.target-heap-size=47689236/)
-      expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
-        .with_content(/storage.local.path=foo/)
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: gitlab_monitor_database\s+metrics_path: "/database"\s+static_configs:\s+- targets:\s+- localhost:9168})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: gitlab_monitor_sidekiq\s+metrics_path: "/sidekiq"\s+static_configs:\s+- targets:\s+- localhost:9168})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: gitlab_monitor_process\s+metrics_path: "/process"\s+static_configs:\s+- targets:\s+- localhost:9168})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: node\s+static_configs:\s+- targets:\s+- localhost:9100})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: redis\s+static_configs:\s+- targets:\s+- localhost:9121})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: postgres\s+static_configs:\s+- targets:\s+- localhost:9187})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
-    end
-
-    it 'renders prometheus.yml with the non-default value' do
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(/scrape_timeout: 8888s/)
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(/scrape_interval: 11/)
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{- job_name: gitaly\s+static_configs:\s+- targets:\s+- testhost:2345})
-      expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-        .with_content(%r{remote_write:\s+- url: https://prom-write-service\s+basic_auth:\s+password: secret})
-    end
-
-    context 'when kubernetes monitoring is disabled' do
+  context 'with Promtheus version 1' do
+    before { allow(PrometheusHelper).to receive(:is_version_1?).and_return(true) }
+    context 'with user provided settings' do
       before do
         stub_gitlab_rb(
           prometheus: {
-            monitor_kubernetes: false
-          })
-      end
-
-      it 'does not contain kuberentes scrap configuration' do
-        expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
-          .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
-      end
-    end
-  end
-
-  context 'with default configuration' do
-    it 'prometheus and all exporters are enabled' do
-      expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be true
-      Prometheus.services.each do |service|
-        expect(chef_run).to include_recipe("gitlab::#{service}")
-      end
-    end
-
-    context 'when redis and postgres are disabled' do
-      before do
-        stub_gitlab_rb(
-          postgresql: {
-            enable: false
+            flags: {
+              'storage.local.path' => 'foo'
+            },
+            listen_address: 'localhost:9898',
+            scrape_interval: 11,
+            scrape_timeout: 8888,
+            enable: true,
+            remote_write: [
+              {
+                url: 'https://prom-write-service',
+                basic_auth: {
+                  password: 'secret'
+                }
+              }
+            ],
+            scrape_configs: [
+              {
+                job_name: 'test',
+                static_configs: [
+                  targets: [
+                    'testhost:1234'
+                  ]
+                ]
+              }
+            ]
           },
-          redis: {
-            enable: false
+          gitaly: {
+            prometheus_listen_addr: 'testhost:2345',
           }
         )
       end
 
-      context 'and user did not enable the exporter' do
-        it 'postgres exporter is disabled' do
-          expect(chef_run).not_to include_recipe('gitlab::postgres-exporter')
+      it 'populates the files with expected configuration' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/web.listen-address=localhost:9898/)
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/storage.local.path=foo/)
+      end
+
+      it 'keeps the defaults that the user did not override' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/storage.local.target-heap-size=47689236/)
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/storage.local.path=foo/)
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: gitlab_monitor_database\s+metrics_path: "/database"\s+static_configs:\s+- targets:\s+- localhost:9168})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: gitlab_monitor_sidekiq\s+metrics_path: "/sidekiq"\s+static_configs:\s+- targets:\s+- localhost:9168})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: gitlab_monitor_process\s+metrics_path: "/process"\s+static_configs:\s+- targets:\s+- localhost:9168})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: node\s+static_configs:\s+- targets:\s+- localhost:9100})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: redis\s+static_configs:\s+- targets:\s+- localhost:9121})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: postgres\s+static_configs:\s+- targets:\s+- localhost:9187})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
+      end
+
+      it 'renders prometheus.yml with the non-default value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(/scrape_timeout: 8888s/)
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(/scrape_interval: 11/)
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: test\s+static_configs:\s+- targets:\s+- testhost:1234})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: gitaly\s+static_configs:\s+- targets:\s+- testhost:2345})
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{remote_write:\s+- url: https://prom-write-service\s+basic_auth:\s+password: secret})
+      end
+
+      context 'when kubernetes monitoring is disabled' do
+        before do
+          stub_gitlab_rb(
+            prometheus: {
+              monitor_kubernetes: false
+            })
         end
 
-        it 'redis exporter is disabled' do
-          expect(chef_run).not_to include_recipe('gitlab::redis-exporter')
+        it 'does not contain kuberentes scrap configuration' do
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content(%r{- job_name: kubernetes-nodes\s+scheme: https})
+        end
+      end
+    end
+
+    context 'with default configuration' do
+      it 'prometheus and all exporters are enabled' do
+        expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be true
+        Prometheus.services.each do |service|
+          expect(chef_run).to include_recipe("gitlab::#{service}")
         end
       end
 
-      context 'and user enabled the exporter' do
+      context 'when redis and postgres are disabled' do
         before do
           stub_gitlab_rb(
-            postgres_exporter: {
-              enable: true
+            postgresql: {
+              enable: false
             },
-            redis_exporter: {
-              enable: true
+            redis: {
+              enable: false
             }
           )
         end
 
-        it 'postgres exporter is enabled' do
-          expect(chef_run).to include_recipe('gitlab::postgres-exporter')
+        context 'and user did not enable the exporter' do
+          it 'postgres exporter is disabled' do
+            expect(chef_run).not_to include_recipe('gitlab::postgres-exporter')
+          end
+
+          it 'redis exporter is disabled' do
+            expect(chef_run).not_to include_recipe('gitlab::redis-exporter')
+          end
         end
 
-        it 'redis exporter is enabled' do
-          expect(chef_run).to include_recipe('gitlab::redis-exporter')
+        context 'and user enabled the exporter' do
+          before do
+            stub_gitlab_rb(
+              postgres_exporter: {
+                enable: true
+              },
+              redis_exporter: {
+                enable: true
+              }
+            )
+          end
+
+          it 'postgres exporter is enabled' do
+            expect(chef_run).to include_recipe('gitlab::postgres-exporter')
+          end
+
+          it 'redis exporter is enabled' do
+            expect(chef_run).to include_recipe('gitlab::redis-exporter')
+          end
+        end
+      end
+
+      context 'with user provided settings' do
+        before do
+          stub_gitlab_rb(
+            prometheus_monitoring: {
+              enable: false
+            }
+          )
+        end
+
+        it 'disables prometheus and all exporters' do
+          expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be false
+          Prometheus.services.each do |service|
+            expect(chef_run).to include_recipe("gitlab::#{service}_disable")
+          end
         end
       end
     end
+  end
 
+  context 'with Prometheus 2' do
+    before { allow(PrometheusHelper).to receive(:is_version_1?).and_return(false) }
     context 'with user provided settings' do
       before do
         stub_gitlab_rb(
-          prometheus_monitoring: {
-            enable: false
+          prometheus: {
+            flags: {
+              'randomFlag' => 'foo'
+            },
+            listen_address: 'localhost:9898',
           }
         )
       end
 
-      it 'disables prometheus and all exporters' do
-        expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be false
-        Prometheus.services.each do |service|
-          expect(chef_run).to include_recipe("gitlab::#{service}_disable")
-        end
+      it 'populates the files with expected configuration' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/web.listen-address=localhost:9898/)
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/randomFlag=foo/)
+      end
+
+      it 'keeps the defaults that the user did not override' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
+          .with_content(/storage.tsdb.path=\/var\/opt\/gitlab\/prometheus\/data/)
       end
     end
   end
