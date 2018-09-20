@@ -181,10 +181,12 @@ module Prometheus
       default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
       user_config = Gitlab['prometheus']
 
-      default_rules_dir = user_config['rules_directory'] || default_config['rules_directory']
+      home_directory = user_config['home'] || default_config['home']
+      rules_dir = user_config['rules_directory'] || File.join(home_directory, "rules")
 
-      rules_files = user_config['rules_files'] || [File.join(default_rules_dir, '*.rules')]
+      rules_files = user_config['rules_files'] || [File.join(rules_dir, '*.rules')]
 
+      Gitlab['prometheus']['rules_directory'] = rules_dir
       Gitlab['prometheus']['rules_files'] = rules_files
     end
 
