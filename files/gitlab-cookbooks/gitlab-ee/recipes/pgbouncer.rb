@@ -81,6 +81,7 @@ execute 'generate databases.ini' do
     EOF
   }
   action :nothing
+  not_if { node['consul']['watchers'].include?('postgresql') }
 end
 
 execute 'reload pgbouncer' do
