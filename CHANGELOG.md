@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.4.0
 
 - Enable omniauth by default !2728
+- Fix identification of Prometheus's rule directory !2736
 
 11.3.0
 
