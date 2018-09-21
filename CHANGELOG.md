@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Enable omniauth by default !2728
 - Fix identification of Prometheus's rule directory !2736
+- Run geo_prune_event_log_worker_cron every 5min
 
 11.3.1
 
