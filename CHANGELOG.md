@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Enable omniauth by default !2728
 - Fix identification of Prometheus's rule directory !2736
 - Run geo_prune_event_log_worker_cron every 5min
+- Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
 
 11.3.1
 
