@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Fix identification of Prometheus's rule directory !2736
 - Run geo_prune_event_log_worker_cron every 5min
 - Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
+- Remove recursive chown for public directory !2743
 
 11.3.1
 
