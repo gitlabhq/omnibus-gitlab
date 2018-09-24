@@ -392,14 +392,6 @@ file File.join(gitlab_rails_dir, "RUBY_VERSION") do
   notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 end
 
-# We shipped packages with 'chown -R git' below for quite some time. That chown
-# was an unnecessary leftover from the manual installation guide; it is better
-# to just leave these files owned by root. If we just remove the 'chown git',
-# existing installations will keep 'git' as the owner, so we now explicitly
-# change the owner to root:root. Once we feel confident that enough versions
-# have been shipped we can maybe get rid of this 'chown' at some point.
-execute "chown -R root:root /opt/gitlab/embedded/service/gitlab-rails/public"
-
 execute "clear the gitlab-rails cache" do
   command "/opt/gitlab/bin/gitlab-rake cache:clear"
   action :nothing
