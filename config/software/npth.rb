@@ -15,7 +15,7 @@
 #
 
 name 'npth'
-default_version '1.5'
+default_version '1.6'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
@@ -23,7 +23,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/npth/npth-#{version}.tar.bz2",
-       sha256: '294a690c1f537b92ed829d867bee537e46be93fbd60b16c04630fbbfcd9db3c2'
+       sha256: '1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1'
 
 relative_path "npth-#{version}"
 
