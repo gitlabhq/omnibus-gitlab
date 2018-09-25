@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.3.1
+- Update Mattermost to 5.2.2
+
 11.3.0
 
 - Support max_concurrency option in sidekiq_cluster
