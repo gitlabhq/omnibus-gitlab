@@ -11,6 +11,12 @@ omnibus-gitlab repository.
 - Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
 - Remove recursive chown for public directory !2743
 - Update libpng to 1.6.35 !2746
+- Update libgcrypt to 1.8.3 !2747
+- Update npth version to 1.6
+- Update libgpg-error to 1.32
+- Update libassuan to 2.5.1
+- Update gpgme to 1.10.0
+- Update gnupg to 2.2.10
 
 11.3.1
 
