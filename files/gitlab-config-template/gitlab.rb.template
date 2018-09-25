@@ -1366,9 +1366,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/pgbouncer_exporter.html
 ################################################################################
 
-# pgbouncer-exporter['enable'] = false
-# pgbouncer-exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
-# pgbouncer-exporter['listen_address'] = 'localhost:9188'
+# pgbouncer_exporter['enable'] = false
+# pgbouncer_exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+# pgbouncer_exporter['listen_address'] = 'localhost:9188'
 
 ################################################################################
 ## Prometheus Gitlab monitor
