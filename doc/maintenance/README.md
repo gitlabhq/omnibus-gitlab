@@ -159,7 +159,7 @@ In `/etc/gitlab/gitlab.rb` specify the read only mode:
 registry['storage'] = {
   'maintenance' => {
     'readonly' => {
-      'enabled' => 'true'
+      'enabled' => true
     }
   }
 }
@@ -182,7 +182,7 @@ Once done, in `/etc/gitlab/gitlab.rb` change the configuration to:
 registry['storage'] = {
   'maintenance' => {
     'readonly' => {
-      'enabled' => 'false'
+      'enabled' => false
     }
   }
 }
