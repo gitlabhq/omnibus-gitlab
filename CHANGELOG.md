@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 11.3.0
 
 - Make gitlab-ctl repmgr standby setup honor postgresql['data_dir'] 
+11.2.4
+
+- Update Mattermost to 5.1.2
 
 11.2.0
 
