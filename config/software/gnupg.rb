@@ -35,6 +35,7 @@ relative_path "gnupg-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['LDFLAGS'] << " -lrt"
   command './configure ' \
     "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr", env: env
 
