@@ -15,6 +15,10 @@
 #
 
 name 'gpgme'
+
+# Note: gpgme versions greater than 1.11.0 were causing some issues when tried
+# to use. Check the comments in https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2747
+# if you are upgrading to 1.11.0 or higher.
 default_version '1.10.0'
 
 dependency 'libassuan'
