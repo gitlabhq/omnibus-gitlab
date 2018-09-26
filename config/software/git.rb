@@ -26,7 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-default_version '2.18.0'
+default_version 'v2.18.1'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -38,8 +38,7 @@ dependency 'curl'
 dependency 'pcre2'
 dependency 'libiconv'
 
-source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '94faf2c0b02a7920b0b46f4961d8e9cad08e81418614102898a55f980fa3e7e4'
+source git: 'git@dev.gitlab.org:security/cabal.git'
 
 relative_path "git-#{version}"
 
