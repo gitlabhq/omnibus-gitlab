@@ -211,7 +211,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
     **Note:**
     - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
     plain-text passwords.
-    - Postgresql allows to listen on multiple adresses. See [Postgresql Connection Config#listen_addresses](https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html#listen_addresses)
+    - Postgresql allows to listen on multiple addresses. See [Postgresql Connection Config#listen_addresses](https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html#listen_addresses)
 
         If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
 
@@ -281,7 +281,7 @@ need to be made to both `postgresql` and `gitlab_rails` sections of `gitlab.rb`.
 The following settings are affected in the `postgresql` block:
 - `listen_address` controls the address on which PostgreSQL will listen.
 - `port` controls the port on which PostgreSQL will listen, and _must be set_ if `listen_address` is.
-- `md5_auth_cidr_adresses` is a list of CIDR address blocks which are allowed to
+- `md5_auth_cidr_addresses` is a list of CIDR address blocks which are allowed to
 connect to the server, after authentication via password.
 - `trust_auth_cidr_addresses` is a list of CIDR address blocks which are allowed
 to connect to the server, without authentication of any kind. _Be very careful
