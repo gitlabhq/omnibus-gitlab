@@ -9,6 +9,10 @@ follows
 1. Install Docker. Visit [official docs](https://docs.docker.com/engine/installation/)
    for more details.
 
+> Containers need access to 4GB of memory to complete builds. Consult the documentation
+> for your container runtime. Docker for Mac and Docker for Windows are known to set
+> this value to 2GB for default installations.
+
 1. Pull the docker image for the OS you need to build package for
    [GitLab Omnibus builder registry](https://gitlab.com/gitlab-org/gitlab-omnibus-builder/container_registry)
    contains images for all the supported OSs and versions. You can use one of
