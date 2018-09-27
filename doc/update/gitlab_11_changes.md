@@ -24,3 +24,11 @@ been removed.
    configuration. [Check out the official documentation for details](https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory)
 3. Old format of `git_data_dirs` configuration has been replaced with a new
    format, allowing much more fine grain control. [Check out the official documentation for details](https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory)
+
+## Changes introduced in minor versions
+
+### 11.4
+
+1. Version of bundled Redis has been upgraded to 3.2.12. This is a critical
+   security update that fixes multiple vulnerabilities. After upgrading to 11.4,
+   run `gitlab-ctl restart redis` to ensure the new version is loaded.
