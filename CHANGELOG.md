@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Remove recursive chown for public directory !2743
 - Update libpng to 1.6.35 !2746
 - Update redis to 3.2.12 !2750
+- Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
 
 11.3.1
 
