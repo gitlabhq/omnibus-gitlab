@@ -18,6 +18,8 @@ omnibus-gitlab repository.
 - Update libassuan to 2.5.1
 - Update gpgme to 1.10.0
 - Update gnupg to 2.2.10
+- Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
+  prometheus-upgrade command !2733
 
 11.3.4
 
