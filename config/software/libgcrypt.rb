@@ -15,7 +15,7 @@
 #
 
 name 'libgcrypt'
-default_version '1.8.1'
+default_version '1.8.3'
 
 dependency 'libgpg-error'
 
@@ -25,7 +25,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-#{version}.tar.bz2",
-       sha256: '7a2875f8b1ae0301732e878c0cca2c9664ff09ef71408f085c50e332656a78b3'
+       sha256: '66ec90be036747602f2b48f98312361a9180c97c68a690a5f376fa0f67d0af7c'
 
 relative_path "libgcrypt-#{version}"
 
