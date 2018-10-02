@@ -82,7 +82,7 @@ GitLab uses [runit](http://smarden.org/runit/) recipes for the purpose of servic
 
 ### Services
 
-Services are software processes that we run using the Runit process init/supervisor. You are able to check their status, start, stop, and restart them using the gitlab-ctl commands. Recipes may also disable or enable these services based on their process group and the settings/roles that have been configured for the instance of gitlab. The list of services and the service groups associated with them can be found in [files/gitlab-cookbooks/package/libraries/services.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/package/libraries/services.rb).
+Services are software processes that we run using the Runit process init/supervisor. You are able to check their status, start, stop, and restart them using the gitlab-ctl commands. Recipes may also disable or enable these services based on their process group and the settings/roles that have been configured for the instance of gitlab. The list of services and the service groups associated with them can be found in [files/gitlab-cookbooks/package/libraries/config/services.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/config/services.rb).
 
 ## Additional gitlab-ctl commands
 
