@@ -41,7 +41,7 @@ namespace :build do
       files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
 
       files.each do |file|
-        system("sha256sum \"#{file}\" > \"#{file}.sha256\"")
+        system('sha256sum', file, out: "#{file}.sha256")
       end
     end
 
@@ -49,7 +49,7 @@ namespace :build do
     task :sync do
       release_bucket = Build::Info.release_bucket
       release_bucket_region = "eu-west-1"
-      system("aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}")
+      system(*%W[aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}])
       files = Dir.glob('pkg/**/*').select { |f| File.file? f }
       files.each do |file|
         puts file.gsub('pkg', "https://#{release_bucket}.s3.amazonaws.com").gsub('+', '%2B')

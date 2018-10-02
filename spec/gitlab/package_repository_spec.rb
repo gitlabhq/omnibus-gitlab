@@ -10,7 +10,7 @@ describe PackageRepository do
       # on non stable branch: 8.1.0+rc1.ce.0-1685-gd2a2c51
       # on tag: 8.12.0+rc1.ee.0
       before do
-        allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(true)
+        expect(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.0+rc1.ee.0\n")
       end
 
       it { expect(repo.repository_for_rc).to eq 'unstable' }
@@ -21,7 +21,7 @@ describe PackageRepository do
       # on non stable branch: 8.12.8+ce.0-1-gdac92d4
       # on tag: 8.12.8+ce.0
       before do
-        allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(false)
+        allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.8+ce.0\n")
       end
 
       it { expect(repo.repository_for_rc).to eq nil }
@@ -55,7 +55,7 @@ describe PackageRepository do
 
     context 'on non-stable branch' do
       before do
-        allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(true)
+        allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.1.0+rc1.ce.0-1685-gd2a2c51\n")
       end
 
       it 'prints unstable' do
@@ -68,12 +68,12 @@ describe PackageRepository do
 
     context 'on a stable branch' do
       before do
-        allow(repo).to receive(:system).with('git describe | grep -q -e rc').and_return(false)
+        allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.8+ce.0-1-gdac92d4\n")
       end
 
       context 'when EE' do
         before do
-          allow(Build::Check).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(true)
+          allow(File).to receive(:read).with('VERSION').and_return("1.2.3-ee\n")
         end
 
         it 'prints gitlab-ee' do
@@ -86,7 +86,7 @@ describe PackageRepository do
 
       context 'when CE' do
         before do
-          allow(Build::Check).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(false)
+          allow(File).to receive(:read).with('VERSION').and_return("1.2.3\n")
         end
 
         it 'prints gitlab-ce' do
@@ -106,7 +106,7 @@ describe PackageRepository do
       end
 
       it 'in dry run mode prints the checksum commands' do
-        expect { repo.validate(true) }.to output("sha256sum -c \"pkg/el-6/gitlab-ce.rpm.sha256\"\n").to_stdout
+        expect { repo.validate(true) }.to output("sha256sum -c pkg/el-6/gitlab-ce.rpm.sha256\n").to_stdout
       end
 
       it 'raises an exception when there is a mismatch' do

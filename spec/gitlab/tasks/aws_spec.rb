@@ -79,7 +79,7 @@ describe 'aws:process', type: :rake do
     allow(Build::Check).to receive(:is_ee?).and_return(false)
     allow(Build::Check).to receive(:match_tag?).and_return(true)
 
-    expect_any_instance_of(Kernel).to receive(:system).with("support/packer/packer_ami.sh 8.16.4 ce http://example.com")
+    expect_any_instance_of(Kernel).to receive(:system).with(*%w[support/packer/packer_ami.sh 8.16.4 ce http://example.com])
     expect { Rake::Task['aws:process'].invoke }.to output(/No greater version exists. Creating AMI/).to_stdout
   end
 

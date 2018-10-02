@@ -19,7 +19,7 @@ class PackageRepository
   end
 
   def repository_for_rc
-    "unstable" if system('git describe | grep -q -e rc')
+    "unstable" if IO.popen(%w[git describe], &:read).include?('rc')
   end
 
   def validate(dry_run)
@@ -107,13 +107,13 @@ class PackageRepository
   end
 
   def verify_checksum(filename, dry_run)
-    cmd = "sha256sum -c \"#{filename}\""
+    cmd = %W[sha256sum -c #{filename}]
 
     if dry_run
-      puts cmd
+      puts cmd.join(' ')
       true
     else
-      system(cmd)
+      system(*cmd)
     end
   end
 end
