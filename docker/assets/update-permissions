@@ -59,6 +59,8 @@ fi
 if id -u gitlab-prometheus; then
 	chown_if_exists -R gitlab-prometheus:gitlab-prometheus /var/opt/gitlab/prometheus
 	chown_if_exists gitlab-prometheus /var/log/gitlab/prometheus
+	chown_if_exists -R gitlab-prometheus:gitlab-prometheus /var/opt/gitlab/alertmanager
+	chown_if_exists gitlab-prometheus /var/log/gitlab/alertmanager
 fi
 
 # Fix redis storage and logs
