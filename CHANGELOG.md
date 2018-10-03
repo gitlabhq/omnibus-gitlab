@@ -7,7 +7,7 @@ omnibus-gitlab repository.
 
 - Bump git to 2.18.1
 
-11.3.1
+11.3.2
 
 - Update Mattermost to 5.2.2
 
