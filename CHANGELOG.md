@@ -3,7 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.3.2
+
+- Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
+
 11.3.1
+
 - Update Mattermost to 5.2.2
 
 11.3.0
@@ -48,7 +53,7 @@ omnibus-gitlab repository.
 - Run GitLab service after systemd multi-user.target !2632
 - Update repmgr-check-master to exit 1 for standby nodes
 - Geo: Fix replicate-geo-database not working with a custom port
-- Update repmgr-check-master to exit 1 for standby nodes 
+- Update repmgr-check-master to exit 1 for standby nodes
 - Run GitLab service after systemd multi-user.target !2632
 
 11.1.1
