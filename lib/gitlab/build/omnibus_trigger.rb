@@ -17,14 +17,16 @@ module Build
         "variables[ALTERNATIVE_SOURCES]" => true,
         "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
         "variables[ee]" => ENV["ee"] || "false",
-        "variables[TRIGGERED_USER]" => ENV["GITLAB_USER_NAME"],
-        "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/#{ENV['CI_JOB_ID']}"
-
+        "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],
+        "variables[TRIGGER_SOURCE]" => ENV['CI_JOB_URL'],
+        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => ENV['TOP_UPSTREAM_SOURCE_PROJECT'],
+        "variables[TOP_UPSTREAM_SOURCE_JOB]" => ENV['TOP_UPSTREAM_SOURCE_JOB'],
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => ENV['TOP_UPSTREAM_SOURCE_SHA']
       }
     end
 
     def self.get_access_token
-      ENV['QA_ACCESS_TOKEN']
+      ENV['GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN']
     end
   end
 end
