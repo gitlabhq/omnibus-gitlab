@@ -20,7 +20,7 @@ name 'chef-zero'
 default_version '13.1.0'
 
 license 'Apache-2.0'
-license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -28,6 +28,7 @@ dependency 'ruby'
 dependency 'rubygems'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install chef-zero' \
