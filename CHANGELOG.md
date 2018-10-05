@@ -19,6 +19,10 @@ omnibus-gitlab repository.
 - Update gpgme to 1.10.0
 - Update gnupg to 2.2.10
 
+11.3.4
+
+- Bump git to 2.18.1
+
 11.3.2
 
 - Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
