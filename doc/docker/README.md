@@ -242,24 +242,14 @@ You can then access your GitLab instance at `http://1.1.1.1/` and `https://1.1.1
 
 ### Expose GitLab on different ports
 
-GitLab will occupy by default the following ports inside the container:
+GitLab will occupy [some ports](../package-information/defaults.md)
+inside the container.
 
-- `80` (HTTP)
-- `443` (if you configure HTTPS)
-- `8080` (used by Unicorn)
-- `22` (used by the SSH daemon)
+If you want to use a different host port than `80` (HTTP) or `443` (HTTPS),
+you need to add a separate `--publish` directive to the `docker run` command.
 
-> **Note:**
-The format for publishing ports is `hostPort:containerPort`. Read more in
-Docker's documentation about [exposing incoming ports][docker-ports].
-
-> **Warning:**
-Do NOT use port `8080` otherwise there will be conflicts. This port is already
-used by Unicorn that runs internally in the container.
-
-If you want to use a different port than `80` (HTTP) or `443` (HTTPS) for the
-container, you need to add a separate `--publish` directive to the `docker run`
-command.
+Do NOT use any of the above ports to replace the defaults `80` or `443` **inside**
+the container, otherwise there will be conflicts.
 
 For example, to expose the web interface on port `8929`, and the SSH service on
 port `2289`, use the following `docker run` command:
@@ -275,6 +265,10 @@ sudo docker run --detach \
 	--volume /srv/gitlab/data:/var/opt/gitlab \
 	gitlab/gitlab-ce:latest
 ```
+
+NOTE: **Note:**
+The format for publishing ports is `hostPort:containerPort`. Read more in
+Docker's documentation about [exposing incoming ports][docker-ports].
 
 You then need to appropriately configure `gitlab.rb`:
 
