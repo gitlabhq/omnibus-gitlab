@@ -12,7 +12,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   end
   # We only need the arguments if we're performing an action which needs to
   # know the primary node
-  repmgr_options = repmgr_parse_options
+  repmgr_options = Repmgr.parse_options(ARGV)
 
   repmgr_args = begin
                   {
@@ -55,7 +55,7 @@ add_command_under_category('repmgr-check-master', 'database', 'Check if the curr
     if node.is_master?
       Kernel.exit 0
     else
-      Kernel.exit 2
+      Kernel.exit 1
     end
   rescue Repmgr::MasterError => se
     $stderr.puts "Error checking for master: #{se}"
@@ -80,36 +80,4 @@ def repmgr_help
     promote -- Promote the current node to be the master node
   cluster show -- Displays the current membership status of the cluster
   EOF
-end
-
-def repmgr_parse_options
-  options = {
-    node: nil,
-    wait: true,
-    verbose: ''
-  }
-
-  OptionParser.new do |opts|
-    opts.on('-w', '--no-wait', 'Do not wait before starting the setup process') do
-      options[:wait] = false
-    end
-
-    opts.on('-v', '--verbose', 'Run repmgr with verbose option') do
-      options[:verbose] = '-v'
-    end
-
-    opts.on('-n', '--node NUMBER', 'The node number to operate on') do |n|
-      options[:node] = n
-    end
-
-    opts.on('--host HOSTNAME', 'The host name to operate on') do |h|
-      options[:host] = h
-    end
-
-    opts.on('--user USER', 'The database user to connect as') do |u|
-      options[:user] = u
-    end
-  end.parse!(ARGV)
-
-  options
 end

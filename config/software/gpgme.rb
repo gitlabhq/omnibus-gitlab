@@ -15,7 +15,11 @@
 #
 
 name 'gpgme'
-default_version '1.9.0'
+
+# Note: gpgme versions greater than 1.11.0 were causing some issues when tried
+# to use. Check the comments in https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2747
+# if you are upgrading to 1.11.0 or higher.
+default_version '1.10.0'
 
 dependency 'libassuan'
 dependency 'gnupg'
@@ -23,8 +27,10 @@ dependency 'gnupg'
 license 'LGPL-2.1'
 license_file 'COPYING.LESSER'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
-       sha256: '1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb'
+       sha256: '1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693'
 
 relative_path "gpgme-#{version}"
 

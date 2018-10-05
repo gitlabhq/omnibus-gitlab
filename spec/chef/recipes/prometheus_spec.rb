@@ -388,4 +388,43 @@ describe 'gitlab::prometheus' do
       end
     end
   end
+
+  context 'rules directory' do
+    context 'default settings' do
+      it 'creates rules directory in correct location' do
+        expect(chef_run).to create_directory("/var/opt/gitlab/prometheus/rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus/rules/node.rules")
+      end
+    end
+
+    context 'user specified home directory' do
+      before do
+        stub_gitlab_rb(
+          prometheus: {
+            home: "/var/opt/gitlab/prometheus-bak"
+          }
+        )
+      end
+
+      it 'creates rules directory in correct location' do
+        expect(chef_run).to create_directory("/var/opt/gitlab/prometheus-bak/rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus-bak/rules/node.rules")
+      end
+    end
+
+    context 'user specified rules directory' do
+      before do
+        stub_gitlab_rb(
+          prometheus: {
+            rules_directory: "/var/opt/gitlab/prometheus/alert-rules"
+          }
+        )
+      end
+
+      it 'creates rules directory in correct location' do
+        expect(chef_run).to create_directory("/var/opt/gitlab/prometheus/alert-rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus/alert-rules/node.rules")
+      end
+    end
+  end
 end

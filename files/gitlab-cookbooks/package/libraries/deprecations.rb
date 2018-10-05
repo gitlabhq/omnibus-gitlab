@@ -104,7 +104,9 @@ module Gitlab
            gitlab_token_endpoint
            gitlab_user_api_endpoint
            email_invite_salt
-           file_public_link_salt)
+           file_public_link_salt
+           plugin_directory
+           plugin_client_directory)
       end
 
       def next_major_version

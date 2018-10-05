@@ -23,7 +23,7 @@ stages:
 
 variables:
   BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "0.0.24"
+  BUILDER_IMAGE_REVISION: "0.0.27"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
 
@@ -56,6 +56,7 @@ variables:
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -79,8 +80,9 @@ variables:
     - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
-    - bundle exec rake knapsack:rspec
+    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml]"
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -92,6 +94,8 @@ variables:
     expire_in: 31d
     paths:
     - knapsack/
+    reports:
+      junit: junit_rspec.xml
   retry: 1
 
 ## Runs on dev.gitlab.org
@@ -114,6 +118,7 @@ variables:
   only:
     - branches@gitlab/omnibus-gitlab
   artifacts:
+    when: always
     expire_in: 1 day
     paths:
       - pkg/
@@ -123,7 +128,7 @@ variables:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -183,7 +188,7 @@ variables:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 dependency_scanning:
@@ -307,6 +312,7 @@ rubocop:
   script:
     - bundle exec rubocop --parallel
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -316,20 +322,21 @@ rubocop:
     - gems
 
 docs-check-links:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:nanoc-bootstrap-ruby-2.4-alpine"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-docs-lint"
   stage: check
   cache: {}
   dependencies: []
   before_script: []
   <<: *dedicated-runner
   script:
-    - mv doc/ /nanoc/content/
-    - cd /nanoc
+    - mv doc/ /tmp/gitlab-docs/content/
+    - cd /tmp/gitlab-docs
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
     - bundle exec nanoc check internal_links
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -343,6 +350,8 @@ danger-review:
   only:
     refs:
       - branches@gitlab-org/omnibus-gitlab
+  except:
+    - schedules@gitlab-org/omnibus-gitlab
   script:
     - danger --fail-on-errors=true
 
@@ -365,6 +374,7 @@ update-knapsack:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
   except:
+    - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
     - tags@gitlab/omnibus-gitlab
     - triggers
@@ -393,7 +403,7 @@ Trigger:package:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   tags:
     - triggered-packages
 
@@ -824,7 +834,7 @@ SLES-12:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   retry: 1
 
 Docker:
@@ -886,7 +896,7 @@ Raspberry-Pi-2-Jessie:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch:
@@ -897,7 +907,7 @@ Raspberry-Pi-2-Stretch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_tag_build
 
 ## Building from branch
@@ -959,7 +969,7 @@ SLES-12-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   artifacts:
     expire_in: 1 day
     paths:
@@ -1035,7 +1045,7 @@ Raspberry-Pi-2-Jessie-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_branch_build
 
 Raspberry-Pi-2-Stretch-branch:
@@ -1046,7 +1056,7 @@ Raspberry-Pi-2-Stretch-branch:
     - cache
     - gems
     - assets_cache
-    - node_modules
+    - .yarn-cache
   <<: *rpi_branch_build
 
 notify:slack-fail:
@@ -1055,7 +1065,7 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+    - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
   only:
     - master
@@ -1304,3 +1314,37 @@ release:images:
   only:
     - tags@gitlab/omnibus-gitlab
   dependencies: []
+
+license-upload:
+  stage: metrics
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake license:generate_index
+  allow_failure: true
+  when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-18.04
+
+pages:
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:alpine-aws
+  stage: prepare
+  before_script: []
+  script:
+    - mkdir -p ~/.aws
+    - echo -e "[default]\naws_access_key_id = $LICENSE_AWS_ACCESS_KEY_ID\naws_secret_access_key = $LICENSE_AWS_SECRET_ACCESS_KEY"  > ~/.aws/config
+    - aws s3 sync s3://${LICENSE_S3_BUCKET} public
+    - cp support/webpages/* public
+  artifacts:
+    paths:
+      - public
+  only:
+    - schedules@gitlab-org/omnibus-gitlab

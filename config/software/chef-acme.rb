@@ -21,6 +21,8 @@ default_version version.print(false)
 license 'Apache-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 dependency 'gitlab-cookbooks'

@@ -3,6 +3,57 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.4.0
+
+- Enable omniauth by default !2728
+- Fix identification of Prometheus's rule directory !2736
+- Run geo_prune_event_log_worker_cron every 5min
+- Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
+- Remove recursive chown for public directory !2743
+- Update libpng to 1.6.35 !2746
+- Update redis to 3.2.12 !2750
+- Update libgcrypt to 1.8.3 !2747
+- Update npth version to 1.6
+- Update libgpg-error to 1.32
+- Update libassuan to 2.5.1
+- Update gpgme to 1.10.0
+- Update gnupg to 2.2.10
+
+11.3.2
+
+- Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
+
+11.3.1
+
+- Update Mattermost to 5.2.2
+
+11.3.0
+
+- Support max_concurrency option in sidekiq_cluster
+- Support Redis hz parameter
+- Support Redis tcp-backlog parameter
+- Disable SSL compression by default when using gitlab-psql or gitlab-geo-psql
+- Increase Sidekiq RSS memory limit from 1 GB to 2 GB
+- Add /metrics endpoint to gitlab_monitor !2719 (Maxime)
+- Reload sysctl if a new symlink is created in /etc/sysctl.d
+- Bump omnibus-ctl to v0.6.0 !2715
+- Add missing pgbouncer options
+- Add plugin_directory and plugin_client_directory to supported Mattermost
+  settings !2649
+
+11.2.3
+
+- Fix custom runtime_dir not working
+- Geo Secondary: ensure rails enabled when Gitaly enabled !2720
+- Update Mattermost to 5.2.1
+- Update libiconv to 1.15
+- Update libiconv zlib and makedepend build recipe to improve build cache reuse
+
+11.2.1
+
+- Fix bzip2 download source
+- Allow configuration of maven package repository
+
 11.2.0
 
 - Bump git to 2.18.0 !2636
@@ -12,6 +63,12 @@ omnibus-gitlab repository.
 - Enable rbtrace for unicorn if ENABLE_RBTRACE is set
 - Fix database.yml group setting to point at the proper user['group']
 - Fix Prometheus metrics not working out of the box in Docker
+- Make gitlab-ctl repmgr standby setup honor postgresql['data_dir']
+- Update Mattermost to 5.1.1
+- Update repmgr-check-master to exit 1 for standby nodes
+- Run GitLab service after systemd multi-user.target !2632
+- Update repmgr-check-master to exit 1 for standby nodes
+- Geo: Fix replicate-geo-database not working with a custom port
 
 11.1.1
 

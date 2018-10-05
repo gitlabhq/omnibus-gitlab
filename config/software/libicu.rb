@@ -25,6 +25,8 @@ source url: 'http://downloads.sourceforge.net/project/icu/ICU4C/57.1/icu4c-57_1-
 license 'MIT'
 license_file 'icu/LICENSE'
 
+skip_transitive_dependency_licensing true
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"

@@ -30,6 +30,7 @@ describe 'gitlab::gitlab-monitor' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-monitor/gitlab-monitor.yml')
         .with_content { |content|
           expect(content).to match(/database:/)
+          expect(content).to match(/metrics:/)
           expect(content).to match(/rows_count/)
           expect(content).to match(/git-upload-pack/)
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)

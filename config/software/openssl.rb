@@ -20,6 +20,8 @@ name 'openssl'
 license 'OpenSSL'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'zlib'
 dependency 'cacerts'
 dependency 'makedepend' unless aix?

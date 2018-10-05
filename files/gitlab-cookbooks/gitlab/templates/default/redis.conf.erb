@@ -94,7 +94,7 @@ port <%= @port %>
 # will silently truncate it to the value of /proc/sys/net/core/somaxconn so
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
-# tcp-backlog 511
+tcp-backlog <%= @tcp_backlog %>
 
 # Unix socket.
 #
@@ -1058,7 +1058,7 @@ client-output-buffer-limit pubsub <%= @client_output_buffer_limit_pubsub %>
 # The range is between 1 and 500, however a value over 100 is usually not
 # a good idea. Most users should use the default of 10 and raise this up to
 # 100 only in environments where very low latency is required.
-hz 10
+hz <%= @hz %>
 
 # When a child rewrites the AOF file, if the following option is enabled
 # the file will be fsync-ed every 32 MB of data generated. This is useful

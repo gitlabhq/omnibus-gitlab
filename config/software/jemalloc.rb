@@ -21,6 +21,8 @@ default_version '4.2.1'
 license 'jemalloc'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://github.com/jemalloc/jemalloc/releases/download/#{version}/jemalloc-#{version}.tar.bz2",
        sha256: '5630650d5c1caab95d2f0898de4fe5ab8519dc680b04963b38bb425ef6a42d57'
 

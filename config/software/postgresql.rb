@@ -21,6 +21,8 @@ default_version '9.6.8'
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
 
+skip_transitive_dependency_licensing true
+
 dependency 'zlib'
 dependency 'openssl'
 dependency 'libedit'

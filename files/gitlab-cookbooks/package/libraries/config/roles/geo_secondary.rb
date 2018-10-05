@@ -36,6 +36,7 @@ module GeoSecondaryRole
     Gitlab['unicorn']['enable'] ||
       Gitlab['sidekiq']['enable'] ||
       Gitlab['sidekiq_cluster']['enable'] ||
+      Gitlab['gitaly']['enable'] ||
       Gitlab['geo_logcursor']['enable']
   end
 

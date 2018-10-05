@@ -48,4 +48,7 @@ build do
   command '../../../../bin/glide install ', env: env
   command "go build -ldflags '#{ldflags}'", env: env
   copy 'redis_exporter', "#{install_dir}/embedded/bin/"
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/redis-exporter.csv"
 end

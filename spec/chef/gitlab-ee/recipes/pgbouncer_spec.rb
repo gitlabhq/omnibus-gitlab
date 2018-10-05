@@ -88,8 +88,55 @@ describe 'gitlab-ee::pgbouncer' do
         expect(content).to match(/^ignore_startup_parameters = extra_float_digits$/)
         expect(content).to match(%r{^unix_socket_dir = /var/opt/gitlab/pgbouncer$})
         expect(content).to match(%r{^%include /var/opt/gitlab/pgbouncer/databases.ini})
+        expect(content).to match(/^unix_socket_mode = 0777$/)
+        expect(content).to match(/^client_tls_sslmode = disable$/)
+        expect(content).to match(/^client_tls_protocols = all$/)
+        expect(content).to match(/^client_tls_dheparams = auto$/)
+        expect(content).to match(/^client_tls_ecdhcurve = auto$/)
+        expect(content).to match(/^server_tls_sslmode = disable$/)
+        expect(content).to match(/^server_tls_protocols = all$/)
+        expect(content).to match(/^server_tls_ciphers = fast$/)
+        expect(content).to match(/^server_reset_query_always = 0$/)
+        expect(content).to match(/^server_check_query = select 1$/)
+        expect(content).to match(/^server_check_delay = 30$/)
+        expect(content).to match(/^syslog = 0$/)
+        expect(content).to match(/^syslog_facility = daemon$/)
+        expect(content).to match(/^syslog_ident = pgbouncer$/)
+        expect(content).to match(/^log_disconnections = 1$/)
+        expect(content).to match(/^log_pooler_errors = 1$/)
+        expect(content).to match(/^stats_period = 60$/)
+        expect(content).to match(/^verbose = 0$/)
+        expect(content).to match(/^server_lifetime = 3600$/)
+        expect(content).to match(/^server_connect_timeout = 15$/)
+        expect(content).to match(/^server_login_retry = 15$/)
+        expect(content).to match(/^query_timeout = 0$/)
+        expect(content).to match(/^query_wait_timeout = 120$/)
+        expect(content).to match(/^client_idle_timeout = 0$/)
+        expect(content).to match(/^client_login_timeout = 60$/)
+        expect(content).to match(/^autodb_idle_timeout = 3600$/)
+        expect(content).to match(/^suspend_timeout = 10$/)
+        expect(content).to match(/^idle_transaction_timeout = 0$/)
+        expect(content).to match(/^pkt_buf = 4096$/)
+        expect(content).to match(/^listen_backlog = 128$/)
+        expect(content).to match(/^sbuf_loopcnt = 5$/)
+        expect(content).to match(/^max_packet_size = 2147483647$/)
+        expect(content).to match(/^tcp_defer_accept = 0$/)
+        expect(content).to match(/^tcp_socket_buffer = 0$/)
+        expect(content).to match(/^tcp_keepalive = 1$/)
+        expect(content).to match(/^tcp_keepcnt = 0$/)
+        expect(content).to match(/^tcp_keepidle = 0$/)
+        expect(content).to match(/^tcp_keepintvl = 0$/)
+        expect(content).to match(/^disable_pqexec = 0$/)
         expect(content).not_to match(/^logfile =/)
         expect(content).not_to match(/^pidfile =/)
+        expect(content).not_to match(%r{^unix_socket_group =})
+        expect(content).not_to match(%r{^client_tls_ca_file =})
+        expect(content).not_to match(%r{^client_tls_cert_file =})
+        expect(content).not_to match(%r{^server_tls_ca_file =})
+        expect(content).not_to match(%r{^server_tls_key_file =})
+        expect(content).not_to match(%r{^server_tls_cert_file =})
+        expect(content).not_to match(%r{^max_db_connections =})
+        expect(content).not_to match(%r{^max_user_connections =})
       }
     end
 
@@ -100,11 +147,28 @@ describe 'gitlab-ee::pgbouncer' do
         stub_gitlab_rb(
           pgbouncer: {
             enable: true,
-            unix_socket_dir: '/fake/dir'
+            unix_socket_dir: '/fake/dir',
+            unix_socket_group: 'fakegroup',
+            client_tls_ca_file: '/fakecafile',
+            client_tls_cert_file: '/fakecertfile',
+            server_tls_ca_file: '/fakeservercafile',
+            server_tls_key_file: '/fakeserverkeyfile',
+            server_tls_cert_file: '/fakeservercertfile',
+            max_db_connections: 99999,
+            max_user_connections: 88888
           }
         )
-        expect(chef_run).to render_file(pgbouncer_ini)
-          .with_content(%r{^unix_socket_dir = /fake/dir$})
+        expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
+          expect(content).to match(%r{^unix_socket_dir = /fake/dir$})
+          expect(content).to match(%r{^unix_socket_group = fakegroup$})
+          expect(content).to match(%r{^client_tls_ca_file = /fakecafile$})
+          expect(content).to match(%r{^client_tls_cert_file = /fakecertfile$})
+          expect(content).to match(%r{^server_tls_ca_file = /fakeservercafile$})
+          expect(content).to match(%r{^server_tls_key_file = /fakeserverkeyfile$})
+          expect(content).to match(%r{^server_tls_cert_file = /fakeservercertfile$})
+          expect(content).to match(%r{^max_db_connections = 99999$})
+          expect(content).to match(%r{^max_user_connections = 88888$})
+        }
       end
 
       it 'reloads pgbouncer and starts pgbouncer if it is not running' do

@@ -36,6 +36,20 @@ describe 'gitlab::unicorn' do
       }
     end
   end
+
+  context 'with custom runtime_dir' do
+    before do
+      stub_gitlab_rb(runtime_dir: '/tmp/test-dir')
+    end
+
+    it 'uses the user-specific runtime_dir' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
+        .with_content { |content|
+          expect(content).to match(%r(export prometheus_run_dir='/tmp/test-dir/gitlab/unicorn'))
+          expect(content).to match(%r(mkdir -p /tmp/test-dir/gitlab/unicorn))
+        }
+    end
+  end
 end
 
 describe 'gitlab::unicorn' do

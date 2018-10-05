@@ -22,6 +22,8 @@ default_version '1.7.1'
 license 'Apache-2.0'
 license_file 'https://raw.githubusercontent.com/chef/mixlib-log/master/LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'rubygems'
 

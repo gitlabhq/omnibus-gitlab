@@ -1,6 +1,6 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: b6d67e8db5c594d4e2b3970d8536141e8afee51d
+  revision: 2ed670aa5187a2fc200c7853304a964de11c3927
   branch: gitlab-omnibus-v5.6.12
   specs:
     omnibus (5.6.12)
@@ -305,6 +305,7 @@ DEPENDENCIES
   rainbow (~> 2.2)
   rake
   rspec
+  rspec_junit_formatter
   rubocop
   rubocop-rspec
   thor (= 0.18.1)

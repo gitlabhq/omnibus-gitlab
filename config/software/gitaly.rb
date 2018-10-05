@@ -23,6 +23,8 @@ default_version version.print
 license 'MIT'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'bundler'
 dependency 'libicu'
@@ -54,4 +56,7 @@ build do
   ).each { |f| copy(f, ruby_install_dir) }
 
   make "install PREFIX=#{install_dir}/embedded", env: env
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/gitaly.csv"
 end

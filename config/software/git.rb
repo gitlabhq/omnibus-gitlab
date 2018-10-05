@@ -31,6 +31,8 @@ default_version '2.18.0'
 license 'GPL-2.0'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 # Runtime dependency
 dependency 'zlib'
 dependency 'openssl'

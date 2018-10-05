@@ -23,6 +23,8 @@ default_version '0.11'
 license 'Public-Domain'
 license_file 'http://docutils.sourceforge.net/COPYING.txt'
 
+skip_transitive_dependency_licensing true
+
 dependency 'python3'
 
 build do

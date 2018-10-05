@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '5.0.2'
+default_version '5.2.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: '4244b307fce419c2d913fa160839df83'
+       md5: '435f91eb6068b1676256b08704b152c6'
 
 relative_path 'mattermost'
 
@@ -29,6 +29,8 @@ license_path = File.join(install_dir, 'embedded/service/mattermost', license_nam
 
 license 'MIT with Trademark Protection'
 license_file license_path
+
+skip_transitive_dependency_licensing true
 
 build do
   move 'bin/mattermost', "#{install_dir}/embedded/bin/mattermost"
@@ -39,6 +41,7 @@ build do
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
   copy 'client', "#{install_dir}/embedded/service/mattermost/client"
   copy 'config/config.json', "#{install_dir}/embedded/service/mattermost/config.json.template"
+  copy 'prepackaged_plugins', "#{install_dir}/embedded/service/mattermost/prepackaged_plugins"
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }

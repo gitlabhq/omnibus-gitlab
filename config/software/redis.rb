@@ -19,14 +19,13 @@ name 'redis'
 license 'BSD-3-Clause'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 dependency 'config_guess'
-default_version '3.2.11'
+default_version '3.2.12'
 
-version '3.2.11' do
-  source md5: '27dd679aa8dc8ff6fbba48e82cfa6b42'
-end
-
-source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
+source url: "http://download.redis.io/releases/redis-#{version}.tar.gz",
+       md5: 'b005ef8161ee1e9f67d10af5bab28093'
 
 relative_path "redis-#{version}"
 

@@ -20,6 +20,8 @@ default_version 'v12.19.0'
 license 'Apache-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: 'https://github.com/chef-cookbooks/compat_resource.git'
 
 target_path = "#{install_dir}/embedded/cookbooks/compat_resource"

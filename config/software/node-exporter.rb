@@ -24,6 +24,8 @@ default_version version.print
 license 'APACHE-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source git: version.remote
 
 go_source = 'github.com/prometheus/node_exporter'
@@ -39,4 +41,7 @@ build do
 
   command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
+
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
+  copy "license.csv", "#{install_dir}/licenses/node-exporter.csv"
 end

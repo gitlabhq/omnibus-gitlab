@@ -26,6 +26,8 @@ source url: "https://www.x.org/releases/individual/util/util-macros-#{version}.t
 license 'MIT'
 license_file 'COPYING'
 
+skip_transitive_dependency_licensing true
+
 relative_path "util-macros-#{version}"
 
 build do

@@ -21,6 +21,9 @@ name 'gitlab-geo-psql'
 
 license 'Apache-2.0'
 license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
+
+skip_transitive_dependency_licensing true
+
 # This 'software' is self-contained in this file. Use the file contents
 # to generate a version string.
 default_version Digest::MD5.file(__FILE__).hexdigest
@@ -54,7 +57,7 @@ else
   privilege_drop="-u ${psql_user}"
 fi
 
-cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} -d ${psql_dbname} "$@"
+cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /usr/bin/env PGSSLCOMPRESSION=0 /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} -d ${psql_dbname} "$@"
        EOH
     end
   end

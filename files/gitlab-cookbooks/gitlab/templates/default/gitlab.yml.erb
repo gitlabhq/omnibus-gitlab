@@ -159,6 +159,19 @@ production: &base
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
+  ## Packages (maven repository so far) EE only
+  packages:
+    enabled: <%= @packages_enabled %>
+    # The location where build packages are stored (default: shared/packages).
+    storage_path: <%= @packages_storage_path %>
+    object_store:
+      enabled: <%= @packages_object_store_enabled %>
+      direct_upload: <%= @packages_object_store_direct_upload %>
+      background_upload: <%= @packages_object_store_background_upload %>
+      proxy_download: <%= @packages_object_store_proxy_download %>
+      remote_directory: <%= quote(@packages_object_store_remote_directory) %>
+      connection: <%= @packages_object_store_connection.to_json %>
+
   ## Container Registry
   registry:
     enabled: <%= @registry_enabled %>

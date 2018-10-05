@@ -36,6 +36,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_artifacts_dir
       parse_lfs_objects_dir
       parse_uploads_dir
+      parse_packages_dir
       parse_pages_dir
       parse_repository_storage
     end
@@ -110,12 +111,9 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
         return
       end
 
-      search_dirs =
-        if Gitlab['runtime_dir']
-          Gitlab['runtime_dir']
-        else
-          ['/run', '/dev/shm']
-        end
+      return if Gitlab['runtime_dir']
+
+      search_dirs = ['/run', '/dev/shm']
 
       search_dirs.each do |run_dir|
         fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]
@@ -147,6 +145,11 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def parse_uploads_dir
       Gitlab['gitlab_rails']['uploads_storage_path'] ||= public_path
+    end
+
+    def parse_packages_dir
+      # This requires the parse_shared_dir to be executed before
+      Gitlab['gitlab_rails']['packages_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'packages')
     end
 
     def parse_pages_dir

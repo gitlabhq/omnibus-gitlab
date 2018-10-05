@@ -41,6 +41,7 @@ describe 'gitlab-ee::sidekiq-cluster' do
           expect(content).to match(/process_commit,post_receive/)
           expect(content).to match(/gitlab_shell/)
           expect(content).not_to match(/--negate/)
+          expect(content).not_to match(/-m /)
         }
     end
   end
@@ -73,6 +74,23 @@ describe 'gitlab-ee::sidekiq-cluster' do
 
     it 'correctly renders out the sidekiq-cluster service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run").with_content(/\-i 10/)
+    end
+  end
+
+  context 'with max_concurrency set' do
+    before do
+      stub_gitlab_rb(sidekiq_cluster: {
+                       enable: true,
+                       max_concurrency: 100,
+                       queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+                     })
+    end
+
+    it 'correctly renders out the sidekiq-cluster service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
+        .with_content { |content|
+          expect(content).to match(/-m 100/)
+        }
     end
   end
 

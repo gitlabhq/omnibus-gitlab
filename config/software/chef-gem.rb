@@ -22,6 +22,8 @@ default_version '13.6.4'
 license 'Apache-2.0'
 license_file 'https://github.com/chef/chef/raw/master/LICENSE'
 
+skip_transitive_dependency_licensing true
+
 dependency 'ruby'
 dependency 'rubygems'
 dependency 'libffi'

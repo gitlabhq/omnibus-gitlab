@@ -34,6 +34,10 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
     end
 
+    it 'does not create the packages storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/packages')
+    end
+
     it 'does not create the uploads storage directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
@@ -68,6 +72,10 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the lfs storage directory' do
       expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
+    end
+
+    it 'creates the packages directory' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/packages')
     end
 
     it 'creates the uploads directory' do
@@ -298,6 +306,33 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'for settings regarding object storage for packages' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "packages"\s+connection:/)
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           packages_object_store_enabled: true,
+                           packages_object_store_direct_upload: true,
+                           packages_object_store_background_upload: false,
+                           packages_object_store_proxy_download: true,
+                           packages_object_store_remote_directory: 'mepmep',
+                           packages_object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+        end
+
+        include_examples 'sets the connection in YAML'
+      end
+    end
+
     describe 'pseudonymizer settings' do
       it 'allows not setting any values' do
         pseudonymizer_spec = Regexp.new([
@@ -394,6 +429,27 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'omniauth settings' do
+      context 'enabled setting' do
+        it 'defaults to nil (enabled)' do
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: \n/)
+        end
+
+        it 'can be explicitly enabled' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: true })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: true\n/)
+        end
+
+        it 'can be disabled' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: false })
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: false\n/)
+        end
+      end
+
       context 'sync email from omniauth provider is configured' do
         it 'sets the omniauth provider' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })
@@ -776,7 +832,7 @@ describe 'gitlab::gitlab-rails' do
     context 'by default' do
       it_behaves_like "enabled gitlab-rails env", "HOME", '\/var\/opt\/gitlab'
       it_behaves_like "enabled gitlab-rails env", "RAILS_ENV", 'production'
-      it_behaves_like "enabled gitlab-rails env", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '1000000'
+      it_behaves_like "enabled gitlab-rails env", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '2000000'
       it_behaves_like "enabled gitlab-rails env", "BUNDLE_GEMFILE", '\/opt\/gitlab\/embedded\/service\/gitlab-rails\/Gemfile'
       it_behaves_like "enabled gitlab-rails env", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
       it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'

@@ -33,13 +33,14 @@ by default:
 | <a name="gitlab-registry"></a>     GitLab Registry  | No            | Port             | X           | 5000                                   |
 | <a name="ldap"></a>                LDAP             | No            | Port             | X           | Depends on the component configuration |
 | <a name="kerberos"></a>            Kerberos         | No            | Port             | X           | 8443 or 8088                           |
-| <a name="omniauth"></a>            Omniauth         | No            | Port             | X           | Depends on the component configuration |
+| <a name="omniauth"></a>            Omniauth         | Yes           | Port             | X           | Depends on the component configuration |
 | <a name="smtp"></a>                SMTP             | No            | Port             | X           | 465                                    |
 | <a name="remote-syslog"></a>       Remote syslog    | No            | Port             | X           | 514                                    |
 | <a name="mattermost"></a>          Mattermost       | No            | Port             | X           | 8065                                   |
 | <a name="mattermost-web"></a>      Mattermost       | No            | Port             | X           | 80 or 443                              |
 | <a name="pgbouncer"></a>           PgBouncer        | No            | Port             | X           | 6432                                   |
 | <a name="consul"></a>              Consul           | No            | Port             | X           | 8300, 8500                             |
+
 Legend:
 
 * `Component` - Name of the component.

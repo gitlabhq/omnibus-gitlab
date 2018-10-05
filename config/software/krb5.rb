@@ -22,6 +22,8 @@ default_version '1.14.2'
 license 'MIT'
 license_file 'NOTICE'
 
+skip_transitive_dependency_licensing true
+
 source url: "http://web.mit.edu/kerberos/dist/krb5/#{version.rpartition('.').first}/krb5-#{version}.tar.gz",
        sha256: '6bcad7e6778d1965e4ce4af21d2efdc15b274c5ce5c69031c58e4c954cda8b27'
 

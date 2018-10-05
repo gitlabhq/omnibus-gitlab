@@ -15,6 +15,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq-cluster']['interval'] %>
       -i <%= node['gitlab']['sidekiq-cluster']['interval'] %> \
       <% end %>
+      <% if node['gitlab']['sidekiq-cluster']['max_concurrency'] %>
+      -m <%= node['gitlab']['sidekiq-cluster']['max_concurrency'] %> \
+      <% end %>
       <% node['gitlab']['sidekiq-cluster']['queue_groups'].each do |queue| %>
         <%= queue %> \
       <% end %>

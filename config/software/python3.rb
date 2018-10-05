@@ -31,6 +31,8 @@ dependency 'bzip2'
 license 'Python-2.0'
 license_file 'LICENSE'
 
+skip_transitive_dependency_licensing true
+
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
        sha256: '8b1a1ce043e132082d29a5d09f2841f193c77b631282a82f98895a5dbaba1639'
 

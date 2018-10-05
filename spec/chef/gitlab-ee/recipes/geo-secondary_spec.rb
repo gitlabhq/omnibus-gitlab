@@ -61,6 +61,49 @@ describe 'gitlab-ee::geo-secondary' do
     end
   end
 
+  context 'when gitaly is enabled' do
+    describe 'when gitlab_rails enable is not set' do
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+      before do
+        stub_gitlab_rb(geo_secondary_role: { enable: true },
+                       geo_secondary: { enable: true },
+                       geo_postgresql: { enable: false },
+                       unicorn: { enable: false },
+                       sidekiq: { enable: false },
+                       sidekiq_cluster: { enable: false },
+                       geo_logcursor: { enable: false },
+                       gitaly: { enable: true })
+      end
+
+      it 'ensures gitlab_rails is enabled' do
+        chef_run
+        expect(Gitlab['gitlab_rails']['enable']).to be true
+      end
+    end
+
+    describe 'when gitlab_rails enable is provided' do
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+      before do
+        stub_gitlab_rb(geo_secondary_role: { enable: true },
+                       geo_secondary: { enable: true },
+                       geo_postgresql: { enable: false },
+                       unicorn: { enable: false },
+                       sidekiq: { enable: false },
+                       sidekiq_cluster: { enable: false },
+                       geo_logcursor: { enable: false },
+                       gitaly: { enable: true },
+                       gitlab_rails: { enable: false })
+      end
+
+      it 'does not override gitlab_rails enable' do
+        chef_run
+        expect(Gitlab['gitlab_rails']['enable']).to be false
+      end
+    end
+  end
+
   context 'when geo_secondary_role is enabled but geo-postgresql is disabled' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: true },
