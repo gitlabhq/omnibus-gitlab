@@ -106,7 +106,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-listener="localhost:2345"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-verbose})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id=app_id})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-redirect-uri="https://pages.example.com/auth"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-redirect-uri="https://projects.pages.example.com/auth"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-server="https://gitlab.example.com"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=app_secret})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-secret=auth_secret})
