@@ -1146,14 +1146,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['pages_admin_address'] = 'pages.gitlab.example.com:5678'
 # gitlab_rails['pages_admin_certificate'] = '/etc/gitlab/pages-admin.crt'
 
-#! Pages access control
-gitlab_rails['pages_access_control'] = true
-gitlab_pages['gitlab_id'] = nil # Generated if not exists
-gitlab_pages['gitlab_secret'] = nil # Generated if not exists
-gitlab_pages['auth_redirect_uri'] = nil # Defaults to projects subdomain at pages_external_url and + '/auth'
-gitlab_pages['auth_server'] = nil # Defaults to external url
-gitlab_pages['auth_secret'] = nil # Generated if not exists
-
+##! Pages access control
+# gitlab_pages['gitlab_id'] = nil # Automatically generated if not present
+# gitlab_pages['gitlab_secret'] = nil # Generated if not present
+# gitlab_pages['auth_redirect_uri'] = nil # Defaults to projects subdomain of pages_external_url and + '/auth'
+# gitlab_pages['auth_server'] = nil # Defaults to external_url
+# gitlab_pages['auth_secret'] = nil # Generated if not present
 
 ################################################################################
 ## GitLab Pages NGINX

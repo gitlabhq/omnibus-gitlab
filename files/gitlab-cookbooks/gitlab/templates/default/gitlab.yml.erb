@@ -189,6 +189,7 @@ production: &base
   ## GitLab Pages
   pages:
     enabled: <%= @pages_enabled %>
+    access_control: <%= @pages_access_control %>
     path: <%= @pages_path %>
     host: <%= @pages_host %>
     port: <%= @pages_port %>

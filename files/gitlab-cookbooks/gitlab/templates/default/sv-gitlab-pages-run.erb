@@ -53,7 +53,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% if node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %>
     -artifacts-server-timeout=<%= node['gitlab']['gitlab-pages']['artifacts_server_timeout'] %>
     <% end %>
+    <% end %>
     \
+    <% if node['gitlab']['gitlab-pages']['access_control'] %>
     -auth-client-id=<%= node['gitlab']['gitlab-pages']['gitlab_id'] %> \
     -auth-client-secret=<%= node['gitlab']['gitlab-pages']['gitlab_secret'] %> \
     -auth-redirect-uri="<%= node['gitlab']['gitlab-pages']['auth_redirect_uri'] %>" \
