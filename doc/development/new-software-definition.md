@@ -23,6 +23,21 @@ project by a member of the Distribution team.  It should have the
 See other Software services in the directory for examples on how to include your
 software service.
 
+## Handling Licenses
+
+Most software repositories include a license file. Add the license using a patch
+file if it is not explicitly included. Software installed using a package manager
+such as `gem` or `pip` should also use this method.
+
+[Create patches](creating-patches.md) for licenses added manually and store them
+at a directory path with the naming convention
+`config/patches/SOFTWARE_NAME/license/VERSION_NUMBER/add-license-file.patch`.
+
+> Licenses can and do change over the lifetime of a project. This method
+> intentionally causes builds to fail reminding contributors to verify manually
+> installed licenses. If the license has not changed then `git mv` the `VERSION_NUMBER`
+> directory containing the patch file to the new `VERSION_NUMBER`.
+
 ## Add a dependency for the software definition to another component
 
 Add a `dependency` statement to the definition of the gitlab project found in

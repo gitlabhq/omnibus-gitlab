@@ -20,7 +20,7 @@ name 'remote-syslog'
 default_version '1.6.15'
 
 license 'MIT'
-license_file "https://raw.githubusercontent.com/papertrail/remote_syslog/#{version}/LICENSE"
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -28,6 +28,7 @@ dependency 'ruby'
 dependency 'rubygems'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
   gem "install remote_syslog -n #{install_dir}/embedded/bin --no-rdoc --no-ri -v #{version}", env: env
 end
