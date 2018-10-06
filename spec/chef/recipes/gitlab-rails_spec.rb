@@ -389,6 +389,41 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'pages settings' do
+      context 'pages access control is enabled' do
+        it 'sets the hint true' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              external_http: ['external_pages.example.com', 'localhost:9000'],
+              external_https: ['external_pages.example.com', 'localhost:9001'],
+              access_control: true
+            }
+          )
+
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pages:\s+enabled: true\s+access_control: true/)
+        end
+      end
+
+      context 'pages access control is disabled' do
+        it 'sets the hint false' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              external_http: ['external_pages.example.com', 'localhost:9000'],
+              external_https: ['external_pages.example.com', 'localhost:9001'],
+              access_control: false
+            }
+          )
+          expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/pages:\s+enabled: true\s+access_control: false/)
+        end
+      end
+    end
+
     context 'mattermost settings' do
       context 'mattermost is configured' do
         it 'exposes the mattermost host' do

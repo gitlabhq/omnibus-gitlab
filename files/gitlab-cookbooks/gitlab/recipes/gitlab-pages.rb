@@ -33,8 +33,12 @@ admin_secret_path = File.join(working_dir, "admin.secret")
   end
 end
 
-ruby_block "authorize pages with gitlab" do
-  GitlabPages.authorize_with_gitlab
+if node['gitlab']['gitlab-pages']['access_control']
+  ruby_block "authorize pages with gitlab" do
+    block do
+      GitlabPages.authorize_with_gitlab
+    end
+  end
 end
 
 file File.join(working_dir, "VERSION") do

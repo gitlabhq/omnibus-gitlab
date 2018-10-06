@@ -82,6 +82,16 @@ describe 'gitlab::gitlab-pages' do
       )
     end
 
+    it 'authorizes pages with gitlab' do
+      allow(GitlabPages).to receive(:authorize_with_gitlab)
+
+      expect(chef_run).to run_ruby_block('authorize pages with gitlab')
+        .at_converge_time
+      expect(GitlabPages).to receive(:authorize_with_gitlab)
+
+      chef_run.ruby_block('authorize pages with gitlab').block.call
+    end
+
     it 'correctly renders the pages service run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-proxy="localhost:8090"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-uid})
