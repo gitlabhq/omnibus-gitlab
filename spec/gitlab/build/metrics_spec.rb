@@ -4,6 +4,7 @@ require 'chef_helper'
 describe Build::Metrics do
   before do
     allow_any_instance_of(Kernel).to receive(:system).and_return(true)
+    allow(Build::Info).to receive(:package_download_url).and_return("https://example.com")
   end
 
   describe '.configure_gitlab_repo' do
@@ -28,7 +29,8 @@ describe Build::Metrics do
 
     describe 'when upgrade set' do
       it 'installs gitlab-ee pacakge but does not run reconfigure explicitly' do
-        expect_any_instance_of(Kernel).to receive(:system).with(/apt-get -y install gitlab-ee=1.2.3/)
+        expect_any_instance_of(Kernel).to receive(:system).with(/curl -q -o gitlab.deb/)
+        expect_any_instance_of(Kernel).to receive(:system).with(/dpkg -i gitlab.deb/)
         expect_any_instance_of(Kernel).not_to receive(:system).with(/runsvdir-start/)
         expect_any_instance_of(Kernel).not_to receive(:system).with(/gitlab-ctl reconfigure/)
 
