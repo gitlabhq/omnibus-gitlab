@@ -461,6 +461,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = false
 gitlab_rails['smtp_tls'] = true
 ```
 
+
 ### FastMail
 
 FastMail requires an
