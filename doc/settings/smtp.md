@@ -459,8 +459,6 @@ gitlab_rails['smtp_domain'] = "your domain"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = false
 gitlab_rails['smtp_tls'] = true
-gitlab_rails['gitlab_email_from'] = 'username@your domain'
-# gitlab_rails['gitlab_email_reply_to'] = 'username@your domain'
 ```
 
 ### FastMail
