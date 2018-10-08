@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Update libassuan to 2.5.1
 - Update gpgme to 1.10.0
 - Update gnupg to 2.2.10
+- Bump git to 2.18.1
 
 11.3.4
 
