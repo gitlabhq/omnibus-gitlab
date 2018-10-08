@@ -80,7 +80,7 @@ variables:
     - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
-    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml]"
+    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
   except:
     - schedules@gitlab-org/omnibus-gitlab
     - branches@gitlab/omnibus-gitlab
