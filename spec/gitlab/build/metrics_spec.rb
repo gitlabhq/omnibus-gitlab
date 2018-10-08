@@ -17,25 +17,23 @@ describe Build::Metrics do
   end
 
   describe '.install_package' do
-    describe 'when upgrade not set' do
-      it 'installs gitlab-ee pacakge and runs reconfigure explicitly' do
-        expect_any_instance_of(Kernel).to receive(:system).with(/apt-get -y install gitlab-ee=1.2.3/)
-        expect_any_instance_of(Kernel).to receive(:system).with(/runsvdir-start/)
-        expect_any_instance_of(Kernel).to receive(:system).with(/gitlab-ctl reconfigure/)
+    it 'installs gitlab-ee pacakge and runs reconfigure explicitly' do
+      expect_any_instance_of(Kernel).to receive(:system).with(/apt-get -y install gitlab-ee=1.2.3/)
+      expect_any_instance_of(Kernel).to receive(:system).with(/runsvdir-start/)
+      expect_any_instance_of(Kernel).to receive(:system).with(/gitlab-ctl reconfigure/)
 
-        described_class.install_package("1.2.3", upgrade: false)
-      end
+      described_class.install_package("1.2.3")
     end
+  end
 
-    describe 'when upgrade set' do
-      it 'installs gitlab-ee pacakge but does not run reconfigure explicitly' do
-        expect_any_instance_of(Kernel).to receive(:system).with(/curl -q -o gitlab.deb/)
-        expect_any_instance_of(Kernel).to receive(:system).with(/dpkg -i gitlab.deb/)
-        expect_any_instance_of(Kernel).not_to receive(:system).with(/runsvdir-start/)
-        expect_any_instance_of(Kernel).not_to receive(:system).with(/gitlab-ctl reconfigure/)
+  describe '.upgrade' do
+    it 'installs gitlab-ee pacakge but does not run reconfigure explicitly' do
+      expect_any_instance_of(Kernel).to receive(:system).with(/curl -q -o gitlab.deb/)
+      expect_any_instance_of(Kernel).to receive(:system).with(/dpkg -i gitlab.deb/)
+      expect_any_instance_of(Kernel).not_to receive(:system).with(/runsvdir-start/)
+      expect_any_instance_of(Kernel).not_to receive(:system).with(/gitlab-ctl reconfigure/)
 
-        described_class.install_package("1.2.3", upgrade: true)
-      end
+      described_class.upgrade_package
     end
   end
 
