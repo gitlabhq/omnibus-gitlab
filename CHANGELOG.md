@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Update gpgme to 1.10.0
 - Update gnupg to 2.2.10
 - Bump git to 2.18.1
+- Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
 
 11.3.4
 
