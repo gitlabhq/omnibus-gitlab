@@ -7,6 +7,31 @@ omnibus-gitlab repository.
 
 - Enable omniauth by default !2728
 - Update Mattermost to 5.3.1
+- Fix identification of Prometheus's rule directory !2736
+- Run geo_prune_event_log_worker_cron every 5min
+- Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
+- Remove recursive chown for public directory !2743
+- Update libpng to 1.6.35 !2746
+- Update redis to 3.2.12 !2750
+- Update libgcrypt to 1.8.3 !2747
+- Update npth version to 1.6
+- Update libgpg-error to 1.32
+- Update libassuan to 2.5.1
+- Update gpgme to 1.10.0
+- Update gnupg to 2.2.10
+- Bump git to 2.18.1
+
+11.3.4
+
+- Bump git to 2.18.1
+
+11.3.2
+
+- Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
+
+11.3.1
+
+- Update Mattermost to 5.2.2
 
 11.3.0
 

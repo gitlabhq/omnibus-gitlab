@@ -15,7 +15,7 @@
 #
 
 name 'gnupg'
-default_version '2.1.15'
+default_version '2.2.10'
 
 dependency 'libassuan'
 dependency 'npth'
@@ -29,14 +29,24 @@ license_file 'COPYING.LGPL3'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
-       sha256: 'c28c1a208f1b8ad63bdb6b88d252f6734ff4d33de6b54e38494b11d49e00ffdd'
+       sha256: '799dd37a86a1448732e339bd20440f4f5ee6e69755f6fd7a73ee8af30840c915'
 
 relative_path "gnupg-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  # For gnupg to build fine in Debian Wheezy and Centos ^
+  env['LDFLAGS'] << " -lrt"
+
+  config_flags = ""
+  # CentOS 6 doesn't have inotify, which will raise an error
+  # IN_EXCL_UNLINK undeclared. Hence disabling it explicitly.
+  if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
+    config_flags = "ac_cv_func_inotify_init=no"
+  end
+
   command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr", env: env
+    "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr #{config_flags}", env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env

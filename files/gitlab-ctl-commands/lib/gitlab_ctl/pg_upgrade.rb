@@ -1,3 +1,4 @@
+require 'optparse'
 require_relative 'util'
 
 module GitlabCtl
@@ -61,6 +62,27 @@ module GitlabCtl
 
     def start
       GitlabCtl::Util.run_command('gitlab-ctl start postgresql').error!
+    end
+
+    class << self
+      def parse_options(args)
+        options = {
+          tmp_dir: nil,
+          wait: true
+        }
+
+        OptionParser.new do |opts|
+          opts.on('-tDIR', '--tmp-dir=DIR', 'Storage location for temporary data') do |t|
+            options[:tmp_dir] = t
+          end
+
+          opts.on('-w', '--no-wait', 'Do not wait before starting the upgrade process') do
+            options[:wait] = false
+          end
+        end.parse!(args)
+
+        options
+      end
     end
   end
 end

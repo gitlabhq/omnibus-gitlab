@@ -17,7 +17,7 @@
 name 'cacerts'
 
 license 'MPL-2.0'
-license_file 'https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt'
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -33,6 +33,7 @@ end
 source url: "https://curl.haxx.se/ca/cacert-#{version.tr('.', '-')}.pem"
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   mkdir "#{install_dir}/embedded/ssl/certs"
 
   # Append the 1024bit Verisign certs so that S3 continues to work

@@ -16,7 +16,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! The default is to have no roles enabled, which results in GitLab running as an all-in-one instance.
 ##! Options:
 ##!   redis_sentinel_role redis_master_role redis_slave_role geo_primary_role geo_secondary_role
-##! For more deatils on each role, see:
+##! For more details on each role, see:
 ##! https://docs.gitlab.com/omnibus/roles/README.html#roles
 ##!
 # roles ['redis_sentinel_role', 'redis_master_role']
@@ -167,8 +167,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
-#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
-#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'host' => 's3.amazonaws.com',
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
@@ -187,8 +187,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
-#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
-#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'host' => 's3.amazonaws.com',
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
@@ -209,8 +209,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
 #   # 'host' => 's3.amazonaws.com',
-#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
-#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
@@ -400,7 +400,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['rate_limit_requests_per_period'] = 10
 # gitlab_rails['rate_limit_period'] = 60
 
-#### Change the initial default admin password and shared runner registraion tokens.
+#### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
 ####!   is created and seeded won't yield any change.**
 # gitlab_rails['initial_root_password'] = "password"
@@ -1366,9 +1366,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/pgbouncer_exporter.html
 ################################################################################
 
-# pgbouncer-exporter['enable'] = false
-# pgbouncer-exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
-# pgbouncer-exporter['listen_address'] = 'localhost:9188'
+# pgbouncer_exporter['enable'] = false
+# pgbouncer_exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+# pgbouncer_exporter['listen_address'] = 'localhost:9188'
 
 ################################################################################
 ## Prometheus Gitlab monitor
@@ -1472,7 +1472,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # gitlab_rails['geo_file_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
-# gitlab_rails['geo_prune_event_log_worker_cron'] = "0 */2 * * *"
+# gitlab_rails['geo_prune_event_log_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_primary_batch_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_secondary_scheduler_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] = "15 */6 * * *"
@@ -1512,8 +1512,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
 #   # # The below options configure an S3 compatible host instead of AWS
 #   # 'host' => 's3.amazonaws.com',
-#   # 'aws_signature_version' => 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
-#   # 'endpoint' => 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 

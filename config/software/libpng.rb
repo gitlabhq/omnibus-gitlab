@@ -15,7 +15,7 @@
 #
 
 name 'libpng'
-default_version '1.6.34'
+default_version '1.6.35'
 
 license 'Libpng'
 license_file 'LICENSE'
@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'zlib'
 
 source url: "https://download.sourceforge.net/libpng/libpng-#{version}.tar.gz",
-       sha256: '574623a4901a9969080ab4a2df9437026c8a87150dfd5c235e28c94b212964a7'
+       sha256: '2b82ab3e996803b80bc73206857e826a155d3ebb374e8eb03a87a63c6f672cf7'
 
 relative_path "libpng-#{version}"
 

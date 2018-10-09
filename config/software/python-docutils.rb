@@ -21,13 +21,14 @@ name 'python-docutils'
 default_version '0.11'
 
 license 'Public-Domain'
-license_file 'http://docutils.sourceforge.net/COPYING.txt'
+license_file 'COPYING.txt'
 
 skip_transitive_dependency_licensing true
 
 dependency 'python3'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
   command "#{install_dir}/embedded/bin/pip3 install --compile docutils==#{version}", env: env
   command "find #{install_dir}/embedded/lib/python3.4 -name '*.dist-info' -type d -print -exec rm -r {} +"
