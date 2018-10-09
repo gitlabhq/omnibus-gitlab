@@ -1,127 +1,193 @@
-# SSL settings
+# SSL Configuration
 
-Omnibus-gitlab ships with the official [CAcert.org](http://www.cacert.org/)
-collection of trusted root certification authorities which are used to verify
-certificate authenticity.
+## Available SSL Configuration Tasks
 
-For installations that use self-signed or custom certificates, Omnibus-gitlab
-provides a way to manage these certificates. For more technical details how
-this works, see the [details](#details-on-how-gitlab-and-ssl-work)
-at the bottom of this page.
+Omnibus-GitLab supports several common use cases for SSL configuration.
 
-## Install custom certificate authorities:
+1. Allow `https` connections to GitLab instance services
+1. Configure public certificate bundles for external resource connections
 
-Starting from GitLab version *8.9*, the omnibus-gitlab package will handle
-custom certificates.
+## Host Services
 
-1. Place your custom (Root CA) or a self-signed certificate in the
-`/etc/gitlab/trusted-certs/` directory;
-For example, `/etc/gitlab/trusted-certs/customcacert.pem`.
-**Note**: The certificate must be either **DER- or PEM-encoded**.
-1. Run `gitlab-ctl reconfigure`.
+Administrators can enable secure http using any method supported by a GitLab service.
 
-This will create a symlink in `/opt/gitlab/embedded/ssl/certs/` pointing to
-your custom certificate. The symlink name is the subject hash.
-**Warning** Any broken symlink found in `/opt/gitlab/embedded/ssl/certs` will be
-removed and any existing symlink will not be changed.
-If the directory contains valid certificates, they will be automatically moved
-to `/etc/gitlab/trusted-certs`. If the directory contains any other files,
-reconfigure run will fail with:
+| **Service** | **Manual SSL** | **Let's Encrypt** |
+|-|-|-|
+| Primary GitLab Instance Domain | [Yes](nginx.md#manually-configuring-https) | [Yes](#lets-encrypt-integration) |
+| Container Registry | [Yes](https://docs.gitlab.com/ce/administration/container_registry.html#configure-container-registry-under-its-own-domain) | [Yes](#lets-encrypt-integration) |
+| Mattermost | [Yes](https://docs.gitlab.com/omnibus/gitlab-mattermost/README.html#running-gitlab-mattermost-with-https) | [Yes](#lets-encrypt-integration) |
+| GitLab Pages | [Yes](https://docs.gitlab.com/ce/administration/pages/#wildcard-domains-with-tls-support) | No |
 
-```
-ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt/gitlab/embedded/ssl/certs to a different location and reconfigure again.
-```
+### [Let's Encrypt](https://letsencrypt.org) Integration
 
-Move the files that are not certificates out of `/opt/gitlab/embedded/ssl/certs`
-and run reconfigure once more.
+#### Primary GitLab Instance
 
-**WARNING** In GitLab version 8.9.0, 8.9.1 and 8.9.2, the directory that was used
-to hold the custom certificates was mistakenly set to `/etc/gitlab/ssl/trusted-certs/`.
-If you **do not** have any files inside of this directory, it is safe to remove it.
-If you do have custom certificates in there, move them to `/etc/gitlab/trusted-certs/`
-and run `sudo gitlab-ctl reconfigure`.
+> **Note**: Introduced in GitLab version ***10.5*** and disabled by default.
+> Enabled by default in GitLab version ***10.7*** and later if `external_url` is set with the *https* protocol
+> and no certificates are configured.
 
-[CAcert.org]: http://www.cacert.org/
+> **Caution**
+> 
+> Administrators installing or upgrading to GitLab version ***10.7*** or later and do not plan on using
+> **Let's Encrypt** should set the following in `/etc/gitlab/gitlab.rb` to disable:
+>
+> ```ruby
+> letsencrypt['enable'] = false
+> ```
 
-## Let's Encrypt Integration
+Add the following entries to `/etc/gitlab/gitlab.rb` to enable **Let's Encrypt**
+support for the primary domain:
 
-Omnibus-gitlab can automatically fetch and renew certificates from Let's Encrypt for you. Currently only the primary GitLab domain, and the registry are supported. Other services like pages, and Mattermost will be supported in a future release.
-
-### Enabling
-> **Note**: For GitLab 10.5 and 10.6, you will need to also set `letsencrypt['enable'] = true`.
-
-To enable, ensure your `external_url` specifies `https` as the protocol, and add the following to your `/etc/gitlab/gitlab.rb`
 ```ruby
+letsencrypt['enable'] = true                      # GitLab 10.5 and 10.6 require this option
+external_url "https://gitlab.example.com"	  # Must use https protocol
 letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
-While the contact information is optional, it is recommended. You will receive an email alert when your certificate is nearing its 3 month expiration.
+> **Maintenance Tip**
+>
+> Certificates issued by **Let's Encrypt** expire every ninety days. The optional `contact_emails`
+> setting causes an expiration alert to be sent to the configured address when that expiration date approaches.
 
-### Enabling for other services
+#### GitLab Components
 
-> **Note**: Available in GitLab 11.0 and onwards.
+> **Note**: Introduced in GitLab version ***11.0***
 
-#### Registry
+[Follow the steps to enable basic **Let's Encrypt** integration](#lets-encrypt-integration) and
+modify `/etc/gitlab/gitlab.rb` with any of the following that apply:
 
-We will automatically add the host address specified in the
-`registry_external_url` as an alternate name to the certificate managed by
-LetsEncrypt, and use the same certificate for both services.
-
-This will be enabled when the `registry_external_url` uses the `https` protocol,
-and the `registry_nginx['ssl_certificate']` is absent from your
-`/etc/gitlab/gitlab.rb`.
-
-#### Mattermost
-
-Similar to registry, `mattermost_external_url` will be added as an alternate
-name to the certificate maanged by LetsEncrypt. This is enabled when
-`mattermost_external_url` uses `https` protocol and no ssl certificate is
-specified for Mattermost (`mattermost_nginx['ssl_certificate']` in
-`/etc/gitlab/gitlab.rb`)
-
-### Disabling auto-configuration
-
-From 10.7 we will automatically use Let's Encrypt certificates if the `external_url` specifies `https`, the certificate files are absent, and the embedded nginx will be used to terminate ssl connections.
-
-To disable this, add the following to your `/etc/gitlab/gitlab.rb`
 ```ruby
-letsencrypt['enable'] = false
+registry_external_url "https://registry.example.com"     # container registry, must use https protocol
+mattermost_external_url "https://mattermost.example.com" # mattermost, must use https protocol
+#registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
 ```
 
-### Renewing
+> **Under the Hood**
+>
+> The **Let's Encrypt** certificate is created with the GitLab primary
+> instance as the primary name on the certificate. Additional services
+> such as the registry are added as alternate names to the same
+> certificate.
+>
+> Note in the example above, the primary domain is `gitlab.example.com` and
+> the registry domain is `registry.example.com`. Administrators do not need
+> to worry about setting up wildcard certificates.
 
-#### Automatic renewal
-> **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
+#### Automatic Let's Encrypt Renewal
 
-A scheduled task is set up by default for you to perform the renewal.
+> **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) ***10.7***.
 
-By default the renewal will be scheduled after midnight every 4th day. The minute is based on the hostname of your `external_url`, to distribute the load on the
-upstream Let's Encrypt servers. You can specify the minute explicitly using the `letsencrypt['auto_renew_minute']` setting.
+Default installations schedule renewals after midnight on every 4th day. The minute is determined by the value in `external_url` to help distribute the load
+on the upstream `Let's Encypt` servers.
 
-The renewal frequency can be configured by setting the desired schedule in `/etc/gitlab/gitlab.rb`. For example, every 7th day at 12:30 could be configured as below:
+Explicitly set renewal times by adding the following to `/etc/gitlab/gitlab.rb`:
 
 ```ruby
+# This example renews every 7th day at 12:30
 letsencrypt['auto_renew_hour'] = "12"
 letsencrypt['auto_renew_minute'] = "30"
 letsencrypt['auto_renew_day_of_month'] = "*/7"
 ```
 
-To disable auto-renewal add the following to `/etc/gitlab/gitlab.rb`:
+Disable automatic renewal with the following in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 letsencrypt['auto_renew'] = false
 ```
 
-#### Manual renewal
+#### Manual Let's Encrypt Renewal
 
-There are two commands that can be used to manually renew your Let's Encrypt certificates.
+Renew **Let's Encrypt** certificates manually using ***one*** of the following commands:
 
-1. `gitlab-ctl reconfigure`
-1. `gitlab-ctl renew-le-certs`
+```sh
+# gitlab-ctl reconfigure
+```
+```sh
+# gitlab-ctl renew-le-certs
+```
 
-Both commands require root privileges and will only generate a renewal request to Let's Encrypt if the certificates are close to the expiration date. Please consider [LE rate limits](https://letsencrypt.org/docs/rate-limits/) if you get an error during renewal.
+> **Tip**
+>
+> The above commands require root privileges and only generate a renewal if the certificate is close to expiration.
+> [Consider the upstream rate limits](https://letsencrypt.org/docs/rate-limits/) if encountering an error during renewal.
 
-## Troubleshooting
+## Connecting to External Resources
+
+Some environments connect to external resources for various tasks. Omnibus-GitLab
+allows these connections to use secure http (`https`).
+
+### Default Configuration
+
+Omnibus-GitLab ships with the official [CAcert.org](http://www.cacert.org/)
+collection of trusted root certification authorities which are used to verify
+certificate authenticity.
+
+### Other Certificate Authorities
+
+Omnibus-Gitlab supports connections to external services with
+self-signed certificates.
+
+> **Compatibility Note**
+>
+> Custom certificates were introduced in GitLab version **8.9**.
+
+> **Further Reading**
+> For installations that use self-signed certificates, Omnibus-GitLab
+> provides a way to manage these certificates. For more technical details how
+> this works, see the [details](#details-on-how-gitlab-and-ssl-work)
+> at the bottom of this page.
+
+#### Install Custom Public Certificates:
+
+1. Generate the ***PEM*** or ***DER*** encoded public certificate from your private key certificate.
+1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
+1. Run `gitlab-ctl reconfigure`.
+
+## Solving Problems
+
+### git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
+
+The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
+instead of **OpenSSL**.
+
+Add the following entry in `/etc/gitlab/gitlab.rb` to work around the
+[issue as reported](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701):
+
+```ruby
+gitlab_workhorse['env'] = {
+  'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+}
+```
+
+> **Note:**
+>
+> If you have installed GitLab to a path other than `/opt/gitlab/` then modify the entry above
+> with the correct path in your operating environment.
+
+### Reconfigure Fails Due to Certificates
+
+```sh
+ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt/gitlab/embedded/ssl/certs to a different location and reconfigure again.
+```
+
+Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid x509 certificates.
+
+> **Under the Hood**
+>
+> Running `gitlab-ctl reconfigure` constructs symlinks named from the subject hashes
+> of your custom public certificates and places them in `/opt/gitlab/embedded/ssl/certs/`.
+>
+> Broken symlinks in `/opt/gitlab/embedded/ssl/certs/` will be automatically removed.
+>
+> Files other than `cacert.pem` and `README.md` stored in
+> `/opt/gitlab/embedded/ssl/certs/` will be moved into the `/etc/gitlab/trusted-certs/`.
+
+### Custom Certificates Missing or Skipped
+
+GitLab versions ***8.9.0***, ***8.9.1***, and ***8.9.2*** all mistakenly used the
+`/etc/gitlab/ssl/trusted-certs/` directory. This directory is safe to remove if it
+is empty. If it still contains custom certificates then move them to `/etc/gitlab/trusted-certs/`
+and run `gitlab-ctl reconfigure`.
 
 If no symlinks are created in `/opt/gitlab/embedded/ssl/certs/` and you see
 the message "Skipping `cert.pem`" after running `gitlab-ctl reconfigure`, that
@@ -130,75 +196,31 @@ means there may be one of two issues:
 1. The file in `/etc/gitlab/ssl/trusted-certs/` is a symlink
 2. The file is not a valid PEM or DER-encoded certificate
 
-To test whether the certificate is in a valid PEM format, you can run
-`openssl` to decode the certificate. For example:
+Test the certificate's validity using the commands below:
 
-```
-/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
-```
-
-To test whether the certificate is in a valid DER format:
-
-```
-/opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
+```sh
+$ /opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
+$ /opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
 ```
 
-The output of a valid certificate will look something like the following:
-
-```
-Certificate:
-        Data:
-            Version: 1 (0x0)
-            Serial Number: 3578 (0xdfa)
-        Signature Algorithm: sha1WithRSAEncryption
-            Issuer: C=JP, ST=Tokyo, L=Chuo-ku, O=Frank4DD, OU=WebCert Support, CN=Frank4DD Web CA/emailAddress=support@frank4dd.com
-            Validity
-                Not Before: Aug 22 05:26:54 2012 GMT
-                Not After : Aug 21 05:26:54 2017 GMT
-            Subject: C=JP, ST=Tokyo, O=Frank4DD, CN=www.example.com
-            Subject Public Key Info:
-                Public Key Algorithm: rsaEncryption
-                    Public-Key: (512 bit)
-                    Modulus:
-                        00:9b:fc:66:90:79:84:42:bb:ab:13:fd:2b:7b:f8:
-                        de:15:12:e5:f1:93:e3:06:8a:7b:b8:b1:e1:9e:26:
-                        bb:95:01:bf:e7:30:ed:64:85:02:dd:15:69:a8:34:
-                        b0:06:ec:3f:35:3c:1e:1b:2b:8f:fa:8f:00:1b:df:
-                        07:c6:ac:53:07
-                    Exponent: 65537 (0x10001)
-        Signature Algorithm: sha1WithRSAEncryption
-             14:b6:4c:bb:81:79:33:e6:71:a4:da:51:6f:cb:08:1d:8d:60:
-             ec:bc:18:c7:73:47:59:b1:f2:20:48:bb:61:fa:fc:4d:ad:89:
-             8d:d1:21:eb:d5:d8:e5:ba:d6:a6:36:fd:74:50:83:b6:0f:c7:
-             1d:df:7d:e5:2e:81:7f:45:e0:9f:e2:3e:79:ee:d7:30:31:c7:
-             20:72:d9:58:2e:2a:fe:12:5a:34:45:a1:19:08:7c:89:47:5f:
-             4a:95:be:23:21:4a:53:72:da:2a:05:2f:2e:c9:70:f6:5b:fa:
-             fd:df:b4:31:b2:c1:4a:9c:06:25:43:a1:e6:b4:1e:7f:86:9b:
-             16:40
-```
-
-An invalid file will display something like:
-
-```
+Invalid certificate files produce the following output:
+```sh
 unable to load certificate
 140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
 ```
 
-### Let's Encrypt issues
+### **Let's Encrypt** Certificate signed by unknown authority
 
-#### Certificate signed by unknown authority issues
-
-The initial implementation of Let's Encrypt integration only used the certificate, and not the full certificate chain.
+The initial implementation of **Let's Encrypt** integration only used the certificate, not the full certificate chain.
 
 Starting in 10.5.4, the full certificate chain will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
 
-```shell
+```sh
 # rm /etc/gitlab/ssl/HOSTNAME*
 # gitlab-ctl reconfigure
 ```
 
 Where HOSTNAME is the hostname of the certificate.
-
 
 ## Details on how GitLab and SSL work
 
@@ -212,7 +234,7 @@ using the [c_rehash](https://www.openssl.org/docs/man1.1.0/apps/c_rehash.html)
 tool. For example, let's suppose we add `customcacert.pem` to
 `/etc/gitlab/trusted-certs/`:
 
-```
+```sh
 $ sudo ls -al /opt/gitlab/embedded/ssl/certs
 total 272
 drwxr-xr-x 2 root root   4096 Jul 12 04:19 .
