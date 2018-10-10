@@ -21,6 +21,8 @@ omnibus-gitlab repository.
 - Update gnupg to 2.2.10
 - Bump git to 2.18.1
 - Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
+- Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
+  prometheus-upgrade command !2733
 
 11.3.1
 

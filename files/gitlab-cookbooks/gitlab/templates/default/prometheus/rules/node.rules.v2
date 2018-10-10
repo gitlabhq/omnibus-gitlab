@@ -1,0 +1,36 @@
+groups:
+- name: node.rules
+  rules:
+  - record: instance:node_cpus:count
+    expr: count without(cpu, mode) (node_cpu{mode="idle"})
+  - record: instance:node_cpus:count
+    expr: count without(cpu, mode) (node_cpu_seconds_total{mode="idle"})
+  - record: instance_cpu:node_cpu_seconds_not_idle:rate5m
+    expr: sum without(mode) (rate(node_cpu{mode!="idle"}[5m]))
+  - record: instance_cpu:node_cpu_seconds_not_idle:rate5m
+    expr: sum without(mode) (rate(node_cpu_seconds_total{mode!="idle"}[5m]))
+  - record: instance_mode:node_cpu_seconds:rate5m
+    expr: sum without(cpu) (rate(node_cpu[5m]))
+  - record: instance_mode:node_cpu_seconds:rate5m
+    expr: sum without(cpu) (rate(node_cpu_seconds_total[5m]))
+  - record: instance:node_cpu_utilization:ratio
+    expr: sum without(mode) (instance_mode:node_cpu_seconds:rate5m{mode!="idle"})
+      / instance:node_cpus:count
+  - record: instance:node_filesystem_avail:ratio
+    expr: node_filesystem_avail_bytes / (node_filesystem_size_bytes > 0)
+  - alert: FilesystemAlmostFull
+    expr: instance:node_filesystem_avail:ratio * 100 < 5
+    for: 10m
+    annotations:
+      description: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on
+        {{ $labels.instance }} has {{ $value | printf '%.2f' }}% space available.
+      summary: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} is almost
+        full
+  - alert: FilesystemFullIn1Day
+    expr: predict_linear(node_filesystem_avail_bytes[6h], 24 * 3600) < 0
+    for: 30m
+    annotations:
+      description: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on
+        {{ $labels.instance }} will be full in the next 24 hours.
+      summary: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} will be
+        full within 24 hours
