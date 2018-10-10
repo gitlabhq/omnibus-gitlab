@@ -447,6 +447,21 @@ gitlab_rails['smtp_domain'] = "your domain"
 gitlab_rails['smtp_authentication'] = "login"
 ```
 
+### Aliyun Enterprise Mail with TLS (阿里企业邮箱)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.qiye.aliyun.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@your domain"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "your domain"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = true
+```
+
+
 ### FastMail
 
 FastMail requires an
