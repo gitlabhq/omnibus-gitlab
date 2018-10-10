@@ -145,8 +145,11 @@ class CertificateHelper
   end
 
   def update_permissions
-    file_list = Dir.glob(File.join(@trusted_certs_dir, '*'))
-    FileUtils.chmod(0755, file_list)
+    files_directories = Dir.glob(File.join(@trusted_certs_dir, '*'))
+
+    # Only operate on files
+    file_list = files_directories.reject { |f| File.directory?(f) }
+    FileUtils.chmod(0644, file_list)
   end
 
   def c_rehash

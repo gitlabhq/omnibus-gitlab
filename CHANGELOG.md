@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.4.0
 
 - Enable omniauth by default !2728
+- Update Mattermost to 5.3.1
 - Fix identification of Prometheus's rule directory !2736
 - Run geo_prune_event_log_worker_cron every 5min
 - Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
@@ -19,6 +20,7 @@ omnibus-gitlab repository.
 - Update gpgme to 1.10.0
 - Update gnupg to 2.2.10
 - Bump git to 2.18.1
+- Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
 
 11.3.1
 
