@@ -15,10 +15,14 @@
 #
 
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
+prometheus_helper = PrometheusHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
 prometheus_dir = node['gitlab']['prometheus']['home']
 prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
+
+binary, rule_file = prometheus_helper.binary_and_rules
 
 include_recipe 'gitlab::prometheus_user'
 
@@ -40,6 +44,13 @@ directory prometheus_log_dir do
   recursive true
 end
 
+link "Link prometheus executable to correct binary" do
+  target_file "#{node['package']['install-dir']}/embedded/bin/prometheus"
+  to "#{node['package']['install-dir']}/embedded/bin/#{binary}"
+
+  notifies :restart, 'service[prometheus]', :immediately if omnibus_helper.should_notify?("prometheus")
+end
+
 configuration = Prometheus.hash_to_yaml({
                                           'global' => {
                                             'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
@@ -59,7 +70,7 @@ file 'Prometheus config' do
   notifies :restart, 'service[prometheus]'
 end
 
-runtime_flags = PrometheusHelper.new(node).flags('prometheus')
+runtime_flags = prometheus_helper.flags('prometheus')
 runit_service 'prometheus' do
   options({
     log_directory: prometheus_log_dir,
@@ -77,7 +88,7 @@ if node['gitlab']['bootstrap']['enable']
 end
 
 template File.join(prometheus_rules_dir, 'node.rules') do
-  source 'prometheus/rules/node.rules.erb'
+  source "prometheus/rules/#{rule_file}"
   owner prometheus_user
   mode '0644'
   only_if { node['gitlab']['prometheus']['enable'] }
