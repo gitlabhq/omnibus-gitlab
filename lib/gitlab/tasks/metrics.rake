@@ -10,8 +10,8 @@ namespace :metrics do
 
       # upgrade argument decides if starting of runsv and reconfigure should
       # done explicitly
-      Build::Metrics.install_package(Build::Info.previous_version, upgrade: false)
-      Build::Metrics.install_package(Build::Info.release_version, upgrade: true)
+      Build::Metrics.install_package(Build::Info.previous_version)
+      Build::Metrics.upgrade_package
       duration = Build::Metrics.calculate_duration
       Build::Metrics.append_to_sheet(Build::Info.release_version, duration)
     end

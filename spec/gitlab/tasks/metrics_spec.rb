@@ -20,6 +20,7 @@ describe 'metrics', type: :rake do
 
       expect(Build::Metrics).not_to receive(:configure_gitlab_repo)
       expect(Build::Metrics).not_to receive(:install_package)
+      expect(Build::Metrics).not_to receive(:upgrade_package)
       expect(Build::Metrics).not_to receive(:calculate_duration)
       expect(Build::Metrics).not_to receive(:append_to_sheet)
     end
@@ -30,8 +31,8 @@ describe 'metrics', type: :rake do
       allow(Build::Metrics).to receive(:should_upgrade?).and_return(true)
 
       expect(Build::Metrics).to receive(:configure_gitlab_repo)
-      expect(Build::Metrics).to receive(:install_package).with("10.3.6-ee.0", upgrade: false)
-      expect(Build::Metrics).to receive(:install_package).with("10.4.0-ee.0", upgrade: true)
+      expect(Build::Metrics).to receive(:install_package).with("10.3.6-ee.0")
+      expect(Build::Metrics).to receive(:upgrade_package)
       expect(Build::Metrics).to receive(:calculate_duration).and_return(290)
       expect(Build::Metrics).to receive(:append_to_sheet).with('10.4.0-ee.0', 290)
 
