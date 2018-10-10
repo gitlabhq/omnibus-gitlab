@@ -646,6 +646,21 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 ```
 
+### Postmark
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.postmarkapp.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "your_api_token"
+gitlab_rails['smtp_password'] = "your_api_token"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
