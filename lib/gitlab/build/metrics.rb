@@ -10,15 +10,21 @@ module Build
         system("curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | bash")
       end
 
-      def install_package(version, upgrade: false)
+      def install_package(version)
         # Deleting RUBY and BUNDLE related env variables so rake tasks ran
         # during reconfigure won't use gems from builder image.
         ENV.delete_if { |name, _v| name =~ /^(RUBY|BUNDLE)/ }
-        system("EXTERNAL_URL='http://gitlab.example.com' apt-get -y install gitlab-ee=#{version}")
-        return if upgrade # If upgrade, the following will be handled automatically
 
+        system("EXTERNAL_URL='http://gitlab.example.com' apt-get -y install gitlab-ee=#{version}")
         system("/opt/gitlab/embedded/bin/runsvdir-start &")
         system("gitlab-ctl reconfigure")
+      end
+
+      def upgrade_package
+        # For the current version, use the package from S3 bucket and not depend
+        # upon the packagecloud repository.
+        system("curl -q -o gitlab.deb #{Build::Info.package_download_url}")
+        system("dpkg -i gitlab.deb")
       end
 
       def should_upgrade?
