@@ -59,6 +59,12 @@ namespace :build do
 
   desc "Trigger package and QA builds"
   task :trigger do
-    Build::OmnibusTrigger.invoke!.wait!
+    # We need to set the following variables to be able to post a comment with
+    # the "downstream" pipeline on the commit under test
+    ENV['TOP_UPSTREAM_SOURCE_PROJECT'] ||= ENV['CI_PROJECT_PATH']
+    ENV['TOP_UPSTREAM_SOURCE_JOB'] ||= ENV['CI_JOB_URL']
+    ENV['TOP_UPSTREAM_SOURCE_SHA'] ||= ENV['CI_COMMIT_SHA']
+
+    Build::OmnibusTrigger.invoke!(post_comment: true).wait!
   end
 end

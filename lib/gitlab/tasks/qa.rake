@@ -62,7 +62,7 @@ namespace :qa do
   desc "Run QA tests"
   task :test do
     image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
-    Build::QATrigger.invoke!(image: image_address).wait!
+    Build::QATrigger.invoke!(image: image_address, post_comment: true).wait!
   end
 
   namespace :ha do
