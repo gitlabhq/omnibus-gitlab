@@ -33,12 +33,13 @@ admin_secret_path = File.join(working_dir, "admin.secret")
   end
 end
 
-if node['gitlab']['gitlab-pages']['access_control']
-  ruby_block "authorize pages with gitlab" do
-    block do
-      GitlabPages.authorize_with_gitlab
-    end
+ruby_block "authorize pages with gitlab" do
+  block do
+    GitlabPages.authorize_with_gitlab
   end
+
+  not_if { node['gitlab']['gitlab-pages']['gitlab_id'] && node['gitlab']['gitlab-pages']['gitlab_secret'] }
+  only_if { node['gitlab']['gitlab-pages']['access_control'] }
 end
 
 file File.join(working_dir, "VERSION") do
@@ -59,5 +60,6 @@ runit_service 'gitlab-pages' do
   options({
     log_directory: log_directory
   }.merge(params))
+  variables(lazy { node['gitlab']['gitlab-pages'].to_hash })
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end

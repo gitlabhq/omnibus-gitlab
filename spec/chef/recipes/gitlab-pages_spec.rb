@@ -53,6 +53,30 @@ describe 'gitlab::gitlab-pages' do
     end
   end
 
+  context 'with access control without id and secret' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: {
+          log_verbose: true,
+          auth_secret: 'auth_secret',
+          access_control: true
+        }
+      )
+    end
+
+    it 'authorizes pages with gitlab' do
+      allow(GitlabPages).to receive(:authorize_with_gitlab)
+
+      expect(chef_run).to run_ruby_block('authorize pages with gitlab')
+        .at_converge_time
+      expect(GitlabPages).to receive(:authorize_with_gitlab)
+
+      chef_run.ruby_block('authorize pages with gitlab').block.call
+    end
+  end
+
   context 'with user settings' do
     before do
       stub_gitlab_rb(
@@ -82,14 +106,8 @@ describe 'gitlab::gitlab-pages' do
       )
     end
 
-    it 'authorizes pages with gitlab' do
-      allow(GitlabPages).to receive(:authorize_with_gitlab)
-
-      expect(chef_run).to run_ruby_block('authorize pages with gitlab')
-        .at_converge_time
-      expect(GitlabPages).to receive(:authorize_with_gitlab)
-
-      chef_run.ruby_block('authorize pages with gitlab').block.call
+    it 'skip authorize pages with gitlab when id and secret exists' do
+      expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
     end
 
     it 'correctly renders the pages service run file' do
@@ -157,6 +175,10 @@ describe 'gitlab::gitlab-pages' do
         pages_external_url: 'https://pages.example.com',
         gitlab_pages: { access_control: false }
       )
+    end
+
+    it 'skip authorize pages with gitlab if access control disabled' do
+      expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
     end
 
     it 'correctly renders the pages service run file' do
