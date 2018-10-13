@@ -42,6 +42,13 @@ ruby_block "authorize pages with gitlab" do
   only_if { node['gitlab']['gitlab-pages']['access_control'] }
 end
 
+# Options may have changed in the previous step
+ruby_block "re-populate GitLab Pages configuration options" do
+  block do
+    node.consume_attributes(Gitlab.hyphenate_config_keys)
+  end
+end
+
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
   notifies :restart, "service[gitlab-pages]"
@@ -60,6 +67,5 @@ runit_service 'gitlab-pages' do
   options({
     log_directory: log_directory
   }.merge(params))
-  variables(lazy { node['gitlab']['gitlab-pages'].to_hash })
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end

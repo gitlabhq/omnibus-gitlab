@@ -67,13 +67,22 @@ describe 'gitlab::gitlab-pages' do
     end
 
     it 'authorizes pages with gitlab' do
-      allow(GitlabPages).to receive(:authorize_with_gitlab)
+      allow(GitlabPages).to receive(:authorize_with_gitlab) {
+        Gitlab['gitlab_pages']['gitlab_secret'] = 'app_secret'
+        Gitlab['gitlab_pages']['gitlab_id'] = 'app_id'
+      }
 
       expect(chef_run).to run_ruby_block('authorize pages with gitlab')
+        .at_converge_time
+      expect(chef_run).to run_ruby_block('re-populate GitLab Pages configuration options')
         .at_converge_time
       expect(GitlabPages).to receive(:authorize_with_gitlab)
 
       chef_run.ruby_block('authorize pages with gitlab').block.call
+      chef_run.ruby_block('re-populate GitLab Pages configuration options').block.call
+
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id=app_id})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=app_secret})
     end
   end
 
