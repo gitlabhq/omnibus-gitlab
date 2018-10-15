@@ -197,9 +197,9 @@ for the changes to take effect.
 ## Using a non-bundled web-server
 
 By default, omnibus-gitlab installs GitLab with bundled Nginx.
-Omnibus-gitlab allows webserver access through user `gitlab-www` which resides
+Omnibus-gitlab allows webserver access through the `gitlab-www` user, which resides
 in the group with the same name. To allow an external webserver access to
-GitLab, external webserver user needs to be added `gitlab-www` group.
+GitLab, the external webserver user needs to be added to the `gitlab-www` group.
 
 To use another web server like Apache or an existing Nginx installation you
 will have to perform the following steps:
@@ -238,12 +238,12 @@ will have to perform the following steps:
 
 1. **Add the non-bundled web-server to the list of trusted proxies**
 
-    Normally, omnibus-gitlab defaults the list of trusted proxies to the what was
-    configured in the real_ip module for the bundled NGINX.
+    Normally, omnibus-gitlab defaults the list of trusted proxies to what was
+    configured in the `real_ip` module for the bundled NGINX.
 
     For non-bundled web-servers the list needs to be configured directly, and should
-    include the IP address of your web-server if it not on the same machine as GitLab.
-    Otherwise users will be shown as being signed in from your web-server's IP address.
+    include the IP address of your web-server if it is not on the same machine as GitLab.
+    Otherwise, users will be shown as being signed in from your web-server's IP address.
 
     ```ruby
     gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
