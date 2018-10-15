@@ -37,7 +37,7 @@ elif [ "$(id -n -u)" = "${gitlab_user}" ] ; then
   # root!).
   privilege_drop=''
 else
-  privilege_drop="-u ${gitlab_user}"
+  privilege_drop="-u ${gitlab_user}:${gitlab_group}"
 fi
 
-exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env ${privilege_drop} -U ${gitlab_user} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
+exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env ${privilege_drop} -U ${gitlab_user}:${gitlab_group} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
