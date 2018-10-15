@@ -18,7 +18,7 @@ name 'awesome_print'
 default_version '1.8.0'
 
 license 'MIT'
-license_file "https://github.com/awesome-print/awesome_print/blob/v#{version}/LICENSE"
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -26,6 +26,7 @@ dependency 'ruby'
 dependency 'rubygems'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install awesome_print' \

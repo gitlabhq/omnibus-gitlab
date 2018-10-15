@@ -24,9 +24,17 @@ omnibus-gitlab repository.
 - Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
   prometheus-upgrade command !2733
 
-11.3.1
+11.3.4
+
+- Bump git to 2.18.1
+
+11.3.2
 
 - Update pgbouncer cookbook to not regenerate databases.ini on hosts using consul watchers
+
+11.3.1
+
+- Update Mattermost to 5.2.2
 
 11.3.0
 

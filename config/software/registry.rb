@@ -24,7 +24,7 @@ version = Gitlab::Version.new('registry', '2.6.2-with-patch')
 default_version version.print(false)
 
 license 'Apache-2.0'
-license_file "https://gitlab.com/gitlab-org/build/omnibus-mirror/distribution/raw/#{version.print(false)}/LICENSE"
+license_file 'LICENSE'
 
 source git: version.remote
 

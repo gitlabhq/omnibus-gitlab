@@ -156,6 +156,13 @@ variables:
     paths:
       - pkg/
   dependencies: []
+  cache:
+    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
   retry: 1
 
 .tag_template: &tag_build
@@ -241,6 +248,13 @@ dependency_scanning:
     paths:
       - pkg/
   dependencies: []
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
   retry: 1
 
 ### This stage is used for uploading packages
@@ -261,6 +275,10 @@ dependency_scanning:
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
   retry: 1
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+      - gems
   tags:
   - promotion
 
@@ -277,6 +295,10 @@ dependency_scanning:
   only:
     - tags@gitlab/omnibus-gitlab
   when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+      - gems
   tags:
   - promotion
 
@@ -322,15 +344,15 @@ rubocop:
     - gems
 
 docs-check-links:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:nanoc-bootstrap-ruby-2.4-alpine"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-docs-lint"
   stage: check
   cache: {}
   dependencies: []
   before_script: []
   <<: *dedicated-runner
   script:
-    - mv doc/ /nanoc/content/
-    - cd /nanoc
+    - mv doc/ /tmp/gitlab-docs/content/
+    - cd /tmp/gitlab-docs
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
@@ -890,24 +912,10 @@ HA-Validate-Tagged:
 
 Raspberry-Pi-2-Jessie:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
   <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
   <<: *rpi_tag_build
 
 ## Building from branch
@@ -1039,24 +1047,10 @@ HA-Validate-Nightly:
 
 Raspberry-Pi-2-Jessie-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
   <<: *rpi_branch_build
 
 Raspberry-Pi-2-Stretch-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
   <<: *rpi_branch_build
 
 notify:slack-fail:

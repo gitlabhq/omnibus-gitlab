@@ -20,7 +20,7 @@ name 'omnibus-ctl'
 default_version '1b96ac486636cac987e5b464810bb3ff673a93fe'
 
 license 'Apache-2.0'
-license_file 'https://github.com/chef/omnibus-ctl/raw/master/LICENSE'
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 

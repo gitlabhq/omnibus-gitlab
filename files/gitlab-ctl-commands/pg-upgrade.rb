@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 
-require 'optparse'
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
@@ -23,7 +22,8 @@ INST_DIR = "#{base_path}/embedded/postgresql".freeze
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
-  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_gitlab_options[:tmp_dir])
+  options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, options[:tmp_dir])
 
   maintenance_mode('enable')
 
@@ -57,7 +57,8 @@ end
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            2 do |_cmd_name|
-  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, parse_gitlab_options[:tmp_dir])
+  options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, options[:tmp_dir])
 
   running_version = @db_worker.fetch_running_version
 
@@ -115,7 +116,12 @@ add_command_under_category 'pg-upgrade', 'database',
 
   # Wait for processes to settle, and give use one last chance to change their
   # mind
-  delay_for(30) if parse_gitlab_options[:wait]
+  log "Waiting 30 seconds to ensure tasks complete before PostgreSQL upgrade."
+  status = GitlabCtl::Util.delay_for(30) if options[:wait]
+  unless status
+    maintenance_mode('disable')
+    Kernel.exit(0)
+  end
 
   # Get the existing locale before we move on
   begin
@@ -240,25 +246,6 @@ add_command_under_category 'pg-upgrade', 'database',
   Kernel.exit 0
 end
 
-def parse_gitlab_options
-  options = {
-    tmp_dir: nil,
-    wait: true
-  }
-
-  OptionParser.new do |opts|
-    opts.on('-tDIR', '--tmp-dir=DIR', 'Storage location for temporary data') do |t|
-      options[:tmp_dir] = t
-    end
-
-    opts.on('-w', '--no-wait', 'Do not wait before starting the upgrade process') do
-      options[:wait] = false
-    end
-  end.parse!(ARGV)
-
-  options
-end
-
 def version_from_manifest(software)
   if @versions.nil?
     @versions = JSON.parse(File.read("#{base_path}/version-manifest.json"))
@@ -340,17 +327,4 @@ def maintenance_mode(command)
       run_sv_command_for_service(sv_cmd, svc)
     end
   end
-end
-
-def delay_for(seconds)
-  log "Waiting #{seconds} seconds to ensure tasks complete before PostgreSQL upgrade"
-  log 'Please hit Ctrl-C now if you want to cancel the upgrade'
-  seconds.times do
-    $stdout.print '.'
-    sleep 1
-  end
-rescue Interrupt
-  log "\nInterrupt received, cancelling upgrade"
-  maintenance_mode('disable')
-  Kernel.exit 0
 end
