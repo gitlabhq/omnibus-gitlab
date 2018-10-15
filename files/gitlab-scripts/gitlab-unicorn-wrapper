@@ -99,7 +99,7 @@ function is_unicorn
 
 function start_unicorn_master
 {
-  chpst -e /opt/gitlab/etc/${rails_app}/env -U ${user} \
+  chpst -e /opt/gitlab/etc/${rails_app}/env -U ${user}:${group} \
     /opt/gitlab/embedded/bin/bundle exec unicorn \
       -D \
       -E ${environment} \
