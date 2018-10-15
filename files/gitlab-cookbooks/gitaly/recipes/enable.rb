@@ -68,6 +68,7 @@ runit_service 'gitaly' do
   down node['gitaly']['ha']
   options({
     user: account_helper.gitlab_user,
+    groupname: account_helper.gitlab_group,
     working_dir: working_dir,
     env_dir: env_directory,
     bin_path: node['gitaly']['bin_path'],
