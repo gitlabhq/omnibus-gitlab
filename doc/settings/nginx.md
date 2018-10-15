@@ -5,7 +5,7 @@
 By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
 gitlab.example.com, there are two options:
 
-1. [Free and automated HTTPS with Let's Encrypt](ssl.md#let-39-s-encrypt-integration)
+1. [Free and automated HTTPS with Let's Encrypt](ssl.md#lets-encrypt-integration)
 1. [Manually configuring HTTPS with your own certificates](#manually-configuring-https)
 
 ### Warning
@@ -26,15 +26,15 @@ external_url "https://gitlab.example.com"
 ```
 
 Because the hostname in our example is 'gitlab.example.com', omnibus-gitlab
-will look for key and certificate files called
+will look for private key and public certificate files called
 `/etc/gitlab/ssl/gitlab.example.com.key` and
 `/etc/gitlab/ssl/gitlab.example.com.crt`, respectively. Create the
 `/etc/gitlab/ssl` directory and copy your key and certificate there.
 
-```
-sudo mkdir -p /etc/gitlab/ssl
-sudo chmod 700 /etc/gitlab/ssl
-sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
+```sh
+$ sudo mkdir -p /etc/gitlab/ssl
+$ sudo chmod 700 /etc/gitlab/ssl
+$ sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
 ```
 
 Now run `sudo gitlab-ctl reconfigure`. When the reconfigure finishes your
