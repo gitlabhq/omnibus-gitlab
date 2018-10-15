@@ -20,7 +20,7 @@ name 'chef-gem'
 default_version '13.6.4'
 
 license 'Apache-2.0'
-license_file 'https://github.com/chef/chef/raw/master/LICENSE'
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -30,6 +30,7 @@ dependency 'libffi'
 dependency 'rb-readline'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install chef' \

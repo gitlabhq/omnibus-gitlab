@@ -18,7 +18,7 @@ name 'rubygems'
 default_version '2.7.6'
 
 license 'MIT'
-license_file 'https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE.txt'
+license_file 'LICENSE.txt'
 
 skip_transitive_dependency_licensing true
 
@@ -79,5 +79,6 @@ build do
     # Installing direct from rubygems:
     # If there is no version, this will get latest.
     gem "update --system #{version}", env: env
+    patch source: "license/#{version}/add-license-file.patch"
   end
 end

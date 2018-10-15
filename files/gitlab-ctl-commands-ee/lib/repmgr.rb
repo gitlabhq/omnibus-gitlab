@@ -1,3 +1,4 @@
+require 'optparse'
 require 'mixlib/shellout'
 require 'timeout'
 
@@ -25,6 +26,40 @@ class Repmgr
 
   def execute
     @command.send(subcommand, @args)
+  end
+
+  class << self
+    def parse_options(args)
+      options = {
+        node: nil,
+        wait: true,
+        verbose: ''
+      }
+
+      OptionParser.new do |opts|
+        opts.on('-w', '--no-wait', 'Do not wait before starting the setup process') do
+          options[:wait] = false
+        end
+
+        opts.on('-v', '--verbose', 'Run repmgr with verbose option') do
+          options[:verbose] = '-v'
+        end
+
+        opts.on('-n', '--node NUMBER', 'The node number to operate on') do |n|
+          options[:node] = n
+        end
+
+        opts.on('--host HOSTNAME', 'The host name to operate on') do |h|
+          options[:host] = h
+        end
+
+        opts.on('--user USER', 'The database user to connect as') do |u|
+          options[:user] = u
+        end
+      end.parse!(args)
+
+      options
+    end
   end
 
   class Base

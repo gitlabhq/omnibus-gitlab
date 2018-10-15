@@ -19,13 +19,14 @@ name 'bundler'
 default_version '1.16.2'
 
 license 'MIT'
-license_file 'https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md'
+license_file 'LICENSE.MD'
 
 skip_transitive_dependency_licensing true
 
 dependency 'rubygems'
 
 build do
+  patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   v_opts = "--version '#{version}'" unless version.nil?
