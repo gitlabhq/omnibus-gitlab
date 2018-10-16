@@ -9,8 +9,8 @@ exec 2>&1
 cd <%= node['gitlab']['gitlab-workhorse']['dir'] %>
 
 exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
-  -U <%= node['gitlab']['user']['username'] %> \
-  -u <%= node['gitlab']['user']['username'] %> \
+  -U <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
+  -u <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   /opt/gitlab/embedded/bin/gitlab-workhorse \
     -listenNetwork <%= node['gitlab']['gitlab-workhorse']['listen_network'] %> \
     -listenUmask <%= node['gitlab']['gitlab-workhorse']['listen_umask'] %> \
