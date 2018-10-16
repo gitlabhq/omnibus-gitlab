@@ -74,6 +74,10 @@ class AccountHelper
     node['gitlab']['prometheus']['username']
   end
 
+  def prometheus_group
+    node['gitlab']['prometheus']['group']
+  end
+
   def consul_user
     node['consul']['user']
   end
@@ -103,6 +107,7 @@ class AccountHelper
       #{postgresql_group}
       #{mattermost_group}
       #{registry_group}
+      #{prometheus_group}
     )
   end
 end
