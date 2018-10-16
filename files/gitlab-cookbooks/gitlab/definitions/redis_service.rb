@@ -21,13 +21,14 @@ define :redis_service, socket_group: nil do
   redis_dir = node['gitlab'][svc]['dir']
   redis_log_dir = node['gitlab'][svc]['log_directory']
   redis_user = AccountHelper.new(node).redis_user
+  redis_group = AccountHelper.new(node).redis_group
   omnibus_helper = OmnibusHelper.new(node)
 
   account 'user and group for redis' do
     username redis_user
     uid node['gitlab'][svc]['uid']
-    ugid redis_user
-    groupname redis_user
+    ugid redis_group
+    groupname redis_group
     gid node['gitlab'][svc]['gid']
     shell node['gitlab'][svc]['shell']
     home node['gitlab'][svc]['home']

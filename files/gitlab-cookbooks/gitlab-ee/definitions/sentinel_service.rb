@@ -26,14 +26,15 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
   sentinel_log_dir = sentinel['log_directory']
 
   redis_user = AccountHelper.new(node).redis_user
+  redis_group = AccountHelper.new(node).redis_group
 
   omnibus_helper = OmnibusHelper.new(node)
 
   account 'user and group for sentinel' do
     username redis_user
     uid node['gitlab']['redis']['uid']
-    ugid redis_user
-    groupname redis_user
+    ugid redis_group
+    groupname redis_group
     gid node['gitlab']['redis']['gid']
     shell node['gitlab']['redis']['shell']
     home node['gitlab']['redis']['home']
@@ -60,6 +61,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
       options(
         {
           user: redis['username'],
+          groupname: redis['group'],
           config_path: config_path,
           log_directory: sentinel_log_dir
         }.merge(params)

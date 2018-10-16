@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.5.0
+
+- Add option to configure redis group !2784
+
 11.4.0
 
 - Enable omniauth by default !2728
