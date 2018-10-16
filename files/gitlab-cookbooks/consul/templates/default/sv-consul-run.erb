@@ -7,7 +7,7 @@ exec 2>&1
 cd <%= @options[:dir] %>
 
 exec chpst -P \
--U <%= @options[:user] %> \
--u <%= @options[:user] %> \
+-U <%= @options[:user] %>:<%= @options[:groupname] %> \
+-u <%= @options[:user] %>:<%= @options[:groupname] %> \
 /opt/gitlab/embedded/bin/consul agent -config-file <%= @options[:config_file] %> \
   -config-dir <%= @options[:config_dir] %> -data-dir <%= @options[:data_dir] %>

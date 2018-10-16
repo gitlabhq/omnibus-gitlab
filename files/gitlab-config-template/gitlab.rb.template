@@ -1817,6 +1817,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['enable'] = false
 # consul['dir'] = '/var/opt/gitlab/consul'
 # consul['user'] = 'gitlab-consul'
+# consul['group'] = 'gitlab-consul'
 # consul['config_file'] = '/var/opt/gitlab/consul/config.json'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
 # consul['data_dir'] = '/var/opt/gitlab/consul/data'
