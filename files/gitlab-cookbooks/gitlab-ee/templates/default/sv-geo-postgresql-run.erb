@@ -1,4 +1,4 @@
 #!/bin/sh
 exec 2>&1
 <%= render('mount_point_check.erb') %>
-exec chpst -P -U <%= node['gitlab']['postgresql']['username'] %> -u <%= node['gitlab']['postgresql']['username'] %> /opt/gitlab/embedded/bin/postgres -D <%= File.join(node['gitlab']['geo-postgresql']['dir'], 'data') %>
+exec chpst -P -U <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> -u <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> /opt/gitlab/embedded/bin/postgres -D <%= File.join(node['gitlab']['geo-postgresql']['dir'], 'data') %>

@@ -397,6 +397,7 @@ default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
 default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
+default['gitlab']['postgresql']['group'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
