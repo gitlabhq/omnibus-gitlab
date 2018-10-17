@@ -124,7 +124,8 @@ build do
     'RAILS_ENV' => 'production',
     'PATH' => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
     'USE_DB' => 'false',
-    'SKIP_STORAGE_VALIDATION' => 'true'
+    'SKIP_STORAGE_VALIDATION' => 'true',
+    'NODE_OPTIONS' => '--max_old_space_size=3584'
   }
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if ENV['NO_SOURCEMAPS']
   command 'yarn install --pure-lockfile --production --cache-folder .yarn-cache'
