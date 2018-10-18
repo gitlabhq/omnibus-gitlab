@@ -99,7 +99,7 @@ module GitlabPages
         SecretsHelper.write_to_gitlab_secrets
         info('Updated the gitlab-secrets.json file.')
       else
-        warn('Something went wrong while executing gitlab-rails runner command to get or create the app id and secret.')
+        warn('Something went wrong while executing gitlab-rails runner command to get or create the app ID and secret.')
       end
     end
 
