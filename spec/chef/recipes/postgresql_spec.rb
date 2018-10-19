@@ -34,7 +34,7 @@ psql_port='5432'
       .with_content(gitlab_psql_rc)
   end
 
-  it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root'
+  it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
 
   context 'renders postgresql.conf' do
     it 'includes runtime.conf in postgresql.conf' do
@@ -62,9 +62,13 @@ psql_port='5432'
       before do
         stub_gitlab_rb(postgresql: {
                          shared_preload_libraries: 'pg_stat_statements',
-                         archive_mode: 'on'
+                         archive_mode: 'on',
+                         username: 'foo',
+                         group: 'bar'
                        })
       end
+
+      it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'foo', 'bar'
 
       it 'correctly sets the shared_preload_libraries setting' do
         expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])

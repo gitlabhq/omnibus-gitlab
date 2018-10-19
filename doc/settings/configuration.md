@@ -324,6 +324,7 @@ web_server['home'] = '/var/opt/gitlab/webserver'
 
 # Postgresql (not needed when using external Postgresql)
 postgresql['username'] = "postgres-gitlab"
+postgresql['group'] = "postgres-gitlab"
 postgresql['shell'] = "/bin/sh"
 postgresql['home'] = "/var/opt/postgres-gitlab"
 

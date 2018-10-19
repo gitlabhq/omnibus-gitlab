@@ -24,6 +24,7 @@ postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_username = account_helper.postgresql_user
+postgresql_group = account_helper.postgresql_group
 
 pg_helper = PgHelper.new(node)
 
@@ -91,7 +92,7 @@ ssl_key_file = File.absolute_path(node['gitlab']['postgresql']['ssl_key_file'], 
 file ssl_cert_file do
   content node['gitlab']['postgresql']['internal_certificate']
   owner postgresql_username
-  group postgresql_username
+  group postgresql_group
   mode 0400
   sensitive true
   only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
@@ -100,7 +101,7 @@ end
 file ssl_key_file do
   content node['gitlab']['postgresql']['internal_key']
   owner postgresql_username
-  group postgresql_username
+  group postgresql_group
   mode 0400
   sensitive true
   only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
@@ -152,7 +153,7 @@ end
 runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
   supervisor_owner postgresql_username
-  supervisor_group postgresql_username
+  supervisor_group postgresql_group
   control(['t'])
   options({
     log_directory: postgresql_log_dir

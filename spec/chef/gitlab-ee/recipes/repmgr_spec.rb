@@ -51,7 +51,7 @@ witness_repl_nodes_sync_interval_secs=15
 
   context 'repmgrd' do
     let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::repmgrd') }
-    it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root'
+    it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
   end
 
   context 'disable' do
@@ -66,7 +66,7 @@ witness_repl_nodes_sync_interval_secs=15
     end
   end
 
-  context 'enabled' do
+  context 'enabled with user specified config' do
     before do
       stub_gitlab_rb(
         repmgr: {
@@ -80,10 +80,14 @@ witness_repl_nodes_sync_interval_secs=15
           hot_standby: 'on',
           wal_level: 'replica',
           max_wal_senders: 3,
-          shared_preload_libraries: 'repmgr_funcs'
+          shared_preload_libraries: 'repmgr_funcs',
+          username: 'foo',
+          group: 'bar'
         }
       )
     end
+
+    it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root', 'foo', 'bar'
 
     context 'by default' do
       it 'includes the repmgr::enable recipe' do

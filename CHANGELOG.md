@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Add Prometheus alerts for GitLab components !2753
 - Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
+- Add option to configure postgresql group !2780
 
 11.4.0
 

@@ -51,7 +51,7 @@ class AccountHelper
   end
 
   def postgresql_group
-    node['gitlab']['postgresql']['username']
+    node['gitlab']['postgresql']['group']
   end
 
   def mattermost_user
