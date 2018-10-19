@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
 - Add option to configure postgresql group !2780
 - Add option to configure prometheus group !2782
+- Add option to configure redis group !2784
 
 11.4.0
 

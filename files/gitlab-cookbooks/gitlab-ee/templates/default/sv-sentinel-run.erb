@@ -4,4 +4,5 @@ exec 2>&1
 umask 077
 
 <% user = @options[:user] %>
-exec chpst -P -U <%= user %> -u <%= user %> /opt/gitlab/embedded/bin/redis-sentinel <%= @options[:config_path] %>
+<% group = @options[:groupname] %>
+exec chpst -P -U <%= user %>:<%= group %> -u <%= user %>:<%= group %> /opt/gitlab/embedded/bin/redis-sentinel <%= @options[:config_path] %>

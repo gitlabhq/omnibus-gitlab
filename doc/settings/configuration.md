@@ -330,6 +330,7 @@ postgresql['home'] = "/var/opt/postgres-gitlab"
 
 # Redis (not needed when using external Redis)
 redis['username'] = "redis-gitlab"
+redis['group'] = "redis-gitlab"
 redis['shell'] = "/bin/false"
 redis['home'] = "/var/opt/redis-gitlab"
 

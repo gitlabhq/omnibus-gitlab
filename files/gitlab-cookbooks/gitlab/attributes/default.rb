@@ -508,6 +508,7 @@ default['gitlab']['redis']['hz'] = 10
 default['gitlab']['redis']['dir'] = "/var/opt/gitlab/redis"
 default['gitlab']['redis']['log_directory'] = "/var/log/gitlab/redis"
 default['gitlab']['redis']['username'] = "gitlab-redis"
+default['gitlab']['redis']['group'] = "gitlab-redis"
 default['gitlab']['redis']['uid'] = nil
 default['gitlab']['redis']['gid'] = nil
 default['gitlab']['redis']['shell'] = "/bin/false"

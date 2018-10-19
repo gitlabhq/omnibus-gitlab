@@ -825,6 +825,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['dir'] = "/var/opt/gitlab/redis"
 # redis['log_directory'] = "/var/log/gitlab/redis"
 # redis['username'] = "gitlab-redis"
+# redis['group'] = "gitlab-redis"
 # redis['maxclients'] = "10000"
 # redis['maxmemory'] = "0"
 # redis['maxmemory_policy'] = "noeviction"
