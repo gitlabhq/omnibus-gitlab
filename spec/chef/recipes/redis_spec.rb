@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -34,6 +34,16 @@ describe 'gitlab::redis' do
       expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof/)
     end
+
+    it 'creates redis user' do
+      expect(chef_run).to create_user('gitlab-redis')
+    end
+
+    it 'creates redis group' do
+      expect(chef_run).to create_group('gitlab-redis')
+    end
+
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
   end
 
   context 'with user specified values' do
@@ -48,7 +58,9 @@ describe 'gitlab::redis' do
           maxmemory_policy: "allkeys-url",
           maxmemory_samples: 10,
           tcp_backlog: 1024,
-          hz: 100
+          hz: 100,
+          username: 'foo',
+          group: 'bar'
         }
       )
     end
@@ -73,6 +85,16 @@ describe 'gitlab::redis' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^hz 100/)
     end
+
+    it 'creates redis user' do
+      expect(chef_run).to create_user('foo')
+    end
+
+    it 'creates redis group' do
+      expect(chef_run).to create_group('bar')
+    end
+
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'foo', 'bar'
   end
 
   context 'with snapshotting disabled' do
