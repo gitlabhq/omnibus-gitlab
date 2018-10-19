@@ -28,15 +28,27 @@ describe 'gitlab::sidekiq' do
           expect(content).to match(/\-c 25/)
         }
     end
+
+    it_behaves_like "enabled runit service", "sidekiq", "root", "root", "git", "git"
   end
 
   context 'with specified values' do
     before do
-      stub_gitlab_rb(sidekiq: { shutdown_timeout: 8, concurrency: 35 })
+      stub_gitlab_rb(
+        sidekiq: {
+          shutdown_timeout: 8, concurrency: 35
+        },
+        user: {
+          username: 'foo',
+          group: 'bar'
+        }
+      )
     end
     it 'correctly renders out the sidekiq service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run").with_content(/\-t 8/)
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run").with_content(/\-c 35/)
     end
+
+    it_behaves_like "enabled runit service", "sidekiq", "root", "root", "foo", "bar"
   end
 end

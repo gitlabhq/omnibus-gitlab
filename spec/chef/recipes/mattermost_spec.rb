@@ -10,6 +10,27 @@ describe 'gitlab::mattermost' do
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
   end
 
+  context 'service user and group' do
+    context 'default values' do
+      it_behaves_like "enabled runit service", "mattermost", "root", "root", "mattermost", "mattermost"
+    end
+
+    context 'custom user and group' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://gitlab.example.com',
+          mattermost_external_url: 'http://mattermost.example.com',
+          mattermost: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like "enabled runit service", "mattermost", "root", "root", "foo", "bar"
+    end
+  end
+
   context 'SiteUrl setting' do
     it_behaves_like "enabled mattermost env", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.example.com'
   end

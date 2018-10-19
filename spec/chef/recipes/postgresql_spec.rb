@@ -10,6 +10,7 @@ describe 'postgresql 9.2' do
   let(:gitlab_psql_rc) do
     <<-EOF
 psql_user='gitlab-psql'
+psql_group='gitlab-psql'
 psql_host='/var/opt/gitlab/postgresql'
 psql_port='5432'
     EOF

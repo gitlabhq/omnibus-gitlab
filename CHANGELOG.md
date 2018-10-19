@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Add option to configure postgresql group !2780
 - Add option to configure prometheus group !2782
 - Add option to configure redis group !2784
+- Specify groups while running services and `gitlab-` prefixed commands !2785
 
 11.4.1
 
