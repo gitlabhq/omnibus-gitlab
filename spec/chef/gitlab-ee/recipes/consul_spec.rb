@@ -35,10 +35,14 @@ describe 'consul' do
     end
 
     describe 'consul::enable' do
-      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul'
+      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul'
 
       it 'creates the consul system user' do
         expect(chef_run).to create_user 'gitlab-consul'
+      end
+
+      it 'creates the consul system group' do
+        expect(chef_run).to create_group 'gitlab-consul'
       end
 
       it 'includes the postgresql_service recipe' do
@@ -94,15 +98,30 @@ describe 'consul' do
     end
 
     context 'with non-default options' do
-      it 'allows the user to specify node name' do
+      before do
         stub_gitlab_rb(
           consul: {
             enable: true,
-            node_name: 'fakenodename'
+            node_name: 'fakenodename',
+            user: 'foo',
+            group: 'bar',
           }
         )
+      end
+
+      it 'allows the user to specify node name' do
         expect(chef_run).to render_file(consul_conf).with_content('"node_name":"fakenodename"')
       end
+
+      it 'creates the consul system user' do
+        expect(chef_run).to create_user 'foo'
+      end
+
+      it 'creates the consul system group' do
+        expect(chef_run).to create_group 'bar'
+      end
+
+      it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar'
     end
 
     context 'server enabled' do
