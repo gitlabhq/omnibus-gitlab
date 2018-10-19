@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.5.0
 
 - Add Prometheus alerts for GitLab components !2753
+- Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
 
 11.4.0
 
