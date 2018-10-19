@@ -1,0 +1,27 @@
+groups:
+- name: GitLab
+  rules:
+  - alert: ServiceDown
+    expr: avg_over_time(up[5m]) * 100 < 50
+    annotations:
+      description: The service {{ $labels.job }} instance {{ $labels.instance }} is
+        not responding for more than 50% of the time for 5 minutes.
+      summary: The service {{ $labels.job }} is not responding
+  - alert: RedisDown
+    expr: avg_over_time(redis_up[5m]) * 100 < 50
+    annotations:
+      description: The Redis service {{ $labels.job }} instance {{ $labels.instance
+        }} is not responding for more than 50% of the time for 5 minutes.
+      summary: The Redis service {{ $labels.job }} is not responding
+  - alert: PostgresDown
+    expr: avg_over_time(pg_up[5m]) * 100 < 50
+    annotations:
+      description: The Postgres service {{ $labels.job }} instance {{ $labels.instance
+        }} is not responding for more than 50% of the time for 5 minutes.
+      summary: The Postgres service {{ $labels.job }} is not responding
+  - alert: UnicornQueueing
+    expr: avg_over_time(unicorn_queued_connections[30m]) > 1
+    annotations:
+      description: Unicorn instance {{ $labels.instance }} is queueing requests with
+        an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
+      summary: Unicorn is queueing requests

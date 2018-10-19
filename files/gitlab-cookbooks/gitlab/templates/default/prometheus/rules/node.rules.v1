@@ -21,7 +21,7 @@ ALERT FilesystemAlmostFull
   FOR 10m
   ANNOTATIONS {
     summary = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} is almost full",
-    description = "The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} has {{ $value | printf '%.2f' }}% space available.",
+    description = 'The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on {{ $labels.instance }} has {{ $value | printf "%.2f" }}% space available.',
   }
 
 ALERT FilesystemFullIn1Day
