@@ -425,6 +425,7 @@ describe 'gitlab::prometheus' do
       it 'creates rules directory in correct location' do
         expect(chef_run).to create_directory("/var/opt/gitlab/prometheus/rules")
         expect(chef_run).to render_file("/var/opt/gitlab/prometheus/rules/node.rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus/rules/gitlab.rules")
       end
     end
 
@@ -440,6 +441,7 @@ describe 'gitlab::prometheus' do
       it 'creates rules directory in correct location' do
         expect(chef_run).to create_directory("/var/opt/gitlab/prometheus-bak/rules")
         expect(chef_run).to render_file("/var/opt/gitlab/prometheus-bak/rules/node.rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus-bak/rules/gitlab.rules")
       end
     end
 
@@ -455,6 +457,7 @@ describe 'gitlab::prometheus' do
       it 'creates rules directory in correct location' do
         expect(chef_run).to create_directory("/var/opt/gitlab/prometheus/alert-rules")
         expect(chef_run).to render_file("/var/opt/gitlab/prometheus/alert-rules/node.rules")
+        expect(chef_run).to render_file("/var/opt/gitlab/prometheus/alert-rules/gitlab.rules")
       end
     end
   end
