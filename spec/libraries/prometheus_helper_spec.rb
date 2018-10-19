@@ -37,7 +37,7 @@ describe PrometheusHelper do
       allow(PrometheusHelper).to receive(:is_version_1?).and_return(true)
       chef_run.node.set['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 
-      expect(subject.binary_and_rules).to eq(["prometheus1", "node.rules"])
+      expect(subject.binary_and_rules).to eq(%w(prometheus1 rules.v1))
     end
   end
 

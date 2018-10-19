@@ -65,11 +65,15 @@ class PrometheusHelper
     File.exist?(version_file) && File.exist?(head_db)
   end
 
+  def is_running?
+    OmnibusHelper.new(node).service_up?("prometheus")
+  end
+
   def binary_and_rules
     if PrometheusHelper.is_version_1?(node['gitlab']['prometheus']['home'])
-      ["prometheus1", "node.rules"]
+      %w(prometheus1 rules.v1)
     else
-      ["prometheus2", "node.rules.v2"]
+      %w(prometheus2 rules.v2)
     end
   end
 end

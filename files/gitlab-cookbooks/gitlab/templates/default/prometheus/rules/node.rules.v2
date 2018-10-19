@@ -1,5 +1,5 @@
 groups:
-- name: node.rules
+- name: Node
   rules:
   - record: instance:node_cpus:count
     expr: count without(cpu, mode) (node_cpu{mode="idle"})
@@ -23,7 +23,7 @@ groups:
     for: 10m
     annotations:
       description: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on
-        {{ $labels.instance }} has {{ $value | printf '%.2f' }}% space available.
+        {{ $labels.instance }} has {{ $value | printf "%.2f" }}% space available.
       summary: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} is almost
         full
   - alert: FilesystemFullIn1Day

@@ -15,12 +15,13 @@
 #
 account_helper = AccountHelper.new(node)
 postgresql_username = account_helper.postgresql_user
+postgresql_group = account_helper.postgresql_group
 
 account "Postgresql user and group" do
   username postgresql_username
   uid node['gitlab']['postgresql']['uid']
   ugid postgresql_username
-  groupname postgresql_username
+  groupname postgresql_group
   gid node['gitlab']['postgresql']['gid']
   shell node['gitlab']['postgresql']['shell']
   home node['gitlab']['postgresql']['home']

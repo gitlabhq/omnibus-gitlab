@@ -22,7 +22,7 @@ prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
 prometheus_dir = node['gitlab']['prometheus']['home']
 prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
 
-binary, rule_file = prometheus_helper.binary_and_rules
+binary, rule_extension = prometheus_helper.binary_and_rules
 
 include_recipe 'gitlab::prometheus_user'
 
@@ -62,12 +62,19 @@ configuration = Prometheus.hash_to_yaml({
                                           'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
                                         })
 
+execute 'reload prometheus' do
+  command %(/opt/gitlab/bin/gitlab-ctl hup prometheus)
+  retries 20
+  action :nothing
+  only_if { prometheus_helper.is_running? }
+end
+
 file 'Prometheus config' do
   path File.join(prometheus_dir, 'prometheus.yml')
   content configuration
   owner prometheus_user
   mode '0644'
-  notifies :restart, 'service[prometheus]'
+  notifies :run, 'execute[reload prometheus]'
 end
 
 runtime_flags = prometheus_helper.flags('prometheus')
@@ -87,9 +94,18 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-template File.join(prometheus_rules_dir, 'node.rules') do
-  source "prometheus/rules/#{rule_file}"
+template File.join(prometheus_rules_dir, 'gitlab.rules') do
+  source "prometheus/rules/gitlab.#{rule_extension}"
   owner prometheus_user
   mode '0644'
+  notifies :run, 'execute[reload prometheus]'
+  only_if { node['gitlab']['prometheus']['enable'] }
+end
+
+template File.join(prometheus_rules_dir, 'node.rules') do
+  source "prometheus/rules/node.#{rule_extension}"
+  owner prometheus_user
+  mode '0644'
+  notifies :run, 'execute[reload prometheus]'
   only_if { node['gitlab']['prometheus']['enable'] }
 end

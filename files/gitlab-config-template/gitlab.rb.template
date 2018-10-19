@@ -705,6 +705,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['dir'] = "/var/opt/gitlab/postgresql"
 # postgresql['log_directory'] = "/var/log/gitlab/postgresql"
 # postgresql['username'] = "gitlab-psql"
+# postgresql['group'] = "gitlab-psql"
 ##! `SQL_USER_PASSWORD_HASH` can be generated using the command `gitlab-ctl pg-password-md5 gitlab`
 # postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
 # postgresql['uid'] = nil
@@ -824,6 +825,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['dir'] = "/var/opt/gitlab/redis"
 # redis['log_directory'] = "/var/log/gitlab/redis"
 # redis['username'] = "gitlab-redis"
+# redis['group'] = "gitlab-redis"
 # redis['maxclients'] = "10000"
 # redis['maxmemory'] = "0"
 # redis['maxmemory_policy'] = "noeviction"
@@ -1252,6 +1254,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['enable'] = true
 # prometheus['monitor_kubernetes'] = true
 # prometheus['username'] = 'gitlab-prometheus'
+# prometheus['group'] = 'gitlab-prometheus'
 # prometheus['uid'] = nil
 # prometheus['gid'] = nil
 # prometheus['shell'] = '/bin/sh'

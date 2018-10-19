@@ -325,7 +325,19 @@ gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+### Microsoft Exchange (with authentication)
 
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.example.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = 'password'
+gitlab_rails['smtp_domain'] = "mail.example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+ 
 ### Strato.de
 
 ```ruby

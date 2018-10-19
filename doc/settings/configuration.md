@@ -324,11 +324,13 @@ web_server['home'] = '/var/opt/gitlab/webserver'
 
 # Postgresql (not needed when using external Postgresql)
 postgresql['username'] = "postgres-gitlab"
+postgresql['group'] = "postgres-gitlab"
 postgresql['shell'] = "/bin/sh"
 postgresql['home'] = "/var/opt/postgres-gitlab"
 
 # Redis (not needed when using external Redis)
 redis['username'] = "redis-gitlab"
+redis['group'] = "redis-gitlab"
 redis['shell'] = "/bin/false"
 redis['home'] = "/var/opt/redis-gitlab"
 
