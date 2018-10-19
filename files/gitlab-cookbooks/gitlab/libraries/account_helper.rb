@@ -83,7 +83,7 @@ class AccountHelper
   end
 
   def consul_group
-    node['consul']['user']
+    node['consul']['group']
   end
 
   def users
@@ -107,6 +107,7 @@ class AccountHelper
       #{postgresql_group}
       #{mattermost_group}
       #{registry_group}
+      #{consul_group}
       #{prometheus_group}
     )
   end

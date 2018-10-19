@@ -22,7 +22,8 @@ runit_service 'consul' do
             data_dir: node['consul']['data_dir'],
             dir: node['consul']['dir'],
             log_directory: node['consul']['log_directory'],
-            user: node['consul']['user']
+            user: node['consul']['user'],
+            groupname: node['consul']['group']
           })
   supervisor_owner account_helper.consul_user
   supervisor_group account_helper.consul_group
