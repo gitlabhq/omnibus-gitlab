@@ -789,6 +789,7 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 default['gitlab']['prometheus']['enable'] = false
 default['gitlab']['prometheus']['monitor_kubernetes'] = true
 default['gitlab']['prometheus']['username'] = 'gitlab-prometheus'
+default['gitlab']['prometheus']['group'] = 'gitlab-prometheus'
 default['gitlab']['prometheus']['uid'] = nil
 default['gitlab']['prometheus']['gid'] = nil
 default['gitlab']['prometheus']['shell'] = '/bin/sh'

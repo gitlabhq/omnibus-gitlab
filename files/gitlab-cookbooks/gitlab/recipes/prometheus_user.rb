@@ -16,13 +16,14 @@
 
 account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
+prometheus_group = account_helper.prometheus_group
 prometheus_dir = node['gitlab']['prometheus']['home']
 
 account "Prometheus user and group" do
   username prometheus_user
   uid node['gitlab']['prometheus']['uid']
-  ugid prometheus_user
-  groupname prometheus_user
+  ugid prometheus_group
+  groupname prometheus_group
   home prometheus_dir
   gid node['gitlab']['prometheus']['gid']
   shell node['gitlab']['prometheus']['shell']

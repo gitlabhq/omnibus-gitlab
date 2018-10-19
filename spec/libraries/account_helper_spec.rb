@@ -11,7 +11,7 @@ describe AccountHelper do
 
   it 'returns a list of groups' do
     expect(AccountHelper.new(chef_run.node).groups).to eq(
-      %w(git gitlab-www gitlab-redis gitlab-psql mattermost registry)
+      %w(git gitlab-www gitlab-redis gitlab-psql mattermost registry gitlab-prometheus)
     )
   end
 end

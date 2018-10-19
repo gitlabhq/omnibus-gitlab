@@ -61,6 +61,10 @@ module GitlabCtl
       Etc.getpwuid(File.stat(@v1_path).uid).name
     end
 
+    def prometheus_group
+      Etc.getgrgid(File.stat(@v1_path).gid).name
+    end
+
     def migrate
       status = true
 
@@ -68,6 +72,7 @@ module GitlabCtl
       result = Mixlib::ShellOut.new(
         command,
         user: prometheus_user,
+        group: prometheus_group,
         # Allow a week before timing out.
         timeout: 604800
       )

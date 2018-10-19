@@ -1253,6 +1253,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['enable'] = true
 # prometheus['monitor_kubernetes'] = true
 # prometheus['username'] = 'gitlab-prometheus'
+# prometheus['group'] = 'gitlab-prometheus'
 # prometheus['uid'] = nil
 # prometheus['gid'] = nil
 # prometheus['shell'] = '/bin/sh'
