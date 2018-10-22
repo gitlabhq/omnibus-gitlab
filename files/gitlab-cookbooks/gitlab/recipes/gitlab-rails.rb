@@ -260,6 +260,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
       pages_artifacts_server: node['gitlab']['gitlab-pages']['artifacts_server'],
       pages_admin_https_cert: node['gitlab']['gitlab-pages']['admin_https_cert'],
+      pages_access_control: node['gitlab']['gitlab-pages']['access_control'],
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq']

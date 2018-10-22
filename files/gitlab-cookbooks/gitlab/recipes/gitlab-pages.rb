@@ -33,6 +33,22 @@ admin_secret_path = File.join(working_dir, "admin.secret")
   end
 end
 
+ruby_block "authorize pages with gitlab" do
+  block do
+    GitlabPages.authorize_with_gitlab
+  end
+
+  not_if { node['gitlab']['gitlab-pages']['gitlab_id'] && node['gitlab']['gitlab-pages']['gitlab_secret'] }
+  only_if { node['gitlab']['gitlab-pages']['access_control'] }
+end
+
+# Options may have changed in the previous step
+ruby_block "re-populate GitLab Pages configuration options" do
+  block do
+    node.consume_attributes(Gitlab.hyphenate_config_keys)
+  end
+end
+
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
   notifies :restart, "service[gitlab-pages]"

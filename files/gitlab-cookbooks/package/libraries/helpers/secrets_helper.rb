@@ -73,7 +73,10 @@ class SecretsHelper
         'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key']
       },
       'gitlab_pages' => {
-        'admin_secret_token' => Gitlab['gitlab_pages']['admin_secret_token']
+        'admin_secret_token' => Gitlab['gitlab_pages']['admin_secret_token'],
+        'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],
+        'gitlab_id' => Gitlab['gitlab_pages']['gitlab_id'],
+        'auth_secret' => Gitlab['gitlab_pages']['auth_secret']
       },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
@@ -91,7 +94,7 @@ class SecretsHelper
       'postgresql' => {
         'internal_certificate' => Gitlab['postgresql']['internal_certificate'],
         'internal_key' => Gitlab['postgresql']['internal_key']
-      }
+      },
     }
 
     if Gitlab['mattermost']['gitlab_enable']
