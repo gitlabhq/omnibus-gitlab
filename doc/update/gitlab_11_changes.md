@@ -65,6 +65,5 @@ been removed.
    Support for Prometheus 1.x versions that were shipped with earlier versions
    of GitLab has been deprecated and will be removed completely in GitLab 12.0.
    Users still using those versions will be presented with a deprecation warning
-   during reconfigure. With GitLab 12.0, upgrades will be aborted if Prometheus
-   1.x is detected and users will not be able to upgrade without migrating to
-   Prometheus 2.x first.
+   during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
+   Prometheus 1.0 data will not be migrated. 
