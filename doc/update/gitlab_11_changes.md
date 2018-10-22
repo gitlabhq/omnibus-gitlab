@@ -29,41 +29,41 @@ been removed.
 
 ### 11.4
 
-1. Version of bundled Redis has been upgraded to 3.2.12. This is a critical
-   security update that fixes multiple vulnerabilities. After upgrading to 11.4,
-   run `gitlab-ctl restart redis` to ensure the new version is loaded.
+1.  Version of bundled Redis has been upgraded to 3.2.12. This is a critical
+    security update that fixes multiple vulnerabilities. After upgrading to 11.4,
+    run `gitlab-ctl restart redis` to ensure the new version is loaded.
 
-1. The bundled version of Prometheus has been upgraded to 2.4.2 and fresh
-   installations will use it by default. Version 2 of Prometheus uses a data
-   format incompatible with version 1.
+1.  The bundled version of Prometheus has been upgraded to 2.4.2 and fresh
+    installations will use it by default. Version 2 of Prometheus uses a data
+    format incompatible with version 1.
 
-   For users looking for preserving the Prometheus version 1 data, a command
-   line tool is provided to upgrade their Prometheus service and migrate data to
-   the format supported by new Prometheus version.  This tool can be invoked
-   using the following command
+    For users looking for preserving the Prometheus version 1 data, a command
+    line tool is provided to upgrade their Prometheus service and migrate data to
+    the format supported by new Prometheus version.  This tool can be invoked
+    using the following command:
 
-     ```bash
-     sudo gitlab-ctl prometheus-upgrade
-     ```
+    ```bash
+    sudo gitlab-ctl prometheus-upgrade
+    ```
 
-   This tool will convert existing data to a format supported by the latest
-   Prometheus version. Depending on the volume of data, this process can take
-   hours.  If users do not want to migrate the data, but start with a clean
-   database, they can pass `--skip-data-migration` flag to the above command.
+    This tool will convert existing data to a format supported by the latest
+    Prometheus version. Depending on the volume of data, this process can take
+    hours.  If users do not want to migrate the data, but start with a clean
+    database, they can pass `--skip-data-migration` flag to the above command.
 
-   **`Note`**: Prometheus service will be stopped during the migration process.
+    NOTE: **Note**: Prometheus service will be stopped during the migration process.
 
-   To know about other supported options, pass `--help` flag to the above
-   command.
+    To know about other supported options, pass `--help` flag to the above
+    command.
 
-   This tool **will not** be automatically invoked during package upgrades.
-   Users will have to run it manually to migrate to latest version of
-   Prometheus, and are advised to do it as soon as possible. Therefore, existing
-   users who are upgrading to 11.4 will continue to use Prometheus 1.x until
-   they manually migrate to the 2.x version.
+    This tool **will not** be automatically invoked during package upgrades.
+    Users will have to run it manually to migrate to latest version of
+    Prometheus, and are advised to do it as soon as possible. Therefore, existing
+    users who are upgrading to 11.4 will continue to use Prometheus 1.x until
+    they manually migrate to the 2.x version.
 
-   Support for Prometheus 1.x versions that were shipped with earlier versions
-   of GitLab has been deprecated and will be removed completely in GitLab 12.0.
-   Users still using those versions will be presented with a deprecation warning
-   during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
-   Prometheus 1.0 data will not be migrated. 
+    Support for Prometheus 1.x versions that were shipped with earlier versions
+    of GitLab has been deprecated and will be removed completely in GitLab 12.0.
+    Users still using those versions will be presented with a deprecation warning
+    during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
+    Prometheus 1.0 data will not be migrated.
