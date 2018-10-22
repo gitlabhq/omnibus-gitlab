@@ -21,7 +21,8 @@ module Build
         "variables[TRIGGER_SOURCE]" => ENV['CI_JOB_URL'],
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => ENV['TOP_UPSTREAM_SOURCE_PROJECT'],
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => ENV['TOP_UPSTREAM_SOURCE_JOB'],
-        "variables[TOP_UPSTREAM_SOURCE_SHA]" => ENV['TOP_UPSTREAM_SOURCE_SHA']
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => ENV['TOP_UPSTREAM_SOURCE_SHA'],
+        "variables[QA_BRANCH]" => ENV['QA_BRANCH'] || 'master'
       }
     end
 
