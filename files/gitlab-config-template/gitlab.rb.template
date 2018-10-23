@@ -373,7 +373,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 # gitlab_rails['rack_attack_git_basic_auth'] = {
-#   'enabled' => true,
+#   'enabled' => false,
 #   'ip_whitelist' => ["127.0.0.1"],
 #   'maxretry' => 10,
 #   'findtime' => 60,
