@@ -170,6 +170,12 @@ prometheus_yml_output = <<-PROMYML
       - __meta_kubernetes_pod_name
       action: replace
       target_label: kubernetes_pod_name
+  alerting:
+    alertmanagers:
+    - scheme: http
+      static_configs:
+      - targets:
+        - localhost:9093
 PROMYML
 
 describe 'gitlab::prometheus' do
@@ -190,7 +196,15 @@ describe 'gitlab::prometheus' do
     before do
       stub_gitlab_rb(
         prometheus: {
-          enable: true
+          enable: true,
+          alertmanagers: [
+            {
+              scheme: 'http',
+              static_configs: [
+                { targets: ['localhost:9093'] }
+              ]
+            }
+          ]
         },
         gitlab_monitor: {
           enable: true

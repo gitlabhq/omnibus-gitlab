@@ -72,6 +72,9 @@ configuration = Prometheus.hash_to_yaml({
                                           'remote_write' => node['gitlab']['prometheus']['remote_write'],
                                           'rule_files' => node['gitlab']['prometheus']['rules_files'],
                                           'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
+                                          'alerting' => {
+                                            'alertmanagers' => node['gitlab']['prometheus']['alertmanagers'],
+                                          }
                                         })
 
 execute 'reload prometheus' do
