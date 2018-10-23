@@ -21,7 +21,7 @@ action :create do
   end
 
   postgresql_query "update mapping for #{new_resource.db_user} at #{new_resource.server_name}" do
-    query "ALTER USER MAPPING FOR #{new_resource.db_user} SERVER #{new_resource.server_name} OPTIONS (SET user '#{new_resource.external_user}', SET password '#{new_resource.external_password}');"
+    query "ALTER USER MAPPING FOR #{new_resource.db_user} SERVER #{new_resource.server_name} OPTIONS (#{new_resource.helper.fdw_user_mapping_update_options(new_resource)});"
     db_name new_resource.db_name
     helper new_resource.helper
 

@@ -133,6 +133,30 @@ class BasePgHelper < BaseHelper
     # return whether options is not a subset of server_options
     # this allows us to ignore additional params on server and look only to the ones informed in the method
     !(options <= user_mapping_options)
+  # Returns the desired FDW user mapping options, not including parentheses
+  #
+  # `resource` must respond to FDW user mapping properties:
+  #   db_user
+  #   server_name
+  #   db_name
+  #   external_user
+  #   external_password
+  def fdw_user_mapping_update_options(resource)
+    has_password = fdw_external_password_exists?(resource.db_user, resource.server_name, resource.db_name)
+    password_action = has_password ? 'SET' : 'ADD'
+
+    "SET user '#{resource.external_user}', #{password_action} password '#{resource.external_password}'"
+  end
+
+  # Returns whether the user mapping has a password set
+  def fdw_external_password_exists?(user, server_name, db_name)
+    fdw_user_mapping_current_options(user, server_name, db_name).key?(:password)
+  end
+
+  def fdw_user_mapping_current_options(user, server_name, db_name)
+    raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
+
+    parse_pghash(raw_content)
   end
 
   def user_hashed_password(db_user)
