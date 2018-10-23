@@ -127,12 +127,13 @@ class BasePgHelper < BaseHelper
   end
 
   def fdw_user_mapping_changed?(user, server_name, db_name, options = {})
-    raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
-    user_mapping_options = parse_pghash(raw_content)
+    current_options = fdw_user_mapping_current_options(user, server_name, db_name)
 
-    # return whether options is not a subset of server_options
+    # return whether options is not a subset of current_options
     # this allows us to ignore additional params on server and look only to the ones informed in the method
-    !(options <= user_mapping_options)
+    !(options <= current_options)
+  end
+
   # Returns the desired FDW user mapping options, not including parentheses
   #
   # `resource` must respond to FDW user mapping properties:
