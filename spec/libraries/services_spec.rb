@@ -43,7 +43,7 @@ describe Services do
         Services.enable('mattermost')
         runner.converge('gitlab::config')
 
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
       end
     end
@@ -52,7 +52,7 @@ describe Services do
       it 'sets the correct values' do
         chef_run
         Services.disable('redis')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
 
         Services.enable('mattermost')
         expect(node['mattermost']['enable']).to be true
@@ -66,7 +66,7 @@ describe Services do
 
         Services.enable('redis')
         Services.disable('redis', except: 'redis')
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
       end
     end
 
@@ -75,7 +75,7 @@ describe Services do
 
       it 'sets the correct values' do
         Services.disable('redis', 'postgresql', 'gitaly')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be false
         expect(node['gitaly']['enable']).to be false
 
@@ -94,7 +94,7 @@ describe Services do
 
         Services.enable('postgresql')
         Services.disable('redis', 'postgresql', 'gitaly', except: 'postgresql')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be false
       end
@@ -108,7 +108,7 @@ describe Services do
 
         Services.enable('postgresql', 'gitaly')
         Services.disable('redis', 'postgresql', 'gitaly', except: %w(postgresql gitaly))
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
       end
@@ -130,7 +130,7 @@ describe Services do
       it 'enables all others' do
         Services.disable('registry')
         Services.enable(Services::ALL_SERVICES, except: 'registry')
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['gitlab']['postgresql']['enable']).to be true
         expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be false
@@ -139,7 +139,7 @@ describe Services do
       it 'disables all others' do
         Services.enable('redis')
         Services.disable(Services::ALL_SERVICES, except: 'redis')
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['gitlab']['postgresql']['enable']).to be false
         expect(node['mattermost']['enable']).to be false
         expect(node['registry']['enable']).to be false
@@ -152,7 +152,7 @@ describe Services do
       it 'enables all others' do
         Services.disable('registry', 'mailroom')
         Services.enable(Services::ALL_SERVICES, except: %w(registry mailroom))
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['gitlab']['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be true
@@ -163,7 +163,7 @@ describe Services do
       it 'disables all others' do
         Services.enable('postgresql', 'gitaly')
         Services.disable(Services::ALL_SERVICES, except: %w(postgresql gitaly))
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
@@ -189,7 +189,7 @@ describe Services do
         Services.enable_group('postgres')
         runner.converge('gitlab::config')
 
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
       end
     end
@@ -199,7 +199,7 @@ describe Services do
 
       it 'sets the correct values' do
         Services.disable_group('redis')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['redis-exporter']['enable']).to be false
 
         Services.enable_group('rails')
@@ -215,7 +215,7 @@ describe Services do
 
         Services.enable_group('prometheus')
         Services.disable_group('redis', except: 'prometheus')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['redis-exporter']['enable']).to be true
       end
     end
@@ -224,7 +224,7 @@ describe Services do
       before { chef_run }
       it 'sets the correct values' do
         Services.disable_group('redis', 'postgres')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgresql']['enable']).to be false
 
         Services.enable_group('rails', 'prometheus')
@@ -235,14 +235,14 @@ describe Services do
       it 'supports single exceptions' do
         Services.disable_group('prometheus')
         Services.enable_group('redis', 'rails', except: 'prometheus')
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['gitlab']['unicorn']['enable']).to be true
         expect(node['gitlab']['gitlab-monitor']['enable']).to be false
         expect(node['gitlab']['redis-exporter']['enable']).to be false
 
         Services.enable_group('postgres')
         Services.disable_group('redis', 'prometheus', except: 'postgres')
-        expect(node['gitlab']['redis']['enable']).to be false
+        expect(node['redis']['enable']).to be false
         expect(node['gitlab']['postgres-exporter']['enable']).to be true
         expect(node['gitlab']['prometheus']['enable']).to be false
       end
@@ -308,7 +308,7 @@ describe Services do
         Services.enable_group('redis', 'rails')
         Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['gitlab']['prometheus']['enable']).to be false
-        expect(node['gitlab']['redis']['enable']).to be true
+        expect(node['redis']['enable']).to be true
         expect(node['gitlab']['sidekiq']['enable']).to be true
       end
     end

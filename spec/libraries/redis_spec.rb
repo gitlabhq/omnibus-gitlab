@@ -42,7 +42,7 @@ describe 'Redis' do
         end
 
         it 'disables unix socket when redis tcp params are defined' do
-          expect(node['gitlab']['redis']['unixsocket']).to eq false
+          expect(node['redis']['unixsocket']).to eq false
 
           subject.parse_redis_settings
         end
@@ -81,7 +81,7 @@ describe 'Redis' do
         end
 
         it 'disables unix socket when sentinel params are defined' do
-          expect(node['gitlab']['redis']['unixsocket']).to eq false
+          expect(node['redis']['unixsocket']).to eq false
 
           subject.parse_redis_settings
         end
@@ -118,7 +118,7 @@ describe 'Redis' do
         end
 
         it 'defined redis master as false' do
-          expect(node['gitlab']['redis']['master']).to eq false
+          expect(node['redis']['master']).to eq false
         end
       end
     end
@@ -140,7 +140,7 @@ describe 'Redis' do
         end
 
         it 'master_password is autofilled based on redis current password' do
-          expect(node['gitlab']['redis']['master_password']).to eq redis_password
+          expect(node['redis']['master_password']).to eq redis_password
         end
       end
 
@@ -156,7 +156,7 @@ describe 'Redis' do
         end
 
         it 'master_password is autofilled based on redis current password' do
-          expect(node['gitlab']['redis']['master_password']).to eq redis_password
+          expect(node['redis']['master_password']).to eq redis_password
         end
       end
 
@@ -174,7 +174,7 @@ describe 'Redis' do
         end
 
         it 'master_password is autofilled based on redis current password' do
-          expect(node['gitlab']['redis']['master_password']).to eq redis_password
+          expect(node['redis']['master_password']).to eq redis_password
         end
 
         context 'announce_ip is defined' do
@@ -195,7 +195,7 @@ describe 'Redis' do
           end
 
           it 'Redis announce_port is autofilled based on redis current port' do
-            expect(node['gitlab']['redis']['announce_port']).to eq redis_port
+            expect(node['redis']['announce_port']).to eq redis_port
 
             subject.parse_redis_settings
           end
@@ -218,7 +218,7 @@ describe 'Redis' do
         end
 
         it 'keeps user specified master_password' do
-          expect(node['gitlab']['redis']['master_password']).to eq master_password
+          expect(node['redis']['master_password']).to eq master_password
         end
       end
     end

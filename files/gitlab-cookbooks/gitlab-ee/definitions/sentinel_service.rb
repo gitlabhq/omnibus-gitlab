@@ -32,12 +32,12 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
 
   account 'user and group for sentinel' do
     username redis_user
-    uid node['gitlab']['redis']['uid']
+    uid node['redis']['uid']
     ugid redis_group
     groupname redis_group
-    gid node['gitlab']['redis']['gid']
-    shell node['gitlab']['redis']['shell']
-    home node['gitlab']['redis']['home']
+    gid node['redis']['gid']
+    shell node['redis']['shell']
+    home node['redis']['home']
     manage node['gitlab']['manage-accounts']['enable']
   end
 

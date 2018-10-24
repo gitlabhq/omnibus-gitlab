@@ -16,22 +16,20 @@
 #
 
 define :redis_service, socket_group: nil do
-  svc = params[:name]
-
-  redis_dir = node['gitlab'][svc]['dir']
-  redis_log_dir = node['gitlab'][svc]['log_directory']
+  redis_dir = node['redis']['dir']
+  redis_log_dir = node['redis']['log_directory']
   redis_user = AccountHelper.new(node).redis_user
   redis_group = AccountHelper.new(node).redis_group
   omnibus_helper = OmnibusHelper.new(node)
 
   account 'user and group for redis' do
     username redis_user
-    uid node['gitlab'][svc]['uid']
+    uid node['redis']['uid']
     ugid redis_group
     groupname redis_group
-    gid node['gitlab'][svc]['gid']
-    shell node['gitlab'][svc]['shell']
-    home node['gitlab'][svc]['home']
+    gid node['redis']['gid']
+    shell node['redis']['shell']
+    home node['redis']['home']
     manage node['gitlab']['manage-accounts']['enable']
   end
 
@@ -51,31 +49,31 @@ define :redis_service, socket_group: nil do
     mode "0700"
   end
 
-  redis_config = File.join(redis_dir, "redis.conf")
-  is_slave = node['gitlab'][svc]['master_ip'] &&
-    node['gitlab'][svc]['master_port'] &&
-    !node['gitlab'][svc]['master']
+  redis_config = File.join(redis_dir, 'redis.conf')
+  is_slave = node['redis']['master_ip'] &&
+    node['redis']['master_port'] &&
+    !node['redis']['master']
 
   template redis_config do
     source "redis.conf.erb"
     owner redis_user
     mode "0644"
-    variables(node['gitlab'][svc].to_hash.merge({ is_slave: is_slave }))
-    notifies :restart, "service[#{svc}]", :immediately if omnibus_helper.should_notify?(svc)
+    variables(node['redis'].to_hash.merge({ is_slave: is_slave }))
+    notifies :restart, 'service[redis]', :immediately if omnibus_helper.should_notify?('redis')
   end
 
-  runit_service svc do
-    down node['gitlab'][svc]['ha']
+  runit_service 'redis' do
+    down node['redis']['ha']
     template_name 'redis'
     options({
-      service: svc,
+      service: 'redis',
       log_directory: redis_log_dir
     }.merge(params))
-    log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
+    log_options node['gitlab']['logging'].to_hash.merge(node['redis'].to_hash)
   end
 
   if node['gitlab']['bootstrap']['enable']
-    execute "/opt/gitlab/bin/gitlab-ctl start #{svc}" do
+    execute "/opt/gitlab/bin/gitlab-ctl start redis" do
       retries 20
     end
   end
