@@ -6,7 +6,8 @@ exec 2>&1
 <%= render("make_metrics_rundir.erb") %>
 <%= render("mount_point_check.erb") %>
 exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
-  -U <%= @options[:user] %>:<%= @options[:groupname] %> -u <%= @options[:user] %>:<%= @options[:groupname] %> \
+  -U <%= @options[:user] %>:<%= @options[:groupname] %> \
+  -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
     /opt/gitlab/embedded/bin/bundle exec sidekiq \
