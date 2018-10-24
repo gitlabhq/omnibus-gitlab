@@ -16,7 +16,7 @@
 
 name 'bundler'
 # Pin the bundler version to avoid breaking changes in later versions
-default_version '1.16.2'
+default_version '1.16.6'
 
 license 'MIT'
 license_file 'LICENSE.MD'
@@ -36,12 +36,4 @@ build do
     v_opts,
     '--no-ri --no-rdoc --force'
   ].compact.join(' '), env: env
-
-  # Needed until a release includes https://github.com/bundler/bundler/pull/6550
-  if version.satisfies?('>= 1.14.0')
-    patch source: 'bundler-homedir-workaround.patch',
-          target: "#{install_dir}/embedded/lib/ruby/gems/2.4.0/gems/bundler-#{version}/lib/bundler.rb",
-          plevel: 1,
-          env: env
-  end
 end
