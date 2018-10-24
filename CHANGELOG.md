@@ -35,6 +35,10 @@ omnibus-gitlab repository.
 - Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
   prometheus-upgrade command !2733
 
+11.3.7
+
+- Update redis to 3.2.12
+
 11.3.4
 
 - Bump git to 2.18.1
