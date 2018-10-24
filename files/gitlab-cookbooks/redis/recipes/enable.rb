@@ -16,6 +16,6 @@
 # limitations under the License.
 #
 
-runit_service "redis" do
-  action :disable
+redis_service do
+  socket_group AccountHelper.new(node).gitlab_group
 end

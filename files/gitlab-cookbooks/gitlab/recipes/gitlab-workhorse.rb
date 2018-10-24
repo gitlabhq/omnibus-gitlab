@@ -60,8 +60,8 @@ end
 redis_url = RedisHelper.new(node).redis_url(true).to_s
 redis_password = node['gitlab']['gitlab-rails']['redis_password']
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
-redis_sentinel_master = node['gitlab']['redis']['master_name']
-redis_sentinel_master_password = node['gitlab']['redis']['master_password']
+redis_sentinel_master = node['redis']['master_name']
+redis_sentinel_master_password = node['redis']['master_password']
 config_file_path = File.join(working_dir, "config.toml")
 
 template config_file_path do

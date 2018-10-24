@@ -39,11 +39,11 @@ class AccountHelper
   end
 
   def redis_user
-    node['gitlab']['redis']['username']
+    node['redis']['username']
   end
 
   def redis_group
-    node['gitlab']['redis']['group']
+    node['redis']['group']
   end
 
   def postgresql_user

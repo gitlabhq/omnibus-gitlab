@@ -11,6 +11,7 @@ supports "ubuntu"
 
 depends "package"
 depends 'postgresql'
+depends 'redis'
 depends 'registry'
 depends 'mattermost'
 depends 'consul'

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::redis' do
+describe 'redis' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service account)).converge('gitlab::default') }
 
   before do
@@ -175,5 +175,13 @@ describe 'gitlab::redis' do
       expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof/)
     end
+  end
+
+  context 'with redis disabled' do
+    before do
+      stub_gitlab_rb(redis: { enable: false })
+    end
+
+    it_behaves_like 'disabled runit service', 'redis', 'root', 'root'
   end
 end

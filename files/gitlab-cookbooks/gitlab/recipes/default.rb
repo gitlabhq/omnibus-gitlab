@@ -93,13 +93,13 @@ end
 include_recipe "runit"
 
 # Configure DB Services
-[
-  "redis",
-].each do |service|
-  if node["gitlab"][service]["enable"]
-    include_recipe "gitlab::#{service}"
+%w(
+  redis
+).each do |service|
+  if node[service]['enable']
+    include_recipe "#{service}::enable"
   else
-    include_recipe "gitlab::#{service}_disable"
+    include_recipe "#{service}::disable"
   end
 end
 

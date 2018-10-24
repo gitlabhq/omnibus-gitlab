@@ -17,7 +17,7 @@
 
 sentinel_service 'redis' do
   config_path File.join(node['gitlab']['sentinel']['dir'], 'sentinel.conf')
-  redis_configuration node['gitlab']['redis']
+  redis_configuration node['redis']
   sentinel_configuration node['gitlab']['sentinel']
   logging_configuration node['gitlab']['logging']
   action :disable

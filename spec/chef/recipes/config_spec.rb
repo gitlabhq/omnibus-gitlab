@@ -57,7 +57,7 @@ describe 'gitlab::config' do
     it 'still leaves other default service enabled' do
       expect(node['gitlab']['nginx']['enable']).to eq true
       expect(node['gitlab']['postgresql']['enable']).to eq true
-      expect(node['gitlab']['redis']['enable']).to eq true
+      expect(node['redis']['enable']).to eq true
       expect(node['gitlab']['prometheus']['enable']).to eq true
       expect(node['gitlab']['alertmanager']['enable']).to eq true
       expect(node['gitlab']['node-exporter']['enable']).to eq true
@@ -86,7 +86,7 @@ describe 'gitlab::config' do
 
       it 'only sentinel is enabled' do
         expect(node['gitlab']['sentinel']['enable']).to eq true
-        expect(node['gitlab']['redis']['enable']).to eq false
+        expect(node['redis']['enable']).to eq false
         expect(node['gitlab']['redis-exporter']['enable']).to eq false
         expect(node['gitlab']['node-exporter']['enable']).to eq true
         expect(node['gitlab']['logrotate']['enable']).to eq true
@@ -109,7 +109,7 @@ describe 'gitlab::config' do
 
         it 'redis and sentinel are enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
-          expect(node['gitlab']['redis']['enable']).to eq true
+          expect(node['redis']['enable']).to eq true
           expect(node['gitlab']['redis-exporter']['enable']).to eq true
           expect(node['gitlab']['node-exporter']['enable']).to eq true
           expect(node['gitlab']['logrotate']['enable']).to eq true
@@ -138,7 +138,7 @@ describe 'gitlab::config' do
 
         it 'only redis is enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
-          expect(node['gitlab']['redis']['enable']).to eq true
+          expect(node['redis']['enable']).to eq true
           expect(node['gitlab']['redis-exporter']['enable']).to eq true
           expect(node['gitlab']['node-exporter']['enable']).to eq true
           expect(node['gitlab']['logrotate']['enable']).to eq true
@@ -159,7 +159,7 @@ describe 'gitlab::config' do
       it_behaves_like 'regular services are disabled'
 
       it 'only redis is enabled' do
-        expect(node['gitlab']['redis']['enable']).to eq true
+        expect(node['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
         expect(node['gitlab']['redis-exporter']['enable']).to eq true
         expect(node['gitlab']['node-exporter']['enable']).to eq true
@@ -185,7 +185,7 @@ describe 'gitlab::config' do
       it_behaves_like 'regular services are disabled'
 
       it 'only redis is enabled' do
-        expect(node['gitlab']['redis']['enable']).to eq true
+        expect(node['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
       end
     end

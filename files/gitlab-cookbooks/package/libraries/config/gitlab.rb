@@ -40,6 +40,7 @@ module Gitlab
 
   ## Attributes directly on the node
   attribute('registry', priority: 20).use { Registry }
+  attribute('redis', priority: 20).use { Redis }
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
@@ -62,7 +63,6 @@ module Gitlab
     attribute('gitlab_rails',     priority: 15).use { GitlabRails } # Parse rails first as others may depend on it
     attribute('gitlab_workhorse', priority: 20).use { GitlabWorkhorse }
     attribute('logging',          priority: 20).use { Logging }
-    attribute('redis',            priority: 20).use { Redis }
     attribute('postgresql',       priority: 20).use { Postgresql }
     attribute('unicorn',          priority: 20).use { Unicorn }
     attribute('mailroom',         priority: 20).use { IncomingEmail }
