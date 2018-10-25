@@ -30,6 +30,7 @@ describe 'gitlab::unicorn' do
 
     it 'renders the unicorn.rb file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/unicorn.rb').with_content { |content|
+        expect(content).to match(/^require_relative \"\/opt\/gitlab\/embedded\/service\/gitlab-rails\/lib\/gitlab\/cluster\/lifecycle_events\"/)
         expect(content).to match(/^before_exec/)
         expect(content).to match(/^before_fork/)
         expect(content).to match(/^after_fork/)
