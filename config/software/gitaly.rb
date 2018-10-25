@@ -35,8 +35,9 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   ruby_build_dir = "#{Omnibus::Config.source_dir}/gitaly/ruby"
+  bundle_without = %w(development test)
   bundle 'config build.rugged --no-use-system-libraries', env: env, cwd: ruby_build_dir
-  bundle 'install', env: env, cwd: ruby_build_dir
+  bundle "install --without #{bundle_without.join(' ')}", env: env, cwd: ruby_build_dir
   touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
 
   block 'delete grpc shared objects' do
