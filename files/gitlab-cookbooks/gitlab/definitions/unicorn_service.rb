@@ -74,33 +74,7 @@ define :unicorn_service, rails_app: nil, user: nil do
     stdout_path File.join(unicorn_log_dir, "unicorn_stdout.log")
     relative_url node['gitlab'][svc]['relative_url']
     pid unicorn_pidfile
-    before_exec <<-'EOS'
-      if ENV['prometheus_multiproc_dir']
-        old_metrics = Dir[File.join(ENV['prometheus_multiproc_dir'], '*.db')]
-        FileUtils.rm_rf(old_metrics)
-      end
-    EOS
-    before_fork <<-'EOS'
-      old_pid = "#{server.config[:pid]}.oldbin"
-      if old_pid != server.pid
-        begin
-          sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
-          Process.kill(sig, File.read(old_pid).to_i)
-        rescue Errno::ENOENT, Errno::ESRCH
-        end
-      end
-
-      ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord::Base)
-    EOS
-    after_fork <<-'EOS'
-      require 'rbtrace' if ENV['ENABLE_RBTRACE']
-
-      ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
-      defined?(::Prometheus::Client.reinitialize_on_pid_change) &&
-        Prometheus::Client.reinitialize_on_pid_change
-      defined?(Gitlab::Database::LoadBalancing) &&
-        Gitlab::Database::LoadBalancing.start_service_discovery
-    EOS
+    install_dir node['package']['install-dir']
     owner "root"
     group "root"
     mode "0644"
