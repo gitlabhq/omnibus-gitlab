@@ -535,7 +535,8 @@ default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
 default['gitlab']['gitlab-workhorse']['log_format'] = nil
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'HOME' => node['gitlab']['user']['home']
+  'HOME' => node['gitlab']['user']['home'],
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
 ####
@@ -561,6 +562,9 @@ default['gitlab']['gitlab-pages']['redirect_http'] = false
 default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
+default['gitlab']['gitlab-pages']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['gitlab-pages']['status_uri'] = nil
 default['gitlab']['gitlab-pages']['log_format'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server'] = true
@@ -766,6 +770,9 @@ default['gitlab']['prometheus']['gid'] = nil
 default['gitlab']['prometheus']['shell'] = '/bin/sh'
 default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
+default['gitlab']['prometheus']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['prometheus']['remote_read'] = []
 default['gitlab']['prometheus']['remote_write'] = []
 default['gitlab']['prometheus']['rules_directory'] = "/var/opt/gitlab/prometheus/rules"
@@ -786,6 +793,9 @@ default['gitlab']['prometheus']['target_heap_size'] = (
 default['gitlab']['alertmanager']['enable'] = false
 default['gitlab']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
 default['gitlab']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
+default['gitlab']['alertmanager']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['alertmanager']['listen_address'] = 'localhost:9093'
 default['gitlab']['alertmanager']['admin_email'] = nil
 default['gitlab']['alertmanager']['inhibit_rules'] = []
@@ -799,6 +809,9 @@ default['gitlab']['alertmanager']['templates'] = []
 default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['gitlab']['node-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 
 ####
@@ -806,6 +819,9 @@ default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 ###
 default['gitlab']['redis-exporter']['enable'] = false
 default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['gitlab']['redis-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 
 ####
@@ -816,7 +832,8 @@ default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-expor
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['postgres-exporter']['env'] = {
-  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=postgres sslmode=allow"
+  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=postgres sslmode=allow",
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
 ####
