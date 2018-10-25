@@ -20,6 +20,7 @@ define :unicorn_service, rails_app: nil, user: nil do
   rails_home = node['gitlab'][rails_app]['dir']
   svc = params[:name]
   user = params[:user]
+  group = params[:group]
 
   omnibus_helper = OmnibusHelper.new(node)
 
@@ -114,6 +115,7 @@ define :unicorn_service, rails_app: nil, user: nil do
     options({
       service: svc,
       user: user,
+      groupname: group,
       rails_app: rails_app,
       unicorn_rb: unicorn_rb,
       log_directory: unicorn_log_dir,

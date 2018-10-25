@@ -14,7 +14,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
@@ -35,6 +35,19 @@ describe 'gitlab::unicorn' do
         expect(content).to match(/^after_fork/)
       }
     end
+  end
+
+  context 'with custom user and group' do
+    before do
+      stub_gitlab_rb(
+        user: {
+          username: 'foo',
+          group: 'bar'
+        }
+      )
+    end
+
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'foo', 'bar'
   end
 
   context 'with custom runtime_dir' do
@@ -66,7 +79,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled on a node with no /run or /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
@@ -92,7 +105,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled on a node with a /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')

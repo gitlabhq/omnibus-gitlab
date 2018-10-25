@@ -24,6 +24,7 @@ end
 unicorn_service 'unicorn' do
   rails_app 'gitlab-rails'
   user account_helper.gitlab_user
+  group account_helper.gitlab_group
 end
 
 sysctl "net.core.somaxconn" do

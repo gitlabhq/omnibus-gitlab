@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Upgrade Bundler version to 1.16.6
 - Support for Pages access control settings (Turo Soisenniemi)
 - Geo: Fix adding a password to the FDW user mapping !2799
+- Specify groups while running services and `gitlab-` prefixed commands !2785
 
 11.4.1
 

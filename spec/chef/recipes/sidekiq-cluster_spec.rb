@@ -21,6 +21,34 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
   end
 
+  context 'with default values' do
+    before do
+      stub_gitlab_rb(sidekiq_cluster: {
+                       enable: true,
+                       queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+                     })
+    end
+
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "git", "git"
+  end
+
+  context 'with custom user and group values' do
+    before do
+      stub_gitlab_rb(
+        sidekiq_cluster: {
+          enable: true,
+          queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+        },
+        user: {
+          username: 'foo',
+          group: 'bar'
+        }
+      )
+    end
+
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "foo", "bar"
+  end
+
   context 'with queue_groups set' do
     before do
       stub_gitlab_rb(sidekiq_cluster: {

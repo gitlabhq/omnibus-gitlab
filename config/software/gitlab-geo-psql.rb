@@ -54,7 +54,7 @@ fi
 if [ "$(id -n -u)" = "${psql_user}" ] ; then
   privilege_drop=''
 else
-  privilege_drop="-u ${psql_user}"
+  privilege_drop="-u ${psql_user}:${psql_group}"
 fi
 
 cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /usr/bin/env PGSSLCOMPRESSION=0 /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} -d ${psql_dbname} "$@"

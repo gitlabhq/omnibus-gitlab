@@ -18,6 +18,7 @@
 define :sidekiq_service, rails_app: nil, user: nil do
   svc = params[:name]
   user = params[:user]
+  group = params[:group]
   rails_app = params[:rails_app]
 
   metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/sidekiq') unless node['gitlab']['runtime-dir'].nil?
@@ -36,6 +37,7 @@ define :sidekiq_service, rails_app: nil, user: nil do
     options({
       rails_app: rails_app,
       user: user,
+      groupname: group,
       shutdown_timeout: node['gitlab'][svc]['shutdown_timeout'],
       concurrency: node['gitlab'][svc]['concurrency'],
       log_directory: sidekiq_log_dir,

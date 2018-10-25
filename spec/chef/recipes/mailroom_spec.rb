@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2017 GitLab Inc.
+# Copyright:: Copyright (c) 2018 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe 'gitlab::storage-check' do
+describe 'gitlab::mailroom' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
@@ -24,25 +24,27 @@ describe 'gitlab::storage-check' do
   end
 
   describe 'when disabled' do
-    it_behaves_like 'disabled runit service', 'storage-check'
+    it_behaves_like 'disabled runit service', 'mailroom'
   end
 
   describe 'when enabled' do
     context 'default values' do
       before do
         stub_gitlab_rb(
-          storage_check: { enable: true }
+          gitlab_rails: {
+            incoming_email_enabled: true
+          }
         )
       end
 
-      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'git', 'git'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
     end
 
     context 'custom values' do
       before do
         stub_gitlab_rb(
-          storage_check: {
-            enable: true
+          gitlab_rails: {
+            incoming_email_enabled: true
           },
           user: {
             username: 'foo',
@@ -51,7 +53,7 @@ describe 'gitlab::storage-check' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'foo', 'bar'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'foo', 'bar'
     end
   end
 end

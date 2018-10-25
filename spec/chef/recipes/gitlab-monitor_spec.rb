@@ -16,7 +16,7 @@ describe 'gitlab::gitlab-monitor' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'gitlab-monitor', 'root', 'root'
+    it_behaves_like 'enabled runit service', 'gitlab-monitor', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload gitlab-monitor svlogd configuration]')
@@ -47,6 +47,22 @@ describe 'gitlab::gitlab-monitor' do
         mode: '0700'
       )
     end
+  end
+
+  context 'with custom user and group' do
+    before do
+      stub_gitlab_rb(
+        gitlab_monitor: {
+          enable: true
+        },
+        user: {
+          username: 'foo',
+          group: 'bar'
+        }
+      )
+    end
+
+    it_behaves_like 'enabled runit service', 'gitlab-monitor', 'root', 'root', 'foo', 'bar'
   end
 
   context 'when gitlab-monitor is enabled and postgres is disabled' do

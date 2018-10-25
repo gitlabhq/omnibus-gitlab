@@ -30,6 +30,7 @@ runit_service 'sidekiq-cluster' do
   template_name 'sidekiq-cluster'
   options({
     user: account_helper.gitlab_user,
+    groupname: account_helper.gitlab_group,
     log_directory: log_directory,
     metrics_dir: metrics_dir,
     clean_metrics_dir: true

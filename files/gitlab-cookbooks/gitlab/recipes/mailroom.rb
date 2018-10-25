@@ -16,6 +16,7 @@
 #
 
 user = AccountHelper.new(node).gitlab_user
+group = AccountHelper.new(node).gitlab_group
 
 GITLAB_RAILS_SOURCE_DIR = '/opt/gitlab/embedded/service/gitlab-rails'.freeze
 
@@ -32,6 +33,7 @@ runit_service 'mailroom' do
   finish_script true
   options({
     user: user,
+    groupname: group,
     log_directory: mailroom_log_dir,
     mail_room_config: mail_room_config
   }.merge(params))

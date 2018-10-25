@@ -54,7 +54,7 @@ fi
 if [ "$(id -n -u)" = "${psql_user}" ] ; then
   privilege_drop=''
 else
-  privilege_drop="-u ${psql_user}"
+  privilege_drop="-u ${psql_user}:${psql_group}"
 fi
 
 export PGDATA=${psql_host}/data
