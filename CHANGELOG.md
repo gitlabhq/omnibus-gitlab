@@ -3,38 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-11.3.0
-11.5.0
-
-- Add Prometheus alerts for GitLab components !2753
-- Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
-- Add option to configure postgresql group !2780
-- Add option to configure prometheus group !2782
-- Add option to configure redis group !2784
-11.4.1
+11.2.6
 
 - Upgrade Ruby version to 2.4.5
-
-11.4.0
-
-- Enable omniauth by default !2728
-- Update Mattermost to 5.3.1
-- Fix identification of Prometheus's rule directory !2736
-- Run geo_prune_event_log_worker_cron every 5min
-- Fix workhorse log path in the Docker fix update-permission script !2742 (Matteo Mazza)
-- Remove recursive chown for public directory !2743
-- Update libpng to 1.6.35 !2746
-- Update redis to 3.2.12 !2750
-- Update libgcrypt to 1.8.3 !2747
-- Update npth version to 1.6
-- Update libgpg-error to 1.32
-- Update libassuan to 2.5.1
-- Update gpgme to 1.10.0
-- Update gnupg to 2.2.10
-- Bump git to 2.18.1
-- Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
-- Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
-  prometheus-upgrade command !2733
 
 11.2.5
 
