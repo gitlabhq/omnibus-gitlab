@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.5.0
 
+- Update gitlab-monitor to 2.19.1
 - Add option to configure consul group !2781
 - Add Prometheus alerts for GitLab components !2753
 - Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
