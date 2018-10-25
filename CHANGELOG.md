@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Add option to configure redis group !2784
 - Upgrade Bundler version to 1.16.6
 - Support for Pages access control settings (Turo Soisenniemi)
+- Geo: Fix adding a password to the FDW user mapping !2799
 
 11.4.1
 
