@@ -17,6 +17,8 @@
 account_helper = AccountHelper.new(node)
 consul_helper = ConsulHelper.new(node)
 
+gitlab_consul_static_etc_dir = "/opt/gitlab/etc/consul"
+
 account "Consul user and group" do
   username account_helper.consul_user
   uid node['consul']['uid']
@@ -29,6 +31,17 @@ end
 
 directory node['consul']['dir'] do
   owner account_helper.consul_user
+end
+
+directory gitlab_consul_static_etc_dir do
+  owner account_helper.consul_user
+  mode '0700'
+  recursive true
+end
+
+env_dir File.join(gitlab_consul_static_etc_dir, 'env') do
+  variables node['gitlab']['consul']['env']
+  notifies :restart, "service[consul]"
 end
 
 %w(
