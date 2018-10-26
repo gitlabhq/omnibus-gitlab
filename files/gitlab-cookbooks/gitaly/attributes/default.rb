@@ -3,9 +3,7 @@ default['gitaly']['ha'] = false
 default['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
 default['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
 default['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly"
-default['gitaly']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
-}
+# default['gitaly']['env'] is set in ../recipes/enable.rb
 default['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
 default['gitaly']['socket_path'] = "#{node['gitaly']['dir']}/gitaly.socket"
 default['gitaly']['listen_addr'] = nil
