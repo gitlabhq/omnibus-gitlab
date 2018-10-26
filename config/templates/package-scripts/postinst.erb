@@ -75,6 +75,17 @@ print_upgrade_info()
   fi
 }
 
+# Required for non-erroring upgrades from the old full path install log_directory
+# 9.6.8 is the last postgres version where we used this old path
+# @TODO: Remove in GitLab 12
+symlink_old_postgres_directory()
+{
+  postgres_dir="${DEST_DIR}/embedded/postgresql/9.6"
+  if [ -d $postgres_dir ]; then
+    ln -sf $postgres_dir ${DEST_DIR}/embedded/postgresql/9.6.8
+  fi
+}
+
 if [ -n "${GITLAB_DEBUG}" ] ; then
   notify "debug: arguments: $@"
 fi
@@ -82,6 +93,7 @@ fi
 <%= external_url_script %>
 
 ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+symlink_old_postgres_directory
 create_config_template
 fix_directory_permissions
 print_upgrade_info
