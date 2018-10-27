@@ -236,19 +236,19 @@ describe BasePgHelper do
 
   describe '#is_managed_and_offline?' do
     it 'returns true when conditions are met' do
-      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
+      chef_run.node.normal['postgresql']['enable'] = true
       stub_service_failure_status('postgresql', true)
 
       expect(subject.is_managed_and_offline?).to be_truthy
     end
 
     it 'returns false when conditions are not met' do
-      chef_run.node.normal['gitlab']['postgresql']['enable'] = true
+      chef_run.node.normal['postgresql']['enable'] = true
       stub_service_failure_status('postgresql', false)
 
       expect(subject.is_managed_and_offline?).to be_falsey
 
-      chef_run.node.normal['gitlab']['postgresql']['enable'] = false
+      chef_run.node.normal['postgresql']['enable'] = false
       stub_service_failure_status('postgresql', false)
 
       expect(subject.is_managed_and_offline?).to be_falsey

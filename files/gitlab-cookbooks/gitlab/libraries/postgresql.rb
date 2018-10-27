@@ -70,10 +70,10 @@ module Postgresql
     def parse_mattermost_postgresql_settings
       value_from_gitlab_rb = Gitlab['mattermost']['sql_data_source']
 
-      user = Gitlab['postgresql']['sql_mattermost_user'] || Gitlab['node']['gitlab']['postgresql']['sql_mattermost_user']
-      unix_socket_directory = Gitlab['postgresql']['unix_socket_directory'] || Gitlab['node']['gitlab']['postgresql']['unix_socket_directory']
-      postgres_directory = Gitlab['postgresql']['dir'] || Gitlab['node']['gitlab']['postgresql']['dir']
-      port = Gitlab['postgresql']['port'] || Gitlab['node']['gitlab']['postgresql']['port']
+      user = Gitlab['postgresql']['sql_mattermost_user'] || Gitlab['node']['postgresql']['sql_mattermost_user']
+      unix_socket_directory = Gitlab['postgresql']['unix_socket_directory'] || Gitlab['node']['postgresql']['unix_socket_directory']
+      postgres_directory = Gitlab['postgresql']['dir'] || Gitlab['node']['postgresql']['dir']
+      port = Gitlab['postgresql']['port'] || Gitlab['node']['postgresql']['port']
       database_name = Gitlab['mattermost']['database_name'] || Gitlab['node']['mattermost']['database_name']
       host = unix_socket_directory || postgres_directory
 

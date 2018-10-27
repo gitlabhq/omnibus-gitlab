@@ -6,7 +6,7 @@ require 'repmgr'
 
 describe Repmgr do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
-  let(:public_attributes) { { 'gitlab' => { 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } } } }
+  let(:public_attributes) { { 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } } }
   let(:shellout) do
     double('shellout', error!: nil, stdout: 'xxxx', stderr: 'yyyy', run_command: nil)
   end

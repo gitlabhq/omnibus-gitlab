@@ -72,7 +72,11 @@ class Repmgr
                 else
                   Etc.getpwuid.name
                 end
-        repmgr_conf = File.join(GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['dir'], "repmgr.conf")
+
+        postgresql_directory = GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['dir'] ||
+          GitlabCtl::Util.get_public_node_attributes['postgresql']['dir']
+
+        repmgr_conf = File.join(postgresql_directory, 'repmgr.conf')
         cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f #{repmgr_conf} #{command}", runas)
       end
 
@@ -162,7 +166,7 @@ class Repmgr
         $stdout.puts "Stopping the database"
         cmd("gitlab-ctl stop postgresql")
         $stdout.puts "Removing the data"
-        cmd("rm -rf #{GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['data_dir']}")
+        cmd("rm -rf #{GitlabCtl::Util.get_public_node_attributes['postgresql']['data_dir']}")
         $stdout.puts "Cloning the data"
         clone(args)
         $stdout.puts "Starting the database"
@@ -214,8 +218,8 @@ class Repmgr
     def is_master?
       hostname = attributes['repmgr']['node_name'] || `hostname -f`.chomp
       query = "SELECT name FROM repmgr_gitlab_cluster.repl_nodes WHERE type='master' AND active != 'f'"
-      host = attributes['gitlab']['postgresql']['unix_socket_directory']
-      port = attributes['gitlab']['postgresql']['port']
+      host = attributes['postgresql']['unix_socket_directory']
+      port = attributes['postgresql']['port']
       master = Repmgr::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
       show_count = Repmgr::Base.cmd(
         %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),

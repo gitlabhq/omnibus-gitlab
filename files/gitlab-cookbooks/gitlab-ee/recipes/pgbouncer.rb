@@ -50,8 +50,8 @@ end
 
 runit_service 'pgbouncer' do
   options(
-    username: node['gitlab']['postgresql']['username'],
-    groupname: node['gitlab']['postgresql']['group'],
+    username: node['postgresql']['username'],
+    groupname: node['postgresql']['group'],
     data_directory: node['gitlab']['pgbouncer']['data_directory'],
     log_directory: node['gitlab']['pgbouncer']['log_directory'],
     env_dir: pgbouncer_static_etc_dir
@@ -86,7 +86,7 @@ execute 'generate databases.ini' do
      --hostgroup #{account_helper.postgresql_group} \
      --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
      --pg-port #{node['gitlab']['pgbouncer']['listen_port']} \
-     --user #{node['gitlab']['postgresql']['pgbouncer_user']}
+     --user #{node['postgresql']['pgbouncer_user']}
     EOF
   }
   action :nothing

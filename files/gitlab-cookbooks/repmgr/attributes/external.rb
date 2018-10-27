@@ -1,1 +1,1 @@
-default['gitlab']['postgresql']['custom_pg_hba_entries']['repmgr'] = []
+default['postgresql']['custom_pg_hba_entries']['repmgr'] = []

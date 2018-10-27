@@ -46,7 +46,7 @@ psql_port='5432'
 
     context 'with default settings' do
       it 'correctly sets the shared_preload_libraries default setting' do
-        expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])
+        expect(chef_run.node['postgresql']['shared_preload_libraries'])
           .to be_nil
 
         expect(chef_run).to render_file(postgresql_conf)
@@ -73,7 +73,7 @@ psql_port='5432'
       it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'foo', 'bar'
 
       it 'correctly sets the shared_preload_libraries setting' do
-        expect(chef_run.node['gitlab']['postgresql']['shared_preload_libraries'])
+        expect(chef_run.node['postgresql']['shared_preload_libraries'])
           .to eql('pg_stat_statements')
 
         expect(chef_run).to render_file(postgresql_conf)
@@ -89,7 +89,7 @@ psql_port='5432'
 
     context 'sets SSL settings' do
       it 'enables SSL by default' do
-        expect(chef_run.node['gitlab']['postgresql']['ssl'])
+        expect(chef_run.node['postgresql']['ssl'])
           .to eq('on')
 
         expect(chef_run).to render_file(
@@ -168,7 +168,7 @@ psql_port='5432'
   context 'renders runtime.conf' do
     context 'with default settings' do
       it 'correctly sets the log_line_prefix default setting' do
-        expect(chef_run.node['gitlab']['postgresql']['log_line_prefix'])
+        expect(chef_run.node['postgresql']['log_line_prefix'])
           .to be_nil
 
         expect(chef_run).to render_file(runtime_conf)
@@ -212,7 +212,7 @@ psql_port='5432'
       end
 
       it 'correctly sets the log_line_prefix setting' do
-        expect(chef_run.node['gitlab']['postgresql']['log_line_prefix'])
+        expect(chef_run.node['postgresql']['log_line_prefix'])
           .to eql('%a')
 
         expect(chef_run).to render_file(runtime_conf)
@@ -220,7 +220,7 @@ psql_port='5432'
       end
 
       it 'correctly sets the log_line_prefix setting' do
-        expect(chef_run.node['gitlab']['postgresql']['log_statement'])
+        expect(chef_run.node['postgresql']['log_statement'])
           .to eql('all')
 
         expect(chef_run).to render_file(runtime_conf)
@@ -249,9 +249,9 @@ psql_port='5432'
 
   context 'version specific settings' do
     it 'sets unix_socket_directory' do
-      expect(chef_run.node['gitlab']['postgresql']['unix_socket_directory'])
+      expect(chef_run.node['postgresql']['unix_socket_directory'])
         .to eq('/var/opt/gitlab/postgresql')
-      expect(chef_run.node['gitlab']['postgresql']['unix_socket_directories'])
+      expect(chef_run.node['postgresql']['unix_socket_directories'])
         .to eq(nil)
       expect(chef_run).to render_file(
         postgresql_conf
@@ -266,7 +266,7 @@ psql_port='5432'
     end
 
     it 'sets checkpoint_segments' do
-      expect(chef_run.node['gitlab']['postgresql']['checkpoint_segments'])
+      expect(chef_run.node['postgresql']['checkpoint_segments'])
         .to eq(10)
       expect(chef_run).to render_file(
         runtime_conf
@@ -338,7 +338,7 @@ describe 'postgresql 9.6' do
 
   context 'version specific settings' do
     it 'sets unix_socket_directories' do
-      expect(chef_run.node['gitlab']['postgresql']['unix_socket_directory'])
+      expect(chef_run.node['postgresql']['unix_socket_directory'])
         .to eq('/var/opt/gitlab/postgresql')
       expect(chef_run).to render_file(
         postgresql_conf
@@ -360,7 +360,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the max_replication_slots setting' do
-        expect(chef_run.node['gitlab']['postgresql']['max_replication_slots'])
+        expect(chef_run.node['postgresql']['max_replication_slots'])
           .to eq(0)
 
         expect(chef_run).to render_file(
@@ -369,7 +369,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the synchronous_commit setting' do
-        expect(chef_run.node['gitlab']['postgresql']['synchronous_standby_names'])
+        expect(chef_run.node['postgresql']['synchronous_standby_names'])
           .to eq('')
 
         expect(chef_run).to render_file(
@@ -384,7 +384,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the max_locks_per_transaction setting' do
-        expect(chef_run.node['gitlab']['postgresql']['max_locks_per_transaction'])
+        expect(chef_run.node['postgresql']['max_locks_per_transaction'])
           .to eq(128)
 
         expect(chef_run).to render_file(
@@ -411,7 +411,7 @@ describe 'postgresql 9.6' do
 
     context 'renders runtime.conf' do
       it 'sets the synchronous_commit setting' do
-        expect(chef_run.node['gitlab']['postgresql']['synchronous_commit'])
+        expect(chef_run.node['postgresql']['synchronous_commit'])
           .to eq('on')
 
         expect(chef_run).to render_file(
@@ -420,7 +420,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the hot_standby_feedback setting' do
-        expect(chef_run.node['gitlab']['postgresql']['hot_standby_feedback'])
+        expect(chef_run.node['postgresql']['hot_standby_feedback'])
           .to eq('off')
 
         expect(chef_run).to render_file(
@@ -429,7 +429,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the random_page_cost setting' do
-        expect(chef_run.node['gitlab']['postgresql']['random_page_cost'])
+        expect(chef_run.node['postgresql']['random_page_cost'])
           .to eq(2.0)
 
         expect(chef_run).to render_file(
@@ -438,7 +438,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the log_temp_files setting' do
-        expect(chef_run.node['gitlab']['postgresql']['log_temp_files'])
+        expect(chef_run.node['postgresql']['log_temp_files'])
           .to eq(-1)
 
         expect(chef_run).to render_file(
@@ -447,7 +447,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets the log_checkpoints setting' do
-        expect(chef_run.node['gitlab']['postgresql']['log_checkpoints'])
+        expect(chef_run.node['postgresql']['log_checkpoints'])
           .to eq('off')
 
         expect(chef_run).to render_file(
@@ -456,7 +456,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets idle_in_transaction_session_timeout' do
-        expect(chef_run.node['gitlab']['postgresql']['idle_in_transaction_session_timeout'])
+        expect(chef_run.node['postgresql']['idle_in_transaction_session_timeout'])
           .to eq('60000')
 
         expect(chef_run).to render_file(runtime_conf)
@@ -464,7 +464,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets effective_io_concurrency' do
-        expect(chef_run.node['gitlab']['postgresql']['effective_io_concurrency'])
+        expect(chef_run.node['postgresql']['effective_io_concurrency'])
           .to eq(1)
 
         expect(chef_run).to render_file(runtime_conf)
@@ -472,7 +472,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets max_worker_processes' do
-        expect(chef_run.node['gitlab']['postgresql']['max_worker_processes'])
+        expect(chef_run.node['postgresql']['max_worker_processes'])
           .to eq(8)
 
         expect(chef_run).to render_file(runtime_conf)
@@ -480,7 +480,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets max_parallel_workers_per_gather' do
-        expect(chef_run.node['gitlab']['postgresql']['max_parallel_workers_per_gather'])
+        expect(chef_run.node['postgresql']['max_parallel_workers_per_gather'])
           .to eq(0)
 
         expect(chef_run).to render_file(runtime_conf)
@@ -488,7 +488,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets log_lock_waits' do
-        expect(chef_run.node['gitlab']['postgresql']['log_lock_waits'])
+        expect(chef_run.node['postgresql']['log_lock_waits'])
           .to eq(1)
 
         expect(chef_run).to render_file(runtime_conf)
@@ -496,7 +496,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets deadlock_timeout' do
-        expect(chef_run.node['gitlab']['postgresql']['deadlock_timeout'])
+        expect(chef_run.node['postgresql']['deadlock_timeout'])
           .to eq('5s')
 
         expect(chef_run).to render_file(runtime_conf)
@@ -504,7 +504,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets track_io_timing' do
-        expect(chef_run.node['gitlab']['postgresql']['track_io_timing'])
+        expect(chef_run.node['postgresql']['track_io_timing'])
           .to eq('off')
 
         expect(chef_run).to render_file(runtime_conf)
@@ -512,7 +512,7 @@ describe 'postgresql 9.6' do
       end
 
       it 'sets default_statistics_target' do
-        expect(chef_run.node['gitlab']['postgresql']['default_statistics_target'])
+        expect(chef_run.node['postgresql']['default_statistics_target'])
           .to eq(1000)
 
         expect(chef_run).to render_file(runtime_conf)

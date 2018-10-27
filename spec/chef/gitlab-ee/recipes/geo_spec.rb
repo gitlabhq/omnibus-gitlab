@@ -33,7 +33,7 @@ describe 'gitlab-ee::geo' do
     end
 
     context 'in postgres settings' do
-      let(:config_attrs) { node['gitlab']['postgresql'] }
+      let(:config_attrs) { node['postgresql'] }
 
       it 'defines sql_replication_user' do
         expect(config_attrs['sql_replication_user']).to eq('gitlab_replicator')
@@ -84,7 +84,7 @@ describe 'gitlab-ee::geo' do
     end
 
     context 'in postgres settings' do
-      let(:config_attrs) { node['gitlab']['postgresql'] }
+      let(:config_attrs) { node['postgresql'] }
 
       it 'defines wal_level' do
         expect(config_attrs['wal_level']).to eq('hot_standby')

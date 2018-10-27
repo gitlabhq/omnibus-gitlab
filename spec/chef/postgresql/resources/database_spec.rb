@@ -5,7 +5,7 @@ describe 'postgresql_database' do
     ChefSpec::SoloRunner.new(step_into: %w(postgresql_database)) do |node|
       # unix_socket_directory is normally conditionally set in postgresql::enable
       # which is not executed as part of this spec
-      node.normal['gitlab']['postgresql']['unix_socket_directory'] = '/var/opt/gitlab/postgresql'
+      node.normal['postgresql']['unix_socket_directory'] = '/var/opt/gitlab/postgresql'
     end
   end
 

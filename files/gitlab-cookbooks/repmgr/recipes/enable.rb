@@ -17,13 +17,13 @@
 account_helper = AccountHelper.new(node)
 repmgr_helper = RepmgrHelper.new(node)
 replication_user = node['repmgr']['user']
-repmgr_conf = "#{node['gitlab']['postgresql']['dir']}/repmgr.conf"
+repmgr_conf = "#{node['postgresql']['dir']}/repmgr.conf"
 
 pg_helper = PgHelper.new(node)
 
 log_directory = node['repmgr']['log_directory']
 
-node.default['gitlab']['postgresql']['custom_pg_hba_entries']['repmgr'] = repmgr_helper.pg_hba_entries
+node.default['postgresql']['custom_pg_hba_entries']['repmgr'] = repmgr_helper.pg_hba_entries
 
 node_number = node['repmgr']['node_number'] || repmgr_helper.generate_node_number
 template repmgr_conf do

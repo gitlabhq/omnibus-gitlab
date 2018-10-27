@@ -44,7 +44,7 @@ end
 
 runit_service 'pgbouncer-exporter' do
   options(
-    username: node['gitlab']['postgresql']['username'],
+    username: node['postgresql']['username'],
     connection_string: pgbouncer_connection_string,
     listen_address: pgbouncer_exporter_listen_address,
     log_directory: pgbouncer_exporter_log_dir,

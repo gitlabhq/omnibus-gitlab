@@ -38,10 +38,10 @@ Creates a database in the PostgreSQL instance
 #### properties
 
 * `database`: The name of the database to create. Required.
-* `owner`: The user account that will be the owner of the database. Default: `node['gitlab']['postgresql']['user']`
+* `owner`: The user account that will be the owner of the database. Default: `node['postgresql']['user']`
 * `helper`: The helper object for interacting with the running database. Default: PgHelper.new(node)
-* `database_port`: The port the database instance is listening on. Default: `node['gitlab']['postgresql']['port']`
-* `database_socket`: The directory that the socket file exists in. Default: `node['gitlab']['postgresql']['unix_socket_directory']`
+* `database_port`: The port the database instance is listening on. Default: `node['postgresql']['port']`
+* `database_socket`: The directory that the socket file exists in. Default: `node['postgresql']['unix_socket_directory']`
 
 #### example
 

@@ -39,8 +39,12 @@ class PostgreSQL
     end
 
     def replication_user
-      configured_user = GitlabCtl::Util.get_node_attributes(@ctl.base_path)
-        .dig('gitlab', 'postgresql', 'sql_replication_user').to_s
+      configured_user = (
+        GitlabCtl::Util.get_node_attributes(@ctl.base_path)
+          .dig('gitlab', 'postgresql', 'sql_replication_user') ||
+        GitlabCtl::Util.get_node_attributes(@ctl.base_path)
+          .dig('postgresql', 'sql_replication_user')
+      ).to_s
 
       configured_user.tap do |user|
         if user.strip.empty?
