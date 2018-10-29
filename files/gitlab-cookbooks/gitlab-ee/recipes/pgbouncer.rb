@@ -17,6 +17,7 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
+pgbouncer_static_etc_dir = "/opt/gitlab/etc/pgbouncer"
 
 node.default['gitlab']['pgbouncer']['unix_socket_dir'] ||= node['gitlab']['pgbouncer']['data_directory']
 
@@ -27,13 +28,19 @@ include_recipe 'consul::enable' if node['consul']['enable']
 
 [
   node['gitlab']['pgbouncer']['log_directory'],
-  node['gitlab']['pgbouncer']['data_directory']
+  node['gitlab']['pgbouncer']['data_directory'],
+  pgbouncer_static_etc_dir
 ].each do |dir|
   directory dir do
     owner account_helper.postgresql_user
     mode '0700'
     recursive true
   end
+end
+
+env_dir File.join(pgbouncer_static_etc_dir, 'env') do
+  variables node['gitlab']['pgbouncer']['env']
+  notifies :restart, "service[pgbouncer]"
 end
 
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pg_auth" do
