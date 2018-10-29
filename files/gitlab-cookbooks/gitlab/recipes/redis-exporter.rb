@@ -18,11 +18,23 @@
 account_helper = AccountHelper.new(node)
 redis_user = account_helper.redis_user
 redis_exporter_log_dir = node['gitlab']['redis-exporter']['log_directory']
+redis_exporter_static_etc_dir = "/opt/gitlab/etc/redis-exporter"
 
 directory redis_exporter_log_dir do
   owner redis_user
   mode '0700'
   recursive true
+end
+
+directory redis_exporter_static_etc_dir do
+  owner redis_user
+  mode '0700'
+  recursive true
+end
+
+env_dir File.join(redis_exporter_static_etc_dir, 'env') do
+  variables node['gitlab']['redis-exporter']['env']
+  notifies :restart, "service[redis-exporter]"
 end
 
 runtime_flags = PrometheusHelper.new(node).flags('redis-exporter')
