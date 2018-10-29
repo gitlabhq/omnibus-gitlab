@@ -1113,6 +1113,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Configure to enable health check endpoint on GitLab Pages
 # gitlab_pages['status_uri'] = "/@status"
 
+##! Tune the maximum number of concurrent connections GitLab Pages will handle.
+##! This should be in the range 1 - 10000, defaulting to 5000.
+# gitlab_pages['max_connections'] = 5000
+
 ##! Configure to use JSON structured logging in GitLab Pages
 # gitlab_pages['log_format'] = "json"
 
