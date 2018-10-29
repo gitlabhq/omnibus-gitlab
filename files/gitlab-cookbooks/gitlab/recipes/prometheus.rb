@@ -21,6 +21,7 @@ prometheus_user = account_helper.prometheus_user
 prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
 prometheus_dir = node['gitlab']['prometheus']['home']
 prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
+prometheus_static_etc_dir = "/opt/gitlab/etc/prometheus"
 
 binary, rule_extension = prometheus_helper.binary_and_rules
 
@@ -42,6 +43,17 @@ directory prometheus_log_dir do
   owner prometheus_user
   mode '0700'
   recursive true
+end
+
+directory prometheus_static_etc_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+env_dir File.join(prometheus_static_etc_dir, 'env') do
+  variables node['gitlab']['prometheus']['env']
+  notifies :restart, "service[prometheus]"
 end
 
 link "Link prometheus executable to correct binary" do
