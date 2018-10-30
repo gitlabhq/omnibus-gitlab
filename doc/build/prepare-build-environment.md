@@ -24,13 +24,13 @@ follows
    in the following commands.
 
     ```
-    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION}
+    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}
     ```
 
 1. Start the container and enter its shell:
 
     ```
-    docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:debian_9-${BUILDER_IMAGE_REVISION} bash
+    docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
     ```
 
 1. Clone the Omnibus GitLab source and change to the cloned directory:
