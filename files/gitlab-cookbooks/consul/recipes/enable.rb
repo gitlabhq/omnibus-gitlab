@@ -17,7 +17,7 @@
 account_helper = AccountHelper.new(node)
 consul_helper = ConsulHelper.new(node)
 
-gitlab_consul_static_etc_dir = "/opt/gitlab/etc/consul"
+gitlab_consul_static_etc_dir = node['consul']['env_dir']
 
 account "Consul user and group" do
   username account_helper.consul_user

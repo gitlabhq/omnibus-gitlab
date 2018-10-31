@@ -9,8 +9,9 @@ default['consul']['log_directory'] = '/var/log/gitlab/consul'
 default['consul']['node_name'] = nil
 default['consul']['script_directory'] = '/var/opt/gitlab/consul/scripts'
 default['consul']['configuration'] = {}
+default['consul']['env_dir'] = '/opt/gitlab/etc/consul'
 default['consul']['env'] = {
-  'SSL_CERT_DIR' => "/opt/gitlabs/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 }
 
 # Critical state of service:postgresql indicates a node is not a master
