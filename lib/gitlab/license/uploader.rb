@@ -1,9 +1,10 @@
 require 'erb'
 require 'fileutils'
 require_relative '../build/info.rb'
+require_relative 'base.rb'
 
 module License
-  class PageGenerator
+  class Uploader < Base
     def initialize
       @edition = Build::Info.package
       @license_bucket = ENV['LICENSE_S3_BUCKET']
@@ -18,21 +19,8 @@ module License
       s3_fetch
       copy_license
       load_data
-      generate_package_webpage
-      generate_edition_webpage
+      generate_package_page
       s3_upload
-    end
-
-    def s3_sync(source, destination)
-      system("AWS_ACCESS_KEY_ID=#{ENV['LICENSE_AWS_ACCESS_KEY_ID']} AWS_SECRET_ACCESS_KEY=#{ENV['LICENSE_AWS_SECRET_ACCESS_KEY']} aws s3 sync --region #{@license_bucket_region} #{source} #{destination}")
-    end
-
-    def s3_fetch
-      s3_sync("s3://#{@license_bucket}", @licenses_path)
-    end
-
-    def s3_upload
-      s3_sync(@licenses_path, "s3://#{@license_bucket}")
     end
 
     def copy_license
@@ -41,20 +29,26 @@ module License
       # gitlab-licenses
       # |-- gitlab-ce
       # |   |-- 11.0
-      # |   |   |-- 11.0.1-ce.0.license.txt
-      # |   |   `-- 11.0.2-ce.0.license.txt
+      # |   |   |-- 11.0.1-ce.0.json
+      # |   |   |-- 11.0.1-ce.0.html
+      # |   |   |-- 11.0.2-ce.0.json
+      # |   |   `-- 11.0.2-ce.0.html
       # |   `-- 11.1
-      # |       |-- 11.1.1-ce.0.license.txt
-      # |       `-- 11.1.2-ce.0.license.txt
-      # |-- gitlab-ce.html
-      # |-- gitlab-ee
-      # |   |-- 11.0
-      # |   |   |-- 11.0.1-ee.0.license.txt
-      # |   |   `-- 11.0.2-ee.0.license.txt
-      # |   `-- 11.1
-      # |       |-- 11.1.1-ee.0.license.txt
-      # |       `-- 11.1.2-ee.0.license.txt
-      # `-- gitlab-ee.html
+      # |       |-- 11.1.1-ce.0.json
+      # |       |-- 11.1.1-ce.0.html
+      # |       |-- 11.1.2-ce.0.json
+      # |       `-- 11.1.2-ce.0.html
+      # `-- gitlab-ee
+      #     |-- 11.0
+      #     |   |-- 11.0.1-ee.0.json
+      #     |   |-- 11.0.1-ee.0.html
+      #     |   |-- 11.0.2-ee.0.json
+      #     |   `-- 11.0.2-ee.0.html
+      #     `-- 11.1
+      #         |-- 11.1.1-ee.0.json
+      #         |-- 11.1.1-ee.0.html
+      #         |-- 11.1.2-ee.0.json
+      #         `-- 11.1.2-ee.0.html
       #
       dest_dir = File.join(@licenses_path, @edition, @current_minor_version)
       FileUtils.mkdir_p(dest_dir)
@@ -66,23 +60,11 @@ module License
       @json_data = JSON.parse(File.read("#{dest_dir}/#{@current_version}.json")).sort
     end
 
-    def generate_package_webpage
+    def generate_package_page
       template = File.read(File.join(File.dirname(__FILE__), "package.html.erb"))
       output_text = ERB.new(template).result(binding)
 
       output_path = File.join(@licenses_path, @edition, @current_minor_version, "#{@current_version}.html")
-      FileUtils.mkdir_p(File.dirname(output_path))
-
-      File.open(output_path, "w") do |f|
-        f.write(output_text)
-      end
-    end
-
-    def generate_edition_webpage
-      template = File.read(File.join(File.dirname(__FILE__), "edition.html.erb"))
-      output_text = ERB.new(template).result(binding)
-
-      output_path = File.join(@licenses_path, "#{@edition}.html")
       FileUtils.mkdir_p(File.dirname(output_path))
 
       File.open(output_path, "w") do |f|

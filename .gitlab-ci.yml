@@ -1313,7 +1313,7 @@ license-upload:
   stage: metrics
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   script:
-    - bundle exec rake license:generate_index
+    - bundle exec rake license:upload
   allow_failure: true
   when: manual
   cache:
@@ -1329,13 +1329,12 @@ license-upload:
     - Ubuntu-18.04
 
 pages:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:alpine-aws
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: prepare
   before_script: []
   script:
-    - mkdir -p ~/.aws
-    - echo -e "[default]\naws_access_key_id = $LICENSE_AWS_ACCESS_KEY_ID\naws_secret_access_key = $LICENSE_AWS_SECRET_ACCESS_KEY"  > ~/.aws/config
-    - aws s3 sync s3://${LICENSE_S3_BUCKET} public
+    - bundle exec license:generate_pages
+    - mv ${LICENSE_S3_BUCKET} public
     - cp support/webpages/* public
   artifacts:
     paths:
