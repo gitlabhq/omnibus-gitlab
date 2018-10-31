@@ -84,7 +84,7 @@ end
 
 shared_examples 'enabled env' do |env_dir, env_var, content|
   it 'created env directory' do
-    expect(chef_run).to create_directory("#{env_dir}")
+    expect(chef_run).to create_directory(env_dir)
   end
 
   it "does create the #{env_var} file" do
@@ -96,7 +96,7 @@ end
 
 shared_examples 'disabled env' do |env_dir, env_var, content|
   it 'created env directory' do
-    expect(chef_run).to create_directory("#{env_dir}")
+    expect(chef_run).to create_directory(env_dir)
   end
 
   it "does not create the #{env_var} file" do
