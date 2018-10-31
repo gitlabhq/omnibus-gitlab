@@ -33,6 +33,7 @@ describe 'gitlab-ee::geo-database-migrations' do
         redis-exporter
         sidekiq
         unicorn
+        puma
         gitaly
         geo-postgresql
         gitlab-pages

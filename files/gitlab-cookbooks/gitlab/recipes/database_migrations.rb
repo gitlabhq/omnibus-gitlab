@@ -23,6 +23,7 @@ initial_runner_token  = node['gitlab']['gitlab-rails']['initial_shared_runners_r
 
 dependent_services = []
 dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
+dependent_services << "service[puma]" if omnibus_helper.should_notify?("puma")
 dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
 connection_attributes = %w(

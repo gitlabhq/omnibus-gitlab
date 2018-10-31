@@ -170,6 +170,7 @@ describe 'gitlab-ee::geo-secondary' do
         redis-exporter
         sidekiq
         unicorn
+        puma
         gitaly
         geo-postgresql
         gitlab-pages

@@ -65,6 +65,7 @@ module Gitlab
     attribute('logging',          priority: 20).use { Logging }
     attribute('postgresql',       priority: 20).use { Postgresql }
     attribute('unicorn',          priority: 20).use { Unicorn }
+    attribute('puma',             priority: 20)
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('gitlab_pages',     priority: 20).use { GitlabPages }
     attribute('prometheus',       priority: 20).use { Prometheus }

@@ -623,6 +623,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/omnibus/settings/unicorn.html
 ################################################################################
 
+# unicorn['enable'] = true
 # unicorn['worker_timeout'] = 60
 ###! Minimum worker_processes is 2 at this moment
 ###! See https://gitlab.com/gitlab-org/gitlab-ce/issues/18771
@@ -647,6 +648,33 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!       https://github.com/kzk/unicorn-worker-killer
 # unicorn['worker_memory_limit_min'] = "400 * 1 << 20"
 # unicorn['worker_memory_limit_max'] = "650 * 1 << 20"
+
+################################################################################
+## GitLab Puma
+##! Tweak puma settings. You should only use Unicorn or Puma, not both.
+##! Docs: https://docs.gitlab.com/omnibus/settings/puma.html
+################################################################################
+
+# puma['enable'] = false
+# puma['ha'] = false
+# puma['worker_timeout'] = 60
+# puma['worker_processes'] = 2
+# puma['min_threads'] = 1
+# puma['max_threads'] = 16
+
+### Advanced settings
+# puma['listen'] = '127.0.0.1'
+# puma['port'] = 8080
+# puma['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+# puma['pidfile'] = '/opt/gitlab/var/puma/puma.pid'
+# puma['state_path'] = '/opt/gitlab/var/puma/puma.state'
+
+###! **We do not recommend changing this setting**
+# puma['log_directory'] = "/var/log/gitlab/puma"
+
+### **Only change these settings if you understand well what they mean**
+###! Docs: https://github.com/schneems/puma_worker_killer
+# puma['per_worker_max_memory_mb'] = 650
 
 ################################################################################
 ## GitLab Sidekiq

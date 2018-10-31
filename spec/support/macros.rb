@@ -9,6 +9,11 @@ module GitlabSpec
       end
     end
 
+    def stub_default_should_notify?(value)
+      allow(File).to receive(:symlink?).and_return(value)
+      allow_any_instance_of(OmnibusHelper).to receive(:success?).and_return(value)
+    end
+
     # @param [String] service internal name of the service (on-disk)
     # @param [Boolean] value status command succeed?
     def stub_service_success_status(service, value)

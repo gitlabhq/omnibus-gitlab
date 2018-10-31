@@ -80,6 +80,7 @@ include_recipe "gitlab::add_trusted_certs"
 # the corresponding service recipe is not loaded below.
 %w(
   unicorn
+  puma
   sidekiq
   mailroom
 ).each do |dummy|
@@ -125,6 +126,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 # Configure Services
 [
   "unicorn",
+  "puma",
   "sidekiq",
   "gitlab-workhorse",
   "mailroom",
