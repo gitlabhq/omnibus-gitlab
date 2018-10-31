@@ -76,7 +76,6 @@ describe 'gitlab::alertmanager' do
       )
     end
 
-
     it 'should create a gitlab-prometheus user account' do
       expect(chef_run).to create_user('gitlab-prometheus')
     end
