@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.5.0
 
+- Add experimental support for Puma !2801
 - Move to standardized cluster lifecycle event handlers in preparation for Puma support !2728
 - Update gitlab-monitor to 2.19.1
 - Add option to configure consul group !2781

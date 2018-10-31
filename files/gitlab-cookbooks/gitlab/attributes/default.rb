@@ -357,6 +357,25 @@ default['gitlab']['unicorn']['worker_memory_limit_max'] = "650 * 1 << 20"
 default['gitlab']['unicorn']['worker_processes'] = nil
 
 ####
+# Puma
+####
+default['gitlab']['puma']['enable'] = false
+default['gitlab']['puma']['ha'] = false
+default['gitlab']['puma']['log_directory'] = "/var/log/gitlab/puma"
+default['gitlab']['puma']['listen'] = "127.0.0.1"
+default['gitlab']['puma']['port'] = 8080
+default['gitlab']['puma']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+# Path to the puma server Process ID file
+# defaults to /opt/gitlab/var/puma/puma.pid. The install-dir path is set at build time
+default['gitlab']['puma']['pidfile'] = "#{node['package']['install-dir']}/var/puma/puma.pid"
+default['gitlab']['puma']['state_path'] = "#{node['package']['install-dir']}/var/puma/puma.state"
+default['gitlab']['puma']['worker_timeout'] = 60
+default['gitlab']['puma']['per_worker_max_memory_mb'] = 650
+default['gitlab']['puma']['worker_processes'] = 2
+default['gitlab']['puma']['min_threads'] = 1
+default['gitlab']['puma']['max_threads'] = 16
+
+####
 # Sidekiq
 ####
 default['gitlab']['sidekiq']['enable'] = false

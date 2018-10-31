@@ -391,6 +391,7 @@ end
 file File.join(gitlab_rails_dir, "RUBY_VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
   notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?('unicorn')
+  notifies :restart, "service[puma]" if omnibus_helper.should_notify?('puma')
 end
 
 execute "clear the gitlab-rails cache" do
