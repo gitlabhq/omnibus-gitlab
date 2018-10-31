@@ -1,4 +1,8 @@
 #!/bin/sh
 exec 2>&1
 umask 077
-exec chpst -P -u <%= @options[:username] %> /opt/gitlab/embedded/bin/pgbouncer_exporter -pgBouncer.connectionString="<%= @options[:connection_string] %>" -web.listen-address="<%= @options[:listen_address] %>"
+exec chpst -P -e <%= @options[:env_dir] %> \
+  -u <%= @options[:username] %> \
+  /opt/gitlab/embedded/bin/pgbouncer_exporter \
+    -pgBouncer.connectionString="<%= @options[:connection_string] %>" \
+    -web.listen-address="<%= @options[:listen_address] %>"
