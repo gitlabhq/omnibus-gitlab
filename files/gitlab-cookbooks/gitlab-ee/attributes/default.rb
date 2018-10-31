@@ -163,6 +163,9 @@ default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcu
 
 default['gitlab']['postgresql']['pgbouncer_user'] = 'pgbouncer'
 default['gitlab']['postgresql']['pgbouncer_user_password'] = nil
+default['gitlab']['pgbouncer']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['pgbouncer']['enable'] = false
 default['gitlab']['pgbouncer']['log_directory'] = '/var/log/gitlab/pgbouncer'
 default['gitlab']['pgbouncer']['data_directory'] = '/var/opt/gitlab/pgbouncer'
