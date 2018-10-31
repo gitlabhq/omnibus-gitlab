@@ -41,7 +41,8 @@ runtime_flags = PrometheusHelper.new(node).flags('redis-exporter')
 runit_service 'redis-exporter' do
   options({
     log_directory: redis_exporter_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: File.join(redis_exporter_static_etc_dir, 'env')
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end

@@ -70,7 +70,8 @@ runtime_flags = PrometheusHelper.new(node).kingpin_flags('alertmanager')
 runit_service 'alertmanager' do
   options({
     log_directory: alertmanager_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: File.join(alertmanager_static_etc_dir, 'env')
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['alertmanager'].to_hash

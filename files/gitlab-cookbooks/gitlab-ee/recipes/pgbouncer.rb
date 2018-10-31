@@ -53,7 +53,8 @@ runit_service 'pgbouncer' do
     username: node['gitlab']['postgresql']['username'],
     groupname: node['gitlab']['postgresql']['group'],
     data_directory: node['gitlab']['pgbouncer']['data_directory'],
-    log_directory: node['gitlab']['pgbouncer']['log_directory']
+    log_directory: node['gitlab']['pgbouncer']['log_directory'],
+    env_dir: File.join(pgbouncer_static_etc_dir, 'env')
   )
 end
 

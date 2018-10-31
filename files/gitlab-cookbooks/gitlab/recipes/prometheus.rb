@@ -93,7 +93,8 @@ runtime_flags = prometheus_helper.flags('prometheus')
 runit_service 'prometheus' do
   options({
     log_directory: prometheus_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: File.join(prometheus_static_etc_dir, 'env')
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['prometheus'].to_hash

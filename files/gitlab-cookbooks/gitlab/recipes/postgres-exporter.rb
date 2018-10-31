@@ -44,7 +44,8 @@ runtime_flags = PrometheusHelper.new(node).kingpin_flags('postgres-exporter')
 runit_service 'postgres-exporter' do
   options({
     log_directory: postgres_exporter_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: File.join(postgres_exporter_static_etc_dir, 'env')
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
