@@ -40,7 +40,7 @@ directory gitlab_consul_static_etc_dir do
 end
 
 env_dir File.join(gitlab_consul_static_etc_dir, 'env') do
-  variables node['gitlab']['consul']['env']
+  variables node['consul']['env']
   notifies :restart, "service[consul]"
 end
 
