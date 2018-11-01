@@ -19,6 +19,7 @@ psql_port='5432'
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+    allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.2.18')
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
   end
 
@@ -283,6 +284,7 @@ psql_port='5432'
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
+        allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.6.1')
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
@@ -308,6 +310,11 @@ psql_port='5432'
         end
         chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
       end
+
+      it 'does not warn the user that a restart is needed' do
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
+      end
     end
   end
 end
@@ -320,7 +327,13 @@ describe 'postgresql 9.6' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
+    allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.6.1')
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.6')
+  end
+
+  it 'does not warn the user that a restart is needed by default' do
+    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+    expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
   end
 
   context 'version specific settings' do
@@ -525,9 +538,25 @@ describe 'postgresql 9.6' do
       expect(chef_run).not_to run_execute('enable pg_trgm extension')
     end
 
+    context 'running version differs from installed version' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+      end
+
+      it 'warns the user that a restart is needed' do
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).to run_ruby_block('warn pending postgresql restart')
+      end
+
+      it 'does not warns the user that a restart is needed when postgres is stopped' do
+        expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
+      end
+    end
+
     context 'running version differs from data version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+        allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.2.18')
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
@@ -552,6 +581,11 @@ describe 'postgresql 9.6' do
           )
         end
         chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
+      end
+
+      it 'does not warn the user that a restart is needed' do
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
       end
     end
 

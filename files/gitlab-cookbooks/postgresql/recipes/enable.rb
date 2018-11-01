@@ -219,6 +219,19 @@ postgresql_extension 'pg_trgm' do
   action :enable
 end
 
+ruby_block 'warn pending postgresql restart' do
+  block do
+    message = <<~MESSAGE
+      The version of the running postgresql service is different than what is installed.
+      Please restart postgresql to start the new version.
+
+      sudo gitlab-ctl restart postgresql
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
+end
+
 execute 'reload postgresql' do
   command %(/opt/gitlab/bin/gitlab-ctl hup postgresql)
   retries 20
