@@ -19,6 +19,7 @@ omnibus-gitlab repository.
 - Support for Pages access control settings (Turo Soisenniemi)
 - Geo: Fix adding a password to the FDW user mapping !2799
 - Specify groups while running services and `gitlab-` prefixed commands !2785
+- Warn users when postgresql needs to be restarted due to version changes !2823
 
 11.4.1
 
