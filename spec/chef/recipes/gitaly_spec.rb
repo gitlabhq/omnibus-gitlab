@@ -283,11 +283,11 @@ describe 'gitaly' do
   end
 
   context 'populates default env variables' do
-    it_behaves_like "enabled gitaly env", "TZ", ':/etc/localtime'
-    it_behaves_like "enabled gitaly env", "HOME", '/var/opt/gitlab'
-    it_behaves_like "enabled gitaly env", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
-    it_behaves_like "enabled gitaly env", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
-    it_behaves_like "enabled gitaly env", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it_behaves_like "enabled service env", "gitaly", "TZ", ':/etc/localtime'
+    it_behaves_like "enabled service env", "gitaly", "HOME", '/var/opt/gitlab'
+    it_behaves_like "enabled service env", "gitaly", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
+    it_behaves_like "enabled service env", "gitaly", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
+    it_behaves_like "enabled service env", "gitaly", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
   end
 
   context 'computes env variables based on other values' do
@@ -300,7 +300,7 @@ describe 'gitaly' do
         }
       )
     end
-    it_behaves_like "enabled gitaly env", "HOME", '/my/random/path'
+    it_behaves_like "enabled service env", "gitaly", "HOME", '/my/random/path'
   end
 end
 
