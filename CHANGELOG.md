@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Upgrade Bundler version to 1.16.6
 - Omit Gitaly development and test gems !2808
 - Support for Pages access control settings (Turo Soisenniemi)
+- Pages: Support limiting connection concurrency !2815
 - Geo: Fix adding a password to the FDW user mapping !2799
 - Specify groups while running services and `gitlab-` prefixed commands !2785
 - Update Mattermost to 5.4.0

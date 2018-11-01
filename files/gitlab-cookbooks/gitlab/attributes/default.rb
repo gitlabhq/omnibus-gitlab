@@ -581,6 +581,7 @@ default['gitlab']['gitlab-pages']['use_http2'] = true
 default['gitlab']['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
 default['gitlab']['gitlab-pages']['status_uri'] = nil
+default['gitlab']['gitlab-pages']['max_connections'] = nil
 default['gitlab']['gitlab-pages']['log_format'] = nil
 default['gitlab']['gitlab-pages']['artifacts_server'] = true
 default['gitlab']['gitlab-pages']['artifacts_server_url'] = nil
