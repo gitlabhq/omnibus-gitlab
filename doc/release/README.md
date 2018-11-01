@@ -3,14 +3,14 @@
 Our main goal is to make it clear which version of GitLab is in an omnibus
 package.
 
-# How is the official omnibus-gitlab package built
+## How is the official omnibus-gitlab package built
 
 The official package build is fully automated by GitLab Inc.
 
 We can differentiate between two types of build:
 
-* Packages for release to packages.gitlab.com
-* Test packages built from branches available in S3 buckets
+- Packages for release to packages.gitlab.com.
+- Test packages built from branches available in S3 buckets.
 
 Both types are built on the same infrastructure.
 
@@ -46,10 +46,10 @@ GitLab Inc is using the [release-tools project] to automate the release tasks
 for every release. When the release manager starts the release process, a couple
 of important things for omnibus-gitlab will be done:
 
-1. All remotes of the project will be synced
+1. All remotes of the project will be synced.
 1. The versions of components will be read from GitLab CE/EE repository
-  (eg. VERSION, GITLAB_SHELL_VERSION) and written to omnibus-gitlab repository
-1. A specific Git tag will be created and synced to omnibus-gitlab repositories
+  (eg. VERSION, GITLAB_SHELL_VERSION) and written to omnibus-gitlab repository.
+1. A specific Git tag will be created and synced to omnibus-gitlab repositories.
 
 When the omnibus-gitlab repository on dev.gitlab.org gets updated, GitLab CI
 build gets triggered.
@@ -66,6 +66,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 (files older than 30 days are purged) S3 bucket.
 
 ## Specifying component versions manually
+
 ### On your development machine
 
 1. Pick a tag of GitLab to package (e.g. `v6.6.0`).
@@ -73,7 +74,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 1. If the release branch already exists, for instance because you are doing a
   patch release, make sure to pull the latest changes to your local machine:
 
-    ```
+    ```sh
     git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing release branch
     ```
 
@@ -82,7 +83,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
   the download sources to dev.gitlab.org. Use `set-revisions --ee` for an EE
   release:
 
-    ```
+    ```sh
     # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF
 
     # For GitLab CE:
@@ -94,7 +95,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 
 1. Commit the new version to the release branch:
 
-    ```shell
+    ```sh
     git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
     git commit
     ```
@@ -104,11 +105,12 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
   `MAJOR.MINOR.PATCH` is the GitLab version, `OTHER` can be something like `ce`,
   `ee` or `rc1` (or `rc1.ee`), and `OMNIBUS_RELEASE` is a number (starting at 0):
 
-    ```shell
+    ```sh
     git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
     ```
 
-    **WARNING:** Do NOT use a hyphen `-` anywhere in the omnibus-gitlab tag.
+    CAUTION: **WARNING:**
+    Do NOT use a hyphen `-` anywhere in the omnibus-gitlab tag.
 
     Examples of converting an upstream tag to an omnibus tag sequence:
 
@@ -120,7 +122,7 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 
 1. Push the branch and the tag to both gitlab.com and dev.gitlab.org:
 
-    ```shell
+    ```sh
     git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
     git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
     ```
@@ -135,18 +137,19 @@ successful builds.
 
 ### Updating cloud images
 
-The cloud image release process is documented here: [https://about.gitlab.com/cloud-images/.](https://about.gitlab.com/cloud-images/)
+The cloud image release process is documented here: <https://about.gitlab.com/cloud-images/>.
 
 New image are released when:
 
-1. There is a new monthly release of GitLab
-2. A security vulnerability has been fixed in a patch release
-3. There is a patch that fixes a critical issue impacting the image
+1. There is a new monthly release of GitLab.
+1. A security vulnerability has been fixed in a patch release.
+1. There is a patch that fixes a critical issue impacting the image.
 
 New images should be released within 3 business days of the package release.
 
 Image specific release documentation:
- - OpenShift: [openshift.md.](openshift.md)
+
+- OpenShift: [openshift.md](openshift.md).
 
 [dev.gitlab.org]: https://dev.gitlab.org/gitlab/omnibus-gitlab/builds
 [release-tools project]: https://gitlab.com/gitlab-org/release-tools/tree/master
