@@ -155,7 +155,7 @@ default['gitlab']['geo-postgresql']['pgbouncer_user_password'] = nil
 
 default['gitlab']['geo-logcursor']['ha'] = false
 default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
-default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor'
+default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
 
 ####
 # Pgbouncer

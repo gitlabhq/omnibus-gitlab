@@ -55,6 +55,16 @@ env_dir env_directory do
   notifies :restart, "service[gitaly]"
 end
 
+# Before version 11.6, gitaly env directory was `/opt/gitlab/etc/gitaly` by
+# default. With 11.6, we changed it to `/opt/gitlab/etc/gitaly/env`. We attempt
+# to clean the old files if user is using the default location.
+node['gitaly']['env'].keys.each do |item|
+  file File.join("/opt/gitlab/etc/gitaly", item) do
+    action :delete
+    only_if { node['gitaly']['env_directory'] == '/opt/gitlab/etc/gitaly/env' }
+  end
+end
+
 template "Create Gitaly config.toml" do
   path config_path
   source "gitaly-config.toml.erb"

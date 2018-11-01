@@ -32,6 +32,16 @@ env_dir env_directory do
   notifies :restart, 'service[geo-logcursor]'
 end
 
+# Before version 11.6, geo-logcursor env directory was `/opt/gitlab/etc/geo-logcursor` by
+# default. With 11.6, we changed it to `/opt/gitlab/etc/geo-logcursor/env`. We attempt
+# to clean the old files if user is using the default location.
+node['gitlab']['gitlab-rails']['env'].keys.each do |item|
+  file File.join("/opt/gitlab/etc/geo-logcursor", item) do
+    action :delete
+    only_if { node['gitlab']['geo-logcursor']['env_directory'] == '/opt/gitlab/etc/geo-logcursor/env' }
+  end
+end
+
 directory log_directory do
   owner account_helper.gitlab_user
   mode '0700'

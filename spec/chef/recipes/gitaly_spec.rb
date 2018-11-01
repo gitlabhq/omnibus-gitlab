@@ -31,8 +31,8 @@ describe 'gitaly' do
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
       expect(chef_run).to create_directory('/var/log/gitlab/gitaly').with(user: 'git', mode: '0700')
-      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly')
-      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/PATH')
+      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly/env')
+      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/env/PATH')
     end
 
     it 'creates a default VERSION file' do
