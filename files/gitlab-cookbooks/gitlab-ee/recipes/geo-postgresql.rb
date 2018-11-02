@@ -205,6 +205,19 @@ if node['gitlab']['geo-postgresql']['enable']
 
     only_if { fdw_helper.fdw_can_refresh? }
   end
+
+  ruby_block 'warn pending geo-postgresql restart' do
+    block do
+      message = <<~MESSAGE
+        The version of the running geo-postgresql service is different than what is installed.
+        Please restart geo-postgresql to start the new version.
+
+        sudo gitlab-ctl restart geo-postgresql
+      MESSAGE
+      LoggingHelper.warning(message)
+    end
+    only_if { geo_pg_helper.is_running? && geo_pg_helper.running_version != geo_pg_helper.version }
+  end
 end
 
 execute 'reload geo-postgresql' do
