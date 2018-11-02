@@ -18,7 +18,7 @@
 account_helper = AccountHelper.new(node)
 redis_user = account_helper.redis_user
 redis_exporter_log_dir = node['gitlab']['redis-exporter']['log_directory']
-redis_exporter_static_etc_dir = "/opt/gitlab/etc/redis-exporter"
+redis_exporter_static_etc_dir = node['gitlab']['redis-exporter']['env_directory']
 
 directory redis_exporter_log_dir do
   owner redis_user

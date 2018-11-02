@@ -18,7 +18,7 @@ account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 alertmanager_log_dir = node['gitlab']['alertmanager']['log_directory']
 alertmanager_dir = node['gitlab']['alertmanager']['home']
-alertmanager_static_etc_dir = "/opt/gitlab/etc/alertmanager"
+alertmanager_static_etc_dir = node['gitlab']['alertmanager']['env_directory']
 
 # alertmanager runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account

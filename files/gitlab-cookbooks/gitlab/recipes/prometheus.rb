@@ -21,7 +21,7 @@ prometheus_user = account_helper.prometheus_user
 prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
 prometheus_dir = node['gitlab']['prometheus']['home']
 prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
-prometheus_static_etc_dir = "/opt/gitlab/etc/prometheus"
+prometheus_static_etc_dir = node['gitlab']['prometheus']['env_directory']
 
 binary, rule_extension = prometheus_helper.binary_and_rules
 

@@ -22,7 +22,7 @@ default['mattermost']['gid'] = nil
 default['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['mattermost']['database_name'] = 'mattermost_production'
 default['mattermost']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 }
 
 default['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost/'

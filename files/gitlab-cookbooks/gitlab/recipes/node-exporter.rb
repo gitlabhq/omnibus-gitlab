@@ -19,7 +19,7 @@ account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 node_exporter_log_dir = node['gitlab']['node-exporter']['log_directory']
 textfile_dir = File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
-node_exporter_static_etc_dir = "/opt/gitlab/etc/node-exporter"
+node_exporter_static_etc_dir = node['gitlab']['node-exporter']['env_directory']
 
 # node-exporter runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account

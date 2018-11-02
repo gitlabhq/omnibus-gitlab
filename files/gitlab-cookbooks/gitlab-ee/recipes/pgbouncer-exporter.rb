@@ -21,7 +21,7 @@ postgresql_user = account_helper.postgresql_user
 pgbouncer_exporter_log_dir = node['gitlab']['pgbouncer-exporter']['log_directory']
 pgbouncer_exporter_listen_address = node['gitlab']['pgbouncer-exporter']['listen_address']
 pgbouncer_connection_string = pgb_helper.pgbouncer_admin_config
-pgbouncer_exporter_static_etc_dir = '/opt/gitlab/etc/pgbouncer-exporter'
+pgbouncer_exporter_static_etc_dir = node['gitlab']['pgbouncer-exporter']['env_directory']
 
 include_recipe 'postgresql::user'
 
