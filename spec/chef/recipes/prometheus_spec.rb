@@ -14,6 +14,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9090
+  - job_name: nginx
+    static_configs:
+    - targets:
+      - localhost:8060
   - job_name: redis
     static_configs:
     - targets:
