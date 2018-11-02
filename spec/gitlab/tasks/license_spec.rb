@@ -11,7 +11,6 @@ describe 'license:check', type: :rake do
     Rake::Task['license:check'].reenable
     allow(File).to receive(:exist?).and_return(true)
     allow(File).to receive(:open).and_call_original
-    allow(File).to receive(:open).with("pkg/license-status.txt", "w").and_return(f)
     allow(File).to receive(:open).with("pkg/license-status.json", "w").and_return(f)
     allow(f).to receive(:write).and_return(true)
     allow(f).to receive(:close).and_return(true)
