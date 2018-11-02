@@ -256,7 +256,7 @@ default['gitlab']['pgbouncer']['users'] = {}
 default['gitlab']['pgbouncer-exporter']['enable'] = false
 default['gitlab']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
 default['gitlab']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'
-default['gitlab']['pgbouncer']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter'
+default['gitlab']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter'
 default['gitlab']['pgbouncer-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
