@@ -407,7 +407,7 @@ module Prometheus
 
       if user_config['status']
         # Don't enable a scrape config if nginx vts is disabled.
-        return if user_config['status']['vts_enable'] && user_config['status']['vts_enable'] == false
+        return if user_config['status'].key?('vts_enable') && user_config['status']['vts_enable'] == false
 
         listen_address = user_config['status']['fqdn'] || default_config['fqdn']
         port = user_config['status']['port'] || default_config['port']
