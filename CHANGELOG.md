@@ -22,6 +22,7 @@ omnibus-gitlab repository.
 - Specify groups while running services and `gitlab-` prefixed commands !2785
 - Update Mattermost to 5.4.0
 - Warn users when postgresql needs to be restarted due to version changes !2823
+- Add nginx-module-vts for Prometheus metrics collection !2795
 
 11.4.1
 
