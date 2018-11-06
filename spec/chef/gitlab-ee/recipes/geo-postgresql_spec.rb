@@ -45,7 +45,7 @@ describe 'geo postgresql 9.2' do
       allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('geo-postgresql').and_return(true)
 
       psql_service = chef_run.service('geo-postgresql')
-      expect(psql_service).to_not subscribe_to('template[/opt/gitlab/sv/geo-postgresql/run]').on(:restart).delayed
+      expect(psql_service).not_to subscribe_to('template[/opt/gitlab/sv/geo-postgresql/run]').on(:restart).delayed
     end
 
     context 'running version differs from installed version' do
