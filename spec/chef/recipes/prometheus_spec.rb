@@ -393,7 +393,25 @@ describe 'gitlab::prometheus' do
         end
       end
 
-      context 'when vts is disabled' do
+      context 'when nginx status is disabled' do
+        before do
+          stub_gitlab_rb(
+            nginx: {
+              status: {
+                enable: false
+              }
+            }
+          )
+        end
+        it 'no nginx job is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content('job_name: nginx')
+        end
+      end
+
+      context 'when nginx vts is disabled' do
         before do
           stub_gitlab_rb(
             nginx: {
@@ -403,7 +421,7 @@ describe 'gitlab::prometheus' do
             }
           )
         end
-        it 'postgres exporter is enabled' do
+        it 'no nginx job is enabled' do
           expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
 
           expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
