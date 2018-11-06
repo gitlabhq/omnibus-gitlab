@@ -528,6 +528,14 @@ describe 'postgresql 9.6' do
       expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
 
+    it 'notifies restarts postgresql when the postgresql runit run file changes' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('postgresql').and_return(true)
+
+      psql_service = chef_run.service('postgresql')
+      expect(psql_service).not_to subscribe_to('template[/opt/gitlab/sv/postgresql/run]').on(:restart).delayed
+    end
+
     it 'creates the pg_trgm extension when it is possible' do
       allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('pg_trgm', 'gitlabhq_production').and_return(true)
       expect(chef_run).to enable_postgresql_extension('pg_trgm')
