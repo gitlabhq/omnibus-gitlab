@@ -104,6 +104,7 @@ end
 
 runit_service 'geo-postgresql' do
   down node['gitlab']['geo-postgresql']['ha']
+  run_restart false
   control(['t'])
   options({
     log_directory: postgresql_log_dir

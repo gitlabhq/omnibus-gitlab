@@ -154,6 +154,7 @@ runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
   supervisor_owner postgresql_username
   supervisor_group postgresql_group
+  run_restart false
   control(['t'])
   options({
     log_directory: postgresql_log_dir

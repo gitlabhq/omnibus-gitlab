@@ -40,6 +40,14 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
     end
 
+    it 'notifies restarts postgresql when the postgresql runit run file changes' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('geo-postgresql').and_return(true)
+
+      psql_service = chef_run.service('geo-postgresql')
+      expect(psql_service).not_to subscribe_to('template[/opt/gitlab/sv/geo-postgresql/run]').on(:restart).delayed
+    end
+
     context 'running version differs from installed version' do
       before do
         allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.6.8')
