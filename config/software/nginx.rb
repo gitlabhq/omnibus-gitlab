@@ -30,6 +30,9 @@ dependency 'pcre'
 dependency 'zlib'
 dependency 'openssl'
 
+# Include the nginx-module-vts for metrics.
+dependency 'nginx-module-vts'
+
 version '1.12.1' do
   source sha256: '8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb'
 end
@@ -51,6 +54,7 @@ build do
            '--with-http_realip_module',
            '--with-ipv6',
            '--with-debug',
+           "--add-module=#{Omnibus::Config.source_dir}/nginx-module-vts",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
            "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' ')
   command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }

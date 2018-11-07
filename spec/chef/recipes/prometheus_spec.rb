@@ -14,6 +14,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9090
+  - job_name: nginx
+    static_configs:
+    - targets:
+      - localhost:8060
   - job_name: redis
     static_configs:
     - targets:
@@ -386,6 +390,42 @@ describe 'gitlab::prometheus' do
           it 'redis exporter is enabled' do
             expect(chef_run).to include_recipe('gitlab::redis-exporter')
           end
+        end
+      end
+
+      context 'when nginx status is disabled' do
+        before do
+          stub_gitlab_rb(
+            nginx: {
+              status: {
+                enable: false
+              }
+            }
+          )
+        end
+        it 'no nginx job is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content('job_name: nginx')
+        end
+      end
+
+      context 'when nginx vts is disabled' do
+        before do
+          stub_gitlab_rb(
+            nginx: {
+              status: {
+                vts_enable: false
+              }
+            }
+          )
+        end
+        it 'no nginx job is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content('job_name: nginx')
         end
       end
 
