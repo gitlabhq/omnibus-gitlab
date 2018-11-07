@@ -1329,7 +1329,7 @@ pages:
   stage: prepare
   before_script: []
   script:
-    - bundle exec license:generate_pages
+    - bundle exec rake license:generate_pages
     - mv ${LICENSE_S3_BUCKET} public
     - cp support/webpages/* public
   artifacts:
