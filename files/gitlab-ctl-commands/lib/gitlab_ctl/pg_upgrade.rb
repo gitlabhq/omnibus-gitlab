@@ -3,7 +3,7 @@ require_relative 'util'
 
 # For testing purposes, if the first path cannot be found load the second
 begin
-  require_relative '../../../cookbooks/gitlab/libraries/pg_version'
+  require_relative '../../../../cookbooks/gitlab/libraries/pg_version'
 rescue LoadError
   require_relative '../../../gitlab-cookbooks/gitlab/libraries/pg_version'
 end
