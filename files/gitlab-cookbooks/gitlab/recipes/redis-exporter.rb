@@ -32,7 +32,7 @@ directory redis_exporter_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(redis_exporter_static_etc_dir, 'env') do
+env_dir redis_exporter_static_etc_dir do
   variables node['gitlab']['redis-exporter']['env']
   notifies :restart, "service[redis-exporter]"
 end
@@ -42,7 +42,7 @@ runit_service 'redis-exporter' do
   options({
     log_directory: redis_exporter_log_dir,
     flags: runtime_flags,
-    env_dir: File.join(redis_exporter_static_etc_dir, 'env')
+    env_dir: redis_exporter_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end

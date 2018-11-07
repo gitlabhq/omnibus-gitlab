@@ -37,7 +37,7 @@ directory pgbouncer_exporter_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(pgbouncer_exporter_static_etc_dir, 'env') do
+env_dir pgbouncer_exporter_static_etc_dir do
   variables node['gitlab']['pgbouncer-exporter']['env']
   notifies :restart, "service[pgbouncer-exporter]"
 end
@@ -48,7 +48,7 @@ runit_service 'pgbouncer-exporter' do
     connection_string: pgbouncer_connection_string,
     listen_address: pgbouncer_exporter_listen_address,
     log_directory: pgbouncer_exporter_log_dir,
-    env_dir: File.join(pgbouncer_exporter_static_etc_dir, 'env')
+    env_dir: pgbouncer_exporter_static_etc_dir
   )
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['pgbouncer-exporter'].to_hash)
 end

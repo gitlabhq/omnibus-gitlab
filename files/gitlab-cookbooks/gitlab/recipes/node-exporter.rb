@@ -37,7 +37,7 @@ directory node_exporter_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(node_exporter_static_etc_dir, 'env') do
+env_dir node_exporter_static_etc_dir do
   variables node['gitlab']['node-exporter']['env']
   notifies :restart, "service[node-exporter]"
 end
@@ -53,7 +53,7 @@ runit_service 'node-exporter' do
   options({
     log_directory: node_exporter_log_dir,
     flags: runtime_flags,
-    env_dir: File.join(node_exporter_static_etc_dir, 'env')
+    env_dir: node_exporter_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['node-exporter'].to_hash

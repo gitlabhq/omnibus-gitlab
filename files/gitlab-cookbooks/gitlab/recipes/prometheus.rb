@@ -51,7 +51,7 @@ directory prometheus_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(prometheus_static_etc_dir, 'env') do
+env_dir prometheus_static_etc_dir do
   variables node['gitlab']['prometheus']['env']
   notifies :restart, "service[prometheus]"
 end
@@ -94,7 +94,7 @@ runit_service 'prometheus' do
   options({
     log_directory: prometheus_log_dir,
     flags: runtime_flags,
-    env_dir: File.join(prometheus_static_etc_dir, 'env')
+    env_dir: prometheus_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['prometheus'].to_hash

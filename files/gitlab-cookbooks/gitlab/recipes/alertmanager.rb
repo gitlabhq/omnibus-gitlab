@@ -42,7 +42,7 @@ directory alertmanager_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(alertmanager_static_etc_dir, 'env') do
+env_dir alertmanager_static_etc_dir do
   variables node['gitlab']['alertmanager']['env']
   notifies :restart, "service[alertmanager]"
 end
@@ -71,7 +71,7 @@ runit_service 'alertmanager' do
   options({
     log_directory: alertmanager_log_dir,
     flags: runtime_flags,
-    env_dir: File.join(alertmanager_static_etc_dir, 'env')
+    env_dir: alertmanager_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['alertmanager'].to_hash

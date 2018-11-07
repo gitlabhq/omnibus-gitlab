@@ -37,7 +37,7 @@ describe 'gitlab::redis-exporter' do
 
     it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload redis-exporter svlogd configuration]')
@@ -107,6 +107,6 @@ describe 'gitlab::redis-exporter' do
         .with_content(%r{redis.addr=/tmp/socket})
     end
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "USER_SETTING", 'asdf1234'
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter', "USER_SETTING", 'asdf1234'
   end
 end

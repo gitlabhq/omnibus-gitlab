@@ -38,7 +38,7 @@ include_recipe 'consul::enable' if node['consul']['enable']
   end
 end
 
-env_dir File.join(pgbouncer_static_etc_dir, 'env') do
+env_dir pgbouncer_static_etc_dir do
   variables node['gitlab']['pgbouncer']['env']
   notifies :restart, "service[pgbouncer]"
 end
@@ -54,7 +54,7 @@ runit_service 'pgbouncer' do
     groupname: node['gitlab']['postgresql']['group'],
     data_directory: node['gitlab']['pgbouncer']['data_directory'],
     log_directory: node['gitlab']['pgbouncer']['log_directory'],
-    env_dir: File.join(pgbouncer_static_etc_dir, 'env')
+    env_dir: pgbouncer_static_etc_dir
   )
 end
 
