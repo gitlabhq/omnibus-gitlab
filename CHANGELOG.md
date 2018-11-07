@@ -24,6 +24,8 @@ omnibus-gitlab repository.
 - Warn users when postgresql needs to be restarted due to version changes !2823
 - Ensure postgres doesn't automatically restart when it's run file changes !2830
 - Add nginx-module-vts for Prometheus metrics collection !2795
+- Ensure pgbouncer is shut down when multiple master situation is encountered
+  and resumed when it is cleared !2812
 
 11.4.1
 
