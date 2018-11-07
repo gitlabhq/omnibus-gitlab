@@ -1,6 +1,13 @@
 require 'optparse'
 require_relative 'util'
 
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../../cookbooks/gitlab/libraries/pg_version'
+rescue LoadError
+  require_relative '../../../gitlab-cookbooks/gitlab/libraries/pg_version'
+end
+
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
@@ -33,9 +40,9 @@ module GitlabCtl
     end
 
     def fetch_running_version
-      GitlabCtl::Util.get_command_output(
+      PGVersion.parse(GitlabCtl::Util.get_command_output(
         "#{@base_path}/embedded/bin/pg_ctl --version"
-      ).split.last
+      ).split.last)
     end
 
     def run_query(query)
@@ -53,7 +60,7 @@ module GitlabCtl
     end
 
     def fetch_data_version
-      File.read("#{data_dir}/PG_VERSION").strip
+      PGVersion.parse(File.read("#{data_dir}/PG_VERSION").strip)
     end
 
     def running?

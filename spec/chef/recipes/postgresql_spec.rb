@@ -18,9 +18,9 @@ psql_port='5432'
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
-    allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.2.18')
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
+    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
   end
 
   it 'includes the postgresql::bin recipe' do
@@ -283,8 +283,8 @@ psql_port='5432'
 
     context 'running version differs from data version' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
-        allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.6.1')
+        allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.6.1'))
+        allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('9.6.1'))
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
@@ -326,9 +326,9 @@ describe 'postgresql 9.6' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(PgHelper).to receive(:version).and_return('9.6.1')
-    allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.6.1')
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.6')
+    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.6'))
   end
 
   it 'does not warn the user that a restart is needed by default' do
@@ -548,7 +548,7 @@ describe 'postgresql 9.6' do
 
     context 'running version differs from installed version' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
+        allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
       end
 
       it 'warns the user that a restart is needed' do
@@ -563,8 +563,8 @@ describe 'postgresql 9.6' do
 
     context 'running version differs from data version' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:version).and_return('9.2.18')
-        allow_any_instance_of(PgHelper).to receive(:running_version).and_return('9.2.18')
+        allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+        allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
@@ -599,12 +599,12 @@ describe 'postgresql 9.6' do
 
     context 'old unused data version is present' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2')
+        allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return([])
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1*").and_return(
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return(
           ['/opt/gitlab/embedded/postgresql/9.6.1']
         )
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
@@ -630,7 +630,7 @@ describe 'postgresql 9.6' do
 
     context 'the desired postgres version is missing' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:database_version).and_return('9.2.18')
+        allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2.18'))
         allow(File).to receive(:exists?).and_call_original
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
