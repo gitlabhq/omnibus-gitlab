@@ -163,7 +163,7 @@ default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcu
 
 default['gitlab']['postgresql']['pgbouncer_user'] = 'pgbouncer'
 default['gitlab']['postgresql']['pgbouncer_user_password'] = nil
-default['gitlab']['pgbouncer']['env_directory'] = '/opt/gitlab/etc/pgbouncer'
+default['gitlab']['pgbouncer']['env_directory'] = '/opt/gitlab/etc/pgbouncer/env'
 default['gitlab']['pgbouncer']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
@@ -256,7 +256,7 @@ default['gitlab']['pgbouncer']['users'] = {}
 default['gitlab']['pgbouncer-exporter']['enable'] = false
 default['gitlab']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
 default['gitlab']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'
-default['gitlab']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter'
+default['gitlab']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
 default['gitlab']['pgbouncer-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }

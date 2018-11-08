@@ -767,7 +767,7 @@ default['gitlab']['prometheus']['gid'] = nil
 default['gitlab']['prometheus']['shell'] = '/bin/sh'
 default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
-default['gitlab']['prometheus']['env_directory'] = '/opt/gitlab/etc/prometheus'
+default['gitlab']['prometheus']['env_directory'] = '/opt/gitlab/etc/prometheus/env'
 default['gitlab']['prometheus']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
@@ -791,7 +791,7 @@ default['gitlab']['prometheus']['target_heap_size'] = (
 default['gitlab']['alertmanager']['enable'] = false
 default['gitlab']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
 default['gitlab']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
-default['gitlab']['alertmanager']['env_directory'] = '/opt/gitlab/etc/alertmanager'
+default['gitlab']['alertmanager']['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
 default['gitlab']['alertmanager']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
@@ -808,7 +808,7 @@ default['gitlab']['alertmanager']['templates'] = []
 default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
-default['gitlab']['node-exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter'
+default['gitlab']['node-exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
 default['gitlab']['node-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
@@ -819,7 +819,7 @@ default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 ###
 default['gitlab']['redis-exporter']['enable'] = false
 default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
-default['gitlab']['redis-exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter'
+default['gitlab']['redis-exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
 default['gitlab']['redis-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }

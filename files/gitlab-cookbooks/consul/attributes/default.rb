@@ -9,7 +9,7 @@ default['consul']['log_directory'] = '/var/log/gitlab/consul'
 default['consul']['node_name'] = nil
 default['consul']['script_directory'] = '/var/opt/gitlab/consul/scripts'
 default['consul']['configuration'] = {}
-default['consul']['env_directory'] = '/opt/gitlab/etc/consul'
+default['consul']['env_directory'] = '/opt/gitlab/etc/consul/env'
 default['consul']['env'] = {
   'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
 }

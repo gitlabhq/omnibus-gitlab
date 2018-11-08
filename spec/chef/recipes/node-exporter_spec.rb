@@ -18,7 +18,7 @@ describe 'gitlab::node-exporter' do
 
     it_behaves_like 'enabled runit service', 'node-exporter', 'root', 'root'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload node-exporter svlogd configuration]')
@@ -121,6 +121,6 @@ describe 'gitlab::node-exporter' do
         .with_content(/--no-collector.arp/)
     end
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter', "USER_SETTING", 'asdf1234'
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter/env', "USER_SETTING", 'asdf1234'
   end
 end
