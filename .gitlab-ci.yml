@@ -152,6 +152,8 @@ variables:
     refs:
       - branches@gitlab/omnibus-gitlab
   except:
+    refs:
+      - /*-stable-ee/
     variables:
       - $ee == "true"
   artifacts:
@@ -247,8 +249,9 @@ dependency_scanning:
     refs:
       - tags@gitlab/omnibus-gitlab
   except:
+    refs:
+      - /.*ee\.\d/
     variables:
-      - $CI_COMMIT_REF_NAME =~ /.*ee\.\d/
       - $ee == "true"
   artifacts:
     expire_in: 7 days
@@ -329,7 +332,6 @@ before_script:
         && git commit -m "Updating Gemfile.lock";
     fi
   - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; fi
-  - if ./support/is_gitlab_ee.sh; then export ee="true"; fi
 
 # Jobs
 ## Runs on GitLab.com only
