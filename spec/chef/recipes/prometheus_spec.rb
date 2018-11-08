@@ -187,7 +187,7 @@ describe 'gitlab::prometheus' do
 
     it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'gitlab-prometheus', 'gitlab-prometheus'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/prometheus', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/prometheus/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload prometheus svlogd configuration]')
