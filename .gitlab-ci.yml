@@ -134,6 +134,7 @@ variables:
   variables:
     NO_SOURCEMAPS: "true"
   script:
+    - if ./support/is_gitlab_ee.sh; then exit 0; fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -143,12 +144,16 @@ variables:
     - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
-    - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake build:project build:package:sync ;fi
+    - bundle exec rake build:project build:package:sync
     - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
   only:
-  - branches@gitlab/omnibus-gitlab
+    refs:
+      - branches@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $ee == "true"
   artifacts:
     expire_in: 1 day
     paths:
@@ -224,6 +229,7 @@ dependency_scanning:
   variables:
     NO_SOURCEMAPS: "true"
   script:
+    - if ./support/is_gitlab_ee.sh; then exit 0; fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -233,12 +239,17 @@ dependency_scanning:
     - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - bundle exec rake cache:populate
     - bundle exec rake cache:restore
-    - if ./support/is_gitlab_ee.sh; then exit 0; else bundle exec rake release:package ;fi
+    - bundle exec rake release:package
     - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
   only:
-    - tags@gitlab/omnibus-gitlab
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /.*ee\.\d/
+      - $ee == "true"
   artifacts:
     expire_in: 7 days
     paths:
@@ -318,6 +329,7 @@ before_script:
         && git commit -m "Updating Gemfile.lock";
     fi
   - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; fi
+  - if ./support/is_gitlab_ee.sh; then export ee="true"; fi
 
 # Jobs
 ## Runs on GitLab.com only
