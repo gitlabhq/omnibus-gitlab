@@ -6,9 +6,9 @@ describe 'geo postgresql 9.2' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.2.18')
-    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return('9.2.18')
-    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.2')
+    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
 
     # Workaround for Chef reloading instances across different examples
     allow_any_instance_of(GeoPgHelper).to receive(:bootstrapped?).and_return(true)
@@ -50,7 +50,7 @@ describe 'geo postgresql 9.2' do
 
     context 'running version differs from installed version' do
       before do
-        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.6.8')
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.6.8'))
       end
 
       it 'warns the user that a restart is needed' do
@@ -65,8 +65,8 @@ describe 'geo postgresql 9.2' do
 
     context 'running version differs from data version' do
       before do
-        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.2.18')
-        allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return('9.2.18')
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+        allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
       end
 
       it 'does not warn the user that a restart is needed' do
@@ -267,9 +267,9 @@ describe 'geo postgresql 9.6' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.6.1')
-    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return('9.6.1')
-    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.6')
+    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('9.6'))
   end
 
   cached(:chef_run) do
