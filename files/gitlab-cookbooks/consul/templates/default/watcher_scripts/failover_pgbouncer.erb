@@ -37,6 +37,20 @@ def find_passing_service(data, service)
   end
 end
 
+# When multiple masters are found, running `gitlab-ctl repmgr-check-master` in
+# PG nodes will print `Multiple masters found` and exit returning code 3.
+# Because any value other than 0 or 1 is `critical` for consul, we need a way
+# to differentiate between a multiple-master situation and any legit error that
+# happened while running gitlab-ctl repmgr-check-master. So, we check the
+# output string of the command.
+def find_masters(data, service)
+  data.select do |x|
+    x['Checks'].find do |y|
+      (y['CheckID'].eql?(service) && y['Status'].eql?('passing')) || (y['CheckID'].eql?(service) && y['Output'].include?('MasterNode: Multiple masters found'))
+    end
+  end
+end
+
 begin
   data = JSON.parse($stdin.gets)
 rescue JSON::ParserError
@@ -46,7 +60,7 @@ end
 
 begin
   healthy_agents = find_passing_service(data, 'serfHealth')
-  masters = find_passing_service(healthy_agents, 'service:postgresql')
+  masters = find_masters(healthy_agents, 'service:postgresql')
 rescue Exception => e
   @log.error("Error parsing data: #{e.inspect}")
   Kernel.exit 2
@@ -54,8 +68,11 @@ end
 
 if masters.length > 1
   @log.error('More than one master found, stopping pgbouncer to prevent issues.')
+  masters.each do |master|
+    @log.error("    Node: #{master['Node']['Node']}")
+  end
   @log.error('Once the error is cleared, consul will reload pgbouncer')
-  results = run_command('gitlab-ctl pgb-kill --pg-database gitlabhq_production --user gitlab-consul')
+  results = run_command('gitlab-ctl pgb-kill --pg-database gitlabhq_production --user pgbouncer --hostuser gitlab-consul')
   Kernel.exit 3 + results
 elsif masters.empty?
   @log.error('No master found')

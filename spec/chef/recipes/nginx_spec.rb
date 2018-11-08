@@ -293,8 +293,8 @@ describe 'nginx' do
                                                                   "listen_addresses" => ["*"],
                                                                   "fqdn" => "localhost",
                                                                   "port" => 8060,
+                                                                  "vts_enable" => true,
                                                                   "options" => {
-                                                                    "stub_status" => "on",
                                                                     "server_tokens" => "off",
                                                                     "access_log" => "off",
                                                                     "allow" => "127.0.0.1",
@@ -310,8 +310,8 @@ describe 'nginx' do
         "listen_addresses" => ["127.0.0.1"],
         "fqdn" => "dev.example.com",
         "port" => 9999,
+        "vts_enable" => true,
         "options" => {
-          "stub_status" => "on",
           "server_tokens" => "off",
           "access_log" => "on",
           "allow" => "127.0.0.1",

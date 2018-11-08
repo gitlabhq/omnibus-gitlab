@@ -71,6 +71,11 @@ http {
     ~^(?<temp>.*)\? $temp;
   }
 
+  <% if @status['vts_enable'] -%>
+  # Enable vts status module.
+  vhost_traffic_status_zone;
+
+  <% end -%>
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
   <% end %>

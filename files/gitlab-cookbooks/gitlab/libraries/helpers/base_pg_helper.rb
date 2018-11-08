@@ -240,6 +240,10 @@ class BasePgHelper < BaseHelper
     VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last
   end
 
+  def running_version
+    psql_query('template1', 'SHOW SERVER_VERSION')
+  end
+
   def database_version
     version_file = "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION"
     File.read(version_file).chomp if File.exist?(version_file)
