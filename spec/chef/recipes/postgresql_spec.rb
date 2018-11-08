@@ -604,7 +604,7 @@ describe 'postgresql 9.6' do
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return([])
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return(
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1*").and_return(
           ['/opt/gitlab/embedded/postgresql/9.6.1']
         )
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
