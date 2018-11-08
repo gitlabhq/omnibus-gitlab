@@ -153,7 +153,7 @@ variables:
       - branches@gitlab/omnibus-gitlab
   except:
     refs:
-      - /*-stable-ee/
+      - /.*-stable-ee/
     variables:
       - $ee == "true"
   artifacts:
