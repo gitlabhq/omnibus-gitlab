@@ -101,6 +101,24 @@ module Pgbouncer
       raise
     end
 
+    def show_databases
+      pgbouncer_command('SHOW DATABASES')
+    end
+
+    def database_paused?
+      databases = show_databases
+
+      # In `show databases` output, column 10 gives paused status of database
+      # (1 for paused and 0 for unpaused)
+      paused_status = databases.lines.find { |x| x.match(/#{@database}/) }.split('|')[10].strip
+
+      paused_status == "1"
+    end
+
+    def resume_if_paused
+      pgbouncer_command("RESUME #{@database}") if database_paused?
+    end
+
     def reload
       # Attempt to connect to the pgbouncer admin interface and send the RELOAD
       # command. Assumes the current user is in the list of admin-users
@@ -133,6 +151,7 @@ module Pgbouncer
       # If we haven't written databases.json yet, don't do anything
       return if databases.nil?
       write
+      resume_if_paused
       begin
         reload
       rescue GitlabCtl::Errors::ExecutionError
