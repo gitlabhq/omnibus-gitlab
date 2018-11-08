@@ -154,6 +154,7 @@ runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
   supervisor_owner postgresql_username
   supervisor_group postgresql_group
+  run_restart false
   control(['t'])
   options({
     log_directory: postgresql_log_dir
@@ -217,6 +218,19 @@ end
 postgresql_extension 'pg_trgm' do
   database database_name
   action :enable
+end
+
+ruby_block 'warn pending postgresql restart' do
+  block do
+    message = <<~MESSAGE
+      The version of the running postgresql service is different than what is installed.
+      Please restart postgresql to start the new version.
+
+      sudo gitlab-ctl restart postgresql
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
 end
 
 execute 'reload postgresql' do

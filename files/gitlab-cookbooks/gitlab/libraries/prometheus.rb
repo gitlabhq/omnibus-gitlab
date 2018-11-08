@@ -223,6 +223,7 @@ module Prometheus
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
       exporter_scrape_config('redis')
+      nginx_scrape_config
       prometheus_scrape_configs
     end
 
@@ -394,6 +395,39 @@ module Prometheus
       }
 
       default_scrape_configs = [] << default_config << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def nginx_scrape_config
+      # Don't parse if nginx is explicitly disabled.
+      return unless Services.enabled?('nginx')
+
+      default_config = Gitlab['node']['gitlab']['nginx']['status'].to_hash
+      user_config = Gitlab['nginx']
+
+      if user_config['status']
+        # Don't enable a scrape config if nginx status is disabled.
+        return if user_config['status'].key?('enable') && user_config['status']['enable'] == false
+        # Don't enable a scrape config if nginx vts is disabled.
+        return if user_config['status'].key?('vts_enable') && user_config['status']['vts_enable'] == false
+
+        listen_address = user_config['status']['fqdn'] || default_config['fqdn']
+        port = user_config['status']['port'] || default_config['port']
+      else
+        listen_address = default_config['fqdn']
+        port = default_config['port']
+      end
+
+      target = "#{listen_address}:#{port}"
+
+      scrape_config = {
+        'job_name' => 'nginx',
+        'static_configs' => [
+          'targets' => [target],
+        ],
+      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 

@@ -3,7 +3,8 @@ require 'json'
 require_relative "../build/info.rb"
 require_relative "../build/check.rb"
 require_relative '../license/analyzer.rb'
-require_relative '../license/page_generator.rb'
+require_relative '../license/uploader.rb'
+require_relative '../license/collector.rb'
 
 namespace :license do
   desc "Check licenses of bundled softwares"
@@ -30,9 +31,14 @@ namespace :license do
     puts "###### END LICENSE CHECK ######"
   end
 
-  desc "Sync license files of releases to AWS bucket and generate html"
-  task :generate_index do
+  desc "Generate license file of current release and push to AWS bucket"
+  task :upload do
     # This is done on Ubuntu 18.04 non-rc tag pipeline only
-    License::PageGenerator.new.execute unless Build::Check.is_rc_release?
+    License::Uploader.new.execute unless Build::Check.is_rc_release?
+  end
+
+  desc "Collect all license files and generate index page"
+  task :generate_pages do
+    License::Collector.new.execute
   end
 end

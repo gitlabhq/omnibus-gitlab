@@ -232,7 +232,10 @@ class Repmgr
         %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),
         Etc.getpwuid.name
       ).chomp
-      raise MasterError, "#{master} #{show_count}" if master.length != 1 || show_count != '1'
+      if master.length != 1 || show_count != '1'
+        node_type = master.include?(hostname) ? "MasterNode" : "StandbyNode"
+        raise MasterError, "#{node_type}: Multiple masters found: #{master} #{show_count}"
+      end
       master.first.eql?(hostname)
     end
   end

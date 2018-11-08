@@ -1032,6 +1032,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "listen_addresses" => ["127.0.0.1"],
 #  "fqdn" => "dev.example.com",
 #  "port" => 9999,
+#  "vts_enable" => true,
 #  "options" => {
 #    "stub_status" => "on", # Turn on stats
 #    "server_tokens" => "off", # Don't show the version of NGINX

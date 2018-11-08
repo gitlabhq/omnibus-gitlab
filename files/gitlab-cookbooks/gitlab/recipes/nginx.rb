@@ -211,7 +211,8 @@ template nginx_status_conf do
               listen_addresses: nginx_vars['status']['listen_addresses'],
               fqdn: nginx_vars['status']['fqdn'],
               port: nginx_vars['status']['port'],
-              options: nginx_vars['status']['options']
+              options: nginx_vars['status']['options'],
+              vts_enable: nginx_vars['status']['vts_enable']
             })
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action nginx_status_enabled ? :create : :delete

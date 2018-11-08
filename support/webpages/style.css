@@ -1,8 +1,68 @@
-h1, h2 {
+h1, h2, h3, h4 {
         text-align: center;
 }
 
-.content {
-        margin-left: 5%;
-        width: 90%;
+body {
+  color: #6a6c6f;
+  margin-top: 30px;
+}
+
+/*
+ * Thanks to Andreas Eracleous at https://codepen.io/Sp00ky/pen/akVkyV
+*/
+
+.table tr.header {
+  font-weight: bold;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+}
+
+.table tr.clickable{
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+}
+
+.table tr:not(.header) {
+  display: none;
+}
+
+.table .header td.deps:after {
+  content: "\002b";
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  float: right;
+  color: #999;
+  text-align: center;
+  padding: 3px;
+  transition: transform .25s linear;
+  -webkit-transition: -webkit-transform .25s linear;
+}
+
+.table .header.active td.deps:after {
+  content: "\2212";
+}
+
+tr.table-head > td {
+  font-size: larger;
 }
