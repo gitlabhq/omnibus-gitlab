@@ -26,6 +26,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/system_check/app/git_version_check.rb
 default_version '2.18.1'
 
 license 'GPL-2.0'
