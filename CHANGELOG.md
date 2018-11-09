@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 - Add nginx-module-vts for Prometheus metrics collection !2795
 - Ensure pgbouncer is shut down when multiple master situation is encountered
   and resumed when it is cleared !2812
+- Provide SSL_CERT_DIR to embedded Go services !2813
 
 11.4.1
 

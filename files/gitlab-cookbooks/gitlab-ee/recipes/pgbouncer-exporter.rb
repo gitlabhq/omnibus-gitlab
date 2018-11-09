@@ -21,6 +21,7 @@ postgresql_user = account_helper.postgresql_user
 pgbouncer_exporter_log_dir = node['gitlab']['pgbouncer-exporter']['log_directory']
 pgbouncer_exporter_listen_address = node['gitlab']['pgbouncer-exporter']['listen_address']
 pgbouncer_connection_string = pgb_helper.pgbouncer_admin_config
+pgbouncer_exporter_static_etc_dir = node['gitlab']['pgbouncer-exporter']['env_directory']
 
 include_recipe 'postgresql::user'
 
@@ -30,12 +31,24 @@ directory pgbouncer_exporter_log_dir do
   recursive true
 end
 
+directory pgbouncer_exporter_static_etc_dir do
+  owner postgresql_user
+  mode '0700'
+  recursive true
+end
+
+env_dir pgbouncer_exporter_static_etc_dir do
+  variables node['gitlab']['pgbouncer-exporter']['env']
+  notifies :restart, "service[pgbouncer-exporter]"
+end
+
 runit_service 'pgbouncer-exporter' do
   options(
     username: node['gitlab']['postgresql']['username'],
     connection_string: pgbouncer_connection_string,
     listen_address: pgbouncer_exporter_listen_address,
-    log_directory: pgbouncer_exporter_log_dir
+    log_directory: pgbouncer_exporter_log_dir,
+    env_dir: pgbouncer_exporter_static_etc_dir
   )
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['pgbouncer-exporter'].to_hash)
 end

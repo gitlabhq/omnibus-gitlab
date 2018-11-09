@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::redis-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(env_dir)).converge('gitlab::default') }
   let(:node) { chef_run.node }
 
   before do
@@ -36,6 +36,8 @@ describe 'gitlab::redis-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload redis-exporter svlogd configuration]')
@@ -90,7 +92,10 @@ describe 'gitlab::redis-exporter' do
             'redis.addr' => '/tmp/socket'
           },
           listen_address: 'localhost:9900',
-          enable: true
+          enable: true,
+          env: {
+            'USER_SETTING' => 'asdf1234'
+          }
         }
       )
     end
@@ -101,5 +106,7 @@ describe 'gitlab::redis-exporter' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
         .with_content(%r{redis.addr=/tmp/socket})
     end
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "USER_SETTING", 'asdf1234'
   end
 end
