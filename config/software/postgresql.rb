@@ -66,6 +66,12 @@ build do
       link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
     end
   end
+
+  # Required in order to be removed with the package when downgrading
+  # Goes with matching change in postinst script
+  # 9.6.8 is the last postgres version where we used this old path
+  # @TODO: Remove in GitLab 12
+  link prefix, "#{install_dir}/embedded/postgresql/9.6.8"
 end
 
 # exclude headers and static libraries from package
