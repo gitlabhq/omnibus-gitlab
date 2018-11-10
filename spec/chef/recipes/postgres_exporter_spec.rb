@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::postgres-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(env_dir)).converge('gitlab::default') }
   let(:node) { chef_run.node }
 
   before do
@@ -36,6 +36,8 @@ describe 'gitlab::postgres-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'postgres-exporter', 'root', 'root'
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/postgres-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload postgres-exporter svlogd configuration]')
@@ -107,7 +109,10 @@ describe 'gitlab::postgres-exporter' do
             'some.flag' => 'foo'
           },
           listen_address: 'localhost:9700',
-          enable: true
+          enable: true,
+          env: {
+            'USER_SETTING' => 'asdf1234'
+          }
         }
       )
     end
@@ -118,5 +123,7 @@ describe 'gitlab::postgres-exporter' do
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
         .with_content(/some.flag=foo/)
     end
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/postgres-exporter/env', "USER_SETTING", 'asdf1234'
   end
 end

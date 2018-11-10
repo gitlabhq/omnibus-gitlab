@@ -76,9 +76,9 @@ default['gitlab']['geo-postgresql'] = default['gitlab']['postgresql'].dup
 # We are inheriting default attributes from postgresql and changing below what should be different
 default['gitlab']['geo-postgresql']['enable'] = false
 default['gitlab']['geo-postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
+default['gitlab']['geo-postgresql']['data_dir'] = nil
 default['gitlab']['geo-postgresql']['log_directory'] = '/var/log/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['unix_socket_directory'] = '/var/opt/gitlab/geo-postgresql'
+default['gitlab']['geo-postgresql']['unix_socket_directory'] = nil
 default['gitlab']['geo-postgresql']['ssl'] = 'off'
 # Postgres User's Environment Path
 default['gitlab']['geo-postgresql']['sql_user'] = 'gitlab_geo'
@@ -163,6 +163,10 @@ default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcu
 
 default['gitlab']['postgresql']['pgbouncer_user'] = 'pgbouncer'
 default['gitlab']['postgresql']['pgbouncer_user_password'] = nil
+default['gitlab']['pgbouncer']['env_directory'] = '/opt/gitlab/etc/pgbouncer/env'
+default['gitlab']['pgbouncer']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['pgbouncer']['enable'] = false
 default['gitlab']['pgbouncer']['log_directory'] = '/var/log/gitlab/pgbouncer'
 default['gitlab']['pgbouncer']['data_directory'] = '/var/opt/gitlab/pgbouncer'
@@ -252,3 +256,7 @@ default['gitlab']['pgbouncer']['users'] = {}
 default['gitlab']['pgbouncer-exporter']['enable'] = false
 default['gitlab']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
 default['gitlab']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'
+default['gitlab']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
+default['gitlab']['pgbouncer-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}

@@ -19,11 +19,11 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 gitlab_geo_helper = GitlabGeoHelper.new(node)
 
-postgresql_dir = node['gitlab']['geo-postgresql']['dir']
-postgresql_data_dir = node['gitlab']['geo-postgresql']['data_dir']
-postgresql_data_dir_symlink = File.join(postgresql_dir, 'data')
+node.default['gitlab']['geo-postgresql']['unix_socket_directory'] ||= node['gitlab']['geo-postgresql']['dir']
+node.default['gitlab']['geo-postgresql']['data_dir'] ||= "#{node['gitlab']['geo-postgresql']['dir']}/data"
+node.default['gitlab']['geo-postgresql']['home'] ||= node['gitlab']['geo-postgresql']['dir']
+
 postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
-postgresql_socket_dir = node['gitlab']['geo-postgresql']['unix_socket_directory']
 postgresql_username = account_helper.postgresql_user
 
 geo_pg_helper = GeoPgHelper.new(node)
@@ -31,14 +31,14 @@ fdw_helper = FdwHelper.new(node)
 
 include_recipe 'postgresql::user'
 
-directory postgresql_dir do
+directory node['gitlab']['geo-postgresql']['dir'] do
   owner postgresql_username
   mode '0755'
   recursive true
 end
 
 [
-  postgresql_data_dir,
+  node['gitlab']['geo-postgresql']['data_dir'],
   postgresql_log_dir
 ].each do |dir|
   directory dir do
@@ -48,18 +48,13 @@ end
   end
 end
 
-link postgresql_data_dir_symlink do
-  to postgresql_data_dir
-  not_if { postgresql_data_dir == postgresql_data_dir_symlink }
-end
-
-execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
+execute "/opt/gitlab/embedded/bin/initdb -D #{node['gitlab']['geo-postgresql']['data_dir']} -E UTF8" do
   user postgresql_username
   not_if { geo_pg_helper.bootstrapped? }
 end
 
-postgresql_config = File.join(postgresql_data_dir, 'postgresql.conf')
-postgresql_runtime_config = File.join(postgresql_data_dir, 'runtime.conf')
+postgresql_config = File.join(node['gitlab']['geo-postgresql']['data_dir'], 'postgresql.conf')
+postgresql_runtime_config = File.join(node['gitlab']['geo-postgresql']['data_dir'], 'runtime.conf')
 bootstrapping = !geo_pg_helper.bootstrapped?
 should_notify = omnibus_helper.should_notify?('geo-postgresql') && !bootstrapping
 
@@ -83,7 +78,7 @@ template postgresql_runtime_config do
   notifies :run, 'execute[reload geo-postgresql]', :immediately if should_notify
 end
 
-pg_hba_config = File.join(postgresql_data_dir, 'pg_hba.conf')
+pg_hba_config = File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_hba.conf')
 
 template pg_hba_config do
   source 'pg_hba.conf.erb'
@@ -94,7 +89,7 @@ template pg_hba_config do
   notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
 end
 
-template File.join(postgresql_data_dir, 'pg_ident.conf') do
+template File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_ident.conf') do
   owner postgresql_username
   mode '0644'
   variables(node['gitlab']['geo-postgresql'].to_hash)
@@ -154,7 +149,7 @@ if node['gitlab']['geo-postgresql']['enable']
   postgresql_database geo_database_name do
     owner geo_pg_user
     database_port geo_pg_port
-    database_socket postgresql_socket_dir
+    database_socket node['gitlab']['geo-postgresql']['unix_socket_directory']
     helper geo_pg_helper
     action :create
   end

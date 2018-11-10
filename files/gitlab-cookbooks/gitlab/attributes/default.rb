@@ -280,7 +280,7 @@ default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_load_balancing'] = { 'hosts' => [] }
 # Path to postgresql socket directory
-default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['gitlab-rails']['db_host'] = nil
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
@@ -412,15 +412,15 @@ default['gitlab']['gitlab-shell']['git_data_directories'] = {
 default['gitlab']['postgresql']['enable'] = false
 default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
-default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
+default['gitlab']['postgresql']['data_dir'] = nil
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
-default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['postgresql']['unix_socket_directory'] = nil
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['group'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
-default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['postgresql']['home'] = nil
 # Postgres User's Environment Path
 # defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
 default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
@@ -554,7 +554,8 @@ default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
 default['gitlab']['gitlab-workhorse']['log_format'] = nil
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
-  'HOME' => node['gitlab']['user']['home']
+  'HOME' => node['gitlab']['user']['home'],
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
 ####
@@ -786,6 +787,10 @@ default['gitlab']['prometheus']['gid'] = nil
 default['gitlab']['prometheus']['shell'] = '/bin/sh'
 default['gitlab']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['gitlab']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
+default['gitlab']['prometheus']['env_directory'] = '/opt/gitlab/etc/prometheus/env'
+default['gitlab']['prometheus']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['prometheus']['remote_read'] = []
 default['gitlab']['prometheus']['remote_write'] = []
 default['gitlab']['prometheus']['rules_directory'] = "/var/opt/gitlab/prometheus/rules"
@@ -806,6 +811,10 @@ default['gitlab']['prometheus']['target_heap_size'] = (
 default['gitlab']['alertmanager']['enable'] = false
 default['gitlab']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
 default['gitlab']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
+default['gitlab']['alertmanager']['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
+default['gitlab']['alertmanager']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['alertmanager']['listen_address'] = 'localhost:9093'
 default['gitlab']['alertmanager']['admin_email'] = nil
 default['gitlab']['alertmanager']['inhibit_rules'] = []
@@ -819,6 +828,10 @@ default['gitlab']['alertmanager']['templates'] = []
 default['gitlab']['node-exporter']['enable'] = false
 default['gitlab']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['gitlab']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['gitlab']['node-exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
+default['gitlab']['node-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 
 ####
@@ -826,6 +839,10 @@ default['gitlab']['node-exporter']['listen_address'] = 'localhost:9100'
 ###
 default['gitlab']['redis-exporter']['enable'] = false
 default['gitlab']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['gitlab']['redis-exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
+default['gitlab']['redis-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['gitlab']['redis-exporter']['listen_address'] = 'localhost:9121'
 
 ####
@@ -836,7 +853,7 @@ default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-expor
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['postgres-exporter']['env'] = {
-  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=postgres sslmode=allow"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
 ####

@@ -34,6 +34,7 @@ upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
 node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
+node.default['gitlab']['gitlab-rails']['db_host'] ||= node['gitlab']['postgresql']['dir']
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group

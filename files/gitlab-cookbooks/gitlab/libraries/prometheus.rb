@@ -92,7 +92,7 @@ module Prometheus
           To upgrade to Promtheus 2.x, use `gitlab-ctl prometheus-upgrade` command.
           Running this command will migrate all your existing data to format supported by Prometheus 2.x.
           This can be a time consuming operation. To skip migrating the data, and instead remove and start fresh, run `gitlab-ctl prometheus-upgrade --skip-data-migration`.
-          Check https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#11-4 for details.
+          Check https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114 for details.
           ---
         EOS
       LoggingHelper.deprecation(message)

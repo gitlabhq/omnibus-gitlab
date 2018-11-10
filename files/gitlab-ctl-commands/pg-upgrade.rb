@@ -257,11 +257,11 @@ def version_from_manifest(software)
 end
 
 def default_version
-  version_from_manifest('postgresql')
+  PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 def upgrade_version
-  version_from_manifest('postgresql_new')
+  PGVersion.parse(version_from_manifest('postgresql_new'))
 end
 
 def create_links(version)
