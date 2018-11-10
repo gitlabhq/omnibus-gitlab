@@ -1,7 +1,13 @@
 require 'chef_helper'
 
 describe 'postgresql_database' do
-  let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_database)) }
+  let(:runner) do
+    ChefSpec::SoloRunner.new(step_into: %w(postgresql_database)) do |node|
+      # unix_socket_directory is normally conditionally set in postgresql::enable
+      # which is not executed as part of this spec
+      node.normal['gitlab']['postgresql']['unix_socket_directory'] = '/var/opt/gitlab/postgresql'
+    end
+  end
 
   context 'create' do
     let(:chef_run) { runner.converge('test_gitlab_postgresql_database::create') }
