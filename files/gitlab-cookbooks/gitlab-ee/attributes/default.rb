@@ -76,9 +76,9 @@ default['gitlab']['geo-postgresql'] = default['gitlab']['postgresql'].dup
 # We are inheriting default attributes from postgresql and changing below what should be different
 default['gitlab']['geo-postgresql']['enable'] = false
 default['gitlab']['geo-postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
+default['gitlab']['geo-postgresql']['data_dir'] = nil
 default['gitlab']['geo-postgresql']['log_directory'] = '/var/log/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['unix_socket_directory'] = '/var/opt/gitlab/geo-postgresql'
+default['gitlab']['geo-postgresql']['unix_socket_directory'] = nil
 default['gitlab']['geo-postgresql']['ssl'] = 'off'
 # Postgres User's Environment Path
 default['gitlab']['geo-postgresql']['sql_user'] = 'gitlab_geo'

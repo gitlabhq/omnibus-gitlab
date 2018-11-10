@@ -17,7 +17,8 @@
 pg_helper = PgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
-postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
+
+include_recipe 'postgresql::directory_locations'
 
 # This recipe will also be called standalone so the resource
 # won't exist for resource collection.
@@ -48,7 +49,7 @@ ruby_block "Link postgresql bin files to the correct version" do
     end
   end
   only_if do
-    !File.exist?(File.join(postgresql_data_dir, "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
+    !File.exist?(File.join(node['gitlab']['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
   end
   notifies :restart, 'service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['service[postgresql]']
 end

@@ -280,7 +280,7 @@ default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_load_balancing'] = { 'hosts' => [] }
 # Path to postgresql socket directory
-default['gitlab']['gitlab-rails']['db_host'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['gitlab-rails']['db_host'] = nil
 default['gitlab']['gitlab-rails']['db_port'] = 5432
 default['gitlab']['gitlab-rails']['db_socket'] = nil
 default['gitlab']['gitlab-rails']['db_sslmode'] = nil
@@ -412,15 +412,15 @@ default['gitlab']['gitlab-shell']['git_data_directories'] = {
 default['gitlab']['postgresql']['enable'] = false
 default['gitlab']['postgresql']['ha'] = false
 default['gitlab']['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
-default['gitlab']['postgresql']['data_dir'] = "/var/opt/gitlab/postgresql/data"
+default['gitlab']['postgresql']['data_dir'] = nil
 default['gitlab']['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
-default['gitlab']['postgresql']['unix_socket_directory'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['postgresql']['unix_socket_directory'] = nil
 default['gitlab']['postgresql']['username'] = "gitlab-psql"
 default['gitlab']['postgresql']['group'] = "gitlab-psql"
 default['gitlab']['postgresql']['uid'] = nil
 default['gitlab']['postgresql']['gid'] = nil
 default['gitlab']['postgresql']['shell'] = "/bin/sh"
-default['gitlab']['postgresql']['home'] = "/var/opt/gitlab/postgresql"
+default['gitlab']['postgresql']['home'] = nil
 # Postgres User's Environment Path
 # defaults to /opt/gitlab/embedded/bin:/opt/gitlab/bin/$PATH. The install-dir path is set at build time
 default['gitlab']['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
@@ -853,7 +853,6 @@ default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-expor
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
 default['gitlab']['postgres-exporter']['env'] = {
-  'DATA_SOURCE_NAME' => "user=#{node['gitlab']['postgresql']['username']} host=#{node['gitlab']['gitlab-rails']['db_host']} database=postgres sslmode=allow",
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
