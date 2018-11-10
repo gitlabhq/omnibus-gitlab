@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::node-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(account env_dir)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -17,6 +17,8 @@ describe 'gitlab::node-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'node-exporter', 'root', 'root'
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload node-exporter svlogd configuration]')
@@ -102,7 +104,10 @@ describe 'gitlab::node-exporter' do
             'collector.arp' => false
           },
           listen_address: 'localhost:9899',
-          enable: true
+          enable: true,
+          env: {
+            'USER_SETTING' => 'asdf1234'
+          }
         }
       )
     end
@@ -115,5 +120,7 @@ describe 'gitlab::node-exporter' do
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
         .with_content(/--no-collector.arp/)
     end
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/node-exporter/env', "USER_SETTING", 'asdf1234'
   end
 end

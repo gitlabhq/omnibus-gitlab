@@ -12,7 +12,7 @@ module Build
 
     def self.get_params(image: nil)
       {
-        "ref" => "master",
+        "ref" => ENV['QA_BRANCH'] || 'master',
         "token" => ENV['QA_TRIGGER_TOKEN'],
         "variables[RELEASE]" => image,
         "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],

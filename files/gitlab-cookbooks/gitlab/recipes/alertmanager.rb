@@ -18,6 +18,7 @@ account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 alertmanager_log_dir = node['gitlab']['alertmanager']['log_directory']
 alertmanager_dir = node['gitlab']['alertmanager']['home']
+alertmanager_static_etc_dir = node['gitlab']['alertmanager']['env_directory']
 
 # alertmanager runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
@@ -33,6 +34,17 @@ directory alertmanager_log_dir do
   owner prometheus_user
   mode '0700'
   recursive true
+end
+
+directory alertmanager_static_etc_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+env_dir alertmanager_static_etc_dir do
+  variables node['gitlab']['alertmanager']['env']
+  notifies :restart, "service[alertmanager]"
 end
 
 configuration = {
@@ -58,7 +70,8 @@ runtime_flags = PrometheusHelper.new(node).kingpin_flags('alertmanager')
 runit_service 'alertmanager' do
   options({
     log_directory: alertmanager_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: alertmanager_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['alertmanager'].to_hash

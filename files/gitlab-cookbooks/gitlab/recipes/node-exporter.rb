@@ -19,6 +19,7 @@ account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 node_exporter_log_dir = node['gitlab']['node-exporter']['log_directory']
 textfile_dir = File.join(node['gitlab']['node-exporter']['home'], 'textfile_collector')
+node_exporter_static_etc_dir = node['gitlab']['node-exporter']['env_directory']
 
 # node-exporter runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
@@ -28,6 +29,17 @@ directory node_exporter_log_dir do
   owner prometheus_user
   mode '0700'
   recursive true
+end
+
+directory node_exporter_static_etc_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+env_dir node_exporter_static_etc_dir do
+  variables node['gitlab']['node-exporter']['env']
+  notifies :restart, "service[node-exporter]"
 end
 
 directory textfile_dir do
@@ -40,7 +52,8 @@ runtime_flags = PrometheusHelper.new(node).kingpin_flags('node-exporter')
 runit_service 'node-exporter' do
   options({
     log_directory: node_exporter_log_dir,
-    flags: runtime_flags
+    flags: runtime_flags,
+    env_dir: node_exporter_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
     node['gitlab']['node-exporter'].to_hash
