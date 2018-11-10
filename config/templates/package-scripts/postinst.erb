@@ -83,8 +83,14 @@ print_upgrade_info()
 symlink_old_postgres_directory()
 {
   postgres_dir="${DEST_DIR}/embedded/postgresql/9.6"
+  symlink_dir="${DEST_DIR}/embedded/postgresql/9.6.8"
   if [ -d $postgres_dir ]; then
-    ln -sf $postgres_dir ${DEST_DIR}/embedded/postgresql/9.6.8
+    # Cleanup any exiting non-symlink directory
+    if ! [ -L $symlink_dir ]; then
+     rm -rf $symlink_dir
+    fi
+
+    ln -sfn $postgres_dir $symlink_dir
   fi
 }
 
