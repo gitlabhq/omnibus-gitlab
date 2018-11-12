@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Upgrade Ruby to 2.5.3 !2806
 - Deprecate postgresql['data_dir'] !2846
 - Move env directory of all services to `/opt/gitlab/etc/<service>/env` !2825
+- Add client support for Redis over SSL !2843
 
 11.5.0
 

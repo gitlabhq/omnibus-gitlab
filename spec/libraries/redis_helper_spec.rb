@@ -69,6 +69,20 @@ describe RedisHelper do
 
         expect(subject.redis_url.to_s).to eq('redis://:mypass@redis.example.com:8888/0')
       end
+
+      it 'returns an SSL Redis URL with password, port and database when all specified' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_host: 'redis.example.com',
+            redis_password: 'mypass',
+            redis_database: 0,
+            redis_port: 8888,
+            redis_ssl: true
+          }
+        )
+
+        expect(subject.redis_url.to_s).to eq('rediss://:mypass@redis.example.com:8888/0')
+      end
     end
   end
 end
