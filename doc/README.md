@@ -123,11 +123,4 @@ You can also use the docker images provided by GitLab to install and configure a
 
 ## Omnibus GitLab developer documentation
 
-- [Development Setup](development/README.md)
-- [Omnibus GitLab Architecture](architecture/README.md)
-- [Adding a new Service to Omnibus GitLab](development/new-services.md)
-- [Creating patches](development/creating-patches.md)
-- [Release process](release/README.md)
-- [Building your own package](build/README.md)
-- [Building a package from a custom branch](build/README.md#building-a-package-from-a-custom-branch)
-- [Adding deprecation messages](development/adding-deprecation-messages.md)
+See the [development documentation](development/README.md)
