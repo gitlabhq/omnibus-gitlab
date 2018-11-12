@@ -1,125 +1,66 @@
-# Setting up your development environment
+# Omnibus GitLab developer documentation
 
-Development of Omnibus GitLab maybe done using an existing package available
-from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
-a build environment to build these packages and use them, please read [Setting
-up a Build Environment](../build/prepare-build-environment.md).
+- [Development Setup](setup.md)
+- [Omnibus GitLab Architecture](../architecture/README.md)
+- [Adding a new Service to Omnibus GitLab](new-services.md)
+- [Creating patches](creating-patches.md)
+- [Release process](../release/README.md)
+- [Building your own package](../build/README.md)
+- [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
+- [Adding deprecation messages](adding-deprecation-messages.md)
 
- 1. Setup a VM
+## Setting up development environment
 
-    To provide isolation and to prevent rebuilding of the package for each and
-    every change, it is preferred to use a Virtual Machine for development. The
-    following example uses docker on a Debian host with a Debian Jessie image.
-    The steps are similar for other OSs; only the commands differ.
-    1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/engine/installation).
+Check [setting up development environment docs](setup.md) for
+instructions on setting up a environment for local development.
 
-    2. Pulling a Debian Jessie image
+## Understanding the architecture
 
-        ```
-        docker pull debian:jessie
-        ```
+Check the [architecture documentation](../architecture/README.md) for an full description
+of the various components of this project, and how they work together.
 
-    3. Running docker image with a shell prompt
+## Writing tests
 
-        ```
-        docker run -it debian:jessie bash
-        ```
-    This will cause the docker to run the jessie image and you will fall into a
-    bash prompt, where the following steps are applied to.
+Any change in the internal cookbook also requires specs. Apart from testing the
+specific feature/bug, it would be greatly appreciated if the submitted Merge
+Request includes more tests. This is to ensure that the test coverage grows with
+development.
 
- 2. Install basic necessary tools
+When in rush to fix something (eg. security issue, bug blocking the release),
+writing specs can be skipped. However, an issue to implement the tests
+**must be** created and assigned to the person who originally wrote the code.
 
-    Basic tools used for developing Omnibus GitLab may be installed using the
-    following command
+To run tests, execute the following command (you may have to run `bundle install` before running it)
 
-    ```
-    sudo apt-get install git
-    ```
+```
+bundle exec rspec
+```
 
- 3. Getting GitLab CE nightly package and installing it
+## Merge Request Guidelines
 
-    Get the latest GitLab CE nightly package (of the OS you are using) from
-    [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
-    and install it using the instructions given on that page. Once you configure
-    and start gitlab. Check if you can access it from your host browser on
-    \<ip address of host>
+If you are working on a new feature or an issue which doesn't have an entry on
+Omnibus GitLab's issue tracker, it is always a better idea to create an issue
+and mention that you will be working on it as this will help to prevent
+duplication of work. Also, others may be able to provide input regarding the
+issue, which can help you in your task.
 
-    **`Note`**: Nightly packages versioning is incorrect which can cause a
-    confusion. This [issue is reported in #864](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/864).
-    For the time being, consider the date of pushing (which is available next
-    to the package name in the repository page) to find the latest package version.
+It is preferred to make your changes in a branch named \<issue
+number>-\<description> so that merging the request will automatically close the
+specified issue.
 
- 4. Getting source of Omnibus GitLab
+A good Merge Request is expected to have the following components, based on
+their applicability:
 
-    Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
+ 1. Full Merge Request description explaining why this change was needed
+ 2. Code for implementing feature/bugfix
+ 3. Tests, as explained in [Writing Tests](#writing-tests)
+ 4. Documentation explaining the change
+ 5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+ 6. Changelog entry to inform about the change, if necessary.
 
-    ```
-    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
-    ```
+**`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
 
-    We will be doing the development inside the `~/omnibus-gitlab` directory.
-
- 5. Instructing GitLab to apply the changes we make to the cookbooks.
-
-    During development, we need the changes we make to the cookbooks to be
-    applied immediately to the running GitLab instance. So, we have to instruct
-    GitLab to use those cookbooks instead of the ones shipped during
-    installation. This involves backing up of the existing cookbooks directory
-    and symlinking the directory where we make modifications to its location.
-
-    ```
-    sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
-    sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
-    ```
-
-  6. Docker container specific items
-
-     Before running `reconfigure`, you need to start runsv.
-
-     ```
-     /opt/gitlab/embedded/bin/runsvdir-start &
-     ```
-
-     After running `reconfigure`, you may have sysctl errors. There is a workaround in the [common installation problems doc](../common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
-
-Now, you can make necessary changes in the
-`~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
-for those changes to take effect.
-
-## Run GitLab QA Against Your Development Environment
-
-You can run [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa) tests against your development instance.
-
-This ensures that your new work is behaving as expected, and not breaking anything else. You can even add your own tests to QA to validate what you are working on.
-
-1. Create a user account on your development instance for GitLab QA to use
-
-   Then, from any machine that can reach your development instance:
-
-1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab-ee) repository
-
-    ```
-    $ git clone git@gitlab.com:gitlab-org/gitlab-ee.git
-    ```
-
-1. Change to the `qa` directory
-
-    ```
-    $ cd gitlab-ee/qa
-    ```
-
-1. Install the required gems
-
-   ```
-   $ bundle install
-   ```
-
-1. Run the tests
-
-   ```
-   $ GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
-   ```
-
-## Openshift GitLab Development Setup
-
-See [openshift/README.md.](openshift/README.md#development-setup)
+[^1]:
+  1. Go to Settings -> CI/CD
+  1. Expand Runners settings
+  1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"

@@ -4,6 +4,8 @@ Omnibus-GitLab is a customized fork of the Omnibus project from Chef, and it use
 
 ![Omnibus-GitLab Components](components.png)
 
+An in-depth video walkthrough of these components is available [on YouTube](https://www.youtube.com/watch?v=m89NHLhTMj4 )
+
 ## Software Definitions
 
 ### GitLab project definition file
