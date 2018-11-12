@@ -1187,7 +1187,13 @@ Raspberry-Pi-2-Jessie-release:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
   only:
-    - tags@gitlab/omnibus-gitlab
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
   when: manual
   dependencies:
     - Raspberry-Pi-2-Jessie
@@ -1201,7 +1207,13 @@ Raspberry-Pi-2-Stretch-release:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
   only:
-    - tags@gitlab/omnibus-gitlab
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
   when: manual
   dependencies:
     - Raspberry-Pi-2-Stretch
