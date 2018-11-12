@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.6.0
+
+- Depracate postgresql['data_dir'] !2846
+
 11.5.0
 
 - Add experimental support for Puma !2801
