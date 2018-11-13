@@ -133,9 +133,16 @@ build do
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env
 
-  # Up the default timeout from 10min to 4hrs for this command so it has the
-  # opportunity to complete on the pi
-  bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
+  # By default, copy assets from the fetch-assets job
+  # Compile from scratch if the COMPILE_ASSETS variable is set to to true
+  if ENV['COMPILE_ASSETS'].eql?('true')
+    # Up the default timeout from 10min to 4hrs for this command so it has the
+    # opportunity to complete on the pi
+    bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
+  else
+    # Copy the asset files
+    sync "#{ENV['CI_PROJECT_DIR']}/#{ENV['ASSET_PATH']}", 'public/assets/'
+  end
 
   # Move folders for caching. GitLab CI permits only relative path for Cache
   # and Artifacts. So we need these folder in the root directory.
