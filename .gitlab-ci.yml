@@ -1,4 +1,5 @@
 stages:
+  - prepare-assets
   - trigger-package
   - trigger-docker
   - trigger-ha-validate
@@ -24,6 +25,12 @@ stages:
 variables:
   BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
   BUILDER_IMAGE_REVISION: "0.0.27"
+  # The registry to pull the assets image from
+  ASSET_REGISTRY: "${CI_REGISTRY}"
+  ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
+  ASSET_SYNC_GZIP_COMPRESSION: "true"
+  ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
+  COMPILE_ASSETS: "false"
 
 # Templates
 ## Runs on GitLab.com only
@@ -312,6 +319,17 @@ dependency_scanning:
   tags:
   - promotion
 
+### For services that need a docker daemon
+.docker_job: &docker_job
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind
+  tags:
+    - docker
+
 before_script:
   - echo $NIGHTLY
   - mkdir -p ~/.ssh
@@ -332,6 +350,25 @@ before_script:
         && git commit -m "Updating Gemfile.lock";
     fi
   - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; fi
+
+fetch-assets:
+  <<: *docker_job
+  stage: prepare-assets
+  before_script: []
+  script:
+    - support/fetch_assets
+  artifacts:
+    paths:
+      - ${ASSET_PATH}
+  only:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+  except:
+    variables:
+      - $COMPILE_ASSETS == "true"
 
 # Jobs
 ## Runs on GitLab.com only
@@ -440,13 +477,8 @@ Trigger:package:
     - triggered-packages
 
 Trigger:gitlab-docker:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  <<: *docker_job
   stage: trigger-docker
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
@@ -461,13 +493,8 @@ Trigger:gitlab-docker:
     - triggers@gitlab-org/omnibus-gitlab
 
 Trigger:qa-docker:
+  <<: *docker_job
   stage: trigger-docker
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -870,13 +897,8 @@ SLES-12:
   retry: 1
 
 Docker:
+  <<: *docker_job
   stage: images
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
@@ -890,13 +912,8 @@ Docker:
   retry: 1
 
 Docker-QA:
+  <<: *docker_job
   stage: images
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-    - docker:dind
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -995,13 +1012,8 @@ SLES-12-branch:
   retry: 1
 
 Docker-branch:
+  <<: *docker_job
   stage: images
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
@@ -1016,14 +1028,10 @@ Docker-branch:
   retry: 1
 
 QA-Master:
+  <<: *docker_job
   stage: images
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
-  services:
-  - docker:dind
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -1221,13 +1229,8 @@ Raspberry-Pi-2-Stretch-release:
   - promotion
 
 Docker-Release:
+  <<: *docker_job
   stage: image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
-  services:
-  - docker:dind
   script:
     - bundle exec rake release:docker
   only:
@@ -1253,14 +1256,10 @@ AWS:
   retry: 1
 
 QA-Tag:
+  <<: *docker_job
   stage: image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
-    DOCKER_DRIVER: overlay
-    DOCKER_HOST: tcp://docker:2375
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
-  services:
-  - docker:dind
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
