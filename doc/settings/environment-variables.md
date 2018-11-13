@@ -18,6 +18,12 @@ You can also override environment variables from other GitLab components which
 might be required if you are behind a proxy:
 
 ```ruby
+# Needed for proxying Git clones
+gitaly['env'] = {
+    "http_proxy" => "my_proxy",
+    "https_proxy" => "my_proxy"
+}
+
 gitlab_workhorse['env'] = {
     "http_proxy" => "my_proxy",
     "https_proxy" => "my_proxy"
