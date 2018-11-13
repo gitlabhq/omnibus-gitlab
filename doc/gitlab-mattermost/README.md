@@ -3,12 +3,6 @@
 You can run a [GitLab Mattermost](http://www.mattermost.org/)
 service on your GitLab server.
 
-## Documentation version
-
-Make sure you view this guide from the tag (version) of GitLab you would like to install. In most cases this should be the highest numbered production tag (without rc in it). You can select the tag in the version dropdown in the top left corner of GitLab (below the menu bar).
-
-If the highest number stable branch is unclear please check the [GitLab Blog](https://about.gitlab.com/blog/) for installation guide links by version.
-
 ## Pre-requisite
 
 GitLab Mattermost is compiled and manually tested each release on an AMD 64 chipset for Linux. ARM chipsets and operating systems, like Raspberry PI, are not supported.
