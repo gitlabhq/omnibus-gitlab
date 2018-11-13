@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 11.6.0
 
-- Depracate postgresql['data_dir'] !2846
+- Deprecate postgresql['data_dir'] !2846
 
 11.5.0
 
