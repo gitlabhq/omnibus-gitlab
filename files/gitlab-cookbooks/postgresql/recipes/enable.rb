@@ -48,7 +48,7 @@ end
 
 link postgresql_data_dir_symlink do
   to node['gitlab']['postgresql']['data_dir']
-  not_if { node['gitlab']['postgresql']['data_dir']  == postgresql_data_dir_symlink }
+  not_if { node['gitlab']['postgresql']['data_dir'] == postgresql_data_dir_symlink }
 end
 
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
