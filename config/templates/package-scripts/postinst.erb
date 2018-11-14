@@ -84,7 +84,6 @@ fi
 <%= common_script %>
 
 ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
-symlink_old_postgres_directory
 create_config_template
 fix_directory_permissions
 print_upgrade_info
@@ -93,6 +92,7 @@ case "$1" in
   configure)
     # Looks like a DEB install. We don't know if it is a fresh install or an
     # upgrade.
+    symlink_old_postgres_directory
     EXTERNAL_URL=${EXTERNAL_URL} ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)
