@@ -4,7 +4,14 @@
 symlink_old_postgres_directory()
 {
   postgres_dir="${DEST_DIR}/embedded/postgresql/9.6"
+  symlink_name="${DEST_DIR}/embedded/postgresql/9.6.8"
   if [ -d $postgres_dir ]; then
-    ln -sfn $postgres_dir ${DEST_DIR}/embedded/postgresql/9.6.8
+    # Remove the existing directory if exists and is not already a symlink
+    if ! [ -L $symlink_name ]; then
+      rm -rf $symlink_name
+    fi
+
+    # create/update the symlink
+    ln -sfn $postgres_dir $symlink_name
   fi
 }
