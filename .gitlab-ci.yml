@@ -8,6 +8,8 @@ stages:
   - prepare
   - tests
   - post-test
+  - package:gitlab_com
+  - upload:gitlab_com
   - package
   - scan-dependencies
   - images
@@ -829,13 +831,16 @@ OpenSUSE 42.3 specs 5 6:
   dependencies:
   - OpenSUSE 42.3 knapsack
 
+## Package for GitLab.com
+Ubuntu-16.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: package:gitlab_com
+  extends: .tag_template
+
 # dev.gitlab.org only
 # Release build
 Ubuntu-14.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Ubuntu-16.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -945,12 +950,15 @@ Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
 
+## Package for GitLab.com
+Ubuntu-16.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: package:gitlab_com
+  extends: .branch_template
+
 ## Building from branch
 Ubuntu-14.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
-Ubuntu-16.04-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -1088,16 +1096,19 @@ notify:slack-fail:
   - promotion
   dependencies: []
 
+## Upload for GitLab.com
+Ubuntu-16.04-staging:
+  stage: upload:gitlab_com
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+
 # Staging upload
 Ubuntu-14.04-staging:
   dependencies:
     - Ubuntu-14.04
     - Ubuntu-14.04-branch
-  <<: *staging_upload
-Ubuntu-16.04-staging:
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
   <<: *staging_upload
 Ubuntu-18.04-staging:
   dependencies:
