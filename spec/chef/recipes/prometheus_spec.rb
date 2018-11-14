@@ -14,6 +14,10 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9090
+  - job_name: nginx
+    static_configs:
+    - targets:
+      - localhost:8060
   - job_name: redis
     static_configs:
     - targets:
@@ -165,7 +169,7 @@ prometheus_yml_output = <<-PROMYML
 PROMYML
 
 describe 'gitlab::prometheus' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(account env_dir)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -186,6 +190,8 @@ describe 'gitlab::prometheus' do
     end
 
     it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'gitlab-prometheus', 'gitlab-prometheus'
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/prometheus/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload prometheus svlogd configuration]')
@@ -386,6 +392,42 @@ describe 'gitlab::prometheus' do
           it 'redis exporter is enabled' do
             expect(chef_run).to include_recipe('gitlab::redis-exporter')
           end
+        end
+      end
+
+      context 'when nginx status is disabled' do
+        before do
+          stub_gitlab_rb(
+            nginx: {
+              status: {
+                enable: false
+              }
+            }
+          )
+        end
+        it 'no nginx job is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content('job_name: nginx')
+        end
+      end
+
+      context 'when nginx vts is disabled' do
+        before do
+          stub_gitlab_rb(
+            nginx: {
+              status: {
+                vts_enable: false
+              }
+            }
+          )
+        end
+        it 'no nginx job is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+
+          expect(chef_run).not_to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+            .with_content('job_name: nginx')
         end
       end
 

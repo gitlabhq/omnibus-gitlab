@@ -26,7 +26,7 @@ describe 'gitaly' do
   end
 
   context 'by default' do
-    it_behaves_like "enabled runit service", "gitaly", "root", "root"
+    it_behaves_like "enabled runit service", "gitaly", "root", "root", "git", "git"
 
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
@@ -102,9 +102,15 @@ describe 'gitaly' do
           ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
           ruby_restart_delay: ruby_restart_delay,
           ruby_num_workers: ruby_num_workers,
+        },
+        user: {
+          username: 'foo',
+          group: 'bar'
         }
       )
     end
+
+    it_behaves_like "enabled runit service", "gitaly", "root", "root", "foo", "bar"
 
     it 'populates gitaly config.toml with custom values' do
       expect(chef_run).to render_file(config_path)
@@ -281,6 +287,7 @@ describe 'gitaly' do
     it_behaves_like "enabled gitaly env", "HOME", '/var/opt/gitlab'
     it_behaves_like "enabled gitaly env", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
     it_behaves_like "enabled gitaly env", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
+    it_behaves_like "enabled gitaly env", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
   end
 
   context 'computes env variables based on other values' do

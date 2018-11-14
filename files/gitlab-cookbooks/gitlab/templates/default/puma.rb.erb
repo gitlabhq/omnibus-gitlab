@@ -1,0 +1,86 @@
+# frozen_string_literal: true
+
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+# Load "path" as a rackup file.
+#
+# The default is "config.ru".
+#
+environment '<%= @environment %>'
+rackup '<%= @install_dir %>/embedded/service/gitlab-rails/config.ru'
+pidfile '<%= @pid %>'
+state_path '<%= @state_path %>'
+
+stdout_redirect '<%= @stdout_path %>', '<%= @stderr_path %>', true
+
+# Configure "min" to be the minimum number of threads to use to answer
+# requests and "max" the maximum.
+#
+# The default is "0, 16".
+#
+threads <%= @min_threads %>, <%= @max_threads %>
+
+# By default, workers accept all requests and queue them to pass to handlers.
+# When false, workers accept the number of simultaneous requests configured.
+#
+# Queueing requests generally improves performance, but can cause deadlocks if
+# the app is waiting on a request to itself. See https://github.com/puma/puma/issues/612
+#
+# When set to false this may require a reverse proxy to handle slow clients and
+# queue requests before they reach puma. This is due to disabling HTTP keepalive
+queue_requests false
+
+# Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
+# accepted protocols.
+<%- if @listen_socket %>
+bind 'unix://<%= @listen_socket %>'
+<%- end %>
+
+<%- if @listen_tcp %>
+bind 'tcp://<%= @listen_tcp %>'
+<%- end %>
+
+<%- if @working_directory %>
+directory '<%= @working_directory %>'
+<%- end %>
+
+workers <%= @worker_processes %>
+
+require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
+require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/puma_worker_killer_initializer"
+
+on_restart do
+  # Signal application hooks that we're about to restart
+  Gitlab::Cluster::LifecycleEvents.do_master_restart
+end
+
+options = { workers: <%= @worker_processes %> }
+
+before_fork do
+  # Signal to the puma killer
+  Gitlab::Cluster::PumaWorkerKillerInitializer.start(options, puma_per_worker_max_memory_mb: <%= @per_worker_max_memory_mb %>) unless ENV['DISABLE_PUMA_WORKER_KILLER']
+
+  # Signal application hooks that we're about to fork
+  Gitlab::Cluster::LifecycleEvents.do_before_fork
+end
+
+Gitlab::Cluster::LifecycleEvents.set_puma_options options
+on_worker_boot do
+  # Signal application hooks of worker start
+  Gitlab::Cluster::LifecycleEvents.do_worker_start
+end
+
+# Preload the application before starting the workers; this conflicts with
+# phased restart feature. (off by default)
+
+preload_app!
+
+tag 'gitlab-puma-worker'
+
+# Verifies that all workers have checked in to the master process within
+# the given timeout. If not the worker process will be restarted. Default
+# value is 60 seconds.
+#
+worker_timeout <%= @worker_timeout %>

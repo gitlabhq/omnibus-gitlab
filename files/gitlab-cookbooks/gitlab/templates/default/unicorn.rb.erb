@@ -21,27 +21,31 @@ preload_app <%= @preload_app %>
 # How many worker processes
 worker_processes <%= @worker_processes %>
 
-<%- if @before_exec %>
-# What to do before we exec the binary
+# Load the Gitlab::Cluster::LifecycleEvents module
+# to notify the application of unicorn events
+require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
+
 before_exec do |server|
-  <%= @before_exec %>
+  Gitlab::Cluster::LifecycleEvents.do_master_restart
 end
 
-<%- end %>
-<%- if @before_fork %>
-# What to do before we fork a worker
 before_fork do |server, worker|
-  <%= @before_fork %>
+  Gitlab::Cluster::LifecycleEvents.do_before_fork
+
+  old_pid = "#{server.config[:pid]}.oldbin"
+  if old_pid != server.pid
+    begin
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+    end
+  end
 end
 
-<%- end %>
-<%- if @after_fork %>
-# What to do after we fork a worker
 after_fork do |server, worker|
-  <%= @after_fork %>
+  Gitlab::Cluster::LifecycleEvents.do_worker_start
 end
 
-<%- end %>
 <%- if @pid %>
 # Where to drop a pidfile
 pid '<%= @pid %>'

@@ -79,6 +79,7 @@ describe OmnibusHelper do
   let(:services) do
     %w(
       unicorn
+      puma
       sidekiq
       gitlab-workhorse
       postgresql

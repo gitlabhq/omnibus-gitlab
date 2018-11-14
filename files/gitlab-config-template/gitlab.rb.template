@@ -516,7 +516,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['debug_addr'] = "localhost:5001"
 # registry['log_directory'] = "/var/log/gitlab/registry"
 # registry['env_directory'] = "/opt/gitlab/etc/registry/env"
-# registry['env'] = {}
+# registry['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 # registry['log_level'] = "info"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['health_storagedriver_enabled'] = true
@@ -594,7 +596,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['log_format'] = "json"
 
 # gitlab_workhorse['env'] = {
-#   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin"
+#   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 
 ################################################################################
@@ -623,6 +626,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/omnibus/settings/unicorn.html
 ################################################################################
 
+# unicorn['enable'] = true
 # unicorn['worker_timeout'] = 60
 ###! Minimum worker_processes is 2 at this moment
 ###! See https://gitlab.com/gitlab-org/gitlab-ce/issues/18771
@@ -647,6 +651,33 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!       https://github.com/kzk/unicorn-worker-killer
 # unicorn['worker_memory_limit_min'] = "400 * 1 << 20"
 # unicorn['worker_memory_limit_max'] = "650 * 1 << 20"
+
+################################################################################
+## GitLab Puma
+##! Tweak puma settings. You should only use Unicorn or Puma, not both.
+##! Docs: https://docs.gitlab.com/omnibus/settings/puma.html
+################################################################################
+
+# puma['enable'] = false
+# puma['ha'] = false
+# puma['worker_timeout'] = 60
+# puma['worker_processes'] = 2
+# puma['min_threads'] = 1
+# puma['max_threads'] = 16
+
+### Advanced settings
+# puma['listen'] = '127.0.0.1'
+# puma['port'] = 8080
+# puma['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+# puma['pidfile'] = '/opt/gitlab/var/puma/puma.pid'
+# puma['state_path'] = '/opt/gitlab/var/puma/puma.state'
+
+###! **We do not recommend changing this setting**
+# puma['log_directory'] = "/var/log/gitlab/puma"
+
+### **Only change these settings if you understand well what they mean**
+###! Docs: https://github.com/schneems/puma_worker_killer
+# puma['per_worker_max_memory_mb'] = 650
 
 ################################################################################
 ## GitLab Sidekiq
@@ -1004,6 +1035,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "listen_addresses" => ["127.0.0.1"],
 #  "fqdn" => "dev.example.com",
 #  "port" => 9999,
+#  "vts_enable" => true,
 #  "options" => {
 #    "stub_status" => "on", # Turn on stats
 #    "server_tokens" => "off", # Don't show the version of NGINX
@@ -1113,6 +1145,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Configure to enable health check endpoint on GitLab Pages
 # gitlab_pages['status_uri'] = "/@status"
 
+##! Tune the maximum number of concurrent connections GitLab Pages will handle.
+##! This should be in the range 1 - 10000, defaulting to 5000.
+# gitlab_pages['max_connections'] = 5000
+
 ##! Configure to use JSON structured logging in GitLab Pages
 # gitlab_pages['log_format'] = "json"
 
@@ -1191,8 +1227,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # mattermost['gid'] = nil
 # mattermost['home'] = '/var/opt/gitlab/mattermost'
 # mattermost['database_name'] = 'mattermost_production'
-# mattermost['env'] = {}
-
+# mattermost['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 # mattermost['service_address'] = "127.0.0.1"
 # mattermost['service_port'] = "8065"
 # mattermost['service_site_url'] = nil
@@ -1272,6 +1309,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
 # prometheus['chunk_encoding_version'] = 2
+# prometheus['env_directory'] = '/opt/gitlab/etc/prometheus'
+# prometheus['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 #
 ### Custom scrape configs
 #
@@ -1328,6 +1369,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data"
 #   'config.file' => "#{node['gitlab']['alertmanager']['home']}/alertmanager.yml"
 # }
+# alertmanager['env_directory'] = '/opt/gitlab/etc/alertmanager'
+# alertmanager['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # alertmanager['listen_address'] = 'localhost:9093'
@@ -1343,6 +1388,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['flags'] = {
 #   'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
 # }
+# node_exporter['env_directory'] = '/opt/gitlab/etc/node-exporter'
+# node_exporter['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # node_exporter['listen_address'] = 'localhost:9100'
@@ -1356,6 +1405,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
+# }
+# redis_exporter['env_directory'] = '/opt/gitlab/etc/redis-exporter'
+# redis_exporter['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
@@ -1371,6 +1424,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
+# postgres_exporter['env_directory'] = '/opt/gitlab/etc/postgres-exporter'
+# postgres_exporter['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 
 ################################################################################
 ## Prometheus PgBouncer exporter (EE only)
@@ -1380,6 +1437,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer_exporter['enable'] = false
 # pgbouncer_exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
 # pgbouncer_exporter['listen_address'] = 'localhost:9188'
+# pgbouncer_exporter['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter'
+# pgbouncer_exporter['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 
 ################################################################################
 ## Prometheus Gitlab monitor
@@ -1677,6 +1738,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['enable'] = false
 # pgbouncer['log_directory'] = '/var/log/gitlab/pgbouncer'
 # pgbouncer['data_directory'] = '/var/opt/gitlab/pgbouncer'
+# pgbouncer['env_directory'] = '/opt/gitlab/etc/pgbouncer'
+# pgbouncer['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 # pgbouncer['listen_addr'] = '0.0.0.0'
 # pgbouncer['listen_port'] = '6432'
 # pgbouncer['pool_mode'] = 'transaction'
@@ -1833,6 +1898,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
 # consul['data_dir'] = '/var/opt/gitlab/consul/data'
 # consul['log_directory'] = '/var/log/gitlab/consul'
+# consul['env_directory'] = '/opt/gitlab/etc/consul'
+# consul['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+# }
 # consul['node_name'] = nil
 # consul['script_directory'] = '/var/opt/gitlab/consul/scripts'
 # consul['configuration'] = {

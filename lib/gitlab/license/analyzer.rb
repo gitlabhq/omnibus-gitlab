@@ -91,7 +91,7 @@ module License
 
     def self.analyze(json_data)
       violations = []
-      output_file = File.open("pkg/license-status.txt", "w")
+      output_json = {}
 
       # We are currently considering dependencies in a two-level view only. This
       # means some information will be repeated as there are softwares that are
@@ -106,8 +106,14 @@ module License
         status, reason = acceptable?(name, license.strip)
         message = status_string(name, version, license, status, reason, level)
         puts message
-        output_file.write(message)
         violations << "#{name} - #{version} - #{license} - #{reason}" if status == 'unacceptable'
+        output_json[name] = {
+          license: license,
+          version: version,
+          status: status,
+          reason: reason,
+          dependencies: {}
+        }
 
         # Handling level-1 dependencies
         library['dependencies'].each do |dependency|
@@ -118,11 +124,19 @@ module License
           status, reason = acceptable?(name, license.strip)
           message = status_string(name, version, license, status, reason, level)
           puts message
-          output_file.write(message)
           violations << "#{name} - #{version} - #{license} - #{reason}" if status == 'unacceptable'
+          output_json[library['name']][:dependencies][name] = {
+            license: license,
+            version: version,
+            status: status,
+            reason: reason,
+          }
         end
       end
-      output_file.close
+
+      File.open("pkg/license-status.json", "w") do |f|
+        f.write(JSON.pretty_generate(output_json))
+      end
 
       violations.uniq
     end

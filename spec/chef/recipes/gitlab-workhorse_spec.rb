@@ -7,6 +7,25 @@ describe 'gitlab::gitlab-workhorse' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  context 'user and group' do
+    context 'default values' do
+      it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root", "git", "git"
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          user: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root", "foo", "bar"
+    end
+  end
+
   context 'with environment variables' do
     context 'by default' do
       it_behaves_like "enabled gitlab-workhorse env", "HOME", '\/var\/opt\/gitlab'

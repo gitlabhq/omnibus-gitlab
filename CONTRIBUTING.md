@@ -23,7 +23,7 @@ _This notice should stay as the first item in the CONTRIBUTING.md file._
 
 ## Definition of done
 
-The omnibus-gitlab project uses the [definition of done as noted in GitLab Community Edition (and Enterprise Edition)](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CONTRIBUTING.md#definition-of-done).
+The omnibus-gitlab project uses the [definition of done as noted in GitLab Community Edition (and Enterprise Edition)](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/contributing/merge_request_workflow.md#definition-of-done).
 
 As this project is a wrapper around GitLab CE/EE, some additions to the definition apply:
 
@@ -45,6 +45,18 @@ If you are experiencing problems during GitLab package installation or have issu
 #### For problems not related to package installation and configuration check ways to get help [at GitLab website.](https://about.gitlab.com/getting-help/)
 
 This can be the case when installation and `gitlab-ctl reconfigure` run went without issues but your GitLab instance is still giving 500 error page with an error in the log.
+
+## I want to contribute!
+
+If you want to contribute to GitLab Omnibus, issues with both the ~Accepting merge requests and ~For Scheduling labels 
+are issues that have been triaged as areas where where we are looking for contributors to help us out.
+
+See the [contributor issue issues list](https://gitlab.com/gitlab-org/omnibus-gitlab/issues?state=opened&label_name[]=Accepting%20merge%20requests&label_name[]=For%20Scheduling).
+
+If you have any questions or need help visit [Getting Help](https://about.gitlab.com/getting-help/#discussion) to
+learn how to communicate with GitLab. If you're looking for a Gitter or Slack channel
+please consider we favor
+[asynchronous communication](https://about.gitlab.com/handbook/communication/#internal-communication) over real time communication. Thanks for your contribution!
 
 ## Maintainer documentation
 
@@ -108,58 +120,27 @@ suites where possible as part of the review process.
 
 ## Developer Guidelines
 
-### Setting up development environment
+### Developer Documentation
 
-Check [setting up development environment docs](doc/development/README.md) for
-instructions on setting up a environment for local development.
+See the [developer documentation](doc/development/README.md) for additional information.
+
+#### Setting up development environment
+
+See the [developer documentation](doc/development/README.md#setting-up-development-environment)
+
+#### Understanding the architecture
+
+See the [developer documentation](doc/development/README.md#understanding-the-architecture)
 
 ### Writing tests
 
-Any change in the internal cookbook also requires specs. Apart from testing the
-specific feature/bug, it would be greatly appreciated if the submitted Merge
-Request includes more tests. This is to ensure that the test coverage grows with
-development.
-
-When in rush to fix something (eg. security issue, bug blocking the release),
-writing specs can be skipped. However, an issue to implement the tests
-**must be** created and assigned to the person who originally wrote the code.
-
-To run tests, execute the following command (you may have to run `bundle install` before running it)
-
-```
-bundle exec rspec
-```
+See the [developer documentation](doc/development/README.md#writing tests)
 
 ### Merge Request Guidelines
 
-If you are working on a new feature or an issue which doesn't have an entry on
-Omnibus GitLab's issue tracker, it is always a better idea to create an issue
-and mention that you will be working on it as this will help to prevent
-duplication of work. Also, others may be able to provide input regarding the
-issue, which can help you in your task.
+See the [developer documentation](doc/development/README.md#merge-request-guidelines)
 
-It is preferred to make your changes in a branch named \<issue
-number>-\<description> so that merging the request will automatically close the
-specified issue.
-
-A good Merge Request is expected to have the following components, based on
-their applicability:
-
- 1. Full Merge Request description explaining why this change was needed
- 2. Code for implementing feature/bugfix
- 3. Tests, as explained in [Writing Tests](#writing-tests)
- 4. Documentation explaining the change
- 5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](files/gitlab-config-template/gitlab.rb.template)
- 6. Changelog entry to inform about the change, if necessary.
-
-**`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
-
-[^1]:
-  1. Go to Settings -> CI/CD
-  1. Expand Runners settings
-  1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"
-
-### Unofficial packaging point of contact
+## Unofficial packaging point of contact
 
 The omnibus-gitlab project is a project used for building official GitLab packages.
 There are multiple community driven projects for packaging, such as [GitLab CE unofficial Debian 9](https://packages.debian.org/stretch/gitlab) package.

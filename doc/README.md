@@ -14,6 +14,7 @@ Omnibus is a way to package different services and tools required to run GitLab,
 - [Deprecated Operating Systems](package-information/deprecated_os.md)
 - [Signed Packages](package-information/signed_packages.md)
 - [Deprecation Policy](package-information/deprecation_policy.md)
+- Licenses of bundled dependencies - [Community Edition](https://gitlab-org.gitlab.io/omnibus-gitlab/gitlab-ce.html) | [Enterprise Edition](https://gitlab-org.gitlab.io/omnibus-gitlab/gitlab-ee.html)
 
 ## Installation
 
@@ -122,11 +123,4 @@ You can also use the docker images provided by GitLab to install and configure a
 
 ## Omnibus GitLab developer documentation
 
-- [Development Setup](development/README.md)
-- [Omnibus GitLab Architecture](architecture/README.md)
-- [Adding a new Service to Omnibus GitLab](development/new-services.md)
-- [Creating patches](development/creating-patches.md)
-- [Release process](release/README.md)
-- [Building your own package](build/README.md)
-- [Building a package from a custom branch](build/README.md#building-a-package-from-a-custom-branch)
-- [Adding deprecation messages](development/adding-deprecation-messages.md)
+See the [development documentation](development/README.md)

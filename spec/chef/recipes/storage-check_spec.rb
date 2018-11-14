@@ -28,12 +28,30 @@ describe 'gitlab::storage-check' do
   end
 
   describe 'when enabled' do
-    before do
-      stub_gitlab_rb(
-        storage_check: { enable: true }
-      )
+    context 'default values' do
+      before do
+        stub_gitlab_rb(
+          storage_check: { enable: true }
+        )
+      end
+
+      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'git', 'git'
     end
 
-    it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root'
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          storage_check: {
+            enable: true
+          },
+          user: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'foo', 'bar'
+    end
   end
 end

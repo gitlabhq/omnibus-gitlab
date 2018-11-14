@@ -6,8 +6,9 @@ describe 'geo postgresql 9.2' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.2.18')
-    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.2')
+    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
+    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
 
     # Workaround for Chef reloading instances across different examples
     allow_any_instance_of(GeoPgHelper).to receive(:bootstrapped?).and_return(true)
@@ -28,6 +29,54 @@ describe 'geo postgresql 9.2' do
   end
 
   context 'with default settings' do
+    let(:chef_run) do
+      stub_gitlab_rb(geo_postgresql: { enable: true })
+
+      ChefSpec::SoloRunner.converge('gitlab-ee::default')
+    end
+
+    it 'does not warn the user that a restart is needed by default' do
+      allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+      expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+    end
+
+    it 'notifies restarts postgresql when the postgresql runit run file changes' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('geo-postgresql').and_return(true)
+
+      psql_service = chef_run.service('geo-postgresql')
+      expect(psql_service).not_to subscribe_to('template[/opt/gitlab/sv/geo-postgresql/run]').on(:restart).delayed
+    end
+
+    context 'running version differs from installed version' do
+      before do
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.6.8'))
+      end
+
+      it 'warns the user that a restart is needed' do
+        allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).to run_ruby_block('warn pending geo-postgresql restart')
+      end
+
+      it 'does not warns the user that a restart is needed when geo-postgres is stopped' do
+        expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+      end
+    end
+
+    context 'running version differs from data version' do
+      before do
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
+        allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
+      end
+
+      it 'does not warn the user that a restart is needed' do
+        allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+      end
+    end
+  end
+
+  context 'with default cached settings' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(geo_postgresql: { enable: true })
@@ -218,8 +267,9 @@ describe 'geo postgresql 9.6' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return('9.6.1')
-    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return('9.6')
+    allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('9.6.1'))
+    allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('9.6'))
   end
 
   cached(:chef_run) do

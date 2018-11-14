@@ -227,7 +227,7 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
     service params[:name] do
       control_cmd = node[:runit][:sv_bin]
       if params[:owner]
-        control_cmd = "#{node[:runit][:chpst_bin]} -u #{params[:owner]} #{control_cmd}"
+        control_cmd = "#{node[:runit][:chpst_bin]} -u #{params[:owner]}:#{params[:group]} #{control_cmd}"
       end
       provider Chef::Provider::Service::Simple
       supports restart: true, status: true

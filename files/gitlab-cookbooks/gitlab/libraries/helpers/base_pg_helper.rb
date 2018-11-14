@@ -1,5 +1,6 @@
 # This is a base class to be inherited by PG Helpers
 require_relative 'base_helper'
+require_relative '../pg_version'
 
 class BasePgHelper < BaseHelper
   include ShellOutHelper
@@ -237,12 +238,16 @@ class BasePgHelper < BaseHelper
   end
 
   def version
-    VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last
+    PGVersion.parse(VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last)
+  end
+
+  def running_version
+    PGVersion.parse(psql_query('template1', 'SHOW SERVER_VERSION'))
   end
 
   def database_version
     version_file = "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION"
-    File.read(version_file).chomp if File.exist?(version_file)
+    PGVersion.new(File.read(version_file).chomp) if File.exist?(version_file)
   end
 
   def pg_shadow_lookup

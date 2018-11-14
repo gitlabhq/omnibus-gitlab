@@ -5,6 +5,9 @@ omnibus-gitlab repository.
 
 11.5.0
 
+- Add experimental support for Puma !2801
+- Move to standardized cluster lifecycle event handlers in preparation for Puma support !2728
+- Update gitlab-monitor to 2.19.1
 - Add option to configure consul group !2781
 - Add Prometheus alerts for GitLab components !2753
 - Update required `gitlab-elasticsearch-indexer` version to 0.3.0 for Elasticsearch 6 support !2791
@@ -12,8 +15,18 @@ omnibus-gitlab repository.
 - Add option to configure prometheus group !2782
 - Add option to configure redis group !2784
 - Upgrade Bundler version to 1.16.6
+- Omit Gitaly development and test gems !2808
 - Support for Pages access control settings (Turo Soisenniemi)
+- Pages: Support limiting connection concurrency !2815
 - Geo: Fix adding a password to the FDW user mapping !2799
+- Specify groups while running services and `gitlab-` prefixed commands !2785
+- Update Mattermost to 5.4.0
+- Warn users when postgresql needs to be restarted due to version changes !2823
+- Ensure postgres doesn't automatically restart when it's run file changes !2830
+- Add nginx-module-vts for Prometheus metrics collection !2795
+- Ensure pgbouncer is shut down when multiple master situation is encountered
+  and resumed when it is cleared !2812
+- Provide SSL_CERT_DIR to embedded Go services !2813
 
 11.4.1
 

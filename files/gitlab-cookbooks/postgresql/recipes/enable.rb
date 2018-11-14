@@ -18,11 +18,9 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
-postgresql_dir = node['gitlab']['postgresql']['dir']
-postgresql_data_dir = node['gitlab']['postgresql']['data_dir']
-postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
+include_recipe 'postgresql::directory_locations'
+
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
-postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 
@@ -30,14 +28,14 @@ pg_helper = PgHelper.new(node)
 
 include_recipe 'postgresql::user'
 
-directory postgresql_dir do
+directory node['gitlab']['postgresql']['dir'] do
   owner postgresql_username
   mode "0755"
   recursive true
 end
 
 [
-  postgresql_data_dir,
+  node['gitlab']['postgresql']['data_dir'],
   postgresql_log_dir
 ].each do |dir|
   directory dir do
@@ -45,11 +43,6 @@ end
     mode "0700"
     recursive true
   end
-end
-
-link postgresql_data_dir_symlink do
-  to postgresql_data_dir
-  not_if { postgresql_data_dir == postgresql_data_dir_symlink }
 end
 
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
@@ -78,16 +71,16 @@ sysctl "kernel.sem" do
   value sem
 end
 
-execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
+execute "/opt/gitlab/embedded/bin/initdb -D #{node['gitlab']['postgresql']['data_dir']} -E UTF8" do
   user postgresql_username
   not_if { pg_helper.bootstrapped? }
 end
 
 ##
-# Create SSL cert + key in the defined location. Paths are relative to postgresql_data_dir
+# Create SSL cert + key in the defined location. Paths are relative to node['gitlab']['postgresql']['data_dir']
 ##
-ssl_cert_file = File.absolute_path(node['gitlab']['postgresql']['ssl_cert_file'], postgresql_data_dir)
-ssl_key_file = File.absolute_path(node['gitlab']['postgresql']['ssl_key_file'], postgresql_data_dir)
+ssl_cert_file = File.absolute_path(node['gitlab']['postgresql']['ssl_cert_file'], node['gitlab']['postgresql']['data_dir'])
+ssl_key_file = File.absolute_path(node['gitlab']['postgresql']['ssl_key_file'], node['gitlab']['postgresql']['data_dir'])
 
 file ssl_cert_file do
   content node['gitlab']['postgresql']['internal_certificate']
@@ -107,8 +100,8 @@ file ssl_key_file do
   only_if { node['gitlab']['postgresql']['ssl'] == 'on' }
 end
 
-postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
-postgresql_runtime_config = File.join(postgresql_data_dir, 'runtime.conf')
+postgresql_config = File.join(node['gitlab']['postgresql']['data_dir'], "postgresql.conf")
+postgresql_runtime_config = File.join(node['gitlab']['postgresql']['data_dir'], 'runtime.conf')
 should_notify = omnibus_helper.should_notify?("postgresql")
 
 template postgresql_config do
@@ -131,7 +124,7 @@ template postgresql_runtime_config do
   notifies :run, 'execute[start postgresql]', :immediately if should_notify
 end
 
-pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
+pg_hba_config = File.join(node['gitlab']['postgresql']['data_dir'], "pg_hba.conf")
 
 template pg_hba_config do
   source 'pg_hba.conf.erb'
@@ -142,7 +135,7 @@ template pg_hba_config do
   notifies :run, 'execute[start postgresql]', :immediately if should_notify
 end
 
-template File.join(postgresql_data_dir, 'pg_ident.conf') do
+template File.join(node['gitlab']['postgresql']['data_dir'], 'pg_ident.conf') do
   owner postgresql_username
   mode "0644"
   variables(node['gitlab']['postgresql'].to_hash)
@@ -154,6 +147,7 @@ runit_service "postgresql" do
   down node['gitlab']['postgresql']['ha']
   supervisor_owner postgresql_username
   supervisor_group postgresql_group
+  run_restart false
   control(['t'])
   options({
     log_directory: postgresql_log_dir
@@ -200,7 +194,7 @@ if node['gitlab']['gitlab-rails']['enable']
   end
 
   execute "create #{database_name} database" do
-    command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{postgresql_socket_dir} -O #{gitlab_sql_user} #{database_name}"
+    command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{node['gitlab']['postgresql']['unix_socket_directory']} -O #{gitlab_sql_user} #{database_name}"
     user postgresql_username
     retries 30
     not_if { !pg_helper.is_running? || pg_helper.database_exists?(database_name) || pg_helper.is_slave? }
@@ -217,6 +211,19 @@ end
 postgresql_extension 'pg_trgm' do
   database database_name
   action :enable
+end
+
+ruby_block 'warn pending postgresql restart' do
+  block do
+    message = <<~MESSAGE
+      The version of the running postgresql service is different than what is installed.
+      Please restart postgresql to start the new version.
+
+      sudo gitlab-ctl restart postgresql
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
 end
 
 execute 'reload postgresql' do

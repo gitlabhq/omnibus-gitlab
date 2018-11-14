@@ -20,4 +20,5 @@ account_helper = AccountHelper.new(node)
 sidekiq_service 'sidekiq' do
   rails_app 'gitlab-rails'
   user account_helper.gitlab_user
+  group account_helper.gitlab_group
 end

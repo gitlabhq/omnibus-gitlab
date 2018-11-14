@@ -40,6 +40,7 @@ module Services
     service 'registry'
     service 'storage_check'
     service 'crond'
+    service 'puma'
   end
 
   # Define the services included in the EE edition of GitLab

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" media="all" href="../../style.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="../../script.js"></script>
+</head>
+<body>
+  <% editions = {"gitlab-ce" => "GitLab Community Edition", "gitlab-ee" => "GitLab Enterprise Edition"} %>
+  <h1><%=" #{editions[@edition]} #{@current_version}" %></h1>
+  <h4><a href='<%= "#{@current_version}.json" %>'>Get JSON file</a></h4>
+  <div style="margin-left:10%;margin-right:10%;width:80%;">
+    <table class="table table-bordered">
+      <thead>
+        <tr class="header table-head">
+          <td style="width:30%"><b>Library</b></td>
+          <td style="width:25%"><b>Version</b></td>
+          <td><b>License</b></td>
+          <td><b>Status</b></td>
+          <td><b>Reason</b></td>
+        </tr>
+      </thead>
+      <% @json_data.each do |library, details| %>
+        <tr class="header <% if details['reason'] == 'Whitelisted software' %>warning<% end %> <% unless details['dependencies'].empty? %>clickable<% end %>">
+          <td><%= library %></td>
+          <td><%= details['version'] %></td>
+          <td><%= details['license'] %></td>
+          <td><%= details['status'] %></td>
+          <td <% unless details['dependencies'].empty? %>class="deps" <% end %> ><%= details['reason'] %></td>
+        </tr>
+        <% details['dependencies'].each do |dep, dep_details| %>
+          <tr class="<% if dep_details['reason'] == 'Whitelisted software' %>warning<% end %>">
+            <td><%= dep %></td>
+            <td><%= dep_details['version'] %></td>
+            <td><%= dep_details['license'] %></td>
+            <td><%= dep_details['status'] %></td>
+            <td><%= dep_details['reason'] %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </div>
+<body>
+</html>
