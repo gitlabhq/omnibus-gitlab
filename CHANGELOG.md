@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.6.0
+
+- Upgrade Ruby to 2.5.3 !2806
+
 11.5.0
 
 - Add experimental support for Puma !2801
