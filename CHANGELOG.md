@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.6.0
 
 - Upgrade Ruby to 2.5.3 !2806
+- Deprecate postgresql['data_dir'] !2846
 
 11.5.0
 

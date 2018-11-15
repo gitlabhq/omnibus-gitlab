@@ -340,6 +340,26 @@ Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
 connections to Postgres to be handled over the UNIX socket, and may not function
 properly. You can enable TCP/IP without disabling UNIX sockets.
 
+## Store PostgreSQL data in a different directory
+
+By default, everything is stored under `/var/opt/gitlab/postgresql`, controlled by the `postgresql['dir']` attribute.
+
+This consists of
+
+1. The database socket will be `/var/opt/gitlab/postgresql/.s.PGSQL.5432`. This is controlled by `postgresql['unix_socket_directory']`
+1. The `gitlab-psql` system user will have its `HOME` directory set to this. This is controlled by `postgresql['home']`
+1. The actual data will be stored in `/var/opt/gitlab/postgresql/data`
+
+To change the location of the PostgreSQL data
+
+**Warning**: If you have an existing database, you need to move the data to the new location first
+
+**Warning**: This is an intrusive operation. It cannot be done without downtime on an existing installation
+
+1. Stop GitLab if this is an existing installation: `gitlab-ctl stop`
+1. Update `postgresql['dir']` to the desired location.
+1. Run `gitlab-ctl reconfigure`
+1. Start GitLab `gitlab-ctl start`
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
