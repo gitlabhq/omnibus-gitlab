@@ -29,6 +29,11 @@ gitlab_version=$(cat VERSION | awk '
   }
 ')
 
+if [ "${gitlab_version}" != "master" ]
+then
+    gitlab_version="v${gitlab_version}"
+fi
+
 docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 assets_image_name="${ASSET_REGISTRY}/${assets_image}:${gitlab_version}"
@@ -38,7 +43,7 @@ timeout=600
 interval=30
 while ! docker pull "${assets_image_name}"
 do
-    if [ "${timout}" -le 0 ]
+    if [ "${timeout}" -le 0 ]
     then
         echo "Timed out waiting for the assets image"
         exit 1
