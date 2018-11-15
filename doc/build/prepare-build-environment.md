@@ -54,6 +54,10 @@ follows
    `.custom_sources.yml` file and specify them as `alternate` and set the
    `ALTERNATIVE_SOURCES` variable to `true`.
 
+1. By default, Omnibus GitLab uses a docker image containing pre-compiled assets for the `config/software/gitlab-rails.rb`
+   1. If you are building from a mirror of the GitLab application on the same instance, you should not need to do anything.
+   1. To use the upstream assets, set the `ASSET_REGISTRY` environment variable to `registry.gitlab.com`
+   1. To compile your own, set the `COMPILE_ASSETS` environment variable to `false`
 1. Install the dependencies and generate binaries:
 
     ```
