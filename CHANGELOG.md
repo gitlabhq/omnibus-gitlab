@@ -3,6 +3,11 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.6.0
+
+- Upgrade Ruby to 2.5.3 !2806
+- Deprecate postgresql['data_dir'] !2846
+
 11.5.0
 
 - Add experimental support for Puma !2801
@@ -26,6 +31,7 @@ omnibus-gitlab repository.
 - Add nginx-module-vts for Prometheus metrics collection !2795
 - Ensure pgbouncer is shut down when multiple master situation is encountered
   and resumed when it is cleared !2812
+- Provide SSL_CERT_DIR to embedded Go services !2813
 
 11.4.1
 

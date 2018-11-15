@@ -22,7 +22,9 @@ default['registry']['gid'] = nil
 default['registry']['dir'] = "/var/opt/gitlab/registry"
 default['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['registry']['env_directory'] = "/opt/gitlab/etc/registry/env"
-default['registry']['env'] = {}
+default['registry']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
 default['registry']['log_level'] = "info"
 default['registry']['rootcertbundle'] = nil
 default['registry']['health_storagedriver_enabled'] = true

@@ -16,7 +16,7 @@
 require 'chef_helper'
 
 describe 'gitlab-ee::pgbouncer' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(env_dir)).converge('gitlab-ee::default') }
   let(:pgbouncer_ini) { '/var/opt/gitlab/pgbouncer/pgbouncer.ini' }
   let(:databases_json) { '/var/opt/gitlab/pgbouncer/databases.json' }
 
@@ -55,6 +55,8 @@ describe 'gitlab-ee::pgbouncer' do
     end
 
     it_behaves_like 'enabled runit service', 'pgbouncer', 'root', 'root'
+
+    it_behaves_like 'enabled env', '/opt/gitlab/etc/pgbouncer/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
 
     it 'creates the appropriate directories' do
       expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer')

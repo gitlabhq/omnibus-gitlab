@@ -1,0 +1,57 @@
+#!/bin/bash
+
+curdir=$(dirname $0)
+
+if [ "${ASSET_REGISTRY}" = "dev.gitlab.org:5005" ]
+then
+  group_name="gitlab"
+  if ${curdir}/is_gitlab_ee.sh
+  then
+    assets_image="${group_name}/gitlab-ee/gitlab-assets-ee"
+  else
+    assets_image="${group_name}/gitlabhq/gitlabhq-assets"
+  fi
+else
+  group_name="gitlab-org"
+  if ${curdir}/is_gitlab_ee.sh
+  then
+    assets_image="${group_name}/gitlab-ee/gitlab-assets-ee"
+  else
+    assets_image="${group_name}/gitlab-ce/gitlab-assets-ce"
+  fi
+fi
+
+gitlab_version=$(cat VERSION | awk '
+  {
+    gsub(/[^a-z0-9]/, "-")
+    gsub(/(\A-+|-+\z)/, "")
+    print substr($0, 1, 63);
+  }
+')
+
+if [ "${gitlab_version}" != "master" ]
+then
+    gitlab_version="v${gitlab_version}"
+fi
+
+docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+
+assets_image_name="${ASSET_REGISTRY}/${assets_image}:${gitlab_version}"
+
+# In case the image hasn't been created yet. Wait 10 minutes then error
+timeout=600
+interval=30
+while ! docker pull "${assets_image_name}"
+do
+    if [ "${timeout}" -le 0 ]
+    then
+        echo "Timed out waiting for the assets image"
+        exit 1
+    fi
+    echo "Waiting ${timeout} more seconds for ${assets_image} to be available"
+    timeout=$((timeout-interval))
+    sleep ${interval}
+done
+
+docker create --name asset_cache ${assets_image_name}
+docker cp asset_cache:/assets ${ASSET_PATH}

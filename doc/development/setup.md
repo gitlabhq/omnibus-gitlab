@@ -1,0 +1,125 @@
+# Setting up your development environment
+
+Development of Omnibus GitLab maybe done using an existing package available
+from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
+a build environment to build these packages and use them, please read [Setting
+up a Build Environment](../build/prepare-build-environment.md).
+
+ 1. Setup a VM
+
+    To provide isolation and to prevent rebuilding of the package for each and
+    every change, it is preferred to use a Virtual Machine for development. The
+    following example uses docker on a Debian host with a Debian Jessie image.
+    The steps are similar for other OSs; only the commands differ.
+    1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/engine/installation).
+
+    2. Pulling a Debian Jessie image
+
+        ```
+        docker pull debian:jessie
+        ```
+
+    3. Running docker image with a shell prompt
+
+        ```
+        docker run -it debian:jessie bash
+        ```
+    This will cause the docker to run the jessie image and you will fall into a
+    bash prompt, where the following steps are applied to.
+
+ 2. Install basic necessary tools
+
+    Basic tools used for developing Omnibus GitLab may be installed using the
+    following command
+
+    ```
+    sudo apt-get install git
+    ```
+
+ 3. Getting GitLab CE nightly package and installing it
+
+    Get the latest GitLab CE nightly package (of the OS you are using) from
+    [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
+    and install it using the instructions given on that page. Once you configure
+    and start gitlab. Check if you can access it from your host browser on
+    \<ip address of host>
+
+    **`Note`**: Nightly packages versioning is incorrect which can cause a
+    confusion. This [issue is reported in #864](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/864).
+    For the time being, consider the date of pushing (which is available next
+    to the package name in the repository page) to find the latest package version.
+
+ 4. Getting source of Omnibus GitLab
+
+    Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
+
+    ```
+    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
+    ```
+
+    We will be doing the development inside the `~/omnibus-gitlab` directory.
+
+ 5. Instructing GitLab to apply the changes we make to the cookbooks.
+
+    During development, we need the changes we make to the cookbooks to be
+    applied immediately to the running GitLab instance. So, we have to instruct
+    GitLab to use those cookbooks instead of the ones shipped during
+    installation. This involves backing up of the existing cookbooks directory
+    and symlinking the directory where we make modifications to its location.
+
+    ```
+    sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
+    sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
+    ```
+
+  6. Docker container specific items
+
+     Before running `reconfigure`, you need to start runsv.
+
+     ```
+     /opt/gitlab/embedded/bin/runsvdir-start &
+     ```
+
+     After running `reconfigure`, you may have sysctl errors. There is a workaround in the [common installation problems doc](../common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
+
+Now, you can make necessary changes in the
+`~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
+for those changes to take effect.
+
+## Run GitLab QA Against Your Development Environment
+
+You can run [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa) tests against your development instance.
+
+This ensures that your new work is behaving as expected, and not breaking anything else. You can even add your own tests to QA to validate what you are working on.
+
+1. Create a user account on your development instance for GitLab QA to use
+
+   Then, from any machine that can reach your development instance:
+
+1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab-ee) repository
+
+    ```
+    $ git clone git@gitlab.com:gitlab-org/gitlab-ee.git
+    ```
+
+1. Change to the `qa` directory
+
+    ```
+    $ cd gitlab-ee/qa
+    ```
+
+1. Install the required gems
+
+   ```
+   $ bundle install
+   ```
+
+1. Run the tests
+
+   ```
+   $ GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
+   ```
+
+## Openshift GitLab Development Setup
+
+See [openshift/README.md.](openshift/README.md#development-setup)

@@ -15,6 +15,7 @@ module Build
         "ref" => ENV["CI_COMMIT_REF_NAME"],
         "token" => ENV["BUILD_TRIGGER_TOKEN"],
         "variables[ALTERNATIVE_SOURCES]" => true,
+        "variables[COMPILE_ASSETS]" => ENV['COMPILE_ASSETS'],
         "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
         "variables[ee]" => ENV["ee"] || "false",
         "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],
