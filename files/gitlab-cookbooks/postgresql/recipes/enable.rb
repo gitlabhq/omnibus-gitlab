@@ -23,6 +23,7 @@ include_recipe 'postgresql::directory_locations'
 postgresql_log_dir = node['gitlab']['postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
+postgresql_data_dir_symlink = File.join(node['gitlab']['postgresql']['dir'], "data")
 
 pg_helper = PgHelper.new(node)
 
@@ -43,6 +44,11 @@ end
     mode "0700"
     recursive true
   end
+end
+
+link postgresql_data_dir_symlink do
+  to node['gitlab']['postgresql']['data_dir']
+  not_if { node['gitlab']['postgresql']['data_dir'] == postgresql_data_dir_symlink }
 end
 
 file File.join(node['gitlab']['postgresql']['home'], ".profile") do
