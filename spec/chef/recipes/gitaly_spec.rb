@@ -6,6 +6,9 @@ describe 'gitaly' do
   let(:gitaly_config) { chef_run.template(config_path) }
   let(:socket_path) { '/tmp/gitaly.socket' }
   let(:listen_addr) { 'localhost:7777' }
+  let(:tls_listen_addr) { 'localhost:8888' }
+  let(:certificate_path) { '/path/to/cert.pem' }
+  let(:key_path) { '/path/to/key.pem' }
   let(:prometheus_listen_addr) { 'localhost:9000' }
   let(:logging_level) { 'warn' }
   let(:logging_format) { 'json' }
@@ -50,6 +53,12 @@ describe 'gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content("listen_addr = '#{listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
+        .with_content("tls_listen_addr =")
+      expect(chef_run).not_to render_file(config_path)
+       .with_content("certificate_path  =")
+      expect(chef_run).not_to render_file(config_path)
+       .with_content("key_path  =")
+      expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+level = '#{logging_level}'\s+format = '#{logging_format}'\s+sentry_dsn = '#{logging_sentry_dsn}'})
@@ -90,6 +99,9 @@ describe 'gitaly' do
         gitaly: {
           socket_path: socket_path,
           listen_addr: listen_addr,
+          tls_listen_addr: tls_listen_addr,
+          certificate_path: certificate_path,
+          key_path: key_path,
           prometheus_listen_addr: prometheus_listen_addr,
           logging_level: logging_level,
           logging_format: logging_format,
@@ -119,6 +131,12 @@ describe 'gitaly' do
         .with_content("bin_dir = '/opt/gitlab/embedded/bin'")
       expect(chef_run).to render_file(config_path)
         .with_content("listen_addr = 'localhost:7777'")
+      expect(chef_run).to render_file(config_path)
+        .with_content { |content|
+          expect(content).to include("tls_listen_addr = 'localhost:8888'")
+          expect(content).to include("certificate_path = '/path/to/cert.pem'")
+          expect(content).to include("key_path = '/path/to/key.pem'")
+        }
       expect(chef_run).to render_file(config_path)
         .with_content("prometheus_listen_addr = 'localhost:9000'")
 
@@ -318,12 +336,30 @@ describe 'gitaly::git_data_dirs' do
     end
   end
 
-  context 'when gitaly is set to use a listen_addr instead of a socket' do
+  context 'when gitaly is set to use a listen_addr' do
     before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' })
+    end
+  end
+
+  context 'when gitaly is set to use a tls_listen_addr' do
+    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', tls_listen_addr: 'localhost:8123' }) }
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tls://localhost:8123' })
+    end
+  end
+
+  context 'when both tls and socket' do
+    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '/some/socket/path.socket', tls_listen_addr: 'localhost:8123' }) }
+
+    it 'Tls should take precedence' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+        .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tls://localhost:8123' })
     end
   end
 
