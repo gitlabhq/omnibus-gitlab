@@ -1477,6 +1477,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
+# gitaly['tls_listen_addr] = "localhost:9075"
+# gitaly['certificate_path'] = "/var/opt/gitlab/gitaly/certificate.pem'
+# gitaly['key_path'] = "/var/opt/gitlab/gitaly/key.pem"
 # gitaly['prometheus_listen_addr'] = "localhost:9236"
 # gitaly['logging_level'] = "warn"
 # gitaly['logging_format'] = "json"
