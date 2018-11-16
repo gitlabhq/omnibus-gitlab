@@ -7,6 +7,7 @@ omnibus-gitlab repository.
 
 - Upgrade Ruby to 2.5.3 !2806
 - Deprecate postgresql['data_dir'] !2846
+- Add support for Git v2 protocol in docker image's `sshd_config` !2864
 
 11.5.0
 
