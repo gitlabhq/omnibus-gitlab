@@ -70,27 +70,14 @@ module Postgresql
     def parse_mattermost_postgresql_settings
       value_from_gitlab_rb = Gitlab['mattermost']['sql_data_source']
 
-      attributes_values = []
-      [
-        %w(postgresql sql_mattermost_user),
-        %w(postgresql unix_socket_directory),
-        %w(postgresql port),
-        %w(mattermost database_name)
-      ].each do |value|
-        # This conditional is required until postgresql is extracted to its own
-        # cookbook. Mattermost exists directly on node while postgresql exists
-        # on node['gitlab']
-        service_name_key = value.first
-        service_attribute_key = value.last
-        attribute_value = if Gitlab['node']['gitlab'].key?(service_name_key)
-                            (Gitlab[service_name_key][service_attribute_key] || Gitlab['node']['gitlab'][service_name_key][service_attribute_key])
-                          else
-                            (Gitlab[service_name_key][service_attribute_key] || Gitlab['node'][service_name_key][service_attribute_key])
-                          end
-        attributes_values << attribute_value
-      end
+      user = Gitlab['postgresql']['sql_mattermost_user'] || Gitlab['node']['gitlab']['postgresql']['sql_mattermost_user']
+      unix_socket_directory = Gitlab['postgresql']['unix_socket_directory'] || Gitlab['node']['gitlab']['postgresql']['unix_socket_directory']
+      postgres_directory = Gitlab['postgresql']['dir'] || Gitlab['node']['gitlab']['postgresql']['dir']
+      port = Gitlab['postgresql']['port'] || Gitlab['node']['gitlab']['postgresql']['port']
+      database_name = Gitlab['mattermost']['database_name'] || Gitlab['node']['mattermost']['database_name']
+      host = unix_socket_directory || postgres_directory
 
-      value_from_attributes = "user=#{attributes_values[0]} host=#{attributes_values[1]} port=#{attributes_values[2]} dbname=#{attributes_values[3]}"
+      value_from_attributes = "user=#{user} host=#{host} port=#{port} dbname=#{database_name}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
     end
 
