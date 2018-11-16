@@ -37,6 +37,12 @@ module Gitlab
             removal: '11.0',
             note: "Use git_data_dirs instead."
           },
+          {
+            config_keys: %w(gitlab postgresql data_dir),
+            deprecation: '11.6',
+            removal: '14.0',
+            note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
+          }
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['mattermost'], mattermost_supported_keys, "10.2", "11.0") if existing_config
