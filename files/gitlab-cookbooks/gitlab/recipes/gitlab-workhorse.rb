@@ -19,6 +19,7 @@ account_helper = AccountHelper.new(node)
 working_dir = node['gitlab']['gitlab-workhorse']['dir']
 log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
+workhorse_env_dir = node['gitlab']['gitlab-workhorse']['env_directory']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -39,7 +40,7 @@ directory gitlab_workhorse_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(gitlab_workhorse_static_etc_dir, 'env') do
+env_dir workhorse_env_dir do
   variables node['gitlab']['gitlab-workhorse']['env']
   notifies :restart, "service[gitlab-workhorse]"
 end

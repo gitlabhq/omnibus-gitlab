@@ -21,6 +21,7 @@ default['mattermost']['uid'] = nil
 default['mattermost']['gid'] = nil
 default['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['mattermost']['database_name'] = 'mattermost_production'
+default['mattermost']['env_directory'] = '/opt/gitlab/etc/mattermost/env'
 default['mattermost']['env'] = {
   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 }

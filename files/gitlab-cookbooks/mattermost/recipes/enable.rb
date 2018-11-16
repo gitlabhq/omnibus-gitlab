@@ -25,6 +25,7 @@ mattermost_storage_directory = node['mattermost']['file_directory']
 mattermost_plugin_directory_server = node['mattermost']['plugin_directory']
 mattermost_plugin_directory_web = node['mattermost']['plugin_client_directory']
 postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
+mattermost_env_dir = node['mattermost']['env_directory']
 pg_port = node['gitlab']['postgresql']['port']
 pg_user = node['gitlab']['postgresql']['username']
 config_file_path = File.join(mattermost_home, "config.json")
@@ -121,9 +122,18 @@ end
 # Mattermost control service
 ###
 
-env_dir File.join(mattermost_home, 'env') do
+env_dir mattermost_env_dir do
   variables lazy { MattermostHelper.get_env_variables(node).merge(node['mattermost']['env']) }
   notifies :restart, "service[mattermost]"
+end
+
+# Before version 11.6, we stored env directory inside Mattermost's home
+# directory. Cleaning that up.
+# TODO: Drop this in 12.0
+directory File.join(mattermost_home, 'env') do
+  recursive true
+  action :delete
+  only_if { mattermost_env_dir != File.join(mattermost_home, 'env') }
 end
 
 runit_service "mattermost" do

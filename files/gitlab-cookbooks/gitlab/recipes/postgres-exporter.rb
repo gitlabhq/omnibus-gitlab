@@ -18,7 +18,7 @@
 account_helper = AccountHelper.new(node)
 postgresql_user = account_helper.postgresql_user
 postgres_exporter_log_dir = node['gitlab']['postgres-exporter']['log_directory']
-postgres_exporter_static_etc_dir = "/opt/gitlab/etc/postgres-exporter"
+postgres_exporter_env_dir = node['gitlab']['postgres-exporter']['env_directory']
 postgres_exporter_dir = node['gitlab']['postgres-exporter']['home']
 
 node.default['gitlab']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['gitlab']['postgresql']['username']} " \
@@ -39,7 +39,7 @@ directory postgres_exporter_dir do
   recursive true
 end
 
-env_dir File.join(postgres_exporter_static_etc_dir, 'env') do
+env_dir postgres_exporter_env_dir do
   variables node['gitlab']['postgres-exporter']['env']
   notifies :restart, "service[postgres-exporter]"
 end
@@ -49,7 +49,7 @@ runit_service 'postgres-exporter' do
   options({
     log_directory: postgres_exporter_log_dir,
     flags: runtime_flags,
-    env_dir: File.join(postgres_exporter_static_etc_dir, 'env')
+    env_dir: postgres_exporter_env_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
