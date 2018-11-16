@@ -127,8 +127,9 @@ env_dir mattermost_env_dir do
   notifies :restart, "service[mattermost]"
 end
 
-# Before version 11.5, we stored env directory inside Mattermost's home
-# directory. Cleaning that up
+# Before version 11.6, we stored env directory inside Mattermost's home
+# directory. Cleaning that up.
+# TODO: Drop this in 12.0
 directory File.join(mattermost_home, 'env') do
   recursive true
   action :delete

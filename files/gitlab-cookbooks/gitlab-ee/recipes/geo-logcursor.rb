@@ -35,6 +35,7 @@ end
 # Before version 11.6, geo-logcursor env directory was `/opt/gitlab/etc/geo-logcursor` by
 # default. With 11.6, we changed it to `/opt/gitlab/etc/geo-logcursor/env`. We attempt
 # to clean the old files if user is using the default location.
+# TODO: Drop this in 12.0
 rails_env.merge(node['gitlab']['gitlab-rails']['env']).keys.each do |item|
   file File.join("/opt/gitlab/etc/geo-logcursor", item) do
     action :delete

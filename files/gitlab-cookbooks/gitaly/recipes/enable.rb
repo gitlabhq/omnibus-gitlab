@@ -58,6 +58,7 @@ end
 # Before version 11.6, gitaly env directory was `/opt/gitlab/etc/gitaly` by
 # default. With 11.6, we changed it to `/opt/gitlab/etc/gitaly/env`. We attempt
 # to clean the old files if user is using the default location.
+# TODO: Drop this in 12.0
 node['gitaly']['env'].keys.each do |item|
   file File.join("/opt/gitlab/etc/gitaly", item) do
     action :delete
