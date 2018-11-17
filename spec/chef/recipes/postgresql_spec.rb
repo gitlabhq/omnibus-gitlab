@@ -289,13 +289,13 @@ psql_port='5432'
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return(
-          ['/opt/gitlab/embedded/postgresql/9.2.18']
+          ['/opt/gitlab/embedded/postgresql/9.2']
         )
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2.18/bin/*").and_return(
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2/bin/*").and_return(
           %w(
-            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_one
-            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_two
-            /opt/gitlab/embedded/postgresql/9.2.18/bin/foo_three
+            /opt/gitlab/embedded/postgresql/9.2/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.2/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.2/bin/foo_three
           )
         )
       end
@@ -304,7 +304,7 @@ psql_port='5432'
         allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
           expect(FileUtils).to receive(:ln_sf).with(
-            "/opt/gitlab/embedded/postgresql/9.2.18/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/postgresql/9.2/bin/#{pg_bin}",
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end
@@ -569,13 +569,13 @@ describe 'postgresql 9.6' do
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return(
-          ['/opt/gitlab/embedded/postgresql/9.6.1']
+          ['/opt/gitlab/embedded/postgresql/9.6']
         )
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6/bin/*").and_return(
           %w(
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_one
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_two
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_three
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_three
           )
         )
       end
@@ -584,7 +584,7 @@ describe 'postgresql 9.6' do
         allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
           expect(FileUtils).to receive(:ln_sf).with(
-            "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/postgresql/9.6/bin/#{pg_bin}",
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end
@@ -604,14 +604,14 @@ describe 'postgresql 9.6' do
         allow(File).to receive(:exists?).with("/var/opt/gitlab/postgresql/data/PG_VERSION").and_return(true)
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.2*").and_return([])
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1*").and_return(
-          ['/opt/gitlab/embedded/postgresql/9.6.1']
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6*").and_return(
+          ['/opt/gitlab/embedded/postgresql/9.6']
         )
-        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6.1/bin/*").and_return(
+        allow(Dir).to receive(:glob).with("/opt/gitlab/embedded/postgresql/9.6/bin/*").and_return(
           %w(
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_one
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_two
-            /opt/gitlab/embedded/postgresql/9.6.1/bin/foo_three
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_one
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_two
+            /opt/gitlab/embedded/postgresql/9.6/bin/foo_three
           )
         )
       end
@@ -620,7 +620,7 @@ describe 'postgresql 9.6' do
         allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
           expect(FileUtils).to receive(:ln_sf).with(
-            "/opt/gitlab/embedded/postgresql/9.6.1/bin/#{pg_bin}",
+            "/opt/gitlab/embedded/postgresql/9.6/bin/#{pg_bin}",
             "/opt/gitlab/embedded/bin/#{pg_bin}"
           )
         end

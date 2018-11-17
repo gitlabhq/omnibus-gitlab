@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Upgrade Ruby to 2.5.3 !2806
 - Deprecate postgresql['data_dir'] !2846
 - Move env directory of all services to `/opt/gitlab/etc/<service>/env` !2825
+- Move the postgres install to being located under its major version path !2818
 
 11.5.0
 

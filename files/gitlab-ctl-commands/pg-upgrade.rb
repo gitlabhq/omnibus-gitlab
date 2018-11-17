@@ -34,7 +34,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     Kernel.exit 1
   end
 
-  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version}")
+  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
     log "#{@db_worker.tmp_data_dir}.#{default_version} does not exist, cannot revert data"
     log 'Will proceed with reverting the running program version only, unless you interrupt'
   end
@@ -72,7 +72,7 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   log 'Checking for a newer version of PostgreSQL to install'
-  if upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version}")
+  if upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version.major}")
     log "Upgrading PostgreSQL to #{upgrade_version}"
   else
     $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
@@ -89,7 +89,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
   ) do
-    Dir.glob("#{INST_DIR}/#{running_version}/bin/*").each do |bin_file|
+    Dir.glob("#{INST_DIR}/#{running_version.major}/bin/*").each do |bin_file|
       link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
@@ -148,10 +148,10 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message('Creating temporary data directory') do
     begin
       @db_worker.run_pg_command(
-        "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version}"
+        "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
       )
     rescue GitlabCtl::Errors::ExecutionError => ee
-      log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version}"
+      log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
       log "STDOUT: #{ee.stdout}"
       log "STDERR: #{ee.stderr}"
       false
@@ -166,7 +166,7 @@ add_command_under_category 'pg-upgrade', 'database',
     begin
       @db_worker.run_pg_command(
         "#{base_path}/embedded/bin/initdb " \
-        "-D #{@db_worker.tmp_data_dir}.#{upgrade_version} " \
+        "-D #{@db_worker.tmp_data_dir}.#{upgrade_version.major} " \
         "--locale #{locale} " \
         "--encoding #{encoding} " \
         " --lc-collate=#{locale} " \
@@ -186,9 +186,9 @@ add_command_under_category 'pg-upgrade', 'database',
     begin
       @db_worker.run_pg_command(
         "#{base_path}/embedded/bin/pg_upgrade " \
-        "-b #{base_path}/embedded/postgresql/#{default_version}/bin " \
+        "-b #{base_path}/embedded/postgresql/#{default_version.major}/bin " \
         "-d #{@db_worker.data_dir} " \
-        "-D #{@db_worker.tmp_data_dir}.#{upgrade_version} " \
+        "-D #{@db_worker.tmp_data_dir}.#{upgrade_version.major} " \
         "-B #{base_path}/embedded/bin"
       )
     rescue GitlabCtl::Errors::ExecutionError => ee
@@ -203,7 +203,7 @@ add_command_under_category 'pg-upgrade', 'database',
 
   unless progress_message('Move the old data directory out of the way') do
     run_command(
-      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version}"
+      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version.major}"
     )
   end
     die 'Error moving data for older version, '
@@ -211,10 +211,10 @@ add_command_under_category 'pg-upgrade', 'database',
 
   unless progress_message('Rename the new data directory') do
     run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{upgrade_version} #{@db_worker.data_dir}"
+      "mv #{@db_worker.tmp_data_dir}.#{upgrade_version.major} #{@db_worker.data_dir}"
     )
   end
-    die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version} to #{@db_worker.data_dir}"
+    die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version.major} to #{@db_worker.data_dir}"
   end
 
   log 'Upgrade is complete, doing post configuration steps'
@@ -241,7 +241,7 @@ add_command_under_category 'pg-upgrade', 'database',
   end
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
-  log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version}"
+  log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
   maintenance_mode('disable')
   Kernel.exit 0
 end
@@ -265,7 +265,7 @@ def upgrade_version
 end
 
 def create_links(version)
-  Dir.glob("#{INST_DIR}/#{version}/bin/*").each do |bin_file|
+  Dir.glob("#{INST_DIR}/#{version.major}/bin/*").each do |bin_file|
     destination = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
     GitlabCtl::Util.get_command_output("ln -sf #{bin_file} #{destination}")
   end
@@ -274,10 +274,10 @@ end
 def revert
   log '== Reverting =='
   run_sv_command_for_service('stop', 'postgresql')
-  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version}")
+  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
     run_command("rm -rf #{@db_worker.data_dir}")
     run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{default_version} #{@db_worker.data_dir}"
+      "mv #{@db_worker.tmp_data_dir}.#{default_version.major} #{@db_worker.data_dir}"
     )
   end
   create_links(default_version)

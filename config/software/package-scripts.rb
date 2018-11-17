@@ -29,6 +29,7 @@ default_version Build::Info.latest_stable_tag
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
   command "mkdir -p #{install_dir}/.package_util/package-scripts"
+  common_script = File.read(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/common.sh'))
   external_url_script = File.read(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/external_url.sh'))
 
   # Render the package script erb files
@@ -40,6 +41,7 @@ build do
         vars: {
           install_dir: project.install_dir,
           external_url_script: external_url_script,
+          common_script: common_script,
           build_version: project.build_version
         }
   end
