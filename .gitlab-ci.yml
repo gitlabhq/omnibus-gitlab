@@ -33,6 +33,7 @@ variables:
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
+  RUBY_IMAGE: "ruby:2.5"
 
 # Templates
 ## Runs on GitLab.com only
@@ -1416,3 +1417,13 @@ pages:
       - public
   only:
     - schedules@gitlab-org/omnibus-gitlab
+
+dependencies_io_check:
+  image: "${RUBY_IMAGE}"
+  stage: trigger-package
+  <<: *dedicated-runner
+  script:
+    - bundle exec rake build:trigger
+  only:
+    refs:
+      - /^dependencies_io/
