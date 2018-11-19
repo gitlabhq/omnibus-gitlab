@@ -3,6 +3,7 @@ require_relative "../build.rb"
 require_relative "../build/info.rb"
 require_relative '../build/omnibus_trigger'
 require_relative "../ohai_helper.rb"
+require_relative '../version.rb'
 require 'net/http'
 require 'json'
 
@@ -66,5 +67,11 @@ namespace :build do
     ENV['TOP_UPSTREAM_SOURCE_SHA'] ||= ENV['CI_COMMIT_SHA']
 
     Build::OmnibusTrigger.invoke!(post_comment: true).wait!
+  end
+
+  desc 'Print the current version'
+  task :version do
+    # We don't differentiate between CE and EE here since they use the same version file
+    puts Gitlab::Version.new('gitlab-rails').print
   end
 end
