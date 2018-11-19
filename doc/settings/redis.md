@@ -137,3 +137,115 @@ redis['maxmemory_samples'] = 5
 ## Using a Redis HA setup
 
 See <https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
+
+## Using Secure Sockets Layer (SSL)
+
+Redis v3.2.x does NOT support SSL out of the box. However, you can encrypt a
+Redis connection using [stunnel](https://redislabs.com/blog/stunnel-secure-redis-ssl/).
+AWS ElasticCache also supports Redis over SSL.
+
+### Limitations
+
+- GitLab does NOT ship with stunnel or other tools to provide encryption
+for the Redis server. However, GitLab does provide client support via
+the `rediss://` (as opposed to `redis://`) URL scheme.
+
+- Redis Sentinel does NOT support SSL yet. If you use Redis Sentinel, do
+not activate client support for SSL. [This pull
+request](https://github.com/antirez/redis/pull/4855) may bring native
+support to Redis 6.0.
+
+### Activating SSL (client settings)
+
+To activate GitLab client support for SSL, do the following:
+
+1. Add the following line to `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    gitlab_rails['redis_ssl'] = true
+    ```
+
+1. Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+
+## SSL certificates
+
+If you are using custom SSL certificates for Redis, be sure to add them
+to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
+
+## Common Troubleshooting
+
+### x509: certificate signed by unknown authority
+
+This error message suggests that the SSL certificates have not been
+properly added to the list of trusted certificates for the server. To
+check whether this is an issue:
+
+1. Check Workhorse logs in `/var/log/gitlab/gitlab-workhorse/current`.
+
+1. If you see messages that look like:
+
+    ```
+    2018-11-14_05:52:16.71123 time="2018-11-14T05:52:16Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
+    2018-11-14_05:52:16.74397 time="2018-11-14T05:52:16Z" level=error msg="unknown error" error="keywatcher: x509: certificate signed by unknown authority"
+    ```
+
+    The first line should show `rediss` as the scheme with the address
+    of the Redis server. The second line indicates the certificate is
+    not properly trusted on this server. See the [previous section](#ssl-certificates).
+
+1. Verify that the SSL certificate is working via [these troubleshooting
+steps](../settings/ssl.md##custom-certificates-missing-or-skipped).
+
+### NOAUTH Authentication required
+
+A Redis server may require a password sent via an `AUTH` message before
+commands are accepted. A `NOAUTH Authentication required` error message
+suggests the client is not sending a password. GitLab logs may help
+troubleshoot this error:
+
+1. Check Workhorse logs in `/var/log/gitlab/gitlab-workhorse/current`.
+
+1. If you see messages that look like:
+
+    ```
+    2018-11-14_06:18:43.81636 time="2018-11-14T06:18:43Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
+    2018-11-14_06:18:43.86929 time="2018-11-14T06:18:43Z" level=error msg="unknown error" error="keywatcher: pubsub receive: NOAUTH Authentication required."
+    ```
+
+1. Check that the Redis client password specified in `/etc/gitlab/gitlab.rb` is correct:
+
+    ```ruby
+    gitlab_rails['redis_password'] = 'your-password-here'
+    ```
+
+1. If you are using the Omnibus-provided Redis server, check that the server has the same password:
+
+    ```ruby
+    redis['password'] = 'your-password-here'
+    ```
+
+### Redis connection reset (ECONNRESET)
+
+If you see `Redis::ConnectionError: Connection lost (ECONNRESET)` in the
+GitLab Rails logs (`/var/log/gitlab-rails/production.log`), this might
+indicate that the server is expecting SSL but the client is not
+configured to use it.
+
+1. Check that the server is actually listening to the port via SSL.
+   For example:
+
+    ```sh
+    /opt/gitlab/embedded/bin/openssl s_client -connect redis-server:6379
+    ```
+
+1. Check `/var/opt/gitlab/gitlab-rails/etc/resque.yml`. You
+should see something like:
+
+    ```yaml
+    production:
+      url: rediss://:mypassword@redis-server:6379/
+    ```
+
+1. If `redis://` is present instead of `rediss://`, the `redis_ssl`
+   parameter may not have been configured properly, or the reconfigure
+   step may not have been run.

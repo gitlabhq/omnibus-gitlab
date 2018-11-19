@@ -58,7 +58,7 @@ file File.join(working_dir, "VERSION") do
   notifies :restart, "service[gitlab-workhorse]"
 end
 
-redis_url = RedisHelper.new(node).redis_url(true).to_s
+redis_url = RedisHelper.new(node).redis_url.to_s
 redis_password = node['gitlab']['gitlab-rails']['redis_password']
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']

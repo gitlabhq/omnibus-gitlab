@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Move env directory of all services to `/opt/gitlab/etc/<service>/env` !2825
 - Move the postgres install to being located under its major version path !2818
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
+- Add client support for Redis over SSL !2843
 
 11.5.0
 
