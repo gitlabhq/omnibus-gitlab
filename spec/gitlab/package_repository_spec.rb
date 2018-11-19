@@ -10,7 +10,7 @@ describe PackageRepository do
       # on non stable branch: 8.1.0+rc1.ce.0-1685-gd2a2c51
       # on tag: 8.12.0+rc1.ee.0
       before do
-        expect(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.0+rc1.ee.0\n")
+        allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.0+rc1.ee.0\n")
       end
 
       it { expect(repo.repository_for_rc).to eq 'unstable' }
