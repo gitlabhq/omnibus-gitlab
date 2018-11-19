@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Deprecate postgresql['data_dir'] !2846
 - Move env directory of all services to `/opt/gitlab/etc/<service>/env` !2825
 - Move the postgres install to being located under its major version path !2818
+- Update postgresql to 9.6.11 !2840
 
 11.5.0
 
