@@ -21,18 +21,13 @@ else
   fi
 fi
 
-gitlab_version=$(cat VERSION | awk '
+gitlab_version=$(echo "${1}" | awk '
   {
     gsub(/[^a-z0-9]/, "-")
     gsub(/(\A-+|-+\z)/, "")
     print substr($0, 1, 63);
   }
 ')
-
-if [ "${gitlab_version}" != "master" ]
-then
-  gitlab_version="v${gitlab_version}"
-fi
 
 docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
@@ -46,5 +41,5 @@ do
   sleep ${interval}
 done
 
-docker create --name asset_cache ${assets_image_name}
+docker create --name asset_cache "${assets_image_name}"
 docker cp asset_cache:/assets ${ASSET_PATH}
