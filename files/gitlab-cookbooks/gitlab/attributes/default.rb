@@ -552,6 +552,7 @@ default['gitlab']['gitlab-workhorse']['api_queue_duration'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_limit'] = nil
 default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
 default['gitlab']['gitlab-workhorse']['log_format'] = nil
+default['gitlab']['gitlab-workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab-workhorse/env'
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'HOME' => node['gitlab']['user']['home'],
@@ -852,6 +853,7 @@ default['gitlab']['postgres-exporter']['enable'] = false
 default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
+default['gitlab']['postgres-exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
 default['gitlab']['postgres-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }

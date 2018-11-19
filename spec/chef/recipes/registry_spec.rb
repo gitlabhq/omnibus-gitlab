@@ -409,7 +409,7 @@ describe 'registry' do
         stub_gitlab_rb(registry: { env: { 'HTTP_PROXY' => 'my-proxy' } })
       end
 
-      it_behaves_like "enabled registry env", "HTTP_PROXY", "my-proxy"
+      it_behaves_like "enabled service env", "registry", "HTTP_PROXY", "my-proxy"
     end
   end
 end
