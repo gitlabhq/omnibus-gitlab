@@ -12,6 +12,10 @@ omnibus-gitlab repository.
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
 - Add client support for Redis over SSL !2843
 
+11.5.1
+
+- Make remote-syslog detect log directories of all services correctly !2871
+
 11.5.0
 
 - Add experimental support for Puma !2801
