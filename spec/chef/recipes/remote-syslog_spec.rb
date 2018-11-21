@@ -18,7 +18,7 @@ describe 'gitlab::remote-syslog' do
   end
 
   context 'when remote logger is enabled' do
-    it 'creates the remote_syslog config' do
+    before do
       stub_gitlab_rb(
         remote_syslog: {
           enable: true
@@ -27,8 +27,25 @@ describe 'gitlab::remote-syslog' do
           udp_log_shipping_hostname: "example.com"
         }
       )
+    end
+
+    it 'creates the remote_syslog config' do
       expect(chef_run.node['gitlab']['remote-syslog']['enable']).to eq true
+    end
+
+    it 'creates remote-syslog config file with correct log directories' do
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml')
+
+      # Checking if log_directory of both type of services - those accessible
+      # via node[service] and those via node['gitlab'][service] are populated.
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/redis\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/nginx\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/unicorn\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-rails\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/postgresql\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/sidekiq\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-workhorse\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-pages\/\*.log/)
     end
 
     it 'creates the remote-syslog sv file without setting hostname' do
