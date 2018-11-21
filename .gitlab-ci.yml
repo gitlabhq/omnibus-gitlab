@@ -363,7 +363,7 @@ fetch-assets:
   <<: *docker_job
   stage: prepare-assets
   script:
-    - export VERSION=$(bundle exec rake build:version)
+    - export VERSION=${GITLAB_REF_SLUG-$(bundle exec rake build:version)}
     - support/fetch_assets "${VERSION}"
   artifacts:
     paths:
