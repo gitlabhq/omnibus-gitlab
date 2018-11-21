@@ -8,6 +8,10 @@ omnibus-gitlab repository.
 - Upgrade Ruby to 2.5.3 !2806
 - Deprecate postgresql['data_dir'] !2846
 
+11.5.1
+
+- Make remote-syslog detect log directories of all services correctly !2871
+
 11.5.0
 
 - Add experimental support for Puma !2801
