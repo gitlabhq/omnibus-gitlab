@@ -40,7 +40,7 @@ module GitlabSpec
     end
 
     def stub_is_ee_version(value)
-      allow(Build::Check).to receive(:system).with('grep -q -E "\-ee" VERSION').and_return(value)
+      allow(File).to receive(:read).with('VERSION').and_return(value ? '1.2.3-ee' : '1.2.3')
     end
 
     def stub_is_ee_env(value)

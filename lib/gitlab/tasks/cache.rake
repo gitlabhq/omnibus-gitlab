@@ -4,7 +4,7 @@ require_relative "../ohai_helper.rb"
 namespace :cache do
   desc "Populate cache"
   task :populate do
-    system("bin/omnibus cache populate")
+    system(*%w[bin/omnibus cache populate])
   end
 
   desc "Purge existing cache"
@@ -29,14 +29,14 @@ namespace :cache do
   desc "Prepare cache bundle"
   task :bundle do
     platform_dir = OhaiHelper.platform_dir
-    system("git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/#{platform_dir} --tags")
+    system(*%W[git --git-dir=/var/cache/omnibus/cache/git_cache/opt/gitlab bundle create cache/#{platform_dir} --tags])
   end
 
   desc "Restore cache bundle"
   task :restore do
     platform_dir = OhaiHelper.platform_dir
     if File.exist?("cache/#{platform_dir}") && File.file?("cache/#{platform_dir}")
-      system("git clone --mirror cache/#{platform_dir} /var/cache/omnibus/cache/git_cache/opt/gitlab")
+      system(*%W[git clone --mirror cache/#{platform_dir} /var/cache/omnibus/cache/git_cache/opt/gitlab])
     end
   end
 end

@@ -20,7 +20,7 @@ describe Build::QA do
   describe '.clone_gitlab_rails' do
     it 'calls the git command' do
       allow(Build::Info).to receive(:package).and_return("gitlab-ee")
-      expect(described_class).to receive("system").with("git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab.#{$PROCESS_ID}")
+      expect(described_class).to receive(:system).with(*%W[git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab.#{$PROCESS_ID}])
 
       Build::QA.clone_gitlab_rails
     end
@@ -31,7 +31,7 @@ describe Build::QA do
       allow(Build::Info).to receive(:package).and_return("gitlab-ee")
       allow(Build::Info).to receive(:gitlab_version).and_return("9.0.0")
       allow(Build::Check).to receive(:on_tag?).and_return(true)
-      expect(described_class).to receive("system").with("git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet v9.0.0")
+      expect(described_class).to receive(:system).with(*%W[git --git-dir=/tmp/gitlab.#{$PROCESS_ID}/.git --work-tree=/tmp/gitlab.#{$PROCESS_ID} checkout --quiet v9.0.0])
 
       Build::QA.checkout_gitlab_rails
     end

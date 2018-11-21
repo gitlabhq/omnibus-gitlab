@@ -9,29 +9,41 @@ describe Build::Metrics do
 
   describe '.configure_gitlab_repo' do
     it 'shells out to system correctly' do
-      expect_any_instance_of(Kernel).to receive(:system).with(/apt-get update && apt-get install/)
-      expect_any_instance_of(Kernel).to receive(:system).with(/curl.*packages.gitlab.com.*gitlab-ee.*|bash/)
+      expect_any_instance_of(Kernel).to receive(:system).with('apt-get', 'update')
+      expect_any_instance_of(Kernel).to receive(:system).with(*%w[apt-get install -y curl openssh-server ca-certificates])
+      expect(Open3).to receive(:pipeline).with(
+        %w[curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh],
+        %w[bash]
+      )
 
       described_class.configure_gitlab_repo
     end
   end
 
   describe '.install_package' do
-    it 'installs gitlab-ee pacakge and runs reconfigure explicitly' do
-      expect_any_instance_of(Kernel).to receive(:system).with(/apt-get -y install gitlab-ee=1.2.3/)
-      expect_any_instance_of(Kernel).to receive(:system).with(/runsvdir-start/)
-      expect_any_instance_of(Kernel).to receive(:system).with(/gitlab-ctl reconfigure/)
+    describe 'when upgrade not set' do
+      it 'installs gitlab-ee pacakge and runs reconfigure explicitly' do
+        expect_any_instance_of(Kernel).to receive(:system).with(
+          { 'EXTERNAL_URL' => 'http://gitlab.example.com' },
+          *%w[apt-get -y install gitlab-ee=1.2.3]
+        )
+        expect_any_instance_of(Kernel).to receive(:spawn).with(/runsvdir-start/)
+        expect_any_instance_of(Kernel).to receive(:system).with(*%w[gitlab-ctl reconfigure])
 
-      described_class.install_package("1.2.3")
+        described_class.install_package("1.2.3")
+      end
     end
   end
 
-  describe '.upgrade' do
+  describe '.upgrade_package' do
     it 'installs gitlab-ee pacakge but does not run reconfigure explicitly' do
-      expect_any_instance_of(Kernel).to receive(:system).with(/curl -q -o gitlab.deb/)
-      expect_any_instance_of(Kernel).to receive(:system).with(/dpkg -i gitlab.deb/)
-      expect_any_instance_of(Kernel).not_to receive(:system).with(/runsvdir-start/)
-      expect_any_instance_of(Kernel).not_to receive(:system).with(/gitlab-ctl reconfigure/)
+      allow(Build::Info).to receive(:package_download_url).and_return('https://gitlab.example/foo.deb')
+
+      expect_any_instance_of(Kernel).to receive(:system).with(*%w[curl -q -o gitlab.deb https://gitlab.example/foo.deb])
+      expect_any_instance_of(Kernel).to receive(:system).with(*%w[dpkg -i gitlab.deb])
+
+      expect_any_instance_of(Kernel).not_to receive(:spawn).with(/runsvdir-start/)
+      expect_any_instance_of(Kernel).not_to receive(:system).with(*%w[gitlab-ctl reconfigure])
 
       described_class.upgrade_package
     end
@@ -72,7 +84,12 @@ describe Build::Metrics do
 
   describe '.get_latest_log' do
     it 'extracts last log to preferred location' do
-      expect_any_instance_of(Kernel).to receive(:system).with("tac /var/log/apt/term.log | sed '/^Log started/q' | tac > /my/random/path.log")
+      expect(Open3).to receive(:pipeline).with(
+        %w[tac /var/log/apt/term.log],
+        %w[sed /^Log\ started/q],
+        %w[tac],
+        out: "/my/random/path.log"
+      )
 
       described_class.get_latest_log("/my/random/path.log")
     end
@@ -80,7 +97,7 @@ describe Build::Metrics do
 
   describe '.calculate duration' do
     it 'calculates duration correctly' do
-      allow(File).to receive(:open).with("/tmp/upgrade.log").and_return(["Log started: 2018-01-25  15:55:15", "Some random log", "Log ended: 2018-01-25  16:00:05"])
+      allow(File).to receive(:read).with("/tmp/upgrade.log").and_return(["Log started: 2018-01-25  15:55:15", "Some random log", "Log ended: 2018-01-25  16:00:05"])
       allow(described_class).to receive(:get_latest_log).and_return(true)
 
       expect(described_class.calculate_duration).to eq(290)
