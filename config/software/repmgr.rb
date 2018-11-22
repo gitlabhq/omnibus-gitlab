@@ -37,7 +37,7 @@ build do
   make "-j #{workers} USE_PGXS=1 install", env: env
 
   block 'link bin files' do
-    postgresql_version = shellout!("#{embedded_bin('psql')} --version", env: env).stdout.split.last
-    link "#{install_dir}/embedded/postgresql/#{postgresql_version}/bin/repmgr*", "#{install_dir}/embedded/bin/"
+    psql_bins = File.dirname(File.realpath(embedded_bin('psql')))
+    link File.join(psql_bins, 'repmgr*'), "#{install_dir}/embedded/bin/"
   end
 end
