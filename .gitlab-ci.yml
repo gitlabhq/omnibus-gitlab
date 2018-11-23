@@ -1017,7 +1017,6 @@ SLES-12-branch:
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-      - /.*-stable-ee/
     variables:
       - $ee == "true"
   tags:
@@ -1169,6 +1168,11 @@ SLES-12-staging:
   dependencies:
     - SLES-12
     - SLES-12-branch
+  only:
+    refs:
+      - branches@gitlab/omnibus-gitlab
+    variables:
+      - $ee == "true"
   allow_failure: true
   <<: *staging_upload
 
@@ -1215,6 +1219,12 @@ SLES-12-release:
   dependencies:
     - SLES-12
   allow_failure: true
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
   <<: *production_release
 
 Raspberry-Pi-2-Jessie-release:
