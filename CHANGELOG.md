@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Move the postgres install to being located under its major version path !2818
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
 - Add client support for Redis over SSL !2843
+- Add impersonation_enabled configuration to gitlab.rb !2880
 
 11.5.1
 
