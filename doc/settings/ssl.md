@@ -147,6 +147,9 @@ self-signed certificates.
 
 ### git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
+NOTE: **Note:**
+In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701).
+
 The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
 instead of **OpenSSL**.
 

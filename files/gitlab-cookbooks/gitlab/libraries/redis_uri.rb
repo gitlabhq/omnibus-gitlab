@@ -23,9 +23,11 @@ module URI
       :query
     ].freeze
 
-    # Include this class as the handler for 'redis' scheme
-    # This allows URI('redis://') to delegate to this class
-    @@schemes['REDIS'] = Redis
+    # Include this class as the handler for 'redis' and 'rediss' schemes
+    # This allows URI('redis://') or URI('rediss://') to delegate to this class
+    %w(REDIS REDISS).each do |scheme|
+      @@schemes[scheme] = Redis
+    end
 
     def self.build(args)
       super(Util.make_components_hash(self, args))

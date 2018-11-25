@@ -36,6 +36,8 @@ registry['env'] = {
 }
 ```
 
+**`Note`**: Proxy settings use the . syntax for globing 
+
 ## Applying the changes
 
 Any change made to the environment variables **requires a hard restart** after

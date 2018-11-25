@@ -85,7 +85,7 @@ class AWSHelper
   end
 
   def create_ami
-    system("support/packer/packer_ami.sh #{@version} #{@type} #{@download_url}")
+    system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url}])
   end
 
   def process

@@ -3,6 +3,7 @@ require_relative "../build.rb"
 require_relative "../build/info.rb"
 require_relative '../build/omnibus_trigger'
 require_relative "../ohai_helper.rb"
+require_relative '../version.rb'
 require 'net/http'
 require 'json'
 
@@ -41,7 +42,7 @@ namespace :build do
       files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
 
       files.each do |file|
-        system("sha256sum \"#{file}\" > \"#{file}.sha256\"")
+        system('sha256sum', file, out: "#{file}.sha256")
       end
     end
 
@@ -49,7 +50,7 @@ namespace :build do
     task :sync do
       release_bucket = Build::Info.release_bucket
       release_bucket_region = "eu-west-1"
-      system("aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}")
+      system(*%W[aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}])
       files = Dir.glob('pkg/**/*').select { |f| File.file? f }
       files.each do |file|
         puts file.gsub('pkg', "https://#{release_bucket}.s3.amazonaws.com").gsub('+', '%2B')
@@ -66,5 +67,11 @@ namespace :build do
     ENV['TOP_UPSTREAM_SOURCE_SHA'] ||= ENV['CI_COMMIT_SHA']
 
     Build::OmnibusTrigger.invoke!(post_comment: true).wait!
+  end
+
+  desc 'Print the current version'
+  task :version do
+    # We don't differentiate between CE and EE here since they use the same version file
+    puts Gitlab::Version.new('gitlab-rails').print
   end
 end

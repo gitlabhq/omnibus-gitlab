@@ -165,7 +165,7 @@ describe 'gitlab::gitlab-workhorse' do
     end
 
     it 'should generate config file with the specified values' do
-      content_url = 'URL = "tcp://10.0.15.1:1234/"'
+      content_url = 'URL = "redis://:examplepassword@10.0.15.1:1234/"'
       content_password = 'Password = "examplepassword"'
       content_sentinel = 'Sentinel'
       content_sentinel_master = 'SentinelMaster'
