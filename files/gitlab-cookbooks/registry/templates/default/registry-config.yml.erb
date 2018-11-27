@@ -14,6 +14,9 @@ http:
   <% if @debug_addr %>
   debug:
     addr: <%= @debug_addr %>
+    prometheus:
+      enabled: true
+      path: /metrics
   <% end %>
 health:
   storagedriver:

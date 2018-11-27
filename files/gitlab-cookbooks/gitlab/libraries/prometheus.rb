@@ -218,6 +218,7 @@ module Prometheus
       return unless Services.enabled?('prometheus')
       gitaly_scrape_config
       gitlab_monitor_scrape_configs
+      registry_scrape_config
       sidekiq_scrape_config
       unicorn_scrape_configs
       workhorse_scrape_config
@@ -286,6 +287,29 @@ module Prometheus
       }
 
       default_scrape_configs = [] << database << sidekiq << process << Gitlab['prometheus']['scrape_configs']
+      Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
+    end
+
+    def registry_scrape_config
+      # Don't parse if registry is explicitly disabled
+      return unless Services.enabled?('registry')
+
+      default_config = Gitlab['node']['registry'].to_hash
+      user_config = Gitlab['registry']
+
+      debug_addr = user_config['debug_addr'] || default_config['debug_addr']
+
+      # Don't enable if there is no debug_addr
+      return if debug_addr.nil?
+
+      scrape_config = {
+        'job_name' => 'registry',
+        'static_configs' => [
+          'targets' => [debug_addr],
+        ]
+      }
+
+      default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 

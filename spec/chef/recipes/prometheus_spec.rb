@@ -55,6 +55,10 @@ prometheus_yml_output = <<-PROMYML
       regex: 127.0.0.1:(.*)
       replacement: localhost:$1
       target_label: instance
+  - job_name: registry
+    static_configs:
+    - targets:
+      - localhost:5001
   - job_name: gitlab_monitor_database
     metrics_path: "/database"
     static_configs:
@@ -190,6 +194,10 @@ describe 'gitlab::prometheus' do
         },
         gitlab_monitor: {
           enable: true
+        },
+        registry: {
+          enable: true,
+          debug_addr: 'localhost:5001'
         }
       )
     end
