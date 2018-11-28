@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+redis_helper = RedisHelper.new(node)
 gitlab_user = account_helper.gitlab_user
 gitlab_monitor_dir = node['gitlab']['gitlab-monitor']['home']
 gitlab_monitor_log_dir = node['gitlab']['gitlab-monitor']['log_directory']
@@ -40,7 +41,8 @@ connection_string += if node['gitlab']['postgresql']['enabled']
                        " host=#{node['gitlab']['gitlab-rails']['db_host']} port=#{node['gitlab']['gitlab-rails']['db_port']} password=#{node['gitlab']['gitlab-rails']['db_password']}"
                      end
 
-redis_url = RedisHelper.new(node).redis_url
+redis_url = redis_helper.redis_url(support_sentinel_groupname: false)
+
 template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   source "gitlab-monitor.yml.erb"
   owner gitlab_user
