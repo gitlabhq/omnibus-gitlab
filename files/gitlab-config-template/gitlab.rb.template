@@ -1458,6 +1458,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_monitor['listen_address'] = 'localhost'
 # gitlab_monitor['listen_port'] = '9168'
 
+##! Manage gitlab-monitor sidekiq probes. false by default when Sentinels are
+##! found.
+# gitlab_monitor['probe_sidekiq'] = true
+
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true
 

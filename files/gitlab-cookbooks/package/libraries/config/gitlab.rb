@@ -95,7 +95,7 @@ module Gitlab
     attribute('node_exporter')
     attribute('redis_exporter')
     attribute('postgres_exporter')
-    attribute('gitlab_monitor')
+    attribute('gitlab_monitor').use { GitlabMonitor }
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
     attribute('pgbouncer_exporter')

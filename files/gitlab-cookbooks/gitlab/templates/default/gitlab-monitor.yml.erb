@@ -48,6 +48,7 @@ probes:
         name: git_upload_pack
         quantiles: true
 
+<% if @probe_sidekiq %>
   sidekiq: &sidekiq
     methods:
       - probe_queues
@@ -57,6 +58,7 @@ probes:
       - probe_dead
     opts:
       redis_url: "<%= @redis_url %>"
+<% end %>
 
   metrics:
     multiple: true
@@ -64,8 +66,10 @@ probes:
       <<: *git_process
     process:
       <<: *process
+<% if @probe_sidekiq %>
     sidekiq:
       <<: *sidekiq
+<% end %>
 <% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
     ci_builds:
       class_name: Database::CiBuildsProber

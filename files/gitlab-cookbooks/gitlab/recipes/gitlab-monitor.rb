@@ -49,6 +49,7 @@ template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   mode "0600"
   notifies :restart, "service[gitlab-monitor]"
   variables(
+    probe_sidekiq: node['gitlab']['gitlab-monitor']['probe_sidekiq'],
     redis_url: redis_url,
     connection_string: connection_string
   )
