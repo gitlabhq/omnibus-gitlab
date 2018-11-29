@@ -15,6 +15,8 @@ omnibus-gitlab repository.
 11.5.1
 
 - Make remote-syslog detect log directories of all services correctly !2871
+- Update GITLAB_PAGES_VERSION to 1.3.1
+- Update GITLAB_WORKHORSE_VERSION to 7.1.3
 
 11.5.0
 
@@ -41,6 +43,11 @@ omnibus-gitlab repository.
   and resumed when it is cleared !2812
 - Provide SSL_CERT_DIR to embedded Go services !2813
 
+11.4.8
+
+- Update GITLAB_PAGES_VERSION to 1.1.1
+- Update GITLAB_WORKHORSE_VERSION to 7.0.1
+
 11.4.1
 
 - Upgrade Ruby version to 2.4.5
@@ -65,6 +72,11 @@ omnibus-gitlab repository.
 - Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
 - Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
   prometheus-upgrade command !2733
+
+11.3.11
+
+- Update GITLAB_PAGES_VERSION to 1.1.1
+- Update GITLAB_WORKHORSE_VERSION to 6.1.2
 
 11.3.4
 
