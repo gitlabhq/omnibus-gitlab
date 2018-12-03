@@ -950,7 +950,11 @@ HA-Validate-Tagged:
     - './support/is_gitlab_ee.sh || exit 0'
     - bundle exec rake qa:ha:tag
   only:
-    - tags@gitlab/omnibus-gitlab
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
   dependencies: []
   allow_failure: true
 
@@ -1085,7 +1089,10 @@ HA-Validate-Nightly:
     - '[[ -n "${NIGHTLY}" ]] || exit 0'
     - bundle exec rake qa:ha:nightly
   only:
-    - schedules@gitlab/omnibus-gitlab
+    refs:
+      - schedules@gitlab/omnibus-gitlab
+    variables:
+      - $ee == "true"
   dependencies: []
 
 Raspberry-Pi-2-Jessie-branch:
