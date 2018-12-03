@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Add impersonation_enabled configuration to gitlab.rb !2880
 - Update runit version to 2.1.2 !2897
 - Update Prometheus components !2891
+- Add smartcard configuration to gitlab.rb !2894
 
 11.5.2
 
