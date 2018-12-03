@@ -209,7 +209,6 @@ Verify that you can upgrade with no downtime by checking the
 [Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
-<br/><br/>
 
 | Deployment type                              | Description                    |
 | -------------------------------------------- | ------------------------------ |
@@ -217,8 +216,8 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Multi-node / HA](#multi-node-ha-deployment) | GitLab CE/EE on multiple nodes |
 | [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
 
-<br/>
-### Single deployment
+
+## Single deployment
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -259,13 +258,12 @@ If you meet all the requirements above, follow these instructions in order. Ther
     sudo gitlab-ctl hup sidekiq
     ```
 
-<br/>
-### Multi-node / HA deployment
+
+## Multi-node / HA deployment
 
 Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
 node throughout the process.
 
-<br/>
 
 **Deploy node**
 
@@ -334,8 +332,8 @@ node throughout the process.
     sudo gitlab-ctl hup sidekiq
     ```
 
-<br/>
-### Geo deployment
+
+## Geo deployment
 
 **Primary node**
 
@@ -392,10 +390,8 @@ On the Primary node, executing the following:
     sudo gitlab-rake gitlab:geo:check
     ```
 
-<br/>
 **Secondary node(s)**
 
-<br/>
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Primary node.

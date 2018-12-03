@@ -94,7 +94,7 @@ describe Build::Image do
         [
           "PACKAGECLOUD_REPO=download-package",
           "RELEASE_VERSION=12.121.12-ce.1",
-          "DOWNLOAD_URL=https://gitlab.example.com/project/repository/builds/1/artifacts/raw/pkg/ubuntu-xenial/gitlab.deb",
+          "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/1/jobs/1/artifacts/pkg/ubuntu-xenial/gitlab.deb",
           "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
         ]
       end
@@ -102,7 +102,6 @@ describe Build::Image do
       before do
         stub_env_var('PACKAGECLOUD_REPO', 'download-package')
         stub_env_var('TRIGGER_PRIVATE_TOKEN', 'NOT-PRIVATE-TOKEN')
-        stub_env_var('CI_PROJECT_URL', 'https://gitlab.example.com/project/repository')
         stub_env_var('CI_PROJECT_ID', '1')
         stub_env_var('CI_PIPELINE_ID', '2')
         allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.1')
