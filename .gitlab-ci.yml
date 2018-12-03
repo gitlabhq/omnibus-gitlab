@@ -1120,13 +1120,22 @@ notify:slack-fail:
   - promotion
   dependencies: []
 
-## Upload for GitLab.com
+## Upload and deploy to staging for GitLab.com
+## The version of the deployment is set by the
+## VERSION file.
+
 Ubuntu-16.04-staging:
   stage: upload:gitlab_com
   extends: .staging_upload_template
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
+  variables:
+    TAKEOFF_ENVIRONMENT: 'gstg'
+  script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
 
 # Staging upload
 Ubuntu-14.04-staging:
