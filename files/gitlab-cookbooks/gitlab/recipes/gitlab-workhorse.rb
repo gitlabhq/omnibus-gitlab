@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+redis_helper = RedisHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-workhorse']['dir']
 log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
@@ -58,8 +59,8 @@ file File.join(working_dir, "VERSION") do
   notifies :restart, "service[gitlab-workhorse]"
 end
 
-redis_url = RedisHelper.new(node).redis_url.to_s
-redis_password = node['gitlab']['gitlab-rails']['redis_password']
+_redis_host, _redis_port, redis_password = redis_helper.redis_params
+redis_url = redis_helper.redis_url.to_s
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']

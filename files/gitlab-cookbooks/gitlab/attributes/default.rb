@@ -867,6 +867,7 @@ default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-m
 default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost'
 default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
+default['gitlab']['gitlab-monitor']['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true

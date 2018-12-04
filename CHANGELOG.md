@@ -11,6 +11,8 @@ omnibus-gitlab repository.
 - Move the postgres install to being located under its major version path !2818
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
 - Add client support for Redis over SSL !2843
+- Disable sidekiq probes of gitlab-monitor by default in Redis HA mode and
+  provide `probe_sidekiq` attribute to control it. !2872
 
 11.5.1
 

@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 require_relative 'redis_uri.rb'
+require_relative 'redis_helper.rb'
 
 module Redis
   class << self
@@ -23,13 +24,13 @@ module Redis
     end
 
     def parse_redis_settings
-      if is_redis_tcp?
+      if RedisHelper::Checks.is_redis_tcp?
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
 
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon
-        parse_redis_daemon! unless has_sentinels?
+        parse_redis_daemon! unless RedisHelper::Checks.has_sentinels?
       end
 
       Gitlab['redis']['master'] = false if Gitlab['redis_slave_role']['enable']
@@ -41,27 +42,14 @@ module Redis
         Gitlab['redis']['announce_port'] ||= Gitlab['redis']['port']
       end
 
-      if redis_managed? && (sentinel_daemon_enabled? || is_redis_slave? || Gitlab['redis_master_role']['enable'])
+      if redis_managed? && (RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_slave? || Gitlab['redis_master_role']['enable'])
         Gitlab['redis']['master_password'] ||= Gitlab['redis']['password']
       end
 
-      if sentinel_daemon_enabled? || is_redis_slave?
-        raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
-        raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
-      end
+      return unless RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_slave?
 
-      # Try to discover gitlab_rails redis connection params
-      # based on sentinels node data
-      parse_sentinels! if has_sentinels?
-
-      return unless is_gitlab_rails_redis_tcp?
-
-      # The user wants to connect to a Redis instance via TCP.
-      # It can be either a non-bundled instance or a Sentinel based one.
-      # Overriding redis_socket to false signals that gitlab-rails
-      # should connect to Redis via TCP instead of a Unix domain socket.
-      Gitlab['gitlab_rails']['redis_port'] ||= 6379
-      Gitlab['gitlab_rails']['redis_socket'] = false
+      raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
+      raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
     end
 
     def redis_managed?
@@ -69,32 +57,6 @@ module Redis
     end
 
     private
-
-    # Parses sentinel specific meta-data to fill gitlab_rails
-    #
-    # Redis sentinel requires the url to point to the 'master_name' instead of
-    # an IP or a valid host. We also need to ignore port and make sure we use
-    # correct password
-    def parse_sentinels!
-      master_name = Gitlab['redis']['master_name'] || node['redis']['master_name']
-
-      if Gitlab['gitlab_rails']['redis_host'] != master_name
-        Gitlab['gitlab_rails']['redis_host'] = master_name
-
-        Chef::Log.warn "gitlab-rails 'redis_host' will be ignored as sentinel is defined."
-      end
-
-      if Gitlab['gitlab_rails']['redis_port']
-        Gitlab['gitlab_rails']['redis_port'] = nil
-
-        Chef::Log.warn "gitlab-rails 'redis_port' will be ignored as sentinel is defined."
-      end
-
-      return unless Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
-
-      Gitlab['gitlab_rails']['redis_password'] = Gitlab['redis']['master_password']
-      Chef::Log.warn "gitlab-rails 'redis_password' will be ignored as sentinel is defined."
-    end
 
     def parse_redis_daemon!
       return unless redis_managed?
@@ -117,26 +79,6 @@ module Redis
 
     def node
       Gitlab[:node]
-    end
-
-    def is_redis_tcp?
-      Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?
-    end
-
-    def is_redis_slave?
-      Gitlab['redis']['master'] == false
-    end
-
-    def sentinel_daemon_enabled?
-      Services.enabled?('sentinel')
-    end
-
-    def is_gitlab_rails_redis_tcp?
-      Gitlab['gitlab_rails']['redis_host']
-    end
-
-    def has_sentinels?
-      Gitlab['gitlab_rails']['redis_sentinels'] && !Gitlab['gitlab_rails']['redis_sentinels'].empty?
     end
   end
 end
