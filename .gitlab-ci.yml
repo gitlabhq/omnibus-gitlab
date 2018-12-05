@@ -379,7 +379,6 @@ fetch-assets:
       - branches@gitlab/omnibus-gitlab
       - tags@gitlab/omnibus-gitlab
       - triggers
-      - /^dependencies_io/
   except:
     variables:
       - $COMPILE_ASSETS == "true"
@@ -483,7 +482,6 @@ Trigger:package:
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
-      - /^dependencies_io/
   artifacts:
     expire_in: 1 day
     paths:
@@ -514,7 +512,6 @@ Trigger:gitlab-docker:
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
-      - /^dependencies_io/
 
 Trigger:qa-docker:
   <<: *docker_job
@@ -531,7 +528,6 @@ Trigger:qa-docker:
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
-      - /^dependencies_io/
   dependencies:
     - Trigger:package
 
@@ -546,7 +542,6 @@ Trigger:qa-test:
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
-      - /^dependencies_io/
   dependencies: []
 
 Trigger:ce-package:
@@ -588,7 +583,6 @@ Trigger:ha-validate:
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
-      - /^dependencies_io/
   dependencies:
     - Trigger:ee-package
 
@@ -1443,14 +1437,14 @@ pages:
   only:
     - schedules@gitlab-org/omnibus-gitlab
 
-# dependencies_io_check:
-#   image: "${RUBY_IMAGE}"
-#   stage: trigger-package
-#   <<: *dedicated-runner
-#   script:
-#     - bundle exec rake build:trigger
-#   only:
-#     refs:
-#       - /^dependencies_io/
-#   except:
-#     - triggers
+dependencies_io_check:
+  image: "${RUBY_IMAGE}"
+  stage: trigger-package
+  <<: *dedicated-runner
+  script:
+    - bundle exec rake build:trigger
+  only:
+    refs:
+      - /^dependencies_io/
+  except:
+    - triggers
