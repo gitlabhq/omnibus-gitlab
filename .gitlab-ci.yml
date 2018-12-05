@@ -379,6 +379,7 @@ fetch-assets:
       - branches@gitlab/omnibus-gitlab
       - tags@gitlab/omnibus-gitlab
       - triggers
+      - /^dependencies_io/
   except:
     variables:
       - $COMPILE_ASSETS == "true"
