@@ -13,6 +13,7 @@ omnibus-gitlab repository.
 - Add client support for Redis over SSL !2843
 - Disable sidekiq probes of gitlab-monitor by default in Redis HA mode and
   provide `probe_sidekiq` attribute to control it. !2872
+- Update Prometheus components !2891
 
 11.5.2
 
