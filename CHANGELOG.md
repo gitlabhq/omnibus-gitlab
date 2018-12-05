@@ -14,9 +14,12 @@ omnibus-gitlab repository.
 - Disable sidekiq probes of gitlab-monitor by default in Redis HA mode and
   provide `probe_sidekiq` attribute to control it. !2872
 
-11.5.1
+11.5.2
 
 - Make remote-syslog detect log directories of all services correctly !2871
+
+11.5.1
+
 - Update GITLAB_PAGES_VERSION to 1.3.1
 - Update GITLAB_WORKHORSE_VERSION to 7.1.3
 
