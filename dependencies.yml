@@ -1,0 +1,13 @@
+version: 2
+
+dependencies:
+- type: git-repos
+  path: dependencies_io/git_repos.yml
+  settings:
+    branch_prefix: dependencies_io/
+
+    gitlab_labels:
+      - maintenance
+      - dependencies.io
+
+    gitlab_remove_source_branch: true
