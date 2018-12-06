@@ -214,6 +214,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Impersonation settings
+# gitlab_rails['impersonation_enabled'] = true
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 

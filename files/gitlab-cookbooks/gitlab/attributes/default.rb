@@ -181,6 +181,7 @@ default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
+default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
 default['gitlab']['gitlab-rails']['usage_ping_enabled'] = nil
 # Defaults set in libraries/gitlab_rails.rb
 default['gitlab']['gitlab-rails']['repositories_storages'] = {}
