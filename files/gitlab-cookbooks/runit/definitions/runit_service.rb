@@ -89,18 +89,18 @@ define :runit_service, directory: nil, only_if: false, finish_script: false, con
 
     ruby_block "reload #{params[:name]} svlogd configuration" do
       block do
-        File.open(File.join(sv_dir_name, "log/supervise/control"), "w") do |control|
-          control.print "h"
-        end
+        sv_binary = node[:runit][:sv_bin]
+        log_dir = File.join(sv_dir_name, "log")
+        shell_out(%W[#{sv_binary} reload #{log_dir}])
       end
       action :nothing
     end
 
     ruby_block "restart #{params[:name]} svlogd configuration" do
       block do
-        File.open(File.join(sv_dir_name, "log/supervise/control"), "w") do |control|
-          control.print "k"
-        end
+        sv_binary = node[:runit][:sv_bin]
+        log_dir = File.join(sv_dir_name, "log")
+        shell_out(%W[#{sv_binary} restart #{log_dir}])
       end
       action :nothing
     end
