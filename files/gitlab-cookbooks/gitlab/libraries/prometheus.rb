@@ -89,7 +89,7 @@ module Prometheus
       message = <<~EOS
           == Prometheus ==
           Detected Prometheus version 1.x. Version 1.x has been deprecated and support will be removed in GitLab version 12.0.
-          To upgrade to Promtheus 2.x, use `gitlab-ctl prometheus-upgrade` command.
+          To upgrade to Prometheus 2.x, use `gitlab-ctl prometheus-upgrade` command.
           Running this command will migrate all your existing data to format supported by Prometheus 2.x.
           This can be a time consuming operation. To skip migrating the data, and instead remove and start fresh, run `gitlab-ctl prometheus-upgrade --skip-data-migration`.
           Check https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114 for details.
