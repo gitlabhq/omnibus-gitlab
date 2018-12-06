@@ -1447,4 +1447,6 @@ dependencies_io_check:
     refs:
       - /^dependencies_io/
   except:
-    - triggers
+    refs:
+      - triggers
+      - branches@gitlab/omnibus-gitlab
