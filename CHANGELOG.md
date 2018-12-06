@@ -15,6 +15,7 @@ omnibus-gitlab repository.
   provide `probe_sidekiq` attribute to control it. !2872
 - Update docker registry to include a set of patches from the upcoming 2.7.0 release !2888
 - Update Mattermost to 5.5.0
+- Update runit version to 2.1.2 !2897
 
 11.5.2
 
