@@ -85,22 +85,6 @@ describe 'Redis' do
 
           subject.parse_redis_settings
         end
-
-        it 'expects redis_host to match bind value from redis' do
-          expect(node['gitlab']['gitlab-rails']['redis_host']).to eq master_name
-
-          subject.parse_redis_settings
-        end
-
-        it 'expects redis_port to match default port value from redis' do
-          expect(node['gitlab']['gitlab-rails']['redis_port']).to eq 6379
-
-          subject.parse_redis_settings
-        end
-
-        it 'expects redis_password to match master_password value from redis' do
-          expect(node['gitlab']['gitlab-rails']['redis_password']).to eq master_pass
-        end
       end
 
       context 'when with redis_slave_role enabled' do
@@ -220,26 +204,6 @@ describe 'Redis' do
         it 'keeps user specified master_password' do
           expect(node['redis']['master_password']).to eq master_password
         end
-      end
-    end
-
-    context 'within gitlab-rails redis values' do
-      let(:redis_host) { '1.2.3.4' }
-
-      before do
-        stub_gitlab_rb(
-          gitlab_rails: {
-            redis_host: redis_host
-          }
-        )
-      end
-
-      it 'disables unix socket when gitlab-rails tcp params are defined' do
-        expect(node['gitlab']['gitlab-rails']['redis_socket']).to eq false
-      end
-
-      it 'defaults port to 6379' do
-        expect(node['gitlab']['gitlab-rails']['redis_port']).to eq 6379
       end
     end
   end

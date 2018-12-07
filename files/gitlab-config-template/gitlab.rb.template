@@ -214,6 +214,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Impersonation settings
+# gitlab_rails['impersonation_enabled'] = true
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
@@ -1457,6 +1460,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Advanced settings. Should be changed only if absolutely needed.
 # gitlab_monitor['listen_address'] = 'localhost'
 # gitlab_monitor['listen_port'] = '9168'
+
+##! Manage gitlab-monitor sidekiq probes. false by default when Sentinels are
+##! found.
+# gitlab_monitor['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true

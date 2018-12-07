@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'prometheus-storage-migrator'
-version = Gitlab::Version.new('prometheus', '0.1.0')
+version = Gitlab::Version.new('prometheus', '0.2.0')
 default_version version.print
 
 license 'APACHE-2.0'
