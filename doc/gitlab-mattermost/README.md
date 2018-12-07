@@ -305,37 +305,8 @@ To resolve this problem, `gitlab.rb` will include only the
 configuration necessary for GitLab<=>Mattermost integration in 11.0. GitLab will no longer
 generate the `config.json` file, instead passing limited configuration settings via environment variables.
 
-The settings that will continue to be
-supported in `gitlab.rb` are:
-
-```
-# Supported settings
-mattermost_external_url
-mattermost['enable']
-mattermost['username']
-mattermost['group']
-mattermost['uid']
-mattermost['gid']
-mattermost['home']
-mattermost['database_name']
-mattermost['env']
-mattermost['service_use_ssl']
-mattermost['service_address']
-mattermost['service_port']
-mattermost['service_site_url']
-mattermost['team_site_name']
-mattermost['sql_driver_name']
-mattermost['sql_data_source']
-mattermost['log_file_directory']
-mattermost['file_directory']
-mattermost['gitlab_enable']
-mattermost['gitlab_secret']
-mattermost['gitlab_id']
-mattermost['gitlab_scope']
-mattermost['gitlab_auth_endpoint']
-mattermost['gitlab_token_endpoint']
-mattermost['gitlab_user_api_endpoint']
-```
+The settings that continue to be supported in `gitlab.rb` can be found in
+[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 With GitLab 11.0, other Mattermost settings can be configured through Mattermost's System Console,
 by editing `/var/opt/gitlab/mattermost/config.json`, or by using `mattermost['env']` in `gitlab.rb`.
