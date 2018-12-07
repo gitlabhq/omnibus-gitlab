@@ -205,7 +205,7 @@ mattermost['email_skip_server_certificate_verification'] = false
 #### With GitLab 11.0
 
 Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL,
-including protocol and port, is required:
+including protocol and port, is required if different from `mattermost_external_url`:
 
 ```ruby
 mattermost['service_site_url'] = 'https://mattermost.example.com'
@@ -220,7 +220,7 @@ This setting can also be configured in `/var/opt/gitlab/mattermost/config.json`.
 
 #### Prior to GitLab 11.0
 
-Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
+Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required if different from `mattermost_external_url`:
 
 ```ruby
 mattermost['service_site_url'] = 'https://mattermost.example.com'
