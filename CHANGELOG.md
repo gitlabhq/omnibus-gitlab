@@ -26,6 +26,7 @@ omnibus-gitlab repository.
 
 - Update GITLAB_PAGES_VERSION to 1.3.1
 - Update GITLAB_WORKHORSE_VERSION to 7.1.3
+- Update postgresql to 9.6.11 !2840
 
 11.5.0
 
