@@ -17,6 +17,7 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.5.0
 - Add impersonation_enabled configuration to gitlab.rb !2880
 - Update runit version to 2.1.2 !2897
+- Update Prometheus components !2891
 
 11.5.2
 
