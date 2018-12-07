@@ -11,12 +11,23 @@ omnibus-gitlab repository.
 - Move the postgres install to being located under its major version path !2818
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
 - Add client support for Redis over SSL !2843
+- Disable sidekiq probes of gitlab-monitor by default in Redis HA mode and
+  provide `probe_sidekiq` attribute to control it. !2872
+- Update docker registry to include a set of patches from the upcoming 2.7.0 release !2888
+- Update Mattermost to 5.5.0
+- Add impersonation_enabled configuration to gitlab.rb !2880
+- Update runit version to 2.1.2 !2897
+- Update Prometheus components !2891
+
+11.5.2
+
+- Make remote-syslog detect log directories of all services correctly !2871
 
 11.5.1
 
-- Make remote-syslog detect log directories of all services correctly !2871
 - Update GITLAB_PAGES_VERSION to 1.3.1
 - Update GITLAB_WORKHORSE_VERSION to 7.1.3
+- Update postgresql to 9.6.11 !2840
 
 11.5.0
 

@@ -67,3 +67,26 @@ been removed.
     Users still using those versions will be presented with a deprecation warning
     during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
     Prometheus 1.0 data will not be migrated.
+
+### 11.6
+
+1. [Sidekiq probe of gitlab-monitor](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_monitor_exporter.html)
+   will be disabled by default if GitLab is configured in [Redis HA mode](https://docs.gitlab.com/ee/administration/high_availability/redis.html).
+   To manually enable it, users can set `gitlab_monitor['probe_sidekiq'] = true`
+   in `/etc/gitlab/gitlab.rb` file. However, when manually enabling it in Redis
+   HA mode, users are expected to point the probe to a Redis instance connected
+   to the instance using the `gitlab_rails['redis_*']` settings.
+
+   A valid example configuration is:
+
+    ```ruby
+    gitlab_monitor['probe_sidekiq'] = true
+    gitlab_rails['redis_host'] = <IP of Redis master node>
+    gitlab_rails['redis_port'] = <Port where Redis runs in master node>
+    gitlab_rails['redis_password'] = <Password to connect to Redis master>
+    ```
+
+    **NOTE**: In the above configuration, when a failover happens after the
+    master node fails, gitlab-monitor will still be probing the original master
+    node, since it is specified in gitlab.rb. Users will have to manually update
+    gitlab.rb to point it to the new master node.

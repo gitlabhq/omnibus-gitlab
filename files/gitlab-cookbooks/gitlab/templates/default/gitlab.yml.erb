@@ -85,6 +85,9 @@ production: &base
     # The default is 'tmp/repositories' relative to the root of the Rails app.
     repository_downloads_path: <%= @gitlab_repository_downloads_path %>
 
+    ## Impersonation settings
+    impersonation_enabled: <%= @impersonation_enabled %>
+
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
   ## Reply by email

@@ -23,7 +23,7 @@ ruby_block 'skip-auto-migrations deprecation' do
   block do
     message = <<~MESSAGE
       Old file /etc/gitlab/skip-auto-migrations found.
-      This file will stop being checked in GitLab 11, use /etc/gitlab/skip-auto-reconfigure
+      This file will stop being checked in GitLab 12, use /etc/gitlab/skip-auto-reconfigure
       instead.  This file has been automatically created for you as a migration aid.
 
       To disable this message, remove the deprecated /etc/gitlab/skip-auto-migrations
