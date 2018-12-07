@@ -47,6 +47,7 @@ mattermost_external_url 'http://mattermost.example.com'
 
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
+redis['enable'] = false
 ```
 
 Then following the details in [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
