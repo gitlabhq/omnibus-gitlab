@@ -35,12 +35,8 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/redis-exporter",
   }
 
-  revision = `git rev-parse HEAD`.strip
-  build_time = Time.now.iso8601
   ldflags = [
-    "-X main.VERSION=#{version.print(false)}",
-    "-X main.COMMIT_SHA1=#{revision}",
-    "-X main.BUILD_DATE=#{build_time}",
+    "-X main.VERSION=#{version.print(false)}"
   ].join(' ')
 
   command 'go get github.com/Masterminds/glide', env: env
