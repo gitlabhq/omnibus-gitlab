@@ -374,8 +374,9 @@ will have to install it on your own or use an existing one. Omnibus ships only
 the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
-hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
-(#set-mysql-collation-to-utf-8) to fix any relevant errors.
+hit [collation issues][ee-245]. See
+[Set MySQL collation to UTF-8](#set-mysql-collation-to-utf-8) to fix any
+relevant errors.
 
 ---
 
