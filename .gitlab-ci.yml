@@ -14,9 +14,7 @@ stages:
   - scan-dependencies
   - images
   - staging_upload
-  - trigger-packages
   - package-release
-  - trigger-images
   - image-release
   - validate
   - metrics
@@ -1353,37 +1351,6 @@ upgrade:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
-  dependencies: []
-
-release:packages:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  stage: trigger-packages
-  script:
-    - bundle exec ruby support/trigger-release.rb package-release
-  when: manual
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-  only:
-    - tags@gitlab/omnibus-gitlab
-  dependencies: []
-
-release:images:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  stage: trigger-images
-  script:
-    - bundle exec ruby support/trigger-release.rb image-release
-    - bundle exec ruby support/trigger-release.rb metrics
-  when: manual
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-  only:
-    - tags@gitlab/omnibus-gitlab
   dependencies: []
 
 license-upload:
