@@ -33,6 +33,7 @@ variables:
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
+  RUBY_IMAGE: "ruby:2.5"
 
 # Templates
 ## Runs on GitLab.com only
@@ -63,10 +64,12 @@ variables:
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
   except:
-    - schedules@gitlab-org/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
   retry: 1
 
 .spec_template: &run_rspec
@@ -89,10 +92,12 @@ variables:
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
   except:
-    - schedules@gitlab-org/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -389,10 +394,12 @@ rubocop:
   script:
     - bundle exec rubocop --parallel
   except:
-    - schedules@gitlab-org/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -414,10 +421,12 @@ docs-check-links:
     # Disabled until https://gitlab.com/gitlab-com/gitlab-docs/issues/305 is resolved
     # - bundle exec nanoc check internal_links
   except:
-    - schedules@gitlab-org/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -452,10 +461,12 @@ update-knapsack:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
   except:
-    - schedules@gitlab-org/omnibus-gitlab
-    - branches@gitlab/omnibus-gitlab
-    - tags@gitlab/omnibus-gitlab
-    - triggers
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
   retry: 1
 
 Trigger:package:
@@ -470,7 +481,8 @@ Trigger:package:
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
   artifacts:
     expire_in: 1 day
     paths:
@@ -499,7 +511,8 @@ Trigger:gitlab-docker:
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
 
 Trigger:qa-docker:
   <<: *docker_job
@@ -514,7 +527,8 @@ Trigger:qa-docker:
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
   dependencies:
     - Trigger:package
 
@@ -527,7 +541,8 @@ Trigger:qa-test:
     - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:test
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
 
 Trigger:ce-package:
@@ -540,7 +555,9 @@ Trigger:ce-package:
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
-    - triggers
+    refs:
+      - triggers
+      - /^dependencies_io/
 
 Trigger:ee-package:
   image: "ruby:2.4"
@@ -554,7 +571,9 @@ Trigger:ee-package:
   only:
     - branches@gitlab-org/omnibus-gitlab
   except:
-    - triggers
+    refs:
+      - triggers
+      - /^dependencies_io/
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
@@ -563,7 +582,8 @@ Trigger:ha-validate:
   script:
       - bundle exec rake qa:ha:validate
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
   dependencies:
     - Trigger:ee-package
 
@@ -1417,3 +1437,17 @@ pages:
       - public
   only:
     - schedules@gitlab-org/omnibus-gitlab
+
+dependencies_io_check:
+  image: "${RUBY_IMAGE}"
+  stage: trigger-package
+  <<: *dedicated-runner
+  script:
+    - bundle exec rake build:trigger
+  only:
+    refs:
+      - /^dependencies_io/
+  except:
+    refs:
+      - triggers
+      - branches@gitlab/omnibus-gitlab
