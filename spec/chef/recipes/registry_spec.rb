@@ -125,6 +125,8 @@ describe 'registry recipe' do
         .with_content(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/health:\s*storagedriver:\s*enabled:\s*true/)
+      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+        .with_content(/log:\s*level: info\s*formatter:\s*text/)
     end
 
     context 'when registry storagedriver health check is disabled' do
@@ -132,6 +134,15 @@ describe 'registry recipe' do
       it 'creates registry config with specified value' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/health:\s*storagedriver:\s*enabled:\s*false/)
+      end
+    end
+
+    context 'when a log formatter is specified' do
+      before { stub_gitlab_rb(registry: { log_formatter: 'json' }) }
+
+      it 'creates the registry config with the specified value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/log:\s*level: info\s*formatter:\s*json/)
       end
     end
 

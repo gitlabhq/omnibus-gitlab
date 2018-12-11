@@ -26,6 +26,7 @@ default['registry']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 default['registry']['log_level'] = "info"
+default['registry']['log_formatter'] = 'text'
 default['registry']['rootcertbundle'] = nil
 default['registry']['health_storagedriver_enabled'] = true
 default['registry']['storage_delete_enabled'] = nil
