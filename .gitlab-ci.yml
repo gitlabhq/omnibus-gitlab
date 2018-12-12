@@ -8,8 +8,8 @@ stages:
   - prepare
   - tests
   - post-test
-  - package:gitlab_com
-  - upload:gitlab_com
+  - gitlab_com:package
+  - gitlab_com:upload_deploy
   - package
   - scan-dependencies
   - images
@@ -838,11 +838,46 @@ OpenSUSE 42.3 specs 5 6:
   dependencies:
   - OpenSUSE 42.3 knapsack
 
+## Build the docker image for QA
+## This is necessary for the deployment
+## pipeline so it must happen before
+## the upload and deploy stage for GitLab.com
+Docker-QA:
+  <<: *docker_job
+  stage: gitlab_com:package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake qa:build qa:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
 ## Package for GitLab.com
 Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: package:gitlab_com
+  stage: gitlab_com:package
   extends: .tag_template
+
+## Upload and deploy to staging for GitLab.com
+## The version of the deployment is set by the
+## VERSION file.
+Ubuntu-16.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  variables:
+    TAKEOFF_ENVIRONMENT: 'gstg'
+  script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
 
 # dev.gitlab.org only
 # Release build
@@ -929,21 +964,6 @@ Docker:
   dependencies: []
   retry: 1
 
-Docker-QA:
-  <<: *docker_job
-  stage: images
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - bundle exec rake qa:build qa:push:staging
-  only:
-    - tags@gitlab/omnibus-gitlab
-  tags:
-  - docker-builder
-  dependencies: []
-  retry: 1
-
 HA-Validate-Tagged:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
@@ -970,7 +990,7 @@ Raspberry-Pi-2-Stretch:
 ## Package for GitLab.com
 Ubuntu-16.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: package:gitlab_com
+  stage: gitlab_com:package
   extends: .branch_template
 
 ## Building from branch
@@ -1120,23 +1140,6 @@ notify:slack-fail:
   tags:
   - promotion
   dependencies: []
-
-## Upload and deploy to staging for GitLab.com
-## The version of the deployment is set by the
-## VERSION file.
-
-Ubuntu-16.04-staging:
-  stage: upload:gitlab_com
-  extends: .staging_upload_template
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
-  variables:
-    TAKEOFF_ENVIRONMENT: 'gstg'
-  script:
-    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
 
 # Staging upload
 Ubuntu-14.04-staging:
