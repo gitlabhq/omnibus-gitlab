@@ -275,6 +275,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     sync_ssh_keys: false
 # EOS
 
+### Smartcard authentication settings
+###! Docs: https://docs.gitlab.com/ee/administration/auth/smartcard.html
+# gitlab_rails['smartcard_enabled'] = false
+# gitlab_rails['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+# gitlab_rails['smartcard_client_certificate_required_port'] = 3444
+
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
 # gitlab_rails['omniauth_enabled'] = nil

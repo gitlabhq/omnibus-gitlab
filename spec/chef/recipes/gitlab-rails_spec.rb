@@ -463,6 +463,36 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'smartcard authentication settings' do
+      context 'smartcard authentication is configured' do
+        it 'exposes the smartcard authentication settings' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              smartcard_enabled: true
+            }
+          )
+
+          expect(chef_run).to(
+            render_file(gitlab_yml_path).with_content do |content|
+              expect(content).to match(/smartcard:\s+(#.*\n\s+)?enabled: true/)
+              expect(content).to include('ca_file: "/etc/gitlab/ssl/CA.pem"')
+              expect(content).to include('client_certificate_required_port: 3444')
+            end
+          )
+        end
+      end
+
+      context 'smartcard authentication is disabled' do
+        context 'smartcard authentication is not configured' do
+          it 'does not enable smartcard authentication' do
+            expect(chef_run).to(
+              render_file(gitlab_yml_path)
+                .with_content(/smartcard:\s+(#.*\n\s+)?enabled: false/))
+          end
+        end
+      end
+    end
+
     context 'omniauth settings' do
       context 'enabled setting' do
         it 'defaults to nil (enabled)' do
