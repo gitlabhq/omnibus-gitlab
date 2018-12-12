@@ -43,6 +43,7 @@ end
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
+gitlab_rails_smartcard_http_conf = File.join(nginx_conf_dir, "gitlab-smartcard-http.conf")
 gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
 gitlab_registry_http_conf = File.join(nginx_conf_dir, "gitlab-registry.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
@@ -54,6 +55,12 @@ gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
                        else
                          false
                        end
+
+gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab-rails']['enable']
+                                   node['gitlab']['nginx']['enable'] && node['gitlab']['gitlab-rails']['smartcard_enabled']
+                                 else
+                                   false
+                                 end
 
 gitlab_mattermost_enabled = if node['mattermost']['enable']
                               node['gitlab']['mattermost-nginx']['enable']
@@ -79,6 +86,11 @@ nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
 nginx_vars = node['gitlab']['nginx'].to_hash.merge({
                                                      gitlab_http_config: gitlab_rails_enabled ? gitlab_rails_http_conf : nil
                                                    })
+
+# Include the config file for gitlab-rails-smartcard in nginx.conf later
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         gitlab_smartcard_http_config: gitlab_rails_smartcard_enabled ? gitlab_rails_smartcard_http_conf : nil
+                                       })
 
 # Include the config file for gitlab mattermost in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
@@ -130,6 +142,39 @@ template gitlab_rails_http_conf do
   )
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_rails_enabled ? :create : :delete
+end
+
+template gitlab_rails_smartcard_http_conf do
+  source "nginx-gitlab-http.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
+    lazy do
+      nginx_vars.merge(
+        {
+          fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
+          port: node['gitlab']['gitlab-rails']['gitlab_port'],
+          listen_port: node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'],
+          relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
+          ssl_client_certificate: node['gitlab']['gitlab-rails']['smartcard_ca_file'],
+          ssl_verify_client: 'on',
+          ssl_verify_depth: 2,
+          proxy_set_headers: nginx_vars['proxy_set_headers'].merge(
+            {
+              'X-SSL-Client-Certificate' => '$ssl_client_cert'
+            }
+          ),
+          registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+          letsencrypt_enable: node['letsencrypt']['enable'],
+          redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
+        }
+      )
+    end
+  )
+  notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
+  action gitlab_rails_smartcard_enabled ? :create : :delete
 end
 
 pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash

@@ -371,6 +371,17 @@ production: &base
     sync_time: <%= @ldap_sync_time %>
   <% end %>
 
+  ## Smartcard authentication settings
+  smartcard:
+    # Allow smartcard authentication
+    enabled: <%= @smartcard_enabled %>
+
+    # Path to a file containing a CA certificate
+    ca_file: <%= quote(@smartcard_ca_file) %>
+
+    # Port where the client side certificate is requested by the webserver (NGINX/Apache)
+    client_certificate_required_port: <%= @smartcard_client_certificate_required_port %>
+
   ## Kerberos settings
   kerberos:
     # Allow the HTTP Negotiate authentication method for Git clients

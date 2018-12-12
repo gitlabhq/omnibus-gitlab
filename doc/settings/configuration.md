@@ -517,6 +517,11 @@ Disabling impersonation is documented in
 
 See [doc/settings/ldap.md](ldap.md).
 
+## Smartcard authentication
+
+Smartcard authentication is documented in
+[docs.gitlab.com](https://docs.gitlab.com/ee/administration/auth/smartcard.html).
+
 ## Enable HTTPS
 
 See [doc/settings/nginx.md](nginx.md#enable-https).

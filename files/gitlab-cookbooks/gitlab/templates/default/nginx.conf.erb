@@ -75,9 +75,17 @@ http {
   # Enable vts status module.
   vhost_traffic_status_zone;
 
+  upstream gitlab-workhorse {
+    server <%= "unix:" if node['gitlab']['gitlab-workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
+  }
+
   <% end -%>
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
+  <% end %>
+
+  <% if @gitlab_smartcard_http_config %>
+  include <%= @gitlab_smartcard_http_config %>;
   <% end %>
 
   <% if @gitlab_pages_http_config %>
