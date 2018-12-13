@@ -52,7 +52,7 @@ module License
       #
       dest_dir = File.join(@licenses_path, @edition, @current_minor_version)
       FileUtils.mkdir_p(dest_dir)
-      FileUtils.cp("pkg/ubuntu-bionic/license-status.json", "#{dest_dir}/#{@current_version}.json")
+      FileUtils.cp("pkg/ubuntu-bionic/#{@current_version}.license-status.json", "#{dest_dir}/#{@current_version}.json")
     end
 
     def load_data
