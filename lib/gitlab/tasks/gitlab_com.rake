@@ -8,8 +8,9 @@ namespace :gitlab_com do
       abort "This task requires #{env_var} to be set" unless ENV[env_var]
     end
 
-    unless Build::Check.match_tag?(Build::Info.latest_tag)
-      puts "#{Build::Info.latest_tag.chomp} is not the latest tag, not doing anything."
+    latest_tag = Build::Info.latest_tag
+    unless Build::Check.match_tag?(latest_tag)
+      puts "#{latest_tag} is not the latest tag, not doing anything."
       exit
     end
 
