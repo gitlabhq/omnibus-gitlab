@@ -225,7 +225,7 @@ dependency_scanning:
 ## pipeline so it must happen before
 ## the upload and deploy stage for GitLab.com
 Docker-QA:
-  <<: *docker_job
+  extends: .docker_job
   stage: gitlab_com:package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -332,7 +332,7 @@ SLES-12:
   retry: 1
 
 Docker:
-  <<: *docker_job
+  extends: .docker_job
   stage: images
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
@@ -444,7 +444,7 @@ SLES-12-branch:
   retry: 1
 
 Docker-branch:
-  <<: *docker_job
+  extends: .docker_job
   stage: images
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
@@ -653,7 +653,7 @@ Raspberry-Pi-2-Stretch-release:
   - promotion
 
 Docker-Release:
-  <<: *docker_job
+  extends: .docker_job
   stage: image-release
   script:
     - bundle exec rake release:docker

@@ -1,3 +1,7 @@
+.dedicated-runner: &dedicated-runner
+  tags:
+    - gitlab-org
+
 .knapsack-state: &knapsack-state
   services: []
   cache:
@@ -182,7 +186,7 @@ Trigger:package:
     - triggered-packages
 
 Trigger:gitlab-docker:
-  <<: *docker_job
+  extends: .docker_job
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
@@ -199,7 +203,7 @@ Trigger:gitlab-docker:
       - triggers@gitlab-org/omnibus-gitlab
 
 Trigger:qa-docker:
-  <<: *docker_job
+  extends: .docker_job
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
