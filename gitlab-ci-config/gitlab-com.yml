@@ -36,15 +36,13 @@
   <<: *com-only
   retry: 1
 
-.spec_template: &run_rspec
+.spec_template:
   stage: tests
   <<: *dedicated-runner
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
     - export DISTRO_VERSION=${JOB_NAME[1]}
-    - export CI_NODE_INDEX=${JOB_NAME[3]}
-    - export CI_NODE_TOTAL=${JOB_NAME[4]}
     - export KNAPSACK_REPORT_PATH=knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_node_${CI_NODE_INDEX}_${CI_NODE_TOTAL}_report.json
     - export KNAPSACK_GENERATE_REPORT=true
     - export USE_KNAPSACK=true
@@ -254,274 +252,58 @@ Trigger:ha-validate:
   dependencies:
     - Trigger:ee-package
 
-Ubuntu 14.04 specs 0 6:
+Ubuntu 14.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Ubuntu 14.04 knapsack
-Ubuntu 14.04 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 14.04 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 14.04 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 14.04 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 14.04 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 16.04 specs 0 6:
+Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Ubuntu 16.04 knapsack
-Ubuntu 16.04 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 16.04 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 16.04 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 16.04 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 16.04 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 18.04 specs 0 6:
+Ubuntu 18.04 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Ubuntu 18.04 knapsack
-Ubuntu 18.04 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Ubuntu 18.04 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Ubuntu 18.04 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Ubuntu 18.04 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Ubuntu 18.04 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  <<: *run_rspec
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Debian 7 specs 0 6:
+Debian 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Debian 7 knapsack
-Debian 7 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
-  dependencies:
-  - Debian 7 knapsack
-Debian 7 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
-  dependencies:
-  - Debian 7 knapsack
-Debian 7 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
-  dependencies:
-  - Debian 7 knapsack
-Debian 7 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
-  dependencies:
-  - Debian 7 knapsack
-Debian 7 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  <<: *run_rspec
-  dependencies:
-  - Debian 7 knapsack
-Debian 8 specs 0 6:
+Debian 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Debian 8 knapsack
-Debian 8 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
-  dependencies:
-  - Debian 8 knapsack
-Debian 8 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
-  dependencies:
-  - Debian 8 knapsack
-Debian 8 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
-  dependencies:
-  - Debian 8 knapsack
-Debian 8 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
-  dependencies:
-  - Debian 8 knapsack
-Debian 8 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  <<: *run_rspec
-  dependencies:
-  - Debian 8 knapsack
-Debian 9.1 specs 0 6:
+Debian 9.1 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Debian 9.1 knapsack
-Debian 9.1 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
-  dependencies:
-  - Debian 9.1 knapsack
-Debian 9.1 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
-  dependencies:
-  - Debian 9.1 knapsack
-Debian 9.1 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
-  dependencies:
-  - Debian 9.1 knapsack
-Debian 9.1 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
-  dependencies:
-  - Debian 9.1 knapsack
-Debian 9.1 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  <<: *run_rspec
-  dependencies:
-  - Debian 9.1 knapsack
-Centos 6 specs 0 6:
+Centos 6 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Centos 6 knapsack
-Centos 6 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
-  dependencies:
-  - Centos 6 knapsack
-Centos 6 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
-  dependencies:
-  - Centos 6 knapsack
-Centos 6 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
-  dependencies:
-  - Centos 6 knapsack
-Centos 6 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
-  dependencies:
-  - Centos 6 knapsack
-Centos 6 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  <<: *run_rspec
-  dependencies:
-  - Centos 6 knapsack
-Centos 7 specs 0 6:
+Centos 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - Centos 7 knapsack
-Centos 7 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
-  dependencies:
-  - Centos 7 knapsack
-Centos 7 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
-  dependencies:
-  - Centos 7 knapsack
-Centos 7 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
-  dependencies:
-  - Centos 7 knapsack
-Centos 7 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
-  dependencies:
-  - Centos 7 knapsack
-Centos 7 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  <<: *run_rspec
-  dependencies:
-  - Centos 7 knapsack
-OpenSUSE 42.3 specs 0 6:
+OpenSUSE 42.3 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.3 knapsack
-OpenSUSE 42.3 specs 1 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.3 knapsack
-OpenSUSE 42.3 specs 2 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.3 knapsack
-OpenSUSE 42.3 specs 3 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.3 knapsack
-OpenSUSE 42.3 specs 4 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
-  dependencies:
-  - OpenSUSE 42.3 knapsack
-OpenSUSE 42.3 specs 5 6:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  <<: *run_rspec
+  extends: .spec_template
+  parallel: 6
   dependencies:
   - OpenSUSE 42.3 knapsack
 
