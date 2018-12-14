@@ -1,3 +1,10 @@
+# This config lists the jobs that will be run on omnibus-gitlab project in
+# gitlab.com.
+
+#############
+# Templates #
+#############
+
 .com-only: &com-only
   except:
     refs:
@@ -66,8 +73,40 @@
       junit: junit_rspec.xml
   retry: 1
 
-# Jobs
-## Runs on GitLab.com only
+###########################
+#     Branch pipeline     #
+###########################
+
+Trigger:ce-package:
+  image: "ruby:2.4"
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  script:
+    - bundle exec rake build:trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    refs:
+      - triggers
+      - /^dependencies_io/
+
+Trigger:ee-package:
+  image: "ruby:2.4"
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  variables:
+    ee: "true"
+  script:
+    - bundle exec rake build:trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    refs:
+      - triggers
+      - /^dependencies_io/
+
 rubocop:
   stage: check
   <<: *dedicated-runner
@@ -123,6 +162,61 @@ Ubuntu 14.04 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
 
+Ubuntu 14.04 specs:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 16.04 specs:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 18.04 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Debian 7 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Debian 7 knapsack
+Debian 8 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Debian 8 knapsack
+Debian 9.1 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Debian 9.1 knapsack
+Centos 6 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Centos 6 knapsack
+Centos 7 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Centos 7 knapsack
+OpenSUSE 42.3 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+
 update-knapsack:
   <<: *knapsack-state
   <<: *dedicated-runner
@@ -133,6 +227,10 @@ update-knapsack:
     - rm -f knapsack/*node*
   <<: *com-only
   retry: 1
+
+############################
+#     Trigger Pipeline     #
+############################
 
 Trigger:package:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
@@ -210,36 +308,6 @@ Trigger:qa-test:
       - triggers@gitlab-org/omnibus-gitlab
   dependencies: []
 
-Trigger:ce-package:
-  image: "ruby:2.4"
-  stage: trigger-package
-  <<: *dedicated-runner
-  when: manual
-  script:
-    - bundle exec rake build:trigger
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - /^dependencies_io/
-
-Trigger:ee-package:
-  image: "ruby:2.4"
-  stage: trigger-package
-  <<: *dedicated-runner
-  when: manual
-  variables:
-    ee: "true"
-  script:
-    - bundle exec rake build:trigger
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - /^dependencies_io/
-
 Trigger:ha-validate:
   stage: trigger-ha-validate
   image: "ruby:2.4"
@@ -252,60 +320,9 @@ Trigger:ha-validate:
   dependencies:
     - Trigger:ee-package
 
-Ubuntu 14.04 specs:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Ubuntu 14.04 knapsack
-Ubuntu 16.04 specs:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Ubuntu 16.04 knapsack
-Ubuntu 18.04 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Ubuntu 18.04 knapsack
-Debian 7 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Debian 7 knapsack
-Debian 8 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Debian 8 knapsack
-Debian 9.1 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Debian 9.1 knapsack
-Centos 6 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Centos 6 knapsack
-Centos 7 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Centos 7 knapsack
-OpenSUSE 42.3 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - OpenSUSE 42.3 knapsack
+##############################
+#     Scheduled pipeline     #
+##############################
 
 pages:
   image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
