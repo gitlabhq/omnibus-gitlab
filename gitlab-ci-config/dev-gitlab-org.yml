@@ -1,0 +1,743 @@
+## Runs on dev.gitlab.org
+.branch_template: &branch_build
+  stage: package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake build:project build:package:sync
+    - bundle exec rake cache:bundle
+  tags:
+  - docker-builder
+  only:
+    - branches@gitlab/omnibus-gitlab
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  retry: 1
+
+.rpi_branch_template: &rpi_branch_build
+  stage: slow_jobs
+  variables:
+    NO_SOURCEMAPS: "true"
+  script:
+    - if ./support/is_gitlab_ee.sh; then exit 0; fi
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake build:project build:package:sync
+    - bundle exec rake cache:bundle
+  tags:
+  - docker-rpi-builder
+  only:
+    refs:
+      - branches@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*-stable-ee/
+    variables:
+      - $ee == "true"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  cache:
+    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  retry: 1
+
+.tag_template: &tag_build
+  stage: package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake release:package
+    - bundle exec rake cache:bundle
+  tags:
+  - docker-builder
+  only:
+    - tags@gitlab/omnibus-gitlab
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  cache:
+    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  retry: 1
+
+dependency_scanning:
+  image: alpine:3.7
+  stage: scan-dependencies
+  allow_failure: true
+  variables:
+    TERM: xterm-256color
+    REPORT_PATH: ./
+  before_script:
+    - apk update && apk add curl jq bash bc coreutils
+  script:
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  artifacts:
+    expire_in: 7 days
+    when: on_failure
+    paths:
+      - dependency_report.txt
+      - gl-dependency-scanning-report.json
+
+.rpi_tag_template: &rpi_tag_build
+  stage: slow_jobs
+  variables:
+    NO_SOURCEMAPS: "true"
+  script:
+    - if ./support/is_gitlab_ee.sh; then exit 0; fi
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake release:package
+    - bundle exec rake cache:bundle
+  tags:
+  - docker-rpi-builder
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  retry: 1
+
+### This stage is used for uploading packages
+### 1. To a staging package repository
+### 2. Always ran on dev.gitlab.org
+.staging_upload_template: &staging_upload
+  stage: staging_upload
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+  retry: 1
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+      - gems
+  tags:
+  - promotion
+
+### This stage is ran only on tag:
+### 1. It is a manual action
+### 2. It will upload the package to public, user facing repositories
+### 3. Only ran on dev.gitlab.org
+.production_release_template: &production_release
+  stage: package-release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
+    - bundle exec rake repository:upload:production
+  only:
+    - tags@gitlab/omnibus-gitlab
+  when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+      - gems
+  tags:
+  - promotion
+
+## Build the docker image for QA
+## This is necessary for the deployment
+## pipeline so it must happen before
+## the upload and deploy stage for GitLab.com
+Docker-QA:
+  extends: .docker_job
+  stage: gitlab_com:package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake qa:build qa:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
+## Package for GitLab.com
+Ubuntu-16.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .tag_template
+
+## Upload and deploy to staging for GitLab.com
+## The version of the deployment is set by the
+## VERSION file.
+Ubuntu-16.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  variables:
+    TAKEOFF_ENVIRONMENT: 'gstg'
+  script:
+    - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+
+# dev.gitlab.org only
+# Release build
+Ubuntu-14.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Ubuntu-18.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-7:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-8:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-9.1:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+CentOS-6:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+CentOS-7:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+OpenSUSE-42.3:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+SLES-12:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  stage: package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
+    - if ./support/is_gitlab_ee.sh; then
+        bundle exec rake cache:populate;
+        bundle exec rake cache:restore;
+        bundle exec rake release:package;
+        bundle exec rake cache:bundle;
+      else
+        exit 0;
+      fi
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  tags:
+  - docker-builder
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  cache:
+    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  retry: 1
+
+Docker:
+  extends: .docker_job
+  stage: images
+  script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
+HA-Validate-Tagged:
+  stage: slow_jobs
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - './support/is_gitlab_ee.sh || exit 0'
+    - bundle exec rake qa:ha:tag
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  dependencies: []
+  allow_failure: true
+
+Raspberry-Pi-2-Jessie:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
+
+Raspberry-Pi-2-Stretch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
+
+## Package for GitLab.com
+Ubuntu-16.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .branch_template
+
+## Building from branch
+Ubuntu-14.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Ubuntu-18.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian-7-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian-8-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian-9.1-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+CentOS-6-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+CentOS-7-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+OpenSUSE-42.3-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+SLES-12-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  stage: package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
+    # GPG key for package signing
+    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
+    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
+    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+    - echo $PACKAGECLOUD_REPO
+    - if ./support/is_gitlab_ee.sh; then
+        bundle exec rake cache:populate;
+        bundle exec rake cache:restore;
+        bundle exec rake build:project build:package:sync;
+        bundle exec rake cache:bundle;
+      else
+        exit 0;
+      fi
+  only:
+    refs:
+      - branches@gitlab/omnibus-gitlab
+    variables:
+      - $ee == "true"
+  tags:
+  - docker-builder
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  dependencies:
+    - fetch-assets
+  retry: 1
+
+Docker-branch:
+  extends: .docker_job
+  stage: images
+  script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  - bundle exec rake docker:push:nightly
+  only:
+    - branches@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
+QA-Master:
+  extends: .docker_job
+  stage: images
+  variables:
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake qa:build
+    - bundle exec rake qa:push:nightly
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
+  allow_failure: true
+  only:
+    - branches@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-16.04-branch
+  retry: 1
+
+HA-Validate-Nightly:
+  stage: slow_jobs
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - './support/is_gitlab_ee.sh || exit 0'
+    - '[[ -n "${NIGHTLY}" ]] || exit 0'
+    - bundle exec rake qa:ha:nightly
+  only:
+    refs:
+      - schedules@gitlab/omnibus-gitlab
+    variables:
+      - $ee == "true"
+  dependencies: []
+
+Raspberry-Pi-2-Jessie-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
+
+Raspberry-Pi-2-Stretch-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
+
+# Staging upload
+Ubuntu-14.04-staging:
+  dependencies:
+    - Ubuntu-14.04
+    - Ubuntu-14.04-branch
+  <<: *staging_upload
+Ubuntu-18.04-staging:
+  dependencies:
+    - Ubuntu-18.04
+    - Ubuntu-18.04-branch
+  <<: *staging_upload
+Debian-7-staging:
+  dependencies:
+    - Debian-7
+    - Debian-7-branch
+  <<: *staging_upload
+Debian-8-staging:
+  dependencies:
+    - Debian-8
+    - Debian-8-branch
+  <<: *staging_upload
+Debian-9.1-staging:
+  dependencies:
+    - Debian-9.1
+    - Debian-9.1-branch
+  <<: *staging_upload
+CentOS-6-staging:
+  dependencies:
+    - CentOS-6
+    - CentOS-6-branch
+  <<: *staging_upload
+CentOS-7-staging:
+  dependencies:
+    - CentOS-7
+    - CentOS-7-branch
+  <<: *staging_upload
+OpenSUSE-42.3-staging:
+  dependencies:
+    - OpenSUSE-42.3
+    - OpenSUSE-42.3-branch
+  <<: *staging_upload
+SLES-12-staging:
+  variables:
+    RUN_ONLY_EE: 'true'
+  dependencies:
+    - SLES-12
+    - SLES-12-branch
+  only:
+    refs:
+      - branches@gitlab/omnibus-gitlab
+    variables:
+      - $ee == "true"
+  allow_failure: true
+  <<: *staging_upload
+
+# Release
+Ubuntu-14.04-release:
+  dependencies:
+    - Ubuntu-14.04
+  <<: *production_release
+Ubuntu-16.04-release:
+  dependencies:
+    - Ubuntu-16.04
+  <<: *production_release
+Ubuntu-18.04-release:
+  dependencies:
+    - Ubuntu-18.04
+  <<: *production_release
+Debian-7-release:
+  dependencies:
+    - Debian-7
+  <<: *production_release
+Debian-8-release:
+  dependencies:
+    - Debian-8
+  <<: *production_release
+Debian-9.1-release:
+  dependencies:
+    - Debian-9.1
+  <<: *production_release
+CentOS-6-release:
+  dependencies:
+    - CentOS-6
+  <<: *production_release
+CentOS-7-release:
+  dependencies:
+    - CentOS-7
+  <<: *production_release
+OpenSUSE-42.3-release:
+  dependencies:
+    - OpenSUSE-42.3
+  <<: *production_release
+SLES-12-release:
+  variables:
+    RUN_ONLY_EE: 'true'
+  dependencies:
+    - SLES-12
+  allow_failure: true
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  <<: *production_release
+
+Raspberry-Pi-2-Jessie-release:
+  stage: raspbian-release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  when: manual
+  dependencies:
+    - Raspberry-Pi-2-Jessie
+  tags:
+  - promotion
+
+Raspberry-Pi-2-Stretch-release:
+  stage: raspbian-release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  when: manual
+  dependencies:
+    - Raspberry-Pi-2-Stretch
+  tags:
+  - promotion
+
+Docker-Release:
+  extends: .docker_job
+  stage: image-release
+  script:
+    - bundle exec rake release:docker
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  when: manual
+
+AWS:
+  stage: image-release
+  image: "${BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - bundle exec rake aws:process
+  allow_failure: true
+  tags:
+  - docker-builder
+  when: manual
+  only:
+    - tags@gitlab/omnibus-gitlab
+  dependencies: []
+  retry: 1
+
+QA-Tag:
+  extends: .docker_job
+  stage: image-release
+  variables:
+    QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake release:qa
+  artifacts:
+    when: on_failure
+    expire_in: 7d
+    paths:
+    - screenshots/
+  allow_failure: true
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-16.04
+  retry: 1
+  when: manual
+
+upgrade:
+  stage: metrics
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - echo $GCP_SERVICE_ACCOUNT > service_account.json
+    - bundle exec rake metrics:upgrade_package
+  allow_failure: true
+  when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies: []
+
+license-upload:
+  stage: metrics
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake license:upload
+  allow_failure: true
+  when: manual
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  dependencies:
+    - Ubuntu-18.04
