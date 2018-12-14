@@ -1,3 +1,12 @@
+.com-only: &com-only
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+
 .dedicated-runner: &dedicated-runner
   tags:
     - gitlab-org
@@ -24,13 +33,7 @@
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - /^dependencies_io/
+  <<: *com-only
   retry: 1
 
 .spec_template: &run_rspec
@@ -52,13 +55,7 @@
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - /^dependencies_io/
+  <<: *com-only
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -81,13 +78,7 @@ rubocop:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
     - bundle exec rubocop --parallel
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - /^dependencies_io/
+  <<: *com-only
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -108,13 +99,7 @@ docs-check-links:
     # Check the internal links
     # Disabled until https://gitlab.com/gitlab-com/gitlab-docs/issues/305 is resolved
     # - bundle exec nanoc check internal_links
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - /^dependencies_io/
+  <<: *com-only
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -148,13 +133,7 @@ update-knapsack:
   script:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - /^dependencies_io/
+  <<: *com-only
   retry: 1
 
 Trigger:package:
