@@ -291,6 +291,7 @@ SLES-12:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
+    - './support/is_gitlab_ee.sh || exit 0'
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -300,20 +301,13 @@ SLES-12:
     - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
-    - if ./support/is_gitlab_ee.sh; then
-        bundle exec rake cache:populate;
-        bundle exec rake cache:restore;
-        bundle exec rake release:package;
-        bundle exec rake cache:bundle;
-      else
-        exit 0;
-      fi
+    - bundle exec rake cache:populate;
+    - bundle exec rake cache:restore;
+    - bundle exec rake release:package;
+    - bundle exec rake cache:bundle;
   only:
     refs:
-      - tags@gitlab/omnibus-gitlab
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
   tags:
   - docker-builder
   artifacts:
@@ -404,6 +398,7 @@ SLES-12-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   stage: package
   script:
+    - './support/is_gitlab_ee.sh || exit 0'
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -413,19 +408,13 @@ SLES-12-branch:
     - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
     - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
     - echo $PACKAGECLOUD_REPO
-    - if ./support/is_gitlab_ee.sh; then
-        bundle exec rake cache:populate;
-        bundle exec rake cache:restore;
-        bundle exec rake build:project build:package:sync;
-        bundle exec rake cache:bundle;
-      else
-        exit 0;
-      fi
+    - bundle exec rake cache:populate;
+    - bundle exec rake cache:restore;
+    - bundle exec rake build:project build:package:sync;
+    - bundle exec rake cache:bundle;
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-    variables:
-      - $ee == "true"
   tags:
   - docker-builder
   cache:
@@ -556,8 +545,6 @@ SLES-12-staging:
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-    variables:
-      - $ee == "true"
   allow_failure: true
   <<: *staging_upload
 
@@ -608,8 +595,6 @@ SLES-12-release:
     refs:
       - tags@gitlab/omnibus-gitlab
       - /.*ee\.\d/
-    variables:
-      - $ee == "true"
   <<: *production_release
 
 Raspberry-Pi-2-Jessie-release:
