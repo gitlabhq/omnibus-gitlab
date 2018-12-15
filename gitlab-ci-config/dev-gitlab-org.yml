@@ -4,6 +4,18 @@
   paths:
     - pkg/
 
+.branch-cache: &branch-cache
+  key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+  paths:
+  - cache
+  - gems
+  - assets_cache
+  - .yarn-cache
+
+.tag-cache: &tag-cache
+  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+  <<: *branch-cache
+
 .branch_template: &branch_build
   stage: package
   script:
@@ -25,13 +37,7 @@
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *branch-cache
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -64,13 +70,7 @@
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
-  cache:
-    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *branch-cache
   retry: 1
 
 .tag_template: &tag_build
@@ -94,13 +94,7 @@
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
-  cache:
-    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *tag-cache
   retry: 1
 
 dependency_scanning:
@@ -158,13 +152,7 @@ dependency_scanning:
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *tag-cache
   retry: 1
 
 ### This stage is used for uploading packages
@@ -182,10 +170,7 @@ dependency_scanning:
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
   retry: 2
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-      - gems
+  cache: *tag-cache
   tags:
   - promotion
 
@@ -203,10 +188,7 @@ dependency_scanning:
     - tags@gitlab/omnibus-gitlab
   retry: 2
   when: manual
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-      - gems
+  cache: *tag-cache
   tags:
   - promotion
 
@@ -224,6 +206,7 @@ Docker-QA:
     - bundle exec rake qa:build qa:push:staging
   only:
     - tags@gitlab/omnibus-gitlab
+  cache: *tag-cache
   tags:
   - docker-builder
   dependencies: []
@@ -303,13 +286,7 @@ SLES-12:
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
-  cache:
-    key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *tag-cache
   retry: 1
 
 Docker:
@@ -324,6 +301,7 @@ Docker:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *tag-cache
   dependencies: []
   retry: 1
 
@@ -339,6 +317,7 @@ HA-Validate-Tagged:
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+  cache: *tag-cache
   dependencies: []
   allow_failure: true
 
@@ -404,13 +383,7 @@ SLES-12-branch:
       - branches@gitlab/omnibus-gitlab
   tags:
   - docker-builder
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - .yarn-cache
+  cache: *branch-cache
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
@@ -429,6 +402,7 @@ Docker-branch:
     - branches@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *branch-cache
   dependencies: []
   retry: 1
 
@@ -453,6 +427,7 @@ QA-Master:
     - branches@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *branch-cache
   dependencies:
     - Ubuntu-16.04-branch
   retry: 1
@@ -469,6 +444,7 @@ HA-Validate-Nightly:
       - schedules@gitlab/omnibus-gitlab
     variables:
       - $ee == "true"
+  cache: *branch-cache
   dependencies: []
 
 Raspberry-Pi-2-Jessie-branch:
@@ -595,6 +571,7 @@ Raspberry-Pi-2-Jessie-release:
     variables:
       - $ee == "true"
   when: manual
+  cache: *tag-cache
   dependencies:
     - Raspberry-Pi-2-Jessie
   tags:
@@ -616,6 +593,7 @@ Raspberry-Pi-2-Stretch-release:
     variables:
       - $ee == "true"
   when: manual
+  cache: *tag-cache
   dependencies:
     - Raspberry-Pi-2-Stretch
   tags:
@@ -628,6 +606,7 @@ Docker-Release:
     - bundle exec rake release:docker
   only:
     - tags@gitlab/omnibus-gitlab
+  cache: *tag-cache
   dependencies: []
   when: manual
 
@@ -645,6 +624,7 @@ AWS:
   when: manual
   only:
     - tags@gitlab/omnibus-gitlab
+  cache: *tag-cache
   dependencies: []
   retry: 1
 
@@ -668,6 +648,7 @@ QA-Tag:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *tag-cache
   dependencies:
     - Ubuntu-16.04
   retry: 1
@@ -681,15 +662,11 @@ upgrade:
     - bundle exec rake metrics:upgrade_package
   allow_failure: true
   when: manual
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *tag-cache
   dependencies: []
 
 license-upload:
@@ -699,14 +676,10 @@ license-upload:
     - bundle exec rake license:upload
   allow_failure: true
   when: manual
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - cache
-    - gems
   only:
     - tags@gitlab/omnibus-gitlab
   tags:
   - docker-builder
+  cache: *tag-cache
   dependencies:
     - Ubuntu-18.04
