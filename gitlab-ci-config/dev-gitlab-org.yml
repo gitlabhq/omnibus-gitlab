@@ -1,4 +1,9 @@
-## Runs on dev.gitlab.org
+.package-artifacts: &package-artifacts
+  when: always
+  expire_in: 1 day
+  paths:
+    - pkg/
+
 .branch_template: &branch_build
   stage: package
   script:
@@ -17,11 +22,7 @@
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   cache:
@@ -60,10 +61,7 @@
       - /.*-stable-ee/
     variables:
       - $ee == "true"
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   cache:
@@ -93,10 +91,7 @@
   - docker-builder
   only:
     - tags@gitlab/omnibus-gitlab
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   cache:
@@ -160,10 +155,7 @@ dependency_scanning:
       - /.*ee\.\d/
     variables:
       - $ee == "true"
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   cache:
@@ -184,10 +176,7 @@ dependency_scanning:
   script:
     - if [ -n "$RUN_ONLY_EE" ] && ! ./support/is_gitlab_ee.sh; then exit 0; fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   only:
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
@@ -311,10 +300,7 @@ SLES-12:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
   tags:
   - docker-builder
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   cache:
@@ -425,10 +411,7 @@ SLES-12-branch:
     - gems
     - assets_cache
     - .yarn-cache
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - pkg/
+  artifacts: *package-artifacts
   dependencies:
     - fetch-assets
   retry: 1
