@@ -14,9 +14,18 @@
       - triggers
       - /^dependencies_io/
 
+.com-trigger-only: &com-trigger-only
+  only:
+    - triggers@gitlab-org/omnibus-gitlab
+
 .dedicated-runner: &dedicated-runner
   tags:
     - gitlab-org
+
+.knapsack-artifacts: &knapsack-artifacts
+  expire_in: 31d
+  paths:
+  - knapsack/
 
 .knapsack-state: &knapsack-state
   services: []
@@ -24,10 +33,7 @@
     key: "knapsack"
     paths:
     - knapsack/
-  artifacts:
-    expire_in: 31d
-    paths:
-    - knapsack/
+  artifacts: *knapsack-artifacts
 
 .knapsack: &prepare_knapsack
   <<: *knapsack-state
@@ -66,9 +72,7 @@
     paths:
     - gems
   artifacts:
-    expire_in: 31d
-    paths:
-    - knapsack/
+    <<: *knapsack-artifacts
     reports:
       junit: junit_rspec.xml
   retry: 1
@@ -273,9 +277,7 @@ Trigger:gitlab-docker:
     - if [ -z "${IMAGE_TAG}" ]; then export IMAGE_TAG=${GITLAB_VERSION}; fi
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
-  only:
-    refs:
-      - triggers@gitlab-org/omnibus-gitlab
+  <<: *com-trigger-only
 
 Trigger:qa-docker:
   extends: .docker_job
@@ -289,9 +291,7 @@ Trigger:qa-docker:
     - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
-  only:
-    refs:
-      - triggers@gitlab-org/omnibus-gitlab
+  <<: *com-trigger-only
   dependencies:
     - Trigger:package
 
@@ -303,9 +303,7 @@ Trigger:qa-test:
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
     - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:test
-  only:
-    refs:
-      - triggers@gitlab-org/omnibus-gitlab
+  <<: *com-trigger-only
   dependencies: []
 
 Trigger:ha-validate:
@@ -314,9 +312,7 @@ Trigger:ha-validate:
   when: manual
   script:
       - bundle exec rake qa:ha:validate
-  only:
-    refs:
-      - triggers@gitlab-org/omnibus-gitlab
+  <<: *com-trigger-only
   dependencies:
     - Trigger:ee-package
 
