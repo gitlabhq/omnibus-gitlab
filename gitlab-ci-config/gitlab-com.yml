@@ -5,12 +5,11 @@
 # Templates #
 #############
 
-.com-only: &com-only
+.com-except-triggers: &com-except-triggers
+  only:
+    - //@gitlab-org/omnibus-gitlab
   except:
     refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
       - triggers
       - /^dependencies_io/
 
@@ -46,7 +45,7 @@
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
-  <<: *com-only
+  <<: *com-except-triggers
   retry: 1
 
 .spec_template:
@@ -66,7 +65,7 @@
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
-  <<: *com-only
+  <<: *com-except-triggers
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -119,7 +118,7 @@ rubocop:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
     - bundle exec rubocop --parallel
-  <<: *com-only
+  <<: *com-except-triggers
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -140,7 +139,7 @@ docs-check-links:
     # Check the internal links
     # Disabled until https://gitlab.com/gitlab-com/gitlab-docs/issues/305 is resolved
     # - bundle exec nanoc check internal_links
-  <<: *com-only
+  <<: *com-except-triggers
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -229,7 +228,7 @@ update-knapsack:
   script:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
-  <<: *com-only
+  <<: *com-except-triggers
   retry: 1
 
 ############################
