@@ -41,35 +41,18 @@
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
+  <<: *branch_build
   stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
-    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
-    - bundle exec rake cache:populate
-    - bundle exec rake cache:restore
-    - bundle exec rake build:project build:package:sync
-    - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
-  only:
-    refs:
-      - branches@gitlab/omnibus-gitlab
   except:
     refs:
       - /.*-stable-ee/
     variables:
       - $ee == "true"
   artifacts: *package-artifacts
-  dependencies:
-    - fetch-assets
-  cache: *branch-cache
   retry: 1
 
 .tag_template: &tag_build
@@ -122,36 +105,17 @@ dependency_scanning:
       - gl-dependency-scanning-report.json
 
 .rpi_tag_template: &rpi_tag_build
+  <<: *tag_build
   stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
-    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
-    - bundle exec rake cache:populate
-    - bundle exec rake cache:restore
-    - bundle exec rake release:package
-    - bundle exec rake cache:bundle
   tags:
   - docker-rpi-builder
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
   except:
     refs:
       - /.*ee\.\d/
     variables:
       - $ee == "true"
-  artifacts: *package-artifacts
-  dependencies:
-    - fetch-assets
-  cache: *tag-cache
-  retry: 1
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -257,32 +221,10 @@ OpenSUSE-42.3:
   <<: *tag_build
 SLES-12:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
-  stage: package
-  script:
-    - './support/is_gitlab_ee.sh || exit 0'
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
-    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
-    - bundle exec rake cache:populate;
-    - bundle exec rake cache:restore;
-    - bundle exec rake release:package;
-    - bundle exec rake cache:bundle;
+  <<: *tag_build
   only:
     refs:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
-  tags:
-  - docker-builder
-  artifacts: *package-artifacts
-  dependencies:
-    - fetch-assets
-  cache: *tag-cache
-  retry: 1
 
 Docker:
   extends: .docker_job
@@ -356,32 +298,7 @@ OpenSUSE-42.3-branch:
   <<: *branch_build
 SLES-12-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
-  stage: package
-  script:
-    - './support/is_gitlab_ee.sh || exit 0'
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
-    # GPG key for package signing
-    - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
-    - gpg --batch --no-tty --allow-secret-key-import --import package.sig.key
-    - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-    - echo $PACKAGECLOUD_REPO
-    - bundle exec rake cache:populate;
-    - bundle exec rake cache:restore;
-    - bundle exec rake build:project build:package:sync;
-    - bundle exec rake cache:bundle;
-  only:
-    refs:
-      - branches@gitlab/omnibus-gitlab
-  tags:
-  - docker-builder
-  cache: *branch-cache
-  artifacts: *package-artifacts
-  dependencies:
-    - fetch-assets
-  retry: 1
+  <<: *branch_build
 
 Docker-branch:
   extends: .docker_job
