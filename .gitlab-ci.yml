@@ -45,6 +45,24 @@ variables:
     - docker
 
 before_script:
+  - export CE_ONLY=(Raspberry)
+  - export EE_ONLY=(SLES HA-Validate -staging)
+  - for job in "${CE_ONLY[@]}"; do
+      if [[ "${CI_JOB_NAME}" =~ ${job} ]]; then
+        if ./support/is_gitlab_ee.sh; then
+          echo "EE build found. ${CI_JOB_NAME} is run only on CE builds";
+          exit 0 ;
+        fi;
+      fi;
+    done
+  - for job in "${EE_ONLY[@]}"; do
+      if [[ "${CI_JOB_NAME}" =~ ${job} ]]; then
+        if ! ./support/is_gitlab_ee.sh; then
+          echo "CE build found. ${CI_JOB_NAME} is run only on EE builds";
+          exit 0 ;
+        fi;
+      fi;
+    done
   - echo $NIGHTLY
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
