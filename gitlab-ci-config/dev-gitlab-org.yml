@@ -80,14 +80,13 @@
   retry: 1
 
 dependency_scanning:
-  image: alpine:3.7
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
   stage: scan-dependencies
   allow_failure: true
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
-  before_script:
-    - apk update && apk add curl jq bash bc coreutils
+  before_script: []
   script:
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
   only:
