@@ -212,6 +212,7 @@ dependency_scanning:
     - bundle exec rake repository:upload:production
   only:
     - tags@gitlab/omnibus-gitlab
+  retry: 2
   when: manual
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
@@ -602,6 +603,7 @@ Raspberry-Pi-2-Jessie-release:
   script:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
+  retry: 2
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
@@ -622,6 +624,7 @@ Raspberry-Pi-2-Stretch-release:
   script:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
+  retry: 2
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
