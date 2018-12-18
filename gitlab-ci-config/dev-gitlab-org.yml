@@ -555,8 +555,6 @@ HA-Validate-Tagged:
   only:
     refs:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
-    variables:
-      - $ee == "true"
   cache: *tag-cache
   dependencies: []
   allow_failure: true
