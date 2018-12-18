@@ -76,39 +76,30 @@
       junit: junit_rspec.xml
   retry: 1
 
+.trigger-job: &trigger-job
+  image: "ruby:2.4"
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  script:
+    - bundle exec rake build:trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    refs:
+      - triggers
+      - /^dependencies_io/
+
 ###########################
 #     Branch pipeline     #
 ###########################
 
-Trigger:ce-package:
-  image: "ruby:2.4"
-  stage: trigger-package
-  <<: *dedicated-runner
-  when: manual
-  script:
-    - bundle exec rake build:trigger
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - /^dependencies_io/
+Trigger:ce-package: *trigger-job
 
 Trigger:ee-package:
-  image: "ruby:2.4"
-  stage: trigger-package
-  <<: *dedicated-runner
-  when: manual
+  <<: *trigger-job
   variables:
     ee: "true"
-  script:
-    - bundle exec rake build:trigger
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - /^dependencies_io/
 
 rubocop:
   stage: check
