@@ -590,7 +590,6 @@ SLES-12-release:
     RUN_ONLY_EE: 'true'
   dependencies:
     - SLES-12
-  allow_failure: true
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
