@@ -196,8 +196,6 @@ Docker-branch:
   extends: .docker_job
   stage: package-and-image
   script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   - bundle exec rake docker:push:nightly
@@ -362,8 +360,6 @@ Docker:
   extends: .docker_job
   stage: package-and-image
   script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   only:
