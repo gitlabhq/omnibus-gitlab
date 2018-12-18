@@ -5,6 +5,10 @@
 # Templates #
 #############
 
+.dev-tag-only: &dev-tag-only
+  only:
+    - tags@gitlab/omnibus-gitlab
+
 .dev-except-branches: &dev-except-branches
    only:
     - tags@gitlab/omnibus-gitlab
@@ -84,8 +88,7 @@
     - bundle exec rake cache:bundle
   tags:
   - docker-builder
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
@@ -129,9 +132,8 @@
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - bundle exec rake repository:upload:production
-  only:
-    - tags@gitlab/omnibus-gitlab
   retry: 2
+  <<: *dev-tag-only
   when: manual
   cache: *tag-cache
   tags:
@@ -143,9 +145,7 @@
     RASPBERRY_REPO: "raspberry-pi2"
   stage: raspbian-release
   retry: 2
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   except:
     refs:
       - /.*ee\.\d/
@@ -280,8 +280,7 @@ Docker-QA:
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   cache: *tag-cache
   tags:
   - docker-builder
@@ -362,8 +361,7 @@ Docker:
   script:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   tags:
   - docker-builder
   cache: *tag-cache
@@ -466,8 +464,7 @@ SLES-12-release:
     - SLES-12
   only:
     refs:
-      - tags@gitlab/omnibus-gitlab
-      - /.*ee\.\d/
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
   <<: *production_release
 
 Docker-Release:
@@ -475,8 +472,7 @@ Docker-Release:
   stage: package-and-image-release
   script:
     - bundle exec rake release:docker
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   cache: *tag-cache
   dependencies: []
   when: manual
@@ -493,8 +489,7 @@ AWS:
   tags:
   - docker-builder
   when: manual
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   cache: *tag-cache
   dependencies: []
   retry: 1
@@ -515,8 +510,7 @@ QA-Tag:
     paths:
     - screenshots/
   allow_failure: true
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   tags:
   - docker-builder
   cache: *tag-cache
@@ -533,8 +527,7 @@ upgrade:
     - bundle exec rake metrics:upgrade_package
   allow_failure: true
   when: manual
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   tags:
   - docker-builder
   cache: *tag-cache
@@ -547,8 +540,7 @@ license-upload:
     - bundle exec rake license:upload
   allow_failure: true
   when: manual
-  only:
-    - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
   tags:
   - docker-builder
   cache: *tag-cache
@@ -562,8 +554,7 @@ HA-Validate-Tagged:
     - bundle exec rake qa:ha:tag
   only:
     refs:
-      - tags@gitlab/omnibus-gitlab
-      - /.*ee\.\d/
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
     variables:
       - $ee == "true"
   cache: *tag-cache
