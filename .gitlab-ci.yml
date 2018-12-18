@@ -10,12 +10,10 @@ stages:
   - post-test
   - gitlab_com:package
   - gitlab_com:upload_deploy
-  - package
+  - package-and-image
   - scan-dependencies
-  - images
   - staging_upload
-  - package-release
-  - image-release
+  - package-and-image-release
   - validate
   - metrics
   - slow_jobs

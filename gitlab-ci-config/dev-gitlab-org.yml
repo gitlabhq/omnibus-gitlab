@@ -24,7 +24,7 @@
   <<: *branch-cache
 
 .branch_template: &branch_build
-  stage: package
+  stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -63,7 +63,7 @@
   retry: 1
 
 .tag_template: &tag_build
-  stage: package
+  stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
@@ -122,7 +122,7 @@
 ### 2. It will upload the package to public, user facing repositories
 ### 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
-  stage: package-release
+  stage: package-and-image-release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
     - bundle exec rake repository:upload:production
@@ -176,7 +176,7 @@ SLES-12-branch:
 
 Docker-branch:
   extends: .docker_job
-  stage: images
+  stage: package-and-image
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
@@ -193,7 +193,7 @@ Docker-branch:
 
 QA-Master:
   extends: .docker_job
-  stage: images
+  stage: package-and-image
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
@@ -345,7 +345,7 @@ dependency_scanning:
 
 Docker:
   extends: .docker_job
-  stage: images
+  stage: package-and-image
   script:
   - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
   - echo $PACKAGECLOUD_REPO
@@ -461,7 +461,7 @@ SLES-12-release:
 
 Docker-Release:
   extends: .docker_job
-  stage: image-release
+  stage: package-and-image-release
   script:
     - bundle exec rake release:docker
   only:
@@ -471,7 +471,7 @@ Docker-Release:
   when: manual
 
 AWS:
-  stage: image-release
+  stage: package-and-image-release
   image: "${BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
   script:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
@@ -490,7 +490,7 @@ AWS:
 
 QA-Tag:
   extends: .docker_job
-  stage: image-release
+  stage: package-and-image-release
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
