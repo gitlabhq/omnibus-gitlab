@@ -143,9 +143,8 @@ GEM
     json (2.0.2)
     json_pure (1.8.1)
     jwt (2.1.0)
-    knapsack (1.13.1)
+    knapsack (1.17.1)
       rake
-      timecop (>= 0.1.0)
     libyajl2 (1.2.0)
     license_scout (1.0.10)
       ffi-yajl (~> 2.2)
@@ -282,7 +281,6 @@ GEM
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.18.1)
-    timecop (0.8.1)
     toml-rb (1.1.1)
       citrus (~> 3.0, > 3.0)
     uber (0.1.0)
