@@ -1,3 +1,5 @@
+require_relative '../build/info.rb'
+
 module License
   class Analyzer
     @license_acceptable = Regexp.union([/MIT/i, /LGPL/i, /Apache/i, /Ruby/i, /BSD/i,
@@ -134,7 +136,7 @@ module License
         end
       end
 
-      File.open("pkg/license-status.json", "w") do |f|
+      File.open("pkg/#{Build::Info.package}_#{Build::Info.release_version}.license-status.json", "w") do |f|
         f.write(JSON.pretty_generate(output_json))
       end
 

@@ -1,0 +1,560 @@
+.dedicated-runner: &dedicated-runner
+  tags:
+    - gitlab-org
+
+.knapsack-state: &knapsack-state
+  services: []
+  cache:
+    key: "knapsack"
+    paths:
+    - knapsack/
+  artifacts:
+    expire_in: 31d
+    paths:
+    - knapsack/
+
+.knapsack: &prepare_knapsack
+  <<: *knapsack-state
+  <<: *dedicated-runner
+  stage: prepare
+  before_script: []
+  script:
+    - JOB_NAME=( $CI_JOB_NAME )
+    - export DISTRO_NAME=${JOB_NAME[0]}
+    - export DISTRO_VERSION=${JOB_NAME[1]}
+    - mkdir -p knapsack/
+    - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+  retry: 1
+
+.spec_template: &run_rspec
+  stage: tests
+  <<: *dedicated-runner
+  script:
+    - JOB_NAME=( $CI_JOB_NAME )
+    - export DISTRO_NAME=${JOB_NAME[0]}
+    - export DISTRO_VERSION=${JOB_NAME[1]}
+    - export CI_NODE_INDEX=${JOB_NAME[3]}
+    - export CI_NODE_TOTAL=${JOB_NAME[4]}
+    - export KNAPSACK_REPORT_PATH=knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_rspec_node_${CI_NODE_INDEX}_${CI_NODE_TOTAL}_report.json
+    - export KNAPSACK_GENERATE_REPORT=true
+    - export USE_KNAPSACK=true
+    # To prevent current OS providing empty/old reports of other OSs as an
+    # artifact. If not, they may overwrite the valid/new reports from those
+    # corresponding OSs. So, removing everything except current OS's report.
+    - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
+    - rm -f knapsack/*.json
+    - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
+    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - gems
+  artifacts:
+    expire_in: 31d
+    paths:
+    - knapsack/
+    reports:
+      junit: junit_rspec.xml
+  retry: 1
+
+# Jobs
+## Runs on GitLab.com only
+rubocop:
+  stage: check
+  <<: *dedicated-runner
+  image: ruby:2.4
+  before_script:
+    - bundle install -j $(nproc) --binstubs --path gems --without default test
+  script:
+    - bundle exec rubocop --parallel
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - gems
+
+docs-check-links:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-docs-lint"
+  stage: check
+  cache: {}
+  dependencies: []
+  before_script: []
+  <<: *dedicated-runner
+  script:
+    - mv doc/ /tmp/gitlab-docs/content/
+    - cd /tmp/gitlab-docs
+    # Build HTML from Markdown
+    - bundle exec nanoc
+    # Check the internal links
+    # Disabled until https://gitlab.com/gitlab-com/gitlab-docs/issues/305 is resolved
+    # - bundle exec nanoc check internal_links
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+
+danger-review:
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
+  stage: check
+  cache: {}
+  dependencies: []
+  before_script: []
+  only:
+    refs:
+      - branches@gitlab-org/omnibus-gitlab
+  except:
+    - schedules@gitlab-org/omnibus-gitlab
+  script:
+    - danger --fail-on-errors=true
+
+Centos 6 knapsack: *prepare_knapsack
+Centos 7 knapsack: *prepare_knapsack
+Debian 7 knapsack: *prepare_knapsack
+Debian 8 knapsack: *prepare_knapsack
+Debian 9.1 knapsack: *prepare_knapsack
+OpenSUSE 42.3 knapsack: *prepare_knapsack
+Ubuntu 14.04 knapsack: *prepare_knapsack
+Ubuntu 16.04 knapsack: *prepare_knapsack
+Ubuntu 18.04 knapsack: *prepare_knapsack
+
+update-knapsack:
+  <<: *knapsack-state
+  <<: *dedicated-runner
+  stage: post-test
+  before_script: []
+  script:
+    - support/merge-reports knapsack
+    - rm -f knapsack/*node*
+  except:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+      - branches@gitlab/omnibus-gitlab
+      - tags@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
+  retry: 1
+
+Trigger:package:
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: trigger-package
+  script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    - bundle exec rake cache:populate
+    - bundle exec rake cache:restore
+    - bundle exec rake build:project
+    - bundle exec rake cache:bundle
+    # Renaming so we can easily generate the artifact URL
+    - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
+  only:
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - pkg/
+  cache:
+    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - cache
+    - gems
+    - assets_cache
+    - .yarn-cache
+  tags:
+    - triggered-packages
+
+Trigger:gitlab-docker:
+  extends: .docker_job
+  stage: trigger-docker
+  script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
+    # variable, which will be used to tag the final Docker image.
+    # So, if IMAGE_TAG variable is empty, it means the trigger happened from
+    # either CE or EE repository. In that case, we can use the GITLAB_VERSION
+    # variable as IMAGE_TAG.
+    - if [ -z "${IMAGE_TAG}" ]; then export IMAGE_TAG=${GITLAB_VERSION}; fi
+    - bundle exec rake docker:build:image
+    - bundle exec rake docker:push:triggered
+  only:
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
+
+Trigger:qa-docker:
+  extends: .docker_job
+  stage: trigger-docker
+  script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
+    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
+    - bundle exec rake qa:build
+    - bundle exec rake qa:push:triggered
+  only:
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
+  dependencies:
+    - Trigger:package
+
+Trigger:qa-test:
+  stage: trigger-qa
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  script:
+    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
+    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
+    - bundle exec rake qa:test
+  only:
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
+  dependencies: []
+
+Trigger:ce-package:
+  image: "ruby:2.4"
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  script:
+    - bundle exec rake build:trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    refs:
+      - triggers
+      - /^dependencies_io/
+
+Trigger:ee-package:
+  image: "ruby:2.4"
+  stage: trigger-package
+  <<: *dedicated-runner
+  when: manual
+  variables:
+    ee: "true"
+  script:
+    - bundle exec rake build:trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+  except:
+    refs:
+      - triggers
+      - /^dependencies_io/
+
+Trigger:ha-validate:
+  stage: trigger-ha-validate
+  image: "ruby:2.4"
+  when: manual
+  script:
+      - bundle exec rake qa:ha:validate
+  only:
+    refs:
+      - triggers@gitlab-org/omnibus-gitlab
+  dependencies:
+    - Trigger:ee-package
+
+Ubuntu 14.04 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 14.04 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 14.04 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 14.04 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 14.04 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 14.04 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-trusty"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 14.04 knapsack
+Ubuntu 16.04 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 16.04 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 16.04 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 16.04 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 16.04 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 16.04 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 16.04 knapsack
+Ubuntu 18.04 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Ubuntu 18.04 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  <<: *run_rspec
+  dependencies:
+  - Ubuntu 18.04 knapsack
+Debian 7 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 7 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 7 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 7 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 7 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 7 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
+  <<: *run_rspec
+  dependencies:
+  - Debian 7 knapsack
+Debian 8 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 8 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 8 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 8 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 8 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 8 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+  <<: *run_rspec
+  dependencies:
+  - Debian 8 knapsack
+Debian 9.1 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Debian 9.1 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
+  <<: *run_rspec
+  dependencies:
+  - Debian 9.1 knapsack
+Centos 6 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 6 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 6 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 6 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 6 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 6 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
+  <<: *run_rspec
+  dependencies:
+  - Centos 6 knapsack
+Centos 7 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+Centos 7 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+Centos 7 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+Centos 7 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+Centos 7 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+Centos 7 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  <<: *run_rspec
+  dependencies:
+  - Centos 7 knapsack
+OpenSUSE 42.3 specs 0 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 1 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 2 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 3 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 4 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+OpenSUSE 42.3 specs 5 6:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse42.3"
+  <<: *run_rspec
+  dependencies:
+  - OpenSUSE 42.3 knapsack
+
+pages:
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: prepare
+  script:
+    - bundle exec rake license:generate_pages
+    - mv ${LICENSE_S3_BUCKET} public
+    - cp support/webpages/* public
+  artifacts:
+    paths:
+      - public
+  only:
+    - schedules@gitlab-org/omnibus-gitlab

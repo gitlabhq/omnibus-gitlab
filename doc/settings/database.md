@@ -309,7 +309,7 @@ configuration when connecting to the PostgreSQL server. They must also be within
 ### Configure gitlab-rails block
 
 To configure the `gitlab-rails` application to connect to the PostgreSQL database
-over the network, several settings must be confgured.
+over the network, several settings must be configured.
 - `db_host` needs to be set to the IP address of the database sever. If this is
 on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
 not require_ password authentication.
