@@ -134,6 +134,21 @@
   tags:
   - promotion
 
+.raspbian_release_template: &raspbian_release
+  <<: *production_release
+  variables:
+    RASPBERRY_REPO: "raspberry-pi2"
+  stage: raspbian-release
+  retry: 2
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+
 ###########################
 #     Branch pipeline     #
 ###########################
@@ -568,45 +583,11 @@ Raspberry-Pi-2-Stretch:
   <<: *rpi_tag_build
 
 Raspberry-Pi-2-Jessie-release:
-  stage: raspbian-release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
-  script:
-    - export RASPBERRY_REPO=raspberry-pi2
-    - bundle exec rake repository:upload:production
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
-  except:
-    refs:
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
-  when: manual
-  cache: *tag-cache
-  retry: 2
   dependencies:
     - Raspberry-Pi-2-Jessie
-  tags:
-  - promotion
+  <<: *raspbian_release
 
 Raspberry-Pi-2-Stretch-release:
-  stage: raspbian-release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
-  script:
-    - export RASPBERRY_REPO=raspberry-pi2
-    - bundle exec rake repository:upload:production
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
-  except:
-    refs:
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
-  when: manual
-  retry: 2
-  cache: *tag-cache
   dependencies:
     - Raspberry-Pi-2-Stretch
-  tags:
-  - promotion
+  <<: *raspbian_release
