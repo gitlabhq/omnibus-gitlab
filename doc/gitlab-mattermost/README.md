@@ -450,17 +450,17 @@ If you are using an older version of GitLab Omnibus, enable incoming webhooks fr
 mattermost['service_enable_incoming_webhooks'] = true
 ```
 
-#### Setting up Mattermost as a Slack project service integration:
+#### Setting up Mattermost as a service integration:
 
-Mattermost webhooks are Slack-compatible, so you can use their project service option to set up Mattermost integration:
+You can use the Mattermost notifications project integration option to set up Mattermost integration:
 
 1. In Mattermost, go to **System Console** > **Integration Settings** > **Custom Integrations** and turn on **Enable Incoming Webhooks**
 1. Exit the system console, and then go to **Integrations** > **Incoming Webhooks** from the main menu
 2. Select a channel and click **Add** and copy the `Webhook URL`
-3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Services** > **Slack**
+3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Integrations** > **Mattermost notifications**
 4. Enter **Username** for how you would like to name the account that posts the notifications
 4. Select **Triggers** for GitLab events on which you'd like to receive notifications
-6. Click **Save changes** then **Test settings** to make sure everything is working
+6. Click **Test settings and save changes** to make sure everything is working
 
 Any issues, please see the [Mattermost Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150).
 
