@@ -1,3 +1,10 @@
+# This config lists the jobs that will be run on omnibus-gitlab project in
+# dev.gitlab.org.
+
+#############
+# Templates #
+#############
+
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -79,30 +86,6 @@
   cache: *tag-cache
   retry: 1
 
-dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
-  stage: scan-dependencies
-  allow_failure: true
-  variables:
-    TERM: xterm-256color
-    REPORT_PATH: ./
-  before_script: []
-  script:
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
-  only:
-    - tags@gitlab/omnibus-gitlab
-    - schedules@gitlab/omnibus-gitlab
-    - triggers@gitlab/omnibus-gitlab
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
-  artifacts:
-    expire_in: 7 days
-    when: on_failure
-    paths:
-      - dependency_report.txt
-      - gl-dependency-scanning-report.json
-
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
   stage: slow_jobs
@@ -151,126 +134,18 @@ dependency_scanning:
   tags:
   - promotion
 
-## Build the docker image for QA
-## This is necessary for the deployment
-## pipeline so it must happen before
-## the upload and deploy stage for GitLab.com
-Docker-QA:
-  extends: .docker_job
-  stage: gitlab_com:package
-  script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
-    - bundle exec rake qa:build qa:push:staging
-  only:
-    - tags@gitlab/omnibus-gitlab
-  cache: *tag-cache
-  tags:
-  - docker-builder
-  dependencies: []
-  retry: 1
+###########################
+#     Branch pipeline     #
+###########################
 
-## Package for GitLab.com
-Ubuntu-16.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
-  extends: .tag_template
+# fetch-assets job from .gitlab-ci.yml file runs here
 
-## Upload and deploy to staging for GitLab.com
-## The version of the deployment is set by the
-## VERSION file.
-Ubuntu-16.04-staging:
-  stage: gitlab_com:upload_deploy
-  extends: .staging_upload_template
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
-  variables:
-    TAKEOFF_ENVIRONMENT: 'gstg'
-  script:
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
-
-# dev.gitlab.org only
-# Release build
-Ubuntu-14.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Ubuntu-18.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Debian-7:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Debian-8:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Debian-9.1:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-CentOS-6:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-CentOS-7:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-OpenSUSE-42.3:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-SLES-12:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-  only:
-    refs:
-      - /.*ee\.\d/@gitlab/omnibus-gitlab
-
-Docker:
-  extends: .docker_job
-  stage: images
-  script:
-  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
-  - echo $PACKAGECLOUD_REPO
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
-  only:
-    - tags@gitlab/omnibus-gitlab
-  tags:
-  - docker-builder
-  cache: *tag-cache
-  dependencies: []
-  retry: 1
-
-HA-Validate-Tagged:
-  stage: slow_jobs
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - bundle exec rake qa:ha:tag
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
-  cache: *tag-cache
-  dependencies: []
-  allow_failure: true
-
-Raspberry-Pi-2-Jessie:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_tag_build
-
-Raspberry-Pi-2-Stretch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_tag_build
-
-## Package for GitLab.com
+# We build package for deploying to GitLab.com first
 Ubuntu-16.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .branch_template
 
-## Building from branch
 Ubuntu-14.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -342,6 +217,15 @@ QA-Master:
     - Ubuntu-16.04-branch
   retry: 1
 
+Raspberry-Pi-2-Jessie-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
+
+Raspberry-Pi-2-Stretch-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
+
+# This job runs only on nightly EE builds
 HA-Validate-Nightly:
   stage: slow_jobs
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
@@ -356,15 +240,126 @@ HA-Validate-Nightly:
   cache: *branch-cache
   dependencies: []
 
-Raspberry-Pi-2-Jessie-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_branch_build
+############################
+#     Release pipeline     #
+############################
 
-Raspberry-Pi-2-Stretch-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_branch_build
+# fetch-assets job from .gitlab-ci.yml file runs here
 
-# Staging upload
+# We build package for deploying to GitLab.com first
+Ubuntu-16.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .tag_template
+
+## Build the docker image for QA
+## This is necessary for the deployment
+## pipeline so it must happen before
+## the upload and deploy stage for GitLab.com
+Docker-QA:
+  extends: .docker_job
+  stage: gitlab_com:package
+  script:
+    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - chmod -R 0600 ~/.ssh/
+    - bundle exec rake qa:build qa:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  cache: *tag-cache
+  tags:
+  - docker-builder
+  dependencies: []
+  retry: 1
+
+## Upload and deploy to staging for GitLab.com
+## The version of the deployment is set by the
+## VERSION file. This job runs also in nightly branch builds.
+Ubuntu-16.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  variables:
+    TAKEOFF_ENVIRONMENT: 'gstg'
+  script:
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+
+### Package builds
+Ubuntu-14.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Ubuntu-18.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-7:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-8:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-9.1:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+CentOS-6:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+CentOS-7:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+OpenSUSE-42.3:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+SLES-12:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+
+dependency_scanning:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
+  stage: scan-dependencies
+  allow_failure: true
+  variables:
+    TERM: xterm-256color
+    REPORT_PATH: ./
+  before_script: []
+  script:
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  artifacts:
+    expire_in: 7 days
+    when: on_failure
+    paths:
+      - dependency_report.txt
+      - gl-dependency-scanning-report.json
+
+Docker:
+  extends: .docker_job
+  stage: images
+  script:
+  - export PACKAGECLOUD_REPO=$(bundle exec rake repository:target)
+  - echo $PACKAGECLOUD_REPO
+  - bundle exec rake docker:build:image
+  - bundle exec rake docker:push:staging
+  only:
+    - tags@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  cache: *tag-cache
+  dependencies: []
+  retry: 1
+
+### Staging uploads
 Ubuntu-14.04-staging:
   dependencies:
     - Ubuntu-14.04
@@ -416,7 +411,7 @@ SLES-12-staging:
       - branches@gitlab/omnibus-gitlab
   <<: *staging_upload
 
-# Release
+### Package releases
 Ubuntu-14.04-release:
   dependencies:
     - Ubuntu-14.04
@@ -463,50 +458,6 @@ SLES-12-release:
       - tags@gitlab/omnibus-gitlab
       - /.*ee\.\d/
   <<: *production_release
-
-Raspberry-Pi-2-Jessie-release:
-  stage: raspbian-release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
-  script:
-    - export RASPBERRY_REPO=raspberry-pi2
-    - bundle exec rake repository:upload:production
-  retry: 2
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
-  except:
-    refs:
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
-  when: manual
-  cache: *tag-cache
-  dependencies:
-    - Raspberry-Pi-2-Jessie
-  tags:
-  - promotion
-
-Raspberry-Pi-2-Stretch-release:
-  stage: raspbian-release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
-  script:
-    - export RASPBERRY_REPO=raspberry-pi2
-    - bundle exec rake repository:upload:production
-  retry: 2
-  only:
-    refs:
-      - tags@gitlab/omnibus-gitlab
-  except:
-    refs:
-      - /.*ee\.\d/
-    variables:
-      - $ee == "true"
-  when: manual
-  cache: *tag-cache
-  dependencies:
-    - Raspberry-Pi-2-Stretch
-  tags:
-  - promotion
 
 Docker-Release:
   extends: .docker_job
@@ -592,3 +543,70 @@ license-upload:
   cache: *tag-cache
   dependencies:
     - Ubuntu-18.04
+
+HA-Validate-Tagged:
+  stage: slow_jobs
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake qa:ha:tag
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  cache: *tag-cache
+  dependencies: []
+  allow_failure: true
+
+Raspberry-Pi-2-Jessie:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
+
+Raspberry-Pi-2-Stretch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
+
+Raspberry-Pi-2-Jessie-release:
+  stage: raspbian-release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  when: manual
+  cache: *tag-cache
+  retry: 2
+  dependencies:
+    - Raspberry-Pi-2-Jessie
+  tags:
+  - promotion
+
+Raspberry-Pi-2-Stretch-release:
+  stage: raspbian-release
+  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  script:
+    - export RASPBERRY_REPO=raspberry-pi2
+    - bundle exec rake repository:upload:production
+  only:
+    refs:
+      - tags@gitlab/omnibus-gitlab
+  except:
+    refs:
+      - /.*ee\.\d/
+    variables:
+      - $ee == "true"
+  when: manual
+  retry: 2
+  cache: *tag-cache
+  dependencies:
+    - Raspberry-Pi-2-Stretch
+  tags:
+  - promotion
