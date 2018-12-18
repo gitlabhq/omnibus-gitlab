@@ -299,7 +299,7 @@ dependency_scanning:
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
-  retry: 1
+  retry: 2
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
     paths:
@@ -319,6 +319,7 @@ dependency_scanning:
     - bundle exec rake repository:upload:production
   only:
     - tags@gitlab/omnibus-gitlab
+  retry: 2
   when: manual
   cache:
     key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
@@ -1180,7 +1181,6 @@ SLES-12-staging:
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-  allow_failure: true
   <<: *staging_upload
 
 # Release
@@ -1225,7 +1225,6 @@ SLES-12-release:
     RUN_ONLY_EE: 'true'
   dependencies:
     - SLES-12
-  allow_failure: true
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
@@ -1238,6 +1237,7 @@ Raspberry-Pi-2-Jessie-release:
   script:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
+  retry: 2
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
@@ -1258,6 +1258,7 @@ Raspberry-Pi-2-Stretch-release:
   script:
     - export RASPBERRY_REPO=raspberry-pi2
     - bundle exec rake repository:upload:production
+  retry: 2
   only:
     refs:
       - tags@gitlab/omnibus-gitlab
