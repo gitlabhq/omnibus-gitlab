@@ -5,6 +5,12 @@
 # Templates #
 #############
 
+.dev-except-branches: &dev-except-branches
+   only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -108,12 +114,9 @@
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts: *package-artifacts
-  only:
-    - tags@gitlab/omnibus-gitlab
-    - schedules@gitlab/omnibus-gitlab
-    - triggers@gitlab/omnibus-gitlab
-  retry: 2
+  <<: *dev-except-branches
   cache: *tag-cache
+  retry: 2
   tags:
   - promotion
 
@@ -344,10 +347,7 @@ dependency_scanning:
   before_script: []
   script:
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
-  only:
-    - tags@gitlab/omnibus-gitlab
-    - schedules@gitlab/omnibus-gitlab
-    - triggers@gitlab/omnibus-gitlab
+  <<: *dev-except-branches
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
