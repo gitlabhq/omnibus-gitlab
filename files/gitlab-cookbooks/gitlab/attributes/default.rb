@@ -242,6 +242,7 @@ default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
 default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
+default['gitlab']['gitlab-rails']['backup_encryption_key'] = nil
 default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
 
 default['gitlab']['gitlab-rails']['pseudonymizer_manifest'] = nil
