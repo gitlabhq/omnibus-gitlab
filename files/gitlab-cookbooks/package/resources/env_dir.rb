@@ -40,7 +40,7 @@ action :create do
 
   new_resource.variables.each do |key, value|
     file ::File.join(new_resource.name, key) do
-      content value
+      content value.to_s
     end
   end
 end
