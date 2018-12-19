@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 11.7.0
 
-- Ensure env_dir files' content to be strings !2923
+- Ensure env values are converted to strings (Romain Tartière) !2923
 
 11.6.0
 
