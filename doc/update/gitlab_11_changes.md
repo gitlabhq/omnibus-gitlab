@@ -90,3 +90,10 @@ been removed.
     master node fails, gitlab-monitor will still be probing the original master
     node, since it is specified in gitlab.rb. Users will have to manually update
     gitlab.rb to point it to the new master node.
+
+2. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
+   the unicorn processes have been restarted. The restart is done automatically
+   at the end of `gitlab-ctl reconfigure`, which is run by default on upgrade.
+
+   **Note**: the application will throw 500 http errors until the unicorn
+   restart is completed.
