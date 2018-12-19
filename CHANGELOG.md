@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.7.0
+
+- Ensure env_dir files' content to be strings !2923
+
 11.6.0
 
 - Switch restart_command for Unicorn service to signal HUP instead of USR2 !2905
