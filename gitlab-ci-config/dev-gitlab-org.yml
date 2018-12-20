@@ -410,8 +410,6 @@ OpenSUSE-42.3-staging:
     - OpenSUSE-42.3-branch
   <<: *staging_upload
 SLES-12-staging:
-  variables:
-    RUN_ONLY_EE: 'true'
   dependencies:
     - SLES-12
     - SLES-12-branch
@@ -458,8 +456,6 @@ OpenSUSE-42.3-release:
     - OpenSUSE-42.3
   <<: *production_release
 SLES-12-release:
-  variables:
-    RUN_ONLY_EE: 'true'
   dependencies:
     - SLES-12
   only:
