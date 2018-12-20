@@ -1,5 +1,26 @@
 # GitLab 11 specific changes
 
+# TLS v1.1 Deprecation
+Beginning with GitLab 12.0, TLS v1.1 will be disabled by default to improve security.
+
+This mitigates numerous issues including, but not limited to, Heartbleed and makes
+GitLab compliant out of the box with the PCI DSS 3.1 standard.
+[Learn more about why TLS v1.1 is being deprecated in our blog.](https://about.gitlab.com/2018/10/15/gitlab-to-deprecate-older-tls/)
+
+## Clients supporting TLS v1.2
+
+* **Git-Credential-Manager** - support since **1.14.0***
+* **git on Red Hat Enterprise Linux 6** - support since ***6.8***
+* **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
+* **JGit / Java** - support since ***JDK 7***
+* **Visual Studio** - support since version ***2017***
+
+Modify or add these entries to `gitlab.rb` and run `gitlab-ctl reconfigure` to disable TLS v1.1 immediately:
+
+```ruby
+nginx['ssl_protocols'] = "TLSv1.2"
+```
+
 ## Upgrade prerequisites
 For successfully upgrading to GitLab 11.0, users need to satisfy following
 requirements
