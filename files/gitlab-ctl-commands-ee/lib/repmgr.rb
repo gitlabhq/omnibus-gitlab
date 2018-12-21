@@ -70,7 +70,8 @@ class Repmgr
                 else
                   Etc.getpwuid.name
                 end
-        cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f /var/opt/gitlab/postgresql/repmgr.conf #{command}", runas)
+        repmgr_conf = File.join(GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['dir'], "repmgr.conf")
+        cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f #{repmgr_conf} #{command}", runas)
       end
 
       def execute_psql(options)

@@ -6,6 +6,7 @@ require 'repmgr'
 
 describe Repmgr do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
+  let(:public_attributes) { { 'gitlab' => { 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } } } }
   let(:shellout) do
     double('shellout', error!: nil, stdout: 'xxxx', stderr: 'yyyy', run_command: nil)
   end
@@ -21,6 +22,7 @@ describe Repmgr do
   before do
     allow(Mixlib::ShellOut).to receive(:new).and_return(shellout)
     allow(Etc).to receive(:getpwuid).and_return(double(name: 'fakeuser'))
+    allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(public_attributes)
   end
 
   describe Repmgr::Standby do
