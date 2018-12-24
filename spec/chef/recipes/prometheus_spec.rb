@@ -237,7 +237,7 @@ describe 'gitlab::prometheus' do
     end
   end
 
-  context 'with Promtheus version 1' do
+  context 'with Prometheus version 1' do
     before { allow(PrometheusHelper).to receive(:is_version_1?).and_return(true) }
     context 'with user provided settings' do
       before do
