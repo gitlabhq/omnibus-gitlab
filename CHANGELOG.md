@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.7.0
 
+- Hide transfer of refs/remotes/* in git config !2932
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
