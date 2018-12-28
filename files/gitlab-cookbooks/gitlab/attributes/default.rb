@@ -24,7 +24,7 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
   "repack" => ["writeBitmaps = true"],
-  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 }
 # Create users and groups needed for the package
 default['gitlab']['manage-accounts']['enable'] = true
