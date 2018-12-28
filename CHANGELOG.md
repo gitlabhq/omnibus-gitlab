@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
 
+11.6.2
+
+- Fix environment variables not being cleaned up !2934
+
 11.6.0
 
 - Switch restart_command for Unicorn service to signal HUP instead of USR2 !2905
