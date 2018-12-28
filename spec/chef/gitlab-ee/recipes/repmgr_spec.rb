@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'repmgr' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
 
   let(:repmgr_conf) { '/var/opt/gitlab/postgresql/repmgr.conf' }
 
@@ -45,12 +45,12 @@ witness_repl_nodes_sync_interval_secs=15
   end
 
   context 'repmgrd_disable' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::repmgrd_disable') }
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('repmgr::repmgrd_disable') }
     it_behaves_like 'disabled runit service', 'repmgrd'
   end
 
   context 'repmgrd' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('repmgr::repmgrd') }
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('repmgr::repmgrd') }
     it_behaves_like 'enabled runit service', 'repmgrd', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
   end
 

@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-monitor' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -19,7 +19,7 @@ describe 'gitlab::gitlab-monitor' do
     it_behaves_like 'enabled runit service', 'gitlab-monitor', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
-      expect(config_template).to notify('ruby_block[reload gitlab-monitor svlogd configuration]')
+      expect(config_template).to notify('ruby_block[reload_log_service]')
 
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-monitor/run')
         .with_content { |content|

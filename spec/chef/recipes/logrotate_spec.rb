@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::logrotate' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -13,7 +13,7 @@ describe 'gitlab::logrotate' do
     it_behaves_like "enabled runit service", "logrotate", "root", "root"
 
     it 'populates the files with expected configuration' do
-      expect(config_template).to notify('ruby_block[reload logrotate svlogd configuration]')
+      expect(config_template).to notify('ruby_block[reload_log_service]')
 
       expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/run')
         .with_content(/cd \/var\/opt\/gitlab\/logrotate/)

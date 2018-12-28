@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir storage_directory)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
 
