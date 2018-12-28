@@ -19,6 +19,7 @@ AllCops:
     - 'cache/**/*'
     - 'node_modules/**/*'
     - 'vendor/bundle/**/*'
+    - 'files/gitlab-cookbooks/runit/**/*'
 
 Style/NumericLiteralPrefix:
   Enabled: false
