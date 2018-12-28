@@ -30,7 +30,7 @@ directory mailroom_log_dir do
 end
 
 runit_service 'mailroom' do
-  finish_script true
+  finish true
   options({
     user: user,
     groupname: group,
