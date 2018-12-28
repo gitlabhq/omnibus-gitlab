@@ -26,7 +26,7 @@ default['mattermost']['env'] = {
   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 }
 
-default['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost/'
+default['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'
 default['mattermost']['service_use_ssl'] = false
 default['mattermost']['service_address'] = "127.0.0.1"
 default['mattermost']['service_port'] = "8065"
