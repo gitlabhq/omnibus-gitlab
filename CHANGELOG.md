@@ -5,6 +5,7 @@ omnibus-gitlab repository.
 
 11.7.0
 
+- Disable nginx proxy_request_buffering for git-receive-pack !2935
 - Hide transfer of refs/remotes/* in git config !2932
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923

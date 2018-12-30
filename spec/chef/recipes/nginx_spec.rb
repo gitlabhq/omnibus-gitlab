@@ -243,6 +243,12 @@ describe 'nginx' do
       }
     end
 
+    it 'applies nginx request_buffering path regex' do
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include("location ~ (\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$)")
+      }
+    end
+
     it 'applies mattermost_nginx verify client settings to gitlab-mattermost-http' do
       stub_gitlab_rb("mattermost_nginx" => {
                        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-mattermost-http-ca.crt",

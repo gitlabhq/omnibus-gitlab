@@ -1040,6 +1040,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['keepalive_timeout'] = 65
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
+##! These paths have proxy_request_buffering disabled
+# nginx['request_buffering_off_path_regex'] = "\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$"
 
 ### Nginx status
 # nginx['status'] = {
