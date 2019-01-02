@@ -27,7 +27,7 @@ describe 'gitlab::default' do
       "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
       "pack" => ["threads = 1"],
       "repack" => ["writeBitmaps = true"],
-      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
@@ -48,7 +48,7 @@ describe 'gitlab::default' do
       "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
       "pack" => ["threads = 2"],
       "repack" => ["writeBitmaps = true"],
-      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(

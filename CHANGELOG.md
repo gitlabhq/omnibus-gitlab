@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.7.0
+
+- Hide transfer of refs/remotes/* in git config !2932
+- Add option to specify a registry log formatter !2911
+- Ensure env values are converted to strings (Romain Tartière) !2923
+- Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
+
+11.6.2
+
+- Fix environment variables not being cleaned up !2934
+
 11.6.0
 
 - Switch restart_command for Unicorn service to signal HUP instead of USR2 !2905

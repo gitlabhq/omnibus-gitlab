@@ -1135,7 +1135,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "pack" => ["threads = 1"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
-#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 # }
 
 ################################################################################
