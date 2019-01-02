@@ -1,5 +1,213 @@
 repos:
+# acme-client
+- url: https://github.com/unixcharles/acme-client
+  installed: 0.4.0
+  replace_in_files:
+    config/software/acme-client.rb: default_version '{version_clean}'
+
+# alertmanager
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/alertmanager.git
+  installed: 0.15.1
+  replace_in_files:
+    config/software/alertmanager.rb: version = Gitlab::Version.new('alertmanager', '{version_clean}')
+
+# awesome_print
+- url: https://github.com/awesome-print/awesome_print
+  installed: 1.8.0
+  replace_in_files:
+    config/software/awesome_print.rb: default_version '{version_clean}'
+
+# bundler
+- url: https://github.com/bundler/bundler
+  installed: 1.16.6
+  replace_in_files:
+    config/software/bundler.rb: default_version '{version_clean}'
+
+# chef-acme
+- url: https://github.com/schubergphilis/chef-acme
+  installed: b49c28d
+  replace_in_files:
+    config/software/chef-acme.rb: version = Gitlab::Version.new(name, '{version_clean}')
+
+# chef-gem
+- url: https://github.com/chef/chef
+  installed: 13.6.4
+  replace_in_files:
+    config/software/chef-gem.rb: default_version '{version_clean}'
+
+# chef-zero
+- url: https://github.com/chef/chef-zero
+  installed: 13.1.0
+  replace_in_files:
+    config/software/chef-zero.rb: default_version '{version_clean}'
+
+# compat_resource
 - url: https://github.com/chef-cookbooks/compat_resource.git
   installed: v12.19.0
   replace_in_files:
     config/software/compat_resource.rb: default_version '{version}'
+
+# config_guess
+# TODO: No tags
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git
+  installed: c9092d05347c925a26f6887980e185206e13f9d6
+  replace_in_files:
+    config/software/config_guess.rb: version = Gitlab::Version.new('config_guess', '{version_clean}')
+
+# consul
+- url: https://github.com/hashicorp/consul
+  installed: 0.9.0
+  replace_in_files:
+    config/software/consul.rb: default_version '{version_clean}'
+
+# curl
+- url: https://github.com/curl/curl
+  installed: curl-7_59_0
+  replace_in_files:
+    config/software/curl.rb: default_version '{version}'
+
+# gnupg #TODO
+# - url:
+#   installed:
+#   replace_in_files:
+#     config/software/gnupg.rb: default_version '{version_clean}'
+
+# go-crond
+- url: https://github.com/webdevops/go-crond
+  installed: 0.6.1
+  replace_in_files:
+    config/software/go-crond.rb: default_version '{version_clean}'
+
+# gpgme #TODO
+
+# jemalloc
+- url: https://github.com/jemalloc/jemalloc
+  installed: 4.2.1
+  replace_in_files:
+    config/software/jemalloc.rb: default_version '{version}'
+
+# libassuan TODO: not-github
+- url:
+  installed:
+  replace_in_files:
+    config/software/libassuan.rb: default_version '{version_clean}'
+
+# libevent
+- url: https://github.com/libevent/libevent
+  installed: release-2.1.8-stable
+  replace_in_files:
+    config/software/libevent.rb: default_version '{version_clean}'
+
+# libgcrypt TODO
+- url: https://dev.gnupg.org/source/libgcrypt.git
+  installed:
+  replace_in_files:
+    config/software/libgcrypt.rb: default_version '{version_clean}'
+
+# libpng TODO
+- url: https://git.code.sf.net/p/libpng/code
+  installed:
+  replace_in_files:
+    config/software/libpng.rb: default_version '{version_clean}'
+
+# libre2 TODO
+- url: https://github.com/google/re2
+  installed:
+  replace_in_files:
+    config/software/libre2.rb: default_version '{version_clean}'
+
+# libtool
+- url: https://git.savannah.gnu.org/git/libtool.git
+  installed:
+  replace_in_files:
+    config/software/libtool.rb: default_version '{version_clean}'
+
+# libxml2
+- url: https://gitlab.gnome.org/GNOME/libxml2.git
+  installed:
+  replace_in_files:
+    config/software/libxml2.rb: default_version '{version_clean}'
+
+# logrotate
+- url:
+  installed:
+  replace_in_files:
+    config/software/logrotate.rb: default_version '{version_clean}'
+
+# mixlib-log
+- url:
+  installed:
+  replace_in_files:
+    config/software/mixlib-log.rb: default_version '{version_clean}'
+
+# nginx-module-vts
+- url:
+  installed:
+  replace_in_files:
+    config/software/nginx-module-vts.rb: default_version '{version_clean}'
+
+# ohai
+- url:
+  installed:
+  replace_in_files:
+    config/software/ohai.rb: default_version '{version_clean}'
+
+# omnibus-ctl
+- url:
+  installed:
+  replace_in_files:
+    config/software/omnibus-ctl.rb: default_version '{version_clean}'
+
+# openssl
+- url: https://github.com/openssl/openssl.git
+  installed:
+  replace_in_files:
+    config/software/openssl.rb: default_version '{version_clean}'
+
+# prometheus-storage-migrator
+- url:
+  installed:
+  replace_in_files:
+    config/software/prometheus-storage-migrator.rb: default_version '{version_clean}'
+
+# rb-readline
+- url:
+  installed:
+  replace_in_files:
+    config/software/rb-readline.rb: default_version '{version_clean}'
+
+# registry
+- url:
+  installed:
+  replace_in_files:
+    config/software/registry.rb: default_version '{version_clean}'
+
+# remote-syslog
+- url:
+  installed:
+  replace_in_files:
+    config/software/remote-syslog.rb: default_version '{version_clean}'
+
+# repmgr
+- url: https://github.com/2ndQuadrant/repmgr.git
+  installed:
+  replace_in_files:
+    config/software/rempgr.rb: default_version '{version_clean}'
+
+# rubygems
+- url:
+  installed:
+  replace_in_files:
+    config/software/rubygems.rb: default_version '{version_clean}'
+
+# util-macros
+- url: https://github.com/freedesktop/xorg-macros
+  installed:
+  replace_in_files:
+    config/software/util-macros.rb: default_version '{version_clean}'
+
+# zlib
+- url: https://github.com/madler/zlib.git
+  installed:
+  replace_in_files:
+    config/software/zlib.rb: default_version '{version_clean}'
