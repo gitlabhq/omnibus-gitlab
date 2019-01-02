@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
+- Update Mattermost to 5.6.2
 
 11.6.2
 
