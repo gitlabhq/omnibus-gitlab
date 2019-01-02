@@ -115,18 +115,17 @@ describe 'registry recipe' do
         group: nil,
         mode: '0644'
       )
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/version: 0.1/)
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/realm: .*\/jwt\/auth/)
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/addr: localhost:5000/)
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/health:\s*storagedriver:\s*enabled:\s*true/)
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/log:\s*level: info\s*formatter:\s*text/)
+      expect(chef_run).to(
+        render_file('/var/opt/gitlab/registry/config.yml').with_content do |content|
+          expect(content).to match(/version: 0.1/)
+          expect(content).to match(/realm: .*\/jwt\/auth/)
+          expect(content).to match(/addr: localhost:5000/)
+          expect(content).to match(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
+          expect(content).to match(/health:\s*storagedriver:\s*enabled:\s*true/)
+          expect(content).to match(/log:\s*level: info\s*formatter:\s*text/)
+          expect(content).to match(/validation:\s*disabled: true$/)
+        end
+      )
     end
 
     context 'when registry storagedriver health check is disabled' do
