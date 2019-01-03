@@ -1,5 +1,26 @@
 # GitLab 11 specific changes
 
+# TLS v1.1 Deprecation
+Beginning with GitLab 12.0, TLS v1.1 will be disabled by default to improve security.
+
+This mitigates numerous issues including, but not limited to, Heartbleed and makes
+GitLab compliant out of the box with the PCI DSS 3.1 standard.
+[Learn more about why TLS v1.1 is being deprecated in our blog.](https://about.gitlab.com/2018/10/15/gitlab-to-deprecate-older-tls/)
+
+## Clients supporting TLS v1.2
+
+* **Git-Credential-Manager** - support since **1.14.0***
+* **git on Red Hat Enterprise Linux 6** - support since ***6.8***
+* **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
+* **JGit / Java** - support since ***JDK 7***
+* **Visual Studio** - support since version ***2017***
+
+Modify or add these entries to `gitlab.rb` and run `gitlab-ctl reconfigure` to disable TLS v1.1 immediately:
+
+```ruby
+nginx['ssl_protocols'] = "TLSv1.2"
+```
+
 ## Upgrade prerequisites
 For successfully upgrading to GitLab 11.0, users need to satisfy following
 requirements
@@ -67,3 +88,33 @@ been removed.
     Users still using those versions will be presented with a deprecation warning
     during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
     Prometheus 1.0 data will not be migrated.
+
+### 11.6
+
+1. [Sidekiq probe of gitlab-monitor](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_monitor_exporter.html)
+   will be disabled by default if GitLab is configured in [Redis HA mode](https://docs.gitlab.com/ee/administration/high_availability/redis.html).
+   To manually enable it, users can set `gitlab_monitor['probe_sidekiq'] = true`
+   in `/etc/gitlab/gitlab.rb` file. However, when manually enabling it in Redis
+   HA mode, users are expected to point the probe to a Redis instance connected
+   to the instance using the `gitlab_rails['redis_*']` settings.
+
+   A valid example configuration is:
+
+    ```ruby
+    gitlab_monitor['probe_sidekiq'] = true
+    gitlab_rails['redis_host'] = <IP of Redis master node>
+    gitlab_rails['redis_port'] = <Port where Redis runs in master node>
+    gitlab_rails['redis_password'] = <Password to connect to Redis master>
+    ```
+
+    **NOTE**: In the above configuration, when a failover happens after the
+    master node fails, gitlab-monitor will still be probing the original master
+    node, since it is specified in gitlab.rb. Users will have to manually update
+    gitlab.rb to point it to the new master node.
+
+2. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
+   the unicorn processes have been restarted. The restart is done automatically
+   at the end of `gitlab-ctl reconfigure`, which is run by default on upgrade.
+
+   **Note**: the application will throw 500 http errors until the unicorn
+   restart is completed.

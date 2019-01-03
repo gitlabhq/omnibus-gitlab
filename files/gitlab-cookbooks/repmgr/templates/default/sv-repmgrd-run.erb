@@ -9,4 +9,4 @@ cd <%= node['gitlab']['postgresql']['dir'] %>
 exec chpst -P \
   -U <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> \
   -u <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> \
-  /opt/gitlab/embedded/bin/repmgrd -f /var/opt/gitlab/postgresql/repmgr.conf
+  /opt/gitlab/embedded/bin/repmgrd -f <%= node['gitlab']['postgresql']['dir'] %>/repmgr.conf

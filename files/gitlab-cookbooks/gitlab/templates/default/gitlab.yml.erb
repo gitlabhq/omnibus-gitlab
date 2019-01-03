@@ -85,6 +85,9 @@ production: &base
     # The default is 'tmp/repositories' relative to the root of the Rails app.
     repository_downloads_path: <%= @gitlab_repository_downloads_path %>
 
+    ## Impersonation settings
+    impersonation_enabled: <%= @impersonation_enabled %>
+
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
   ## Reply by email
@@ -367,6 +370,17 @@ production: &base
     sync_ssh_keys: <%= quote(@ldap_sync_ssh_keys) %>
     sync_time: <%= @ldap_sync_time %>
   <% end %>
+
+  ## Smartcard authentication settings
+  smartcard:
+    # Allow smartcard authentication
+    enabled: <%= @smartcard_enabled %>
+
+    # Path to a file containing a CA certificate
+    ca_file: <%= quote(@smartcard_ca_file) %>
+
+    # Port where the client side certificate is requested by the webserver (NGINX/Apache)
+    client_certificate_required_port: <%= @smartcard_client_certificate_required_port %>
 
   ## Kerberos settings
   kerberos:

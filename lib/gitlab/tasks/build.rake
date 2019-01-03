@@ -31,6 +31,7 @@ namespace :build do
   namespace :package do
     desc "Move packages to OS specific directory"
     task :move_to_platform_dir do
+      FileUtils.mv("pkg/version-manifest.json", "pkg/#{Build::Info.package}_#{Build::Info.release_version}.version-manifest.json")
       platform_dir = OhaiHelper.platform_dir
       FileUtils.mv("pkg", platform_dir)
       FileUtils.mkdir("pkg")

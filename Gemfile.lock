@@ -102,6 +102,9 @@ GEM
     ffi-yajl (2.3.1)
       libyajl2 (~> 1.2)
     fuzzyurl (0.9.0)
+    gitlab (4.7.0)
+      httparty (>= 0.14.0)
+      terminal-table (>= 1.5.1)
     google-api-client (0.10.3)
       addressable (~> 2.3)
       googleauth (~> 0.5)
@@ -127,6 +130,9 @@ GEM
     highline (1.6.20)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    httparty (0.16.3)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     hurley (0.2)
     iniparse (1.4.4)
@@ -137,9 +143,8 @@ GEM
     json (2.0.2)
     json_pure (1.8.1)
     jwt (2.1.0)
-    knapsack (1.13.1)
+    knapsack (1.17.1)
       rake
-      timecop (>= 0.1.0)
     libyajl2 (1.2.0)
     license_scout (1.0.10)
       ffi-yajl (~> 2.2)
@@ -163,6 +168,7 @@ GEM
     mixlib-shellout (2.3.2)
     mixlib-versioning (1.2.2)
     multi_json (1.13.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -272,8 +278,9 @@ GEM
       sfl
     syslog-logger (1.6.8)
     systemu (2.6.5)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.18.1)
-    timecop (0.8.1)
     toml-rb (1.1.1)
       citrus (~> 3.0, > 3.0)
     uber (0.1.0)
@@ -295,6 +302,7 @@ DEPENDENCIES
   chefspec
   docker-api
   fantaskspec
+  gitlab
   google_drive
   json
   knapsack
@@ -311,4 +319,4 @@ DEPENDENCIES
   thor (= 0.18.1)
 
 BUNDLED WITH
-   1.16.6
+   1.17.1

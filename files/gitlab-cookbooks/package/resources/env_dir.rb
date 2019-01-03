@@ -25,7 +25,8 @@ property :variables, Hash, default: {}
 action :create do
   # Cleaning up non-existent variables
   if ::File.directory?(new_resource.name)
-    deleted_env_vars = Dir.entries(new_resource.name) - new_resource.variables.keys - %w(. ..)
+    existing_files = Dir.entries(new_resource.name).select { |f| ::File.file?(::File.join(new_resource.name, f)) }
+    deleted_env_vars = existing_files - new_resource.variables.keys - %w(. ..)
     deleted_env_vars.each do |deleted_var|
       file ::File.join(new_resource.name, deleted_var) do
         action :delete
@@ -39,7 +40,7 @@ action :create do
 
   new_resource.variables.each do |key, value|
     file ::File.join(new_resource.name, key) do
-      content value
+      content value.to_s
     end
   end
 end

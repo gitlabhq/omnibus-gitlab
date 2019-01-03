@@ -214,6 +214,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Impersonation settings
+# gitlab_rails['impersonation_enabled'] = true
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
@@ -271,6 +274,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     admin_group: ''
 #     sync_ssh_keys: false
 # EOS
+
+### Smartcard authentication settings
+###! Docs: https://docs.gitlab.com/ee/administration/auth/smartcard.html
+# gitlab_rails['smartcard_enabled'] = false
+# gitlab_rails['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+# gitlab_rails['smartcard_client_certificate_required_port'] = 3444
 
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
@@ -521,6 +530,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 # registry['log_level'] = "info"
+# registry['log_formatter'] = "text"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['health_storagedriver_enabled'] = true
 # registry['storage_delete_enabled'] = true
@@ -1126,7 +1136,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "pack" => ["threads = 1"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
-#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 # }
 
 ################################################################################
@@ -1457,6 +1467,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Advanced settings. Should be changed only if absolutely needed.
 # gitlab_monitor['listen_address'] = 'localhost'
 # gitlab_monitor['listen_port'] = '9168'
+
+##! Manage gitlab-monitor sidekiq probes. false by default when Sentinels are
+##! found.
+# gitlab_monitor['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true

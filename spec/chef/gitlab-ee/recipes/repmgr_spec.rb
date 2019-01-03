@@ -296,4 +296,25 @@ witness_repl_nodes_sync_interval_secs=15
       expect(chef_run).not_to include_recipe('repmgr::consul_user_permissions')
     end
   end
+
+  context 'with custom postgresql directory specified' do
+    before do
+      stub_gitlab_rb(
+        repmgr: {
+          enable: true
+        },
+        postgresql: {
+          dir: "/foo/bar"
+        }
+      )
+    end
+
+    it 'creates conf file in correct location' do
+      expect(chef_run).to render_file('/foo/bar/repmgr.conf')
+    end
+
+    it 'specifies correct location of conf file in service run file' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/repmgrd/run').with_content(/\/foo\/bar\/repmgr.conf/)
+    end
+  end
 end

@@ -3,18 +3,44 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.7.0
+
+- Hide transfer of refs/remotes/* in git config !2932
+- Add option to specify a registry log formatter !2911
+- Ensure env values are converted to strings (Romain Tartière) !2923
+- Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
+
+11.6.2
+
+- Fix environment variables not being cleaned up !2934
+
 11.6.0
 
+- Switch restart_command for Unicorn service to signal HUP instead of USR2 !2905
 - Upgrade Ruby to 2.5.3 !2806
 - Deprecate postgresql['data_dir'] !2846
 - Move env directory of all services to `/opt/gitlab/etc/<service>/env` !2825
 - Move the postgres install to being located under its major version path !2818
 - Add support for Git v2 protocol in docker image's `sshd_config` !2864
 - Add client support for Redis over SSL !2843
+- Disable sidekiq probes of gitlab-monitor by default in Redis HA mode and
+  provide `probe_sidekiq` attribute to control it. !2872
+- Update docker registry to include a set of patches from the upcoming 2.7.0 release !2888
+- Update Mattermost to 5.5.0
+- Add impersonation_enabled configuration to gitlab.rb !2880
+- Update runit version to 2.1.2 !2897
+- Update Prometheus components !2891
+- Add smartcard configuration to gitlab.rb !2894
+
+11.5.2
+
+- Make remote-syslog detect log directories of all services correctly !2871
 
 11.5.1
 
-- Make remote-syslog detect log directories of all services correctly !2871
+- Update GITLAB_PAGES_VERSION to 1.3.1
+- Update GITLAB_WORKHORSE_VERSION to 7.1.3
+- Update postgresql to 9.6.11 !2840
 
 11.5.0
 
@@ -41,6 +67,11 @@ omnibus-gitlab repository.
   and resumed when it is cleared !2812
 - Provide SSL_CERT_DIR to embedded Go services !2813
 
+11.4.8
+
+- Update GITLAB_PAGES_VERSION to 1.1.1
+- Update GITLAB_WORKHORSE_VERSION to 7.0.1
+
 11.4.1
 
 - Upgrade Ruby version to 2.4.5
@@ -65,6 +96,11 @@ omnibus-gitlab repository.
 - Set only files under trusted_cert directory explicitly to user read/write and group/other read. !2755
 - Use Prometheus 2.4.2 for new installs. Deprecate Prometheus 1.x and add
   prometheus-upgrade command !2733
+
+11.3.11
+
+- Update GITLAB_PAGES_VERSION to 1.1.1
+- Update GITLAB_WORKHORSE_VERSION to 6.1.2
 
 11.3.4
 

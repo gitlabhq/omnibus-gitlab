@@ -24,7 +24,7 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
   "repack" => ["writeBitmaps = true"],
-  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 }
 # Create users and groups needed for the package
 default['gitlab']['manage-accounts']['enable'] = true
@@ -181,6 +181,7 @@ default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
+default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
 default['gitlab']['gitlab-rails']['usage_ping_enabled'] = nil
 # Defaults set in libraries/gitlab_rails.rb
 default['gitlab']['gitlab-rails']['repositories_storages'] = {}
@@ -206,6 +207,10 @@ default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 ####
+
+default['gitlab']['gitlab-rails']['smartcard_enabled'] = false
+default['gitlab']['gitlab-rails']['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'] = 3444
 
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
@@ -867,6 +872,7 @@ default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-m
 default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost'
 default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
+default['gitlab']['gitlab-monitor']['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true

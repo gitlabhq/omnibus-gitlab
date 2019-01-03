@@ -1,0 +1,20 @@
+version: 2
+
+dependencies:
+- type: git-repos
+  path: dependencies_io/git_repos.yml
+  settings:
+    branch_prefix: dependencies_io/
+
+    # Assign to ibaum by default
+    gitlab_assignee_id: 787914
+
+    gitlab_labels:
+      - maintenance
+      - dependencies.io
+
+    gitlab_remove_source_branch: true
+
+    pullrequest_notes: >
+      @gitlab\-org/distribution -
+      Please reassign this MR to yourself and verify the changes. Once ready, assign back to any project maintainer.

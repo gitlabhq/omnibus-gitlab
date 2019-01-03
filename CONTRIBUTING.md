@@ -48,7 +48,7 @@ This can be the case when installation and `gitlab-ctl reconfigure` run went wit
 
 ## I want to contribute!
 
-If you want to contribute to GitLab Omnibus, issues with both the ~Accepting merge requests and ~For Scheduling labels 
+If you want to contribute to GitLab Omnibus, issues with both the ~Accepting merge requests and ~For Scheduling labels
 are issues that have been triaged as areas where where we are looking for contributors to help us out.
 
 See the [contributor issue issues list](https://gitlab.com/gitlab-org/omnibus-gitlab/issues?state=opened&label_name[]=Accepting%20merge%20requests&label_name[]=For%20Scheduling).
@@ -117,6 +117,30 @@ Some of the interactions of the components are not fully covered by the
 unit/acceptance tests, so testing here can reveal issues such as invalid service
 configuration being generated.  Issues found should be fed back into the test
 suites where possible as part of the review process.
+
+### Reviewing Merge Requests
+
+Before merging, a MR must be reviewed by a [GitLab Omnibus Maintainer](https://about.gitlab.com/handbook/engineering/projects/#omnibus-gitlab).
+If the change is not time-sensitive, then the MR can first be reviewed by any other
+[Distribution Team Member](https://about.gitlab.com/handbook/engineering/dev-backend/distribution/#team-members),
+then finally reviewed by a Maintainer.
+
+Reviews generally only need the *approval* of one Maintainer to be merged, but
+additional Maintainers may be involved with reviewing parts of the change. We will
+try to avoid having more than one Maintainer do a full review.
+
+**When the change was unscheduled, and requires notifying users**
+
+The [Distribution Engineering Manager](https://about.gitlab.com/company/team/#maxlazio)
+need to provide approval if the change is for an unscheduled issue, and makes a
+user-facing change that needs mentioning in the release post.
+
+**Other changes**
+
+As long as one of the Maintainers is confident in the change, it does not need to
+be reviewed again before merge.
+
+> **Note**: This process is intended to balance code quality with effective use of reviewers' time. Just because a change was approved and merged by one Maintainer, does not guarantee that it won't be reverted later. 
 
 ## Developer Guidelines
 
