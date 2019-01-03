@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 11.6.3
 
 - Fix Docker registry not working with Windows layers !2938
+- Remove deprecated OpenShift template !2936
 
 11.6.2
 
