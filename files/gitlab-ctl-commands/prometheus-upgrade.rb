@@ -20,15 +20,15 @@ require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 add_command 'prometheus-upgrade', 'Upgrade the Prometheus data to the latest supported version',
   2 do |_cmd_name|
 
+  unless service_enabled?('prometheus')
+    log "Prometheus not enabled."
+    Kernel.exit 0
+  end
+
   options = GitlabCtl::PrometheusUpgrade.parse_options(ARGV)
   home_dir = File.expand_path(options[:home_dir])
 
   prometheus_upgrade = GitlabCtl::PrometheusUpgrade.new(base_path, home_dir)
-
-  unless Services.enabled?('prometheus')
-    log "Prometheus not enabled."
-    Kernel.exit 0
-  end
 
   # v1_path points to the current data directory
   unless File.exist?(prometheus_upgrade.v1_path)
