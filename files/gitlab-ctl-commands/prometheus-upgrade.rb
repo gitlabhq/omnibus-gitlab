@@ -25,6 +25,11 @@ add_command 'prometheus-upgrade', 'Upgrade the Prometheus data to the latest sup
 
   prometheus_upgrade = GitlabCtl::PrometheusUpgrade.new(base_path, home_dir)
 
+  unless Services.enabled?('prometheus')
+    log "Prometheus not enabled."
+    Kernel.exit 0
+  end
+
   # v1_path points to the current data directory
   unless File.exist?(prometheus_upgrade.v1_path)
     log "Specified home directory, #{home_dir} either does not exist or does not contain any data directory inside."
