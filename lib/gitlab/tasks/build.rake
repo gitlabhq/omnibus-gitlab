@@ -76,6 +76,9 @@ namespace :build do
     puts Gitlab::Version.new('gitlab-rails').print
   end
 
+  # Use this task to add/update `known_hosts` file, in the unlikely case of a change in
+  # `gitlab.com` and `dev.gitlab.org` SSH keys.
+  # Note: After running this task you need to add and commit `support/known_hosts`.
   desc 'Updates the known SSH hosts used in CI config'
   task :known_hosts do
     sh 'ssh-keyscan gitlab.com > support/known_hosts'
