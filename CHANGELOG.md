@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
 
+11.6.3
+
+- Fix Docker registry not working with Windows layers !2938
+
 11.6.2
 
 - Fix environment variables not being cleaned up !2934
