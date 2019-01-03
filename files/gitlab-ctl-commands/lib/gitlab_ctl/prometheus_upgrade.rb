@@ -4,7 +4,7 @@ require 'mixlib/shellout'
 
 module GitlabCtl
   class PrometheusUpgrade
-    attr_reader :v1_path, :v2_path, :backup_path
+    attr_reader :v1_path, :v2_path, :backup_path, :binary_path
 
     # Sample output of prometheus --version is
     # prometheus, version 1.8.2 (branch: master, revision: 6aa68e74cdc25a7d95f3f120ccc8eddd46e3c07b)
@@ -16,10 +16,15 @@ module GitlabCtl
       @v1_path = File.join(home_dir, "data")
       @v2_path = File.join(home_dir, "data2")
       @backup_path = File.join(home_dir, "data_tmp")
+      @binary_path = File.join(base_path, "embedded", "bin", "prometheus")
     end
 
     def is_version_2?
-      version_string_check && file_existence_check
+      binary_existence_check && version_string_check && file_existence_check
+    end
+
+    def binary_existence_check
+      File.exist?(@binary_path)
     end
 
     def file_existence_check
@@ -27,7 +32,7 @@ module GitlabCtl
     end
 
     def version_string_check
-      version_output = `#{@base_path}/embedded/bin/prometheus --version 2>&1`.strip
+      version_output = `#{@binary_path} --version 2>&1`.strip
       version_output.match(VERSION_REGEX)[:version].start_with?("2")
     end
 
