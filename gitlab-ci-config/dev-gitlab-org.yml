@@ -37,7 +37,7 @@
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
@@ -76,7 +76,7 @@
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
@@ -214,7 +214,7 @@ QA-Master:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build
     - bundle exec rake qa:push:nightly
@@ -277,7 +277,7 @@ Docker-QA:
   stage: gitlab_com:package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
   <<: *dev-tag-only
@@ -497,7 +497,7 @@ QA-Tag:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake release:qa
   artifacts:

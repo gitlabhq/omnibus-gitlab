@@ -75,4 +75,10 @@ namespace :build do
     # We don't differentiate between CE and EE here since they use the same version file
     puts Gitlab::Version.new('gitlab-rails').print
   end
+
+  desc 'Updates the known SSH hosts used in CI config'
+  task :known_hosts do
+    sh 'ssh-keyscan gitlab.com > support/known_hosts'
+    sh 'ssh-keyscan dev.gitlab.org >> support/known_hosts'
+  end
 end
