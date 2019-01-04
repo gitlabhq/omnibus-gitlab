@@ -482,6 +482,8 @@ describe 'gitlab::prometheus' do
     context 'prometheus enabled' do
       it 'displays a deprecation for version 1' do
         allow(PrometheusHelper).to receive(:is_version_1?).and_return(true)
+        allow(LoggingHelper).to receive(:deprecation).and_call_original
+
         expect(LoggingHelper).to receive(:deprecation).with(/Prometheus/)
         chef_run
       end
