@@ -10,7 +10,8 @@ omnibus-gitlab repository.
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
-- Enabled ENA networking and SRIOV support to AMIs !2867 
+- Enabled ENA networking and SRIOV support to AMIs !2867
+- Support TLS communication with gitaly
 
 11.6.3
 
