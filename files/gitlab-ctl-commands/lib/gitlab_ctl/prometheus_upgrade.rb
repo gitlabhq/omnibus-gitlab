@@ -20,11 +20,7 @@ module GitlabCtl
     end
 
     def is_version_2?
-      binary_existence_check && version_string_check && file_existence_check
-    end
-
-    def binary_existence_check
-      File.exist?(@binary_path)
+      version_string_check && file_existence_check
     end
 
     def file_existence_check
