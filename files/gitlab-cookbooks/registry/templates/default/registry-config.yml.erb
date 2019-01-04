@@ -25,7 +25,8 @@ auth:
     service: container_registry
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>
-
+validation:
+  disabled: true
 <% if @notifications %>
 notifications:
   endpoints: <%= @notifications.to_json %>
