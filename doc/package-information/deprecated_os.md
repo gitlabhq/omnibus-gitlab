@@ -12,6 +12,7 @@ release for them can be found below:
 |Ubuntu 12.04|[April 2017](https://www.ubuntu.com/info/release-end-of-life)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/precise/gitlab-ce_9.1.7-ce.0_amd64.deb) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/ubuntu/precise/gitlab-ee_9.1.7-ee.0_amd64.deb) 9.1.7|
 |OpenSUSE 42.1|[May 2017](https://en.opensuse.org/Lifetime#Discontinued_distributions)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/opensuse/42.1/gitlab-ce-9.3.3-ce.0.sles42.x86_64.rpm) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/opensuse/42.1/gitlab-ee-9.3.3-ee.0.sles42.x86_64.rpm) 9.3.3|
 |OpenSUSE 42.2|[January 2018](https://en.opensuse.org/Lifetime#Discontinued_distributions)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/opensuse/42.2/gitlab-ce-10.4.0-ce.0.sles42.x86_64.rpm) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/opensuse/42.2/gitlab-ee-10.4.0-ee.0.sles42.x86_64.rpm) 10.4.0|
+|Debian Wheezy|[May 2018](https://www.debian.org/News/2018/20180601)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/wheezy/gitlab-ce_11.6.2-ce.0_amd64.deb) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/wheezy/gitlab-ee_11.6.2-ee.0_amd64.deb) 11.6.2|
 
 ## Supported Operating Systems
 
@@ -28,7 +29,6 @@ The following lists the currently supported OSs and their possible EOL dates.
 |:---:|:---:|:---:|:---:|
 |CentOS 6|GitLab CE / GitLab EE 7.10.0|November 2020|https://wiki.centos.org/About/Product|
 |CentOS 7|GitLab CE / GitLab EE 7.10.0|June 2024|https://wiki.centos.org/About/Product|
-|Debian 7|GitLab CE / GitLab EE 7.10.0|May 2018|https://wiki.debian.org/DebianReleases#Production_Releases|
 |Debian 8|GitLab CE / GitLab EE 7.10.1|June 2020|https://wiki.debian.org/DebianReleases#Production_Releases|
 |Debian 9|GitLab CE / GitLab EE 9.3.0|2022|https://wiki.debian.org/DebianReleases#Production_Releases|
 |OpenSUSE 42.3|GitLab CE / GitLab EE 10.4.0|Jan 2019|https://en.opensuse.org/Lifetime|
