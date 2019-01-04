@@ -81,7 +81,7 @@ namespace :build do
   # Note: After running this task you need to add and commit `support/known_hosts`.
   desc 'Updates the known SSH hosts used in CI config'
   task :known_hosts do
-    sh 'ssh-keyscan gitlab.com > support/known_hosts'
-    sh 'ssh-keyscan dev.gitlab.org >> support/known_hosts'
+    gitlab_hosts = %w(gitlab.com dev.gitlab.org)
+    system('ssh-keyscan', *gitlab_hosts, out: 'support/known_hosts')
   end
 end
