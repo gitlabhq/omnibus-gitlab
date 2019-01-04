@@ -1,13 +1,18 @@
 require_relative "info.rb"
 require "google_drive"
+require "open3"
 
 module Build
   class Metrics
     class << self
       def configure_gitlab_repo
         # Install recommended softwares for installing GitLab EE
-        system("apt-get update && apt-get install -y curl openssh-server ca-certificates")
-        system("curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | bash")
+        system(*%w[apt-get update])
+        system(*%w[apt-get install -y curl openssh-server ca-certificates])
+        Open3.pipeline(
+          %w[curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh],
+          %w[bash]
+        )
       end
 
       def install_package(version)
@@ -15,16 +20,20 @@ module Build
         # during reconfigure won't use gems from builder image.
         ENV.delete_if { |name, _v| name =~ /^(RUBY|BUNDLE)/ }
 
-        system("EXTERNAL_URL='http://gitlab.example.com' apt-get -y install gitlab-ee=#{version}")
-        system("/opt/gitlab/embedded/bin/runsvdir-start &")
-        system("gitlab-ctl reconfigure")
+        system(
+          { 'EXTERNAL_URL' => 'http://gitlab.example.com' },
+          *%W[apt-get -y install gitlab-ee=#{version}]
+        )
+
+        spawn('/opt/gitlab/embedded/bin/runsvdir-start')
+        system(*%w[gitlab-ctl reconfigure])
       end
 
       def upgrade_package
         # For the current version, use the package from S3 bucket and not depend
         # upon the packagecloud repository.
-        system("curl -q -o gitlab.deb #{Build::Info.package_download_url}")
-        system("dpkg -i gitlab.deb")
+        system(*%W[curl -q -o gitlab.deb #{Build::Info.package_download_url}])
+        system(*%w[dpkg -i gitlab.deb])
       end
 
       def should_upgrade?
@@ -55,7 +64,12 @@ module Build
         # 2. sed will get the string till the first "Log started" string
         #    (which corresponds to the last log block).
         # 3. Next tac will again reverse it, hence producing log in proper order
-        system("tac #{log_location} | sed '/^Log started/q' | tac > #{final_location}")
+        Open3.pipeline(
+          %W[tac #{log_location}],
+          %w[sed /^Log\ started/q],
+          %w[tac],
+          out: final_location
+        )
       end
 
       def calculate_duration
@@ -63,8 +77,8 @@ module Build
         get_latest_log(latest_log_location)
 
         # Logs from apt follow the format `Log (started|ended): <date>  <time>`
-        start_string = File.open(latest_log_location).grep(/Log started/)[0].strip.gsub("Log started: ", "")
-        end_string = File.open(latest_log_location).grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
+        start_string = File.read(latest_log_location).grep(/Log started/)[0].strip.gsub("Log started: ", "")
+        end_string = File.read(latest_log_location).grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
         start_time = DateTime.strptime(start_string, "%Y-%m-%d  %H:%M:%S")
         end_time = DateTime.strptime(end_string, "%Y-%m-%d  %H:%M:%S")
 

@@ -9,8 +9,8 @@ example:
 
 ```ruby
 gitlab_rails['env'] = {
-    "http_proxy" => "my_proxy",
-    "https_proxy" => "my_proxy"
+    "http_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
 }
 ```
 
@@ -20,28 +20,34 @@ might be required if you are behind a proxy:
 ```ruby
 # Needed for proxying Git clones
 gitaly['env'] = {
-    "http_proxy" => "my_proxy",
-    "https_proxy" => "my_proxy"
+    "http_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
 }
 
 gitlab_workhorse['env'] = {
-    "http_proxy" => "my_proxy",
-    "https_proxy" => "my_proxy"
+    "http_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
 }
 
 # If you use the docker registry
 registry['env'] = {
-    "http_proxy" => "my_proxy",
-    "https_proxy" => "my_proxy"
+    "http_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
 }
 ```
+
+NOTE: **Note**: GitLab 11.6 and newer will attempt to use HTTP Basic
+Authentication when a username and password is included in the proxy
+URL. Older GitLab versions will omit the authentication details.
+
+NOTE: **Note**: Proxy settings use the `.` syntax for globing.
 
 ## Applying the changes
 
 Any change made to the environment variables **requires a hard restart** after
 reconfigure for it to take effect.
 
-**`Note`**: During a hard restart, your GitLab instance will be down until the
+NOTE: **Note**: During a hard restart, your GitLab instance will be down until the
 services are back up.
 
 So, after editing `gitlab.rb` file, run the following commands

@@ -1,6 +1,7 @@
 files:
 <% @services.each do |service| %>
-  - <%= File.join(node['gitlab'][service]['log_directory'], "*.log") %>
+  <% log_dir = node['gitlab'].has_key?(service) ? node['gitlab'][service]['log_directory'] : node[service]['log_directory'] %>
+  - <%= File.join(log_dir, "*.log") %>
 <% end %>
 exclude_files:
   # /var/log/gitlab-rails/sidekiq.log is a symlink to /var/log/sidekiq/current,

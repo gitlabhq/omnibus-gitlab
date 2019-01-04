@@ -46,7 +46,7 @@ module Build
       # TODO, merge latest_tag with latest_stable_tag
       # TODO, add tests, needs a repo clone
       def latest_tag
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | head -1`
+        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | head -1`.chomp
       end
 
       def latest_stable_tag(level: 1)
@@ -133,7 +133,7 @@ module Build
 
       def fetch_artifact_url(project_id, pipeline_id)
         output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
-        output.find { |job| job['name'] == 'Trigger:package' }['id']
+        output.map { |job| job['id'] if job['name'] == 'Trigger:package' }.compact.sort.last
       end
 
       def fetch_pipeline_jobs(project_id, pipeline_id, token)
@@ -146,7 +146,7 @@ module Build
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
         id = fetch_artifact_url(project_id, pipeline_id)
-        "#{ENV['CI_PROJECT_URL']}/builds/#{id}/artifacts/raw/pkg/ubuntu-xenial/gitlab.deb"
+        "https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/jobs/#{id}/artifacts/pkg/ubuntu-xenial/gitlab.deb"
       end
 
       def tag_match_pattern

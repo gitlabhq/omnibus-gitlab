@@ -5,24 +5,62 @@ class RedisHelper
     @node = node
   end
 
-  def redis_url(workhorse = false)
+  def redis_params(support_sentinel_groupname: true)
+    gitlab_rails_config = @node['gitlab']['gitlab-rails']
+    redis_config = @node['redis']
+
+    params = if RedisHelper::Checks.has_sentinels? && support_sentinel_groupname
+               [redis_config['master_name'], redis_config['master_port'], redis_config['master_password']]
+             else
+               host = gitlab_rails_config['redis_host'] || Gitlab['redis']['master_ip']
+               port = gitlab_rails_config['redis_port'] || Gitlab['redis']['master_port']
+               password = gitlab_rails_config['redis_password'] || Gitlab['redis']['master_password']
+
+               [host, port, password]
+             end
+    params
+  end
+
+  def redis_url(support_sentinel_groupname: true)
     gitlab_rails = @node['gitlab']['gitlab-rails']
 
-    if gitlab_rails['redis_socket']
+    redis_socket = gitlab_rails['redis_socket']
+    redis_socket = false if RedisHelper::Checks.is_gitlab_rails_redis_tcp?
+
+    if redis_socket && !RedisHelper::Checks.has_sentinels?
       uri = URI('unix:/')
-      uri.path = gitlab_rails['redis_socket']
-    elsif workhorse
-      uri = URI('tcp:/')
-      uri.host = gitlab_rails['redis_host']
-      uri.port = gitlab_rails['redis_port']
+      uri.path = redis_socket
     else
-      uri = URI::Redis.parse('redis:/')
-      uri.host = gitlab_rails['redis_host']
-      uri.port = gitlab_rails['redis_port']
-      uri.password = gitlab_rails['redis_password']
+      scheme = gitlab_rails['redis_ssl'] ? 'rediss:/' : 'redis:/'
+      uri = URI(scheme)
+      uri.host, uri.port, uri.password = redis_params(support_sentinel_groupname: support_sentinel_groupname)
       uri.path = "/#{gitlab_rails['redis_database']}"
     end
 
     uri
+  end
+
+  class Checks
+    class << self
+      def is_redis_tcp?
+        Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?
+      end
+
+      def is_redis_slave?
+        Gitlab['redis']['master'] == false
+      end
+
+      def sentinel_daemon_enabled?
+        Services.enabled?('sentinel')
+      end
+
+      def has_sentinels?
+        Gitlab['gitlab_rails']['redis_sentinels'] && !Gitlab['gitlab_rails']['redis_sentinels'].empty?
+      end
+
+      def is_gitlab_rails_redis_tcp?
+        Gitlab['gitlab_rails']['redis_host']
+      end
+    end
   end
 end

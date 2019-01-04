@@ -10,10 +10,13 @@ fi
 
 <%= external_url_script %>
 
+<%= common_script %>
+
 case "$1" in
   0)
     # RPM install/upgrade
     ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+    symlink_old_postgres_directory
     EXTERNAL_URL=${EXTERNAL_URL} ${DEST_DIR}/bin/gitlab-ctl upgrade
     ;;
   *)

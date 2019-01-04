@@ -309,7 +309,7 @@ configuration when connecting to the PostgreSQL server. They must also be within
 ### Configure gitlab-rails block
 
 To configure the `gitlab-rails` application to connect to the PostgreSQL database
-over the network, several settings must be confgured.
+over the network, several settings must be configured.
 - `db_host` needs to be set to the IP address of the database sever. If this is
 on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
 not require_ password authentication.
@@ -340,6 +340,26 @@ Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
 connections to Postgres to be handled over the UNIX socket, and may not function
 properly. You can enable TCP/IP without disabling UNIX sockets.
 
+## Store PostgreSQL data in a different directory
+
+By default, everything is stored under `/var/opt/gitlab/postgresql`, controlled by the `postgresql['dir']` attribute.
+
+This consists of
+
+1. The database socket will be `/var/opt/gitlab/postgresql/.s.PGSQL.5432`. This is controlled by `postgresql['unix_socket_directory']`
+1. The `gitlab-psql` system user will have its `HOME` directory set to this. This is controlled by `postgresql['home']`
+1. The actual data will be stored in `/var/opt/gitlab/postgresql/data`
+
+To change the location of the PostgreSQL data
+
+**Warning**: If you have an existing database, you need to move the data to the new location first
+
+**Warning**: This is an intrusive operation. It cannot be done without downtime on an existing installation
+
+1. Stop GitLab if this is an existing installation: `gitlab-ctl stop`
+1. Update `postgresql['dir']` to the desired location.
+1. Run `gitlab-ctl reconfigure`
+1. Start GitLab `gitlab-ctl start`
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
@@ -354,8 +374,9 @@ will have to install it on your own or use an existing one. Omnibus ships only
 the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
-hit [collation issues][ee-245]. See ['Set MySQL collation to UTF-8']
-(#set-mysql-collation-to-utf-8) to fix any relevant errors.
+hit [collation issues][ee-245]. See
+[Set MySQL collation to UTF-8](#set-mysql-collation-to-utf-8) to fix any
+relevant errors.
 
 ---
 

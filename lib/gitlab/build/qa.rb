@@ -21,7 +21,7 @@ module Build
       # PROCESS_ID is appended to ensure randomness in the directory name
       # to avoid possible conflicts that may arise if the clone's destination
       # directory already exists.
-      system("git clone #{Build::Info.gitlab_rails_repo} #{repo_path}")
+      system(*%W[git clone #{Build::Info.gitlab_rails_repo} #{repo_path}])
     end
 
     def self.get_gitlab_rails_sha
@@ -47,7 +47,7 @@ module Build
       version = get_gitlab_rails_sha
       puts "Building from #{Build::Info.package} commit #{version}"
 
-      system("git --git-dir=#{repo_path}/.git --work-tree=#{repo_path} checkout --quiet #{version}")
+      system(*%W[git --git-dir=#{repo_path}/.git --work-tree=#{repo_path} checkout --quiet #{version}])
     end
   end
 end

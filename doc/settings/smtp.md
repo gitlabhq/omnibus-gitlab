@@ -38,6 +38,7 @@ gitlab_rails['smtp_enable'] = true
 
 ### SMTP without SSL
 By default SSL is enabled for SMTP. If your SMTP server do not support communication over SSL use following settings:
+
 ```ruby
 gitlab_rails['smtp_enable'] = true;
 gitlab_rails['smtp_address'] = 'localhost';
@@ -346,7 +347,7 @@ gitlab_rails['smtp_address'] = "smtp.strato.de"
 gitlab_rails['smtp_port'] = 465
 gitlab_rails['smtp_user_name'] = "username@stratodomain.de"
 gitlab_rails['smtp_password'] = "strato_email_password"
-gitlab_rails['smtp_domain'] = "strato.de"
+gitlab_rails['smtp_domain'] = "stratodomain.de"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true

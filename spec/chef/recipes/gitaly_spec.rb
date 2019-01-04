@@ -34,8 +34,8 @@ describe 'gitaly' do
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
       expect(chef_run).to create_directory('/var/log/gitlab/gitaly').with(user: 'git', mode: '0700')
-      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly')
-      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/PATH')
+      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly/env')
+      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/env/PATH')
     end
 
     it 'creates a default VERSION file' do
@@ -301,11 +301,11 @@ describe 'gitaly' do
   end
 
   context 'populates default env variables' do
-    it_behaves_like "enabled gitaly env", "TZ", ':/etc/localtime'
-    it_behaves_like "enabled gitaly env", "HOME", '/var/opt/gitlab'
-    it_behaves_like "enabled gitaly env", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
-    it_behaves_like "enabled gitaly env", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
-    it_behaves_like "enabled gitaly env", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it_behaves_like "enabled service env", "gitaly", "TZ", ':/etc/localtime'
+    it_behaves_like "enabled service env", "gitaly", "HOME", '/var/opt/gitlab'
+    it_behaves_like "enabled service env", "gitaly", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
+    it_behaves_like "enabled service env", "gitaly", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
+    it_behaves_like "enabled service env", "gitaly", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
   end
 
   context 'computes env variables based on other values' do
@@ -318,7 +318,7 @@ describe 'gitaly' do
         }
       )
     end
-    it_behaves_like "enabled gitaly env", "HOME", '/my/random/path'
+    it_behaves_like "enabled service env", "gitaly", "HOME", '/my/random/path'
   end
 end
 

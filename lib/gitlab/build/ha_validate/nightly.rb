@@ -32,7 +32,7 @@ module Build
       end
 
       def self.get_access_token
-        ENV['HA_VALIDATE_TOKEN']
+        ENV['GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN']
       end
     end
   end

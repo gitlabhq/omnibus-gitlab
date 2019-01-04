@@ -243,6 +243,12 @@ describe 'nginx' do
       }
     end
 
+    it 'applies nginx request_buffering path regex' do
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include("location ~ (\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$)")
+      }
+    end
+
     it 'applies mattermost_nginx verify client settings to gitlab-mattermost-http' do
       stub_gitlab_rb("mattermost_nginx" => {
                        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-mattermost-http-ca.crt",
@@ -344,6 +350,47 @@ describe 'nginx' do
       stub_gitlab_rb(nginx: { listen_https: true, redirect_http_to_https: true })
       expect(chef_run.node['gitlab']['nginx']['redirect_http_to_https']).to be true
       expect(chef_run).to render_file(gitlab_http_config).with_content('return 301 https://fauxhai.local:80$request_uri;')
+    end
+
+    context 'when smartcard authentication is enabled' do
+      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf' }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smartcard_enabled: true
+          },
+          nginx: { listen_https: true }
+        )
+      end
+
+      it 'listens on a separate port' do
+        expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content('listen *:3444 ssl http2')
+      end
+
+      it 'requires client side certificate' do
+        expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
+          expect(content).to include('ssl_client_certificate /etc/gitlab/ssl/CA.pem')
+          expect(content).to include('ssl_verify_client on')
+          expect(content).to include('ssl_verify_depth 2')
+        }
+      end
+
+      it 'forwards client side certificate in header' do
+        expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content('proxy_set_header X-SSL-Client-Certificate')
+      end
+    end
+
+    context 'when smartcard authentication is disabled' do
+      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf' }
+
+      before do
+        stub_gitlab_rb(gitlab_rails: { smartcard_enabled: false })
+      end
+
+      it 'should not add the gitlab smartcard config' do
+        expect(chef_run).not_to render_file(gitlab_smartcard_http_config)
+      end
     end
   end
 

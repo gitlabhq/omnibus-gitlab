@@ -47,6 +47,7 @@ mattermost_external_url 'http://mattermost.example.com'
 
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
+redis['enable'] = false
 ```
 
 Then following the details in [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
@@ -153,7 +154,8 @@ Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes
 
 As of GitLab 11.0, these settings are configured through the Mattermost **System Console** by a user logged
 into Mattermost as a System Administrator. On  the **Notifications** > **Email** tab of the **System Console**,
-you can enter the SMTP credentials given by your SMTP provider. More information on the specific settings
+you can enter the SMTP credentials given by your SMTP provider or `127.0.0.1` and port `25` to use `sendmail`.
+More information on the specific settings
 that are needed is available in the [Mattermost documentation](https://docs.mattermost.com/install/smtp-email-setup.html).
 
 These settings can also be configured in `/var/opt/gitlab/mattermost/config.json`.
@@ -203,7 +205,7 @@ mattermost['email_skip_server_certificate_verification'] = false
 #### With GitLab 11.0
 
 Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL,
-including protocol and port, is required:
+including protocol and port, is required if different from `mattermost_external_url`:
 
 ```ruby
 mattermost['service_site_url'] = 'https://mattermost.example.com'
@@ -218,7 +220,7 @@ This setting can also be configured in `/var/opt/gitlab/mattermost/config.json`.
 
 #### Prior to GitLab 11.0
 
-Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required:
+Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required if different from `mattermost_external_url`:
 
 ```ruby
 mattermost['service_site_url'] = 'https://mattermost.example.com'
@@ -235,6 +237,7 @@ For help and support around your GitLab Mattermost deployment please see:
 
 - [Troubleshooting Forum](https://forum.mattermost.org/t/about-the-trouble-shooting-category/150/1) for configuration questions and issues
 - [Troubleshooting FAQ](http://docs.mattermost.com/install/troubleshooting.html)
+- [Mattermost GitLab Issues Support Handbook](https://docs.mattermost.com/process/support.html?highlight=omnibus#gitlab-issues)
 - [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps
 
 ## Upgrading GitLab Mattermost
@@ -264,6 +267,7 @@ Below is a list of Mattermost versions for GitLab 9.0 and later:
 | 11.3 | 5.2 |
 | 11.4 | 5.3 |
 | 11.5 | 5.4 |
+| 11.6 | 5.5 |
 
 It is possible to skip upgrade versions starting from Mattermost v3.1. For example, Mattermost v3.1.0 in GitLab 8.9 can upgrade directly to Mattermost v3.4.0 in GitLab 8.12.
 
@@ -302,37 +306,8 @@ To resolve this problem, `gitlab.rb` will include only the
 configuration necessary for GitLab<=>Mattermost integration in 11.0. GitLab will no longer
 generate the `config.json` file, instead passing limited configuration settings via environment variables.
 
-The settings that will continue to be
-supported in `gitlab.rb` are:
-
-```
-# Supported settings
-mattermost_external_url
-mattermost['enable']
-mattermost['username']
-mattermost['group']
-mattermost['uid']
-mattermost['gid']
-mattermost['home']
-mattermost['database_name']
-mattermost['env']
-mattermost['service_use_ssl']
-mattermost['service_address']
-mattermost['service_port']
-mattermost['service_site_url']
-mattermost['team_site_name']
-mattermost['sql_driver_name']
-mattermost['sql_data_source']
-mattermost['log_file_directory']
-mattermost['file_directory']
-mattermost['gitlab_enable']
-mattermost['gitlab_secret']
-mattermost['gitlab_id']
-mattermost['gitlab_scope']
-mattermost['gitlab_auth_endpoint']
-mattermost['gitlab_token_endpoint']
-mattermost['gitlab_user_api_endpoint']
-```
+The settings that continue to be supported in `gitlab.rb` can be found in
+[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 With GitLab 11.0, other Mattermost settings can be configured through Mattermost's System Console,
 by editing `/var/opt/gitlab/mattermost/config.json`, or by using `mattermost['env']` in `gitlab.rb`.
@@ -426,7 +401,7 @@ After upgrading to GitLab 8.9 additional steps are require before restarting the
 1. Confirm you are starting with version GitLab 8.8.
 1. Backup your Mattermost database.
      - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions.
-     - If you use a default omnibus install you can use this command: `sudo -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > mattermost_dbdump_$(date --rfc-3339=date).sql.gz`
+     - If you use a default omnibus install you can use [this command](#backup-the-bundled-postgresql-database)
 1. Configure two settings.
      - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
      - In ` /etc/gitlab/gitlab.rb` set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost.
@@ -475,17 +450,17 @@ If you are using an older version of GitLab Omnibus, enable incoming webhooks fr
 mattermost['service_enable_incoming_webhooks'] = true
 ```
 
-#### Setting up Mattermost as a Slack project service integration:
+#### Setting up Mattermost as a service integration:
 
-Mattermost webhooks are Slack-compatible, so you can use their project service option to set up Mattermost integration:
+You can use the Mattermost notifications project integration option to set up Mattermost integration:
 
 1. In Mattermost, go to **System Console** > **Integration Settings** > **Custom Integrations** and turn on **Enable Incoming Webhooks**
 1. Exit the system console, and then go to **Integrations** > **Incoming Webhooks** from the main menu
 2. Select a channel and click **Add** and copy the `Webhook URL`
-3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Services** > **Slack**
+3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Integrations** > **Mattermost notifications**
 4. Enter **Username** for how you would like to name the account that posts the notifications
 4. Select **Triggers** for GitLab events on which you'd like to receive notifications
-6. Click **Save changes** then **Test settings** to make sure everything is working
+6. Click **Test settings and save changes** to make sure everything is working
 
 Any issues, please see the [Mattermost Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150).
 
@@ -532,6 +507,14 @@ If you need to connect to the bundled PostgreSQL database and are using the defa
 
 ```
 sudo gitlab-psql -d mattermost_production
+```
+
+### Backup the bundled PostgreSQL database
+
+If you need to backup the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can backup using this command:
+
+```
+sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > mattermost_dbdump_$(date --rfc-3339=date).sql.gz
 ```
 
 ### Mattermost Command Line Tools (CLI)

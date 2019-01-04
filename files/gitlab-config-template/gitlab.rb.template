@@ -214,6 +214,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Impersonation settings
+# gitlab_rails['impersonation_enabled'] = true
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
@@ -271,6 +274,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     admin_group: ''
 #     sync_ssh_keys: false
 # EOS
+
+### Smartcard authentication settings
+###! Docs: https://docs.gitlab.com/ee/administration/auth/smartcard.html
+# gitlab_rails['smartcard_enabled'] = false
+# gitlab_rails['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+# gitlab_rails['smartcard_client_certificate_required_port'] = 3444
 
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
@@ -440,6 +449,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Redis TCP connection
 # gitlab_rails['redis_host'] = "127.0.0.1"
 # gitlab_rails['redis_port'] = 6379
+# gitlab_rails['redis_ssl'] = false
 # gitlab_rails['redis_password'] = nil
 # gitlab_rails['redis_database'] = 0
 
@@ -520,6 +530,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 # registry['log_level'] = "info"
+# registry['log_formatter'] = "text"
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['health_storagedriver_enabled'] = true
 # registry['storage_delete_enabled'] = true
@@ -595,6 +606,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Log format: default is text, can also be json or none.
 # gitlab_workhorse['log_format'] = "json"
 
+# gitlab_workhorse['env_directory'] = "/opt/gitlab/etc/gitlab-workhorse/env"
 # gitlab_workhorse['env'] = {
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
@@ -1028,6 +1040,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['keepalive_timeout'] = 65
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
+##! These paths have proxy_request_buffering disabled
+# nginx['request_buffering_off_path_regex'] = "\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$"
 
 ### Nginx status
 # nginx['status'] = {
@@ -1124,7 +1138,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "pack" => ["threads = 1"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
-#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 # }
 
 ################################################################################
@@ -1309,7 +1323,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
 # prometheus['chunk_encoding_version'] = 2
-# prometheus['env_directory'] = '/opt/gitlab/etc/prometheus'
+# prometheus['env_directory'] = '/opt/gitlab/etc/prometheus/env'
 # prometheus['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1369,7 +1383,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data"
 #   'config.file' => "#{node['gitlab']['alertmanager']['home']}/alertmanager.yml"
 # }
-# alertmanager['env_directory'] = '/opt/gitlab/etc/alertmanager'
+# alertmanager['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
 # alertmanager['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1388,7 +1402,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['flags'] = {
 #   'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
 # }
-# node_exporter['env_directory'] = '/opt/gitlab/etc/node-exporter'
+# node_exporter['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
 # node_exporter['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1406,7 +1420,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
 # }
-# redis_exporter['env_directory'] = '/opt/gitlab/etc/redis-exporter'
+# redis_exporter['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
 # redis_exporter['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1424,7 +1438,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
-# postgres_exporter['env_directory'] = '/opt/gitlab/etc/postgres-exporter'
+# postgres_exporter['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
 # postgres_exporter['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1437,7 +1451,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer_exporter['enable'] = false
 # pgbouncer_exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
 # pgbouncer_exporter['listen_address'] = 'localhost:9188'
-# pgbouncer_exporter['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter'
+# pgbouncer_exporter['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
 # pgbouncer_exporter['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1456,6 +1470,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_monitor['listen_address'] = 'localhost'
 # gitlab_monitor['listen_port'] = '9168'
 
+##! Manage gitlab-monitor sidekiq probes. false by default when Sentinels are
+##! found.
+# gitlab_monitor['probe_sidekiq'] = true
+
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true
 
@@ -1470,7 +1488,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['dir'] = "/var/opt/gitlab/gitaly"
 # gitaly['log_directory'] = "/var/log/gitlab/gitaly"
 # gitaly['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
-# gitaly['env_directory'] = "/opt/gitlab/etc/gitaly"
+# gitaly['env_directory'] = "/opt/gitlab/etc/gitaly/env"
 # gitaly['env'] = {
 #  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
 #  'HOME' => '/var/opt/gitlab'
@@ -1741,7 +1759,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['enable'] = false
 # pgbouncer['log_directory'] = '/var/log/gitlab/pgbouncer'
 # pgbouncer['data_directory'] = '/var/opt/gitlab/pgbouncer'
-# pgbouncer['env_directory'] = '/opt/gitlab/etc/pgbouncer'
+# pgbouncer['env_directory'] = '/opt/gitlab/etc/pgbouncer/env'
 # pgbouncer['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
@@ -1901,7 +1919,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
 # consul['data_dir'] = '/var/opt/gitlab/consul/data'
 # consul['log_directory'] = '/var/log/gitlab/consul'
-# consul['env_directory'] = '/opt/gitlab/etc/consul'
+# consul['env_directory'] = '/opt/gitlab/etc/consul/env'
 # consul['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }

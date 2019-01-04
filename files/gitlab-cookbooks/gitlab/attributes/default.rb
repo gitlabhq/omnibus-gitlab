@@ -24,7 +24,7 @@ default['gitlab']['omnibus-gitconfig']['system'] = {
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
   "repack" => ["writeBitmaps = true"],
-  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/"],
+  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
 }
 # Create users and groups needed for the package
 default['gitlab']['manage-accounts']['enable'] = true
@@ -181,6 +181,7 @@ default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
+default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
 default['gitlab']['gitlab-rails']['usage_ping_enabled'] = nil
 # Defaults set in libraries/gitlab_rails.rb
 default['gitlab']['gitlab-rails']['repositories_storages'] = {}
@@ -206,6 +207,10 @@ default['gitlab']['gitlab-rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 ####
+
+default['gitlab']['gitlab-rails']['smartcard_enabled'] = false
+default['gitlab']['gitlab-rails']['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'] = 3444
 
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
@@ -293,6 +298,7 @@ default['gitlab']['gitlab-rails']['db_fdw'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
+default['gitlab']['gitlab-rails']['redis_ssl'] = false
 default['gitlab']['gitlab-rails']['redis_password'] = nil
 default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 default['gitlab']['gitlab-rails']['redis_sentinels'] = []
@@ -552,6 +558,7 @@ default['gitlab']['gitlab-workhorse']['api_queue_duration'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_limit'] = nil
 default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
 default['gitlab']['gitlab-workhorse']['log_format'] = nil
+default['gitlab']['gitlab-workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab-workhorse/env'
 default['gitlab']['gitlab-workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'HOME' => node['gitlab']['user']['home'],
@@ -620,6 +627,8 @@ default['gitlab']['nginx']['client_max_body_size'] = 0
 default['gitlab']['nginx']['cache_max_size'] = '5000m'
 default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
+# The following matched paths will set proxy_request_buffering to off
+default['gitlab']['nginx']['request_buffering_off_path_regex'] = "\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$"
 default['gitlab']['nginx']['ssl_client_certificate'] = nil # Most root CA's will be included by default
 default['gitlab']['nginx']['ssl_verify_client'] = nil # do not enable 2-way SSL client authentication
 default['gitlab']['nginx']['ssl_verify_depth'] = "1" # n/a if ssl_verify_client off
@@ -852,6 +861,7 @@ default['gitlab']['postgres-exporter']['enable'] = false
 default['gitlab']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
 default['gitlab']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
 default['gitlab']['postgres-exporter']['listen_address'] = 'localhost:9187'
+default['gitlab']['postgres-exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
 default['gitlab']['postgres-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
@@ -864,6 +874,7 @@ default['gitlab']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-m
 default['gitlab']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
 default['gitlab']['gitlab-monitor']['listen_address'] = 'localhost'
 default['gitlab']['gitlab-monitor']['listen_port'] = '9168'
+default['gitlab']['gitlab-monitor']['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true

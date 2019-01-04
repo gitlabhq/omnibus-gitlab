@@ -21,7 +21,7 @@ else
   fi
 fi
 
-gitlab_version=$(cat VERSION | awk '
+gitlab_version=$(echo "${1}" | awk '
   {
     gsub(/[^a-z0-9]/, "-")
     gsub(/(\A-+|-+\z)/, "")
@@ -33,20 +33,13 @@ docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 assets_image_name="${ASSET_REGISTRY}/${assets_image}:${gitlab_version}"
 
-# In case the image hasn't been created yet. Wait 10 minutes then error
-timeout=600
+# In case the image hasn't been created yet. Keep trying until the pipeline times out
 interval=30
 while ! docker pull "${assets_image_name}"
 do
-    if [ "${timout}" -le 0 ]
-    then
-        echo "Timed out waiting for the assets image"
-        exit 1
-    fi
-    echo "Waiting ${timeout} more seconds for ${assets_image} to be available"
-    timeout=$((timeout-interval))
-    sleep ${interval}
+  echo "${assets_image_name} is not available yet. Will retry in ${interval} seconds"
+  sleep ${interval}
 done
 
-docker create --name asset_cache ${assets_image_name}
+docker create --name asset_cache "${assets_image_name}"
 docker cp asset_cache:/assets ${ASSET_PATH}

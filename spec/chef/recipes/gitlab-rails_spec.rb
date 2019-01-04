@@ -463,6 +463,36 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'smartcard authentication settings' do
+      context 'smartcard authentication is configured' do
+        it 'exposes the smartcard authentication settings' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              smartcard_enabled: true
+            }
+          )
+
+          expect(chef_run).to(
+            render_file(gitlab_yml_path).with_content do |content|
+              expect(content).to match(/smartcard:\s+(#.*\n\s+)?enabled: true/)
+              expect(content).to include('ca_file: "/etc/gitlab/ssl/CA.pem"')
+              expect(content).to include('client_certificate_required_port: 3444')
+            end
+          )
+        end
+      end
+
+      context 'smartcard authentication is disabled' do
+        context 'smartcard authentication is not configured' do
+          it 'does not enable smartcard authentication' do
+            expect(chef_run).to(
+              render_file(gitlab_yml_path)
+                .with_content(/smartcard:\s+(#.*\n\s+)?enabled: false/))
+          end
+        end
+      end
+    end
+
     context 'omniauth settings' do
       context 'enabled setting' do
         it 'defaults to nil (enabled)' do
@@ -865,25 +895,25 @@ describe 'gitlab::gitlab-rails' do
 
   context 'with environment variables' do
     context 'by default' do
-      it_behaves_like "enabled gitlab-rails env", "HOME", '\/var\/opt\/gitlab'
-      it_behaves_like "enabled gitlab-rails env", "RAILS_ENV", 'production'
-      it_behaves_like "enabled gitlab-rails env", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '2000000'
-      it_behaves_like "enabled gitlab-rails env", "BUNDLE_GEMFILE", '\/opt\/gitlab\/embedded\/service\/gitlab-rails\/Gemfile'
-      it_behaves_like "enabled gitlab-rails env", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
-      it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
-      it_behaves_like "enabled gitlab-rails env", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
+      it_behaves_like "enabled service env", "gitlab-rails", "HOME", '\/var\/opt\/gitlab'
+      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_ENV", 'production'
+      it_behaves_like "enabled service env", "gitlab-rails", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '2000000'
+      it_behaves_like "enabled service env", "gitlab-rails", "BUNDLE_GEMFILE", '\/opt\/gitlab\/embedded\/service\/gitlab-rails\/Gemfile'
+      it_behaves_like "enabled service env", "gitlab-rails", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
+      it_behaves_like "enabled service env", "gitlab-rails", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
+      it_behaves_like "enabled service env", "gitlab-rails", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
 
-      it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
-      it_behaves_like "disabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", ''
+      it_behaves_like "enabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it_behaves_like "disabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", ''
 
       context 'when a custom env variable is specified' do
         before do
           stub_gitlab_rb(gitlab_rails: { env: { 'IAM' => 'CUSTOMVAR' } })
         end
 
-        it_behaves_like "enabled gitlab-rails env", "IAM", 'CUSTOMVAR'
-        it_behaves_like "enabled gitlab-rails env", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
-        it_behaves_like "enabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+        it_behaves_like "enabled service env", "gitlab-rails", "IAM", 'CUSTOMVAR'
+        it_behaves_like "enabled service env", "gitlab-rails", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
+        it_behaves_like "enabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
       end
     end
 
@@ -892,7 +922,7 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(gitlab_rails: { gitlab_relative_url: '/gitlab' })
       end
 
-      it_behaves_like "enabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
+      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
     end
 
     context 'when relative URL is specified in external_url' do
@@ -900,7 +930,7 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(external_url: 'http://localhost/gitlab')
       end
 
-      it_behaves_like "enabled gitlab-rails env", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
+      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
     end
 
     context 'when jemalloc is disabled' do
@@ -908,7 +938,7 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(gitlab_rails: { enable_jemalloc: false })
       end
 
-      it_behaves_like "disabled gitlab-rails env", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it_behaves_like "disabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
     end
   end
 

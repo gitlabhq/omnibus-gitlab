@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '9.6.8'
+default_version '9.6.11'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,9 +30,16 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '9.6.8' do
-  source sha256: 'eafdb3b912e9ec34bdd28b651d00226a6253ba65036cb9a41cad2d9e82e3eb70'
+version '9.6.11' do
+  source sha256: '38250adc69a1e8613fb926c894cda1d01031391a03648894b9a6e13ff354a530'
 end
+
+# PostgreSQL 10 should have a major version of 10, not 10.0.
+# See: https://www.postgresql.org/support/versioning
+#
+# Be sure to update files/gitlab-cookbooks/postgresql/recipes/enable.rb when
+# upgrading.
+major_version = '9.6'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -40,7 +47,7 @@ relative_path "postgresql-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  prefix = "#{install_dir}/embedded/postgresql/#{version}"
+  prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
   update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
@@ -63,7 +70,7 @@ end
 
 # exclude headers and static libraries from package
 project.exclude "embedded/bin/pg_config"
-project.exclude "embedded/postgresql/#{version}/include"
-project.exclude "embedded/postgresql/#{version}/lib/*.a"
-project.exclude "embedded/postgresql/#{version}/lib/pgxs"
-project.exclude "embedded/postgresql/#{version}/lib/pkgconfig"
+project.exclude "embedded/postgresql/#{major_version}/include"
+project.exclude "embedded/postgresql/#{major_version}/lib/*.a"
+project.exclude "embedded/postgresql/#{major_version}/lib/pgxs"
+project.exclude "embedded/postgresql/#{major_version}/lib/pkgconfig"

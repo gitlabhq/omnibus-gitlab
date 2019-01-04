@@ -78,7 +78,7 @@ mattermost_external_url "https://mattermost.example.com" # mattermost, must use 
 > **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) ***10.7***.
 
 Default installations schedule renewals after midnight on every 4th day. The minute is determined by the value in `external_url` to help distribute the load
-on the upstream `Let's Encypt` servers.
+on the upstream `Let's Encrypt` servers.
 
 Explicitly set renewal times by adding the following to `/etc/gitlab/gitlab.rb`:
 
@@ -146,6 +146,9 @@ self-signed certificates.
 ## Solving Problems
 
 ### git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
+
+NOTE: **Note:**
+In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701).
 
 The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
 instead of **OpenSSL**.

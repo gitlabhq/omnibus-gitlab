@@ -32,7 +32,7 @@ describe 'gitlab::mattermost' do
   end
 
   context 'SiteUrl setting' do
-    it_behaves_like "enabled mattermost env", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.example.com'
+    it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.example.com'
   end
 
   context 'when explicitly set' do
@@ -42,7 +42,7 @@ describe 'gitlab::mattermost' do
                      })
     end
 
-    it_behaves_like "enabled mattermost env", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.gitlab.example'
+    it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.gitlab.example'
   end
 
   it 'authorizes mattermost with gitlab' do
@@ -82,13 +82,13 @@ describe 'gitlab::mattermost' do
                      })
     end
 
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_ENABLE", 'true'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_SECRET", 'gitlab_secret'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_ID", 'gitlab_id'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_SCOPE", 'scope'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_AUTHENDPOINT", 'http://gitlab.example.com/oauth/authorize'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_TOKENENDPOINT", 'http://gitlab.example.com/oauth/token'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'http://gitlab.example.com/api/v4/user'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ENABLE", 'true'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_SECRET", 'gitlab_secret'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ID", 'gitlab_id'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_SCOPE", 'scope'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_AUTHENDPOINT", 'http://gitlab.example.com/oauth/authorize'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_TOKENENDPOINT", 'http://gitlab.example.com/oauth/token'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'http://gitlab.example.com/api/v4/user'
   end
 
   context 'allows overrides to the mattermost settings regarding GitLab endpoints' do
@@ -102,15 +102,15 @@ describe 'gitlab::mattermost' do
                      })
     end
 
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_ENABLE", 'true'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_AUTHENDPOINT", 'https://test-endpoint.example.com/test/auth'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_TOKENENDPOINT", 'https://test-endpoint.example.com/test/token'
-    it_behaves_like "enabled mattermost env", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'https://test-endpoint.example.com/test/user/api'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ENABLE", 'true'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_AUTHENDPOINT", 'https://test-endpoint.example.com/test/auth'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_TOKENENDPOINT", 'https://test-endpoint.example.com/test/token'
+    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'https://test-endpoint.example.com/test/user/api'
   end
 
   context 'gitlab is added to untrusted internal connections list' do
     context 'when no allowed internal connections are provided by gitlab.rb' do
-      it_behaves_like "enabled mattermost env", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", ' gitlab.example.com'
+      it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", ' gitlab.example.com'
     end
 
     context 'when some allowed internal connections are provided by gitlab.rb' do
@@ -118,7 +118,7 @@ describe 'gitlab::mattermost' do
         stub_gitlab_rb(mattermost: { enable: true, service_allowed_untrusted_internal_connections: 'localhost' })
       end
 
-      it_behaves_like "enabled mattermost env", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
+      it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
     end
   end
 
@@ -140,7 +140,7 @@ describe 'gitlab::mattermost' do
     it_behaves_like 'no gitlab authorization performed'
 
     context 'does not add gitlab automatically to the list of allowed internal addresses' do
-      it_behaves_like "disabled mattermost env", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
+      it_behaves_like "disabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
     end
   end
 
@@ -161,7 +161,7 @@ describe 'gitlab::mattermost' do
       stub_gitlab_rb(mattermost: { env: { 'IAM' => 'CUSTOMVAR' } })
     end
 
-    it_behaves_like "enabled mattermost env", "IAM", 'CUSTOMVAR'
+    it_behaves_like "enabled service env", "mattermost", "IAM", 'CUSTOMVAR'
   end
 
   context 'letsencrypt alt_names' do

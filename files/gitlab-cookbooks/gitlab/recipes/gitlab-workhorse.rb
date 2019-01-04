@@ -15,10 +15,12 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+redis_helper = RedisHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-workhorse']['dir']
 log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
+workhorse_env_dir = node['gitlab']['gitlab-workhorse']['env_directory']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -39,7 +41,7 @@ directory gitlab_workhorse_static_etc_dir do
   recursive true
 end
 
-env_dir File.join(gitlab_workhorse_static_etc_dir, 'env') do
+env_dir workhorse_env_dir do
   variables node['gitlab']['gitlab-workhorse']['env']
   notifies :restart, "service[gitlab-workhorse]"
 end
@@ -57,8 +59,8 @@ file File.join(working_dir, "VERSION") do
   notifies :restart, "service[gitlab-workhorse]"
 end
 
-redis_url = RedisHelper.new(node).redis_url(true).to_s
-redis_password = node['gitlab']['gitlab-rails']['redis_password']
+_redis_host, _redis_port, redis_password = redis_helper.redis_params
+redis_url = redis_helper.redis_url.to_s
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']

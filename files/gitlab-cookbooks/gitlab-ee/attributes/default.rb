@@ -29,12 +29,6 @@ default['gitlab']['sentinel']['failover_timeout'] = 60000
 default['gitlab']['sentinel']['myid'] = nil
 
 ####
-# Redis Settings for EE
-####
-default['gitlab']['redis']['announce_ip'] = nil
-default['gitlab']['redis']['announce_port'] = nil
-
-####
 # Sidekiq Cluster
 ####
 default['gitlab']['sidekiq-cluster']['enable'] = false
@@ -155,7 +149,7 @@ default['gitlab']['geo-postgresql']['pgbouncer_user_password'] = nil
 
 default['gitlab']['geo-logcursor']['ha'] = false
 default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
-default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor'
+default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
 
 ####
 # Pgbouncer

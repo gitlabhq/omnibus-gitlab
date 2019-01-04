@@ -6,11 +6,11 @@ module Build
       def is_ee?
         return true if ENV['ee'] == 'true'
 
-        system('grep -q -E "\-ee" VERSION')
+        File.read('VERSION').include?('-ee')
       end
 
       def match_tag?(tag)
-        system("git describe --exact-match --match #{tag}")
+        system(*%W[git describe --exact-match --match #{tag}])
       end
 
       def is_patch_release?
@@ -35,11 +35,11 @@ module Build
       end
 
       def no_changes?
-        system("git diff --quiet")
+        system(*%w[git diff --quiet])
       end
 
       def on_tag?
-        system("git describe --exact-match")
+        system(*%w[git describe --exact-match])
       end
     end
   end

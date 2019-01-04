@@ -508,9 +508,19 @@ gitlab_rails['rate_limit_period'] = 60
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+## Disable impersonation
+
+Disabling impersonation is documented in
+[docs.gitlab.com](https://docs.gitlab.com/ee/api/README.html#disable-impersonation).
+
 ## Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](ldap.md).
+
+## Smartcard authentication
+
+Smartcard authentication is documented in
+[docs.gitlab.com](https://docs.gitlab.com/ee/administration/auth/smartcard.html).
 
 ## Enable HTTPS
 

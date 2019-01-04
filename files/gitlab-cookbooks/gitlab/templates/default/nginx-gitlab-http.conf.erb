@@ -30,10 +30,6 @@
 ##         configuration         ##
 ###################################
 
-upstream gitlab-workhorse {
-  server <%= "unix:" if node['gitlab']['gitlab-workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
-}
-
 <% if @https && @redirect_http_to_https %>
 ## Redirects all HTTP traffic to the HTTPS host
 server {
@@ -160,7 +156,7 @@ server {
   proxy_set_header <%= header[0] %> <%= header[1] %>;
   <% end %>
 
-  location ~ (\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$) {
+  location ~ (<%= @request_buffering_off_path_regex %>) {
     proxy_cache off;
     proxy_pass http://gitlab-workhorse;
     proxy_request_buffering off;

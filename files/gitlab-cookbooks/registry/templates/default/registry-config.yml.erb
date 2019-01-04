@@ -1,6 +1,7 @@
 version: 0.1
 log:
   level: <%= @log_level %>
+  formatter: <%= @log_formatter %>
   fields:
     service: registry
     environment: production
@@ -25,7 +26,8 @@ auth:
     service: container_registry
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>
-
+validation:
+  disabled: true
 <% if @notifications %>
 notifications:
   endpoints: <%= @notifications.to_json %>
