@@ -343,7 +343,8 @@ dependency_scanning:
     REPORT_PATH: ./
   before_script: []
   script:
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
+    - manifest=pkg/ubuntu-xenial/*.version-manifest.json
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
   dependencies:
     - Ubuntu-16.04
