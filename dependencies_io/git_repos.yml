@@ -47,13 +47,6 @@ repos:
   replace_in_files:
     config/software/compat_resource.rb: default_version '{version}'
 
-# config_guess
-# TODO: No tags
-- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git
-  installed: c9092d05347c925a26f6887980e185206e13f9d6
-  replace_in_files:
-    config/software/config_guess.rb: version = Gitlab::Version.new('config_guess', '{version_clean}')
-
 # consul
 - url: https://github.com/hashicorp/consul
   installed: 0.9.0
@@ -66,19 +59,11 @@ repos:
   replace_in_files:
     config/software/curl.rb: default_version '{version}'
 
-# gnupg #TODO
-# - url:
-#   installed:
-#   replace_in_files:
-#     config/software/gnupg.rb: default_version '{version_clean}'
-
 # go-crond
 - url: https://github.com/webdevops/go-crond
   installed: 0.6.1
   replace_in_files:
     config/software/go-crond.rb: default_version '{version_clean}'
-
-# gpgme #TODO
 
 # jemalloc
 - url: https://github.com/jemalloc/jemalloc
@@ -86,128 +71,80 @@ repos:
   replace_in_files:
     config/software/jemalloc.rb: default_version '{version}'
 
-# libassuan TODO: not-github
-- url:
-  installed:
-  replace_in_files:
-    config/software/libassuan.rb: default_version '{version_clean}'
-
 # libevent
 - url: https://github.com/libevent/libevent
   installed: release-2.1.8-stable
   replace_in_files:
     config/software/libevent.rb: default_version '{version_clean}'
 
-# libgcrypt TODO
-- url: https://dev.gnupg.org/source/libgcrypt.git
-  installed:
-  replace_in_files:
-    config/software/libgcrypt.rb: default_version '{version_clean}'
-
-# libpng TODO
+# libpng
 - url: https://git.code.sf.net/p/libpng/code
-  installed:
+  installed: v1.6.35
   replace_in_files:
     config/software/libpng.rb: default_version '{version_clean}'
 
-# libre2 TODO
+# libre2
 - url: https://github.com/google/re2
-  installed:
+  installed: 2016-02-01
   replace_in_files:
-    config/software/libre2.rb: default_version '{version_clean}'
-
-# libtool
-- url: https://git.savannah.gnu.org/git/libtool.git
-  installed:
-  replace_in_files:
-    config/software/libtool.rb: default_version '{version_clean}'
-
-# libxml2
-- url: https://gitlab.gnome.org/GNOME/libxml2.git
-  installed:
-  replace_in_files:
-    config/software/libxml2.rb: default_version '{version_clean}'
+    config/software/libre2.rb: default_version '{version}'
 
 # logrotate
-- url:
-  installed:
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git
+  installed: r3-8-5
   replace_in_files:
-    config/software/logrotate.rb: default_version '{version_clean}'
+    config/software/logrotate.rb: default_version '{version}'
 
 # mixlib-log
-- url:
-  installed:
+- url: https://github.com/chef/mixlib-log.git
+  installed: 1.7.1
   replace_in_files:
     config/software/mixlib-log.rb: default_version '{version_clean}'
 
 # nginx-module-vts
-- url:
-  installed:
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx-module-vts.git
+  installed: 0.1.18
   replace_in_files:
     config/software/nginx-module-vts.rb: default_version '{version_clean}'
 
 # ohai
-- url:
-  installed:
+- url: https://github.com/chef/ohai.git
+  installed: 13.7.1
   replace_in_files:
     config/software/ohai.rb: default_version '{version_clean}'
 
-# omnibus-ctl
-- url:
-  installed:
-  replace_in_files:
-    config/software/omnibus-ctl.rb: default_version '{version_clean}'
-
 # openssl
 - url: https://github.com/openssl/openssl.git
-  installed:
+  installed: OpenSSL_1_0_2o
   replace_in_files:
-    config/software/openssl.rb: default_version '{version_clean}'
+    config/software/openssl.rb: default_version '{version}'
 
 # prometheus-storage-migrator
-- url:
-  installed:
+- url: https://gitlab.com/gitlab-org/prometheus-storage-migrator.git
+  installed: 0.2.0
   replace_in_files:
-    config/software/prometheus-storage-migrator.rb: default_version '{version_clean}'
-
-# rb-readline
-- url:
-  installed:
-  replace_in_files:
-    config/software/rb-readline.rb: default_version '{version_clean}'
-
-# registry
-- url:
-  installed:
-  replace_in_files:
-    config/software/registry.rb: default_version '{version_clean}'
+    config/software/prometheus-storage-migrator.rb: version = Gitlab::Version.new('prometheus', '{version}')
 
 # remote-syslog
-- url:
-  installed:
+- url: https://github.com/papertrail/remote_syslog.git
+  installed: 1.6.15
   replace_in_files:
     config/software/remote-syslog.rb: default_version '{version_clean}'
 
-# repmgr
-- url: https://github.com/2ndQuadrant/repmgr.git
-  installed:
-  replace_in_files:
-    config/software/rempgr.rb: default_version '{version_clean}'
-
 # rubygems
-- url:
-  installed:
+- url: https://github.com/rubygems/rubygems.git
+  installed: 2.7.6
   replace_in_files:
     config/software/rubygems.rb: default_version '{version_clean}'
 
 # util-macros
 - url: https://github.com/freedesktop/xorg-macros
-  installed:
+  installed: 1.18.0
   replace_in_files:
     config/software/util-macros.rb: default_version '{version_clean}'
 
 # zlib
 - url: https://github.com/madler/zlib.git
-  installed:
+  installed: 1.2.11
   replace_in_files:
     config/software/zlib.rb: default_version '{version_clean}'
