@@ -83,12 +83,6 @@ repos:
   replace_in_files:
     config/software/libpng.rb: default_version '{version_clean}'
 
-# libre2
-- url: https://github.com/google/re2
-  installed: 2016-02-01
-  replace_in_files:
-    config/software/libre2.rb: default_version '{version}'
-
 # logrotate
 - url: https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git
   installed: r3-8-5
