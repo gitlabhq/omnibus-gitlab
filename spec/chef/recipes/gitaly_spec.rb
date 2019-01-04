@@ -337,7 +337,16 @@ describe 'gitaly::git_data_dirs' do
   end
 
   context 'when gitaly is set to use a listen_addr' do
-    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', listen_addr: 'localhost:8123' }) }
+    before do
+      stub_gitlab_rb(git_data_dirs: {
+                       'default' => {
+                         'path' => '/tmp/user/git-data'
+                       }
+                     }, gitaly: {
+                       socket_path: '',
+                       listen_addr: 'localhost:8123'
+                     })
+    end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
@@ -346,7 +355,15 @@ describe 'gitaly::git_data_dirs' do
   end
 
   context 'when gitaly is set to use a tls_listen_addr' do
-    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '', tls_listen_addr: 'localhost:8123' }) }
+    before do
+      stub_gitlab_rb(git_data_dirs: {
+                       'default' => {
+                         'path' => '/tmp/user/git-data'
+                       }
+                     }, gitaly: {
+                       socket_path: '', tls_listen_addr: 'localhost:8123'
+                     })
+    end
 
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
@@ -355,9 +372,17 @@ describe 'gitaly::git_data_dirs' do
   end
 
   context 'when both tls and socket' do
-    before { stub_gitlab_rb(git_data_dirs: { 'default' => { 'path' => '/tmp/user/git-data' } }, gitaly: { socket_path: '/some/socket/path.socket', tls_listen_addr: 'localhost:8123' }) }
+    before do
+      stub_gitlab_rb(git_data_dirs: {
+                       'default' => {
+                         'path' => '/tmp/user/git-data'
+                       }
+                     }, gitaly: {
+                       socket_path: '/some/socket/path.socket', tls_listen_addr: 'localhost:8123'
+                     })
+    end
 
-    it 'Tls should take precedence' do
+    it 'TlS should take precedence' do
       expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tls://localhost:8123' })
     end
