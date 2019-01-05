@@ -24,13 +24,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-version '2016-02-01' do
-  source sha256: 'f246c43897ac341568a7460622138ec0dd8de9b6f5459686376fa23e9d8c1bb8'
-end
-
-source url: "https://github.com/google/re2/archive/#{version}.tar.gz"
-
-relative_path "re2-#{version}"
+source git: "https://github.com/google/re2"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
