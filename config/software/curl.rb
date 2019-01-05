@@ -15,21 +15,19 @@
 #
 
 name 'curl'
-default_version '7.59.0'
+default_version 'curl-7_59_0'
 
 # Runtime dependency
 dependency 'zlib'
 dependency 'openssl'
+dependency 'libtool'
 
 license 'MIT'
 license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source url: "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-       sha256: '099d9c32dc7b8958ca592597c9fabccdf4c08cfb7c114ff1afbbc4c6f13c9e9e'
-
-relative_path "curl-#{version}"
+source git: 'https://github.com/curl/curl'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -70,6 +68,7 @@ build do
     "--with-ca-fallback"
   ]
 
+  command './buildconf', env: env
   command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env

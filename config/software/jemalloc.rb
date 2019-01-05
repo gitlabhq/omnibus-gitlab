@@ -23,8 +23,7 @@ license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://github.com/jemalloc/jemalloc/releases/download/#{version}/jemalloc-#{version}.tar.bz2",
-       sha256: '5630650d5c1caab95d2f0898de4fe5ab8519dc680b04963b38bb425ef6a42d57'
+source git: 'https://github.com/jemalloc/jemalloc'
 
 dependency 'redis'
 
@@ -33,12 +32,13 @@ env = with_standard_compiler_flags(with_embedded_path)
 relative_path "jemalloc-#{version}"
 
 build do
-  command ['./configure',
+  command ['./autogen.sh',
            ' --enable-cc-silence',
            ' --enable-prof',
            "--prefix=#{install_dir}/embedded"].join(' '), env: env
-  make "-j #{workers}", env: env
-  make 'install', env: env
+  make "-j #{workers} build_lib", env: env
+  make 'install_lib', env: env
+  make 'install_bin', env: env
 end
 
 project.exclude "embedded/bin/jemalloc-config"

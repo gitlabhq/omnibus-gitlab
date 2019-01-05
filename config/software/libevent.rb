@@ -15,23 +15,25 @@
 #
 
 name 'libevent'
-default_version '2.1.8'
+default_version 'release-2.1.8-stable'
+
+dependency 'libtool'
+dependency 'openssl'
 
 license 'BSD-3-Clause'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-version '2.1.8' do
-  source sha256: '965cc5a8bb46ce4199a47e9b2c9e1cae3b137e8356ffdad6d94d3b9069b71dc2'
-end
-
-source url: "https://github.com/libevent/libevent/releases/download/release-#{version}-stable/libevent-#{version}-stable.tar.gz"
+source git: "https://github.com/libevent/libevent"
 
 relative_path "libevent-#{version}-stable"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
+
+  command './autogen.sh', env: env
   command './configure ' \
     "--prefix=#{install_dir}/embedded", env: env
 
