@@ -134,8 +134,8 @@ describe OmnibusHelper do
 
   describe '#is_deprecated_os?' do
     it 'detects deprecated OS correctly' do
-      allow_any_instance_of(Ohai::System).to receive(:data).and_return({ "platform" => "debian", "platform_version" => "7.11" })
-      expect(LoggingHelper).to receive(:deprecation).with(/Your OS, debian-7.11, will be deprecated soon/)
+      allow_any_instance_of(Ohai::System).to receive(:data).and_return({ "platform" => "raspbian", "platform_version" => "8.0" })
+      expect(LoggingHelper).to receive(:deprecation).with(/Your OS, raspbian-8.0, will be deprecated soon/)
       OmnibusHelper.is_deprecated_os?
     end
 

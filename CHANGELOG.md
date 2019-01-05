@@ -11,6 +11,7 @@ omnibus-gitlab repository.
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
 - Enabled ENA networking and SRIOV support to AMIs !2867 
+- Drop support for Debian Wheezy !2943
 
 11.6.3
 

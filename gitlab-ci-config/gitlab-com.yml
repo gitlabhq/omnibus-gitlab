@@ -148,7 +148,6 @@ danger-review:
 
 Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
-Debian 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
 Debian 9.1 knapsack: *prepare_knapsack
 OpenSUSE 42.3 knapsack: *prepare_knapsack
@@ -174,12 +173,6 @@ Ubuntu 18.04 specs :
   parallel: 6
   dependencies:
   - Ubuntu 18.04 knapsack
-Debian 7 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-wheezy"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Debian 7 knapsack
 Debian 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   extends: .spec_template
