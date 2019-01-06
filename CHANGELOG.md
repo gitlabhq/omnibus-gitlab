@@ -12,6 +12,7 @@ omnibus-gitlab repository.
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
 - Enabled ENA networking and SRIOV support to AMIs !2867 
 - Drop support for Debian Wheezy !2943
+- Restart sidekiq-cluster when relevant changes occur !2945
 
 11.6.3
 

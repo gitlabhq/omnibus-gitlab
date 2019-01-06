@@ -32,6 +32,7 @@ describe 'gitlab-ee::geo-database-migrations' do
         redis
         redis-exporter
         sidekiq
+        sidekiq-cluster
         unicorn
         puma
         gitaly
