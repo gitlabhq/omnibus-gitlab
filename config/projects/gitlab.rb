@@ -81,6 +81,7 @@ dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
 dependency 'go-crond'
+dependency 'docker-distribution-pruner'
 
 if ee
   dependency 'consul'
