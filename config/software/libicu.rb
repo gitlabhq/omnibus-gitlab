@@ -17,10 +17,9 @@
 #
 
 name 'libicu'
-default_version '57.1'
+default_version 'release-57-1'
 
-source url: 'http://downloads.sourceforge.net/project/icu/ICU4C/57.1/icu4c-57_1-src.tgz',
-       sha256: 'ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581'
+source git: 'https://github.com/unicode-org/icu'
 
 license 'MIT'
 license_file 'icu/LICENSE'
@@ -30,7 +29,7 @@ skip_transitive_dependency_licensing true
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"
-  cwd = "#{Omnibus::Config.source_dir}/libicu/icu/source"
+  cwd = "#{Omnibus::Config.source_dir}/libicu/icu4c/source"
 
   command ['./runConfigureICU',
            'Linux/gcc',
