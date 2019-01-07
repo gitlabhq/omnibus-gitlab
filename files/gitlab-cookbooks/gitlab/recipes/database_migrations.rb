@@ -25,6 +25,7 @@ dependent_services = []
 dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
 dependent_services << "service[puma]" if omnibus_helper.should_notify?("puma")
 dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
+dependent_services << "service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
 
 connection_attributes = %w(
   db_adapter
