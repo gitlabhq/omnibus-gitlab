@@ -18,6 +18,7 @@ omnibus-gitlab repository.
 - Fix Docker registry not working with Windows layers !2938
 - Remove deprecated OpenShift template !2936
 - Update Mattermost to 5.6.2
+- Fix warnings/errors when Prometheus is disabled. !2940
 
 11.6.2
 
