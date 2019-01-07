@@ -15,6 +15,8 @@ module Build
         "ref" => ENV["CI_COMMIT_REF_NAME"],
         "token" => ENV["BUILD_TRIGGER_TOKEN"],
         "variables[ALTERNATIVE_SOURCES]" => true,
+        "variables[BUILDER_IMAGE_REVISION]" => ENV['BUILDER_IMAGE_REVISION'],
+        "variables[BUILDER_IMAGE_REGISTRY]" => ENV['BUILDER_IMAGE_REGISTRY'],
         "variables[COMPILE_ASSETS]" => ENV['COMPILE_ASSETS'],
         "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
         "variables[ee]" => ENV["ee"] || "false",

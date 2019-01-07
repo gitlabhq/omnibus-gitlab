@@ -27,12 +27,9 @@ dependency 'cacerts'
 dependency 'makedepend' unless aix?
 dependency 'patch' if solaris2?
 
-default_version '1.0.2o'
+default_version 'OpenSSL_1_0_2o'
 
-source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz",
-       sha256: 'ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d'
-
-relative_path "openssl-#{version}"
+source git: "https://github.com/openssl/openssl.git"
 
 build do
   env = case ohai['platform']
