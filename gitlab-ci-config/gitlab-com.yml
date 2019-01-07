@@ -267,9 +267,6 @@ Trigger:qa-docker:
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
     - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:build
