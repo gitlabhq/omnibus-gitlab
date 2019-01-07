@@ -1,5 +1,144 @@
 repos:
+# acme-client
+- url: https://github.com/unixcharles/acme-client
+  installed: 0.4.0
+  replace_in_files:
+    config/software/acme-client.rb: default_version '{version_clean}'
+
+# alertmanager
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/alertmanager.git
+  installed: 0.15.1
+  replace_in_files:
+    config/software/alertmanager.rb: version = Gitlab::Version.new('alertmanager', '{version_clean}')
+
+# awesome_print
+- url: https://github.com/awesome-print/awesome_print
+  installed: 1.8.0
+  replace_in_files:
+    config/software/awesome_print.rb: default_version '{version_clean}'
+
+# bundler
+- url: https://github.com/bundler/bundler
+  installed: 1.16.6
+  replace_in_files:
+    config/software/bundler.rb: default_version '{version_clean}'
+
+# chef-acme
+- url: https://github.com/schubergphilis/chef-acme
+  installed: b49c28d
+  replace_in_files:
+    config/software/chef-acme.rb: version = Gitlab::Version.new(name, '{version_clean}')
+
+# chef-gem
+- url: https://github.com/chef/chef
+  installed: 13.6.4
+  replace_in_files:
+    config/software/chef-gem.rb: default_version '{version_clean}'
+
+# chef-zero
+- url: https://github.com/chef/chef-zero
+  installed: 13.1.0
+  replace_in_files:
+    config/software/chef-zero.rb: default_version '{version_clean}'
+
+# compat_resource
 - url: https://github.com/chef-cookbooks/compat_resource.git
   installed: v12.19.0
   replace_in_files:
     config/software/compat_resource.rb: default_version '{version}'
+
+# consul
+- url: https://github.com/hashicorp/consul
+  installed: 0.9.0
+  replace_in_files:
+    config/software/consul.rb: default_version '{version_clean}'
+
+# curl
+- url: https://github.com/curl/curl
+  installed: curl-7_59_0
+  replace_in_files:
+    config/software/curl.rb: default_version '{version}'
+
+# go-crond
+- url: https://github.com/webdevops/go-crond
+  installed: 0.6.1
+  replace_in_files:
+    config/software/go-crond.rb: default_version '{version_clean}'
+
+# jemalloc
+- url: https://github.com/jemalloc/jemalloc
+  installed: 4.2.1
+  replace_in_files:
+    config/software/jemalloc.rb: default_version '{version}'
+
+# libevent
+- url: https://github.com/libevent/libevent
+  installed: release-2.1.8-stable
+  replace_in_files:
+    config/software/libevent.rb: default_version '{version_clean}'
+
+# libpng
+- url: https://git.code.sf.net/p/libpng/code
+  installed: v1.6.35
+  replace_in_files:
+    config/software/libpng.rb: default_version '{version_clean}'
+
+# logrotate
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git
+  installed: r3-8-5
+  replace_in_files:
+    config/software/logrotate.rb: default_version '{version}'
+
+# mixlib-log
+- url: https://github.com/chef/mixlib-log.git
+  installed: 1.7.1
+  replace_in_files:
+    config/software/mixlib-log.rb: default_version '{version_clean}'
+
+# nginx-module-vts
+- url: https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx-module-vts.git
+  installed: 0.1.18
+  replace_in_files:
+    config/software/nginx-module-vts.rb: default_version '{version_clean}'
+
+# ohai
+- url: https://github.com/chef/ohai.git
+  installed: 13.7.1
+  replace_in_files:
+    config/software/ohai.rb: default_version '{version_clean}'
+
+# openssl
+- url: https://github.com/openssl/openssl.git
+  installed: OpenSSL_1_0_2o
+  replace_in_files:
+    config/software/openssl.rb: default_version '{version}'
+
+# prometheus-storage-migrator
+- url: https://gitlab.com/gitlab-org/prometheus-storage-migrator.git
+  installed: 0.2.0
+  replace_in_files:
+    config/software/prometheus-storage-migrator.rb: version = Gitlab::Version.new('prometheus', '{version}')
+
+# remote-syslog
+- url: https://github.com/papertrail/remote_syslog.git
+  installed: 1.6.15
+  replace_in_files:
+    config/software/remote-syslog.rb: default_version '{version_clean}'
+
+# rubygems
+- url: https://github.com/rubygems/rubygems.git
+  installed: 2.7.6
+  replace_in_files:
+    config/software/rubygems.rb: default_version '{version_clean}'
+
+# util-macros
+- url: https://github.com/freedesktop/xorg-macros
+  installed: 1.18.0
+  replace_in_files:
+    config/software/util-macros.rb: default_version '{version_clean}'
+
+# zlib
+- url: https://github.com/madler/zlib.git
+  installed: 1.2.11
+  replace_in_files:
+    config/software/zlib.rb: default_version '{version_clean}'
