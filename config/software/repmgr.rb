@@ -16,21 +16,18 @@
 #
 
 name 'repmgr'
-default_version '3.3.2'
+default_version 'v3.3.2'
 
 license 'GPL-3.0'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source url: "http://www.repmgr.org/download/repmgr-#{version}.tar.gz",
-       sha1: '48ed41fd552df50b597b547deccfecd8b12a5cf1'
+source git: "https://github.com/2ndQuadrant/repmgr.git"
 
 dependency 'postgresql'
 
 env = with_standard_compiler_flags(with_embedded_path)
-
-relative_path "#{name}-#{version}"
 
 build do
   make "-j #{workers} USE_PGXS=1 all", env: env

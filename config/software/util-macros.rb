@@ -15,24 +15,19 @@
 #
 
 name 'util-macros'
-default_version '1.18.0'
+default_version 'util-macros-1.18.0'
 
-version '1.18.0' do
-  source md5: 'fd0ba21b3179703c071bbb4c3e5fb0f4'
-end
-
-source url: "https://www.x.org/releases/individual/util/util-macros-#{version}.tar.gz"
+source git: "https://gitlab.freedesktop.org/xorg/util/macros"
 
 license 'MIT'
 license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-relative_path "util-macros-#{version}"
-
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  command './autogen.sh', env: env
   command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 

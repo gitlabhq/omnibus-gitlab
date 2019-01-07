@@ -15,7 +15,7 @@
 #
 
 name 'libpng'
-default_version '1.6.35'
+default_version 'v1.6.35'
 
 license 'Libpng'
 license_file 'LICENSE'
@@ -24,10 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'zlib'
 
-source url: "https://download.sourceforge.net/libpng/libpng-#{version}.tar.gz",
-       sha256: '2b82ab3e996803b80bc73206857e826a155d3ebb374e8eb03a87a63c6f672cf7'
-
-relative_path "libpng-#{version}"
+source git: "https://git.code.sf.net/p/libpng/code"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

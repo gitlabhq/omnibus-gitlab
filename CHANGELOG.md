@@ -5,14 +5,18 @@ omnibus-gitlab repository.
 
 11.7.0
 
+- Disable nginx proxy_request_buffering for git-receive-pack !2935
 - Hide transfer of refs/remotes/* in git config !2932
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
+- Enabled ENA networking and SRIOV support to AMIs !2867 
+- Drop support for Debian Wheezy !2943
 
 11.6.3
 
 - Fix Docker registry not working with Windows layers !2938
+- Remove deprecated OpenShift template !2936
 
 11.6.2
 

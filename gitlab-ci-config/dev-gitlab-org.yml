@@ -37,7 +37,7 @@
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
@@ -76,7 +76,7 @@
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
@@ -170,9 +170,6 @@ Ubuntu-14.04-branch:
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-Debian-7-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
 Debian-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -214,7 +211,7 @@ QA-Master:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build
     - bundle exec rake qa:push:nightly
@@ -277,7 +274,7 @@ Docker-QA:
   stage: gitlab_com:package
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
   <<: *dev-tag-only
@@ -308,9 +305,6 @@ Ubuntu-14.04:
   <<: *tag_build
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Debian-7:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_7:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-8:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
@@ -343,7 +337,8 @@ dependency_scanning:
     REPORT_PATH: ./
   before_script: []
   script:
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s pkg/ubuntu-xenial/version-manifest.json
+    - manifest=pkg/ubuntu-xenial/*.version-manifest.json
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
   dependencies:
     - Ubuntu-16.04
@@ -378,11 +373,6 @@ Ubuntu-18.04-staging:
   dependencies:
     - Ubuntu-18.04
     - Ubuntu-18.04-branch
-  <<: *staging_upload
-Debian-7-staging:
-  dependencies:
-    - Debian-7
-    - Debian-7-branch
   <<: *staging_upload
 Debian-8-staging:
   dependencies:
@@ -430,10 +420,6 @@ Ubuntu-16.04-release:
 Ubuntu-18.04-release:
   dependencies:
     - Ubuntu-18.04
-  <<: *production_release
-Debian-7-release:
-  dependencies:
-    - Debian-7
   <<: *production_release
 Debian-8-release:
   dependencies:
@@ -497,7 +483,7 @@ QA-Tag:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - ssh-keyscan -H dev.gitlab.org > ~/.ssh/known_hosts
+    - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
     - bundle exec rake release:qa
   artifacts:
