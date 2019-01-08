@@ -81,6 +81,7 @@ describe OmnibusHelper do
       unicorn
       puma
       sidekiq
+      sidekiq-cluster
       gitlab-workhorse
       postgresql
       redis

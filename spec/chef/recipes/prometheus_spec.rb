@@ -478,6 +478,35 @@ describe 'gitlab::prometheus' do
     end
   end
 
+  context 'deprecation' do
+    context 'prometheus enabled' do
+      it 'displays a deprecation for version 1' do
+        allow(PrometheusHelper).to receive(:is_version_1?).and_return(true)
+        allow(LoggingHelper).to receive(:deprecation).and_call_original
+
+        expect(LoggingHelper).to receive(:deprecation).with(/Prometheus/)
+        chef_run
+      end
+    end
+
+    context 'prometheus disabled' do
+      before do
+        stub_gitlab_rb(
+          prometheus: {
+            enabled: false
+          }
+        )
+      end
+
+      it 'does not display deprecation for version 1' do
+        allow(Services).to receive(:enabled?).and_call_original
+
+        expect(LoggingHelper).not_to receive(:deprecation).with(/Prometheus/)
+        chef_run
+      end
+    end
+  end
+
   context 'rules directory' do
     context 'default settings' do
       it 'creates rules directory in correct location' do
