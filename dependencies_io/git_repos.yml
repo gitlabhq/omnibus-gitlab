@@ -77,6 +77,12 @@ repos:
   replace_in_files:
     config/software/libevent.rb: default_version '{version_clean}'
 
+# libicu
+- url: https://github.com/unicode-org/icu
+  installed: release-57-1
+  replace_in_files:
+    config/software/libicu.rb: default_version '{version_clean}'
+
 # libpng
 - url: https://git.code.sf.net/p/libpng/code
   installed: v1.6.35
