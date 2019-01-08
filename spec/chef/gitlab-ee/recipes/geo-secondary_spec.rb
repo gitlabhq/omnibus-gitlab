@@ -169,6 +169,7 @@ describe 'gitlab-ee::geo-secondary' do
         redis
         redis-exporter
         sidekiq
+        sidekiq-cluster
         unicorn
         puma
         gitaly

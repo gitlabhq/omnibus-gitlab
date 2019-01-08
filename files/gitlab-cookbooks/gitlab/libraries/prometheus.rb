@@ -85,6 +85,7 @@ module Prometheus
 
       Gitlab['prometheus']['flags'] = default_config['flags']
 
+      return unless Services.enabled?('prometheus')
       return unless version_1
       message = <<~EOS
           == Prometheus ==

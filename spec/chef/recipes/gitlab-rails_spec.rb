@@ -592,6 +592,28 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'sidekiq-cluster' do
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default')
+      end
+
+      before do
+        stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: 'gitlab_shell' })
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('sidekiq-cluster').and_return(true)
+        stub_should_notify?('sidekiq-cluster', true)
+      end
+
+      describe 'gitlab.yml' do
+        let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).not_to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq-cluster]').to(:restart).delayed
+        end
+      end
+    end
+
     context 'GitLab Geo settings' do
       let(:chef_run) do
         ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default')
