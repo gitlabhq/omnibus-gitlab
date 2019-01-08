@@ -7,6 +7,8 @@ omnibus-gitlab repository.
 
 - Add AWS customer provided encryption key configuration option !2928
 - Fix mattermost data directory permissions with ```update-permissions```
+- Patch runit to not consider status of log service for `status` command exit
+  code !2949
 
 11.7.0
 
