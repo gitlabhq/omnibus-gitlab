@@ -21,7 +21,8 @@ might be required if you are behind a proxy:
 # Needed for proxying Git clones
 gitaly['env'] = {
     "http_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
-    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
+    "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080",
+    "no_proxy" => "unix"  # Workaround for https://gitlab.com/gitlab-org/gitaly/issues/1447
 }
 
 gitlab_workhorse['env'] = {
@@ -35,6 +36,13 @@ registry['env'] = {
     "https_proxy" => "https://USERNAME:PASSWORD@example.com:8080"
 }
 ```
+
+NOTE: **Note**: The `no_proxy` entry for Gitaly is needed in GitLab 11.6
+and newer if a proxy is defined and Gitaly is listening on a UNIX
+socket, which it is by default. It appears to be a limitation in the
+gRPC client library. See [the Gitaly
+issue]([https://gitlab.com/gitlab-org/gitaly/issues/1447]) for more
+details.
 
 NOTE: **Note**: GitLab 11.6 and newer will attempt to use HTTP Basic
 Authentication when a username and password is included in the proxy
