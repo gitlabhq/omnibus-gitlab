@@ -9,7 +9,8 @@ repos:
 - url: https://gitlab.com/gitlab-org/build/omnibus-mirror/alertmanager.git
   installed: 0.15.1
   replace_in_files:
-    config/software/alertmanager.rb: version = Gitlab::Version.new('alertmanager', '{version_clean}')
+    config/software/alertmanager.rb: version = Gitlab::Version.new('alertmanager',
+      '{version_clean}')
 
 # awesome_print
 - url: https://github.com/awesome-print/awesome_print
@@ -85,7 +86,7 @@ repos:
 
 # libpng
 - url: https://git.code.sf.net/p/libpng/code
-  installed: v1.6.35
+  installed: v1.6.36
   replace_in_files:
     config/software/libpng.rb: default_version '{version_clean}'
 
@@ -123,7 +124,8 @@ repos:
 - url: https://gitlab.com/gitlab-org/prometheus-storage-migrator.git
   installed: 0.2.0
   replace_in_files:
-    config/software/prometheus-storage-migrator.rb: version = Gitlab::Version.new('prometheus', '{version}')
+    config/software/prometheus-storage-migrator.rb: version = Gitlab::Version.new('prometheus',
+      '{version}')
 
 # remote-syslog
 - url: https://github.com/papertrail/remote_syslog.git
