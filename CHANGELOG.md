@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.8.0
+
+- Fix mattermost data directory permissions with ```update-permissions```
+
 11.7.0
 
 - Disable nginx proxy_request_buffering for git-receive-pack !2935
