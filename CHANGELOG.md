@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.8.0
+
+- Add AWS customer provided encryption key configuration option !2928
+
 11.7.0
 
 - Disable nginx proxy_request_buffering for git-receive-pack !2935
@@ -10,7 +14,7 @@ omnibus-gitlab repository.
 - Add option to specify a registry log formatter !2911
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
-- Enabled ENA networking and SRIOV support to AMIs !2867 
+- Enabled ENA networking and SRIOV support to AMIs !2867
 - Drop support for Debian Wheezy !2943
 - Restart sidekiq-cluster when relevant changes occur !2945
 

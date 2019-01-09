@@ -517,6 +517,7 @@ production: &base
       remote_directory: <%= quote(@backup_upload_remote_directory) %>
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
       encryption: <%= @backup_encryption %>
+      encryption_key: <%= @backup_encryption_key %>
       storage_class: <%= @backup_storage_class %>
 
   ## Pseudonymizer settings

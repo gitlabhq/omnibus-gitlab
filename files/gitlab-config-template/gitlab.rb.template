@@ -328,6 +328,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for
 ###!   backups**
 # gitlab_rails['backup_encryption'] = 'AES256'
+###! The encryption key to use with AWS Server-Side Encryption.
+###! Setting this value will enable Server-Side Encryption with customer provided keys;
+###!   otherwise S3-managed keys are used.
+# gitlab_rails['backup_encryption_key'] = '<base64-encoded encryption key>'
 
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
 ###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
