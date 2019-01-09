@@ -41,7 +41,11 @@ build do
   make "-j #{workers}", env: env, cwd: cwd
   make 'install', env: env, cwd: cwd
 
-  link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current", force: true
+  # The git repository uses the format release-MAJ-MIN for the release tags
+  # We need to reference the actual version number to create this link, which
+  # is required by Gitaly
+  actual_version = default_version.split('-')[1..2].join('.')
+  link "#{install_dir}/embedded/share/icu/#{actual_version}", "#{install_dir}/embedded/share/icu/current", force: true
 end
 
 project.exclude 'embedded/bin/icu-config'
