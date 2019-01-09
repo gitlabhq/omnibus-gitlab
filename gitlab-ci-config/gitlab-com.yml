@@ -296,6 +296,20 @@ Trigger:ha-validate:
   dependencies:
     - Trigger:ee-package
 
+dependencies_io_check:
+  image: "${RUBY_IMAGE}"
+  stage: trigger-package
+  <<: *dedicated-runner
+  script:
+    - bundle exec rake build:trigger
+  only:
+    refs:
+      - /^dependencies_io/
+  except:
+    refs:
+      - triggers
+      - branches@gitlab/omnibus-gitlab
+
 ##############################
 #     Scheduled pipeline     #
 ##############################
