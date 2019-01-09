@@ -76,3 +76,8 @@ fi
 if id -u registry; then
     chown_if_exists -R registry:git /var/opt/gitlab/gitlab-rails/shared/registry
 fi
+
+# Fix mattermost storage
+if id -u mattermost; then
+    chown_if_exists -R mattermost /var/opt/gitlab/mattermost
+fi

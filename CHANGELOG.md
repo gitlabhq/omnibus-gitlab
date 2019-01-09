@@ -6,6 +6,7 @@ omnibus-gitlab repository.
 11.8.0
 
 - Add AWS customer provided encryption key configuration option !2928
+- Fix mattermost data directory permissions with ```update-permissions```
 
 11.7.0
 
