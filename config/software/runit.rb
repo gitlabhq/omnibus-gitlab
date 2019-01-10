@@ -31,6 +31,11 @@ source url: "http://smarden.org/runit/runit-#{version}.tar.gz"
 relative_path "admin/runit-#{version}/src"
 
 build do
+  # Patch runit to not consider status of log service associated with a service
+  # on determining output of status command. For details, check
+  # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4008
+  patch source: 'log-status.patch'
+
   env = with_standard_compiler_flags(with_embedded_path)
 
   # Put runit where we want it, not where they tell us to
