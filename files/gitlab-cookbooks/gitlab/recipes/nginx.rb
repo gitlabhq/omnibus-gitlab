@@ -215,7 +215,9 @@ template gitlab_registry_http_conf do
               {
                 registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
                 registry_host: node['gitlab']['gitlab-rails']['registry_host'],
-                registry_http_addr: node['registry']['registry_http_addr']
+                registry_http_addr: node['registry']['registry_http_addr'],
+                letsencrypt_enable: node['letsencrypt']['enable'],
+                redirect_http_to_https: node['gitlab']['registry-nginx']['redirect_http_to_https']
               }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
@@ -240,7 +242,9 @@ template gitlab_mattermost_http_conf do
                 fqdn: node['mattermost']['host'],
                 port: node['mattermost']['port'],
                 service_port: node['mattermost']['service_port'],
-                service_address: node['mattermost']['service_address']
+                service_address: node['mattermost']['service_address'],
+                letsencrypt_enable: node['letsencrypt']['enable'],
+                redirect_http_to_https: node['gitlab']['mattermost-nginx']['redirect_http_to_https']
               }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")

@@ -15,13 +15,24 @@ server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
 <% end %>
+
   server_name  <%= @registry_host %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
-  <% if @port %>
-  return 301 https://$http_host:<%= @port %>$request_uri;
-  <% else %>
-  return 301 https://$http_host$request_uri;
+
+  <% if @letsencrypt_enable %>
+  location /.well-known {
+    root <%= @dir %>/www/;
+  }
   <% end %>
+
+  location / {
+  <% if @port %>
+    return 301 https://$http_host:<%= @port %>$request_uri;
+  <% else %>
+    return 301 https://$http_host$request_uri;
+  <% end %>
+  }
+
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_registry_error.log;
 }

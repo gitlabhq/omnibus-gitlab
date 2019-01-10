@@ -11,6 +11,8 @@ omnibus-gitlab repository.
   code !2949
 - Upgrade libpng to 1.6.36 !2950
 - Fix invalid registry redirect url when using the default ports (jelhan) !2961
+- Turn on http to https redirection for Registry and Mattermost if LE
+  integration is used !2968
 
 11.7.0
 
