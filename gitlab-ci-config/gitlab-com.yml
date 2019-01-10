@@ -6,10 +6,9 @@
 #############
 
 .com-except-triggers: &com-except-triggers
-  only:
-    - //@gitlab-org/omnibus-gitlab
   except:
     refs:
+      - //@gitlab/omnibus-gitlab
       - triggers
       - /^dependencies_io/
 
