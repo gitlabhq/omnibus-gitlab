@@ -17,10 +17,9 @@
 #
 
 name 'libicu'
-default_version '57.1'
+default_version 'release-57-1'
 
-source url: 'http://downloads.sourceforge.net/project/icu/ICU4C/57.1/icu4c-57_1-src.tgz',
-       sha256: 'ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581'
+source git: 'https://github.com/unicode-org/icu'
 
 license 'MIT'
 license_file 'icu/LICENSE'
@@ -30,7 +29,7 @@ skip_transitive_dependency_licensing true
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['LD_RPATH'] = "#{install_dir}/embedded/lib"
-  cwd = "#{Omnibus::Config.source_dir}/libicu/icu/source"
+  cwd = "#{Omnibus::Config.source_dir}/libicu/icu4c/source"
 
   command ['./runConfigureICU',
            'Linux/gcc',
@@ -42,7 +41,11 @@ build do
   make "-j #{workers}", env: env, cwd: cwd
   make 'install', env: env, cwd: cwd
 
-  link "#{install_dir}/embedded/share/icu/#{default_version}", "#{install_dir}/embedded/share/icu/current", force: true
+  # The git repository uses the format release-MAJ-MIN for the release tags
+  # We need to reference the actual version number to create this link, which
+  # is required by Gitaly
+  actual_version = default_version.split('-')[1..2].join('.')
+  link "#{install_dir}/embedded/share/icu/#{actual_version}", "#{install_dir}/embedded/share/icu/current", force: true
 end
 
 project.exclude 'embedded/bin/icu-config'
