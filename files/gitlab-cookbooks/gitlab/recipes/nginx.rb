@@ -214,7 +214,7 @@ template gitlab_registry_http_conf do
   variables(registry_nginx_vars.merge(
               {
                 registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-                registry_host: node['gitlab']['gitlab-rails']['registry_host'],
+                fqdn: node['gitlab']['gitlab-rails']['registry_host'],
                 port: node['gitlab']['gitlab-rails']['registry_port'],
                 registry_http_addr: node['registry']['registry_http_addr'],
                 letsencrypt_enable: node['letsencrypt']['enable'],
