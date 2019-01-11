@@ -9,6 +9,7 @@ omnibus-gitlab repository.
 - Fix mattermost data directory permissions with ```update-permissions```
 - Patch runit to not consider status of log service for `status` command exit
   code !2949
+- Upgrade libpng to 1.6.36 !2950
 
 11.7.0
 
