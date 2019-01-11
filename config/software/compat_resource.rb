@@ -15,7 +15,7 @@
 #
 
 name 'compat_resource'
-default_version 'v12.19.0'
+default_version 'v12.19.1'
 
 license 'Apache-2.0'
 license_file 'LICENSE'

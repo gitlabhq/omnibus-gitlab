@@ -43,7 +43,7 @@ repos:
 
 # compat_resource
 - url: https://github.com/chef-cookbooks/compat_resource.git
-  installed: v12.19.0
+  installed: v12.19.1
   replace_in_files:
     config/software/compat_resource.rb: default_version '{version}'
 
