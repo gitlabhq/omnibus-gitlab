@@ -7,7 +7,7 @@ describe 'registry recipe' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  context 'letsencrypt alt_names' do
+  describe 'letsencrypt' do
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
@@ -15,6 +15,44 @@ describe 'registry recipe' do
       )
 
       allow(File).to receive(:exist?).and_call_original
+    end
+
+    describe 'HTTP to HTTPS redirection' do
+      context 'by default' do
+        it 'is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
+        end
+      end
+
+      context 'if disabled in gitlab.rb' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            registry_external_url: 'https://registry.example.com',
+            registry_nginx: {
+              redirect_http_to_https: false
+            }
+          )
+        end
+
+        it 'is disabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf')
+          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
+        end
+      end
+
+      context 'registry on gitlab domain with a different port ' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            registry_external_url: 'https://gitlab.example.com:5005'
+          )
+        end
+
+        it 'is enabled and has correct redirect URL in nginx config' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://gitlab.example.com:5005$request_uri;")
+        end
+      end
     end
 
     context 'default certificate file is missing' do
