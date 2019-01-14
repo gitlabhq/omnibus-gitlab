@@ -1214,8 +1214,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## GitLab Pages NGINX
 ################################################################################
 
-# All the settings defined in the "GitLab Nginx" section are also available in this "GitLab Pages NGINX" section
-# You just have to change the key "nginx['some_settings']" with "pages_nginx['some_settings']"
+# All the settings defined in the "GitLab Nginx" section are also available in
+# this "GitLab Pages NGINX" section, using the key `pages_nginx`.  However,
+# those settings should be explicitly set. That is, settings given as
+# `nginx['some_setting']` WILL NOT be automatically replicated as
+# `pages_nginx['some_setting']` and should be set separately.
 
 # Below you can find settings that are exclusive to "GitLab Pages NGINX"
 # pages_nginx['enable'] = false
@@ -1272,8 +1275,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Mattermost NGINX
 ################################################################################
 
-# All the settings defined in the "GitLab NGINX" section are also available in this "Mattermost NGINX" section
-# You just have to change the key "nginx['some_settings']" with "mattermost_nginx['some_settings']"
+# All the settings defined in the "GitLab Nginx" section are also available in
+# this "Mattermost NGINX" section, using the key `mattermost_nginx`.  However,
+# those settings should be explicitly set. That is, settings given as
+# `nginx['some_setting']` WILL NOT be automatically replicated as
+# `mattermost_nginx['some_setting']` and should be set separately.
 
 # Below you can find settings that are exclusive to "Mattermost NGINX"
 # mattermost_nginx['enable'] = false
@@ -1295,8 +1301,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Registry NGINX
 ################################################################################
 
-# All the settings defined in the "GitLab NGINX" section are also available in this "Registry NGINX" section
-# You just have to change the key "nginx['some_settings']" with "registry_nginx['some_settings']"
+# All the settings defined in the "GitLab Nginx" section are also available in
+# this "Registry NGINX" section, using the key `registry_nginx`.  However, those
+# settings should be explicitly set. That is, settings given as
+# `nginx['some_setting']` WILL NOT be automatically replicated as
+# `registry_nginx['some_setting']` and should be set separately.
 
 # Below you can find settings that are exclusive to "Registry NGINX"
 # registry_nginx['enable'] = false

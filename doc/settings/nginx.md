@@ -1,5 +1,30 @@
 # NGINX settings
 
+## Service-specific NGINX settings
+
+Users can configure NGINX settings differently for different services via
+gitlab.rb. Settings for the GitLab rails application can be configured using the
+`nginx['<some setting>']` keys. There are similar keys for other services like
+`pages_nginx`, `mattermost_nginx` and `registry_nginx`. All the configurations
+available for `nginx` are also available for these `<service_nginx>` settings and
+share the same default values as GitLab NGINX.
+
+If modifying via gitlab.rb, users have to configure nginx setting for each
+service separately. Settings given via `nginx['foo']` WILL NOT be replicated to
+service specific nginx configuration (as `registry_nginx['foo']` or
+`mattermost_nginx['foo']`, etc.). For example, to configure HTTP to HTTPS
+redirection for GitLab, Mattermost and Registry, the following settings should
+be added to `gitlab.rb`
+
+```ruby
+nginx['redirect_http_to_https'] = true
+registry_nginx['redirect_http_to_https'] = true
+mattermost_nginx['redirect_http_to_https'] = true
+```
+
+**`Note`**: Modifying NGINX configuration should be done with care as incorrect
+or incompatible configuration may yield to unavailability of service.
+
 ## Enable HTTPS
 
 By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
