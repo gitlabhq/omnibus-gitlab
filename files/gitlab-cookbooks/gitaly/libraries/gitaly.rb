@@ -28,11 +28,14 @@ module Gitaly
     end
 
     def gitaly_address
-      socket_path = user_config['socket_path'] || package_default['socket_path']
-      listen_addr = user_config['listen_addr'] || package_default['listen_addr']
+      socket_path     = user_config['socket_path']     || package_default['socket_path']
+      listen_addr     = user_config['listen_addr']     || package_default['listen_addr']
+      tls_listen_addr = user_config['tls_listen_addr'] || package_default['tls_listen_addr']
 
       # Default to using socket path if available
-      if socket_path && !socket_path.empty?
+      if tls_listen_addr && !tls_listen_addr.empty?
+        "tls://#{tls_listen_addr}"
+      elsif socket_path && !socket_path.empty?
         "unix:#{socket_path}"
       elsif listen_addr && !listen_addr.empty?
         "tcp://#{listen_addr}"

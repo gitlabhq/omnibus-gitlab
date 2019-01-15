@@ -21,6 +21,7 @@ omnibus-gitlab repository.
 - Enabled ENA networking and SRIOV support to AMIs !2867
 - Drop support for Debian Wheezy !2943
 - Restart sidekiq-cluster when relevant changes occur !2945
+- Support TLS communication with gitaly
 
 11.6.3
 
