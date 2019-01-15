@@ -189,3 +189,21 @@ registry['storage'] = {
 ```
 
 and run `sudo gitlab-ctl reconfigure`.
+
+## Administratively recycling unused tags
+
+GitLab offers a set of APIs to manipulate Container Registry and aid the process
+of removing unused tags. Currently, this is exposed using API, but in the future
+these controls will be migrated to the GitLab Interface and be allowed by the
+developer.
+
+Project maintainers can
+[delete container registry tags in bulk](https://docs.gitlab.com/ce/api/container_registry.html#delete-repository-tags-in-bulk)
+periodically based on their own criteria.
+
+However, this alone does not recycle data, it only unlinks tags from manifests
+and image blobs. To recycle the container registry data in the whole GitLab instance run:
+
+```sh
+sudo gitlab-ctl registry-garbage-collect
+```
