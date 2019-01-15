@@ -31,6 +31,12 @@ build do
   patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # Install ohai dependencies compatible with ruby 2.4, see: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4048
+  gem 'install mixlib-cli' \
+      " --version '1.7.0'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-ri --no-rdoc', env: env
+
   gem 'install ohai' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
