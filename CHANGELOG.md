@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Patch runit to not consider status of log service for `status` command exit
   code !2949
 - Upgrade libpng to 1.6.36 !2950
+- Fix invalid registry redirect url when using the default ports (jelhan) !2961
 
 11.7.0
 

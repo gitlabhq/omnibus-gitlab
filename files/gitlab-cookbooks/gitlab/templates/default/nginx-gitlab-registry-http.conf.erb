@@ -17,7 +17,11 @@ server {
 <% end %>
   server_name  <%= @registry_host %>;
   server_tokens off; ## Don't show the nginx version number, a security best practice
+  <% if @port %>
   return 301 https://$http_host:<%= @port %>$request_uri;
+  <% else %>
+  return 301 https://$http_host$request_uri;
+  <% end %>
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_registry_error.log;
 }
