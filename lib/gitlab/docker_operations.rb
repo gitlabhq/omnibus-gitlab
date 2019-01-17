@@ -1,8 +1,10 @@
 require 'docker'
 
+require_relative "util.rb"
+
 class DockerOperations
   def self.set_timeout
-    timeout = ENV['DOCKER_TIMEOUT'] || 1200
+    timeout = Gitlab::Util.get_env('DOCKER_TIMEOUT') || 1200
     Docker.options = { read_timeout: timeout, write_timeout: timeout }
   end
 
@@ -15,7 +17,7 @@ class DockerOperations
     end
   end
 
-  def self.authenticate(username = ENV['DOCKERHUB_USERNAME'], password = ENV['DOCKERHUB_PASSWORD'], serveraddress = "")
+  def self.authenticate(username = Gitlab::Util.get_env('DOCKERHUB_USERNAME'), password = Gitlab::Util.get_env('DOCKERHUB_PASSWORD'), serveraddress = "")
     Docker.authenticate!(username: username, password: password, serveraddress: serveraddress)
   end
 

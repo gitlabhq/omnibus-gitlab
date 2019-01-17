@@ -1,12 +1,13 @@
 require 'erb'
 require 'fileutils'
 require_relative '../build/info.rb'
+require_relative "../util.rb"
 require_relative 'base.rb'
 
 module License
   class Collector < License::Base
     def initialize
-      @license_bucket = ENV['LICENSE_S3_BUCKET']
+      @license_bucket = Gitlab::Util.get_env('LICENSE_S3_BUCKET')
       @licenses_path = File.absolute_path(@license_bucket)
       @license_bucket_region = "eu-west-1"
       @json_data = nil

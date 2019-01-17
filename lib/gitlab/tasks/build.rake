@@ -4,6 +4,7 @@ require_relative "../build/info.rb"
 require_relative '../build/omnibus_trigger'
 require_relative "../ohai_helper.rb"
 require_relative '../version.rb'
+require_relative "../util.rb"
 require 'net/http'
 require 'json'
 
@@ -63,9 +64,9 @@ namespace :build do
   task :trigger do
     # We need to set the following variables to be able to post a comment with
     # the "downstream" pipeline on the commit under test
-    ENV['TOP_UPSTREAM_SOURCE_PROJECT'] ||= ENV['CI_PROJECT_PATH']
-    ENV['TOP_UPSTREAM_SOURCE_JOB'] ||= ENV['CI_JOB_URL']
-    ENV['TOP_UPSTREAM_SOURCE_SHA'] ||= ENV['CI_COMMIT_SHA']
+    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_PROJECT', Gitlab::Util.get_env('CI_PROJECT_PATH'))
+    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_JOB', Gitlab::Util.get_env('CI_JOB_URL'))
+    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_SHA', Gitlab::Util.get_env('CI_COMMIT_SHA'))
 
     Build::OmnibusTrigger.invoke!(post_comment: true).wait!
   end

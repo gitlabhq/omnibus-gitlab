@@ -1,6 +1,7 @@
 require_relative '../trigger'
 require_relative '../info'
 require_relative '../../version'
+require_relative "../../util.rb"
 
 require 'cgi'
 
@@ -25,14 +26,14 @@ module Build
       def self.get_params(image: nil)
         {
           'ref' => 'master',
-          'token' => ENV['HA_VALIDATE_TOKEN'],
+          'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
           'variables[QA_IMAGE]' => 'gitlab/gitlab-ee-qa:nightly',
           'variables[PACKAGE_URL]' => package_url
         }
       end
 
       def self.get_access_token
-        ENV['GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN']
+        Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
       end
     end
   end

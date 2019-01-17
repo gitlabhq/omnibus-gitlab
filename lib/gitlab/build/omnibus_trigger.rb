@@ -1,4 +1,5 @@
 require_relative 'trigger'
+require_relative "../util.rb"
 
 module Build
   class OmnibusTrigger
@@ -12,25 +13,25 @@ module Build
 
     def self.get_params(image: nil)
       {
-        "ref" => ENV["CI_COMMIT_REF_NAME"],
-        "token" => ENV["BUILD_TRIGGER_TOKEN"],
+        "ref" => Gitlab::Util.get_env("CI_COMMIT_REF_NAME"),
+        "token" => Gitlab::Util.get_env("BUILD_TRIGGER_TOKEN"),
         "variables[ALTERNATIVE_SOURCES]" => true,
-        "variables[BUILDER_IMAGE_REVISION]" => ENV['BUILDER_IMAGE_REVISION'],
-        "variables[BUILDER_IMAGE_REGISTRY]" => ENV['BUILDER_IMAGE_REGISTRY'],
-        "variables[COMPILE_ASSETS]" => ENV['COMPILE_ASSETS'],
-        "variables[IMAGE_TAG]" => "omnibus-#{ENV['CI_COMMIT_SHA']}",
-        "variables[ee]" => ENV["ee"] || "false",
-        "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],
-        "variables[TRIGGER_SOURCE]" => ENV['CI_JOB_URL'],
-        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => ENV['TOP_UPSTREAM_SOURCE_PROJECT'],
-        "variables[TOP_UPSTREAM_SOURCE_JOB]" => ENV['TOP_UPSTREAM_SOURCE_JOB'],
-        "variables[TOP_UPSTREAM_SOURCE_SHA]" => ENV['TOP_UPSTREAM_SOURCE_SHA'],
-        "variables[QA_BRANCH]" => ENV['QA_BRANCH'] || 'master'
+        "variables[BUILDER_IMAGE_REVISION]" => Gitlab::Util.get_env('BUILDER_IMAGE_REVISION'),
+        "variables[BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY'),
+        "variables[COMPILE_ASSETS]" => Gitlab::Util.get_env('COMPILE_ASSETS'),
+        "variables[IMAGE_TAG]" => "omnibus-#{Gitlab::Util.get_env('CI_COMMIT_SHA')}",
+        "variables[ee]" => Gitlab::Util.get_env("ee") || "false",
+        "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
+        "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),
+        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
+        "variables[TOP_UPSTREAM_SOURCE_JOB]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB'),
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA'),
+        "variables[QA_BRANCH]" => Gitlab::Util.get_env('QA_BRANCH') || 'master'
       }
     end
 
     def self.get_access_token
-      ENV['GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN']
+      Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
     end
   end
 end

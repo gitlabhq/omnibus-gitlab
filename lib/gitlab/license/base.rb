@@ -1,10 +1,12 @@
+require_relative "../util.rb"
+
 module License
   class Base
     def s3_sync(source, destination)
       system(
         {
-          'AWS_ACCESS_KEY_ID' => ENV['LICENSE_AWS_ACCESS_KEY_ID'],
-          'AWS_SECRET_ACCESS_KEY' => ENV['LICENSE_AWS_SECRET_ACCESS_KEY']
+          'AWS_ACCESS_KEY_ID' => Gitlab::Util.get_env('LICENSE_AWS_ACCESS_KEY_ID'),
+          'AWS_SECRET_ACCESS_KEY' => Gitlab::Util.get_env('LICENSE_AWS_SECRET_ACCESS_KEY')
         },
         *%W[aws s3 sync --region #{@license_bucket_region} #{source} #{destination}]
       )

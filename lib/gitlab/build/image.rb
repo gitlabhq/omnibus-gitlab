@@ -1,5 +1,6 @@
 require_relative 'info'
 require_relative '../docker_operations'
+require_relative "../util.rb"
 
 module Build
   module Image
@@ -11,14 +12,14 @@ module Build
     end
 
     def gitlab_registry_image_address(tag: nil)
-      address = "#{ENV['CI_REGISTRY_IMAGE']}/#{gitlab_registry_image_name}"
+      address = "#{Gitlab::Util.get_env('CI_REGISTRY_IMAGE')}/#{gitlab_registry_image_name}"
       address << ":#{tag}" if tag
 
       address
     end
 
     def tag_and_push_to_gitlab_registry(final_tag)
-      DockerOperations.authenticate('gitlab-ci-token', ENV['CI_JOB_TOKEN'], ENV['CI_REGISTRY'])
+      DockerOperations.authenticate('gitlab-ci-token', Gitlab::Util.get_env('CI_JOB_TOKEN'), Gitlab::Util.get_env('CI_REGISTRY'))
       DockerOperations.tag_and_push(
         gitlab_registry_image_address,
         gitlab_registry_image_address,
@@ -29,7 +30,7 @@ module Build
     end
 
     def tag_and_push_to_dockerhub(final_tag, initial_tag: Build::Info.docker_tag)
-      DockerOperations.authenticate(ENV['DOCKERHUB_USERNAME'], ENV['DOCKERHUB_PASSWORD'])
+      DockerOperations.authenticate(Gitlab::Util.get_env('DOCKERHUB_USERNAME'), Gitlab::Util.get_env('DOCKERHUB_PASSWORD'))
       DockerOperations.tag_and_push(
         gitlab_registry_image_address,
         dockerhub_image_name,

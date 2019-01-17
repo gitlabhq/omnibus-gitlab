@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'gitlab/package_repository'
+require 'gitlab/util'
 
 describe PackageRepository do
   let(:repo) { PackageRepository.new }
@@ -209,8 +210,8 @@ describe PackageRepository do
           end
 
           it 'in dry run mode prints the upload commands' do
-            expect { repo.upload(ENV['STAGING_REPO'], true) }.to output(%r{Uploading...\n}).to_stdout
-            expect { repo.upload(ENV['STAGING_REPO'], true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(Gitlab::Util.get_env('STAGING_REPO'), true) }.to output(%r{Uploading...\n}).to_stdout
+            expect { repo.upload(Gitlab::Util.get_env('STAGING_REPO'), true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
 

@@ -3,6 +3,7 @@ require 'net/http'
 require 'json'
 
 require_relative '../build_iteration'
+require_relative "../util.rb"
 require_relative 'check'
 require_relative 'image'
 
@@ -28,12 +29,12 @@ module Build
         else
           latest_git_tag = Info.latest_tag.strip
           latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
-          commit_sha_raw = ENV['CI_COMMIT_SHA'] || `git rev-parse HEAD`.strip
+          commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
           commit_sha = commit_sha_raw[0, 8]
           if Build::Check.add_nightly_tag?
-            "#{latest_version}+rnightly.#{ENV['CI_PIPELINE_ID']}.#{commit_sha}"
+            "#{latest_version}+rnightly.#{Gitlab::Util.get_env('CI_PIPELINE_ID')}.#{commit_sha}"
           else
-            "#{latest_version}+rfbranch.#{ENV['CI_PIPELINE_ID']}.#{commit_sha}"
+            "#{latest_version}+rfbranch.#{Gitlab::Util.get_env('CI_PIPELINE_ID')}.#{commit_sha}"
           end
         end
       end
@@ -64,10 +65,10 @@ module Build
         # is built. If GITLAB_VERSION variable is specified, as in triggered builds,
         # we use that. Else, we use the value in VERSION file.
 
-        if ENV['GITLAB_VERSION'].nil? || ENV['GITLAB_VERSION'].empty?
+        if Gitlab::Util.get_env('GITLAB_VERSION').nil? || Gitlab::Util.get_env('GITLAB_VERSION').empty?
           File.read('VERSION').strip
         else
-          ENV['GITLAB_VERSION']
+          Gitlab::Util.get_env('GITLAB_VERSION')
         end
       end
 
@@ -82,7 +83,7 @@ module Build
         # For triggered builds, they are not available and their gitlab.com mirrors
         # have to be used.
 
-        if ENV['ALTERNATIVE_SOURCES'].to_s == "true"
+        if Gitlab::Util.get_env('ALTERNATIVE_SOURCES').to_s == "true"
           domain = "https://gitlab.com/gitlab-org"
           project = package
         else
@@ -108,8 +109,8 @@ module Build
       end
 
       def log_level
-        if ENV['BUILD_LOG_LEVEL'] && !ENV['BUILD_LOG_LEVEL'].empty?
-          ENV['BUILD_LOG_LEVEL']
+        if Gitlab::Util.get_env('BUILD_LOG_LEVEL') && !Gitlab::Util.get_env('BUILD_LOG_LEVEL').empty?
+          Gitlab::Util.get_env('BUILD_LOG_LEVEL')
         else
           'info'
         end
@@ -124,7 +125,7 @@ module Build
       def get_api(path, token: nil)
         uri = URI("https://gitlab.com/api/v4/#{path}")
         req = Net::HTTP::Get.new(uri)
-        req['PRIVATE-TOKEN'] = token || ENV['TRIGGER_PRIVATE_TOKEN']
+        req['PRIVATE-TOKEN'] = token || Gitlab::Util.get_env('TRIGGER_PRIVATE_TOKEN')
         http = Net::HTTP.new(uri.hostname, uri.port)
         http.use_ssl = true
         res = http.request(req)
@@ -141,12 +142,12 @@ module Build
       end
 
       def triggered_build_package_url
-        project_id = ENV['CI_PROJECT_ID']
-        pipeline_id = ENV['CI_PIPELINE_ID']
+        project_id = Gitlab::Util.get_env('CI_PROJECT_ID')
+        pipeline_id = Gitlab::Util.get_env('CI_PIPELINE_ID')
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
         id = fetch_artifact_url(project_id, pipeline_id)
-        "https://gitlab.com/api/v4/projects/#{ENV['CI_PROJECT_ID']}/jobs/#{id}/artifacts/pkg/ubuntu-xenial/gitlab.deb"
+        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/ubuntu-xenial/gitlab.deb"
       end
 
       def tag_match_pattern
@@ -156,8 +157,8 @@ module Build
       end
 
       def release_file_contents
-        repo = ENV['PACKAGECLOUD_REPO'] # Target repository
-        token = ENV['TRIGGER_PRIVATE_TOKEN'] # Token used for triggering a build
+        repo = Gitlab::Util.get_env('PACKAGECLOUD_REPO') # Target repository
+        token = Gitlab::Util.get_env('TRIGGER_PRIVATE_TOKEN') # Token used for triggering a build
 
         download_url = if token && !token.empty?
                          Info.triggered_build_package_url

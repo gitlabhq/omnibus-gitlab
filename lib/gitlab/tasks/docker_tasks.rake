@@ -3,6 +3,7 @@ require_relative '../docker_operations'
 require_relative '../build/info'
 require_relative '../build/check'
 require_relative '../build/gitlab_image'
+require_relative "../util.rb"
 
 namespace :docker do
   namespace :build do
@@ -52,14 +53,14 @@ namespace :docker do
 
     desc "Push triggered Docker Image to GitLab Registry"
     task :triggered do
-      Build::GitlabImage.tag_and_push_to_gitlab_registry(ENV['IMAGE_TAG'])
+      Build::GitlabImage.tag_and_push_to_gitlab_registry(Gitlab::Util.get_env('IMAGE_TAG'))
     end
   end
 
   desc "Pull Docker Image from Registry"
   namespace :pull do
     task :staging do
-      DockerOperations.authenticate("gitlab-ci-token", ENV["CI_JOB_TOKEN"], ENV['CI_REGISTRY'])
+      DockerOperations.authenticate("gitlab-ci-token", Gitlab::Util.get_env("CI_JOB_TOKEN"), Gitlab::Util.get_env('CI_REGISTRY'))
       Build::GitlabImage.pull
     end
   end

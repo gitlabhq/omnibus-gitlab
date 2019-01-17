@@ -7,6 +7,7 @@ require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
 require_relative '../build/ha_validate'
+require_relative "../util.rb"
 
 namespace :qa do
   desc "Build QA Docker image"
@@ -55,13 +56,13 @@ namespace :qa do
 
     desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :triggered do
-      Build::QAImage.tag_and_push_to_gitlab_registry(ENV['IMAGE_TAG'])
+      Build::QAImage.tag_and_push_to_gitlab_registry(Gitlab::Util.get_env('IMAGE_TAG'))
     end
   end
 
   desc "Run QA tests"
   task :test do
-    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: ENV['IMAGE_TAG'])
+    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Gitlab::Util.get_env('IMAGE_TAG'))
     Build::QATrigger.invoke!(image: image_address, post_comment: true).wait!
   end
 

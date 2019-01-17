@@ -2,6 +2,8 @@ require 'net/http'
 require 'json'
 require 'cgi'
 
+require_relative "../util.rb"
+
 module Build
   module Trigger
     def invoke!(image: nil, post_comment: false)
@@ -25,21 +27,21 @@ module Build
 
     class CommitComment
       def self.post!(pipeline_url, access_token)
-        unless ENV['TOP_UPSTREAM_SOURCE_SHA']
+        unless Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA')
           puts "The 'TOP_UPSTREAM_SOURCE_SHA' environment variable is missing, cannot post a comment on a missing upstream commit."
           return
         end
 
-        top_upstream_source_sha = ENV['TOP_UPSTREAM_SOURCE_SHA']
+        top_upstream_source_sha = Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA')
 
-        unless ENV['TOP_UPSTREAM_SOURCE_PROJECT']
+        unless Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT')
           puts "The 'TOP_UPSTREAM_SOURCE_PROJECT' environment variable is missing, cannot post a comment on the upstream #{top_upstream_source_sha} commit."
           return
         end
 
-        top_upstream_source_project = ENV['TOP_UPSTREAM_SOURCE_PROJECT']
+        top_upstream_source_project = Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT')
 
-        comment = "The [`#{ENV['CI_JOB_NAME']}`](#{ENV['CI_JOB_URL']}) job from pipeline #{ENV['CI_PIPELINE_URL']} triggered #{pipeline_url} downstream."
+        comment = "The [`#{Gitlab::Util.get_env('CI_JOB_NAME')}`](#{Gitlab::Util.get_env('CI_JOB_URL')}) job from pipeline #{Gitlab::Util.get_env('CI_PIPELINE_URL')} triggered #{pipeline_url} downstream."
         uri = URI("https://gitlab.com/api/v4/projects/#{CGI.escape(top_upstream_source_project)}/repository/commits/#{top_upstream_source_sha}/comments")
         request = Net::HTTP::Post.new(uri)
         request['PRIVATE-TOKEN'] = access_token
