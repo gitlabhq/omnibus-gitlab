@@ -243,6 +243,7 @@ module Geo
 
         Troubleshooting tips:
           - replication should be run by root user
+          - check if `roles ['geo_primary_role']` or `geo_primary_role['enable'] = true` exists in `gitlab.rb` on the primary node
           - check your trust settings `md5_auth_cidr_addresses` in `gitlab.rb` on the primary node
 
         Failed to execute: #{cmd}
