@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/util"
+
 name 'openssl'
 
 license 'OpenSSL'
@@ -143,7 +145,7 @@ build do
                       end
 
   # openssl build process uses a `makedepend` tool that we build inside the bundle.
-  env['PATH'] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + ENV['PATH']
+  env['PATH'] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + Gitlab::Util.get_env('PATH')
 
   if aix?
     patch_env = env.dup

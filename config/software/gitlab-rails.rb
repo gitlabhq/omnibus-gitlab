@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -122,12 +123,12 @@ build do
   assets_compile_env = {
     'NODE_ENV' => 'production',
     'RAILS_ENV' => 'production',
-    'PATH' => "#{install_dir}/embedded/bin:#{ENV['PATH']}",
+    'PATH' => "#{install_dir}/embedded/bin:#{Gitlab::Util.get_env('PATH')}",
     'USE_DB' => 'false',
     'SKIP_STORAGE_VALIDATION' => 'true',
     'NODE_OPTIONS' => '--max_old_space_size=3584'
   }
-  assets_compile_env['NO_SOURCEMAPS'] = 'true' if ENV['NO_SOURCEMAPS']
+  assets_compile_env['NO_SOURCEMAPS'] = 'true' if Gitlab::Util.get_env('NO_SOURCEMAPS')
   command 'yarn install --pure-lockfile --production --cache-folder .yarn-cache'
 
   # process PO files and generate MO and JSON files
@@ -135,13 +136,13 @@ build do
 
   # By default, copy assets from the fetch-assets job
   # Compile from scratch if the COMPILE_ASSETS variable is set to to true
-  if ENV['COMPILE_ASSETS'].eql?('true')
+  if Gitlab::Util.get_env('COMPILE_ASSETS').eql?('true')
     # Up the default timeout from 10min to 4hrs for this command so it has the
     # opportunity to complete on the pi
     bundle 'exec rake gitlab:assets:compile', timeout: 14400, env: assets_compile_env
   else
     # Copy the asset files
-    sync "#{ENV['CI_PROJECT_DIR']}/#{ENV['ASSET_PATH']}", 'public/assets/'
+    sync "#{Gitlab::Util.get_env('CI_PROJECT_DIR')}/#{Gitlab::Util.get_env('ASSET_PATH')}", 'public/assets/'
   end
 
   # Move folders for caching. GitLab CI permits only relative path for Cache

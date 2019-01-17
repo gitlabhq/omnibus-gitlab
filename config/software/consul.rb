@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/util"
+
 name 'consul'
 default_version 'v0.9.0'
 
@@ -33,7 +35,7 @@ relative_path 'src/github.com/hashicorp/consul'
 build do
   env = {}
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/consul"
-  env['PATH'] = "#{ENV['PATH']}:#{env['GOPATH']}/bin"
+  env['PATH'] = "#{Gitlab::Util.get_env('PATH')}:#{env['GOPATH']}/bin"
   command 'make dev', env: env
   copy 'bin/consul', "#{install_dir}/embedded/bin/"
 
