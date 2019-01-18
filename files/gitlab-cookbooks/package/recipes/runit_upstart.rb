@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: runit
-# Recipe:: default
+# Cookbook Name:: package
+# Recipe:: runit_upstart
 #
 # Copyright 2008-2010, Opscode, Inc.
 # Copyright 2014 GitLab.com

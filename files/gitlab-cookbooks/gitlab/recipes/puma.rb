@@ -78,7 +78,7 @@ end
 
 runit_service svc do
   down node['gitlab'][svc]['ha']
-  restart_command 2 # Restart Puma using SIGUSR2
+  restart_command "2" # Restart Puma using SIGUSR2
   template_name 'puma'
   control ['t']
   options({

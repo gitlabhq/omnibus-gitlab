@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: runit
-# Recipe:: sysvinit
+# Cookbook Name:: package
+# Recipe:: runit_sysvinit
 #
 # Copyright 2011, Opscode, Inc.
 # Copyright 2014 GitLab.com

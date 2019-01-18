@@ -2,7 +2,7 @@ require 'chef_helper'
 
 describe 'gitlab::nginx' do
   let(:chef_runner) do
-    ChefSpec::SoloRunner.new do |node|
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
       node.normal['gitlab']['nginx']['enable'] = true
       node.normal['package']['install-dir'] = '/opt/gitlab'
     end
@@ -69,7 +69,7 @@ describe 'gitlab::nginx' do
 end
 
 describe 'nginx' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   subject { chef_run }
 
   let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }

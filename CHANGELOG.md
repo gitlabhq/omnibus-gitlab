@@ -11,6 +11,7 @@ omnibus-gitlab repository.
   code !2949
 - Upgrade libpng to 1.6.36 !2950
 - Fix invalid registry redirect url when using the default ports (jelhan) !2961
+- Update runit cookbook to v4.3.0 !2902
 
 11.7.0
 

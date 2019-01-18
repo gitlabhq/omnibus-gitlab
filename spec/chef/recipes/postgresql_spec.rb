@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'postgresql 9.2' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:postgresql_data_dir) { '/var/opt/gitlab/postgresql/data' }
   let(:postgresql_ssl_cert) { File.join(postgresql_data_dir, 'server.crt') }
   let(:postgresql_ssl_key) { File.join(postgresql_data_dir, 'server.key') }
@@ -320,7 +320,7 @@ psql_port='5432'
 end
 
 describe 'postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(sysctl)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service sysctl)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 

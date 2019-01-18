@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: runit
-# Recipe:: default
+# Cookbook Name:: gitlab
+# Recipe:: runit
 #
-# Copyright 2008-2010, Opscode, Inc.
+# Copyright 2015-2018, GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ if File.exist?('/.dockerenv')
   Chef::Log.warn "Skipped selecting an init system because it looks like we are running in a container"
 elsif Open3.capture3('/sbin/init --version | grep upstart')[2].success?
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
-  include_recipe "runit::upstart"
+  include_recipe "package::runit_upstart"
 elsif Open3.capture3('systemctl | grep "\-\.mount"')[2].success?
   Chef::Log.warn "Selected systemd because systemctl shows .mount units"
-  include_recipe "runit::systemd"
+  include_recipe "package::runit_systemd"
 else
   Chef::Log.warn "Selected sysvinit because it looks like it is not upstart or systemd."
-  include_recipe "runit::sysvinit"
+  include_recipe "package::runit_sysvinit"
 end

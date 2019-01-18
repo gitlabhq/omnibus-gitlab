@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: runit
-# Recipe:: systemd
+# Cookbook Name:: package
+# Recipe:: runit_systemd
 #
 # Copyright 2014 GitLab B.V.
 #

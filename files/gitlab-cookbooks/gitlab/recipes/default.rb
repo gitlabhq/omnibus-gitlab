@@ -91,7 +91,7 @@ include_recipe "gitlab::add_trusted_certs"
 end
 
 # Install our runit instance
-include_recipe "runit"
+include_recipe "package::runit"
 
 # Configure DB Services
 %w(

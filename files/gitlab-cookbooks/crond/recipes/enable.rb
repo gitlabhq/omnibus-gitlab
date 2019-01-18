@@ -14,6 +14,8 @@ end
 runit_service "crond" do
   owner "root"
   group "root"
-  options node['crond']
+  options({
+    log_directory: node['crond']['log_directory']
+  }.merge(params))
   log_options log_options node['gitlab']['logging'].to_hash.merge(node["crond"].to_hash)
 end

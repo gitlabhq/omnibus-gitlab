@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -189,7 +189,7 @@ describe 'registry recipe' do
 end
 
 describe 'registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink env_dir account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

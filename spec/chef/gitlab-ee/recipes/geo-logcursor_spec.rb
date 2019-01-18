@@ -17,7 +17,7 @@
 require 'chef_helper'
 
 describe 'gitlab-ee::geo-logcursor' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

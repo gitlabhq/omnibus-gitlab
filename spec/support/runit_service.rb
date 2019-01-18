@@ -11,17 +11,17 @@ shared_examples 'enabled runit service' do |svc_name, owner, group, username = n
     expect(chef_run).to create_directory("/opt/gitlab/sv/#{svc_name}").with(
       owner: owner,
       group: group,
-      mode: 493 # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0755'
     )
     expect(chef_run).to create_directory("/opt/gitlab/sv/#{svc_name}/log").with(
       owner: owner,
       group: group,
-      mode: 493 # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0755'
     )
     expect(chef_run).to create_directory("/opt/gitlab/sv/#{svc_name}/log/main").with(
       owner: owner,
       group: group,
-      mode: 493 # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0755'
     )
   end
 
@@ -29,17 +29,17 @@ shared_examples 'enabled runit service' do |svc_name, owner, group, username = n
     expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/run").with(
       owner: owner,
       group: group,
-      mode: 493 # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0755'
     )
     expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/log/run").with(
       owner: owner,
       group: group,
-      mode: 493 # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0755'
     )
     expect(chef_run).to create_template("/var/log/gitlab/#{svc_name}/config").with(
       owner: owner,
       group: group,
-      mode: nil # 0755 is an octal value. 493 is the decimal conversion.
+      mode: '0644'
     )
 
     env_string = get_env_string(username, groupname)
@@ -73,7 +73,8 @@ shared_examples 'disabled runit service' do |svc_name|
     expect(chef_run).not_to create_template("/var/log/gitlab/#{svc_name}/config")
   end
 
-  it 'removes the symlink to the service directory' do
-    expect(chef_run).to delete_link("/opt/gitlab/service/#{svc_name}")
+  it 'runs the disable service ruby block' do
+    allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+    expect(chef_run).to run_ruby_block("disable #{svc_name}")
   end
 end
