@@ -13,9 +13,20 @@ server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
 <% end %>
+
   server_name <%= @fqdn %>;
   server_tokens off;
-  return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+
+  <% if @letsencrypt_enable %>
+  location /.well-known {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
+  location / {
+    return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
+  }
+
   access_log  <%= @log_directory %>/gitlab_mattermost_access.log gitlab_mattermost_access;
   error_log   <%= @log_directory %>/gitlab_mattermost_error.log;
 }

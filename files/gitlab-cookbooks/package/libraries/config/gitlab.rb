@@ -46,7 +46,7 @@ module Gitlab
   attribute('consul')
   attribute('gitaly').use { Gitaly }
   attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
-  attribute('letsencrypt', priority: 20).use { LetsEncrypt } # After GitlabRails
+  attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
 
   ## Attributes under node['gitlab']

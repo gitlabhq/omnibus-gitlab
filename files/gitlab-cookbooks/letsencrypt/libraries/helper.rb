@@ -29,6 +29,8 @@ class LetsEncryptHelper
     # Adds a service's external URL to the certificate's alt_name list so the
     # generated certificate is applicable to that domain also.
 
+    return unless Gitlab['letsencrypt']['enable']
+
     uri = URI(Gitlab["#{service}_external_url"].to_s)
 
     return if !Gitlab['external_url'] || File.exist?(Gitlab["#{service}_nginx"]["ssl_certificate"])
@@ -41,5 +43,9 @@ class LetsEncryptHelper
     external_uri = URI(Gitlab['external_url'])
     Gitlab["#{service}_nginx"]["ssl_certificate"] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
     Gitlab["#{service}_nginx"]["ssl_certificate_key"] = "/etc/gitlab/ssl/#{external_uri.host}.key"
+
+    # Set HTTP to HTTPS redirection automatically, if not explicitly disabled
+    # by user
+    Gitlab["#{service}_nginx"]['redirect_http_to_https'] = true unless Gitlab["#{service}_nginx"].key?('redirect_http_to_https')
   end
 end

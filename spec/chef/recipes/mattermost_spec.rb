@@ -164,7 +164,7 @@ describe 'gitlab::mattermost' do
     it_behaves_like "enabled service env", "mattermost", "IAM", 'CUSTOMVAR'
   end
 
-  context 'letsencrypt alt_names' do
+  describe 'letsencrypt' do
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
@@ -172,6 +172,31 @@ describe 'gitlab::mattermost' do
       )
 
       allow(File).to receive(:exist?).and_call_original
+    end
+
+    describe 'HTTP to HTTPS redirection' do
+      context 'by default' do
+        it 'is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
+        end
+      end
+
+      context 'if disabled in gitlab.rb' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            mattermost_external_url: 'https://mattermost.example.com',
+            mattermost_nginx: {
+              redirect_http_to_https: false
+            }
+          )
+        end
+
+        it 'is disabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf')
+          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
+        end
+      end
     end
 
     context 'default certificate file is missing' do

@@ -80,6 +80,9 @@ module Registry
         raise "Unsupported GitLab Registry external URL path: #{uri.path}"
       end
 
+      # Docker versions before 1.13 will fail to authenticate/push with the
+      # registry if Registry URL contained :80 or :443. So, we don't set the
+      # port in gitlab.yml.
       Gitlab['gitlab_rails']['registry_port'] = uri.port unless [80, 443].include?(uri.port)
     end
 
