@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service redis_service account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service redis_service)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -35,12 +35,8 @@ describe 'redis' do
         .with_content(/^slaveof/)
     end
 
-    it 'creates redis user' do
-      expect(chef_run).to create_user('gitlab-redis')
-    end
-
-    it 'creates redis group' do
-      expect(chef_run).to create_group('gitlab-redis')
+    it 'creates redis user and group' do
+      expect(chef_run).to create_account('user and group for redis').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
@@ -86,12 +82,8 @@ describe 'redis' do
         .with_content(/^hz 100/)
     end
 
-    it 'creates redis user' do
-      expect(chef_run).to create_user('foo')
-    end
-
-    it 'creates redis group' do
-      expect(chef_run).to create_group('bar')
+    it 'creates redis user and group' do
+      expect(chef_run).to create_account('user and group for redis').with(username: 'foo', groupname: 'bar')
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'foo', 'bar'

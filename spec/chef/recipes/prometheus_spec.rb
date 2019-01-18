@@ -230,12 +230,8 @@ describe 'gitlab::prometheus' do
       )
     end
 
-    it 'should create a gitlab-prometheus user account' do
-      expect(chef_run).to create_user('gitlab-prometheus')
-    end
-
-    it 'should create a gitlab-prometheus group' do
-      expect(chef_run).to create_group('gitlab-prometheus')
+    it 'should create a gitlab-prometheus user and group' do
+      expect(chef_run).to create_account('Prometheus user and group').with(username: 'gitlab-prometheus', groupname: 'gitlab-prometheus')
     end
 
     it 'sets a default listen address' do
@@ -284,12 +280,8 @@ describe 'gitlab::prometheus' do
         )
       end
 
-      it 'should create a user account' do
-        expect(chef_run).to create_user('foo')
-      end
-
-      it 'should create a group' do
-        expect(chef_run).to create_group('bar')
+      it 'should create a user and group' do
+        expect(chef_run).to create_account('Prometheus user and group').with(username: 'foo', groupname: 'bar')
       end
 
       it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'foo', 'bar'

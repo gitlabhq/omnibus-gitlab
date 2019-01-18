@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'consul' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:consul_conf) { '/var/opt/gitlab/consul/config.json' }
 
   before do
@@ -37,12 +37,8 @@ describe 'consul' do
     describe 'consul::enable' do
       it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul'
 
-      it 'creates the consul system user' do
-        expect(chef_run).to create_user 'gitlab-consul'
-      end
-
-      it 'creates the consul system group' do
-        expect(chef_run).to create_group 'gitlab-consul'
+      it 'creates the consul system user and group' do
+        expect(chef_run).to create_account('Consul user and group').with(username: 'gitlab-consul', groupname: 'gitlab-consul')
       end
 
       it 'includes the postgresql_service recipe' do
@@ -113,12 +109,8 @@ describe 'consul' do
         expect(chef_run).to render_file(consul_conf).with_content('"node_name":"fakenodename"')
       end
 
-      it 'creates the consul system user' do
-        expect(chef_run).to create_user 'foo'
-      end
-
-      it 'creates the consul system group' do
-        expect(chef_run).to create_group 'bar'
+      it 'creates the consul system user and group' do
+        expect(chef_run).to create_account('Consul user and group').with(username: 'foo', groupname: 'bar')
       end
 
       it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar'
