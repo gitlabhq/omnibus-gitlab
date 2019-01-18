@@ -26,6 +26,7 @@ auth:
     service: container_registry
     issuer: <%= @registry_issuer %>
     rootcertbundle: <%= @rootcertbundle %>
+    autoredirect: false
 validation:
   disabled: true
 <% if @notifications %>
