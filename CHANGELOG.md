@@ -10,6 +10,7 @@ omnibus-gitlab repository.
 - Patch runit to not consider status of log service for `status` command exit
   code !2949
 - Upgrade libpng to 1.6.36 !2950
+- Upgrade Docker registry to 2.7.1 !2970
 
 11.7.0
 
