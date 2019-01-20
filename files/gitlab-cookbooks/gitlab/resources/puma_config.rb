@@ -19,6 +19,7 @@ property :owner, String, default: 'root'
 property :group, String, default: 'root'
 property :mode, String, default: '0644'
 property :dependent_services, Array, default: []
+property :cookbook, String
 
 action :create do
   config_dir = ::File.dirname(new_resource.filename)
@@ -31,6 +32,7 @@ action :create do
   template new_resource.filename do
     source "puma.rb.erb"
     mode "0644"
+    cookbook new_resource.cookbook if new_resource.cookbook
     owner new_resource.owner if new_resource.owner
     group new_resource.group if new_resource.group
     mode new_resource.mode   if new_resource.mode
