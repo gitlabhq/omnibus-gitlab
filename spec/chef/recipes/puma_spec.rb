@@ -3,7 +3,7 @@ require 'chef_helper'
 describe 'gitlab::puma with Ubuntu 16.04' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service puma_config),
+      step_into: %w(runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -53,20 +53,16 @@ describe 'gitlab::puma with Ubuntu 16.04' do
     end
 
     it 'renders the puma.rb file' do
-      expect(chef_run.template('/var/opt/gitlab/gitlab-rails/etc/puma.rb')).to notify('service[puma]').to(:restart)
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
-        expect(content).to match(%r(^environment 'production'))
-        expect(content).to match(%r(^rackup '/opt/gitlab/embedded/service/gitlab-rails/config.ru'))
-        expect(content).to match(%r(^pidfile '/opt/gitlab/var/puma/puma.pid'))
-        expect(content).to match(%r(^state_path '/opt/gitlab/var/puma/puma.state'))
-        expect(content).to match(%r(^bind 'unix:///var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'))
-        expect(content).to match(%r(^bind 'tcp://127.0.0.1:8080'))
-        expect(content).to match(%r(^directory '/var/opt/gitlab/gitlab-rails/working'))
-        expect(content).to match(%r(^require_relative "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"$))
-        expect(content).to match(/^options = { workers: 2 }$/)
-        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 650\)))
-        expect(content).to match(/^preload_app!$/)
-      }
+      expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        environment: 'production',
+        pid: '/opt/gitlab/var/puma/puma.pid',
+        state_path: '/opt/gitlab/var/puma/puma.state',
+        listen_socket: '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket',
+        listen_tcp: '127.0.0.1:8080',
+        working_directory: '/var/opt/gitlab/gitlab-rails/working',
+        worker_processes: 2,
+        per_worker_max_memory_mb: 650
+      )
     end
   end
 
@@ -88,14 +84,15 @@ describe 'gitlab::puma with Ubuntu 16.04' do
     end
 
     it 'renders the puma.rb file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
-        expect(content).to match(%r(state_path '/tmp/puma.state'))
-        expect(content).to match(%r(bind 'unix:///tmp/puma.socket'))
-        expect(content).to match(%r(bind 'tcp://10.0.0.1:9000'))
-        expect(content).to match(%r(threads 5, 10))
-        expect(content).to match(/^options = { workers: 4 }$/)
-        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 1000\)))
-      }
+      expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        state_path: '/tmp/puma.state',
+        listen_socket: '/tmp/puma.socket',
+        listen_tcp: '10.0.0.1:9000',
+        worker_processes: 4,
+        min_threads: 5,
+        max_threads: 10,
+        per_worker_max_memory_mb: 1000
+      )
     end
   end
 
