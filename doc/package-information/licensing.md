@@ -24,6 +24,9 @@ components. This file, being in JSON format, is easily machine parseable and
 can be used for automated checks or validations. The file may be found at
 `/opt/gitlab/dependency_licenses.json`.
 
+Staring with version 11.3, we have also made the license information available
+online, at: [http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
+
 ## Checking licenses
 
 The omnibus-gitlab package is made up of many pieces of software, comprising code
