@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Update runit cookbook to v4.3.0 !2902
 - Turn on http to https redirection for Registry and Mattermost if LE
   integration is used !2968
+- Upgrade Docker registry to 2.7.1 !2970
 
 11.7.0
 
