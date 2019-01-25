@@ -16,6 +16,7 @@ omnibus-gitlab repository.
   integration is used !2968
 - Upgrade Docker registry to 2.7.1 !2970
 - Upgrade Nginx to 1.12.2 !2988
+- Bump gitlab-elasticsearch-indexer to 1.0.0
 
 11.7.0
 
