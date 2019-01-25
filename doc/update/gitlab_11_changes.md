@@ -118,3 +118,7 @@ been removed.
 
    **Note**: the application will throw 500 http errors until the unicorn
    restart is completed.
+
+### 11.8
+
+1. The [runit](files/gitlab-cookbooks/runit) was updated to be closer to the latest version of the upstream [runit cookbook](https://github.com/chef-cookbooks/runit). No user changes are necessary for this release.
