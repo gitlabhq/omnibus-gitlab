@@ -52,6 +52,11 @@ This section describes the commonly used configuration settings. Check
 
 You can also use the docker images provided by GitLab to install and configure a GitLab instance. Check the [documentation](docker/README.md) to know more.
 
+#### Running on a low-resource device (like a Raspberry Pi)
+
+You can run GitLab on supported low-resource computers like the Raspberry Pi 3, but you will need to tune the settings
+to work best with the available resources. Check out the [documentation](settings/rpi.md) for suggestions on what to adjust.
+
 ## Maintenance
 
 - [Get service status](maintenance/README.md#get-service-status)
