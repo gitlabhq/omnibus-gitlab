@@ -538,6 +538,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['rootcertbundle'] = "/var/opt/gitlab/registry/certificate.crt"
 # registry['health_storagedriver_enabled'] = true
 # registry['storage_delete_enabled'] = true
+# registry['validation_enabled'] = false
 # registry['autoredirect'] = false
 
 ### Registry backend storage

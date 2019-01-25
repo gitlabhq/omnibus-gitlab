@@ -168,9 +168,19 @@ describe 'registry recipe' do
 
     context 'when registry storagedriver health check is disabled' do
       before { stub_gitlab_rb(registry: { health_storagedriver_enabled: false }) }
+
       it 'creates registry config with specified value' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/health:\s*storagedriver:\s*enabled:\s*false/)
+      end
+    end
+
+    context 'when registry validation is enabled' do
+      before { stub_gitlab_rb(registry: { validation_enabled: true }) }
+
+      it 'creates registry config with specified value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/^validation:\s*disabled: false$/)
       end
     end
 

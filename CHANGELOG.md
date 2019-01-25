@@ -14,6 +14,7 @@ omnibus-gitlab repository.
 - Update runit cookbook to v4.3.0 !2902
 - Turn on http to https redirection for Registry and Mattermost if LE
   integration is used !2968
+- Make registry validation configurable !2992
 - Upgrade Docker registry to 2.7.1 !2970
 - Upgrade Nginx to 1.12.2 !2988
 - Bump gitlab-elasticsearch-indexer to 1.0.0
