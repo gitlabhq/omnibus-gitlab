@@ -15,6 +15,7 @@ omnibus-gitlab repository.
 - Turn on http to https redirection for Registry and Mattermost if LE
   integration is used !2968
 - Upgrade Docker registry to 2.7.1 !2970
+- Upgrade Nginx to 1.12.2 !2988
 
 11.7.0
 
