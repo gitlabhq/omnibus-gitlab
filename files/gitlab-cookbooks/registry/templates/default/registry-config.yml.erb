@@ -28,7 +28,7 @@ auth:
     rootcertbundle: <%= @rootcertbundle %>
     autoredirect: <%= @autoredirect %>
 validation:
-  disabled: true
+  disabled: <%= !@validation_enabled %>
 <% if @notifications %>
 notifications:
   endpoints: <%= @notifications.to_json %>
