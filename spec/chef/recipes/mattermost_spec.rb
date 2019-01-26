@@ -1,13 +1,38 @@
 require 'chef_helper'
 
 describe 'gitlab::mattermost' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service storage_directory)).converge('gitlab::default') }
+  let(:default_vars) do
+    {
+      'MM_FILESETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/data',
+      'MM_GITLABSETTINGS_AUTHENDPOINT' => 'http://gitlab.example.com/oauth/authorize',
+      'MM_GITLABSETTINGS_ENABLE' => 'false',
+      'MM_GITLABSETTINGS_ID' => '',
+      'MM_GITLABSETTINGS_SCOPE' => '',
+      'MM_GITLABSETTINGS_SECRET' => '',
+      'MM_GITLABSETTINGS_TOKENENDPOINT' => 'http://gitlab.example.com/oauth/token',
+      'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'http://gitlab.example.com/api/v4/user',
+      'MM_LOGSETTINGS_FILELOCATION' => '/var/log/gitlab/mattermost',
+      'MM_PLUGINSETTINGS_CLIENTDIRECTORY' => '/var/opt/gitlab/mattermost/client-plugins',
+      'MM_PLUGINSETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/plugins',
+      'MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS' => ' gitlab.example.com',
+      'MM_SERVICESETTINGS_ENABLEAPITEAMDELETION' => 'true',
+      'MM_SERVICESETTINGS_LISTENADDRESS' => '127.0.0.1:8065',
+      'MM_SERVICESETTINGS_SITEURL' => 'http://mattermost.example.com',
+      'MM_SQLSETTINGS_ATRESTENCRYPTKEY' => 'asdf1234',
+      'MM_SQLSETTINGS_DATASOURCE' => 'user=gitlab_mattermost host=/var/opt/gitlab/postgresql port=5432 dbname=mattermost_production',
+      'MM_SQLSETTINGS_DRIVERNAME' => 'postgres',
+      'MM_TEAMSETTINGS_SITENAME' => 'GitLab Mattermost',
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     stub_gitlab_rb(external_url: 'http://gitlab.example.com', mattermost_external_url: 'http://mattermost.example.com')
     allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
+    allow(SecretsHelper).to receive(:generate_hex).and_return('asdf1234')
   end
 
   context 'service user and group' do
@@ -32,17 +57,27 @@ describe 'gitlab::mattermost' do
   end
 
   context 'SiteUrl setting' do
-    it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.example.com'
-  end
-
-  context 'when explicitly set' do
-    before do
-      stub_gitlab_rb(mattermost: {
-                       service_site_url: 'http://mattermost.gitlab.example'
-                     })
+    context 'default value' do
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+          variables: default_vars
+        )
+      end
     end
 
-    it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_SITEURL", 'http://mattermost.gitlab.example'
+    context 'when explicitly set' do
+      before do
+        stub_gitlab_rb(mattermost: {
+                         service_site_url: 'http://mattermost.gitlab.example'
+                       })
+      end
+
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+          variables: default_vars.merge({ 'MM_SERVICESETTINGS_SITEURL' => 'http://mattermost.gitlab.example' })
+        )
+      end
+    end
   end
 
   it 'authorizes mattermost with gitlab' do
@@ -82,13 +117,21 @@ describe 'gitlab::mattermost' do
                      })
     end
 
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ENABLE", 'true'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_SECRET", 'gitlab_secret'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ID", 'gitlab_id'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_SCOPE", 'scope'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_AUTHENDPOINT", 'http://gitlab.example.com/oauth/authorize'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_TOKENENDPOINT", 'http://gitlab.example.com/oauth/token'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'http://gitlab.example.com/api/v4/user'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+        variables: default_vars.merge(
+          {
+            'MM_GITLABSETTINGS_ENABLE' => 'true',
+            'MM_GITLABSETTINGS_SECRET' => 'gitlab_secret',
+            'MM_GITLABSETTINGS_ID' => 'gitlab_id',
+            'MM_GITLABSETTINGS_SCOPE' => 'scope',
+            'MM_GITLABSETTINGS_AUTHENDPOINT' => 'http://gitlab.example.com/oauth/authorize',
+            'MM_GITLABSETTINGS_TOKENENDPOINT' => 'http://gitlab.example.com/oauth/token',
+            'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'http://gitlab.example.com/api/v4/user',
+          }
+        )
+      )
+    end
   end
 
   context 'allows overrides to the mattermost settings regarding GitLab endpoints' do
@@ -102,15 +145,25 @@ describe 'gitlab::mattermost' do
                      })
     end
 
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_ENABLE", 'true'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_AUTHENDPOINT", 'https://test-endpoint.example.com/test/auth'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_TOKENENDPOINT", 'https://test-endpoint.example.com/test/token'
-    it_behaves_like "enabled service env", "mattermost", "MM_GITLABSETTINGS_USERAPIENDPOINT", 'https://test-endpoint.example.com/test/user/api'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+        variables: default_vars.merge(
+          {
+            'MM_GITLABSETTINGS_ENABLE' => 'true',
+            'MM_GITLABSETTINGS_AUTHENDPOINT' => 'https://test-endpoint.example.com/test/auth',
+            'MM_GITLABSETTINGS_TOKENENDPOINT' => 'https://test-endpoint.example.com/test/token',
+            'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'https://test-endpoint.example.com/test/user/api'
+          }
+        )
+      )
+    end
   end
 
   context 'gitlab is added to untrusted internal connections list' do
     context 'when no allowed internal connections are provided by gitlab.rb' do
-      it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", ' gitlab.example.com'
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(variables: default_vars)
+      end
     end
 
     context 'when some allowed internal connections are provided by gitlab.rb' do
@@ -118,7 +171,15 @@ describe 'gitlab::mattermost' do
         stub_gitlab_rb(mattermost: { enable: true, service_allowed_untrusted_internal_connections: 'localhost' })
       end
 
-      it_behaves_like "enabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+          variables: default_vars.merge(
+            {
+              'MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS' => 'localhost gitlab.example.com'
+            }
+          )
+        )
+      end
     end
   end
 
@@ -139,8 +200,14 @@ describe 'gitlab::mattermost' do
 
     it_behaves_like 'no gitlab authorization performed'
 
-    context 'does not add gitlab automatically to the list of allowed internal addresses' do
-      it_behaves_like "disabled service env", "mattermost", "MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS", 'gitlab.example.com'
+    it 'does not add gitlab automatically to the list of allowed internal addresses' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+        variables: default_vars.merge(
+          {
+            'MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS' => nil
+          }
+        )
+      )
     end
   end
 
@@ -161,7 +228,15 @@ describe 'gitlab::mattermost' do
       stub_gitlab_rb(mattermost: { env: { 'IAM' => 'CUSTOMVAR' } })
     end
 
-    it_behaves_like "enabled service env", "mattermost", "IAM", 'CUSTOMVAR'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/mattermost/env').with(
+        variables: default_vars.merge(
+          {
+            'IAM' => 'CUSTOMVAR'
+          }
+        )
+      )
+    end
   end
 
   describe 'letsencrypt' do

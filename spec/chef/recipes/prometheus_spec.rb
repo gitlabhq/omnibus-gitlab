@@ -169,7 +169,12 @@ prometheus_yml_output = <<-PROMYML
 PROMYML
 
 describe 'gitlab::prometheus' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -191,7 +196,9 @@ describe 'gitlab::prometheus' do
 
     it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'gitlab-prometheus', 'gitlab-prometheus'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/prometheus/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/prometheus/env').with_variables(default_vars)
+    end
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload_log_service]')

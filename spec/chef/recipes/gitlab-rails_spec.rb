@@ -1,9 +1,23 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink storage_directory)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
+  let(:default_vars) do
+    {
+      'HOME' => '/var/opt/gitlab',
+      'RAILS_ENV' => 'production',
+      'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '2000000',
+      'BUNDLE_GEMFILE' => '/opt/gitlab/embedded/service/gitlab-rails/Gemfile',
+      'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin',
+      'ICU_DATA' => '/opt/gitlab/embedded/share/icu/current',
+      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.4/site-packages',
+      'EXECJS_RUNTIME' => 'Disabled',
+      'TZ' => ':/etc/localtime',
+      'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -917,25 +931,24 @@ describe 'gitlab::gitlab-rails' do
 
   context 'with environment variables' do
     context 'by default' do
-      it_behaves_like "enabled service env", "gitlab-rails", "HOME", '\/var\/opt\/gitlab'
-      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_ENV", 'production'
-      it_behaves_like "enabled service env", "gitlab-rails", "SIDEKIQ_MEMORY_KILLER_MAX_RSS", '2000000'
-      it_behaves_like "enabled service env", "gitlab-rails", "BUNDLE_GEMFILE", '\/opt\/gitlab\/embedded\/service\/gitlab-rails\/Gemfile'
-      it_behaves_like "enabled service env", "gitlab-rails", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
-      it_behaves_like "enabled service env", "gitlab-rails", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
-      it_behaves_like "enabled service env", "gitlab-rails", "PYTHONPATH", '\/opt\/gitlab\/embedded\/lib\/python3.4\/site-packages'
-
-      it_behaves_like "enabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
-      it_behaves_like "disabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", ''
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(default_vars)
+      end
 
       context 'when a custom env variable is specified' do
         before do
           stub_gitlab_rb(gitlab_rails: { env: { 'IAM' => 'CUSTOMVAR' } })
         end
 
-        it_behaves_like "enabled service env", "gitlab-rails", "IAM", 'CUSTOMVAR'
-        it_behaves_like "enabled service env", "gitlab-rails", "ICU_DATA", '\/opt\/gitlab\/embedded\/share\/icu\/current'
-        it_behaves_like "enabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+        it 'creates necessary env variable files' do
+          expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(
+            default_vars.merge(
+              {
+                'IAM' => 'CUSTOMVAR'
+              }
+            )
+          )
+        end
       end
     end
 
@@ -944,7 +957,15 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(gitlab_rails: { gitlab_relative_url: '/gitlab' })
       end
 
-      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(
+          default_vars.merge(
+            {
+              'RAILS_RELATIVE_URL_ROOT' => '/gitlab'
+            }
+          )
+        )
+      end
     end
 
     context 'when relative URL is specified in external_url' do
@@ -952,7 +973,15 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(external_url: 'http://localhost/gitlab')
       end
 
-      it_behaves_like "enabled service env", "gitlab-rails", "RAILS_RELATIVE_URL_ROOT", '/gitlab'
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(
+          default_vars.merge(
+            {
+              'RAILS_RELATIVE_URL_ROOT' => '/gitlab'
+            }
+          )
+        )
+      end
     end
 
     context 'when jemalloc is disabled' do
@@ -960,7 +989,11 @@ describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(gitlab_rails: { enable_jemalloc: false })
       end
 
-      it_behaves_like "disabled service env", "gitlab-rails", "LD_PRELOAD", '\/opt\/gitlab\/embedded\/lib\/libjemalloc.so'
+      it 'creates necessary env variable files' do
+        vars = default_vars.dup
+        vars.delete("LD_PRELOAD")
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(vars)
+      end
     end
   end
 
