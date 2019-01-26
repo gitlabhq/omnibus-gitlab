@@ -320,7 +320,7 @@ psql_port='5432'
 end
 
 describe 'postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service sysctl)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 
@@ -722,6 +722,6 @@ describe 'postgresql 9.6' do
   end
 
   it 'creates sysctl files' do
-    expect(chef_run).to render_file('/opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmmax.conf').with_content("17179869184")
+    expect(chef_run).to create_sysctl('kernel.shmmax').with_value(17179869184)
   end
 end
