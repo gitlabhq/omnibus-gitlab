@@ -48,6 +48,27 @@ describe URI::Redis do
     end
   end
 
+  context 'with non-alphanumeric password' do
+    let(:password) { "&onBsidv6#XeKFd}=BDDyRrv" }
+    let(:escaped) { CGI.escape(password) }
+
+    it 'rejects unencoded passwords' do
+      expect { subject.password = password }.to raise_error(URI::InvalidComponentError)
+    end
+
+    it 'allows encoded passwords' do
+      subject.password = escaped
+
+      expect(subject.password).to eq(escaped)
+    end
+
+    it 'renders url with escaped password' do
+      subject.password = escaped
+
+      expect(subject.to_s).to eq "redis://:#{escaped}@localhost"
+    end
+  end
+
   context 'without password' do
     it 'renders url without authentication division characters' do
       expect(subject.to_s).to eq 'redis://localhost'

@@ -99,6 +99,17 @@ describe RedisHelper do
         expect(subject.redis_url.to_s).to eq('redis://:mypass@redis.example.com/')
       end
 
+      it 'returns a Redis URL with an encoded password' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_host: 'redis.example.com',
+            redis_password: '#223'
+          }
+        )
+
+        expect(subject.redis_url.to_s).to eq('redis://:%23223@redis.example.com/')
+      end
+
       it 'returns a Redis URL with password, port and database when all specified' do
         stub_gitlab_rb(
           gitlab_rails: {

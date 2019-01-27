@@ -53,7 +53,13 @@ module URI
     protected
 
     def check_password(value)
-      value.nil? || !value.empty?
+      return true if value.nil? || value.empty?
+
+      # check the password component for RFC2396 compliance
+      # and against the URI::Parser Regexp for :USERINFO
+      return true if parser.regexp[:USERINFO].match?(value)
+
+      raise InvalidComponentError, "bad password component"
     end
   end
 end
