@@ -2,7 +2,7 @@ require 'chef_helper'
 require 'base64'
 
 describe 'secrets' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   HEX_KEY = /\h{128}/
   RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m
@@ -194,15 +194,16 @@ describe 'secrets' do
         end
 
         it 'writes the correct data to secrets.yml' do
-          yaml_secrets = lambda do |yaml|
-            secrets = YAML.safe_load(yaml)['production']
-
-            expect(secrets).to include('db_key_base' => 'rb_ci_db_key_base')
-            expect(secrets).to include('otp_key_base' => 'json_rails_secret_token')
-            expect(secrets).to include('secret_key_base' => 'rb_ci_db_key_base')
-          end
-
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/secrets.yml').with_content(&yaml_secrets)
+          expect(chef_run).to create_templatesymlink('Create a secrets.yml and create a symlink to Rails root').with_variables(
+            'secrets' => {
+              'production' => {
+                'db_key_base' => 'rb_ci_db_key_base',
+                'secret_key_base' => 'rb_ci_db_key_base',
+                'otp_key_base' => 'json_rails_secret_token',
+                'openid_connect_signing_key' => 'json_rails_jws_private_key'
+              }
+            }
+          )
         end
 
         it 'deletes the secret file' do

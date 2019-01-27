@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -201,18 +201,18 @@ describe 'registry recipe' do
     end
 
     it 'creates gitlab-rails config with default values' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
-        .with_content(/api_url: http:\/\/localhost:5000/)
+      expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(hash_including('registry_api_url' => 'http://localhost:5000'))
     end
   end
 
   context 'when registry port is specified' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { registry_http_addr: 'localhost:5001' }) }
+
     it 'creates registry and rails configs with specified value' do
+      expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(hash_including('registry_api_url' => 'http://localhost:5001'))
+
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
         .with_content(/addr: localhost:5001/)
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml')
-        .with_content(/api_url: http:\/\/localhost:5001/)
     end
   end
 
@@ -237,7 +237,7 @@ describe 'registry recipe' do
 end
 
 describe 'registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'

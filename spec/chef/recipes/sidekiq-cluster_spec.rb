@@ -3,7 +3,7 @@ require 'chef_helper'
 describe 'gitlab-ee::sidekiq-cluster' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service templatesymlink),
+      step_into: %w(runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab-ee::default')

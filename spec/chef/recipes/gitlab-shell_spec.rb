@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-shell' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(storage_directory)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -58,15 +58,14 @@ describe 'gitlab::gitlab-shell' do
   end
 
   context 'with default settings' do
-    it 'populates the default values' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content { |content|
-          expect(content).to match(
-            %r{log_file: "/var/log/gitlab/gitlab-shell/gitlab-shell.log"}
-          )
-          expect(content).not_to match(/^custom_hooks_dir: /)
-          expect(content).not_to match(/^log_format: /)
-        }
+    it 'create config file in default location with default values' do
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+        hash_including(
+          log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
+          log_format: nil,
+          custom_hooks_dir: nil
+        )
+      )
     end
   end
 
@@ -76,8 +75,9 @@ describe 'gitlab::gitlab-shell' do
                        dir: '/export/gitlab/gitlab-shell',
                      })
     end
-    it 'creates config file in specified location' do
-      expect(chef_run).to render_file('/export/gitlab/gitlab-shell/config.yml')
+
+    it 'create config file in specified location with default values' do
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_link_to('/export/gitlab/gitlab-shell/config.yml')
     end
   end
 
@@ -89,11 +89,13 @@ describe 'gitlab::gitlab-shell' do
                      })
     end
 
-    it 'populates the correct values' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(/git_trace_log_file: "\/tmp\/log\/gitlab-shell-git-trace.log"/)
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(/log_file: "\/tmp\/log\/gitlab-shell.log"/)
+    it 'create config file with provided values' do
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+        hash_including(
+          log_file: '/tmp/log/gitlab-shell.log',
+          git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
+        )
+      )
     end
   end
 
@@ -105,8 +107,11 @@ describe 'gitlab::gitlab-shell' do
     end
 
     it 'creates the config file with the auth_file within user\'s ssh directory' do
-      config = chef_run.find_resource(:template, '/var/opt/gitlab/gitlab-shell/config.yml').variables
-      expect(config[:authorized_keys]).to eq('/tmp/user/.ssh/authorized_keys')
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+        hash_including(
+          authorized_keys: '/tmp/user/.ssh/authorized_keys'
+        )
+      )
     end
   end
 
@@ -122,8 +127,11 @@ describe 'gitlab::gitlab-shell' do
     end
 
     it 'creates the config file with the auth_file at the specified location' do
-      config = chef_run.find_resource(:template, '/var/opt/gitlab/gitlab-shell/config.yml').variables
-      expect(config[:authorized_keys]).to eq('/tmp/ssh/authorized_keys')
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+        hash_including(
+          authorized_keys: '/tmp/ssh/authorized_keys'
+        )
+      )
     end
   end
 
@@ -137,11 +145,13 @@ describe 'gitlab::gitlab-shell' do
       )
     end
 
-    it 'populates with custom values' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(%r{custom_hooks_dir: "/fake/dir"})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml')
-        .with_content(%r{log_format: json})
+    it 'creates the config file with custom values' do
+      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+        hash_including(
+          custom_hooks_dir: '/fake/dir',
+          log_format: 'json'
+        )
+      )
     end
   end
 end

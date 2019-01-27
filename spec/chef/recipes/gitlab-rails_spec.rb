@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service storage_directory)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
@@ -33,7 +33,7 @@ describe 'gitlab::gitlab-rails' do
                        manage_storage_directories: { enable: false })
       end
 
-      ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+      ChefSpec::SoloRunner.new.converge('gitlab::default')
     end
 
     it 'does not create the shared directory' do
@@ -73,7 +73,7 @@ describe 'gitlab::gitlab-rails' do
                        gitlab_ci: { builds_directory: '/tmp/builds' })
       end
 
-      ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default')
+      ChefSpec::SoloRunner.new(step_into: %w(storage_directory)).converge('gitlab::default')
     end
 
     it 'creates the shared directory' do
@@ -118,8 +118,12 @@ describe 'gitlab::gitlab-rails' do
 
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
-        expect(chef_run).to render_file(config_file)
-                              .with_content(%r{url: unix:/var/opt/gitlab/redis/redis.socket})
+        expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
+            redis_sentinels: []
+          )
+        )
       end
 
       it 'does not render the separate instance configurations' do
@@ -142,8 +146,12 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it 'creates the config file with custom host, port, password and database' do
-        expect(chef_run).to render_file(config_file)
-                              .with_content(%r{url: redis://:mypass@redis.example.com:8888/2})
+        expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            redis_url: URI('redis://:mypass@redis.example.com:8888/2'),
+            redis_sentinels: []
+          )
+        )
       end
     end
 
@@ -172,20 +180,15 @@ describe 'gitlab::gitlab-rails' do
 
       it 'render separate config files' do
         redis_instances.each do |instance|
-          expect(chef_run).to render_file("#{config_dir}redis.#{instance}.yml")
-            .with_content(%r{^\s*url: redis://:fakepass@fake.redis.#{instance}.com:8888/2})
-        end
-      end
-
-      it 'renders Sentinel config in files' do
-        redis_instances.each do |instance|
-          expect(chef_run).to render_file("#{config_dir}redis.#{instance}.yml")
-            .with_content(%r{^\s*sentinels:\n.*-.*\n.*host: #{instance}\n.*port: 1234\n.*\n.*host: #{instance}\n.*port: 3456})
+          expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
+            redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
+            redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }]
+          )
         end
       end
 
       it 'still renders the default configuration file' do
-        expect(chef_run).to render_file(config_file)
+        expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
       end
     end
   end
@@ -240,8 +243,15 @@ describe 'gitlab::gitlab-rails' do
 
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "artifacts"\s+connection:/)
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'artifacts_object_store_enabled' => false,
+            'artifacts_object_store_direct_upload' => false,
+            'artifacts_object_store_background_upload' => true,
+            'artifacts_object_store_proxy_download' => false,
+            'artifacts_object_store_remote_directory' => 'artifacts'
+          )
+        )
       end
 
       context 'with values' do
@@ -257,18 +267,31 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'artifacts_object_store_enabled' => true,
+              'artifacts_object_store_direct_upload' => true,
+              'artifacts_object_store_background_upload' => false,
+              'artifacts_object_store_proxy_download' => true,
+              'artifacts_object_store_remote_directory' => 'mepmep',
+              'artifacts_object_store_connection' => aws_connection_hash
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
     context 'for settings regarding object storage for lfs' do
       it 'allows not setting any values' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/storage_path:\s+[-\/\w]*shared\/lfs-objects\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "lfs-objects"\s+connection:/)
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'lfs_object_store_enabled' => false,
+            'lfs_object_store_direct_upload' => false,
+            'lfs_object_store_background_upload' => true,
+            'lfs_object_store_proxy_download' => false,
+            'lfs_object_store_remote_directory' => 'lfs-objects'
+          )
+        )
       end
 
       context 'with values' do
@@ -284,18 +307,32 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/storage_path:\s+[-\/\w]*shared\/lfs-objects\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'lfs_object_store_enabled' => true,
+              'lfs_object_store_direct_upload' => true,
+              'lfs_object_store_background_upload' => false,
+              'lfs_object_store_proxy_download' => true,
+              'lfs_object_store_remote_directory' => 'mepmep',
+              'lfs_object_store_connection' => aws_connection_hash
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
     context 'for settings regarding object storage for uploads' do
       it 'allows not setting any values' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{storage_path: [-/\w]*public\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "uploads"\s+connection:})
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'uploads_storage_path' => '/opt/gitlab/embedded/service/gitlab-rails/public',
+            'uploads_object_store_enabled' => false,
+            'uploads_object_store_direct_upload' => false,
+            'uploads_object_store_background_upload' => true,
+            'uploads_object_store_proxy_download' => false,
+            'uploads_object_store_remote_directory' => 'uploads'
+          )
+        )
       end
 
       context 'with values' do
@@ -312,18 +349,33 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/storage_path:\s+[-\/\w]*public\s+base_dir:\s+mapmap\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'uploads_base_dir' => 'mapmap',
+              'uploads_object_store_enabled' => true,
+              'uploads_object_store_direct_upload' => true,
+              'uploads_object_store_background_upload' => false,
+              'uploads_object_store_proxy_download' => true,
+              'uploads_object_store_remote_directory' => 'mepmep',
+              'uploads_object_store_connection' => aws_connection_hash
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
     context 'for settings regarding object storage for packages' do
       it 'allows not setting any values' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "packages"\s+connection:/)
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'packages_storage_path' => '/var/opt/gitlab/gitlab-rails/shared/packages',
+            'packages_object_store_enabled' => false,
+            'packages_object_store_direct_upload' => false,
+            'packages_object_store_background_upload' => true,
+            'packages_object_store_proxy_download' => false,
+            'packages_object_store_remote_directory' => 'packages'
+          )
+        )
       end
 
       context 'with values' do
@@ -339,25 +391,29 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/storage_path:\s+[-\/\w]*shared\/packages\s+object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"\s+connection:/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'packages_object_store_enabled' => true,
+              'packages_object_store_direct_upload' => true,
+              'packages_object_store_background_upload' => false,
+              'packages_object_store_proxy_download' => true,
+              'packages_object_store_remote_directory' => 'mepmep',
+              'packages_object_store_connection' => aws_connection_hash
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
     describe 'pseudonymizer settings' do
       it 'allows not setting any values' do
-        pseudonymizer_spec = Regexp.new([
-          'pseudonymizer:',
-          'manifest:',
-          'upload:',
-          'remote_directory:',
-          'connection:\s+{}'
-        ].join('\s+'))
-
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'pseudonymizer_manifest' => nil,
+            'pseudonymizer_upload_connection' => {},
+            'pseudonymizer_upload_remote_directory' => nil
+          )
+        )
       end
 
       context 'with values' do
@@ -370,17 +426,14 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          pseudonymizer_spec = Regexp.new([
-            'pseudonymizer:',
-            'manifest:\s+"another/path/manifest.yml"',
-            'upload:',
-            'remote_directory:\s+"gitlab-pseudo"',
-          ].join('\s+'))
-
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(pseudonymizer_spec)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pseudonymizer_manifest' => 'another/path/manifest.yml',
+              'pseudonymizer_upload_connection' => aws_connection_hash,
+              'pseudonymizer_upload_remote_directory' => 'gitlab-pseudo'
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
@@ -394,12 +447,30 @@ describe 'gitlab::gitlab-rails' do
           }
         )
 
-        expect(chef_run).to render_file(gitlab_yml_path).with_content('"path":"tmp/storage/repositories"')
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'repositories_storages' => {
+              'second_storage' => {
+                'path' => 'tmp/storage/repositories',
+                'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
+              }
+            }
+          )
+        )
       end
 
       it 'sets the defaults' do
-        default_json = '{"default":{"path":"/var/opt/gitlab/git-data/repositories","gitaly_address":"unix:/var/opt/gitlab/gitaly/gitaly.socket"}}'
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(default_json)
+        default_storages = {
+          'default' => {
+            'path' => '/var/opt/gitlab/git-data/repositories',
+            'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
+          }
+        }
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'repositories_storages' => default_storages
+          )
+        )
       end
     end
 
@@ -416,8 +487,12 @@ describe 'gitlab::gitlab-rails' do
             }
           )
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pages:\s+enabled: true\s+access_control: true/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_enabled' => true,
+              pages_access_control: true
+            )
+          )
         end
       end
 
@@ -432,8 +507,12 @@ describe 'gitlab::gitlab-rails' do
               access_control: false
             }
           )
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pages:\s+enabled: true\s+access_control: false/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_enabled' => true,
+              pages_access_control: false
+            )
+          )
         end
       end
     end
@@ -444,15 +523,22 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(mattermost: { enable: true },
                          mattermost_external_url: 'http://mattermost.domain.com')
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content("host: http://mattermost.domain.com")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              mattermost_host: 'http://mattermost.domain.com'
+            )
+          )
         end
       end
 
       context 'mattermost is not configured' do
         it 'has empty values' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/mattermost:\s+enabled: false\s+host:\s+/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              mattermost_enabled: false,
+              mattermost_host: nil
+            )
+          )
         end
       end
 
@@ -460,8 +546,12 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the mattermost host' do
           stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.host.com\s+/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              mattermost_enabled: true,
+              mattermost_host: 'http://my.host.com'
+            )
+          )
         end
 
         context 'values set twice' do
@@ -470,8 +560,12 @@ describe 'gitlab::gitlab-rails' do
                            mattermost_external_url: 'http://my.url.com',
                            gitlab_rails: { mattermost_host: 'http://do.not/setme' })
 
-            expect(chef_run).to render_file(gitlab_yml_path)
-              .with_content(/mattermost:\s+enabled: true\s+host: http:\/\/my.url.com\s+/)
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                mattermost_enabled: true,
+                mattermost_host: 'http://my.url.com'
+              )
+            )
           end
         end
       end
@@ -486,12 +580,12 @@ describe 'gitlab::gitlab-rails' do
             }
           )
 
-          expect(chef_run).to(
-            render_file(gitlab_yml_path).with_content do |content|
-              expect(content).to match(/smartcard:\s+(#.*\n\s+)?enabled: true/)
-              expect(content).to include('ca_file: "/etc/gitlab/ssl/CA.pem"')
-              expect(content).to include('client_certificate_required_port: 3444')
-            end
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'smartcard_enabled' => true,
+              'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+              'smartcard_client_certificate_required_port' => 3444
+            )
           )
         end
       end
@@ -499,9 +593,11 @@ describe 'gitlab::gitlab-rails' do
       context 'smartcard authentication is disabled' do
         context 'smartcard authentication is not configured' do
           it 'does not enable smartcard authentication' do
-            expect(chef_run).to(
-              render_file(gitlab_yml_path)
-                .with_content(/smartcard:\s+(#.*\n\s+)?enabled: false/))
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'smartcard_enabled' => false
+              )
+            )
           end
         end
       end
@@ -510,22 +606,31 @@ describe 'gitlab::gitlab-rails' do
     context 'omniauth settings' do
       context 'enabled setting' do
         it 'defaults to nil (enabled)' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: \n/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_enabled' => nil
+            )
+          )
         end
 
         it 'can be explicitly enabled' do
           stub_gitlab_rb(gitlab_rails: { omniauth_enabled: true })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: true\n/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_enabled' => true
+            )
+          )
         end
 
         it 'can be disabled' do
           stub_gitlab_rb(gitlab_rails: { omniauth_enabled: false })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/omniauth:\s+(#.*\n\s+)?enabled: false\n/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_enabled' => false
+            )
+          )
         end
       end
 
@@ -533,23 +638,31 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the omniauth provider' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content("sync_email_from_provider: \"cas3\"")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_email_from_provider' => 'cas3'
+            )
+          )
         end
       end
 
       context 'sync email from omniauth provider is not configured' do
         it 'does not include the sync email from omniauth provider setting' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('sync_email_from_provider')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_email_from_provider' => nil
+            )
+          )
         end
       end
 
       context 'sync profile from omniauth provider is not configured' do
         it 'sets the sync profile from provider to []' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content("sync_profile_from_provider: []")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_profile_from_provider' => nil
+            )
+          )
         end
       end
 
@@ -557,8 +670,11 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the sync profile from provider to [\'cas3\']' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: ['cas3'] })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content("sync_profile_from_provider: [\"cas3\"]")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_profile_from_provider' => ['cas3']
+            )
+          )
         end
       end
 
@@ -566,8 +682,11 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the sync profile from provider to true' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: true })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-              .with_content("sync_profile_from_provider: true")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_profile_from_provider' => true
+            )
+          )
         end
       end
 
@@ -575,8 +694,11 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the sync profile attributes to [\"email\", \"name\"]' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: %w(email name) })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                  .with_content("sync_profile_attributes: [\"email\",\"name\"]")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_profile_attributes' => %w[email name]
+            )
+          )
         end
       end
 
@@ -584,31 +706,44 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the sync profile attributes to true' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: true })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                  .with_content("sync_profile_attributes: true")
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_sync_profile_attributes' => true
+            )
+          )
         end
       end
+    end
 
-      context 'Sidekiq log_format' do
-        it 'sets the Sidekiq log_format to default' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                  .with_content("log_format: default")
-          expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
-        end
+    context 'Sidekiq log_format' do
+      it 'sets the Sidekiq log_format to default' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            sidekiq: hash_including(
+              'log_format' => 'default'
+            )
+          )
+        )
+        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
+      end
 
-        it 'sets the Sidekiq log_format to json' do
-          stub_gitlab_rb(sidekiq: { log_format: 'json' })
+      it 'sets the Sidekiq log_format to json' do
+        stub_gitlab_rb(sidekiq: { log_format: 'json' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                  .with_content("log_format: json")
-          expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
-        end
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            sidekiq: hash_including(
+              'log_format' => 'json'
+            )
+          )
+        )
+        expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
       end
     end
 
     context 'sidekiq-cluster' do
       let(:chef_run) do
-        ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default')
+        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
       end
 
       before do
@@ -630,23 +765,28 @@ describe 'gitlab::gitlab-rails' do
 
     context 'GitLab Geo settings' do
       let(:chef_run) do
-        ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default')
+        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
       end
 
       context 'when repository sync worker is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_repository_sync_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_repository_sync_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_sync_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when repository sync worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_repository_sync_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_sync_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -654,16 +794,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_prune_event_log_worker_cron: '5 4 3 2 1' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_prune_event_log_worker:\s+cron:\s+"5 4 3 2 1"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_prune_event_log_worker_cron' => '5 4 3 2 1'
+            )
+          )
         end
       end
 
       context 'when geo prune event log worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_prune_event_log_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_excluding(
+              'geo_prune_event_log_worker_cron'
+            )
+          )
         end
       end
 
@@ -671,16 +816,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_file_download_dispatch_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_file_download_dispatch_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_file_download_dispatch_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when file download dispatch worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_file_download_dispatch_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_file_download_dispatch_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -688,16 +838,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_repository_verification_primary_batch_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_repository_verification_primary_batch_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_verification_primary_batch_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when repository verification primary batch worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_repository_verification_primary_batch_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_verification_primary_batch_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -705,16 +860,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_repository_verification_secondary_scheduler_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_repository_verification_secondary_scheduler_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_verification_secondary_scheduler_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when repository verification secondary scheduler worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_repository_verification_secondary_scheduler_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_repository_verification_secondary_scheduler_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -722,16 +882,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_migrated_local_files_clean_up_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/geo_migrated_local_files_clean_up_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_migrated_local_files_clean_up_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when migrated local files cleanup worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('geo_migrated_local_files_clean_up_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_migrated_local_files_clean_up_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -739,16 +904,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { pseudonymizer_worker_cron: '1 2 3 4 5' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pseudonymizer_worker:\s+cron:\s+"1 2 3 4 5"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pseudonymizer_worker_cron' => '1 2 3 4 5'
+            )
+          )
         end
       end
 
       context 'when pseudonymizer worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('pseudonymizer_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pseudonymizer_worker_cron' => nil
+            )
+          )
         end
       end
     end
@@ -758,15 +928,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { pipeline_schedule_worker_cron: '41 * * * *' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pipeline_schedule_worker:\s+cron:\s+"41/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pipeline_schedule_worker_cron' => '41 * * * *'
+            )
+          )
         end
       end
 
       context 'when the cron pattern is not configured' do
         it 'sets no value' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pipeline_schedule_worker:\s+cron:\s[^"]+/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pipeline_schedule_worker_cron' => nil
+            )
+          )
         end
       end
     end
@@ -774,12 +950,19 @@ describe 'gitlab::gitlab-rails' do
     context 'Monitoring settings' do
       context 'by default' do
         it 'whitelists local subnet' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- "127.0.0.0/8"\s+- "::1/128"})
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'monitoring_whitelist' => ['127.0.0.0/8', '::1/128']
+            )
+          )
         end
+
         it 'sampler will sample every 10s' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 10})
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'monitoring_unicorn_sampler_interval' => 10
+            )
+          )
         end
       end
 
@@ -788,8 +971,11 @@ describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: { monitoring_whitelist: %w(1.0.0.0 2.0.0.0) })
         end
         it 'sets the whitelist' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+){3}ip_whitelist:\s+- "1.0.0.0"\s+- "2.0.0.0"})
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'monitoring_whitelist' => ['1.0.0.0', '2.0.0.0']
+            )
+          )
         end
       end
 
@@ -799,26 +985,27 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'sets the interval value' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-                                .with_content(%r{monitoring:\s+(.+\s+)unicorn_sampler_interval: 123})
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'monitoring_unicorn_sampler_interval' => 123
+            )
+          )
         end
       end
     end
 
     context 'Gitaly settings' do
-      it 'renders client_path' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(%r{gitaly:\s+client_path: /opt/gitlab/embedded/bin\s})
-      end
-
       context 'when a global token is set' do
         let(:token) { '123secret456gitaly' }
 
         it 'renders the token in the gitaly section' do
           stub_gitlab_rb(gitlab_rails: { gitaly_token: token })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(%r{gitaly:\s+client_path: /opt/gitlab/embedded/bin\s+token: "#{token}"})
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'gitaly_token' => '123secret456gitaly'
+            )
+          )
         end
       end
     end
@@ -826,17 +1013,23 @@ describe 'gitlab::gitlab-rails' do
     context 'GitLab Shell settings' do
       context 'when git_timeout is configured' do
         it 'sets the git_timeout value' do
-          stub_gitlab_rb(gitlab_rails: { gitlab_shell_git_timeout: '1000' })
+          stub_gitlab_rb(gitlab_rails: { gitlab_shell_git_timeout: 1000 })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/git_timeout:\s+1000/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'gitlab_shell_git_timeout' => 1000
+            )
+          )
         end
       end
 
       context 'when git_timeout is not configured' do
         it 'sets git_timeout value to default' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/git_timeout:\s+10800/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'gitlab_shell_git_timeout' => 10800
+            )
+          )
         end
       end
     end
@@ -846,16 +1039,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { ldap_sync_worker_cron: '40 2 * * *' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/ldap_sync_worker:\s+cron:\s+"40 2 \* \* \*"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_sync_worker_cron' => '40 2 * * *'
+            )
+          )
         end
       end
 
       context 'when ldap user sync worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('ldap_sync_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_sync_worker_cron' => nil
+            )
+          )
         end
       end
 
@@ -863,16 +1061,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { ldap_group_sync_worker_cron: '1 0 * * *' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/ldap_group_sync_worker:\s+cron:\s+"1 0 \* \* \*"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_group_sync_worker_cron' => '1 0 * * *'
+            )
+          )
         end
       end
 
       context 'when ldap group sync worker is not configured' do
         it 'does not set the cron value' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            expect(content).not_to include('ldap_group_sync_worker')
-          }
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_group_sync_worker_cron' => nil
+            )
+          )
         end
       end
     end
@@ -882,13 +1085,19 @@ describe 'gitlab::gitlab-rails' do
         it 'set, sets the setting value' do
           stub_gitlab_rb(gitlab_rails: { ldap_lowercase_usernames: true })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/lowercase_usernames: true/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_lowercase_usernames' => true
+            )
+          )
         end
 
         it 'not set, sets default value to blank' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/lowercase_usernames:\s$/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ldap_lowercase_usernames' => nil
+            )
+          )
         end
       end
     end
@@ -898,15 +1107,21 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { ci_archive_traces_cron_worker_cron: '17 * * * *' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s+"17/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ci_archive_traces_cron_worker_cron' => '17 * * * *'
+            )
+          )
         end
       end
 
       context 'when the cron pattern is not configured' do
         it 'sets no value' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/ci_archive_traces_cron_worker:\s+cron:\s[^"]+/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_excluding(
+              'ci_archive_traces_cron_worker_cron'
+            )
+          )
         end
       end
     end
@@ -916,14 +1131,20 @@ describe 'gitlab::gitlab-rails' do
         it 'sets the value' do
           stub_gitlab_rb(gitlab_rails: { pages_domain_verification_cron_worker: '1 0 * * *' })
 
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pages_domain_verification_cron_worker:\s+cron:\s+"1 0 \* \* \*"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_domain_verification_cron_worker' => '1 0 * * *'
+            )
+          )
         end
       end
       context 'when pages domain verification cron worker is not configured' do
         it ' sets no value' do
-          expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/pages_domain_verification_cron_worker:\s+cron:\s[^"]+/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_domain_verification_cron_worker' => nil
+            )
+          )
         end
       end
     end
@@ -998,7 +1219,7 @@ describe 'gitlab::gitlab-rails' do
   end
 
   describe "with symlinked templates" do
-    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
     before do
       %w(
@@ -1025,25 +1246,20 @@ describe 'gitlab::gitlab-rails' do
 
       context 'by default' do
         cached(:chef_run) do
-          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
         it 'creates the template' do
-          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database.yml')
-            .with(
-              owner: 'root',
-              group: 'git',
-              mode: '0640'
+          expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'db_host' => '/var/opt/gitlab/postgresql',
+              'db_database' => 'gitlabhq_production',
+              'db_load_balancing' => { 'hosts' => [] },
+              'db_prepared_statements' => false,
+              'db_sslcompression' => 0,
+              'db_fdw' => nil
             )
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content { |content|
-            expect(content).to match(/host: \"\/var\/opt\/gitlab\/postgresql\"/)
-            expect(content).to match(/database: gitlabhq_production/)
-            expect(content).to match(/load_balancing: {"hosts":\[\]}/)
-            expect(content).to match(/prepared_statements: false/)
-            expect(content).to match(/statements_limit: 1000/)
-            expect(content).to match(/sslcompression: 0/)
-            expect(content).to match(/fdw:\s*$/)
-          }
+          )
         end
 
         it 'template triggers notifications' do
@@ -1051,10 +1267,6 @@ describe 'gitlab::gitlab-rails' do
           expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
           expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
-        end
-
-        it 'creates the symlink' do
-          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml")
         end
       end
 
@@ -1065,14 +1277,22 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'creates the postgres configuration file with multi listen_address and database.yml file with one host' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "127.0.0.1"/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_host' => '127.0.0.1'
+              )
+            )
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
           end
         end
 
         context 'when no postgresql listen_address is used' do
           it 'creates the postgres configuration file with empty listen_address and database.yml file with default one' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "\/var\/opt\/gitlab\/postgresql"/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_host' => '/var/opt/gitlab/postgresql'
+              )
+            )
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
           end
         end
@@ -1083,11 +1303,15 @@ describe 'gitlab::gitlab-rails' do
               stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1" })
             end
 
-            ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+            ChefSpec::SoloRunner.new.converge('gitlab::default')
           end
 
           it 'creates the postgres configuration file with one listen_address and database.yml file with one host' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/host: "127.0.0.1"/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_host' => '127.0.0.1'
+              )
+            )
             expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
           end
 
@@ -1097,10 +1321,6 @@ describe 'gitlab::gitlab-rails' do
             expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
             expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
           end
-
-          it 'creates the symlink' do
-            expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/config/database.yml to /var/opt/gitlab/gitlab-rails/etc/database.yml")
-          end
         end
 
         context 'when load balancers are specified' do
@@ -1109,7 +1329,11 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'uses provided value in database.yml' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/load_balancing: {"hosts":\["primary.example.com","secondary.example.com"\]}/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_load_balancing' => { 'hosts' => ['primary.example.com', 'secondary.example.com'] }
+              )
+            )
           end
         end
 
@@ -1119,8 +1343,12 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'uses provided value in database.yml' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 1000/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_prepared_statements' => false,
+                'db_statements_limit' => 1000
+              )
+            )
           end
         end
 
@@ -1130,8 +1358,12 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'uses provided value in database.yml' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/statements_limit: 12345/)
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/prepared_statements: false/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_prepared_statements' => false,
+                'db_statements_limit' => 12345
+              )
+            )
           end
         end
 
@@ -1141,7 +1373,11 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'uses provided value in database.yml' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/sslcompression: 1/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_sslcompression' => 1
+              )
+            )
           end
         end
 
@@ -1151,7 +1387,11 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'uses provided value in database.yml' do
-            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database.yml').with_content(/fdw: true/)
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_fdw' => true
+              )
+            )
           end
         end
       end
@@ -1162,26 +1402,21 @@ describe 'gitlab::gitlab-rails' do
 
       context 'by default' do
         cached(:chef_run) do
-          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
         it 'creates the template' do
-          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-            .with(
-              owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
+          expect(chef_run).to create_templatesymlink("Create a gitlab_workhorse_secret and create a symlink to Rails root").with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
         end
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-        end
-
-        it 'creates the symlink' do
-          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
         end
       end
 
@@ -1191,31 +1426,27 @@ describe 'gitlab::gitlab-rails' do
             stub_gitlab_rb(gitlab_workhorse: { secret_token: 'abc123-gitlab-workhorse' })
           end
 
-          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
         it 'renders the correct node attribute' do
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-            .with_content('abc123-gitlab-workhorse')
+          expect(chef_run).to create_templatesymlink("Create a gitlab_workhorse_secret and create a symlink to Rails root").with_variables(
+            secret_token: 'abc123-gitlab-workhorse'
+          )
         end
 
         it 'uses the correct owner and permissions' do
-          expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret')
-            .with(
-              owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
+          expect(chef_run).to create_templatesymlink('Create a gitlab_workhorse_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
         end
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-        end
-
-        it 'creates the symlink' do
-          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret to /var/opt/gitlab/gitlab-rails/etc/gitlab_workhorse_secret")
         end
       end
     end
@@ -1233,26 +1464,21 @@ describe 'gitlab::gitlab-rails' do
             )
           end
 
-          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
         it 'creates the template' do
-          expect(chef_run).to create_template(pages_secret_path)
-            .with(
-              owner: 'root',
-              group: 'git',
-              mode: '0640'
-            )
+          expect(chef_run).to create_templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'git',
+            mode: '0640'
+          )
         end
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
           expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-        end
-
-        it 'creates the symlink' do
-          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_pages_secret to #{pages_secret_path}")
         end
       end
 
@@ -1268,31 +1494,24 @@ describe 'gitlab::gitlab-rails' do
             )
           end
 
-          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
         it 'renders the correct node attribute' do
-          expect(chef_run).to render_file(pages_secret_path)
-            .with_content('abc123-gitlab-pages')
-        end
-
-        it 'uses the correct owner and permissions' do
-          expect(chef_run).to create_template(pages_secret_path)
-            .with(
-              owner: 'root',
-              group: 'git',
-              mode: '0640'
-            )
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with(
+            variables: {
+              secret_token: 'abc123-gitlab-pages'
+            },
+            owner: 'root',
+            group: 'git',
+            mode: '0640'
+          )
         end
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
           expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
           expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-        end
-
-        it 'creates the symlink' do
-          expect(chef_run).to create_link("Link /opt/gitlab/embedded/service/gitlab-rails/.gitlab_pages_secret to #{pages_secret_path}")
         end
       end
     end

@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'rake-attack' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -27,15 +27,9 @@ describe 'rake-attack' do
     end
 
     it 'creates rack_attack config file with user defined list' do
-      rack_attack_config = '/var/opt/gitlab/gitlab-rails/etc/rack_attack.rb'
       stub_gitlab_rb(gitlab_rails: { rack_attack_protected_paths: ['/admin/', '/users/password'] })
 
-      expect(chef_run).to create_template(rack_attack_config)
-
-      expect(chef_run).to render_file(rack_attack_config)
-        .with_content(/#\{Rails.application.config.relative_url_root\}\/admin\//)
-      expect(chef_run).to render_file(rack_attack_config)
-        .with_content(/#\{Rails.application.config.relative_url_root\}\/users\/password/)
+      expect(chef_run).to create_templatesymlink('Create a rack_attack.rb and create a symlink to Rails root').with_variables(hash_including("rack_attack_protected_paths" => ["/admin/", "/users/password"]))
     end
   end
 
@@ -82,12 +76,8 @@ describe 'rake-attack' do
 
     it 'creates rack_attack config file with default list' do
       stub_gitlab_rb(gitlab_rails: { rack_attack_protected_paths: nil })
-      rack_attack_config = '/var/opt/gitlab/gitlab-rails/etc/rack_attack.rb'
-      expect(chef_run).to create_template(rack_attack_config)
-      default_protected_paths.each do |path|
-        expect(chef_run).to render_file(rack_attack_config)
-          .with_content(/#\{Rails.application.config.relative_url_root\}#{path}/)
-      end
+
+      expect(chef_run).to create_templatesymlink('Create a rack_attack.rb and create a symlink to Rails root').with_variables(hash_including("rack_attack_protected_paths" => default_protected_paths))
     end
   end
 end

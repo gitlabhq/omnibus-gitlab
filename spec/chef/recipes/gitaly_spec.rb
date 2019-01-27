@@ -338,7 +338,7 @@ describe 'gitaly' do
 end
 
 describe 'gitaly::git_data_dirs' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(storage_directory)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
