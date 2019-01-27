@@ -309,6 +309,17 @@ dependencies_io_check:
       - triggers
       - branches@gitlab/omnibus-gitlab
 
+validate_packer_changes:
+  before_script: []
+  image: "${BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  stage: check
+  script:
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ce.json
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ee.json
+  only:
+    changes:
+      - support/packer/*
+
 ##############################
 #     Scheduled pipeline     #
 ##############################
