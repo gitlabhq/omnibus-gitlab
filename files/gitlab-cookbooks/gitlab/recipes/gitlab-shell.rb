@@ -16,7 +16,6 @@
 ##
 #
 account_helper = AccountHelper.new(node)
-redis_helper = RedisHelper.new(node)
 
 git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
@@ -58,15 +57,6 @@ end
 api_url = node['gitlab']['gitlab-rails']['internal_api_url']
 api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}#{node['gitlab']['unicorn']['relative_url']}"
 
-redis_host, redis_port, redis_password = redis_helper.redis_params
-redis_socket = if redis_port
-                 # Leave out redis socket setting because in gitlab-shell, setting a Redis socket
-                 # overrides TCP connection settings.
-                 nil
-               else
-                 node['gitlab']['gitlab-rails']['redis_socket']
-               end
-
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
   link_to gitlab_shell_config_file
@@ -78,12 +68,6 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               user: git_user,
               api_url: api_url,
               authorized_keys: authorized_keys,
-              redis_host: redis_host,
-              redis_port: redis_port,
-              redis_socket: redis_socket,
-              redis_password: redis_password,
-              redis_database: node['gitlab']['gitlab-rails']['redis_database'],
-              redis_sentinels: node['gitlab']['gitlab-rails']['redis_sentinels'],
               log_file: File.join(log_directory, "gitlab-shell.log"),
               log_level: node['gitlab']['gitlab-shell']['log_level'],
               log_format: node['gitlab']['gitlab-shell']['log_format'],
