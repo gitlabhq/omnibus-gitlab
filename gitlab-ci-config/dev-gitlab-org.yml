@@ -234,10 +234,6 @@ QA-Master:
     - Ubuntu-16.04-branch
   retry: 1
 
-Raspberry-Pi-2-Jessie-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_branch_build
-
 Raspberry-Pi-2-Stretch-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_branch_build
@@ -545,18 +541,9 @@ HA-Validate-Tagged:
   dependencies: []
   allow_failure: true
 
-Raspberry-Pi-2-Jessie:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_8:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_tag_build
-
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
-
-Raspberry-Pi-2-Jessie-release:
-  dependencies:
-    - Raspberry-Pi-2-Jessie
-  <<: *raspbian_release
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:
