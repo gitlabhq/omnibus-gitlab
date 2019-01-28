@@ -133,8 +133,13 @@ describe OmnibusHelper do
   end
 
   describe '#is_deprecated_os?' do
+    before do
+      allow(OmnibusHelper).to receive(:deprecated_os_list).and_return({ "raspbian-8.0" => "GitLab 11.8" })
+    end
+
     it 'detects deprecated OS correctly' do
       allow_any_instance_of(Ohai::System).to receive(:data).and_return({ "platform" => "raspbian", "platform_version" => "8.0" })
+
       expect(LoggingHelper).to receive(:deprecation).with(/Your OS, raspbian-8.0, will be deprecated soon/)
       OmnibusHelper.is_deprecated_os?
     end
