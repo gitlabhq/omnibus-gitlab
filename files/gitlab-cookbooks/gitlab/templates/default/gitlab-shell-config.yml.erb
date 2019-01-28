@@ -19,25 +19,6 @@ http_settings:
 # File used as authorized_keys for gitlab user
 auth_file: "<%= @authorized_keys %>"
 
-# Redis settings used for pushing commit notices to gitlab
-redis:
-  host: <%= @redis_host %>
-  port: <%= @redis_port %>
-<% if @redis_socket %>
-  socket: <%= @redis_socket %>
-<% end %>
-<% if @redis_password %>
-  pass: <%= @redis_password %>
-<% end %>
-  database: <%= @redis_database %>
-  namespace: resque:gitlab
-  <% unless @redis_sentinels.empty? %>
-  sentinels:
-    <% @redis_sentinels.each do |sentinel| %>
-      - <%= sentinel.to_json %>
-    <% end %>
-  <% end %>
-
 # Log file.
 # Default is gitlab-shell.log in the root directory.
 log_file: "<%= @log_file %>"
