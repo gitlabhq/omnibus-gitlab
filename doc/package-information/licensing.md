@@ -2,7 +2,6 @@
 
 ## License
 
-
 While GitLab itself is MIT, the omnibus-gitlab sources are licensed under the Apache-2.0.
 
 ## License file location
@@ -24,7 +23,7 @@ components. This file, being in JSON format, is easily machine parseable and
 can be used for automated checks or validations. The file may be found at
 `/opt/gitlab/dependency_licenses.json`.
 
-Staring with version 11.3, we have also made the license information available
+Starting with version 11.3, we have also made the license information available
 online, at: [http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
 
 ## Checking licenses
@@ -49,8 +48,6 @@ which should be immediately reviewed for implications of use.
 and thus should be checked for how it is used as a part of the omnibus-gitlab package
 to ensure compliance.
 
-This list is currently sourced from the [GitLab development documentation on licensing]
-(https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/licensing.md).
+This list is currently sourced from the [GitLab development documentation on licensing](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/licensing.md).
 However, due to the nature of the omnibus-gitlab package the licenses may not apply
-in the same way. Such as with `git` and `rsync`. See the [GNU License FAQ]
-(https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation)
+in the same way. Such as with `git` and `rsync`. See the [GNU License FAQ](https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation)
