@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# DEV
 VERSION=$1
 TYPE=$2
 DOWNLOAD_URL=$3
