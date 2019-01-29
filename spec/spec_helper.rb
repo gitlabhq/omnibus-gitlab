@@ -15,4 +15,5 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
 
   config.include(GitlabSpec::Macros)
+  config.include ExpectOffense
 end
