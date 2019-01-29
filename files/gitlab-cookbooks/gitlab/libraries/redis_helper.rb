@@ -1,4 +1,5 @@
 require_relative 'redis_uri.rb'
+require 'cgi'
 
 class RedisHelper
   def initialize(node)
@@ -33,7 +34,10 @@ class RedisHelper
     else
       scheme = gitlab_rails['redis_ssl'] ? 'rediss:/' : 'redis:/'
       uri = URI(scheme)
-      uri.host, uri.port, uri.password = redis_params(support_sentinel_groupname: support_sentinel_groupname)
+      params = redis_params(support_sentinel_groupname: support_sentinel_groupname)
+      # In case the password has non-alphanumeric passwords, be sure to encode it
+      params[2] = CGI.escape(params[2]) if params[2]
+      uri.host, uri.port, uri.password = params
       uri.path = "/#{gitlab_rails['redis_database']}"
     end
 

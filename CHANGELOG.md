@@ -8,6 +8,7 @@ omnibus-gitlab repository.
 - Remove Redis config from gitlab-shell !3000
 - Add AWS customer provided encryption key configuration option !2928
 - Fix mattermost data directory permissions with ```update-permissions```
+- Properly encode the Redis password component in the URL !2999
 - Patch runit to not consider status of log service for `status` command exit
   code !2949
 - Upgrade libpng to 1.6.36 !2950
