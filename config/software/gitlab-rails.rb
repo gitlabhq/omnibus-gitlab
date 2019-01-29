@@ -16,7 +16,6 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 

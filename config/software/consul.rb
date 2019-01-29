@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-require "#{Omnibus::Config.project_root}/lib/gitlab/util"
-
 name 'consul'
 default_version 'v0.9.0'
 
