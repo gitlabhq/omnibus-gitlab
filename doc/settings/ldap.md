@@ -30,6 +30,10 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
   password: '_the_password_of_the_bind_user'
 
+  # Enable smartcard authentication against the LDAP server. Valid values
+  # are "false", "optional", and "required".
+  smartcard_auth: false
+
   # This setting specifies if LDAP server is Active Directory LDAP server.
   # For non AD servers it skips the AD specific queries.
   # If your LDAP server is not AD, set this to false.
@@ -80,6 +84,7 @@ main: # 'main' is the GitLab 'provider ID' of this LDAP server
   encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
   password: '_the_password_of_the_bind_user'
+  smartcard_auth: false
   active_directory: true
   allow_username_or_email_login: false
   lowercase_usernames: false
@@ -99,6 +104,7 @@ secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
   encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
   password: '_the_password_of_the_bind_user'
+  smartcard_auth: false
   active_directory: true
   allow_username_or_email_login: false
   lowercase_usernames: false

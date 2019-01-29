@@ -463,6 +463,60 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'LDAP server configuration' do
+      context 'LDAP servers are configured' do
+        let(:ldap_servers_config) do
+          <<-EOS
+            main:
+              label: 'LDAP Primary'
+              host: 'primary.ldap'
+              port: 389
+              uid: 'uid'
+              encryption: 'plain'
+              password: 's3cr3t'
+              base: 'dc=example,dc=com'
+              user_filter: ''
+
+            secondary:
+              label: 'LDAP Secondary'
+              host: 'secondary.ldap'
+              port: 389
+              uid: 'uid'
+              encryption: 'plain'
+              bind_dn: 'dc=example,dc=com'
+              password: 's3cr3t'
+              smartcard_auth: 'required'
+              base: ''
+              user_filter: ''
+          EOS
+        end
+
+        it 'exposes the LDAP server configuration' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              ldap_enabled: true,
+              ldap_servers: YAML.safe_load(ldap_servers_config)
+            })
+
+          expect(chef_run).to(
+            render_file(gitlab_yml_path).with_content do |content|
+              expect(content).to match(/ldap:\s+(#.*\n\s+)?enabled: true/)
+              expect(content).to include('"host":"primary.ldap"')
+              expect(content).to include('"host":"secondary.ldap"')
+            end
+          )
+        end
+      end
+
+      context 'LDAP is not configured' do
+        it 'does not enable LDAP' do
+          expect(chef_run).to(
+            render_file(gitlab_yml_path)
+              .with_content(/ldap:\s+(#.*\n\s+)?enabled: false/))
+        end
+      end
+    end
+
     context 'smartcard authentication settings' do
       context 'smartcard authentication is configured' do
         it 'exposes the smartcard authentication settings' do
