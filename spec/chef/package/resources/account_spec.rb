@@ -6,7 +6,7 @@ describe 'account' do
   end
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_package_account::create') }
+    let(:chef_run) { runner.converge('test_package::account_create') }
 
     it 'creates user' do
       expect(chef_run).to create_user('foobar').with_username('foo')
@@ -15,7 +15,7 @@ describe 'account' do
   end
 
   context 'remove' do
-    let(:chef_run) { runner.converge('test_package_account::remove') }
+    let(:chef_run) { runner.converge('test_package::account_remove') }
 
     it 'remove user' do
       expect(chef_run).to remove_user('foo')

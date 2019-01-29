@@ -6,7 +6,7 @@ describe 'storage_directory' do
       node.normal['gitlab']['manage-storage-directories']['enable'] = true
     end
   end
-  let(:chef_run) { runner.converge("test_package_storage_directory::create") }
+  let(:chef_run) { runner.converge("test_package::storage_directory_create") }
 
   it 'executes correct ruby block' do
     allow_any_instance_of(StorageDirectoryHelper).to receive(:ensure_directory_exists).and_return(true)

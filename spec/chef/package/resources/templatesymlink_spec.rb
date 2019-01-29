@@ -6,7 +6,7 @@ describe 'templatesymlink' do
   end
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_package_templatesymlink::create') }
+    let(:chef_run) { runner.converge('test_package::templatesymlink_create') }
 
     it 'creates symlinks' do
       expect(chef_run).to create_link('/opt/gitlab/embedded/service/gitlab-rails/config/database.yml')
@@ -17,7 +17,7 @@ describe 'templatesymlink' do
     end
   end
   context 'delete' do
-    let(:chef_run) { runner.converge('test_package_templatesymlink::delete') }
+    let(:chef_run) { runner.converge('test_package::templatesymlink_delete') }
 
     it 'deletes symlinks' do
       expect(chef_run).to delete_link('/opt/gitlab/embedded/service/gitlab-rails/config/database.yml')
