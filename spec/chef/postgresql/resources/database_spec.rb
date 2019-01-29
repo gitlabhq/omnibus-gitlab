@@ -10,7 +10,7 @@ describe 'postgresql_database' do
   end
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_gitlab_postgresql_database::create') }
+    let(:chef_run) { runner.converge('test_postgresql::postgresql_database_create') }
 
     context 'server is running' do
       before do
@@ -30,7 +30,7 @@ describe 'postgresql_database' do
         end
 
         context 'with non-default options' do
-          let(:chef_run) { runner.converge('test_gitlab_postgresql_database::create_with_options') }
+          let(:chef_run) { runner.converge('test_postgresql::postgresql_database_create_with_options') }
 
           it 'creates with the correct options set' do
             expect(chef_run).to run_execute('create database fakedb').with(

@@ -4,7 +4,7 @@ describe 'postgresql_schema' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_schema)) }
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_gitlab_postgresql_schema::create') }
+    let(:chef_run) { runner.converge('test_postgresql::postgresql_schema_create') }
 
     context 'server is running' do
       before do
