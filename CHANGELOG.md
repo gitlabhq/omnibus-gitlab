@@ -21,6 +21,9 @@ omnibus-gitlab repository.
 - Upgrade Nginx to 1.12.2 !2988
 - Bump gitlab-elasticsearch-indexer to 1.0.0
 - Include experimental Docker Distribution Pruner !2946
+- Update Prometheus to v2.6.1 !2981
+- Update Prometheus node_exporter to v0.17.0 !2981
+- Update Prometheus redis_exporter to v0.26.0 !2981
 
 11.7.0
 
