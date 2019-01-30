@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitaly' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
   let(:socket_path) { '/tmp/gitaly.socket' }
@@ -23,6 +23,16 @@ describe 'gitaly' do
   let(:ruby_graceful_restart_timeout) { '30m' }
   let(:ruby_restart_delay) { '10m' }
   let(:ruby_num_workers) { 5 }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'TZ' => ':/etc/localtime',
+      'HOME' => '/var/opt/gitlab',
+      'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin',
+      'ICU_DATA' => '/opt/gitlab/embedded/share/icu/current',
+      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.4/site-packages',
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -34,8 +44,6 @@ describe 'gitaly' do
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
       expect(chef_run).to create_directory('/var/log/gitlab/gitaly').with(user: 'git', mode: '0700')
-      expect(chef_run).to create_directory('/opt/gitlab/etc/gitaly/env')
-      expect(chef_run).to create_file('/opt/gitlab/etc/gitaly/env/PATH')
     end
 
     it 'creates a default VERSION file' do
@@ -301,11 +309,9 @@ describe 'gitaly' do
   end
 
   context 'populates default env variables' do
-    it_behaves_like "enabled service env", "gitaly", "TZ", ':/etc/localtime'
-    it_behaves_like "enabled service env", "gitaly", "HOME", '/var/opt/gitlab'
-    it_behaves_like "enabled service env", "gitaly", "PYTHONPATH", '/opt/gitlab/embedded/lib/python3.4/site-packages'
-    it_behaves_like "enabled service env", "gitaly", "ICU_DATA", '/opt/gitlab/embedded/share/icu/current'
-    it_behaves_like "enabled service env", "gitaly", "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitaly/env').with_variables(default_vars)
+    end
   end
 
   context 'computes env variables based on other values' do
@@ -318,7 +324,16 @@ describe 'gitaly' do
         }
       )
     end
-    it_behaves_like "enabled service env", "gitaly", "HOME", '/my/random/path'
+
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitaly/env').with_variables(
+        default_vars.merge(
+          {
+            'HOME' => '/my/random/path',
+          }
+        )
+      )
+    end
   end
 end
 

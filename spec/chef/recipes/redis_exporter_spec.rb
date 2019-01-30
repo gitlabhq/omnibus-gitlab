@@ -1,8 +1,13 @@
 require 'chef_helper'
 
 describe 'gitlab::redis-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:node) { chef_run.node }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -37,7 +42,9 @@ describe 'gitlab::redis-exporter' do
 
     it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/redis-exporter/env').with_variables(default_vars)
+    end
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload_log_service]')
@@ -107,6 +114,14 @@ describe 'gitlab::redis-exporter' do
         .with_content(%r{redis.addr=/tmp/socket})
     end
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/redis-exporter/env', "USER_SETTING", 'asdf1234'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/redis-exporter/env').with_variables(
+        default_vars.merge(
+          {
+            'USER_SETTING' => 'asdf1234'
+          }
+        )
+      )
+    end
   end
 end

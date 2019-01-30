@@ -1,7 +1,14 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-workhorse' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'HOME' => '/var/opt/gitlab',
+      'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin'
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -28,15 +35,24 @@ describe 'gitlab::gitlab-workhorse' do
 
   context 'with environment variables' do
     context 'by default' do
-      it_behaves_like "enabled service env", "gitlab-workhorse", "HOME", '\/var\/opt\/gitlab'
-      it_behaves_like "enabled service env", "gitlab-workhorse", "PATH", '\/opt\/gitlab\/bin:\/opt\/gitlab\/embedded\/bin:\/bin:\/usr\/bin'
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-workhorse/env').with_variables(default_vars)
+      end
 
       context 'when a custom env variable is specified' do
         before do
           stub_gitlab_rb(gitlab_workhorse: { env: { 'IAM' => 'CUSTOMVAR' } })
         end
 
-        it_behaves_like "enabled service env", "gitlab-workhorse", "IAM", 'CUSTOMVAR'
+        it 'creates necessary env variable files' do
+          expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-workhorse/env').with_variables(
+            default_vars.merge(
+              {
+                'IAM' => 'CUSTOMVAR'
+              }
+            )
+          )
+        end
       end
     end
   end

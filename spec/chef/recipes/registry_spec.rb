@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink account)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -237,7 +237,12 @@ describe 'registry recipe' do
 end
 
 describe 'registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink env_dir account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink account)).converge('gitlab::default') }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -467,7 +472,15 @@ describe 'registry' do
         stub_gitlab_rb(registry: { env: { 'HTTP_PROXY' => 'my-proxy' } })
       end
 
-      it_behaves_like "enabled service env", "registry", "HTTP_PROXY", "my-proxy"
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/registry/env').with_variables(
+          default_vars.merge(
+            {
+              'HTTP_PROXY' => 'my-proxy'
+            }
+          )
+        )
+      end
     end
   end
 end

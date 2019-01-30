@@ -16,8 +16,13 @@
 require 'chef_helper'
 
 describe 'gitlab-ee::pgbouncer-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:config_yaml) { '/var/opt/gitlab/pgbouncer-exporter/pgbouncer-exporter.yaml' }
+  let(:default_vars) do
+    {
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -54,7 +59,9 @@ describe 'gitlab-ee::pgbouncer-exporter' do
 
     it_behaves_like 'enabled runit service', 'pgbouncer-exporter', 'root', 'root'
 
-    it_behaves_like 'enabled env', '/opt/gitlab/etc/pgbouncer-exporter/env', "SSL_CERT_DIR", '/opt/gitlab/embedded/ssl/certs/'
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/pgbouncer-exporter/env').with_variables(default_vars)
+    end
 
     it 'creates the appropriate directories' do
       expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer-exporter')
