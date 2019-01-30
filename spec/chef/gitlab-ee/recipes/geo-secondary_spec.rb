@@ -124,20 +124,17 @@ describe 'gitlab-ee::geo-secondary' do
     end
 
     describe 'database.yml' do
-      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
       it 'creates the template' do
-        expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
-          owner: 'root',
-          group: 'git',
-          mode: '0640'
+        expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            "db_database" => "gitlabhq_geo_production",
+            "db_host" => "1.1.1.1",
+            "db_port" => "5431",
+            "db_sslcompression" => 0
+          )
         )
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content { |content|
-          expect(content).to match(/host: \"1.1.1.1\"/)
-          expect(content).to match(/port: 5431/)
-          expect(content).to match(/sslcompression: 0/)
-          expect(content).to match(/database: gitlabhq_geo_production/)
-        }
       end
 
       context 'when SSL compression is enabled' do
@@ -146,7 +143,11 @@ describe 'gitlab-ee::geo-secondary' do
         end
 
         it 'uses provided value in database.yml' do
-          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/sslcompression: 1/)
+          expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              "db_sslcompression" => 1
+            )
+          )
         end
       end
     end
@@ -180,18 +181,17 @@ describe 'gitlab-ee::geo-secondary' do
     end
 
     describe 'database.yml' do
-      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
       let(:templatesymlink) { chef_run.templatesymlink('Create a database_geo.yml and create a symlink to Rails root') }
 
       it 'creates the template' do
-        expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with(
-          owner: 'root',
-          group: 'git',
-          mode: '0640'
+        expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            "db_database" => "gitlabhq_geo_production",
+            "db_host" => "/var/opt/gitlab/geo-postgresql"
+          )
         )
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/host: \"\/var\/opt\/gitlab\/geo-postgresql\"/)
-        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml').with_content(/database: gitlabhq_geo_production/)
       end
 
       it 'template triggers notifications' do
