@@ -173,6 +173,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### External merge request diffs
+# gitlab_rails['external_diffs_enabled'] = false
+# gitlab_rails['external_diffs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/external-diffs"
+# gitlab_rails['external_diffs_object_store_enabled'] = false
+# gitlab_rails['external_diffs_object_store_direct_upload'] = false
+# gitlab_rails['external_diffs_object_store_background_upload'] = false
+# gitlab_rails['external_diffs_object_store_proxy_download'] = false
+# gitlab_rails['external_diffs_object_store_remote_directory'] = "external-diffs"
+# gitlab_rails['external_diffs_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'host' => 's3.amazonaws.com',
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
 ### Git LFS
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
