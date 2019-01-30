@@ -42,7 +42,7 @@ has_config_changes = !library_paths_requiring_review(all_files).empty?
 manual_check_needed = (gitlab.mr_labels & QA_LABELS).empty?
 
 if has_config_changes && !manual_check_needed
-  fail format(MESSAGE, labels: qa_labels)
+  warn format(MESSAGE, labels: qa_labels)
 end
 
 # rubocop:enable Style/SignalException
