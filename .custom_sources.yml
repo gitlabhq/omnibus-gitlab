@@ -16,6 +16,9 @@ gitlab-pages:
 gitlab-monitor:
   remote: "git@dev.gitlab.org:gitlab-org/gitlab-monitor.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
+docker-distribution-pruner:
+  remote: "git@dev.gitlab.org:gitlab/docker-distribution-pruner.git"
+  alternative: "https://gitlab.com/gitlab-org/docker-distribution-pruner.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git"
