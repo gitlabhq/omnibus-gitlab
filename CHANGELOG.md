@@ -66,6 +66,10 @@ omnibus-gitlab repository.
 - Update Prometheus components !2891
 - Add smartcard configuration to gitlab.rb !2894
 
+11.5.8
+
+- Hide transfer of refs/remotes/* in git config
+
 11.5.2
 
 - Make remote-syslog detect log directories of all services correctly !2871
