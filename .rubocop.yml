@@ -1155,3 +1155,4 @@ Cop/AvoidUsingEnv:
     - files/**/*
     - docker/**/*
     - lib/gitlab/util.rb
+    - spec/gitlab/util_spec.rb
