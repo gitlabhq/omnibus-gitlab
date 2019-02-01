@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.7.1
+- Update Mattermost to 5.6.4
+
 11.7.0
 
 - Disable nginx proxy_request_buffering for git-receive-pack !2935
