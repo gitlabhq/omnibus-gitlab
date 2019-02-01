@@ -11,7 +11,7 @@ describe 'postgresql_user' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: ['postgresql_user']) }
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_gitlab_postgresql_user::create') }
+    let(:chef_run) { runner.converge('test_postgresql::postgresql_user_create') }
 
     it 'creates a user' do
       expect(chef_run).to run_execute('create example postgresql user')
@@ -20,7 +20,7 @@ describe 'postgresql_user' do
 
   context 'password' do
     context 'not specified' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::password_unspecified') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_password_unspecified') }
 
       it 'does not set the password of the no_password user' do
         expect(chef_run).not_to run_execute('set password for no_password postgresql user')
@@ -28,7 +28,7 @@ describe 'postgresql_user' do
     end
 
     context 'nil' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::password_nil') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_password_nil') }
 
       it 'does set the password of the nil_password user' do
         expect(chef_run).to run_execute('set password for nil_password postgresql user')
@@ -37,7 +37,7 @@ describe 'postgresql_user' do
     end
 
     context 'md5' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::password_md5') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_password_md5') }
 
       it 'does set the password of the md5_password user' do
         expect(chef_run).to run_execute('set password for md5_password postgresql user')
@@ -46,7 +46,7 @@ describe 'postgresql_user' do
     end
 
     context 'empty' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::password_empty') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_password_empty') }
 
       it 'does set the password of the empty_password user' do
         expect(chef_run).to run_execute('set password for empty_password postgresql user')
@@ -57,7 +57,7 @@ describe 'postgresql_user' do
 
   context 'options' do
     context 'unspecified' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::options_unspecified') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_options_unspecified') }
 
       it 'does not set options' do
         expect(chef_run).not_to run_execute('set options for example postgresql user')
@@ -65,7 +65,7 @@ describe 'postgresql_user' do
     end
 
     context 'SUPERUSER' do
-      let(:chef_run) { runner.converge('test_gitlab_postgresql_user::options_superuser') }
+      let(:chef_run) { runner.converge('test_postgresql::postgresql_user_options_superuser') }
 
       it 'does set SUPERUSER' do
         expect(chef_run).to run_execute('set options for example postgresql user')
