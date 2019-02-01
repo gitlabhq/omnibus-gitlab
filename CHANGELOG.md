@@ -3,6 +3,9 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+11.6.1
+- Update Mattermost to 5.5.3
+
 11.6.0
 
 - Switch restart_command for Unicorn service to signal HUP instead of USR2 !2905
