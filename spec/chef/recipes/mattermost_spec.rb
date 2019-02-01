@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::mattermost' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'MM_FILESETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/data',

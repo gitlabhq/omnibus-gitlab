@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -118,16 +118,13 @@ describe 'registry recipe' do
       expect(chef_run.node['registry']['group'])
         .to eql('registry')
 
-      expect(chef_run).to create_group('registry').with(
-        gid: nil,
-        system: true
-      )
-
-      expect(chef_run).to create_user('registry').with(
+      expect(chef_run).to create_account('Docker registry user and group').with(
+        username: 'registry',
+        groupname: 'registry',
         uid: nil,
-        gid: 'registry',
-        home: '/var/opt/gitlab/registry',
-        system: true
+        gid: nil,
+        system: true,
+        home: '/var/opt/gitlab/registry'
       )
     end
 

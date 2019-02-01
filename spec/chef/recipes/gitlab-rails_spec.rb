@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
@@ -73,35 +73,35 @@ describe 'gitlab::gitlab-rails' do
                        gitlab_ci: { builds_directory: '/tmp/builds' })
       end
 
-      ChefSpec::SoloRunner.new(step_into: %w(storage_directory)).converge('gitlab::default')
+      ChefSpec::SoloRunner.converge('gitlab::default')
     end
 
     it 'creates the shared directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared')
+      expect(chef_run).to create_storage_directory('/tmp/shared').with(owner: 'git', mode: '0751')
     end
 
     it 'creates the artifacts directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/artifacts')
+      expect(chef_run).to create_storage_directory('/tmp/shared/artifacts').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the lfs storage directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
+      expect(chef_run).to create_storage_directory('/tmp/shared/lfs-objects').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the packages directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/packages')
+      expect(chef_run).to create_storage_directory('/tmp/shared/packages').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the uploads directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/uploads')
+      expect(chef_run).to create_storage_directory('/tmp/uploads').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the ci builds directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/builds')
+      expect(chef_run).to create_storage_directory('/tmp/builds').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the GitLab pages directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/pages')
+      expect(chef_run).to create_storage_directory('/tmp/shared/pages').with(owner: 'git', mode: '0750')
     end
 
     it 'creates the shared tmp directory' do

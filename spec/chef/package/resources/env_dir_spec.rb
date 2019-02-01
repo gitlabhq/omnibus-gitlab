@@ -2,7 +2,7 @@ require 'chef_helper'
 
 describe 'env_dir' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(env_dir)) }
-  let(:chef_run) { runner.converge("test_package_env_dir::create") }
+  let(:chef_run) { runner.converge("test_package::env_dir_create") }
 
   after do
     FileUtils.rm_rf('/tmp/env')

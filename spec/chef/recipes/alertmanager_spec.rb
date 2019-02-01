@@ -17,7 +17,7 @@ alertmanager_yml_output = <<-ALERTMANAGERYML
 ALERTMANAGERYML
 
 describe 'gitlab::alertmanager' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
@@ -84,7 +84,7 @@ describe 'gitlab::alertmanager' do
     end
 
     it 'should create a gitlab-prometheus user account' do
-      expect(chef_run).to create_user('gitlab-prometheus')
+      expect(chef_run).to create_account('Prometheus user and group').with(username: 'gitlab-prometheus')
     end
 
     it 'sets a default listen address' do

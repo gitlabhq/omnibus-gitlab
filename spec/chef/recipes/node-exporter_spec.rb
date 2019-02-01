@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::node-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -69,7 +69,7 @@ describe 'gitlab::node-exporter' do
     end
 
     it 'should create the gitlab-prometheus account if prometheus is disabled' do
-      expect(chef_run).to create_user('gitlab-prometheus')
+      expect(chef_run).to create_account('Prometheus user and group').with_username('gitlab-prometheus')
     end
   end
 

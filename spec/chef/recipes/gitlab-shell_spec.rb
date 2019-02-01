@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-shell' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(storage_directory)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -103,7 +103,7 @@ describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/.ssh')
+      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the config file with the auth_file within user\'s ssh directory' do
@@ -119,11 +119,11 @@ describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/user/.ssh')
+      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the auth_file\'s parent directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/ssh')
+      expect(chef_run).to create_storage_directory('/tmp/ssh').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the config file with the auth_file at the specified location' do
