@@ -19,6 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
 require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -145,11 +146,11 @@ exclude 'embedded/lib/ruby/gems/2.4.0/cache'
 
 # Enable signing packages
 package :rpm do
-  signing_passphrase ENV['GPG_PASSPHRASE']
+  signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 end
 
 package :deb do
-  signing_passphrase ENV['GPG_PASSPHRASE']
+  signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 end
 
 # Our package scripts are generated from .erb files,

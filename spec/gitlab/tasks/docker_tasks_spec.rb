@@ -110,9 +110,9 @@ describe 'docker_operations' do
   describe 'with docker operations timeout variable specified' do
     it 'sets provided value as timeout' do
       allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('DOCKER_TIMEOUT').and_return(500)
+      allow(ENV).to receive(:[]).with('DOCKER_TIMEOUT').and_return("500")
       DockerOperations.set_timeout
-      expect(Docker.options[:read_timeout]).to eq(500)
+      expect(Docker.options[:read_timeout]).to eq("500")
     end
   end
 end

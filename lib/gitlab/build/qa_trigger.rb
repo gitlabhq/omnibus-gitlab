@@ -1,4 +1,5 @@
 require_relative 'trigger'
+require_relative "../util.rb"
 
 module Build
   class QATrigger
@@ -12,19 +13,19 @@ module Build
 
     def self.get_params(image: nil)
       {
-        "ref" => ENV['QA_BRANCH'] || 'master',
-        "token" => ENV['QA_TRIGGER_TOKEN'],
+        "ref" => Gitlab::Util.get_env('QA_BRANCH') || 'master',
+        "token" => Gitlab::Util.get_env('QA_TRIGGER_TOKEN'),
         "variables[RELEASE]" => image,
-        "variables[TRIGGERED_USER]" => ENV["TRIGGERED_USER"] || ENV["GITLAB_USER_NAME"],
-        "variables[TRIGGER_SOURCE]" => ENV['CI_JOB_URL'],
-        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => ENV['TOP_UPSTREAM_SOURCE_PROJECT'],
-        "variables[TOP_UPSTREAM_SOURCE_JOB]" => ENV['TOP_UPSTREAM_SOURCE_JOB'],
-        "variables[TOP_UPSTREAM_SOURCE_SHA]" => ENV['TOP_UPSTREAM_SOURCE_SHA']
+        "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
+        "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),
+        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
+        "variables[TOP_UPSTREAM_SOURCE_JOB]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB'),
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA')
       }
     end
 
     def self.get_access_token
-      ENV['GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN']
+      Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
     end
   end
 end

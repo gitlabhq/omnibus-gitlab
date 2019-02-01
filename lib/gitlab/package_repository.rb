@@ -1,14 +1,15 @@
 require 'English'
 require_relative 'build/info.rb'
+require_relative "util.rb"
 
 class PackageRepository
   PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
 
   def target
     # Override
-    return ENV['PACKAGECLOUD_REPO'] if ENV['PACKAGECLOUD_REPO'] && !ENV['PACKAGECLOUD_REPO'].empty?
+    return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
     # Repository for raspberry pi
-    return ENV['RASPBERRY_REPO'] if ENV['RASPBERRY_REPO'] && !ENV['RASPBERRY_REPO'].empty?
+    return Gitlab::Util.get_env('RASPBERRY_REPO') if Gitlab::Util.get_env('RASPBERRY_REPO') && !Gitlab::Util.get_env('RASPBERRY_REPO').empty?
 
     rc_repository = repository_for_rc
     if rc_repository
@@ -103,7 +104,7 @@ class PackageRepository
   end
 
   def upload_user
-    ENV['PACKAGECLOUD_USER'] if ENV['PACKAGECLOUD_USER'] && !ENV['PACKAGECLOUD_USER'].empty?
+    Gitlab::Util.get_env('PACKAGECLOUD_USER') if Gitlab::Util.get_env('PACKAGECLOUD_USER') && !Gitlab::Util.get_env('PACKAGECLOUD_USER').empty?
   end
 
   def verify_checksum(filename, dry_run)

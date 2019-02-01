@@ -1,5 +1,6 @@
 require 'gitlab'
 require_relative '../takeoff_helper.rb'
+require_relative "../util.rb"
 
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
@@ -19,8 +20,8 @@ namespace :gitlab_com do
       exit
     end
 
-    trigger_token = ENV['TAKEOFF_TRIGGER_TOKEN']
-    deploy_env = ENV['TAKEOFF_ENVIRONMENT']
+    trigger_token = Gitlab::Util.get_env('TAKEOFF_TRIGGER_TOKEN')
+    deploy_env = Gitlab::Util.get_env('TAKEOFF_ENVIRONMENT')
 
     # there is only support for staging deployments
     # from ci at this time, error here for safety.

@@ -1,5 +1,7 @@
 require 'yaml'
 
+require_relative "util.rb"
+
 module Gitlab
   class Version
     def initialize(software_name, version = nil)
@@ -11,7 +13,7 @@ module Gitlab
                         get_software_version
                       end
       @project_root = File.join(File.dirname(__dir__), '../')
-      @software_sources = ENV["ALTERNATIVE_SOURCES"].to_s == "true" ? "alternative" : "remote"
+      @software_sources = Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? "alternative" : "remote"
     end
 
     def get_software_version
@@ -21,15 +23,15 @@ module Gitlab
     def read_version_from_env
       case @software
       when "gitlab-rails", "gitlab-rails-ee"
-        ENV["GITLAB_VERSION"]
+        Gitlab::Util.get_env("GITLAB_VERSION")
       when "gitlab-shell"
-        ENV["GITLAB_SHELL_VERSION"]
+        Gitlab::Util.get_env("GITLAB_SHELL_VERSION")
       when "gitlab-workhorse"
-        ENV["GITLAB_WORKHORSE_VERSION"]
+        Gitlab::Util.get_env("GITLAB_WORKHORSE_VERSION")
       when "gitlab-pages"
-        ENV["GITLAB_PAGES_VERSION"]
+        Gitlab::Util.get_env("GITLAB_PAGES_VERSION")
       when "gitaly"
-        ENV["GITALY_SERVER_VERSION"]
+        Gitlab::Util.get_env("GITALY_SERVER_VERSION")
       end
     end
 

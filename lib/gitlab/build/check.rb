@@ -1,10 +1,11 @@
 require_relative "info.rb"
+require_relative "../util.rb"
 
 module Build
   class Check
     class << self
       def is_ee?
-        return true if ENV['ee'] == 'true'
+        return true if Gitlab::Util.get_env('ee') == 'true'
 
         File.read('VERSION').include?('-ee')
       end
@@ -31,7 +32,7 @@ module Build
       end
 
       def add_nightly_tag?
-        ENV['NIGHTLY'] == 'true'
+        Gitlab::Util.get_env('NIGHTLY') == 'true'
       end
 
       def no_changes?

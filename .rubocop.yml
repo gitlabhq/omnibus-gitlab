@@ -1,5 +1,6 @@
 require:
   - rubocop-rspec
+  - ./lib/rubocop/rubocop
 
 AllCops:
   TargetRubyVersion: 2.4
@@ -1146,3 +1147,12 @@ RSpec/SubjectStub:
 # Prefer using verifying doubles over normal doubles.
 RSpec/VerifiedDoubles:
   Enabled: false
+
+Cop/AvoidUsingEnv:
+  Enabled: true
+  Exclude:
+    - omnibus.rb
+    - files/**/*
+    - docker/**/*
+    - lib/gitlab/util.rb
+    - spec/gitlab/util_spec.rb

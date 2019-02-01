@@ -13,11 +13,11 @@ describe DockerOperations do
 
     context 'when ENV["DOCKER_TIMEOUT"] is not set' do
       before do
-        expect(ENV).to receive(:[]).with('DOCKER_TIMEOUT').and_return(42)
+        expect(ENV).to receive(:[]).with('DOCKER_TIMEOUT').and_return("42")
       end
 
       it 'uses the given timeout value' do
-        expect(Docker).to receive(:options=).with(read_timeout: 42, write_timeout: 42)
+        expect(Docker).to receive(:options=).with(read_timeout: "42", write_timeout: "42")
 
         described_class.set_timeout
       end
