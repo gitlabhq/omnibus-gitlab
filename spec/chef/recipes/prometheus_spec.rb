@@ -169,7 +169,7 @@ prometheus_yml_output = <<-PROMYML
 PROMYML
 
 describe 'gitlab::prometheus' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service account)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
