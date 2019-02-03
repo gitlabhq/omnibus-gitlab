@@ -54,9 +54,9 @@ been removed.
     security update that fixes multiple vulnerabilities. After upgrading to 11.4,
     run `gitlab-ctl restart redis` to ensure the new version is loaded.
 
-1.  The bundled version of Prometheus has been upgraded to 2.4.2 and fresh
-    installations will use it by default. Version 2 of Prometheus uses a data
-    format incompatible with version 1.
+1.  The [bundled version of Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
+    has been upgraded to 2.4.2 and fresh installations will use it by default.
+    Version 2 of Prometheus uses a data format incompatible with version 1.
 
     For users looking for preserving the Prometheus version 1 data, a command
     line tool is provided to upgrade their Prometheus service and migrate data to
