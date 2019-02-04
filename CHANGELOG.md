@@ -24,6 +24,7 @@ omnibus-gitlab repository.
 - Update Prometheus to v2.6.1 !2981
 - Update Prometheus node_exporter to v0.17.0 !2981
 - Update Prometheus redis_exporter to v0.26.0 !2981
+- Support smartcard auth against LDAP server !3006
 
 11.7.0
 
