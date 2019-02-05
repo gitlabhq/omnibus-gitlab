@@ -9,7 +9,7 @@ describe 'crond_job' do
     end
 
     context 'delete' do
-      let(:chef_run) { runner.converge("crond::enable", "test_crond_job::delete") }
+      let(:chef_run) { runner.converge("crond::enable", "test_crond::crond_job_delete") }
 
       it 'should delete the file' do
         expect(chef_run).to delete_file("prefix/delete")
@@ -22,7 +22,7 @@ describe 'crond_job' do
     end
 
     context 'minimal' do
-      let(:chef_run) { runner.converge("crond::enable", "test_crond_job::minimal") }
+      let(:chef_run) { runner.converge("crond::enable", "test_crond::crond_job_minimal") }
 
       it 'should set up the file' do
         expect(chef_run).to create_file("prefix/minimal").with(
@@ -46,7 +46,7 @@ describe 'crond_job' do
     end
 
     context 'delete' do
-      let(:chef_run) { runner.converge("test_crond_job::delete") }
+      let(:chef_run) { runner.converge("test_crond::crond_job_delete") }
 
       it 'should delete the file' do
         expect(chef_run).to delete_file("prefix/delete")
@@ -59,7 +59,7 @@ describe 'crond_job' do
     end
 
     context 'minimal' do
-      let(:chef_run) { runner.converge("test_crond_job::minimal") }
+      let(:chef_run) { runner.converge("test_crond::crond_job_minimal") }
 
       it 'should not set up the file' do
         expect(chef_run).not_to create_file("prefix/minimal")
