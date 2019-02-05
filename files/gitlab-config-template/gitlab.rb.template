@@ -1589,6 +1589,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['auto_renew_minute'] = nil # Should be a number or cron expression, if specified.
 # letsencrypt['auto_renew_day_of_month'] = "*/4"
 
+##! Turn off automatic init system detection. To skip init detection in
+##! non-docker containers. Recommended not to change.
+# package['detect_init'] = true
+
 ################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##

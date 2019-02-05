@@ -12,6 +12,9 @@ manage_accounts['enable'] = false
 host = `hostname`.strip
 external_url "http://#{host}"
 
+# Explicitly disable init detection since we are running on a container
+package['detect_init'] = false
+
 # Load custom config from environment variable: GITLAB_OMNIBUS_CONFIG
 # Disabling the cop since rubocop considers using eval to be security risk but
 # we don't have an easy way out, atleast yet.
