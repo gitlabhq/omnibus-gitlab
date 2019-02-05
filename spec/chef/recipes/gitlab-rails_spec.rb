@@ -606,21 +606,22 @@ describe 'gitlab::gitlab-rails' do
               ldap_servers: YAML.safe_load(ldap_servers_config)
             })
 
-          expect(chef_run).to(
-            render_file(gitlab_yml_path).with_content do |content|
-              expect(content).to match(/ldap:\s+(#.*\n\s+)?enabled: true/)
-              expect(content).to include('"host":"primary.ldap"')
-              expect(content).to include('"host":"secondary.ldap"')
-            end
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              "ldap_enabled" => true,
+              "ldap_servers" => YAML.safe_load(ldap_servers_config)
+            )
           )
         end
       end
 
       context 'LDAP is not configured' do
         it 'does not enable LDAP' do
-          expect(chef_run).to(
-            render_file(gitlab_yml_path)
-              .with_content(/ldap:\s+(#.*\n\s+)?enabled: false/))
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              "ldap_enabled" => false
+            )
+          )
         end
       end
     end
