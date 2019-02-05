@@ -674,6 +674,23 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
+### easyDNS (outbound mail)
+
+Check if it's available/enabled and configuration settings in the [control panel](https://cp.easydns.com/manage/domains/mail/outbound/).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mailout.easydns.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_force_ssl'] = true
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_user_name'] = "example.com"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_password'] = "password_you_set"
+gitlab_rails['gitlab_email_from'] = 'no-reply@git.example.com'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
