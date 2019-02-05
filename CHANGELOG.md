@@ -3,7 +3,7 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-11.6.1
+11.6.10
 - Update Mattermost to 5.5.3
 
 11.6.0
