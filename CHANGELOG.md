@@ -17,6 +17,8 @@ omnibus-gitlab repository.
 11.6.2
 
 - Fix environment variables not being cleaned up !2934
+11.6.10
+- Update Mattermost to 5.5.3
 
 11.6.0
 
