@@ -35,7 +35,7 @@ build do
   cwd = "#{registry_source_dir}/src/github.com/docker/distribution"
   env = {
     'GOPATH' => registry_source_dir,
-    'DOCKER_BUILDTAGS' => 'include_gcs include_oss'
+    'BUILDTAGS' => 'include_gcs include_oss'
   }
 
   make "build", env: env, cwd: cwd
