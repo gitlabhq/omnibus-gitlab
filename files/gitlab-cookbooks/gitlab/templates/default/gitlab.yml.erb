@@ -134,6 +134,19 @@ production: &base
       remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
       connection: <%= @artifacts_object_store_connection.to_json %>
 
+  ## External merge request diffs
+  external_diffs:
+    enabled: <%= @external_diffs_enabled %>
+    # The location where merge request diffs are stored (default: shared/external-diffs).
+    storage_path: <%= @external_diffs_storage_path %>
+    object_store:
+      enabled: <%= @external_diffs_object_store_enabled %>
+      direct_upload: <%= @external_diffs_object_store_direct_upload %>
+      background_upload: <%= @external_diffs_object_store_background_upload %>
+      proxy_download: <%= @external_diffs_object_store_proxy_download %>
+      remote_directory: <%= quote(@external_diffs_object_store_remote_directory) %>
+      connection: <%= @external_diffs_object_store_connection.to_json %>
+
   ## Git LFS
   lfs:
     enabled: <%= @lfs_enabled %>
