@@ -89,7 +89,7 @@ describe 'gitlab::gitlab-rails' do
     end
 
     it 'creates the external-diffs directory' do
-      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/external-diffs')
+      expect(chef_run).to create_storage_directory('/tmp/shared/external-diffs').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the lfs storage directory' do
@@ -291,8 +291,15 @@ describe 'gitlab::gitlab-rails' do
 
     context 'for settings regarding object storage for external diffs' do
       it 'allows not setting any values' do
-        expect(chef_run).to render_file(gitlab_yml_path)
-            .with_content(/object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "external-diffs"\s+connection:/)
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'external_diffs_object_store_enabled' => false,
+            'external_diffs_object_store_direct_upload' => false,
+            'external_diffs_object_store_background_upload' => true,
+            'external_diffs_object_store_proxy_download' => false,
+            'external_diffs_object_store_remote_directory' => 'external-diffs'
+          )
+        )
       end
 
       context 'with values' do
@@ -308,11 +315,17 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it "sets the object storage values" do
-          expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"/)
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'external_diffs_object_store_enabled' => true,
+              'external_diffs_object_store_direct_upload' => true,
+              'external_diffs_object_store_background_upload' => false,
+              'external_diffs_object_store_proxy_download' => true,
+              'external_diffs_object_store_remote_directory' => 'mepmep',
+              'external_diffs_object_store_connection' => aws_connection_hash
+            )
+          )
         end
-
-        include_examples 'sets the connection in YAML'
       end
     end
 
