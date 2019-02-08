@@ -687,6 +687,26 @@ starting:
 
 In this case, consider uninstalling Plymouth.
 
+### Init daemon detection in non-docker container
+
+In docker containers, GitLab package detects existence of `/.dockerenv` file and
+skips automatic detection of an init system. However, in non-docker containers
+(like containerd, cri-o, etc.), that file does not exist and package falls back
+to sysvinit, and this can cause issues with installation. To prevent this, users
+can explicitly disable init daemon detection by adding the following setting in
+`gitlab.rb` file:
+
+```ruby
+package['detect_init'] = false
+```
+
+If using this configuration, runit service must be started before running
+`gitlab-ctl reconfigure`, using the `runsvdir-start` command:
+
+```bash
+/opt/gitlab/embedded/bin/runsvdir-start &
+```
+
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [Change the default proxy headers section of nginx doc]: ../settings/nginx.md

@@ -18,7 +18,9 @@
 #
 require 'open3'
 
-if File.exist?('/.dockerenv')
+if !node['package']['detect_init']
+  Chef::Log.info "Skipped selecting an init system because it was explicitly disabled"
+elsif File.exist?('/.dockerenv')
   Chef::Log.warn "Skipped selecting an init system because it looks like we are running in a container"
 elsif Open3.capture3('/sbin/init --version | grep upstart')[2].success?
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
