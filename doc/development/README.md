@@ -56,7 +56,7 @@ their applicability:
  3. Tests, as explained in [Writing Tests](#writing-tests)
  4. Documentation explaining the change
  5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
- 6. Changelog entry to inform about the change, if necessary.
+ 6. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
 
 **`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
 

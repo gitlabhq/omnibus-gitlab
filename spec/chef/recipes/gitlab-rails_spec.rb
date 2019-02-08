@@ -44,6 +44,10 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/artifacts')
     end
 
+    it 'does not create the external-diffs directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/external-diffs')
+    end
+
     it 'does not create the lfs storage directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
     end
@@ -82,6 +86,10 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the artifacts directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/artifacts').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the external-diffs directory' do
+      expect(chef_run).to run_ruby_block('directory resource: /tmp/shared/external-diffs')
     end
 
     it 'creates the lfs storage directory' do
@@ -278,6 +286,33 @@ describe 'gitlab::gitlab-rails' do
             )
           )
         end
+      end
+    end
+
+    context 'for settings regarding object storage for external diffs' do
+      it 'allows not setting any values' do
+        expect(chef_run).to render_file(gitlab_yml_path)
+            .with_content(/object_store:\s+enabled: false\s+direct_upload: false\s+background_upload: true\s+proxy_download: false\s+remote_directory: "external-diffs"\s+connection:/)
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           external_diffs_object_store_enabled: true,
+                           external_diffs_object_store_direct_upload: true,
+                           external_diffs_object_store_background_upload: false,
+                           external_diffs_object_store_proxy_download: true,
+                           external_diffs_object_store_remote_directory: 'mepmep',
+                           external_diffs_object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to render_file(gitlab_yml_path)
+          .with_content(/object_store:\s+enabled: true\s+direct_upload: true\s+background_upload: false\s+proxy_download: true\s+remote_directory:\s+"mepmep"/)
+        end
+
+        include_examples 'sets the connection in YAML'
       end
     end
 

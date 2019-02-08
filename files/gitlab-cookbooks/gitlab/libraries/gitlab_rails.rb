@@ -34,6 +34,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_runtime_dir
       parse_shared_dir
       parse_artifacts_dir
+      parse_external_diffs_dir
       parse_lfs_objects_dir
       parse_uploads_dir
       parse_packages_dir
@@ -136,6 +137,11 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     def parse_artifacts_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['artifacts_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'artifacts')
+    end
+
+    def parse_external_diffs_dir
+      # This requires the parse_shared_dir to be executed before
+      Gitlab['gitlab_rails']['external_diffs_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'external-diffs')
     end
 
     def parse_lfs_objects_dir
