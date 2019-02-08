@@ -215,7 +215,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab uploads
 ###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
-# gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
+# gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
 # gitlab_rails['uploads_object_store_direct_upload'] = false
