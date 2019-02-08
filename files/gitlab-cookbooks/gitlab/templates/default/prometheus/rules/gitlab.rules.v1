@@ -28,3 +28,55 @@ ALERT UnicornQueueing
     summary = "Unicorn is queueing requests",
     description = 'Unicorn instance {{ $labels.instance }} is queueing requests with an average of {{ $value | printf "%.1f" }} over the last 30 minutes.',
   }
+
+instance:unicorn_utilization:ratio = sum by (instance) (unicorn_active_connections) / count by (instance) (ruby_memory_bytes)
+
+ALERT HighUnicornUtilization
+  IF instance:unicorn_utilization:ratio * 100 > 90
+  FOR 60m
+  ANNOTATIONS {
+    summary = 'Unicorn is has high utilization',
+    description = 'Unicorn instance {{ $labels.instance }} has more than 90% worker utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.',
+  }
+
+ALERT SidekiqJobsQueuing
+  IF sum by (name) (sidekiq_queue_size) > 0
+  FOR 60m
+  ANNOTATIONS {
+    summary = 'Sidekiq has jobs queued',
+    description = 'Sidekiq queue {{ $labels.name }} has {{ $value }} jobs queued for 60 minutes.',
+  }
+
+job_grpc:grpc_server_handled_total:rate5m = sum by (job, grpc_code, grpc_method, grpc_service, grpc_type) (rate(grpc_server_handled_total[5m]))
+
+ALERT HighgRPCResourceExhaustedRate
+  IF sum without (grpc_code) (job_grpc:grpc_server_handled_total:rate5m{grpc_code="ResourceExhausted"}) / sum without (grpc_code) (job_grpc:grpc_server_handled_total:rate5m) * 100 > 1
+  FOR 60m
+  ANNOTATIONS {
+    summary = 'High gRPC ResourceExhausted error rate',
+    description = 'gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.',
+  }
+
+ALERT PostgresDatabaseDeadlocks
+  IF increase(pg_stat_database_deadlocks[5m]) > 0
+  ANNOTATIONS {
+    summary = 'Postgres database has deadlocks',
+    description = 'Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} deadlocks in the last 5 minutes.',
+  }
+
+ALERT PostgresDatabaseDeadlockCancels
+  IF increase(pg_stat_database_conflicts_confl_deadlock[5m]) > 0
+  ANNOTATIONS {
+    summary = 'Postgres database has queries canceled due to deadlocks',
+    description = 'Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} queries canceled due to deadlocks in the last 5 minutes.',
+  }
+
+job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m = sum by (job, route, method, code) (rate(gitlab_workhorse_http_request_duration_seconds_count[5m]))
+
+ALERT WorkhorseHighErrorRate
+  IF sum without (job, code) (job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}) / sum without (job,code) (job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m) * 100 > 1
+  FOR 60m
+  ANNOTATIONS {
+    summary = 'Workhorse has high error rates',
+    description = 'Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 1% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.',
+  }

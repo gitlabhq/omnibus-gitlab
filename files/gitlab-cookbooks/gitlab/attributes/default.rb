@@ -139,15 +139,29 @@ default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['artifacts_object_store_direct_upload'] = false
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
 default['gitlab']['gitlab-rails']['artifacts_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['artifacts_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['artifacts_object_store_remote_directory'] = 'artifacts'
 default['gitlab']['gitlab-rails']['artifacts_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['external_diffs_enabled'] = nil
+default['gitlab']['gitlab-rails']['external_diffs_storage_path'] = nil
+default['gitlab']['gitlab-rails']['external_diffs_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['external_diffs_object_store_direct_upload'] = false
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+default['gitlab']['gitlab-rails']['external_diffs_object_store_background_upload'] = true
+default['gitlab']['gitlab-rails']['external_diffs_object_store_proxy_download'] = false
+default['gitlab']['gitlab-rails']['external_diffs_object_store_remote_directory'] = 'external-diffs'
+default['gitlab']['gitlab-rails']['external_diffs_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['lfs_enabled'] = nil
 default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_object_store_direct_upload'] = false
-default['gitlab']['gitlab-rails']['lfs_object_store_background_upload'] = true # TODO: Deprecate once direct upload is implemented
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+default['gitlab']['gitlab-rails']['lfs_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['lfs_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['lfs_object_store_remote_directory'] = 'lfs-objects'
 default['gitlab']['gitlab-rails']['lfs_object_store_connection'] = {}
@@ -155,6 +169,8 @@ default['gitlab']['gitlab-rails']['uploads_storage_path'] = nil
 default['gitlab']['gitlab-rails']['uploads_base_dir'] = nil
 default['gitlab']['gitlab-rails']['uploads_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['uploads_object_store_direct_upload'] = false
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
 default['gitlab']['gitlab-rails']['uploads_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['uploads_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['uploads_object_store_remote_directory'] = 'uploads'
@@ -163,6 +179,8 @@ default['gitlab']['gitlab-rails']['packages_enabled'] = nil
 default['gitlab']['gitlab-rails']['packages_storage_path'] = nil
 default['gitlab']['gitlab-rails']['packages_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['packages_object_store_direct_upload'] = false
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
 default['gitlab']['gitlab-rails']['packages_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['packages_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['packages_object_store_remote_directory'] = 'packages'
