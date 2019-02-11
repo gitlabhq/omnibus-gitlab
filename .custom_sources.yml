@@ -64,3 +64,6 @@ chef-acme:
 nginx-module-vts:
   remote: "git@dev.gitlab.org:omnibus-mirror/nginx-module-vts.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx-module-vts.git"
+prometheus-storage-migrator:
+  remote: "git@dev.gitlab.org:omnibus-mirror/prometheus-storage-migrator.git"
+  alternative: "https://gitlab.com/gitlab-org/prometheus-storage-migrator.git"

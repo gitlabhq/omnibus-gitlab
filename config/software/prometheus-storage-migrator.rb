@@ -27,7 +27,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: "https://gitlab.com/gitlab-org/prometheus-storage-migrator.git"
+source git: version.remote
 
 go_source = 'gitlab.com/gitlab-org/prometheus-storage-migrator'
 relative_path "src/#{go_source}"
