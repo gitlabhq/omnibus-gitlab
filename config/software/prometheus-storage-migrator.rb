@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'prometheus-storage-migrator'
-version = Gitlab::Version.new('prometheus', '0.2.0')
+version = Gitlab::Version.new('prometheus-storage-migrator', '0.2.0')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -27,7 +27,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: "https://gitlab.com/gitlab-org/prometheus-storage-migrator.git"
+source git: version.remote
 
 go_source = 'gitlab.com/gitlab-org/prometheus-storage-migrator'
 relative_path "src/#{go_source}"
