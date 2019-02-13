@@ -18,3 +18,5 @@ echo "gitlab-aws-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTA
 
 # Cleanup
 sudo rm -rf /var/lib/apt/lists/*
+sudo find /root/.*history /home/*/.*history -exec rm -f {} \;
+sudo rm -f /home/ubuntu/.ssh/authorized_keys /root/.ssh/authorized_keys
