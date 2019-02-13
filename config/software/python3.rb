@@ -20,7 +20,7 @@ name 'python3'
 # If bumping from 3.4.x to something higher, be sure to update the following files with the new path:
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
-default_version '3.4.8'
+default_version '3.4.9'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -34,7 +34,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: '8b1a1ce043e132082d29a5d09f2841f193c77b631282a82f98895a5dbaba1639'
+       sha256: 'e02e565372750a6678efe35ddecbe5ccd5330a8a2e8bbe38d3060713492e3dab'
 
 relative_path "Python-#{version}"
 
