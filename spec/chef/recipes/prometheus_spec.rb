@@ -34,7 +34,7 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9229
-  - job_name: gitlab-unicorn
+  - job_name: gitlab-rails
     metrics_path: "/-/metrics"
     static_configs:
     - targets:
@@ -245,6 +245,26 @@ describe 'gitlab::prometheus' do
     it 'sets a default listen address' do
       expect(chef_run).to render_file('/opt/gitlab/sv/prometheus/run')
         .with_content(/web.listen-address=localhost:9090/)
+    end
+  end
+
+  context 'with puma' do
+    context 'with user provided settings' do
+      before do
+        stub_gitlab_rb(
+          puma: {
+            enable: 'true'
+          },
+          unicorn: {
+            enable: 'false'
+          }
+        )
+      end
+
+      it 'configures puma job' do
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(%r{- job_name: gitlab-rails\s+metrics_path: "/-/metrics"\s+static_configs:\s+- targets:\s+- 127.0.0.1:8080})
+      end
     end
   end
 

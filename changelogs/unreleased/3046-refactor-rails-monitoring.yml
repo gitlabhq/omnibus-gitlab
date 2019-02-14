@@ -1,0 +1,5 @@
+---
+title: Refactor Prometheus rails scrape config
+merge_request: 3046
+author: Ben Kochie <bjk@gitlab.com>
+type: added
