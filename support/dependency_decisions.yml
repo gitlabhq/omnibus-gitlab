@@ -256,3 +256,10 @@
     :why: https://github.com/shurcooL/vfsgen#license
     :versions: []
     :when: 2018-09-20 13:45:18.594859898 Z
+- - :license
+  - github.com/mwitkow/grpc-proxy
+  - Apache-2.0
+  - :who: DJ Mountney
+    :why: https://github.com/mwitkow/grpc-proxy/blob/master/LICENSE.txt
+    :versions: []
+    :when: 2019-02-13 23:45:32.613012625 Z

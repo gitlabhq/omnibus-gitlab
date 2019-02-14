@@ -19,6 +19,7 @@
 # Default location of install-dir is /opt/gitlab.
 # DO NOT change this value unless you are building your own GitLab packages
 default['package']['install-dir'] = '/opt/gitlab'
+default['package']['detect_init'] = true
 
 # Setting runit defaults here so that they can be made available automatically
 # to cookbooks of individual services via depends in metadata.rb

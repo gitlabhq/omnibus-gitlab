@@ -1,6 +1,25 @@
 groups:
 - name: GitLab
   rules:
+  - record: instance:unicorn_utilization:ratio
+    expr: >
+      sum by (instance) (
+        unicorn_active_connections
+      ) /
+      count by (instance) (
+        ruby_memory_bytes
+      )
+  - record: job_grpc:grpc_server_handled_total:rate5m
+    expr: >
+      sum by (job, grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total[5m])
+      )
+  - record: job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+    expr: >
+      sum by (job, route, method, code) (
+        rate(gitlab_workhorse_http_request_duration_seconds_count[5m])
+      )
+
   - alert: ServiceDown
     expr: avg_over_time(up[5m]) * 100 < 50
     annotations:
@@ -25,3 +44,48 @@ groups:
       description: Unicorn instance {{ $labels.instance }} is queueing requests with
         an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
       summary: Unicorn is queueing requests
+  - alert: HighUnicornUtilization
+    expr: instance:unicorn_utilization:ratio * 100 > 90
+    for: 60m
+    annotations:
+      description: Unicorn instance {{ $labels.instance }} has more than 90% worker utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.
+      summary: Unicorn is has high utilization
+  - alert: SidekiqJobsQueuing
+    expr: sum by (name) (sidekiq_queue_size) > 0
+    for: 60m
+    annotations:
+      summary: Sidekiq has jobs queued
+      description: Sidekiq queue {{ $labels.name }} has {{ $value }} jobs queued for 60 minutes.
+  - alert: HighgRPCResourceExhaustedRate
+    expr: >
+      sum without (grpc_code) (
+        job_grpc:grpc_server_handled_total:rate5m{grpc_code="ResourceExhausted"}
+      ) /
+      sum without (grpc_code) (
+        job_grpc:grpc_server_handled_total:rate5m
+      ) * 100 > 1
+    for: 60m
+    annotations:
+      summary: High gRPC ResourceExhausted error rate
+      description: gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.
+  - alert: PostgresDatabaseDeadlocks
+    expr: increase(pg_stat_database_deadlocks[5m]) > 0
+    annotations:
+      summary: Postgres database has deadlocks
+      description: Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} deadlocks in the last 5 minutes.
+  - alert: PostgresDatabaseDeadlockCancels
+    expr: increase(pg_stat_database_deadlocks[5m]) > 0
+    annotations:
+      summary: Postgres database has queries canceled due to deadlocks
+      description: Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} queries canceled due to deadlocks in the last 5 minutes.
+  - alert: WorkhorseHighErrorRate
+    expr: >
+      sum without (job, code) (
+        job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
+      ) /
+      sum without (job,code) (
+        job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+      ) * 100 > 1
+    annotations:
+      summary: Postgres database has queries canceled due to deadlocks
+      description: Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} queries canceled due to deadlocks in the last 5 minutes.

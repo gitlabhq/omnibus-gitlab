@@ -44,6 +44,10 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/artifacts')
     end
 
+    it 'does not create the external-diffs directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/external-diffs')
+    end
+
     it 'does not create the lfs storage directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/lfs-objects')
     end
@@ -82,6 +86,10 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the artifacts directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/artifacts').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the external-diffs directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/external-diffs').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the lfs storage directory' do
@@ -275,6 +283,46 @@ describe 'gitlab::gitlab-rails' do
               'artifacts_object_store_proxy_download' => true,
               'artifacts_object_store_remote_directory' => 'mepmep',
               'artifacts_object_store_connection' => aws_connection_hash
+            )
+          )
+        end
+      end
+    end
+
+    context 'for settings regarding object storage for external diffs' do
+      it 'allows not setting any values' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'external_diffs_object_store_enabled' => false,
+            'external_diffs_object_store_direct_upload' => false,
+            'external_diffs_object_store_background_upload' => true,
+            'external_diffs_object_store_proxy_download' => false,
+            'external_diffs_object_store_remote_directory' => 'external-diffs'
+          )
+        )
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           external_diffs_object_store_enabled: true,
+                           external_diffs_object_store_direct_upload: true,
+                           external_diffs_object_store_background_upload: false,
+                           external_diffs_object_store_proxy_download: true,
+                           external_diffs_object_store_remote_directory: 'mepmep',
+                           external_diffs_object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'external_diffs_object_store_enabled' => true,
+              'external_diffs_object_store_direct_upload' => true,
+              'external_diffs_object_store_background_upload' => false,
+              'external_diffs_object_store_proxy_download' => true,
+              'external_diffs_object_store_remote_directory' => 'mepmep',
+              'external_diffs_object_store_connection' => aws_connection_hash
             )
           )
         end
@@ -567,6 +615,61 @@ describe 'gitlab::gitlab-rails' do
               )
             )
           end
+        end
+      end
+    end
+
+    context 'LDAP server configuration' do
+      context 'LDAP servers are configured' do
+        let(:ldap_servers_config) do
+          <<-EOS
+            main:
+              label: 'LDAP Primary'
+              host: 'primary.ldap'
+              port: 389
+              uid: 'uid'
+              encryption: 'plain'
+              password: 's3cr3t'
+              base: 'dc=example,dc=com'
+              user_filter: ''
+
+            secondary:
+              label: 'LDAP Secondary'
+              host: 'secondary.ldap'
+              port: 389
+              uid: 'uid'
+              encryption: 'plain'
+              bind_dn: 'dc=example,dc=com'
+              password: 's3cr3t'
+              smartcard_auth: 'required'
+              base: ''
+              user_filter: ''
+          EOS
+        end
+
+        it 'exposes the LDAP server configuration' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              ldap_enabled: true,
+              ldap_servers: YAML.safe_load(ldap_servers_config)
+            })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              "ldap_enabled" => true,
+              "ldap_servers" => YAML.safe_load(ldap_servers_config)
+            )
+          )
+        end
+      end
+
+      context 'LDAP is not configured' do
+        it 'does not enable LDAP' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              "ldap_enabled" => false
+            )
+          )
         end
       end
     end

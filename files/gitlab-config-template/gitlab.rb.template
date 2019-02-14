@@ -173,6 +173,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### External merge request diffs
+# gitlab_rails['external_diffs_enabled'] = false
+# gitlab_rails['external_diffs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/external-diffs"
+# gitlab_rails['external_diffs_object_store_enabled'] = false
+# gitlab_rails['external_diffs_object_store_direct_upload'] = false
+# gitlab_rails['external_diffs_object_store_background_upload'] = false
+# gitlab_rails['external_diffs_object_store_proxy_download'] = false
+# gitlab_rails['external_diffs_object_store_remote_directory'] = "external-diffs"
+# gitlab_rails['external_diffs_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'host' => 's3.amazonaws.com',
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
 ### Git LFS
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
@@ -195,7 +215,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab uploads
 ###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
-# gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails/public"
+# gitlab_rails['uploads_storage_path'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
 # gitlab_rails['uploads_object_store_direct_upload'] = false
@@ -243,6 +263,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
+#     smartcard_auth: false
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
@@ -263,6 +284,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     password: '_the_password_of_the_bind_user'
 #     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
+#     smartcard_auth: false
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
@@ -1566,6 +1588,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['auto_renew_hour'] = 0
 # letsencrypt['auto_renew_minute'] = nil # Should be a number or cron expression, if specified.
 # letsencrypt['auto_renew_day_of_month'] = "*/4"
+
+##! Turn off automatic init system detection. To skip init detection in
+##! non-docker containers. Recommended not to change.
+# package['detect_init'] = true
 
 ################################################################################
 ################################################################################

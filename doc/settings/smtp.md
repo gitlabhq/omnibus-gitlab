@@ -637,11 +637,11 @@ gitlab_rails['smtp_address'] = "sXX.goserver.host" # or serverXX.webgo24.de
 gitlab_rails['smtp_port'] = 587
 gitlab_rails['smtp_user_name'] = "webXXXpX"
 gitlab_rails['smtp_password'] = "Your Password"
-gitlab_rails['smtp_domain'] = "s90.goserver.host"
+gitlab_rails['smtp_domain'] = "sXX.goserver.host" # or serverXX.webgo24.de
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['gitlab_email_from'] = 'Your Mail Adress'
-gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Adress'
+gitlab_rails['gitlab_email_from'] = 'Your Mail Address'
+gitlab_rails['gitlab_email_reply_to'] = 'Your Mail Address'
 ```
 
 ### mxhichina.com
@@ -670,6 +670,40 @@ gitlab_rails['smtp_password'] = "your_api_token"
 gitlab_rails['smtp_domain'] = "example.com"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
+```
+
+### easyDNS (outbound mail)
+
+Check if it's available/enabled and configuration settings in the [control panel](https://cp.easydns.com/manage/domains/mail/outbound/).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mailout.easydns.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_force_ssl'] = true
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_user_name'] = "example.com"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_password'] = "password_you_set"
+gitlab_rails['gitlab_email_from'] = 'no-reply@git.example.com'
+```
+
+### Campaign Monitor
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.api.createsend.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "your_api_token" # Menu > Transactional > Send with SMTP > SMTP tokens > Token
+gitlab_rails['smtp_password'] = "your_api_token"  # Same as gitlab_rails['smtp_user_name'] value
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
