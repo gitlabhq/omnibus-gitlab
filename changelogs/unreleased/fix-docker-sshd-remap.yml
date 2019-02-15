@@ -1,0 +1,5 @@
+---
+title: Fix issue with sshd failing in docker with user remap and priviledged
+merge_request:
+author:
+type: fixed
