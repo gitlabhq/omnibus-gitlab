@@ -17,12 +17,24 @@ chown_if_exists()
 	fi
 }
 
+chmod_if_exists()
+{
+	# the last argument of chown is the file or path
+	path="${@:${#@}}"
+	if [ -e "$path" ]; then
+		chmod $@
+	else
+		echo "skipping, path does not exist: $path"
+	fi
+}
+
 # Fix GitLab permissions
 if id -u git; then
 	# Fix data storage
 	chown_if_exists -R git:git /var/opt/gitlab/.ssh
 	chown_if_exists -R git:git /var/opt/gitlab/.gitconfig
 	chown_if_exists -R git:git /var/opt/gitlab/git-data
+	chmod_if_exists 2770 /var/opt/gitlab/git-data/repositories
 	chown_if_exists -R git:git /var/opt/gitlab/gitlab-ci/builds
 	chown_if_exists -R git:git /var/opt/gitlab/gitlab-rails
 	chown_if_exists -R git:git /var/opt/gitlab/gitlab-shell

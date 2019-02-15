@@ -1,0 +1,5 @@
+---
+title: Fix permissions of repositories directory in update-permissions script
+merge_request: 3029
+author: Matthias Lohr <mail@mlohr.com>
+type: fixed
