@@ -3,10 +3,6 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
-11.9.0
-
-- `update-permissions` script should set necessary modes for `repositories` folder
-
 11.8.0
 
 - Remove Redis config from gitlab-shell !3000
