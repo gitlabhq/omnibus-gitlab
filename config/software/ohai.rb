@@ -34,5 +34,5 @@ build do
   gem 'install ohai' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-ri --no-rdoc', env: env
+      ' --no-document', env: env
 end

@@ -31,5 +31,5 @@ build do
 
   gem 'install awesome_print' \
       " --version '#{version}'" \
-      ' --no-ri --no-rdoc', env: env
+      ' --no-document', env: env
 end

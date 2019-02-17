@@ -74,7 +74,7 @@ build do
 
   if source
     # Building from source:
-    ruby 'setup.rb --no-ri --no-rdoc', env: env
+    ruby 'setup.rb --no-document', env: env
   else
     # Installing direct from rubygems:
     # If there is no version, this will get latest.
