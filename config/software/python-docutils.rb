@@ -18,7 +18,7 @@
 
 name 'python-docutils'
 
-default_version '0.11'
+default_version '0.13.1'
 
 license 'Public-Domain'
 license_file 'COPYING.txt'
