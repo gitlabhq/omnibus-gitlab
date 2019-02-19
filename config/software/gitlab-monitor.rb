@@ -36,5 +36,5 @@ build do
   gem 'build gitlab-monitor.gemspec', env: env
   gem 'install gitlab-monitor' \
       " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-ri --no-rdoc', env: env
+      ' --no-document', env: env
 end
