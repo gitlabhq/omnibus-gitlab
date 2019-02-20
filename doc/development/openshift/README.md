@@ -139,7 +139,7 @@ In order to finish setting up the cluster, you need to create a project and allo
  - `oc new-project <your_project_name>``
  - `oc edit scc anyuid` and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
 
-And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker_oc_cluster_up)
+And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker-oc-cluster-up)
 
 
 ## Add the GitLab template to OpenShift

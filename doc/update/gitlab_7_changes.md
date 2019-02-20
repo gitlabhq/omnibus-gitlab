@@ -4,8 +4,8 @@
 
 In the 7.10 package we have added the `gitlab-ctl upgrade` command, and we
 configured the packages to run this command automatically after the new package
-is installed. If you are installing GitLab 7.9 or earlier, please see the
-[procedure below](#updating-from-gitlab-66-and-higher-to-the-latest-version).
+is installed. If you are installing GitLab 7.9 or earlier, please check the
+[different procedure](gitlab_6_changes.md#updating-from-gitlab-66-and-higher-to-the-latest-version).
 
 If you installed using the package server all you need to do is run `sudo apt-get update && sudo apt-get install gitlab-ce` (for Debian/Ubuntu) or `sudo yum install gitlab-ce` (for CentOS/Enterprise Linux).
 

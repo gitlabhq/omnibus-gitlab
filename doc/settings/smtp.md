@@ -9,7 +9,7 @@ Your `smtp_password` should not contain any String delimiters used in
 Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
 config settings.
 
-There are [example configurations](#examples) at the end of this page.
+There are [example configurations](#example-configurations) at the end of this page.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -28,7 +28,7 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
-## Example configuration
+## Example configurations
 ### SMTP on localhost
 This configuration, which simply enables SMTP and otherwise uses the default settings, can be used for an MTA running on localhost that does not provide a `sendmail` interface or that provides a `sendmail` interface that is incompatible with GitLab, such as Exim.
 

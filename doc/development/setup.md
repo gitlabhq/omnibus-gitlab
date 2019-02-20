@@ -122,4 +122,4 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 
 ## Openshift GitLab Development Setup
 
-See [openshift/README.md.](openshift/README.md#development-setup)
+See [openshift/README.md.](openshift/README.md)

@@ -2,7 +2,7 @@
 
 ## Updating from GitLab `6.6` and higher to the latest version
 
-NOT: **Note:**
+NOTE: **Note:**
 The procedure can also be used to upgrade from a CE Omnibus package to an EE
 Omnibus package.
 

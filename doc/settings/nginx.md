@@ -30,7 +30,7 @@ or incompatible configuration may yield to unavailability of service.
 By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
 gitlab.example.com, there are two options:
 
-1. [Free and automated HTTPS with Let's Encrypt](ssl.md#lets-encrypt-integration)
+1. [Free and automated HTTPS with Let's Encrypt](ssl.md#lets-encrypthttpsletsencryptorg-integration)
 1. [Manually configuring HTTPS with your own certificates](#manually-configuring-https)
 
 ### Warning

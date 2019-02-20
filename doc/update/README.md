@@ -194,7 +194,7 @@ version follow the section on
 NOTE: **Note:**
 If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
 step to find the current GitLab version and then follow the steps in
-[Updating by manually downloading the official packages](#updating-by-manually-downloading-the-official-packages).
+[Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package).
 
 ## Zero downtime updates
 
@@ -213,7 +213,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | Deployment type                              | Description                    |
 | -------------------------------------------- | ------------------------------ |
 | [Single](#single-deployment)                 | GitLab CE/EE on a single node  |
-| [Multi-node / HA](#multi-node-ha-deployment) | GitLab CE/EE on multiple nodes |
+| [Multi-node / HA](#multi-node--ha-deployment)| GitLab CE/EE on multiple nodes |
 | [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
 
 

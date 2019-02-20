@@ -71,7 +71,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
 - [Configuring a relative URL for Gitlab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
 - [Storing git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
-- [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user-group)
+- [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
 - [Only start omnibus-gitlab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
 - [Disable user and group account management](settings/configuration.html#disable-user-and-group-account-management)
@@ -100,21 +100,21 @@ to work best with the available resources. Check out the [documentation](setting
 - [Downgrading to an earlier version](update/README.md#downgrading)
 - [Upgrading from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
 - [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-- [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-6-8)
-- [Updating from GitLab 6.6 and higher to 7.10 or newer](update/README.md#updating-from-gitlab-6-6-and-higher-to-7-10-or-newer)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/README.md#updating-from-gitlab-6-6-0-pre1-to-6-6-4)
-- [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-gitlab-ci-from-prior-5-4-0-to-version-7-14-via-omnibus-gitlab)
+- [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
+- [Updating from GitLab 6.6 and higher to 7.10 or newer](update/gitlab_7_changes.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
+- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/gitlab_6_changes.md#updating-from-gitlab-660pre1-to-664)
+- [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-gitlab-ci-from-prior-540-to-version-714-via-omnibus-gitlab)
 
 ## Troubleshooting
 
-- [Hash Sum mismatch when installing packages](common_installation_problems/README.md#hash-sum-mismatch-when-installing-packages)
+- [Hash Sum mismatch when downloading packages](common_installation_problems/README.md#hash-sum-mismatch-when-downloading-packages)
 - [Apt error: 'The requested URL returned error: 403'](common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 - [GitLab is unreachable in my browser](common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 - [Emails are not being delivered](common_installation_problems/README.md#emails-are-not-being-delivered).
 - [Reconfigure freezes at ruby_block[supervise_redis_sleep] action run](common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 - [TCP ports for GitLab services are already taken](common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
-- [Git SSH access stops working on SELinux-enabled systems](common_installation_problems/README.md#git-ssh-access-stops-working-on-selinux-enabled-systems).
-- [Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'](common_installation_problems/README.md#postgres-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
+- [Git SSH access stops working on SELinux-enabled systems](common_installation_problems/README.md#selinux-enabled-systems).
+- [Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'](common_installation_problems/README.md#postgres-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
 - [Reconfigure complains about the GLIBC version](common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
 - [Reconfigure fails to create the git user](common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 - [Failed to modify kernel parameters with sysctl](common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).

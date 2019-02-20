@@ -137,7 +137,7 @@ sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 
 #### Verify with `debsig-verify`
 
-To make use of `debsig-verify`, perform the steps in [Configuring debsigs](#configuring_debsigs) and install the `debsig-verify` package.
+To make use of `debsig-verify`, perform the steps in [Configuring debsigs](#configuring-debsigs) and install the `debsig-verify` package.
 
 `debsig-verify gitlab-xxx.deb`
 
