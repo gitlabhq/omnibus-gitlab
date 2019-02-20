@@ -1535,6 +1535,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus_monitoring['enable'] = true
 
 ################################################################################
+## Grafana Dashboards
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/#prometheus-as-a-grafana-data-source
+################################################################################
+
+# grafana['enable'] = false
+# grafana['log_directory'] = '/var/log/gitlab/grafana'
+# grafana['home'] = '/var/opt/gitlab/grafana'
+
+##! Advanced settings. Should be changed only if absolutely needed.
+# grafana['http_addr'] = 'localhost'
+# grafana['http_port'] = 3000
+
+################################################################################
 ## Gitaly
 ##! Docs:
 ################################################################################

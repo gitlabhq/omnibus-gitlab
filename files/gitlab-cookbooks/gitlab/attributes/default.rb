@@ -901,6 +901,19 @@ default['gitlab']['gitlab-monitor']['probe_sidekiq'] = true
 default['gitlab']['prometheus-monitoring']['enable'] = true
 
 ####
+# Grafana
+###
+default['gitlab']['grafana']['enable'] = false
+default['gitlab']['grafana']['log_directory'] = '/var/log/gitlab/grafana'
+default['gitlab']['grafana']['home'] = '/var/opt/gitlab/grafana'
+default['gitlab']['grafana']['http_addr'] = 'localhost'
+default['gitlab']['grafana']['http_port'] = 3000
+default['gitlab']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env'
+default['gitlab']['grafana']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+
+####
 # Storage check
 ####
 default['gitlab']['storage-check']['enable'] = false

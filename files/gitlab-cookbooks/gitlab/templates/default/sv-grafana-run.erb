@@ -1,0 +1,11 @@
+#!/bin/sh
+exec 2>&1
+<%= render("mount_point_check.erb") %>
+
+cd '<%= @options[:working_dir] %>'
+
+umask 077
+exec chpst -P -e <%= @options[:env_dir] %> \
+  -U <%= node['gitlab']['prometheus']['username'] %>:<%= node['gitlab']['prometheus']['group'] %> \
+  -u <%= node['gitlab']['prometheus']['username'] %>:<%= node['gitlab']['prometheus']['group'] %> \
+  /opt/gitlab/embedded/bin/grafana-server -config '<%= @options[:config] %>'
