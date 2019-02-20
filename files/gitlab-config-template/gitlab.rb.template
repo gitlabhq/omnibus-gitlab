@@ -1791,6 +1791,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
 # geo_postgresql['pgbouncer_user'] = nil
 # geo_postgresql['pgbouncer_user_password'] = nil
+##! `SQL_USER_PASSWORD_HASH` can be generated using the command `gitlab-ctl pg-password-md5 gitlab`
+# geo_postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
 
 ################################################################################
 # Pgbouncer (EE only)
