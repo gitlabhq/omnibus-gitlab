@@ -121,11 +121,12 @@
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts: *package-artifacts-release
-  <<: *dev-except-branches
   cache: *tag-cache
   retry: 2
   tags:
   - promotion
+  only:
+  - tags@gitlab/omnibus-gitlab
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -298,6 +299,7 @@ Ubuntu-16.04-staging:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+  <<: *dev-except-branches
 
 ### Package builds
 Ubuntu-14.04:
