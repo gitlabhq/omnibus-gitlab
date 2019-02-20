@@ -5,7 +5,7 @@ Kubernetes Helm charts for OpenShift also. Check out [release documentation for
 the charts](https://gitlab.com/charts/gitlab/blob/master/doc/development/release.md)
 for details.
 
-New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](../README.md#updating-cloud-images)
+New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](README.md#updating-cloud-images)
 
 ## Update the template to latest GitLab release
 
@@ -59,9 +59,9 @@ And then also update the GitLab Deployment config to use the new tag in it's Ima
 ## Test
 
 For setting up a OpenShift Origin development environment for testing see
-[doc/development/openshift/README.md.](../development/openshift/README.md#development-setup)
+[doc/development/openshift/README.md.](../development/openshift/README.md)
 
-Setup a new GitLab install using the updated template. Smoke test the install:
+Set up a new GitLab install using the updated template. Smoke test the install:
 
 1. Login works
 2. Create project succeeds

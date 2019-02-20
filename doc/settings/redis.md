@@ -194,7 +194,7 @@ check whether this is an issue:
     not properly trusted on this server. See the [previous section](#ssl-certificates).
 
 1. Verify that the SSL certificate is working via [these troubleshooting
-steps](../settings/ssl.md##custom-certificates-missing-or-skipped).
+steps](ssl.md#custom-certificates-missing-or-skipped).
 
 ### NOAUTH Authentication required
 
