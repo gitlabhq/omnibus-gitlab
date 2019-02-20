@@ -81,8 +81,7 @@ Follow the steps below to enable relative URL in GitLab:
     sudo gitlab-ctl restart
     ```
 
-If you stumble upon any issues, see the [troubleshooting section]
-(#relative-url-troubleshooting).
+If you stumble upon any issues, see the [troubleshooting section](#relative-url-troubleshooting).
 
 ### Disable relative URL in GitLab
 
@@ -94,8 +93,7 @@ explicitly restart Unicorn after the reconfigure task is done:
 sudo gitlab-ctl restart unicorn
 ```
 
-If you stumble upon any issues, see the [troubleshooting section]
-(#relative-url-troubleshooting).
+If you stumble upon any issues, see the [troubleshooting section](#relative-url-troubleshooting).
 
 ### Relative URL troubleshooting
 
@@ -245,7 +243,7 @@ In order to disable user and group accounts management, in `/etc/gitlab/gitlab.r
 manage_accounts['enable'] = false
 ```
 
-*Warning* Omnibus-gitlab still expects users and groups to exist on the system where omnibus-gitlab package is installed.
+**Warning** Omnibus-gitlab still expects users and groups to exist on the system where omnibus-gitlab package is installed.
 
 By default, omnibus-gitlab package expects that following users exist:
 
