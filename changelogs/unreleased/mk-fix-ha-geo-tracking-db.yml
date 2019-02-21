@@ -1,0 +1,5 @@
+---
+title: Allow Geo tracking DB user password to be set
+merge_request: 3058
+author:
+type: fixed
