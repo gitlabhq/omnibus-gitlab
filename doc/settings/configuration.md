@@ -22,6 +22,9 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+NOTE: **Note:** After you change the external URL, it is recommended that you also
+[invalidate the Markdown cache](https://docs.gitlab.com/ce/administration/invalidate_markdown_cache.html).
+
 ## Configuring a relative URL for Gitlab
 
 _**Note:** Relative URL support in Omnibus GitLab is **experimental** and was
