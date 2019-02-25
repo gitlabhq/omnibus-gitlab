@@ -54,6 +54,7 @@ describe 'gitlab::grafana' do
         .with_content { |content|
           expect(content).to match(/http_addr = localhost/)
           expect(content).to match(/http_port = 3000/)
+          expect(content).to match(/root_url = %(protocol)s:\/\/%(domain)s\/-\/grafana\//)
         }
     end
   end

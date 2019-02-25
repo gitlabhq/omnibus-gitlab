@@ -46,7 +46,8 @@ enforce_domain = false
 
 # The full public facing url you use in browser, used for redirects and emails
 # If you use reverse proxy and sub path specify full url (with sub path)
-;root_url = http://localhost:3000
+<% path = node['gitlab']['gitlab-rails']['gitlab_relative_url'] ? node['gitlab']['gitlab-rails']['gitlab_relative_url'] : '/' -%>
+root_url = %(protocol)s://%(domain)s<%= File.join(path, '-/grafana/') %>
 
 # Log web requests
 ;router_logging = false
