@@ -152,7 +152,9 @@ log_queries =
 ;admin_user = admin
 
 # default admin password, can be changed before first start of grafana,  or in profile settings
-;admin_password = admin
+<% unless node['gitlab']['grafana']['admin_password'].nil?  -%>
+admin_password = <%= node['gitlab']['grafana']['admin_password'] %>
+<% end -%>
 
 # used for signing
 ;secret_key = SW2YcwTIb9zpOOhoPsMm
@@ -189,7 +191,7 @@ log_queries =
 #################################### Users ###############################
 [users]
 # disable user signup / registration
-;allow_sign_up = true
+allow_sign_up = <%= node['gitlab']['grafana']['allow_user_sign_up'] %>
 
 # Allow non admin users to create organizations
 ;allow_org_create = true
@@ -239,57 +241,19 @@ log_queries =
 # specify role for unauthenticated users
 ;org_role = Viewer
 
-#################################### Github Auth ##########################
-[auth.github]
-;enabled = false
-;allow_sign_up = true
-;client_id = some_id
-;client_secret = some_secret
-;scopes = user:email,read:org
-;auth_url = https://github.com/login/oauth/authorize
-;token_url = https://github.com/login/oauth/access_token
-;api_url = https://api.github.com/user
-;team_ids =
-;allowed_organizations =
-
-#################################### Google Auth ##########################
-[auth.google]
-;enabled = false
-;allow_sign_up = true
-;client_id = some_client_id
-;client_secret = some_client_secret
-;scopes = https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email
-;auth_url = https://accounts.google.com/o/oauth2/auth
-;token_url = https://accounts.google.com/o/oauth2/token
-;api_url = https://www.googleapis.com/oauth2/v1/userinfo
-;allowed_domains =
-
-#################################### Generic OAuth ##########################
-[auth.generic_oauth]
-;enabled = false
-;name = OAuth
-;allow_sign_up = true
-;client_id = some_id
-;client_secret = some_secret
-;scopes = user:email,read:org
-;auth_url = https://foo.bar/login/oauth/authorize
-;token_url = https://foo.bar/login/oauth/access_token
-;api_url = https://foo.bar/user
-;team_ids =
-;allowed_organizations =
-;tls_skip_verify_insecure = false
-;tls_client_cert =
-;tls_client_key =
-;tls_client_ca =
-
-#################################### Grafana.com Auth ####################
-[auth.grafana_com]
-;enabled = false
-;allow_sign_up = true
-;client_id = some_id
-;client_secret = some_secret
-;scopes = user:email
-;allowed_organizations =
+<% unless node['gitlab']['grafana']['gitlab_application_id'].nil? || node['gitlab']['grafana']['gitlab_secret'].nil? -%>
+#################################### GitLab Auth ##########################
+[auth.gitlab]
+enabled = true
+allow_sign_up = false
+client_id = <%= node['gitlab']['grafana']['gitlab_application_id'] %>
+client_secret = <%= node['gitlab']['grafana']['gitlab_secret'] %>
+scopes = api
+auth_url = <%= Gitlab['external_url'] %>oauth/authorize
+token_url = <%= Gitlab['external_url'] %>oauth/token
+api_url = <%= Gitlab['external_url'] %>api/v4
+allowed_groups = <%= node['gitlab']['grafana']['allowed_groups'].join(' ') %>
+<% end -%>
 
 #################################### Auth Proxy ##########################
 [auth.proxy]

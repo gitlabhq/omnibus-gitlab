@@ -1542,6 +1542,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # grafana['enable'] = false
 # grafana['log_directory'] = '/var/log/gitlab/grafana'
 # grafana['home'] = '/var/opt/gitlab/grafana'
+# grafana['admin_password'] = 'admin'
+# grafana['allow_user_sign_up'] = false
+# grafana['gitlab_application_id'] = 'GITLAB_APPLICATION_ID'
+# grafana['gitlab_secret'] = 'GITLAB_SECRET'
+# grafana['env_directory'] = '/opt/gitlab/etc/grafana/env'
+# grafana['allowed_groups'] = []
+# grafana['env'] = {
+#   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+# }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # grafana['http_addr'] = 'localhost'
