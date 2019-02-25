@@ -17,7 +17,7 @@
 #
 
 name 'nginx'
-default_version '1.12.2'
+default_version '1.14.2'
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
@@ -33,8 +33,8 @@ dependency 'openssl'
 # Include the nginx-module-vts for metrics.
 dependency 'nginx-module-vts'
 
-version '1.12.2' do
-  source sha256: '305f379da1d5fb5aefa79e45c829852ca6983c7cd2a79328f8e084a324cf0416'
+version '1.14.2' do
+  source sha256: '002d9f6154e331886a2dd4e6065863c9c1cf8291ae97a1255308572c02be9797'
 end
 
 source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
