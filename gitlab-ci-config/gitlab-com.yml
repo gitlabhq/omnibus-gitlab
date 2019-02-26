@@ -319,6 +319,9 @@ validate_packer_changes:
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ce.json
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ee.json
   only:
+    refs:
+      - //@gitlab/omnibus-gitlab
+      - //@gitlab-org/omnibus-gitlab
     changes:
       - support/packer/*
 
