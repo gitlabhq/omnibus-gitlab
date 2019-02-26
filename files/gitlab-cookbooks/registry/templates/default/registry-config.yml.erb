@@ -29,6 +29,11 @@ auth:
     autoredirect: <%= @autoredirect %>
 validation:
   disabled: <%= !@validation_enabled %>
+<% if @compatibility_schema1_enabled %>
+compatibility:
+  schema1:
+    enabled: true
+<% end %>
 <% if @notifications %>
 notifications:
   endpoints: <%= @notifications.to_json %>
