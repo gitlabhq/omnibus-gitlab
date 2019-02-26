@@ -159,6 +159,7 @@ describe 'registry recipe' do
           expect(content).to match(/health:\s*storagedriver:\s*enabled:\s*true/)
           expect(content).to match(/log:\s*level: info\s*formatter:\s*text/)
           expect(content).to match(/validation:\s*disabled: true$/)
+          expect(content).not_to match(/^compatibility:/)
         end
       )
     end
@@ -187,6 +188,15 @@ describe 'registry recipe' do
       it 'creates the registry config with the specified value' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/log:\s*level: info\s*formatter:\s*json/)
+      end
+    end
+
+    context 'when schema1 compatibility is enabled' do
+      before { stub_gitlab_rb(registry: { compatibility_schema1_enabled: true }) }
+
+      it 'creates registry config with specified value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/compatibility:\s*schema1:\s*enabled:\s*true/)
       end
     end
 
