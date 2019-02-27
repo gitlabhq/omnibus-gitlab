@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.9.0
+
+- Update Mattermost to 5.8.0
+
 ## 11.8.0 (2019-02-22)
 
 - Remove Redis config from gitlab-shell !3000
