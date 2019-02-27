@@ -5,10 +5,10 @@ from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
 a build environment to build these packages and use them, please read [Setting
 up a Build Environment](../build/prepare-build-environment.md).
 
- 1. Setup a VM
+ 1. Set up a Container
 
     To provide isolation and to prevent rebuilding of the package for each and
-    every change, it is preferred to use a Virtual Machine for development. The
+    every change, it is preferred to use a Container for development. The
     following example uses docker on a Debian host with a Debian Jessie image.
     The steps are similar for other OSs; only the commands differ.
     1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/engine/installation).

@@ -62,12 +62,17 @@ class Chef
         @check_script_template_name = @service_name
         @finish_script_template_name = @service_name
         @control_template_names = {}
-        @status_command = "#{@sv_bin} status #{@service_dir}"
         @sv_templates = true
         @sv_timeout = nil
         @sv_verbose = false
         @log_options = {}
+        @start_command = "start"
+        @stop_command = "stop"
+        @restart_command = "restart"
+        @status_command = "status"
+      end
 
+      def after_created
         #
         # Backward Compat Hack
         #
@@ -82,10 +87,10 @@ class Chef
           @service_mirror = Chef::Resource::Service.new(name, run_context)
           @service_mirror.provider(Chef::Provider::Service::Simple)
           @service_mirror.supports(@supports)
-          @service_mirror.start_command("#{control_cmd} start #{service_dir_name}")
-          @service_mirror.stop_command("#{control_cmd} stop #{service_dir_name}")
-          @service_mirror.restart_command("#{control_cmd} restart #{service_dir_name}")
-          @service_mirror.status_command("#{control_cmd} status #{service_dir_name}")
+          @service_mirror.start_command("#{control_cmd} #{@start_command} #{service_dir_name}")
+          @service_mirror.stop_command("#{control_cmd} #{@stop_command} #{service_dir_name}")
+          @service_mirror.restart_command("#{control_cmd} #{@restart_command} #{service_dir_name}")
+          @service_mirror.status_command("#{control_cmd} #{@status_command} #{service_dir_name}")
           @service_mirror.action(:nothing)
           run_context.resource_collection.insert(@service_mirror)
         end
@@ -224,6 +229,22 @@ class Chef
 
       def log_options(arg = nil)
         set_or_return(:log_options, arg, kind_of: [Hash])
+      end
+
+      def start_command(arg = nil)
+        set_or_return(:start_command, arg, kind_of: [String])
+      end
+
+      def stop_command(arg = nil)
+        set_or_return(:stop_command, arg, kind_of: [String])
+      end
+
+      def restart_command(arg = nil)
+        set_or_return(:restart_command, arg, kind_of: [String])
+      end
+
+      def status_command(arg = nil)
+        set_or_return(:status_command, arg, kind_of: [String])
       end
 
       def runit_attributes_from_node(run_context)

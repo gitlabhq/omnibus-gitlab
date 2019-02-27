@@ -94,7 +94,7 @@ module RunitCookbook
     end
 
     def running?
-      cmd = safe_sv_shellout("#{sv_args}status #{service_dir_name}", returns: [0, 100])
+      cmd = safe_sv_shellout("#{sv_args}#{new_resource.status_command} #{service_dir_name}", returns: [0, 100])
       !cmd.error? && cmd.stdout =~ /^run:/
     end
 
@@ -184,15 +184,15 @@ module RunitCookbook
     end
 
     def start_service
-      safe_sv_shellout!("#{sv_args}start #{service_dir_name}")
+      safe_sv_shellout!("#{sv_args}#{new_resource.start_command} #{service_dir_name}")
     end
 
     def stop_service
-      safe_sv_shellout!("#{sv_args}stop #{service_dir_name}")
+      safe_sv_shellout!("#{sv_args}#{new_resource.stop_command} #{service_dir_name}")
     end
 
     def restart_service
-      safe_sv_shellout!("#{sv_args}restart #{service_dir_name}")
+      safe_sv_shellout!("#{sv_args}#{new_resource.restart_command} #{service_dir_name}")
     end
 
     def restart_log_service

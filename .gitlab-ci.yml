@@ -114,6 +114,7 @@ notify:slack-fail:
   when: on_failure
   only:
     - master
+    - /.*-stable(-ee)?$/
     - tags@gitlab/omnibus-gitlab
   except:
     - triggers@gitlab-org/omnibus-gitlab
