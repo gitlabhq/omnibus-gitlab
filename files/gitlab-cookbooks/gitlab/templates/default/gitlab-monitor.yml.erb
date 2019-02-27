@@ -36,13 +36,13 @@ probes:
 
   process: &process
     methods:
-      - probe_memory
-      - probe_age
+      - probe_stat
       - probe_count
+      - probe_smaps
     opts:
       - pid_or_pattern: "sidekiq .* \\[.*?\\]"
         name: sidekiq
-      - pid_or_pattern: "unicorn worker\\[.*?\\]"
+      - pid_or_pattern: "unicorn.* worker\\[.*?\\]"
         name: unicorn
       - pid_or_pattern: "git-upload-pack --stateless-rpc"
         name: git_upload_pack
