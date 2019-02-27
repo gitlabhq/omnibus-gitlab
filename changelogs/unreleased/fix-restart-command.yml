@@ -1,0 +1,5 @@
+---
+title: Add support for restart_command in runit cookbook
+merge_request: 3062
+author:
+type: fixed
