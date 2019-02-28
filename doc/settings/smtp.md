@@ -708,6 +708,23 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
+
+### Freehostia
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mbox.freehostia.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@example.com"
+gitlab_rails['smtp_password'] = "password_you_set"
+gitlab_rails['smtp_domain'] = "mbox.freehostia.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
