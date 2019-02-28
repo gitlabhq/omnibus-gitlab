@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.8.1 (2019-02-28)
+
+- No changes.
+
 ## 11.8.0 (2019-02-22)
 
 - Remove Redis config from gitlab-shell !3000
