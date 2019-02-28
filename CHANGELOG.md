@@ -14,6 +14,10 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.6.10 (2019-02-28)
+
+- No changes.
+
 ## 11.6.3
 
 - Fix Docker registry not working with Windows layers !2938
