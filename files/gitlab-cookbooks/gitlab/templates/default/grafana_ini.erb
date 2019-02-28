@@ -157,7 +157,7 @@ admin_password = <%= node['gitlab']['grafana']['admin_password'] %>
 <% end -%>
 
 # used for signing
-;secret_key = SW2YcwTIb9zpOOhoPsMm
+secret_key = <%= node['gitlab']['grafana']['secret_key'] %>
 
 # Auto-login remember days
 ;login_remember_days = 7
