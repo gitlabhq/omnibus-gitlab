@@ -93,8 +93,8 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).to include_recipe('postgresql::user')
     end
 
-    it 'creates the gitlab_geo role in the geo-postgresql database' do
-      expect(chef_run).to create_postgresql_user('gitlab_geo')
+    it 'creates the gitlab_geo role in the geo-postgresql database, without a password' do
+      expect(chef_run).to create_postgresql_user('gitlab_geo').with(password: nil)
     end
 
     it 'creates gitlabhq_geo_production database' do
@@ -190,6 +190,23 @@ describe 'geo postgresql 9.2' do
       expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
       expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
       expect(chef_run).not_to run_bash('refresh foreign table definition')
+    end
+  end
+
+  context 'when a SQL user password is set' do
+    let(:chef_run) do
+      stub_gitlab_rb(
+        geo_postgresql: {
+          enable: true,
+          sql_user_password: 'fakepasswordhash',
+        }
+      )
+
+      ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
+    end
+
+    it 'creates the gitlab_geo role in the geo-postgresql database with the specified password' do
+      expect(chef_run).to create_postgresql_user('gitlab_geo').with(password: 'md5fakepasswordhash')
     end
   end
 
