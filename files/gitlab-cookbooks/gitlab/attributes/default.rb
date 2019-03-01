@@ -913,6 +913,7 @@ default['gitlab']['grafana']['allow_user_sign_up'] = false
 default['gitlab']['grafana']['gitlab_application_id'] = nil
 default['gitlab']['grafana']['gitlab_secret'] = nil
 default['gitlab']['grafana']['allowed_groups'] = []
+default['gitlab']['grafana']['datasources'] = nil
 default['gitlab']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env'
 default['gitlab']['grafana']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"

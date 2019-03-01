@@ -1552,6 +1552,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # }
 
+### Datasources
+#
+# See: http://docs.grafana.org/administration/provisioning/#example-datasource-config-file
+#
+# grafana['datasources'] = [
+#   {
+#     'name' => 'GitLab Omnibus',
+#     'type' => 'prometheus',
+#     'access' => 'proxy',
+#     'url' => 'http://localhost:9090'
+#   }
+# ]
+
 ##! Advanced settings. Should be changed only if absolutely needed.
 # grafana['http_addr'] = 'localhost'
 # grafana['http_port'] = 3000

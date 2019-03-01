@@ -22,6 +22,10 @@ grafana_dir = node['gitlab']['grafana']['home']
 grafana_assets_dir = '/opt/gitlab/embedded/service/grafana'
 grafana_config = File.join(grafana_dir, 'grafana.ini')
 grafana_static_etc_dir = node['gitlab']['grafana']['env_directory']
+grafana_provisioning_dir = File.join(grafana_dir, 'provisioning')
+grafana_provisioning_dashboards_dir = File.join(grafana_provisioning_dir, 'dashboards')
+grafana_provisioning_datasources_dir = File.join(grafana_provisioning_dir, 'datasources')
+grafana_provisioning_notifiers_dir = File.join(grafana_provisioning_dir, 'notifiers')
 
 # grafana runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
@@ -34,6 +38,30 @@ directory grafana_log_dir do
 end
 
 directory grafana_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+directory grafana_provisioning_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+directory grafana_provisioning_dashboards_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+directory grafana_provisioning_datasources_dir do
+  owner prometheus_user
+  mode '0700'
+  recursive true
+end
+
+directory grafana_provisioning_notifiers_dir do
   owner prometheus_user
   mode '0700'
   recursive true
@@ -64,6 +92,18 @@ template grafana_config do
   mode '0644'
   notifies :restart, 'service[grafana]'
   only_if { node['gitlab']['grafana']['enable'] }
+end
+
+datasources = {
+  'apiVersion' => 1,
+  'datasources' => node['gitlab']['grafana']['datasources']
+}
+
+file File.join(grafana_provisioning_datasources_dir, 'gitlab_datasources.yml') do
+  content Prometheus.hash_to_yaml(datasources)
+  owner prometheus_user
+  mode '0644'
+  notifies :restart, 'service[grafana]'
 end
 
 runit_service 'grafana' do

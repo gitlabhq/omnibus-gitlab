@@ -1,5 +1,15 @@
 require 'chef_helper'
 
+default_datasources_yml_output = <<-DATASOURCEYML
+---
+apiVersion: 1
+datasources:
+- name: GitLab Omnibus
+  type: prometheus
+  access: proxy
+  url: http://localhost:9090
+DATASOURCEYML
+
 describe 'gitlab::grafana' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
@@ -17,7 +27,8 @@ describe 'gitlab::grafana' do
 
     before do
       stub_gitlab_rb(
-        grafana: { enable: true }
+        grafana: { enable: true },
+        prometheus: { enable: true }
       )
     end
 
@@ -56,6 +67,11 @@ describe 'gitlab::grafana' do
           expect(content).to match(/http_port = 3000/)
           expect(content).to match(/root_url = %(protocol)s:\/\/%(domain)s\/-\/grafana\//)
         }
+    end
+
+    it 'creates a default datasources file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/provisioning/datasources/gitlab_datasources.yml')
+        .with_content(default_datasources_yml_output)
     end
   end
 

@@ -20,5 +20,30 @@ module Grafana
     def parse_secrets
       Gitlab['grafana']['secret_key'] ||= SecretsHelper.generate_hex(16)
     end
+
+    def parse_variables
+      parse_grafana_datasources
+    end
+
+    def parse_grafana_datasources
+      user_config = Gitlab['grafana']
+      prom_default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      prom_user_config = Gitlab['prometheus']
+
+      prom_host = prom_user_config['listen_address'] || prom_default_config['listen_address']
+      default_datasources = [
+        {
+          'name' => 'GitLab Omnibus',
+          'type' => 'prometheus',
+          'access' => 'proxy',
+          'url' => "http://#{prom_host}",
+          'isDefault' => true,
+        }
+      ]
+
+      datasources = user_config['datasources'] || default_datasources
+
+      Gitlab['grafana']['datasources'] = datasources
+    end
   end
 end
