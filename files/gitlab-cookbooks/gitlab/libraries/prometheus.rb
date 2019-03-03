@@ -31,6 +31,7 @@ module Prometheus
     def parse_variables
       parse_exporter_enabled
       parse_monitoring_enabled
+      parse_prometheus_alertmanager_config
       parse_alertmanager_config
       parse_scrape_configs
       parse_rules_files
@@ -164,7 +165,33 @@ module Prometheus
       Gitlab['postgres_exporter']['flags'] = default_config['flags']
     end
 
+    def parse_prometheus_alertmanager_config
+      prom_user_config = Gitlab['prometheus']
+      default_config = Gitlab['node']['gitlab']['alertmanager'].to_hash
+      user_config = Gitlab['alertmanager']
+
+      if Services.enabled?('alertmanager')
+        listen_address = user_config['listen_address'] || default_config['listen_address']
+        default_am_config = [
+          {
+            'static_configs' => [
+              {
+                'targets' => [
+                  listen_address
+                ]
+              }
+            ]
+          }
+        ]
+      else
+        default_am_config = []
+      end
+
+      Gitlab['prometheus']['alertmanagers'] = prom_user_config['alertmanagers'] || default_am_config
+    end
+
     def parse_alertmanager_config
+      return unless Services.enabled?('alertmanager')
       user_config = Gitlab['alertmanager']
       rails_config = Gitlab['gitlab_rails']
 

@@ -1384,6 +1384,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   },
 # ]
 #
+### Custom alertmanager config
+#
+# To configure external alertmanagers, create an alertmanager config.
+#
+# See: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config
+#
+# prometheus['alertmanagers'] = [
+#   {
+#     'static_configs' => [
+#       {
+#         'targets' => [
+#           'hostname:port'
+#         ]
+#       }
+#     ]
+#   }
+# ]
+#
 ### Prometheus Memory Management
 #
 # Prometheus needs to be configured for how much memory is used.
