@@ -172,8 +172,7 @@ prometheus_yml_output = <<-PROMYML
       target_label: kubernetes_pod_name
   alerting:
     alertmanagers:
-    - scheme: http
-      static_configs:
+    - static_configs:
       - targets:
         - localhost:9093
 PROMYML
@@ -195,16 +194,11 @@ describe 'gitlab::prometheus' do
 
     before do
       stub_gitlab_rb(
+        alertmanager: {
+          enable: true
+        },
         prometheus: {
-          enable: true,
-          alertmanagers: [
-            {
-              scheme: 'http',
-              static_configs: [
-                { targets: ['localhost:9093'] }
-              ]
-            }
-          ]
+          enable: true
         },
         gitlab_monitor: {
           enable: true
@@ -476,13 +470,32 @@ describe 'gitlab::prometheus' do
     context 'with user provided settings' do
       before do
         stub_gitlab_rb(
+          alertmanager: {
+            enable: true
+          },
           prometheus: {
             flags: {
               'randomFlag' => 'foo'
             },
             listen_address: 'localhost:9898',
+            alertmanagers: [
+              {
+                static_configs: [
+                  {
+                    targets: [
+                      'another-host:9093'
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         )
+      end
+
+      it 'uses a different remote alertmanager' do
+        expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
+          .with_content(/another-host:9093/)
       end
 
       it 'populates the files with expected configuration' do

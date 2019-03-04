@@ -27,7 +27,7 @@ dependency 'cacerts'
 dependency 'makedepend' unless aix?
 dependency 'patch' if solaris2?
 
-default_version 'OpenSSL_1_0_2o'
+default_version 'OpenSSL_1_0_2r'
 
 source git: "https://github.com/openssl/openssl.git"
 
