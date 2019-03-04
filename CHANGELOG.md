@@ -3,6 +3,32 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.8.1 (2019-02-28)
+
+- No changes.
+
+## 11.8.1 (2019-02-28)
+
+### Fixed (1 change)
+
+- Add support for restart_command in runit cookbook. !3062
+
+### Added (1 change, 1 of them is from the community)
+
+- Adding scripts/changelog. !3009 (Ian Baum)
+
+
+## 11.8.1 (2019-02-28)
+
+### Fixed (1 change)
+
+- Add support for restart_command in runit cookbook. !3062
+
+### Added (1 change, 1 of them is from the community)
+
+- Adding scripts/changelog. !3009 (Ian Baum)
+
+
 ## 11.8.0 (2019-02-22)
 
 - Remove Redis config from gitlab-shell !3000
@@ -40,6 +66,18 @@ omnibus-gitlab repository.
 - Drop support for Debian Wheezy !2943
 - Restart sidekiq-cluster when relevant changes occur !2945
 - Support TLS communication with gitaly
+
+## 11.6.10 (2019-02-28)
+
+- No changes.
+
+## 11.6.10 (2019-02-28)
+
+- No changes.
+
+## 11.6.10 (2019-02-28)
+
+- No changes.
 
 ## 11.6.3
 
