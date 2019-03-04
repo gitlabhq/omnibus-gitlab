@@ -235,7 +235,7 @@ Trigger:package:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
   artifacts:
-    expire_in: 1 day
+    expire_in: 3 days
     paths:
       - pkg/
   cache:
