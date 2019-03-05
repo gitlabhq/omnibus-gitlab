@@ -320,6 +320,7 @@ default['gitlab']['gitlab-rails']['redis_port'] = nil
 default['gitlab']['gitlab-rails']['redis_ssl'] = false
 default['gitlab']['gitlab-rails']['redis_password'] = nil
 default['gitlab']['gitlab-rails']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['gitlab-rails']['redis_enable_client'] = true
 default['gitlab']['gitlab-rails']['redis_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_cache_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_cache_sentinels'] = []

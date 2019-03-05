@@ -123,15 +123,22 @@ describe 'gitlab::gitlab-rails' do
 
   context 'with redis settings' do
     let(:config_file) { '/var/opt/gitlab/gitlab-rails/etc/resque.yml' }
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
         expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
           hash_including(
             redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
-            redis_sentinels: []
+            redis_sentinels: [],
+            redis_enable_client: true
           )
         )
+
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(%r(url: unix:/var/opt/gitlab/redis/redis.socket$))
+          expect(content).not_to match(/id:/)
+        }
       end
 
       it 'does not render the separate instance configurations' do
@@ -148,7 +155,8 @@ describe 'gitlab::gitlab-rails' do
             redis_host: 'redis.example.com',
             redis_port: 8888,
             redis_database: 2,
-            redis_password: 'mypass'
+            redis_password: 'mypass',
+            redis_enable_client: false
           }
         )
       end
@@ -157,9 +165,15 @@ describe 'gitlab::gitlab-rails' do
         expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
           hash_including(
             redis_url: URI('redis://:mypass@redis.example.com:8888/2'),
-            redis_sentinels: []
+            redis_sentinels: [],
+            redis_enable_client: false
           )
         )
+
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(%r(url: redis://:mypass@redis.example.com:8888/2))
+          expect(content).to match(/id:$/)
+        }
       end
     end
 

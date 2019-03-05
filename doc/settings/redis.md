@@ -17,6 +17,17 @@ gitlab_rails['redis_port'] = 6380
 gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
 ```
 
+## Using Google Cloud Memorystore
+
+Google Cloud Memorystore [does not support the Redis `CLIENT`
+command.](https://cloud.google.com/memorystore/docs/reference/redis-configs#blocked)
+By default Sidekiq will attempt to set the `CLIENT` for debugging
+purposes. This can be disabled via this config setting:
+
+```ruby
+gitlab_rails['redis_enable_client'] = false
+```
+
 ## Making a bundled Redis instance reachable via TCP
 
 Use the following settings if you want to make one of the Redis instances
