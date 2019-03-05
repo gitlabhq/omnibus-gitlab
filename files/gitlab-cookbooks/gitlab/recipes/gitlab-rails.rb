@@ -185,6 +185,7 @@ end
 
 redis_url = RedisHelper.new(node).redis_url
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
+redis_enable_client = node['gitlab']['gitlab-rails']['redis_enable_client']
 
 templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -210,7 +211,7 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
-  variables(redis_url: redis_url, redis_sentinels: redis_sentinels)
+  variables(redis_url: redis_url, redis_sentinels: redis_sentinels, redis_enable_client: redis_enable_client)
   dependent_services.each { |svc| notifies :restart, svc }
 end
 
