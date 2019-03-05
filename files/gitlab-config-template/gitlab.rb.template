@@ -478,6 +478,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_ssl'] = false
 # gitlab_rails['redis_password'] = nil
 # gitlab_rails['redis_database'] = 0
+# gitlab_rails['redis_enable_client'] = true
 
 #### Redis local UNIX socket (will be disabled if TCP method is used)
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
