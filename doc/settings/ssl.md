@@ -277,7 +277,7 @@ Note that the OpenSSL library supports the definition of `SSL_CERT_FILE` and
 certificate bundle to load, while the latter defines a directory in which to
 search for more certificates.  These variables should not be necessary if you
 have added certificates to the `trusted-certs` directory. However, if for some
-reason you need to set them, they can be [defined as envirnoment
+reason you need to set them, they can be [defined as environment
 variables](environment-variables.md). For example:
 
 ```ruby
