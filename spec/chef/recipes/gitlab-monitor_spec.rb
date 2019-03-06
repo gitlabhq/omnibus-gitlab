@@ -34,6 +34,7 @@ describe 'gitlab::gitlab-monitor' do
           expect(content).to match(/rows_count/)
           expect(content).to match(/git-upload-pack/)
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
+          expect(content).to match(/redis_enable_client: true/)
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-monitor/log/run')
@@ -82,6 +83,22 @@ describe 'gitlab::gitlab-monitor' do
           expect(content).to match(/host=postgres\.example\.com/)
           expect(content).to match(/port=5432/)
           expect(content).to match(/password=secret/)
+        }
+    end
+  end
+
+  context 'with custom Redis settings' do
+    before do
+      stub_gitlab_rb(
+        gitlab_monitor: { enable: true },
+        gitlab_rails: { redis_enable_client: false }
+      )
+    end
+
+    it 'disables Redis CLIENT' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-monitor/gitlab-monitor.yml')
+        .with_content { |content|
+          expect(content).to match(/redis_enable_client: false/)
         }
     end
   end

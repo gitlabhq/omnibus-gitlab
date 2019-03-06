@@ -58,6 +58,7 @@ probes:
       - probe_dead
     opts:
       redis_url: "<%= @redis_url %>"
+      redis_enable_client: <%= @redis_enable_client %>
 <% end %>
 
   metrics:
