@@ -362,6 +362,9 @@ describe 'gitlab::prometheus' do
       it 'prometheus and all exporters are enabled' do
         expect(chef_run.node['gitlab']['prometheus-monitoring']['enable']).to be true
         Prometheus.services.each do |service|
+          # Grafana is disabled by default
+          next if service == 'grafana'
+
           expect(chef_run).to include_recipe("gitlab::#{service}")
         end
       end

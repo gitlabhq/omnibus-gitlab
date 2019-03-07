@@ -163,6 +163,12 @@ server {
   }
 
   <% path = @relative_url ? @relative_url : "/" %>
+  <% if node['gitlab']['grafana']['enable'] -%>
+  location <%= File.join(path, '-/grafana/') %> {
+    proxy_pass http://<%= node['gitlab']['grafana']['http_addr'] %>:<%= node['gitlab']['grafana']['http_port'] %>/;
+  }
+
+  <% end -%>
   location <%= path %> {
     proxy_cache off;
     proxy_pass  http://gitlab-workhorse;

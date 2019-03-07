@@ -70,6 +70,7 @@ module Gitlab
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('gitlab_pages',     priority: 20).use { GitlabPages }
     attribute('prometheus',       priority: 20).use { Prometheus }
+    attribute('grafana',          priority: 30).use { Grafana }
     attribute('storage_check',    priority: 30).use { StorageCheck }
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
     attribute('external_url',            default: nil)
