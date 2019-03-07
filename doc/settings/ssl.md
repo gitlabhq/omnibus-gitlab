@@ -26,8 +26,11 @@ Administrators can enable secure http using any method supported by a GitLab ser
 > Enabled by default in GitLab version ***10.7*** and later if `external_url` is set with the *https* protocol
 > and no certificates are configured.
 
+> **Note**: In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
+> need to be accessible to the Let's Encrypt servers that run the validation. Also note that the validation
+> currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3580).
+
 > **Caution**
-> 
 > Administrators installing or upgrading to GitLab version ***10.7*** or later and do not plan on using
 > **Let's Encrypt** should set the following in `/etc/gitlab/gitlab.rb` to disable:
 >
@@ -143,7 +146,7 @@ self-signed certificates.
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
 1. Run `gitlab-ctl reconfigure`.
 
-## Solving Problems
+## Troubleshooting
 
 ### git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
@@ -224,6 +227,16 @@ Starting in 10.5.4, the full certificate chain will be used. For installs which 
 ```
 
 Where HOSTNAME is the hostname of the certificate.
+
+### **Let's Encrypt** fails on reconfigure
+
+Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
+
+```
+letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
+```
+
+If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](#lets-encrypt-integration).
 
 ## Details on how GitLab and SSL work
 
