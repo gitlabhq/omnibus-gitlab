@@ -31,11 +31,8 @@ module Build
           latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
           commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
           commit_sha = commit_sha_raw[0, 8]
-          if Build::Check.add_nightly_tag?
-            "#{latest_version}+rnightly.#{Gitlab::Util.get_env('CI_PIPELINE_ID')}.#{commit_sha}"
-          else
-            "#{latest_version}+rfbranch.#{Gitlab::Util.get_env('CI_PIPELINE_ID')}.#{commit_sha}"
-          end
+          ver_tag = "#{latest_version}+" + (Build::Check.add_nightly_tag? ? "rnightly" : "rfbranch")
+          [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
         end
       end
 
