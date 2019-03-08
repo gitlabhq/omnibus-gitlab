@@ -7,6 +7,7 @@ describe Prometheus do
     expect(Prometheus.services).to match_array(%w(
                                                  prometheus
                                                  alertmanager
+                                                 grafana
                                                  node-exporter
                                                  redis-exporter
                                                  postgres-exporter

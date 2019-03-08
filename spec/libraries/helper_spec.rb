@@ -89,6 +89,7 @@ describe OmnibusHelper do
       logrotate
       prometheus
       alertmanager
+      grafana
       node-exporter
       redis-exporter
       postgres-exporter

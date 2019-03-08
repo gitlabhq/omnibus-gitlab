@@ -44,6 +44,7 @@ module Logging
         gitlab-shell
         gitlab-workhorse
         gitlab-monitor
+        grafana
         logrotate
         mailroom
         mattermost

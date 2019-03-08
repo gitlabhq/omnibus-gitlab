@@ -98,7 +98,7 @@ repos:
 
 # mixlib-log
 - url: https://github.com/chef/mixlib-log.git
-  installed: 1.7.1
+  installed: v3.0.1
   replace_in_files:
     config/software/mixlib-log.rb: default_version '{version_clean}'
 

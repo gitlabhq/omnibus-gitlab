@@ -1,5 +1,7 @@
 #
-# Copyright 2016 GitLab Inc.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2014 GitLab.com
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,27 +16,6 @@
 # limitations under the License.
 #
 
-version = Gitlab::Version.new('gitlab-monitor', '3.2.0')
-
-default_version version.print
-
-name 'gitlab-monitor'
-license 'MIT'
-license_file 'LICENSE'
-
-skip_transitive_dependency_licensing true
-
-dependency 'ruby'
-dependency 'rubygems'
-dependency 'postgresql'
-
-source git: version.remote
-
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-
-  gem 'build gitlab-monitor.gemspec', env: env
-  gem 'install gitlab-monitor' \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
+runit_service 'grafana' do
+  action :disable
 end
