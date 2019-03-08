@@ -78,6 +78,9 @@ class SecretsHelper
         'gitlab_id' => Gitlab['gitlab_pages']['gitlab_id'],
         'auth_secret' => Gitlab['gitlab_pages']['auth_secret']
       },
+      'grafana' => {
+        'secret_key' => Gitlab['grafana']['secret_key']
+      },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
         'internal_certificate' => Gitlab['registry']['internal_certificate'],

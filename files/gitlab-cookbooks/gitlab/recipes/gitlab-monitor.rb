@@ -51,7 +51,8 @@ template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   variables(
     probe_sidekiq: node['gitlab']['gitlab-monitor']['probe_sidekiq'],
     redis_url: redis_url,
-    connection_string: connection_string
+    connection_string: connection_string,
+    redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
   )
 end
 
