@@ -96,6 +96,7 @@ include_recipe "package::runit"
 # Configure DB Services
 %w(
   redis
+  gitaly
 ).each do |service|
   if node[service]['enable']
     include_recipe "#{service}::enable"
@@ -146,7 +147,6 @@ end
 
 %w(
   registry
-  gitaly
   mattermost
 ).each do |service|
   if node[service]["enable"]

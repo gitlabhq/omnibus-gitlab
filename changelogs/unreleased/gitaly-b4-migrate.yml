@@ -1,0 +1,5 @@
+---
+title: Ensure gitaly is setup before migrations are run
+merge_request:
+author:
+type: fixed
