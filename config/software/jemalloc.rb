@@ -16,7 +16,7 @@
 #
 
 name 'jemalloc'
-default_version '4.2.1'
+default_version '5.1.0'
 
 license 'jemalloc'
 license_file 'COPYING'
@@ -32,6 +32,12 @@ env = with_standard_compiler_flags(with_embedded_path)
 relative_path "jemalloc-#{version}"
 
 build do
+  # CentOS 6 doesn't have a new enough version of autoconf so we have to
+  # use the one packaged in EPEL
+  if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
+    command 'sed -i -e s:autoconf:autoconf268: autogen.sh', env: env
+    env['AUTOCONF'] = '/usr/bin/autoconf268'
+  end
   command ['./autogen.sh',
            ' --enable-cc-silence',
            ' --enable-prof',
