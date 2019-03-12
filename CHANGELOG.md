@@ -6,6 +6,9 @@ omnibus-gitlab repository.
 ## 11.7.6 (2019-02-28)
 
 - No changes.
+## 11.7.6
+
+- Update Mattermost to 5.6.5
 
 ## 11.7.5
 
