@@ -49,6 +49,7 @@ build do
            '--with-http_gzip_static_module',
            '--with-http_v2_module',
            '--with-http_realip_module',
+           '--with-http_sub_module',
            '--with-ipv6',
            '--with-debug',
            "--add-module=#{Omnibus::Config.source_dir}/nginx-module-vts",
