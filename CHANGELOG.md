@@ -7,6 +7,14 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.8.2 (2019-03-13)
+
+### Fixed (2 changes, 1 of them is from the community)
+
+- Restore docker registry compatibility with old clients using manifest v2 schema1. !3061 (Julien Pervillé)
+- Ensure gitaly is setup before migrations are run.
+
+
 ## 11.8.1 (2019-02-28)
 
 - No changes.
