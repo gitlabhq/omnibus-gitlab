@@ -257,7 +257,9 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### QQ exmail (腾讯企业邮箱)
+### QQ exmail
+
+QQ exmail (腾讯企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -415,7 +417,6 @@ gitlab_rails['smtp_enable_starttls_auto'] = false
 gitlab_rails['smtp_tls'] = false
 ```
 
-
 ### OpenSRS (hostedemail.com)
 
 ```ruby
@@ -447,7 +448,9 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_ssl'] = true
 ```
 
-### Aliyun Direct Mail(阿里云邮件推送)
+### Aliyun Direct Mail
+
+Aliyun Direct Mail (阿里云邮件推送)
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'username@your domain'
@@ -460,7 +463,9 @@ gitlab_rails['smtp_domain'] = "your domain"
 gitlab_rails['smtp_authentication'] = "login"
 ```
 
-### Aliyun Enterprise Mail with TLS (阿里企业邮箱)
+### Aliyun Enterprise Mail with TLS
+
+Aliyun Enterprise Mail with TLS (阿里企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -473,7 +478,6 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = false
 gitlab_rails['smtp_tls'] = true
 ```
-
 
 ### FastMail
 
@@ -708,7 +712,6 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
-
 ### Freehostia
 
 ```ruby
@@ -723,7 +726,6 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
-
 
 ### More examples are welcome
 
