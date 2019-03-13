@@ -1,0 +1,60 @@
+From 6b71d90d7487f01cd459ee0452b69b89066cdd08 Mon Sep 17 00:00:00 2001
+From: Robert Marshall <rmarshall@gitlab.com>
+Date: Tue, 12 Mar 2019 23:20:06 -0400
+Subject: [PATCH] Add option to disable keyring ccache support
+
+- There are instances where it is advantageous to be able to
+  turn off the keyring ccache feature when compiling on Linux.
+  This patch adds --disable-keyring-ccache as an option to
+  the configure script.
+
+Signed-off-by: Robert Marshall <rmarshall@gitlab.com>
+---
+ doc/build/options2configure.rst |  3 +++
+ src/aclocal.m4                  | 16 ++++++++++------
+ 2 files changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/doc/build/options2configure.rst b/doc/build/options2configure.rst
+index ddbee2060..55a77d274 100644
+--- a/doc/build/options2configure.rst
++++ b/doc/build/options2configure.rst
+@@ -287,6 +287,9 @@ Optional features
+     given, it controls the -fsanitize compilation flag value (the
+     default is "address").
+ 
++**-**\ **-disable-keyring-ccache**
++    Disable the automatic support for keyring ccache if the
++    keyutils library is detected when building on Linux.
+ 
+ Optional packages
+ -----------------
+diff --git a/src/aclocal.m4 b/src/aclocal.m4
+index 3752d9bd5..cffd1c41e 100644
+--- a/src/aclocal.m4
++++ b/src/aclocal.m4
+@@ -1680,12 +1680,16 @@ fi
+ dnl
+ dnl If libkeyutils exists (on Linux) include it and use keyring ccache
+ AC_DEFUN(KRB5_AC_KEYRING_CCACHE,[
+-  AC_CHECK_HEADERS([keyutils.h],
+-    AC_CHECK_LIB(keyutils, add_key, 
+-      [dnl Pre-reqs were found
+-       AC_DEFINE(USE_KEYRING_CCACHE, 1, [Define if the keyring ccache should be enabled])
+-       LIBS="-lkeyutils $LIBS"
+-      ]))
++  AC_ARG_ENABLE([keyring-ccache],
++  AC_HELP_STRING([--disable-keyring-ccache],do not use keyring ccache even if available @<:@enabled@:>@), , enable_keyring_ccache=yes)
++  if test "$enable_keyring_ccache" = yes; then
++    AC_CHECK_HEADERS([keyutils.h],
++      AC_CHECK_LIB(keyutils, add_key,
++        [dnl Pre-reqs were found
++         AC_DEFINE(USE_KEYRING_CCACHE, 1, [Define if the keyring ccache should be enabled])
++         LIBS="-lkeyutils $LIBS"
++        ]))
++  fi
+ ])dnl
+ dnl
+ dnl If libkeyutils supports persistent keyrings, use them
+-- 
+2.21.0
+
