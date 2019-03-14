@@ -1015,6 +1015,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['hsts_max_age'] = 31536000
 # nginx['hsts_include_subdomains'] = false
 
+##! Defaults to stripping path information when making cross-origin requests
+# nginx['referrer_policy'] = 'strict-origin-when-cross-origin'
+
 ##! **Docs: http://nginx.org/en/docs/http/ngx_http_gzip_module.html**
 # nginx['gzip_enabled'] = true
 

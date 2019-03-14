@@ -116,6 +116,10 @@ server {
 <% if @hsts_include_subdomains %>; includeSubdomains<% end %>";
   <% end %>
 
+  <% if @referrer_policy %>
+  add_header Referrer-Policy <%= @referrer_policy %>;
+  <% end %>
+
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
