@@ -76,7 +76,7 @@ build and confirm it there. To use this:
 1. Copy the [simple.rb](examples/simple.rb) file into your projects
 
    ```shell
-   $ cp doc/examples/simple.rb config/projects/
+   $ cp doc/development/examples/simple.rb config/projects/
    ```
 1. Change the `dependency` in `config/projects/simple.rb` to match the software you are testing
 1. Build the simple project by running
