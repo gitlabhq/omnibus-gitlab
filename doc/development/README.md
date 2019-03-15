@@ -64,3 +64,23 @@ their applicability:
   1. Go to Settings -> CI/CD
   1. Expand Runners settings
   1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"
+
+## Validating changes to a single software dependency
+
+It can be useful to only build one piece of software, rather than rebuild the whole package each time. For instance,
+when adding a new software definition. Using this method, you can quickly rebuild an omnibus package containing only
+the software and its dependencies. Once you've confirmed the software builds on its own, you can add it to the omnibus-gitlab
+build and confirm it there. To use this:
+
+1. [Setup your development environment](setup.md)
+1. Copy the [simple.rb](examples/simple.rb) file into your projects
+
+   ```shell
+   $ cp doc/examples/simple.rb config/projects/
+   ```
+1. Change the `dependency` in `config/projects/simple.rb` to match the software you are testing
+1. Build the simple project by running
+
+   ```shell
+   $ bundle exec omnibus build simple
+   ```
