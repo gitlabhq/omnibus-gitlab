@@ -20,6 +20,7 @@ describe 'gitaly' do
   let(:auth_token) { '123secret456' }
   let(:auth_transitioning) { true }
   let(:ruby_max_rss) { 1000000 }
+  let(:graceful_restart_timeout) { '20m' }
   let(:ruby_graceful_restart_timeout) { '30m' }
   let(:ruby_restart_delay) { '10m' }
   let(:ruby_num_workers) { 5 }
@@ -31,6 +32,8 @@ describe 'gitaly' do
       'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin',
       'ICU_DATA' => '/opt/gitlab/embedded/share/icu/current',
       'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.4/site-packages',
+      'WRAPPER_JSON_LOGGING' => 'false',
+      "GITALY_PID_FILE" => '/var/opt/gitlab/gitaly/gitaly.pid',
     }
   end
 
@@ -118,6 +121,7 @@ describe 'gitaly' do
           prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
           auth_token: auth_token,
           auth_transitioning: auth_transitioning,
+          graceful_restart_timeout: graceful_restart_timeout,
           ruby_max_rss: ruby_max_rss,
           ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
           ruby_restart_delay: ruby_restart_delay,
@@ -139,6 +143,8 @@ describe 'gitaly' do
         .with_content("bin_dir = '/opt/gitlab/embedded/bin'")
       expect(chef_run).to render_file(config_path)
         .with_content("listen_addr = 'localhost:7777'")
+      expect(chef_run).to render_file(config_path)
+        .with_content("graceful_restart_timeout = '#{graceful_restart_timeout}'")
       expect(chef_run).to render_file(config_path)
         .with_content { |content|
           expect(content).to include("tls_listen_addr = 'localhost:8888'")
