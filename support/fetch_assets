@@ -9,6 +9,7 @@ if [ "${ASSET_REGISTRY}" = "dev.gitlab.org:5005" ]
 then
   group_name="gitlab"
   ce_project="gitlabhq"
+fi
 
 if ${curdir}/is_gitlab_ee.sh
 then
