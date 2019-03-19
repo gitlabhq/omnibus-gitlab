@@ -83,6 +83,10 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.7.7 (2019-03-19)
+
+- No changes.
+
 ## 11.7.0
 
 - Disable nginx proxy_request_buffering for git-receive-pack !2935
