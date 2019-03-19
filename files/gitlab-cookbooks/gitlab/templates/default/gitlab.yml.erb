@@ -544,6 +544,7 @@ production: &base
   gitlab_shell:
     path: <%= @gitlab_shell_path %>
     hooks_path: <%= @gitlab_shell_hooks_path %>
+    authorized_keys_file: <%= @gitlab_shell_authorized_keys_file %>
 
     # Git over HTTP
     upload_pack: <%= @gitlab_shell_upload_pack %>
