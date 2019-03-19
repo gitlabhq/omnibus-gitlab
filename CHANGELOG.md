@@ -79,6 +79,10 @@ omnibus-gitlab repository.
 - Update Prometheus alerting rules !3011
 - Allow external diffs for merge requests to be configured
 
+## 11.7.7 (2019-03-19)
+
+- No changes.
+
 ## 11.7.0
 
 - Disable nginx proxy_request_buffering for git-receive-pack !2935
