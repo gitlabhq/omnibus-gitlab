@@ -1,0 +1,5 @@
+---
+title: Add gitlab_shell.authorized_keys_file to gitlab.yml
+merge_request: 3096
+author:
+type: other
