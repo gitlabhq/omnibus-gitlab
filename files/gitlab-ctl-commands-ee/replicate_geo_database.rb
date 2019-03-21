@@ -24,7 +24,8 @@ class GeoReplicationCommand
       backup_timeout: 1800,
       sslmode: 'verify-ca',
       sslcompression: 0,
-      recovery_target_timeline: 'latest'
+      recovery_target_timeline: 'latest',
+      db_name: 'gitlabhq_production'
     }
 
     parse_options!
@@ -93,6 +94,10 @@ class GeoReplicationCommand
 
       opts.on('--recovery-target-timeline=latest', 'Specify the PostgreSQL recovery target timeline (see https://www.postgresql.org/docs/9.6/static/recovery-target-settings.html).') do |timeline|
         @options[:recovery_target_timeline] = timeline
+      end
+
+      opts.on('--db_name=gitlabhq_production', 'Specify the database name') do |db_name|
+        @options[:db_name] = db_name
       end
 
       opts.on_tail('-h', '--help', 'Show this message') do
