@@ -1,5 +1,0 @@
----
-title: Delete build artifacts from AMIs before publishing
-merge_request: 3044
-author:
-type: security

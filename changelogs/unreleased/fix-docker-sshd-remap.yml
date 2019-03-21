@@ -1,5 +1,0 @@
----
-title: Fix issue with sshd failing in docker with user remap and privileged
-merge_request: 3047
-author:
-type: fixed
