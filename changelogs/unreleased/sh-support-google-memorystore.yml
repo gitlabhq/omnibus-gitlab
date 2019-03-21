@@ -1,5 +1,0 @@
----
-title: Support Google Cloud Memorystore by disabling Redis CLIENT
-merge_request: 3072
-author:
-type: added

@@ -1,5 +1,0 @@
----
-title: Add Prometheus support to Docker Registry
-merge_request: 2884
-author:
-type: added

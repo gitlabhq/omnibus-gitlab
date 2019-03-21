@@ -1,5 +1,0 @@
----
-title: Restore docker registry compatibility with old clients using manifest v2 schema1.
-merge_request: 3061
-author: Julien Pervillé
-type: fixed

@@ -1,5 +1,0 @@
----
-title: Automatically configure Prometheus alertmanager
-merge_request: 3071
-author:
-type: fixed
