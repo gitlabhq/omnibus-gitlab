@@ -4,6 +4,11 @@ require 'omnibus-ctl'
 describe 'gitlab-ctl replicate-geo-database' do
   subject { Omnibus::Ctl.new('testing-ctl') }
 
+  let(:required_arguments) do
+    %w(--host=gitlab-primary.geo
+       --slot-name=gitlab_primary_geo)
+  end
+
   before do
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
@@ -19,52 +24,43 @@ describe 'gitlab-ctl replicate-geo-database' do
     expect(subject.get_all_commands_hash).to include('replicate-geo-database')
   end
 
-  it 'executes the geo replication command when called' do
-    arguments = %w(--host=gitlab-primary.geo
-                   --slot-name=gitlab_primary_geo
-                   --sslmode=disable
-                   --no-wait)
+  describe "#replicate_geo_database" do
+    it 'executes the geo replication command' do
+      stub_command_arguments(required_arguments)
 
-    allow_any_instance_of(Omnibus::Ctl::GeoReplicationCommand)
-      .to receive(:arguments).and_return(arguments)
-
-    expect(Geo::Replication).to receive(:new).and_call_original
-      .with(subject, hash_including(host: 'gitlab-primary.geo',
-                                    slot_name: 'gitlab_primary_geo',
-                                    sslmode: 'disable',
-                                    sslcompression: 0,
-                                    now: true))
-
-    expect_any_instance_of(Geo::Replication).to receive(:execute)
-
-    subject.replicate_geo_database
-  end
-
-  context 'with SSL compression enabled' do
-    let(:arguments) do
-      %w(--host=gitlab-primary.geo
-         --slot-name=gitlab_primary_geo
-         --sslmode=disable
-         --sslcompression=1
-         --no-wait)
-    end
-
-    before do
-      allow_any_instance_of(Omnibus::Ctl::GeoReplicationCommand)
-        .to receive(:arguments).and_return(arguments)
-    end
-
-    it 'enables SSL compression' do
       expect(Geo::Replication).to receive(:new).and_call_original
         .with(subject, hash_including(host: 'gitlab-primary.geo',
-                                      slot_name: 'gitlab_primary_geo',
-                                      sslmode: 'disable',
-                                      sslcompression: 1,
-                                      now: true))
+                                      slot_name: 'gitlab_primary_geo'))
 
       expect_any_instance_of(Geo::Replication).to receive(:execute)
 
       subject.replicate_geo_database
     end
+
+    context 'with SSL compression enabled' do
+      it 'enables SSL compression' do
+        stub_command_arguments(
+          required_arguments +
+            %w(--sslmode=disable
+               --sslcompression=1
+               --no-wait))
+
+        expect(Geo::Replication).to receive(:new).and_call_original
+          .with(subject, hash_including(host: 'gitlab-primary.geo',
+                                        slot_name: 'gitlab_primary_geo',
+                                        sslmode: 'disable',
+                                        sslcompression: 1,
+                                        now: true))
+
+        expect_any_instance_of(Geo::Replication).to receive(:execute)
+
+        subject.replicate_geo_database
+      end
+    end
+  end
+
+  def stub_command_arguments(arguments)
+    expect_any_instance_of(Omnibus::Ctl::GeoReplicationCommand)
+      .to receive(:arguments).and_return(arguments)
   end
 end
