@@ -68,7 +68,7 @@ class GeoReplicationCommand
         @options[:now] = true
       end
 
-      opts.on('--backup-timeout[=BACKUP_TIMEOUT]', 'Specify the timeout for the initial database backup from the primary.') do |backup_timeout|
+      opts.on('--backup-timeout[=BACKUP_TIMEOUT]', 'Specify the timeout for the initial database backup from the primary') do |backup_timeout|
         @options[:backup_timeout] = backup_timeout.to_i
       end
 
@@ -84,15 +84,15 @@ class GeoReplicationCommand
         @options[:skip_replication_slot] = true
       end
 
-      opts.on('--sslmode=MODE', 'Choose the level of protection the connection between primary and secondary has.') do |sslmode|
+      opts.on('--sslmode=MODE', 'Choose the level of protection the connection between primary and secondary has') do |sslmode|
         @options[:sslmode] = sslmode
       end
 
-      opts.on('--sslcompression=1', 'Enable SSL compression (disabled by default for performance and security).') do |sslcompression|
+      opts.on('--sslcompression=1', 'Enable SSL compression (disabled by default for performance and security)') do |sslcompression|
         @options[:sslcompression] = sslcompression.to_i
       end
 
-      opts.on('--recovery-target-timeline=latest', 'Specify the PostgreSQL recovery target timeline (see https://www.postgresql.org/docs/9.6/static/recovery-target-settings.html).') do |timeline|
+      opts.on('--recovery-target-timeline=latest', 'Specify the PostgreSQL recovery target timeline (see https://www.postgresql.org/docs/9.6/static/recovery-target-settings.html)') do |timeline|
         @options[:recovery_target_timeline] = timeline
       end
 
