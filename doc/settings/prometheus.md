@@ -42,6 +42,13 @@ Custom list:
 
     prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
 
+## Grafana dashboards
+
+[Grafana](https://grafana.com) is a powerful dashboard software for presenting
+Prometheus metrics data. GitLab Omnibus >= 11.9 includes an embedded copy.
+
+See [the embedded Grafana documentation](grafana.md) for more information.
+
 [alerting]: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 [recording]: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
 
