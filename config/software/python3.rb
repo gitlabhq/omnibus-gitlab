@@ -17,10 +17,11 @@
 #
 
 name 'python3'
-# If bumping from 3.4.x to something higher, be sure to update the following files with the new path:
+# If bumping from 3.7.x to something higher, be sure to update the following files with the new path:
+# config/software/python-docutils.rb
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
-default_version '3.4.9'
+default_version '3.7.3'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -34,7 +35,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: 'e02e565372750a6678efe35ddecbe5ccd5330a8a2e8bbe38d3060713492e3dab'
+       sha256: 'd62e3015f2f89c970ac52343976b406694931742fbde2fed8d1ce8ebb4e1f8ff'
 
 relative_path "Python-#{version}"
 
@@ -62,10 +63,10 @@ build do
   make env: env
   make 'install', env: env
 
-  delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/dbm.*")
-  delete("#{install_dir}/embedded/lib/python3.4/lib-dynload/_sqlite3.*")
-  delete("#{install_dir}/embedded/lib/python3.4/test")
-  command "find #{install_dir}/embedded/lib/python3.4 -name '__pycache__' -type d -print -exec rm -r {} +"
+  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.7/test")
+  command "find #{install_dir}/embedded/lib/python3.7 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
 
 project.exclude "embedded/bin/python3*-config"
