@@ -1,5 +1,0 @@
----
-title: Replace deprecated "--no-ri --no-rdoc" in rubygems
-merge_request: 3050
-author: Takuya Noguchi
-type: other
