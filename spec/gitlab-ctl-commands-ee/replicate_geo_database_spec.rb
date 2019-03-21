@@ -37,6 +37,51 @@ describe 'gitlab-ctl replicate-geo-database' do
       subject.replicate_geo_database
     end
 
+    it 'applies defaults to optional arguments' do
+      stub_command_arguments(required_arguments)
+
+      expect(Geo::Replication).to receive(:new).and_call_original
+        .with(subject, hash_including(host: 'gitlab-primary.geo',
+                                      slot_name: 'gitlab_primary_geo',
+                                      user: 'gitlab_replicator',
+                                      port: 5432,
+                                      password: nil,
+                                      now: false,
+                                      force: false,
+                                      skip_backup: false,
+                                      skip_replication_slot: false,
+                                      backup_timeout: 1800,
+                                      sslmode: 'verify-ca',
+                                      sslcompression: 0,
+                                      recovery_target_timeline: 'latest'))
+
+      expect_any_instance_of(Geo::Replication).to receive(:execute)
+
+      subject.replicate_geo_database
+    end
+
+    it 'requires the host argument' do
+      stub_command_arguments(%w(--slot-name=gitlab_primary_geo))
+
+      expect(Geo::Replication).to_not receive(:new)
+
+      # Important to catch this SystemExit or else RSpec exits
+      expect { subject.replicate_geo_database }.to raise_error(SystemExit).and(
+        output(/missing argument: host/).to_stdout
+      )
+    end
+
+    it 'requires the slot-name argument' do
+      stub_command_arguments(%w(--host=gitlab-primary.geo))
+
+      expect(Geo::Replication).to_not receive(:new)
+
+      # Important to catch this SystemExit or else RSpec exits
+      expect { subject.replicate_geo_database }.to raise_error(SystemExit).and(
+        output(/missing argument: --slot-name/).to_stdout
+      )
+    end
+
     context 'with SSL compression enabled' do
       it 'enables SSL compression' do
         stub_command_arguments(
