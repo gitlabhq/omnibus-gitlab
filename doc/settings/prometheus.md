@@ -45,3 +45,8 @@ Custom list:
 [alerting]: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 [recording]: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
 
+## Grafana Dashboards
+
+[Grafana](https://grafana.com) is a powerful dashboarding sofware for preseenting Prometheus metric data. GitLab Omnibus >= 11.9 includes an embedded copy.
+
+See [the embedded grafana documentation](grafana.md) for more information.
