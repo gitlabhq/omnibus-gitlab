@@ -70,11 +70,11 @@ have access to Grafana:
 ## Dashboards
 
 Once Grafana is up, you can start importing the
-[pre-build dashboards](https://gitlab.com/gitlab-org/grafana-dashboards/tree/master/omnibus)
-that are tailored for the Omnibus installations.
+[pre-built dashboards](https://gitlab.com/gitlab-org/grafana-dashboards/tree/master/omnibus)
+that are tailored for Omnibus installations.
 
 NOTE: **Note:**
-The pre-build dashboards will be automatically loaded in a future release.
+The pre-built dashboards will be automatically loaded in a future release.
 Follow [issue 4180](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4180)
 for more information.
 
