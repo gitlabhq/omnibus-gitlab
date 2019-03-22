@@ -121,4 +121,4 @@ been removed.
 
 ### 11.8
 
-1. The [runit](files/gitlab-cookbooks/runit) was updated to be closer to the latest version of the upstream [runit cookbook](https://github.com/chef-cookbooks/runit). No user changes are necessary for this release.
+1. The [runit](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/runit) cookbook was updated to be closer to the latest version of the upstream [runit cookbook](https://github.com/chef-cookbooks/runit). No user changes are necessary for this release.
