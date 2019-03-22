@@ -278,7 +278,7 @@ Trigger:qa-docker:
 
 Trigger:qa-test:
   stage: trigger-qa
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
@@ -313,7 +313,7 @@ dependencies_io_check:
 
 validate_packer_changes:
   before_script: []
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
   stage: check
   script:
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ce.json
@@ -331,7 +331,7 @@ validate_packer_changes:
 ##############################
 
 pages:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: prepare
   script:
     - bundle exec rake license:generate_pages
