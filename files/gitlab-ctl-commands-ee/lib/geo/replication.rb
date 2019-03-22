@@ -232,7 +232,7 @@ module Geo
     end
 
     def db_name
-      'gitlabhq_production'
+      @options[:db_name]
     end
 
     def teardown(cmd)

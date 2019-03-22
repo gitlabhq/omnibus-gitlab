@@ -10,7 +10,18 @@ describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
   let(:file) { spy('file spy') }
-  let(:options) { { now: true, host: 'localhost', port: 9999, user: 'my-user', sslmode: 'disable', sslcompression: 1, recovery_target_timeline: 'latest' } }
+  let(:options) do
+    {
+      now: true,
+      host: 'localhost',
+      port: 9999,
+      user: 'my-user',
+      sslmode: 'disable',
+      sslcompression: 1,
+      recovery_target_timeline: 'latest',
+      db_name: 'gitlab_db_name'
+    }
+  end
 
   subject { described_class.new(instance, options) }
 
@@ -27,6 +38,14 @@ describe Geo::Replication, '#execute' do
     expect(subject).to receive(:ask_pass).and_return('password')
     expect(GitlabCtl::Util).to receive(:run_command)
       .with(%r{/embedded/bin/pg_basebackup}, anything)
+
+    subject.execute
+  end
+
+  it 'uses the db_name option' do
+    expect(subject).to receive(:ask_pass).and_return('password')
+    expect(GitlabCtl::Util).to receive(:run_command)
+      .with(%r{gitlab_db_name}, anything)
 
     subject.execute
   end
@@ -68,8 +87,8 @@ describe Geo::Replication, '#execute' do
   end
 
   context 'with a custom port' do
-    let(:options) { { now: true, skip_backup: true, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo' } }
-    let(:cmd) { %q(PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/bin/gitlab-psql -h localhost -p 9999 -U my-user -d gitlabhq_production -t -c "SELECT slot_name FROM pg_create_physical_replication_slot('foo');") }
+    let(:options) { { now: true, skip_backup: true, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo', db_name: 'gitlab_db_name' } }
+    let(:cmd) { %q(PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/bin/gitlab-psql -h localhost -p 9999 -U my-user -d gitlab_db_name -t -c "SELECT slot_name FROM pg_create_physical_replication_slot('foo');") }
     let(:status) { double(error?: false, stdout: '') }
 
     it 'executes a gitlab-psql call to check replication slots' do
