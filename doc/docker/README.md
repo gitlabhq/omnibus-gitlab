@@ -21,7 +21,7 @@ The GitLab Docker images can be run in multiple ways:
 
 ## Prerequisites
 
-Docker installation is required, see the [official installation docs](https://docs.docker.com/engine/installation/).
+Docker installation is required, see the [official installation docs](https://docs.docker.com/install/).
 
 NOTE: **Note:**
 Using a native Docker install instead of Docker Toolbox is recommended in order to use the persisted volumes
