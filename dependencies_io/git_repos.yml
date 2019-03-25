@@ -150,3 +150,9 @@ repos:
   installed: 1.2.11
   replace_in_files:
     config/software/zlib.rb: default_version '{version_clean}'
+
+# krb5
+- url: https://github.com/krb5/krb5.git
+  installed: krb5-1.17
+  replace_in_files:
+    config/software/krb5.rb: default_version '{version_clean}'
