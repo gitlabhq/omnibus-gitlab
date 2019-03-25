@@ -36,7 +36,7 @@ variables:
 .docker_job: &docker_job
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   variables:
-    DOCKER_DRIVER: overlay
+    DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
   services:
     - docker:dind
