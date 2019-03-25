@@ -5,9 +5,9 @@ module Build
   class Check
     class << self
       def is_ee?
-        return true if Gitlab::Util.get_env('ee') == 'true'
-
-        File.read('VERSION').include?('-ee')
+        Gitlab::Util.get_env('ee') == 'true' || \
+          Gitlab::Util.get_env('GITLAB_VERSION')&.end_with?('-ee') || \
+          File.read('VERSION').strip.end_with?('-ee')
       end
 
       def match_tag?(tag)

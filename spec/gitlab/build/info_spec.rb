@@ -2,6 +2,10 @@ require 'spec_helper'
 require 'gitlab/build/info'
 
 describe Build::Info do
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+  end
+
   describe '.package' do
     describe 'shows EE' do
       it 'when ee=true' do
