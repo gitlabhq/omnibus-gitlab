@@ -142,3 +142,9 @@ repos:
   installed: 1.2.11
   replace_in_files:
     config/software/zlib.rb: default_version '{version_clean}'
+
+# exiftool
+- url: https://github.com/exiftool/exiftool.git
+  installed: 11.31
+  replace_in_files:
+    config/software/exiftool.rb: default_version '{version_clean}'
