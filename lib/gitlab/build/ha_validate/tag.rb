@@ -18,7 +18,7 @@ module Build
       end
 
       def self.get_params(image: nil)
-        qa_image = image || "gitlab/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
+        qa_image = image || "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
