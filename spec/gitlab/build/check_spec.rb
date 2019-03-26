@@ -2,27 +2,57 @@ require 'spec_helper'
 require 'gitlab/build/check'
 
 describe Build::Check do
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+  end
+
   describe 'is_ee?' do
     describe 'with environment variables' do
-      it 'when ee=true' do
-        stub_is_ee_env(true)
-        expect(described_class.is_ee?).to be_truthy
+      describe 'ee variable' do
+        it 'when ee=true' do
+          stub_is_ee_env(true)
+          expect(described_class.is_ee?).to be_truthy
+        end
+
+        it 'when ee=false' do
+          stub_is_ee(false)
+          expect(described_class.is_ee?).to be_falsy
+        end
+
+        it 'when env variable is not set' do
+          stub_is_ee_version(false)
+          expect(described_class.is_ee?).to be_falsy
+        end
       end
 
-      it 'when ee=false' do
-        stub_is_ee(false)
-        expect(described_class.is_ee?).to be_falsy
-      end
+      describe 'GITLAB_VERSION variable' do
+        it 'when GITLAB_VERSION ends with -ee' do
+          stub_env_var('GITLAB_VERSION', 'foo-ee')
+          expect(described_class.is_ee?).to be_truthy
+        end
 
-      it 'when env variable is not set' do
-        stub_is_ee_version(false)
-        expect(described_class.is_ee?).to be_falsy
+        it 'when GITLAB_VERSION does not end with -ee' do
+          stub_env_var('GITLAB_VERSION', 'foo')
+          expect(described_class.is_ee?).to be_falsy
+        end
+
+        it 'ee variable wins over GITLAB_VERSION variable' do
+          stub_is_ee_env(true)
+          stub_env_var('GITLAB_VERSION', 'foo')
+          expect(described_class.is_ee?).to be_truthy
+        end
       end
     end
 
     describe 'without environment variables' do
       it 'checks the VERSION file' do
-        stub_is_ee_version(true)
+        stub_is_ee_version(false)
+        stub_env_var('GITLAB_VERSION', 'foo-ee')
+        expect(described_class.is_ee?).to be_truthy
+      end
+
+      it 'GITLAB_VERSION variable wins over the file' do
+        stub_env_var('GITLAB_VERSION', 'foo-ee')
         expect(described_class.is_ee?).to be_truthy
       end
     end

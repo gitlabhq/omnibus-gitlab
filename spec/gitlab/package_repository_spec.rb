@@ -5,6 +5,10 @@ require 'gitlab/util'
 describe PackageRepository do
   let(:repo) { PackageRepository.new }
 
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+  end
+
   describe :repository_for_rc do
     context 'on master' do
       # Example:
