@@ -27,6 +27,7 @@ describe 'gitlab::grafana' do
 
     before do
       stub_gitlab_rb(
+        external_url: 'http://gitlab.example.com',
         grafana: { enable: true },
         prometheus: { enable: true }
       )
@@ -66,6 +67,9 @@ describe 'gitlab::grafana' do
           expect(content).to match(/http_addr = localhost/)
           expect(content).to match(/http_port = 3000/)
           expect(content).to match(/root_url = %(protocol)s:\/\/%(domain)s\/-\/grafana\//)
+          expect(content).to match(/auth_url = http:\/\/gitlab.example.com\/oauth\/authorize/)
+          expect(content).to match(/token_url = http:\/\/gitlab.example.com\/oauth\/token/)
+          expect(content).to match(/api_url = http:\/\/gitlab.example.com\/api\/v4\/user/)
         }
     end
 
@@ -78,6 +82,7 @@ describe 'gitlab::grafana' do
   context 'when grafana is enabled and prometheus is disabled' do
     before do
       stub_gitlab_rb(
+        external_url: 'http://gitlab.example.com',
         prometheus: { enable: false },
         grafana: { enable: true }
       )
@@ -91,6 +96,7 @@ describe 'gitlab::grafana' do
   context 'when log dir is changed' do
     before do
       stub_gitlab_rb(
+        external_url: 'http://gitlab.example.com',
         grafana: {
           log_directory: 'foo',
           enable: true
@@ -106,10 +112,12 @@ describe 'gitlab::grafana' do
   context 'with user provided settings' do
     before do
       stub_gitlab_rb(
+        external_url: 'https://trailingslash.example.com/',
         grafana: {
           http_addr: '0.0.0.0',
           http_port: 3333,
           enable: true,
+          gitlab_auth_endpoint: 'https://otherdomain.example.com/special/oauth/authorize',
           env: {
             'USER_SETTING' => 'asdf1234'
           }
@@ -122,6 +130,8 @@ describe 'gitlab::grafana' do
         .with_content { |content|
           expect(content).to match(/http_addr = 0.0.0.0/)
           expect(content).to match(/http_port = 3000/)
+          expect(content).to match(/auth_url = http:\/\/otherdomain.example.com\/special\/oauth\/authorize/)
+          expect(content).to match(/token_url = http:\/\/trailingslash.example.com\/oauth\/token/)
         }
     end
 
