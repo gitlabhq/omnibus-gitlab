@@ -33,6 +33,7 @@ module License
       'map-stream',         # MIT Licensed - https://github.com/dominictarr/map-stream/blob/master/LICENCE
       'object-component',   # MIT Licensed - https://github.com/component/object/blob/master/LICENSE
       'select2',            # MIT Licensed - https://github.com/select2/select2/blob/master/LICENSE.md
+      'exiftool',           # License similar to Perl, which is under either GPL v1 or Artistic license - https://www.sno.phy.queensu.ca/~phil/exiftool/#license
     ]
     # readline is GPL licensed and its use was not mere aggregation. Hence it is
     # blacklisted.

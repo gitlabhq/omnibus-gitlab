@@ -50,6 +50,7 @@ dependency 'unzip'
 dependency 'libre2'
 dependency 'gpgme'
 dependency 'graphicsmagick'
+dependency 'exiftool'
 
 if EE
   dependency 'mysql-client'
