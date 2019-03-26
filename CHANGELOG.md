@@ -132,6 +132,13 @@ omnibus-gitlab repository.
 - Bundle exiftool as a dependency.
 
 
+## 11.8.4 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+
 ## 11.8.3 (2019-03-19)
 
 - No changes.
