@@ -1,0 +1,10 @@
+--- a/exiftool
++++ b/exiftool
+@@ -28,6 +28,7 @@
+     }
+     # add lib directory at start of include path
+     unshift @INC, "$exeDir/lib";
++    push ( @INC, "/opt/gitlab/embedded/lib/exiftool-perl");
+     # load or disable config file if specified
+     if (@ARGV and lc($ARGV[0]) eq '-config') {
+         shift;
