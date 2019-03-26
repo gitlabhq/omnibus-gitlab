@@ -371,6 +371,29 @@ Setting `max_age` to 0 will disable this feature. For more information see:
 
 * https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
 
+## Setting the Referrer-Policy header
+
+By default, GitLab sets the `Referrer-Policy` header to `strict-origin-when-cross-origin` on all responses.
+
+This makes the client send the full URL as referrer when making a same-origin request but only send the
+origin when making cross-origin requests.
+
+To set this header to a different value:
+
+```ruby
+nginx['referrer_policy'] = 'same-origin'
+```
+
+You can also disable this header to make the client use its default setting:
+
+```ruby
+nginx['referrer_policy'] = false
+```
+
+Note that setting this to `origin` or `no-referrer` would break some features in GitLab that require the full referrer URL.
+
+* https://www.w3.org/TR/referrer-policy/
+
 ## Disabling GZIP compression
 
 By default, GitLab enables GZIP compression for text data over 10240 bytes. To

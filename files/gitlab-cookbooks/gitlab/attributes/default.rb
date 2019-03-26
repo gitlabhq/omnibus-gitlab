@@ -674,6 +674,7 @@ default['gitlab']['nginx']['proxy_set_headers'] = {
   "Upgrade" => "$http_upgrade",
   "Connection" => "$connection_upgrade"
 }
+default['gitlab']['nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
 default['gitlab']['nginx']['http2_enabled'] = true
 # Cache up to 1GB of HTTP responses from GitLab on disk
 default['gitlab']['nginx']['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
