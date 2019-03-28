@@ -81,7 +81,7 @@ After the first startup, the admin password is stored in the Grafana datastore. 
    $ gitlab-ctl start grafana
    ```
 
-See the [Grafana CLI documentation](reset-admin-password) for more information.
+See the [Grafana CLI documentation][reset-admin-password] for more information.
 
 ## Dashboards
 
