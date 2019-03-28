@@ -98,6 +98,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
 # gitlab_rails['pages_domain_verification_cron_worker'] = "*/15 * * * *"
+# gitlab_rails['schedule_migrate_external_diffs_worker_cron'] = "15 * * * *"
 
 ### Webhook Settings
 ###! Number of seconds to wait for HTTP response after sending webhook HTTP POST
@@ -175,6 +176,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### External merge request diffs
 # gitlab_rails['external_diffs_enabled'] = false
+# gitlab_rails['external_diffs_when'] = nil
 # gitlab_rails['external_diffs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/external-diffs"
 # gitlab_rails['external_diffs_object_store_enabled'] = false
 # gitlab_rails['external_diffs_object_store_direct_upload'] = false

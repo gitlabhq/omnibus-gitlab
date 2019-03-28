@@ -137,6 +137,12 @@ production: &base
   ## External merge request diffs
   external_diffs:
     enabled: <%= @external_diffs_enabled %>
+    <%- if @external_diffs_when -%>
+    # Diffs may be `always` external (the default), or they can be made external
+    # after they have become `outdated` (i.e., the MR is closed or a new version
+    # has been pushed).
+    when: <%= @external_diffs_when %>
+    <%- end -%>
     # The location where merge request diffs are stored (default: shared/external-diffs).
     storage_path: <%= @external_diffs_storage_path %>
     object_store:
@@ -260,6 +266,10 @@ production: &base
     # Verify custom GitLab Pages domains
     pages_domain_verification_cron_worker:
       cron:<% if @pages_domain_verification_cron_worker %> "<%= @pages_domain_verification_cron_worker %>"<% end %>
+
+    # Periodically migrate diffs from the database to external storage
+    schedule_migrate_external_diffs_worker:
+      cron:<% if @schedule_migrate_external_diffs_worker_cron %> "<%= @schedule_migrate_external_diffs_worker_cron %>"<% end %>
 
     ##
     # GitLab EE only jobs:
