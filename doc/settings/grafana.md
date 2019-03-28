@@ -72,7 +72,7 @@ have access to Grafana:
 
 ### Reset admin password
 
-After the first startup, the admin password is stored in the Grafana datastore. To update it you must use a reset procedure.
+After the first startup, the admin password is stored in the Grafana datastore. To update it you must follow a reset procedure.
 
    ```console
    $ gitlab-ctl stop grafana
