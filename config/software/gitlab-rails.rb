@@ -28,7 +28,6 @@ default_version version.print
 source git: version.remote
 
 combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
-gemcontents_cmd = "#{install_dir}/embedded/bin/gem contents"
 
 license 'MIT'
 license_file 'LICENSE'
@@ -96,18 +95,6 @@ build do
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
     command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
   end
-
-  # This patch makes the github-markup gem use and be compatible with Python3
-  # We've sent part of the changes upstream: https://github.com/github/markup/pull/919
-  patch_file_path = File.join(
-    Omnibus::Config.project_root,
-    'config',
-    'patches',
-    'gitlab-rails',
-    'gitlab-markup_gem-markups.patch'
-  )
-  # Not using the patch DSL as we need the path to the gems directory
-  command "cat #{patch_file_path} | patch -p1 \"$(#{gemcontents_cmd} gitlab-markup | grep lib/github/markups.rb)\""
 
   # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
