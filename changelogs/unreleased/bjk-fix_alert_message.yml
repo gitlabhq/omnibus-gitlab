@@ -1,0 +1,5 @@
+---
+title: Fix typo in Prometheus v2 rules
+merge_request: 3145
+author:
+type: fixed
