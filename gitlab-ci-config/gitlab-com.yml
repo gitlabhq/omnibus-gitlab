@@ -314,7 +314,7 @@ dependencies_io_check:
 
 validate_packer_changes:
   before_script: []
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
   stage: check
   script:
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ce.json
