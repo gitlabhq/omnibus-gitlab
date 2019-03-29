@@ -18,6 +18,7 @@ module Build
         "variables[ALTERNATIVE_SOURCES]" => true,
         "variables[BUILDER_IMAGE_REVISION]" => Gitlab::Util.get_env('BUILDER_IMAGE_REVISION'),
         "variables[BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY'),
+        "variables[PUBLIC_BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('PUBLIC_BUILDER_IMAGE_REGISTRY'),
         "variables[COMPILE_ASSETS]" => Gitlab::Util.get_env('COMPILE_ASSETS'),
         "variables[IMAGE_TAG]" => "omnibus-#{Gitlab::Util.get_env('CI_COMMIT_SHA')}",
         "variables[ee]" => Gitlab::Util.get_env("ee") || "false",
