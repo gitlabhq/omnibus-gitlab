@@ -463,7 +463,7 @@ Docker-Release:
 
 AWS:
   stage: package-and-image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/jessie_packer:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
   script:
   # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
   - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
