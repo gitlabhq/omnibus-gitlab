@@ -129,8 +129,9 @@ docs-check-links:
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
-    # Disabled until https://gitlab.com/gitlab-com/gitlab-docs/issues/305 is resolved
-    # - bundle exec nanoc check internal_links
+    - bundle exec nanoc check internal_links
+    # Check the internal anchor links
+    - bundle exec nanoc check internal_anchors
   <<: *com-except-triggers
 
 danger-review:
