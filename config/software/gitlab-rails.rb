@@ -60,7 +60,7 @@ end
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  command "echo $(git log --pretty=format:'%h' -n 1) > REVISION"
+  command "echo $(git log --pretty=format:'%h' --abbrev=11 -n 1) > REVISION"
   # Set installation type to omnibus
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
