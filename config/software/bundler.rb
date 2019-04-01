@@ -1,5 +1,6 @@
 #
 # Copyright 2012-2016 Chef Software, Inc.
+# Copyright 2017-2019 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 name 'bundler'
 # Pin the bundler version to avoid breaking changes in later versions
-default_version '1.16.6'
+default_version '1.17.3'
 
 license 'MIT'
 license_file 'LICENSE.MD'
