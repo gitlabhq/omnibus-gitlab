@@ -101,7 +101,7 @@ sudo docker exec -it gitlab /bin/bash
 You can also just edit `/etc/gitlab/gitlab.rb`:
 
 ```bash
-sudo docker exec -it gitlab vi /etc/gitlab/gitlab.rb
+sudo docker exec -it gitlab editor /etc/gitlab/gitlab.rb
 ```
 
 Once you open `/etc/gitlab/gitlab.rb` make sure to set the `external_url` to
