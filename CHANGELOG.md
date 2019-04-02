@@ -3,6 +3,36 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.9.3 (2019-03-27)
+
+- No changes.
+
+## 11.9.3 (2019-03-27)
+
+- No changes.
+
+## 11.9.3 (2019-03-27)
+
+- No changes.
+
+## 11.9.2 (2019-03-26)
+
+- No changes.
+
+## 11.9.2 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+
+## 11.9.2 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+
 ## 11.9.1 (2019-03-25)
 
 - No changes.
@@ -101,6 +131,48 @@ omnibus-gitlab repository.
 - Update docutils to 0.13.1. !3042 (Takuya Noguchi)
 - Replace deprecated "--no-ri --no-rdoc" in rubygems. !3050 (Takuya Noguchi)
 - Update Mattermost to 5.8. !3070 (Harrison Healey)
+
+
+## 11.8.6 (2019-03-28)
+
+- No changes.
+
+## 11.8.6 (2019-03-28)
+
+- No changes.
+
+## 11.8.6 (2019-03-28)
+
+- No changes.
+
+## 11.8.5 (2019-03-27)
+
+- No changes.
+
+## 11.8.5 (2019-03-27)
+
+- No changes.
+
+## 11.8.5 (2019-03-27)
+
+- No changes.
+
+## 11.8.4 (2019-03-26)
+
+- No changes.
+
+## 11.8.4 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+
+## 11.8.4 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
 
 
 ## 11.8.3 (2019-03-19)
@@ -190,6 +262,40 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.7.1
 - Update Prometheus alerting rules !3011
 - Allow external diffs for merge requests to be configured
+
+## 11.7.10 (2019-03-28)
+
+- No changes.
+
+## 11.7.10 (2019-03-28)
+
+- No changes.
+
+## 11.7.10 (2019-03-28)
+
+- No changes.
+
+## 11.7.9 (2019-03-27)
+
+- No changes.
+
+## 11.7.8 (2019-03-26)
+
+- No changes.
+
+## 11.7.8 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+
+## 11.7.8 (2019-03-26)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
 
 ## 11.7.7 (2019-03-19)
 
