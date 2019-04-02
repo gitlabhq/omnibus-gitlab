@@ -114,13 +114,15 @@ add_command_under_category 'pg-upgrade', 'database',
   # All tests have passed, this should be an upgradable instance.
   maintenance_mode('enable')
 
-  # Wait for processes to settle, and give use one last chance to change their
-  # mind
-  log "Waiting 30 seconds to ensure tasks complete before PostgreSQL upgrade."
-  status = GitlabCtl::Util.delay_for(30) if options[:wait]
-  unless status
-    maintenance_mode('disable')
-    Kernel.exit(0)
+  if options[:wait]
+    # Wait for processes to settle, and give use one last chance to change their
+    # mind
+    log "Waiting 30 seconds to ensure tasks complete before PostgreSQL upgrade."
+    status = GitlabCtl::Util.delay_for(30)
+    unless status
+      maintenance_mode('disable')
+      Kernel.exit(0)
+    end
   end
 
   # Get the existing locale before we move on
