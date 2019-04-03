@@ -3,6 +3,7 @@ require_relative "../util.rb"
 
 module Build
   class Check
+    AUTO_DEPLOY_TAG_REGEX = /(^\d+)-(\d+)-([^ ]+-[^ ]+)-ee$/
     class << self
       def is_ee?
         Gitlab::Util.get_env('ee') == 'true' || \
@@ -12,6 +13,10 @@ module Build
 
       def match_tag?(tag)
         system(*%W[git describe --exact-match --match #{tag}])
+      end
+
+      def is_auto_deploy?
+        AUTO_DEPLOY_TAG_REGEX.match?(`git describe --exact-match`)
       end
 
       def is_patch_release?

@@ -112,7 +112,8 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+    - echo "noop"
+  # - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
   only:
     - master
