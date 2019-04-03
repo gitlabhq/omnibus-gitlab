@@ -28,7 +28,9 @@ Grafana is not enabled by default. To enable it:
    where you can log in with the username `admin` and the password you set.
 
 NOTE: **Note:**
-The admin password must be changed before the first startup of Grafana. After this the configuration setting does not have any effect. See below for admin password reset information.
+The admin password must be changed before reconfiguring GitLab with Grafana enabled.
+After this, the `admin_password` setting doesn't have any effect, and you'll have to
+[reset the password manually](#resetting-the-admin-password).
 
 ## Authentication
 
@@ -70,18 +72,24 @@ have access to Grafana:
 
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
 
-### Reset admin password
+### Resetting the admin password
 
-After the first startup, the admin password is stored in the Grafana datastore. To update it you must follow a reset procedure.
+After the first startup, the admin password is stored in the Grafana datastore
+and you cannot change it via `gitlab.rb`.
 
-   ```console
-   $ gitlab-ctl stop grafana
-   $ /opt/gitlab/embedded/bin/grafana-cli admin reset-admin-password \
-       --homepath /var/opt/gitlab/grafana NewPassword
-   $ gitlab-ctl start grafana
-   ```
+To update it, you must follow a reset procedure:
 
-See the [Grafana CLI documentation][reset-admin-password] for more information.
+```sh
+gitlab-ctl stop grafana
+
+/opt/gitlab/embedded/bin/grafana-cli admin reset-admin-password \
+  --homepath /var/opt/gitlab/grafana <NewPassword>
+
+gitlab-ctl start grafana
+```
+
+See the [Grafana CLI documentation](http://docs.grafana.org/administration/cli/#reset-admin-password)
+for more information.
 
 ## Dashboards
 
@@ -95,4 +103,3 @@ Follow [issue 4180](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4180)
 for more information.
 
 [reconfigure]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
-[reset-admin-password]: http://docs.grafana.org/administration/cli/#reset-admin-password
