@@ -15,31 +15,84 @@
 # limitations under the License.
 #
 
+require 'shellwords'
+
 add_command_under_category 'registry-garbage-collect', 'container-registry', 'Run Container Registry garbage collection.', 2 do |cmd_name, path|
-  service_name = "registry"
+  result = RegistryGarbageCollect.new(self, path, ARGV).execute!
+  Kernel.exit !!result
+end
 
-  unless service_enabled?(service_name)
-    log "Container registry is not enabled, exiting..."
-    Kernel.exit 1
+class RegistryGarbageCollect
+  def initialize(ctl, path, args)
+    @ctl = ctl
+    @path = path || '/var/opt/gitlab/registry/config.yml'
+    @args = args
+
+    @command = %w(/opt/gitlab/embedded/bin/registry garbage-collect)
+    @command << @path
+
+    parse_options!
   end
 
-  config_file_path = path || '/var/opt/gitlab/registry/config.yml'
+  def execute!
+    unless enabled?
+      log "Container registry is not enabled, exiting..."
+      return
+    end
 
-  unless File.exist?(config_file_path)
-    log "Didn't find #{config_file_path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry-garbage-collect /path/to/config.yml"
-    Kernel.exit 1
+    unless config?
+      log "Didn't find #{@path}, please supply the path to registry config.yml file, eg: gitlab-ctl registry-garbage-collect /path/to/config.yml"
+      return
+    end
+
+    stop!
+
+    begin
+      log "Running garbage-collect using configuration #{@command}, this might take a while...\n"
+      status = @ctl.run_command(@command.shelljoin)
+
+      unless status.exitstatus.zero?
+        log "\nFailed to run garbage-collect command, starting registry service."
+        return
+      end
+
+      true
+    ensure
+      start!
+    end
   end
 
-  run_sv_command_for_service('stop', service_name)
-  log "Running garbage-collect using configuration from #{config_file_path}, this might take a while...\n"
-  status = run_command("/opt/gitlab/embedded/bin/registry garbage-collect #{config_file_path}")
+  private
 
-  if status.exitstatus.zero?
-    run_sv_command_for_service('start', service_name)
-    Kernel.exit 0
-  else
-    log "\nFailed to run garbage-collect command, starting registry service."
-    run_sv_command_for_service('start', service_name)
-    Kernel.exit 1
+  def log(*args)
+    @ctl.log(*args)
+  end
+
+  def start!
+    @ctl.run_sv_command_for_service('start', service_name)
+  end
+
+  def stop!
+    @ctl.run_sv_command_for_service('stop', service_name)
+  end
+
+  def enabled?
+    @ctl.service_enabled?(service_name)
+  end
+
+  def config?
+    File.exist?(@path)
+  end
+
+  def service_name
+    "registry"
+  end
+
+  def parse_options!
+    OptionParser.new do |opts|
+      opts.on('-m', '--delete-manifests', 'Delete manifests that are not currently referenced via tag') do
+        @command << "-m"
+      end
+    end.parse!(@args)
   end
 end

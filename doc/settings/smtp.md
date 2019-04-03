@@ -739,6 +739,6 @@ On the GitLab server, execute `gitlab-rails console` to enter the console. Then,
 you can enter the following command at the console prompt to cause GitLab to
 send a test email:
 
-```
-irb(main):003:0> Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
+```ruby
+Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```

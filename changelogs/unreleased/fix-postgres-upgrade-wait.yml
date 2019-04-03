@@ -1,0 +1,5 @@
+---
+title: Fix bug where passing -w to pg-upgrade aborted the process
+merge_request: 3164
+author:
+type: fixed
