@@ -18,6 +18,17 @@ omnibus-gitlab repository.
 - Fix typo in Prometheus v2 rules. !3145
 
 
+## 11.9.5 (2019-04-03)
+
+### Security (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.8.1. (Harrison Healey)
+
+### Fixed (1 change)
+
+- Fix typo in Prometheus v2 rules. !3145
+
+
 ## 11.9.3 (2019-03-27)
 
 - No changes.
