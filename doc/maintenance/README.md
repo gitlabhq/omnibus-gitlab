@@ -145,6 +145,48 @@ If you changed the location of the Container registry config.yml:
 sudo gitlab-ctl registry-garbage-collect /path/to/config.yml
 ```
 
+#### Removing unused layers not referenced by manifests
+
+GitLab Container Registry follows the same default workflow as Docker Distribution:
+retain all layers, even ones that are unreferenced directly to allow all content
+to be accessed using context addressable identifiers.
+
+#### Content-addressable layers
+
+Consider the following example, where you first build the image:
+
+```bash
+docker build -t my.registry.com/my.group/my.project:latest .
+# this builds a image with content of sha256:111111
+docker push my.registry.com/my.group/my.project:latest
+```
+
+Now, you do overwrite `:latest` with a new version:
+
+```bash
+docker build -t my.registry.com/my.group/my.project:latest .
+# this builds a image with content of sha256:222222
+docker push my.registry.com/my.group/my.project:latest
+```
+
+Now, the `:latest` points to manifest of `sha256:222222`. However, due to architecture
+of registry this data is still accessible via:
+`docker pull my.registry.com/my.group/my.project@sha256:111111` even though it is
+no longer directly accessible via `:latest` tag.
+
+#### Recycle unreference manifests
+
+However, in most of workflows you do not care about old layers, if they are not directly
+referenced by registry tag. The `registry-garbage-collect` supports the `-m` switch
+to allow you to remove all unreferenced manifests and layers, that are not directly
+accessible via `tag`.
+
+Since this is a way more destrictive operation, this behavior is disabled by default.
+You are likely expecting this way of operation, but before doing that ensure
+that you backup all registry data to ensure that you do not use the data.
+
+This will allow you to recycle all registry space with the [Container Registry API](#administratively-recycling-unused-tags).
+
 #### Doing garbage collect without downtime
 
 You can do a garbage collect without stopping the Container registry by setting
@@ -190,7 +232,24 @@ registry['storage'] = {
 
 and run `sudo gitlab-ctl reconfigure`.
 
-## Administratively recycling unused tags
+### Running on schedule
+
+Ideally, you want to run garbage collect of registry regularly on weekly basis
+during time when registry is not being in-use.
+
+The simplest way is to add a new crontab job that it is gonna run periodically,
+once a week.
+Create a file under `/etc/cron.d/registry-garbage-collect`:
+
+```bash
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Run every Sunday at 04:05am
+5 4 * * 0  root gitlab-ctl registry-garbage-collect
+```
+
+### Administratively recycling unused tags
 
 GitLab offers a set of APIs to manipulate Container Registry and aid the process
 of removing unused tags. Currently, this is exposed using API, but in the future
@@ -206,4 +265,15 @@ and image blobs. To recycle the container registry data in the whole GitLab inst
 
 ```sh
 sudo gitlab-ctl registry-garbage-collect
+```
+
+You might also remove all unreferenced manifests with.
+Since this is a way more destructive operation take a look
+at [Recycle unreference manifests](#recycle-unreference-manifests)
+to understand the implications.
+
+```sh
+sudo gitlab-ctl registry-garbage-collect -m
+# or
+sudo gitlab-ctl registry-garbage-collect /path/to/config.yml -m
 ```

@@ -52,6 +52,6 @@ to gitlab.rb.template located in files/gitlab-config-template/gitlab.rb.template
 Otherwise, please consider adding the ~backstage label in that case.
 MSG
 
-unless configuration_paths_to_review.empty?
+if !git.modified_files.include?('files/gitlab-config-template/gitlab.rb.template') && !configuration_paths_to_review.empty?
   warn NO_TEMPLATE_CHANGE_MESSAGE, sticky: false
 end
