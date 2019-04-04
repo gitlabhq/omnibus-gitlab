@@ -7,6 +7,13 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.9.6 (2019-04-04)
+
+### Fixed (1 change)
+
+- Fix Grafana auth URLs. !3139
+
+
 ## 11.9.5 (2019-04-03)
 
 - No changes.
