@@ -551,3 +551,19 @@ Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
   <<: *raspbian_release
+
+AWS-Marketplace-release:
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  stage: aws-marketplace-release
+  when: manual
+  script:
+    - curl --request POST --form "token=$AWS_RELEASE_TRIGGER_TOKEN" --form ref=master
+        --form "variables[GITLAB_VERSION]=$CI_COMMIT_TAG"
+        https://dev.gitlab.org/api/v4/projects/1035/trigger/pipeline
+  only:
+    - tags@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $CI_COMMIT_TAG =~ /^.*\+rc.*/
+  dependencies:
+    - AWS
