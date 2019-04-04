@@ -27,6 +27,11 @@ Grafana is not enabled by default. To enable it:
 1. Once enabled, Grafana will be available on `https://gitlab.example.com/-/grafana`
    where you can log in with the username `admin` and the password you set.
 
+NOTE: **Note:**
+The admin password must be changed before reconfiguring GitLab with Grafana enabled.
+After this, the `admin_password` setting doesn't have any effect, and you'll have to
+[reset the password manually](#resetting-the-admin-password).
+
 ## Authentication
 
 If you want to give a user access to Grafana, you have two options.
@@ -66,6 +71,25 @@ have access to Grafana:
    ```
 
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
+
+### Resetting the admin password
+
+After the first startup, the admin password is stored in the Grafana datastore
+and you cannot change it via `gitlab.rb`.
+
+To update it, you must follow a reset procedure:
+
+```sh
+gitlab-ctl stop grafana
+
+/opt/gitlab/embedded/bin/grafana-cli admin reset-admin-password \
+  --homepath /var/opt/gitlab/grafana <NewPassword>
+
+gitlab-ctl start grafana
+```
+
+See the [Grafana CLI documentation](http://docs.grafana.org/administration/cli/#reset-admin-password)
+for more information.
 
 ## Dashboards
 

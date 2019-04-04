@@ -249,9 +249,9 @@ allow_sign_up = false
 client_id = <%= node['gitlab']['grafana']['gitlab_application_id'] %>
 client_secret = <%= node['gitlab']['grafana']['gitlab_secret'] %>
 scopes = api
-auth_url = <%= Gitlab['external_url'] %>oauth/authorize
-token_url = <%= Gitlab['external_url'] %>oauth/token
-api_url = <%= Gitlab['external_url'] %>api/v4
+auth_url = <%= node['gitlab']['grafana']['gitlab_auth_endpoint'] %>
+token_url = <%= node['gitlab']['grafana']['gitlab_token_endpoint'] %>
+api_url = <%= node['gitlab']['grafana']['gitlab_user_api_endpoint'] %>
 allowed_groups = <%= node['gitlab']['grafana']['allowed_groups'].join(' ') %>
 <% end -%>
 

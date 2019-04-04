@@ -1553,6 +1553,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # grafana['gitlab_secret'] = 'GITLAB_SECRET'
 # grafana['env_directory'] = '/opt/gitlab/etc/grafana/env'
 # grafana['allowed_groups'] = []
+# grafana['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
+# grafana['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
+# grafana['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
 # grafana['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # }
