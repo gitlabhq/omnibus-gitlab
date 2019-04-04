@@ -8,6 +8,10 @@ describe Build::Check do
 
   describe 'is_ee?' do
     describe 'with environment variables' do
+      before do
+        stub_is_ee_version(false)
+      end
+
       describe 'ee variable' do
         it 'when ee=true' do
           stub_is_ee_env(true)
