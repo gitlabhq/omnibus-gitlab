@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.9.6 (2019-04-04)
+
+### Fixed (1 change)
+
+- Fix Grafana auth URLs. !3139
+
+
 ## 11.9.5 (2019-04-03)
 
 ### Security (1 change, 1 of them is from the community)
