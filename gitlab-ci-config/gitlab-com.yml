@@ -322,10 +322,7 @@ validate_packer_changes:
   only:
     changes:
       - support/packer/*
-  except:
-    refs:
-      - triggers
-      - branches@gitlab/omnibus-gitlab
+  <<: *com-except-triggers
 
 ##############################
 #     Scheduled pipeline     #
