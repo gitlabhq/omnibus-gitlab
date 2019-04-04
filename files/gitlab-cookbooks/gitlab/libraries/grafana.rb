@@ -22,7 +22,17 @@ module Grafana
     end
 
     def parse_variables
+      parse_grafana_auth_url
       parse_grafana_datasources
+    end
+
+    def parse_grafana_auth_url
+      return unless Gitlab['external_url']
+
+      gitlab_url = Gitlab['external_url'].chomp('/')
+      Gitlab['grafana']['gitlab_auth_endpoint'] ||= "#{gitlab_url}/oauth/authorize"
+      Gitlab['grafana']['gitlab_token_endpoint'] ||= "#{gitlab_url}/oauth/token"
+      Gitlab['grafana']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v4/user"
     end
 
     def parse_grafana_datasources
