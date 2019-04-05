@@ -117,7 +117,7 @@
 
 .auto_deploy_template: &auto_deploy_build
   extends: .package_and_image
-  <<: *auto-deploy-only
+  <<: *dev-auto-deploy-only
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -284,7 +284,7 @@ Ubuntu-16.04:
   extends: .tag_template
 
 # We build package for deploying to GitLab.com first
-Ubuntu-16.04-auto-deploy:
+Ubuntu-16.04-pkg-auto-deploy:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .auto_deploy_template
