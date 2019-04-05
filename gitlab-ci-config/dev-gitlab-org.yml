@@ -9,6 +9,11 @@
   only:
     - tags@gitlab/omnibus-gitlab
 
+.dev-auto-deploy-only: &dev-auto-deploy-only
+  only:
+    variables:
+      - $AUTO_DEPLOY == "true"
+
 .dev-except-branches: &dev-except-branches
    only:
     - tags@gitlab/omnibus-gitlab
