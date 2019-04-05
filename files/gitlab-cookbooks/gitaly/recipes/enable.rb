@@ -59,7 +59,7 @@ node.default['gitaly']['env'] = {
 
 env_dir env_directory do
   variables node['gitaly']['env']
-  notifies :restart, "runit_service[gitaly]"
+  notifies :restart, "service[gitaly]"
 end
 
 # Before version 11.6, gitaly env directory was `/opt/gitlab/etc/gitaly` by
