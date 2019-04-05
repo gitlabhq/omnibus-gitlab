@@ -11,4 +11,4 @@ cd <%= @options[:working_dir] %>
 exec chpst -e <%= @options[:env_dir] %> -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
-  <%= @options[:bin_path] %> <%= @options[:config_path] %>
+  <%= @options[:wrapper_path] %> <%= @options[:bin_path] %> <%= @options[:config_path] %>

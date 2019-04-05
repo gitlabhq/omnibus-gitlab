@@ -6,6 +6,9 @@
 
 socket_path = '<%= @socket_path %>'
 bin_dir = '/opt/gitlab/embedded/bin'
+<% if @graceful_restart_timeout %>
+graceful_restart_timeout = '<%= @graceful_restart_timeout %>'
+<% end %>
 
 <% if @listen_addr %>
 # Optional: listen on a TCP socket. This is insecure (no authentication)
