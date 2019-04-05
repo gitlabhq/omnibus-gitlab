@@ -71,6 +71,10 @@
   dependencies:
     - fetch-assets
   cache: *branch-cache
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
+
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -115,10 +119,6 @@
   extends: .package_and_image
   <<: *dev-tag-only
 
-.auto_deploy_template: &auto_deploy_build
-  extends: .package_and_image
-  <<: *dev-auto-deploy-only
-
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
   stage: slow_jobs
@@ -132,10 +132,11 @@
     variables:
       - $ee == "true"
 
-### This stage is used for uploading packages
+### This stages are used for uploading packages
 ### 1. To a staging package repository
 ### 2. Always ran on dev.gitlab.org
-.staging_upload_template: &staging_upload
+
+.staging_upload_template:
   stage: staging_upload
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
@@ -145,8 +146,14 @@
   retry: 2
   tags:
   - promotion
-  only:
-  - tags@gitlab/omnibus-gitlab
+
+.staging_upload:
+  extends: .staging_upload_template
+  << *dev-tag-only
+
+.staging_upload_auto_deploy:
+  extends: .staging_upload_template
+  << *dev-auto-deploy-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -283,12 +290,6 @@ Ubuntu-16.04:
   stage: gitlab_com:package
   extends: .tag_template
 
-# We build package for deploying to GitLab.com first
-Ubuntu-16.04-pkg-auto-deploy:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
-  extends: .auto_deploy_template
-
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -313,7 +314,7 @@ Docker-QA:
 ## VERSION file. This job runs also in nightly branch builds.
 Ubuntu-16.04-staging:
   stage: gitlab_com:upload_deploy
-  extends: .staging_upload_template
+  extends: .staging_upload
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
@@ -329,7 +330,7 @@ Ubuntu-16.04-staging:
 ## VERSION file. This job runs also in nightly branch builds.
 Ubuntu-16.04-auto-deploy:
   stage: gitlab_com:upload_deploy
-  extends: .staging_upload_template
+  extends: .staging_upload_auto_deploy
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
@@ -404,43 +405,43 @@ Docker:
 
 ### Staging uploads
 Ubuntu-18.04-staging:
+  extends: .staging_upload
   dependencies:
     - Ubuntu-18.04
     - Ubuntu-18.04-branch
-  <<: *staging_upload
 Debian-8-staging:
+  extends: .staging_upload
   dependencies:
     - Debian-8
     - Debian-8-branch
-  <<: *staging_upload
 Debian-9.1-staging:
+  extends: .staging_upload
   dependencies:
     - Debian-9.1
     - Debian-9.1-branch
-  <<: *staging_upload
 CentOS-6-staging:
+  extends: .staging_upload
   dependencies:
     - CentOS-6
     - CentOS-6-branch
-  <<: *staging_upload
 CentOS-7-staging:
+  extends: .staging_upload
   dependencies:
     - CentOS-7
     - CentOS-7-branch
-  <<: *staging_upload
 OpenSUSE-42.3-staging:
+  extends: .staging_upload
   dependencies:
     - OpenSUSE-42.3
     - OpenSUSE-42.3-branch
-  <<: *staging_upload
 SLES-12-staging:
+  extends: .staging_upload
   dependencies:
     - SLES-12
     - SLES-12-branch
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-  <<: *staging_upload
 
 ### Package releases
 Ubuntu-16.04-release:
