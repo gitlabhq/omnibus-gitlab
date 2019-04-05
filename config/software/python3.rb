@@ -21,6 +21,8 @@ name 'python3'
 # config/software/python-docutils.rb
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
+# spec/chef/recipes/gitaly_spec.rb
+# spec/chef/recipes/gitlab-rails_spec.rb
 default_version '3.7.3'
 
 dependency 'libedit'
@@ -28,6 +30,8 @@ dependency 'ncurses'
 dependency 'zlib'
 dependency 'openssl'
 dependency 'bzip2'
+dependency 'libffi'
+dependency 'liblzma'
 
 license 'Python-2.0'
 license_file 'LICENSE'
@@ -55,6 +59,7 @@ build do
   patch source: 'readline.c.patch', target: "Modules/readline.c"
   patch source: 'setup.py.patch', target: "setup.py"
 
+  command ['autoreconf'], env: env
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
