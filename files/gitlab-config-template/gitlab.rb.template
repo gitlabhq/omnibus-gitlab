@@ -1560,9 +1560,31 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # }
 
+### Dashboards
+#
+# See: http://docs.grafana.org/administration/provisioning/#dashboards
+#
+# NOTE: Setting this will override the default.
+#
+# grafana['dashboards'] = [
+#   {
+#     'name' => 'GitLab Omnibus',
+#     'orgId' => 1,
+#     'folder' => 'GitLab Omnibus',
+#     'type' => 'file',
+#     'disableDeletion' => true,
+#     'updateIntervalSeconds' => 600,
+#     'options' => {
+#       'path' => '/opt/gitlab/embedded/service/grafana-dashboards',
+#     }
+#   }
+# ]
+
 ### Datasources
 #
 # See: http://docs.grafana.org/administration/provisioning/#example-datasource-config-file
+#
+# NOTE: Setting this will override the default.
 #
 # grafana['datasources'] = [
 #   {
