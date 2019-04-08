@@ -287,12 +287,12 @@ HA-Validate-Nightly:
 Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
-  <<: *tag_build
+  extends: .tag_template
 
 Ubuntu-16.04-auto-deploy:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
-  <<: *auto_deploy_build
+  extends: .auto_deploy_template
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -319,9 +319,9 @@ Docker-QA:
 Ubuntu-16.04-staging:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload
-  #  dependencies:
-  #  - Ubuntu-16.04
-  #  - Ubuntu-16.04-branch
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
   variables:
     TAKEOFF_ENVIRONMENT: 'gstg'
   script:
@@ -335,8 +335,8 @@ Ubuntu-16.04-staging:
 Ubuntu-16.04-staging-auto-deploy:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload_auto_deploy
-  # dependencies:
-  #   - Ubuntu-16.04-auto-deploy
+  dependencies:
+    - Ubuntu-16.04-auto-deploy
   variables:
     TAKEOFF_ENVIRONMENT: 'pre'
   script:
