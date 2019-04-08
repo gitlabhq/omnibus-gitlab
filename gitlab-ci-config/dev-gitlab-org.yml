@@ -13,6 +13,7 @@
   only:
     variables:
       - $AUTO_DEPLOY == "true"
+
 .except-auto-deploy: &except-auto-deploy
   except:
     variables:
@@ -68,10 +69,7 @@
   dependencies:
     - fetch-assets
   cache: *branch-cache
-  except:
-    variables:
-      - $AUTO_DEPLOY == "true"
-
+  <<: *except-auto-deploy
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -115,17 +113,12 @@
 
 .tag_template: &tag_build
   <<: *package-and-image
-  only:
-    - tags@gitlab/omnibus-gitlab
-  except:
-    variables:
-      - $AUTO_DEPLOY == "true"
+  <<: *dev-tag-only
+  <<: *except-auto-deploy
 
 .auto_deploy_template: &auto_deploy_build
   <<: *package-and-image
-  only:
-    variables:
-      - $AUTO_DEPLOY == "true"
+  <<: *auto-deploy-only
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
