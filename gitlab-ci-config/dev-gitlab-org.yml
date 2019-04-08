@@ -112,6 +112,10 @@
   extends: .package_and_image
   <<: *dev-tag-only
 
+.auto_deploy_template: &auto_deploy_build
+  extends: .package_and_image
+  <<: *dev-auto-deploy-only
+
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
   stage: slow_jobs
@@ -283,6 +287,11 @@ Ubuntu-16.04:
   stage: gitlab_com:package
   extends: .tag_template
 
+Ubuntu-16.04-auto-deploy:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .auto_deploy_template
+
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -332,7 +341,6 @@ Ubuntu-16.04-auto-deploy:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
-  <<: *dev-auto-deploy-only
 
 
 ### Package builds
