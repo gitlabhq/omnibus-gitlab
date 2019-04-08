@@ -13,6 +13,10 @@
   only:
     variables:
       - $AUTO_DEPLOY == "true"
+.except-auto-deploy: &except-auto-deploy
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 .dev-except-branches: &dev-except-branches
    only:
@@ -112,6 +116,9 @@
   <<: *package-and-image
   only:
     - tags@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 .auto_deploy_template: &auto_deploy_build
   <<: *package-and-image
@@ -131,6 +138,7 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+      - $AUTO_DEPLOY == "true"
 
 ### This stages are used for uploading packages
 ### 1. To a staging package repository
@@ -226,6 +234,7 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy
   tags:
   - docker-builder
   cache: *branch-cache
@@ -251,6 +260,7 @@ QA-Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy
   tags:
   - docker-builder
   cache: *branch-cache
