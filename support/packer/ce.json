@@ -16,6 +16,8 @@
     "ami_name": "GitLab CE {{user `version`}}",
     "ami_description": "Official GitLab CE {{user `version`}} AMI. https://about.gitlab.com/",
     "ami_groups": ["all"],
+    "ami_users": ["684062674729", "679593333241"],
+    "snapshot_users": ["684062674729", "679593333241"],
     "tags": {
         "Type": "GitLab Community Edition",
         "Version": "{{user `version`}}"

@@ -14,6 +14,8 @@
     "instance_type": "m3.medium",
     "ssh_username": "ubuntu",
     "ami_name": "GitLab EE {{user `version`}}",
+    "ami_users": ["684062674729", "679593333241"],
+    "snapshot_users": ["684062674729", "679593333241"],
     "ami_description": "Official GitLab EE {{user `version`}} AMI. https://about.gitlab.com/",
     "ami_groups": ["all"],
     "tags": {
