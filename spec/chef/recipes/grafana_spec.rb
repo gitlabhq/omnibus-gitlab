@@ -41,7 +41,6 @@ describe 'gitlab::grafana' do
 
     before do
       stub_gitlab_rb(
-        external_url: 'http://gitlab.example.com',
         grafana: { enable: true },
         prometheus: { enable: true }
       )
@@ -76,14 +75,12 @@ describe 'gitlab::grafana' do
     end
 
     it 'creates the configuration file' do
-      expect(chef_run).to create_template('/var/opt/gitlab/grafana/grafana.ini')
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
         .with_content { |content|
           expect(content).to match(/http_addr = localhost/)
           expect(content).to match(/http_port = 3000/)
-          expect(content).to match(/root_url = %(protocol)s:\/\/%(domain)s\/-\/grafana\//)
-          expect(content).to match(/auth_url = http:\/\/gitlab.example.com\/oauth\/authorize/)
-          expect(content).to match(/token_url = http:\/\/gitlab.example.com\/oauth\/token/)
-          expect(content).to match(/api_url = http:\/\/gitlab.example.com\/api\/v4\/user/)
+          expect(content).to match(/root_url = http:\/\/localhost\/-\/grafana/)
+          expect(content).not_to match(/\[auth\.gitlab\]/)
         }
     end
 
@@ -136,7 +133,13 @@ describe 'gitlab::grafana' do
           http_addr: '0.0.0.0',
           http_port: 3333,
           enable: true,
-          gitlab_auth_endpoint: 'https://otherdomain.example.com/special/oauth/authorize',
+          gitlab_application_id: 'appid',
+          gitlab_secret: 'secret',
+          gitlab_auth_sign_up: false,
+          allowed_groups: [
+            'allowed',
+            'also-allowed',
+          ],
           env: {
             'USER_SETTING' => 'asdf1234'
           },
@@ -165,12 +168,18 @@ describe 'gitlab::grafana' do
     end
 
     it 'populates the files with expected configuration' do
-      expect(chef_run).to create_template('/var/opt/gitlab/grafana/grafana.ini')
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
         .with_content { |content|
           expect(content).to match(/http_addr = 0.0.0.0/)
-          expect(content).to match(/http_port = 3000/)
-          expect(content).to match(/auth_url = http:\/\/otherdomain.example.com\/special\/oauth\/authorize/)
-          expect(content).to match(/token_url = http:\/\/trailingslash.example.com\/oauth\/token/)
+          expect(content).to match(/http_port = 3333/)
+          expect(content).to match(/root_url = https:\/\/trailingslash.example.com\/-\/grafana/)
+          expect(content).to match(/\[auth\.gitlab\]\nenabled = true\nallow_sign_up = false/)
+          expect(content).to match(/client_id = appid/)
+          expect(content).to match(/client_secret = secret/)
+          expect(content).to match(/auth_url = https:\/\/trailingslash.example.com\/oauth\/authorize/)
+          expect(content).to match(/token_url = https:\/\/trailingslash.example.com\/oauth\/token/)
+          expect(content).to match(/api_url = https:\/\/trailingslash.example.com\/api\/v4/)
+          expect(content).to match(/allowed_groups = allowed also-allowed/)
         }
     end
 
