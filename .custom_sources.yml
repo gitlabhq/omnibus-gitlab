@@ -67,3 +67,6 @@ nginx-module-vts:
 prometheus-storage-migrator:
   remote: "git@dev.gitlab.org:omnibus-mirror/prometheus-storage-migrator.git"
   alternative: "https://gitlab.com/gitlab-org/prometheus-storage-migrator.git"
+grafana-dashboards:
+  remote: "git@dev.gitlab.org:omnibus-mirror/grafana-dashboards.git"
+  alternative: "https://gitlab.com/gitlab-org/grafana-dashboards.git"

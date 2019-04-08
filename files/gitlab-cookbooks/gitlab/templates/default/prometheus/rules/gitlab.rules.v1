@@ -73,10 +73,34 @@ ALERT PostgresDatabaseDeadlockCancels
 
 job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m = sum by (job, route, method, code) (rate(gitlab_workhorse_http_request_duration_seconds_count[5m]))
 
+# Low-traffic - < 10 QPS (600 RPM)
 ALERT WorkhorseHighErrorRate
-  IF sum without (job, code) (job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}) / sum without (job,code) (job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m) * 100 > 1
+  IF (
+       sum without (job, code) (
+         job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
+       ) /
+       sum without (job,code) (
+         job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+       ) < 10
+     ) * 100 > 50
   FOR 60m
   ANNOTATIONS {
     summary = 'Workhorse has high error rates',
-    description = 'Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 1% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.',
+    description = 'Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 50% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.',
+  }
+
+# High-traffic - >= 10 QPS (600 RPM)
+ALERT WorkhorseHighErrorRate
+  IF (
+       sum without (job, code) (
+         job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
+       ) /
+       sum without (job,code) (
+         job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+       ) >= 10
+     ) * 100 > 10
+  FOR 60m
+  ANNOTATIONS {
+    summary = 'Workhorse has high error rates',
+    description = 'Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 10% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.',
   }
