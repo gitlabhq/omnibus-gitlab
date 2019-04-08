@@ -149,11 +149,11 @@
 
 .staging_upload:
   extends: .staging_upload_template
-  << *dev-tag-only
+  <<: *dev-tag-only
 
 .staging_upload_auto_deploy:
   extends: .staging_upload_template
-  << *dev-auto-deploy-only
+  <<: *dev-auto-deploy-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
