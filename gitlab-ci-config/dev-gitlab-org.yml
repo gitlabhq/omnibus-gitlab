@@ -87,6 +87,7 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
+      - $AUTO_DEPLOY == "true"
   artifacts: *package-artifacts
   retry: 1
 
@@ -454,6 +455,7 @@ SLES-12-staging:
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy
 
 ### Package releases
 Ubuntu-16.04-release:
