@@ -169,9 +169,6 @@ Ubuntu-16.04-branch:
   stage: gitlab_com:package
   extends: .branch_template
 
-Ubuntu-14.04-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -302,9 +299,6 @@ Ubuntu-16.04-staging:
   <<: *dev-except-branches
 
 ### Package builds
-Ubuntu-14.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_14.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -366,11 +360,6 @@ Docker:
   retry: 1
 
 ### Staging uploads
-Ubuntu-14.04-staging:
-  dependencies:
-    - Ubuntu-14.04
-    - Ubuntu-14.04-branch
-  <<: *staging_upload
 Ubuntu-18.04-staging:
   dependencies:
     - Ubuntu-18.04
@@ -411,10 +400,6 @@ SLES-12-staging:
   <<: *staging_upload
 
 ### Package releases
-Ubuntu-14.04-release:
-  dependencies:
-    - Ubuntu-14.04
-  <<: *production_release
 Ubuntu-16.04-release:
   dependencies:
     - Ubuntu-16.04
