@@ -332,12 +332,11 @@ Ubuntu-16.04-staging:
 ## Upload and deploy to preprod for GitLab.com
 ## The version of the deployment is set by the
 ## VERSION file. This job runs also in nightly branch builds.
-Ubuntu-16.04-auto-deploy:
+Ubuntu-16.04-staging-auto-deploy:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload_auto_deploy
   dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
+    - Ubuntu-16.04-auto-deploy
   variables:
     TAKEOFF_ENVIRONMENT: 'pre'
   script:
