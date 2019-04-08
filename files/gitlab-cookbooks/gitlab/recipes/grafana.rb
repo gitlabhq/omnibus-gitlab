@@ -94,6 +94,18 @@ template grafana_config do
   only_if { node['gitlab']['grafana']['enable'] }
 end
 
+dashboards = {
+  'apiVersion' => 1,
+  'providers' => node['gitlab']['grafana']['dashboards']
+}
+
+file File.join(grafana_provisioning_dashboards_dir, 'gitlab_dashboards.yml') do
+  content Prometheus.hash_to_yaml(dashboards)
+  owner prometheus_user
+  mode '0644'
+  notifies :restart, 'service[grafana]'
+end
+
 datasources = {
   'apiVersion' => 1,
   'datasources' => node['gitlab']['grafana']['datasources']

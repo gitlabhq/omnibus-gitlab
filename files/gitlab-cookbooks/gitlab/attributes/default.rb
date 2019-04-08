@@ -919,6 +919,19 @@ default['gitlab']['grafana']['allowed_groups'] = []
 default['gitlab']['grafana']['gitlab_auth_endpoint'] = nil
 default['gitlab']['grafana']['gitlab_token_endpoint'] = nil
 default['gitlab']['grafana']['gitlab_user_api_endpoint'] = nil
+default['gitlab']['grafana']['dashboards'] = [
+  {
+    'name' => 'GitLab Omnibus',
+    'orgId' => 1,
+    'folder' => 'GitLab Omnibus',
+    'type' => 'file',
+    'disableDeletion' => true,
+    'updateIntervalSeconds' => 600,
+    'options' => {
+      'path' => '/opt/gitlab/embedded/service/grafana-dashboards',
+    },
+  }
+]
 default['gitlab']['grafana']['datasources'] = nil
 default['gitlab']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env'
 default['gitlab']['grafana']['env'] = {

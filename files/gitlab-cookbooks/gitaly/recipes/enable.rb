@@ -20,6 +20,10 @@ working_dir = node['gitaly']['dir']
 log_directory = node['gitaly']['log_directory']
 env_directory = node['gitaly']['env_directory']
 config_path = File.join(working_dir, "config.toml")
+gitaly_path = node['gitaly']['bin_path']
+wrapper_path = "#{gitaly_path}-wrapper"
+pid_file = File.join(working_dir, "gitaly.pid")
+json_logging = node['gitaly']['logging_format'].eql?('json')
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -47,7 +51,10 @@ node.default['gitaly']['env'] = {
   # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
   # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  # wrapper script parameters
+  'GITALY_PID_FILE' => pid_file,
+  'WRAPPER_JSON_LOGGING' => json_logging.to_s
 }
 
 env_dir env_directory do
@@ -73,7 +80,7 @@ template "Create Gitaly config.toml" do
   group account_helper.gitlab_group
   mode "0640"
   variables node['gitaly'].to_hash
-  notifies :restart, "service[gitaly]"
+  notifies :hup, "runit_service[gitaly]"
 end
 
 runit_service 'gitaly' do
@@ -83,9 +90,11 @@ runit_service 'gitaly' do
     groupname: account_helper.gitlab_group,
     working_dir: working_dir,
     env_dir: env_directory,
-    bin_path: node['gitaly']['bin_path'],
+    bin_path: gitaly_path,
+    wrapper_path: wrapper_path,
     config_path: config_path,
-    log_directory: log_directory
+    log_directory: log_directory,
+    json_logging: json_logging
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitaly'].to_hash)
 end
@@ -98,5 +107,5 @@ end
 
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitaly --version")
-  notifies :restart, "service[gitaly]"
+  notifies :hup, "runit_service[gitaly]"
 end

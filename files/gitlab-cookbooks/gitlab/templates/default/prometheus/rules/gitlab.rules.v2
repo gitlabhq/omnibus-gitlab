@@ -78,14 +78,31 @@ groups:
     annotations:
       summary: Postgres database has queries canceled due to deadlocks
       description: Postgres database {{ $labels.instance }} had {{ $value | printf "%d" }} queries canceled due to deadlocks in the last 5 minutes.
+  # Low-traffic - < 10 QPS (600 RPM)
   - alert: WorkhorseHighErrorRate
     expr: >
-      sum without (job, code) (
-        job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
-      ) /
-      sum without (job,code) (
-        job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
-      ) * 100 > 1
+      (
+        sum without (job, code) (
+          job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
+        ) /
+        sum without (job,code) (
+          job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+        ) < 10
+      ) * 100 > 50
     annotations:
       summary: Workhorse has high error rates
-      description: Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 1% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.
+      description: Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 50% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.
+  # High-traffic - >= 10 QPS (600 RPM)
+  - alert: WorkhorseHighErrorRate
+    expr: >
+      (
+        sum without (job, code) (
+          job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m{code=~"5.."}
+        ) /
+        sum without (job,code) (
+          job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
+        ) > 10
+      ) * 100 > 10
+    annotations:
+      summary: Workhorse has high error rates
+      description: Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 10% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.

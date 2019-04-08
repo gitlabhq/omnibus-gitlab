@@ -1,0 +1,5 @@
+---
+title: Add gitaly graceful restart wrapper
+merge_request: 3116
+author:
+type: added
