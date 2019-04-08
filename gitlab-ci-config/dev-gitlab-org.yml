@@ -319,9 +319,9 @@ Docker-QA:
 Ubuntu-16.04-staging:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
+  #  dependencies:
+  #  - Ubuntu-16.04
+  #  - Ubuntu-16.04-branch
   variables:
     TAKEOFF_ENVIRONMENT: 'gstg'
   script:
