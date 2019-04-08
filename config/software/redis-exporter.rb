@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require 'time'
 
 name 'redis-exporter'
-version = Gitlab::Version.new('redis-exporter', '0.26.0')
+version = Gitlab::Version.new('redis-exporter', '0.32.0')
 default_version version.print
 
 license 'MIT'
@@ -39,9 +39,6 @@ build do
     "-X main.VERSION=#{version.print(false)}"
   ].join(' ')
 
-  command 'go get github.com/Masterminds/glide', env: env
-  command 'go install github.com/Masterminds/glide', env: env
-  command '../../../../bin/glide install ', env: env
   command "go build -ldflags '#{ldflags}'", env: env
   copy 'redis_exporter', "#{install_dir}/embedded/bin/"
 
