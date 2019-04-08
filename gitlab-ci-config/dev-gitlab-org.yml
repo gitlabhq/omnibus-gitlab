@@ -20,13 +20,6 @@
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
 
-.dev-auto-deploy: &dev-auto-deploy
-  only:
-    variables:
-      - $AUTO_DEPLOY == "true"
-    refs:
-      - triggers@gitlab/omnibus-gitlab
-
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -339,7 +332,7 @@ Ubuntu-16.04-auto-deploy:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
-  <<: *dev-auto-deploy
+  <<: *dev-auto-deploy-only
 
 
 ### Package builds
