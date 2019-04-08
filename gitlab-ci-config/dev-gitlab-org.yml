@@ -179,6 +179,7 @@
     RASPBERRY_REPO: "raspberry-pi2"
   stage: raspbian-release
   retry: 2
+  <<: *dev-tag-only
   except:
     refs:
       - /.*ee\.\d/
