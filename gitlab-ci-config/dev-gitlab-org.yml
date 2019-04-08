@@ -86,7 +86,7 @@
   artifacts: *package-artifacts
   retry: 1
 
-.package_and_image:
+.package_and_image: &package-and-image
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -109,12 +109,15 @@
   retry: 1
 
 .tag_template: &tag_build
-  extends: .package_and_image
-  <<: *dev-tag-only
+  <<: *package-and-image
+  only:
+    - tags@gitlab/omnibus-gitlab
 
 .auto_deploy_template: &auto_deploy_build
-  extends: .package_and_image
-  <<: *auto-deploy-only
+  <<: *package-and-image
+  only:
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -284,12 +287,12 @@ HA-Validate-Nightly:
 Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
-  extends: .tag_template
+  <<: *tag_build
 
 Ubuntu-16.04-auto-deploy:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
-  extends: .auto_deploy_template
+  <<: *auto_deploy_build
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
