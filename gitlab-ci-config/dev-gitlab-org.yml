@@ -9,7 +9,7 @@
   only:
     - tags@gitlab/omnibus-gitlab
 
-.dev-auto-deploy-only: &dev-auto-deploy-only
+.auto-deploy-only: &auto-deploy-only
   only:
     variables:
       - $AUTO_DEPLOY == "true"
@@ -114,7 +114,7 @@
 
 .auto_deploy_template: &auto_deploy_build
   extends: .package_and_image
-  <<: *dev-auto-deploy-only
+  <<: *auto-deploy-only
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -150,7 +150,7 @@
 
 .staging_upload_auto_deploy:
   extends: .staging_upload_template
-  <<: *dev-auto-deploy-only
+  <<: *auto-deploy-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -174,7 +174,6 @@
     RASPBERRY_REPO: "raspberry-pi2"
   stage: raspbian-release
   retry: 2
-  <<: *dev-tag-only
   except:
     refs:
       - /.*ee\.\d/
