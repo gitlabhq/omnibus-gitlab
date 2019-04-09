@@ -1,0 +1,5 @@
+---
+title: 'Docker: attempt to cleanup stale pids on restart'
+merge_request: 3200
+author:
+type: added
