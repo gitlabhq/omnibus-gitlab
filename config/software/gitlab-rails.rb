@@ -56,6 +56,7 @@ if EE
   dependency 'mysql-client'
   dependency 'pgbouncer'
   dependency 'repmgr'
+  dependency 'repmgr_pg_10'
   dependency 'gitlab-elasticsearch-indexer'
 end
 
