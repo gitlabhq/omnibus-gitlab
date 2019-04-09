@@ -209,6 +209,7 @@ OpenSUSE 42.3 specs :
 update-knapsack:
   <<: *knapsack-state
   <<: *dedicated-runner
+  image: "${RUBY_IMAGE}"
   stage: post-test
   before_script: []
   script:
