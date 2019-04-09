@@ -1849,6 +1849,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_primary_role['enable'] = false
 # geo_secondary_role['enable'] = false
 
+# This is an optional identifier which Geo nodes can use to identify themselves.
+# For example, if external_url is the same for two secondaries, you must specify
+# a unique Geo node name for those secondaries.
+#
+# If it is blank, it defaults to external_url.
+# gitlab_rails['geo_node_name'] = nil
+
 ################################################################################
 ## GitLab Geo Secondary (EE only)
 ################################################################################
