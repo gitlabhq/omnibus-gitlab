@@ -18,6 +18,7 @@ stages:
   - metrics
   - slow_jobs
   - raspbian-release
+  - aws-marketplace-release
   - notification_fail
 
 variables:
