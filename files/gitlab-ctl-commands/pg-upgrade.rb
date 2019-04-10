@@ -225,6 +225,11 @@ add_command_under_category 'pg-upgrade', 'database',
   end
     die 'Something went wrong during final reconfiguration, please check the output'
   end
+
+  progress_message('Ensuring database service has been started') do
+    run_sv_command_for_service('start', 'postgresql')
+  end
+
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
   analyze_script = File.join(
     File.dirname(@db_worker.default_data_dir),
