@@ -18,7 +18,7 @@ This compiled license can be found in `/opt/gitlab/LICENSE` file.
 Starting with version 9.2, the omnibus-gitlab package ships a
 `dependency_licenses.json` file containing version and license information of
 all bundled software, including software libraries, Ruby gems that the rails
-application uses, and Javascript libraries that is required for the frontend
+application uses, and JavaScript libraries that is required for the frontend
 components. This file, being in JSON format, is easily machine parseable and
 can be used for automated checks or validations. The file may be found at
 `/opt/gitlab/dependency_licenses.json`.
