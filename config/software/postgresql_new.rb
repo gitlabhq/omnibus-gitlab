@@ -51,6 +51,7 @@ build do
   update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
+  patch source: 'copy_file_range.patch'
 
   command './configure' \
           " --prefix=#{prefix}" \
