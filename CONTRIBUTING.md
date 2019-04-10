@@ -122,7 +122,7 @@ suites where possible as part of the review process.
 
 Before merging, a MR must be reviewed by a [GitLab Omnibus Maintainer](https://about.gitlab.com/handbook/engineering/projects/#omnibus-gitlab).
 If the change is not time-sensitive, then the MR can first be reviewed by any other
-[Distribution Team Member](https://about.gitlab.com/handbook/engineering/dev-backend/distribution/#team-members),
+[Distribution Team Member](https://about.gitlab.com/handbook/engineering/development/enablement/distribution/#team-members),
 then finally reviewed by a Maintainer.
 
 Reviews generally only need the *approval* of one Maintainer to be merged, but
@@ -140,7 +140,7 @@ user-facing change that needs mentioning in the release post.
 As long as one of the Maintainers is confident in the change, it does not need to
 be reviewed again before merge.
 
-> **Note**: This process is intended to balance code quality with effective use of reviewers' time. Just because a change was approved and merged by one Maintainer, does not guarantee that it won't be reverted later. 
+> **Note**: This process is intended to balance code quality with effective use of reviewers' time. Just because a change was approved and merged by one Maintainer, does not guarantee that it won't be reverted later.
 
 ## Developer Guidelines
 
