@@ -21,11 +21,20 @@ describe GitlabCtl::PgUpgrade do
     expect(@dbw.base_path).to eq('/fakebasedir')
   end
 
-  it 'should call gitlab-psql with the appropriate command' do
-    allow_any_instance_of(Mixlib::ShellOut).to receive(:run_command)
+  it 'should call pg_command with the appropriate command' do
+    allow(GitlabCtl::Util).to receive(:parse_json_file).and_return(
+      {
+        'default' => {
+          'gitlab' => {
+            'postgresql' => {
+              'username' => 'arbitrary-user-name'
+            }
+          }
+        }
+      })
     expect(GitlabCtl::Util).to receive(
       :get_command_output
-    ).with('su - gitlab-psql -c "fake command"')
+    ).with('su - arbitrary-user-name -c "fake command"')
     @dbw.run_pg_command('fake command')
   end
 
