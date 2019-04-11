@@ -1,0 +1,5 @@
+---
+title: Stop building Ubuntu 14.04 packages
+merge_request: 3192
+author:
+type: deprecated

@@ -14,6 +14,7 @@ release for them can be found below:
 |OpenSUSE 42.2|[January 2018](https://en.opensuse.org/Lifetime#Discontinued_distributions)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/opensuse/42.2/gitlab-ce-10.4.0-ce.0.sles42.x86_64.rpm) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/opensuse/42.2/gitlab-ee-10.4.0-ee.0.sles42.x86_64.rpm) 10.4.0|
 |Debian Wheezy|[May 2018](https://www.debian.org/News/2018/20180601)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/wheezy/gitlab-ce_11.6.2-ce.0_amd64.deb) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/wheezy/gitlab-ee_11.6.2-ee.0_amd64.deb) 11.6.2|
 |Raspbian Jessie|[May 2017](https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/)|[GitLab CE](https://packages.gitlab.com/gitlab/raspberry-pi2/packages/raspbian/jessie/gitlab-ce_11.7.0-ce.0_armhf.deb) 11.7.0|
+|Ubuntu 14.04|[April 2019](https://www.ubuntu.com/info/release-end-of-life)|[GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_11.10.0-ce.0_amd64.deb) / [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee/packages/ubuntu/trusty/gitlab-ee_11.10.0-ee.0_amd64.deb) 11.10.0|
 
 ## Supported Operating Systems
 
@@ -34,7 +35,6 @@ The following lists the currently supported OSs and their possible EOL dates.
 |Debian 9|GitLab CE / GitLab EE 9.3.0|2022|https://wiki.debian.org/DebianReleases#Production_Releases|
 |OpenSUSE 42.3|GitLab CE / GitLab EE 10.4.0|Jan 2019|https://en.opensuse.org/Lifetime|
 |SLES 12|GitLab EE 9.0.0|Oct 2027|https://www.suse.com/lifecycle/|
-|Ubuntu 14.04|GitLab CE / GitLab EE 7.10.0|April 2019|https://wiki.ubuntu.com/Releases|
 |Ubuntu 16.04|GitLab CE / GitLab EE 8.7.1|April 2021|https://wiki.ubuntu.com/Releases|
 |Ubuntu 18.04|GitLab CE / GitLab EE 10.7.0|April 2023|https://wiki.ubuntu.com/Releases|
 |Raspbian Stretch|GitLab CE 11.1.0|June 2020|https://wiki.debian.org/DebianReleases#Production_Releases|
