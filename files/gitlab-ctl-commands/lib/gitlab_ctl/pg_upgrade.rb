@@ -36,7 +36,8 @@ module GitlabCtl
     end
 
     def run_pg_command(command)
-      GitlabCtl::Util.get_command_output("su - gitlab-psql -c \"#{command}\"")
+      pg_username = GitlabCtl::Util.get_node_attributes(@base_path)[:gitlab][:postgresql][:username]
+      GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"")
     end
 
     def fetch_running_version
