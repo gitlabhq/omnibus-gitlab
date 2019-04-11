@@ -15,7 +15,7 @@
 #
 
 name 'libtool'
-default_version '2.4'
+default_version '2.4.6'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 
 # NOTE: 2.4.6 2.4.2 do not compile on solaris2 yet
-version('2.4') { source md5: 'b32b04148ecdd7344abc6fe8bd1bb021' }
+version('2.4.6') { source sha256: 'e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3' }
 
 source url: "https://ftp.gnu.org/gnu/libtool/libtool-#{version}.tar.gz"
 
