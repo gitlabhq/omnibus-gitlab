@@ -1,0 +1,5 @@
+---
+title: Stop raspberry pi builds during nightlies
+merge_request: !3199
+author: John T Skarbek
+type: other

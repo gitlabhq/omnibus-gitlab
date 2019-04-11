@@ -73,6 +73,7 @@
       - /.*-stable-ee/
     variables:
       - $ee == "true"
+      - $NIGHTLY == "true"
   artifacts: *package-artifacts
   retry: 1
 
