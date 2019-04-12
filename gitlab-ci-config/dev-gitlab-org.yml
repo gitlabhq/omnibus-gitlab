@@ -183,6 +183,8 @@ Ubuntu-16.04-branch:
     # since it is necessary for gitlab.com
     variables:
       - $AUTO_DEPLOY == "true"
+  except:
+    variables: []
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -215,6 +217,9 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
   tags:
   - docker-builder
   cache: *branch-cache
@@ -240,6 +245,9 @@ QA-Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
   tags:
   - docker-builder
   cache: *branch-cache
