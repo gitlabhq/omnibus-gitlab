@@ -239,6 +239,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
 
+### Error Reporting and Logging with Sentry
+# gitlab_rails['sentry_enabled'] = false
+# gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+# gitlab_rails['sentry_environment'] = 'production'
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
