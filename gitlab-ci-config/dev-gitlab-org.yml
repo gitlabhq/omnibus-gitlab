@@ -315,7 +315,7 @@ Ubuntu-16.04-staging:
 ## Auto-deploy to pre.gitlab.com for GitLab.com
 ## The version of the deployment is set by the
 ## VERSION file. This job runs also in nightly branch builds.
-Ubuntu-16.04-staging:
+Ubuntu-16.04-staging-auto-deploy:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   dependencies:
