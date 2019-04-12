@@ -55,6 +55,8 @@
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
+  except:
+      - $AUTO_DEPLOY == "true"
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
@@ -129,6 +131,9 @@
   - promotion
   only:
   - tags@gitlab/omnibus-gitlab
+  except:
+    vars:
+      - $AUTO_DEPLOY == "true"
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -170,6 +175,13 @@ Ubuntu-16.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .branch_template
+  only:
+    refs:
+    - branches@gitlab/omnibus-gitlab
+    # We allow this job to be run for AUTO_DEPLOY pipelines
+    # since it is necessary for gitlab.com
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -299,6 +311,24 @@ Ubuntu-16.04-staging:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
   <<: *dev-except-branches
+
+## Auto-deploy to pre.gitlab.com for GitLab.com
+## The version of the deployment is set by the
+## VERSION file. This job runs also in nightly branch builds.
+Ubuntu-16.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-16.04
+    - Ubuntu-16.04-branch
+  variables:
+    TAKEOFF_ENVIRONMENT: 'pre'
+  script:
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+  only:
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 ### Package builds
 Ubuntu-18.04:
