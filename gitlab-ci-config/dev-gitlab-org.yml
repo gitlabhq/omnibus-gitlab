@@ -9,16 +9,6 @@
   only:
     - tags@gitlab/omnibus-gitlab
 
-.auto-deploy-only: &auto-deploy-only
-  only:
-    variables:
-      - $AUTO_DEPLOY == "true"
-
-.except-auto-deploy: &except-auto-deploy
-  except:
-    variables:
-      - $AUTO_DEPLOY == "true"
-
 .dev-except-branches: &dev-except-branches
    only:
     - tags@gitlab/omnibus-gitlab
@@ -69,7 +59,6 @@
   dependencies:
     - fetch-assets
   cache: *branch-cache
-  <<: *except-auto-deploy
   retry: 1
 
 .rpi_branch_template: &rpi_branch_build
@@ -89,7 +78,7 @@
   artifacts: *package-artifacts
   retry: 1
 
-.package_and_image: &package-and-image
+.tag_template: &tag_build
   stage: package-and-image
   script:
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
@@ -105,20 +94,12 @@
     - bundle exec rake cache:bundle
   tags:
   - docker-builder
+  <<: *dev-tag-only
   artifacts: *package-artifacts-release
   dependencies:
     - fetch-assets
   cache: *tag-cache
   retry: 1
-
-.tag_template: &tag_build
-  <<: *package-and-image
-  <<: *dev-tag-only
-  <<: *except-auto-deploy
-
-.auto_deploy_template: &auto_deploy_build
-  <<: *package-and-image
-  <<: *auto-deploy-only
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -132,13 +113,11 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
-      - $AUTO_DEPLOY == "true"
 
-### This stages are used for uploading packages
+### This stage is used for uploading packages
 ### 1. To a staging package repository
 ### 2. Always ran on dev.gitlab.org
-
-.staging_upload_template:
+.staging_upload_template: &staging_upload
   stage: staging_upload
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   script:
@@ -148,14 +127,8 @@
   retry: 2
   tags:
   - promotion
-
-.staging_upload:
-  extends: .staging_upload_template
-  <<: *dev-tag-only
-
-.staging_upload_auto_deploy:
-  extends: .staging_upload_template
-  <<: *auto-deploy-only
+  only:
+  - tags@gitlab/omnibus-gitlab
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -229,7 +202,6 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy
   tags:
   - docker-builder
   cache: *branch-cache
@@ -255,7 +227,6 @@ QA-Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy
   tags:
   - docker-builder
   cache: *branch-cache
@@ -294,11 +265,6 @@ Ubuntu-16.04:
   stage: gitlab_com:package
   extends: .tag_template
 
-Ubuntu-16.04-auto-deploy:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
-  extends: .auto_deploy_template
-
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -323,7 +289,7 @@ Docker-QA:
 ## VERSION file. This job runs also in nightly branch builds.
 Ubuntu-16.04-staging:
   stage: gitlab_com:upload_deploy
-  extends: .staging_upload
+  extends: .staging_upload_template
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
@@ -333,20 +299,6 @@ Ubuntu-16.04-staging:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
   <<: *dev-except-branches
-
-## Upload and deploy to preprod for GitLab.com
-## The version of the deployment is set by the
-## VERSION file. This job runs also in nightly branch builds.
-Ubuntu-16.04-staging-auto-deploy:
-  stage: gitlab_com:upload_deploy
-  extends: .staging_upload_auto_deploy
-  dependencies:
-    - Ubuntu-16.04-auto-deploy
-  variables:
-    TAKEOFF_ENVIRONMENT: 'pre'
-  script:
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
 
 ### Package builds
 Ubuntu-18.04:
@@ -411,44 +363,43 @@ Docker:
 
 ### Staging uploads
 Ubuntu-18.04-staging:
-  extends: .staging_upload
   dependencies:
     - Ubuntu-18.04
     - Ubuntu-18.04-branch
+  <<: *staging_upload
 Debian-8-staging:
-  extends: .staging_upload
   dependencies:
     - Debian-8
     - Debian-8-branch
+  <<: *staging_upload
 Debian-9.1-staging:
-  extends: .staging_upload
   dependencies:
     - Debian-9.1
     - Debian-9.1-branch
+  <<: *staging_upload
 CentOS-6-staging:
-  extends: .staging_upload
   dependencies:
     - CentOS-6
     - CentOS-6-branch
+  <<: *staging_upload
 CentOS-7-staging:
-  extends: .staging_upload
   dependencies:
     - CentOS-7
     - CentOS-7-branch
+  <<: *staging_upload
 OpenSUSE-42.3-staging:
-  extends: .staging_upload
   dependencies:
     - OpenSUSE-42.3
     - OpenSUSE-42.3-branch
+  <<: *staging_upload
 SLES-12-staging:
-  extends: .staging_upload
   dependencies:
     - SLES-12
     - SLES-12-branch
   only:
     refs:
       - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy
+  <<: *staging_upload
 
 ### Package releases
 Ubuntu-16.04-release:
