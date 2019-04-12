@@ -132,7 +132,7 @@
   only:
   - tags@gitlab/omnibus-gitlab
   except:
-    vars:
+    variables:
       - $AUTO_DEPLOY == "true"
 
 ### This stage is ran only on tag:
