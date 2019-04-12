@@ -56,6 +56,7 @@
   only:
     - branches@gitlab/omnibus-gitlab
   except:
+    variables:
       - $AUTO_DEPLOY == "true"
   artifacts: *package-artifacts
   dependencies:
