@@ -310,6 +310,12 @@ Ubuntu-16.04-staging:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+  only:
+    - tags@gitlab/omnibus-gitlab
+    - schedules@gitlab/omnibus-gitlab
+    - triggers@gitlab/omnibus-gitlab
+
+
   <<: *dev-except-branches
 
 ## Auto-deploy to pre.gitlab.com for GitLab.com
@@ -329,6 +335,8 @@ Ubuntu-16.04-staging-auto-deploy:
   only:
     variables:
       - $AUTO_DEPLOY == "true"
+  except:
+    variables: []
 
 ### Package builds
 Ubuntu-18.04:
