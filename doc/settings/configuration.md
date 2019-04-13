@@ -22,14 +22,16 @@ external_url "http://gitlab.example.com"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-NOTE: **Note:** After you change the external URL, it is recommended that you also
+NOTE: **Note:**
+After you change the external URL, it is recommended that you also
 [invalidate the Markdown cache](https://docs.gitlab.com/ce/administration/invalidate_markdown_cache.html).
 
 ## Configuring a relative URL for Gitlab
 
-_**Note:** Relative URL support in Omnibus GitLab is **experimental** and was
+NOTE: **Note:**
+Relative URL support in Omnibus GitLab is **experimental** and was
 [introduced][590] in version 8.5. For source installations there is a
-[separate document](https://docs.gitlab.com/ce/install/relative_url.html)._
+[separate document](https://docs.gitlab.com/ce/install/relative_url.html).
 
 ---
 
@@ -338,6 +340,80 @@ redis['home'] = "/var/opt/redis-gitlab"
 # And so on for users/groups for GitLab Mattermost
 ```
 
+### Moving the home directory for a user
+
+NOTE: **Note:**
+For the GitLab user, it is recommended that the home directory
+is set in local disk (ie not NFS) for better performance. When setting it in
+NFS, git requests will need to make another network request to read the git
+configuration and will increase latency in git operations.
+
+In order to move an existing home directory, GitLab services will need to be stopped and some downtime is required.
+
+1. Stop GitLab
+```
+gitlab-ctl stop
+```
+
+2. Stop the runit server.
+```
+# Using systemctl (Debian => 9 - Stretch):
+sudo systemctl stop gitlab-runsvdir
+
+#Using upstart (Ubuntu <= 14.04):
+sudo initctl stop gitlab-runsvdir
+
+#Using systemd (CentOS, Ubuntu >= 16.04):
+systemctl stop gitlab-runsvdir.service
+```
+
+3. Change the home directory. If you had existing data you will need to manually copy/rsync it to these new locations.
+```
+usermod -d /path/to/home USER
+```
+
+4. Change the configuration setting in your `gitlab.rb`.
+```
+user['home'] = "/var/opt/custom-gitlab"
+```
+
+5. Start the runit server
+```
+# Using systemctl (Debian => 9 - Stretch):
+sudo systemctl start gitlab-runsvdir
+
+#Using upstart (Ubuntu <= 14.04):
+sudo initctl start gitlab-runsvdir
+
+#Using systemd (CentOS, Ubuntu >= 16.04):
+systemctl start gitlab-runsvdir.service
+```
+
+
+
+6. Run a reconfigure
+
+```
+gitlab-ctl reconfigure
+```
+
+
+If the runnit service is not stopped and the home directories are not manually
+moved for the user, GitLab will encounter an error while reconfiguring:
+
+```
+account[GitLab user and group] (gitlab::users line 28) had an error: Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/package/resources/account.rb line 51) had an error: Mixlib::ShellOut::ShellCommandFailed: Expected process to exit with [0], but received '8'
+---- Begin output of ["usermod", "-d", "/var/opt/gitlab", "git"] ----
+STDOUT:
+STDERR: usermod: user git is currently used by process 1234
+---- End output of ["usermod", "-d", "/var/opt/gitlab", "git"] ----
+Ran ["usermod", "-d", "/var/opt/gitlab", "git"] returned 8
+
+```
+
+Please make sure to follow the above instructions to avoid this
+issue.
+
 ## Disable storage directories management
 
 The omnibus-gitlab package takes care of creating all the necessary directories
@@ -428,7 +504,8 @@ To enable Rails metrics again, create a `tmpfs` mount and specify it in `/etc/gi
 runtime_dir '/path/to/tmpfs'
 ```
 
-*Please note that there is no `=` in the configuration.*
+NOTE: **Note:**
+Please note that there is no `=` in the configuration.
 
 Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 
@@ -490,8 +567,8 @@ gitlab_rails['rack_attack_protected_paths'] = [
 ]
 ```
 
-_**Note:** All paths are relative to the gitlab url._
-Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
+NOTE: **Note:**
+All paths are relative to the gitlab url. Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
 
 **Warning** If path contains variables which need to be
 interpolated by rails(ex. `#{API::API.version}`)
