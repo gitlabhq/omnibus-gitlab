@@ -9,23 +9,26 @@ namespace :gitlab_com do
       abort "This task requires #{env_var} to be set" unless ENV[env_var]
     end
 
-    latest_tag = Build::Info.latest_tag
-    unless Build::Check.match_tag?(latest_tag)
-      puts "#{latest_tag} is not the latest tag, not doing anything."
-      exit
-    end
-
     unless Build::Info.package == "gitlab-ee"
       puts "#{Build::Info.package} is not an ee package, not doing anything."
       exit
     end
 
+    unless Gitlab::Util.get_env('AUTO_DEPLOY')
+      latest_tag = Build::Info.latest_tag
+      unless Build::Check.match_tag?(latest_tag)
+        puts "#{latest_tag} is not the latest tag, not doing anything."
+        exit
+      end
+    end
+
     trigger_token = Gitlab::Util.get_env('TAKEOFF_TRIGGER_TOKEN')
     deploy_env = Gitlab::Util.get_env('TAKEOFF_ENVIRONMENT')
 
-    # there is only support for staging deployments
-    # from ci at this time, error here for safety.
-    raise NotImplementedError, "Environment #{deploy_env} not supported" unless deploy_env == "gstg"
+    # We do not support auto-deployments or triggered deployments
+    # to production from the omnibus pipeline, this check is here
+    # for safety
+    raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env.include?('gprd')
 
     takeoff_helper = TakeoffHelper.new(trigger_token, deploy_env)
     url = takeoff_helper.trigger_deploy
