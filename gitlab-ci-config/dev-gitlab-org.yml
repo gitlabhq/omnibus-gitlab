@@ -335,9 +335,6 @@ Ubuntu-16.04-staging-auto-deploy:
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
-  only:
-    variables:
-      - $AUTO_DEPLOY == "true"
   except:
     variables: []
 
