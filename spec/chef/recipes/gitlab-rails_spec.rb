@@ -277,11 +277,14 @@ describe 'gitlab::gitlab-rails' do
 
     context 'when sentry is enabled' do
       before do
-        stub_gitlab_rb(gitlab_rails: {
-          sentry_enabled: true,
-          sentry_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
-          sentry_environment: 'testing'
-        })
+        stub_gitlab_rb(
+          gitlab_rails:
+          {
+            sentry_enabled: true,
+            sentry_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            sentry_environment: 'testing'
+          }
+        )
       end
 
       it "sets the sentry configuration" do
