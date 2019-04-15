@@ -263,6 +263,18 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'when sentry is disabled' do
+      it 'should set sentry variable to nil' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'sentry_enabled' => false,
+            'sentry_dsn' => nil,
+            'sentry_environment' => nil
+          )
+        )
+      end
+    end
+
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
