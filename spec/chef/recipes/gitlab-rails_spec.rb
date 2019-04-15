@@ -275,6 +275,26 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'when sentry is enabled' do
+      before do
+        stub_gitlab_rb(gitlab_rails: {
+          sentry_enabled: true,
+          sentry_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+          sentry_environment: 'testing'
+        })
+      end
+
+      it "sets the sentry configuration" do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'sentry_enabled' => true,
+            'sentry_dsn' => 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            'sentry_environment' => 'testing'
+          )
+        )
+      end
+    end
+
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
