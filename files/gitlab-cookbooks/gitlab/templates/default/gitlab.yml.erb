@@ -88,6 +88,11 @@ production: &base
     ## Impersonation settings
     impersonation_enabled: <%= @impersonation_enabled %>
 
+    ## Error Reporting and Logging with Sentry
+    sentry_enabled: <%= @sentry_enabled %>
+    sentry_dsn: <%= @sentry_dsn %>
+    sentry_environment: <%= @sentry_environment %> # e.g. development, staging, production
+
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
   ## Reply by email
