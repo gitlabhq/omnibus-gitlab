@@ -14,6 +14,9 @@
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $AUTO_DEPLOY == "true"
 
 .package-artifacts: &package-artifacts
   when: always
@@ -318,7 +321,7 @@ Ubuntu-16.04-staging:
 ## This `Ubuntu-16.04` job is repeated because currently
 ## we deploy to two environments, preprod and staging. Eventually
 ## we will only deploy to staging
-Ubuntu-16.04-staging-auto-deploy:
+Ubuntu-16.04-pre-auto-deploy:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   dependencies:
