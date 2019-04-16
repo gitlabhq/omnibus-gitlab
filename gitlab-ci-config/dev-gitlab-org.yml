@@ -14,9 +14,9 @@
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
-  except:
-    variables:
-      - $AUTO_DEPLOY == "true"
+   except:
+     variables:
+       - $AUTO_DEPLOY == "true"
 
 .package-artifacts: &package-artifacts
   when: always
