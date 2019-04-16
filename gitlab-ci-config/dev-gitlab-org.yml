@@ -62,7 +62,6 @@
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy-tag
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
@@ -121,6 +120,7 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -135,9 +135,7 @@
   retry: 2
   tags:
   - promotion
-  only:
-  - tags@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy-tag
+  <<: *dev-tag-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -211,7 +209,6 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy-tag
   tags:
   - docker-builder
   cache: *branch-cache
@@ -237,7 +234,6 @@ QA-Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy-tag
   tags:
   - docker-builder
   cache: *branch-cache
@@ -554,7 +550,6 @@ HA-Validate-Tagged:
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
-  <<: *except-auto-deploy-tag
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:

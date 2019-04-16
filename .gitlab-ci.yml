@@ -111,8 +111,8 @@ notify:slack-fail:
     - apk update && apk add git curl bash
   image: "alpine"
   stage: notification_fail
-  script:
-    - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+  script: []
+  # - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
   only:
     - master
