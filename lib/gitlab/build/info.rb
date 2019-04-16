@@ -22,7 +22,10 @@ module Build
       # different.
       # To resolve this, we append a PIPELINE_ID to change the name of the package
       def semver_version
-        if Build::Check.on_tag?
+        if Build::Check.is_auto_deploy?
+          match = Build::Check::AUTO_DEPLOY_TAG_REGEX.match(`git describe --exact-match`)
+          [match[1..2], "0+#{match[3]}"].compact.join('.')
+        elsif Build::Check.on_tag?
           # timestamp is disabled in omnibus configuration
           Omnibus.load_configuration('omnibus.rb')
           Omnibus::BuildVersion.semver
