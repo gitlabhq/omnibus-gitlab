@@ -313,6 +313,8 @@ Ubuntu-16.04-upload-deploy:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
   <<: *dev-except-branches
+  except:
+    variables: []
 
 ### Package builds
 Ubuntu-18.04:
