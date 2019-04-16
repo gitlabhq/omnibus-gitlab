@@ -20,7 +20,7 @@
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
-  <<: *except-auto-deploy-tag
+   <<: *except-auto-deploy-tag
 
 .package-artifacts: &package-artifacts
   when: always
