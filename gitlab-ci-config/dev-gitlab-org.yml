@@ -179,8 +179,6 @@ Ubuntu-16.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .branch_template
-  except:
-    variables: []
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -277,6 +275,9 @@ Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
+  # Also build for auto-deployt tags
+  except:
+    variables: []
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -351,6 +352,7 @@ dependency_scanning:
     - manifest=pkg/ubuntu-xenial/*.version-manifest.json
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
+  <<: *except-auto-deploy-tag
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
@@ -546,11 +548,13 @@ HA-Validate-Tagged:
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
+  <<: *except-auto-deploy-tag
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
   <<: *raspbian_release
+  <<: *except-auto-deploy-tag
 
 AWS-Marketplace-release:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
@@ -565,5 +569,6 @@ AWS-Marketplace-release:
   except:
     variables:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
+      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
   dependencies:
     - AWS
