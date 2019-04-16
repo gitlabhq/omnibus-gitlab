@@ -5,7 +5,7 @@
 # Templates #
 #############
 
-.except_auto_deploy_tag: &except_auto_deploy_tag
+.except-auto-deploy-tag: &except-auto-deploy-tag
   except:
     variables:
       # Format of the auto-deploy tag
@@ -20,7 +20,7 @@
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
-  <<: *except_auto_deploy_tag
+  <<: *except-auto-deploy-tag
 
 .package-artifacts: &package-artifacts
   when: always
@@ -62,7 +62,7 @@
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except_auto_deploy_tag
+  <<: *except-auto-deploy-tag
   artifacts: *package-artifacts
   dependencies:
     - fetch-assets
@@ -137,7 +137,7 @@
   - promotion
   only:
   - tags@gitlab/omnibus-gitlab
-  <<: *except_auto_deploy_tag
+  <<: *except-auto-deploy-tag
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -213,7 +213,7 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except_auto_deploy_tag
+  <<: *except-auto-deploy-tag
   tags:
   - docker-builder
   cache: *branch-cache
@@ -239,7 +239,7 @@ QA-Master:
   allow_failure: true
   only:
     - branches@gitlab/omnibus-gitlab
-  <<: *except_auto_deploy_tag
+  <<: *except-auto-deploy-tag
   tags:
   - docker-builder
   cache: *branch-cache
