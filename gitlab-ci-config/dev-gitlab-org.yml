@@ -14,13 +14,13 @@
 .dev-tag-only: &dev-tag-only
   only:
     - tags@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy-tag
 
 .dev-except-branches: &dev-except-branches
    only:
     - tags@gitlab/omnibus-gitlab
     - schedules@gitlab/omnibus-gitlab
     - triggers@gitlab/omnibus-gitlab
-   <<: *except-auto-deploy-tag
 
 .package-artifacts: &package-artifacts
   when: always
