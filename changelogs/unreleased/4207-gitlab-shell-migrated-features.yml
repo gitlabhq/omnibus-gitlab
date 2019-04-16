@@ -1,0 +1,5 @@
+---
+title: Support gitlab-shell feature flags through gitlab.rb
+merge_request: 3215
+author:
+type: added
