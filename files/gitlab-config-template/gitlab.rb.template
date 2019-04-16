@@ -748,6 +748,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
+# gitlab_shell['migration'] = { enabled: true, features: [] }
+
 ### Git trace log file.
 ###! If set, git commands receive GIT_TRACE* environment variables
 ###! Docs: https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging

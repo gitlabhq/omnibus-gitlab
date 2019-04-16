@@ -63,7 +63,8 @@ describe 'gitlab::gitlab-shell' do
         hash_including(
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
           log_format: nil,
-          custom_hooks_dir: nil
+          custom_hooks_dir: nil,
+          migration: nil
         )
       )
     end
@@ -140,7 +141,11 @@ describe 'gitlab::gitlab-shell' do
       stub_gitlab_rb(
         gitlab_shell: {
           custom_hooks_dir: '/fake/dir',
-          log_format: 'json'
+          log_format: 'json',
+          migration: {
+            enabled: true,
+            features: ['discover']
+          }
         }
       )
     end
@@ -149,7 +154,11 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
         hash_including(
           custom_hooks_dir: '/fake/dir',
-          log_format: 'json'
+          log_format: 'json',
+          migration: {
+            enabled: true,
+            features: ['discover']
+          }
         )
       )
     end
