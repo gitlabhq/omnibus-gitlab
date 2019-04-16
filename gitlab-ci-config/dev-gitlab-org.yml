@@ -9,7 +9,7 @@
   except:
     variables:
       # Format of the auto-deploy tag
-      - '$CI_COMMIT_TAG =~ /^\d+-\d+-[^s]+-[^s]/'
+      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
 
 .dev-tag-only: &dev-tag-only
   only:
@@ -82,7 +82,7 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
-      - '$CI_COMMIT_TAG =~ /^\d+-\d+-[^s]+-[^s]/'
+      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
   artifacts: *package-artifacts
   retry: 1
 
