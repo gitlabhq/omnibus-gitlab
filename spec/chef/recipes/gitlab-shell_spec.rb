@@ -64,7 +64,7 @@ describe 'gitlab::gitlab-shell' do
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
           log_format: nil,
           custom_hooks_dir: nil,
-          migration: nil
+          migration: { enabled: true, features: [] }
         )
       )
     end
