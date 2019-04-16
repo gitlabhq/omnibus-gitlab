@@ -162,5 +162,29 @@ describe 'gitlab::gitlab-shell' do
         )
       )
     end
+
+    context 'migration is disabled (set to false)' do
+      before do
+        stub_gitlab_rb(
+          gitlab_shell: {
+            migration: {
+              enabled: false,
+              features: []
+            }
+          }
+        )
+      end
+
+      it 'creates the config file with migration disabled' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            migration: {
+              enabled: false,
+              features: []
+            }
+          )
+        )
+      end
+    end
   end
 end
