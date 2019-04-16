@@ -88,11 +88,6 @@ production: &base
     ## Impersonation settings
     impersonation_enabled: <%= @impersonation_enabled %>
 
-    ## Error Reporting and Logging with Sentry
-    sentry_enabled: <%= @sentry_enabled %>
-    sentry_dsn: <%= @sentry_dsn %>
-    sentry_environment: <%= @sentry_environment %> # e.g. development, staging, production
-
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
   ## Reply by email
@@ -208,6 +203,12 @@ production: &base
     path: <%= @registry_path %>
     key: <%= @registry_key_path %>
     issuer: <%= @registry_issuer %>
+
+  ## Error Reporting and Logging with Sentry
+  sentry:
+    enabled: <%= @sentry_enabled %>
+    dsn: <%= @sentry_dsn %>
+    environment: <%= @sentry_environment %> # e.g. development, staging, production
 
   mattermost:
     enabled: <%= @mattermost_enabled %>
