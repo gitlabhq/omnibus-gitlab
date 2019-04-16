@@ -42,7 +42,8 @@ class TakeoffHelper
       'DEPLOY_ENVIRONMENT': @deploy_env,
       'DEPLOY_VERSION': Gitlab::Util.get_env('TAKEOFF_VERSION') || release,
       'DEPLOY_REPO': Gitlab::Util.get_env('TAKEOFF_DEPLOY_REPO') || 'gitlab/pre-release',
-      'DEPLOY_USER': Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff'
+      'DEPLOY_USER': Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff',
+      'CHECKMODE': '--check'
     }
   end
 end
