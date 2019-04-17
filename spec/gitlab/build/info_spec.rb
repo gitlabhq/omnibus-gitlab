@@ -4,6 +4,7 @@ require 'gitlab/build/info'
 describe Build::Info do
   before do
     allow(ENV).to receive(:[]).and_call_original
+    allow(Build::Check).to receive(:git_exact_match).and_return('abcdefghi')
   end
 
   describe '.package' do
@@ -167,6 +168,14 @@ describe Build::Info do
         allow(Build::Info).to receive(:package).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
       end
+    end
+  end
+
+  describe '.semver_version' do
+    it 'returns the correct semver for auto-deploy' do
+      allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
+      allow(Build::Check).to receive(:git_exact_match).and_return('11.10.12345+aaaaaaaaaaa-bbbbbbbbb')
+      expect(described_class.semver_version).to eq('11.10.12345+aaaaaaaaaaa-bbbbbbbbb')
     end
   end
 end
