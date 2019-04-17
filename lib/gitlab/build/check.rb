@@ -54,7 +54,7 @@ module Build
       end
 
       def git_exact_match
-        `git describe --exact-match`
+        `git describe --exact-match`.chomp
       end
     end
   end
