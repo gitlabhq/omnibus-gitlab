@@ -20,10 +20,6 @@ module Build
         AUTO_DEPLOY_TAG_REGEX_CAPTURE.match?(git_exact_match)
       end
 
-      def auto_deploy_match
-        AUTO_DEPLOY_TAG_REGEX_CAPTURE.match(git_exact_match)
-      end
-
       def is_patch_release?
         # Major and minor releases have patch component as zero
         Info.semver_version.split(".")[-1] != "0"

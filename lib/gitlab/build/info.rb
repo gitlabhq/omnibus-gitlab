@@ -30,8 +30,7 @@ module Build
       # To resolve this, we append a PIPELINE_ID to change the name of the package
       def semver_version
         if Build::Check.is_auto_deploy?
-          match = Build::Check::auto_deploy_match
-          [match['major'], match['minor'], "#{match['pipeline_id']}+#{match['shas']}"].join('.')
+          Build::Check.git_exact_match
         elsif Build::Check.on_tag?
           # timestamp is disabled in omnibus configuration
           Omnibus.load_configuration('omnibus.rb')
