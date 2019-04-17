@@ -305,7 +305,7 @@ Ubuntu-16.04-upload-deploy:
     - Ubuntu-16.04-branch
   script:
     - |
-      if echo $CI_COMMIT_TAG | grep -qE '^\d+\.\d+\.[^ ]+\+[^ ]+$' ]; then
+      if echo $CI_COMMIT_TAG | grep -P -q '^\d+\.\d+\.[^ ]+\+[^ ]+$' ]; then
         export TAKEOFF_ENVIRONMENT='pre';
       else
         export TAKEOFF_ENVIRONMENT='gstg';
