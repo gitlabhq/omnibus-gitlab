@@ -9,7 +9,7 @@
   except:
     variables:
       # Format of the auto-deploy tag
-      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 .dev-tag-only: &dev-tag-only
   only:
@@ -81,7 +81,7 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
-      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   artifacts: *package-artifacts
   retry: 1
 
@@ -120,7 +120,7 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
-      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -305,7 +305,7 @@ Ubuntu-16.04-upload-deploy:
     - Ubuntu-16.04-branch
   script:
     - |
-      if echo $CI_COMMIT_TAG | grep -qE '^\d+-\d+-.*-ee$' ]; then
+      if echo $CI_COMMIT_TAG | grep -qE '^\d+\.\d+\.[^ ]+\+[^ ]+$' ]; then
         export TAKEOFF_ENVIRONMENT='pre';
       else
         export TAKEOFF_ENVIRONMENT='gstg';
@@ -570,6 +570,6 @@ AWS-Marketplace-release:
   except:
     variables:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
-      - $CI_COMMIT_TAG =~ /^\d+-\d+-.*-ee$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   dependencies:
     - AWS
