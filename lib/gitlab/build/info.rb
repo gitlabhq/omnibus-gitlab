@@ -16,13 +16,22 @@ module Build
         "gitlab-ce"
       end
 
+      # For auto-deploy builds, we set the semver to the following which is
+      # derived directly from the auto-deploy tag:
+      #   MAJOR.MINOR.PIPELINE_ID+<ee ref>-<omnibus ref>
+      # The PIPELINE ID is *not* the ID of the omnibus pipeline, but the ID of the
+      # CI job that tagged the auto-deploy release
+      #
+      #
       # For nightly builds we fetch all GitLab components from master branch
       # If there was no change inside of the omnibus-gitlab repository, the
       # package version will remain the same but contents of the package will be
       # different.
       # To resolve this, we append a PIPELINE_ID to change the name of the package
       def semver_version
-        if Build::Check.on_tag?
+        if Build::Check.is_auto_deploy?
+          Build::Check.git_exact_match
+        elsif Build::Check.on_tag?
           # timestamp is disabled in omnibus configuration
           Omnibus.load_configuration('omnibus.rb')
           Omnibus::BuildVersion.semver

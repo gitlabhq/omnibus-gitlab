@@ -2,9 +2,10 @@ require 'gitlab'
 require_relative "util.rb"
 
 class TakeoffHelper
-  def initialize(trigger_token, deploy_env)
+  def initialize(trigger_token, deploy_env, trigger_branch)
     @deploy_env = deploy_env
     @trigger_token = trigger_token
+    @trigger_branch = trigger_branch
     Gitlab.endpoint = "https://#{trigger_host}/api/v4"
   end
 
@@ -17,7 +18,7 @@ class TakeoffHelper
     response = client.run_trigger(
       trigger_project,
       @trigger_token,
-      :master,
+      @trigger_branch,
       takeoff_env_vars
     )
     response.web_url
@@ -41,7 +42,8 @@ class TakeoffHelper
       'DEPLOY_ENVIRONMENT': @deploy_env,
       'DEPLOY_VERSION': Gitlab::Util.get_env('TAKEOFF_VERSION') || release,
       'DEPLOY_REPO': Gitlab::Util.get_env('TAKEOFF_DEPLOY_REPO') || 'gitlab/pre-release',
-      'DEPLOY_USER': Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff'
+      'DEPLOY_USER': Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff',
+      'CHECKMODE': '--check'
     }
   end
 end
