@@ -13,11 +13,11 @@ function ee_branch_name(){
 }
 
 function is_auto_deploy_tag(){
-  echo "$CI_COMMIT_TAG" | grep -q -E '^\d+\.\d+\.[^ ]+\+[^ ]+$'
+  echo "$CI_COMMIT_TAG" | grep -q -E -- '^\d+\.\d+\.[^ ]+\+[^ ]+$'
 }
 
 function is_auto_deploy_branch(){
-  echo "$CI_COMMIT_REF_NAME" | grep -q  '-auto-deploy-'
+  echo "$CI_COMMIT_REF_NAME" | grep -q -- '-auto-deploy-'
 }
 echo "commit tag: $CI_COMMIT_TAG"
 echo "commit ref: $CI_COMMIT_REF_NAME"
