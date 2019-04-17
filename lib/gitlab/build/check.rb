@@ -19,19 +19,19 @@ module Build
         Info.semver_version.split(".")[-1] != "0"
       end
 
-      def is_rc_release?
+      def is_rc_tag?
         `git describe --exact-match`.include?("+rc")
       end
 
-      def add_latest_tag?
+      def is_latest_stable_tag?
         match_tag?(Info.latest_stable_tag)
       end
 
-      def add_rc_tag?
+      def is_latest_tag?
         match_tag?(Info.latest_tag)
       end
 
-      def add_nightly_tag?
+      def is_nightly?
         Gitlab::Util.get_env('NIGHTLY') == 'true'
       end
 

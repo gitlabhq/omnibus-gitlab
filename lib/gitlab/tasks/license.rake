@@ -34,7 +34,7 @@ namespace :license do
   desc "Generate license file of current release and push to AWS bucket"
   task :upload do
     # This is done on Ubuntu 18.04 non-rc tag pipeline only
-    License::Uploader.new.execute unless Build::Check.is_rc_release?
+    License::Uploader.new.execute unless Build::Check.is_rc_tag?
   end
 
   desc "Collect all license files and generate index page"

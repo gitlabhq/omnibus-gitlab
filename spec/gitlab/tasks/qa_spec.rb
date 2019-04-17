@@ -50,7 +50,7 @@ describe 'qa', type: :rake do
     end
 
     it 'pushes nightly images correctly' do
-      expect(Build::Check).to receive(:add_nightly_tag?).and_return(true)
+      expect(Build::Check).to receive(:is_nightly?).and_return(true)
 
       expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with('nightly', initial_tag: 'latest')
 
@@ -58,7 +58,7 @@ describe 'qa', type: :rake do
     end
 
     it 'pushes latest images correctly' do
-      expect(Build::Check).to receive(:add_latest_tag?).and_return(true)
+      expect(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
 
       expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with('latest', initial_tag: 'latest')
 
@@ -66,7 +66,7 @@ describe 'qa', type: :rake do
     end
 
     it 'pushes rc images correctly' do
-      expect(Build::Check).to receive(:add_rc_tag?).and_return(true)
+      expect(Build::Check).to receive(:is_latest_tag?).and_return(true)
 
       expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with('rc', initial_tag: 'latest')
 
