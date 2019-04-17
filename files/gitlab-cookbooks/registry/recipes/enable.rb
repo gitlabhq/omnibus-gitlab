@@ -20,6 +20,7 @@ registry_gid = node['registry']['gid']
 
 working_dir = node['registry']['dir']
 log_directory = node['registry']['log_directory']
+log_format = node['registry']['log_formatter']
 env_directory = node['registry']['env_directory']
 
 directory "create #{working_dir}" do
@@ -82,7 +83,8 @@ end
 
 runit_service 'registry' do
   options({
-    log_directory: log_directory
+    log_directory: log_directory,
+    log_format: log_format
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
