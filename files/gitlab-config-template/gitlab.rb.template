@@ -748,6 +748,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
+### Migration to Go feature flags
+###! Docs: https://gitlab.com/gitlab-org/gitlab-shell#migration-to-go-feature-flags
 # gitlab_shell['migration'] = { enabled: true, features: [] }
 
 ### Git trace log file.
