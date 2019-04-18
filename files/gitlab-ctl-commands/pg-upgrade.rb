@@ -111,9 +111,6 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
-  # All tests have passed, this should be an upgradable instance.
-  maintenance_mode('enable')
-
   if options[:wait]
     # Wait for processes to settle, and give use one last chance to change their
     # mind
@@ -125,17 +122,34 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
-  # Get the existing locale before we move on
-  locale, encoding = get_locale_encoding
+  if File.exist?("#{base_path}/embedded/bin/repmgr") && get_all_services.include?("repmgrd")
+    log "Detected an HA cluster."
+    node = Repmgr::Node.new
+    if node.is_master?
+      log "Primary node detected."
+      general_upgrade
+    else
+      log "Secondary node detected."
+      ha_secondary_upgrade
+    end
+  else
+    general_upgrade
+  end
+end
 
-  # Ensure tmp_data_dir and data_dir are set before the database is stopped
+def common_pre_upgrade
+  maintenance_mode('enable')
+
+  locale, encoding = get_locale_encoding
   @db_worker.tmp_data_dir
 
   stop_database
   create_links(upgrade_version)
   create_temp_data_dir
   initialize_new_db(locale, encoding)
-  run_pg_upgrade
+end
+
+def common_post_upgrade
   cleanup_data_dir
 
   log 'Upgrade is complete, doing post configuration steps'
@@ -143,12 +157,29 @@ add_command_under_category 'pg-upgrade', 'database',
 
   start_database
 
+  log "Waiting 30 seconds for Database to be running."
+  GitlabCtl::Util.delay_for(30, exit_message: false)
+
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
   analyze_cluster
 
   goodbye_message
   maintenance_mode('disable')
   Kernel.exit 0
+end
+
+def ha_secondary_upgrade
+  log "Unregistering secondary node from cluster"
+  Repmgr::Standby.unregister({})
+
+  common_pre_upgrade
+  common_post_upgrade
+end
+
+def general_upgrade
+  common_pre_upgrade
+  run_pg_upgrade
+  common_post_upgrade
 end
 
 def start_database
