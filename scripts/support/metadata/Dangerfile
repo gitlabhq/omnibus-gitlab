@@ -4,6 +4,8 @@ fail "Please provide a proper merge request description." if gitlab.mr_body.size
 
 fail "Please add labels to this merge request." if gitlab.mr_labels.empty?
 
+warn "You may want to add ~Distribution label to this MR for gitlab-insights" unless gitlab.mr_labels.include?("Distribution")
+
 unless gitlab.mr_json["assignee"]
   warn "This merge request does not have any assignee yet. Setting an assignee clarifies who needs to take action on the merge request at any given time."
 end
