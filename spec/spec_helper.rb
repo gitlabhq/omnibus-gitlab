@@ -1,6 +1,8 @@
 # Just the basic rspec configuration common to all spec testing.
 # Use this if you do not need the full weight of `chef_helper`
 
+require 'pry';binding.pry
+require 'gitlab'
 require 'fantaskspec'
 require 'knapsack'
 require 'gitlab/util'
