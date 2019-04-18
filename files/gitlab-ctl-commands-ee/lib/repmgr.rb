@@ -80,8 +80,13 @@ class Repmgr
         host = options[:host]
         port = options[:port]
         user = options[:user] || Etc.getpwuid.name
+        runas = if Etc.getpwuid.name.eql?('root')
+                  user
+                else
+                  Etc.getpwuid.name
+                end
         command = %(/opt/gitlab/embedded/bin/psql -qt -d #{database} -h #{host} -p #{port} -c "#{query}" -U #{user})
-        cmd(command, user).chomp.lines.map(&:strip)
+        cmd(command, runas).chomp.lines.map(&:strip)
       end
 
       def cmd(command, user = 'root')
