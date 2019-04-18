@@ -116,4 +116,22 @@ nginx['log_format'] = 'my format string $foo $bar'
 mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ```
 
+## JSON logging
+
+Structured logs can be exported via JSON to be parsed by Elasticsearch,
+Splunk, or another log management system. Some components already write JSON logs
+by default (e.g. see [GitLab CE logging
+documentation](https://docs.gitlab.com/ce/administration/logs.html)),
+but until GitLab 12.0 other GitLab components may be using an
+unstructured format. To enable JSON logging for all GitLab components,
+add these lines to `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitaly['logging_format'] = 'json'
+gitlab_shell['log_format'] = 'json'
+gitlab_workhorse['log_format'] = 'json'
+registry['log_formatter'] = 'json'
+sidekiq['log_format'] = 'json'
+```
+
 [ee]: https://about.gitlab.com/gitlab-ee/
