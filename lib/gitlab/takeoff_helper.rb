@@ -14,8 +14,8 @@ class TakeoffHelper
     form_data = {
       'token' => @trigger_token,
       'ref' => @trigger_ref,
-    }.merge(takeoff_env_vars.map{ |k,v| ["variables[#{k}]",v] }.to_h)
-    resp = HTTP.post(pipeline_trigger_url, :form => form_data)
+    }.merge(takeoff_env_vars.map { |k, v| ["variables[#{k}]", v] }.to_h)
+    resp = HTTP.post(pipeline_trigger_url, form: form_data)
     raise "Unable to trigger #{pipeline_url}, status: #{resp.status}" unless resp.status == 201
     JSON.parse(resp.body.to_s)['web_url']
   end

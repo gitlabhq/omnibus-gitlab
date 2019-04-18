@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build'
 require 'gitlab/takeoff_helper'
 
-describe TakeoffHelper  do
+describe TakeoffHelper do
   subject(:service) { described_class.new('some-token', 'some-env', 'some-branch') }
   describe '#trigger_deploy' do
     it 'triggers an auto deploy' do
@@ -15,10 +15,10 @@ describe TakeoffHelper  do
           form: {
             "token" => "some-token",
             "ref" => "some-branch",
-            "variables[DEPLOY_ENVIRONMENT]"=>"some-env",
-            "variables[DEPLOY_VERSION]"=>"some-version",
-            "variables[DEPLOY_REPO]"=>"gitlab/pre-release",
-            "variables[DEPLOY_USER]"=>"takeoff"
+            "variables[DEPLOY_ENVIRONMENT]" => "some-env",
+            "variables[DEPLOY_VERSION]" => "some-version",
+            "variables[DEPLOY_REPO]" => "gitlab/pre-release",
+            "variables[DEPLOY_USER]" => "takeoff"
           }
         ).and_return(response)
       expect(service.trigger_deploy).to eq('http://example.com')
