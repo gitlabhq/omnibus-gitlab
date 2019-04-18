@@ -824,10 +824,16 @@ GEM
       signet (~> 0.7)
     hashie (3.5.7)
     highline (1.6.20)
+    http (4.1.1)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.0)
+      http_parser.rb (~> 0.6.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    http-form_data (2.1.1)
+    http_parser.rb (0.6.0)
     httpclient (2.8.3)
-    httprb (0.1.5)
     hurley (0.2)
     iniparse (1.4.4)
     iostruct (0.0.4)
@@ -998,7 +1004,7 @@ DEPENDENCIES
   docker-api
   fantaskspec
   google_drive
-  httprb
+  http
   json
   knapsack
   ohai

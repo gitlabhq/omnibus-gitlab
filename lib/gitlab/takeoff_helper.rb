@@ -1,8 +1,8 @@
-require "faraday"
+require "http"
+require "json"
 require_relative "util.rb"
 
 class TakeoffHelper
-  attr_reader :deploy_env, :trigger_ref, :trigger_token, :endpoint
   def initialize(trigger_token, deploy_env, trigger_ref)
     @deploy_env = deploy_env
     @trigger_token = trigger_token
@@ -15,27 +15,17 @@ class TakeoffHelper
   end
 
   def trigger_deploy
-    # For triggers we don't need an API token, so we explicitly set it to nil
-    data = {
-      "token": trigger_token,
-      "ref": trigger_ref,
-      "variables[DEPLOY_ENVIRONMENT]": 'gstg',
-      "variables[DEPLOY_VERSION]": 'some-version-that-does-not-exist'
+    pipeline_trigger_url = "#{@endpoint}/projects/#{trigger_project}/trigger/pipeline"
+    form_data = {
+      "token" => @trigger_token,
+      "ref" => @trigger_ref,
+      "variables[DEPLOY_ENVIRONMENT]" => 'pre',
+      "variables[DEPLOY_VERSION]" => 'some-version-that-does-not-exist',
+      "variables[CHECKMODE]" => '--check'
     }
-
-    response = Faraday.post("#{endpoint}/projects/151/trigger/pipeline") do |req|
-      req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-      req.body = URI.encode_www_form(data)
-    end
-
-
-    response = client.run_trigger(
-      trigger_project,
-      trigger_token,
-      trigger_ref,
-      takeoff_env_vars
-    )
-    response.web_url
+    req = HTTP.post(pipeline_url, :form => form_data)
+    raise "Unable to trigger #{pipeline_url}, status: #{req.status}" unless req.status == 201
+    JSON.parse(req.body.to_s)['web_url']
   end
 
   def trigger_host
@@ -53,7 +43,7 @@ class TakeoffHelper
 
   def takeoff_env_vars
     {
-      'DEPLOY_ENVIRONMENT': deploy_env,
+      'DEPLOY_ENVIRONMENT': @deploy_env,
       'DEPLOY_VERSION': Gitlab::Util.get_env('TAKEOFF_VERSION') || release,
       'DEPLOY_REPO': Gitlab::Util.get_env('TAKEOFF_DEPLOY_REPO') || 'gitlab/pre-release',
       'DEPLOY_USER': Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff',
