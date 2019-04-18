@@ -10,22 +10,20 @@ class TakeoffHelper
     @endpoint = "https://#{trigger_host}/api/v4"
   end
 
-  def client
-    @client ||= Gitlab::Client.new(token: nil, host: trigger_host)
-  end
-
   def trigger_deploy
-    pipeline_trigger_url = "#{@endpoint}/projects/#{trigger_project}/trigger/pipeline"
     form_data = {
       "token" => @trigger_token,
       "ref" => @trigger_ref,
-      "variables[DEPLOY_ENVIRONMENT]" => 'pre',
-      "variables[DEPLOY_VERSION]" => 'some-version-that-does-not-exist',
-      "variables[CHECKMODE]" => '--check'
+      "variables[DEPLOY_ENVIRONMENT]" => @deploy_env,
+      "variables[DEPLOY_VERSION]" => 'some-version-that-does-not-exist'
     }
-    req = HTTP.post(pipeline_url, :form => form_data)
-    raise "Unable to trigger #{pipeline_url}, status: #{req.status}" unless req.status == 201
-    JSON.parse(req.body.to_s)['web_url']
+    resp = HTTP.post(pipeline_trigger_url, :form => form_data)
+    raise "Unable to trigger #{pipeline_url}, status: #{resp.status}" unless resp.status == 201
+    JSON.parse(resp.body.to_s)['web_url']
+  end
+
+  def pipeline_trigger_url
+    "#{@endpoint}/projects/#{trigger_project}/trigger/pipeline"
   end
 
   def trigger_host
