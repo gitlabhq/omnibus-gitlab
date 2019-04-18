@@ -126,6 +126,44 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   # Get the existing locale before we move on
+  locale, encoding = get_locale_encoding
+
+  # Ensure tmp_data_dir and data_dir are set before the database is stopped
+  @db_worker.tmp_data_dir
+
+  stop_database
+  create_links(upgrade_version)
+  create_temp_data_dir
+  initialize_new_db(locale, encoding)
+  run_pg_upgrade
+  cleanup_data_dir
+
+  log 'Upgrade is complete, doing post configuration steps'
+  run_reconfigure
+
+  start_database
+
+  log 'Database upgrade is complete, running analyze_new_cluster.sh'
+  analyze_cluster
+
+  goodbye_message
+  maintenance_mode('disable')
+  Kernel.exit 0
+end
+
+def start_database
+  progress_message('Starting the database') do
+    run_sv_command_for_service('start', 'postgresql')
+  end
+end
+
+def stop_database
+  progress_message('Stopping the database') do
+    run_sv_command_for_service('stop', 'postgresql')
+  end
+end
+
+def get_locale_encoding
   begin
     locale = @db_worker.fetch_lc_collate
     encoding = @db_worker.fetch_server_encoding
@@ -136,17 +174,10 @@ add_command_under_category 'pg-upgrade', 'database',
     log "STDERR: #{ee.stderr}"
   end
 
-  # Ensure tmp_data_dir and data_dir are set before the database is stopped
-  @db_worker.tmp_data_dir
+  [locale, encoding]
+end
 
-  progress_message('Stopping the database') do
-    run_sv_command_for_service('stop', 'postgresql')
-  end
-
-  progress_message('Update the symlinks') do
-    create_links(upgrade_version)
-  end
-
+def create_temp_data_dir
   unless progress_message('Creating temporary data directory') do
     begin
       @db_worker.run_pg_command(
@@ -163,7 +194,9 @@ add_command_under_category 'pg-upgrade', 'database',
   end
     die 'Please check the output'
   end
+end
 
+def initialize_new_db(locale, encoding)
   unless progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
@@ -183,7 +216,9 @@ add_command_under_category 'pg-upgrade', 'database',
   end
     die 'Error initializing new database'
   end
+end
 
+def run_pg_upgrade
   unless progress_message('Upgrading the data') do
     begin
       @db_worker.run_pg_command(
@@ -202,7 +237,9 @@ add_command_under_category 'pg-upgrade', 'database',
   end
     die 'Error upgrading the database'
   end
+end
 
+def cleanup_data_dir
   unless progress_message('Move the old data directory out of the way') do
     run_command(
       "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version.major}"
@@ -218,19 +255,17 @@ add_command_under_category 'pg-upgrade', 'database',
   end
     die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version.major} to #{@db_worker.data_dir}"
   end
+end
 
-  log 'Upgrade is complete, doing post configuration steps'
+def run_reconfigure
   unless progress_message('Running reconfigure') do
     run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
   end
     die 'Something went wrong during final reconfiguration, please check the output'
   end
+end
 
-  progress_message('Ensuring database service has been started') do
-    run_sv_command_for_service('start', 'postgresql')
-  end
-
-  log 'Database upgrade is complete, running analyze_new_cluster.sh'
+def analyze_cluster
   analyze_script = File.join(
     File.dirname(@db_worker.default_data_dir),
     'analyze_new_cluster.sh'
@@ -246,11 +281,6 @@ add_command_under_category 'pg-upgrade', 'database',
     log 'If the error persists, please open an issue at: '
     log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
   end
-  log '==== Upgrade has completed ===='
-  log 'Please verify everything is working and run the following if so'
-  log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
-  maintenance_mode('disable')
-  Kernel.exit 0
 end
 
 def version_from_manifest(software)
@@ -272,9 +302,11 @@ def upgrade_version
 end
 
 def create_links(version)
-  Dir.glob("#{INST_DIR}/#{version.major}/bin/*").each do |bin_file|
-    destination = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
-    GitlabCtl::Util.get_command_output("ln -sf #{bin_file} #{destination}")
+  progress_message('Symlink correct version of binaries') do
+    Dir.glob("#{INST_DIR}/#{version.major}/bin/*").each do |bin_file|
+      destination = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
+      GitlabCtl::Util.get_command_output("ln -sf #{bin_file} #{destination}")
+    end
   end
 end
 
@@ -334,4 +366,10 @@ def maintenance_mode(command)
       run_sv_command_for_service(sv_cmd, svc)
     end
   end
+end
+
+def goodbye_message
+  log '==== Upgrade has completed ===='
+  log 'Please verify everything is working and run the following if so'
+  log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
 end
