@@ -14,7 +14,7 @@ namespace :gitlab_com do
       exit
     end
 
-    unless Gitlab::Util.get_env('AUTO_DEPLOY')
+    unless Build::Check.is_auto_deploy?
       latest_tag = Build::Info.latest_tag
       unless Build::Check.match_tag?(latest_tag)
         puts "#{latest_tag} is not the latest tag, not doing anything."
@@ -23,15 +23,15 @@ namespace :gitlab_com do
     end
 
     trigger_token = Gitlab::Util.get_env('TAKEOFF_TRIGGER_TOKEN')
-    trigger_branch = Gitlab::Util.get_env('AUTO_DEPLOY') ? Build::Info.gitlab_version.to_sym : :master
+    trigger_ref = (Build::Check.is_auto_deploy? && Build::Check.ci_commit_tag?) ? Gitlab::Util.get_env('CI_COMMIT_TAG') : :master
     deploy_env = Gitlab::Util.get_env('TAKEOFF_ENVIRONMENT')
 
     # We do not support auto-deployments or triggered deployments
     # to production from the omnibus pipeline, this check is here
     # for safety
     raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env.include?('gprd')
-    takeoff_helper = TakeoffHelper.new(trigger_token, deploy_env, trigger_branch)
+    takeoff_helper = TakeoffHelper.new(trigger_token, deploy_env, trigger_ref)
     url = takeoff_helper.trigger_deploy
-    puts "Takeoff build triggered at #{url} on #{trigger_branch} for the #{deploy_env} environment"
+    puts "Takeoff build triggered at #{url} on #{trigger_ref} for the #{deploy_env} environment"
   end
 end

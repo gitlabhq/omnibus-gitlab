@@ -25,6 +25,10 @@ module Build
         Info.semver_version.split(".")[-1] != "0"
       end
 
+      def ci_commit_tag?
+        Gitlab::Util.get_env('CI_COMMIT_TAG')
+      end
+
       def is_rc_release?
         git_exact_match.include?("+rc")
       end
