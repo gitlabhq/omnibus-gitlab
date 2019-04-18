@@ -1,8 +1,8 @@
 # Maintenance commands
 
-## After installation
+The following commands can be run after installation.
 
-### Get service status
+## Get service status
 
 Run `sudo gitlab-ctl status`; the output should look like this:
 
@@ -14,11 +14,11 @@ run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
 run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
 ```
 
-### Tail process logs
+## Tail process logs
 
 See [settings/logs.md.](../settings/logs.md)
 
-### Starting and stopping
+## Starting and stopping
 
 After omnibus-gitlab is installed and configured, your server will have a Runit
 service directory (`runsvdir`) process running that gets started at boot via
@@ -58,7 +58,7 @@ sudo gitlab-ctl hup unicorn
 
 Note that you cannot use a Unicorn reload to update the Ruby runtime.
 
-### Invoking Rake tasks
+## Invoking Rake tasks
 
 To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 
@@ -72,7 +72,7 @@ Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the
 `gitlab-rake` wrapper script.
 
-### Starting a Rails console session
+## Starting a Rails console session
 
 If you need access to a Rails production console for your GitLab installation
 you can start one with the command below. Please be warned that it is very easy
@@ -85,7 +85,7 @@ sudo gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
-### Starting a Postgres superuser psql session
+## Starting a Postgres superuser psql session
 
 If you need superuser access to the bundled Postgres service you can
 use the `gitlab-psql` command. It takes the same arguments as the
@@ -101,7 +101,7 @@ least once. The `gitlab-psql` command cannot be used to connect to a
 remote Postgres server, nor to connect to a local non-Omnibus Postgres
 server.
 
-#### Starting a Postgres superuser psql session in Geo tracking database
+### Starting a Postgres superuser psql session in Geo tracking database
 
 Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
@@ -112,133 +112,166 @@ It takes the same arguments as the regular `psql` command.
 sudo gitlab-geo-psql -d gitlabhq_geo_production
 ```
 
-### Container registry garbage collection
+## Container Registry garbage collection
 
-Container registry can use considerable amounts of disk space. To clear up
+Container Registry can use considerable amounts of disk space. To clear up
 some unused layers, registry includes a garbage collect command.
 
-There are a couple of considerations you need to note before running the
-built in command:
+GitLab offers a set of APIs to manipulate the Container Registry and aid the process
+of removing unused tags. Currently, this is exposed using the API, but in the future,
+these controls will be migrated to the GitLab interface.
 
-* The built in command will stop the registry before it starts garbage collect
-* The garbage collect command takes some time to complete, depending on the
-amount of data that exists
-* If you changed the location of registry configuration file, you will need to
-specify the path
-* After the garbage collect is done, registry should start up automatically
+Project maintainers can
+[delete Container Registry tags in bulk](https://docs.gitlab.com/ce/api/container_registry.html#delete-repository-tags-in-bulk)
+periodically based on their own criteria.
 
-**Warning** The command below will cause Container registry downtime.
+However, this alone does not recycle data, it only unlinks tags from manifests
+and image blobs. To recycle the Container Registry data in the whole GitLab
+instance, you can use the built-in command provided by `gitlab-ctl`.
 
-If you did not change the default location of the configuration file, to do
-garbage collection:
-
-```
-sudo gitlab-ctl registry-garbage-collect
-```
-
-This command will take some time to complete, depending on the amount of
-layers you have stored.
-
-If you changed the location of the Container registry config.yml:
-
-```
-sudo gitlab-ctl registry-garbage-collect /path/to/config.yml
-```
-
-#### Removing unused layers not referenced by manifests
-
-GitLab Container Registry follows the same default workflow as Docker Distribution:
-retain all layers, even ones that are unreferenced directly to allow all content
-to be accessed using context addressable identifiers.
-
-#### Content-addressable layers
+### Understanding the content-addressable layers
 
 Consider the following example, where you first build the image:
 
 ```bash
+# This builds a image with content of sha256:111111
 docker build -t my.registry.com/my.group/my.project:latest .
-# this builds a image with content of sha256:111111
 docker push my.registry.com/my.group/my.project:latest
 ```
 
 Now, you do overwrite `:latest` with a new version:
 
 ```bash
+# This builds a image with content of sha256:222222
 docker build -t my.registry.com/my.group/my.project:latest .
-# this builds a image with content of sha256:222222
 docker push my.registry.com/my.group/my.project:latest
 ```
 
-Now, the `:latest` points to manifest of `sha256:222222`. However, due to architecture
-of registry this data is still accessible via:
-`docker pull my.registry.com/my.group/my.project@sha256:111111` even though it is
-no longer directly accessible via `:latest` tag.
+Now, the `:latest` tag points to manifest of `sha256:222222`. However, due to
+the architecture of registry, this data is still accessible when pulling the
+image `my.registry.com/my.group/my.project@sha256:111111`, even though it is
+no longer directly accessible via the `:latest` tag.
 
-#### Recycle unreference manifests
+### Recycling unused tags
 
-However, in most of workflows you do not care about old layers, if they are not directly
-referenced by registry tag. The `registry-garbage-collect` supports the `-m` switch
-to allow you to remove all unreferenced manifests and layers, that are not directly
-accessible via `tag`.
+There are a couple of considerations you need to note before running the
+built-in command:
 
-Since this is a way more destrictive operation, this behavior is disabled by default.
-You are likely expecting this way of operation, but before doing that ensure
-that you backup all registry data to ensure that you do not use the data.
+- The built-in command will stop the registry before it starts the garbage collection.
+- The garbage collect command takes some time to complete, depending on the
+  amount of data that exists.
+- If you changed the location of registry configuration file, you will need to
+  specify its path.
+- After the garbage collection is done, the registry should start up automatically.
 
-This will allow you to recycle all registry space with the [Container Registry API](#administratively-recycling-unused-tags).
+CAUTION: **Warning:**
+By running the built-in garbage collection command, it will cause downtime to
+the Container Registry. To avoid that, you can [use another method](#performing-garbage-collection-without-downtime).
 
-#### Doing garbage collect without downtime
+If you did not change the default location of the configuration file, run:
 
-You can do a garbage collect without stopping the Container registry by setting
-it into a read only mode. During this time, you will be able to pull from
-the Container registry but you will not be able to push.
-
-These are the steps you need to take in order to complete the garbage collection:
-
-In `/etc/gitlab/gitlab.rb` specify the read only mode:
-
-```ruby
-registry['storage'] = {
-  'maintenance' => {
-    'readonly' => {
-      'enabled' => true
-    }
-  }
-}
+```sh
+sudo gitlab-ctl registry-garbage-collect
 ```
 
-Save and run `sudo gitlab-ctl reconfigure`. This will set the Container registry
-into the read only mode.
+This command will take some time to complete, depending on the amount of
+layers you have stored.
 
-Next, trigger the garbage collect command:
+If you changed the location of the Container Registry `config.yml`:
 
-```
-sudo /opt/gitlab/embedded/bin/registry garbage-collect /var/opt/gitlab/registry/config.yml
-```
-
-This will start the garbage collection. The command will take some time to complete.
-
-Once done, in `/etc/gitlab/gitlab.rb` change the configuration to:
-
-```ruby
-registry['storage'] = {
-  'maintenance' => {
-    'readonly' => {
-      'enabled' => false
-    }
-  }
-}
+```sh
+sudo gitlab-ctl registry-garbage-collect /path/to/config.yml
 ```
 
-and run `sudo gitlab-ctl reconfigure`.
+You may also [remove all unreferenced manifests](#removing-unused-layers-not-referenced-by-manifests),
+although this is a way more destructive operation, and you should first
+understand the implications.
 
-### Running on schedule
+### Removing unused layers not referenced by manifests
 
-Ideally, you want to run garbage collect of registry regularly on weekly basis
-during time when registry is not being in-use.
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/3097)
+in Omnibus GitLab 11.10.
 
-The simplest way is to add a new crontab job that it is gonna run periodically,
+DANGER: **Danger:**
+This is a destructive operation.
+
+The GitLab Container Registry follows the same default workflow as Docker Distribution:
+retain all layers, even ones that are unreferenced directly to allow all content
+to be accessed using context addressable identifiers.
+
+However, in most workflows, you don't care about old layers if they are not directly
+referenced by the registry tag. The `registry-garbage-collect` command supports the
+`-m` switch to allow you to remove all unreferenced manifests and layers that are
+not directly accessible via `tag`:
+
+```sh
+sudo gitlab-ctl registry-garbage-collect -m
+```
+
+Since this is a way more destructive operation, this behavior is disabled by default.
+You are likely expecting this way of operation, but before doing that, ensure
+that you have backed up all registry data.
+
+### Performing garbage collection without downtime
+
+You can perform a garbage collection without stopping the Container Registry by setting
+it into a read-only mode and by not using the built-in command. During this time,
+you will be able to pull from the Container Registry, but you will not be able to
+push. To enable the read-only mode:
+
+1. In `/etc/gitlab/gitlab.rb`, specify the read-only mode:
+
+   ```ruby
+   registry['storage'] = {
+     'maintenance' => {
+       'readonly' => {
+         'enabled' => true
+       }
+     }
+   }
+   ```
+
+1. Save and reconfigure GitLab:
+
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
+
+   This will set the Container Registry into the read only mode.
+
+1. Next, trigger the garbage collect command:
+
+   ```sh
+   sudo /opt/gitlab/embedded/bin/registry garbage-collect /var/opt/gitlab/registry/config.yml
+   ```
+
+   This will start the garbage collection, which might take some time to complete.
+
+1. Once done, in `/etc/gitlab/gitlab.rb` change it back to read-write mode:
+
+   ```ruby
+   registry['storage'] = {
+     'maintenance' => {
+       'readonly' => {
+         'enabled' => false
+       }
+     }
+   }
+   ```
+
+1. Save and reconfigure GitLab:
+
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
+
+### Running the garbage collection on schedule
+
+Ideally, you want to run the garbage collection of the registry regularly on a
+weekly basis at a time when the registry is not being in-use.
+The simplest way is to add a new crontab job that it will run periodically
 once a week.
+
 Create a file under `/etc/cron.d/registry-garbage-collect`:
 
 ```bash
@@ -247,33 +280,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # Run every Sunday at 04:05am
 5 4 * * 0  root gitlab-ctl registry-garbage-collect
-```
-
-### Administratively recycling unused tags
-
-GitLab offers a set of APIs to manipulate Container Registry and aid the process
-of removing unused tags. Currently, this is exposed using API, but in the future
-these controls will be migrated to the GitLab Interface and be allowed by the
-developer.
-
-Project maintainers can
-[delete container registry tags in bulk](https://docs.gitlab.com/ce/api/container_registry.html#delete-repository-tags-in-bulk)
-periodically based on their own criteria.
-
-However, this alone does not recycle data, it only unlinks tags from manifests
-and image blobs. To recycle the container registry data in the whole GitLab instance run:
-
-```sh
-sudo gitlab-ctl registry-garbage-collect
-```
-
-You might also remove all unreferenced manifests with.
-Since this is a way more destructive operation take a look
-at [Recycle unreference manifests](#recycle-unreference-manifests)
-to understand the implications.
-
-```sh
-sudo gitlab-ctl registry-garbage-collect -m
-# or
-sudo gitlab-ctl registry-garbage-collect /path/to/config.yml -m
 ```
