@@ -35,6 +35,11 @@ log_format: <%= @log_format %>
 # incurs an extra API call on every gitlab-shell command.
 audit_usernames: <%= @audit_usernames %>
 
+<% if @migration %>
+migration:
+  <%= @migration.to_json %>
+<% end %>
+
 <% if @git_trace_log_file %>
 # Git trace log file.
 # If set, git commands receive GIT_TRACE* environment variables
