@@ -1,13 +1,13 @@
-require "faraday"
+require 'gitlab'
 require_relative "util.rb"
 
 class TakeoffHelper
-  attr_reader :deploy_env, :trigger_ref, :trigger_token, :endpoint
+  attr_reader :deploy_env, :trigger_ref, :trigger_token
   def initialize(trigger_token, deploy_env, trigger_ref)
     @deploy_env = deploy_env
     @trigger_token = trigger_token
     @trigger_ref = trigger_ref
-    @endpoint = "https://#{trigger_host}/api/v4"
+    Gitlab.endpoint = "https://#{trigger_host}/api/v4"
   end
 
   def client
@@ -16,19 +16,6 @@ class TakeoffHelper
 
   def trigger_deploy
     # For triggers we don't need an API token, so we explicitly set it to nil
-    data = {
-      "token": trigger_token,
-      "ref": trigger_ref,
-      "variables[DEPLOY_ENVIRONMENT]": 'gstg',
-      "variables[DEPLOY_VERSION]": 'some-version-that-does-not-exist'
-    }
-
-    response = Faraday.post("#{endpoint}/projects/151/trigger/pipeline") do |req|
-      req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-      req.body = URI.encode_www_form(data)
-    end
-
-
     response = client.run_trigger(
       trigger_project,
       trigger_token,
