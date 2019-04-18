@@ -54,6 +54,9 @@ To use GitLab as an OAuth provider so that users of your GitLab instance
 have access to Grafana:
 
 1. First, [create an application ID and secret](https://docs.gitlab.com/ce/integration/oauth_provider.html).
+
+1. Set the callback URL based on your `external_url`. For example `https://gitlab.example.com/-/grafana/login/gitlab`.
+
 1. Then, edit `/etc/gitlab/gitlab.rb` and add the following lines:
 
    ```ruby
@@ -71,6 +74,10 @@ have access to Grafana:
    ```
 
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
+
+NOTE: **Note:**
+
+GitLab users are created with read-only Viewer privilege by default. The admin account must be used to grant additional access.
 
 ### Resetting the admin password
 
