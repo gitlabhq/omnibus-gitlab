@@ -46,49 +46,49 @@ repos:
 - url: https://github.com/chef-cookbooks/compat_resource.git
   installed: v12.19.1
   replace_in_files:
-    config/software/compat_resource.rb: default_version '{version}'
+    config/software/compat_resource.rb: version = Gitlab::Version.new('compat_resource', '{version_clean}')
 
 # consul
 - url: https://github.com/hashicorp/consul
   installed: 0.9.0
   replace_in_files:
-    config/software/consul.rb: default_version '{version_clean}'
+    config/software/consul.rb: version = Gitlab::Version.new('consul', '{version_clean}')
 
 # curl
 - url: https://github.com/curl/curl
   installed: curl-7_59_0
   replace_in_files:
-    config/software/curl.rb: default_version '{version}'
+    config/software/curl.rb: version = Gitlab::Version.new('curl', '{version_clean}')
 
 # go-crond
 - url: https://github.com/webdevops/go-crond
   installed: 0.6.1
   replace_in_files:
-    config/software/go-crond.rb: default_version '{version_clean}'
+    config/software/go-crond.rb: version = Gitlab::Version.new('go-crond', '{version_clean}')
 
 # jemalloc
 - url: https://github.com/jemalloc/jemalloc
   installed: 4.2.1
   replace_in_files:
-    config/software/jemalloc.rb: default_version '{version}'
+    config/software/jemalloc.rb: version = Gitlab::Version.new('jemalloc', '{version_clean}')
 
 # libevent
 - url: https://github.com/libevent/libevent
   installed: release-2.1.8-stable
   replace_in_files:
-    config/software/libevent.rb: default_version '{version_clean}'
+    config/software/libevent.rb: version = Gitlab::Version.new('libevent', '{version_clean}')
 
 # libicu
 - url: https://github.com/unicode-org/icu
   installed: release-57-1
   replace_in_files:
-    config/software/libicu.rb: default_version '{version_clean}'
+    config/software/libicu.rb: version = Gitlab::Version.new('libicu', '{version_clean}')
 
 # libpng
 - url: https://git.code.sf.net/p/libpng/code
   installed: v1.6.36
   replace_in_files:
-    config/software/libpng.rb: default_version '{version_clean}'
+    config/software/libpng.rb: version = Gitlab::Version.new('libpng', '{version_clean}')
 
 # logrotate
 - url: https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git
@@ -118,7 +118,7 @@ repos:
 - url: https://github.com/openssl/openssl.git
   installed: OpenSSL_1_0_2o
   replace_in_files:
-    config/software/openssl.rb: default_version '{version}'
+    config/software/openssl.rb: version = Gitlab::Version.new('openssl', '{version_clean}')
 
 # prometheus-storage-migrator
 - url: https://gitlab.com/gitlab-org/prometheus-storage-migrator.git
@@ -143,16 +143,16 @@ repos:
 - url: https://github.com/freedesktop/xorg-macros
   installed: 1.18.0
   replace_in_files:
-    config/software/util-macros.rb: default_version '{version_clean}'
+    config/software/util-macros.rb: version = Gitlab::Version.new('util-macros', '{version_clean}')
 
 # zlib
 - url: https://github.com/madler/zlib.git
   installed: 1.2.11
   replace_in_files:
-    config/software/zlib.rb: default_version '{version_clean}'
+    config/software/zlib.rb: version = Gitlab::Version.new('zlib', '{version_clean}')
 
 # exiftool
 - url: https://github.com/exiftool/exiftool.git
   installed: 11.31
   replace_in_files:
-    config/software/exiftool.rb: default_version '{version_clean}'
+    config/software/exiftool.rb: version = Gitlab::Version.new('exiftool', '{version_clean}')
