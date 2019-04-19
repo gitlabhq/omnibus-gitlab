@@ -1,4 +1,3 @@
-require 'gitlab'
 require_relative '../takeoff_helper.rb'
 require_relative "../util.rb"
 
