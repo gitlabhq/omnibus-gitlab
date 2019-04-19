@@ -15,14 +15,16 @@
 #
 
 name 'compat_resource'
-default_version 'v12.19.1'
+
+version = Gitlab::Version.new('compat_resource', 'v12.19.1')
+default_version version.print(false)
 
 license 'Apache-2.0'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: 'https://github.com/chef-cookbooks/compat_resource.git'
+source git: version.remote
 
 target_path = "#{install_dir}/embedded/cookbooks/compat_resource"
 
