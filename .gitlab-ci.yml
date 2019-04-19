@@ -102,6 +102,8 @@ fetch-assets:
   except:
     variables:
       - $COMPILE_ASSETS == "true"
+      # Format of the auto-deploy tag
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
