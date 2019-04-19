@@ -15,9 +15,10 @@
 #
 
 name 'util-macros'
-default_version 'util-macros-1.18.0'
+version = Gitlab::Version.new('util-macros', 'util-macros-1.18.0')
 
-source git: "https://gitlab.freedesktop.org/xorg/util/macros"
+default_version version.print(false)
+source git: version.remote
 
 license 'MIT'
 license_file 'COPYING'

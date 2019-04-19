@@ -17,9 +17,12 @@
 #
 
 name 'libicu'
-default_version 'release-57-1'
 
-source git: 'https://github.com/unicode-org/icu'
+version = Gitlab::Version.new('libicu', 'release-57-1')
+
+default_version version.print(false)
+
+source git: version.remote
 
 license 'MIT'
 license_file 'icu/LICENSE'
