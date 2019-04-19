@@ -15,7 +15,9 @@
 #
 
 name 'libpng'
-default_version 'v1.6.35'
+version = Gitlab::Version.new('libpng', 'v1.6.35')
+
+default_version version.print(false)
 
 license 'Libpng'
 license_file 'LICENSE'
@@ -24,7 +26,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'zlib'
 
-source git: "https://git.code.sf.net/p/libpng/code"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

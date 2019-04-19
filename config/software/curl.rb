@@ -15,7 +15,10 @@
 #
 
 name 'curl'
-default_version 'curl-7_59_0'
+
+version = Gitlab::Version.new('curl', 'curl-7_59_0')
+
+default_version version.print(false)
 
 # Runtime dependency
 dependency 'zlib'
@@ -27,7 +30,7 @@ license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source git: 'https://github.com/curl/curl'
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

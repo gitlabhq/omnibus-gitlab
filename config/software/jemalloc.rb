@@ -16,14 +16,15 @@
 #
 
 name 'jemalloc'
-default_version '5.1.0'
+version = Gitlab::Version.new('jemalloc', '5.1.0')
+default_version version.print(false)
 
 license 'jemalloc'
 license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source git: 'https://github.com/jemalloc/jemalloc'
+source git: version.remote
 
 dependency 'redis'
 

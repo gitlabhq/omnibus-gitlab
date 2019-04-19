@@ -15,7 +15,9 @@
 #
 
 name 'libevent'
-default_version 'release-2.1.8-stable'
+version = Gitlab::Version.new('libevent', 'release-2.1.8-stable')
+
+default_version version.print(false)
 
 dependency 'libtool'
 dependency 'openssl'
@@ -25,9 +27,9 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: "https://github.com/libevent/libevent"
+source git: version.remote
 
-relative_path "libevent-#{version}-stable"
+relative_path "libevent-#{version.print}-stable"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
