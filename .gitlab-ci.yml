@@ -32,6 +32,7 @@ variables:
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
   RUBY_IMAGE: "ruby:2.5"
+  AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.[^ ]+\+[^ ]+$'
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

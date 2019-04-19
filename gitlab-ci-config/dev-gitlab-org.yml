@@ -81,6 +81,7 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
+      # Format of the auto-deploy tag
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   artifacts: *package-artifacts
   retry: 1
@@ -88,6 +89,12 @@
 .tag_template: &tag_build
   stage: package-and-image
   script:
+    # Always compile assets for auto-deploy builds
+    - |
+      if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
+        echo "Setting COMPILE_ASSETS env variable for auto-deploy"
+        export COMPILE_ASSETS='true';
+      fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -120,6 +127,7 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+      # Format of the auto-deploy tag
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 ### This stage is used for uploading packages
@@ -305,7 +313,7 @@ Ubuntu-16.04-upload-deploy:
     - Ubuntu-16.04-branch
   script:
     - |
-      if echo $CI_COMMIT_TAG | grep -P -q '^\d+\.\d+\.[^ ]+\+[^ ]+$'; then
+      if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
         export TAKEOFF_ENVIRONMENT='pre';
       else
         export TAKEOFF_ENVIRONMENT='gstg';
@@ -570,6 +578,7 @@ AWS-Marketplace-release:
   except:
     variables:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
+      # Format of the auto-deploy tag
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   dependencies:
     - AWS
