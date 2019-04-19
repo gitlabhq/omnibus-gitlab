@@ -1,5 +1,0 @@
----
-title: Add optional db_name to "gitlab-ctl replicate-geo-database"
-merge_request: 3124
-author:
-type: added

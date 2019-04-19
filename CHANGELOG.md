@@ -3,6 +3,47 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.10.0 (2019-04-22)
+
+### Security (1 change)
+
+- Bundle exiftool as a dependency.
+
+### Fixed (3 changes)
+
+- Use a fixed git abbrev parameter when we fetch a git revision. !3143
+- Fix bug where passing -w to pg-upgrade aborted the process. !3164
+- Update WorkhorseHighErrorRate alert. !3183
+
+### Changed (3 changes)
+
+- Remove gitlab-markup custom patches. !3115
+- Add grafana-dashboards to auto-provisioning. !3141
+- Set the default LANG variable in docker to support UTF-8. !3159
+
+### Added (7 changes, 2 of them are from the community)
+
+- Refactor Prometheus rails scrape config. !3046 (Ben Kochie <bjk@gitlab.com>)
+- Support conditional external diffs. !3059
+- Support for registry-garbage-collect command. !3097
+- Add sub_module to bundled nginx. !3100 (Rafael Gomez)
+- Add gitaly graceful restart wrapper. !3116
+- Add optional db_name to "gitlab-ctl replicate-geo-database". !3124
+- Add default Referrer-Policy header. !3138
+
+### Other (9 changes, 2 of them are from the community)
+
+- Upgrade jemalloc to 5.1.0. !2957
+- Update CA Certificates to 2019-01-23. !3095
+- Add gitlab_shell.authorized_keys_file to gitlab.yml. !3096
+- Update to latest krb5 version 1.17. !3114
+- Update to latest libxml2. !3156
+- Update bundler to 1.17.3. !3157 (Takuya Noguchi)
+- Share AWS AMIs with the Marketplace account. !3190
+- Move software built from git to omnibus-mirror. !3228
+- Update Mattermost to 5.9.0 (GitLab 11.10). (Harrison Healey)
+
+
 ## 11.9.6 (2019-04-04)
 
 - No changes.
