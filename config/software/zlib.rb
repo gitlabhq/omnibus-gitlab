@@ -15,14 +15,13 @@
 #
 
 name 'zlib'
-default_version 'v1.2.11'
+version = Gitlab::Version.new('zlib', 'v1.2.11')
+default_version version.print(false)
 
-source git: "https://github.com/madler/zlib.git"
+source git: version.remote
 
 license 'Zlib'
 license_file 'README'
-skip_transitive_dependency_licensing true
-
 skip_transitive_dependency_licensing true
 
 build do

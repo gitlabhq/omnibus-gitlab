@@ -70,3 +70,51 @@ prometheus-storage-migrator:
 grafana-dashboards:
   remote: "git@dev.gitlab.org:omnibus-mirror/grafana-dashboards.git"
   alternative: "https://gitlab.com/gitlab-org/grafana-dashboards.git"
+zlib:
+  remote: "git@dev.gitlab.org:omnibus-mirror/zlib.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/zlib.git"
+util-macros:
+  remote: "git@dev.gitlab.org:omnibus-mirror/util-macros.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/util-macros.git"
+openssl:
+  remote: "git@dev.gitlab.org:omnibus-mirror/openssl.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/openssl.git"
+curl:
+  remote: "git@dev.gitlab.org:omnibus-mirror/curl.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/curl.git"
+omnibus-ctl:
+  remote: "git@dev.gitlab.org:omnibus-mirror/omnibus-ctl.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/omnibus-ctl.git"
+compat_resource:
+  remote: "git@dev.gitlab.org:omnibus-mirror/compat_resource.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/compat_resource.git"
+libicu:
+  remote: "git@dev.gitlab.org:omnibus-mirror/libicu.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libicu.git"
+krb5:
+  remote: "git@dev.gitlab.org:omnibus-mirror/krb5.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/krb5.git"
+libre2:
+  remote: "git@dev.gitlab.org:omnibus-mirror/libre2.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libre2.git"
+libpng:
+  remote: "git@dev.gitlab.org:omnibus-mirror/libpng.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libpng.git"
+exiftool:
+  remote: "git@dev.gitlab.org:omnibus-mirror/exiftool.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/exiftool.git"
+libevent:
+  remote: "git@dev.gitlab.org:omnibus-mirror/libevent.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libevent.git"
+repmgr:
+  remote: "git@dev.gitlab.org:omnibus-mirror/repmgr.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/repmgr.git"
+jemalloc:
+  remote: "git@dev.gitlab.org:omnibus-mirror/jemalloc.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/jemalloc.git"
+go-crond:
+  remote: "git@dev.gitlab.org:omnibus-mirror/go-crond.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/go-crond.git"
+consul:
+  remote: "git@dev.gitlab.org:omnibus-mirror/consul.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/consul.git"

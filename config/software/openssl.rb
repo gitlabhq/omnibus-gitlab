@@ -27,9 +27,11 @@ dependency 'cacerts'
 dependency 'makedepend' unless aix?
 dependency 'patch' if solaris2?
 
-default_version 'OpenSSL_1_0_2r'
+version = Gitlab::Version.new('openssl', 'OpenSSL_1_0_2r')
 
-source git: "https://github.com/openssl/openssl.git"
+default_version version.print(false)
+
+source git: version.remote
 
 build do
   env = case ohai['platform']
