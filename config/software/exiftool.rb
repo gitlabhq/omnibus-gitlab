@@ -15,14 +15,15 @@
 #
 
 name 'exiftool'
-default_version '11.31'
+version = Gitlab::Version.new('exiftool', '11.31')
+default_version version.print(false)
 
 license 'GPL-1.0 or Artistic'
 license_file 'LICENSE.txt'
 
 skip_transitive_dependency_licensing true
 
-source git: "https://github.com/exiftool/exiftool.git"
+source git: version.remote
 
 build do
   # exiftool has a hardcoded list of locations where it looks for libraries. We

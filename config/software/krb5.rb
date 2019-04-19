@@ -17,7 +17,9 @@
 
 name 'krb5'
 
-default_version 'krb5-1.17'
+version = Gitlab::Version.new('krb5', 'krb5-1.17')
+
+default_version version.print(false)
 
 license 'MIT'
 license_file 'NOTICE'
@@ -26,7 +28,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'openssl'
 
-source git: "https://github.com/krb5/krb5.git"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

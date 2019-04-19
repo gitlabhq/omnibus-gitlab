@@ -15,12 +15,13 @@
 #
 
 name 'go-crond'
-default_version '0.6.1'
+version = Gitlab::Version.new('go-crond', '0.6.1')
+default_version version.print(false)
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
 
-source git: "https://github.com/webdevops/go-crond"
+source git: version.remote
 
 relative_path 'src/github.com/webdevops/go-crond'
 

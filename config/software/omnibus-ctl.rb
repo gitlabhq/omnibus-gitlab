@@ -17,7 +17,8 @@
 name 'omnibus-ctl'
 # Commit SHA of v0.6.0 is used because the tag is not pushed to the upstream
 # repo.  Change it to v0.6.0 when that happens.
-default_version '1b96ac486636cac987e5b464810bb3ff673a93fe'
+version = Gitlab::Version.new('omnibus-ctl', '1b96ac486636cac987e5b464810bb3ff673a93fe')
+default_version version.print(false)
 
 license 'Apache-2.0'
 license_file 'LICENSE'
@@ -28,7 +29,7 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'bundler'
 
-source git: 'https://github.com/chef/omnibus-ctl.git'
+source git: version.remote
 
 relative_path 'omnibus-ctl'
 

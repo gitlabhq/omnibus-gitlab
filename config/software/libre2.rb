@@ -17,14 +17,16 @@
 #
 
 name 'libre2'
-default_version '2016-02-01'
+
+version = Gitlab::Version.new('libre2', '2016-02-01')
+default_version version.print(false)
 
 license 'BSD'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: "https://github.com/google/re2"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
