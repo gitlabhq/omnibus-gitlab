@@ -164,6 +164,11 @@ describe 'registry recipe' do
       )
     end
 
+    it 'populates default settings for svlogd' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/registry/log/run')
+        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/registry/)
+    end
+
     context 'when registry storagedriver health check is disabled' do
       before { stub_gitlab_rb(registry: { health_storagedriver_enabled: false }) }
 
@@ -188,6 +193,11 @@ describe 'registry recipe' do
       it 'creates the registry config with the specified value' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/log:\s*level: info\s*formatter:\s*json/)
+      end
+
+      it 'does not append timestamp in logs if logging format is json' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/registry/log/run')
+          .with_content(/exec svlogd \/var\/log\/gitlab\/registry/)
       end
     end
 

@@ -1,0 +1,5 @@
+---
+title: Fix Grafana GitLab Authentication
+merge_request: 3195
+author:
+type: fixed

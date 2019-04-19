@@ -429,6 +429,7 @@ default['gitlab']['gitlab-shell']['http_settings'] = nil
 default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
+default['gitlab']['gitlab-shell']['migration'] = { enabled: true, features: [] }
 # DEPRECATED! Not used by gitlab-shell
 default['gitlab']['gitlab-shell']['git_data_directories'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data" }
@@ -916,9 +917,7 @@ default['gitlab']['grafana']['allow_user_sign_up'] = false
 default['gitlab']['grafana']['gitlab_application_id'] = nil
 default['gitlab']['grafana']['gitlab_secret'] = nil
 default['gitlab']['grafana']['allowed_groups'] = []
-default['gitlab']['grafana']['gitlab_auth_endpoint'] = nil
-default['gitlab']['grafana']['gitlab_token_endpoint'] = nil
-default['gitlab']['grafana']['gitlab_user_api_endpoint'] = nil
+default['gitlab']['grafana']['gitlab_auth_sign_up'] = true
 default['gitlab']['grafana']['dashboards'] = [
   {
     'name' => 'GitLab Omnibus',

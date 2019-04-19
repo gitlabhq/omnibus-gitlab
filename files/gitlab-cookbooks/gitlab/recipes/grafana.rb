@@ -27,6 +27,12 @@ grafana_provisioning_dashboards_dir = File.join(grafana_provisioning_dir, 'dashb
 grafana_provisioning_datasources_dir = File.join(grafana_provisioning_dir, 'datasources')
 grafana_provisioning_notifiers_dir = File.join(grafana_provisioning_dir, 'notifiers')
 
+external_url = if Gitlab['external_url']
+                 Gitlab['external_url'].to_s
+               else
+                 'http://localhost'
+               end
+
 # grafana runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
 include_recipe 'gitlab::prometheus_user'
@@ -88,6 +94,9 @@ end
 
 template grafana_config do
   source 'grafana_ini.erb'
+  variables(
+    'external_url': external_url.chomp('/')
+  )
   owner prometheus_user
   mode '0644'
   notifies :restart, 'service[grafana]'

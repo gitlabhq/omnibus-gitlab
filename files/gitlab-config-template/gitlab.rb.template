@@ -748,6 +748,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
+### Migration to Go feature flags
+###! Docs: https://gitlab.com/gitlab-org/gitlab-shell#migration-to-go-feature-flags
+# gitlab_shell['migration'] = { enabled: true, features: [] }
+
 ### Git trace log file.
 ###! If set, git commands receive GIT_TRACE* environment variables
 ###! Docs: https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging
@@ -1553,9 +1557,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # grafana['gitlab_secret'] = 'GITLAB_SECRET'
 # grafana['env_directory'] = '/opt/gitlab/etc/grafana/env'
 # grafana['allowed_groups'] = []
-# grafana['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
-# grafana['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
-# grafana['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
+# grafana['gitlab_auth_sign_up'] = true
 # grafana['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # }
