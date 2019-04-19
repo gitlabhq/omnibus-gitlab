@@ -35,21 +35,21 @@ namespace :qa do
 
     desc "Push rc version of gitlab-{ce,ee}-qa to Docker Hub"
     task :rc do
-      if Build::Check.add_rc_tag?
+      if Build::Check.is_latest_tag?
         Build::QAImage.tag_and_push_to_dockerhub('rc', initial_tag: 'latest')
       end
     end
 
     desc "Push nightly version of gitlab-{ce,ee}-qa to Docker Hub"
     task :nightly do
-      if Build::Check.add_nightly_tag?
+      if Build::Check.is_nightly?
         Build::QAImage.tag_and_push_to_dockerhub('nightly', initial_tag: 'latest')
       end
     end
 
     desc "Push latest version of gitlab-{ce,ee}-qa to Docker Hub"
     task :latest do
-      if Build::Check.add_latest_tag?
+      if Build::Check.is_latest_stable_tag?
         Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest')
       end
     end

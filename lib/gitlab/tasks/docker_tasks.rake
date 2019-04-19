@@ -32,21 +32,21 @@ namespace :docker do
 
     # Special tags
     task :nightly do
-      if Build::Check.add_nightly_tag?
+      if Build::Check.is_nightly?
         Build::GitlabImage.tag_and_push_to_dockerhub('nightly')
       end
     end
 
     # push as :rc tag, the :rc is always the latest tagged release
     task :rc do
-      if Build::Check.add_rc_tag?
+      if Build::Check.is_latest_tag?
         Build::GitlabImage.tag_and_push_to_dockerhub('rc')
       end
     end
 
     # push as :latest tag, the :latest is always the latest stable release
     task :latest do
-      if Build::Check.add_latest_tag?
+      if Build::Check.is_latest_stable_tag?
         Build::GitlabImage.tag_and_push_to_dockerhub('latest')
       end
     end

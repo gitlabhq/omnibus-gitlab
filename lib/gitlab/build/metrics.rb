@@ -46,7 +46,7 @@ module Build
         elsif Build::Check.is_patch_release?
           puts "Not a major/minor release. Not upgrading."
           status = false
-        elsif !Build::Check.add_latest_tag?
+        elsif !Build::Check.is_latest_stable_tag?
           # Checking if latest stable release.
           # TODO: Refactor the method name to be more explanatory
           # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3274
