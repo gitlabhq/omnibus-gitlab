@@ -10,6 +10,10 @@ omnibus-gitlab repository.
 - Ensure env values are converted to strings (Romain Tartière) !2923
 - Make location of repmgr.conf dynamic in run file and gitlab-ctl commands !2924
 
+## 11.6.11 (2019-04-23)
+
+- No changes.
+
 ## 11.6.10 (2019-02-28)
 
 - No changes.
