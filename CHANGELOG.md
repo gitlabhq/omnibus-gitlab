@@ -499,6 +499,10 @@ omnibus-gitlab repository.
 - Restart sidekiq-cluster when relevant changes occur !2945
 - Support TLS communication with gitaly
 
+## 11.6.11 (2019-04-23)
+
+- No changes.
+
 ## 11.6.10 (2019-02-28)
 
 - No changes.
