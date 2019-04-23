@@ -540,6 +540,10 @@ omnibus-gitlab repository.
 - Update Prometheus components !2891
 - Add smartcard configuration to gitlab.rb !2894
 
+## 11.5.11 (2019-04-23)
+
+- No changes.
+
 ## 11.5.8
 
 - Hide transfer of refs/remotes/* in git config
