@@ -429,6 +429,10 @@ omnibus-gitlab repository.
 - Update Prometheus alerting rules !3011
 - Allow external diffs for merge requests to be configured
 
+## 11.7.12 (2019-04-23)
+
+- No changes.
+
 ## 11.7.11 (2019-04-09)
 
 - No changes.
