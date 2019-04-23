@@ -548,6 +548,10 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.5.11 (2019-04-23)
+
+- No changes.
+
 ## 11.5.8
 
 - Hide transfer of refs/remotes/* in git config
