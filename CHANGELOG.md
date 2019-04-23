@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.9.9 (2019-04-23)
+
+### Other (1 change)
+
+- Move software built from git to omnibus-mirror. !3228
+
+
 ## 11.9.8 (2019-04-11)
 
 - No changes.
