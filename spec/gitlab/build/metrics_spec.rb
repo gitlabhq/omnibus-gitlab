@@ -52,7 +52,7 @@ describe Build::Metrics do
   describe '.should_upgrade?' do
     before do
       allow(Build::Check).to receive(:is_ee?).and_return(true)
-      allow(Build::Check).to receive(:add_latest_tag?).and_return(true)
+      allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
       allow(Build::Check).to receive(:is_patch_release?).and_return(false)
     end
 
@@ -71,7 +71,7 @@ describe Build::Metrics do
     end
 
     it 'detects RC package' do
-      allow(Build::Check).to receive(:add_latest_tag?).and_return(false)
+      allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(false)
 
       expect(described_class).to receive(:puts).with("Not a latest stable release. Not upgrading.")
       expect(described_class.should_upgrade?).to be_falsey

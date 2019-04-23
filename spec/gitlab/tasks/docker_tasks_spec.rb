@@ -69,21 +69,21 @@ describe 'docker', type: :rake do
     end
 
     it 'pushes nightly images correctly' do
-      allow(Build::Check).to receive(:add_nightly_tag?).and_return(true)
+      allow(Build::Check).to receive(:is_nightly?).and_return(true)
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:nightly')
       Rake::Task['docker:push:nightly'].invoke
     end
 
     it 'pushes latest images correctly' do
-      allow(Build::Check).to receive(:add_latest_tag?).and_return(true)
+      allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:latest')
       Rake::Task['docker:push:latest'].invoke
     end
 
     it 'pushes rc images correctly' do
-      allow(Build::Check).to receive(:add_rc_tag?).and_return(true)
+      allow(Build::Check).to receive(:is_latest_tag?).and_return(true)
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:rc')
       Rake::Task['docker:push:rc'].invoke
