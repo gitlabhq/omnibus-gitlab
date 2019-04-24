@@ -170,12 +170,4 @@ describe Build::Info do
       end
     end
   end
-
-  describe '.semver_version' do
-    it 'returns the correct semver for auto-deploy' do
-      allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
-      allow(Build::Check).to receive(:git_exact_match).and_return('11.10.12345+aaaaaaaaaaa.bbbbbbbbb')
-      expect(described_class.semver_version).to eq('11.10.12345+aaaaaaaaaaa.bbbbbbbbb')
-    end
-  end
 end

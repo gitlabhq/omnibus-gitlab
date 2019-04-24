@@ -20,7 +20,7 @@ module Build
       end
 
       def is_rc_tag?
-        `git describe --exact-match`.include?("+rc")
+        git_exact_match.include?("+rc")
       end
 
       def is_latest_stable_tag?
@@ -41,6 +41,10 @@ module Build
 
       def on_tag?
         system(*%w[git describe --exact-match])
+      end
+
+      def git_exact_match
+        `git describe --exact-match`
       end
     end
   end

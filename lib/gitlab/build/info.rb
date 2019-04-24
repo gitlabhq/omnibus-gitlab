@@ -19,9 +19,7 @@ module Build
       # For auto-deploy builds, we set the semver to the following which is
       # derived directly from the auto-deploy tag:
       #   MAJOR.MINOR.PIPELINE_ID+<ee ref>-<omnibus ref>
-      # The PIPELINE ID is *not* the ID of the omnibus pipeline, but the ID of the
-      # CI job that tagged the auto-deploy release
-      #
+      #   See https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       #
       # For nightly builds we fetch all GitLab components from master branch
       # If there was no change inside of the omnibus-gitlab repository, the
