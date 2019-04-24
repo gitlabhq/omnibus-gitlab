@@ -116,10 +116,6 @@ notify:slack-fail:
   image: "alpine"
   stage: notification_fail
   script:
-    - if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
-        echo "Skipping failure notification for auto_deploys";
-        exit 0;
-      fi
     - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
   only:
