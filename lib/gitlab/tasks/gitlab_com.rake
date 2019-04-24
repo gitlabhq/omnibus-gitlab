@@ -15,7 +15,7 @@ namespace :gitlab_com do
 
     unless Build::Check.is_auto_deploy?
       latest_tag = Build::Info.latest_tag
-      unless Build::Check.match_tag?(latest_tag)
+      unless Build::Check.is_latest_tag?
         puts "#{latest_tag} is not the latest tag, not doing anything."
         exit
       end
