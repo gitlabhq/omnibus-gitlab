@@ -44,7 +44,7 @@ class DeployerHelper
   end
 
   def trigger_project
-    # Project ID 135 is the project ID of takeoff on ops.gitlab.net
+    # Project ID 135 is the project ID of deployer on ops.gitlab.net
     @trigger_project ||= Gitlab::Util.get_env('DEPLOYER_TRIGGER_PROJECT') || '135'
   end
 
@@ -56,10 +56,10 @@ class DeployerHelper
     {
       'token' => @trigger_token,
       'ref' => @trigger_ref,
-    }.merge(takeoff_env_vars.map { |k, v| ["variables[#{k}]", v] }.to_h)
+    }.merge(deployer_env_vars.map { |k, v| ["variables[#{k}]", v] }.to_h)
   end
 
-  def takeoff_env_vars
+  def deployer_env_vars
     {
       'DEPLOY_ENVIRONMENT' => @deploy_env,
       'DEPLOY_VERSION' => Gitlab::Util.get_env('DEPLOYER_VERSION') || release,
