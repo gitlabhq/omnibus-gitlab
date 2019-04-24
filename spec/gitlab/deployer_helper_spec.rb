@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build'
 require 'gitlab/takeoff_helper'
 
-describe TakeoffHelper do
+describe DeployerHelper do
   subject(:service) { described_class.new('some-token', 'some-env', 'some-branch') }
   describe '#trigger_deploy' do
     it 'triggers an auto deploy' do
@@ -26,7 +26,7 @@ describe TakeoffHelper do
 
     it 'triggers an auto deploy with retries' do
       # Set this to zero so there we don't have delays during tests
-      stub_const('TakeoffHelper::TRIGGER_RETRY_INTERVAL', 0)
+      stub_const('DeployerHelper::TRIGGER_RETRY_INTERVAL', 0)
       response = instance_double('response', body: JSON.dump(web_url: 'http://example.com'), status: 401)
       allow(Build::Info).to receive(:docker_tag).and_return('some-version')
       expect(HTTP)

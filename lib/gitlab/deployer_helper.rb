@@ -3,7 +3,7 @@ require "json"
 require_relative "util.rb"
 
 class PipelineTriggerFailure < StandardError; end
-class TakeoffHelper
+class DeployerHelper
   TRIGGER_RETRY_INTERVAL = 5
   TRIGGER_RETRIES = 3
   def initialize(trigger_token, deploy_env, trigger_ref)
