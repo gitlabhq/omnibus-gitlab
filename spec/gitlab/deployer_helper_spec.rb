@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'gitlab/build'
-require 'gitlab/takeoff_helper'
+require 'gitlab/deployer_helper'
 
 describe DeployerHelper do
   subject(:service) { described_class.new('some-token', 'some-env', 'some-branch') }

@@ -43,12 +43,12 @@ class DeployerHelper
   end
 
   def trigger_host
-    @trigger_host ||= Gitlab::Util.get_env('TAKEOFF_TRIGGER_HOST') || 'ops.gitlab.net'
+    @trigger_host ||= Gitlab::Util.get_env('DEPLOYER_TRIGGER_HOST') || 'ops.gitlab.net'
   end
 
   def trigger_project
     # Project ID 135 is the project ID of takeoff on ops.gitlab.net
-    @trigger_project ||= Gitlab::Util.get_env('TAKEOFF_TRIGGER_PROJECT') || '135'
+    @trigger_project ||= Gitlab::Util.get_env('DEPLOYER_TRIGGER_PROJECT') || '135'
   end
 
   def release
@@ -65,9 +65,8 @@ class DeployerHelper
   def takeoff_env_vars
     {
       'DEPLOY_ENVIRONMENT' => @deploy_env,
-      'DEPLOY_VERSION' => Gitlab::Util.get_env('TAKEOFF_VERSION') || release,
-      'DEPLOY_REPO' => Gitlab::Util.get_env('TAKEOFF_DEPLOY_REPO') || 'gitlab/pre-release',
-      'DEPLOY_USER' => Gitlab::Util.get_env('TAKEOFF_DEPLOY_USER') || 'takeoff'
+      'DEPLOY_VERSION' => Gitlab::Util.get_env('DEPLOYER_VERSION') || release,
+      'DEPLOY_USER' => Gitlab::Util.get_env('DEPLOYER_DEPLOY_USER') || 'deployer'
     }
   end
 end
