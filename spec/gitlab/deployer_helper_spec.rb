@@ -17,8 +17,7 @@ describe DeployerHelper do
             "ref" => "some-branch",
             "variables[DEPLOY_ENVIRONMENT]" => "some-env",
             "variables[DEPLOY_VERSION]" => "some-version",
-            "variables[DEPLOY_REPO]" => "gitlab/pre-release",
-            "variables[DEPLOY_USER]" => "takeoff"
+            "variables[DEPLOY_USER]" => "deployer"
           }
         ).and_return(response)
       expect(service.trigger_deploy).to eq('http://example.com')
@@ -38,8 +37,7 @@ describe DeployerHelper do
             "ref" => "some-branch",
             "variables[DEPLOY_ENVIRONMENT]" => "some-env",
             "variables[DEPLOY_VERSION]" => "some-version",
-            "variables[DEPLOY_REPO]" => "gitlab/pre-release",
-            "variables[DEPLOY_USER]" => "takeoff"
+            "variables[DEPLOY_USER]" => "deployer"
           }
       ).and_return(response).exactly(3).times
       expect { service.trigger_deploy }.to raise_error(RuntimeError, "Unable to trigger pipeline after 3 retries")
