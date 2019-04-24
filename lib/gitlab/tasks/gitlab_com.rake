@@ -4,7 +4,7 @@ require_relative "../util.rb"
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
   task :takeoff do
-    %w[TAKEOFF_TRIGGER_TOKEN TAKEOFF_ENVIRONMENT].each do |env_var|
+    %w[DEPLOYER_TRIGGER_TOKEN DEPLOYER_ENVIRONMENT].each do |env_var|
       abort "This task requires #{env_var} to be set" unless ENV[env_var]
     end
 
@@ -21,9 +21,9 @@ namespace :gitlab_com do
       end
     end
 
-    trigger_token = Gitlab::Util.get_env('TAKEOFF_TRIGGER_TOKEN')
+    trigger_token = Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
     trigger_ref = Build::Check.is_auto_deploy? && Build::Check.ci_commit_tag? ? Gitlab::Util.get_env('CI_COMMIT_TAG') : :master
-    deploy_env = Gitlab::Util.get_env('TAKEOFF_ENVIRONMENT')
+    deploy_env = Gitlab::Util.get_env('DEPLOYER_ENVIRONMENT')
 
     # We do not support auto-deployments or triggered deployments
     # to production from the omnibus pipeline, this check is here

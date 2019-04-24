@@ -317,12 +317,12 @@ Ubuntu-16.04-upload-deploy:
   script:
     - |
       if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
-        export TAKEOFF_ENVIRONMENT='pre';
+        export DEPLOYER_ENVIRONMENT='pre';
       else
-        export TAKEOFF_ENVIRONMENT='gstg';
+        export DEPLOYER_ENVIRONMENT='gstg';
       fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
   <<: *dev-except-branches
   except:
     variables: []
