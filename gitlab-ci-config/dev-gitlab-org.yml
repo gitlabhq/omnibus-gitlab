@@ -282,7 +282,7 @@ Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
-  # Also build for auto-deployt tags
+  # Also build for auto-deploy tags
   except:
     variables: []
 
