@@ -4,7 +4,8 @@ require_relative "util.rb"
 
 class PipelineTriggerFailure < StandardError; end
 class TakeoffHelper
-  RETRY_INTERVAL = 5
+  TRIGGER_RETRY_INTERVAL = 5
+  TRIGGER_RETRIES = 3
   def initialize(trigger_token, deploy_env, trigger_ref)
     @deploy_env = deploy_env
     @trigger_token = trigger_token
@@ -18,8 +19,8 @@ class TakeoffHelper
       resp = HTTP.post(pipeline_trigger_url, form: form_data_for_trigger)
       raise PipelineTriggerFailure unless resp.status == 201
     rescue PipelineTriggerFailure
-      if (retries +=1) <3
-        sleep RETRY_INTERVAL
+      if (retries += 1) < TRIGGER_RETRIES
+        sleep TRIGGER_RETRY_INTERVAL
         puts "Retrying pipeline trigger ##{retries} due to invalid status: #{resp.status}"
         retry
       else

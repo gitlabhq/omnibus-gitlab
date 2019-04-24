@@ -25,7 +25,8 @@ describe TakeoffHelper do
     end
 
     it 'triggers an auto deploy with retries' do
-      stub_const('TakeoffHelper::RETRY_INTERVAL', 0)
+      # Set this to zero so there we don't have delays during tests
+      stub_const('TakeoffHelper::TRIGGER_RETRY_INTERVAL', 0)
       response = instance_double('response', body: JSON.dump(web_url: 'http://example.com'), status: 401)
       allow(Build::Info).to receive(:docker_tag).and_return('some-version')
       expect(HTTP)
