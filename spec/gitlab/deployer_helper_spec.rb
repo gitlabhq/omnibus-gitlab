@@ -39,7 +39,7 @@ describe DeployerHelper do
             "variables[DEPLOY_VERSION]" => "some-version",
             "variables[DEPLOY_USER]" => "deployer"
           }
-      ).and_return(response).exactly(3).times
+        ).and_return(response).exactly(3).times
       expect { service.trigger_deploy }.to raise_error(RuntimeError, "Unable to trigger pipeline after 3 retries")
     end
   end

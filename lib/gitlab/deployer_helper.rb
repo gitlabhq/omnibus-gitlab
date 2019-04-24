@@ -23,19 +23,16 @@ class DeployerHelper
         sleep TRIGGER_RETRY_INTERVAL
         puts "Retrying pipeline trigger ##{retries} due to invalid status: #{resp.status}"
         retry
-      else
-        raise "Unable to trigger pipeline after #{retries} retries"
       end
+      raise "Unable to trigger pipeline after #{retries} retries"
     end
     web_url_from_trigger(resp)
   end
 
   def web_url_from_trigger(resp)
-    begin
-      JSON.parse(resp.body.to_s)['web_url']
-    rescue JSON::ParserError
-      raise "Unable to parse response from pipeline trigger, got #{resp.body.to_s}"
-    end
+    JSON.parse(resp.body.to_s)['web_url']
+  rescue JSON::ParserError
+    raise "Unable to parse response from pipeline trigger, got #{resp.body}"
   end
 
   def pipeline_trigger_url
