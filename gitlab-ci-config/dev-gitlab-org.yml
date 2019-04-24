@@ -8,7 +8,8 @@
 .except-auto-deploy-tag: &except-auto-deploy-tag
   except:
     variables:
-      # Format of the auto-deploy tag
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 .dev-tag-only: &dev-tag-only
@@ -81,7 +82,8 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
-      # Format of the auto-deploy tag
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   artifacts: *package-artifacts
   retry: 1
@@ -130,7 +132,8 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
-      # Format of the auto-deploy tag
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
 
 ### This stage is used for uploading packages
@@ -581,7 +584,8 @@ AWS-Marketplace-release:
   except:
     variables:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
-      # Format of the auto-deploy tag
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
   dependencies:
     - AWS
