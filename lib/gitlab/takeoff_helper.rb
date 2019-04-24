@@ -2,7 +2,9 @@ require "http"
 require "json"
 require_relative "util.rb"
 
+class PipelineTriggerFailure < StandardError; end
 class TakeoffHelper
+  RETRY_INTERVAL = 5
   def initialize(trigger_token, deploy_env, trigger_ref)
     @deploy_env = deploy_env
     @trigger_token = trigger_token
@@ -11,13 +13,28 @@ class TakeoffHelper
   end
 
   def trigger_deploy
-    form_data = {
-      'token' => @trigger_token,
-      'ref' => @trigger_ref,
-    }.merge(takeoff_env_vars.map { |k, v| ["variables[#{k}]", v] }.to_h)
-    resp = HTTP.post(pipeline_trigger_url, form: form_data)
-    raise "Unable to trigger #{pipeline_url}, status: #{resp.status}" unless resp.status == 201
-    JSON.parse(resp.body.to_s)['web_url']
+    begin
+      retries ||= 0
+      resp = HTTP.post(pipeline_trigger_url, form: form_data_for_trigger)
+      raise PipelineTriggerFailure unless resp.status == 201
+    rescue PipelineTriggerFailure
+      if (retries +=1) <3
+        sleep RETRY_INTERVAL
+        puts "Retrying pipeline trigger ##{retries} due to invalid status: #{resp.status}"
+        retry
+      else
+        raise "Unable to trigger pipeline after #{retries} retries"
+      end
+    end
+    web_url_from_trigger(resp)
+  end
+
+  def web_url_from_trigger(resp)
+    begin
+      JSON.parse(resp.body.to_s)['web_url']
+    rescue JSON::ParserError
+      raise "Unable to parse response from pipeline trigger, got #{resp.body.to_s}"
+    end
   end
 
   def pipeline_trigger_url
@@ -35,6 +52,13 @@ class TakeoffHelper
 
   def release
     @release ||= Build::Info.docker_tag
+  end
+
+  def form_data_for_trigger
+    {
+      'token' => @trigger_token,
+      'ref' => @trigger_ref,
+    }.merge(takeoff_env_vars.map { |k, v| ["variables[#{k}]", v] }.to_h)
   end
 
   def takeoff_env_vars

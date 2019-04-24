@@ -23,5 +23,25 @@ describe TakeoffHelper do
         ).and_return(response)
       expect(service.trigger_deploy).to eq('http://example.com')
     end
+
+    it 'triggers an auto deploy with retries' do
+      stub_const('TakeoffHelper::RETRY_INTERVAL', 0)
+      response = instance_double('response', body: JSON.dump(web_url: 'http://example.com'), status: 401)
+      allow(Build::Info).to receive(:docker_tag).and_return('some-version')
+      expect(HTTP)
+        .to receive(:post)
+        .with(
+          "https://ops.gitlab.net/api/v4/projects/135/trigger/pipeline",
+          form: {
+            "token" => "some-token",
+            "ref" => "some-branch",
+            "variables[DEPLOY_ENVIRONMENT]" => "some-env",
+            "variables[DEPLOY_VERSION]" => "some-version",
+            "variables[DEPLOY_REPO]" => "gitlab/pre-release",
+            "variables[DEPLOY_USER]" => "takeoff"
+          }
+      ).and_return(response).exactly(3).times
+      expect { service.trigger_deploy }.to raise_error(RuntimeError, "Unable to trigger pipeline after 3 retries")
+    end
   end
 end
