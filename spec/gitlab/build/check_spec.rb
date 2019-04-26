@@ -117,4 +117,30 @@ describe Build::Check do
       expect(described_class.is_patch_release?).to be_falsey
     end
   end
+
+  describe 'is_rc_tag?' do
+    it 'returns true if it looks like an rc tag' do
+      # It will be the case if the tag is 9.3.0+rc6.ce.0
+      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+rc6.ce.0')
+      expect(described_class.is_rc_tag?).to be_truthy
+    end
+    it 'returns false if it does not look like an rc tag' do
+      # This not be the case if tag is eg. 9.3.0+ce.0
+      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
+      expect(described_class.is_rc_tag?).to be_truthy
+    end
+  end
+
+  describe 'is_auto_deploy?' do
+    it 'returns true if it looks like an auto-deploy tag' do
+      # This is the case if the tag is 11.10.12345+5159f2949cb.59c9fa631
+      allow(Build::Info).to receive(:current_git_tag).and_return('11.10.12345+5159f2949cb.59c9fa631')
+      expect(described_class.is_auto_deploy?).to be_truthy
+    end
+    it 'returns false if it does not look like an auto-deploy tag' do
+      # This not be the case if ag is eg. 9.3.0+ce.0
+      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
+      expect(described_class.is_auto_deploy?).to be_falsey
+    end
+  end
 end

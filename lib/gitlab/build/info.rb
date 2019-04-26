@@ -175,6 +175,10 @@ module Build
         contents << "TRIGGER_PRIVATE_TOKEN=#{token.chomp}\n" if token && !token.empty?
         contents.join
       end
+
+      def current_git_tag
+        `git describe --exact-match`
+      end
     end
   end
 end
