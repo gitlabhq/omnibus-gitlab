@@ -63,7 +63,8 @@ class DeployerHelper
     {
       'DEPLOY_ENVIRONMENT' => @deploy_env,
       'DEPLOY_VERSION' => Gitlab::Util.get_env('DEPLOYER_VERSION') || release,
-      'DEPLOY_USER' => Gitlab::Util.get_env('DEPLOYER_DEPLOY_USER') || 'deployer'
+      'DEPLOY_USER' => Gitlab::Util.get_env('DEPLOYER_DEPLOY_USER') || 'deployer',
+      'CHECKMODE' => '--check'
     }
   end
 end
