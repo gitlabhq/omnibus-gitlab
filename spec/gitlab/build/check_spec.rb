@@ -143,4 +143,11 @@ describe Build::Check do
       expect(described_class.is_auto_deploy?).to be_falsey
     end
   end
+
+  describe 'ci_commit_tag?' do
+    it 'checks for the CI_COMMIT_TAG' do
+      allow(Gitlab::Util).to receive(:get_env).with('CI_COMMIT_TAG').and_return('11.10.12345+5159f2949cb.59c9fa631')
+      expect(described_class.ci_commit_tag?).to be_truthy
+    end
+  end
 end

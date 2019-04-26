@@ -29,6 +29,10 @@ module Build
         Build::Info.current_git_tag.include?("+rc")
       end
 
+      def ci_commit_tag?
+        Gitlab::Util.get_env('CI_COMMIT_TAG')
+      end
+
       def is_latest_stable_tag?
         match_tag?(Info.latest_stable_tag)
       end
