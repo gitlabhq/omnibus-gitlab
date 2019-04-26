@@ -13,7 +13,7 @@ function ee_branch_name(){
 }
 
 function is_auto_deploy_tag(){
-  echo "$CI_COMMIT_TAG" | grep -q -P -- '^\d+\.\d+\.[^ ]+\+[^ ]+$'
+  echo "$CI_COMMIT_TAG" | grep -q -P -- '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
 }
 
 function is_auto_deploy_branch(){
