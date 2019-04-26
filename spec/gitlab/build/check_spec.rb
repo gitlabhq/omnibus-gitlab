@@ -127,7 +127,7 @@ describe Build::Check do
     it 'returns false if it does not look like an rc tag' do
       # This not be the case if tag is eg. 9.3.0+ce.0
       allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
-      expect(described_class.is_rc_tag?).to be_truthy
+      expect(described_class.is_rc_tag?).to be_falsey
     end
   end
 

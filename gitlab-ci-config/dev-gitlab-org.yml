@@ -10,7 +10,7 @@
     variables:
       # Format of the auto-deploy tag for auto-deploy builds.
       # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
 
 .dev-tag-only: &dev-tag-only
   only:
@@ -84,7 +84,7 @@
       - $NIGHTLY == "true"
       # Format of the auto-deploy tag for auto-deploy builds.
       # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
   artifacts: *package-artifacts
   retry: 1
 
@@ -134,7 +134,7 @@
       - $ee == "true"
       # Format of the auto-deploy tag for auto-deploy builds.
       # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -586,6 +586,6 @@ AWS-Marketplace-release:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
       # Format of the auto-deploy tag for auto-deploy builds.
       # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.[^ ]+\+[^ ]+$/
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
   dependencies:
     - AWS

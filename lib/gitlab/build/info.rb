@@ -177,7 +177,7 @@ module Build
       end
 
       def current_git_tag
-        `git describe --exact-match`
+        `git describe --exact-match 2>/dev/null`
       end
     end
   end

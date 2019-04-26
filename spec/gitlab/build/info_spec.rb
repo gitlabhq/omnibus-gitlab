@@ -4,7 +4,6 @@ require 'gitlab/build/info'
 describe Build::Info do
   before do
     allow(ENV).to receive(:[]).and_call_original
-    allow(Build::Check).to receive(:git_exact_match).and_return('abcdefghi')
   end
 
   describe '.package' do
@@ -75,6 +74,7 @@ describe Build::Info do
     describe 'for CE' do
       before do
         stub_is_ee(false)
+        allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('12.121.12+rc7.ce.0')
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ce.0')
       end
 
@@ -99,6 +99,7 @@ describe Build::Info do
     describe 'for CE' do
       before do
         stub_is_ee(nil)
+        allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('12.121.12+ce.0')
         allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ce.0')
       end
 
@@ -137,6 +138,7 @@ describe Build::Info do
 
   describe '.previous_version' do
     it 'detects previous version correctly' do
+      allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('10.4.0+ee.0')
       allow(Build::Info).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
 
       expect(described_class.previous_version).to eq("10.3.5-ee.0")
