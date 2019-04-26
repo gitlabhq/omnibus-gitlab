@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.10.1 (2019-04-23)
+
+- No changes.
+
+## 11.10.1 (2019-04-23)
+
+- No changes.
+
+## 11.10.1 (2019-04-23)
+
+- No changes.
+
 ## 11.10.0 (2019-04-22)
 
 - No changes.
@@ -87,6 +99,24 @@ omnibus-gitlab repository.
 - Share AWS AMIs with the Marketplace account. !3190
 - Move software built from git to omnibus-mirror. !3228
 - Update Mattermost to 5.9.0 (GitLab 11.10). (Harrison Healey)
+
+
+## 11.9.9 (2019-04-23)
+
+- No changes.
+
+## 11.9.9 (2019-04-23)
+
+### Other (1 change)
+
+- Move software built from git to omnibus-mirror. !3228
+
+
+## 11.9.9 (2019-04-23)
+
+### Other (1 change)
+
+- Move software built from git to omnibus-mirror. !3228
 
 
 ## 11.9.8 (2019-04-11)
@@ -285,6 +315,21 @@ omnibus-gitlab repository.
 - Update docutils to 0.13.1. !3042 (Takuya Noguchi)
 - Replace deprecated "--no-ri --no-rdoc" in rubygems. !3050 (Takuya Noguchi)
 - Update Mattermost to 5.8. !3070 (Harrison Healey)
+
+
+## 11.8.8 (2019-04-23)
+
+- No changes.
+
+## 11.8.8 (2019-04-23)
+
+- No changes.
+
+## 11.8.8 (2019-04-23)
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade Mattermost to 5.7.3 (GitLab 11.8). !3137 (Harrison Healey)
 
 
 ## 11.8.7 (2019-04-09)
@@ -429,6 +474,18 @@ omnibus-gitlab repository.
 - Update Prometheus alerting rules !3011
 - Allow external diffs for merge requests to be configured
 
+## 11.7.12 (2019-04-23)
+
+- No changes.
+
+## 11.7.12 (2019-04-23)
+
+- No changes.
+
+## 11.7.12 (2019-04-23)
+
+- No changes.
+
 ## 11.7.11 (2019-04-09)
 
 - No changes.
@@ -499,6 +556,18 @@ omnibus-gitlab repository.
 - Restart sidekiq-cluster when relevant changes occur !2945
 - Support TLS communication with gitaly
 
+## 11.6.11 (2019-04-23)
+
+- No changes.
+
+## 11.6.11 (2019-04-23)
+
+- No changes.
+
+## 11.6.11 (2019-04-23)
+
+- No changes.
+
 ## 11.6.10 (2019-02-28)
 
 - No changes.
@@ -539,6 +608,18 @@ omnibus-gitlab repository.
 - Update runit version to 2.1.2 !2897
 - Update Prometheus components !2891
 - Add smartcard configuration to gitlab.rb !2894
+
+## 11.5.11 (2019-04-23)
+
+- No changes.
+
+## 11.5.11 (2019-04-23)
+
+- No changes.
+
+## 11.5.11 (2019-04-23)
+
+- No changes.
 
 ## 11.5.8
 
