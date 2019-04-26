@@ -13,12 +13,10 @@ namespace :gitlab_com do
       exit
     end
 
-    unless Build::Check.is_auto_deploy?
+    if !Build::Check.is_auto_deploy? && !Build::Check.is_latest_tag?
       latest_tag = Build::Info.latest_tag
-      unless Build::Check.is_latest_tag?
-        puts "#{latest_tag} is not the latest tag, not doing anything."
-        exit
-      end
+      puts "#{latest_tag} is not the latest tag, not doing anything."
+      exit
     end
 
     trigger_token = Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
