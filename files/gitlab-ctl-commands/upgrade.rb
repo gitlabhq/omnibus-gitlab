@@ -236,8 +236,13 @@ def print_upgrade_and_exit
   puts "Upgrade complete! If your GitLab server is misbehaving try running"
   puts "  sudo gitlab-ctl restart"
   puts "before anything else."
-  puts "If you need to roll back to the previous version you can use the database"
-  puts "backup made during the upgrade (scroll up for the filename)."
+
+  auto_backup_skip_file = "#{etc_path}/skip-auto-backup"
+  unless File.exist?(auto_backup_skip_file)
+    puts "If you need to roll back to the previous version you can use the database"
+    puts "backup made during the upgrade (scroll up for the filename)."
+  end
+
   puts "\n"
   stale_files_check
   Kernel.exit 0
