@@ -32,6 +32,7 @@ variables:
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
   RUBY_IMAGE: "ruby:2.5"
+  MAX_PACKAGE_SIZE_MB: "700"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

@@ -51,11 +51,15 @@
     - bundle exec rake cache:restore
     - bundle exec rake build:project build:package:sync
     - bundle exec rake cache:bundle
+    - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
   tags:
   - docker-builder
   only:
     - branches@gitlab/omnibus-gitlab
-  artifacts: *package-artifacts
+  artifacts:
+    <<: *package-artifacts
+    reports:
+      junit: junit_ci_rspec.xml
   dependencies:
     - fetch-assets
   cache: *branch-cache
