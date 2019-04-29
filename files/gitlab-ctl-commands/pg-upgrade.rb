@@ -153,9 +153,13 @@ def common_post_upgrade
   cleanup_data_dir
 
   log 'Upgrade is complete, doing post configuration steps'
+  log 'Running reconfigure to re-generate PG configuration'
   run_reconfigure
 
   start_database
+
+  log 'Running reconfigure to re-generate any dependent service configuration'
+  run_reconfigure
 
   log "Waiting 30 seconds for Database to be running."
   GitlabCtl::Util.delay_for(30, exit_message: false)
