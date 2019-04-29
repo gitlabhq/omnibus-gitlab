@@ -95,7 +95,7 @@ backup_failed() {
   notify
   notify "$1 backup failed! If you want to skip this backup, run the following command and try again:"
   notify
-  notify " sudo touch ${skip_reconfigure_file}"
+  notify " sudo touch ${skip_backup_file}"
   notify
   exit 1
 }
