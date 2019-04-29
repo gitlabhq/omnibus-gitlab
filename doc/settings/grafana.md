@@ -93,13 +93,10 @@ for more information.
 
 ## Dashboards
 
-Once Grafana is up, you can start importing the
+Starting with [GitLab 11.10](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4180), dashboards for monitoring Omnibus GitLab will be pre-loaded and available on initial login.
+
+For earlier versions of GitLab, you can manually import the
 [pre-built dashboards](https://gitlab.com/gitlab-org/grafana-dashboards/tree/master/omnibus)
 that are tailored for Omnibus installations.
-
-NOTE: **Note:**
-The pre-built dashboards will be automatically loaded in a future release.
-Follow [issue 4180](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4180)
-for more information.
 
 [reconfigure]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
