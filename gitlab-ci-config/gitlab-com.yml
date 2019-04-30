@@ -226,13 +226,17 @@ Trigger:package:
     - bundle exec rake cache:bundle
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
+    - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
   only:
     refs:
       - triggers@gitlab-org/omnibus-gitlab
   artifacts:
     expire_in: 3 days
+    when: always
     paths:
       - pkg/
+    reports:
+      junit: junit_ci_rspec.xml
   cache:
     key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}"
     paths:

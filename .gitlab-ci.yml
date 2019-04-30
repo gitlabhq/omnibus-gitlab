@@ -35,6 +35,7 @@ variables:
   # Format of the auto-deploy tag for auto-deploy builds.
   # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
   AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
+  MAX_PACKAGE_SIZE_MB: "700"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job
