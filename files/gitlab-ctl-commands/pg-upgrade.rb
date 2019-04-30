@@ -16,6 +16,7 @@
 #
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
+require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
 
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
 
@@ -161,8 +162,8 @@ def common_post_upgrade
   log 'Running reconfigure to re-generate any dependent service configuration'
   run_reconfigure
 
-  log "Waiting 30 seconds for Database to be running."
-  GitlabCtl::Util.delay_for(30, exit_message: false)
+  log "Waiting for Database to be running."
+  GitlabCtl::PostgreSQL.wait_for_postgresql(30)
 
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
   analyze_cluster

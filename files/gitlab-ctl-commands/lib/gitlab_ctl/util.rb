@@ -92,8 +92,8 @@ module GitlabCtl
         run_command("/opt/gitlab/embedded/bin/chef-client -z -c #{cookbook_path}/#{config} -j #{cookbook_path}/#{attribs}")
       end
 
-      def delay_for(seconds, exit_message: true)
-        $stdout.print "\nPlease hit Ctrl-C now if you want to cancel the operation.\n" if exit_message
+      def delay_for(seconds)
+        $stdout.print "\nPlease hit Ctrl-C now if you want to cancel the operation.\n"
         seconds.times do
           $stdout.print '.'
           sleep 1
