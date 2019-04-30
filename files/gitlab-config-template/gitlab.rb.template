@@ -596,7 +596,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['default_notifications_backoff'] = "1s"
 # registry['default_notifications_headers'] = {}
 
-
+################################################################################
+## Error Reporting and Logging with Sentry
+################################################################################
+# gitlab_rails['sentry_enabled'] = false
+# gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+# gitlab_rails['sentry_environment'] = 'production'
 
 ################################################################################
 ## GitLab Workhorse
