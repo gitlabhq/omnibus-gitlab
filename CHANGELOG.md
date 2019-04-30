@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.10.3 (2019-04-30)
+
+### Fixed (1 change)
+
+- Update exclusion of gem cache to match ruby 2.5. !3243
+
+
 ## 11.10.2 (2019-04-25)
 
 - No changes.
