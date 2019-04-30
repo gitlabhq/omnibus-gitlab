@@ -204,6 +204,12 @@ production: &base
     key: <%= @registry_key_path %>
     issuer: <%= @registry_issuer %>
 
+  ## Error Reporting and Logging with Sentry
+  sentry:
+    enabled: <%= @sentry_enabled %>
+    dsn: <%= @sentry_dsn %>
+    environment: <%= @sentry_environment %> # e.g. development, staging, production
+
   mattermost:
     enabled: <%= @mattermost_enabled %>
     host: <%= @mattermost_host %>

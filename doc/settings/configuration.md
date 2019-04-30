@@ -591,6 +591,24 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 Disabling impersonation is documented in
 [docs.gitlab.com](https://docs.gitlab.com/ee/api/README.html#disable-impersonation).
 
+## Error Reporting and Logging with Sentry
+
+[Sentry](https://sentry.io) is an error reporting and logging tool which can be
+used as SaaS or on premise. It's Open Source and you can browse it's source code
+repositiories [here](https://github.com/getsentry).
+
+The following settings can be used to configure Sentry:
+
+```ruby
+gitlab_rails['sentry_enabled'] = true
+gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+gitlab_rails['sentry_environment'] = 'production'
+```
+
+The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environments/)
+can be used to track errors and issues across several deployed GitLab
+environments, e.g. lab, development, staging, production.
+
 ## Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](ldap.md).
