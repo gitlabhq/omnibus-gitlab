@@ -86,9 +86,6 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
-      # Format of the auto-deploy tag for auto-deploy builds.
-      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
   artifacts: *package-artifacts
   retry: 1
 
@@ -96,9 +93,10 @@
   stage: package-and-image
   script:
     # Always compile assets for auto-deploy builds,
-    # this is necessary because for autodeploy builds
-    # it is not guaranteed that assets are compiled
-    # in the gitlab-ee pipeline
+    # this is done for auto-deploy builds
+    # so we do not need or have to wait for the compile
+    # assets job to run in the gitlab-ee pipeline
+    # on dev.gitlab.org
     - |
       if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
         echo "Setting COMPILE_ASSETS env variable for auto-deploy"
