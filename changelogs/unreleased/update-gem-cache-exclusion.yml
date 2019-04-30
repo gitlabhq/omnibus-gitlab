@@ -1,5 +1,0 @@
----
-title: Update exclusion of gem cache to match ruby 2.5
-merge_request: 3243
-author:
-type: fixed
