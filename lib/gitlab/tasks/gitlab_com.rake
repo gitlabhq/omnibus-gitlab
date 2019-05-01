@@ -1,18 +1,11 @@
-require 'gitlab'
-require_relative '../takeoff_helper.rb'
+require_relative '../deployer_helper.rb'
 require_relative "../util.rb"
 
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
-  task :takeoff do
-    %w[TAKEOFF_TRIGGER_TOKEN TAKEOFF_ENVIRONMENT].each do |env_var|
+  task :deployer do
+    %w[DEPLOYER_TRIGGER_TOKEN DEPLOYER_ENVIRONMENT].each do |env_var|
       abort "This task requires #{env_var} to be set" unless ENV[env_var]
-    end
-
-    latest_tag = Build::Info.latest_tag
-    unless Build::Check.match_tag?(latest_tag)
-      puts "#{latest_tag} is not the latest tag, not doing anything."
-      exit
     end
 
     unless Build::Info.package == "gitlab-ee"
@@ -20,15 +13,22 @@ namespace :gitlab_com do
       exit
     end
 
-    trigger_token = Gitlab::Util.get_env('TAKEOFF_TRIGGER_TOKEN')
-    deploy_env = Gitlab::Util.get_env('TAKEOFF_ENVIRONMENT')
+    if !Build::Check.is_auto_deploy? && !Build::Check.is_latest_tag?
+      latest_tag = Build::Info.latest_tag
+      puts "#{latest_tag} is not the latest tag, not doing anything."
+      exit
+    end
 
-    # there is only support for staging deployments
-    # from ci at this time, error here for safety.
-    raise NotImplementedError, "Environment #{deploy_env} not supported" unless deploy_env == "gstg"
+    trigger_token = Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
+    trigger_ref = Build::Check.is_auto_deploy? && Build::Check.ci_commit_tag? ? Gitlab::Util.get_env('CI_COMMIT_TAG') : :master
+    deploy_env = Gitlab::Util.get_env('DEPLOYER_ENVIRONMENT')
 
-    takeoff_helper = TakeoffHelper.new(trigger_token, deploy_env)
-    url = takeoff_helper.trigger_deploy
-    puts "Takeoff build triggered at #{url}"
+    # We do not support auto-deployments or triggered deployments
+    # to production from the omnibus pipeline, this check is here
+    # for safety
+    raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env.include?('gprd')
+    deployer_helper = DeployerHelper.new(trigger_token, deploy_env, trigger_ref)
+    url = deployer_helper.trigger_deploy
+    puts "Deployer build triggered at #{url} on #{trigger_ref} for the #{deploy_env} environment"
   end
 end

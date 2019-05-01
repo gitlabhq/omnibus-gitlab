@@ -32,6 +32,11 @@ variables:
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
   RUBY_IMAGE: "ruby:2.5"
+  # Format of the auto-deploy tag for auto-deploy builds.
+  # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+  AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
+  # Default environment for auto-deploy
+  AUTO_DEPLOY_ENVIRONMENT: 'pre'
   MAX_PACKAGE_SIZE_MB: "700"
 
 ### For services that need a docker daemon
@@ -102,6 +107,8 @@ fetch-assets:
   except:
     variables:
       - $COMPILE_ASSETS == "true"
+      # Format of the auto-deploy tag
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
 
 include:
   - '/gitlab-ci-config/gitlab-com.yml'

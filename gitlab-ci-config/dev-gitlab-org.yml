@@ -5,9 +5,17 @@
 # Templates #
 #############
 
+.except-auto-deploy-tag: &except-auto-deploy-tag
+  except:
+    variables:
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+
 .dev-tag-only: &dev-tag-only
   only:
     - tags@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy-tag
 
 .dev-except-branches: &dev-except-branches
    only:
@@ -84,6 +92,15 @@
 .tag_template: &tag_build
   stage: package-and-image
   script:
+    # Always compile assets for auto-deploy builds,
+    # this is done for auto-deploy builds
+    # so that we do not have to wait for the compile assets job 
+    # in the gitlab-ee pipeline.
+    - |
+      if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
+        echo "Setting COMPILE_ASSETS env variable for auto-deploy"
+        export COMPILE_ASSETS='true';
+      fi
     - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
     - cp support/known_hosts ~/.ssh/known_hosts
     - chmod -R 0600 ~/.ssh/
@@ -116,6 +133,9 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -130,8 +150,7 @@
   retry: 2
   tags:
   - promotion
-  only:
-  - tags@gitlab/omnibus-gitlab
+  <<: *dev-tag-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -161,6 +180,10 @@
       - /.*ee\.\d/
     variables:
       - $ee == "true"
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+
 
 ###########################
 #     Branch pipeline     #
@@ -268,6 +291,9 @@ Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
+  # Also build for auto-deploy tags
+  except:
+    variables: []
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -288,21 +314,27 @@ Docker-QA:
   dependencies: []
   retry: 1
 
-## Upload and deploy to staging for GitLab.com
-## The version of the deployment is set by the
-## VERSION file. This job runs also in nightly branch builds.
-Ubuntu-16.04-staging:
+## Upload and deploy to staging or preprod for GitLab.com
+## Normal tagged releases are deployed to staging
+## Auto-deploy tagged releases are deployed to preprod
+Ubuntu-16.04-upload-deploy:
   stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
-  variables:
-    TAKEOFF_ENVIRONMENT: 'gstg'
   script:
+    - |
+      if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
+        export DEPLOYER_ENVIRONMENT="$AUTO_DEPLOY_ENVIRONMENT";
+      else
+        export DEPLOYER_ENVIRONMENT='gstg';
+      fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$TAKEOFF_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:takeoff; fi
+    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
   <<: *dev-except-branches
+  except:
+    variables: []
 
 ### Package builds
 Ubuntu-18.04:
@@ -342,6 +374,7 @@ dependency_scanning:
     - manifest=pkg/ubuntu-xenial/*.version-manifest.json
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
+  <<: *except-auto-deploy-tag
   dependencies:
     - Ubuntu-16.04
     - Ubuntu-16.04-branch
@@ -542,6 +575,7 @@ Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
   <<: *raspbian_release
+  <<: *except-auto-deploy-tag
 
 AWS-Marketplace-release:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
@@ -556,5 +590,8 @@ AWS-Marketplace-release:
   except:
     variables:
       - $CI_COMMIT_TAG =~ /^.*\+rc.*/
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
   dependencies:
     - AWS
