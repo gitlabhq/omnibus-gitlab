@@ -16,6 +16,11 @@ module Build
         "gitlab-ce"
       end
 
+      # For auto-deploy builds, we set the semver to the following which is
+      # derived directly from the auto-deploy tag:
+      #   MAJOR.MINOR.PIPELINE_ID+<ee ref>-<omnibus ref>
+      #   See https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      #
       # For nightly builds we fetch all GitLab components from master branch
       # If there was no change inside of the omnibus-gitlab repository, the
       # package version will remain the same but contents of the package will be
@@ -169,6 +174,10 @@ module Build
         contents << "DOWNLOAD_URL=#{download_url}\n" if download_url
         contents << "TRIGGER_PRIVATE_TOKEN=#{token.chomp}\n" if token && !token.empty?
         contents.join
+      end
+
+      def current_git_tag
+        `git describe --exact-match 2>/dev/null`
       end
     end
   end
