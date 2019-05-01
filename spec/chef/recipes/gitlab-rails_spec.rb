@@ -1415,6 +1415,18 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    context 'Geo settings' do
+      it 'sets the geo_node_name variable' do
+        stub_gitlab_rb(gitlab_rails: { geo_node_name: 'the name of the node' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'geo_node_name' => 'the name of the node'
+          )
+        )
+      end
+    end
   end
 
   context 'with environment variables' do

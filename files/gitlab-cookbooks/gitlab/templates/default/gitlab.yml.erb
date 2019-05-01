@@ -353,6 +353,16 @@ production: &base
       cron: "<%= @pseudonymizer_worker_cron %>"
     <% end %>
 
+  ## Geo
+  # NOTE: These settings will only take effect if Geo is enabled
+  geo:
+    # This is an optional identifier which Geo nodes can use to identify themselves.
+    # For example, if external_url is the same for two secondaries, you must specify
+    # a unique Geo node name for those secondaries.
+    #
+    # If it is blank, it defaults to external_url.
+    node_name: <%= @geo_node_name %>
+
   #
   # 2. GitLab CI settings
   # ==========================

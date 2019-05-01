@@ -40,6 +40,11 @@ default['gitlab']['sidekiq-cluster']['queue_groups'] = []
 default['gitlab']['sidekiq-cluster']['negate'] = false
 
 ###
+# Geo: Common (primary or secondary) node configuration
+###
+default['gitlab']['gitlab-rails']['geo_node_name'] = nil
+
+###
 # Geo: Secondary node configuration
 ###
 default['gitlab']['geo-secondary']['enable'] = false
