@@ -22,7 +22,7 @@ See [settings/logs.md.](../settings/logs.md)
 
 After omnibus-gitlab is installed and configured, your server will have a Runit
 service directory (`runsvdir`) process running that gets started at boot via
-`/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource.  You
+`/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource. You
 should not have to deal with the `runsvdir` process directly; you can use the
 `gitlab-ctl` front-end instead.
 
@@ -190,7 +190,7 @@ understand the implications.
 ### Removing unused layers not referenced by manifests
 
 > [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/3097)
-in Omnibus GitLab 11.10.
+> in Omnibus GitLab 11.10.
 
 DANGER: **Danger:**
 This is a destructive operation.
@@ -219,17 +219,23 @@ it into a read-only mode and by not using the built-in command. During this time
 you will be able to pull from the Container Registry, but you will not be able to
 push. To enable the read-only mode:
 
+NOTE: **Note:**
+By default, the registry storage path is `/var/opt/gitlab/gitlab-rails/shared/registry`.
+
 1. In `/etc/gitlab/gitlab.rb`, specify the read-only mode:
 
-   ```ruby
-   registry['storage'] = {
-     'maintenance' => {
-       'readonly' => {
-         'enabled' => true
-       }
-     }
-   }
-   ```
+```ruby
+  registry['storage'] = {
+    'filesystem' => {
+      'rootdirectory' => "<your_registry_storage_path>"
+    },
+    'maintenance' => {
+      'readonly' => {
+        'enabled' => true
+      }
+    }
+  }
+```
 
 1. Save and reconfigure GitLab:
 
@@ -250,13 +256,16 @@ push. To enable the read-only mode:
 1. Once done, in `/etc/gitlab/gitlab.rb` change it back to read-write mode:
 
    ```ruby
-   registry['storage'] = {
-     'maintenance' => {
-       'readonly' => {
-         'enabled' => false
-       }
-     }
-   }
+    registry['storage'] = {
+      'filesystem' => {
+        'rootdirectory' => "<your_registry_storage_path>"
+      },
+      'maintenance' => {
+        'readonly' => {
+          'enabled' => false
+        }
+      }
+    }
    ```
 
 1. Save and reconfigure GitLab:
