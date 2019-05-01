@@ -208,6 +208,7 @@ production: &base
   sentry:
     enabled: <%= @sentry_enabled %>
     dsn: <%= @sentry_dsn %>
+    clientside_dsn: <%= @sentry_clientside_dsn %>
     environment: <%= @sentry_environment %> # e.g. development, staging, production
 
   mattermost:

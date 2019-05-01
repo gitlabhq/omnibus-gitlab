@@ -602,6 +602,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # gitlab_rails['sentry_enabled'] = false
 # gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+# gitlab_rails['sentry_clientside_dsn'] = 'https://<key>@sentry.io/<project>'
 # gitlab_rails['sentry_environment'] = 'production'
 
 ################################################################################
