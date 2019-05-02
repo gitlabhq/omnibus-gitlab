@@ -532,9 +532,31 @@ sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
 ```
 
 ### Upgrading a GitLab HA cluster
-If you have setup your GitLab instance per the [GitLab HA documentation](https://docs.gitlab.com/ee/administration/high_availability/database.html), upgrade the database server last. It should not be necessary to perform any other extra steps.
+If [PostgreSQL is configured for high availability](https://docs.gitlab.com/ee/administration/high_availability/database.html),
+`pg-upgrade` should be run all the nodes running PostgreSQL. Other nodes can be
+skipped, but must be running the same GitLab version as the database nodes.
+Follow the steps below to upgrade the database nodes
 
-You do not need to run `pg-upgrade` on any node besides the database node, but they should be updated to the latest version of GitLab before the database is updated.
+1. Secondary nodes must be upgraded before the primary node.
+    1. On running `pg-upgrade` on a PG secondary node, the node will be removed
+       from the cluster.
+    1. Once all the secondary nodes are upgraded using `pg-upgrade`, the user
+       will be left with a single-node cluster that has only the primary node.
+    1. `pg-upgrade`, on secondary nodes will not update the existing data to
+       match the new version, as that data will be replaced by the data from
+       primary node. It will, however move the existing data to a backup
+       location.
+1. Once all secondary nodes are upgraded, run `pg-upgrade` on primary node.
+    1. On a primary node, `pg-upgrade` will update the existing data to match
+       the new PG version.
+1. Recreate the secondary nodes by running the following command on each of them
+    ```bash
+    gitlab-ctl repmgr standby setup MASTER_NODE_NAME
+    ```
+1. Check if the repmgr cluster is back to the original state
+    ```bash
+    gitlab-ctl repmgr cluster show
+    ```
 
 #### Troubleshooting upgrades in an HA cluster
 
