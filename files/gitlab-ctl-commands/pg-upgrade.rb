@@ -60,6 +60,7 @@ add_command_under_category 'pg-upgrade', 'database',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
   @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, options[:tmp_dir])
+  @instance_type = :single_node
 
   running_version = @db_worker.fetch_running_version
 
@@ -128,17 +129,19 @@ add_command_under_category 'pg-upgrade', 'database',
     node = Repmgr::Node.new
     if node.is_master?
       log "Primary node detected."
-      general_upgrade(instance_type: :pg_primary)
+      @instance_type = :pg_primary
+      general_upgrade
     else
       log "Secondary node detected."
+      @instance_type = :pg_secondary
       ha_secondary_upgrade
     end
   else
-    general_upgrade(instance_type: :single_node)
+    general_upgrade
   end
 end
 
-def common_pre_upgrade(instance_type: :single_node)
+def common_pre_upgrade
   maintenance_mode('enable')
 
   locale, encoding = get_locale_encoding
@@ -150,7 +153,7 @@ def common_pre_upgrade(instance_type: :single_node)
   initialize_new_db(locale, encoding)
 end
 
-def common_post_upgrade(instance_type: :single_node)
+def common_post_upgrade
   cleanup_data_dir
 
   log 'Upgrade is complete, doing post configuration steps'
@@ -165,11 +168,13 @@ def common_post_upgrade(instance_type: :single_node)
   log "Waiting for Database to be running."
   GitlabCtl::PostgreSQL.wait_for_postgresql(30)
 
-  log 'Database upgrade is complete, running analyze_new_cluster.sh'
-  analyze_cluster
+  if @instance_type != :pg_secondary
+    log 'Database upgrade is complete, running analyze_new_cluster.sh'
+    analyze_cluster
+  end
 
   maintenance_mode('disable')
-  goodbye_message(instance_type)
+  goodbye_message
   Kernel.exit 0
 end
 
@@ -177,14 +182,14 @@ def ha_secondary_upgrade
   log "Unregistering secondary node from cluster"
   Repmgr::Standby.unregister({})
 
-  common_pre_upgrade(instance_type: :pg_secondary)
-  common_post_upgrade(instance_type: :pg_secondary)
+  common_pre_upgrade
+  common_post_upgrade
 end
 
-def general_upgrade(instance_type: :single_node)
-  common_pre_upgrade(instance_type)
+def general_upgrade
+  common_pre_upgrade
   run_pg_upgrade
-  common_post_upgrade(instance_type)
+  common_post_upgrade
 end
 
 def start_database
@@ -404,19 +409,18 @@ def maintenance_mode(command)
   end
 end
 
-def goodbye_message(instance_type: :single_node)
+def goodbye_message
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
   log ""
 
-  case instance_type
+  case @instance_type
   when :pg_secondary
     log "As part of PostgreSQL upgrade, this secondary node was removed from"
-    log "the HA cluster."
-    log "Once the primary node has been upgraded to new version of PostgreSQL,"
-    log " you will have to re-initialize this secondary node to follow the priamry"
-    log "node."
+    log "the HA cluster. Once the primary node is upgraded to new version of"
+    log "PostgreSQL, you will have to configure this secondary node to follow"
+    log "the primary node again."
     log "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster for details."
   when :pg_primary
 
@@ -424,7 +428,7 @@ def goodbye_message(instance_type: :single_node)
     log "the HA cluster. So right now, the cluster has only a single node in"
     log "it - the primary node."
     log "Now the primary node has been upgraded to new version of PostgreSQL,"
-    log "you may go ahead and re-initialize the secondary nodes to follow this"
+    log "you may go ahead and configure the secondary nodes to follow this"
     log "primary node."
     log "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster for details."
   end
