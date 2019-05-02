@@ -128,17 +128,17 @@ add_command_under_category 'pg-upgrade', 'database',
     node = Repmgr::Node.new
     if node.is_master?
       log "Primary node detected."
-      general_upgrade
+      general_upgrade(instance_type: :pg_primary)
     else
       log "Secondary node detected."
       ha_secondary_upgrade
     end
   else
-    general_upgrade
+    general_upgrade(instance_type: :single_node)
   end
 end
 
-def common_pre_upgrade
+def common_pre_upgrade(instance_type: :single_node)
   maintenance_mode('enable')
 
   locale, encoding = get_locale_encoding
@@ -150,7 +150,7 @@ def common_pre_upgrade
   initialize_new_db(locale, encoding)
 end
 
-def common_post_upgrade
+def common_post_upgrade(instance_type: :single_node)
   cleanup_data_dir
 
   log 'Upgrade is complete, doing post configuration steps'
@@ -168,8 +168,8 @@ def common_post_upgrade
   log 'Database upgrade is complete, running analyze_new_cluster.sh'
   analyze_cluster
 
-  goodbye_message
   maintenance_mode('disable')
+  goodbye_message(instance_type)
   Kernel.exit 0
 end
 
@@ -177,14 +177,14 @@ def ha_secondary_upgrade
   log "Unregistering secondary node from cluster"
   Repmgr::Standby.unregister({})
 
-  common_pre_upgrade
-  common_post_upgrade
+  common_pre_upgrade(instance_type: :pg_secondary)
+  common_post_upgrade(instance_type: :pg_secondary)
 end
 
-def general_upgrade
-  common_pre_upgrade
+def general_upgrade(instance_type: :single_node)
+  common_pre_upgrade(instance_type)
   run_pg_upgrade
-  common_post_upgrade
+  common_post_upgrade(instance_type)
 end
 
 def start_database
@@ -404,8 +404,28 @@ def maintenance_mode(command)
   end
 end
 
-def goodbye_message
+def goodbye_message(instance_type: :single_node)
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
   log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
+  log ""
+
+  case instance_type
+  when :pg_secondary
+    log "As part of PostgreSQL upgrade, this secondary node was removed from"
+    log "the HA cluster."
+    log "Once the primary node has been upgraded to new version of PostgreSQL,"
+    log " you will have to re-initialize this secondary node to follow the priamry"
+    log "node."
+    log "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster for details."
+  when :pg_primary
+
+    log "As part of PostgreSQL upgrade, the secondary nodes were removed from"
+    log "the HA cluster. So right now, the cluster has only a single node in"
+    log "it - the primary node."
+    log "Now the primary node has been upgraded to new version of PostgreSQL,"
+    log "you may go ahead and re-initialize the secondary nodes to follow this"
+    log "primary node."
+    log "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster for details."
+  end
 end
