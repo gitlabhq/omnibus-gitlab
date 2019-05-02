@@ -14,6 +14,7 @@ describe 'gitaly' do
   let(:logging_format) { 'json' }
   let(:logging_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
   let(:logging_ruby_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project-ruby' }
+  let(:logging_sentry_environment) { 'production' }
   let(:prometheus_grpc_latency_buckets) do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
   end
@@ -76,6 +77,8 @@ describe 'gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+level = '#{logging_level}'\s+format = '#{logging_format}'\s+ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'})
       expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[logging\]\s+level = '#{logging_level}'\s+format = '#{logging_format}'\s+sentry_environment = '#{logging_sentry_environment}'})
+      expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[auth\]\s+token = })
@@ -118,6 +121,7 @@ describe 'gitaly' do
           logging_format: logging_format,
           logging_sentry_dsn: logging_sentry_dsn,
           logging_ruby_sentry_dsn: logging_ruby_sentry_dsn,
+          logging_sentry_environment: logging_sentry_environment,
           prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
           auth_token: auth_token,
           auth_transitioning: auth_transitioning,
@@ -160,6 +164,7 @@ describe 'gitaly' do
         %r{format = '#{logging_format}'},
         %r{sentry_dsn = '#{logging_sentry_dsn}'},
         %r{ruby_sentry_dsn = '#{logging_ruby_sentry_dsn}'},
+        %r{sentry_environment = '#{logging_sentry_environment}'},
       ].map(&:to_s).join('\s+'))
       expect(chef_run).to render_file(config_path)
         .with_content(gitaly_logging_section)
