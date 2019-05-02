@@ -16,7 +16,7 @@
 #
 
 name 'postgresql_new'
-default_version '10.0'
+default_version '10.7'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,8 +30,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '10.0' do
-  source sha256: '712f5592e27b81c5b454df96b258c14d94b6b03836831e015c65d6deeae57fd1'
+version '10.7' do
+  source sha256: 'bfed1065380c1bba927bfe51f23168471373f26e3324cbad859269cc32733ede'
 end
 
 # PostgreSQL 10 should have a major version of 10, not 10.0.
@@ -51,7 +51,6 @@ build do
   update_config_guess(target: 'config')
 
   patch source: 'no_docs.patch', target: 'GNUmakefile.in'
-  patch source: 'copy_file_range.patch'
 
   command './configure' \
           " --prefix=#{prefix}" \
