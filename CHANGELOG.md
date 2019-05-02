@@ -14,6 +14,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.9.1 (GitLab 11.10). (Harrison Healey)
 
 
+## 11.10.4 (2019-05-02)
+
+- No changes.
+
 ## 11.10.3 (2019-04-30)
 
 - No changes.
