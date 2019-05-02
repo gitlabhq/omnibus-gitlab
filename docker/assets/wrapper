@@ -91,7 +91,7 @@ if [ "${GITLAB_SKIP_PG_UPGRADE}" != true ]; then
 fi
 
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
-  echo "Runnning Post Reconfigure Script..."
+  echo "Running Post Reconfigure Script..."
   eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
 fi
 
