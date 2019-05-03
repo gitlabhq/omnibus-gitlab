@@ -134,7 +134,7 @@ add_command_under_category 'pg-upgrade', 'database',
     else
       log "Secondary node detected."
       @instance_type = :pg_secondary
-      ha_secondary_upgrade
+      ha_secondary_upgrade(options)
     end
   else
     general_upgrade
@@ -178,9 +178,13 @@ def common_post_upgrade
   Kernel.exit 0
 end
 
-def ha_secondary_upgrade
-  log "Unregistering secondary node from cluster"
-  Repmgr::Standby.unregister({})
+def ha_secondary_upgrade(options)
+  if options[:skip_unregister]
+    log "Not attempting to unregister secondary node due to --skip-unregister flag"
+  else
+    log "Unregistering secondary node from cluster"
+    Repmgr::Standby.unregister({})
+  end
 
   common_pre_upgrade
   common_post_upgrade
