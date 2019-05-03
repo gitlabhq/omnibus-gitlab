@@ -102,14 +102,16 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   log 'Reconfiguring GitLab to apply migrations'
   reconfigure(false) # sending 'false' means "don't quit afterwards"
 
-  unless progress_message('Ensuring PostgreSQL is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
-    status = run_command(command.join(' '))
-    status.success?
-  end
-    log 'Error ensuring PostgreSQL is updated. Please check the logs'
-    Kernel.exit 1
-  end
+  # Commented out until 12.0, where we make PostgreSQL 10 default
+  #
+  # unless progress_message('Ensuring PostgreSQL is updated') do
+  #   command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
+  #   status = run_command(command.join(' '))
+  #   status.success?
+  # end
+  #   log 'Error ensuring PostgreSQL is updated. Please check the logs'
+  #   Kernel.exit 1
+  # end
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
