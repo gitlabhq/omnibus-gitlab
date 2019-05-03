@@ -17,6 +17,33 @@ function failed_pg_upgrade() {
     exit 1
 }
 
+function clean_stale_pids() {
+    # cleanup known pid/socket files
+    for x in /opt/gitlab/sv /run $(ls -d /tmp/gitaly-ruby* 2>/dev/null) ; do
+        # find
+        #  - any (s)ocket or regular (f)ile
+        #  - by the name of "*.pid" or "socket.?"
+        #  - and delete them
+        find $x \
+            \( \
+              -type f \
+              -o -type s \
+            \) \(\
+              -name pid \
+              -o -name "*.pid" \
+              -o -name "socket.?" \
+            \) \
+            -delete ;
+    done
+}
+
+function detect_unclean_start() {
+    set +e
+    echo "Cleaning stale PIDs & sockets"
+    clean_stale_pids
+    set -e
+}
+
 trap "sigterm_handler; exit" TERM
 
 source /RELEASE
@@ -43,6 +70,9 @@ echo "  docker exec -it gitlab update-permissions"
 echo "  docker restart gitlab"
 echo
 sleep 3s
+
+# Run unclean start detection & cleanup
+detect_unclean_start
 
 # Copy gitlab.rb for the first time
 if [[ ! -e /etc/gitlab/gitlab.rb ]]; then
