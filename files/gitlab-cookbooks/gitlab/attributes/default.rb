@@ -188,6 +188,16 @@ default['gitlab']['gitlab-rails']['packages_object_store_background_upload'] = t
 default['gitlab']['gitlab-rails']['packages_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['packages_object_store_remote_directory'] = 'packages'
 default['gitlab']['gitlab-rails']['packages_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['dependency_proxy_enabled'] = nil
+default['gitlab']['gitlab-rails']['dependency_proxy_storage_path'] = nil
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_direct_upload'] = false
+# TODO: Deprecate once direct upload is implemented
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_background_upload'] = true
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_proxy_download'] = false
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_remote_directory'] = 'dependency_proxy'
+default['gitlab']['gitlab-rails']['dependency_proxy_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
