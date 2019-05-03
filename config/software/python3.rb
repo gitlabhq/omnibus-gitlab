@@ -59,7 +59,14 @@ build do
   patch source: 'readline.c.patch', target: "Modules/readline.c"
   patch source: 'setup.py.patch', target: "setup.py"
 
-  command ['autoreconf'], env: env
+  # CentOS 6 doesn't have a new enough version of autoreconf so we have
+  # to use the one packaged in EPEL
+  autoreconf_cmd_name = if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
+                          'autoreconf268'
+                        else
+                          'autoreconf'
+                        end
+  command [autoreconf_cmd_name], env: env
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
