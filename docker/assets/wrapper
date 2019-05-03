@@ -19,19 +19,27 @@ function failed_pg_upgrade() {
 
 function clean_stale_pids() {
     # cleanup known pid/socket files
-    for x in /opt/gitlab /run $(ls -d /tmp/gitaly-ruby* 2>/dev/null) ; do
+    for x in /opt/gitlab/sv /run $(ls -d /tmp/gitaly-ruby* 2>/dev/null) ; do
+        # find
+        #  - any (s)ocket or regular (f)ile
+        #  - by the name of "*.pid" or "socket.?"
+        #  - and delete them
         find $x \
-            -name pid \
-            -o -name "*.pid" \
-            -o -name "socket.?" \
-            -exec rm {} \;
+            \( \
+              -type f \
+              -o -type s \
+            \) \(\
+              -name pid \
+              -o -name "*.pid" \
+              -o -name "socket.?" \
+            \) \
+            -delete ;
     done
 }
 
 function detect_unclean_start() {
     set +e
-    # find stale PID files, using inverse `false` to get 0/1 return (1 if found)
-    echo "Checking for stale PIDs"
+    echo "Cleaning stale PIDs & sockets"
     clean_stale_pids
     set -e
 }
