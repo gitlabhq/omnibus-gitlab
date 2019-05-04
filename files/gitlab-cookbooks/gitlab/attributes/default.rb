@@ -215,6 +215,7 @@ default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
 default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
 default['gitlab']['gitlab-rails']['sentry_enabled'] = false
 default['gitlab']['gitlab-rails']['sentry_dsn'] = nil
+default['gitlab']['gitlab-rails']['sentry_clientside_dsn'] = nil
 default['gitlab']['gitlab-rails']['sentry_environment'] = nil
 default['gitlab']['gitlab-rails']['usage_ping_enabled'] = nil
 # Defaults set in libraries/gitlab_rails.rb

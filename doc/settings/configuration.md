@@ -602,6 +602,7 @@ The following settings can be used to configure Sentry:
 ```ruby
 gitlab_rails['sentry_enabled'] = true
 gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+gitlab_rails['sentry_clientside_dsn'] = 'https://<key>@sentry.io/<project>'
 gitlab_rails['sentry_environment'] = 'production'
 ```
 

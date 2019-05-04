@@ -277,6 +277,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'sentry_enabled' => false,
             'sentry_dsn' => nil,
+            'sentry_clientside_dsn' => nil,
             'sentry_environment' => nil
           )
         )
@@ -290,6 +291,7 @@ describe 'gitlab::gitlab-rails' do
           {
             sentry_enabled: true,
             sentry_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            sentry_clientside_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/77',
             sentry_environment: 'testing'
           }
         )
@@ -300,6 +302,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'sentry_enabled' => true,
             'sentry_dsn' => 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            'sentry_clientside_dsn' => 'https://708cd0ca88972f04d5c836a395b8db63@example.com/77',
             'sentry_environment' => 'testing'
           )
         )
