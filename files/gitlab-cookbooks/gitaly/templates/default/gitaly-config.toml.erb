@@ -51,6 +51,9 @@ sentry_dsn = '<%= @logging_sentry_dsn %>'
 <% if @logging_ruby_sentry_dsn %>
 ruby_sentry_dsn = '<%= @logging_ruby_sentry_dsn %>'
 <% end %>
+<% if @logging_sentry_environment %>
+sentry_environment = '<%= @logging_sentry_environment %>'
+<% end %>
 
 <% if @prometheus_grpc_latency_buckets %>
 # # You can optionally configure Gitaly to record histogram latencies on GRPC method calls
