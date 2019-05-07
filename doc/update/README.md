@@ -34,9 +34,9 @@ There are two ways to update Omnibus GitLab:
 - Using the official repositories
 - Manually download the package
 
-Both will automatically back up the GitLab SQL database before installing a
-newer GitLab version. You may skip this automatic backup by creating an empty
-file at `/etc/gitlab/skip-auto-backup`:
+Both will automatically back up the GitLab database before installing a newer
+GitLab version. You may skip this automatic backup by creating an empty file
+at `/etc/gitlab/skip-auto-backup`:
 
 ```sh
 sudo touch /etc/gitlab/skip-auto-backup
