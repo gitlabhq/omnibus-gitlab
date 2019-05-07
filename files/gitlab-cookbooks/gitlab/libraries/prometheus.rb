@@ -121,11 +121,15 @@ module Prometheus
     def parse_node_exporter_flags
       default_config = Gitlab['node']['gitlab']['node-exporter'].to_hash
       user_config = Gitlab['node_exporter']
+      runit_config = Gitlab['node']['runit'].to_hash
 
       home_directory = user_config['home'] || default_config['home']
       listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
+        'collector.mountstats' => true,
+        'collector.runit' => true,
+        'collector.runit.servicedir' => runit_config['sv_dir'],
         'collector.textfile.directory' => File.join(home_directory, 'textfile_collector')
       }
 
