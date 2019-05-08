@@ -233,26 +233,17 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 /opt/gitlab/embedded/bin/psql --version
 ```
 
-If these versions are different from your non-packaged external PostgreSQL
-(most likely they are different), you need to add symbolic links to your
-non-packaged PostgreSQL:
+If these versions are different from your non-packaged external PostgreSQL, you 
+will need to install tools that match your database version and then follow the 
+steps below. There are multiple ways to install PostgreSQL client tools. See
+https://www.postgresql.org/download/ for options. 
 
-1. Check the location of the non-packaged executables:
-
-    ```bash
-    which pg_dump psql
-    ```
-
-    This will output something like:
-
-    ```
-    /usr/bin/pg_dump
-    /usr/bin/psql
-    ```
+Once the correct `psql` and `pg_dump` tools are available on your system, follow
+these steps, using the correct path to the location you installed the new tools:
 
 1.  Add symbolic links to the non-packaged versions:
     ```bash
-    ln -s /usr/bin/pg_dump /usr/bin/psql /opt/gitlab/bin/
+    ln -s /path/to/new/pg_dump /path/to/new/psql /opt/gitlab/bin/
     ```
 
 1.  Check the versions:
