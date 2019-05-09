@@ -1,0 +1,5 @@
+---
+title: Add HA support for pg-upgrade command
+merge_request: 3240
+author:
+type: added

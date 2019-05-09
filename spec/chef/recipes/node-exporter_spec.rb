@@ -34,6 +34,9 @@ describe 'gitlab::node-exporter' do
         .with_content { |content|
           expect(content).to match(/exec chpst -P/)
           expect(content).to match(/\/opt\/gitlab\/embedded\/bin\/node_exporter/)
+          expect(content).to match(/--collector\.mountstats /)
+          expect(content).to match(/--collector\.runit /)
+          expect(content).to match(/--collector\.runit.servicedir=\/opt\/gitlab\/sv /)
           expect(content).to match(/\/textfile_collector/)
         }
 
@@ -108,7 +111,8 @@ describe 'gitlab::node-exporter' do
         node_exporter: {
           flags: {
             'collector.textfile.directory' => '/tmp',
-            'collector.arp' => false
+            'collector.arp' => false,
+            'collector.mountstats' => false
           },
           listen_address: 'localhost:9899',
           enable: true,
@@ -121,11 +125,13 @@ describe 'gitlab::node-exporter' do
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
-        .with_content(/web.listen-address=localhost:9899/)
-      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
-        .with_content(/collector.textfile.directory=\/tmp/)
-      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/run')
-        .with_content(/--no-collector.arp/)
+        .with_content { |content|
+          expect(content).to match(/web\.listen-address=localhost:9899/)
+          expect(content).to match(/collector\.textfile\.directory=\/tmp/)
+          expect(content).to match(/--no-collector\.arp/)
+          expect(content).to match(/--no-collector\.mountstats/)
+          expect(content).to match(/--collector\.runit/)
+        }
     end
 
     it 'creates necessary env variable files' do

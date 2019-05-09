@@ -263,3 +263,10 @@
     :why: https://github.com/mwitkow/grpc-proxy/blob/master/LICENSE.txt
     :versions: []
     :when: 2019-02-13 23:45:32.613012625 Z
+- - :license
+  - github.com/golang/groupcache
+  - Apache-2.0
+  - :who: DJ Mountney
+    :why: https://github.com/golang/groupcache/blob/master/LICENSE
+    :versions: []
+    :when: 2019-05-02 20:45:16.018133379 Z

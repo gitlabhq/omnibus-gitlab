@@ -56,6 +56,10 @@ describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/packages')
     end
 
+    it 'does not create the dependency_proxy storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/dependency_proxy')
+    end
+
     it 'does not create the uploads storage directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
@@ -98,6 +102,10 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the packages directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/packages').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the dependency_proxy directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/dependency_proxy').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the uploads directory' do
@@ -269,6 +277,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'sentry_enabled' => false,
             'sentry_dsn' => nil,
+            'sentry_clientside_dsn' => nil,
             'sentry_environment' => nil
           )
         )
@@ -282,6 +291,7 @@ describe 'gitlab::gitlab-rails' do
           {
             sentry_enabled: true,
             sentry_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            sentry_clientside_dsn: 'https://708cd0ca88972f04d5c836a395b8db63@example.com/77',
             sentry_environment: 'testing'
           }
         )
@@ -292,6 +302,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'sentry_enabled' => true,
             'sentry_dsn' => 'https://708cd0ca88972f04d5c836a395b8db63@example.com/76',
+            'sentry_clientside_dsn' => 'https://708cd0ca88972f04d5c836a395b8db63@example.com/77',
             'sentry_environment' => 'testing'
           )
         )
@@ -520,6 +531,47 @@ describe 'gitlab::gitlab-rails' do
               'packages_object_store_proxy_download' => true,
               'packages_object_store_remote_directory' => 'mepmep',
               'packages_object_store_connection' => aws_connection_hash
+            )
+          )
+        end
+      end
+    end
+
+    context 'for settings regarding object storage for dependency_proxy' do
+      it 'allows not setting any values' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'dependency_proxy_storage_path' => '/var/opt/gitlab/gitlab-rails/shared/dependency_proxy',
+            'dependency_proxy_object_store_enabled' => false,
+            'dependency_proxy_object_store_direct_upload' => false,
+            'dependency_proxy_object_store_background_upload' => true,
+            'dependency_proxy_object_store_proxy_download' => false,
+            'dependency_proxy_object_store_remote_directory' => 'dependency_proxy'
+          )
+        )
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           dependency_proxy_object_store_enabled: true,
+                           dependency_proxy_object_store_direct_upload: true,
+                           dependency_proxy_object_store_background_upload: false,
+                           dependency_proxy_object_store_proxy_download: true,
+                           dependency_proxy_object_store_remote_directory: 'mepmep',
+                           dependency_proxy_object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'dependency_proxy_object_store_enabled' => true,
+              'dependency_proxy_object_store_direct_upload' => true,
+              'dependency_proxy_object_store_background_upload' => false,
+              'dependency_proxy_object_store_proxy_download' => true,
+              'dependency_proxy_object_store_remote_directory' => 'mepmep',
+              'dependency_proxy_object_store_connection' => aws_connection_hash
             )
           )
         end
@@ -1413,6 +1465,18 @@ describe 'gitlab::gitlab-rails' do
             )
           )
         end
+      end
+    end
+
+    context 'Geo settings' do
+      it 'sets the geo_node_name variable' do
+        stub_gitlab_rb(gitlab_rails: { geo_node_name: 'the name of the node' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'geo_node_name' => 'the name of the node'
+          )
+        )
       end
     end
   end

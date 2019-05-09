@@ -356,14 +356,14 @@ gitlab-ctl stop
 ```
 
 2. Stop the runit server.
-```
+```shell
 # Using systemctl (Debian => 9 - Stretch):
 sudo systemctl stop gitlab-runsvdir
 
-#Using upstart (Ubuntu <= 14.04):
+# Using upstart (Ubuntu <= 14.04):
 sudo initctl stop gitlab-runsvdir
 
-#Using systemd (CentOS, Ubuntu >= 16.04):
+# Using systemd (CentOS, Ubuntu >= 16.04):
 systemctl stop gitlab-runsvdir.service
 ```
 
@@ -378,14 +378,14 @@ user['home'] = "/var/opt/custom-gitlab"
 ```
 
 5. Start the runit server
-```
+```shell
 # Using systemctl (Debian => 9 - Stretch):
 sudo systemctl start gitlab-runsvdir
 
-#Using upstart (Ubuntu <= 14.04):
+# Using upstart (Ubuntu <= 14.04):
 sudo initctl start gitlab-runsvdir
 
-#Using systemd (CentOS, Ubuntu >= 16.04):
+# Using systemd (CentOS, Ubuntu >= 16.04):
 systemctl start gitlab-runsvdir.service
 ```
 
@@ -602,6 +602,7 @@ The following settings can be used to configure Sentry:
 ```ruby
 gitlab_rails['sentry_enabled'] = true
 gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+gitlab_rails['sentry_clientside_dsn'] = 'https://<key>@sentry.io/<project>'
 gitlab_rails['sentry_environment'] = 'production'
 ```
 

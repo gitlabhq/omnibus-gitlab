@@ -181,7 +181,7 @@ production: &base
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
-  ## Packages (maven repository so far) EE only
+  ## Packages (EE only)
   packages:
     enabled: <%= @packages_enabled %>
     # The location where build packages are stored (default: shared/packages).
@@ -193,6 +193,19 @@ production: &base
       proxy_download: <%= @packages_object_store_proxy_download %>
       remote_directory: <%= quote(@packages_object_store_remote_directory) %>
       connection: <%= @packages_object_store_connection.to_json %>
+
+  ## Dependency proxy (EE only)
+  dependency_proxy:
+    enabled: <%= @dependency_proxy_enabled %>
+    # The location where dependency_proxy blobs are stored (default: shared/dependency_proxy).
+    storage_path: <%= @dependency_proxy_storage_path %>
+    object_store:
+      enabled: <%= @dependency_proxy_object_store_enabled %>
+      direct_upload: <%= @dependency_proxy_object_store_direct_upload %>
+      background_upload: <%= @dependency_proxy_object_store_background_upload %>
+      proxy_download: <%= @dependency_proxy_object_store_proxy_download %>
+      remote_directory: <%= quote(@dependency_proxy_object_store_remote_directory) %>
+      connection: <%= @dependency_proxy_object_store_connection.to_json %>
 
   ## Container Registry
   registry:
@@ -208,6 +221,7 @@ production: &base
   sentry:
     enabled: <%= @sentry_enabled %>
     dsn: <%= @sentry_dsn %>
+    clientside_dsn: <%= @sentry_clientside_dsn %>
     environment: <%= @sentry_environment %> # e.g. development, staging, production
 
   mattermost:
@@ -352,6 +366,16 @@ production: &base
     pseudonymizer_worker:
       cron: "<%= @pseudonymizer_worker_cron %>"
     <% end %>
+
+  ## Geo
+  # NOTE: These settings will only take effect if Geo is enabled
+  geo:
+    # This is an optional identifier which Geo nodes can use to identify themselves.
+    # For example, if external_url is the same for two secondaries, you must specify
+    # a unique Geo node name for those secondaries.
+    #
+    # If it is blank, it defaults to external_url.
+    node_name: <%= @geo_node_name %>
 
   #
   # 2. GitLab CI settings
