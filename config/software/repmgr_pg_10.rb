@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2019 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,23 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new('grafana-dashboards', '1.1.0')
 
-name 'grafana-dashboards'
-default_version version.print
+name 'repmgr_pg_10'
+default_version 'v3.3.2'
 
-dependency 'grafana'
-
-license 'MIT'
+license 'GPL-3.0'
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
-relative_path 'grafana-dashboards'
+source git: "https://github.com/2ndQuadrant/repmgr.git"
+
+dependency 'postgresql_new'
+
+env = with_standard_compiler_flags(with_embedded_path)
 
 build do
-  # Copy dashboards.
-  command "mkdir -p '#{install_dir}/embedded/service/grafana-dashboards'"
-  sync 'omnibus/', "#{install_dir}/embedded/service/grafana-dashboards/"
+  env['PATH'] = "#{install_dir}/embedded/postgresql/10/bin:#{env['PATH']}"
+  make "-j #{workers} USE_PGXS=1 all", env: env
+  make "-j #{workers} USE_PGXS=1 install", env: env
 end

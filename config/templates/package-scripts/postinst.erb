@@ -39,39 +39,23 @@ fi
 
 print_upgrade_info()
 {
-  # Moving towards GitLab 11 we're deprecating skip-auto-migrations in favour of
-  # skip-auto-reconfigure.  In the meantime check for both and populate skip_file.
-  if [ -e "/etc/gitlab/skip-auto-migrations" ]; then
-    skip_file="/etc/gitlab/skip-auto-migrations"
-  elif [ -e "/etc/gitlab/skip-auto-reconfigure" ]; then
-    skip_file="/etc/gitlab/skip-auto-reconfigure"
-  else
-    skip_file=""
-  fi
-
-  # As of 9.0, we're updating PostgreSQL by default.
-  # But, if /etc/gitlab/skip-auto-migrations exists we won't do anything.
-  # Here we'll warn users with out of date databases.
-  if [ -n "${skip_file}" ]
+  local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null)
+  local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
+  if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
   then
-    local version=$(cat /var/opt/gitlab/postgresql/data/PG_VERSION 2>/dev/null || true)
-    local new_version=$(awk '$1 == "postgresql_new" {print $2}' /opt/gitlab/version-manifest.txt)
-    if [ -n "${new_version}" -a "${new_version#*$version}" = "${new_version}" ]
-    then
-      echo
-      notify "WARNING:"
-      notify "GitLab now ships with a newer version of PostgreSQL (${new_version}) by default"
-      notify "We did not upgrade since ${skip_file} exists"
-      notify "To manually upgrade, RUN THE FOLLOWING COMMAND:"
-      echo
-      echo "sudo gitlab-ctl pg-upgrade"
-      echo
-      notify "In the future, we will be removing old versions of PostgreSQL from the omnibus package"
-      notify "Hosts which have not upgraded to the new version will begin to fail then"
-      notify "For more details, please see:"
-      notify "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
-      notify
-    fi
+    echo
+    notify "GitLab now ships with a newer version of PostgreSQL (${new_version}), but it is not yet"
+    notify "enabled by default. To upgrade, RUN THE FOLLOWING COMMAND:"
+    echo
+    echo "sudo gitlab-ctl pg-upgrade"
+    echo
+    notify "Note: This command does not support Geo instances yet. So we don't"
+    notify "recommend running this command on Geo nodes. It will be supported"
+    notify "in GitLab 12.0."
+    echo
+    notify "For more details, please see:"
+    notify "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
+    notify
   fi
 }
 

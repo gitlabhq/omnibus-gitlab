@@ -34,7 +34,7 @@ gem 'knapsack'
 gem 'docker-api'
 gem 'aws-sdk'
 gem 'google_drive'
-gem 'gitlab'
+gem 'http'
 
 group :rubocop do
   gem 'rubocop'
@@ -47,4 +47,5 @@ group :test do
   gem 'omnibus-ctl', '0.3.6'
   gem 'fantaskspec'
   gem 'rspec_junit_formatter'
+  gem 'pry'
 end

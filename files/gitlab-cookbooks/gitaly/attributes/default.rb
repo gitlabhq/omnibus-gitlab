@@ -16,6 +16,7 @@ default['gitaly']['logging_level'] = nil
 default['gitaly']['logging_format'] = nil
 default['gitaly']['logging_sentry_dsn'] = nil
 default['gitaly']['logging_ruby_sentry_dsn'] = nil
+default['gitaly']['logging_sentry_environment'] = nil
 default['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitaly']['storage'] = []
 default['gitaly']['auth_token'] = nil
