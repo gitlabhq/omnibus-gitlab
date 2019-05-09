@@ -19,7 +19,8 @@ require 'digest'
 omnibus_helper = OmnibusHelper.new(node)
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
-initial_runner_token  = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
+initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
+initial_runner_token = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
 
 dependent_services = []
 dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
@@ -43,6 +44,7 @@ db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connectio
 
 env_variables = {}
 env_variables['GITLAB_ROOT_PASSWORD'] = initial_root_password if initial_root_password
+env_variables['GITLAB_LICENSE_FILE'] = initial_license_file if initial_license_file
 env_variables['GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN'] = initial_runner_token if initial_runner_token
 
 # TODO: Refactor this into a resource
