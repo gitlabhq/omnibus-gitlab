@@ -49,7 +49,7 @@ describe 'secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base')
-        rsa_keys = rails_keys.values_at('openid_connect_signing_key')
+        rsa_keys = rails_keys.values_at('openid_connect_signing_key', 'lets_encrypt_private_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(HEX_KEY))
@@ -166,7 +166,8 @@ describe 'secrets' do
           stub_gitlab_secrets_json(
             gitlab_rails: {
               secret_token: 'json_rails_secret_token',
-              jws_private_key: 'json_rails_jws_private_key'
+              jws_private_key: 'json_rails_jws_private_key',
+              lets_encrypt_private_key: 'json_rails_lets_encrypt_private_key'
             }
           )
 
@@ -200,7 +201,8 @@ describe 'secrets' do
                 'db_key_base' => 'rb_ci_db_key_base',
                 'secret_key_base' => 'rb_ci_db_key_base',
                 'otp_key_base' => 'json_rails_secret_token',
-                'openid_connect_signing_key' => 'json_rails_jws_private_key'
+                'openid_connect_signing_key' => 'json_rails_jws_private_key',
+                'lets_encrypt_private_key' => 'json_rails_lets_encrypt_private_key'
               }
             }
           )
