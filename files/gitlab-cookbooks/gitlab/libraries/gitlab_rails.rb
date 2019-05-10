@@ -63,12 +63,14 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
       Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= Gitlab['gitlab_rails']['jws_private_key'] # Changed in 10.1
+      Gitlab['gitlab_rails']['lets_encrypt_private_key'] ||= Gitlab['gitlab_rails']['lets_encrypt_private_key']
 
       # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
       Gitlab['gitlab_rails']['db_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      Gitlab['gitlab_rails']['lets_encrypt_private_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
     end
 
     def parse_external_url
