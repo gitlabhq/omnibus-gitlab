@@ -18,7 +18,6 @@
     "ami_users": ["684062674729", "679593333241"],
     "snapshot_users": ["684062674729", "679593333241"],
     "ami_description": "Official GitLab EE {{user `version`}} AMI. https://about.gitlab.com/",
-    "ami_groups": ["all"],
     "tags": {
         "Type": "GitLab Enterprise Edition",
         "Version": "{{user `version`}}"
