@@ -76,7 +76,6 @@ have access to Grafana:
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
 
 NOTE: **Note:**
-
 GitLab users are created with read-only Viewer privilege by default. The admin account must be used to grant additional access.
 
 ### Resetting the admin password
