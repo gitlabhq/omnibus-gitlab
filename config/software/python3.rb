@@ -53,20 +53,11 @@ env = {
 build do
   # Patches below are based on patches provided by martin.panter, 2016-06-02 06:31
   # in https://bugs.python.org/issue13501
-  patch source: 'configure.ac.patch', target: "configure.ac"
   patch source: 'configure.patch', target: "configure"
   patch source: 'pyconfig.h.in.patch', target: "pyconfig.h.in"
   patch source: 'readline.c.patch', target: "Modules/readline.c"
   patch source: 'setup.py.patch', target: "setup.py"
 
-  # CentOS 6 doesn't have a new enough version of autoreconf so we have
-  # to use the one packaged in EPEL
-  autoreconf_cmd_name = if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
-                          'autoreconf268'
-                        else
-                          'autoreconf'
-                        end
-  command [autoreconf_cmd_name], env: env
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
