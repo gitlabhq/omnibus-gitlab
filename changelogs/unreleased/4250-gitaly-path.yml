@@ -1,0 +1,5 @@
+---
+title: Set default path for git storage directories if user didn't specify one
+merge_request: 3304
+author:
+type: fixed
