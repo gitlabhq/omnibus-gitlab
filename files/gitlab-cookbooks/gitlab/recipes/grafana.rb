@@ -26,9 +26,10 @@ grafana_provisioning_dir = File.join(grafana_dir, 'provisioning')
 grafana_provisioning_dashboards_dir = File.join(grafana_provisioning_dir, 'dashboards')
 grafana_provisioning_datasources_dir = File.join(grafana_provisioning_dir, 'datasources')
 grafana_provisioning_notifiers_dir = File.join(grafana_provisioning_dir, 'notifiers')
+pg_helper = PgHelper.new(node)
 
 external_url = if Gitlab['external_url']
-                 Gitlab['external_url'].to_s
+                 Gitlab['external_url'].to_s.chomp('/')
                else
                  'http://localhost'
                end
@@ -87,6 +88,22 @@ directory grafana_static_etc_dir do
   recursive true
 end
 
+if !node['gitlab']['grafana']['gitlab_secret'] && !node['gitlab']['grafana']['gitlab_application_id']
+  ruby_block "authorize Grafana with GitLab" do
+    block do
+      GrafanaHelper.authorize_with_gitlab(external_url)
+    end
+    # Try connecting to GitLab only if it is enabled
+    only_if { node['gitlab']['gitlab-rails']['enable'] && pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database']) }
+  end
+end
+
+ruby_block "populate Grafana configuration options" do
+  block do
+    node.consume_attributes(Gitlab.hyphenate_config_keys)
+  end
+end
+
 env_dir grafana_static_etc_dir do
   variables node['gitlab']['grafana']['env']
   notifies :restart, 'service[grafana]'
@@ -94,9 +111,12 @@ end
 
 template grafana_config do
   source 'grafana_ini.erb'
-  variables(
-    'external_url': external_url.chomp('/')
-  )
+  variables lazy {
+    {
+      'external_url' => external_url,
+      'data_path' => File.join(node['gitlab']['grafana']['home'], 'data'),
+    }.merge(node['gitlab']['grafana'])
+  }
   owner prometheus_user
   mode '0644'
   notifies :restart, 'service[grafana]'
