@@ -17,6 +17,7 @@ class DeployerHelper
     begin
       retries ||= 0
       resp = HTTP.post(pipeline_trigger_url, form: form_data_for_trigger)
+      puts "Triggering pipeline #{pipeline_trigger_url} for ref #{@trigger_ref}, status code: #{resp.status}"
       raise PipelineTriggerFailure unless resp.status == 201
     rescue PipelineTriggerFailure
       if (retries += 1) < TRIGGER_RETRIES
