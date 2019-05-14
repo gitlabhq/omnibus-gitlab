@@ -17,9 +17,6 @@ curl -o gitlab.deb "$DOWNLOAD_URL"
 sudo dpkg -i gitlab.deb
 sudo rm gitlab.deb
 
-# Clearing off the license file
-sudo rm /etc/gitlab/predefined.gitlab-license
-
 # Set install type to aws
 echo "gitlab-aws-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null
 
