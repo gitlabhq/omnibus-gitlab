@@ -9,4 +9,7 @@ unicorn['worker_processes'] = 3
 unicorn['worker_timeout'] = 60
 ```
 
-> NOTE: Minimum required `worker_processes` is 2 in order for the web editor to work correctly, see [gitlab-ce#18771](https://gitlab.com/gitlab-org/gitlab-ce/issues/18771)
+NOTE: **Note:** Minimum required `worker_processes` is 2 in order for the web editor to work correctly, see [gitlab-ce#18771](https://gitlab.com/gitlab-org/gitlab-ce/issues/18771) for details.
+
+CAUTION: **Caution:** Be sure to review [recommended number of Unicorn Workers](https://docs.gitlab.com/ee/install/requirements.html#unicorn-workers)
+before changing.
