@@ -64,6 +64,36 @@ describe 'gitlab::database-migrations' do
       )
     end
 
+    context 'initial license file' do
+      it 'detects license file from /etc/gitlab' do
+        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
+        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+          environment: {
+            'GITLAB_LICENSE_FILE' => '/etc/gitlab/company.gitlab-license'
+          }
+        )
+      end
+
+      it 'license file specified in gitlab.rb gets priority' do
+        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
+        stub_gitlab_rb(
+          gitlab_rails: { initial_license_file: '/mnt/random.gitlab-license' }
+        )
+        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+          environment: {
+            'GITLAB_LICENSE_FILE' => '/mnt/random.gitlab-license'
+          }
+        )
+      end
+
+      it 'Does not fail if no license file found in /etc/gitlab' do
+        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return([])
+        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+          environment: nil
+        )
+      end
+    end
+
     it 'triggers the gitlab:db:configure task' do
       migrate = %(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
       expect(bash_block.code).to match(/#{migrate}/)

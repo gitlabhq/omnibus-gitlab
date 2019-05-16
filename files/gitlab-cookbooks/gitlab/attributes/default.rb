@@ -369,6 +369,7 @@ default['gitlab']['gitlab-rails']['trusted_certs_dir'] = "/etc/gitlab/trusted-ce
 default['gitlab']['gitlab-rails']['webhook_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
+default['gitlab']['gitlab-rails']['initial_license_file'] = nil
 default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
 default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
 
