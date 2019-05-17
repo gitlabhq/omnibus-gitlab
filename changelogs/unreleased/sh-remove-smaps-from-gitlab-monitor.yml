@@ -1,0 +1,5 @@
+---
+title: Remove smaps metrics from gitlab-monitor
+merge_request: 3279
+author:
+type: performance
