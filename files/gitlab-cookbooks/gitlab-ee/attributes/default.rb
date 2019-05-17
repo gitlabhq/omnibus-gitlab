@@ -71,7 +71,7 @@ default['gitlab']['geo-secondary']['db_fdw'] = true
 # Geo: PostgreSQL (Tracking database)
 ###
 
-default['gitlab']['geo-postgresql'] = default['gitlab']['postgresql'].dup
+default['gitlab']['geo-postgresql'] = default['postgresql'].dup
 # We are inheriting default attributes from postgresql and changing below what should be different
 default['gitlab']['geo-postgresql']['enable'] = false
 default['gitlab']['geo-postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
@@ -160,8 +160,8 @@ default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcu
 # Pgbouncer
 ####
 
-default['gitlab']['postgresql']['pgbouncer_user'] = 'pgbouncer'
-default['gitlab']['postgresql']['pgbouncer_user_password'] = nil
+default['postgresql']['pgbouncer_user'] = 'pgbouncer'
+default['postgresql']['pgbouncer_user_password'] = nil
 default['gitlab']['pgbouncer']['env_directory'] = '/opt/gitlab/etc/pgbouncer/env'
 default['gitlab']['pgbouncer']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"

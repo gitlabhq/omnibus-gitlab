@@ -4,9 +4,9 @@ set -e # fail on errors
 # Redirect stderr -> stdout
 exec 2>&1
 
-cd <%= node['gitlab']['postgresql']['dir'] %>
+cd <%= node['postgresql']['dir'] %>
 
 exec chpst -P \
-  -U <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> \
-  -u <%= node['gitlab']['postgresql']['username'] %>:<%= node['gitlab']['postgresql']['group'] %> \
-  /opt/gitlab/embedded/bin/repmgrd -f <%= node['gitlab']['postgresql']['dir'] %>/repmgr.conf
+  -U <%= node['postgresql']['username'] %>:<%= node['postgresql']['group'] %> \
+  -u <%= node['postgresql']['username'] %>:<%= node['postgresql']['group'] %> \
+  /opt/gitlab/embedded/bin/repmgrd -f <%= node['postgresql']['dir'] %>/repmgr.conf

@@ -35,8 +35,8 @@ end
 if pgb_helper.create_pgbouncer_user?('postgresql')
   pgbouncer_user 'rails' do
     pg_helper PgHelper.new(node)
-    user node['gitlab']['postgresql']['pgbouncer_user']
-    password node['gitlab']['postgresql']['pgbouncer_user_password']
+    user node['postgresql']['pgbouncer_user']
+    password node['postgresql']['pgbouncer_user_password']
     database node['gitlab']['gitlab-rails']['db_database']
     add_auth_function default_auth_query.eql?(auth_query)
     action :create

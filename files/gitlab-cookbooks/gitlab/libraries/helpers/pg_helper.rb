@@ -2,7 +2,7 @@ require_relative 'base_pg_helper'
 
 # Helper class to interact with bundled PostgreSQL instance
 class PgHelper < BasePgHelper
-  # internal name for the service (node['gitlab'][service_name])
+  # internal name for the service (node[service_name])
   def service_name
     'postgresql'
   end
@@ -22,11 +22,9 @@ class PgHelper < BasePgHelper
     )
 
     {
-      'gitlab' => {
-        service_name => node['gitlab'][service_name].select do |key, value|
-                          attributes.include?(key)
-                        end
-      }
+      service_name => node[service_name].select do |key, value|
+        attributes.include?(key)
+      end
     }
   end
 end

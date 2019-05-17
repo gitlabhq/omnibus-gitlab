@@ -14,12 +14,19 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   # know the primary node
   repmgr_options = Repmgr.parse_options(ARGV)
 
+  # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
+  # configure on an existing installation
+  #
+  # TODO: Remove support for legacy attributes in GitLab 13.0
+  postgresql_directory = node_attributes.dig('gitlab', 'postgresql', 'data_dir') ||
+    node_attributes.dig('postgresql', 'data_dir')
+
   repmgr_args = begin
                   {
                     primary: repmgr_primary,
                     user: repmgr_options[:user] || node_attributes['repmgr']['user'],
                     database:  node_attributes['repmgr']['database'],
-                    directory: node_attributes['gitlab']['postgresql']['data_dir'],
+                    directory: postgresql_directory,
                     verbose: repmgr_options[:verbose],
                     wait: repmgr_options[:wait],
                     host: repmgr_options[:host],

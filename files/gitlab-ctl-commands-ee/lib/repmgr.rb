@@ -72,8 +72,18 @@ class Repmgr
                 else
                   Etc.getpwuid.name
                 end
-        repmgr_conf = File.join(GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['dir'], "repmgr.conf")
+
+        repmgr_conf = File.join(postgresql_directory, 'repmgr.conf')
         cmd("/opt/gitlab/embedded/bin/repmgr #{args[:verbose]} -f #{repmgr_conf} #{command}", runas)
+      end
+
+      def postgresql_directory
+        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
+        # configure on an existing installation
+        #
+        # TODO: Remove support for legacy attributes in GitLab 13.0
+        node_attributes.dig('gitlab', 'postgresql', 'dir') ||
+          node_attributes.dig('postgresql', 'dir')
       end
 
       def execute_psql(options)
@@ -124,6 +134,10 @@ class Repmgr
       def restart_daemon
         cmd('gitlab-ctl restart repmgrd')
       end
+
+      def node_attributes
+        @node_attributes ||= GitlabCtl::Util.get_public_node_attributes
+      end
     end
   end
 
@@ -162,7 +176,7 @@ class Repmgr
         $stdout.puts "Stopping the database"
         cmd("gitlab-ctl stop postgresql")
         $stdout.puts "Removing the data"
-        cmd("rm -rf #{GitlabCtl::Util.get_public_node_attributes['gitlab']['postgresql']['data_dir']}")
+        cmd("rm -rf #{postgresql_data_dir}")
         $stdout.puts "Cloning the data"
         clone(args)
         $stdout.puts "Starting the database"
@@ -171,6 +185,17 @@ class Repmgr
         GitlabCtl::PostgreSQL.wait_for_postgresql(30)
         $stdout.puts "Registering the node with the cluster"
         register(args)
+      end
+
+      private
+
+      def postgresql_data_dir
+        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
+        # configure on an existing installation
+        #
+        # TODO: Remove support for legacy attributes in GitLab 13.0
+        node_attributes.dig('gitlab', 'postgresql', 'data_dir') ||
+          node_attributes.dig('postgresql', 'data_dir')
       end
     end
   end
@@ -214,8 +239,8 @@ class Repmgr
     def is_master?
       hostname = attributes['repmgr']['node_name'] || `hostname -f`.chomp
       query = "SELECT name FROM repmgr_gitlab_cluster.repl_nodes WHERE type='master' AND active != 'f'"
-      host = attributes['gitlab']['postgresql']['unix_socket_directory']
-      port = attributes['gitlab']['postgresql']['port']
+      host = attributes['postgresql']['unix_socket_directory']
+      port = attributes['postgresql']['port']
       master = Repmgr::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
       show_count = Repmgr::Base.cmd(
         %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),

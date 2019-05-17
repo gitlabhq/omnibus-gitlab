@@ -223,7 +223,13 @@ class BasePgHelper < BaseHelper
   end
 
   def bootstrapped?
-    File.exist?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION'))
+    # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
+    # being split to their own dedicated cookbooks, and attributes are being moved from
+    # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
+    # need to check both.
+
+    return File.exist?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION')) if node['gitlab'].key?(service_name)
+    File.exist?(File.join(node[service_name]['data_dir'], 'PG_VERSION'))
   end
 
   def psql_cmd(cmd_list)
@@ -246,7 +252,12 @@ class BasePgHelper < BaseHelper
   end
 
   def database_version
-    version_file = "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION"
+    # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
+    # being split to their own dedicated cookbooks, and attributes are being moved from
+    # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
+    # need to check both.
+
+    version_file = node['gitlab'].key?(service_name) ? "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION" : "#{@node[service_name]['data_dir']}/PG_VERSION"
     PGVersion.new(File.read(version_file).chomp) if File.exist?(version_file)
   end
 

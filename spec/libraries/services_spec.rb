@@ -76,7 +76,7 @@ describe Services do
       it 'sets the correct values' do
         Services.disable('redis', 'postgresql', 'gitaly')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgresql']['enable']).to be false
+        expect(node['postgresql']['enable']).to be false
         expect(node['gitaly']['enable']).to be false
 
         Services.enable('mattermost', 'registry', 'mailroom')
@@ -95,7 +95,7 @@ describe Services do
         Services.enable('postgresql')
         Services.disable('redis', 'postgresql', 'gitaly', except: 'postgresql')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgresql']['enable']).to be true
+        expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be false
       end
 
@@ -109,7 +109,7 @@ describe Services do
         Services.enable('postgresql', 'gitaly')
         Services.disable('redis', 'postgresql', 'gitaly', except: %w(postgresql gitaly))
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgresql']['enable']).to be true
+        expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
       end
 
@@ -131,7 +131,7 @@ describe Services do
         Services.disable('registry')
         Services.enable(Services::ALL_SERVICES, except: 'registry')
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['postgresql']['enable']).to be true
+        expect(node['postgresql']['enable']).to be true
         expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be false
       end
@@ -140,7 +140,7 @@ describe Services do
         Services.enable('redis')
         Services.disable(Services::ALL_SERVICES, except: 'redis')
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['postgresql']['enable']).to be false
+        expect(node['postgresql']['enable']).to be false
         expect(node['mattermost']['enable']).to be false
         expect(node['registry']['enable']).to be false
       end
@@ -153,7 +153,7 @@ describe Services do
         Services.disable('registry', 'mailroom')
         Services.enable(Services::ALL_SERVICES, except: %w(registry mailroom))
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['postgresql']['enable']).to be true
+        expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be true
         expect(node['gitlab']['mailroom']['enable']).to be false
@@ -164,7 +164,7 @@ describe Services do
         Services.enable('postgresql', 'gitaly')
         Services.disable(Services::ALL_SERVICES, except: %w(postgresql gitaly))
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgresql']['enable']).to be true
+        expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
         expect(node['gitlab']['mailroom']['enable']).to be false
@@ -225,7 +225,7 @@ describe Services do
       it 'sets the correct values' do
         Services.disable_group('redis', 'postgres')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgresql']['enable']).to be false
+        expect(node['postgresql']['enable']).to be false
 
         Services.enable_group('rails', 'prometheus')
         expect(node['gitlab']['redis-exporter']['enable']).to be true
@@ -258,7 +258,7 @@ describe Services do
         Services.disable_group('rails', 'postgres', except: %w(sidekiq prometheus))
         expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
         expect(node['gitlab']['sidekiq']['enable']).to be true
-        expect(node['gitlab']['postgresql']['enable']).to be false
+        expect(node['postgresql']['enable']).to be false
         expect(node['gitlab']['postgres-exporter']['enable']).to be true
       end
 
@@ -289,7 +289,7 @@ describe Services do
         Services.enable_group('prometheus')
         Services.disable_group(Services::ALL_GROUPS, except: 'prometheus')
         expect(node['gitlab']['postgres-exporter']['enable']).to be true
-        expect(node['gitlab']['postgresql']['enable']).to be false
+        expect(node['postgresql']['enable']).to be false
       end
     end
 

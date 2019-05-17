@@ -24,10 +24,10 @@ mattermost_log_dir = node['mattermost']['log_file_directory']
 mattermost_storage_directory = node['mattermost']['file_directory']
 mattermost_plugin_directory_server = node['mattermost']['plugin_directory']
 mattermost_plugin_directory_web = node['mattermost']['plugin_client_directory']
-postgresql_socket_dir = node['gitlab']['postgresql']['unix_socket_directory']
+postgresql_socket_dir = node['postgresql']['unix_socket_directory']
 mattermost_env_dir = node['mattermost']['env_directory']
-pg_port = node['gitlab']['postgresql']['port']
-pg_user = node['gitlab']['postgresql']['username']
+pg_port = node['postgresql']['port']
+pg_user = node['postgresql']['username']
 config_file_path = File.join(mattermost_home, "config.json")
 mattermost_log_file = File.join(mattermost_log_dir, 'mattermost.log')
 
@@ -78,7 +78,7 @@ bin_dir = "/opt/gitlab/embedded/bin"
 
 mysql_adapter = node['mattermost']['sql_driver_name'] == 'mysql' ? true : false
 db_name = node['mattermost']['database_name']
-sql_user = node['gitlab']['postgresql']['sql_mattermost_user']
+sql_user = node['postgresql']['sql_mattermost_user']
 
 postgresql_user sql_user do
   action :create

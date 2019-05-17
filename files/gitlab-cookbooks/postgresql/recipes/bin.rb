@@ -49,7 +49,7 @@ ruby_block "Link postgresql bin files to the correct version" do
     end
   end
   only_if do
-    !File.exist?(File.join(node['gitlab']['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
+    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
   end
   notifies :restart, 'service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['service[postgresql]']
 end

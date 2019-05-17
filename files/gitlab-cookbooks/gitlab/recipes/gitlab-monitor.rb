@@ -35,8 +35,8 @@ end
 
 connection_string = "dbname=#{node['gitlab']['gitlab-rails']['db_database']} user=#{node['gitlab']['gitlab-rails']['db_username']}"
 
-connection_string += if node['gitlab']['postgresql']['enabled']
-                       " host=#{node['gitlab']['postgresql']['dir']}"
+connection_string += if node['postgresql']['enabled']
+                       " host=#{node['postgresql']['dir']}"
                      else
                        " host=#{node['gitlab']['gitlab-rails']['db_host']} port=#{node['gitlab']['gitlab-rails']['db_port']} password=#{node['gitlab']['gitlab-rails']['db_password']}"
                      end

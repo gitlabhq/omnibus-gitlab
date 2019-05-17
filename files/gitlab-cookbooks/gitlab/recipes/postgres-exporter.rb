@@ -21,7 +21,7 @@ postgres_exporter_log_dir = node['gitlab']['postgres-exporter']['log_directory']
 postgres_exporter_env_dir = node['gitlab']['postgres-exporter']['env_directory']
 postgres_exporter_dir = node['gitlab']['postgres-exporter']['home']
 
-node.default['gitlab']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['gitlab']['postgresql']['username']} " \
+node.default['gitlab']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['postgresql']['username']} " \
                                                                          "host=#{node['gitlab']['gitlab-rails']['db_host']} " \
                                                                          "database=postgres sslmode=allow"
 

@@ -138,7 +138,7 @@ geo_database_name = node['gitlab']['geo-secondary']['db_database']
 
 # set custom pg_hba entries at the secondary postgres for FDW compatibility
 if fdw_helper.fdw_enabled?
-  node.default['gitlab']['postgresql']['custom_pg_hba_entries']['fdw'] = fdw_helper.pg_hba_entries
+  node.default['postgresql']['custom_pg_hba_entries']['fdw'] = fdw_helper.pg_hba_entries
 end
 
 if node['gitlab']['geo-postgresql']['enable']

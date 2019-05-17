@@ -93,23 +93,15 @@ end
 # Install our runit instance
 include_recipe "package::runit"
 
-# Configure DB Services
+# Configure Pre-migration services
+# Postgresql depends on Redis because of `rake db:seed_fu`
+# Gitaly must be available before migrations
 %w(
   redis
   gitaly
-).each do |service|
-  if node[service]['enable']
-    include_recipe "#{service}::enable"
-  else
-    include_recipe "#{service}::disable"
-  end
-end
-
-# Postgresql depends on Redis because of `rake db:seed_fu`
-%w(
   postgresql
 ).each do |service|
-  if node["gitlab"][service]["enable"]
+  if node[service]['enable']
     include_recipe "#{service}::enable"
   else
     include_recipe "#{service}::disable"

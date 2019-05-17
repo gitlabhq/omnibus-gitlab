@@ -12,7 +12,7 @@ class PgbouncerHelper < BaseHelper
   end
 
   def pgbouncer_admin_config
-    user = node['gitlab']['postgresql']['pgbouncer_user']
+    user = node['postgresql']['pgbouncer_user']
     port = node['gitlab']['pgbouncer']['listen_port']
     unix_socket_dir = node['gitlab']['pgbouncer']['data_directory']
     "user=#{user} dbname=pgbouncer sslmode=disable port=#{port} host=#{unix_socket_dir}"
@@ -27,9 +27,20 @@ class PgbouncerHelper < BaseHelper
   end
 
   def create_pgbouncer_user?(db)
-    node['gitlab'][db]['enable'] &&
-      !node['gitlab'][db]['pgbouncer_user'].nil? &&
-      !node['gitlab'][db]['pgbouncer_user_password'].nil?
+    # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
+    # being split to their own dedicated cookbooks, and attributes are being moved from
+    # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
+    # need to check both.
+
+    if node['gitlab'].key?(db)
+      node['gitlab'][db]['enable'] &&
+        !node['gitlab'][db]['pgbouncer_user'].nil? &&
+        !node['gitlab'][db]['pgbouncer_user_password'].nil?
+    else
+      node[db]['enable'] &&
+        !node[db]['pgbouncer_user'].nil? &&
+        !node[db]['pgbouncer_user_password'].nil?
+    end
   end
 
   def public_attributes

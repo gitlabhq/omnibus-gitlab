@@ -15,7 +15,7 @@ describe 'gitlab::config' do
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
       expect(node['gitaly']['enable']).to eq false
       expect(node['gitlab']['nginx']['enable']).to eq false
-      expect(node['gitlab']['postgresql']['enable']).to eq false
+      expect(node['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
       expect(node['gitlab']['gitlab-monitor']['enable']).to eq false
       expect(node['gitlab']['postgres-exporter']['enable']).to eq false
@@ -56,7 +56,7 @@ describe 'gitlab::config' do
 
     it 'still leaves other default service enabled' do
       expect(node['gitlab']['nginx']['enable']).to eq true
-      expect(node['gitlab']['postgresql']['enable']).to eq true
+      expect(node['postgresql']['enable']).to eq true
       expect(node['redis']['enable']).to eq true
       expect(node['gitlab']['prometheus']['enable']).to eq true
       expect(node['gitlab']['alertmanager']['enable']).to eq true
