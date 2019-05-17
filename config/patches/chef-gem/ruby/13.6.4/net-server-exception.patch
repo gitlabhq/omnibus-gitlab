@@ -1,0 +1,870 @@
+diff --git a/lib/chef/api_client.rb b/lib/chef/api_client.rb
+index 087de3fdf..7875aae47 100644
+--- a/lib/chef/api_client.rb
++++ b/lib/chef/api_client.rb
+@@ -184,7 +184,7 @@ class Chef
+     # Save this client via the REST API, returns a hash including the private key
+     def save
+       http_api.put("clients/#{name}", { :name => name, :admin => admin, :validator => validator })
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       # If that fails, go ahead and try and update it
+       if e.response.code == "404"
+         http_api.post("clients", { :name => name, :admin => admin, :validator => validator })
+diff --git a/lib/chef/api_client/registration.rb b/lib/chef/api_client/registration.rb
+index e8ab0149e..eed7e904e 100644
+--- a/lib/chef/api_client/registration.rb
++++ b/lib/chef/api_client/registration.rb
+@@ -85,7 +85,7 @@ class Chef
+ 
+       def create_or_update
+         create
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         # If create fails because the client exists, attempt to update. This
+         # requires admin privileges.
+         raise unless e.response.code == "409"
+diff --git a/lib/chef/api_client_v1.rb b/lib/chef/api_client_v1.rb
+index a1b9b8317..38ef675c7 100644
+--- a/lib/chef/api_client_v1.rb
++++ b/lib/chef/api_client_v1.rb
+@@ -213,7 +213,7 @@ class Chef
+     # Save this client via the REST API, returns a hash including the private key
+     def save
+       update
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       # If that fails, go ahead and try and update it
+       if e.response.code == "404"
+         create
+@@ -232,7 +232,7 @@ class Chef
+         private_key(reregistered_self.private_key)
+       end
+       self
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       # if there was a 406 related to versioning, give error explaining that
+       # only API version 0 is supported for reregister command
+       if e.response.code == "406" && e.response["x-ops-server-api-version"]
+@@ -263,7 +263,7 @@ class Chef
+ 
+       begin
+         new_client = chef_rest_v1.put("clients/#{name}", payload)
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         # rescue API V0 if 406 and the server supports V0
+         supported_versions = server_client_api_version_intersection(e, SUPPORTED_API_VERSIONS)
+         raise e unless supported_versions && supported_versions.include?(0)
+@@ -300,7 +300,7 @@ class Chef
+           new_client.delete("chef_key")
+         end
+ 
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         # rescue API V0 if 406 and the server supports V0
+         supported_versions = server_client_api_version_intersection(e, SUPPORTED_API_VERSIONS)
+         raise e unless supported_versions && supported_versions.include?(0)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/acl_entry.rb b/lib/chef/chef_fs/file_system/chef_server/acl_entry.rb
+index f4655412f..367adc3f0 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/acl_entry.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/acl_entry.rb
+@@ -51,7 +51,7 @@ class Chef
+                 rest.put("#{api_path}/#{permission}", { permission => acls[permission] })
+               rescue Timeout::Error => e
+                 raise Chef::ChefFS::FileSystem::OperationFailedError.new(:write, self, e, "Timeout writing: #{e}")
+-              rescue Net::HTTPServerException => e
++              rescue Net::HTTPClientException => e
+                 if e.response.code == "404"
+                   raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+                 else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/cookbook_dir.rb b/lib/chef/chef_fs/file_system/chef_server/cookbook_dir.rb
+index 64488ed70..bd6b6b14f 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/cookbook_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/cookbook_dir.rb
+@@ -108,7 +108,7 @@ class Chef
+                 rest.delete(api_path)
+               rescue Timeout::Error => e
+                 raise Chef::ChefFS::FileSystem::OperationFailedError.new(:delete, self, e, "Timeout deleting: #{e}")
+-              rescue Net::HTTPServerException
++              rescue Net::HTTPClientException
+                 if $!.response.code == "404"
+                   raise Chef::ChefFS::FileSystem::NotFoundError.new(self, $!)
+                 else
+@@ -182,7 +182,7 @@ class Chef
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:read, self, e, "Timeout reading: #{e}")
+ 
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               if e.response.code == "404"
+                 @could_not_get_chef_object = e
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, @could_not_get_chef_object)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/cookbook_file.rb b/lib/chef/chef_fs/file_system/chef_server/cookbook_file.rb
+index 6b4657ae6..a680daacc 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/cookbook_file.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/cookbook_file.rb
+@@ -41,7 +41,7 @@ class Chef
+             File.open(tmpfile, "rb") { |f| f.read }
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:read, self, e, "Timeout reading #{file[:url]}: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:read, self, e, "#{e.message} retrieving #{file[:url]}")
+           rescue Errno::ENOENT
+             raise Chef::ChefFS::FileSystem::NotFoundError.new(self, $!)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/cookbooks_dir.rb b/lib/chef/chef_fs/file_system/chef_server/cookbooks_dir.rb
+index 4e8e68e36..12220d5ad 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/cookbooks_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/cookbooks_dir.rb
+@@ -60,7 +60,7 @@ class Chef
+             upload_cookbook(other, options)
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:write, self, e, "Timeout writing: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             case e.response.code
+             when "409"
+               raise Chef::ChefFS::FileSystem::CookbookFrozenError.new(:write, self, e, "Cookbook #{other.name} is frozen")
+diff --git a/lib/chef/chef_fs/file_system/chef_server/data_bag_dir.rb b/lib/chef/chef_fs/file_system/chef_server/data_bag_dir.rb
+index ee0ecd3b4..0102ea284 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/data_bag_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/data_bag_dir.rb
+@@ -56,7 +56,7 @@ class Chef
+               rest.delete(api_path)
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:delete, self, e, "Timeout deleting: #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               if e.response.code == "404"
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+               else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/data_bags_dir.rb b/lib/chef/chef_fs/file_system/chef_server/data_bags_dir.rb
+index 205aa9fd8..6c7dd7b47 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/data_bags_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/data_bags_dir.rb
+@@ -33,7 +33,7 @@ class Chef
+             @children ||= root.get_json(api_path).keys.sort.map { |entry| make_child_entry(entry, true) }
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:children, self, e, "Timeout getting children: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             if e.response.code == "404"
+               raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+             else
+@@ -50,7 +50,7 @@ class Chef
+               rest.post(api_path, { "name" => name })
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:create_child, self, e, "Timeout creating child '#{name}': #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               if e.response.code == "409"
+                 raise Chef::ChefFS::FileSystem::AlreadyExistsError.new(:create_child, self, e, "Cannot create #{name} under #{path}: already exists")
+               else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/nodes_dir.rb b/lib/chef/chef_fs/file_system/chef_server/nodes_dir.rb
+index c81e88074..e56c68ffa 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/nodes_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/nodes_dir.rb
+@@ -33,7 +33,7 @@ class Chef
+             end
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:children, self, e, "Timeout retrieving children: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             if $!.response.code == "404"
+               raise Chef::ChefFS::FileSystem::NotFoundError.new(self, $!)
+             else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/organization_invites_entry.rb b/lib/chef/chef_fs/file_system/chef_server/organization_invites_entry.rb
+index adaffb99a..b8a6f7276 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/organization_invites_entry.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/organization_invites_entry.rb
+@@ -46,7 +46,7 @@ class Chef
+             (desired_invites - invites).each do |invite|
+               begin
+                 rest.post(api_path, { "user" => invite })
+-              rescue Net::HTTPServerException => e
++              rescue Net::HTTPClientException => e
+                 if e.response.code == "409"
+                   Chef::Log.warn("Could not invite #{invite} to organization #{org}: #{api_error_text(e.response)}")
+                 else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/organization_members_entry.rb b/lib/chef/chef_fs/file_system/chef_server/organization_members_entry.rb
+index 7e9c7141c..41a4391c5 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/organization_members_entry.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/organization_members_entry.rb
+@@ -45,7 +45,7 @@ class Chef
+             (desired_members - members).each do |member|
+               begin
+                 rest.post(api_path, "username" => member)
+-              rescue Net::HTTPServerException => e
++              rescue Net::HTTPClientException => e
+                 if %w{404 405}.include?(e.response.code)
+                   raise "Chef server at #{api_path} does not allow you to directly add members.  Please either upgrade your Chef server or move the users you want into invitations.json instead of members.json."
+                 else
+diff --git a/lib/chef/chef_fs/file_system/chef_server/policies_dir.rb b/lib/chef/chef_fs/file_system/chef_server/policies_dir.rb
+index a4add1378..2b4598e78 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/policies_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/policies_dir.rb
+@@ -80,7 +80,7 @@ class Chef
+             end
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:children, self, e, "Timeout retrieving children: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             # 404 = NotFoundError
+             if $!.response.code == "404"
+               # GET /organizations/ORG/policies returned 404, but that just might be because
+@@ -91,7 +91,7 @@ class Chef
+                 root.get_json(parent.api_path)
+                 # Return empty list if the organization exists but /policies didn't work
+                 []
+-              rescue Net::HTTPServerException => e
++              rescue Net::HTTPClientException => e
+                 if e.response.code == "404"
+                   raise Chef::ChefFS::FileSystem::NotFoundError.new(self, $!)
+                 end
+@@ -131,7 +131,7 @@ class Chef
+               rest.post("#{api_path}/#{policy_name}/revisions", object)
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:create_child, self, e, "Timeout creating '#{name}': #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               # 404 = NotFoundError
+               if e.response.code == "404"
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/policy_group_entry.rb b/lib/chef/chef_fs/file_system/chef_server/policy_group_entry.rb
+index df3d393d3..2a8ebd1f5 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/policy_group_entry.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/policy_group_entry.rb
+@@ -79,7 +79,7 @@ class Chef
+ 
+                 get_data = begin
+                   rest.get(policy_path)
+-                rescue Net::HTTPServerException => e
++                rescue Net::HTTPClientException => e
+                   raise "Could not find policy '#{policy_name}'' with revision '#{policy_data["revision_id"]}'' on the server"
+                 end
+ 
+@@ -113,7 +113,7 @@ class Chef
+ 
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:create_child, self, e, "Timeout creating '#{name}': #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               # 404 = NotFoundError
+               if e.response.code == "404"
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/rest_list_dir.rb b/lib/chef/chef_fs/file_system/chef_server/rest_list_dir.rb
+index 6ba53fab4..a58a01ae8 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/rest_list_dir.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/rest_list_dir.rb
+@@ -77,7 +77,7 @@ class Chef
+             end
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:children, self, e, "Timeout retrieving children: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             # 404 = NotFoundError
+             if $!.response.code == "404"
+ 
+@@ -90,7 +90,7 @@ class Chef
+                   root.get_json(parent.api_path)
+                   # Return empty list if the organization exists but /policies didn't work
+                   []
+-                rescue Net::HTTPServerException => e
++                rescue Net::HTTPClientException => e
+                   if e.response.code == "404"
+                     raise Chef::ChefFS::FileSystem::NotFoundError.new(self, $!)
+                   end
+@@ -133,7 +133,7 @@ class Chef
+               rest.post(api_path, object)
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:create_child, self, e, "Timeout creating '#{name}': #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               # 404 = NotFoundError
+               if e.response.code == "404"
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+diff --git a/lib/chef/chef_fs/file_system/chef_server/rest_list_entry.rb b/lib/chef/chef_fs/file_system/chef_server/rest_list_entry.rb
+index c16c5ad4d..02f394f16 100644
+--- a/lib/chef/chef_fs/file_system/chef_server/rest_list_entry.rb
++++ b/lib/chef/chef_fs/file_system/chef_server/rest_list_entry.rb
+@@ -72,7 +72,7 @@ class Chef
+               begin
+                 @this_object_cache = rest.get(api_path)
+                 @exists = true
+-              rescue Net::HTTPServerException => e
++              rescue Net::HTTPClientException => e
+                 if e.response.code == "404"
+                   @exists = false
+                 else
+@@ -91,7 +91,7 @@ class Chef
+             rest.delete(api_path)
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:delete, self, e, "Timeout deleting: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             if e.response.code == "404"
+               raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+             else
+@@ -108,7 +108,7 @@ class Chef
+             @this_object_cache ? JSON.parse(@this_object_cache) : root.get_json(api_path)
+           rescue Timeout::Error => e
+             raise Chef::ChefFS::FileSystem::OperationFailedError.new(:read, self, e, "Timeout reading: #{e}")
+-          rescue Net::HTTPServerException => e
++          rescue Net::HTTPClientException => e
+             if $!.response.code == "404"
+               raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+             else
+@@ -185,7 +185,7 @@ class Chef
+               rest.put(api_path, object)
+             rescue Timeout::Error => e
+               raise Chef::ChefFS::FileSystem::OperationFailedError.new(:write, self, e, "Timeout writing: #{e}")
+-            rescue Net::HTTPServerException => e
++            rescue Net::HTTPClientException => e
+               if e.response.code == "404"
+                 raise Chef::ChefFS::FileSystem::NotFoundError.new(self, e)
+               else
+diff --git a/lib/chef/client.rb b/lib/chef/client.rb
+index ed55cd791..cad534ce6 100644
+--- a/lib/chef/client.rb
++++ b/lib/chef/client.rb
+@@ -550,7 +550,7 @@ class Chef
+       recipe = Chef::Recipe.new(nil, nil, run_context)
+       recipe.from_file(required_recipe_file)
+       run_context
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       case e.response
+       when Net::HTTPNotFound
+         Chef::Log.debug("Required Recipe not configured on the server, skipping it")
+diff --git a/lib/chef/config_fetcher.rb b/lib/chef/config_fetcher.rb
+index e14428157..a6b20b984 100644
+--- a/lib/chef/config_fetcher.rb
++++ b/lib/chef/config_fetcher.rb
+@@ -39,7 +39,7 @@ class Chef
+ 
+     def fetch_remote_config
+       http.get("")
+-    rescue SocketError, SystemCallError, Net::HTTPServerException => error
++    rescue SocketError, SystemCallError, Net::HTTPClientException => error
+       Chef::Application.fatal!("Cannot fetch config '#{config_location}': '#{error.class}: #{error.message}")
+     end
+ 
+diff --git a/lib/chef/cookbook_uploader.rb b/lib/chef/cookbook_uploader.rb
+index 5e1131419..4b1e44d86 100644
+--- a/lib/chef/cookbook_uploader.rb
++++ b/lib/chef/cookbook_uploader.rb
+@@ -84,7 +84,7 @@ class Chef
+       retries = 0
+       begin
+         rest.put(sandbox_url, { :is_completed => true })
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.message =~ /^400/ && (retries += 1) <= 5
+           sleep 2
+           retry
+@@ -101,7 +101,7 @@ class Chef
+         save_url = opts[:force] ? manifest.force_save_url : manifest.save_url
+         begin
+           rest.put(save_url, manifest)
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           case e.response.code
+           when "409"
+             raise Chef::Exceptions::CookbookFrozen, "Version #{cb.version} of cookbook #{cb.name} is frozen. Use --force to override."
+@@ -128,7 +128,7 @@ class Chef
+         begin
+           rest.put(url, file_contents, headers)
+           checksums_to_upload.delete(checksum)
+-        rescue Net::HTTPServerException, Net::HTTPFatalError, Errno::ECONNREFUSED, Timeout::Error, Errno::ETIMEDOUT, SocketError => e
++        rescue Net::HTTPClientException, Net::HTTPFatalError, Errno::ECONNREFUSED, Timeout::Error, Errno::ETIMEDOUT, SocketError => e
+           error_message = "Failed to upload #{file} (#{checksum}) to #{url} : #{e.message}"
+           error_message << "\n#{e.response.body}" if e.respond_to?(:response)
+           Chef::Knife.ui.error(error_message)
+diff --git a/lib/chef/cookbook_version.rb b/lib/chef/cookbook_version.rb
+index dcb8c9754..e479744a0 100644
+--- a/lib/chef/cookbook_version.rb
++++ b/lib/chef/cookbook_version.rb
+@@ -496,7 +496,7 @@ class Chef
+       chef_server_rest.get("cookbooks/#{cookbook_name}")[cookbook_name]["versions"].map do |cb|
+         cb["version"]
+       end
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       if e.to_s =~ /^404/
+         Chef::Log.error("Cannot find a cookbook named #{cookbook_name}")
+         nil
+diff --git a/lib/chef/data_bag.rb b/lib/chef/data_bag.rb
+index 82eb03fbd..c4638dc6a 100644
+--- a/lib/chef/data_bag.rb
++++ b/lib/chef/data_bag.rb
+@@ -153,7 +153,7 @@ class Chef
+         else
+           create
+         end
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise e unless e.response.code == "409"
+       end
+       self
+diff --git a/lib/chef/data_bag_item.rb b/lib/chef/data_bag_item.rb
+index d0fca2612..d4d37e55c 100644
+--- a/lib/chef/data_bag_item.rb
++++ b/lib/chef/data_bag_item.rb
+@@ -172,7 +172,7 @@ class Chef
+         else
+           r.put("data/#{data_bag}/#{item_id}", self)
+         end
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise e unless e.response.code == "404"
+         r.post("data/#{data_bag}", self)
+       end
+diff --git a/lib/chef/environment.rb b/lib/chef/environment.rb
+index 621a12244..fde91b5fd 100644
+--- a/lib/chef/environment.rb
++++ b/lib/chef/environment.rb
+@@ -275,7 +275,7 @@ class Chef
+     def save
+       begin
+         chef_server_rest.put("environments/#{@name}", self)
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise e unless e.response.code == "404"
+         chef_server_rest.post("environments", self)
+       end
+diff --git a/lib/chef/formatters/error_inspectors/cookbook_resolve_error_inspector.rb b/lib/chef/formatters/error_inspectors/cookbook_resolve_error_inspector.rb
+index eb1aa629f..9ee416fde 100644
+--- a/lib/chef/formatters/error_inspectors/cookbook_resolve_error_inspector.rb
++++ b/lib/chef/formatters/error_inspectors/cookbook_resolve_error_inspector.rb
+@@ -35,7 +35,7 @@ class Chef
+ 
+         def add_explanation(error_description)
+           case exception
+-          when Net::HTTPServerException, Net::HTTPFatalError
++          when Net::HTTPClientException, Net::HTTPFatalError
+             humanize_http_exception(error_description)
+           when EOFError
+             describe_eof_error(error_description)
+diff --git a/lib/chef/formatters/error_inspectors/cookbook_sync_error_inspector.rb b/lib/chef/formatters/error_inspectors/cookbook_sync_error_inspector.rb
+index 3bd9b419f..6ab2816a5 100644
+--- a/lib/chef/formatters/error_inspectors/cookbook_sync_error_inspector.rb
++++ b/lib/chef/formatters/error_inspectors/cookbook_sync_error_inspector.rb
+@@ -41,7 +41,7 @@ class Chef
+ 
+         def add_explanation(error_description)
+           case exception
+-          when Net::HTTPServerException, Net::HTTPFatalError
++          when Net::HTTPClientException, Net::HTTPFatalError
+             humanize_http_exception(error_description)
+           when EOFError
+             describe_eof_error(error_description)
+diff --git a/lib/chef/formatters/error_inspectors/node_load_error_inspector.rb b/lib/chef/formatters/error_inspectors/node_load_error_inspector.rb
+index c52dad4c0..6d21e04f2 100644
+--- a/lib/chef/formatters/error_inspectors/node_load_error_inspector.rb
++++ b/lib/chef/formatters/error_inspectors/node_load_error_inspector.rb
+@@ -40,7 +40,7 @@ class Chef
+ 
+         def add_explanation(error_description)
+           case exception
+-          when Net::HTTPServerException, Net::HTTPFatalError
++          when Net::HTTPClientException, Net::HTTPFatalError
+             humanize_http_exception(error_description)
+           when Chef::Exceptions::PrivateKeyMissing
+             error_description.section("Private Key Not Found:", <<-E)
+diff --git a/lib/chef/formatters/error_inspectors/registration_error_inspector.rb b/lib/chef/formatters/error_inspectors/registration_error_inspector.rb
+index c7c145431..888afa3ef 100644
+--- a/lib/chef/formatters/error_inspectors/registration_error_inspector.rb
++++ b/lib/chef/formatters/error_inspectors/registration_error_inspector.rb
+@@ -23,7 +23,7 @@ class Chef
+ 
+         def add_explanation(error_description)
+           case exception
+-          when Net::HTTPServerException, Net::HTTPFatalError
++          when Net::HTTPClientException, Net::HTTPFatalError
+             humanize_http_exception(error_description)
+           when Errno::ECONNREFUSED, Timeout::Error, Errno::ETIMEDOUT, SocketError
+             error_description.section("Network Error:", <<-E)
+diff --git a/lib/chef/formatters/error_inspectors/run_list_expansion_error_inspector.rb b/lib/chef/formatters/error_inspectors/run_list_expansion_error_inspector.rb
+index e94b34737..ea1e97cb4 100644
+--- a/lib/chef/formatters/error_inspectors/run_list_expansion_error_inspector.rb
++++ b/lib/chef/formatters/error_inspectors/run_list_expansion_error_inspector.rb
+@@ -41,7 +41,7 @@ class Chef
+ 
+ Your chef_server_url may be misconfigured, or the network could be down.
+ E
+-          when Net::HTTPServerException, Net::HTTPFatalError
++          when Net::HTTPClientException, Net::HTTPFatalError
+             humanize_http_exception(error_description)
+           when Chef::Exceptions::MissingRole
+             describe_missing_role(error_description)
+diff --git a/lib/chef/http.rb b/lib/chef/http.rb
+index 14dd8b93a..98b3443ec 100644
+--- a/lib/chef/http.rb
++++ b/lib/chef/http.rb
+@@ -152,7 +152,7 @@ class Chef
+       response.error! unless success_response?(response)
+       return_value
+ 
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       http_attempts += 1
+       response = e.response
+       if response.kind_of?(Net::HTTPNotAcceptable) && version_retries - http_attempts > 0
+@@ -191,7 +191,7 @@ class Chef
+         response.error!
+       end
+       tempfile
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       http_attempts += 1
+       response = e.response
+       if response.kind_of?(Net::HTTPNotAcceptable) && version_retries - http_attempts > 0
+@@ -247,7 +247,7 @@ class Chef
+         end
+       end
+       tempfile
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       http_attempts += 1
+       response = e.response
+       if response.kind_of?(Net::HTTPNotAcceptable) && version_retries - http_attempts > 0
+diff --git a/lib/chef/key.rb b/lib/chef/key.rb
+index bf8e533d6..c79fc1978 100644
+--- a/lib/chef/key.rb
++++ b/lib/chef/key.rb
+@@ -185,7 +185,7 @@ class Chef
+ 
+     def save
+       create
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       if e.response.code == "409"
+         update
+       else
+diff --git a/lib/chef/knife.rb b/lib/chef/knife.rb
+index aa30f2e2e..3ec2b9ecf 100644
+--- a/lib/chef/knife.rb
++++ b/lib/chef/knife.rb
+@@ -451,7 +451,7 @@ class Chef
+       case e
+       when SystemExit
+         raise # make sure exit passes through.
+-      when Net::HTTPServerException, Net::HTTPFatalError
++      when Net::HTTPClientException, Net::HTTPFatalError
+         humanize_http_exception(e)
+       when OpenSSL::SSL::SSLError
+         ui.error "Could not establish a secure connection to the server."
+diff --git a/lib/chef/knife/bootstrap/client_builder.rb b/lib/chef/knife/bootstrap/client_builder.rb
+index cab33cd81..865c3b613 100644
+--- a/lib/chef/knife/bootstrap/client_builder.rb
++++ b/lib/chef/knife/bootstrap/client_builder.rb
+@@ -187,7 +187,7 @@ class Chef
+         def resource_exists?(relative_path)
+           rest.get(relative_path)
+           true
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           raise unless e.response.code == "404"
+           false
+         end
+diff --git a/lib/chef/knife/cookbook_delete.rb b/lib/chef/knife/cookbook_delete.rb
+index b1bb88b38..49046e104 100644
+--- a/lib/chef/knife/cookbook_delete.rb
++++ b/lib/chef/knife/cookbook_delete.rb
+@@ -88,7 +88,7 @@ class Chef
+         @available_versions ||= rest.get("cookbooks/#{@cookbook_name}").map do |name, url_and_version|
+           url_and_version["versions"].map { |url_by_version| url_by_version["version"] }
+         end.flatten
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.to_s =~ /^404/
+           ui.error("Cannot find a cookbook named #{@cookbook_name} to delete")
+           nil
+diff --git a/lib/chef/knife/cookbook_site_share.rb b/lib/chef/knife/cookbook_site_share.rb
+index d55d6c123..d2d8c12e9 100644
+--- a/lib/chef/knife/cookbook_site_share.rb
++++ b/lib/chef/knife/cookbook_site_share.rb
+@@ -116,7 +116,7 @@ class Chef
+         data = noauth_rest.get("#{config[:supermarket_site]}/api/v1/cookbooks/#{@name_args[0]}")
+         data["category"]
+       rescue => e
+-        return "Other" if e.kind_of?(Net::HTTPServerException) && e.response.code == "404"
++        return "Other" if e.kind_of?(Net::HTTPClientException) && e.response.code == "404"
+         ui.fatal("Unable to reach Supermarket: #{e.message}. Increase log verbosity (-VV) for more information.")
+         Chef::Log.debug("\n#{e.backtrace.join("\n")}")
+         exit(1)
+diff --git a/lib/chef/knife/cookbook_site_unshare.rb b/lib/chef/knife/cookbook_site_unshare.rb
+index bdabff0b9..268bcc8cd 100644
+--- a/lib/chef/knife/cookbook_site_unshare.rb
++++ b/lib/chef/knife/cookbook_site_unshare.rb
+@@ -49,7 +49,7 @@ class Chef
+ 
+         begin
+           rest.delete "#{config[:supermarket_site]}/api/v1/cookbooks/#{@name_args[0]}"
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           raise e unless e.message =~ /Forbidden/
+           ui.error "Forbidden: You must be the maintainer of #{@cookbook_name} to unshare it."
+           exit 1
+diff --git a/lib/chef/knife/cookbook_upload.rb b/lib/chef/knife/cookbook_upload.rb
+index 6938ac280..f6a0b5b09 100644
+--- a/lib/chef/knife/cookbook_upload.rb
++++ b/lib/chef/knife/cookbook_upload.rb
+@@ -226,7 +226,7 @@ WARNING
+ 
+       def assert_environment_valid!
+         environment
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.response.code.to_s == "404"
+           ui.error "The environment #{config[:environment]} does not exist on the server, aborting."
+           Log.debug(e)
+diff --git a/lib/chef/knife/data_bag_create.rb b/lib/chef/knife/data_bag_create.rb
+index 563e931dc..bf90fb81b 100644
+--- a/lib/chef/knife/data_bag_create.rb
++++ b/lib/chef/knife/data_bag_create.rb
+@@ -53,7 +53,7 @@ class Chef
+         begin
+           rest.get("data/#{@data_bag_name}")
+           ui.info("Data bag #{@data_bag_name} already exists")
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           raise unless e.to_s =~ /^404/
+           # if it doesn't exists, try to create it
+           rest.post("data", { "name" => @data_bag_name })
+diff --git a/lib/chef/knife/index_rebuild.rb b/lib/chef/knife/index_rebuild.rb
+index 206b7b0fb..62fbed497 100644
+--- a/lib/chef/knife/index_rebuild.rb
++++ b/lib/chef/knife/index_rebuild.rb
+@@ -50,7 +50,7 @@ class Chef
+         # back will give us what we want
+         dummy_node = "knife_index_rebuild_test_#{rand(1000000)}"
+         rest.get("/nodes/#{dummy_node}")
+-      rescue Net::HTTPServerException => exception
++      rescue Net::HTTPClientException => exception
+         r = exception.response
+         parse_api_info(r)
+       end
+diff --git a/lib/chef/knife/raw.rb b/lib/chef/knife/raw.rb
+index 76b83d221..34c59e165 100644
+--- a/lib/chef/knife/raw.rb
++++ b/lib/chef/knife/raw.rb
+@@ -91,7 +91,7 @@ class Chef
+         rescue Timeout::Error => e
+           ui.error "Server timeout"
+           exit 1
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           ui.error "Server responded with error #{e.response.code} \"#{e.response.message}\""
+           ui.error "Error Body: #{e.response.body}" if e.response.body && e.response.body != ""
+           exit 1
+diff --git a/lib/chef/knife/search.rb b/lib/chef/knife/search.rb
+index 2a68ec510..1e273bc6a 100644
+--- a/lib/chef/knife/search.rb
++++ b/lib/chef/knife/search.rb
+@@ -107,7 +107,7 @@ class Chef
+             result_items << formatted_item
+             result_count += 1
+           end
+-        rescue Net::HTTPServerException => e
++        rescue Net::HTTPClientException => e
+           msg = Chef::JSONCompat.from_json(e.response.body)["error"].first
+           ui.error("knife search failed: #{msg}")
+           exit 99
+diff --git a/lib/chef/mixin/api_version_request_handling.rb b/lib/chef/mixin/api_version_request_handling.rb
+index b91a1dfe0..c41d2a31c 100644
+--- a/lib/chef/mixin/api_version_request_handling.rb
++++ b/lib/chef/mixin/api_version_request_handling.rb
+@@ -21,7 +21,7 @@ class Chef
+     module ApiVersionRequestHandling
+       # Input:
+       # exeception:
+-      #   Net::HTTPServerException that may or may not contain the x-ops-server-api-version header
++      #   Net::HTTPClientException that may or may not contain the x-ops-server-api-version header
+       # supported_client_versions:
+       #  An array of Integers that represent the API versions the client supports.
+       #
+diff --git a/lib/chef/monkey_patches/net_http.rb b/lib/chef/monkey_patches/net_http.rb
+index c1cb87bff..434364268 100644
+--- a/lib/chef/monkey_patches/net_http.rb
++++ b/lib/chef/monkey_patches/net_http.rb
+@@ -13,7 +13,7 @@ module Net
+   class HTTPRetriableError
+     include ChefNetHTTPExceptionExtensions
+   end
+-  class HTTPServerException
++  class HTTPClientException
+     include ChefNetHTTPExceptionExtensions
+   end
+   class HTTPFatalError
+diff --git a/lib/chef/node.rb b/lib/chef/node.rb
+index 549bde0db..86ff3718c 100644
+--- a/lib/chef/node.rb
++++ b/lib/chef/node.rb
+@@ -562,7 +562,7 @@ class Chef
+ 
+     def self.find_or_create(node_name)
+       load(node_name)
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       raise unless e.response.code == "404"
+       node = build(node_name)
+       node.create
+@@ -595,7 +595,7 @@ class Chef
+         else
+           chef_server_rest.put("nodes/#{name}", data_for_save)
+         end
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.response.code == "404"
+           chef_server_rest.post("nodes", data_for_save)
+         else
+@@ -609,7 +609,7 @@ class Chef
+     def create
+       chef_server_rest.post("nodes", data_for_save)
+       self
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       # Chef Server before 12.3 rejects node JSON with 'policy_name' or
+       # 'policy_group' keys, but 'policy_name' will be detected first.
+       # Backcompat can be removed in 13.0
+@@ -642,7 +642,7 @@ class Chef
+       trimmed_data = data_for_save_without_policyfile_attrs
+ 
+       chef_server_rest.put("nodes/#{name}", trimmed_data)
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       raise e unless e.response.code == "404"
+       chef_server_rest.post("nodes", trimmed_data)
+     end
+diff --git a/lib/chef/org.rb b/lib/chef/org.rb
+index 73a129c7c..cf90bbf59 100644
+--- a/lib/chef/org.rb
++++ b/lib/chef/org.rb
+@@ -90,7 +90,7 @@ class Chef
+ 
+     def save
+       create
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       if e.response.code == "409"
+         update
+       else
+diff --git a/lib/chef/policy_builder/policyfile.rb b/lib/chef/policy_builder/policyfile.rb
+index 545d36cb0..5b1aabad5 100644
+--- a/lib/chef/policy_builder/policyfile.rb
++++ b/lib/chef/policy_builder/policyfile.rb
+@@ -294,7 +294,7 @@ class Chef
+       # @api private
+       def policy
+         @policy ||= api_service.get(policyfile_location)
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise ConfigurationError, "Error loading policyfile from `#{policyfile_location}': #{e.class} - #{e.message}"
+       end
+ 
+diff --git a/lib/chef/provider/apt_repository.rb b/lib/chef/provider/apt_repository.rb
+index 2d86a6fce..50f42c5c6 100644
+--- a/lib/chef/provider/apt_repository.rb
++++ b/lib/chef/provider/apt_repository.rb
+@@ -210,7 +210,7 @@ class Chef
+         url = "https://launchpad.net/api/1.0/~#{owner}/+archive/#{repo}"
+         key_id = Chef::HTTP::Simple.new(url).get("signing_key_fingerprint").delete('"')
+         install_key_from_keyserver(key_id, "keyserver.ubuntu.com")
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise "Could not access Launchpad ppa API: #{e.message}"
+       end
+ 
+diff --git a/lib/chef/provider/remote_file/content.rb b/lib/chef/provider/remote_file/content.rb
+index 983285307..b3b1cb02b 100644
+--- a/lib/chef/provider/remote_file/content.rb
++++ b/lib/chef/provider/remote_file/content.rb
+@@ -54,7 +54,7 @@ class Chef
+                     as_uri(source)
+                   end
+             raw_file = grab_file_from_uri(uri)
+-          rescue SocketError, Errno::ECONNREFUSED, Errno::ENOENT, Errno::EACCES, Timeout::Error, Net::HTTPServerException, Net::HTTPFatalError, Net::FTPError, Errno::ETIMEDOUT => e
++          rescue SocketError, Errno::ECONNREFUSED, Errno::ENOENT, Errno::EACCES, Timeout::Error, Net::HTTPClientException, Net::HTTPFatalError, Net::FTPError, Errno::ETIMEDOUT => e
+             Chef::Log.warn("#{@new_resource} cannot be downloaded from #{source}: #{e}")
+             if source = sources.shift
+               Chef::Log.info("#{@new_resource} trying to download from another mirror")
+diff --git a/lib/chef/role.rb b/lib/chef/role.rb
+index c22c77b70..f48a44692 100644
+--- a/lib/chef/role.rb
++++ b/lib/chef/role.rb
+@@ -224,7 +224,7 @@ class Chef
+     def save
+       begin
+         chef_server_rest.put("roles/#{@name}", self)
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         raise e unless e.response.code == "404"
+         chef_server_rest.post("roles", self)
+       end
+diff --git a/lib/chef/run_list/run_list_expansion.rb b/lib/chef/run_list/run_list_expansion.rb
+index b895b5352..ed113bdd0 100644
+--- a/lib/chef/run_list/run_list_expansion.rb
++++ b/lib/chef/run_list/run_list_expansion.rb
+@@ -217,7 +217,7 @@ class Chef
+ 
+       def fetch_role(name, included_by)
+         Chef::Role.from_hash(rest.get("roles/#{name}"))
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.message == '404 "Not Found"'
+           role_not_found(name, included_by)
+         else
+diff --git a/lib/chef/user.rb b/lib/chef/user.rb
+index f52d0e255..826d88d1e 100644
+--- a/lib/chef/user.rb
++++ b/lib/chef/user.rb
+@@ -113,7 +113,7 @@ class Chef
+ 
+     def save(new_key = false)
+       create
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       if e.response.code == "409"
+         update(new_key)
+       else
+diff --git a/lib/chef/user_v1.rb b/lib/chef/user_v1.rb
+index 0ca17c6ed..9561a6cd3 100644
+--- a/lib/chef/user_v1.rb
++++ b/lib/chef/user_v1.rb
+@@ -162,7 +162,7 @@ class Chef
+           new_user["public_key"] = new_user["chef_key"]["public_key"]
+           new_user.delete("chef_key")
+         end
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         # rescue API V0 if 406 and the server supports V0
+         supported_versions = server_client_api_version_intersection(e, SUPPORTED_API_VERSIONS)
+         raise e unless supported_versions && supported_versions.include?(0)
+@@ -198,7 +198,7 @@ class Chef
+         payload[:private_key] = new_key if new_key
+ 
+         updated_user = chef_root_rest_v1.put("users/#{username}", payload)
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         if e.response.code == "400"
+           # if a 400 is returned but the error message matches the error related to private / public key fields, try V0
+           # else, raise the 400
+@@ -218,7 +218,7 @@ class Chef
+ 
+     def save(new_key = false)
+       create
+-    rescue Net::HTTPServerException => e
++    rescue Net::HTTPClientException => e
+       if e.response.code == "409"
+         update(new_key)
+       else
+@@ -233,7 +233,7 @@ class Chef
+         reregistered_self = chef_root_rest_v0.put("users/#{username}", payload)
+         private_key(reregistered_self["private_key"])
+       # only V0 supported for reregister
+-      rescue Net::HTTPServerException => e
++      rescue Net::HTTPClientException => e
+         # if there was a 406 related to versioning, give error explaining that
+         # only API version 0 is supported for reregister command
+         if e.response.code == "406" && e.response["x-ops-server-api-version"]
