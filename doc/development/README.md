@@ -8,6 +8,7 @@
 - [Building your own package](../build/README.md)
 - [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
 - [Adding deprecation messages](adding-deprecation-messages.md)
+- [Adding an attribute to public_attributes.json](public-attributes.md)
 
 ## Setting up development environment
 
