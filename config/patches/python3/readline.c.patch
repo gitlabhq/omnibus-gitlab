@@ -1,9 +1,24 @@
---- readline.c.orig	2016-06-25 17:52:32.000000000 -0400
-+++ readline.c	2017-05-17 08:34:42.244842000 -0400
-@@ -27,45 +27,47 @@
+From 0fe1f51e50a3828cb6861439ce4c73fc02146d7a Mon Sep 17 00:00:00 2001
+From: Robert Marshall <rmarshall@gitlab.com>
+Date: Sat, 30 Mar 2019 01:01:34 -0400
+Subject: [PATCH 5/5] Patch Modules/readline.c for libedit
+
+- Port of Martin Panter's patch from
+  https://bugs.python.org/issue13501
+
+Signed-off-by: Robert Marshall <rmarshall@gitlab.com>
+---
+ Modules/readline.c | 148 ++++++++++++++++++++-------------------------
+ 1 file changed, 66 insertions(+), 82 deletions(-)
+
+diff --git a/Modules/readline.c b/Modules/readline.c
+index fa7e7d18e5..e1dbdcfd89 100644
+--- a/Modules/readline.c
++++ b/Modules/readline.c
+@@ -26,45 +26,47 @@
  #  define RESTORE_LOCALE(sl)
  #endif
-
+ 
 +#ifdef WITH_EDITLINE
 +#  include <editline/readline.h>
 +#else
@@ -15,9 +30,9 @@
 +#  include <readline/readline.h>
 +#  include <readline/history.h>
 +#endif
-
+ 
 +/* Readline 4.2 deprecated completion_matches() in favour of
-+rl_completion_matches() */
+++rl_completion_matches() */
  #ifdef HAVE_RL_COMPLETION_MATCHES
  #define completion_matches(x, y) \
      rl_completion_matches((x), ((rl_compentry_func_t *)(y)))
@@ -31,7 +46,7 @@
 -#endif
 -#endif
  #endif
-
+ 
 -#ifdef __APPLE__
  /*
   * It is possible to link the readline module to the readline
@@ -65,13 +80,13 @@
  static int libedit_history_start = 0;
 -#endif /* __APPLE__ */
 +#endif
-
+ 
  #ifdef HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK
  static void
-@@ -598,25 +600,6 @@
+@@ -664,25 +666,6 @@ PyDoc_STRVAR(doc_get_completer,
  \n\
  Returns current completer function.");
-
+ 
 -/* Private function to get current length of history.  XXX It may be
 - * possible to replace this with a direct use of history_length instead,
 - * but it's not clear whether BSD's libedit keeps history_length up to date.
@@ -92,11 +107,11 @@
 -}
 -
  /* Exported function to get any element of history */
-
+ 
  static PyObject *
-@@ -627,27 +610,19 @@
-
-     if (!PyArg_ParseTuple(args, "i:index", &idx))
+@@ -693,27 +676,20 @@ get_history_item(PyObject *self, PyObject *args)
+ 
+     if (!PyArg_ParseTuple(args, "i:get_history_item", &idx))
          return NULL;
 -#ifdef  __APPLE__
 -    if (using_libedit_emulation) {
@@ -117,12 +132,13 @@
 -                || idx >= (length + libedit_history_start)) {
 -            Py_RETURN_NONE;
 -        }
++
 +#ifdef SUPPORT_EDITLINE
 +    idx = idx - 1 + libedit_history_start;
 +
 +    /*
-+     * Apple's readline emulation (and maybe other versions of
-+     * Editline) crash when the index is out of range, therefore
++     * Apple's readline emulation crashes when
++     * the index is out of range, therefore
 +     * test for that and fail gracefully.
 +     */
 +    if (idx < libedit_history_start
@@ -132,21 +148,21 @@
 -#endif /* __APPLE__ */
 +#endif /* SUPPORT_EDITLINE */
      if ((hist_ent = history_get(idx)))
-         return PyUnicode_FromString(hist_ent->line);
+         return decode(hist_ent->line);
      else {
-@@ -665,7 +640,7 @@
+@@ -731,7 +707,7 @@ return the current contents of history item at index.");
  static PyObject *
  get_current_history_length(PyObject *self, PyObject *noarg)
  {
 -    return PyLong_FromLong((long)_py_get_history_length());
 +    return PyLong_FromLong(history_length);
  }
-
+ 
  PyDoc_STRVAR(doc_get_current_history_length,
-@@ -978,14 +953,16 @@
-         Py_FatalError("not enough memory to save locale");
- #endif
-
+@@ -1080,14 +1056,16 @@ setup_readline(readlinestate *mod_state)
+     /* The name must be defined before initialization */
+     rl_readline_name = "python";
+ 
 -#ifdef __APPLE__
 +#ifdef SUPPORT_EDITLINE
      /* the libedit readline emulation resets key bindings etc
@@ -157,31 +173,31 @@
      if (using_libedit_emulation)
 +#  endif
          rl_initialize();
-
+ 
 -    /* Detect if libedit's readline emulation uses 0-based
 +    /* Detect if the backend library uses 0-based
       * indexing or 1-based indexing.
       */
      add_history("1");
-@@ -995,7 +972,7 @@
+@@ -1097,7 +1075,7 @@ setup_readline(readlinestate *mod_state)
          libedit_history_start = 1;
      }
      clear_history();
 -#endif /* __APPLE__ */
 +#endif /* SUPPORT_EDITLINE */
-
+ 
      using_history();
-
-@@ -1021,7 +998,7 @@
+ 
+@@ -1126,7 +1104,7 @@ setup_readline(readlinestate *mod_state)
      mod_state->begidx = PyLong_FromLong(0L);
      mod_state->endidx = PyLong_FromLong(0L);
-
--#ifndef __APPLE__
-+#ifndef SUPPORT_EDITLINE
-     if (!isatty(STDOUT_FILENO)) {
-         /* Issue #19884: stdout is no a terminal. Disable meta modifier
-            keys to not write the ANSI sequence "\033[1034h" into stdout. On
-@@ -1039,13 +1016,20 @@
+ 
+-#ifdef __APPLE__
++#ifdef SUPPORT_EDITLINE
+     if (!using_libedit_emulation)
+ #endif
+     {
+@@ -1147,13 +1125,20 @@ setup_readline(readlinestate *mod_state)
       *
       * XXX: A bug in the readline-2.2 library causes a memory leak
       * inside this function.  Nothing we can do about it.
@@ -197,38 +213,39 @@
 -#endif /* __APPLE__ */
          rl_initialize();
 +#elif defined(WITH_EDITLINE)
-+    rl_read_init_file(NULL);
++        rl_read_init_file(NULL);
 +#else
-+    rl_initialize();
++        rl_initialize();
 +#endif
-
+ 
      RESTORE_LOCALE(saved_locale)
  }
-@@ -1208,15 +1192,12 @@
+@@ -1278,16 +1263,13 @@ call_readline(FILE *sys_stdin, FILE *sys_stdout, const char *prompt)
      n = strlen(p);
-     if (n > 0) {
+     if (should_auto_add_history && n > 0) {
          const char *line;
 -        int length = _py_get_history_length();
--        if (length > 0)
+-        if (length > 0) {
++        if (history_length > 0) {
+             HIST_ENTRY *hist_ent;
 -#ifdef __APPLE__
 -            if (using_libedit_emulation) {
 -                /* handle older 0-based or newer 1-based indexing */
--                line = (const char *)history_get(length + libedit_history_start - 1)->line;
+-                hist_ent = history_get(length + libedit_history_start - 1);
 -            } else
 -#endif /* __APPLE__ */
--            line = (const char *)history_get(length)->line;
-+        if (history_length > 0)
+-                hist_ent = history_get(length);
 +#ifdef SUPPORT_EDITLINE
-+            line = history_get(history_length + libedit_history_start - 1)->line;
++            hist_ent = history_get(history_length + libedit_history_start - 1);
 +#else
-+            line = history_get(history_length)->line;
++            hist_ent = history_get(history_length);
 +#endif
-         else
+             line = hist_ent ? hist_ent->line : "";
+         } else
              line = "";
-         if (strcmp(p, line))
-@@ -1240,12 +1221,15 @@
+@@ -1312,12 +1294,15 @@ call_readline(FILE *sys_stdin, FILE *sys_stdout, const char *prompt)
  /* Initialize the module */
-
+ 
  PyDoc_STRVAR(doc_module,
 +#ifndef WITH_EDITLINE
  "Importing this module enables command line editing using GNU readline.");
@@ -242,23 +259,27 @@
  "Importing this module enables command line editing using libedit readline.");
 -#endif /* __APPLE__ */
 +#endif
-
+ 
  static struct PyModuleDef readlinemodule = {
      PyModuleDef_HEAD_INIT,
-@@ -1266,15 +1250,14 @@
+@@ -1338,15 +1323,14 @@ PyInit_readline(void)
      PyObject *m;
      readlinestate *mod_state;
-
+ 
 -#ifdef __APPLE__
 +#ifdef DETECT_EDITLINE
      if (strncmp(rl_library_version, libedit_version_tag, strlen(libedit_version_tag)) == 0) {
          using_libedit_emulation = 1;
      }
-
+ 
      if (using_libedit_emulation)
          readlinemodule.m_doc = doc_module_le;
 -
 -#endif /* __APPLE__ */
 +#endif /* DETECT_EDITLINE */
-
+ 
      m = PyModule_Create(&readlinemodule);
+ 
+-- 
+2.21.0
+
