@@ -9,6 +9,7 @@
 - [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
 - [Adding deprecation messages](adding-deprecation-messages.md)
 - [Adding an attribute to public_attributes.json](public-attributes.md)
+- [Adding a gitlab-ctl command](gitlab-ctl-commands.md)
 
 ## Setting up development environment
 
