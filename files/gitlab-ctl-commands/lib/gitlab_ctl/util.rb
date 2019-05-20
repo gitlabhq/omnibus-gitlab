@@ -8,8 +8,8 @@ require 'socket'
 module GitlabCtl
   module Util
     class <<self
-      def get_command_output(command, user = nil)
-        shell_out = run_command(command, live: false, user: user)
+      def get_command_output(command, user = nil, timeout = nil)
+        shell_out = run_command(command, live: false, user: user, timeout: timeout)
 
         begin
           shell_out.error!
