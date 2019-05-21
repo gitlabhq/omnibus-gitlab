@@ -11,7 +11,7 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout
     attr_writer :data_dir, :tmp_data_dir
 
     def initialize(base_path, data_path, tmp_dir = nil, timeout = nil)
