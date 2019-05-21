@@ -530,6 +530,7 @@ default['gitlab']['gitlab-pages']['gitlab_secret'] = nil
 default['gitlab']['gitlab-pages']['auth_redirect_uri'] = nil
 default['gitlab']['gitlab-pages']['auth_server'] = nil
 default['gitlab']['gitlab-pages']['auth_secret'] = nil
+default['gitlab']['gitlab-pages']['insecure_ciphers'] = false
 
 ####
 # Nginx

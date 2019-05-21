@@ -77,3 +77,6 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% end %>
     -admin-secret-path="<%= node['gitlab']['gitlab-pages']['dir'] %>/admin.secret" \
     -admin-unix-listener="<%= node['gitlab']['gitlab-pages']['dir'] %>/admin.socket" \
+    <% if node['gitlab']['gitlab-pages']['insecure_ciphers'] %>
+    -insecure-ciphers \
+    <% end %>
