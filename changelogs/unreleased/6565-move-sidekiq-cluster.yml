@@ -1,5 +1,0 @@
----
-title: Move sidekiq-cluster to ee/bin
-merge_request: 3216
-author:
-type: other

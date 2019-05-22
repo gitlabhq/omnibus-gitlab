@@ -7,6 +7,65 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.11.0 (2019-05-22)
+
+### Security (1 change)
+
+- Upgrade RubyGems to 2.7.9. !3082
+
+### Removed (1 change)
+
+- Remove postgres auto-upgrade from Docker images for 11.11.0 release.
+
+### Fixed (4 changes)
+
+- Run pg_upgrade with configured postgres username. !3162
+- Fix Grafana GitLab Authentication. !3195
+- Run repmgr's psql commands as the specified user. !3224
+- Remove timestamp prefix from JSON formatted registry logs.
+
+### Deprecated (1 change)
+
+- Stop building Ubuntu 14.04 packages. !3192
+
+### Changed (4 changes)
+
+- Patch bundle install in CentOS 6 to install sassc gem using newer GCC. !3112
+- Enable additional node metrics. !3207
+- geo_log_cursor is located in ee/bin/ now. !3223
+- Bump Grafana Dashboards. !3241
+
+### Performance (2 changes)
+
+- Use AuthorizedKeysCommand in Docker builds. !3191
+- Remove smaps metrics from gitlab-monitor. !3279
+
+### Added (12 changes, 2 of them are from the community)
+
+- Bundle PostgreSQL 10 with the package. !3142
+- Docker: attempt to cleanup stale pids on restart. !3200
+- Decouple Geo node identity from external_url. !3201
+- Add configuration support for dependency proxy feature. !3206
+- add option to define Sentry settings. !3214 (Roger Meier)
+- Support gitlab-shell feature flags through gitlab.rb. !3215
+- Upgrade Git to 2.21. !3220
+- Add HA support for pg-upgrade command. !3240
+- Add pages domain removal cron configuration. !3246
+- Allow Sentry client-side DSN to be passed on gitlab.yml. !3249
+- add option to define Sentry environment for gitaly. !3253 (Roger Meier)
+- Add option to provide license during initial installation. !3265
+
+### Other (7 changes, 2 of them are from the community)
+
+- Bump Prometheus components to the latest. !3182
+- Update liblzma to 5.2.4. !3197
+- Update libtool to 2.4.6. !3210
+- Move sidekiq-cluster to ee/bin. !3216
+- Rename library methods to make their function explicit. !3222
+- Update Mattermost to 5.10.0. (Harrison Healey)
+- Stop raspberry pi builds during nightlies. (John T Skarbek)
+
+
 ## 11.10.4 (2019-05-01)
 
 - No changes.

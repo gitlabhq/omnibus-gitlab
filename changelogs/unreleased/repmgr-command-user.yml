@@ -1,5 +1,0 @@
----
-title: Run repmgr's psql commands as the specified user
-merge_request: 3224
-author:
-type: fixed

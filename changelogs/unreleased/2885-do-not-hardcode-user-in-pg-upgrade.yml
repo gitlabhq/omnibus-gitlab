@@ -1,5 +1,0 @@
----
-title: Run pg_upgrade with configured postgres username
-merge_request: 3162
-author:
-type: fixed
