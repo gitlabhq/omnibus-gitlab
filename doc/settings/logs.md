@@ -132,6 +132,7 @@ gitlab_shell['log_format'] = 'json'
 gitlab_workhorse['log_format'] = 'json'
 registry['log_formatter'] = 'json'
 sidekiq['log_format'] = 'json'
+gitlab_pages['log_format'] = 'json'
 ```
 
 [ee]: https://about.gitlab.com/gitlab-ee/
