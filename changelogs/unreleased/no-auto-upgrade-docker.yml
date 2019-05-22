@@ -1,5 +1,0 @@
----
-title: Remove postgres auto-upgrade from Docker images for 11.11.0 release
-merge_request:
-author:
-type: removed

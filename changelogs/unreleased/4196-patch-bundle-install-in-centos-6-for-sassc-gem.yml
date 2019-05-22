@@ -1,5 +1,0 @@
----
-title: Patch bundle install in CentOS 6 to install sassc gem using newer GCC
-merge_request: 3112
-author:
-type: changed
