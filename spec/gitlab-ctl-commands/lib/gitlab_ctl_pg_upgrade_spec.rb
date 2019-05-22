@@ -38,7 +38,7 @@ describe GitlabCtl::PgUpgrade do
       })
     expect(GitlabCtl::Util).to receive(
       :get_command_output
-    ).with('fake command', 'arbitrary-user-name', 123)
+    ).with('su - arbitrary-user-name -c "fake command"', nil, 123)
     @dbw.run_pg_command('fake command')
   end
 

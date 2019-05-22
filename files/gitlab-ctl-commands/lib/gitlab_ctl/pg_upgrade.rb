@@ -43,7 +43,7 @@ module GitlabCtl
       # TODO: Remove support for legacy attributes in GitLab 13.0
       pg_username = node_attributes.dig(:gitlab, :postgresql, :username) || node_attributes.dig(:postgresql, :username)
 
-      GitlabCtl::Util.get_command_output(command, pg_username, @timeout)
+      GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"", nil, @timeout)
     end
 
     def fetch_running_version
@@ -107,7 +107,8 @@ module GitlabCtl
           end
 
           opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
-            options[:timeout] = t
+            i = t.to_i
+            options[:timeout] = i.positive? ? i : nil
           end
         end.parse!(args)
 
