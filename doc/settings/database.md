@@ -233,10 +233,10 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 /opt/gitlab/embedded/bin/psql --version
 ```
 
-If these versions are different from your non-packaged external PostgreSQL, you 
-will need to install tools that match your database version and then follow the 
+If these versions are different from your non-packaged external PostgreSQL, you
+will need to install tools that match your database version and then follow the
 steps below. There are multiple ways to install PostgreSQL client tools. See
-https://www.postgresql.org/download/ for options. 
+https://www.postgresql.org/download/ for options.
 
 Once the correct `psql` and `pg_dump` tools are available on your system, follow
 these steps, using the correct path to the location you installed the new tools:
@@ -461,13 +461,14 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ## Upgrade packaged PostgreSQL server
 
-**As of GitLab 10.0, PostgreSQL 9.6.X is the only database version in GitLab.**
+**As of GitLab 11.1, PostgreSQL 9.6.X and 10.7.0 are shipped with Omnibus GitLab.**
 
-If you're still running on the bundled PostgreSQL 9.2.18 when you upgrade to GitLab 10.0,
-it will fail and remain on your current version.
-To ensure you're running the latest version of the bundled PostgreSQL, first upgrade GitLab to the latest 9.5.X release.
+You can follow the instructions for manually upgrading PostgreSQL to 10.7.0.
 
-If you had previously avoided the upgrade by touching `/etc/gitlab/skip-auto-migrations` this will no longer work.
+For GitLab 12.0, we will be automatically upgrading the database to 10.7.0 unless specifically opted out. To opt out, run
+```shell
+sudo touch /etc/gitlab/disable-postgresql-upgrade
+```
 
 If you want to manually upgrade without upgrading GitLab, you can follow these instructions:
 
@@ -482,8 +483,7 @@ Before upgrading, please check the following:
 
 * You're currently running the latest version of GitLab and it is working.
 * If you recently upgraded, make sure that `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
-* You're using the bundled version of PostgreSQL. Look for `postgresql['enable']` to be `true`, commented out, or absent from `/etc/gitlab/gitlab.rb`.
-* You haven't already upgraded. Running `sudo gitlab-psql --version` should print `psql (PostgreSQL) 9.2.18`.
+
 * You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
 
 Please note:
@@ -519,7 +519,7 @@ Once this step is complete, verify everything is working as expected.
 you can remove the old database with:
 
 ```
-sudo rm -rf /var/opt/gitlab/postgresql/data.9.2.18
+sudo rm -rf /var/opt/gitlab/postgresql/data.9.6
 ```
 
 ### Upgrading a GitLab HA cluster
