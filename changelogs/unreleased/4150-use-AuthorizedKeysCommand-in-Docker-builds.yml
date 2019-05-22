@@ -1,5 +1,0 @@
----
-title: Use AuthorizedKeysCommand in Docker builds
-merge_request: 3191
-author:
-type: performance
