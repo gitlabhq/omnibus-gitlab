@@ -17,6 +17,10 @@ ssl_verify_mode :verify_peer
 log_location "#{LOG_PATH}/#{TIME}.log"
 log_level :info
 
+# Enforce the acme-client gem version range
+# TODO: Remove when chef-acme updated to support acme-client 2.x
+gem 'acme-client', '~> 0.4'
+
 # This monkey-patch is a workaround for https://github.com/chef/chef/issues/6889
 # We do not want an additional logger attached to STDOUT as the `gitlab`
 # formatter manages STDOUT
