@@ -137,9 +137,9 @@ class CertificateHelper
         certificate_path = File.realpath(trusted_cert)
         symlink_path = File.join(@omnibus_certs_dir, hash_name)
 
+        puts "\n Linking #{hash_name} from #{certificate_path}"
+
         FileUtils.ln_s certificate_path, symlink_path unless File.exist?(symlink_path)
-      else
-        puts "\n Skipping #{trusted_cert}."
       end
     end
   end
