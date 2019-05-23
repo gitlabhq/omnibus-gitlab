@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql'
-default_version '9.6.11'
+name 'postgresql_new'
+default_version '10.7'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,8 +30,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '9.6.11' do
-  source sha256: '38250adc69a1e8613fb926c894cda1d01031391a03648894b9a6e13ff354a530'
+version '10.7' do
+  source sha256: 'bfed1065380c1bba927bfe51f23168471373f26e3324cbad859269cc32733ede'
 end
 
 # PostgreSQL 10 should have a major version of 10, not 10.0.
@@ -39,7 +39,7 @@ end
 #
 # Be sure to update files/gitlab-cookbooks/postgresql/recipes/enable.rb when
 # upgrading.
-major_version = '9.6'
+major_version = '10'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -60,12 +60,6 @@ build do
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
-
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
 end
 
 # exclude headers and static libraries from package
