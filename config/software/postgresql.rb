@@ -60,12 +60,6 @@ build do
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
-
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
 end
 
 # exclude headers and static libraries from package
