@@ -236,7 +236,7 @@ module Prometheus
 
     def gitaly_scrape_config
       # Don't parse if gitaly is explicitly disabled
-      return unless Services.enabled?('gitaly')
+      return unless Services.enabled?('gitaly') || service_discovery
 
       default_config = Gitlab['node']['gitaly'].to_hash
       user_config = Gitlab['gitaly']
@@ -244,14 +244,21 @@ module Prometheus
       # Don't enable a scrape config if the listen address is empty.
       return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
 
-      listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
+      if service_discovery
+        scrape_config = {
+          'job_name' => 'gitaly',
+          'consul_sd_configs' => [{ 'services' => ['gitaly'] }]
+        }
+      else
+        listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
 
-      scrape_config = {
-        'job_name' => 'gitaly',
-        'static_configs' => [
-          'targets' => [listen_address],
-        ]
-      }
+        scrape_config = {
+          'job_name' => 'gitaly',
+          'static_configs' => [
+            'targets' => [listen_address],
+          ]
+        }
+      end
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -320,45 +327,52 @@ module Prometheus
 
     def sidekiq_scrape_config
       # Don't parse if sidekiq is explicitly disabled
-      return unless Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster')
+      return unless Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster') || service_discovery
 
-      default_config = Gitlab['node']['gitlab']['sidekiq'].to_hash
-      user_config = Gitlab['sidekiq']
+      if service_discovery
+        scrape_config = {
+          'job_name' => 'gitlab-sidekiq',
+          'consul_sd_configs' => [{ 'services' => ['sidekiq'] }],
+        }
+      else
+        default_config = Gitlab['node']['gitlab']['sidekiq'].to_hash
+        user_config = Gitlab['sidekiq']
 
-      # Don't enable unless the exporter is enabled
-      return unless default_config['metrics_enabled'] || user_config['metrics_enabled']
+        # Don't enable unless the exporter is enabled
+        return unless default_config['metrics_enabled'] || user_config['metrics_enabled']
 
-      listen_address = user_config['listen_address'] || default_config['listen_address']
-      listen_port = user_config['listen_port'] || default_config['listen_port']
-      prometheus_target = [listen_address, listen_port].join(':')
+        listen_address = user_config['listen_address'] || default_config['listen_address']
+        listen_port = user_config['listen_port'] || default_config['listen_port']
+        prometheus_target = [listen_address, listen_port].join(':')
 
-      # Don't enable if the target is empty.
-      return if prometheus_target.empty?
+        # Don't enable if the target is empty.
+        return if prometheus_target.empty?
 
-      scrape_config = {
-        'job_name' => 'gitlab-sidekiq',
-        'static_configs' => [
-          'targets' => [prometheus_target],
-        ],
-        'relabel_configs' => [
-          {
-            "source_labels" => ["__address__"],
-            "regex" => "127.0.0.1:(.*)",
-            "replacement" => "localhost:$1",
-            "target_label" => "instance"
-          }
-        ]
-      }
+        scrape_config = {
+          'job_name' => 'gitlab-sidekiq',
+          'static_configs' => [
+            'targets' => [prometheus_target],
+          ],
+          'relabel_configs' => [
+            {
+              "source_labels" => ["__address__"],
+              "regex" => "127.0.0.1:(.*)",
+              "replacement" => "localhost:$1",
+              "target_label" => "instance"
+            }
+          ]
+        }
+      end
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
     def rails_scrape_configs
-      if Services.enabled?('unicorn')
+      if Services.enabled?('unicorn') || service_discovery
         default_config = Gitlab['node']['gitlab']['unicorn'].to_hash
         user_config = Gitlab['unicorn']
-      elsif Services.enabled?('puma')
+      elsif Services.enabled?('puma') || service_discovery
         default_config = Gitlab['node']['gitlab']['puma'].to_hash
         user_config = Gitlab['puma']
       else
@@ -366,25 +380,33 @@ module Prometheus
         return
       end
 
-      listen_address = user_config['listen'] || default_config['listen']
-      listen_port = user_config['port'] || default_config['port']
-      prometheus_target = [listen_address, listen_port].join(':')
+      if service_discovery
+        scrape_config = {
+          'job_name' => 'gitlab-rails',
+          'metrics_path' => '/-/metrics',
+          'consul_sd_configs' => [{ 'services' => ['rails'] }]
+        }
+      else
+        listen_address = user_config['listen'] || default_config['listen']
+        listen_port = user_config['port'] || default_config['port']
+        prometheus_target = [listen_address, listen_port].join(':')
 
-      scrape_config = {
-        'job_name' => 'gitlab-rails',
-        'metrics_path' => '/-/metrics',
-        'static_configs' => [
-          'targets' => [prometheus_target],
-        ],
-        'relabel_configs' => [
-          {
-            "source_labels" => ["__address__"],
-            "regex" => "127.0.0.1:(.*)",
-            "replacement" => "localhost:$1",
-            "target_label" => "instance"
-          }
-        ]
-      }
+        scrape_config = {
+          'job_name' => 'gitlab-rails',
+          'metrics_path' => '/-/metrics',
+          'static_configs' => [
+            'targets' => [prometheus_target],
+          ],
+          'relabel_configs' => [
+            {
+              "source_labels" => ["__address__"],
+              "regex" => "127.0.0.1:(.*)",
+              "replacement" => "localhost:$1",
+              "target_label" => "instance"
+            }
+          ]
+        }
+      end
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -392,22 +414,29 @@ module Prometheus
 
     def workhorse_scrape_config
       # Don't parse if workhorse is explicitly disabled
-      return unless Services.enabled?('gitlab_workhorse')
+      return unless Services.enabled?('gitlab_workhorse') || service_discovery
 
-      default_config = Gitlab['node']['gitlab']['gitlab-workhorse'].to_hash
-      user_config = Gitlab['gitlab_workhorse']
+      if service_discovery
+        scrape_config = {
+          'job_name' => 'gitlab-workhorse',
+          'consul_sd_configs' => [{ 'services' => ['workhorse'] }]
+        }
+      else
+        default_config = Gitlab['node']['gitlab']['gitlab-workhorse'].to_hash
+        user_config = Gitlab['gitlab_workhorse']
 
-      # Don't enable a scrape config if the listen address is empty.
-      return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
+        # Don't enable a scrape config if the listen address is empty.
+        return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
 
-      listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
+        listen_address = user_config['prometheus_listen_addr'] || default_config['prometheus_listen_addr']
 
-      scrape_config = {
-        'job_name' => 'gitlab-workhorse',
-        'static_configs' => [
-          'targets' => [listen_address],
-        ]
-      }
+        scrape_config = {
+          'job_name' => 'gitlab-workhorse',
+          'static_configs' => [
+            'targets' => [listen_address],
+          ]
+        }
+      end
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -415,19 +444,26 @@ module Prometheus
 
     def exporter_scrape_config(exporter)
       # Don't parse if exporter is explicitly disabled
-      return unless Services.enabled?("#{exporter}_exporter")
+      return unless Services.enabled?("#{exporter}_exporter") || service_discovery
 
-      default_config = Gitlab['node']['gitlab']["#{exporter}-exporter"].to_hash
-      user_config = Gitlab["#{exporter}_exporter"]
+      if service_discovery
+        default_config = {
+          'job_name' => exporter,
+          'consul_sd_configs' => [{ 'services' => ["#{exporter}-exporter"] }]
+        }
+      else
+        default_config = Gitlab['node']['gitlab']["#{exporter}-exporter"].to_hash
+        user_config = Gitlab["#{exporter}_exporter"]
 
-      listen_address = user_config['listen_address'] || default_config['listen_address']
+        listen_address = user_config['listen_address'] || default_config['listen_address']
 
-      default_config = {
-        'job_name' => exporter,
-        'static_configs' => [
-          'targets' => [listen_address],
-        ],
-      }
+        default_config = {
+          'job_name' => exporter,
+          'static_configs' => [
+            'targets' => [listen_address],
+          ],
+        }
+      end
 
       default_scrape_configs = [] << default_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -435,49 +471,63 @@ module Prometheus
 
     def nginx_scrape_config
       # Don't parse if nginx is explicitly disabled.
-      return unless Services.enabled?('nginx')
+      return unless Services.enabled?('nginx') || service_discovery
 
-      default_config = Gitlab['node']['gitlab']['nginx']['status'].to_hash
-      user_config = Gitlab['nginx']
-
-      if user_config['status']
-        # Don't enable a scrape config if nginx status is disabled.
-        return if user_config['status'].key?('enable') && user_config['status']['enable'] == false
-        # Don't enable a scrape config if nginx vts is disabled.
-        return if user_config['status'].key?('vts_enable') && user_config['status']['vts_enable'] == false
-
-        listen_address = user_config['status']['fqdn'] || default_config['fqdn']
-        port = user_config['status']['port'] || default_config['port']
+      if service_discovery
+        scrape_config = {
+          'job_name' => 'nginx',
+          'consul_sd_configs' => [{ 'services' => ['nginx'] }]
+        }
       else
-        listen_address = default_config['fqdn']
-        port = default_config['port']
+        default_config = Gitlab['node']['gitlab']['nginx']['status'].to_hash
+        user_config = Gitlab['nginx']
+
+        if user_config['status']
+          # Don't enable a scrape config if nginx status is disabled.
+          return if user_config['status'].key?('enable') && user_config['status']['enable'] == false
+          # Don't enable a scrape config if nginx vts is disabled.
+          return if user_config['status'].key?('vts_enable') && user_config['status']['vts_enable'] == false
+
+          listen_address = user_config['status']['fqdn'] || default_config['fqdn']
+          port = user_config['status']['port'] || default_config['port']
+        else
+          listen_address = default_config['fqdn']
+          port = default_config['port']
+        end
+
+        target = "#{listen_address}:#{port}"
+
+        scrape_config = {
+          'job_name' => 'nginx',
+          'static_configs' => [
+            'targets' => [target],
+          ],
+        }
       end
-
-      target = "#{listen_address}:#{port}"
-
-      scrape_config = {
-        'job_name' => 'nginx',
-        'static_configs' => [
-          'targets' => [target],
-        ],
-      }
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
     def prometheus_scrape_configs
-      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
-      user_config = Gitlab['prometheus']
+      if service_discovery
+        prometheus = {
+          'job_name' => 'prometheus',
+          'consul_sd_configs' => [{ 'services' => ['prometheus'] }]
+        }
+      else
+        default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+        user_config = Gitlab['prometheus']
 
-      listen_address = user_config['listen_address'] || default_config['listen_address']
+        listen_address = user_config['listen_address'] || default_config['listen_address']
 
-      prometheus = {
-        'job_name' => 'prometheus',
-        'static_configs' => [
-          'targets' => [listen_address],
-        ],
-      }
+        prometheus = {
+          'job_name' => 'prometheus',
+          'static_configs' => [
+            'targets' => [listen_address],
+          ],
+        }
+      end
 
       k8s_cadvisor = {
         'job_name' => 'kubernetes-cadvisor',
@@ -627,6 +677,10 @@ module Prometheus
     def hash_to_yaml(hash)
       mutable_hash = JSON.parse(hash.dup.to_json)
       mutable_hash.to_yaml
+    end
+
+    def service_discovery
+      Services.enabled?('consul') && Gitlab['consul']['monitoring_service_discovery']
     end
   end
 end

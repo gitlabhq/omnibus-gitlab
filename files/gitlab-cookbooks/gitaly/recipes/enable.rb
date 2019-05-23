@@ -98,3 +98,9 @@ file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitaly --version")
   notifies :hup, "runit_service[gitaly]"
 end
+
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'gitaly' do
+    socket_address node['gitaly']['prometheus_listen_addr']
+  end
+end

@@ -94,6 +94,12 @@ runit_service 'prometheus' do
   )
 end
 
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'prometheus' do
+    socket_address node['gitlab']['prometheus']['listen_address']
+  end
+end
+
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start prometheus" do
     retries 20

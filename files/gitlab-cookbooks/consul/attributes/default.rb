@@ -20,3 +20,4 @@ default['consul']['env'] = {
 default['consul']['logging_filters'] = {
   postgresql_warning: "-*agent: Check 'service:postgresql' is now critical"
 }
+default['consul']['monitoring_service_discovery'] = false
