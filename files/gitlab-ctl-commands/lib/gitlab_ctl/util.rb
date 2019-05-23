@@ -9,13 +9,16 @@ module GitlabCtl
   module Util
     class <<self
       def get_command_output(command, user = nil, timeout = nil)
-        shell_out = run_command(command, live: false, user: user, timeout: timeout)
-
         begin
+          shell_out = run_command(command, live: false, user: user, timeout: timeout)
           shell_out.error!
         rescue Mixlib::ShellOut::ShellCommandFailed
           raise GitlabCtl::Errors::ExecutionError.new(
             command, shell_out.stdout, shell_out.stderr
+          )
+        rescue Mixlib::ShellOut::CommandTimeout
+          raise GitlabCtl::Errors::ExecutionError.new(
+            command, '', 'timed out'
           )
         end
 
