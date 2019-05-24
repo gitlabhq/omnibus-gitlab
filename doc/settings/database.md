@@ -461,7 +461,7 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ## Upgrade packaged PostgreSQL server
 
-**As of GitLab 11.1, PostgreSQL 9.6.X and 10.7.0 are shipped with Omnibus GitLab.**
+**As of GitLab 11.11, PostgreSQL 9.6.X and 10.7.0 are shipped with Omnibus GitLab.**
 
 You can follow the instructions for manually upgrading PostgreSQL to 10.7.0.
 
