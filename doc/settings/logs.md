@@ -123,8 +123,9 @@ Splunk, or another log management system. Some components already write JSON log
 by default (e.g. see [GitLab CE logging
 documentation](https://docs.gitlab.com/ce/administration/logs.html)),
 but until GitLab 12.0 other GitLab components may be using an
-unstructured format. To enable JSON logging for all GitLab components,
-add these lines to `/etc/gitlab/gitlab.rb`:
+unstructured format. To enable JSON logging for all GitLab components in
+versions prior to GitLab 12.0 add these lines to `/etc/gitlab/gitlab.rb` and
+run `gitlab-ctl reconfigure`:
 
 ```ruby
 gitaly['logging_format'] = 'json'
@@ -135,4 +136,19 @@ sidekiq['log_format'] = 'json'
 gitlab_pages['log_format'] = 'json'
 ```
 
+## Text logging
+
+Customers with established log ingestion systems may not wish to use JSON
+logs after they become default in GitLab version 12.0. The old behavior may
+be retained by setting the following in `/etc/gitlab/gitlab.rb` and then
+running `gitlab-ctl reconfigure` afterward:
+
+```ruby
+gitaly['logging_format'] = 'default'
+gitlab_shell['log_format'] = nil
+gitlab_workhorse['log_format'] = nil
+registry['log_formatter'] = 'text'
+sidekiq['log_format'] = 'default'
+gitlab_pages['log_format'] = 'text'
+```
 [ee]: https://about.gitlab.com/gitlab-ee/
