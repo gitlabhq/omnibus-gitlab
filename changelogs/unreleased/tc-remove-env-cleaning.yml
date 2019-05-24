@@ -1,0 +1,5 @@
+---
+title: Remove old env directory cleaning
+merge_request: 3290
+author:
+type: removed
