@@ -196,32 +196,24 @@ mattermost['email_skip_server_certificate_verification'] = false
 
 ### Email Batching
 
+Enabling this feature allows users to control how often they receive email notifications.
+
 #### With GitLab 11.0
 
-Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL,
-including protocol and port, is required if different from `mattermost_external_url`:
-
-```ruby
-mattermost['service_site_url'] = 'https://mattermost.example.com'
-```
-
-Then, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
-
-With the site URL configured, email batching can be enabled in the Mattermost **System Console** by going to the **Notifications** > **Email**
-tab, and setting the `Enable Email Batching` setting to true
+Email batching can be enabled in the Mattermost **System Console** by going to the **Notifications** > **Email**
+tab, and setting the `Enable Email Batching` setting to true.
 
 This setting can also be configured in `/var/opt/gitlab/mattermost/config.json`.
 
 #### Prior to GitLab 11.0
 
-Enabling this feature allows users to control how often they receive email notifications. Configuring the site URL, including protocol and port, is required if different from `mattermost_external_url`:
+Enable email batching in `config.json`:
 
 ```ruby
-mattermost['service_site_url'] = 'https://mattermost.example.com'
 mattermost['email_enable_batching'] = true
 ```
 
-Once the configuration is set, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
+Then, run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 For additional configuration settings, see the [Mattermost documentation](https://docs.mattermost.com/administration/config-settings.html).
 
