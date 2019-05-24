@@ -133,6 +133,8 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
 
     context 'when default' do
+      before { stub_gitlab_rb(sidekiq: { log_format: 'default' }) }
+
       it 'sets the svlogd -tt option' do
         expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/log/run")
           .with_content(/svlogd -tt/)
@@ -140,8 +142,6 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
 
     context 'when json' do
-      before { stub_gitlab_rb(sidekiq: { log_format: 'json' }) }
-
       it 'does not set the svlogd -tt option' do
         expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq-cluster/log/run")
           .with_content(/-tt/)

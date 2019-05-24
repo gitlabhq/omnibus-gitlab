@@ -988,20 +988,7 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'Sidekiq log_format' do
-      it 'sets the Sidekiq log_format to default' do
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            sidekiq: hash_including(
-              'log_format' => 'default'
-            )
-          )
-        )
-        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
-      end
-
       it 'sets the Sidekiq log_format to json' do
-        stub_gitlab_rb(sidekiq: { log_format: 'json' })
-
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
           hash_including(
             sidekiq: hash_including(
@@ -1010,6 +997,19 @@ describe 'gitlab::gitlab-rails' do
           )
         )
         expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+      end
+
+      it 'sets the Sidekiq log_format to default' do
+        stub_gitlab_rb(sidekiq: { log_format: 'default' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            sidekiq: hash_including(
+              'log_format' => 'default'
+            )
+          )
+        )
+        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
       end
     end
 

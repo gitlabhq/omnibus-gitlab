@@ -62,7 +62,7 @@ describe 'gitlab::gitlab-shell' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
         hash_including(
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
-          log_format: nil,
+          log_format: "json",
           custom_hooks_dir: nil,
           migration: { enabled: true, features: [] }
         )
