@@ -58,7 +58,7 @@ action :create do
 
   # Load the settings right away
   execute "load sysctl conf #{new_resource.name}" do
-    command "cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -"
+    command "sysctl -e --system"
     action :nothing
   end
 end

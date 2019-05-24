@@ -28,7 +28,7 @@ describe 'sysctl' do
 
   it 'loaded the settings' do
     resource = chef_run.execute('load sysctl conf foo')
-    expect(resource.command).to eq('cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -')
+    expect(resource.command).to eq('sysctl -e --system')
     expect(resource).to do_nothing
   end
 end
