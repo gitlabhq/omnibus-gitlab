@@ -50,6 +50,8 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-key})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-admin-https-listener})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-insecure-ciphers})
+
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy})
     end
 
     it 'correctly renders the pages log run file' do
@@ -205,6 +207,20 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-server=})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-secret=})
+    end
+  end
+
+  context 'with a http proxy value specified' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: { http_proxy: "http://example:8080" }
+      )
+    end
+
+    it 'correctly renders the pages service run file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy="http://example:8080"})
     end
   end
 end
