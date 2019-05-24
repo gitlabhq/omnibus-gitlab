@@ -10,6 +10,7 @@
 - [Adding deprecation messages](adding-deprecation-messages.md)
 - [Adding an attribute to public_attributes.json](public-attributes.md)
 - [Adding a gitlab-ctl command](gitlab-ctl-commands.md)
+- [Managing PostgreSQL versions](managing-postgresql-versions.md)
 
 ## Setting up development environment
 
