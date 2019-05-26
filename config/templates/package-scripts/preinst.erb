@@ -7,7 +7,6 @@ NEW_MINOR_VERSION=<%= build_version.split(".")[0,2].join(".") %>
 
 mkdir -p /var/log/gitlab/reconfigure
 
-skip_migrations_file=/etc/gitlab/skip-auto-migrations
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
 
 config_check() {
@@ -76,7 +75,7 @@ pg_check() {
 }
 
 main() {
-  if [ -e "${skip_migrations_file}" ] || [ -e "${skip_reconfigure_file}" ] ; then
+  if [ -e "${skip_reconfigure_file}" ] ; then
     # The user wants us to do nothing
     return
   fi
