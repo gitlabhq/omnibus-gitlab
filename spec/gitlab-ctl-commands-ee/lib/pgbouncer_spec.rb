@@ -31,7 +31,7 @@ describe Pgbouncer::Databases do
   end
 
   before do
-    allow(GitlabCtl::Util).to receive(:fqdn).and_return('fakehost')
+    allow(GitlabCtl::Util).to receive(:get_fqdn).and_return('fakehost')
     allow(Dir).to receive(:exist?).and_call_original
     allow(Dir).to receive(:exist?).with('/fakedata/pgbouncer').and_return(true)
     allow(File).to receive(:exist?).with('/fakedata/pgbouncer/databases.json').and_return(true)
