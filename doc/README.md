@@ -35,7 +35,7 @@ This section describes the commonly used configuration settings. Check
   * [Manually downloading and installing a GitLab package](manual_install.md)
 * [Setting up a domain name/URL](https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab) for the GitLab Instance so that it can be accessed easily
 * [Enabling HTTPS](https://docs.gitlab.com/omnibus/settings/nginx.html#enable-https)
-* [Enabling notification EMails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
+* [Enabling notification emails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
 * [Enabling replying via email](https://docs.gitlab.com/ce/administration/reply_by_email.html#set-it-up)
     * [Installing and configuring postfix](https://docs.gitlab.com/ce/administration/reply_by_email_postfix_setup.html)
 * [Enabling container registry on GitLab](https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-domain-configuration)
