@@ -1,6 +1,6 @@
 # Creating Patches
 
-It can hapens that you may need to manually modify a external dependency for it
+It can happen that you may need to manually modify an external dependency for it
 to work correctly in the context of a Omnibus embedded packaging, or even to
 fix an issue that the upstream maintainer have not either accepted or still
 taking longer to review and ship.
