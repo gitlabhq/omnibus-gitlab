@@ -41,9 +41,13 @@ module GitlabCtl
         begin
           data = JSON.parse(File.read(file))
         rescue JSON::ParserError
-          raise GitlabCtl::Errors::NodeError(
+          raise GitlabCtl::Errors::NodeError,
             "Error reading #{file}, has reconfigure been run yet?"
-          )
+        end
+
+        unless data.key?('normal')
+          raise GitlabCtl::Errors::NodeError,
+            "Attributes not found in #{file}, has reconfigure been run yet?"
         end
         data
       end
