@@ -32,6 +32,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   unless progress_message('Checking PostgreSQL executables') do
+    remove_old_node_state
     command = %W( chef-client
                   -z
                   -c #{base_path}/embedded/cookbooks/solo.rb

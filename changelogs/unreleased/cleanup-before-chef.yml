@@ -1,0 +1,5 @@
+---
+title: Remove old chef state before running chef commands
+merge_request:
+author:
+type: changed
