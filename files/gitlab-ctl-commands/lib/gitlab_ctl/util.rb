@@ -32,7 +32,7 @@ module GitlabCtl
         shell_out
       end
 
-      def fqdn
+      def get_fqdn
         results = run_command('hostname -f')
         results.stdout.chomp
       end
@@ -56,7 +56,8 @@ module GitlabCtl
         # reconfigure creates a json file containing all of the attributes of
         # the node after a chef run, indexed by priority. Merge an return those
         # as a single level Hash
-        attribute_file = "#{base_path}/embedded/nodes/#{fqdn}.json"
+        fqdn = get_fqdn
+        attribute_file = File.exist?("#{base_path}/embedded/nodes/#{fqdn}.json") ? "#{base_path}/embedded/nodes/#{fqdn}.json" : Dir.glob("#{base_path}/embedded/nodes/*.json").max_by { |f| File.mtime(f) }
         data = parse_json_file(attribute_file)
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
       end
