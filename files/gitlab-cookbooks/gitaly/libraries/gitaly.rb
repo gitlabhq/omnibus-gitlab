@@ -46,7 +46,7 @@ module Gitaly
       Gitlab['git_data_dirs'] = { "default" => { "path" => "/var/opt/gitlab/git-data" } } if Gitlab['git_data_dirs'].empty?
 
       Gitlab['git_data_dirs'].map do |name, details|
-        Gitlab['git_data_dirs'][name]['path'] ||= '/var/opt/gitlab/git-data'
+        Gitlab['git_data_dirs'][name]['path'] = details[:path] || details['path'] || '/var/opt/gitlab/git-data'
       end
 
       Gitlab['gitlab_rails']['repositories_storages'] =
