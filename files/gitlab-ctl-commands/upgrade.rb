@@ -102,7 +102,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   log 'Reconfiguring GitLab to apply migrations'
   reconfigure(false) # sending 'false' means "don't quit afterwards"
 
-  if File.exist?('/etc/gitlab/disable-postgresql-upgrade') || File.exist?('/etc/gitlab/skip-auto-migrations')
+  if File.exist?('/etc/gitlab/disable-postgresql-upgrade')
     log ''
     log '==='
     log 'Skipping automatic PostgreSQL upgrade'
@@ -112,7 +112,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log ''
   else
     unless progress_message('Ensuring PostgreSQL is updated') do
-      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade)
+      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
       status = run_command(command.join(' '))
       status.success?
     end
