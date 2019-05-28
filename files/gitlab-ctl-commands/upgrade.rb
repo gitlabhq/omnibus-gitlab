@@ -43,12 +43,8 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log 'Could not update PostgreSQL executables.'
   end
 
-  auto_migrations_skip_files = [
-    "#{etc_path}/skip-auto-reconfigure",
-    "#{etc_path}/skip-auto-migrations",
-  ]
-  auto_migrations_skip_file = auto_migrations_skip_files.find { |f| File.exist?(f) }
-  if auto_migrations_skip_file
+  auto_migrations_skip_file = "#{etc_path}/skip-auto-reconfigure"
+  if File.exist?(auto_migrations_skip_file)
     log "Found #{auto_migrations_skip_file}, exiting..."
     print_upgrade_and_exit
   end
