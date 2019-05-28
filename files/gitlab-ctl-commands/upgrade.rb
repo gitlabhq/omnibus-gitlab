@@ -36,7 +36,8 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   unless progress_message('Checking PostgreSQL executables') do
     remove_old_node_state
     status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-bin.json')
-    status.success?
+    $stdout.puts status.stdout
+    !status.error?
   end
     log 'Could not update PostgreSQL executables.'
   end
