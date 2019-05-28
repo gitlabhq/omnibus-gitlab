@@ -1,0 +1,5 @@
+---
+title: Add timeout option to pg-upgrade command
+merge_request: 3284
+author:
+type: fixed

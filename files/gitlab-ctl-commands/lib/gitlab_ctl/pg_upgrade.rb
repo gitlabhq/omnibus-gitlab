@@ -11,13 +11,14 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, tmp_dir = nil)
+    def initialize(base_path, data_path, tmp_dir = nil, timeout = nil)
       @base_path = base_path
       @data_path = data_path
       @tmp_dir = tmp_dir
+      @timeout = timeout
     end
 
     def default_data_dir
@@ -42,7 +43,7 @@ module GitlabCtl
       # TODO: Remove support for legacy attributes in GitLab 13.0
       pg_username = node_attributes.dig(:gitlab, :postgresql, :username) || node_attributes.dig(:postgresql, :username)
 
-      GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"")
+      GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"", nil, @timeout)
     end
 
     def fetch_running_version
@@ -53,7 +54,9 @@ module GitlabCtl
 
     def run_query(query)
       GitlabCtl::Util.get_command_output(
-        "#{@base_path}/bin/gitlab-psql -d postgres -c '#{query}' -q -t"
+        "#{@base_path}/bin/gitlab-psql -d postgres -c '#{query}' -q -t",
+        nil, # user
+        @timeout
       ).strip
     end
 
@@ -86,7 +89,8 @@ module GitlabCtl
         options = {
           tmp_dir: nil,
           wait: true,
-          skip_unregister: false
+          skip_unregister: false,
+          timeout: nil
         }
 
         OptionParser.new do |opts|
@@ -100,6 +104,11 @@ module GitlabCtl
 
           opts.on('-s', '--skip-unregister', 'Skip the attempt to unregister an HA secondary node. No-op in non-HA scenarios.') do
             options[:skip_unregister] = true
+          end
+
+          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
+            i = t.to_i
+            options[:timeout] = i.positive? ? i : nil
           end
         end.parse!(args)
 

@@ -7,7 +7,7 @@ require 'gitlab_ctl'
 describe GitlabCtl::PgUpgrade do
   before do
     @fake_default_dir = '/fake/data/postgresql/data'
-    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data')
+    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', nil, 123)
     allow(File).to receive(:realpath).with(
       @fake_default_dir
     ).and_return(@fake_default_dir)
@@ -19,6 +19,10 @@ describe GitlabCtl::PgUpgrade do
 
   it 'should allow for a custom base directory' do
     expect(@dbw.base_path).to eq('/fakebasedir')
+  end
+
+  it 'should use the specified timeout' do
+    expect(@dbw.timeout).to eq(123)
   end
 
   it 'should call pg_command with the appropriate command' do
@@ -34,7 +38,7 @@ describe GitlabCtl::PgUpgrade do
       })
     expect(GitlabCtl::Util).to receive(
       :get_command_output
-    ).with('su - arbitrary-user-name -c "fake command"')
+    ).with('su - arbitrary-user-name -c "fake command"', nil, 123)
     @dbw.run_pg_command('fake command')
   end
 
