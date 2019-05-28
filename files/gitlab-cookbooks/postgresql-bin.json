@@ -1,0 +1,6 @@
+{
+  "run_list": [
+      "recipe[gitlab::config]",
+      "recipe[postgresql::bin]"
+  ]
+}

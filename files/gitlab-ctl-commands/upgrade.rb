@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
+
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   # On a fresh installation, run reconfigure automatically if EXTERNAL_URL is set
   unless File.exist?("/var/opt/gitlab/bootstrapped") || external_url_unset?
@@ -32,13 +34,10 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   unless progress_message('Checking PostgreSQL executables') do
-    command = %W( chef-client
-                  -z
-                  -c #{base_path}/embedded/cookbooks/solo.rb
-                  -o recipe[gitlab::config],recipe[postgresql::bin])
-
-    status = run_command(command.join(" "))
-    status.success?
+    remove_old_node_state
+    status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-bin.json')
+    $stdout.puts status.stdout
+    !status.error?
   end
     log 'Could not update PostgreSQL executables.'
   end
