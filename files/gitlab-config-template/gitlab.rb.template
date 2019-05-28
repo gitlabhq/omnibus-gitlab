@@ -1017,7 +1017,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! **Recommended by: https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
 ##!                   https://cipherli.st/**
-# nginx['ssl_protocols'] = "TLSv1.1 TLSv1.2"
+# nginx['ssl_protocols'] = "TLSv1.2"
 
 ##! **Recommended in: https://nginx.org/en/docs/http/ngx_http_ssl_module.html**
 # nginx['ssl_session_cache'] = "builtin:1000  shared:SSL:10m"
