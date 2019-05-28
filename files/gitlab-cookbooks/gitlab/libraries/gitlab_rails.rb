@@ -69,7 +69,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
-      Gitlab['gitlab_rails']['lets_encrypt_private_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
     end
 
     def parse_external_url
