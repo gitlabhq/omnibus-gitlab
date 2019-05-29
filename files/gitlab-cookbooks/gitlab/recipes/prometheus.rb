@@ -23,8 +23,6 @@ prometheus_dir = node['gitlab']['prometheus']['home']
 prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
 prometheus_static_etc_dir = node['gitlab']['prometheus']['env_directory']
 
-binary, rule_extension = prometheus_helper.binary_and_rules
-
 include_recipe 'gitlab::prometheus_user'
 
 directory prometheus_dir do
@@ -54,13 +52,6 @@ end
 env_dir prometheus_static_etc_dir do
   variables node['gitlab']['prometheus']['env']
   notifies :restart, "service[prometheus]"
-end
-
-link "Link prometheus executable to correct binary" do
-  target_file "#{node['package']['install-dir']}/embedded/bin/prometheus"
-  to "#{node['package']['install-dir']}/embedded/bin/#{binary}"
-
-  notifies :restart, 'service[prometheus]', :immediately if omnibus_helper.should_notify?("prometheus")
 end
 
 configuration = Prometheus.hash_to_yaml({
@@ -111,7 +102,7 @@ if node['gitlab']['bootstrap']['enable']
 end
 
 template File.join(prometheus_rules_dir, 'gitlab.rules') do
-  source "prometheus/rules/gitlab.#{rule_extension}"
+  source 'prometheus/rules/gitlab.rules'
   owner prometheus_user
   mode '0644'
   notifies :run, 'execute[reload prometheus]'
@@ -119,7 +110,7 @@ template File.join(prometheus_rules_dir, 'gitlab.rules') do
 end
 
 template File.join(prometheus_rules_dir, 'node.rules') do
-  source "prometheus/rules/node.#{rule_extension}"
+  source 'prometheus/rules/node.rules'
   owner prometheus_user
   mode '0644'
   notifies :run, 'execute[reload prometheus]'

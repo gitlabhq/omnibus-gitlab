@@ -116,6 +116,15 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     end
   end
 
+  unless progress_message('Ensuring Prometheus is updated') do
+    command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w -s)
+    status = run_command(command.join(' '))
+    status.success?
+  end
+    log 'Error ensuring Prometheus is updated. Please check the logs'
+    Kernel.exit 1
+  end
+
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
     if /^run: #{sv_name}:/.match?(service_statuses)

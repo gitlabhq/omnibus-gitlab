@@ -68,12 +68,4 @@ class PrometheusHelper
   def is_running?
     OmnibusHelper.new(node).service_up?("prometheus")
   end
-
-  def binary_and_rules
-    if PrometheusHelper.is_version_1?(node['gitlab']['prometheus']['home'])
-      %w(prometheus1 rules.v1)
-    else
-      %w(prometheus2 rules.v2)
-    end
-  end
 end

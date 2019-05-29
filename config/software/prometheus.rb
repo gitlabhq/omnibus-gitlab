@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'prometheus'
-version = Gitlab::Version.new('prometheus', '1.8.2')
+version = Gitlab::Version.new('prometheus', '2.8.1')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -43,7 +43,7 @@ build do
   prom_version = Prometheus::VersionFlags.new(go_source, version)
 
   command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
-  copy 'prometheus', "#{install_dir}/embedded/bin/prometheus1"
+  copy 'prometheus', "#{install_dir}/embedded/bin/prometheus"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
   copy "license.csv", "#{install_dir}/licenses/prometheus.csv"

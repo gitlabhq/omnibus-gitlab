@@ -42,33 +42,11 @@ add_command 'prometheus-upgrade', 'Upgrade the Prometheus data to the latest sup
     Kernel.exit 0
   end
 
-  unless options[:skip_data_migration]
-    if options[:wait]
-      log "Converting existing data to new format is a time consuming process and can take hours."
-      log "If you prefer not to migrate existing data, press Ctrl-C now and re-run the command with --skip-data-migration flag."
-      log "Waiting for 30 seconds for input."
-      status = GitlabCtl::Util.delay_for(30)
-      Kernel.exit(0) unless status
-    end
-  end
-
   prometheus_upgrade.prepare_directories
   prometheus_upgrade.backup_data
 
   log "\nStopping prometheus for upgrade"
   run_sv_command_for_service('stop', 'prometheus')
-
-  unless options[:skip_data_migration]
-    log "Migrating data"
-    status = prometheus_upgrade.migrate
-    unless status
-      log "Migration failed. Restoring data and restarting prometheus."
-      prometheus_upgrade.revert
-      run_sv_command_for_service('start', 'prometheus')
-      Kernel.exit 1
-    end
-    log "Migration successful. "
-  end
 
   prometheus_upgrade.rename_directory
 
