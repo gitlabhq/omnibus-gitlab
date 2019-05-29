@@ -83,3 +83,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% if node['gitlab']['gitlab-pages']['insecure_ciphers'] %>
     -insecure-ciphers \
     <% end %>
+    <% if node['gitlab']['gitlab-pages']['tls_min_version'] %>
+    -tls-min-version="<%= node['gitlab']['gitlab-pages']['tls_min_version'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['tls_max_version'] %>
+    -tls-max-version="<%= node['gitlab']['gitlab-pages']['tls_max_version'] %>" \
+    <% end %>
