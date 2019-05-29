@@ -72,9 +72,6 @@ module Prometheus
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['prometheus']['flags'] = default_config['flags']
-
-      return unless Services.enabled?('prometheus')
-      LoggingHelper.deprecation(message)
     end
 
     def parse_alertmanager_flags

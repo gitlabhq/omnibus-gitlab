@@ -36,7 +36,7 @@ module GitlabCtl
 
     def backup_data
       # Backup existing v1 data to a temporary location
-      FileUtils.cp_r(@v1_path, @backup_path, preserve: true)
+      FileUtils.mv(@v1_path, @backup_path)
     end
 
     def revert

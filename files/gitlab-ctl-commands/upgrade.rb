@@ -90,6 +90,16 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     abort "Failed to start #{sv_name} for migrations"
   end
 
+  # Force upgrade to Prometheus 2.x
+  unless progress_message('Ensuring Prometheus is updated') do
+    command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w -s)
+    status = run_command(command.join(' '))
+    status.success?
+  end
+    log 'Error ensuring Prometheus is updated. Please check the logs'
+    Kernel.exit 1
+  end
+
   # Do not show "WARN: Cookbook 'local-mode-cache' is empty or entirely chefignored at /opt/gitlab/embedded/cookbooks/local-mode-cache"
   local_mode_cache_path = "#{base_path}/embedded/cookbooks/local-mode-cache"
   run_command("rm -rf #{local_mode_cache_path}")
@@ -114,15 +124,6 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
       log 'Error ensuring PostgreSQL is updated. Please check the logs'
       Kernel.exit 1
     end
-  end
-
-  unless progress_message('Ensuring Prometheus is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w -s)
-    status = run_command(command.join(' '))
-    status.success?
-  end
-    log 'Error ensuring Prometheus is updated. Please check the logs'
-    Kernel.exit 1
   end
 
   log 'Restarting previously running GitLab services'
