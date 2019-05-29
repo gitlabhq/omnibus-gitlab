@@ -15,7 +15,6 @@
 #
 
 account_helper = AccountHelper.new(node)
-omnibus_helper = OmnibusHelper.new(node)
 prometheus_helper = PrometheusHelper.new(node)
 prometheus_user = account_helper.prometheus_user
 prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
