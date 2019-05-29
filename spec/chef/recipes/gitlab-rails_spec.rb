@@ -645,6 +645,28 @@ describe 'gitlab::gitlab-rails' do
           )
         )
       end
+
+      it 'sets path if not provided' do
+        stub_gitlab_rb(
+          {
+            git_data_dirs:
+            {
+              'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' }
+            }
+          }
+        )
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'repositories_storages' => {
+              'default' => {
+                'path' => '/var/opt/gitlab/git-data/repositories',
+                'gitaly_address' => 'tcp://gitaly.internal:8075'
+              }
+            }
+          )
+        )
+      end
     end
 
     context 'pages settings' do

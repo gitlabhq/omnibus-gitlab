@@ -218,25 +218,47 @@ describe 'gitaly' do
     end
 
     context 'when using git_data_dirs storage configuration' do
-      before do
-        stub_gitlab_rb(
-          {
-            git_data_dirs:
+      context 'using local gitaly' do
+        before do
+          stub_gitlab_rb(
             {
-              'default' => { 'path' => '/tmp/default/git-data' },
-              'nfs1' => { 'path' => '/mnt/nfs1' }
+              git_data_dirs:
+              {
+                'default' => { 'path' => '/tmp/default/git-data' },
+                'nfs1' => { 'path' => '/mnt/nfs1' }
+              }
             }
-          }
-        )
+          )
+        end
+
+        it 'populates gitaly config.toml with custom storages' do
+          expect(chef_run).to render_file(config_path)
+            .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/tmp/default/git-data/repositories'})
+          expect(chef_run).to render_file(config_path)
+            .with_content(%r{\[\[storage\]\]\s+name = 'nfs1'\s+path = '/mnt/nfs1/repositories'})
+          expect(chef_run).not_to render_file(config_path)
+            .with_content('gitaly_address: "/var/opt/gitlab/gitaly/gitaly.socket"')
+        end
       end
 
-      it 'populates gitaly config.toml with custom storages' do
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/tmp/default/git-data/repositories'})
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[\[storage\]\]\s+name = 'nfs1'\s+path = '/mnt/nfs1/repositories'})
-        expect(chef_run).not_to render_file(config_path)
-          .with_content('gitaly_address: "/var/opt/gitlab/gitaly/gitaly.socket"')
+      context 'using external gitaly' do
+        before do
+          stub_gitlab_rb(
+            {
+              git_data_dirs:
+              {
+                'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' },
+              }
+            }
+          )
+        end
+
+        it 'populates gitaly config.toml with custom storages' do
+          expect(chef_run).to render_file(config_path)
+            .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/var/opt/gitlab/git-data/repositories'})
+          expect(chef_run).not_to render_file(config_path)
+            .with_content('gitaly_address: "tcp://gitaly.internal:8075"')
+        end
       end
     end
   end
@@ -447,6 +469,23 @@ describe 'gitaly::git_data_dirs' do
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
                                                                                       })
+    end
+  end
+
+  context 'when path not defined in git_data_dirs' do
+    before do
+      stub_gitlab_rb(
+        {
+          git_data_dirs:
+          {
+            'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' },
+          }
+        }
+      )
+    end
+
+    it 'correctly sets the repository storage directories' do
+      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({ 'default' => { 'path' => '/var/opt/gitlab/git-data/repositories', 'gitaly_address' => 'tcp://gitaly.internal:8075' } })
     end
   end
 

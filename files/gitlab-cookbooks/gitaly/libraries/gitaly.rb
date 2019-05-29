@@ -45,6 +45,10 @@ module Gitaly
     def parse_git_data_dirs
       Gitlab['git_data_dirs'] = { "default" => { "path" => "/var/opt/gitlab/git-data" } } if Gitlab['git_data_dirs'].empty?
 
+      Gitlab['git_data_dirs'].map do |name, details|
+        Gitlab['git_data_dirs'][name]['path'] = details[:path] || details['path'] || '/var/opt/gitlab/git-data'
+      end
+
       Gitlab['gitlab_rails']['repositories_storages'] =
         Hash[Mash.new(Gitlab['git_data_dirs']).map do |name, data_directory|
           shard_gitaly_address = data_directory['gitaly_address'] || gitaly_address
