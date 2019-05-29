@@ -391,12 +391,11 @@ remote_file File.join(gitlab_rails_dir, 'REVISION') do
   source "file:///opt/gitlab/embedded/service/gitlab-rails/REVISION"
 end
 
-# If a version of ruby changes restart unicorn. If not, unicorn will fail to
-# reload until restarted
+# If a version of ruby changes restart dependent services. Otherwise, services like
+# unicorn will fail to reload until restarted
 file File.join(gitlab_rails_dir, "RUBY_VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
-  notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?('unicorn')
-  notifies :restart, "service[puma]" if omnibus_helper.should_notify?('puma')
+  dependent_services.each { |svc| notifies :restart, svc }
 end
 
 execute "clear the gitlab-rails cache" do

@@ -56,6 +56,12 @@ template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   )
 end
 
+# If a version of ruby changes restart gitlab-monitor
+file File.join(gitlab_monitor_dir, 'RUBY_VERSION') do
+  content VersionHelper.version('/opt/gitlab/embedded/bin/ruby --version')
+  notifies :restart, 'service[gitlab-monitor]'
+end
+
 runit_service "gitlab-monitor" do
   options({
     log_directory: gitlab_monitor_log_dir
