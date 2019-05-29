@@ -43,26 +43,10 @@ class PrometheusHelper
 
     node['gitlab'][service]['flags'].each do |flag_key, flag_value|
       next if flag_value.empty?
-      config << if PrometheusHelper.is_version_1?(node['gitlab']['prometheus']['home'])
-                  "-#{flag_key}=#{flag_value}"
-                else
-                  "--#{flag_key}=#{flag_value}"
-                end
+      config << "--#{flag_key}=#{flag_value}"
     end
 
     config.join(" ")
-  end
-
-  # This is a class method because we need to access it from
-  # `Prometheus::parse_prometheus_flags`. If it was an instance method,
-  # object initialization would've been required, which needs passing `node`
-  # object. Converting `GitLab['node']` to `node` is not fun.
-  def self.is_version_1?(home_dir)
-    # These files are present only if version 1 is/was running
-    version_file = File.join(home_dir, "data", "VERSION")
-    head_db = File.join(home_dir, "data", "heads.db")
-
-    File.exist?(version_file) && File.exist?(head_db)
   end
 
   def is_running?
