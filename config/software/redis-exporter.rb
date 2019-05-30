@@ -39,6 +39,7 @@ build do
     "-X main.VERSION=#{version.print(false)}"
   ].join(' ')
 
+  patch source: 'glide-procfs.patch', env: env
   command 'go get github.com/Masterminds/glide', env: env
   command 'go install github.com/Masterminds/glide', env: env
   command '../../../../bin/glide install ', env: env
