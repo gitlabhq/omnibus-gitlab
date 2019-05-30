@@ -1,0 +1,5 @@
+---
+title: Pin procfs version used for building redis-exporter
+merge_request: 3318
+author:
+type: fixed

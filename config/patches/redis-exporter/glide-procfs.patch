@@ -1,0 +1,15 @@
+diff --git a/glide.yaml b/glide.yaml
+index 5ae5f74..9074d58 100644
+--- a/glide.yaml
++++ b/glide.yaml
+@@ -13,6 +13,10 @@ import:
+ - package: github.com/cloudfoundry-community/go-cfenv
+   version: v1.17.0
+ - package: github.com/mitchellh/mapstructure
++- package: github.com/prometheus/procfs
++  version: 4d4a0fbea2f0e31d18f51cb05eabd73a00be57db
++  subpackages:
++  - internal/fs
+ testImport:
+ - package: github.com/prometheus/client_model
+   subpackages:
