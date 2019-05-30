@@ -65,6 +65,8 @@ http://mattermost.example.com/login/gitlab/complete
 ```
 (replace `http` with `https` if you use https).
 
+Note that you do not need to select any options under **Scopes**.
+
 Once the application is created you will receive an `Application ID` and `Secret`. One other piece of information needed is the URL of GitLab instance.
 
 Now, go to the server running GitLab Mattermost and edit the `/etc/gitlab/gitlab.rb`
