@@ -351,51 +351,54 @@ configuration and will increase latency in git operations.
 In order to move an existing home directory, GitLab services will need to be stopped and some downtime is required.
 
 1. Stop GitLab
-```
-gitlab-ctl stop
-```
 
-2. Stop the runit server.
-```shell
-# Using systemctl (Debian => 9 - Stretch):
-sudo systemctl stop gitlab-runsvdir
+   ```
+   gitlab-ctl stop
+   ```
 
-# Using upstart (Ubuntu <= 14.04):
-sudo initctl stop gitlab-runsvdir
+1. Stop the runit server
 
-# Using systemd (CentOS, Ubuntu >= 16.04):
-systemctl stop gitlab-runsvdir.service
-```
+   ```shell
+   # Using systemctl (Debian => 9 - Stretch):
+   sudo systemctl stop gitlab-runsvdir
 
-3. Change the home directory. If you had existing data you will need to manually copy/rsync it to these new locations.
-```
-usermod -d /path/to/home USER
-```
+   # Using upstart (Ubuntu <= 14.04):
+   sudo initctl stop gitlab-runsvdir
 
-4. Change the configuration setting in your `gitlab.rb`.
-```
-user['home'] = "/var/opt/custom-gitlab"
-```
+   # Using systemd (CentOS, Ubuntu >= 16.04):
+   systemctl stop gitlab-runsvdir.service
+   ```
 
-5. Start the runit server
-```shell
-# Using systemctl (Debian => 9 - Stretch):
-sudo systemctl start gitlab-runsvdir
+1. Change the home directory. If you had existing data you will need to manually copy/rsync it to these new locations.
 
-# Using upstart (Ubuntu <= 14.04):
-sudo initctl start gitlab-runsvdir
+   ```
+   usermod -d /path/to/home USER
+   ```
 
-# Using systemd (CentOS, Ubuntu >= 16.04):
-systemctl start gitlab-runsvdir.service
-```
+1. Change the configuration setting in your `gitlab.rb`
 
+   ```
+   user['home'] = "/var/opt/custom-gitlab"
+   ```
 
+1. Start the runit server
 
-6. Run a reconfigure
+   ```shell
+   # Using systemctl (Debian => 9 - Stretch):
+   sudo systemctl start gitlab-runsvdir
 
-```
-gitlab-ctl reconfigure
-```
+   # Using upstart (Ubuntu <= 14.04):
+   sudo initctl start gitlab-runsvdir
+
+   # Using systemd (CentOS, Ubuntu >= 16.04):
+   systemctl start gitlab-runsvdir.service
+   ```
+
+1. Run a reconfigure
+
+   ```
+   gitlab-ctl reconfigure
+   ```
 
 
 If the runnit service is not stopped and the home directories are not manually
