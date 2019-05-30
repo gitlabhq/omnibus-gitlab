@@ -1,0 +1,5 @@
+---
+title: Ensure sidekiq and gitlab-monitor are restarted when the ruby version changes
+merge_request: 3317
+author:
+type: fixed
