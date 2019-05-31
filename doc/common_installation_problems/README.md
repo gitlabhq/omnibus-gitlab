@@ -181,7 +181,7 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 By default, Unicorn listens at TCP address 127.0.0.1:8080. Nginx
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
-The ports for Redis, PostgreSQL and Unicorn can be overriden in
+The ports for Redis, PostgreSQL and Unicorn can be overridden in
 `/etc/gitlab/gitlab.rb` as follows:
 
 ```ruby

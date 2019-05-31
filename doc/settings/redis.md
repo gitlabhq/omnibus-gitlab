@@ -40,7 +40,7 @@ redis['bind'] = '127.0.0.1'
 
 ## Setting up a Redis-only server
 
-If you'd like to setup a seperate Redis server (e.g. in the case of scaling
+If you'd like to setup a separate Redis server (e.g. in the case of scaling
 issues) for use with GitLab you can do so using GitLab Omnibus.
 
 > **Note:** Redis does not require authentication by default. See

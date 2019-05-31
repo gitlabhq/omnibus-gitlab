@@ -39,4 +39,4 @@ permissions to read the files:
 
 By default, SELinux allocates port 8080 to the http_cache_port_t context.
 Note that if you have to change that port, you will have to create a custom
-SELinux module to accomodate that.
+SELinux module to accommodate that.
