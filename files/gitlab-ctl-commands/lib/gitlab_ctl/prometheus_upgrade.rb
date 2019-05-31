@@ -65,10 +65,15 @@ module GitlabCtl
       def parse_options(args)
         options = {
           home_dir: "/var/opt/gitlab/prometheus",
-          wait: true
+          skip_reconfigure: false,
+          wait: true,
         }
         OptionParser.new do |opts|
           opts.on('-s', '--skip-data-migration', 'Obsolete flag, ignored.')
+
+          opts.on('--skip-reconfigure', 'Skip reconfigure when upgrading.') do
+            options[:skip_reconfigure] = true
+          end
 
           opts.on('-dDIR', '--home-dir=DIR', "Value of prometheus['home'] set in gitlab.rb. Defaults to /var/opt/gitlab/prometheus") do |d|
             options[:home_dir] = d

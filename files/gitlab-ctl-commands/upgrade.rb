@@ -92,7 +92,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   # Force upgrade to Prometheus 2.x
   unless progress_message('Ensuring Prometheus is updated') do
-    command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w -s)
+    command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w --skip-reconfigure)
     status = run_command(command.join(' '))
     status.success?
   end

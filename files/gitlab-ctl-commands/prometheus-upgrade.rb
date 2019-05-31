@@ -50,8 +50,10 @@ add_command 'prometheus-upgrade', 'Upgrade the Prometheus data to the latest sup
 
   prometheus_upgrade.rename_directory
 
-  log "Running reconfigure to apply changes"
-  run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
+  unless options[:skip_reconfigure]
+    log "Running reconfigure to apply changes"
+    run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
+  end
 
   log "Starting prometheus"
   run_sv_command_for_service('start', 'prometheus')
