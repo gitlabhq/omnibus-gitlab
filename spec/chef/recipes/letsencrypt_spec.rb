@@ -57,6 +57,21 @@ server {
     return 301 https://fakehost.example.com:443$request_uri;
   }
 
+  location /-/health {
+    proxy_cache off;
+    proxy_pass  http://gitlab-workhorse;
+  }
+
+  location /-/readiness {
+    proxy_cache off;
+    proxy_pass  http://gitlab-workhorse;
+  }
+
+  location /-/liveness {
+    proxy_cache off;
+    proxy_pass  http://gitlab-workhorse;
+  }
+
   access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
   error_log   /var/log/gitlab/nginx/gitlab_error.log;
 }
