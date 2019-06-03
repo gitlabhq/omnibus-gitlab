@@ -270,3 +270,10 @@
     :why: https://github.com/golang/groupcache/blob/master/LICENSE
     :versions: []
     :when: 2019-05-02 20:45:16.018133379 Z
+- - :license
+  - github.com/stretchr/testify
+  - MIT
+  - :who: Balasankar C
+    :why: https://github.com/stretchr/testify/blob/master/LICENSE
+    :versions: []
+    :when: 2019-06-03 14:59:56.182545151 Z
