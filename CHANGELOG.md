@@ -141,6 +141,13 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.10.6 (2019-06-04)
+
+### Fixed (1 change)
+
+- Pin procfs version used for building redis-exporter. !3319
+
+
 ## 11.10.4 (2019-05-01)
 
 - No changes.
