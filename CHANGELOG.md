@@ -137,6 +137,10 @@ omnibus-gitlab repository.
 - Stop raspberry pi builds during nightlies. (John T Skarbek)
 
 
+## 11.10.6 (2019-06-04)
+
+- No changes.
+
 ## 11.10.4 (2019-05-01)
 
 - No changes.
