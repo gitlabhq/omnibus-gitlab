@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.10.6 (2019-06-04)
+
+### Fixed (1 change)
+
+- Pin procfs version used for building redis-exporter. !3319
+
+
 ## 11.10.5 (2019-05-30)
 
 - No changes.
