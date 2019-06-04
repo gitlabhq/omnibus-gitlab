@@ -7,6 +7,13 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.11.2 (2019-06-04)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.10.1 (GitLab 11.11). (Harrison Healey)
+
+
 ## 11.11.1 (2019-05-30)
 
 - No changes.
