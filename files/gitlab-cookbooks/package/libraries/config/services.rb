@@ -34,7 +34,7 @@ module Services
     service 'prometheus',         groups: [DEFAULT_GROUP, 'prometheus']
     service 'alertmanager',       groups: [DEFAULT_GROUP, 'prometheus']
     service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'prometheus', 'postgres', 'postgres_role']
-    service 'grafana',            groups: ['prometheus']
+    service 'grafana',            groups: [DEFAULT_GROUP, 'prometheus']
     service 'mailroom'
     service 'gitlab_pages'
     service 'mattermost'

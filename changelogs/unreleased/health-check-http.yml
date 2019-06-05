@@ -1,0 +1,5 @@
+---
+title: Allow health check endpoints to be access via plain http
+merge_request: 3296
+author:
+type: changed

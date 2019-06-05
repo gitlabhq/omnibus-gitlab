@@ -116,6 +116,16 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
                         nginx_vars['listen_https']
                       end
 
+nginx_gitlab_http_vars = nginx_vars.merge(
+  fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
+  port: node['gitlab']['gitlab-rails']['gitlab_port'],
+  relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
+  registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+  letsencrypt_enable: node['letsencrypt']['enable'],
+  # These addresses will be allowed through plain http, even if `redirect_http_to_https` is enabled
+  monitoring_addresses: %w(/-/health /-/readiness /-/liveness)
+)
+
 template gitlab_rails_http_conf do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
@@ -124,17 +134,12 @@ template gitlab_rails_http_conf do
   variables(
     # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
     lazy do
-      nginx_vars.merge(
+      nginx_gitlab_http_vars.merge(
         {
-          fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
-          port: node['gitlab']['gitlab-rails']['gitlab_port'],
-          relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
           kerberos_enabled: node['gitlab']['gitlab-rails']['kerberos_enabled'],
           kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
           kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
           kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
-          registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-          letsencrypt_enable: node['letsencrypt']['enable'],
           redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
         }
       )
@@ -152,12 +157,9 @@ template gitlab_rails_smartcard_http_conf do
   variables(
     # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
     lazy do
-      nginx_vars.merge(
+      nginx_gitlab_http_vars.merge(
         {
-          fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
-          port: node['gitlab']['gitlab-rails']['gitlab_port'],
           listen_port: node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'],
-          relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
           ssl_client_certificate: node['gitlab']['gitlab-rails']['smartcard_ca_file'],
           ssl_verify_client: 'on',
           ssl_verify_depth: 2,
@@ -166,8 +168,6 @@ template gitlab_rails_smartcard_http_conf do
               'X-SSL-Client-Certificate' => '$ssl_client_cert'
             }
           ),
-          registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-          letsencrypt_enable: node['letsencrypt']['enable'],
           redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
         }
       )

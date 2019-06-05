@@ -34,6 +34,8 @@ describe 'gitlab::grafana' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+    allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
   end
 
   context 'when grafana is enabled' do
@@ -123,6 +125,19 @@ describe 'gitlab::grafana' do
       expect(chef_run).to render_file('/opt/gitlab/sv/grafana/log/run')
         .with_content(/exec svlogd -tt foo/)
     end
+  end
+
+  it 'authorizes Grafana with gitlab' do
+    stub_gitlab_rb(external_url: 'http://gitlab.example.com')
+
+    allow(GrafanaHelper).to receive(:authorize_with_gitlab)
+
+    expect(chef_run).to run_ruby_block('authorize Grafana with GitLab')
+      .at_converge_time
+    expect(GrafanaHelper).to receive(:authorize_with_gitlab)
+      .with 'http://gitlab.example.com'
+
+    chef_run.ruby_block('authorize Grafana with GitLab').block.call
   end
 
   context 'with user provided settings' do

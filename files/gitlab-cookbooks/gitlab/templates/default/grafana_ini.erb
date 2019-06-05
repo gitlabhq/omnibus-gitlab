@@ -12,13 +12,13 @@
 #################################### Paths ####################################
 [paths]
 # Path to where grafana can store temp files, sessions, and the sqlite3 db (if that is used)
-data = <%= File.join(node['gitlab']['grafana']['home'], 'data') %>
+data = <%= @data_path %>
 
 # Temporary files in `data` directory older than given duration will be removed
 ;temp_data_lifetime = 24h
 
 # Directory where grafana can store logs
-logs = <%= node['gitlab']['grafana']['log_directory'] %>
+logs = <%= @log_directory %>
 
 # Directory where grafana will automatically scan and look for plugins
 ;plugins = /var/lib/grafana/plugins
@@ -32,10 +32,10 @@ provisioning = provisioning
 protocol = http
 
 # The ip address to bind to, empty will bind to all interfaces
-http_addr = <%= node['gitlab']['grafana']['http_addr'] %>
+http_addr = <%= @http_addr %>
 
 # The http port  to use
-http_port = <%= node['gitlab']['grafana']['http_port'] %>
+http_port = <%= @http_port %>
 
 # The public facing domain name used to access grafana from a browser
 ;domain = localhost
@@ -151,12 +151,12 @@ log_queries =
 ;admin_user = admin
 
 # default admin password, can be changed before first start of grafana,  or in profile settings
-<% unless node['gitlab']['grafana']['admin_password'].nil?  -%>
-admin_password = <%= node['gitlab']['grafana']['admin_password'] %>
+<% unless @admin_password.nil? %>
+admin_password = <%= @admin_password %>
 <% end -%>
 
 # used for signing
-secret_key = <%= node['gitlab']['grafana']['secret_key'] %>
+secret_key = <%= @secret_key %>
 
 # Auto-login remember days
 ;login_remember_days = 7
@@ -190,7 +190,7 @@ secret_key = <%= node['gitlab']['grafana']['secret_key'] %>
 #################################### Users ###############################
 [users]
 # disable user signup / registration
-allow_sign_up = <%= node['gitlab']['grafana']['allow_user_sign_up'] %>
+allow_sign_up = <%= @allow_user_sign_up %>
 
 # Allow non admin users to create organizations
 ;allow_org_create = true
@@ -240,18 +240,18 @@ allow_sign_up = <%= node['gitlab']['grafana']['allow_user_sign_up'] %>
 # specify role for unauthenticated users
 ;org_role = Viewer
 
-<% if !node['gitlab']['grafana']['gitlab_application_id'].nil? && !node['gitlab']['grafana']['gitlab_secret'].nil? -%>
+<% if !@gitlab_application_id.nil? && !@gitlab_secret.nil? -%>
 #################################### GitLab Auth ##########################
 [auth.gitlab]
 enabled = true
-allow_sign_up = <%= node['gitlab']['grafana']['gitlab_auth_sign_up'] %>
-client_id = <%= node['gitlab']['grafana']['gitlab_application_id'] %>
-client_secret = <%= node['gitlab']['grafana']['gitlab_secret'] %>
+allow_sign_up = <%= @gitlab_auth_sign_up %>
+client_id = <%= @gitlab_application_id %>
+client_secret = <%= @gitlab_secret %>
 scopes = api
 auth_url = <%= @external_url %>/oauth/authorize
 token_url = <%= @external_url %>/oauth/token
 api_url = <%= @external_url %>/api/v4
-allowed_groups = <%= node['gitlab']['grafana']['allowed_groups'].join(' ') %>
+allowed_groups = <%= @allowed_groups.join(' ') %>
 <% end -%>
 
 #################################### Auth Proxy ##########################

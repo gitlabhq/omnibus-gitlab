@@ -3,6 +3,36 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.11.2 (2019-06-04)
+
+- No changes.
+
+## 11.11.2 (2019-06-04)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.10.1 (GitLab 11.11). (Harrison Healey)
+
+
+## 11.11.2 (2019-06-04)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.10.1 (GitLab 11.11). (Harrison Healey)
+
+
+## 11.11.1 (2019-05-30)
+
+- No changes.
+
+## 11.11.1 (2019-05-30)
+
+- No changes.
+
+## 11.11.1 (2019-05-30)
+
+- No changes.
+
 ## 11.11.0 (2019-05-22)
 
 - No changes.
@@ -123,6 +153,24 @@ omnibus-gitlab repository.
 - Rename library methods to make their function explicit. !3222
 - Update Mattermost to 5.10.0. (Harrison Healey)
 - Stop raspberry pi builds during nightlies. (John T Skarbek)
+
+
+## 11.10.6 (2019-06-04)
+
+- No changes.
+
+## 11.10.6 (2019-06-04)
+
+### Fixed (1 change)
+
+- Pin procfs version used for building redis-exporter. !3319
+
+
+## 11.10.6 (2019-06-04)
+
+### Fixed (1 change)
+
+- Pin procfs version used for building redis-exporter. !3319
 
 
 ## 11.10.4 (2019-05-01)
@@ -281,6 +329,21 @@ omnibus-gitlab repository.
 - Share AWS AMIs with the Marketplace account. !3190
 - Move software built from git to omnibus-mirror. !3228
 - Update Mattermost to 5.9.0 (GitLab 11.10). (Harrison Healey)
+
+
+## 11.9.12 (2019-05-30)
+
+- No changes.
+
+## 11.9.12 (2019-05-30)
+
+- No changes.
+
+## 11.9.12 (2019-05-30)
+
+### Security (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.8.2 (GitLab 11.9). (Harrison Healey)
 
 
 ## 11.9.11 (2019-04-30)
