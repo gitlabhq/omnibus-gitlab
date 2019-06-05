@@ -1394,7 +1394,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['rules_files'] = ['/var/opt/gitlab/prometheus/rules/*.rules']
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
-# prometheus['chunk_encoding_version'] = 2
 # prometheus['env_directory'] = '/opt/gitlab/etc/prometheus/env'
 # prometheus['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
@@ -1436,23 +1435,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 #
-### Prometheus Memory Management
-#
-# Prometheus needs to be configured for how much memory is used.
-# * This sets the target heap size.
-# * This value accounts for approximately 2/3 of the memory used by the server.
-# * The recommended memory is 4kb per unique metrics time-series.
-# See: https://prometheus.io/docs/operating/storage/#memory-usage
-#
-# prometheus['target_heap_size'] = (
-#   # Use 25mb + 2% of total memory for Prometheus memory.
-#   26_214_400 + (node['memory']['total'].to_i * 1024 * 0.02 )
-# ).to_i
+### Custom Prometheus flags
 #
 # prometheus['flags'] = {
 #   'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
-#   'storage.local.chunk-encoding-version' => user_config['chunk-encoding-version'],
-#   'storage.local.target-heap-size' => node['gitlab']['prometheus']['target-heap-size'],
 #   'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
 # }
 

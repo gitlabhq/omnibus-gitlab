@@ -63,41 +63,15 @@ module Prometheus
 
       home_directory = user_config['home'] || default_config['home']
       listen_address = user_config['listen_address'] || default_config['listen_address']
-      chunk_encoding_version = user_config['chunk_encoding_version'] || default_config['chunk_encoding_version']
-      target_heap_size = user_config['target_heap_size'] || default_config['target_heap_size']
-      version_1 = PrometheusHelper.is_version_1?(home_directory)
-      default_config['flags'] = if version_1
-                                  {
-                                    'web.listen-address' => listen_address,
-                                    'storage.local.path' => File.join(home_directory, 'data'),
-                                    'storage.local.chunk-encoding-version' => chunk_encoding_version.to_s,
-                                    'storage.local.target-heap-size' => target_heap_size.to_s,
-                                    'config.file' => File.join(home_directory, 'prometheus.yml')
-                                  }
-                                else
-                                  {
-                                    'web.listen-address' => listen_address,
-                                    'storage.tsdb.path' => File.join(home_directory, 'data'),
-                                    'config.file' => File.join(home_directory, 'prometheus.yml')
-                                  }
-                                end
+      default_config['flags'] = {
+        'web.listen-address' => listen_address,
+        'storage.tsdb.path' => File.join(home_directory, 'data'),
+        'config.file' => File.join(home_directory, 'prometheus.yml')
+      }
 
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
       Gitlab['prometheus']['flags'] = default_config['flags']
-
-      return unless Services.enabled?('prometheus')
-      return unless version_1
-      message = <<~EOS
-          == Prometheus ==
-          Detected Prometheus version 1.x. Version 1.x has been deprecated and support will be removed in GitLab version 12.0.
-          To upgrade to Prometheus 2.x, use `gitlab-ctl prometheus-upgrade` command.
-          Running this command will migrate all your existing data to format supported by Prometheus 2.x.
-          This can be a time consuming operation. To skip migrating the data, and instead remove and start fresh, run `gitlab-ctl prometheus-upgrade --skip-data-migration`.
-          Check https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114 for details.
-          ---
-        EOS
-      LoggingHelper.deprecation(message)
     end
 
     def parse_alertmanager_flags
