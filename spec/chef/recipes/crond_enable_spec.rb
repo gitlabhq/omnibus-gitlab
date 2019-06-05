@@ -16,5 +16,9 @@ describe 'crond::enable' do
     )
   end
 
+  it "should pass correct options to runit_service" do
+    expect(chef_run).to render_file("/opt/gitlab/sv/crond/run").with_content(/--include=\/var\/opt\/gitlab\/crond/)
+  end
+
   it_behaves_like "enabled runit service", "crond", "root", "root"
 end
