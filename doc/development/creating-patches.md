@@ -5,7 +5,7 @@ to work correctly in the context of a Omnibus embedded packaging, or even to
 fix an issue that the upstream maintainer have not either accepted or still
 taking longer to review and ship.
 
-## Bootstraping
+## Bootstrapping
 
 Omnibus has a specific [DSL](https://github.com/chef/omnibus#software) and
 conventions to ship and apply patches automatically as part of the building
