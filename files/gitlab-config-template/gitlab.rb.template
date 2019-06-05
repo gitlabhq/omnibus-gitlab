@@ -1266,7 +1266,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['gitlab_id'] = nil # Automatically generated if not present
 # gitlab_pages['gitlab_secret'] = nil # Generated if not present
 # gitlab_pages['auth_redirect_uri'] = nil # Defaults to projects subdomain of pages_external_url and + '/auth'
-# gitlab_pages['auth_server'] = nil # Defaults to external_url
+# gitlab_pages['gitlab_server'] = nil # Defaults to external_url
 # gitlab_pages['auth_secret'] = nil # Generated if not present
 
 ################################################################################

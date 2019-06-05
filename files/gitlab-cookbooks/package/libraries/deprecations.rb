@@ -42,6 +42,12 @@ module Gitlab
             deprecation: '11.6',
             removal: '14.0',
             note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
+          },
+          {
+            config_keys: %w(gitlab gitlab-pages auth_server),
+            deprecation: '12.0',
+            removal: '13.0',
+            note: "Use gitlab_server instead."
           }
         ]
 

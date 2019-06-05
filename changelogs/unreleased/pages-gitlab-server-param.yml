@@ -1,0 +1,5 @@
+---
+title: Replace --auth-server with --gitlab-server flag for pages
+merge_request: 3314
+author:
+type: added
