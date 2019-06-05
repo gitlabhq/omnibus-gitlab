@@ -1,3 +1,4 @@
+---
 groups:
 - name: GitLab
   rules:
@@ -106,3 +107,166 @@ groups:
     annotations:
       summary: Workhorse has high error rates
       description: Workhorse route {{ $labels.route }} method {{ $labels.method }} has more than 10% errors ({{ $value | printf "%.1f" }}%) for the last 60 minutes.
+
+###
+# These metrics are top-level GitLab Service Level Indicators (SLIs). They can
+# be used to monitor the overall health of a GitLab instance.
+- name: Service Level Indicators
+  interval: 30s
+  rules:
+  # Service availability.
+  - record: gitlab_sli:job:availability:ratio
+    expr: >
+      avg by (job) (
+        avg_over_time(up[30s])
+      )
+  # Rails worker/thread capacity.
+  - record: gitlab_sli:rails_active_connections:avg30s
+    expr: >
+      sum(avg_over_time(unicorn_active_connections[30s])) or
+      sum(avg_over_time(puma_active_connections[30s]))
+  - record: gitlab_sli:rails_queued_connections:avg30s
+    expr: >
+      sum(avg_over_time(unicorn_queued_connections[30s])) or
+      sum(avg_over_time(puma_queued_connections[30s]))
+  - record: gitlab_sli:rails_active_connections:max30s
+    expr: >
+      sum(max_over_time(unicorn_active_connections[30s])) or
+      sum(max_over_time(puma_active_connections[30s]))
+  - record: gitlab_sli:rails_queued_connections:max30s
+    expr: >
+      sum(max_over_time(unicorn_queued_connections[30s])) or
+      sum(max_over_time(puma_queued_connections[30s]))
+  - record: gitlab_sli:rails_workers:avg30s
+    expr: >
+      count(avg_over_time(ruby_memory_bytes[30s])) or
+      sum(avg_over_time(puma_max_threads[30s]))
+  # Redis CPU use.
+  - record: gitlab_sli:redis_cpu_seconds:rate1m
+    expr: >
+      (sum(rate(redis_used_cpu_sys[1m])) + sum(rate(redis_used_cpu_user[1m]))) or
+      (sum(rate(redis_cpu_sys_seconds_total[1m])) + sum(rate(redis_cpu_user_seconds_total[1m])))
+  # Workhorse traffic.
+  - record: gitlab_sli:code_method_route:workhorse_http_request_count:rate1m
+    expr: >
+      sum by (code,method,route) (
+        rate(gitlab_workhorse_http_request_duration_seconds_count[1m])
+      )
+  - record: gitlab_sli:code_method_route:workhorse_http_request_duration_seconds:rate1m
+    expr: >
+      sum by (code,method,route) (
+        rate(gitlab_workhorse_http_request_duration_seconds_sum[1m])
+      )
+# SLI - Apdex
+- name: Service Level Indicators - Apdex
+  interval: 1m
+  rules:
+  # Gitaly goserver
+  # Satisfied -> 0.5 seconds
+  # Acceptable -> 1 seconds
+  - record: gitlab_sli:gitlab_component_apdex:ratio
+    labels:
+      job: gitaly
+    expr: >
+      (
+        sum(rate(grpc_server_handling_seconds_bucket{job="gitaly",grpc_type="unary",le="0.5",grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m]))
+        +
+        sum(rate(grpc_server_handling_seconds_bucket{job="gitaly",grpc_type="unary",le="1",grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m]))
+      )
+      /
+      2 / sum(rate(grpc_server_handling_seconds_count{job="gitaly",grpc_type="unary",grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m]))
+  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-ce/issues/56752
+  # - record: gitlab_sli:gitlab_component_apdex:ratio
+  #   labels:
+  #     job: gitlab-sidekiq
+  #   expr: >
+  #     (
+  #       sum(rate(sidekiq_jobs_completion_time_seconds_bucket{le="25"}[1m]))
+  #       +
+  #       sum(rate(sidekiq_jobs_completion_time_seconds_bucket{le="50"}[1m]))
+  #     )
+  #     / 2
+  #     /
+  #     sum(rate(sidekiq_jobs_completion_time_seconds_count[1m]))
+
+  # Workhorse
+  # Satisfied -> 1 seconds
+  # Acceptable -> 10 seconds
+  - record: gitlab_sli:gitlab_component_apdex:ratio
+    labels:
+      job: gitlab-workhorse
+    expr: >
+      (
+        sum(rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/v4/jobs/request\\z"}[1m]))
+      +
+        sum(rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/v4/jobs/request\\z"}[1m]))
+      )
+      /
+      2 / sum(rate(gitlab_workhorse_http_request_duration_seconds_count{route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/v4/jobs/request\\z"}[1m]))
+
+# SLI - Errors
+- name: Service Level Indicators - Errors
+  interval: 1m
+  rules:
+  # PostgreSQL
+  - record: gitlab_sli:gitlab_component_ops:rate
+    labels:
+      job: postgres
+    expr: >
+      sum(rate(pg_stat_database_xact_commit[1m])) +
+      sum(rate(pg_stat_database_xact_rollback[1m]))
+  - record: gitlab_sli:gitlab_component_errors:rate
+    labels:
+      job: postgres
+    expr: sum(rate(pg_stat_database_xact_rollback[1m]))
+  # Rails (Unicorn/Puma)
+  - record: gitlab_sli:gitlab_component_ops:rate
+    labels:
+      job: gitlab-rails
+    expr: >
+      sum(
+        rate(http_request_duration_seconds_count{job="gitlab-rails"}[1m])
+      )
+  - record: gitlab_sli:gitlab_component_errors:rate
+    labels:
+      job: gitlab-rails
+    expr: >
+      sum(
+        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5.."}[1m])
+      )
+  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-ce/issues/56752
+  # - record: gitlab_sli:gitlab_component_ops:rate
+  #   labels:
+  #     job: gitlab-sidekiq
+  #   expr: >
+  #     sum (
+  #       rate(sidekiq_jobs_started_total{job="gitlab-sidekiq"}[1m])
+  #     )
+  # - record: gitlab_sli:gitlab_component_errors:rate
+  #   labels:
+  #     job: gitlab-sidekiq
+  #   expr: >
+  #     sum (
+  #       rate(sidekiq_jobs_failed_total{job="gitlab-sidekiq"}[1m])
+  #     )
+  # Workhorse
+  - record: gitlab_sli:gitlab_component_ops:rate
+    labels:
+      job: gitlab-workhorse
+    expr: >
+      sum(
+        rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse"}[1m])
+      )
+  - record: gitlab_sli:gitlab_component_errors:rate
+    labels:
+      job: gitlab-workhorse
+    expr: >
+      sum(
+        rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",code=~"5.."}[1m])
+      )
+  ###
+  # Calculate service error ratios
+  - record: gitlab_sli:gitlab_component_errors:ratio
+    expr: >
+      gitlab_sli:gitlab_component_errors:rate /
+      gitlab_sli:gitlab_component_ops:rate
