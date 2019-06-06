@@ -1642,6 +1642,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['auth_token'] = '<secret>'
 # gitaly['auth_transitioning'] = false # When true, auth is logged to Prometheus but NOT enforced
 # gitaly['graceful_restart_timeout'] = '1m' # Grace time for a gitaly process to finish ongoing requests
+# gitaly['git_catfile_cache_size'] = 100 # Number of 'git cat-file' processes kept around for re-use
 # gitaly['ruby_max_rss'] = 300000000 # RSS threshold in bytes for triggering a gitaly-ruby restart
 # gitaly['ruby_graceful_restart_timeout'] = '10m' # Grace time for a gitaly-ruby process to finish ongoing requests
 # gitaly['ruby_restart_delay'] = '5m' # Period of sustained high RSS that needs to be observed before restarting gitaly-ruby

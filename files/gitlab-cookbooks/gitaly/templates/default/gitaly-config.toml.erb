@@ -69,6 +69,12 @@ token = '<%= @auth_token %>'
 transitioning = <%= @auth_transitioning %>
 <% end %>
 
+[git]
+<% if @git_catfile_cache_size %>
+catfile_cache_size = <%= @git_catfile_cache_size %>
+<% end %>
+
+
 [gitaly-ruby]
 dir = "/opt/gitlab/embedded/service/gitaly-ruby"
 <% if @ruby_max_rss %>
