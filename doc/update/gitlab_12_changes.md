@@ -24,3 +24,11 @@ Please note that `gitlab-ctl prometheus-upgrade` command automatically
 reconfigures your GitLab instance, and will cause database migrations to run.
 So, if you are on an HA instance, run this command only as the last step, after
 performing all database related actions.
+
+## Removal of support for /etc/gitlab/skip-auto-migrations file
+
+Before GitLab 10.6, the file `/etc/gitlab/skip-auto-migrations` was used to
+prevent automatic reconfigure (and thus automatic database migrations) as part
+of upgrade. This file had been deprecated in favor of `/etc/gitlab/skip-auto-reconfigure`
+since GitLab 10.6, and in 12.0 the support is removed completely. Upgrade
+process will no longer take `skip-auto-migrations` file into consideration.
