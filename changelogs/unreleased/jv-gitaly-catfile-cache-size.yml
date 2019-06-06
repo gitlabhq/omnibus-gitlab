@@ -1,0 +1,6 @@
+---
+title: Make gitaly git.catfile_cache_size configurable
+merge_request: 3329
+author:
+type: added
+

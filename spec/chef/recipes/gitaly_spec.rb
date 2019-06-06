@@ -25,6 +25,7 @@ describe 'gitaly' do
   let(:ruby_graceful_restart_timeout) { '30m' }
   let(:ruby_restart_delay) { '10m' }
   let(:ruby_num_workers) { 5 }
+  let(:git_catfile_cache_size) { 50 }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -94,6 +95,8 @@ describe 'gitaly' do
         .with_content('num_workers =')
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[logging\]\s+level})
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{catfile_cache_size})
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -130,6 +133,7 @@ describe 'gitaly' do
           ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
           ruby_restart_delay: ruby_restart_delay,
           ruby_num_workers: ruby_num_workers,
+          git_catfile_cache_size: git_catfile_cache_size,
         },
         user: {
           username: 'foo',
@@ -184,6 +188,9 @@ describe 'gitaly' do
       ].map(&:to_s).join('\s+'))
       expect(chef_run).to render_file(config_path)
         .with_content(gitaly_ruby_section)
+
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[git\]\s+catfile_cache_size = 50})
     end
 
     it 'populates sv related log files' do
