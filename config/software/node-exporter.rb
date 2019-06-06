@@ -34,12 +34,13 @@ relative_path "src/#{go_source}"
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
-    'CGO_ENABLED' => '0' # Details: https://github.com/prometheus/node_exporter/issues/870
+    'CGO_ENABLED' => '0', # Details: https://github.com/prometheus/node_exporter/issues/870
+    'GO111MODULE' => 'on',
   }
 
   prom_version = Prometheus::VersionFlags.new(go_source, version)
 
-  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
+  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
