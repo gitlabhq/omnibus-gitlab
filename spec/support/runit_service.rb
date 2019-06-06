@@ -55,6 +55,21 @@ shared_examples 'enabled runit service' do |svc_name, owner, group, username = n
     expect(chef_run).to render_file("/var/log/gitlab/#{svc_name}/config").with_content(%r{.*})
   end
 
+  it 'verifies that file ownership persists' do
+    expect(chef_run.template("/var/log/gitlab/#{svc_name}/config")).to notify("ruby_block[verify_chown_persisted_on_#{svc_name}]")
+  end
+
+  it 'raises an error when file ownership does not persist' do
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_user?).and_return(true)
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_user?).with(/\/var\/log\/gitlab\/.*\/config/, anything).and_return(false)
+
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).and_return(true)
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).with(/\/var\/log\/gitlab\/.*\/config/, anything).and_return(false)
+
+    block = chef_run.find_resource('ruby_block', "verify_chown_persisted_on_#{svc_name}")
+    expect { block.block.call }.to raise_error("Unable to persist filesystem ownership changes of /var/log/gitlab/#{svc_name}/config. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance.")
+  end
+
   it 'creates the symlink to the service directory' do
     expect(chef_run).to create_link("/opt/gitlab/init/#{svc_name}").with(to: '/opt/gitlab/embedded/bin/sv')
   end
