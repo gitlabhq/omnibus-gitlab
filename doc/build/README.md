@@ -90,7 +90,7 @@ VERSION file.
 
 For example, if you want to build a package that will use a branch named
 `my-feature-branch`, `VERSION` file in omnibus-repo should contain the text
-`my-feature-branch`. Similary, if you want to build a package that will use
+`my-feature-branch`. Similarly, if you want to build a package that will use
 a specific commit, say [this one](https://dev.gitlab.org/gitlab/gitlabhq/commit/46973f3d4602c7ea6366d6401116b89d72b83b9e),
 `VERSION` file should contain the text `46973f3d4602c7ea6366d6401116b89d72b83b9e`,
 which is the SHA of that commit.

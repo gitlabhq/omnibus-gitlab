@@ -20,6 +20,6 @@ changes are made:
    does the init detection, and calls init system specific recipes as needed.
 
 4. Default values for runit cookbook specifying the location of service related
-   files are overriden. This is done in [attribute files of package cookbook](files/gitlab-cookbooks/package/attributes/default.rb).
+   files are overridden. This is done in [attribute files of package cookbook](files/gitlab-cookbooks/package/attributes/default.rb).
    `package` cookbook is made a dependency of all other cookbooks that need
    runit, so the default attributes are propogated to them automatically.

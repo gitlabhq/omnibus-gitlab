@@ -102,7 +102,7 @@ module SettingsHelper
 
   def method_missing(method_name, *arguments) # rubocop:disable Style/MethodMissing
     # Give better message for NilClass errors
-    # If there are no arguements passed, this is a 'GET' call, and if
+    # If there are no arguments passed, this is a 'GET' call, and if
     # there is no matching key in the configuration, then it has not been set (not even to nil)
     # and we will output a nicer error above the exception
     if arguments.length.zero? && !configuration.key?(method_name)

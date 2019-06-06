@@ -46,7 +46,7 @@ build do
   # the libxslt configure script iterates directories specified in
   # --with-libxml-prefix looking for the libxml2 config script. That
   # iteration treats colons as a delimiter so we are using a cygwin
-  # style path to accomodate
+  # style path to accommodate
   configure_commands = [
     "--with-libxml-prefix=#{install_dir.sub('C:', '/C')}/embedded",
     '--without-python',

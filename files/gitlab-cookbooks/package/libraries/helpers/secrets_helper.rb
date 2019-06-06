@@ -49,7 +49,7 @@ class SecretsHelper
     existing_secrets.each do |k, v|
       if Gitlab[k]
         v.each do |pk, p|
-          # Note: Specifiying a secret in gitlab.rb will take precendence over "gitlab-secrets.json"
+          # Note: Specifying a secret in gitlab.rb will take precedence over "gitlab-secrets.json"
           Gitlab[k][pk] ||= p
         end
       else

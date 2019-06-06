@@ -22,7 +22,7 @@ describe Build::Metrics do
 
   describe '.install_package' do
     describe 'when upgrade not set' do
-      it 'installs gitlab-ee pacakge and runs reconfigure explicitly' do
+      it 'installs gitlab-ee package and runs reconfigure explicitly' do
         expect_any_instance_of(Kernel).to receive(:system).with(
           { 'EXTERNAL_URL' => 'http://gitlab.example.com' },
           *%w[apt-get -y install gitlab-ee=1.2.3]
@@ -36,7 +36,7 @@ describe Build::Metrics do
   end
 
   describe '.upgrade_package' do
-    it 'installs gitlab-ee pacakge but does not run reconfigure explicitly' do
+    it 'installs gitlab-ee package but does not run reconfigure explicitly' do
       allow(Build::Info).to receive(:package_download_url).and_return('https://gitlab.example/foo.deb')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*%w[curl -q -o gitlab.deb https://gitlab.example/foo.deb])

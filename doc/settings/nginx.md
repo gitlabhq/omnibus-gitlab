@@ -774,7 +774,7 @@ We strongly urge you to upgrade ciphers on your server, similar to what was ment
 in [this user comment](https://gitlab.com/gitlab-org/gitlab-ce/issues/624#note_299061).
 
 If it is not possible to make this server change, you can default back to the old
-behavour by changing the values in your `/etc/gitlab/gitlab.rb`:
+behavior by changing the values in your `/etc/gitlab/gitlab.rb`:
 
 ```
 nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
