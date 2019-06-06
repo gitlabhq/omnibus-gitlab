@@ -355,14 +355,13 @@ To change the location of the PostgreSQL data
 ## Using a MySQL database management server (Enterprise Edition only)
 
 >**Note:**
-Using MySQL with the Omnibus GitLab package is considered deprecated. Although
-GitLab Enterprise Edition will still work when MySQL is used, there will be some
-limitations as outlined in the [database requirements document].
+Using MySQL with the Omnibus GitLab package is considered deprecated. It is only
+supported in GitLab Enterprise Edition Starter and Premium for versions up-to
+12.0. Starting in the 12.1 release, MySQL will no longer be supported in any
+Edition.
 
-MySQL in Omnibus GitLab package is only supported in GitLab Enterprise Edition
-Starter and Premium. The MySQL server itself is _not_ shipped with Omnibus, you
-will have to install it on your own or use an existing one. Omnibus ships only
-the MySQL client.
+The MySQL server itself is _not_ shipped with Omnibus, you will have to install
+it on your own or use an existing one. Omnibus ships only the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
 hit [collation issues][ee-245]. See
