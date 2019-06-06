@@ -6,7 +6,12 @@ class BasePgHelper < BaseHelper
   include ShellOutHelper
   attr_reader :node
 
-  PG_HASH_PATTERN ||= /\{(.*)\}/
+  PG_HASH_PATTERN = /\{(.*)\}/
+  PG_HASH_PAIR_SEPARATOR = ','.freeze
+  PG_HASH_PAIR_ESCAPED_PATTERN = /^"|"$/
+  PG_HASH_KEY_VALUE_SEPARATOR = '='.freeze
+  PG_ESCAPED_DOUBLE_QUOTE_PATTERN = /\\"/
+  PG_ESCAPED_BACKSLASH_PATTERN = /\\{2}/
 
   def is_running?
     OmnibusHelper.new(node).service_up?(service_name)
@@ -182,16 +187,9 @@ class BasePgHelper < BaseHelper
   # @param [String] raw_content from command-line output
   # @return [Hash] hash with key and values from parsed content
   def parse_pghash(raw_content)
-    content = PG_HASH_PATTERN.match(raw_content)
-
-    if content
-      tuples = content[1].split(',')
-      tuples.each_with_object({}) do |tuple, hash|
-        key, value = tuple.split('=')
-        hash[key.to_sym] = value
-      end
-    else
-      {}
+    parse_pghash_pairs(raw_content).each_with_object({}) do |pair, hash|
+      key, value = parse_pghash_key_value(pair)
+      hash[key.to_sym] = value
     end
   end
 
@@ -288,5 +286,17 @@ class BasePgHelper < BaseHelper
 
   def stringify_hash_values(options)
     options.each_with_object({}) { |(k, v), hash| hash[k] = v.to_s }
+  end
+
+  def parse_pghash_pairs(raw_content)
+    raw_content.gsub(PG_HASH_PATTERN) { Regexp.last_match(1) }
+               .split(PG_HASH_PAIR_SEPARATOR)
+  end
+
+  def parse_pghash_key_value(pair)
+    pair.gsub(PG_HASH_PAIR_ESCAPED_PATTERN, '')
+        .gsub(PG_ESCAPED_DOUBLE_QUOTE_PATTERN, '"')
+        .gsub(PG_ESCAPED_BACKSLASH_PATTERN, '')
+        .split(PG_HASH_KEY_VALUE_SEPARATOR)
   end
 end

@@ -194,7 +194,7 @@ describe BasePgHelper do
   end
 
   describe '#parse_pghash' do
-    let(:payload) { '{host=127.0.0.1,dbname=gitlabhq_production,port=5432}' }
+    let(:payload) { '{host=127.0.0.1,dbname=gitlabhq_production,port=5432,user=gitlab,"password=foo}bar\"zoo\\cat"}' }
 
     it 'returns a hash' do
       expect(subject.parse_pghash(payload)).to be_a(Hash)
@@ -208,15 +208,13 @@ describe BasePgHelper do
     it 'returns hash with expected keys' do
       hash = subject.parse_pghash(payload)
 
-      expect(hash).to have_key(:host)
-      expect(hash).to have_key(:dbname)
-      expect(hash).to have_key(:port)
+      expect(hash.keys).to contain_exactly(:host, :dbname, :port, :user, :password)
     end
 
     it 'returns hash with expected values' do
       hash = subject.parse_pghash(payload)
 
-      expect(hash.values).to include('127.0.0.1', 'gitlabhq_production', '5432')
+      expect(hash.values).to contain_exactly('127.0.0.1', 'gitlabhq_production', '5432', 'gitlab', 'foo}bar"zoo\cat')
     end
   end
 
