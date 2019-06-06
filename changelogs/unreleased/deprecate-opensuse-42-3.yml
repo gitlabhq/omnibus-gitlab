@@ -1,0 +1,5 @@
+---
+title: Mark openSUSE 42.3 as deprecated
+merge_request: 3334
+author:
+type: deprecated
