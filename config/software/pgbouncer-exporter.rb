@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'pgbouncer-exporter'
-version = Gitlab::Version.new('pgbouncer-exporter', '0.0.4-gitlab')
+version = Gitlab::Version.new('pgbouncer-exporter', '0.0.6-gitlab')
 default_version version.print
 
 license 'MIT'
@@ -35,11 +35,12 @@ relative_path "src/#{go_source}"
 
 build do
   env = {
-    'GOPATH' => "#{Omnibus::Config.source_dir}/pgbouncer-exporter"
+    'GOPATH' => "#{Omnibus::Config.source_dir}/pgbouncer-exporter",
+    'GO111MODULE' => 'on',
   }
-  prom_version = Prometheus::VersionFlags.new(go_source, version)
+  prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
+  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'pgbouncer_exporter', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"

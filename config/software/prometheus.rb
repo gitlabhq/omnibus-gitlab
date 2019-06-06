@@ -36,13 +36,14 @@ relative_path "src/#{go_source}"
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/prometheus",
+    'GO111MODULE' => 'on',
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
   cwd = "#{exporter_source_dir}/src/#{go_source}"
 
-  prom_version = Prometheus::VersionFlags.new(go_source, version)
+  prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
+  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/prometheus"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
