@@ -45,7 +45,7 @@ build do
 
   block do
     File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
-    File.open(File.join(install_dir, 'embedded/service/mattermost/VERSION'), version)
+    File.write(File.join(install_dir, 'embedded/service/mattermost/VERSION'), version)
   end
 end
 
