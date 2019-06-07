@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 version = Gitlab::Version.new('gitlab-elasticsearch-indexer')
 
 name 'gitlab-elasticsearch-indexer'
-default_version 'v1.0.0'
+default_version 'v1.2.0'
 
 license 'MIT'
 license_file 'LICENSE'
@@ -31,7 +31,6 @@ source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  env['GOPATH'] = "#{Omnibus::Config.source_dir}/gitlab-elasticsearch-indexer"
 
   make "install PREFIX=#{install_dir}/embedded", env: env
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
