@@ -1,5 +1,6 @@
 require 'aws-sdk'
 require_relative 'build/info.rb'
+require_relative 'util.rb'
 
 class AWSHelper
   VERSION_REGEX = /\A(?<version>\d+\.\d+\.\d+)-?(?<type>(ee|ce))?\z/
@@ -10,6 +11,9 @@ class AWSHelper
 
     @version = version
     @type = type || 'ce'
+    if @type == 'ee' && Gitlab::Util.get_env("EE_ULTIMATE_AMI") == "true"
+      @type = 'ee-ultimate'
+    end
     @clients = {}
     @download_url = Build::Info.package_download_url
   end
@@ -47,7 +51,13 @@ class AWSHelper
   end
 
   def category
-    @type == "ce" ? "GitLab Community Edition" : "GitLab Enterprise Edition"
+    if @type == "ce"
+      "GitLab Community Edition"
+    elsif @type == "ee"
+      "GitLab Enterprise Edition"
+    elsif @type == "ee-ultimate"
+      "GitLab Enterprise Edition Ultimate"
+    end
   end
 
   def list_images(region)
