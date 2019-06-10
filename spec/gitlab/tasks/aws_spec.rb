@@ -66,6 +66,15 @@ describe 'aws:process', type: :rake do
     expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Enterprise Edition/).to_stdout
   end
 
+  it 'should identify ee ultimate category correctly' do
+    allow(Build::Info).to receive(:edition).and_return('ee')
+    allow(Gitlab::Util).to receive(:get_env).and_call_original
+    allow(Gitlab::Util).to receive(:get_env).with("EE_ULTIMATE_AMI").and_return('true')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
+
+    expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Enterprise Edition Ultimate/).to_stdout
+  end
+
   # it 'should delete existing smaller versioned AMIs' do
   # allow(File).to receive(:read).with('VERSION').and_return('8.16.4-ce')
   # expect_any_instance_of(AwsDummyClass).to receive(:deregister_image).and_return(true)
