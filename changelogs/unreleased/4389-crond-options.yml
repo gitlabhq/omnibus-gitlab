@@ -1,5 +1,0 @@
----
-title: Pass cron directory to crond run file
-merge_request: 3327
-author:
-type: fixed

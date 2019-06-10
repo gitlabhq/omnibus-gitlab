@@ -1,5 +1,0 @@
----
-title: Fix bug in pg-upgrade HA detection
-merge_request: 3287
-author:
-type: fixed

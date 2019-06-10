@@ -7,6 +7,14 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.11.3 (2019-06-10)
+
+### Fixed (2 changes)
+
+- Fix bug in pg-upgrade HA detection. !3287
+- Pass cron directory to crond run file. !3327
+
+
 ## 11.11.2 (2019-06-04)
 
 - No changes.
