@@ -529,6 +529,32 @@ AWS:
   dependencies: []
   retry: 1
 
+AWS-Ultimate:
+  stage: package-and-image-release
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
+  variables:
+    EE_ULTIMATE_AMI: "true"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - bundle exec rake aws:process
+  allow_failure: true
+  tags:
+  - docker-builder
+  when: manual
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+  except:
+    variables:
+      # Format of the auto-deploy tag for auto-deploy builds.
+      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
+      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+  cache: *tag-cache
+  dependencies: []
+  retry: 1
+
 QA-Tag:
   extends: .docker_job
   stage: package-and-image-release
