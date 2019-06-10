@@ -124,7 +124,7 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
-  if File.exist?("#{base_path}/embedded/bin/repmgr") && get_all_services.include?("repmgrd")
+  if service_enabled?('repmgrd')
     log "Detected an HA cluster."
     node = Repmgr::Node.new
     if node.is_master?
