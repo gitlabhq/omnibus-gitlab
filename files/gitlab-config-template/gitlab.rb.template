@@ -1447,7 +1447,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Alertmanager
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/alertmanager.html
 ################################################################################
 
 # alertmanager['enable'] = true
