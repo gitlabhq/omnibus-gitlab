@@ -53,9 +53,20 @@ class LetsEncrypt
           Gitlab['letsencrypt']['auto_enabled'] || (
             !File.exist?(Gitlab['nginx']['ssl_certificate_key']) &&
             !File.exist?(Gitlab['nginx']['ssl_certificate'])
-          )
+          ) || needs_renewal?
         )
       )
+    end
+
+    # Checks wheather the existing certificate is expired and needs renewal.
+    #
+    # @return [true, false]
+    def needs_renewal?
+      file_name = Gitlab['nginx']['ssl_certificate']
+      return false unless File.exist? file_name
+
+      cert = OpenSSL::X509::Certificate.new File.read(file_name)
+      cert.not_after < Time.now
     end
 
     # Save secrets if they do not have letsencrypt.auto_enabled

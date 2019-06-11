@@ -102,7 +102,11 @@ describe LetsEncrypt do
     end
 
     it 'is false with the cert present' do
+      mock_cert = OpenSSL::X509::Certificate.new
+      allow(mock_cert).to receive(:not_after).and_return(Time.now + 600)
       allow(File).to receive(:exist?).with('example.crt').and_return(true)
+      allow(File).to receive(:read).with('example.crt').and_return(nil)
+      allow(OpenSSL::X509::Certificate).to receive(:new).and_return(mock_cert)
 
       expect(subject.should_auto_enable?).to be_falsey
     end
@@ -112,6 +116,17 @@ describe LetsEncrypt do
 
       allow(File).to receive(:exist?).with('example.key').and_return(true)
       allow(File).to receive(:exist?).with('example.crt').and_return(true)
+
+      expect(subject.should_auto_enable?).to be_truthy
+    end
+
+    it 'is true when files present, but certificate is expired' do
+      mock_cert = OpenSSL::X509::Certificate.new
+      allow(mock_cert).to receive(:not_after).and_return(Time.now - 1)
+      allow(File).to receive(:exist?).with('example.key').and_return(true)
+      allow(File).to receive(:exist?).with('example.crt').and_return(true)
+      allow(File).to receive(:read).with('example.crt').and_return(nil)
+      allow(OpenSSL::X509::Certificate).to receive(:new).and_return(mock_cert)
 
       expect(subject.should_auto_enable?).to be_truthy
     end
