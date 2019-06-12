@@ -3,8 +3,8 @@ require 'chef_helper'
 shared_examples 'Postgres helpers' do |service_name, service_cmd|
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.set['gitlab'][service_name]['data_dir'] = '/fakedir'
-      node.set['package']['install-dir'] = '/fake/install/dir'
+      node.normal['gitlab'][service_name]['data_dir'] = '/fakedir'
+      node.normal['package']['install-dir'] = '/fake/install/dir'
     end.converge('gitlab::config')
   end
 
