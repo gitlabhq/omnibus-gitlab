@@ -44,7 +44,8 @@ build do
   copy 'prepackaged_plugins', "#{install_dir}/embedded/service/mattermost/prepackaged_plugins"
 
   block do
-    File.open(license_path, 'w') { |f| f.write(GITLAB_MATTERMOST_COMPILED_LICENSE) }
+    File.write(license_path, GITLAB_MATTERMOST_COMPILED_LICENSE)
+    File.write(File.join(install_dir, 'embedded/service/mattermost/VERSION'), version)
   end
 end
 

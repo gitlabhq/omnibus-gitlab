@@ -133,3 +133,8 @@ runit_service "mattermost" do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['mattermost'].to_hash)
 end
+
+file File.join(mattermost_home, "VERSION") do
+  content VersionHelper.version("cat /opt/gitlab/embedded/service/mattermost/VERSION")
+  notifies :hup, "runit_service[mattermost]"
+end
