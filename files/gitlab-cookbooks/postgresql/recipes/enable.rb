@@ -59,11 +59,11 @@ PATH=#{node['postgresql']['user_path']}
 EOH
 end
 
-sysctl "kernel.shmmax" do
+gitlab_sysctl "kernel.shmmax" do
   value node['postgresql']['shmmax']
 end
 
-sysctl "kernel.shmall" do
+gitlab_sysctl "kernel.shmall" do
   value node['postgresql']['shmall']
 end
 
@@ -73,7 +73,7 @@ sem = [
   node['postgresql']['semopm'],
   node['postgresql']['semmni'],
 ].join(" ")
-sysctl "kernel.sem" do
+gitlab_sysctl "kernel.sem" do
   value sem
 end
 

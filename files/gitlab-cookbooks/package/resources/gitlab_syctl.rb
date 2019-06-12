@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource_name :sysctl
-provides :sysctl
+resource_name :gitlab_sysctl
+provides :gitlab_sysctl
 
 actions :create
 default_action :create

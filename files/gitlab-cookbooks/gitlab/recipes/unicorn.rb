@@ -34,6 +34,6 @@ if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
   end
 end
 
-sysctl "net.core.somaxconn" do
+gitlab_sysctl "net.core.somaxconn" do
   value node['gitlab']['unicorn']['somaxconn']
 end
