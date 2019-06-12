@@ -37,6 +37,6 @@ action :create do
     group new_resource.group if new_resource.group
     mode new_resource.mode   if new_resource.mode
     variables new_resource.to_hash
-    dependent_services.each { |svc| notifies :restart, svc }
+    new_resource.dependent_services.each { |svc| notifies :restart, svc }
   end
 end
