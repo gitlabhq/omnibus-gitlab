@@ -1,0 +1,5 @@
+---
+title: Upgrade node-exporter to 0.18.1
+merge_request: 3326
+author:
+type: fixed
