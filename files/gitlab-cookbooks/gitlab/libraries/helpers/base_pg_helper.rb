@@ -6,12 +6,12 @@ class BasePgHelper < BaseHelper
   include ShellOutHelper
   attr_reader :node
 
-  PG_HASH_PATTERN = /\{(.*)\}/
-  PG_HASH_PAIR_SEPARATOR = ','.freeze
-  PG_HASH_PAIR_ESCAPED_PATTERN = /^"|"$/
-  PG_HASH_KEY_VALUE_SEPARATOR = '='.freeze
-  PG_ESCAPED_DOUBLE_QUOTE_PATTERN = /\\"/
-  PG_ESCAPED_BACKSLASH_PATTERN = /\\{2}/
+  PG_HASH_PATTERN ||= /\{(.*)\}/
+  PG_HASH_PAIR_SEPARATOR ||= ','.freeze
+  PG_HASH_PAIR_ESCAPED_PATTERN ||= /^"|"$/
+  PG_HASH_KEY_VALUE_SEPARATOR ||= '='.freeze
+  PG_ESCAPED_DOUBLE_QUOTE_PATTERN ||= /\\"/
+  PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/
 
   def is_running?
     OmnibusHelper.new(node).service_up?(service_name)
