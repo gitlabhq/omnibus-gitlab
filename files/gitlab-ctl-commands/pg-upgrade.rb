@@ -61,6 +61,7 @@ add_command_under_category 'pg-upgrade', 'database',
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
   @db_worker = GitlabCtl::PgUpgrade.new(base_path, data_path, options[:tmp_dir], options[:timeout])
   @instance_type = :single_node
+  @roles = GitlabCtl::Util.roles(base_path)
 
   running_version = @db_worker.fetch_running_version
 
@@ -85,6 +86,16 @@ add_command_under_category 'pg-upgrade', 'database',
     running_version == upgrade_version
   end
     $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
+    Kernel.exit 0
+  end
+
+  if @roles.include?('geo-primary') || @roles.include?('geo-secondary')
+    log ''
+    log '==='
+    log 'Not running automatic PostgreSQL upgrade on a GEO node'
+    log 'Support will be added in a future version'
+    log '==='
+    log ''
     Kernel.exit 0
   end
 

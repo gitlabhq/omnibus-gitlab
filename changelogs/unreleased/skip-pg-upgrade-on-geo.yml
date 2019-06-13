@@ -1,0 +1,5 @@
+---
+title: Skip automatic pg-upgrade on GEO
+merge_request: 3338
+author:
+type: other

@@ -100,6 +100,11 @@ module GitlabCtl
         run_command("/opt/gitlab/embedded/bin/chef-client -z -c #{cookbook_path}/#{config} -j #{cookbook_path}/#{attribs}")
       end
 
+      # Parse enabled roles out of the attributes json file and return an Array of Strings
+      def roles(base_path)
+        get_node_attributes(base_path)['roles'].select { |k, v| v.key?('enable') && v['enable'] }.keys
+      end
+
       def delay_for(seconds)
         $stdout.print "\nPlease hit Ctrl-C now if you want to cancel the operation.\n"
         seconds.times do
