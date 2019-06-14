@@ -99,3 +99,10 @@ if node['gitlab']['bootstrap']['enable']
     retries 20
   end
 end
+
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'rails' do
+    ip_address node['gitlab']['puma']['listen']
+    port node['gitlab']['puma']['port']
+  end
+end

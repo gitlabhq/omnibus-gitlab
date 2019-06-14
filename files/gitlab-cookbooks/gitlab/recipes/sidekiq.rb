@@ -22,3 +22,10 @@ sidekiq_service 'sidekiq' do
   user account_helper.gitlab_user
   group account_helper.gitlab_group
 end
+
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'sidekiq' do
+    ip_address node['gitlab']['sidekiq']['listen_address']
+    port node['gitlab']['sidekiq']['listen_port']
+  end
+end

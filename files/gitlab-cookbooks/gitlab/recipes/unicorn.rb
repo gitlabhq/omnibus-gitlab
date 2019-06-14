@@ -27,6 +27,13 @@ unicorn_service 'unicorn' do
   group account_helper.gitlab_group
 end
 
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'rails' do
+    ip_address node['gitlab']['unicorn']['listen']
+    port node['gitlab']['unicorn']['port']
+  end
+end
+
 sysctl "net.core.somaxconn" do
   value node['gitlab']['unicorn']['somaxconn']
 end

@@ -54,6 +54,12 @@ runit_service 'gitlab-workhorse' do
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
 
+if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'workhorse' do
+    socket_address node['gitlab']['gitlab-workhorse']['prometheus_listen_addr']
+  end
+end
+
 file File.join(working_dir, "VERSION") do
   content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
   notifies :restart, "service[gitlab-workhorse]"

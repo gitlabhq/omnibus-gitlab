@@ -5,17 +5,49 @@ server  {
     server_name <%= @fqdn %>;
     location /nginx_status {
       stub_status;
-    <% @options.each do |key, value| %>
+    <% @options.each do |key, value|
+      if value.is_a?(String) -%>
       <%= key %> <%= value %>;
-    <% end %>
+    <% elsif value.is_a?(Array)
+        value.each do |v| -%>
+      <%= key %> <%= v %>;
+    <%
+        end
+      end
+    end
+    -%>
     }
     <% if @vts_enable -%>
     location /metrics {
       vhost_traffic_status_display;
       vhost_traffic_status_display_format prometheus;
-    <% @options.each do |key, value| -%>
+    <% @options.each do |key, value|
+      if value.is_a?(String) -%>
       <%= key %> <%= value %>;
-    <% end -%>
+    <% elsif value.is_a?(Array)
+        value.each do |v| -%>
+      <%= key %> <%= v %>;
+    <%
+        end
+      end
+    end
+    -%>
     }
     <% end -%>
+
+    location /rails-metrics {
+      proxy_cache off;
+      proxy_pass  http://gitlab-workhorse/-/metrics;
+    <% @options.each do |key, value|
+      if value.is_a?(String) -%>
+      <%= key %> <%= value %>;
+    <% elsif value.is_a?(Array)
+        value.each do |v| -%>
+      <%= key %> <%= v %>;
+    <%
+        end
+      end
+    end
+    -%>
+    }
 }
