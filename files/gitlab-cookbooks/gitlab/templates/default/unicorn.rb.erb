@@ -29,7 +29,18 @@ before_exec do |server|
   Gitlab::Cluster::LifecycleEvents.do_master_restart
 end
 
+run_once = true
+
 before_fork do |server, worker|
+  if run_once
+    run_once = false
+
+    # The Unicorn before_exec hook only gets called on a Unicorn
+    # restart, but we want to clean things up (e.g. metric files) at
+    # first boot.
+    Gitlab::Cluster::LifecycleEvents.do_master_restart
+  end
+
   Gitlab::Cluster::LifecycleEvents.do_before_fork
 
   old_pid = "#{server.config[:pid]}.oldbin"
