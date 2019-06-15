@@ -33,23 +33,6 @@ of upgrade. This file had been deprecated in favor of `/etc/gitlab/skip-auto-rec
 since GitLab 10.6, and in 12.0 the support is removed completely. Upgrade
 process will no longer take `skip-auto-migrations` file into consideration.
 
-## Deprecation of TLS v1.1
-
-With the release of GitLab 12, TLS v1.1 has been fully deprecated.
-This mitigates numerous issues including, but not limited to,
-Heartbleed and makes GitLab compliant out of the box with the PCI
-DSS 3.1 standard.
-
-[Learn more about why TLS v1.1 is being deprecated in our blog.](https://about.gitlab.com/2018/10/15/gitlab-to-deprecate-older-tls/)
-
-### Clients supporting TLS v1.2
-
-* **Git-Credential-Manager** - support since **1.14.0***
-* **git on Red Hat Enterprise Linux 6** - support since ***6.8***
-* **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
-* **JGit / Java** - support since ***JDK 7***
-* **Visual Studio** - support since version ***2017***
-
 ## Upgrade to Postgres 10
 
 Postgres will automatically be upgraded to 10.7.0 unless specifically opted
@@ -62,6 +45,3 @@ sudo touch /etc/gitlab/disable-postgres-upgrade
 
 Further details and procedures for upgrading a GitLab HA cluster can be
 found in the [Database Settings notes](/doc/settings/database.md#upgrade-packaged-postgresql-server).
-
-## Update to Ruby 2.6
-
