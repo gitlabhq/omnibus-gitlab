@@ -66,7 +66,7 @@ class LetsEncrypt
       return false unless File.exist? file_name
 
       cert = OpenSSL::X509::Certificate.new File.read(file_name)
-      cert.not_after < Time.now
+      cert.not_after < Time.now && cert.subject == cert.issuer
     end
 
     # Save secrets if they do not have letsencrypt.auto_enabled
