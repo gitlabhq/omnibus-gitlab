@@ -32,6 +32,7 @@ describe Geo::Replication, '#execute' do
     allow(File).to receive(:open).and_yield(file)
 
     allow(GitlabCtl::Util).to receive(:run_command).and_return(command)
+    allow(subject).to receive(:postgresql_user).and_return('gitlab-psql')
   end
 
   it 'replicates geo database' do
@@ -113,6 +114,58 @@ describe Geo::Replication, '#execute' do
               anything)
 
       subject.execute
+    end
+  end
+end
+
+describe Geo::Replication, '#postgresql_user' do
+  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
+  let(:options) do
+    {
+      now: true,
+      host: 'localhost',
+      port: 9999,
+      user: 'my-user',
+      sslmode: 'disable',
+      sslcompression: 1,
+      recovery_target_timeline: 'latest',
+      db_name: 'gitlab_db_name'
+    }
+  end
+
+  subject { described_class.new(instance, options) }
+
+  context 'when using legacy configuration' do
+    before do
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return(
+        {
+          'gitlab' => {
+            'postgresql' => {
+              'username' => 'foo'
+            }
+          }
+        }
+      )
+    end
+
+    it 'detects username correctly' do
+      expect(subject.postgresql_user).to eq('foo')
+    end
+  end
+
+  context 'when using updated configuration' do
+    before do
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return(
+        {
+          'postgresql' => {
+            'username' => 'bar'
+          }
+        }
+      )
+    end
+
+    it 'detects username correctly' do
+      expect(subject.postgresql_user).to eq('bar')
     end
   end
 end

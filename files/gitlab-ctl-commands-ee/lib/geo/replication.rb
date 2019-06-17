@@ -1,6 +1,13 @@
 require 'io/console'
 require 'rainbow/ext/string'
 
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../../omnibus-ctl/lib/gitlab_ctl'
+rescue LoadError
+  require_relative '../../../gitlab-ctl-commands/lib/gitlab_ctl'
+end
+
 module Geo
   class Replication
     attr_accessor :base_path, :data_path, :tmp_dir, :ctl
@@ -12,6 +19,18 @@ module Geo
       @data_path = instance.data_path
       @ctl = instance
       @options = options
+    end
+
+    def node_attributes
+      @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
+    end
+
+    def postgresql_user
+      # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
+      # configure on an existing installation
+      #
+      # TODO: Remove support for legacy attributes in GitLab 13.0
+      (node_attributes.dig('gitlab', 'postgresql', 'username') || node_attributes.dig('postgresql', 'username')).to_s
     end
 
     def check_gitlab_active?
@@ -96,7 +115,7 @@ module Geo
       run_command("mv #{data_path}/postgresql/postgresql.conf #{data_path}/postgresql/data/")
 
       puts '* Setting ownership permissions in PostgreSQL data directory'.color(:green)
-      run_command("chown -R gitlab-psql:gitlab-psql #{data_path}/postgresql/data")
+      run_command("chown -R #{postgresql_user}:#{postgresql_user} #{data_path}/postgresql/data")
 
       puts '* Starting PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl start')
@@ -129,7 +148,7 @@ module Geo
         EOF
                   )
       end
-      run_command("chown gitlab-psql #{@pgpass}")
+      run_command("chown #{postgresql_user} #{@pgpass}")
     end
 
     def create_recovery_file!
@@ -143,7 +162,7 @@ module Geo
                   )
         file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
       end
-      run_command("chown gitlab-psql #{recovery_file}")
+      run_command("chown #{postgresql_user} #{recovery_file}")
     end
 
     def ask_pass
