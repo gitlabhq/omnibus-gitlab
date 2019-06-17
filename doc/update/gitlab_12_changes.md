@@ -53,4 +53,4 @@ sudo touch /etc/gitlab/disable-postgres-upgrade
 ```
 
 Further details and procedures for upgrading a GitLab HA cluster can be
-found in the [Database Settings notes](/doc/settings/database.md#upgrade-packaged-postgresql-server).
+found in the [Database Settings notes](../settings/database.md#upgrade-packaged-postgresql-server).
