@@ -48,7 +48,7 @@ module GitlabCtl
             "Error reading #{file}, has reconfigure been run yet?"
         end
 
-        unless data.key?('normal')
+        if file.start_with?('/opt/gitlab/embedded/nodes') && !data.key?('normal')
           raise GitlabCtl::Errors::NodeError,
             "Attributes not found in #{file}, has reconfigure been run yet?"
         end
