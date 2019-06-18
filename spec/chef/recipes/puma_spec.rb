@@ -173,8 +173,8 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
         .with_content { |content|
-          expect(content).to match(/export prometheus_run_dir=\'\'/)
-          expect(content).not_to match(/mkdir -p \/dev\/shm\/gitlab\/puma/)
+          expect(content).to match(/export prometheus_run_dir=\'\/dev\/shm\/gitlab\/puma\'/)
+          expect(content).to match(/mkdir -p \/dev\/shm\/gitlab\/puma/)
         }
     end
   end
