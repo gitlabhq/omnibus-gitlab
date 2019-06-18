@@ -13,7 +13,7 @@ Thus you have three options for database servers to use with Omnibus GitLab:
 
 - Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required, recommended)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
-- Use an [external MySQL server with Enterprise Edition package](#using-a-mysql-database-management-server-enterprise-edition-only) (deprecated)
+- Use an [external MySQL server with Enterprise Edition package](#using-a-mysql-database-management-server-enterprise-edition-only) (not supported in 12.1+)
 
 If you are planning to use MySQL/MariaDB, make sure to read the [introductory
 paragraph](#using-a-mysql-database-management-server-enterprise-edition-only)
@@ -355,12 +355,10 @@ To change the location of the PostgreSQL data
 ## Using a MySQL database management server (Enterprise Edition only)
 
 >**Note:**
-Using MySQL with the Omnibus GitLab package is considered deprecated. It is only
-supported in GitLab Enterprise Edition Starter and Premium for versions up-to
-12.0. Starting in the 12.1 release, MySQL will no longer be supported in any
-Edition.
+GitLab 12.0 is the last version with support for MySQL (and MariaDB). Users will
+need to [migrate][mysql-migrate] to PostgreSQL in order to utilize future versions. 
 
-The MySQL server itself is _not_ shipped with Omnibus, you will have to install
+The MySQL server itself is _not_ shipped with Omnibus ([PostgresSQL is](#database-settings)), you will have to install
 it on your own or use an existing one. Omnibus ships only the MySQL client.
 
 Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
@@ -600,3 +598,4 @@ sudo gitlab-psql -d gitlabhq_production
 [rake-restore]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
 [mysql-install]: https://docs.gitlab.com/ce/install/database_mysql.html "MySQL documentation"
 [database requirements document]: https://docs.gitlab.com/ce/install/requirements.html#database
+[mysql-migrate]: https://docs.gitlab.com/ce/update/mysql_to_postgresql.html
