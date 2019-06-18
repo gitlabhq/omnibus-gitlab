@@ -6,31 +6,41 @@
 you can use to visualize performance metrics from the [embedded Prometheus](prometheus.md)
 monitoring system.
 
-## Enabling Grafana
+Starting with GitLab 12.0, Grafana is enabled by default and SSO with GitLab is
+automatically configured. Grafana will be available on `https://gitlab.example.com/-/grafana`.
 
-Grafana is not enabled by default. To enable it:
+## Specifying an admin password
+
+Default admin credentials for Grafana is `root` as both username and password.
+It is recommended that you change this admin password. After logging in
+initially using these credentials, Grafana will present you with a screen to
+change the password.
+
+You can also set the admin password in `/etc/gitlab/gitlab.rb` file, to do this
+without using the UI.
+
+NOTE: **Note:**
+The admin password must be specified before the first reconfigure after
+installation. After this, the `admin_password` setting doesn't have any effect,
+and you'll have to [reset the password manually](#resetting-the-admin-password).
+
+To specify an admin password, add the following line to `/etc/gitlab/gitlab.rb`
+file and [reconfigure]:
+
+```
+grafana['admin_password'] = 'foobar'
+```
+
+## Disabling Grafana
 
 1. Edit `/etc/gitlab/gitlab.rb` and add/edit the following lines:
 
    ```ruby
-   ## The URL of your GitLab instance
-   external_url "https://gitlab.example.com"
-
    ## Set to true/false to enable/disable respectively
-   grafana['enable'] = true
-
-   ## The default admin password is 'admin', change it here
-   grafana['admin_password'] = 'admin'
+   grafana['enable'] = false
    ```
 
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
-1. Once enabled, Grafana will be available on `https://gitlab.example.com/-/grafana`
-   where you can log in with the username `admin` and the password you set.
-
-NOTE: **Note:**
-The admin password must be changed before reconfiguring GitLab with Grafana enabled.
-After this, the `admin_password` setting doesn't have any effect, and you'll have to
-[reset the password manually](#resetting-the-admin-password).
 
 ## Authentication
 
@@ -49,6 +59,10 @@ To allow users to create their own accounts in Grafana:
 1. Save the file and [reconfigure] GitLab for the changes to take effect.
 
 ### Using GitLab as an OAuth provider
+
+NOTE: **Note:**
+If you're using GitLab 12.0 or later, this is automatically configured. You
+can skip this section.
 
 To use GitLab as an OAuth provider so that users of your GitLab instance
 have access to Grafana:
