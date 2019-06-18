@@ -84,4 +84,33 @@ describe GitlabCtl::Util do
       expect(described_class.roles(fake_base_path)).to eq(%w[role_one role_three])
     end
   end
+
+  describe '#parse_json_file' do
+    it 'fails on malformed JSON file' do
+      malformed_json = <<~MSG
+      {
+      'foo': 'bar'
+      MSG
+      allow(File).to receive(:read).with('/tmp/foo').and_return(malformed_json)
+
+      expect { GitlabCtl::Util.parse_json_file('/tmp/foo') }.to raise_error(GitlabCtl::Errors::NodeError, "Error reading /tmp/foo, has reconfigure been run yet?")
+    end
+
+    it 'do not fail on empty json file' do
+      allow(File).to receive(:read).with('/tmp/foo').and_return('{}')
+
+      expect(GitlabCtl::Util.parse_json_file('/tmp/foo')).to eq({})
+    end
+
+    it 'fails on incomplete but valid node attribute file' do
+      incomplete_node_attributes = <<~MSG
+      {
+        "name": "a-random-server"
+      }
+      MSG
+      allow(File).to receive(:read).with('/opt/gitlab/embedded/nodes/12345.json').and_return(incomplete_node_attributes)
+
+      expect { GitlabCtl::Util.parse_json_file('/opt/gitlab/embedded/nodes/12345.json') }.to raise_error(GitlabCtl::Errors::NodeError, "Attributes not found in /opt/gitlab/embedded/nodes/12345.json, has reconfigure been run yet?")
+    end
+  end
 end
