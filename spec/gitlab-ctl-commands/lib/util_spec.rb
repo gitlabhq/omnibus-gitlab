@@ -96,10 +96,10 @@ describe GitlabCtl::Util do
       expect { GitlabCtl::Util.parse_json_file('/tmp/foo') }.to raise_error(GitlabCtl::Errors::NodeError, "Error reading /tmp/foo, has reconfigure been run yet?")
     end
 
-    it 'fails on empty json file' do
+    it 'do not fail on empty json file' do
       allow(File).to receive(:read).with('/tmp/foo').and_return('{}')
 
-      expect { GitlabCtl::Util.parse_json_file('/tmp/foo') }.to raise_error(GitlabCtl::Errors::NodeError, "Attributes not found in /tmp/foo, has reconfigure been run yet?")
+      expect(GitlabCtl::Util.parse_json_file('/tmp/foo')).to eq({})
     end
 
     it 'fails on incomplete but valid node attribute file' do
