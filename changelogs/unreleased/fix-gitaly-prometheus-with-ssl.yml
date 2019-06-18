@@ -1,0 +1,5 @@
+---
+title: 'gitaly: prometheus not working with tls enabled'
+merge_request: 3353
+author: Roger Meier
+type: fixed
