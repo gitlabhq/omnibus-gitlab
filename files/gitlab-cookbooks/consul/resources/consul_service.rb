@@ -28,8 +28,6 @@ action :create do
     }
   }
 
-  account_helper = AccountHelper.new(node)
-
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do
     recursive true
