@@ -28,8 +28,6 @@ action :create do
     }
   }
 
-  account_helper = AccountHelper.new(node)
-
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do
     recursive true
@@ -37,7 +35,6 @@ action :create do
 
   file "#{node['consul']['config_dir']}/#{service_name}-service.json" do
     content content.to_json
-    owner account_helper.consul_user
     notifies :run, 'execute[reload consul]'
   end
 end
