@@ -124,7 +124,7 @@ docs-check-links:
   before_script: []
   <<: *dedicated-runner
   script:
-    - mv doc/ /tmp/gitlab-docs/content/
+    - mv doc/ /tmp/gitlab-docs/content/omnibus
     - cd /tmp/gitlab-docs
     # Build HTML from Markdown
     - bundle exec nanoc
