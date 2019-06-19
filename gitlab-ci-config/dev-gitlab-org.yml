@@ -48,9 +48,6 @@
 .branch_template: &branch_build
   stage: package-and-image
   script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - cp support/known_hosts ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
@@ -101,9 +98,6 @@
         echo "Setting COMPILE_ASSETS env variable for auto-deploy"
         export COMPILE_ASSETS='true';
       fi
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - cp support/known_hosts ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID \naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/config
     # GPG key for package signing
     - AWS_ACCESS_KEY_ID="$SECRET_AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$SECRET_AWS_SECRET_ACCESS_KEY" aws s3 cp s3://omnibus-sig/package.sig.key .
@@ -241,9 +235,6 @@ QA-Master:
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - cp support/known_hosts ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build
     - bundle exec rake qa:push:nightly
   artifacts:
@@ -311,9 +302,6 @@ Docker-QA:
   extends: .docker_job
   stage: gitlab_com:package
   script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - cp support/known_hosts ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     - bundle exec rake qa:build qa:push:staging
   <<: *dev-tag-only
   cache: *tag-cache
@@ -561,9 +549,6 @@ QA-Tag:
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
-    - echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa
-    - cp support/known_hosts ~/.ssh/known_hosts
-    - chmod -R 0600 ~/.ssh/
     - bundle exec rake release:qa
   artifacts:
     when: on_failure
