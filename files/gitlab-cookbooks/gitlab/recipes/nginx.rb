@@ -268,6 +268,13 @@ template nginx_status_conf do
   action nginx_status_enabled ? :create : :delete
 end
 
+if nginx_status_enabled && node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+  consul_service 'nginx' do
+    ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
+    port node['gitlab']['nginx']['status']['port']
+  end
+end
+
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
 nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
 
