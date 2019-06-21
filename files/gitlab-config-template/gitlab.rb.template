@@ -1186,6 +1186,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
 
 # omnibus_gitconfig['system'] = {
+#  "core" => [%(alternateRefsPrefixes = "refs/alternates/public")],
 #  "pack" => ["threads = 1"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],

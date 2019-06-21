@@ -21,6 +21,7 @@
 ####
 default['gitlab']['bootstrap']['enable'] = true
 default['gitlab']['omnibus-gitconfig']['system'] = {
+  "core" => [%(alternateRefsPrefixes = "refs/alternates/public")],
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
   "repack" => ["writeBitmaps = true"],
