@@ -1,5 +1,0 @@
----
-title: Stop printing certificate skipped messages, instead list which certs were copied
-merge_request:
-author:
-type: other

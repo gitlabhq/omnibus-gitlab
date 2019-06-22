@@ -1,5 +1,0 @@
----
-title: Disable AuthorizedKeysFile in Docker
-merge_request: 3198
-author:
-type: performance
