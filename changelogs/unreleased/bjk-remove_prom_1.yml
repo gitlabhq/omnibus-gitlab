@@ -1,5 +1,0 @@
----
-title: Remove Prometheus 1.x support
-merge_request: 3315
-author:
-type: removed

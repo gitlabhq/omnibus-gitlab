@@ -1,5 +1,0 @@
----
-title: Enable Grafana by default and configure GitLab SSO
-merge_request: 3272
-author:
-type: changed

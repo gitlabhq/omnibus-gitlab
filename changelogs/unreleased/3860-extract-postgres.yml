@@ -1,5 +1,0 @@
----
-title: Extracted postgresql recipe logic in gitlab recipe to its own recipe
-merge_request: 2794
-author:
-type: changed

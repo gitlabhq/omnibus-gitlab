@@ -1,5 +1,0 @@
----
-title: Fix Unicorn not cleaning up stale metrics file at startup
-merge_request: 3350
-author:
-type: fixed

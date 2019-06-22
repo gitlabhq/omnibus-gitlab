@@ -1,5 +1,0 @@
----
-title: Ensure reconfigure runs with our desired version of the acme-client gem
-merge_request: 3294
-author:
-type: other

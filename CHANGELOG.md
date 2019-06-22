@@ -3,6 +3,73 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.0.0 (2019-06-22)
+
+### Removed (4 changes)
+
+- Remove old env directory cleaning. !3290
+- Remove support for skip-auto-migrations file. !3306
+- Remove TLSv1.1 support in nginx. !3307
+- Remove Prometheus 1.x support. !3315
+
+### Fixed (11 changes)
+
+- Add timeout option to pg-upgrade command. !3284
+- Ensure reconfigure has succeeded reading node attributes. !3302
+- Set default path for git storage directories if user didn't specify one. !3304
+- Get node attribute file from directory contents if hostname is empty. !3309
+- Ensure sidekiq and gitlab-monitor are restarted when the ruby version changes. !3317
+- Upgrade node-exporter to 0.18.1. !3326
+- Update Prometheus exporters. !3328
+- Handle special characters in FDW passwords. !3339
+- Hup Mattermost after a version upgrade. !3340
+- Fix Unicorn not cleaning up stale metrics file at startup. !3350
+- Don't fail on public attribute file on missing 'normal' key. !3358
+
+### Deprecated (1 change)
+
+- Mark openSUSE 42.3 as deprecated. !3334
+
+### Changed (6 changes)
+
+- Extracted postgresql recipe logic in gitlab recipe to its own recipe. !2794
+- Enable Grafana by default and configure GitLab SSO. !3272
+- Make PostgreSQL 10.7 the default version. !3291
+- Default to JSON logging when possible. !3292
+- Allow health check endpoints to be access via plain http. !3296
+- Remove old chef state before running chef commands. !3310
+
+### Performance (2 changes)
+
+- Upgrade Ruby to 2.6.3. !3119
+- Disable AuthorizedKeysFile in Docker. !3198
+
+### Added (6 changes, 1 of them is from the community)
+
+- Allow configuring an HTTP proxy for GitLab Pages. !3060 (Ben Anderson)
+- Add Pages `-insecure-ciphers` support. !3275
+- Add Pages -tls-min-version and -tls-max-version support. !3286
+- Service discovery for Prometheus via Consul. !3295
+- Replace --auth-server with --gitlab-server flag for pages. !3314
+- Make gitaly git.catfile_cache_size configurable. !3329
+
+### Other (13 changes, 2 of them are from the community)
+
+- Update python to 3.7.3 with updated libedit patches. !3274 (Takuya Noguchi)
+- GitLab-Pages can output JSON format logs. !3288
+- Ensure reconfigure runs with our desired version of the acme-client gem. !3294
+- Update sysctl to use --system option. !3298
+- Set 11.11 to be the minimum version required to upgrade to 12.0. !3300
+- Document Setting Logs to Non-JSON Format. !3303
+- Remove PG 9.6 to 9.6.8 directory symlink. !3305
+- Publish unlicensed EE AMI to Community AMIs. !3331
+- Update gitlab-elasticsearch-indexer to v1.2.0. !3331
+- Skip automatic pg-upgrade on GEO. !3338
+- Specify Ruby 2.6.3 for development. !3345
+- Update Mattermost to 5.11.0. (Harrison Healey)
+- Stop printing certificate skipped messages, instead list which certs were copied.
+
+
 ## 11.11.3 (2019-06-10)
 
 - No changes.
