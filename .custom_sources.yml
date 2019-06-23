@@ -115,3 +115,6 @@ go-crond:
 consul:
   remote: "git@dev.gitlab.org:omnibus-mirror/consul.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/consul.git"
+ohai:
+  remote: "git@dev.gitlab.org:omnibus-mirror/ohai.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ohai.git"
