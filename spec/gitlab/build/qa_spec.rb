@@ -20,6 +20,7 @@ describe Build::QA do
   describe '.clone_gitlab_rails' do
     it 'calls the git command' do
       allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+      allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
       expect(described_class).to receive(:system).with(*%W[git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab.#{$PROCESS_ID}])
 
       Build::QA.clone_gitlab_rails

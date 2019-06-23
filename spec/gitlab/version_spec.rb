@@ -9,6 +9,8 @@ describe Gitlab::Version do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns a link from custom_sources yml' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
         expect(subject.remote).to eq('git@dev.gitlab.org:gitlab/gitlab-ee.git')
       end
     end
@@ -25,6 +27,8 @@ describe Gitlab::Version do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns "remote" link from custom_sources yml' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
         expect(subject.remote).to eq('git@dev.gitlab.org:gitlab/gitlab-ee.git')
       end
     end
