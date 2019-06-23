@@ -49,7 +49,7 @@ out during the upgrade. To opt out you must execute the following before
 performing the upgrade of GitLab.
 
 ```bash
-sudo touch /etc/gitlab/disable-postgres-upgrade
+sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
 Further details and procedures for upgrading a GitLab HA cluster can be
