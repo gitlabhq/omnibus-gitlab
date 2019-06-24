@@ -327,6 +327,9 @@ Docker-QA:
 ## * Regular tagged releases are deployed to staging
 ## * Auto-deploy tagged releases are deployed to
 ##   $AUTO_DEPLOY_ENVIRONMENT, set in CI vars
+## * Regular patch releases, RCs and tags that are
+##   not auto-deploys are deployed to
+##   $PATCH_DEPLOY_ENVIRONMENT, set in CI vars
 ##
 ##  Ubuntu 16.04: used for all omnibus installation
 ##  Ubuntu 18.04: used on some non-omnibus infrastructure, we
@@ -344,7 +347,7 @@ Ubuntu-16.04-upload-deploy:
       if echo $CI_COMMIT_TAG | grep -P -q "$AUTO_DEPLOY_TAG_REGEX"; then
         export DEPLOYER_ENVIRONMENT="$AUTO_DEPLOY_ENVIRONMENT";
       else
-        export DEPLOYER_ENVIRONMENT='gstg';
+        export DEPLOYER_ENVIRONMENT='$PATCH_DEPLOY_ENVIRONMENT';
       fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
