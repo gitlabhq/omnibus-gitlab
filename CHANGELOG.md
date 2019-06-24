@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.0.1 (2019-06-24)
+
+### Fixed (1 change)
+
+- Fix upgrade version check in preinst to handle double-decimal-digit versions. !3369
+
+
 ## 12.0.0 (2019-06-22)
 
 ### Removed (4 changes)
