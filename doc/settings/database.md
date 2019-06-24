@@ -352,7 +352,7 @@ To change the location of the PostgreSQL data
 1. Run `gitlab-ctl reconfigure`
 1. Start GitLab `gitlab-ctl start`
 
-## Using a MySQL database management server
+## Using a MySQL database management server (Enterprise Edition only)
 
 >**Note:**
 GitLab 12.0 is the last version with support for MySQL (and MariaDB). Users will
