@@ -73,6 +73,11 @@ before_script:
   - mkdir -p ~/.ssh
   - mkdir -p ~/.aws
   - mkdir -p cache
+  - if [ -n "$DEV_GITLAB_SSH_KEY" ]; then
+      echo "$DEV_GITLAB_SSH_KEY" > ~/.ssh/id_rsa;
+      cp support/known_hosts ~/.ssh/known_hosts;
+      chmod -R 0600 ~/.ssh/;
+    fi
   - bundle install -j $(nproc) --binstubs --path gems --without rubocop
   # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
   # This will alter Gemfile.lock file. As part of the build pipeline, we are
