@@ -1,0 +1,6 @@
+---
+title: Fix upgrade version check in preinst to handle double-decimal-digit
+  versions
+merge_request: 3369
+author:
+type: fixed

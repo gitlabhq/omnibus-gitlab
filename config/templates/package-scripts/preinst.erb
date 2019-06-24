@@ -9,6 +9,11 @@ mkdir -p /var/log/gitlab/reconfigure
 
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
 
+greater_version()
+{
+  test "$(printf '%s\n' "$@" | sort -V | tail -n 1)" = "$1";
+}
+
 config_check() {
 if [ -e "${DEST_DIR}/embedded/service/omnibus-ctl/check_config.rb" ] ; then
   ${DEST_DIR}/bin/gitlab-ctl check-config --version=${NEW_MINOR_VERSION}
@@ -34,7 +39,7 @@ upgrade_check() {
     # (i) if it is a major version jump
     # (ii) if existing version is less than required minimum version
     if test ${OLD_MAJOR_VERSION} -lt ${NEW_MAJOR_VERSION}; then
-      if ! $(echo ${OLD_MINOR_VERSION} | awk -v MIN_VERSION="$MIN_VERSION" '$NF+0 < MIN_VERSION {exit 1}'); then
+      if ! greater_version $OLD_MINOR_VERSION $MIN_VERSION; then
         notify "It seems you are upgrading from ${OLD_MAJOR_VERSION}.x version series"
         notify "to ${NEW_MAJOR_VERSION}.x series. It is recommended to upgrade"
         notify "to the last minor version in a major version series first before"
