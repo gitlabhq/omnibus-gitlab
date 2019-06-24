@@ -2,6 +2,15 @@ require 'chef_helper'
 
 describe 'gitlab::default' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:gitconfig_hash) do
+    {
+      "core" => [%(alternateRefsPrefixes = "refs/alternates/public")],
+      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
+      "pack" => ["threads = 1"],
+      "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -23,20 +32,19 @@ describe 'gitlab::default' do
       mode: '0755'
     )
 
-    gitconfig_hash = {
-      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-      "pack" => ["threads = 1"],
-      "repack" => ["writeBitmaps = true"],
-      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-    }
-
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
       variables: { gitconfig: gitconfig_hash }
     )
   end
 
   it 'creates the system gitconfig directory and file' do
-    stub_gitlab_rb(omnibus_gitconfig: { system: { receive: ["fsckObjects = true", "advertisePushOptions = true"], pack: ["threads = 2"] } })
+    stub_gitlab_rb(omnibus_gitconfig: {
+                     system: {
+                       core: [%(alternateRefsPrefixes = "refs/alternates/public")],
+                       receive: ["fsckObjects = true", "advertisePushOptions = true"],
+                       pack: ["threads = 2"]
+                     }
+                   })
 
     expect(chef_run).to create_directory('/opt/gitlab/embedded/etc').with(
       user: 'root',
@@ -44,13 +52,7 @@ describe 'gitlab::default' do
       mode: '0755'
     )
 
-    gitconfig_hash = {
-      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-      "pack" => ["threads = 2"],
-      "repack" => ["writeBitmaps = true"],
-      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-    }
-
+    gitconfig_hash['pack'] = ["threads = 2"]
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
       source: 'gitconfig-system.erb',
       variables: { gitconfig: gitconfig_hash },

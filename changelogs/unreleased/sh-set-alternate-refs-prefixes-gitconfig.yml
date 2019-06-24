@@ -1,0 +1,5 @@
+---
+title: Fix slow pushes for repositories using object deduplication
+merge_request: 3364
+author:
+type: performance
