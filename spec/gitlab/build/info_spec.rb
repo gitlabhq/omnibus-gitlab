@@ -162,6 +162,9 @@ describe Build::Info do
     end
 
     describe 'ALTERNATIVE_SOURCES variable not specified' do
+      before do
+        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+      end
       it 'returns dev repo for GitLab CE' do
         allow(Build::Info).to receive(:package).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlabhq.git")
