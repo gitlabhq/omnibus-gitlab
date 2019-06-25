@@ -53,6 +53,10 @@ been removed:
 
 ## Changes introduced in minor versions
 
+### 11.2
+
+1.  Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/security/rack_attack.html#settings).
+
 ### 11.4
 
 1.  Version of bundled Redis has been upgraded to 3.2.12. This is a critical
