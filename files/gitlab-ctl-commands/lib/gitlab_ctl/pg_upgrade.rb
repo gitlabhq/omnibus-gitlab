@@ -64,6 +64,10 @@ module GitlabCtl
       run_query('SHOW LC_COLLATE')
     end
 
+    def fetch_lc_ctype
+      run_query('SHOW LC_CTYPE')
+    end
+
     def fetch_server_encoding
       run_query('SHOW SERVER_ENCODING')
     end
