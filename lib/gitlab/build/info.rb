@@ -16,6 +16,11 @@ module Build
         "gitlab-ce"
       end
 
+      def commit_sha
+        commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
+        commit_sha_raw[0, 8]
+      end
+
       # For auto-deploy builds, we set the semver to the following which is
       # derived directly from the auto-deploy tag:
       #   MAJOR.MINOR.PIPELINE_ID+<ee ref>-<omnibus ref>
@@ -34,10 +39,8 @@ module Build
         else
           latest_git_tag = Info.latest_tag.strip
           latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
-          commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
-          commit_sha = commit_sha_raw[0, 8]
           ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
-          [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
+          [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), Info.commit_sha].compact.join('.')
         end
       end
 
@@ -72,6 +75,10 @@ module Build
         else
           Gitlab::Util.get_env('GITLAB_VERSION')
         end
+      end
+
+      def gitlab_version_and_commit_sha
+        "#{Info.gitlab_version}+#{Info.commit_sha}"
       end
 
       def previous_version

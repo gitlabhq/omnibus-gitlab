@@ -36,12 +36,6 @@ describe 'qa', type: :rake do
       allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
     end
 
-    it 'pushes staging images correctly' do
-      expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
-
-      Rake::Task['qa:push:staging'].invoke
-    end
-
     it 'pushes stable images correctly' do
       expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
       expect(Build::QAImage).to receive(:tag_and_push_to_dockerhub).with(gitlab_version, initial_tag: 'latest')
@@ -79,6 +73,31 @@ describe 'qa', type: :rake do
       expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(image_tag)
 
       Rake::Task['qa:push:triggered'].invoke
+    end
+
+    describe ':staging' do
+      before do
+        Rake::Task['qa:push:staging'].reenable
+
+        allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+      end
+
+      it 'pushes staging images correctly' do
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
+
+        Rake::Task['qa:push:staging'].invoke
+      end
+
+      it 'pushes staging auto-deploy images correctly' do
+        allow(Build::Info).to receive(:current_git_tag).and_return("#{gitlab_version}.12345+5159f2949cb.59c9fa631")
+        allow(Build::Info).to receive(:commit_sha).and_return('5159f2949cb')
+
+        expect(Build::Check).to receive(:is_auto_deploy?).and_return(true)
+
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with("#{gitlab_version}+5159f2949cb")
+
+        Rake::Task['qa:push:staging'].invoke
+      end
     end
   end
 

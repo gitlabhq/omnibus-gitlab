@@ -309,6 +309,9 @@ Docker-QA:
   - docker-builder
   dependencies: []
   retry: 1
+  # Also build for auto-deploy tags
+  except:
+    variables: []
 
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
