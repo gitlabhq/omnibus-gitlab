@@ -40,7 +40,7 @@ package to your GitLab server.
 
 ## Updating from GitLab `6.6.0.pre1` to `6.6.4`
 
-1. First, download the latest package from https://about.gitlab.com/downloads/
+1. First, download the latest package from <https://about.gitlab.com/downloads/>
    to your GitLab server.
 
 

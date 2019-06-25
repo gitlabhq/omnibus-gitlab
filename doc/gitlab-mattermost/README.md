@@ -280,7 +280,7 @@ If this is not the case, there are two options:
 
 Consider these notes when upgrading GitLab Mattermost:
 
-1. Starting in Mattermost v4.2, user-supplied URLs such as those used for Open Graph metadata, webhooks, or slash commands will no longer be allowed to connect to reserved IP addresses including loopback or link-local addresses used for internal networks by default. This change may cause private integrations to break in testing environments, which may point to a URL such as http://127.0.0.1:1021/my-command.
+1. Starting in Mattermost v4.2, user-supplied URLs such as those used for Open Graph metadata, webhooks, or slash commands will no longer be allowed to connect to reserved IP addresses including loopback or link-local addresses used for internal networks by default. This change may cause private integrations to break in testing environments, which may point to a URL such as `http://127.0.0.1:1021/my-command`.
     - If you point private integrations to such URLs, you may whitelist such domains, IP addresses, or CIDR notations via the [AllowedUntrustedInternalConnections config setting](https://github.com/mattermost/docs/blob/05cd1685deff85b2a2c5130d889f935b808ae159/source/administration/config-settings.rst#allow-untrusted-internal-connections-to) in your local environment. Although not recommended, you may also whitelist the addresses in your production environments.
     - Push notification, OAuth 2.0 and WebRTC server URLs are trusted and not affected by this setting.
 1. Starting in Mattermost v4.2, Mattermost now handles multiple content-types for integrations. Make sure your integrations have been set to use the appropriate content-type.

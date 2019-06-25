@@ -38,7 +38,7 @@ Sometimes, softwares' source code may have to be patched in order to use it with
 
 `**Note:` Patches may be found inside the [config/patches](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/patches) folder in the repository.
 
-For more extensive changes it may be more convenient to track the changes required in a branch on the mirror. The pattern to follow for this is to create a branch from an upstream tag or sha making reference to that branchpoint in the name of the branch. As an example from the omnibus codebase, `gitlab-omnibus-v5.6.10` is based on the `v5.6.10` tag of the upstream project. This allows for us to generate a comparison link like https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10 to identify what local changes are present.
+For more extensive changes it may be more convenient to track the changes required in a branch on the mirror. The pattern to follow for this is to create a branch from an upstream tag or sha making reference to that branchpoint in the name of the branch. As an example from the omnibus codebase, `gitlab-omnibus-v5.6.10` is based on the `v5.6.10` tag of the upstream project. This allows for us to generate a comparison link like `https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10` to identify what local changes are present.
 
 ## Global GitLab configuration template
 
