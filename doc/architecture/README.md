@@ -10,21 +10,27 @@ An in-depth video walkthrough of these components is available [on YouTube](http
 
 ### GitLab project definition file
 
-A primary component of the omnibus architecture is a project definition file that lists the project details and dependency relations to external softwares and libraries. The main components of this project definition file are
- 1. Project metadata - name, description, etc.
- 2. License details of the project
- 3. Dependency list - List of external tools and softwares which are required to build/run GitLab and sometimes their metadata
- 4. Global configuration variables used for installation of GitLab - Installation directory, system user, system group, etc.
+A primary component of the omnibus architecture is a project definition file that lists the project details and dependency relations to external softwares and libraries.
+
+The main components of this project definition file are:
+
+1. Project metadata - name, description, etc.
+1. License details of the project.
+1. Dependency list - List of external tools and softwares which are required to build/run GitLab and sometimes their metadata.
+1. Global configuration variables used for installation of GitLab - Installation directory, system user, system group, etc.
 
 `**Note:` Project definition may be found at [config/projects/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb).
 
 ### Individual software definitions
 
-Omnibus-GitLab follows a batteries-included style of distribution. All the software, libraries and binaries necessary for the proper functioning of a GitLab instance is provided as part of the package, in an embedded format. So another one of the major components of the omnibus architecture is the software definitions and configurations. A typical software configuration consist of the 4 parts
- 1. Version of the software required.
- 2. License of the software.
- 3. Dependencies for the software to be built/run.
- 4. Commands needed to build the software and embed it inside the package.
+Omnibus-GitLab follows a batteries-included style of distribution. All the software, libraries and binaries necessary for the proper functioning of a GitLab instance is provided as part of the package, in an embedded format.
+
+So another one of the major components of the omnibus architecture is the software definitions and configurations. A typical software configuration consist of the 4 parts:
+
+1. Version of the software required.
+1. License of the software.
+1. Dependencies for the software to be built/run.
+1. Commands needed to build the software and embed it inside the package.
 
 `**Note:` Software definitions may be found inside [config/software/](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/software) folder
 
@@ -32,12 +38,11 @@ Sometimes, softwares' source code may have to be patched in order to use it with
 
 `**Note:` Patches may be found inside the [config/patches](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/patches) folder in the repository.
 
-For more extensive changes it may be more convenient to track the changes required in a branch on the mirror.  The pattern to follow for this is to create a branch from an upstream tag or sha making reference to that branchpoint in the name of the branch.  As an example from the omnibus codebase, `gitlab-omnibus-v5.6.10` is based on the `v5.6.10` tag of the upstream project.  This allows for us to generate a comparison link like https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10 to identify what local changes are present.
+For more extensive changes it may be more convenient to track the changes required in a branch on the mirror. The pattern to follow for this is to create a branch from an upstream tag or sha making reference to that branchpoint in the name of the branch. As an example from the omnibus codebase, `gitlab-omnibus-v5.6.10` is based on the `v5.6.10` tag of the upstream project. This allows for us to generate a comparison link like https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10 to identify what local changes are present.
 
 ## Global GitLab configuration template
 
 Omnibus-GitLab ships with it a single configuration file that can be used to configure each and every part of the GitLab instance, which will be installed to the user's machine. This configuration file acts as the canonical source of all configuration settings that will be applied to the GitLab instance. It lists the general settings for a GitLab instance as well as various options for different components. The common structure of this file consist of configurations specified in the format `<component>['<setting>'] = <value>`. All the available options are listed in the template, but all except the ones necessary for basic working of GitLab are commented out by default. Users may uncomment them and specify corresponding values, if necessary.
-
 
 `**Note:` Global configuration template may be found at [files/gitlab-config-template/gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
@@ -101,16 +106,18 @@ Omnibus-GitLab repository uses ChefSpec to test the cookbooks and recipes it shi
 So, of the components described above, some (software definitions, project metadata, tests, etc.) find use during the package building, in a build environment, and some (Chef cookbooks and recipes, GitLab configuration file, Runit, gitlab-ctl commands, etc.) are used to configure the user's installed instance.
 
 ## Work life cycle of Omnibus-GitLab
+
 ### What happens during package building
 
 The type of packages being built depends on the OS the build process is run. If build is done on a Debian environment, a `.deb` package will be created. What happens during package building can be summarized to the following steps
-1. Fetching sources of dependency softwares
-    1. Parsing software definitions to find out corresponding versions
-    1. Getting source code from remotes or cache
-1. Building individual software components
-    1. Setting up necessary environment variables and flags
-    1. Applying patches, if applicable
-    1. Performing the build and installation of the component, which involves installing it to appropriate location (inside `/opt/gitlab`)
+
+1. Fetching sources of dependency softwares:
+   1. Parsing software definitions to find out corresponding versions.
+   1. Getting source code from remotes or cache.
+1. Building individual software components:
+   1. Setting up necessary environment variables and flags.
+   1. Applying patches, if applicable.
+   1. Performing the build and installation of the component, which involves installing it to appropriate location (inside `/opt/gitlab`).
 1. Generating license information of all bundled components - including external softwares, Ruby gems, JS modules etc. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by gitlab-rails)
 1. Checking license of the components to make sure we are not shipping a component with a non-compatible license
 1. Running a health check on the package to make sure the binaries are linked against available libraries. For bundled libraries, the binaries should link against them and not the one available globally.
@@ -133,19 +140,20 @@ This cache makes sense only if it is retained across builds. For that, we use th
 Both types of cache reduce the overall build time of GitLab and dependencies on external factors.
 
 The cache mechanism can be summarised as follows:
-1. For each software dependency
-  1. Parse definition to understand version and SHA256
-  1. If the source file tarball available in artifact cache in Amazon bucket matches the version and SHA256, use it
-  1. Else, download the correct tarball from the upstream remote
-1. Get build cache from CI cache
-1. For each software dependency
-  1. If cache has been dirtied, break the loop
-  1. Else, checkout the snapshot
-1. If there are remaining dependencies
-  1. For each remaining  dependency
-    1. Build the dependency
-    2. Create a snapshot and commit it
-1. Push back the new build cache to CI cache
+
+1. For each software dependency:
+   1. Parse definition to understand version and SHA256.
+   1. If the source file tarball available in artifact cache in Amazon bucket matches the version and SHA256, use it.
+   1. Else, download the correct tarball from the upstream remote.
+1. Get build cache from CI cache.
+1. For each software dependency:
+   1. If cache has been dirtied, break the loop.
+   1. Else, checkout the snapshot.
+1. If there are remaining dependencies:
+   1. For each remaining  dependency:
+      1. Build the dependency.
+      1. Create a snapshot and commit it.
+1. Push back the new build cache to CI cache.
 
 ### What happens during `gitlab-ctl reconfigure`
 

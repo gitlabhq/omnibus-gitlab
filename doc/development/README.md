@@ -54,19 +54,20 @@ specified issue.
 A good Merge Request is expected to have the following components, based on
 their applicability:
 
- 1. Full Merge Request description explaining why this change was needed
- 2. Code for implementing feature/bugfix
- 3. Tests, as explained in [Writing Tests](#writing-tests)
- 4. Documentation explaining the change
- 5. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
- 6. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
+1. Full Merge Request description explaining why this change was needed
+1. Code for implementing feature/bugfix
+1. Tests, as explained in [Writing Tests](#writing-tests)
+1. Documentation explaining the change
+1. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+1. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
 
 **`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
 
 [^1]:
-  1. Go to Settings -> CI/CD
-  1. Expand Runners settings
-  1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"
+
+1. Go to Settings -> CI/CD
+1. Expand Runners settings
+1. If shared runners are not enabled, click on the button labeled "Enable shared Runners"
 
 ## Validating changes to a single software dependency
 

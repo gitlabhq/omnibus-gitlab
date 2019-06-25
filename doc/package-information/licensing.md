@@ -33,7 +33,7 @@ that is covered by many different licenses. Those licenses are provided and
 compiled as stated above.
 
 Starting with version 8.13, GitLab has placed an additional step into the
-omnibus-gitlab.  The `license_check` step calls
+omnibus-gitlab. The `license_check` step calls
 `lib/gitlab/tasks/license_check.rake`, which checks the compiled `LICENSE` file
 against the current list of approved and questionable licenses as denoted in the
 arrays at the top of the script. This script will output one of `Good`,
@@ -41,12 +41,12 @@ arrays at the top of the script. This script will output one of `Good`,
 omnibus-gitlab package.
 
 - `Good`: denotes a license that is approved for all usage types, within GitLab and
-omnibus-gitlab.
+  omnibus-gitlab.
 - `Unknown`: denotes a license that is not recognized in the list of 'good' or 'bad',
-which should be immediately reviewed for implications of use.
+  which should be immediately reviewed for implications of use.
 - `Check`: denotes a license that has the potential be incompatible with GitLab itself,
-and thus should be checked for how it is used as a part of the omnibus-gitlab package
-to ensure compliance.
+  and thus should be checked for how it is used as a part of the omnibus-gitlab package
+  to ensure compliance.
 
 This list is currently sourced from the [GitLab development documentation on licensing](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/licensing.md).
 However, due to the nature of the omnibus-gitlab package the licenses may not apply

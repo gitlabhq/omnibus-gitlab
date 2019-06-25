@@ -13,7 +13,6 @@ computer in order to test GitLab.
  - For the Ansible based setup you need to be on a RHEL compatible host
    - RHEL/CentOS/Fedora/Atomic
 
-
 ## Setup OpenShift Origin
 
 The first thing you need to interact with OpenShift Origin, are the `oc` client tools for your terminal:
@@ -124,39 +123,39 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 1. Create each of the host paths on your own machine and ensure they have a `777` filemode
 
-1. You can now login to the UI at https://localhost:8443/console/
+1. You can now login to the UI at <https://localhost:8443/console/>
 
 ### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. Follow the [advanded install docs](https://docs.openshift.org/latest/install_config/install/advanced_install.html).
+You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.org/latest/install_config/install/advanced_install.html).
 
-You can find the Ansible playbooks at: https://github.com/openshift/openshift-ansible
+You can find the Ansible playbooks at: <https://github.com/openshift/openshift-ansible>
 
 After setting it all up, you will need to make sure you deploy the registry and router mentioned in the [what's next section](https://docs.openshift.org/latest/install_config/install/advanced_install.html#what-s-next)
 
 In order to finish setting up the cluster, you need to create a project and allow your project's service account to run as anyuid.
 
- - `oc new-project <your_project_name>``
- - `oc edit scc anyuid` and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
+- `oc new-project <your_project_name>`
+- `oc edit scc anyuid` and add `system:serviceaccount:<namespace>:<gitlab-app-name>-user` (`gitlab-app-name` is the first config option when installing GitLab, and defaults to `gitlab-ce`)
 
 And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up steps](#docker-oc-cluster-up)
-
 
 ## Add the GitLab template to OpenShift
 
 **`Note`** This section is deprecated. Check [the open issue to for more details](https://gitlab.com/gitlab-org/distribution/team-tasks/issues/263).
 
-Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required)
-   - `oc login -u system:admin` for the docker cluster up
-   - From the root of your omnibus-gitlab repo, `oc create -f docker/openshift-template.json -n openshift`
+Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required):
+
+- `oc login -u system:admin` for the docker cluster up
+- From the root of your omnibus-gitlab repo, `oc create -f docker/openshift-template.json -n openshift`
 
 ## Install GitLab
 
 After having setup the template:
 
 1. Go to the web console for OpenShift
-2. Create a new project or use an existing one that doesn't already have GitLab
-3. Add to Project, and add the GitLab-Ce template
+1. Create a new project or use an existing one that doesn't already have GitLab
+1. Add to Project, and add the GitLab-Ce template
 
 ## Removing the GitLab template
 

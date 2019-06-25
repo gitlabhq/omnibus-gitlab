@@ -200,7 +200,7 @@ the message "Skipping `cert.pem`" after running `gitlab-ctl reconfigure`, that
 means there may be one of two issues:
 
 1. The file in `/etc/gitlab/ssl/trusted-certs/` is a symlink
-2. The file is not a valid PEM or DER-encoded certificate
+1. The file is not a valid PEM or DER-encoded certificate
 
 Test the certificate's validity using the commands below:
 
@@ -210,6 +210,7 @@ $ /opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-cert
 ```
 
 Invalid certificate files produce the following output:
+
 ```sh
 unable to load certificate
 140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
@@ -241,7 +242,7 @@ If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you 
 ## Details on how GitLab and SSL work
 
 GitLab-Omnibus includes its own library of OpenSSL and links all compiled
-programs (e.g. Ruby, PostgreSQL, etc.) against this library.  This library is
+programs (e.g. Ruby, PostgreSQL, etc.) against this library. This library is
 compiled to look for certificates in `/opt/gitlab/embedded/ssl/certs`.
 
 GitLab-Omnibus manages custom certificates by symlinking any certificate that
@@ -276,19 +277,19 @@ Net::HTTP.get(URI('https://www.google.com'))
 This is what happens behind the scenes:
 
 1. The "require `openssl`" line causes the interpreter to load `/opt/gitlab/embedded/lib/ruby/2.3.0/x86_64-linux/openssl.so`.
-2. The `Net::HTTP` call then attempts to read the default certificate bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`.
-3. SSL negotiation occurs.
-4. The server sends its SSL certificates.
-4. If the certificates that are sent are covered by the bundle, SSL finishes successfully.
-5. Otherwise, OpenSSL may validate other certificates by searching for files
-that match their fingerprints inside the predefined certificate directory. For
-example, if a certificate has the fingerprint `7f279c95`, OpenSSL will attempt
-to read `/opt/gitlab/embedded/ssl/certs/7f279c95.0`.
+1. The `Net::HTTP` call then attempts to read the default certificate bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`.
+1. SSL negotiation occurs.
+1. The server sends its SSL certificates.
+1. If the certificates that are sent are covered by the bundle, SSL finishes successfully.
+1. Otherwise, OpenSSL may validate other certificates by searching for files
+   that match their fingerprints inside the predefined certificate directory. For
+   example, if a certificate has the fingerprint `7f279c95`, OpenSSL will attempt
+   to read `/opt/gitlab/embedded/ssl/certs/7f279c95.0`.
 
 Note that the OpenSSL library supports the definition of `SSL_CERT_FILE` and
 `SSL_CERT_DIR` environment variables. The former defines the default
 certificate bundle to load, while the latter defines a directory in which to
-search for more certificates.  These variables should not be necessary if you
+search for more certificates. These variables should not be necessary if you
 have added certificates to the `trusted-certs` directory. However, if for some
 reason you need to set them, they can be [defined as environment
 variables](environment-variables.md). For example:

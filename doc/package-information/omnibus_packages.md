@@ -7,13 +7,13 @@ These methods are great for physical and virtual machine installations, and simp
 
 ## Goals
 
-We have a few core goals with these packages
+We have a few core goals with these packages:
+
 1. Extremely easy to install, upgrade, maintain.
 1. Support for a wide variety of operating systems
 1. Wide support of cloud service providers
 
 ## GitLab Omnibus Architecture
-
 
 GitLab in its core is a Ruby on Rails project. However, GitLab as a whole
 application is more complex and has multiple components. If these components are
@@ -39,11 +39,11 @@ installation.
 For applications such as GitLab, external dependencies usually bring the following
 challenges:
 
-* Keeping versions in sync between direct and indirect dependencies
-* Availability of a version on a specific Operating System
-* Version changes can introduce or remove previously used configuration
-* Security implications when library is marked as vulnerable but does not have
-a new version released yet
+- Keeping versions in sync between direct and indirect dependencies
+- Availability of a version on a specific Operating System
+- Version changes can introduce or remove previously used configuration
+- Security implications when library is marked as vulnerable but does not have
+  a new version released yet
 
 Keep in mind that if a dependency exists on your Operating System, it does not
 necessarily exist on other supported OSs.
@@ -82,11 +82,11 @@ reasons might not be good enough for you to not use the omnibus package.
 There are two things to keep in mind before going down this route:
 
 1. Getting support for any problems
-you encounter might be more difficult due to the number of possibilities that exist
-when using a library version that is not tested by majority of users.
+   you encounter might be more difficult due to the number of possibilities that exist
+   when using a library version that is not tested by majority of users.
 1. Omnibus package also allows shutting off of any services that you do not need,
-if you need to run a component independently. For example, you can use a
-[non-bundled PG database] with the omnibus package.
+   if you need to run a component independently. For example, you can use a
+   [non-bundled PG database] with the omnibus package.
 
 Keep in mind that a non-standard solution like the omnibus package
 might be a better fit when the application has a number of moving parts.
@@ -104,7 +104,7 @@ what was noted above:
 1. Very simple to get started.
 1. Upgrading to the latest version is extremely simple.
 1. Running separate services in multiple containers and keeping them running
-can be more complex and might not be required for a given install
+   can be more complex and might not be required for a given install.
 
 This method is useful for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation. This method is a great introduction, and will work well for smaller organizations.
 

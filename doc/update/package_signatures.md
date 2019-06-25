@@ -18,7 +18,7 @@ Run `rpm -q gpg-pubkey-f27eab47-5980fed7 --qf '%{name}-%{version}-%{release} -->
 the public key, or `package gpg-pubkey-f27eab47 is not installed`. If the key is
 not present, perform the following steps:
 
-```
+```sh
 rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
 
@@ -26,8 +26,8 @@ rpm --import https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-c
 
 The simplest method of checking if package signature checking is active on an existing install is to compare the content of the repository file in use.
 
-* Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`
-* Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo` should output
+- Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`
+- Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo` should output
     ```
     repo_gpgcheck=1
     gpgcheck=1
@@ -44,6 +44,7 @@ If the file does not exist, you don't have the repository installed. If the file
 The `rpm` tool and related package managers (`yum`,`zypper`) directly support the automatic verification of packages without intervention. If you used the automated repository configuration script after signed packages became available, then you will have no additional steps required. If you installed prior to the release of signed packages, you can either make the necessary changes, or re-run the automatic repository configuration script as found on the [Installation][install] page.
 
 #### Yum (RedHat, CentOS)
+
 1. Enable GPG checking of the packages
    ```
    # sed -i'' 's/^gpgcheck=0/gpgcheck=1/' /etc/yum.repos.d/gitlab_gitlab-ce.repo
@@ -62,6 +63,7 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
    ```
 
 #### Zypper (SuSE/SLES)
+
 1. Enable GPG checking of the packages
    ```
    # sed -i'' 's/pkg_gpgcheck=0/pkg_gpgcheck=1/' /etc/zypp/repos.d/gitlab_gitlab-ce.repo
