@@ -3,7 +3,7 @@
 In order to add a new component to GitLab, you should follow these steps:
 
 1. [Fetch and compile the software during build](#fetch-and-compile-the-software-during-build)
-2. [Add a dependency for the software definition to another component](#add-a-dependency-for-the-software-definition-to-another-component)
+1. [Add a dependency for the software definition to another component](#add-a-dependency-for-the-software-definition-to-another-component)
 
 ## Fetch and compile the software during build
 
@@ -16,7 +16,7 @@ When adding a component that should be fetched from git the clone address of the
 repositories of the local mirror and upstream should be added to
 `/.custom_sources.yml`.
 
-The local mirror should be created in the https://dev.gitlab.org/omnibus-mirror
+The local mirror should be created in the <https://dev.gitlab.org/omnibus-mirror>
 project by a member of the Distribution team.  It should have the
 `omnibus-builder deploy key` enabled.
 

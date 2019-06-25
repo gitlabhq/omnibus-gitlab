@@ -9,7 +9,7 @@ New GitLab templates for OpenShift are prepared as part of our our [cloud image 
 
 ## Update the template to latest GitLab release
 
-Within the template we reference our Docker image. Go to https://store.docker.com/community/images/gitlab/gitlab-ce/tags
+Within the template we reference our Docker image. Go to <https://store.docker.com/community/images/gitlab/gitlab-ce/tags>
 and find the newest descriptive tag. e.g. `8.13.3-ce.0`
 
 Then update the image stream in the template with the name and tag:
@@ -64,9 +64,9 @@ For setting up a OpenShift Origin development environment for testing see
 Set up a new GitLab install using the updated template. Smoke test the install:
 
 1. Login works
-2. Create project succeeds
-3. Readme can be created through the UI
-4. Repo can be clone and pushed to over http
+1. Create project succeeds
+1. Readme can be created through the UI
+1. Repo can be clone and pushed to over http
 
 ## Submit new Merge Request
 

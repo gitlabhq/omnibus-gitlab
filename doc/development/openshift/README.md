@@ -18,8 +18,8 @@ computer in order to test GitLab.
 The first thing you need to interact with OpenShift Origin, are the `oc` client tools for your terminal:
 
 1. Download and install the OpenShift Origin Client Tools onto your path if you don't already have them.
-   - Found here: https://github.com/openshift/origin/releases
-   - Example: https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz
+   - Found here: <https://github.com/openshift/origin/releases>
+   - Example: <https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz>
 
 Next you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
 on a cloud machine, use minishift on your local machine (uses kvm or xhyve), or setup an instance
@@ -27,7 +27,7 @@ using docker for the master, and your own machine as the slave using `oc cluster
 
 ### Minishift
 
-Installation instructions for Minishift can be found at https://docs.openshift.org/latest/minishift/getting-started/installing.html
+Installation instructions for Minishift can be found at <https://docs.openshift.org/latest/minishift/getting-started/installing.html>
 
 1. Before installing Minishift you need to install the proper docker machine driver.
    - For Linux, install the [kvm driver](https://minishift.io/docs/docker-machine-drivers.html#kvm-driver)
@@ -45,7 +45,7 @@ Installation instructions for Minishift can be found at https://docs.openshift.o
 
 ### Docker oc cluster up
 
-If you have Docker installed, you can setup OpenShift Origin on your local machine: https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md
+If you have Docker installed, you can setup OpenShift Origin on your local machine: <https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md>
 
 `**Note:`this currently does not start if you are using docker-ce/ee with the new version scheme (17.xx)
 

@@ -127,7 +127,7 @@ GitLab includes support for running with separate redis instances for different 
 ## Redis Sentinel
 
 For details on configuring Redis Sentinel, see
-https://docs.gitlab.com/ce/administration/high_availability/redis.html.
+<https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
 
 ## Setting the Redis Cache instance as an LRU
 

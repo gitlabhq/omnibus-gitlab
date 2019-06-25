@@ -1,8 +1,8 @@
 # Adding new gitlab-ctl commands
 
-New gitlab-ctl commands can be added to two directory : `files/gitlab-ctl-commands` and` files/gitlab-ctl-commands-ee`.  Chef stores gitlab-ctl commands in `/opt/gitlab/embedded/service/omnibus-ctl`
+New gitlab-ctl commands can be added to two directory : `files/gitlab-ctl-commands` and` files/gitlab-ctl-commands-ee`. Chef stores gitlab-ctl commands in `/opt/gitlab/embedded/service/omnibus-ctl`
 
-There are two main functions you will use to add commands (https://github.com/chef/omnibus-ctl):
+There are two main functions you will use to add commands (<https://github.com/chef/omnibus-ctl>):
 
 ### add_command_under_category(string, string, string, int, ruby_block)
 
@@ -11,9 +11,9 @@ This method will add a new command to your ctl under a category, useful for grou
 Input arguments:
 
 1. Name of the command.
-2. Category of the command. It should be string consisting of only characters and "-". If the category does not exist, it will be added. Default categories are "general" and "service-management" (if the latter is enabled).
-3. Description. This will be outputted below the command name when the help command is run.
-4. Ruby block. Ruby code to be executed when your command is run (arguments to that command will be passed into the block).
+1. Category of the command. It should be string consisting of only characters and "-". If the category does not exist, it will be added. Default categories are "general" and "service-management" (if the latter is enabled).
+1. Description. This will be outputted below the command name when the help command is run.
+1. Ruby block. Ruby code to be executed when your command is run (arguments to that command will be passed into the block).
 
 ### add_command(string, string, int, ruby_block)
 
