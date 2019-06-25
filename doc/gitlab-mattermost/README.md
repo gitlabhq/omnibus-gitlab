@@ -100,10 +100,11 @@ Starting in GitLab 11.0, Mattermost can be configured using the Mattermost Syste
 Mattermost settings and where they can be set is available [in the Mattermost documentation](https://docs.mattermost.com/administration/config-settings.html).
 
 While using the System Console is recommended, you can also configure Mattermost using one of the following:
+
 1. You can edit the Mattermost configuration directly through `/var/opt/gitlab/mattermost/config.json`.
 1. You can specify environment variables used to run Mattermost by changing the `mattermost['env']` setting in
-`gitlab.rb`. Any settings configured in this way will be disabled from the System Console and cannot be changed
-without restarting Mattermost.
+   `gitlab.rb`. Any settings configured in this way will be disabled from the System Console and cannot be changed
+   without restarting Mattermost.
 
 ### Prior to GitLab 11.0
 
@@ -273,7 +274,7 @@ If this is not the case, there are two options:
 
 1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`
    This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
-2. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below).
+1. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently (see below).
 
 **Special Considerations**
 
@@ -311,8 +312,8 @@ in preparation for GitLab 11.0:
 
 1. Upgrade to version 10.x which supports the new `mattermost['env']` setting.
 1. Configure any settings not listed above through the `mattermost['env']` setting. Mattermost requires
-environment variables to be provided in `MM_<CATEGORY>SETTINGS_<ATTRIBUTE>` format. Below is an example
-of how to convert the old settings syntax to the new one.
+   environment variables to be provided in `MM_<CATEGORY>SETTINGS_<ATTRIBUTE>` format. Below is an example
+   of how to convert the old settings syntax to the new one.
 
 The following settings in `gitlab.rb`:
 
@@ -354,11 +355,11 @@ for details about categories, configuration values, etc.
 
 There are a few exceptions to this rule:
 
- 1. `ServiceSettings.ListenAddress` configuration of Mattermost is configured
-    by `mattermost['service_address']` and `mattermost['service_port']` settings.
- 2. Configuration settings named in an inconsistent way are given in the
-    following table. Use these mappings while converting them to environment
-    variables.
+1. `ServiceSettings.ListenAddress` configuration of Mattermost is configured
+   by `mattermost['service_address']` and `mattermost['service_port']` settings.
+1. Configuration settings named in an inconsistent way are given in the
+   following table. Use these mappings while converting them to environment
+   variables.
 
 |`gitlab.rb` configuration|Environment variable|
 |---|---|
@@ -379,14 +380,12 @@ There are a few exceptions to this rule:
 |`mattermost['webrtc_gateway_turn_username']`|`MM_WEBRTCSETTINGS_TURN_USERNAME`|
 |`mattermost['webrtc_gateway_turn_sharedkey']`|`MM_WEBRTCSETTINGS_TURN_SHAREDKEY`|
 
-
 > Please note:
 GitLab 11.0 will no longer generate `config.json` file from the configuration specified
 in `gitlab.rb`. Users are responsible for managing this file which can be done via
 Mattermost System System Console or manually.
 If a configuration setting is specified via both `gitlab.rb` (as env variable)
 and via `config.json` file, environment variable gets precedence.
-
 
 ## Upgrading GitLab Mattermost from versions prior to 8.9
 
@@ -450,11 +449,11 @@ You can use the Mattermost notifications project integration option to set up Ma
 
 1. In Mattermost, go to **System Console** > **Integration Settings** > **Custom Integrations** and turn on **Enable Incoming Webhooks**
 1. Exit the system console, and then go to **Integrations** > **Incoming Webhooks** from the main menu
-2. Select a channel and click **Add** and copy the `Webhook URL`
-3. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Integrations** > **Mattermost notifications**
-4. Enter **Username** for how you would like to name the account that posts the notifications
-4. Select **Triggers** for GitLab events on which you'd like to receive notifications
-6. Click **Test settings and save changes** to make sure everything is working
+1. Select a channel and click **Add** and copy the `Webhook URL`
+1. In GitLab, paste the `Webhook URL` into **Webhook** under your project’s **Settings** > **Integrations** > **Mattermost notifications**
+1. Enter **Username** for how you would like to name the account that posts the notifications
+1. Select **Triggers** for GitLab events on which you'd like to receive notifications
+1. Click **Test settings and save changes** to make sure everything is working
 
 Any issues, please see the [Mattermost Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150).
 
@@ -465,6 +464,7 @@ You can also set up the [open source integration service](https://github.com/Not
 This integration lets you completely control how notifications are formatted and, unlike Slack, offers full markdown support.
 
 The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see:
+
 - [Mattermost incoming webhook documentation](http://docs.mattermost.com/developer/webhooks-incoming.html)
 - [GitLab webhook documentation](https://docs.gitlab.com/ce/web_hooks/web_hooks.html)
 
@@ -523,7 +523,6 @@ sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/
 ```
 
 For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
-
 
 ### OAuth2 Sequence Diagram
 

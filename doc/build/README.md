@@ -122,12 +122,12 @@ Before you start,
 If you have (someone with) access, you need to:
 
 1. Make sure that your custom branch is synced to `dev.gitlab.org` project
-mirror. For example, if you are working on `gitlab-shell`, make sure that your
-custom branch is pushed to the `gitlab-shell` repository on `dev.gitlab.org`
+   mirror. For example, if you are working on `gitlab-shell`, make sure that your
+   custom branch is pushed to the `gitlab-shell` repository on `dev.gitlab.org`
 1. Create a branch in the omnibus-gitlab repository
 1. In this branch, open the related version file of the component and specify
-the name of your branch. For example, if you are working on `gitlab-shell` open
-`GITLAB_SHELL_VERSION` and write `my-feature`
+   the name of your branch. For example, if you are working on `gitlab-shell` open
+   `GITLAB_SHELL_VERSION` and write `my-feature`
 1. Commit and push the omnibus-gitlab branch to `dev.gitlab.org`
 
 This will trigger a build of the custom package, and if the build is

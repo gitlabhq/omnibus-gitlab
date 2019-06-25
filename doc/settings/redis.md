@@ -158,13 +158,13 @@ AWS ElasticCache also supports Redis over SSL.
 ### Limitations
 
 - GitLab does NOT ship with stunnel or other tools to provide encryption
-for the Redis server. However, GitLab does provide client support via
-the `rediss://` (as opposed to `redis://`) URL scheme.
+  for the Redis server. However, GitLab does provide client support via
+  the `rediss://` (as opposed to `redis://`) URL scheme.
 
 - Redis Sentinel does NOT support SSL yet. If you use Redis Sentinel, do
-not activate client support for SSL. [This pull
-request](https://github.com/antirez/redis/pull/4855) may bring native
-support to Redis 6.0.
+  not activate client support for SSL. [This pull
+  request](https://github.com/antirez/redis/pull/4855) may bring native
+  support to Redis 6.0.
 
 ### Activating SSL (client settings)
 
@@ -205,7 +205,7 @@ check whether this is an issue:
     not properly trusted on this server. See the [previous section](#ssl-certificates).
 
 1. Verify that the SSL certificate is working via [these troubleshooting
-steps](ssl.md#custom-certificates-missing-or-skipped).
+   steps](ssl.md#custom-certificates-missing-or-skipped).
 
 ### NOAUTH Authentication required
 
@@ -250,7 +250,7 @@ configured to use it.
     ```
 
 1. Check `/var/opt/gitlab/gitlab-rails/etc/resque.yml`. You
-should see something like:
+   should see something like:
 
     ```yaml
     production:

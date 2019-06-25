@@ -24,17 +24,17 @@ before proceeding, as it contains some useful information.
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. See
-https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html
+<https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html>
 for more details.
 
 SSL support depends on a number of files:
 
 1. The public SSL certificate for the database (`server.crt`).
-2. The corresponding private key for the SSL certificate (`server.key`).
-3. A root certificate bundle that validates the server's certificate
-(`root.crt`). By default, Omnibus GitLab will use the embedded certificate
-bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`. This is not required for
-self-signed certificates
+1. The corresponding private key for the SSL certificate (`server.key`).
+1. A root certificate bundle that validates the server's certificate
+   (`root.crt`). By default, Omnibus GitLab will use the embedded certificate
+   bundle in `/opt/gitlab/embedded/ssl/certs/cacert.pem`. This is not required for
+   self-signed certificates.
 
 A self-signed certificate and private key will be automatically generated for
 use. If you'd prefer to use a CA-signed certificate, follow the steps below.
@@ -179,7 +179,7 @@ To enable WAL Archiving:
     postgresql['archive_timeout'] = "60"
     ```
 
-1.  [Reconfigure GitLab][] for the changes to take effect. This will result in a database restart.
+1. [Reconfigure GitLab][] for the changes to take effect. This will result in a database restart.
 
 ## Using a non-packaged PostgreSQL database management server
 
@@ -190,7 +190,7 @@ PostgreSQL.
 **WARNING** If you are using non-packaged PostgreSQL server, you need to make
 sure that PostgreSQL is set up according to the [database requirements document].
 
-1.  Edit `/etc/gitlab/gitlab.rb`:
+1. Edit `/etc/gitlab/gitlab.rb`:
 
     ```ruby
     # Disable the built-in Postgres
@@ -215,10 +215,9 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
         If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
 
+1. [Reconfigure GitLab][] for the changes to take effect.
 
-1.  [Reconfigure GitLab][] for the changes to take effect.
-
-1.  [Seed the database](#seed-the-database-fresh-installs-only).
+1. [Seed the database](#seed-the-database-fresh-installs-only).
 
 ### Backup and restore a non-packaged PostgreSQL database
 
@@ -236,17 +235,18 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 If these versions are different from your non-packaged external PostgreSQL, you
 will need to install tools that match your database version and then follow the
 steps below. There are multiple ways to install PostgreSQL client tools. See
-https://www.postgresql.org/download/ for options.
+<https://www.postgresql.org/download/> for options.
 
 Once the correct `psql` and `pg_dump` tools are available on your system, follow
 these steps, using the correct path to the location you installed the new tools:
 
-1.  Add symbolic links to the non-packaged versions:
+1. Add symbolic links to the non-packaged versions:
+
     ```bash
     ln -s /path/to/new/pg_dump /path/to/new/psql /opt/gitlab/bin/
     ```
 
-1.  Check the versions:
+1. Check the versions:
 
     ```
     /opt/gitlab/bin/pg_dump --version
@@ -270,19 +270,20 @@ need to be made to both `postgresql` and `gitlab_rails` sections of `gitlab.rb`.
 ### Configure postgresql block
 
 The following settings are affected in the `postgresql` block:
+
 - `listen_address` controls the address on which PostgreSQL will listen.
 - `port` controls the port on which PostgreSQL will listen, and _must be set_ if `listen_address` is.
 - `md5_auth_cidr_addresses` is a list of CIDR address blocks which are allowed to
-connect to the server, after authentication via password.
+  connect to the server, after authentication via password.
 - `trust_auth_cidr_addresses` is a list of CIDR address blocks which are allowed
-to connect to the server, without authentication of any kind. _Be very careful
-with this setting._ It is suggest that this be limited to the loopback address of
-`127.0.0.1/24` or even `127.0.0.1/32`.
+  to connect to the server, without authentication of any kind. _Be very careful
+  with this setting._ It is suggest that this be limited to the loopback address of
+  `127.0.0.1/24` or even `127.0.0.1/32`.
 - `sql_user` controls the expected username for MD5 authentication. This defaults
-to `gitlab`, and is not a required setting.
+  to `gitlab`, and is not a required setting.
 - `sql_user_password` sets the password that PostgrSQL will accept for MD5
-authentication. Replace `securesqlpassword` in the example below with an acceptable
-password.
+  authentication. Replace `securesqlpassword` in the example below with an acceptable
+  password.
 
 ```Ruby
 postgresql['listen_address'] = '0.0.0.0'
@@ -301,17 +302,18 @@ configuration when connecting to the PostgreSQL server. They must also be within
 
 To configure the `gitlab-rails` application to connect to the PostgreSQL database
 over the network, several settings must be configured.
+
 - `db_host` needs to be set to the IP address of the database sever. If this is
-on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
-not require_ password authentication.
+  on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
+  not require_ password authentication.
 - `db_port` sets the port on the PostgreSQL server to connect to, and _must be set_
-if `db_host` is set.
+  if `db_host` is set.
 - `db_username` configures the username with which to connect to PostgreSQL. This
-defaults to `gitlab`.
+  defaults to `gitlab`.
 - `db_password` must be provided if connecting to PostgreSQL over TCP/IP, and from
-an instance in the `postgresql['md5_auth_cidr_addresses']` block from settings
-above. This is not required if you are connecting to `127.0.0.1` and have configured
-`postgresql['trust_auth_cidr_addresses']` to include it.
+  an instance in the `postgresql['md5_auth_cidr_addresses']` block from settings
+  above. This is not required if you are connecting to `127.0.0.1` and have configured
+  `postgresql['trust_auth_cidr_addresses']` to include it.
 
 ```
 gitlab_rails['db_host'] = '127.0.0.1'
@@ -324,7 +326,7 @@ gitlab_rails['db_password'] = "securesqlpassword"
 
 After making the changes above, an administrator should run `gitlab-ctl reconfigure`.
 If you experience any issues in regards to the service not listening on TCP, try
-directly restarting the service with `gitlab-ctl restart postgresql`
+directly restarting the service with `gitlab-ctl restart postgresql`.
 
 > **Note:**
 Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
@@ -335,7 +337,7 @@ properly. You can enable TCP/IP without disabling UNIX sockets.
 
 By default, everything is stored under `/var/opt/gitlab/postgresql`, controlled by the `postgresql['dir']` attribute.
 
-This consists of
+This consists of:
 
 1. The database socket will be `/var/opt/gitlab/postgresql/.s.PGSQL.5432`. This is controlled by `postgresql['unix_socket_directory']`
 1. The `gitlab-psql` system user will have its `HOME` directory set to this. This is controlled by `postgresql['home']`
@@ -347,10 +349,10 @@ To change the location of the PostgreSQL data
 
 **Warning**: This is an intrusive operation. It cannot be done without downtime on an existing installation
 
-1. Stop GitLab if this is an existing installation: `gitlab-ctl stop`
+1. Stop GitLab if this is an existing installation: `gitlab-ctl stop`.
 1. Update `postgresql['dir']` to the desired location.
-1. Run `gitlab-ctl reconfigure`
-1. Start GitLab `gitlab-ctl start`
+1. Run `gitlab-ctl reconfigure`.
+1. Start GitLab `gitlab-ctl start`.
 
 ## Using a MySQL database management server (Enterprise Edition only)
 
@@ -375,11 +377,11 @@ the **GitLab Enterprise Edition packages**.
 If you are connecting Omnibus GitLab to an existing GitLab database you should
 [create a backup][rake-backup] before attempting this procedure.
 
-1.  First, set up your database server according to the [upstream GitLab
-    instructions][mysql-install]. If you want to keep using an existing GitLab
-    database you can skip this step.
+1. First, set up your database server according to the [upstream GitLab
+   instructions][mysql-install]. If you want to keep using an existing GitLab
+   database you can skip this step.
 
-1.  Next, add the following settings to `/etc/gitlab/gitlab.rb`:
+1. Next, add the following settings to `/etc/gitlab/gitlab.rb`:
 
     ```ruby
     # Disable the built-in Postgres
@@ -401,9 +403,9 @@ If you are connecting Omnibus GitLab to an existing GitLab database you should
     `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
     plain-text passwords.
 
-1.  [Reconfigure GitLab][] for the changes to take effect.
+1. [Reconfigure GitLab][] for the changes to take effect.
 
-1.  (Optionally) [Seed the database](#seed-the-database-fresh-installs-only).
+1. (Optionally) [Seed the database](#seed-the-database-fresh-installs-only).
 
 ## Seed the database (fresh installs only)
 
@@ -470,18 +472,17 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 If you want to manually upgrade without upgrading GitLab, you can follow these instructions:
 
 **Note:**
-* Please fully read this section before running any commands.
-* Please plan ahead as upgrade involves downtime.
-* If you encounter any problems during upgrade, please raise an issue
-with a full description at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
 
+- Please fully read this section before running any commands.
+- Please plan ahead as upgrade involves downtime.
+- If you encounter any problems during upgrade, please raise an issue
+  with a full description at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
 
 Before upgrading, please check the following:
 
-* You're currently running the latest version of GitLab and it is working.
-* If you recently upgraded, make sure that `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
-
-* You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
+- You're currently running the latest version of GitLab and it is working.
+- If you recently upgraded, make sure that `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
+- You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
 
 Please note:
 
@@ -499,6 +500,7 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 This command performs the following steps:
+
 1. Checks to ensure the database is in a known good state
 1. Shuts down the existing database, any unnecessary services, and enables the gitlab deploy page.
 1. Changes the symlinks in `/opt/gitlab/embedded/bin/` for PostgreSQL to point to the newer version of the database
@@ -520,6 +522,7 @@ sudo rm -rf /var/opt/gitlab/postgresql/data.9.6
 ```
 
 ### Upgrading a GitLab HA cluster
+
 If [PostgreSQL is configured for high availability](https://docs.gitlab.com/ee/administration/high_availability/database.html),
 `pg-upgrade` should be run all the nodes running PostgreSQL. Other nodes can be
 skipped, but must be running the same GitLab version as the database nodes.
@@ -552,8 +555,8 @@ Follow the steps below to upgrade the database nodes
 
 #### Troubleshooting upgrades in an HA cluster
 
-* If at some point, the bundled PostgreSQL had been running on a node before upgrading to an HA setup, the old data directory may remain. This will cause `gitlab-ctl reconfigure` to downgrade the version of the PostgreSQL utilities it uses on that node. Move (or remove) the directory to prevent this:
-  * `mv /var/opt/gitlab/postgresql/data/ /var/opt/gitlab/postgresql/data.$(date +%s)`
+- If at some point, the bundled PostgreSQL had been running on a node before upgrading to an HA setup, the old data directory may remain. This will cause `gitlab-ctl reconfigure` to downgrade the version of the PostgreSQL utilities it uses on that node. Move (or remove) the directory to prevent this:
+  - `mv /var/opt/gitlab/postgresql/data/ /var/opt/gitlab/postgresql/data.$(date +%s)`
 
 ## Downgrade packaged PostgreSQL server
 

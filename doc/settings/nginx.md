@@ -122,10 +122,10 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Update the SSL Certificates
 
-If the content of your SSL certificates has been updated, but no configuration 
+If the content of your SSL certificates has been updated, but no configuration
 changes have been made to `gitlab.rb`, then `gitlab-ctl reconfigure` will not
-affect NGINX. Instead, run `sudo gitlab-ctl hup nginx` to cause NGINX to 
-[reload the existing configuration and new certificates](http://nginx.org/en/docs/control.html) 
+affect NGINX. Instead, run `sudo gitlab-ctl hup nginx` to cause NGINX to
+[reload the existing configuration and new certificates](http://nginx.org/en/docs/control.html)
 gracefully.
 
 ## Change the default proxy headers
@@ -181,7 +181,8 @@ nginx['real_ip_recursive'] = 'on'
 ```
 
 Description of the options:
-* http://nginx.org/en/docs/http/ngx_http_realip_module.html
+
+- <http://nginx.org/en/docs/http/ngx_http_realip_module.html>
 
 By default, omnibus-gitlab will use the IP addresses in `real_ip_trusted_addresses`
 as GitLab's trusted proxies, which will keep users from being listed as signed
@@ -351,8 +352,8 @@ forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
 (e.g. "422 Unprocessable Entity", "Can't verify CSRF token authenticity") if
 you forget this step. For more information, see:
 
-* http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used
-* https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy
+- <http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used>
+- <https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy>
 
 ## Setting HTTP Strict Transport Security
 
@@ -369,7 +370,7 @@ nginx['hsts_include_subdomains'] = false
 By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS.
 Setting `max_age` to 0 will disable this feature. For more information see:
 
-* https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+- <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>
 
 ## Setting the Referrer-Policy header
 
@@ -392,7 +393,7 @@ nginx['referrer_policy'] = false
 
 Note that setting this to `origin` or `no-referrer` would break some features in GitLab that require the full referrer URL.
 
-* https://www.w3.org/TR/referrer-policy/
+- <https://www.w3.org/TR/referrer-policy/>
 
 ## Disabling GZIP compression
 
@@ -702,14 +703,15 @@ server accepts handled requests
  18 18 36
 Reading: 0 Writing: 1 Waiting: 0
 ```
-* Active connections – Open connections in total.
-* 3 figures are shown.
- * All accepted connections.
- * All handled connections.
- * Total number of handled requests.
-* Reading: Nginx reads request headers
-* Writing: Nginx reads request bodies, processes requests, or writes responses to a client
-* Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
+
+- Active connections – Open connections in total.
+- 3 figures are shown.
+  - All accepted connections.
+  - All handled connections.
+  - Total number of handled requests.
+- Reading: Nginx reads request headers
+- Writing: Nginx reads request bodies, processes requests, or writes responses to a client
+- Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
 
 ### Configuration options
 
@@ -761,6 +763,7 @@ systems `sudo service nginx restart`).
 ## Troubleshooting
 
 ### 400 Bad Request: too many Host headers
+
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
 ['proxy_set_headers'](https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl) configuration in your `gitlab.rb` file.

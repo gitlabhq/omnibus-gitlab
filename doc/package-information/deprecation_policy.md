@@ -18,10 +18,10 @@ will be available in the next major release. See [example](#example) for more de
 
 If the configuration becomes obsolete, we will announce the deprecation:
 
-* via release blog post on `https://about.gitlab.com/blog/`. The blog post item
-will contain the deprecation notice together with the target removal date.
-* via installation/reconfigure output (if applicable).
-* via official documentation on `https://docs.gitlab.com/`. The documentation update will contain the corrected syntax (if applicable) or a date of configuration removal.
+- via release blog post on `https://about.gitlab.com/blog/`. The blog post item
+  will contain the deprecation notice together with the target removal date.
+- via installation/reconfigure output (if applicable).
+- via official documentation on `https://docs.gitlab.com/`. The documentation update will contain the corrected syntax (if applicable) or a date of configuration removal.
 
 ### Procedure
 
@@ -29,9 +29,9 @@ This section lists steps necessary for deprecating and removing configuration.
 
 We can differentiate two different types of configuration:
 
-* Sensitive: Configuration that can cause major service outage ( Data integrity,
+- Sensitive: Configuration that can cause major service outage ( Data integrity,
   installation integrity, preventing users from reaching the installation, etc.)
-* Regular: Configuration that can make a feature unavailable but still makes the installation useable ( Change in default project/group settings, miscommunication with other components and similar )
+- Regular: Configuration that can make a feature unavailable but still makes the installation useable ( Change in default project/group settings, miscommunication with other components and similar )
 
 We also need to differentiate deprecation and removal procedure.
 
@@ -41,7 +41,7 @@ Deprecation procedure is similar for both `sensitive` and `regular` configuratio
 
 Common steps:
 
-1. Create an issue at the [omnibus-gitlab issue tracker][] with details on deprecation type and other necessary information.  Apply the label `deprecation`.
+1. Create an issue at the [omnibus-gitlab issue tracker][] with details on deprecation type and other necessary information. Apply the label `deprecation`.
 1. Decide on the removal target for the deprecated configuration
 1. Formulate deprecation notice for each item as noted in [Notice section](#notice)
 
@@ -70,7 +70,7 @@ The final comment in the issue **has to have**:
 
 1. Text snippet for the release blog post section
 1. Documentation MR ( or snippet ) for introducing the change
-1. WIP MR removing the configuration OR details on what needs to be done.  See [Adding deprecation messages](../development/adding-deprecation-messages.md) for more on this
+1. WIP MR removing the configuration OR details on what needs to be done. See [Adding deprecation messages](../development/adding-deprecation-messages.md) for more on this
 
 ## Example
 
@@ -87,6 +87,5 @@ notice at the end of installation/upgrade/reconfigure run.
 With GitLab 11, `gitlab_rails['configuration'] = true` will no longer work and you will have to manually change the configuration in `/etc/gitlab/gitlab.rb` to the new valid config.
 **Note** If this configuration option is sensitive and can put integrity of the installation or
 data in danger, installation/upgrade will be aborted.
-
 
 [omnibus-gitlab issue tracker]: https://gitlab.com/gitlab-org/omnibus-gitlab/issues
