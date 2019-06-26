@@ -81,6 +81,13 @@ omnibus-gitlab repository.
 - Stop printing certificate skipped messages, instead list which certs were copied.
 
 
+## 11.11.4 (2019-06-26)
+
+### Other (1 change)
+
+- Publish unlicensed EE AMI to Community AMIs. !3331
+
+
 ## 11.11.3 (2019-06-10)
 
 - No changes.
