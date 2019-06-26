@@ -35,6 +35,7 @@ default['registry']['debug_addr'] = nil
 default['registry']['validation_enabled'] = false
 default['registry']['autoredirect'] = false
 default['registry']['compatibility_schema1_enabled'] = false
+default['registry']['uploadpurging_enabled'] = true
 
 ####
 # Notifications
