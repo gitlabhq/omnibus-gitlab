@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 11.11.4 (2019-06-26)
+
+### Other (1 change)
+
+- Publish unlicensed EE AMI to Community AMIs. !3331
+
+
 ## 11.11.3 (2019-06-10)
 
 ### Fixed (2 changes)
