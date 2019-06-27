@@ -34,8 +34,8 @@ Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings
 
 ## Runit logs
 
-The Runit-managed services in omnibus-gitlab generate log data using
-[svlogd][svlogd]. See the [svlogd documentation][svlogd] for more information
+The [Runit-managed](../architecture/README.md#runit) services in omnibus-gitlab generate log data using
+svlogd. See the [svlogd documentation](http://smarden.org/runit/svlogd.8.html) for more information
 about the files it generates.
 
 You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:

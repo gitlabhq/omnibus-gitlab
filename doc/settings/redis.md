@@ -107,7 +107,7 @@ redis['tcp_keepalive'] = "300"
 
 GitLab includes support for running with separate redis instances for different persistence classes, currently: cache, queues, and shared_state.
 
-1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server][]
+1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
 
     ```ruby
