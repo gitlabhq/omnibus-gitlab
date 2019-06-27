@@ -4,20 +4,12 @@
 Omnibus GitLab has a bundled PostgreSQL server and PostgreSQL is the preferred
 database for GitLab.
 
-GitLab supports the following database management systems:
+GitLab supports only PostgreSQL database management system.
 
-- PostgreSQL
-- MySQL/MariaDB
-
-Thus you have three options for database servers to use with Omnibus GitLab:
+Thus you have two options for database servers to use with Omnibus GitLab:
 
 - Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required, recommended)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
-- Use an [external MySQL server with Enterprise Edition package](#using-a-mysql-database-management-server-enterprise-edition-only) (not supported in 12.1+)
-
-If you are planning to use MySQL/MariaDB, make sure to read the [introductory
-paragraph](#using-a-mysql-database-management-server-enterprise-edition-only)
-before proceeding, as it contains some useful information.
 
 ## Configuring SSL
 
@@ -353,59 +345,6 @@ To change the location of the PostgreSQL data
 1. Update `postgresql['dir']` to the desired location.
 1. Run `gitlab-ctl reconfigure`.
 1. Start GitLab `gitlab-ctl start`.
-
-## Using a MySQL database management server (Enterprise Edition only)
-
->**Note:**
-GitLab 12.0 is the last version with support for MySQL (and MariaDB). Users will
-need to [migrate][mysql-migrate] to PostgreSQL in order to utilize future versions. 
-
-The MySQL server itself is _not_ shipped with Omnibus ([PostgresSQL is](#database-settings)), you will have to install
-it on your own or use an existing one. Omnibus ships only the MySQL client.
-
-Make sure that GitLab's MySQL database collation is UTF-8, otherwise you could
-hit [collation issues][ee-245]. See
-[Set MySQL collation to UTF-8](#set-mysql-collation-to-utf-8) to fix any
-relevant errors.
-
----
-
-The following guide assumes that you want to use MySQL or MariaDB and are using
-the **GitLab Enterprise Edition packages**.
-
->**Important note:**
-If you are connecting Omnibus GitLab to an existing GitLab database you should
-[create a backup][rake-backup] before attempting this procedure.
-
-1. First, set up your database server according to the [upstream GitLab
-   instructions][mysql-install]. If you want to keep using an existing GitLab
-   database you can skip this step.
-
-1. Next, add the following settings to `/etc/gitlab/gitlab.rb`:
-
-    ```ruby
-    # Disable the built-in Postgres
-    postgresql['enable'] = false
-
-    # Fill in the values for database.yml
-    gitlab_rails['db_adapter'] = 'mysql2'
-    gitlab_rails['db_encoding'] = 'utf8'
-    gitlab_rails['db_host'] = '127.0.0.1'
-    gitlab_rails['db_port'] = 3306
-    gitlab_rails['db_username'] = 'USERNAME'
-    gitlab_rails['db_password'] = 'PASSWORD'
-    ```
-
-    `db_adapter` and `db_encoding` should be like the example above. Change
-    all other settings according to your MySQL setup.
-
-    >**Note:**
-    `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
-    plain-text passwords.
-
-1. [Reconfigure GitLab][] for the changes to take effect.
-
-1. (Optionally) [Seed the database](#seed-the-database-fresh-installs-only).
 
 ## Seed the database (fresh installs only)
 
