@@ -41,3 +41,6 @@ compatibility:
 notifications:
   endpoints: <%= @notifications.to_json %>
 <% end %>
+maintenance:
+  uploadpurging:
+    enabled: <%= @uploadpurging_enabled %>

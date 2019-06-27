@@ -572,6 +572,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['validation_enabled'] = false
 # registry['autoredirect'] = false
 # registry['compatibility_schema1_enabled'] = false
+# registry['uploadpurging_enabled'] = true
 
 ### Registry backend storage
 ###! Docs: https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
