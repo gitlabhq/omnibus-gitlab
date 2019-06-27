@@ -84,6 +84,8 @@ build do
   end
 
   bundle_without = %w(development test)
+  # TODO: Remove if mysql group is removed from gitlab-ce|ee bundle
+  # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/29608
   bundle_without << 'mysql' unless EE
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env

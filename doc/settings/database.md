@@ -505,19 +505,6 @@ If you need to run an older version of PostgreSQL, you must downgrade GitLab to 
 
 ## Troubleshooting
 
-### Set MySQL collation to UTF-8
-
-If you are hit by an error similar as described in [this issue][ee-245]
-(_Mysql2::Error: Incorrect string value (\`st_diffs\` field)_), you
-can change the collation of the faulty table with:
-
-```bash
-ALTER TABLE merge_request_diffs default character set = utf8 collate = utf8_unicode_ci;
-ALTER TABLE merge_request_diffs convert to character set utf8 collate utf8_unicode_ci;
-```
-
-In the above example the affected table is called `merge_request_diffs`.
-
 ### Connecting to the bundled PostgreSQL database
 
 If you need to connect to the bundled PostgreSQL database and are
@@ -534,10 +521,7 @@ or as a Postgres superuser:
 sudo gitlab-psql -d gitlabhq_production
 ```
 
-[ee-245]: https://gitlab.com/gitlab-org/gitlab-ee/issues/245 "MySQL collation issue"
 [rake-backup]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
 [Reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
 [rake-restore]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
-[mysql-install]: https://docs.gitlab.com/ce/install/database_mysql.html "MySQL documentation"
 [database requirements document]: https://docs.gitlab.com/ce/install/requirements.html#database
-[mysql-migrate]: https://docs.gitlab.com/ce/update/mysql_to_postgresql.html
