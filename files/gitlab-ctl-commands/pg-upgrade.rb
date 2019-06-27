@@ -68,7 +68,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking for an omnibus managed postgresql') do
       !running_version.nil? && \
-          get_all_services.member?('postgresql')
+          service_enabled?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     Kernel.exit 0
