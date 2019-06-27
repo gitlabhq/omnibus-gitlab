@@ -48,7 +48,7 @@ package installation.
 So, in openSUSE or SLES systems, if such a warning is displayed, it is safe to
 continue installation.
 
-### Reconfigure shows an error: NoMethodError - undefined method '[]=' for nil:NilClass
+### Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
 
 You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
 reconfigure which produced error similar to:
@@ -74,7 +74,7 @@ This error is thrown when `/etc/gitlab/gitlab.rb` configuration file contains
 configuration that is invalid or unsupported. Double check that there are no
 typos or that the configuration file does not contain obsolete configuration.
 
-You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [gitlab.rb.template][].
+You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 ### GitLab is unreachable in my browser
 
