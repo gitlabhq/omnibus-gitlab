@@ -44,7 +44,7 @@ DSS 3.1 standard.
 
 ## Upgrade to Postgres 10
 
-Postgres will automatically be upgraded to 10.7.0 unless specifically opted
+Postgres will automatically be upgraded to 10.7 unless specifically opted
 out during the upgrade. To opt out you must execute the following before
 performing the upgrade of GitLab.
 
