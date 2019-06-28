@@ -107,8 +107,8 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     end
 
     def parse_runtime_dir
-      if Gitlab['node']['filesystem2'].nil?
-        Chef::Log.warn 'No filesystem2 variables in Ohai, disabling runtime_dir'
+      if Gitlab['node']['filesystem'].nil?
+        Chef::Log.warn 'No filesystem variables in Ohai, disabling runtime_dir'
         Gitlab['runtime_dir'] = nil
         return
       end
@@ -118,7 +118,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       search_dirs = ['/run', '/dev/shm']
 
       search_dirs.each do |run_dir|
-        fs = Gitlab['node']['filesystem2']['by_mountpoint'][run_dir]
+        fs = Gitlab['node']['filesystem']['by_mountpoint'][run_dir]
 
         if fs && fs['fs_type'] == 'tmpfs'
           Gitlab['runtime_dir'] = run_dir

@@ -31,14 +31,14 @@ class RedhatHelper
   end
 
   # Taken from Ohai
-  # https://github.com/chef/ohai/blob/31f6415c853f3070b0399ac2eb09094eb81939d2/lib/ohai/plugins/linux/platform.rb#L23
+  # https://github.com/chef/ohai/blob/v14.8.12/lib/ohai/plugins/linux/platform.rb#L23
   def self.get_redhatish_platform(contents)
     contents[/^Red Hat/i] ? 'redhat' : contents[/(\w+)/i, 1].downcase
   end
 
   # Taken from Ohai
-  # https://github.com/chef/ohai/blob/31f6415c853f3070b0399ac2eb09094eb81939d2/lib/ohai/plugins/linux/platform.rb#L27
+  # https://github.com/chef/ohai/blob/v14.8.12/lib/ohai/plugins/linux/platform.rb#L34
   def self.get_redhatish_version(contents)
-    contents[/Rawhide/i] ? contents[/((\d+) \(Rawhide\))/i, 1].downcase : contents[/release ([\d\.]+)/, 1]
+    contents[/Rawhide/i] ? contents[/((\d+) \(Rawhide\))/i, 1].downcase : contents[/(release)? ([\d\.]+)/, 2]
   end
 end

@@ -111,8 +111,8 @@ describe 'gitlab::unicorn' do
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
         .with_content { |content|
-          expect(content).to match(/export prometheus_run_dir=\'\'/)
-          expect(content).not_to match(/mkdir -p \/dev\/shm\/gitlab\/unicorn/)
+          expect(content).to match(/export prometheus_run_dir=\'\/dev\/shm\/gitlab\/unicorn\'/)
+          expect(content).to match(/mkdir -p \/dev\/shm\/gitlab\/unicorn/)
         }
     end
   end

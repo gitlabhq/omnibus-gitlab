@@ -722,6 +722,6 @@ describe 'postgresql 9.6' do
   end
 
   it 'creates sysctl files' do
-    expect(chef_run).to create_sysctl('kernel.shmmax').with_value(17179869184)
+    expect(chef_run).to create_gitlab_sysctl('kernel.shmmax').with_value(17179869184)
   end
 end

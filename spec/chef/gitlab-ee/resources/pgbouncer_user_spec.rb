@@ -7,7 +7,7 @@ describe 'pgbouncer_user' do
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-geo').with(
         helper: an_instance_of(GeoPgHelper),
-        user: 'pgbouncer-geo',
+        username: 'pgbouncer-geo',
         password: 'md5fakepassword-geo'
       )
     end
@@ -29,7 +29,7 @@ describe 'pgbouncer_user' do
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-rails').with(
         helper: an_instance_of(PgHelper),
-        user: 'pgbouncer-rails',
+        username: 'pgbouncer-rails',
         password: 'md5fakepassword-rails'
       )
     end
