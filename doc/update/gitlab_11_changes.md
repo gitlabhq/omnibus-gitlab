@@ -121,7 +121,7 @@ been removed:
     node, since it is specified in `gitlab.rb`. Users will have to manually update
     gitlab.rb to point it to the new master node.
 
-2. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
+1. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
    the unicorn processes have been restarted. The restart is done automatically
    at the end of `gitlab-ctl reconfigure`, which is run by default on upgrade.
 
