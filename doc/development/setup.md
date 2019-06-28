@@ -13,13 +13,13 @@ up a Build Environment](../build/prepare-build-environment.md).
     The steps are similar for other OSs; only the commands differ.
     1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/engine/installation).
 
-    2. Pulling a Debian Jessie image
+    1. Pulling a Debian Jessie image
 
         ```
         docker pull debian:jessie
         ```
 
-    3. Running docker image with a shell prompt
+    1. Running docker image with a shell prompt
 
         ```
         docker run -it debian:jessie bash
@@ -27,7 +27,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     This will cause the docker to run the jessie image and you will fall into a
     bash prompt, where the following steps are applied to.
 
- 2. Install basic necessary tools
+ 1. Install basic necessary tools
 
     Basic tools used for developing Omnibus GitLab may be installed using the
     following command
@@ -36,7 +36,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     sudo apt-get install git
     ```
 
- 3. Getting GitLab CE nightly package and installing it
+ 1. Getting GitLab CE nightly package and installing it
 
     Get the latest GitLab CE nightly package (of the OS you are using) from
     [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
@@ -49,7 +49,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     For the time being, consider the date of pushing (which is available next
     to the package name in the repository page) to find the latest package version.
 
- 4. Getting source of Omnibus GitLab
+ 1. Getting source of Omnibus GitLab
 
     Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
 
@@ -59,7 +59,7 @@ up a Build Environment](../build/prepare-build-environment.md).
 
     We will be doing the development inside the `~/omnibus-gitlab` directory.
 
- 5. Instructing GitLab to apply the changes we make to the cookbooks.
+ 1. Instructing GitLab to apply the changes we make to the cookbooks.
 
     During development, we need the changes we make to the cookbooks to be
     applied immediately to the running GitLab instance. So, we have to instruct
@@ -72,7 +72,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
     ```
 
-  6. Docker container specific items
+  1. Docker container specific items
 
      Before running `reconfigure`, you need to start runsv.
 
