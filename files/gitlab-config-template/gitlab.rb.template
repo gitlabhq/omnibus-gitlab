@@ -98,6 +98,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
 # gitlab_rails['pages_domain_verification_cron_worker'] = "*/15 * * * *"
+# gitlab_rails['pages_domain_ssl_renewal_cron_worker'] = "*/10 * * * *"
 # gitlab_rails['pages_domain_removal_cron_worker'] = "47 0 * * *"
 # gitlab_rails['schedule_migrate_external_diffs_worker_cron'] = "15 * * * *"
 
@@ -1187,7 +1188,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
 
 # omnibus_gitconfig['system'] = {
-#  "core" => [%(alternateRefsPrefixes = "refs/alternates/public")],
 #  "pack" => ["threads = 1"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],

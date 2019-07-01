@@ -49,6 +49,6 @@ action :delete do
     db_name new_resource.db_name
     helper new_resource.helper
 
-    not_if { new_resource.helper.is_offline_or_readonly? || !new_resource.helper.fdw_server_exists?(server_name, new_resource.db_name) }
+    not_if { new_resource.helper.is_offline_or_readonly? || !new_resource.helper.fdw_server_exists?(new_resource.server_name, new_resource.db_name) }
   end
 end

@@ -181,19 +181,19 @@ To upgrade GitLab to a new version you have to:
     sudo docker stop gitlab
     ```
 
-2. Remove existing container:
+1. Remove existing container:
 
     ```bash
     sudo docker rm gitlab
     ```
 
-3. Pull the new image:
+1. Pull the new image:
 
     ```bash
     sudo docker pull gitlab/gitlab-ce:latest
     ```
 
-4. Create the container once again with previously specified options:
+1. Create the container once again with previously specified options:
 
     ```bash
     sudo docker run --detach \
@@ -290,7 +290,7 @@ You then need to appropriately configure `gitlab.rb`:
 
     For more information see the [NGINX documentation](../settings/nginx.md).
 
-2. Set `gitlab_shell_ssh_port`:
+1. Set `gitlab_shell_ssh_port`:
 
     ```
     gitlab_rails['gitlab_shell_ssh_port'] = 2289
@@ -385,7 +385,7 @@ download a new release and upgrade your GitLab instance.
 
 ## Deploy GitLab in a Docker swarm
 
-With [Docker swarm](https://docs.docker.com/engine/swarm/) you can easily configure and deploy your 
+With [Docker swarm](https://docs.docker.com/engine/swarm/) you can easily configure and deploy your
 Docker-based GitLab installation in a swarm cluster.
 
 In swarm mode you can leverage [Docker secrets](https://docs.docker.com/engine/swarm/secrets/)
@@ -396,7 +396,7 @@ Configs can help you to keep your GitLab image as generic as possible.
 Here's an example that deploys GitLab with four runners as a [stack](https://docs.docker.com/get-started/part5/), using secrets and configs:
 
 1. [Setup a Docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/)
-2. Create a `docker-compose.yml` file:
+1. Create a `docker-compose.yml` file:
 
     ```yml
     version: "3.6"
@@ -434,20 +434,20 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
     For simplicity reasons, the `network` configuration was omitted.
     More information can be found in the official [Compose file reference](https://docs.docker.com/compose/compose-file/).
 
-3. Create a `gitlab.rb` file:
+1. Create a `gitlab.rb` file:
 
     ```ruby
     external_url 'https://my.domain.com/'
     gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_root_password')
     ```
 
-4. Create a `root_password.txt` file:
+1. Create a `root_password.txt` file:
 
     ```
     MySuperSecretAndSecurePass0rd!
     ```
 
-5. Make sure you are in the same directory as `docker-compose.yml` and run:
+1. Make sure you are in the same directory as `docker-compose.yml` and run:
 
     ```bash
     docker stack deploy --compose-file docker-compose.yml mystack

@@ -287,6 +287,10 @@ production: &base
     pages_domain_verification_cron_worker:
       cron:<% if @pages_domain_verification_cron_worker %> "<%= @pages_domain_verification_cron_worker %>"<% end %>
 
+    # Obtain and renew SSL certificates for pages domain through Let's Encrypt
+    pages_domain_ssl_renewal_cron_worker:
+      cron:<% if @pages_domain_ssl_renewal_cron_worker %> "<%= @pages_domain_ssl_renewal_cron_worker %>"<% end %>
+
     # Removes unverified pages domains
     pages_domain_removal_cron_worker:
       cron:<% if @pages_domain_removal_cron_worker %> "<%= @pages_domain_removal_cron_worker %>"<% end %>

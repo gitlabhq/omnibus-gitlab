@@ -1466,6 +1466,29 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'GitLab Pages domain ssl renewal job settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the value' do
+          stub_gitlab_rb(gitlab_rails: { pages_domain_ssl_renewal_cron_worker: '1 0 * * *' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_domain_ssl_renewal_cron_worker' => '1 0 * * *'
+            )
+          )
+        end
+      end
+      context 'when cron worker is not configured' do
+        it ' sets no value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_domain_ssl_renewal_cron_worker' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'External diff migration cron job settings' do
       context 'when the cron pattern is configured' do
         it 'sets the value' do

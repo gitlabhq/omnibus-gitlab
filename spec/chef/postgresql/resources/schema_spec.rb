@@ -13,8 +13,7 @@ describe 'postgresql_schema' do
 
       it 'creates schema' do
         expect(chef_run).to run_postgresql_query('create example schema on omnibus_gitlab_test').with(
-          owner: 'CURRENT_USER',
-          database: 'omnibus_gitlab_test'
+          db_name: 'omnibus_gitlab_test'
         )
       end
 

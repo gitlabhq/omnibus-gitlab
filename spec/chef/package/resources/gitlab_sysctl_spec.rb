@@ -1,8 +1,8 @@
 require 'chef_helper'
 
 describe 'sysctl' do
-  let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(sysctl)) }
-  let(:chef_run) { runner.converge("test_package::sysctl_create") }
+  let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(gitlab_sysctl)) }
+  let(:chef_run) { runner.converge("test_package::gitlab_sysctl_create") }
   let(:conf) { '90-omnibus-gitlab-foo.conf' }
 
   it 'creates sysctl.d directory for the service' do

@@ -17,7 +17,7 @@
 name 'chef-zero'
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '13.1.0'
+default_version '14.0.12'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
@@ -28,7 +28,7 @@ dependency 'ruby'
 dependency 'rubygems'
 
 build do
-  patch source: "license/#{version}/add-license-file.patch"
+  patch source: "license/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install chef-zero' \

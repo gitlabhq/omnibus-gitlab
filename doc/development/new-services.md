@@ -3,9 +3,9 @@
 In order to add a new service to GitLab, you should follow these steps:
 
 1. [Fetch and compile the software during build](#fetch-and-compile-the-software-during-build)
-2. [Add a top-level configuration object for the service](#add-a-top-level-configuration-object-for-the-service)
-3. [Include the service in the services list](#include-the-service-in-the-services-list)
-4. [Create enable and disable recipes for the service](#create-enable-and-disable-recipes-for-the-service)
+1. [Add a top-level configuration object for the service](#add-a-top-level-configuration-object-for-the-service)
+1. [Include the service in the services list](#include-the-service-in-the-services-list)
+1. [Create enable and disable recipes for the service](#create-enable-and-disable-recipes-for-the-service)
 
 Optionally another common task is to add [additional configuration parsing](#additional-configuration-parsing-for-the-service)
 for the service.

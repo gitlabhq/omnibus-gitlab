@@ -122,13 +122,13 @@ To troubleshoot this error:
     $ ls -al /opt/gitlab/sv/redis/supervise
     ```
 
-2. If you see the message, continue to the next step:
+1. If you see the message, continue to the next step:
 
     ```
     ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
     ```
 
-3.  Restart the runit server.  
+1.  Restart the runit server.
     Using systemctl (Debian => 9 - Stretch):
 
     ```
