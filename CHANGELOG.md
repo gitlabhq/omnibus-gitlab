@@ -268,6 +268,10 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 11.10.8 (2019-07-01)
+
+- No changes.
+
 ## 11.10.7 (2019-06-26)
 
 - No changes.
