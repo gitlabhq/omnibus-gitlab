@@ -11,7 +11,7 @@ AllowUsers git
 PrintMotd no
 PrintLastLog no
 PubkeyAuthentication yes
-AuthorizedKeysFile none
+AuthorizedKeysFile %h/.ssh/authorized_keys /gitlab-data/ssh/authorized_keys
 AuthorizedKeysCommand /opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-shell-authorized-keys-check git %u %k
 AuthorizedKeysCommandUser git
 
