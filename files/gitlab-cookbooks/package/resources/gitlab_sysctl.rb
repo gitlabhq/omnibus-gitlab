@@ -42,20 +42,6 @@ action :create do
     notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
   end
 
-  # Remove old (not-used) configs
-  [
-    "/etc/sysctl.d/90-postgresql.conf",
-    "/etc/sysctl.d/90-unicorn.conf",
-    "/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf",
-    "/etc/sysctl.d/90-omnibus-gitlab.conf"
-  ].each do |conf|
-    file "delete #{conf} #{new_resource.name}" do
-      path conf
-      action :delete
-      only_if { ::File.exist?(conf) }
-    end
-  end
-
   # Load the settings right away
   execute "load sysctl conf #{new_resource.name}" do
     command "sysctl -e --system"
