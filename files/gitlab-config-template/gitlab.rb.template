@@ -2098,6 +2098,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
+# consul['monitoring_service_discovery'] = false
 # consul['node_name'] = nil
 # consul['script_directory'] = '/var/opt/gitlab/consul/scripts'
 # consul['configuration'] = {
