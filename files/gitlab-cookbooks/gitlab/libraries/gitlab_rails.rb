@@ -24,6 +24,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
   class << self
     def parse_variables
+      parse_database_adapter
       parse_external_url
       parse_directories
       parse_gitlab_trusted_proxies
@@ -104,6 +105,18 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       end
 
       Gitlab['gitlab_rails']['gitlab_port'] = uri.port
+    end
+
+    def parse_database_adapter
+      # TODO: Remove in GitLab 13
+
+      adapter = Gitlab['gitlab_rails']['db_adapter']
+      error_message = <<~MSG
+          PostgreSQL is the only supported DBMS starting from GitLab 12.1 and you are using #{adapter}.
+          Please refer https://docs.gitlab.com/omnibus/update/convert_to_omnibus.html#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68
+          to migrate to a PostgreSQL based installation.
+      MSG
+      raise error_message if adapter && adapter != 'postgresql'
     end
 
     def parse_runtime_dir
