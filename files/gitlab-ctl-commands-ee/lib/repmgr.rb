@@ -68,7 +68,7 @@ class Repmgr
     class << self
       def repmgr_cmd(args, command)
         runas = if Etc.getpwuid.name.eql?('root')
-                  (node_attributes.dig('gitlab', 'postgresql', 'username') || node_attributes.dig('postgresql', 'username')).to_s
+                  GitlabCtl::PostgreSQL.postgresql_username
                 else
                   Etc.getpwuid.name
                 end

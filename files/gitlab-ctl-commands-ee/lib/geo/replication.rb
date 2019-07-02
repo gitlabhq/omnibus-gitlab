@@ -3,9 +3,9 @@ require 'rainbow/ext/string'
 
 # For testing purposes, if the first path cannot be found load the second
 begin
-  require_relative '../../../omnibus-ctl/lib/gitlab_ctl'
+  require_relative '../../../omnibus-ctl/lib/postgresql'
 rescue LoadError
-  require_relative '../../../gitlab-ctl-commands/lib/gitlab_ctl'
+  require_relative '../../../gitlab-ctl-commands/lib/postgresql'
 end
 
 module Geo
@@ -21,16 +21,8 @@ module Geo
       @options = options
     end
 
-    def node_attributes
-      @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
-    end
-
     def postgresql_user
-      # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-      # configure on an existing installation
-      #
-      # TODO: Remove support for legacy attributes in GitLab 13.0
-      (node_attributes.dig('gitlab', 'postgresql', 'username') || node_attributes.dig('postgresql', 'username')).to_s
+      @postgresql_user ||= GitlabCtl::PostgreSQL.postgresql_username
     end
 
     def check_gitlab_active?
