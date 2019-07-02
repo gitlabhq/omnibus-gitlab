@@ -1,6 +1,7 @@
 require 'optparse'
 require 'fileutils'
 require 'mixlib/shellout'
+require_relative 'util'
 
 module GitlabCtl
   class PrometheusUpgrade
@@ -63,8 +64,10 @@ module GitlabCtl
 
     class << self
       def parse_options(args)
+        node_attributes = GitlabCtl::Util.get_node_attributes
+
         options = {
-          home_dir: "/var/opt/gitlab/prometheus",
+          home_dir: node_attributes.dig(:gitlab, :prometheus, :home),
           skip_reconfigure: false,
           wait: true,
         }
