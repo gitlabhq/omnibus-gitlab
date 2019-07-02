@@ -466,7 +466,7 @@ This inserts the defined string into the end of the `server` block of
 
 ### Notes:
 
-+ If you're adding a new location, you might need to include
+- If you're adding a new location, you might need to include
 
     ```conf
     proxy_cache off;
@@ -476,7 +476,7 @@ This inserts the defined string into the end of the `server` block of
     in the string or in the included nginx config. Without these, any sub-location
     will return a 404. See
     [gitlab-ce#30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
-+ You cannot add the root `/` location or the `/assets` location as those already
+- You cannot add the root `/` location or the `/assets` location as those already
     exist in `gitlab-http.conf`.
 
 ## Inserting custom settings into the NGINX config
