@@ -38,7 +38,7 @@ build do
     'GO111MODULE' => 'on',
   }
 
-  prom_version = Prometheus::VersionFlags.new(go_source, version)
+  prom_version = Prometheus::VersionFlags.new(version)
 
   command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
