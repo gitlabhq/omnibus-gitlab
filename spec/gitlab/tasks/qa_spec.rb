@@ -89,12 +89,11 @@ describe 'qa', type: :rake do
       end
 
       it 'pushes staging auto-deploy images correctly' do
-        allow(Build::Info).to receive(:current_git_tag).and_return("#{gitlab_version}.12345+5159f2949cb.59c9fa631")
+        allow(Build::Info).to receive(:current_git_tag).and_return('12.0.12345+5159f2949cb.59c9fa631')
+        allow(Build::Info).to receive(:semver_version).and_return('12.0.1')
         allow(Build::Info).to receive(:commit_sha).and_return('5159f2949cb')
 
-        expect(Build::Check).to receive(:is_auto_deploy?).and_return(true)
-
-        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with("#{gitlab_version}+5159f2949cb")
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('12.0.1+5159f2949cb')
 
         Rake::Task['qa:push:staging'].invoke
       end

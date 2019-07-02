@@ -77,8 +77,8 @@ module Build
         end
       end
 
-      def gitlab_version_and_commit_sha
-        "#{Info.gitlab_version}+#{Info.commit_sha}"
+      def semver_version_and_commit_sha
+        "#{Info.semver_version}+#{Info.commit_sha}"
       end
 
       def previous_version
