@@ -217,7 +217,6 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Multi-node / HA](#multi-node--ha-deployment)| GitLab CE/EE on multiple nodes |
 | [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
 
-
 ## Single deployment
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
@@ -259,16 +258,14 @@ If you meet all the requirements above, follow these instructions in order. Ther
     sudo gitlab-ctl hup sidekiq
     ```
 
-
 ## Multi-node / HA deployment
 
 Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
 node throughout the process.
 
-
 **Deploy node**
 
-* Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
@@ -278,11 +275,11 @@ node throughout the process.
 
 **All other nodes (not the Deploy node)**
 
-* Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+- Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
 **Deploy node**
 
-* Update the GitLab package
+- Update the GitLab package
 
     ```sh
     # Debian/Ubuntu
@@ -294,7 +291,7 @@ node throughout the process.
 
     If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
-* To get the regular database migrations in place, run
+- To get the regular database migrations in place, run
 
     ```sh
     SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
@@ -302,7 +299,7 @@ node throughout the process.
 
 **All other nodes (not the Deploy node)**
 
-* Update the GitLab package
+- Update the GitLab package
 
     ```sh
     sudo apt-get update && sudo apt-get install gitlab-ce
@@ -310,7 +307,7 @@ node throughout the process.
 
     If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
-* Ensure nodes are running the latest code
+- Ensure nodes are running the latest code
 
     ```sh
     sudo gitlab-ctl reconfigure
@@ -318,7 +315,7 @@ node throughout the process.
 
 **Deploy node**
 
-* Once all nodes are updated, run the following to run post-deployment database migrations
+- Once all nodes are updated, run the following to run post-deployment database migrations
 
     ```sh
     sudo gitlab-rake db:migrate
@@ -326,13 +323,12 @@ node throughout the process.
 
 **For nodes that run unicorn or sidekiq**
 
-* Hot reload `unicorn` and `sidekiq` services
+- Hot reload `unicorn` and `sidekiq` services
 
     ```sh
     sudo gitlab-ctl hup unicorn
     sudo gitlab-ctl hup sidekiq
     ```
-
 
 ## Geo deployment
 
@@ -392,7 +388,6 @@ On the Primary node, executing the following:
     ```
 
 **Secondary node(s)**
-
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Primary node.
