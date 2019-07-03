@@ -202,9 +202,8 @@ step to find the current GitLab version and then follow the steps in
 NOTE: **Note:**
 This is only available in GitLab 9.1.0 or newer. Skipping restarts during reconfigure with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
 
-It's possible to upgrade to a newer version of
-GitLab without having to take your GitLab instance offline. This can only be
-done if you are using PostgreSQL. If you are using MySQL you will still need downtime when upgrading.
+It's possible to upgrade to a newer version of GitLab without having to take
+your GitLab instance offline.
 
 Verify that you can upgrade with no downtime by checking the
 [Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.

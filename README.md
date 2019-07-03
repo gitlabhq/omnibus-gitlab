@@ -78,7 +78,7 @@ For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/ng
 
 ##### Using a non-packaged PostgreSQL database management server
 
-To connect to an external PostgreSQL or MySQL DBMS see [doc/settings/database.md](doc/settings/database.md) (MySQL support in the Omnibus Packages is Enterprise Only).
+To connect to an external PostgreSQL DBMS see [doc/settings/database.md](doc/settings/database.md)
 
 ##### Using a non-packaged Redis instance
 
@@ -289,10 +289,6 @@ See [doc/settings/logs.md](doc/settings/logs.md#logrotate).
 ##### UDP log shipping (GitLab Enterprise Edition only)
 
 See [doc/settings/logs.md](doc/settings/logs.md#udp-log-shipping-gitlab-enterprise-edition-only)
-
-## Using a MySQL database management server (Enterprise Edition only)
-
-See [doc/settings/database.md](doc/settings/database.md).
 
 ### Create a user and database for GitLab
 

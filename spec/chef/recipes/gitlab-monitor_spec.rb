@@ -103,25 +103,6 @@ describe 'gitlab::gitlab-monitor' do
     end
   end
 
-  context 'when MySQL is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/gitlab-monitor/config') }
-
-    before do
-      stub_gitlab_rb(
-        gitlab_rails: {
-          db_adapter: 'mysql2'
-        }
-      )
-    end
-
-    it 'gitlab-monitor is disabled' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-monitor/gitlab-monitor.yml')
-        .with_content { |content|
-          expect(content).not_to match(/database:/)
-        }
-    end
-  end
-
   context 'when log dir is changed' do
     before do
       stub_gitlab_rb(

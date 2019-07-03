@@ -53,7 +53,6 @@ dependency 'graphicsmagick'
 dependency 'exiftool'
 
 if EE
-  dependency 'mysql-client'
   dependency 'pgbouncer'
   dependency 'repmgr'
   dependency 'repmgr_pg_10'
@@ -85,7 +84,7 @@ build do
   end
 
   bundle_without = %w(development test)
-  bundle_without << 'mysql' unless EE
+  bundle_without << 'mysql'
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
