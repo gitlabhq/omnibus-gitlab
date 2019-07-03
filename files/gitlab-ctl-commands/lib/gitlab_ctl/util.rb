@@ -55,7 +55,7 @@ module GitlabCtl
         data
       end
 
-      def get_node_attributes(base_path)
+      def get_node_attributes(base_path = '/opt/gitlab')
         # reconfigure creates a json file containing all of the attributes of
         # the node after a chef run, indexed by priority. Merge an return those
         # as a single level Hash

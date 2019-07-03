@@ -32,6 +32,7 @@ describe Geo::Replication, '#execute' do
     allow(File).to receive(:open).and_yield(file)
 
     allow(GitlabCtl::Util).to receive(:run_command).and_return(command)
+    allow(subject).to receive(:postgresql_user).and_return('gitlab-psql')
   end
 
   it 'replicates geo database' do

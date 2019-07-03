@@ -1,6 +1,7 @@
 require 'mixlib/shellout'
 require 'timeout'
 require_relative 'postgresql/pgpass'
+require_relative 'gitlab_ctl/util'
 
 module GitlabCtl
   class PostgreSQL
@@ -23,6 +24,16 @@ module GitlabCtl
         end
       rescue Timeout::TimeoutError
         raise TimeoutError("Timed out waiting for PostgreSQL to start")
+      end
+
+      def postgresql_username
+        node_attributes = GitlabCtl::Util.get_node_attributes
+
+        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
+        # configure on an existing installation
+        #
+        # TODO: Remove support for legacy attributes in GitLab 13.0
+        (node_attributes.dig('gitlab', 'postgresql', 'username') || node_attributes.dig('postgresql', 'username')).to_s
       end
     end
   end
