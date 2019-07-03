@@ -120,12 +120,11 @@ describe LetsEncrypt do
       expect(subject.should_auto_enable?).to be_truthy
     end
 
-    it 'is true when files present, but self-signed certificate is expired' do
+    it 'is true when files present, but LE certificate is expired' do
       mock_cert = OpenSSL::X509::Certificate.new
-      mock_name = OpenSSL::X509::Name.parse '/CN=gitlab.example.com'
       allow(mock_cert).to receive(:not_after).and_return(Time.now - 1)
-      allow(mock_cert).to receive(:subject).and_return(mock_name)
-      allow(mock_cert).to receive(:issuer).and_return(mock_name)
+      allow(mock_cert).to receive(:issuer).and_return(
+        OpenSSL::X509::Name.parse(%(/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3)))
       allow(File).to receive(:exist?).with('example.key').and_return(true)
       allow(File).to receive(:exist?).with('example.crt').and_return(true)
       allow(File).to receive(:read).with('example.crt').and_return(nil)
@@ -134,11 +133,11 @@ describe LetsEncrypt do
       expect(subject.should_auto_enable?).to be_truthy
     end
 
-    it 'is false when files present, but certificate is expired and it is not self-signed' do
+    it 'is false when files present, but non-LE certificate is expired' do
       mock_cert = OpenSSL::X509::Certificate.new
       allow(mock_cert).to receive(:not_after).and_return(Time.now - 1)
-      allow(mock_cert).to receive(:subject).and_return(OpenSSL::X509::Name.parse('/CN=gitlab.example.com'))
-      allow(mock_cert).to receive(:issuer).and_return(OpenSSL::X509::Name.parse('/CN=example.com'))
+      allow(mock_cert).to receive(:issuer).and_return(
+        OpenSSL::X509::Name.parse('/C=US/O=Example Corporation/CN=Example'))
       allow(File).to receive(:exist?).with('example.key').and_return(true)
       allow(File).to receive(:exist?).with('example.crt').and_return(true)
       allow(File).to receive(:read).with('example.crt').and_return(nil)

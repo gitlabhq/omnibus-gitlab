@@ -58,17 +58,6 @@ class LetsEncrypt
       )
     end
 
-    # Checks wheather the existing certificate is expired and needs renewal.
-    #
-    # @return [true, false]
-    def needs_renewal?
-      file_name = Gitlab['nginx']['ssl_certificate']
-      return false unless File.exist? file_name
-
-      cert = OpenSSL::X509::Certificate.new File.read(file_name)
-      cert.not_after < Time.now && cert.subject == cert.issuer
-    end
-
     # Save secrets if they do not have letsencrypt.auto_enabled
     #
     # @return [void]
@@ -80,6 +69,21 @@ class LetsEncrypt
       # Avoid writing if the attribute is there and true
       return if secrets.dig('letsencrypt', 'auto_enabled')
       SecretsHelper.write_to_gitlab_secrets
+    end
+
+    private
+
+    LETSENCRYPT_ISSUER = %(/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3).freeze
+
+    # Checks wheather the existing Let's Encrypt certificate is expired and needs renewal.
+    #
+    # @return [true, false]
+    def needs_renewal?
+      file_name = Gitlab['nginx']['ssl_certificate']
+      return false unless File.exist? file_name
+
+      cert = OpenSSL::X509::Certificate.new File.read(file_name)
+      cert.issuer.to_s == LETSENCRYPT_ISSUER && cert.not_after < Time.now
     end
   end
 end
