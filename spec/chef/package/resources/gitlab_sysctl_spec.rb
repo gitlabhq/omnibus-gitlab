@@ -20,12 +20,6 @@ describe 'sysctl' do
     expect(chef_run).to create_link("/etc/sysctl.d/#{conf}")
   end
 
-  it 'removed old configs' do
-    allow(::File).to receive(:exist?).and_call_original
-    allow(::File).to receive(:exist?).with('/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf').and_return(true)
-    expect(chef_run).to delete_file('delete /opt/gitlab/embedded/etc/90-omnibus-gitlab.conf foo')
-  end
-
   it 'loaded the settings' do
     resource = chef_run.execute('load sysctl conf foo')
     expect(resource.command).to eq('sysctl -e --system')

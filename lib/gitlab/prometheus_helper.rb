@@ -2,8 +2,8 @@ require 'time'
 
 module Prometheus
   class VersionFlags
-    def initialize(go_source, version)
-      common_version = "#{go_source}/vendor/github.com/prometheus/common/version"
+    def initialize(version)
+      common_version = 'github.com/prometheus/common/version'
 
       @ldflags = [
         "-X #{common_version}.Version=#{version.print(false)}",
