@@ -77,8 +77,8 @@ module Build
         get_latest_log(latest_log_location)
 
         # Logs from apt follow the format `Log (started|ended): <date>  <time>`
-        start_string = File.read(latest_log_location).grep(/Log started/)[0].strip.gsub("Log started: ", "")
-        end_string = File.read(latest_log_location).grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
+        start_string = File.open(latest_log_location).grep(/Log started/)[0].strip.gsub("Log started: ", "")
+        end_string = File.open(latest_log_location).grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
         start_time = DateTime.strptime(start_string, "%Y-%m-%d  %H:%M:%S")
         end_time = DateTime.strptime(end_string, "%Y-%m-%d  %H:%M:%S")
 
