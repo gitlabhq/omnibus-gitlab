@@ -184,7 +184,7 @@ describe Build::Info do
     it 'return minor and major version components plus commit sha' do
       allow(Build::Info).to receive(:semver_version).and_return('12.0.1')
 
-      expect(described_class.major_minor_version_and_commit_sha).to eq('12.0+5159f2949cb')
+      expect(described_class.major_minor_version_and_commit_sha).to eq('12.0-5159f2949cb')
     end
 
     it 'raises an error if semver is invalid' do

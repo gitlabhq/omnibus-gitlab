@@ -83,7 +83,7 @@ module Build
 
         raise "Invalid semver version '#{Info.semver_version}'!" unless match
 
-        "#{match[1]}.#{match[2]}+#{Info.commit_sha}"
+        "#{match[1]}.#{match[2]}-#{Info.commit_sha}"
       end
 
       def previous_version

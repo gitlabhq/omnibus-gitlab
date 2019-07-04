@@ -93,7 +93,7 @@ describe 'qa', type: :rake do
         allow(Build::Info).to receive(:semver_version).and_return('12.0.1')
         allow(Build::Info).to receive(:commit_sha).and_return('5159f2949cb')
 
-        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('12.0+5159f2949cb')
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('12.0-5159f2949cb')
 
         Rake::Task['qa:push:staging'].invoke
       end
