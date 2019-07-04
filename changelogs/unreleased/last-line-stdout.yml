@@ -1,0 +1,5 @@
+---
+title: Ensure we only grab the last line of stdout from rails runner
+merge_request: 3406
+author:
+type: changed
