@@ -75,15 +75,20 @@ module Build
       def calculate_duration
         latest_log_location = "/tmp/upgrade.log"
         get_latest_log(latest_log_location)
+        duration = nil
 
         # Logs from apt follow the format `Log (started|ended): <date>  <time>`
-        start_string = File.open(latest_log_location).grep(/Log started/)[0].strip.gsub("Log started: ", "")
-        end_string = File.open(latest_log_location).grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
-        start_time = DateTime.strptime(start_string, "%Y-%m-%d  %H:%M:%S")
-        end_time = DateTime.strptime(end_string, "%Y-%m-%d  %H:%M:%S")
+        File.open(latest_log_location) do |f|
+          start_string = f.grep(/Log started/)[0].strip.gsub("Log started: ", "")
+          f.rewind
+          end_string = f.grep(/Log ended/)[0].strip.gsub("Log ended: ", "")
 
-        # Duration in seconds
-        ((end_time - start_time) * 24 * 60 * 60).to_i
+          start_time = DateTime.strptime(start_string, "%Y-%m-%d  %H:%M:%S")
+          end_time = DateTime.strptime(end_string, "%Y-%m-%d  %H:%M:%S")
+          duration = ((end_time - start_time) * 24 * 60 * 60).to_i
+        end
+
+        duration
       end
 
       def append_to_sheet(version, duration)
