@@ -77,7 +77,8 @@ describe 'gitlab::gitlab-rails' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared',
-                                       uploads_directory: '/tmp/uploads' },
+                                       uploads_directory: '/tmp/uploads',
+                                       uploads_storage_path: '/tmp/uploads_storage' },
                        gitlab_ci: { builds_directory: '/tmp/builds' })
       end
 
@@ -126,6 +127,20 @@ describe 'gitlab::gitlab-rails' do
 
     it 'creates the shared cache directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/cache').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the uploads storage directory' do
+      expect(chef_run).to create_storage_directory('/tmp/uploads_storage').with(owner: 'git', mode: '0700')
+    end
+  end
+
+  context 'when uploads storage directory is not specified' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.converge('gitlab::default')
+    end
+
+    it 'does not create the uploads storage directory' do
+      expect(chef_run).not_to create_storage_directory('/opt/gitlab/embedded/service/gitlab-rails/public')
     end
   end
 
