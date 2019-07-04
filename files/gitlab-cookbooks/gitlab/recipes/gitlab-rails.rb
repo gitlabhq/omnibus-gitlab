@@ -26,6 +26,7 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab-rails']['uploads_directory']
 gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
+gitlab_rails_uploads_storage_path = node['gitlab']['gitlab-rails']['uploads_storage_path']
 gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
 gitlab_rails_shared_tmp_dir = File.join(node['gitlab']['gitlab-rails']['shared_path'], 'tmp')
@@ -90,6 +91,12 @@ end
     owner gitlab_user
     mode '0700'
   end
+end
+
+storage_directory gitlab_rails_uploads_storage_path do
+  owner gitlab_user
+  mode '0700'
+  only_if { gitlab_rails_uploads_storage_path != GitlabRails.public_path }
 end
 
 storage_directory node['gitlab']['gitlab-rails']['pages_path'] do
