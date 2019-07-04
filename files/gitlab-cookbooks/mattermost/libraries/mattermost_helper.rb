@@ -12,7 +12,7 @@ class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so 
     o = query_gitlab_rails(redirect_uri, app_name)
 
     if o.exitstatus.zero?
-      app_id, app_secret = o.stdout.chomp.split(" ")
+      app_id, app_secret = o.stdout.lines.last.chomp.split(" ")
 
       Gitlab['mattermost']['gitlab_enable'] = true
       Gitlab['mattermost']['gitlab_secret'] = app_secret
