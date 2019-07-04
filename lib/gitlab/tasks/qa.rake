@@ -23,7 +23,7 @@ namespace :qa do
     # Only runs on dev.gitlab.org
     desc "Push unstable or auto-deploy version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :staging do
-      tag = Build::Check.is_auto_deploy? ? Build::Info.semver_version_and_commit_sha : Build::Info.gitlab_version
+      tag = Build::Check.is_auto_deploy? ? Build::Info.major_minor_version_and_commit_sha : Build::Info.gitlab_version
       Build::QAImage.tag_and_push_to_gitlab_registry(tag)
     end
 

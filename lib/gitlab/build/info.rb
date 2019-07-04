@@ -77,8 +77,13 @@ module Build
         end
       end
 
-      def semver_version_and_commit_sha
-        "#{Info.semver_version}+#{Info.commit_sha}"
+      def major_minor_version_and_commit_sha
+        version_regexp = /^v?(\d+)\.(\d+)\.(\d+)/
+        match = version_regexp.match(Info.semver_version)
+
+        raise "Invalid semver version '#{Info.semver_version}'!" unless match
+
+        "#{match[1]}.#{match[2]}+#{Info.commit_sha}"
       end
 
       def previous_version
