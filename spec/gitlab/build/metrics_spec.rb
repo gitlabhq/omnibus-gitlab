@@ -97,7 +97,7 @@ describe Build::Metrics do
 
   describe '.calculate duration' do
     it 'calculates duration correctly' do
-      allow(File).to receive(:read).with("/tmp/upgrade.log").and_return(["Log started: 2018-01-25  15:55:15", "Some random log", "Log ended: 2018-01-25  16:00:05"])
+      allow(File).to receive(:open).with("/tmp/upgrade.log").and_yield(["Log started: 2018-01-25  15:55:15", "Some random log", "Log ended: 2018-01-25  16:00:05"].each)
       allow(described_class).to receive(:get_latest_log).and_return(true)
 
       expect(described_class.calculate_duration).to eq(290)
