@@ -25,8 +25,13 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://dl.grafana.com/oss/release/grafana-#{default_version}.linux-amd64.tar.gz",
-       sha256: '5c17e57adc6e48f3c9123062f4bdaef849fb4d978b0a9ff0eb8b7cf147c57835'
+if ohai['platform'] == 'debian' && /armv/.match?(ohai['kernel']['machine'])
+  source url: "https://dl.grafana.com/oss/release/grafana-#{default_version}.linux-armv7.tar.gz",
+         sha256: "b6bc74f4441e51d0523d85c4b76a12a0549cbd37115bdc55ea68d3b6b44de6db"
+else
+  source url: "https://dl.grafana.com/oss/release/grafana-#{default_version}.linux-amd64.tar.gz",
+         sha256: '5c17e57adc6e48f3c9123062f4bdaef849fb4d978b0a9ff0eb8b7cf147c57835'
+end
 
 relative_path "grafana-#{default_version}"
 
