@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require 'time'
 
 name 'redis-exporter'
-version = Gitlab::Version.new('redis-exporter', '1.0.0')
+version = Gitlab::Version.new('redis-exporter', '1.0.3')
 default_version version.print
 
 license 'MIT'
@@ -37,7 +37,9 @@ build do
   }
 
   ldflags = [
-    "-X main.VERSION=#{version.print(false)}"
+    "-X main.BuildVersion=#{version.print(false)}",
+    "-X main.BuildDate=''",
+    "-X main.BuildCommitSha=''",
   ].join(' ')
 
   command "go build -mod=vendor -ldflags '#{ldflags}'", env: env
