@@ -154,6 +154,8 @@ package :deb do
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 end
 
+resources_path "#{Omnibus::Config.project_root}/resources"
+
 # Our package scripts are generated from .erb files,
 # so we will grab them from an excluded folder
 package_scripts_path "#{install_dir}/.package_util/package-scripts"

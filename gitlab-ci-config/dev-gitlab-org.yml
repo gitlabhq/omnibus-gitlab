@@ -210,6 +210,9 @@ CentOS-7-branch:
 OpenSUSE-42.3-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+OpenSUSE-15.0-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.0:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 SLES-12-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -373,6 +376,9 @@ CentOS-7:
 OpenSUSE-42.3:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_42.3:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+OpenSUSE-15.0:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.0:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 SLES-12:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -447,6 +453,11 @@ OpenSUSE-42.3-staging:
     - OpenSUSE-42.3
     - OpenSUSE-42.3-branch
   <<: *staging_upload
+OpenSUSE-15.0-staging:
+  dependencies:
+    - OpenSUSE-15.0
+    - OpenSUSE-15.0-branch
+  <<: *staging_upload
 SLES-12-staging:
   dependencies:
     - SLES-12
@@ -484,6 +495,10 @@ CentOS-7-release:
 OpenSUSE-42.3-release:
   dependencies:
     - OpenSUSE-42.3
+  <<: *production_release
+OpenSUSE-15.0-release:
+  dependencies:
+    - OpenSUSE-15.0
   <<: *production_release
 SLES-12-release:
   dependencies:
