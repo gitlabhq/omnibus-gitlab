@@ -4,7 +4,7 @@ New gitlab-ctl commands can be added to two directory : `files/gitlab-ctl-comman
 
 There are two main functions you will use to add commands (<https://github.com/chef/omnibus-ctl>):
 
-### add_command_under_category(string, string, string, int, ruby_block)
+## add_command_under_category(string, string, string, int, ruby_block)
 
 This method will add a new command to your ctl under a category, useful for grouping similar commands together logically in help output.
 
@@ -15,7 +15,7 @@ Input arguments:
 1. Description. This will be outputted below the command name when the help command is run.
 1. Ruby block. Ruby code to be executed when your command is run (arguments to that command will be passed into the block).
 
-### add_command(string, string, int, ruby_block)
+## add_command(string, string, int, ruby_block)
 
 This method will add a new command to your ctl without a category. It will be displayed above all categories when the help command is called.
 
