@@ -1,5 +1,4 @@
 ---
-toc: false
 comments: false
 ---
 
@@ -18,14 +17,14 @@ Omnibus is a way to package different services and tools required to run GitLab,
 
 ## Installation
 
-##### Prerequisites
+### Prerequisites
 
 - [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
 - If you want to access your GitLab instance via a domain name, like mygitlabinstance.com, make sure the domain correctly points to the IP of the server where GitLab is being installed. You can check this using the command `host mygitlabinstance.com`
 - If you want to use HTTPS on your GitLab instance, make sure you have the SSL certificates for the domain ready. (Note that certain components like Container Registry which can have their own subdomains requires certificates for those subdomains also)
 - If you want to send notification emails, install and configure a mail server (MTA) like sendmail. Alternatively, you can use other third party SMTP servers, which is described below.
 
-#### Installation and Configuration using omnibus package
+### Installation and Configuration using omnibus package
 
 NOTE: **Note:**
 This section describes the commonly used configuration settings. Check
@@ -48,11 +47,11 @@ This section describes the commonly used configuration settings. Check
   monitoring included in the Omnibus GitLab package.
 - [GitLab High Availability Roles](roles/README.md)
 
-#### Using docker image
+### Using docker image
 
 You can also use the docker images provided by GitLab to install and configure a GitLab instance. Check the [documentation](docker/README.md) to know more.
 
-#### Running on a low-resource device (like a Raspberry Pi)
+## Running on a low-resource device (like a Raspberry Pi)
 
 You can run GitLab on supported low-resource computers like the Raspberry Pi 3, but you will need to tune the settings
 to work best with the available resources. Check out the [documentation](settings/rpi.md) for suggestions on what to adjust.

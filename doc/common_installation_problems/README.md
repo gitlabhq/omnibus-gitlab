@@ -2,7 +2,7 @@
 
 Below you can find the most common issues users encounter when installing omnibus-gitlab packages.
 
-### Hash Sum mismatch when downloading packages
+## Hash Sum mismatch when downloading packages
 
 apt-get install outputs something like:
 
@@ -27,7 +27,7 @@ curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gi
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
 
-### Installation on openSUSE and SLES platforms warns about unknown key signature
+## Installation on openSUSE and SLES platforms warns about unknown key signature
 
 Omnibus GitLab packages are [signed with GPG
 keys](https://docs.gitlab.com/omnibus/update/package_signatures.html) in
@@ -48,7 +48,7 @@ package installation.
 So, in openSUSE or SLES systems, if such a warning is displayed, it is safe to
 continue installation.
 
-### Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
+## Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
 
 You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
 reconfigure which produced error similar to:
@@ -76,7 +76,7 @@ typos or that the configuration file does not contain obsolete configuration.
 
 You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
-### GitLab is unreachable in my browser
+## GitLab is unreachable in my browser
 
 Try [specifying](../settings/configuration.md#configuring-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
@@ -96,7 +96,7 @@ Try [specifying](../settings/configuration.md#configuring-the-external-url-for-g
 
 > **Don't add the equal sign (`=`) between `external_url` and the value.**
 
-### Emails are not being delivered
+## Emails are not being delivered
 
 To test email delivery you can create a new GitLab account for an email that is
 not used in your GitLab instance yet.
@@ -110,7 +110,7 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
+## Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
 If you uninstall and reinstall GitLab, it's possible that the process
 supervisor (runit) may not be in the proper state if it continued to run.
@@ -176,7 +176,7 @@ sudo initctl start gitlab-runsvdir
 sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 ```
 
-### TCP ports for GitLab services are already taken
+## TCP ports for GitLab services are already taken
 
 By default, Unicorn listens at TCP address 127.0.0.1:8080. Nginx
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
@@ -192,8 +192,9 @@ unicorn['port'] = 3456
 
 For Nginx port changes please see [settings/nginx.md](../settings/nginx.md).
 
-### Git user does not have SSH access
-#### SELinux-enabled systems
+## Git user does not have SSH access
+
+### SELinux-enabled systems
 
 On SELinux-enabled systems the git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
@@ -205,7 +206,7 @@ In GitLab 10.0 this behavior was improved by setting the context permanently usi
 RPM package for RHEL based operating systems in order to ensure the `semanage`
 command is available.
 
-#### All systems
+### All systems
 
 The git user is created, by default, with a locked password, shown by `'!'` in
 /etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon will prevent the
@@ -220,7 +221,7 @@ Keep in mind that the git user must have access to the system so please review
 your security settings at `/etc/security/access.conf` and make sure the git user
 is not blocked.
 
-### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
+## Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
 The packaged Postgres instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
@@ -243,7 +244,7 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-### Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
+## Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
 By default, Postgres will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
 To fix this, you can disable postgresql's shared memory detection. Set the
@@ -255,7 +256,7 @@ postgresql['dynamic_shared_memory_type'] = 'none'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-### Reconfigure complains about the GLIBC version
+## Reconfigure complains about the GLIBC version
 
 ```
 $ gitlab-ctl reconfigure
@@ -267,7 +268,7 @@ This can happen if the omnibus package you installed was built for a different
 OS release than the one on your server. Double-check that you downloaded and
 installed the correct omnibus-gitlab package for your operating system.
 
-### Reconfigure fails to create the git user
+## Reconfigure fails to create the git user
 
 This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
 Switch to another user.
@@ -276,7 +277,7 @@ More importantly: do not give sudo rights to the git user or to any of the
 other users used by omnibus-gitlab. Bestowing unnecessary privileges on a
 system user weakens the security of your system.
 
-### Failed to modify kernel parameters with sysctl
+## Failed to modify kernel parameters with sysctl
 
 If sysctl cannot modify the kernel parameters you could possibly get an error with the following stack trace:
 
@@ -345,18 +346,18 @@ Tip: You may find it easier to look at the line in the Chef output than to find 
   +kernel.shmall = 4194304
 ```
 
-### I am unable to install omnibus-gitlab without root access
+## I am unable to install omnibus-gitlab without root access
 
 Occasionally people ask if they can install GitLab without root access.
 This is problematic for several reasons.
 
-#### Installing the .deb or .rpm
+### Installing the .deb or .rpm
 
 To our knowledge there is no clean way to install Debian or RPM
 packages as a non-privileged user. You cannot install omnibus-gitlab
 RPM's because the Omnibus build process does not create source RPM's.
 
-#### Hassle-free hosting on port 80 and 443
+### Hassle-free hosting on port 80 and 443
 
 The most common way to deploy GitLab is to have a web server
 (NGINX/Apache) running on the same server as GitLab, with the web
@@ -370,7 +371,7 @@ the bundled NGINX service, but this puts the burden on them to keep
 the NGINX configuration in tune with GitLab during application
 updates.
 
-#### Isolation between Omnibus services
+### Isolation between Omnibus services
 
 Bundled services in omnibus-gitlab (GitLab itself, NGINX, Postgres,
 Redis, Mattermost) are isolated from each other using Unix user
@@ -387,13 +388,13 @@ probably create major upgrade pain for all existing omnibus-gitlab
 installations. (We would probably have to rearrange the directory
 structure under /var/opt/gitlab.)
 
-#### Tweaking the operating system for better performance
+### Tweaking the operating system for better performance
 
 During 'gitlab-ctl reconfigure' we set and install several sysctl
 tweaks to improve Postgres performance and increase connection limits.
 This can only be done with root access.
 
-### gitlab-rake assets:precompile fails with 'Permission denied'
+## gitlab-rake assets:precompile fails with 'Permission denied'
 
 Some users report that running `gitlab-rake assets:precompile` does not work
 with the omnibus packages. The short answer to this is: do not run that
@@ -438,11 +439,11 @@ sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake gitlab:assets:clean gitlab:
 sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 ```
 
-### 'Short read or OOM loading DB' error
+## 'Short read or OOM loading DB' error
 
 Try cleaning the old redis session by following the [documentation here.](https://docs.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
 
-### Apt error 'The requested URL returned error: 403'
+## Apt error 'The requested URL returned error: 403'
 
 When trying to install GitLab using the apt repo if you receive an error similar to:
 
@@ -460,7 +461,7 @@ PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.c
 
 Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](http://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
 
-### Using self signed certificate or custom certificate authorities
+## Using self signed certificate or custom certificate authorities
 
 If you are installing GitLab in an isolated network with custom certificate authorities or using self-signed certificate make sure that the certificate can be reached by GitLab. Not doing so will cause errors like:
 
@@ -472,7 +473,7 @@ when GitLab tries to connect with the internal services like gitlab-shell.
 
 To fix these errors, see the [Custom SSL settings](../settings/ssl.md) section.
 
-### error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
+## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
 Starting with version 8.3, gitlab-workorse is the default router for any requests
 going to GitLab.
@@ -491,7 +492,7 @@ gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 
 Save the file and [reconfigure GitLab][] for the changes to take effect.
 
-### The change you wanted was rejected
+## The change you wanted was rejected
 
 Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
@@ -500,7 +501,7 @@ for your environment.
 See [Change the default proxy headers section of nginx doc][] for details on
 how to override the default headers.
 
-### Can't verify CSRF token authenticity Completed 422 Unprocessable
+## Can't verify CSRF token authenticity Completed 422 Unprocessable
 
 Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
@@ -509,7 +510,7 @@ for your environment.
 See [Change the default proxy headers section of nginx doc][] for details on
 how to override the default headers.
 
-### Extension missing pg_trgm
+## Extension missing pg_trgm
 
 Starting from GitLab 8.6, [GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
@@ -568,7 +569,7 @@ above, and finally restart the container.
     docker restart gitlab
     ```
 
-### Errno::ENOMEM: Cannot allocate memory during backup or upgrade
+## Errno::ENOMEM: Cannot allocate memory during backup or upgrade
 
 [GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#memory)
 2GB of available memory to run without errors. Having 2GB of memory installed may
@@ -577,7 +578,7 @@ If GitLab runs fine when not upgrading or running a backup, then adding more swa
 should solve your problem. If you see the server using swap during normal usage,
 you can add more RAM to improve performance.
 
-### NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
+## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
 
 If your external url for GitLab is longer than the default bucket size (64 bytes),
 NGINX may stop working and show this error in the the logs. To allow larger server
@@ -589,7 +590,7 @@ nginx['server_names_hash_bucket_size'] = 128
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-### Reconfigure fails due to "'root' cannot chown" with NFS root_squash
+## Reconfigure fails due to "'root' cannot chown" with NFS root_squash
 
 ```
 $ gitlab-ctl reconfigure
@@ -609,7 +610,7 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [disable storage directory management](../settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
-### gitlab-runsvdir not starting
+## gitlab-runsvdir not starting
 
 This applies to operating systems using systemd (e.g. Ubuntu 16.04+, CentOS, etc.).
 
@@ -687,7 +688,7 @@ starting:
 
 In this case, consider uninstalling Plymouth.
 
-### Init daemon detection in non-docker container
+## Init daemon detection in non-docker container
 
 In docker containers, GitLab package detects existence of `/.dockerenv` file and
 skips automatic detection of an init system. However, in non-docker containers
