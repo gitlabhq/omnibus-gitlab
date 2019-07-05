@@ -12,7 +12,7 @@ class GrafanaHelper
     o = query_gitlab_rails(redirect_uri, app_name)
 
     if o.exitstatus.zero?
-      app_id, app_secret = o.stdout.chomp.split(" ")
+      app_id, app_secret = o.stdout.lines.last.chomp.split(" ")
 
       Gitlab['grafana']['gitlab_secret'] = app_secret
       Gitlab['grafana']['gitlab_application_id'] = app_id

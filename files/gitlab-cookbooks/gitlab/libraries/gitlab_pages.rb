@@ -91,7 +91,7 @@ module GitlabPages
 
       o = query_gitlab_rails(redirect_uri, app_name)
       if o.exitstatus.zero?
-        app_id, app_secret = o.stdout.chomp.split(" ")
+        app_id, app_secret = o.stdout.lines.last.chomp.split(" ")
 
         Gitlab['gitlab_pages']['gitlab_secret'] = app_secret
         Gitlab['gitlab_pages']['gitlab_id'] = app_id
