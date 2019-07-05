@@ -1440,7 +1440,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Custom Prometheus flags
 #
 # prometheus['flags'] = {
-#   'storage.local.path' => "#{node['gitlab']['prometheus']['home']}/data",
+#   'storage.tsdb.path' => "#{node['gitlab']['prometheus']['home']}/data",
+#   'storage.tsdb.retention.time' => "15d",
 #   'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
 # }
 
