@@ -1,8 +1,7 @@
 # Omnibus GitLab High Availability Roles
 
-NOTE: **Note:**
->- Introduced in GitLab EE 10.1.0
->- The majority of these roles will only work on an [Enterprise Edition](https://about.gitlab.com/product/) installation of GitLab.
+> - Introduced in GitLab EE 10.1.0
+> - The majority of these roles will only work on an [Enterprise Edition](https://about.gitlab.com/product/) installation of GitLab.
 
 Omnibus GitLab includes various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
