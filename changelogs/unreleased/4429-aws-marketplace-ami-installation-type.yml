@@ -1,0 +1,5 @@
+---
+title: Set INSTALLATION_TYPE of Marketplace AMI to gitlab-aws-marketplace-ami
+merge_request: 3414
+author:
+type: changed

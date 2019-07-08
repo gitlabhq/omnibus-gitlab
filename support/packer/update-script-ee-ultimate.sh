@@ -18,7 +18,7 @@ sudo dpkg -i gitlab.deb
 sudo rm gitlab.deb
 
 # Set install type to aws
-echo "gitlab-aws-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null
+echo "gitlab-aws-marketplace-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null
 
 # Cleanup
 sudo rm -rf /var/lib/apt/lists/*
