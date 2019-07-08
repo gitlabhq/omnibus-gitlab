@@ -2,8 +2,8 @@
 
 Both GitLab CE and EE are in Docker Hub:
 
-- [GitLab CE Docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ce/)
-- [GitLab EE Docker image](https://registry.hub.docker.com/u/gitlab/gitlab-ee/)
+- [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
+- [GitLab EE Docker image](https://hub.docker.com/r/gitlab/gitlab-ee/)
 
 The GitLab Docker images are monolithic images of GitLab running all the necessary services on a single container.
 
@@ -27,7 +27,7 @@ NOTE: **Note:**
 Using a native Docker install instead of Docker Toolbox is recommended in order to use the persisted volumes
 
 CAUTION: **Caution:**
-We do not officially support running on Docker for Windows. There are known issues with volume permissions, and potentially other unknown issues. If you are trying to run on Docker for Windows, please see our [getting help page](https://about.gitlab.com/getting-help/) for links to community resources (IRC, forum, etc) to seek help from other users.
+We do not officially support running on Docker for Windows. There are known issues with volume permissions, and potentially other unknown issues. If you are trying to run on Docker for Windows, please see our [getting help page](https://about.gitlab.com/get-help/) for links to community resources (IRC, forum, etc) to seek help from other users.
 
 ## Run the image
 
@@ -533,6 +533,6 @@ $ sudo setfacl -mR default:group:docker:rwx /srv/gitlab
 
 ### Getting help
 
-If your problem is not listed here please see [getting help](https://about.gitlab.com/getting-help/) for the support channels.
+If your problem is not listed here please see [getting help](https://about.gitlab.com/get-help/) for the support channels.
 
 These docker images are officially supported by GitLab Inc. and should always be up to date.

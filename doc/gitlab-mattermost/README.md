@@ -1,6 +1,6 @@
 # GitLab Mattermost
 
-You can run a [GitLab Mattermost](http://www.mattermost.org/)
+You can run a [GitLab Mattermost](https://www.mattermost.org/)
 service on your GitLab server.
 
 ## Pre-requisite
@@ -403,7 +403,7 @@ After upgrading to GitLab 8.9 additional steps are require before restarting the
           - If you use multiple teams, this should be the name of the team most commonly used.
                - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed.
                - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account.
-               - For more information, please review the [Mattermost 3.0 upgrade documentation.](http://www.mattermost.org/upgrade-to-3-0/)
+               - For more information, please review the [Mattermost 3.0 upgrade documentation](https://www.mattermost.org/upgrade-to-3-0/).
 1. Run your GitLab 8.9 upgrade as normal.
     - This installs the Mattermost 3.1 binary and will attempt to auto-upgrade the database.
     - Your Mattermost database will be upgraded to version 3.1 and the server should start.

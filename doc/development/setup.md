@@ -1,7 +1,7 @@
 # Setting up your development environment
 
 Development of Omnibus GitLab maybe done using an existing package available
-from [Downloads page](https://about.gitlab.com/downloads). To know how to setup
+from [Downloads page](https://about.gitlab.com/install). To know how to setup
 a build environment to build these packages and use them, please read [Setting
 up a Build Environment](../build/prepare-build-environment.md).
 
@@ -72,7 +72,7 @@ up a Build Environment](../build/prepare-build-environment.md).
     sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
     ```
 
-  1. Docker container specific items
+ 1. Docker container specific items
 
      Before running `reconfigure`, you need to start runsv.
 

@@ -16,7 +16,7 @@ Thus you have two options for database servers to use with Omnibus GitLab:
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. See
-<https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html>
+<https://www.postgresql.org/docs/9.6/auth-pg-hba-conf.html>
 for more details.
 
 SSL support depends on a number of files:
@@ -37,7 +37,7 @@ the permissions of the files for you, but you *must* ensure that the
 `gitlab-psql` can access the directory the files are placed in, if the paths
 are customized.
 
-For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.6/static/ssl-tcp.html).
+For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.6/ssl-tcp.html).
 
 Note that `server.crt` and `server.key` may be different from the default SSL
 certificates used to access GitLab. For example, suppose the external hostname
@@ -203,7 +203,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
     **Note:**
     - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
     plain-text passwords.
-    - Postgresql allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/static/runtime-config-connection.html)
+    - Postgresql allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/runtime-config-connection.html)
 
         If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
 
@@ -489,6 +489,7 @@ Follow the steps below to upgrade the database nodes
     ```
 
 ### Upgrading a Geo instance
+
 `gitlab-ctl pg-upgrade` command does not support Geo yet. This support will be
 [added with GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4309)
 

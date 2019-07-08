@@ -9,7 +9,7 @@ is installed. If you are installing GitLab 7.9 or earlier, please check the
 
 If you installed using the package server all you need to do is run `sudo apt-get update && sudo apt-get install gitlab-ce` (for Debian/Ubuntu) or `sudo yum install gitlab-ce` (for CentOS/Enterprise Linux).
 
-If you are not using the package server, consider [upgrading to the package repository](https://about.gitlab.com/upgrade-to-package-repository). Otherwise, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
+If you are not using the package server, consider [upgrading to the package repository](https://about.gitlab.com/upgrade-to-package-repository/). Otherwise, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://packages.gitlab.com/gitlab/gitlab-ee)
 package to your GitLab server then all you have to do is `dpkg -i gitlab-ce-XXX.deb` (for Debian/Ubuntu) or `rpm
 -Uvh gitlab-ce-XXX.rpm` (for CentOS/Enterprise Linux). After the package has
