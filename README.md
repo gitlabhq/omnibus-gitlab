@@ -20,7 +20,7 @@ The documentation overview is in the [readme in the doc directory](doc/README.md
 
 Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omnibus).  For additional information see the comments in the [Gemfile](/Gemfile).
 
-# Deprecated links
+## Deprecated links
 
 *We left the links below in the readme to preserve old links, but please use the [readme in the doc directory](doc/README.md) to browse the complete documentation.*
 
@@ -44,85 +44,85 @@ to control/debug your GitLab instance.
 
 See [doc/settings/configuration.md](doc/settings/configuration.md).
 
-##### Configuring the external URL for GitLab
+#### Configuring the external URL for GitLab
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#configuring-the-external-url-for-gitlab).
 
-##### Storing Git data in an alternative directory
+#### Storing Git data in an alternative directory
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#storing-git-data-in-an-alternative-directory).
 
-##### Changing the name of the Git user / group
+#### Changing the name of the Git user / group
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#changing-the-name-of-the-git-user-group).
 
-##### Setting up LDAP sign-in
+#### Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](doc/settings/ldap.md).
 
-##### Enable HTTPS
+#### Enable HTTPS
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#enable-https).
 
-##### Redirect `HTTP` requests to `HTTPS`.
+#### Redirect `HTTP` requests to `HTTPS`
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#redirect-http-requests-to-https).
 
-##### Change the default port and the ssl certificate locations.
+#### Change the default port and the ssl certificate locations
 
 See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
-##### Use non-packaged web-server
+#### Use non-packaged web-server
 
 For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
 
-##### Using a non-packaged PostgreSQL database management server
+#### Using a non-packaged PostgreSQL database management server
 
 To connect to an external PostgreSQL DBMS see [doc/settings/database.md](doc/settings/database.md)
 
-##### Using a non-packaged Redis instance
+#### Using a non-packaged Redis instance
 
 See [doc/settings/redis.md](doc/settings/redis.md).
 
-##### Adding ENV Vars to the Gitlab Runtime Environment
+#### Adding ENV Vars to the Gitlab Runtime Environment
 
 See
 [doc/settings/environment-variables.md](doc/settings/environment-variables.md).
 
-##### Changing gitlab.yml settings
+#### Changing gitlab.yml settings
 
 See [doc/settings/gitlab.yml.md](doc/settings/gitlab.yml.md).
 
-##### Specify numeric user and group identifiers
+#### Specify numeric user and group identifiers
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#specify-numeric-user-and-group-identifiers).
 
-##### Sending application email via SMTP
+#### Sending application email via SMTP
 
 See [doc/settings/smtp.md](doc/settings/smtp.md).
 
-##### Omniauth (Google, Twitter, GitHub login)
+#### Omniauth (Google, Twitter, GitHub login)
 
 Omniauth configuration is documented in
 [docs.gitlab.com](https://docs.gitlab.com/ce/integration/omniauth.html).
 
-##### Adjusting Unicorn settings
+#### Adjusting Unicorn settings
 
 See [doc/settings/unicorn.md](doc/settings/unicorn.md).
 
-##### Setting the NGINX listen address or addresses
+#### Setting the NGINX listen address or addresses
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
-##### Inserting custom NGINX settings into the GitLab server block
+#### Inserting custom NGINX settings into the GitLab server block
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
-##### Inserting custom settings into the NGINX config
+#### Inserting custom settings into the NGINX config
 
 See [doc/settings/nginx.md](doc/settings/nginx.md).
 
-##### Only start omnibus-gitlab services after a given filesystem is mounted
+#### Only start omnibus-gitlab services after a given filesystem is mounted
 
 See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted).
 
@@ -156,69 +156,68 @@ This section has been moved to the separate document [doc/common_installation_pr
 
 Section below remains for historical reasons(mainly to not break existing links). Each section contains the link to the new location.
 
-##### Apt error 'The requested URL returned error: 403'
+#### Apt error 'The requested URL returned error: 403'
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 
-##### GitLab is unreachable in my browser
+#### GitLab is unreachable in my browser
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 
-##### Emails are not being delivered
+#### Emails are not being delivered
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#emails-are-not-being-delivered).
 
-##### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
+#### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 
-##### TCP ports for GitLab services are already taken
+#### TCP ports for GitLab services are already taken
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
 
-##### Git SSH access stops working on SELinux-enabled systems
+#### Git SSH access stops working on SELinux-enabled systems
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#git-ssh-access-stops-working-on-selinux-enabled-systems
 ).
 
-##### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
+#### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#postgres-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
 
-##### Reconfigure complains about the GLIBC version
+#### Reconfigure complains about the GLIBC version
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
 
-##### Reconfigure fails to create the git user
+#### Reconfigure fails to create the git user
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 
-##### Failed to modify kernel parameters with sysctl
+#### Failed to modify kernel parameters with sysctl
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
 
-##### I am unable to install omnibus-gitlab without root access
+#### I am unable to install omnibus-gitlab without root access
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
 
-##### gitlab-rake assets:precompile fails with 'Permission denied'
+#### gitlab-rake assets:precompile fails with 'Permission denied'
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 
-##### 'Short read or OOM loading DB' error
+#### 'Short read or OOM loading DB' error
 
 See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#short-read-or-oom-loading-db-error).
-
 
 ### Backups
 
 See [doc/settings/backups.md](doc/settings/backups.md).
 
-##### Backup and restore omnibus-gitlab configuration
+#### Backup and restore omnibus-gitlab configuration
 
 See [doc/settings/backups.md](doc/settings/backups.md#backup-and-restore-omnibus-gitlab-configuration).
 
-##### Creating an application backup
+#### Creating an application backup
 
 See [doc/settings/backups.md](doc/settings/backups.md#creating-an-application-backup).
 
@@ -254,6 +253,7 @@ Omnibus-gitlab uses four different directories.
 
 Although omnibus-gitlab runs on systems that have SELinux enabled, it does not
 use SELinux confinement features:
+
 - omnibus-gitlab creates unconfined system users;
 - omnibus-gitlab services run in an unconfined context.
 
@@ -274,7 +274,7 @@ SELinux profile too.
 
 This section has been moved to separate document [doc/settings/logs.md](doc/settings/logs.md).
 
-##### Tail logs in a console on the server
+#### Tail logs in a console on the server
 
 See [doc/settings/logs.md](doc/settings/logs.md#tail-logs-in-a-console-on-the-server).
 
@@ -324,5 +324,5 @@ This omnibus installer project is based on the awesome work done by Chef in
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
 [database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
-[installation]: https://about.gitlab.com/installation/
+[installation]: https://about.gitlab.com/install/
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template

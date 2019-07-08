@@ -1,6 +1,6 @@
 # Manually Downloading and Installing a GitLab Package
 
-If you do not want to use the official GitLab [package repository](https://about.gitlab.com/installation), you can download and install a Omnibus Gitlab package manually.
+If you do not want to use the official GitLab [package repository](https://about.gitlab.com/install), you can download and install a Omnibus Gitlab package manually.
 
 ## Downloading a GitLab Package
 

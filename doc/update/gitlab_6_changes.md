@@ -7,7 +7,7 @@ The procedure can also be used to upgrade from a CE Omnibus package to an EE
 Omnibus package.
 
 First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
-[EE (license key required)](https://about.gitlab.com/installation/)
+[EE (license key required)](https://about.gitlab.com/install/)
 package to your GitLab server.
 
 1. Stop services, but leave postgres running for the database migrations and
@@ -40,9 +40,8 @@ package to your GitLab server.
 
 ## Updating from GitLab `6.6.0.pre1` to `6.6.4`
 
-1. First, download the latest package from <https://about.gitlab.com/downloads/>
+1. First, download the latest package from <https://about.gitlab.com/install/>
    to your GitLab server.
-
 
 1. Stop unicorn and Sidekiq so we can do database migrations:
 
