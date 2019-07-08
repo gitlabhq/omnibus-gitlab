@@ -44,7 +44,6 @@ module Gitlab
   attribute('registry',    priority: 20).use { Registry }
   attribute('redis',       priority: 20).use { Redis }
   attribute('postgresql',  priority: 20).use { Postgresql }
-  attribute('prometheus',  priority: 20).use { Prometheus }
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
@@ -53,13 +52,15 @@ module Gitlab
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
 
-  attribute_block 'prometheus' do
-    attribute('grafana', priority: 30).use { Grafana }
-    attribute('alertmanager', priority: 30)
-    attribute('node_exporter')
-    attribute('redis_exporter')
-    attribute('postgres_exporter')
-    attribute('gitlab_monitor').use { GitlabMonitor }
+  # Attributes under node['monitoring']
+  attribute_block 'monitoring' do
+    attribute('prometheus',        priority: 20).use { Prometheus }
+    attribute('grafana',           priority: 30).use { Grafana }
+    attribute('alertmanager',      priority: 30)
+    attribute('node_exporter',     priority: 30)
+    attribute('redis_exporter',    priority: 30)
+    attribute('postgres_exporter', priority: 30)
+    attribute('gitlab_monitor',    priority: 30).use { GitlabMonitor }
   end
 
   ## Attributes under node['gitlab']

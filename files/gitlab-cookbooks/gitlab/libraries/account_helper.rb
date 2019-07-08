@@ -71,11 +71,11 @@ class AccountHelper
   end
 
   def prometheus_user
-    node['prometheus']['username']
+    node['monitoring']['prometheus']['username']
   end
 
   def prometheus_group
-    node['prometheus']['group']
+    node['monitoring']['prometheus']['group']
   end
 
   def consul_user

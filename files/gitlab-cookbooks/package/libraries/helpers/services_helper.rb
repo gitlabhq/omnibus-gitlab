@@ -39,7 +39,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
     #
     # Excludes the group, or array of groups, provided in the `except` argument
     # ex: Services.disable_group('redis')
-    #     Services.disable_group('prometheus', except: ['redis', 'postgres'])
+    #     Services.disable_group('monitoring', except: ['redis', 'postgres'])
     #     Services.disable_group(Services::ALL_GROUPS, except: 'redis')
     def disable_group(*groups, except: nil, include_system: false)
       exceptions = [except].flatten
@@ -51,7 +51,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
     #
     # Excludes the group, or array of groups, provided in the `except` argument
     # ex: Services.enable_group('redis')
-    #     Services.enable_group('prometheus', except: ['redis', 'postgres'])
+    #     Services.enable_group('monitoring', except: ['redis', 'postgres'])
     #     Services.enable_group(Services::DEFAULT_GROUP, except: 'redis')
     def enable_group(*groups, except: nil)
       set_service_groups_status(true, *groups, except: except)
@@ -74,7 +74,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
     #
     # Excludes the service, or array of services, provided in the `except` argument
     # ex: Services.enable('mailroom')
-    #     Services.enable(Services::ALL_SERVICES, except: ['prometheus'])
+    #     Services.enable(Services::ALL_SERVICES, except: ['monitoring'])
     def enable(*services, except: nil)
       set_services_status(true, *services, except: except)
     end
@@ -149,8 +149,8 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
 
       service_path = if Gitlab[:node].attribute?(rservice)
                        [rservice]
-                     elsif Gitlab[:node]['prometheus']&.attribute?(rservice)
-                       ['prometheus', rservice]
+                     elsif Gitlab[:node]['monitoring']&.attribute?(rservice)
+                       ['monitoring', rservice]
                      else
                        ['gitlab', rservice]
                      end

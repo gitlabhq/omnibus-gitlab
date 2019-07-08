@@ -1,8 +1,0 @@
-#!/bin/sh
-exec 2>&1
-<%= render("mount_point_check.erb") %>
-umask 077
-exec chpst -P -e <%= @options[:env_dir] %> \
-  -U <%= node['prometheus']['username'] %>:<%= node['prometheus']['group'] %> \
-  -u <%= node['prometheus']['username'] %>:<%= node['prometheus']['group'] %> \
-  /opt/gitlab/embedded/bin/alertmanager <%= @options[:flags] %>

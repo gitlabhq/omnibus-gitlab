@@ -80,16 +80,16 @@ describe 'gitlab::default' do
 
   context 'prometheus is enabled by default' do
     it 'includes the prometheus recipe' do
-      expect(chef_run).to include_recipe('prometheus::prometheus')
-      expect(chef_run).not_to include_recipe('prometheus::prometheus_disable')
+      expect(chef_run).to include_recipe('monitoring::prometheus')
+      expect(chef_run).not_to include_recipe('monitoring::prometheus_disable')
     end
   end
 
   context 'with prometheus disabled' do
     before { stub_gitlab_rb(prometheus: { enable: false }) }
     it 'includes the prometheus_disable recipe' do
-      expect(chef_run).to include_recipe('prometheus::prometheus_disable')
-      expect(chef_run).not_to include_recipe('prometheus::prometheus')
+      expect(chef_run).to include_recipe('monitoring::prometheus_disable')
+      expect(chef_run).not_to include_recipe('monitoring::prometheus')
     end
   end
 end
