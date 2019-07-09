@@ -1,0 +1,5 @@
+---
+title: Fix error with repmgr and PostgreSQL 9
+merge_request: 3417
+author:
+type: fixed
