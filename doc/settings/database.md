@@ -159,6 +159,7 @@ seeking to enable WAL archiving:
 To enable WAL Archiving:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
+
     ```ruby
     # Replication settings
     postgresql['sql_replication_user'] = "gitlab_replicator"
@@ -201,6 +202,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
     lines.
 
     **Note:**
+
     - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
     plain-text passwords.
     - Postgresql allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/runtime-config-connection.html)
@@ -277,7 +279,7 @@ The following settings are affected in the `postgresql` block:
   authentication. Replace `securesqlpassword` in the example below with an acceptable
   password.
 
-```Ruby
+```ruby
 postgresql['listen_address'] = '0.0.0.0'
 postgresql['port'] = 5432
 postgresql['md5_auth_cidr_addresses'] = %w()

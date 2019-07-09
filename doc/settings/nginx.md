@@ -717,7 +717,7 @@ Reading: 0 Writing: 1 Waiting: 0
 
 Edit `/etc/gitlab/gitlab.rb`:
 
-```Ruby
+```ruby
 nginx['status'] = {
   "listen_addresses" => ["127.0.0.1"],
   "fqdn" => "dev.example.com",
