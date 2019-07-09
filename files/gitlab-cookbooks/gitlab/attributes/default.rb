@@ -247,6 +247,7 @@ default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 default['gitlab']['gitlab-rails']['smartcard_enabled'] = false
 default['gitlab']['gitlab-rails']['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
 default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'] = 3444
+default['gitlab']['gitlab-rails']['smartcard_required_for_git_access'] = false
 
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
