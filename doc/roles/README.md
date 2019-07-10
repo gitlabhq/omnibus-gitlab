@@ -80,6 +80,16 @@ for configuration steps.
 
   *By default, enables all of GitLab's default single node services. (Nginx, Unicorn, Redis, Sidekiq, etc)*
 
+### Monitoring Roles
+
+Monitoring roles are used to setup monitoring of HA installs. Additional documentation is available in the HA [Monitoring documentation](https://docs.gitlab.com/ee/administration/high_availability/monitoring_node.html).
+
+- **monitoring_role**
+
+  Configures a central monitoring server to collect metrics and provide dashboards.
+
+  Enables Prometheus, Alertmanager, and Grafana.
+
 ### Postgres Roles
 
 Documentation on the usage of the Postgres Roles can be found in [Configuring Postgres HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)

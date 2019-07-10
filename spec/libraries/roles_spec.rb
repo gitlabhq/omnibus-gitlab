@@ -98,4 +98,19 @@ describe 'GitLabRoles' do
       expect(Services).to have_received(:enable_group).with('rails').once
     end
   end
+
+  describe 'MonitoringRole' do
+    before do
+      allow(MonitoringRole).to receive(:load_role).and_call_original
+    end
+
+    it 'enables the monitoring services' do
+      stub_gitlab_rb(roles: %w(monitoring_role))
+
+      Gitlab.load_roles
+
+      expect(MonitoringRole).to have_received(:load_role)
+      expect(Services).to have_received(:enable_group).with('monitoring_role').once
+    end
+  end
 end

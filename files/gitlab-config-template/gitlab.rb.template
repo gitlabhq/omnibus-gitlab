@@ -1385,6 +1385,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/
 ################################################################################
 
+###! **To enable only Monitoring service in this machine, uncomment
+###!   the line below.**
+###! Docs: https://docs.gitlab.com/ce/administration/high_availability
+# monitoring_role['enable'] = true
+
 # prometheus['enable'] = true
 # prometheus['monitor_kubernetes'] = true
 # prometheus['username'] = 'gitlab-prometheus'
