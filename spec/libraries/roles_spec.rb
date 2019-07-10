@@ -105,7 +105,7 @@ describe 'GitLabRoles' do
     end
 
     it 'enables the monitoring services' do
-      stub_gitlab_rb(monitoring_role: { enable: true })
+      stub_gitlab_rb(roles: %w(monitoring_role))
 
       Gitlab.load_roles
 
