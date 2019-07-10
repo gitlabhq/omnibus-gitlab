@@ -82,7 +82,7 @@ for configuration steps.
 
 ### Monitoring Roles
 
-Monitoring roles are used to setup monitoring of HA installs. Additional documentation is available in in the HA [Monitoring documentation](https://docs.gitlab.com/ee/administration/high_availability/monitoring_node.html).
+Monitoring roles are used to setup monitoring of HA installs. Additional documentation is available in the HA [Monitoring documentation](https://docs.gitlab.com/ee/administration/high_availability/monitoring_node.html).
 
 - **monitoring_role**
 
