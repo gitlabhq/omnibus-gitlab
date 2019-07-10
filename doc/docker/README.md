@@ -69,8 +69,10 @@ sudo docker run --detach \
 This will ensure that the Docker process has enough permissions to create the
 config files in the mounted volumes.
 
-If you are using the [Kerberos integration](https://docs.gitlab.com/ee/integration/kerberos.html) **[STARTER ONLY]**,
-then you will also need to publish your Kerberos port (e.g., `--publish 8443:8443`).
+You will also need to publish your Kerberos port (e.g., `--publish 8443:8443`)
+if you are using the [Kerberos
+integration](https://docs.gitlab.com/ee/integration/kerberos.html). **(STARTER ONLY)**
+
 Failure to do so will prevent Git operations via Kerberos.
 
 ## Where is the data stored?
