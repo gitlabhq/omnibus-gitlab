@@ -73,7 +73,7 @@ class LetsEncrypt
 
     private
 
-    LETSENCRYPT_ISSUER = %(/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3).freeze
+    LETSENCRYPT_ISSUER = %r(/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X[1-4]).freeze
 
     # Checks wheather the existing Let's Encrypt certificate is expired and needs renewal.
     #
