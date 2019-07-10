@@ -80,6 +80,16 @@ mattermost_external_url "https://mattermost.example.com" # mattermost, must use 
 
 > **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) ***10.7***.
 
+> **Caution**
+> Administrators installing or upgrading to GitLab version ***12.1*** or later and plan on using
+> their own **Let's Encrypt** certificate should set the following in `/etc/gitlab/gitlab.rb` to
+> disable automatic renewal. **Otherwise, a `gitlab-ctl reconfigure` may attempt to renew the
+> certificates, and thus overwrite them.**
+>
+> ```ruby
+> letsencrypt['enable'] = false
+> ```
+
 Default installations schedule renewals after midnight on every 4th day. The minute is determined by the value in `external_url` to help distribute the load
 on the upstream `Let's Encrypt` servers.
 
@@ -108,6 +118,16 @@ Renew **Let's Encrypt** certificates manually using ***one*** of the following c
 ```sh
 # gitlab-ctl renew-le-certs
 ```
+
+> **Caution**
+> GitLab version ***12.1*** or later will attempt to renew any **Let's Encrypt** certificate.
+> If you plan to use your own **Let's Encrypt** certificate you must set the following
+> in `/etc/gitlab/gitlab.rb` to disable integration. **Otherwise the the certificate
+> could be overwritten due to the renewal.**
+>
+> ```ruby
+> letsencrypt['enable'] = false
+> ```
 
 > **Tip**
 >
