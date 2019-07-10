@@ -36,9 +36,4 @@ build do
   env['PATH'] = "#{install_dir}/embedded/postgresql/9.6/bin:#{env['PATH']}"
   make "-j #{workers} USE_PGXS=1 all", env: env
   make "-j #{workers} USE_PGXS=1 install", env: env
-
-  block 'link bin files' do
-    psql_bins = File.dirname(File.realpath(embedded_bin('psql')))
-    link File.join(psql_bins, 'repmgr*'), "#{install_dir}/embedded/bin/"
-  end
 end
