@@ -67,6 +67,8 @@ class OhaiHelper
           version = 'jessie'
         when /^9\./
           version = 'stretch'
+        when /^10\./
+          version = 'buster'
         end
       when 'centos'
         case ohai['platform_version']
