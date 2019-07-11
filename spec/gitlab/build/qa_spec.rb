@@ -37,4 +37,21 @@ describe Build::QA do
       Build::QA.checkout_gitlab_rails
     end
   end
+
+  describe '.get_gitlab_rails_sha' do
+    it 'returns the correct stable tag' do
+      allow(Build::Info).to receive(:gitlab_version).and_return("9.0.0")
+      allow(Build::Check).to receive(:on_tag?).and_return(true)
+
+      expect(Build::QA.get_gitlab_rails_sha).to eq("v9.0.0")
+    end
+
+    it 'returns the correct auto-deploy commit sha' do
+      allow(Build::Info).to receive(:gitlab_version).and_return("bebc7c1e290074863e0d2621b3a4c4c7bdb072ae")
+      allow(Build::Check).to receive(:on_tag?).and_return(true)
+      allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
+
+      expect(Build::QA.get_gitlab_rails_sha).to eq("bebc7c1e290074863e0d2621b3a4c4c7bdb072ae")
+    end
+  end
 end
