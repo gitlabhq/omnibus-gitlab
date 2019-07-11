@@ -35,7 +35,8 @@ module Build
         version = Build::Info.gitlab_version
 
         # Tags have a 'v' prepended to them, which is not present in VERSION file.
-        version = "v#{version}" if Build::Check.on_tag?
+        # Unless the tag is an auto-deploy tag
+        version = "v#{version}" if Build::Check.on_tag? && !Build::Check.is_auto_deploy?
       end
 
       version
