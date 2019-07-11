@@ -1,0 +1,5 @@
+---
+title: Enable frame pointer in Redis compile options
+merge_request: 3421
+author:
+type: other

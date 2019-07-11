@@ -34,6 +34,8 @@ build do
     'PREFIX' => "#{install_dir}/embedded"
   )
 
+  env['CFLAGS'] << ' -fno-omit-frame-pointer'
+
   update_config_guess
 
   make "-j #{workers}", env: env
