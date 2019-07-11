@@ -64,6 +64,7 @@ and `nginx/gitlab_access.log`. You can configure logrotate via
 ```
 # Below are some of the default settings
 logging['logrotate_frequency'] = "daily" # rotate logs daily
+logging['logrotate_maxsize'] = nil # logs will be rotated when they grow bigger than size specified for `maxsize`, even before the specified time interval (daily, weekly, monthly, or yearly)
 logging['logrotate_size'] = nil # do not rotate by size by default
 logging['logrotate_rotate'] = 30 # keep 30 rotated logs
 logging['logrotate_compress'] = "compress" # see 'man logrotate'

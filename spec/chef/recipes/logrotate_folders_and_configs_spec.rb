@@ -74,6 +74,8 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
       expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/size/)
       expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
+        .with_content(/maxsize/)
+      expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/dateext/)
     end
 
@@ -81,6 +83,7 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
       stub_gitlab_rb(logging:
         { logrotate_frequency: "weekly",
           logrotate_size: "50",
+          logrotate_maxsize: "50",
           logrotate_rotate: "50",
           logrotate_compress: "nocompress",
           logrotate_method: "copy",
@@ -99,6 +102,8 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
         .with_content(/postrotate/)
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/size 50/)
+      expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
+        .with_content(/maxsize 50/)
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/dateext/)
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')

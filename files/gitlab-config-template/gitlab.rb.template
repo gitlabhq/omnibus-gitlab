@@ -1125,6 +1125,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # logging['svlogd_udp'] = nil # transmit log messages via UDP
 # logging['svlogd_prefix'] = nil # custom prefix for log messages
 # logging['logrotate_frequency'] = "daily" # rotate logs daily
+# logging['logrotate_maxsize'] = nil # rotate logs when they grow bigger than size bytes even before the specified time interval (daily, weekly, monthly, or yearly)
 # logging['logrotate_size'] = nil # do not rotate by size by default
 # logging['logrotate_rotate'] = 30 # keep 30 rotated logs
 # logging['logrotate_compress'] = "compress" # see 'man logrotate'

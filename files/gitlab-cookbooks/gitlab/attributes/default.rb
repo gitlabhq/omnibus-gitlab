@@ -633,6 +633,7 @@ default['gitlab']['logging']['udp_log_shipping_host'] = nil # remote host to shi
 default['gitlab']['logging']['udp_log_shipping_hostname'] = nil # set the hostname for log messages shipped via UDP
 default['gitlab']['logging']['udp_log_shipping_port'] = 514 # remote port to ship log messages to via UDP
 default['gitlab']['logging']['logrotate_frequency'] = "daily" # rotate logs daily
+default['gitlab']['logging']['logrotate_maxsize'] = nil # rotate logs when they grow bigger than size bytes even before the specified time interval (daily, weekly, monthly, or yearly)
 default['gitlab']['logging']['logrotate_size'] = nil # do not rotate by size by default
 default['gitlab']['logging']['logrotate_rotate'] = 30 # keep 30 rotated logs
 default['gitlab']['logging']['logrotate_compress'] = "compress" # see 'man logrotate'
