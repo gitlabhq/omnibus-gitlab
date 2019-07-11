@@ -1,0 +1,5 @@
+---
+title: Add ability to set 'maxsize' for logrotate configs
+merge_request: 3419
+author:
+type: added

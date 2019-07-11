@@ -4,6 +4,7 @@
 <%= @log_directory %>/*.log {
   <%= @options['logrotate_frequency'] %>
   <%= "size #{@options['logrotate_size']}" if @options['logrotate_size'] %>
+  <%= "maxsize #{@options['logrotate_maxsize']}" if @options['logrotate_maxsize'] %>
   rotate <%= @options['logrotate_rotate'] %>
 <% if @options['logrotate_dateformat'] %>
   <%= "dateext" %>
