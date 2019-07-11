@@ -11,7 +11,7 @@ automatically configured. Grafana will be available on `https://gitlab.example.c
 
 ## Specifying an admin password
 
-Default admin credentials for Grafana is `root` as both username and password.
+Default admin credentials for Grafana is `admin` as both username and password.
 It is recommended that you change this admin password. After logging in
 initially using these credentials, Grafana will present you with a screen to
 change the password.
