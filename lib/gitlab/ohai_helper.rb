@@ -44,48 +44,68 @@ class OhaiHelper
       end
     end
 
+    def get_ubuntu_version
+      case ohai['platform_version']
+      when /^12\.04/
+        'precise'
+      when /^14\.04/
+        'trusty'
+      when /^16\.04/
+        'xenial'
+      when /^18\.04/
+        'bionic'
+      end
+    end
+
+    def get_debian_version
+      case ohai['platform_version']
+      when /^7\./
+        'wheezy'
+      when /^8\./
+        'jessie'
+      when /^9\./
+        'stretch'
+      when /^10\./
+        'buster'
+      end
+    end
+
+    def get_centos_version
+      case ohai['platform_version']
+      when /^6\./
+        '6'
+      when /^7\./
+        '7'
+      end
+    end
+
+    def get_opensuse_version
+      ohai['platform_version']
+    end
+
+    def get_suse_version
+      case ohai['platform_version']
+      when /^12\./
+        '12.2'
+      when /^11\./
+        '11.4'
+      end
+    end
+
     def os_platform_version
       version = :unknown
 
       case ohai['platform']
       when 'ubuntu'
-        case ohai['platform_version']
-        when /^12\.04/
-          version = 'precise'
-        when /^14\.04/
-          version = 'trusty'
-        when /^16\.04/
-          version = 'xenial'
-        when /^18\.04/
-          version = 'bionic'
-        end
+        version = get_ubuntu_version
       when 'debian', 'raspbian'
-        case ohai['platform_version']
-        when /^7\./
-          version = 'wheezy'
-        when /^8\./
-          version = 'jessie'
-        when /^9\./
-          version = 'stretch'
-        when /^10\./
-          version = 'buster'
-        end
+        version = get_debian_version
       when 'centos'
-        case ohai['platform_version']
-        when /^6\./
-          version = '6'
-        when /^7\./
-          version = '7'
-        end
+        version = get_centos_version
       when 'opensuse', 'opensuseleap'
-        version = ohai['platform_version']
+        version = get_opensuse_version
       when 'suse'
-        case ohai['platform_version']
-        when /^12\./
-          version = '12.2'
-        when /^11\./
-          version = '11.4'
-        end
+        version = get_suse_version
       end
 
       version
