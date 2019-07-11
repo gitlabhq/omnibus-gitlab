@@ -537,6 +537,9 @@ default['gitlab']['gitlab-pages']['auth_secret'] = nil
 default['gitlab']['gitlab-pages']['insecure_ciphers'] = false
 default['gitlab']['gitlab-pages']['tls_min_version'] = nil
 default['gitlab']['gitlab-pages']['tls_max_version'] = nil
+default['gitlab']['gitlab-pages']['sentry_enabled'] = false
+default['gitlab']['gitlab-pages']['sentry_dsn'] = nil
+default['gitlab']['gitlab-pages']['sentry_environment'] = nil
 
 ####
 # Nginx

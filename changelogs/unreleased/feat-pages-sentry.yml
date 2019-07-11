@@ -1,0 +1,5 @@
+---
+title: add option to enable sentry and to define dsn/environment for pages
+merge_request: 3424
+author: Roger Meier
+type: added
