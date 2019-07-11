@@ -191,17 +191,33 @@ describe 'letsencrypt::renew' do
     ChefSpec::SoloRunner.converge('gitlab::letsencrypt_renew')
   end
 
-  before do
-    allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      external_url: 'https://standalone.fakehost.com',
-      letsencrypt: {
-        enable: true
-      }
-    )
+  context 'letsencrypt enabled' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+      stub_gitlab_rb(
+        external_url: 'https://standalone.fakehost.com',
+        letsencrypt: {
+          enable: true
+        }
+      )
+    end
+
+    it 'executes letsencrypt_certificate' do
+      expect(chef_run).to create_letsencrypt_certificate('standalone.fakehost.com')
+    end
   end
 
-  it 'executes letsencrypt_certificate' do
-    expect(chef_run).to create_letsencrypt_certificate('standalone.fakehost.com')
+  context 'letsencrypt auto-enabled' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+      allow(OpenSSL::X509::Certificate).to receive(:not_after).and_return(Time.now - 1)
+      stub_gitlab_rb(
+        external_url: 'https://standalone.fakehost.com'
+      )
+    end
+
+    it 'executes letsencrypt_certificate' do
+      expect(chef_run).to create_letsencrypt_certificate('standalone.fakehost.com')
+    end
   end
 end
