@@ -1,0 +1,5 @@
+---
+title: Make Roles respect user specified configuration
+merge_request: 3423
+author:
+type: fixed
