@@ -27,7 +27,7 @@ dependency 'cacerts'
 dependency 'makedepend' unless aix?
 dependency 'patch' if solaris2?
 
-version = Gitlab::Version.new('openssl', 'OpenSSL_1_0_2r')
+version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1c')
 
 default_version version.print(false)
 
@@ -90,18 +90,18 @@ build do
 
   configure_command = case ohai['platform']
                       when 'aix'
-                        ['perl', './Configure',
+                        ['perl', './config',
                          'aix64-cc',
                          common_args,
                          "-L#{install_dir}/embedded/lib",
                          "-I#{install_dir}/embedded/include",
                          "-Wl,-blibpath:#{install_dir}/embedded/lib:/usr/lib:/lib"].join(' ')
                       when 'mac_os_x'
-                        ['./Configure',
+                        ['./config',
                          'darwin64-x86_64-cc',
                          common_args].join(' ')
                       when 'smartos'
-                        ['/bin/bash ./Configure',
+                        ['/bin/bash ./config',
                          'solaris64-x86_64-gcc',
                          common_args,
                          "-L#{install_dir}/embedded/lib",
@@ -110,7 +110,7 @@ build do
                          '-static-libgcc'].join(' ')
                       when 'solaris2'
                         if /sun/.match?(ohai['kernel']['machine'])
-                          ['/bin/sh ./Configure',
+                          ['/bin/sh ./config',
                            'solaris-sparcv9-gcc',
                            common_args,
                            "-L#{install_dir}/embedded/lib",
@@ -120,7 +120,7 @@ build do
                         else
                           # This should not require a /bin/sh, but without it we get
                           # Errno::ENOEXEC: Exec format error
-                          ['/bin/sh ./Configure',
+                          ['/bin/sh ./config',
                            'solaris-x86-gcc',
                            common_args,
                            "-L#{install_dir}/embedded/lib",
@@ -130,9 +130,9 @@ build do
                         end
                       else
                         config = if ohai['os'] == 'linux' && ohai['kernel']['machine'] == 'ppc64'
-                                   './Configure linux-ppc64'
+                                   './config linux-ppc64'
                                  elsif ohai['os'] == 'linux' && ohai['kernel']['machine'] == 's390x'
-                                   './Configure linux64-s390x'
+                                   './config linux64-s390x'
                                  else
                                    './config'
                                  end
@@ -147,15 +147,16 @@ build do
   # openssl build process uses a `makedepend` tool that we build inside the bundle.
   env['PATH'] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + Gitlab::Util.get_env('PATH')
 
+  command configure_command, env: env
+
   if aix?
     patch_env = env.dup
     patch_env['PATH'] = "/opt/freeware/bin:#{env['PATH']}"
-    patch source: 'openssl-1.0.2f-remove-build-docs.patch', env: patch_env
+    patch source: 'openssl-1.1.1c-do-not-install-docs.patch', env: patch_env
   else
-    patch source: 'openssl-1.0.2f-remove-build-docs.patch'
+    patch source: 'openssl-1.1.1c-do-not-install-docs.patch'
   end
 
-  command configure_command, env: env
   make 'depend', env: env
   # make -j N on openssl is not reliable
   make env: env
