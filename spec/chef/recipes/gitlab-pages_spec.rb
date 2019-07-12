@@ -122,7 +122,10 @@ describe 'gitlab::gitlab-pages' do
           access_control: true,
           insecure_ciphers: true,
           tls_min_version: "tls1.0",
-          tls_max_version: "tls1.2"
+          tls_max_version: "tls1.2",
+          sentry_enabled: true,
+          sentry_dsn: 'https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40',
+          sentry_environment: 'production'
         }
       )
     end
@@ -166,6 +169,8 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-insecure-ciphers})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-min-version="tls1.0"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version="tls1.2"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-dsn="https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-environment="production"})
     end
 
     it 'correctly renders the pages log run file' do
