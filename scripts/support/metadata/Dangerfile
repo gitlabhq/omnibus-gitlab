@@ -22,5 +22,10 @@ has_pick_into_stable_label = gitlab.mr_labels.find { |label| label.start_with?('
 if gitlab.branch_for_base != "master" && !has_pick_into_stable_label
   warn "Most of the time, all merge requests should target `master`. Otherwise, please set the relevant `Pick into X.Y` label."
 end
+
+THROUGHPUT_LABELS = ['Community contribution', 'security', 'bug', 'feature', 'backstage'].freeze
+if (gitlab.mr_labels & THROUGHPUT_LABELS).empty?
+  warn "This merge request is missing any [throughput labels](https://about.gitlab.com/handbook/engineering/management/throughput)."
+end
 # rubocop:enable Style/IfUnlessModifier
 # rubocop:enable Style/SignalException
