@@ -216,7 +216,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Multi-node / HA](#multi-node--ha-deployment)| GitLab CE/EE on multiple nodes |
 | [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
 
-## Single deployment
+### Single deployment
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -257,7 +257,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
     sudo gitlab-ctl hup sidekiq
     ```
 
-## Multi-node / HA deployment
+### Multi-node / HA deployment
 
 Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
 node throughout the process.
@@ -329,7 +329,7 @@ node throughout the process.
     sudo gitlab-ctl hup sidekiq
     ```
 
-## Geo deployment
+### Geo deployment
 
 **Primary node**
 
