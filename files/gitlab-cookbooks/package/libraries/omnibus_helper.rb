@@ -26,6 +26,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
     return node['gitlab'][service_name]['enable'] if node['gitlab'].key?(service_name)
+    return node['monitoring'][service_name]['enable'] if node['monitoring'].key?(service_name)
     node[service_name]['enable']
   end
 
