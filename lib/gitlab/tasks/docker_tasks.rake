@@ -4,6 +4,7 @@ require_relative '../build/info'
 require_relative '../build/check'
 require_relative '../build/gitlab_image'
 require_relative "../util.rb"
+require_relative "../docker_image_memory_measurer.rb"
 
 namespace :docker do
   namespace :build do
@@ -17,6 +18,14 @@ namespace :docker do
         'latest'
       )
     end
+  end
+
+  task :measure_memory do
+    image_reference = Gitlab::Util.get_env('IMAGE_REFERENCE') || Build::Info.image_reference
+    debug_output_dir = Gitlab::Util.get_env('DEBUG_OUTPUT_DIR')
+
+    docker_image_memory_measurer = Gitlab::DockerImageMemoryMeasurer.new(image_reference, debug_output_dir)
+    puts docker_image_memory_measurer.measure
   end
 
   desc "Push Docker Image to Registry"

@@ -191,6 +191,17 @@ module Build
       def current_git_tag
         `git describe --exact-match 2>/dev/null`
       end
+
+      def image_reference
+        if Gitlab::Util.get_env('CI_PIPELINE_TRIGGERED') == 'true' && Gitlab::Util.get_env('CI_PIPELINE_SOURCE') == 'trigger'
+          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Gitlab::Util.get_env('IMAGE_TAG')}"
+        elsif Build::Check.is_nightly? || Build::Check.on_tag?
+          # We push nightly images to both dockerhub and gitlab registry
+          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
+        else
+          abort 'unknown pipeline type: only support triggered/nightly/tag pipeline'
+        end
+      end
     end
   end
 end
