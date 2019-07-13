@@ -1,5 +1,6 @@
 require 'optparse'
 require_relative 'util'
+require_relative '../gitlab_ctl'
 
 # For testing purposes, if the first path cannot be found load the second
 begin
@@ -11,14 +12,16 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, tmp_dir = nil, timeout = nil)
+    def initialize(base_path, data_path, default_version, upgrade_version, tmp_dir = nil, timeout = nil)
       @base_path = base_path
       @data_path = data_path
       @tmp_dir = tmp_dir
       @timeout = timeout
+      @default_version = default_version
+      @upgrade_version = upgrade_version
     end
 
     def default_data_dir
@@ -88,6 +91,27 @@ module GitlabCtl
       @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
     end
 
+    def run_pg_upgrade
+      unless GitlabCtl::Util.progress_message('Upgrading the data') do
+        begin
+          run_pg_command(
+            "#{base_path}/embedded/bin/pg_upgrade " \
+            "-b #{base_path}/embedded/postgresql/#{default_version.major}/bin " \
+            "--old-datadir=#{data_dir}  " \
+            "--new-datadir=#{tmp_data_dir}.#{upgrade_version.major}  " \
+            "-B #{base_path}/embedded/bin"
+          )
+        rescue GitlabCtl::Errors::ExecutionError => ee
+          $stderr.puts "Error upgrading the data to version #{upgrade_version}"
+          $stderr.puts "STDOUT: #{ee.stdout}"
+          $stderr.puts "STDERR: #{ee.stderr}"
+          false
+        end
+      end
+        die 'Error upgrading the database'
+      end
+    end
+
     class << self
       def parse_options(args)
         options = {
@@ -117,6 +141,15 @@ module GitlabCtl
         end.parse!(args)
 
         options
+      end
+
+      def die(message)
+        $stderr.puts '== Fatal error =='
+        $stderr.puts message
+        revert
+        $stderr.puts "== Reverted to #{default_version}. Please check output for what went wrong =="
+        maintenance_mode('disable')
+        exit 1
       end
     end
   end
