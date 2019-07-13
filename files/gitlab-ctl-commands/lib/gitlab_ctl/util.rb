@@ -116,6 +116,17 @@ module GitlabCtl
         $stdout.print "\nInterrupt received, cancelling operation.\n"
         false
       end
+
+      def progress_message(message, &block)
+        $stdout.print "\r#{message}:"
+        results = yield
+        if results
+          $stdout.print "\r#{message}: \e[32mOK\e[0m\n"
+        else
+          $stdout.print "\r#{message}: \e[31mNOT OK\e[0m\n"
+        end
+        results
+      end
     end
   end
 end
