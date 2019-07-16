@@ -117,11 +117,11 @@ module SettingsHelper
   end
 
   def hyphenate_config_keys
-    results = { "gitlab" => {}, "roles" => {} }
+    results = { "gitlab" => {}, "roles" => {}, "monitoring" => {} }
 
     # Add the settings to the results
     sorted_settings.each do |key, value|
-      raise "Attribute parent value invalid" if value[:parent] && !results.key?(value[:parent])
+      raise "Attribute parent value invalid for key: #{key} (#{value})" if value[:parent] && !results.key?(value[:parent])
       target = value[:parent] ? results[value[:parent]] : results
 
       rkey = key.tr('_', '-')

@@ -6,6 +6,6 @@ cd '<%= @options[:working_dir] %>'
 
 umask 077
 exec chpst -P -e <%= @options[:env_dir] %> \
-  -U <%= node['gitlab']['prometheus']['username'] %>:<%= node['gitlab']['prometheus']['group'] %> \
-  -u <%= node['gitlab']['prometheus']['username'] %>:<%= node['gitlab']['prometheus']['group'] %> \
+  -U <%= node['monitoring']['prometheus']['username'] %>:<%= node['monitoring']['prometheus']['group'] %> \
+  -u <%= node['monitoring']['prometheus']['username'] %>:<%= node['monitoring']['prometheus']['group'] %> \
   /opt/gitlab/embedded/bin/grafana-server -config '<%= @options[:config] %>'

@@ -15,9 +15,9 @@
 # limitations under the License.
 #
 
-require_relative 'postgresql.rb'
 require_relative 'prometheus_helper.rb'
-require_relative 'redis.rb'
+require_relative '../../gitlab/libraries/postgresql.rb'
+require_relative '../../gitlab/libraries/redis.rb'
 
 require 'yaml'
 require 'json'
@@ -25,7 +25,7 @@ require 'json'
 module Prometheus
   class << self
     def services
-      Services.find_by_group('prometheus').map { |name, _| name.tr('_', '-') }
+      Services.find_by_group('monitoring').map { |name, _| name.tr('_', '-') }
     end
 
     def parse_variables
@@ -40,7 +40,7 @@ module Prometheus
 
     def parse_monitoring_enabled
       # Disabled monitoring if it has been explicitly set to false
-      Services.disable_group('prometheus', include_system: true) if Gitlab['prometheus_monitoring']['enable'] == false
+      Services.disable_group('monitoring', include_system: true) if Gitlab['prometheus_monitoring']['enable'] == false
     end
 
     def parse_exporter_enabled
@@ -58,7 +58,7 @@ module Prometheus
     end
 
     def parse_prometheus_flags
-      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      default_config = Gitlab['node']['monitoring']['prometheus'].to_hash
       user_config = Gitlab['prometheus']
 
       home_directory = user_config['home'] || default_config['home']
@@ -75,7 +75,7 @@ module Prometheus
     end
 
     def parse_alertmanager_flags
-      default_config = Gitlab['node']['gitlab']['alertmanager'].to_hash
+      default_config = Gitlab['node']['monitoring']['alertmanager'].to_hash
       user_config = Gitlab['alertmanager']
 
       home_directory = user_config['home'] || default_config['home']
@@ -93,7 +93,7 @@ module Prometheus
     end
 
     def parse_node_exporter_flags
-      default_config = Gitlab['node']['gitlab']['node-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['node-exporter'].to_hash
       user_config = Gitlab['node_exporter']
       runit_config = Gitlab['node']['runit'].to_hash
 
@@ -113,7 +113,7 @@ module Prometheus
     end
 
     def parse_redis_exporter_flags
-      default_config = Gitlab['node']['gitlab']['redis-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['redis-exporter'].to_hash
       user_config = Gitlab['redis_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
@@ -128,7 +128,7 @@ module Prometheus
     end
 
     def parse_postgres_exporter_flags
-      default_config = Gitlab['node']['gitlab']['postgres-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['postgres-exporter'].to_hash
       user_config = Gitlab['postgres_exporter']
 
       home_directory = user_config['home'] || default_config['home']
@@ -145,7 +145,7 @@ module Prometheus
 
     def parse_prometheus_alertmanager_config
       prom_user_config = Gitlab['prometheus']
-      default_config = Gitlab['node']['gitlab']['alertmanager'].to_hash
+      default_config = Gitlab['node']['monitoring']['alertmanager'].to_hash
       user_config = Gitlab['alertmanager']
 
       if Services.enabled?('alertmanager')
@@ -206,7 +206,7 @@ module Prometheus
       # Don't parse if prometheus is explicitly disabled
       return unless Services.enabled?('prometheus')
 
-      default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+      default_config = Gitlab['node']['monitoring']['prometheus'].to_hash
       user_config = Gitlab['prometheus']
 
       home_directory = user_config['home'] || default_config['home']
@@ -268,7 +268,7 @@ module Prometheus
       # Don't parse if gitlab_monitor is explicitly disabled
       return unless Services.enabled?('gitlab_monitor')
 
-      default_config = Gitlab['node']['gitlab']['gitlab-monitor'].to_hash
+      default_config = Gitlab['node']['monitoring']['gitlab-monitor'].to_hash
       user_config = Gitlab['gitlab_monitor']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
@@ -452,7 +452,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ["#{exporter}-exporter"] }]
         }
       else
-        default_config = Gitlab['node']['gitlab']["#{exporter}-exporter"].to_hash
+        default_config = Gitlab['node']['monitoring']["#{exporter}-exporter"].to_hash
         user_config = Gitlab["#{exporter}_exporter"]
 
         listen_address = user_config['listen_address'] || default_config['listen_address']
@@ -516,7 +516,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ['prometheus'] }]
         }
       else
-        default_config = Gitlab['node']['gitlab']['prometheus'].to_hash
+        default_config = Gitlab['node']['monitoring']['prometheus'].to_hash
         user_config = Gitlab['prometheus']
 
         listen_address = user_config['listen_address'] || default_config['listen_address']

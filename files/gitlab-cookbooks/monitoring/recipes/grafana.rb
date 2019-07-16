@@ -17,11 +17,11 @@
 #
 account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-grafana_log_dir = node['gitlab']['grafana']['log_directory']
-grafana_dir = node['gitlab']['grafana']['home']
+grafana_log_dir = node['monitoring']['grafana']['log_directory']
+grafana_dir = node['monitoring']['grafana']['home']
 grafana_assets_dir = '/opt/gitlab/embedded/service/grafana'
 grafana_config = File.join(grafana_dir, 'grafana.ini')
-grafana_static_etc_dir = node['gitlab']['grafana']['env_directory']
+grafana_static_etc_dir = node['monitoring']['grafana']['env_directory']
 grafana_provisioning_dir = File.join(grafana_dir, 'provisioning')
 grafana_provisioning_dashboards_dir = File.join(grafana_provisioning_dir, 'dashboards')
 grafana_provisioning_datasources_dir = File.join(grafana_provisioning_dir, 'datasources')
@@ -36,7 +36,7 @@ external_url = if Gitlab['external_url']
 
 # grafana runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
-include_recipe 'gitlab::prometheus_user'
+include_recipe 'monitoring::user'
 
 directory grafana_log_dir do
   owner prometheus_user
@@ -88,7 +88,7 @@ directory grafana_static_etc_dir do
   recursive true
 end
 
-if !node['gitlab']['grafana']['gitlab_secret'] && !node['gitlab']['grafana']['gitlab_application_id']
+if !node['monitoring']['grafana']['gitlab_secret'] && !node['monitoring']['grafana']['gitlab_application_id']
   ruby_block "authorize Grafana with GitLab" do
     block do
       GrafanaHelper.authorize_with_gitlab(external_url)
@@ -105,7 +105,7 @@ ruby_block "populate Grafana configuration options" do
 end
 
 env_dir grafana_static_etc_dir do
-  variables node['gitlab']['grafana']['env']
+  variables node['monitoring']['grafana']['env']
   notifies :restart, 'service[grafana]'
 end
 
@@ -114,18 +114,18 @@ template grafana_config do
   variables lazy {
     {
       'external_url' => external_url,
-      'data_path' => File.join(node['gitlab']['grafana']['home'], 'data'),
-    }.merge(node['gitlab']['grafana'])
+      'data_path' => File.join(node['monitoring']['grafana']['home'], 'data'),
+    }.merge(node['monitoring']['grafana'])
   }
   owner prometheus_user
   mode '0644'
   notifies :restart, 'service[grafana]'
-  only_if { node['gitlab']['grafana']['enable'] }
+  only_if { node['monitoring']['grafana']['enable'] }
 end
 
 dashboards = {
   'apiVersion' => 1,
-  'providers' => node['gitlab']['grafana']['dashboards']
+  'providers' => node['monitoring']['grafana']['dashboards']
 }
 
 file File.join(grafana_provisioning_dashboards_dir, 'gitlab_dashboards.yml') do
@@ -137,7 +137,7 @@ end
 
 datasources = {
   'apiVersion' => 1,
-  'datasources' => node['gitlab']['grafana']['datasources']
+  'datasources' => node['monitoring']['grafana']['datasources']
 }
 
 file File.join(grafana_provisioning_datasources_dir, 'gitlab_datasources.yml') do
@@ -155,7 +155,7 @@ runit_service 'grafana' do
     working_dir: grafana_dir,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['gitlab']['grafana'].to_hash
+    node['monitoring']['grafana'].to_hash
   )
 end
 

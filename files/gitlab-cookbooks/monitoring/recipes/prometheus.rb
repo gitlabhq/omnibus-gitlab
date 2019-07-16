@@ -17,12 +17,12 @@
 account_helper = AccountHelper.new(node)
 prometheus_helper = PrometheusHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-prometheus_log_dir = node['gitlab']['prometheus']['log_directory']
-prometheus_dir = node['gitlab']['prometheus']['home']
-prometheus_rules_dir = node['gitlab']['prometheus']['rules_directory']
-prometheus_static_etc_dir = node['gitlab']['prometheus']['env_directory']
+prometheus_log_dir = node['monitoring']['prometheus']['log_directory']
+prometheus_dir = node['monitoring']['prometheus']['home']
+prometheus_rules_dir = node['monitoring']['prometheus']['rules_directory']
+prometheus_static_etc_dir = node['monitoring']['prometheus']['env_directory']
 
-include_recipe 'gitlab::prometheus_user'
+include_recipe 'monitoring::user'
 
 directory prometheus_dir do
   owner prometheus_user
@@ -49,21 +49,21 @@ directory prometheus_static_etc_dir do
 end
 
 env_dir prometheus_static_etc_dir do
-  variables node['gitlab']['prometheus']['env']
+  variables node['monitoring']['prometheus']['env']
   notifies :restart, "service[prometheus]"
 end
 
 configuration = Prometheus.hash_to_yaml({
                                           'global' => {
-                                            'scrape_interval' => "#{node['gitlab']['prometheus']['scrape_interval']}s",
-                                            'scrape_timeout' => "#{node['gitlab']['prometheus']['scrape_timeout']}s",
+                                            'scrape_interval' => "#{node['monitoring']['prometheus']['scrape_interval']}s",
+                                            'scrape_timeout' => "#{node['monitoring']['prometheus']['scrape_timeout']}s",
                                           },
-                                          'remote_read' => node['gitlab']['prometheus']['remote_read'],
-                                          'remote_write' => node['gitlab']['prometheus']['remote_write'],
-                                          'rule_files' => node['gitlab']['prometheus']['rules_files'],
-                                          'scrape_configs' => node['gitlab']['prometheus']['scrape_configs'],
+                                          'remote_read' => node['monitoring']['prometheus']['remote_read'],
+                                          'remote_write' => node['monitoring']['prometheus']['remote_write'],
+                                          'rule_files' => node['monitoring']['prometheus']['rules_files'],
+                                          'scrape_configs' => node['monitoring']['prometheus']['scrape_configs'],
                                           'alerting' => {
-                                            'alertmanagers' => node['gitlab']['prometheus']['alertmanagers'],
+                                            'alertmanagers' => node['monitoring']['prometheus']['alertmanagers'],
                                           }
                                         })
 
@@ -90,13 +90,13 @@ runit_service 'prometheus' do
     env_dir: prometheus_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['gitlab']['prometheus'].to_hash
+    { log_directory: node['monitoring']['prometheus']['log_directory'] }
   )
 end
 
 if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
   consul_service 'prometheus' do
-    socket_address node['gitlab']['prometheus']['listen_address']
+    socket_address node['monitoring']['prometheus']['listen_address']
   end
 end
 
@@ -107,17 +107,17 @@ if node['gitlab']['bootstrap']['enable']
 end
 
 template File.join(prometheus_rules_dir, 'gitlab.rules') do
-  source 'prometheus/rules/gitlab.rules'
+  source 'rules/gitlab.rules'
   owner prometheus_user
   mode '0644'
   notifies :run, 'execute[reload prometheus]'
-  only_if { node['gitlab']['prometheus']['enable'] }
+  only_if { node['monitoring']['prometheus']['enable'] }
 end
 
 template File.join(prometheus_rules_dir, 'node.rules') do
-  source 'prometheus/rules/node.rules'
+  source 'rules/node.rules'
   owner prometheus_user
   mode '0644'
   notifies :run, 'execute[reload prometheus]'
-  only_if { node['gitlab']['prometheus']['enable'] }
+  only_if { node['monitoring']['prometheus']['enable'] }
 end

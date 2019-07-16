@@ -18,8 +18,8 @@
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
 gitlab_user = account_helper.gitlab_user
-gitlab_monitor_dir = node['gitlab']['gitlab-monitor']['home']
-gitlab_monitor_log_dir = node['gitlab']['gitlab-monitor']['log_directory']
+gitlab_monitor_dir = node['monitoring']['gitlab-monitor']['home']
+gitlab_monitor_log_dir = node['monitoring']['gitlab-monitor']['log_directory']
 
 directory gitlab_monitor_dir do
   owner gitlab_user
@@ -49,7 +49,7 @@ template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
   mode "0600"
   notifies :restart, "service[gitlab-monitor]"
   variables(
-    probe_sidekiq: node['gitlab']['gitlab-monitor']['probe_sidekiq'],
+    probe_sidekiq: node['monitoring']['gitlab-monitor']['probe_sidekiq'],
     redis_url: redis_url,
     connection_string: connection_string,
     redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
@@ -66,7 +66,7 @@ runit_service "gitlab-monitor" do
   options({
     log_directory: gitlab_monitor_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-monitor'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab-monitor'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']

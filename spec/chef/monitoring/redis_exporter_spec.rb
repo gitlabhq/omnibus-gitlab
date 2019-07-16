@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::redis-exporter' do
+describe 'monitoring::redis-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:node) { chef_run.node }
   let(:default_vars) do
@@ -21,13 +21,13 @@ describe 'gitlab::redis-exporter' do
     end
 
     it 'defaults the redis-exporter to being disabled' do
-      expect(node['gitlab']['redis-exporter']['enable']).to eq false
+      expect(node['monitoring']['redis-exporter']['enable']).to eq false
     end
 
     it 'allows redis-exporter to be explicitly enabled' do
       stub_gitlab_rb(redis_exporter: { enable: true })
 
-      expect(node['gitlab']['redis-exporter']['enable']).to eq true
+      expect(node['monitoring']['redis-exporter']['enable']).to eq true
     end
   end
 

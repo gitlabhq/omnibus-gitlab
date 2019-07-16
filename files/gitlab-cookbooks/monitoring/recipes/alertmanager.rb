@@ -16,13 +16,13 @@
 
 account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-alertmanager_log_dir = node['gitlab']['alertmanager']['log_directory']
-alertmanager_dir = node['gitlab']['alertmanager']['home']
-alertmanager_static_etc_dir = node['gitlab']['alertmanager']['env_directory']
+alertmanager_log_dir = node['monitoring']['alertmanager']['log_directory']
+alertmanager_dir = node['monitoring']['alertmanager']['home']
+alertmanager_static_etc_dir = node['monitoring']['alertmanager']['env_directory']
 
 # alertmanager runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
-include_recipe 'gitlab::prometheus_user'
+include_recipe 'monitoring::user'
 
 directory alertmanager_dir do
   owner prometheus_user
@@ -43,19 +43,19 @@ directory alertmanager_static_etc_dir do
 end
 
 env_dir alertmanager_static_etc_dir do
-  variables node['gitlab']['alertmanager']['env']
+  variables node['monitoring']['alertmanager']['env']
   notifies :restart, "service[alertmanager]"
 end
 
 configuration = {
-  'global' => node['gitlab']['alertmanager']['global'],
-  'templates' => node['gitlab']['alertmanager']['templates'],
+  'global' => node['monitoring']['alertmanager']['global'],
+  'templates' => node['monitoring']['alertmanager']['templates'],
   'route' => {
-    'receiver' => node['gitlab']['alertmanager']['default_receiver'],
-    'routes' => node['gitlab']['alertmanager']['routes'],
+    'receiver' => node['monitoring']['alertmanager']['default_receiver'],
+    'routes' => node['monitoring']['alertmanager']['routes'],
   },
-  'receivers' => node['gitlab']['alertmanager']['receivers'],
-  'inhibit_rules' => node['gitlab']['alertmanager']['inhibit_rules'],
+  'receivers' => node['monitoring']['alertmanager']['receivers'],
+  'inhibit_rules' => node['monitoring']['alertmanager']['inhibit_rules'],
 }
 
 file 'Alertmanager config' do
@@ -74,7 +74,7 @@ runit_service 'alertmanager' do
     env_dir: alertmanager_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['gitlab']['alertmanager'].to_hash
+    node['monitoring']['alertmanager'].to_hash
   )
 end
 

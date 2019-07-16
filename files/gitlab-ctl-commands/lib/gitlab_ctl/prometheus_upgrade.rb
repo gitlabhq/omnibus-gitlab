@@ -67,7 +67,7 @@ module GitlabCtl
         node_attributes = GitlabCtl::Util.get_node_attributes
 
         options = {
-          home_dir: node_attributes.dig(:gitlab, :prometheus, :home),
+          home_dir: node_attributes.dig(:monitoring, :prometheus, :home),
           skip_reconfigure: false,
           wait: true,
         }

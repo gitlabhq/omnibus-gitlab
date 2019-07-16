@@ -17,9 +17,9 @@
 
 # Configure Prometheus Services
 Prometheus.services.each do |service|
-  if node['gitlab'][service]['enable']
-    include_recipe "gitlab::#{service}"
+  if node['monitoring'][service]['enable']
+    include_recipe "monitoring::#{service}"
   else
-    include_recipe "gitlab::#{service}_disable"
+    include_recipe "monitoring::#{service}_disable"
   end
 end

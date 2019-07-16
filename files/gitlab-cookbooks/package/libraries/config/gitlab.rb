@@ -41,16 +41,27 @@ module Gitlab
 
   ## Attributes directly on the node
   attribute('package')
-  attribute('registry', priority: 20).use { Registry }
-  attribute('redis', priority: 20).use { Redis }
-  attribute('postgresql', priority: 20).use { Postgresql }
+  attribute('registry',    priority: 20).use { Registry }
+  attribute('redis',       priority: 20).use { Redis }
+  attribute('postgresql',  priority: 20).use { Postgresql }
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
   attribute('gitaly').use { Gitaly }
-  attribute('mattermost', priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
+  attribute('mattermost',  priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
+
+  # Attributes under node['monitoring']
+  attribute_block 'monitoring' do
+    attribute('prometheus',        priority: 20).use { Prometheus }
+    attribute('grafana',           priority: 30).use { Grafana }
+    attribute('alertmanager',      priority: 30)
+    attribute('node_exporter',     priority: 30)
+    attribute('redis_exporter',    priority: 30)
+    attribute('postgres_exporter', priority: 30)
+    attribute('gitlab_monitor',    priority: 30).use { GitlabMonitor }
+  end
 
   ## Attributes under node['gitlab']
   attribute_block 'gitlab' do
@@ -70,8 +81,6 @@ module Gitlab
     attribute('puma',             priority: 20)
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('gitlab_pages',     priority: 20).use { GitlabPages }
-    attribute('prometheus',       priority: 20).use { Prometheus }
-    attribute('grafana',          priority: 30).use { Grafana }
     attribute('storage_check',    priority: 30).use { StorageCheck }
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
     attribute('external_url',            default: nil)
@@ -94,11 +103,6 @@ module Gitlab
     attribute('logrotate')
     attribute('high_availability')
     attribute('web_server')
-    attribute('alertmanager')
-    attribute('node_exporter')
-    attribute('redis_exporter')
-    attribute('postgres_exporter')
-    attribute('gitlab_monitor').use { GitlabMonitor }
     attribute('prometheus_monitoring')
     attribute('pgbouncer')
     attribute('pgbouncer_exporter')

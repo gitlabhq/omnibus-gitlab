@@ -6,8 +6,8 @@ db_common: &db_common
 
 # Web server config
 server:
-  listen_address: <%= node['gitlab']['gitlab-monitor']['listen_address'] %>
-  listen_port: <%= node['gitlab']['gitlab-monitor']['listen_port'] %>
+  listen_address: <%= node['monitoring']['gitlab-monitor']['listen_address'] %>
+  listen_port: <%= node['monitoring']['gitlab-monitor']['listen_port'] %>
 
 # Probes config
 probes:
