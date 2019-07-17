@@ -20,7 +20,6 @@ Fetches or renews a Let's Encrypt certificate
 * `wwwroot`: The root directory that the acme client will use for http authorization
 * `alt_names`: An array of alt names to add to the certificate
 * `key_size`: The private key size to use
-* `fullchain`: The file path for the certificate file including the chain
 
 #### example
 
