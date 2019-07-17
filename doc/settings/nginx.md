@@ -353,7 +353,7 @@ forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
 you forget this step. For more information, see:
 
 - <http://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used>
-- <https://wiki.apache.org/couchdb/Nginx_As_a_Reverse_Proxy>
+- <https://websiteforstudents.com/setup-apache2-reverse-proxy-nginx-ubuntu-17-04-17-10/>
 
 ## Setting HTTP Strict Transport Security
 
