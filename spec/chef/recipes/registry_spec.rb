@@ -256,7 +256,7 @@ describe 'registry recipe' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
     it 'creates the registry config with the default value' do
       expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/maintenance:\n\s*uploadpurging:\n\s*enabled: true/)
+        .with_content(/  maintenance:\n\s*uploadpurging:\n\s*enabled: true/)
     end
   end
 
