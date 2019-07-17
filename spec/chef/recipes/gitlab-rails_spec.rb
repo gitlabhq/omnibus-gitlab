@@ -1560,6 +1560,32 @@ describe 'gitlab::gitlab-rails' do
         )
       end
     end
+
+    context 'Prometheus self-monitoring' do
+      it 'sets the default values' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            prometheus: hash_including(
+              enable: true,
+              listen_address: 'localhost:9090'
+            )
+          )
+        )
+      end
+
+      it 'allows the values to be changed' do
+        stub_gitlab_rb(prometheus: { enable: false, listen_address: '192.168.1.1:8080' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            prometheus: hash_including(
+              enable: false,
+              listen_address: '192.168.1.1:8080'
+            )
+          )
+        )
+      end
+    end
   end
 
   context 'with environment variables' do

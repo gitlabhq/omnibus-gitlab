@@ -627,6 +627,16 @@ production: &base
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
+  ## Prometheus settings
+  # Do not modify these settings here. They should be modified in /etc/gitlab/gitlab.rb
+  # if you installed GitLab via Omnibus.
+  # If you installed from source, you need to install and configure Prometheus
+  # yourself, and then update the values here.
+  # https://docs.gitlab.com/ee/administration/monitoring/prometheus/
+  prometheus:
+    enable: <%= @prometheus['enable'] %>
+    listen_address: <%= @prometheus['listen_address'] %>
+
   #
   # 5. Extra customization
   # ==========================
