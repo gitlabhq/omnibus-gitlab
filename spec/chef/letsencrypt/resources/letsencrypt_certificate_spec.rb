@@ -22,14 +22,13 @@ describe 'gitlab::letsencrypt' do
     end
 
     it 'creates a staging certificate' do
-      expect(chef_run).to create_acme_certificate('staging')
-                            .with(
-                              fullchain: '/etc/gitlab/ssl/fakehost.example.com.crt-staging',
-                              key: '/etc/gitlab/ssl/fakehost.example.com.key-staging',
-                              wwwroot: '/var/opt/gitlab/nginx/www',
-                              endpoint: 'https://acme-staging.api.letsencrypt.org/',
-                              sensitive: true
-                            )
+      expect(chef_run).to create_acme_certificate('staging').with(
+        crt: '/etc/gitlab/ssl/fakehost.example.com.crt-staging',
+        key: '/etc/gitlab/ssl/fakehost.example.com.key-staging',
+        wwwroot: '/var/opt/gitlab/nginx/www',
+        dir: 'https://acme-staging-v02.api.letsencrypt.org/directory',
+        sensitive: true
+      )
     end
 
     it "updates the node['acme']['private_key'] attribute" do
@@ -37,13 +36,12 @@ describe 'gitlab::letsencrypt' do
     end
 
     it 'creates a production certificate' do
-      expect(chef_run).to create_acme_certificate('production')
-                            .with(
-                              fullchain: '/etc/gitlab/ssl/fakehost.example.com.crt',
-                              key: '/etc/gitlab/ssl/fakehost.example.com.key',
-                              wwwroot: '/var/opt/gitlab/nginx/www',
-                              sensitive: true
-                            )
+      expect(chef_run).to create_acme_certificate('production').with(
+        crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
+        key: '/etc/gitlab/ssl/fakehost.example.com.key',
+        wwwroot: '/var/opt/gitlab/nginx/www',
+        sensitive: true
+      )
     end
 
     it 'reloads nginx' do

@@ -1,13 +1,18 @@
 property :cn, String, name_property: true
-property :fullchain, String, required: true
 property :key, String, required: true
 property :owner, [String, nil], default: lazy { node['letsencrypt']['owner'] }
-property :chain, [String, nil], default: lazy { node['letsencrypt']['chain'] }
 property :wwwroot, String, default: lazy { node['letsencrypt']['wwwroot'] }
 property :alt_names, Array, default: lazy { node['letsencrypt']['alt_names'] }
 property :key_size, [Integer, nil], default: lazy { node['letsencrypt']['key_size'] }
 property :crt, [String, nil], default: lazy { node['letsencrypt']['crt'] }
 property :group, [String, nil], default: lazy { node['letsencrypt']['group'] }
+
+property :chain, [String, nil],
+  deprecated: 'chain has been deprecated since crt now returns the full certificate by default',
+  default: lazy { node['letsencrypt']['chain'] }
+
+deprecated_property_alias :fullchain, :crt,
+  'The fullchain property has been deprecated in favor of crt, and will be removed in GitLab 13.0'
 
 action :create do
   # Attempt to fetch a certificate from Let's Encrypt staging instance
@@ -23,12 +28,11 @@ action :create do
     group new_resource.group unless new_resource.group.nil?
     owner new_resource.owner unless new_resource.owner.nil?
     chain "#{new_resource.chain}-staging" unless new_resource.chain.nil?
-    crt "#{new_resource.crt}-staging" unless new_resource.crt.nil?
     contact contact_info
-    fullchain "#{new_resource.fullchain}-staging"
+    crt "#{new_resource.crt}-staging"
     cn new_resource.cn
     key "#{new_resource.key}-staging"
-    endpoint 'https://acme-staging.api.letsencrypt.org/'
+    dir 'https://acme-staging-v02.api.letsencrypt.org/directory'
     wwwroot new_resource.wwwroot
     sensitive true
   end
@@ -45,9 +49,8 @@ action :create do
     group new_resource.group unless new_resource.group.nil?
     owner new_resource.owner unless new_resource.owner.nil?
     chain new_resource.chain unless new_resource.chain.nil?
-    crt new_resource.crt unless new_resource.crt.nil?
     contact contact_info
-    fullchain new_resource.fullchain
+    crt new_resource.crt
     cn new_resource.cn
     key new_resource.key
     wwwroot new_resource.wwwroot

@@ -125,7 +125,7 @@ server {
     it 'creates a letsencrypt certificate' do
       expect(chef_run).to create_letsencrypt_certificate('fakehost.example.com').with(
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
-        fullchain: '/etc/gitlab/ssl/fakehost.example.com.crt'
+        crt: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )
     end
 

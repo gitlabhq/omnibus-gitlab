@@ -15,7 +15,7 @@
 #
 
 name 'chef-acme'
-version = Gitlab::Version.new(name, 'b49c28d')
+version = Gitlab::Version.new(name, '5bd8e5c')
 default_version version.print(false)
 
 license 'Apache-2.0'
