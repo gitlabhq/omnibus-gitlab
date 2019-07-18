@@ -41,7 +41,6 @@ server {
   client_max_body_size <%= @client_max_body_size %>;
 
   <% if @https %>
-  ssl on;
   ssl_certificate <%= @ssl_certificate %>;
   ssl_certificate_key <%= @ssl_certificate_key %>;
   <% if @ssl_client_certificate %>
