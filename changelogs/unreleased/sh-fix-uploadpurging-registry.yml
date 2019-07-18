@@ -1,0 +1,5 @@
+---
+title: Fix registry upload purging configuration
+merge_request: 3441
+author:
+type: fixed
