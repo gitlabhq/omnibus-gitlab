@@ -142,6 +142,19 @@ class Chef
               source "sv-#{new_resource.log_template_name}-log-config.erb"
               variables new_resource.log_options
               notifies :create, 'ruby_block[reload_log_service]'
+              notifies :create, "ruby_block[verify_chown_persisted_on_#{new_resource.name}]", :immediately
+            end
+
+            ruby_block "verify_chown_persisted_on_#{new_resource.name}" do
+              block do
+                omnibus_helper = get_omnibus_helper
+                config_path = "#{new_resource.options[:log_directory]}/config"
+                # Check one at a time in case either is ever not specified
+                user_matches = new_resource.owner.nil? ? true : omnibus_helper.expected_user?(config_path, new_resource.owner)
+                group_matches = new_resource.group.nil? ? true : omnibus_helper.expected_group?(config_path, new_resource.group)
+                raise "Unable to persist filesystem ownership changes of #{config_path}. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance." unless (user_matches && group_matches)
+              end
+              action :nothing
             end
 
           end
