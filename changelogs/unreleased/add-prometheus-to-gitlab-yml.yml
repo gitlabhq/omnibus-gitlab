@@ -1,0 +1,5 @@
+---
+title: Add prometheus settings to gitlab.yml
+merge_request: 3383
+author:
+type: added

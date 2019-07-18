@@ -490,15 +490,43 @@ Follow the steps below to upgrade the database nodes
     gitlab-ctl repmgr cluster show
     ```
 
-### Upgrading a Geo instance
-
-`gitlab-ctl pg-upgrade` command does not support Geo yet. This support will be
-[added with GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4309)
-
 #### Troubleshooting upgrades in an HA cluster
 
 - If at some point, the bundled PostgreSQL had been running on a node before upgrading to an HA setup, the old data directory may remain. This will cause `gitlab-ctl reconfigure` to downgrade the version of the PostgreSQL utilities it uses on that node. Move (or remove) the directory to prevent this:
   - `mv /var/opt/gitlab/postgresql/data/ /var/opt/gitlab/postgresql/data.$(date +%s)`
+
+
+### Upgrading a Geo instance
+As of Gitlab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your GEO servers.
+
+NOTE: **Note:**
+Due to how PostgreSQL replication works, this cannot be done without the need to resynchronize your secondary database server. Therefore, this upgrade cannot be done without downtime.
+
+If you want to skip the automatic upgrade, before you install 12.1 or newer, run the following:
+```shell
+sudo touch /etc/gitlab/disable-postgresql-upgrade
+```
+
+To upgrade a GEO cluster, you will need a name for the replication slot, and the password to connect to the primary server.
+
+1. To find the existing name of the replication slot name on the primary node, run:
+   ```shell
+   sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
+   ```
+
+1. Upgrade the gitlab-ee package on the primary server
+
+1. Upgrade the gitlab-ee package on the secondary server
+
+1. Re-initialize the database on the secondary server using the command
+   ```shell
+   sudo gitlab-ctl replicate-geo-database --slot-name=SECONDARY_SLOT_NAME --host=PRIMARY_HOST_NAME
+   ```
+   You will be prompted for the password of the primary server.
+
+1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy
+
+[added with GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4309)
 
 ## Downgrade packaged PostgreSQL server
 

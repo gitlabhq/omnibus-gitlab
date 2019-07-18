@@ -1,0 +1,5 @@
+---
+title: Fix GitLab upgrades crashing when LetsEncrypt cert needs renewal
+merge_request: 3402
+author:
+type: fixed

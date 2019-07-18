@@ -21,20 +21,20 @@ module Services
   class BaseServices < ::Services::Config
     # Define all gitlab cookbook services
     service 'logrotate',          groups: [DEFAULT_GROUP, SYSTEM_GROUP]
-    service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'prometheus', 'monitoring_role']
+    service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'monitoring', 'monitoring_role']
     service 'unicorn',            groups: [DEFAULT_GROUP, 'rails']
     service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq']
-    service 'gitlab_monitor',     groups: [DEFAULT_GROUP, 'rails', 'prometheus']
+    service 'gitlab_monitor',     groups: [DEFAULT_GROUP, 'rails', 'monitoring']
     service 'gitlab_workhorse',   groups: [DEFAULT_GROUP, 'rails']
     service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']
-    service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'prometheus']
+    service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'monitoring']
     service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role']
     service 'nginx',              groups: [DEFAULT_GROUP]
-    service 'prometheus',         groups: [DEFAULT_GROUP, 'prometheus', 'monitoring_role']
-    service 'alertmanager',       groups: [DEFAULT_GROUP, 'prometheus', 'monitoring_role']
-    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'prometheus', 'postgres', 'postgres_role']
-    service 'grafana',            groups: [DEFAULT_GROUP, 'prometheus', 'monitoring_role']
+    service 'prometheus',         groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
+    service 'alertmanager',       groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
+    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role']
+    service 'grafana',            groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'mailroom'
     service 'gitlab_pages'
     service 'mattermost'

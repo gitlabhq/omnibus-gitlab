@@ -33,7 +33,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_welcome_and_exit
   end
 
-  unless progress_message('Checking PostgreSQL executables') do
+  unless GitlabCtl::Util.progress_message('Checking PostgreSQL executables') do
     remove_old_node_state
     status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-bin.json')
     $stdout.puts status.stdout
@@ -91,7 +91,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   # Force upgrade to Prometheus 2.x
-  unless progress_message('Ensuring Prometheus is updated') do
+  unless GitlabCtl::Util.progress_message('Ensuring Prometheus is updated') do
     command = %W(#{base_path}/bin/gitlab-ctl prometheus-upgrade -w --skip-reconfigure)
     status = run_command(command.join(' '))
     status.success?
@@ -116,7 +116,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log '==='
     log ''
   else
-    unless progress_message('Ensuring PostgreSQL is updated') do
+    unless GitlabCtl::Util.progress_message('Ensuring PostgreSQL is updated') do
       command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
       status = run_command(command.join(' '))
       status.success?
