@@ -6,9 +6,6 @@ log:
     service: registry
     environment: production
 storage: <%= @storage.to_json %>
-  maintenance:
-    uploadpurging:
-      enabled: <%= @uploadpurging_enabled %>
 http:
   addr: <%= @registry_http_addr %>
   secret: "<%= @http_secret %>"
@@ -44,3 +41,6 @@ compatibility:
 notifications:
   endpoints: <%= @notifications.to_json %>
 <% end %>
+maintenance:
+  uploadpurging:
+    enabled: <%= @uploadpurging_enabled %>
