@@ -251,22 +251,6 @@ describe 'registry recipe' do
         .with_content(/-u registryuser:registrygroup/)
     end
   end
-
-  context 'when uploadpurging is not specified' do
-    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com') }
-    it 'creates the registry config with the default value' do
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/  maintenance:\n\s*uploadpurging:\n\s*enabled: true/)
-    end
-  end
-
-  context 'when uploadpurging is disabled' do
-    before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { uploadpurging_enabled: false }) }
-    it 'creates the registry config with the specified uploadpurging value' do
-      expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-        .with_content(/maintenance:\n\s*uploadpurging:\n\s*enabled: false/)
-    end
-  end
 end
 
 describe 'registry' do
