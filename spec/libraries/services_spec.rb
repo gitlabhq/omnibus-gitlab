@@ -115,12 +115,12 @@ describe Services do
 
       it 'ignores disable on system services' do
         Services.disable('node_exporter')
-        expect(node['gitlab']['node-exporter']['enable']).to be true
+        expect(node['monitoring']['node-exporter']['enable']).to be true
       end
 
       it 'allows forced disable on system services' do
         Services.disable('node_exporter', include_system: true)
-        expect(node['gitlab']['node-exporter']['enable']).to be false
+        expect(node['monitoring']['node-exporter']['enable']).to be false
       end
     end
 
@@ -200,23 +200,23 @@ describe Services do
       it 'sets the correct values' do
         Services.disable_group('redis')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['redis-exporter']['enable']).to be false
 
         Services.enable_group('rails')
         expect(node['gitlab']['unicorn']['enable']).to be true
-        expect(node['gitlab']['gitlab-monitor']['enable']).to be true
+        expect(node['monitoring']['gitlab-monitor']['enable']).to be true
       end
 
       it 'supports exceptions' do
-        Services.disable_group('prometheus')
-        Services.enable_group('rails', except: 'prometheus')
-        expect(node['gitlab']['gitlab-monitor']['enable']).to be false
+        Services.disable_group('monitoring')
+        Services.enable_group('rails', except: 'monitoring')
+        expect(node['monitoring']['gitlab-monitor']['enable']).to be false
         expect(node['gitlab']['unicorn']['enable']).to be true
 
-        Services.enable_group('prometheus')
-        Services.disable_group('redis', except: 'prometheus')
+        Services.enable_group('monitoring')
+        Services.disable_group('redis', except: 'monitoring')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['redis-exporter']['enable']).to be true
+        expect(node['monitoring']['redis-exporter']['enable']).to be true
       end
     end
 
@@ -227,39 +227,39 @@ describe Services do
         expect(node['redis']['enable']).to be false
         expect(node['postgresql']['enable']).to be false
 
-        Services.enable_group('rails', 'prometheus')
-        expect(node['gitlab']['redis-exporter']['enable']).to be true
+        Services.enable_group('rails', 'monitoring')
+        expect(node['monitoring']['redis-exporter']['enable']).to be true
         expect(node['gitlab']['unicorn']['enable']).to be true
       end
 
       it 'supports single exceptions' do
-        Services.disable_group('prometheus')
-        Services.enable_group('redis', 'rails', except: 'prometheus')
+        Services.disable_group('monitoring')
+        Services.enable_group('redis', 'rails', except: 'monitoring')
         expect(node['redis']['enable']).to be true
         expect(node['gitlab']['unicorn']['enable']).to be true
-        expect(node['gitlab']['gitlab-monitor']['enable']).to be false
-        expect(node['gitlab']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['gitlab-monitor']['enable']).to be false
+        expect(node['monitoring']['redis-exporter']['enable']).to be false
 
         Services.enable_group('postgres')
-        Services.disable_group('redis', 'prometheus', except: 'postgres')
+        Services.disable_group('redis', 'monitoring', except: 'postgres')
         expect(node['redis']['enable']).to be false
-        expect(node['gitlab']['postgres-exporter']['enable']).to be true
-        expect(node['gitlab']['prometheus']['enable']).to be false
+        expect(node['monitoring']['postgres-exporter']['enable']).to be true
+        expect(node['monitoring']['prometheus']['enable']).to be false
       end
 
       it 'supports multiple exceptions' do
         Services.disable_group('redis', Services::SYSTEM_GROUP, include_system: true)
-        Services.enable_group('rails', 'prometheus', except: ['redis', Services::SYSTEM_GROUP])
-        expect(node['gitlab']['redis-exporter']['enable']).to be false
-        expect(node['gitlab']['node-exporter']['enable']).to be false
+        Services.enable_group('rails', 'monitoring', except: ['redis', Services::SYSTEM_GROUP])
+        expect(node['monitoring']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['node-exporter']['enable']).to be false
         expect(node['gitlab']['unicorn']['enable']).to be true
 
-        Services.enable_group('sidekiq', 'prometheus')
-        Services.disable_group('rails', 'postgres', except: %w(sidekiq prometheus))
+        Services.enable_group('sidekiq', 'monitoring')
+        Services.disable_group('rails', 'postgres', except: %w(sidekiq monitoring))
         expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
         expect(node['gitlab']['sidekiq']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
-        expect(node['gitlab']['postgres-exporter']['enable']).to be true
+        expect(node['monitoring']['postgres-exporter']['enable']).to be true
       end
 
       it 'ignores disable on system services' do
@@ -279,16 +279,16 @@ describe Services do
       before { chef_run }
 
       it 'enables all others' do
-        Services.disable_group('prometheus')
-        Services.enable_group(Services::ALL_GROUPS, except: 'prometheus')
+        Services.disable_group('monitoring')
+        Services.enable_group(Services::ALL_GROUPS, except: 'monitoring')
         expect(node['gitlab']['unicorn']['enable']).to be true
-        expect(node['gitlab']['gitlab-monitor']['enable']).to be false
+        expect(node['monitoring']['gitlab-monitor']['enable']).to be false
       end
 
       it 'disables all others' do
-        Services.enable_group('prometheus')
-        Services.disable_group(Services::ALL_GROUPS, except: 'prometheus')
-        expect(node['gitlab']['postgres-exporter']['enable']).to be true
+        Services.enable_group('monitoring')
+        Services.disable_group(Services::ALL_GROUPS, except: 'monitoring')
+        expect(node['monitoring']['postgres-exporter']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
       end
     end
@@ -300,14 +300,14 @@ describe Services do
         Services.disable_group('redis', 'rails')
         Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['gitlab']['unicorn']['enable']).to be false
-        expect(node['gitlab']['node-exporter']['enable']).to be true
-        expect(node['gitlab']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['node-exporter']['enable']).to be true
+        expect(node['monitoring']['redis-exporter']['enable']).to be false
       end
 
       it 'disables all others' do
         Services.enable_group('redis', 'rails')
         Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
-        expect(node['gitlab']['prometheus']['enable']).to be false
+        expect(node['monitoring']['prometheus']['enable']).to be false
         expect(node['redis']['enable']).to be true
         expect(node['gitlab']['sidekiq']['enable']).to be true
       end

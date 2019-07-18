@@ -81,6 +81,8 @@ server {
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(false)
+    allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+    allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(true)
   end
 
   context 'default' do
@@ -123,7 +125,7 @@ server {
     it 'creates a letsencrypt certificate' do
       expect(chef_run).to create_letsencrypt_certificate('fakehost.example.com').with(
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
-        fullchain: '/etc/gitlab/ssl/fakehost.example.com.crt'
+        crt: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )
     end
 
@@ -189,6 +191,11 @@ end
 describe 'letsencrypt::renew' do
   let(:chef_run) do
     ChefSpec::SoloRunner.converge('gitlab::letsencrypt_renew')
+  end
+
+  before do
+    allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+    allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(true)
   end
 
   context 'letsencrypt enabled' do

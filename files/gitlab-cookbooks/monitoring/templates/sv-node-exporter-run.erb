@@ -1,0 +1,8 @@
+#!/bin/sh
+exec 2>&1
+<%= render("mount_point_check.erb") %>
+umask 077
+exec chpst -P -e <%= @options[:env_dir] %> \
+  -U <%= node['monitoring']['prometheus']['username'] %>:<%= node['monitoring']['prometheus']['group'] %> \
+  -u <%= node['monitoring']['prometheus']['username'] %>:<%= node['monitoring']['prometheus']['group'] %> \
+  /opt/gitlab/embedded/bin/node_exporter <%= @options[:flags] %>

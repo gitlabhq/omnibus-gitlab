@@ -19,10 +19,10 @@ module GeoPrimaryRole
     return unless Gitlab['geo_primary_role']['enable']
 
     Gitlab['postgresql']['sql_replication_user'] ||= 'gitlab_replicator'
-    Gitlab['postgresql']['wal_level'] = 'hot_standby'
+    Gitlab['postgresql']['wal_level'] ||= 'hot_standby'
     Gitlab['postgresql']['max_wal_senders'] ||= 10
     Gitlab['postgresql']['wal_keep_segments'] ||= 50
     Gitlab['postgresql']['max_replication_slots'] ||= 1
-    Gitlab['postgresql']['hot_standby'] = 'on'
+    Gitlab['postgresql']['hot_standby'] ||= 'on'
   end
 end

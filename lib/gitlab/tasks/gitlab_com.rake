@@ -24,9 +24,9 @@ namespace :gitlab_com do
     deploy_env = Gitlab::Util.get_env('DEPLOYER_ENVIRONMENT')
 
     # We do not support auto-deployments or triggered deployments
-    # to production from the omnibus pipeline, this check is here
+    # directly to production from the omnibus pipeline, this check is here
     # for safety
-    raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env.include?('gprd')
+    raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env == 'gprd'
     deployer_helper = DeployerHelper.new(trigger_token, deploy_env, trigger_ref)
     url = deployer_helper.trigger_deploy
     puts "Deployer build triggered at #{url} on #{trigger_ref} for the #{deploy_env} environment"

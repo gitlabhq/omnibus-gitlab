@@ -13,6 +13,7 @@ See [Definition of done](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/maste
 - [ ] MR targeting `master` branch
 - [ ] MR has a green pipeline on GitLab.com
 - [ ] Equivalent MR/issue for CNG opened if applicable
+- [ ] `trigger-package` has a green pipeline running against latest commit
 
 ### Reviewer Checklist
 

@@ -7,7 +7,7 @@ require 'gitlab_ctl'
 describe GitlabCtl::PgUpgrade do
   before do
     @fake_default_dir = '/fake/data/postgresql/data'
-    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', nil, 123)
+    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', 'fakeoldverision', 'fakenewversion', nil, 123)
     allow(File).to receive(:realpath).with(
       @fake_default_dir
     ).and_return(@fake_default_dir)

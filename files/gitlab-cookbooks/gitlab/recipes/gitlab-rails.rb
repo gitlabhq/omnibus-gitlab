@@ -275,7 +275,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],
-      gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file']
+      gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
+      prometheus: node['monitoring']['prometheus']
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }

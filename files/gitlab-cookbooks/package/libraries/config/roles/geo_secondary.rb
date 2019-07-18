@@ -19,15 +19,15 @@ module GeoSecondaryRole
     return unless Gitlab['geo_secondary_role']['enable']
 
     Services.enable_group('geo')
-    Gitlab['geo_secondary']['enable'] = true
-    Gitlab['postgresql']['wal_level'] = 'hot_standby'
+    Gitlab['geo_secondary']['enable'] = true if Gitlab['geo_secondary']['enable'].nil?
+    Gitlab['postgresql']['wal_level'] ||= 'hot_standby'
     Gitlab['postgresql']['max_wal_senders'] ||= 10
     Gitlab['postgresql']['wal_keep_segments'] ||= 10
     # This helps prevent query conflicts
     Gitlab['postgresql']['max_standby_archive_delay'] ||= '60s'
     Gitlab['postgresql']['max_standby_streaming_delay'] ||= '60s'
-    Gitlab['postgresql']['hot_standby'] = 'on'
-    Gitlab['gitlab_rails']['auto_migrate'] = false
+    Gitlab['postgresql']['hot_standby'] ||= 'on'
+    Gitlab['gitlab_rails']['auto_migrate'] ||= false
     Gitlab['gitlab_rails']['enable'] = rails_needed? if Gitlab['gitlab_rails']['enable'].nil?
     Gitlab['unicorn']['worker_processes'] ||= number_of_worker_processes
   end

@@ -1,7 +1,7 @@
 repos:
 # acme-client
 - url: https://github.com/unixcharles/acme-client
-  installed: 0.4.0
+  installed: 2.0.2
   replace_in_files:
     config/software/acme-client.rb: default_version '{version_clean}'
 
@@ -26,7 +26,7 @@ repos:
 
 # chef-acme
 - url: https://github.com/schubergphilis/chef-acme
-  installed: b49c28d
+  installed: 5bd8e5c
   replace_in_files:
     config/software/chef-acme.rb: version = Gitlab::Version.new(name, '{version_clean}')
 

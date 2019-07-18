@@ -74,11 +74,13 @@ describe OmnibusHelper do
       before do
         chef_run.node.normal['gitlab']['old_service']['enable'] = true
         chef_run.node.normal['new_service']['enable'] = true
+        chef_run.node.normal['monitoring']['another_service']['enable'] = true
       end
 
       it 'should return true' do
         expect(subject.service_enabled?('old_service')).to be_truthy
         expect(subject.service_enabled?('new_service')).to be_truthy
+        expect(subject.service_enabled?('another_service')).to be_truthy
       end
     end
 
@@ -86,11 +88,13 @@ describe OmnibusHelper do
       before do
         chef_run.node.normal['gitlab']['old_service']['enable'] = false
         chef_run.node.normal['new_service']['enable'] = false
+        chef_run.node.normal['monitoring']['another_service']['enable'] = false
       end
 
       it 'should return false' do
         expect(subject.service_enabled?('old_service')).to be_falsey
         expect(subject.service_enabled?('new_service')).to be_falsey
+        expect(subject.service_enabled?('another_service')).to be_falsey
       end
     end
   end
