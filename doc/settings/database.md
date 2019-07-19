@@ -536,6 +536,24 @@ If you need to run an older version of PostgreSQL, you must downgrade GitLab to 
 
 ## Troubleshooting
 
+### Set `default_transaction_isolation` into `read committed`
+
+If you see errors similar to the following in your production/sidekiq log: 
+
+```
+ActiveRecord::StatementInvalid PG::TRSerializationFailure: ERROR:  could not serialize access due to concurrent update
+```
+
+Chances are your database's `default_transaction_isolation` configuration is not
+in line with GitLab application requirement. You can check this configuration by
+connecting to your PostgreSQL database and run `SHOW default_transaction_isolation;`.
+GitLab application expects `read committed` to be configured.
+
+This `default_transaction_isolation` configuration is set in your 
+`postgresql.conf` file. You will need to restart/reload the database once you 
+changed the configuration. This configuration comes by default in the packaged 
+PostgreSQL server included with GitLab Omnibus.
+
 ### Connecting to the bundled PostgreSQL database
 
 If you need to connect to the bundled PostgreSQL database and are
