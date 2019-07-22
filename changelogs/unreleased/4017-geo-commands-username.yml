@@ -1,5 +1,0 @@
----
-title: Use PostgreSQL username from node attribute file in gitlab-ctl command
-merge_request: 3352
-author:
-type: fixed

@@ -1,5 +1,0 @@
----
-title: Remove bundled MySQL client and related docs
-merge_request: 3382
-author:
-type: deprecated
