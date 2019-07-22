@@ -28,15 +28,19 @@ The simplest method of checking if package signature checking is active on an ex
 
 - Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`
 - Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo` should output
-    ```
-    repo_gpgcheck=1
-    gpgcheck=1
-    ```
-    or
-    ```
-    repo_gpgcheck=1
-    pkg_gpgcheck=1
-    ```
+
+  ```
+  repo_gpgcheck=1
+  gpgcheck=1
+  ```
+
+  or
+
+  ```
+  repo_gpgcheck=1
+  pkg_gpgcheck=1
+  ```
+
 If the file does not exist, you don't have the repository installed. If the file exists, but the output shows `gpgpcheck=0`, then you will need to edit that value to enable it, as below.
 
 ### Enable Automatic Verification
@@ -46,18 +50,21 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
 #### Yum (RedHat, CentOS)
 
 1. Enable GPG checking of the packages
+
    ```
    # sed -i'' 's/^gpgcheck=0/gpgcheck=1/' /etc/yum.repos.d/gitlab_gitlab-ce.repo
    ```
 
 1. Add the package signing public key to the `gpgkey` list:
    Edit `/etc/yum.repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
+
    ```
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
            https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `yum` to refresh the cache for the repository
+
    ```
    # yum -q makecache -y --disablerepo='*' --enablerepo='gitlab_gitlab-ce'
    ```
@@ -65,18 +72,21 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
 #### Zypper (SuSE/SLES)
 
 1. Enable GPG checking of the packages
+
    ```
    # sed -i'' 's/pkg_gpgcheck=0/pkg_gpgcheck=1/' /etc/zypp/repos.d/gitlab_gitlab-ce.repo
    ```
 
 1. Add the package signing public key to the `gpgkey` list:
    Edit `/etc/zypp/repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
+
    ```
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
            https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `zypper` to refresh the repository and import the keys
+
    ```
    # zypper --gpg-auto-import-keys refresh gitlab_gitlab-ce
    ```
@@ -98,17 +108,20 @@ Manual verification of DEB packages signed with `debsigs` can be performed in tw
 The `debsig-verify` package has a [slew of dependencies](https://packages.debian.org/sid/devel/debsig-verify) that a user may not wish to install. To verify the `debsigs` based signature without installing `debsig-verify` and dependencies, a user can complete the following manual steps:
 
 1. Download and import the package signing public key
+
    ```
    $ curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    $ gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Extract the signature file (`_gpgorigin`)
+
    ```
    $ ar x gitlab-ce-xxx.deb _gpgorigin
    ```
 
 1. Verify the signature matches the content
+
    ```
    $ ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
    ```
@@ -129,6 +142,7 @@ Primary key fingerprint: DBEF 8977 4DDB 9EB3 7D9F  C3A0 3CFC F9BA F27E AB47
 Configuring a policy and keyring for `debsigs` can be complicated, so GitLab provides `gitlab-debsigs.sh` as a scripted method of configuration.
 
 To use this script, you will need to download the public key and the script.
+
 ```
 curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 curl -JLO https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh
@@ -136,12 +150,10 @@ chmod +x gitlab-debsigs.sh
 sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
 
-
 #### Verify with `debsig-verify`
 
 To make use of `debsig-verify`, perform the steps in [Configuring debsigs](#configuring-debsigs) and install the `debsig-verify` package.
 
 `debsig-verify gitlab-xxx.deb`
-
 
 [install]: https://about.gitlab.com/installation/

@@ -1,6 +1,8 @@
 # GitLab 12 specific changes
 
-## Prometheus 1.x Removal Prometheus 1.x was deprecated in GitLab 11.4, and
+## Prometheus 1.x Removal
+
+Prometheus 1.x was deprecated in GitLab 11.4, and
 Prometheus 2.8.1 was installed by default on new installations. Users updating
 from older versions of GitLab could manually upgrade Prometheus data using the
 [`gitlab-ctl prometheus-upgrade`](https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114)

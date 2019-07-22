@@ -82,6 +82,7 @@ build and confirm it there. To use this:
    ```shell
    $ cp doc/development/examples/simple.rb config/projects/
    ```
+
 1. Change the `dependency` in `config/projects/simple.rb` to match the software you are testing
 1. Build the simple project by running
 

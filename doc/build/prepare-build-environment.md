@@ -23,22 +23,22 @@ follows
    file. Make sure you substitute that value to `${BUILDER_IMAGE_REVISION}`
    in the following commands.
 
-    ```
-    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}
-    ```
+   ```
+   docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}
+   ```
 
 1. Start the container and enter its shell:
 
-    ```
-    docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
-    ```
+   ```
+   docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
+   ```
 
 1. Clone the Omnibus GitLab source and change to the cloned directory:
 
-    ```
-    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
-    cd ~/omnibus-gitlab
-    ```
+   ```
+   git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
+   cd ~/omnibus-gitlab
+   ```
 
 1. Omnibus GitLab is optimized to use the internal repositories from
    dev.gitlab.org. These repositories are specified in the `.custom_sources.yml`
@@ -60,15 +60,15 @@ follows
    1. To compile your own, set the `COMPILE_ASSETS` environment variable to `true`
 1. Install the dependencies and generate binaries:
 
-    ```
-    bundle install --path .bundle --binstubs
-    ```
+   ```
+   bundle install --path .bundle --binstubs
+   ```
 
 1. Run the build command to initiate a build process:
 
-    ```
-    bin/omnibus build gitlab
-    ```
+   ```
+   bin/omnibus build gitlab
+   ```
 
-    You can see the results of the build in the `pkg` folder at the root of the
-    source tree.
+   You can see the results of the build in the `pkg` folder at the root of the
+   source tree.

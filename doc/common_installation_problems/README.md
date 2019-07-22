@@ -35,6 +35,7 @@ addition to the package repositories providing signed metadata. This ensures
 authenticity and integrity of the packages that are distributed to the users.
 However, the package manager used in openSUSE and SLES operating systems may
 sometime raise false warnings with these signatures, similar to
+
 ```
 File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no):
 File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no): yes
@@ -87,13 +88,13 @@ Try [specifying](../settings/configuration.md#configuring-the-external-url-for-g
 > (Registry and Mattermost) doesn't follow the `key=value` format that other
 > parts of `gitlab.rb` follow. Make sure that you have them set in the following
 > format:
-
+>
 > ```ruby
 > external_url "https://gitlab.example.com"
 > registry_external_url "https://registry.example.com"
 > mattermost_external_url "https://mattermost.example.com"
 > ```
-
+>
 > **Don't add the equal sign (`=`) between `external_url` and the value.**
 
 ## Emails are not being delivered
@@ -118,34 +119,34 @@ To troubleshoot this error:
 
 1. First check that the runit directory exists:
 
-    ```sh
-    $ ls -al /opt/gitlab/sv/redis/supervise
-    ```
+   ```sh
+   $ ls -al /opt/gitlab/sv/redis/supervise
+   ```
 
 1. If you see the message, continue to the next step:
 
-    ```
-    ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
-    ```
+   ```
+   ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
+   ```
 
-1.  Restart the runit server.
-    Using systemctl (Debian => 9 - Stretch):
+1. Restart the runit server.
+   Using systemctl (Debian => 9 - Stretch):
 
-    ```
-    $ sudo systemctl restart gitlab-runsvdir
-    ```
+   ```
+   $ sudo systemctl restart gitlab-runsvdir
+   ```
 
-    Using upstart (Ubuntu <= 14.04):
+   Using upstart (Ubuntu <= 14.04):
 
-    ```
-    $ sudo initctl restart gitlab-runsvdir
-    ```
+   ```
+   $ sudo initctl restart gitlab-runsvdir
+   ```
 
-    Using systemd (CentOS, Ubuntu >= 16.04):
+   Using systemd (CentOS, Ubuntu >= 16.04):
 
-    ```
-    $ systemctl restart gitlab-runsvdir.service
-    ```
+   ```
+   $ systemctl restart gitlab-runsvdir.service
+   ```
 
 *Note* This should be resolved starting from 7.13 omnibus-gitlab packages.
 
@@ -245,6 +246,7 @@ postgresql['shared_buffers'] = "100MB"
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
+
 By default, Postgres will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
 To fix this, you can disable postgresql's shared memory detection. Set the
@@ -292,8 +294,8 @@ Mixlib::ShellOut::ShellCommandFailed
 ------------------------------------
 Expected process to exit with [0], but received '255'
 ---- Begin output of /sbin/sysctl -p /etc/sysctl.conf ----
-
 ```
+
 This is unlikely to happen with non virtualized machines but on a VPS with virtualization like openVZ, container might not have the required module enabled
 or container doesn't have access to kernel parameters.
 
@@ -323,7 +325,7 @@ Another variation of this error reports the file system is read-only and shows f
     Ran cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - returned 255
 ```
 
-This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p - ` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
+This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
 
 Also note you may need to repeat this process for a couple other lines, e.g. reconfigure will fail 3 times and you will eventually have added something like this to `/etc/sysctl.conf`:
 
@@ -340,8 +342,8 @@ Tip: You may find it easier to look at the line in the Chef output than to find 
 * file[create /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf kernel.shmall] action create
   - create new file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf
   - update content in file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf from none to 6d765d
-  --- /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf	2017-11-28 19:09:46.864364952 +0000
-  +++ /opt/gitlab/embedded/etc/.chef-90-omnibus-gitlab-kernel.shmall.conf kernel.shmall20171128-13622-sduqoj	2017-11-28 19:09:46.864364952 +0000
+  --- /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf 2017-11-28 19:09:46.864364952 +0000
+  +++ /opt/gitlab/embedded/etc/.chef-90-omnibus-gitlab-kernel.shmall.conf kernel.shmall20171128-13622-sduqoj 2017-11-28 19:09:46.864364952 +0000
   @@ -1 +1,2 @@
   +kernel.shmall = 4194304
 ```
@@ -522,7 +524,6 @@ enable the extension manually. The reason for this is that omnibus-gitlab
 package with external database has no way of confirming if the extension exists,
 and it also doesn't have a way of enabling the extension.
 
-
 To fix this issue, you'll need to first install the `pg_trgm` extension.
 The extension is located in the `postgresql-contrib` package. For Debian:
 
@@ -535,21 +536,23 @@ extension.
 
 1. Access `psql` as superuser:
 
-    ```
-    sudo gitlab-psql -d gitlabhq_production
-    ```
+   ```
+   sudo gitlab-psql -d gitlabhq_production
+   ```
 
 1. Enable the extension:
 
-    ```
-    CREATE EXTENSION pg_trgm;
-    \q
-    ```
+   ```
+   CREATE EXTENSION pg_trgm;
+   \q
+   ```
+
 1. Now run migrations again:
 
-    ```
-    sudo gitlab-rake db:migrate
-    ```
+   ```
+   sudo gitlab-rake db:migrate
+   ```
+
 ---
 
 If using Docker, you first need to access your container, then run the commands
@@ -557,17 +560,17 @@ above, and finally restart the container.
 
 1. Access the container:
 
-    ```
-    docker exec -it gitlab bash
-    ```
+   ```
+   docker exec -it gitlab bash
+   ```
 
 1. Run the commands above
 
 1. Restart the container:
 
-    ```
-    docker restart gitlab
-    ```
+   ```
+   docker restart gitlab
+   ```
 
 ## Errno::ENOMEM: Cannot allocate memory during backup or upgrade
 
