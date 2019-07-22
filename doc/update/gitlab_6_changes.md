@@ -13,30 +13,30 @@ package to your GitLab server.
 1. Stop services, but leave postgres running for the database migrations and
    create a backup:
 
-    ```sh
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    sudo gitlab-ctl stop nginx
-    sudo gitlab-rake gitlab:backup:create
-    ```
+   ```sh
+   sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop sidekiq
+   sudo gitlab-ctl stop nginx
+   sudo gitlab-rake gitlab:backup:create
+   ```
 
 1. Install the latest package:
 
-    ```sh
-    # Debian/Ubuntu:
-    sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
+   ```sh
+   # Debian/Ubuntu:
+   sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 
-    # CentOS:
-    sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
-    ```
+   # CentOS:
+   sudo rpm -Uvh gitlab-x.x.x_xxx.rpm
+   ```
 
 1. Reconfigure GitLab (includes running database migrations) and restart all
    services:
 
-    ```sh
-    sudo gitlab-ctl reconfigure
-    sudo gitlab-ctl restart
-    ```
+   ```sh
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl restart
+   ```
 
 ## Updating from GitLab `6.6.0.pre1` to `6.6.4`
 
@@ -45,7 +45,7 @@ package to your GitLab server.
 
 1. Stop unicorn and Sidekiq so we can do database migrations:
 
-    ```sh
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    ```
+   ```sh
+   sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop sidekiq
+   ```

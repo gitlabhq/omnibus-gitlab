@@ -67,16 +67,16 @@ download the package and install it manually.
 1. Once the GitLab package is downloaded, install it using the following
    commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
 
-    ```sh
-    # Debian/Ubuntu
-    dpkg -i gitlab-ce-XXX.deb
+   ```sh
+   # Debian/Ubuntu
+   dpkg -i gitlab-ce-XXX.deb
 
-    # CentOS/RHEL
-    rpm -Uvh gitlab-ce-XXX.rpm
-    ```
+   # CentOS/RHEL
+   rpm -Uvh gitlab-ce-XXX.rpm
+   ```
 
-    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
-    in the above commands.
+   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
+   in the above commands.
 
 ## Updating Community Edition to Enterprise Edition
 
@@ -91,82 +91,82 @@ The steps can be summed up to:
 
 1. Find the currently installed GitLab version:
 
-    **For Debian/Ubuntu**
+   **For Debian/Ubuntu**
 
-    ```sh
-    sudo apt-cache policy gitlab-ce | grep Installed
-    ```
+   ```sh
+   sudo apt-cache policy gitlab-ce | grep Installed
+   ```
 
-    The output should be similar to: `Installed: 8.6.7-ce.0`. In that case,
-    the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
-    value down.
+   The output should be similar to: `Installed: 8.6.7-ce.0`. In that case,
+   the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
+   value down.
 
-    ---
+   ---
 
-    **For CentOS/RHEL**
+   **For CentOS/RHEL**
 
-    ```sh
-    sudo rpm -q gitlab-ce
-    ```
+   ```sh
+   sudo rpm -q gitlab-ce
+   ```
 
-    The output should be similar to: `gitlab-ce-8.6.7-ce.0.el7.x86_64`. In that
-    case, the equivalent Enterprise Edition version will be:
-    `gitlab-ee-8.6.7-ee.0.el7.x86_64`. Write this value down.
+   The output should be similar to: `gitlab-ce-8.6.7-ce.0.el7.x86_64`. In that
+   case, the equivalent Enterprise Edition version will be:
+   `gitlab-ee-8.6.7-ee.0.el7.x86_64`. Write this value down.
 
 1. Add the `gitlab-ee` [Apt or Yum repository](https://packages.gitlab.com/gitlab/gitlab-ee/install):
 
-    **For Debian/Ubuntu**
+   **For Debian/Ubuntu**
 
-    ```sh
-    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
-    ```
+   ```sh
+   curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+   ```
 
-    **For CentOS/RHEL**
+   **For CentOS/RHEL**
 
-    ```sh
-    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
-    ```
+   ```sh
+   curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+   ```
 
-    ---
+   ---
 
-    The above command will find your OS version and automatically set up the
-    repository. If you are not comfortable installing the repository through a
-    piped script, you can first
-    [check its contents](https://packages.gitlab.com/gitlab/gitlab-ee/install).
+   The above command will find your OS version and automatically set up the
+   repository. If you are not comfortable installing the repository through a
+   piped script, you can first
+   [check its contents](https://packages.gitlab.com/gitlab/gitlab-ee/install).
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
    uninstall the `gitlab-ce` package on your GitLab server. Reconfigure
    Omnibus right after the `gitlab-ee` package is installed. Make sure that you
    install the exact same GitLab version:
 
-    **For Debian/Ubuntu**
+   **For Debian/Ubuntu**
 
-    ```sh
-    ## Make sure the repositories are up-to-date
-    sudo apt-get update
+   ```sh
+   ## Make sure the repositories are up-to-date
+   sudo apt-get update
 
-    ## Install the package using the version you wrote down from step 1
-    sudo apt-get install gitlab-ee=8.6.7-ee.0
+   ## Install the package using the version you wrote down from step 1
+   sudo apt-get install gitlab-ee=8.6.7-ee.0
 
-    ## Reconfigure GitLab
-    sudo gitlab-ctl reconfigure
-    ```
+   ## Reconfigure GitLab
+   sudo gitlab-ctl reconfigure
+   ```
 
-    **For CentOS/RHEL**
+   **For CentOS/RHEL**
 
-    ```sh
-    ## Install the package using the version you wrote down from step 1
-    sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
+   ```sh
+   ## Install the package using the version you wrote down from step 1
+   sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
 
-    ## Reconfigure GitLab
-    sudo gitlab-ctl reconfigure
-    ```
+   ## Reconfigure GitLab
+   sudo gitlab-ctl reconfigure
+   ```
 
-    NOTE: **Note:**
-    If you want to upgrade to EE and at the same time also update GitLab to the
-    latest version, you can omit the version check in the above commands. For
-    Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
-    CentOS/RHEL `sudo yum install gitlab-ee`.
+   NOTE: **Note:**
+   If you want to upgrade to EE and at the same time also update GitLab to the
+   latest version, you can omit the version check in the above commands. For
+   Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
+   CentOS/RHEL `sudo yum install gitlab-ee`.
 
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
@@ -174,19 +174,19 @@ The steps can be summed up to:
 1. After you confirm that GitLab is working as expected, you may remove the old
    Community Edition repository:
 
-    **For Debian/Ubuntu**
+   **For Debian/Ubuntu**
 
-    ```sh
-    sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
-    ```
+   ```sh
+   sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
+   ```
 
-    ---
+   ---
 
-    **For CentOS/RHEL**
+   **For CentOS/RHEL**
 
-    ```sh
-    sudo rm /etc/yum.repos.d/gitlab_gitlab-ce.repo
-    ```
+   ```sh
+   sudo rm /etc/yum.repos.d/gitlab_gitlab-ce.repo
+   ```
 
 That's it! You can now use GitLab Enterprise Edition! To update to a newer
 version follow the section on
@@ -222,40 +222,40 @@ If you meet all the requirements above, follow these instructions in order. Ther
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-    ```sh
-    sudo touch /etc/gitlab/skip-auto-reconfigure
-    ```
+   ```sh
+   sudo touch /etc/gitlab/skip-auto-reconfigure
+   ```
 
 1. Update the GitLab package
 
-    ```sh
-    # Debian/Ubuntu
-    sudo apt-get update && sudo apt-get install gitlab-ce
+   ```sh
+   # Debian/Ubuntu
+   sudo apt-get update && sudo apt-get install gitlab-ce
 
-    # Centos/RHEL
-    sudo yum install gitlab-ce
-    ```
+   # Centos/RHEL
+   sudo yum install gitlab-ce
+   ```
 
-    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
 1. To get the regular migrations in place, run
 
-    ```sh
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-    ```
+   ```sh
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   ```
 
 1. Once the node is updated and reconfigure finished successfully, complete the migrations with
 
-    ```sh
-    sudo gitlab-rake db:migrate
-    ```
+   ```sh
+   sudo gitlab-rake db:migrate
+   ```
 
 1. Hot reload `unicorn` and `sidekiq` services
 
-    ```sh
-    sudo gitlab-ctl hup unicorn
-    sudo gitlab-ctl hup sidekiq
-    ```
+   ```sh
+   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup sidekiq
+   ```
 
 ### Multi-node / HA deployment
 
@@ -265,12 +265,12 @@ node throughout the process.
 **Deploy node**
 
 - Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-   installation only, this will prevent the upgrade from running
-   `gitlab-ctl reconfigure` and automatically running database migrations
+  installation only, this will prevent the upgrade from running
+  `gitlab-ctl reconfigure` and automatically running database migrations
 
-    ```sh
-    sudo touch /etc/gitlab/skip-auto-reconfigure
-    ```
+  ```sh
+  sudo touch /etc/gitlab/skip-auto-reconfigure
+  ```
 
 **All other nodes (not the Deploy node)**
 
@@ -280,54 +280,54 @@ node throughout the process.
 
 - Update the GitLab package
 
-    ```sh
-    # Debian/Ubuntu
-    sudo apt-get update && sudo apt-get install gitlab-ce
+  ```sh
+  # Debian/Ubuntu
+  sudo apt-get update && sudo apt-get install gitlab-ce
 
-    # Centos/RHEL
-    sudo yum install gitlab-ce
-    ```
+  # Centos/RHEL
+  sudo yum install gitlab-ce
+  ```
 
-    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+  If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
 - To get the regular database migrations in place, run
 
-    ```sh
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-    ```
+  ```sh
+  SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+  ```
 
 **All other nodes (not the Deploy node)**
 
 - Update the GitLab package
 
-    ```sh
-    sudo apt-get update && sudo apt-get install gitlab-ce
-    ```
+  ```sh
+  sudo apt-get update && sudo apt-get install gitlab-ce
+  ```
 
-    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+  If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
 - Ensure nodes are running the latest code
 
-    ```sh
-    sudo gitlab-ctl reconfigure
-    ```
+  ```sh
+  sudo gitlab-ctl reconfigure
+  ```
 
 **Deploy node**
 
 - Once all nodes are updated, run the following to run post-deployment database migrations
 
-    ```sh
-    sudo gitlab-rake db:migrate
-    ```
+  ```sh
+  sudo gitlab-rake db:migrate
+  ```
 
 **For nodes that run unicorn or sidekiq**
 
 - Hot reload `unicorn` and `sidekiq` services
 
-    ```sh
-    sudo gitlab-ctl hup unicorn
-    sudo gitlab-ctl hup sidekiq
-    ```
+  ```sh
+  sudo gitlab-ctl hup unicorn
+  sudo gitlab-ctl hup sidekiq
+  ```
 
 ### Geo deployment
 
@@ -341,50 +341,50 @@ On the Primary node, executing the following:
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-    ```sh
-    sudo touch /etc/gitlab/skip-auto-reconfigure
-    ```
+   ```sh
+   sudo touch /etc/gitlab/skip-auto-reconfigure
+   ```
 
 1. Update the GitLab package
 
-    ```sh
-    # Debian/Ubuntu
-    sudo apt-get update && sudo apt-get install gitlab-ee
+   ```sh
+   # Debian/Ubuntu
+   sudo apt-get update && sudo apt-get install gitlab-ee
 
-    # Centos/RHEL
-    sudo yum install gitlab-ee
-    ```
+   # Centos/RHEL
+   sudo yum install gitlab-ee
+   ```
 
 1. To get the database migrations in place, run
 
-    ```sh
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-    ```
+   ```sh
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   ```
 
 1. Run non post-deployment database migrations
 
-    ```sh
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-rake db:migrate
-    ```
+   ```sh
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-rake db:migrate
+   ```
 
 1. Run post-deployment database migrations
 
-    ```sh
-    sudo gitlab-rake db:migrate
-    ```
+   ```sh
+   sudo gitlab-rake db:migrate
+   ```
 
 1. Hot reload `unicorn` and `sidekiq` services
 
-    ```sh
-    sudo gitlab-ctl hup unicorn
-    sudo gitlab-ctl hup sidekiq
-    ```
+   ```sh
+   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup sidekiq
+   ```
 
 1. Verify Geo configuration and dependencies
 
-    ```sh
-    sudo gitlab-rake gitlab:geo:check
-    ```
+   ```sh
+   sudo gitlab-rake gitlab:geo:check
+   ```
 
 **Secondary node(s)**
 
@@ -399,51 +399,51 @@ On all Secondary nodes, executing the following:
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-    ```sh
-    sudo touch /etc/gitlab/skip-auto-reconfigure
-    ```
+   ```sh
+   sudo touch /etc/gitlab/skip-auto-reconfigure
+   ```
 
 1. Update the GitLab package
 
-    ```sh
-    # Debian/Ubuntu
-    sudo apt-get update && sudo apt-get install gitlab-ee
+   ```sh
+   # Debian/Ubuntu
+   sudo apt-get update && sudo apt-get install gitlab-ee
 
-    # Centos/RHEL
-    sudo yum install gitlab-ee
-    ```
+   # Centos/RHEL
+   sudo yum install gitlab-ee
+   ```
 
 1. To get the database migrations in place, run
 
-    ```sh
-    SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
-    ```
+   ```sh
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   ```
 
 1. Run post-deployment database migrations, specific to the Geo database
 
-    ```sh
-    sudo gitlab-rake geo:db:migrate
-    ```
+   ```sh
+   sudo gitlab-rake geo:db:migrate
+   ```
 
 1. Hot reload `unicorn`, `sidekiq` and restart `geo-logcursor` services
 
-    ```sh
-    sudo gitlab-ctl hup unicorn
-    sudo gitlab-ctl hup sidekiq
-    sudo gitlab-ctl restart geo-logcursor
-    ```
+   ```sh
+   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart geo-logcursor
+   ```
 
 1. Verify Geo configuration and dependencies
 
-    ```sh
-    sudo gitlab-rake gitlab:geo:check
-    ```
+   ```sh
+   sudo gitlab-rake gitlab:geo:check
+   ```
 
 1. Verify Geo status
 
-    ```sh
-    sudo gitlab-rake geo:status
-    ```
+   ```sh
+   sudo gitlab-rake geo:status
+   ```
 
 ## Downgrading
 
@@ -473,49 +473,49 @@ Steps:
 
 1. Stop GitLab:
 
-    ```sh
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    ```
+   ```sh
+   sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop sidekiq
+   ```
 
 1. Downgrade GitLab to 6.x:
 
-    ```sh
-    # Ubuntu
-    sudo dpkg -r gitlab
-    sudo dpkg -i gitlab-6.x.x-yyy.deb
+   ```sh
+   # Ubuntu
+   sudo dpkg -r gitlab
+   sudo dpkg -i gitlab-6.x.x-yyy.deb
 
-    # CentOS:
-    sudo rpm -e gitlab
-    sudo rpm -ivh gitlab-6.x.x-yyy.rpm
-    ```
+   # CentOS:
+   sudo rpm -e gitlab
+   sudo rpm -ivh gitlab-6.x.x-yyy.rpm
+   ```
 
 1. Prepare GitLab for receiving the backup restore. Due to a backup restore bug
    in versions earlier than GitLab 6.8.0, it is needed to drop the database
    _before_ running `gitlab-ctl reconfigure`, only if you are downgrading to
    6.7.x or less:
 
-    ```sh
-    sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
-    ```
+   ```sh
+   sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
+   ```
 
 1. Reconfigure GitLab (includes database migrations):
 
-    ```sh
-    sudo gitlab-ctl reconfigure
-    ```
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
 
 1. Restore your backup:
 
-    ```sh
-    sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
-    ```
+   ```sh
+   sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
+   ```
 
 1. Start GitLab:
 
-    ```sh
-    sudo gitlab-ctl start
-    ```
+   ```sh
+   sudo gitlab-ctl start
+   ```
 
 ## Updating GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
 

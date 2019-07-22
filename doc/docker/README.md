@@ -179,35 +179,35 @@ To upgrade GitLab to a new version you have to:
 
 1. Stop the running container:
 
-    ```bash
-    sudo docker stop gitlab
-    ```
+   ```bash
+   sudo docker stop gitlab
+   ```
 
 1. Remove existing container:
 
-    ```bash
-    sudo docker rm gitlab
-    ```
+   ```bash
+   sudo docker rm gitlab
+   ```
 
 1. Pull the new image:
 
-    ```bash
-    sudo docker pull gitlab/gitlab-ce:latest
-    ```
+   ```bash
+   sudo docker pull gitlab/gitlab-ce:latest
+   ```
 
 1. Create the container once again with previously specified options:
 
-    ```bash
-    sudo docker run --detach \
-    --hostname gitlab.example.com \
-    --publish 443:443 --publish 80:80 --publish 22:22 \
-    --name gitlab \
-    --restart always \
-    --volume /srv/gitlab/config:/etc/gitlab \
-    --volume /srv/gitlab/logs:/var/log/gitlab \
-    --volume /srv/gitlab/data:/var/opt/gitlab \
-    gitlab/gitlab-ce:latest
-    ```
+   ```bash
+   sudo docker run --detach \
+   --hostname gitlab.example.com \
+   --publish 443:443 --publish 80:80 --publish 22:22 \
+   --name gitlab \
+   --restart always \
+   --volume /srv/gitlab/config:/etc/gitlab \
+   --volume /srv/gitlab/logs:/var/log/gitlab \
+   --volume /srv/gitlab/data:/var/opt/gitlab \
+   gitlab/gitlab-ce:latest
+   ```
 
 On the first run, GitLab will reconfigure and update itself.
 
@@ -280,23 +280,23 @@ You then need to appropriately configure `gitlab.rb`:
 
 1. Set `external_url`:
 
-    ```
-    # For HTTP
-    external_url "http://gitlab.example.com:8929"
+   ```
+   # For HTTP
+   external_url "http://gitlab.example.com:8929"
 
-    or
+   or
 
-    # For HTTPS (notice the https)
-    external_url "https://gitlab.example.com:8929"
-    ```
+   # For HTTPS (notice the https)
+   external_url "https://gitlab.example.com:8929"
+   ```
 
-    For more information see the [NGINX documentation](../settings/nginx.md).
+   For more information see the [NGINX documentation](../settings/nginx.md).
 
 1. Set `gitlab_shell_ssh_port`:
 
-    ```
-    gitlab_rails['gitlab_shell_ssh_port'] = 2289
-    ```
+   ```
+   gitlab_rails['gitlab_shell_ssh_port'] = 2289
+   ```
 
 Following the above example you will be able to reach GitLab from your
 web browser under `<hostIP>:8929` and push using SSH under the port `2289`.
@@ -330,24 +330,24 @@ Docker-based GitLab installation.
 1. [Install][install-compose] Docker Compose
 1. Create a `docker-compose.yml` file (or [download an example](https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/docker/docker-compose.yml)):
 
-    ```yaml
-    web:
-      image: 'gitlab/gitlab-ce:latest'
-      restart: always
-      hostname: 'gitlab.example.com'
-      environment:
-        GITLAB_OMNIBUS_CONFIG: |
-          external_url 'https://gitlab.example.com'
-          # Add any other gitlab.rb configuration here, each on its own line
-      ports:
-        - '80:80'
-        - '443:443'
-        - '22:22'
-      volumes:
-        - '/srv/gitlab/config:/etc/gitlab'
-        - '/srv/gitlab/logs:/var/log/gitlab'
-        - '/srv/gitlab/data:/var/opt/gitlab'
-    ```
+   ```yaml
+   web:
+     image: 'gitlab/gitlab-ce:latest'
+     restart: always
+     hostname: 'gitlab.example.com'
+     environment:
+       GITLAB_OMNIBUS_CONFIG: |
+         external_url 'https://gitlab.example.com'
+         # Add any other gitlab.rb configuration here, each on its own line
+     ports:
+       - '80:80'
+       - '443:443'
+       - '22:22'
+     volumes:
+       - '/srv/gitlab/config:/etc/gitlab'
+       - '/srv/gitlab/logs:/var/log/gitlab'
+       - '/srv/gitlab/data:/var/opt/gitlab'
+   ```
 
 1. Make sure you are in the same directory as `docker-compose.yml` and run
   `docker-compose up -d` to start GitLab
@@ -400,60 +400,60 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 1. [Setup a Docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/)
 1. Create a `docker-compose.yml` file:
 
-    ```yml
-    version: "3.6"
-    services:
-      gitlab:
-        image: gitlab/gitlab-ce:latest
-        ports:
-          - "22:22"
-          - "80:80"
-          - "443:443"
-        volumes:
-          - /srv/gitlab/data:/var/opt/gitlab
-          - /srv/gitlab/logs:/var/log/gitlab
-          - /srv/gitlab/config:/etc/gitlab
-        environment:
-          GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
-        configs:
-          - source: gitlab
-            target: /omnibus_config.rb
-        secrets:
-          - gitlab_root_password
-      gitlab-runner:
-        image: gitlab/gitlab-runner:alpine
-        deploy:
-          mode: replicated
-          replicas: 4
-    configs:
-      gitlab:
-        file: ./gitlab.rb
-    secrets:
-      gitlab_root_password:
-        file: ./root_password.txt
-    ```
+   ```yml
+   version: "3.6"
+   services:
+     gitlab:
+       image: gitlab/gitlab-ce:latest
+       ports:
+         - "22:22"
+         - "80:80"
+         - "443:443"
+       volumes:
+         - /srv/gitlab/data:/var/opt/gitlab
+         - /srv/gitlab/logs:/var/log/gitlab
+         - /srv/gitlab/config:/etc/gitlab
+       environment:
+         GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+       configs:
+         - source: gitlab
+           target: /omnibus_config.rb
+       secrets:
+         - gitlab_root_password
+     gitlab-runner:
+       image: gitlab/gitlab-runner:alpine
+       deploy:
+         mode: replicated
+         replicas: 4
+   configs:
+     gitlab:
+       file: ./gitlab.rb
+   secrets:
+     gitlab_root_password:
+       file: ./root_password.txt
+   ```
 
-    For simplicity reasons, the `network` configuration was omitted.
-    More information can be found in the official [Compose file reference](https://docs.docker.com/compose/compose-file/).
+   For simplicity reasons, the `network` configuration was omitted.
+   More information can be found in the official [Compose file reference](https://docs.docker.com/compose/compose-file/).
 
 1. Create a `gitlab.rb` file:
 
-    ```ruby
-    external_url 'https://my.domain.com/'
-    gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_root_password')
-    ```
+   ```ruby
+   external_url 'https://my.domain.com/'
+   gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_root_password')
+   ```
 
 1. Create a `root_password.txt` file:
 
-    ```
-    MySuperSecretAndSecurePass0rd!
-    ```
+   ```
+   MySuperSecretAndSecurePass0rd!
+   ```
 
 1. Make sure you are in the same directory as `docker-compose.yml` and run:
 
-    ```bash
-    docker stack deploy --compose-file docker-compose.yml mystack
-    ```
+   ```bash
+   docker stack deploy --compose-file docker-compose.yml mystack
+   ```
 
 ## Install GitLab into a cluster
 

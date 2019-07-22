@@ -72,62 +72,62 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
 1. Pick a tag of GitLab to package (e.g. `v6.6.0`).
 1. Create a release branch in omnibus-gitlab (e.g. `6-6-stable`).
 1. If the release branch already exists, for instance because you are doing a
-  patch release, make sure to pull the latest changes to your local machine:
+   patch release, make sure to pull the latest changes to your local machine:
 
-    ```sh
-    git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing release branch
-    ```
+   ```sh
+   git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing release branch
+   ```
 
 1. Use `support/set-revisions` to set the revisions of files in
-  `config/software/`. It will take tag names and look up the Git SHA1's, and set
-  the download sources to dev.gitlab.org. Use `set-revisions --ee` for an EE
-  release:
+   `config/software/`. It will take tag names and look up the Git SHA1's, and set
+   the download sources to dev.gitlab.org. Use `set-revisions --ee` for an EE
+   release:
 
-    ```sh
-    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF
+   ```sh
+   # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF
 
-    # For GitLab CE:
-    support/set-revisions v1.2.3 v1.2.3 1.2.3 1.2.3
+   # For GitLab CE:
+   support/set-revisions v1.2.3 v1.2.3 1.2.3 1.2.3
 
-    # For GitLab EE:
-    support/set-revisions --ee v1.2.3-ee v1.2.3 1.2.3 1.2.3
-    ```
+   # For GitLab EE:
+   support/set-revisions --ee v1.2.3-ee v1.2.3 1.2.3 1.2.3
+   ```
 
 1. Commit the new version to the release branch:
 
-    ```sh
-    git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
-    git commit
-    ```
+   ```sh
+   git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
+   git commit
+   ```
 
 1. Create an annotated tag on omnibus-gitlab corresponding to the GitLab tag.
-  The omnibus tag looks like: `MAJOR.MINOR.PATCH+OTHER.OMNIBUS_RELEASE`, where
-  `MAJOR.MINOR.PATCH` is the GitLab version, `OTHER` can be something like `ce`,
-  `ee` or `rc1` (or `rc1.ee`), and `OMNIBUS_RELEASE` is a number (starting at 0):
+   The omnibus tag looks like: `MAJOR.MINOR.PATCH+OTHER.OMNIBUS_RELEASE`, where
+   `MAJOR.MINOR.PATCH` is the GitLab version, `OTHER` can be something like `ce`,
+   `ee` or `rc1` (or `rc1.ee`), and `OMNIBUS_RELEASE` is a number (starting at 0):
 
-    ```sh
-    git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
-    ```
+   ```sh
+   git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
+   ```
 
-    CAUTION: **WARNING:**
-    Do NOT use a hyphen `-` anywhere in the omnibus-gitlab tag.
+   CAUTION: **WARNING:**
+   Do NOT use a hyphen `-` anywhere in the omnibus-gitlab tag.
 
-    Examples of converting an upstream tag to an omnibus tag sequence:
+   Examples of converting an upstream tag to an omnibus tag sequence:
 
-    | upstream tag     | omnibus tag sequence                        |
-    | ------------     | --------------------                        |
-    | `v7.10.4`        | `7.10.4+ce.0`, `7.10.4+ce.1`, `...`         |
-    | `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
-    | `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
+   | upstream tag     | omnibus tag sequence                        |
+   | ------------     | --------------------                        |
+   | `v7.10.4`        | `7.10.4+ce.0`, `7.10.4+ce.1`, `...`         |
+   | `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
+   | `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
 
 1. Push the branch and the tag to both gitlab.com and dev.gitlab.org:
 
-    ```sh
-    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
-    git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
-    ```
+   ```sh
+   git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
+   git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
+   ```
 
-    Pushing an annotated tag to dev.gitlab.org triggers a package release.
+   Pushing an annotated tag to dev.gitlab.org triggers a package release.
 
 ### Publishing the packages
 

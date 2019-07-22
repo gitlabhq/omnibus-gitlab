@@ -47,6 +47,7 @@ redis['enable'] = false
 Then following the details in [Authorise GitLab Mattermost section](#authorise-gitlab-mattermost).
 
 To enable integrations with GitLab, add the following on the GitLab Server:
+
 ```ruby
 gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
 ```
@@ -63,6 +64,7 @@ To do this, using browser navigate to the Admin area of GitLab, `Application` se
 http://mattermost.example.com/signup/gitlab/complete
 http://mattermost.example.com/login/gitlab/complete
 ```
+
 (replace `http` with `https` if you use https).
 
 Note that you do not need to select any options under **Scopes**.
@@ -282,8 +284,8 @@ If this is not the case, there are two options:
 Consider these notes when upgrading GitLab Mattermost:
 
 1. Starting in Mattermost v4.2, user-supplied URLs such as those used for Open Graph metadata, webhooks, or slash commands will no longer be allowed to connect to reserved IP addresses including loopback or link-local addresses used for internal networks by default. This change may cause private integrations to break in testing environments, which may point to a URL such as `http://127.0.0.1:1021/my-command`.
-    - If you point private integrations to such URLs, you may whitelist such domains, IP addresses, or CIDR notations via the [AllowedUntrustedInternalConnections config setting](https://github.com/mattermost/docs/blob/05cd1685deff85b2a2c5130d889f935b808ae159/source/administration/config-settings.rst#allow-untrusted-internal-connections-to) in your local environment. Although not recommended, you may also whitelist the addresses in your production environments.
-    - Push notification, OAuth 2.0 and WebRTC server URLs are trusted and not affected by this setting.
+   - If you point private integrations to such URLs, you may whitelist such domains, IP addresses, or CIDR notations via the [AllowedUntrustedInternalConnections config setting](https://github.com/mattermost/docs/blob/05cd1685deff85b2a2c5130d889f935b808ae159/source/administration/config-settings.rst#allow-untrusted-internal-connections-to) in your local environment. Although not recommended, you may also whitelist the addresses in your production environments.
+   - Push notification, OAuth 2.0 and WebRTC server URLs are trusted and not affected by this setting.
 1. Starting in Mattermost v4.2, Mattermost now handles multiple content-types for integrations. Make sure your integrations have been set to use the appropriate content-type.
 
 For a complete list of upgrade notices from older versions, see the [Mattermost documentation](https://docs.mattermost.com/administration/important-upgrade-notes.html).
@@ -394,20 +396,20 @@ After upgrading to GitLab 8.9 additional steps are require before restarting the
 
 1. Confirm you are starting with version GitLab 8.8.
 1. Backup your Mattermost database.
-     - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions.
-     - If you use a default omnibus install you can use [this command](#backup-the-bundled-postgresql-database)
+   - This is especially important in the 8.9 upgrade since the database upgrade cannot be reversed and is incompatible with previous versions.
+   - If you use a default omnibus install you can use [this command](#backup-the-bundled-postgresql-database)
 1. Configure two settings in `/etc/gitlab/gitlab.rb`:
-     - Set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
-     - Set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost.
-          - If you use only one team in Mattermost, this should be the name of the team.
-          - If you use multiple teams, this should be the name of the team most commonly used.
-               - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed.
-               - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account.
-               - For more information, please review the [Mattermost 3.0 upgrade documentation](https://www.mattermost.org/upgrade-to-3-0/).
+   - Set `mattermost['db2_backup_created'] = true` to verify your database backup is complete.
+   - Set `mattermost['db2_team_name'] = "TEAMNAME"` where TEAMNAME is the name of your primary team in Mattermost.
+     - If you use only one team in Mattermost, this should be the name of the team.
+     - If you use multiple teams, this should be the name of the team most commonly used.
+       - When Mattermost 3.1 upgrades the database with multi-team account support user accounts on the primary team are preserved, and accounts with duplciate emails or usernames in other teams are renamed.
+       - Users with renamed accounts receive instructions by email on how to switch from using multiple accounts into one multi-team account.
+       - For more information, please review the [Mattermost 3.0 upgrade documentation](https://www.mattermost.org/upgrade-to-3-0/).
 1. Run your GitLab 8.9 upgrade as normal.
-    - This installs the Mattermost 3.1 binary and will attempt to auto-upgrade the database.
-    - Your Mattermost database will be upgraded to version 3.1 and the server should start.
-    - You'll see an "Automatic database upgrade failed" error on the command line and Mattermost will not start if something goes wrong.
+   - This installs the Mattermost 3.1 binary and will attempt to auto-upgrade the database.
+   - Your Mattermost database will be upgraded to version 3.1 and the server should start.
+   - You'll see an "Automatic database upgrade failed" error on the command line and Mattermost will not start if something goes wrong.
 
 If you experience issues you can run an interactive upgrade using:
 

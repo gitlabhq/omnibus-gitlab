@@ -1,6 +1,7 @@
 # GitLab 11 specific changes
 
-# TLS v1.1 Deprecation
+## TLS v1.1 Deprecation
+
 Beginning with GitLab 12.0, TLS v1.1 will be disabled by default to improve security.
 
 This mitigates numerous issues including, but not limited to, Heartbleed and makes
@@ -9,11 +10,11 @@ GitLab compliant out of the box with the PCI DSS 3.1 standard.
 
 ## Clients supporting TLS v1.2
 
-* **Git-Credential-Manager** - support since **1.14.0***
-* **git on Red Hat Enterprise Linux 6** - support since ***6.8***
-* **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
-* **JGit / Java** - support since ***JDK 7***
-* **Visual Studio** - support since version ***2017***
+- **Git-Credential-Manager** - support since **1.14.0***
+- **git on Red Hat Enterprise Linux 6** - support since ***6.8***
+- **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
+- **JGit / Java** - support since ***JDK 7***
+- **Visual Studio** - support since version ***2017***
 
 Modify or add these entries to `gitlab.rb` and run `gitlab-ctl reconfigure` to disable TLS v1.1 immediately:
 
@@ -22,6 +23,7 @@ nginx['ssl_protocols'] = "TLSv1.2"
 ```
 
 ## Upgrade prerequisites
+
 For successfully upgrading to GitLab 11.0, users need to satisfy following
 requirements:
 
@@ -37,6 +39,7 @@ that users does not end up with a broken Gitlab due to these unsupported
 configurations.
 
 ## Removed configurations
+
 The following configurations were deprecated in the 10.x series and have now
 been removed:
 
@@ -55,48 +58,48 @@ been removed:
 
 ### 11.2
 
-1.  Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/security/rack_attack.html#settings).
+Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/security/rack_attack.html#settings).
 
 ### 11.4
 
-1.  Version of bundled Redis has been upgraded to 3.2.12. This is a critical
-    security update that fixes multiple vulnerabilities. After upgrading to 11.4,
-    run `gitlab-ctl restart redis` to ensure the new version is loaded.
+1. Version of bundled Redis has been upgraded to 3.2.12. This is a critical
+   security update that fixes multiple vulnerabilities. After upgrading to 11.4,
+   run `gitlab-ctl restart redis` to ensure the new version is loaded.
 
-1.  The [bundled version of Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
-    has been upgraded to 2.4.2 and fresh installations will use it by default.
-    Version 2 of Prometheus uses a data format incompatible with version 1.
+1. The [bundled version of Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
+   has been upgraded to 2.4.2 and fresh installations will use it by default.
+   Version 2 of Prometheus uses a data format incompatible with version 1.
 
-    For users looking for preserving the Prometheus version 1 data, a command
-    line tool is provided to upgrade their Prometheus service and migrate data to
-    the format supported by new Prometheus version.  This tool can be invoked
-    using the following command:
+   For users looking for preserving the Prometheus version 1 data, a command
+   line tool is provided to upgrade their Prometheus service and migrate data to
+   the format supported by new Prometheus version.  This tool can be invoked
+   using the following command:
 
-    ```bash
-    sudo gitlab-ctl prometheus-upgrade
-    ```
+   ```bash
+   sudo gitlab-ctl prometheus-upgrade
+   ```
 
-    This tool will convert existing data to a format supported by the latest
-    Prometheus version. Depending on the volume of data, this process can take
-    hours.  If users do not want to migrate the data, but start with a clean
-    database, they can pass `--skip-data-migration` flag to the above command.
+   This tool will convert existing data to a format supported by the latest
+   Prometheus version. Depending on the volume of data, this process can take
+   hours.  If users do not want to migrate the data, but start with a clean
+   database, they can pass `--skip-data-migration` flag to the above command.
 
-    NOTE: **Note**: Prometheus service will be stopped during the migration process.
+   NOTE: **Note**: Prometheus service will be stopped during the migration process.
 
-    To know about other supported options, pass `--help` flag to the above
-    command.
+   To know about other supported options, pass `--help` flag to the above
+   command.
 
-    This tool **will not** be automatically invoked during package upgrades.
-    Users will have to run it manually to migrate to latest version of
-    Prometheus, and are advised to do it as soon as possible. Therefore, existing
-    users who are upgrading to 11.4 will continue to use Prometheus 1.x until
-    they manually migrate to the 2.x version.
+   This tool **will not** be automatically invoked during package upgrades.
+   Users will have to run it manually to migrate to latest version of
+   Prometheus, and are advised to do it as soon as possible. Therefore, existing
+   users who are upgrading to 11.4 will continue to use Prometheus 1.x until
+   they manually migrate to the 2.x version.
 
-    Support for Prometheus 1.x versions that were shipped with earlier versions
-    of GitLab has been deprecated and will be removed completely in GitLab 12.0.
-    Users still using those versions will be presented with a deprecation warning
-    during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
-    Prometheus 1.0 data will not be migrated.
+   Support for Prometheus 1.x versions that were shipped with earlier versions
+   of GitLab has been deprecated and will be removed completely in GitLab 12.0.
+   Users still using those versions will be presented with a deprecation warning
+   during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
+   Prometheus 1.0 data will not be migrated.
 
 ### 11.6
 
@@ -109,17 +112,17 @@ been removed:
 
    A valid example configuration is:
 
-    ```ruby
-    gitlab_monitor['probe_sidekiq'] = true
-    gitlab_rails['redis_host'] = <IP of Redis master node>
-    gitlab_rails['redis_port'] = <Port where Redis runs in master node>
-    gitlab_rails['redis_password'] = <Password to connect to Redis master>
-    ```
+   ```ruby
+   gitlab_monitor['probe_sidekiq'] = true
+   gitlab_rails['redis_host'] = <IP of Redis master node>
+   gitlab_rails['redis_port'] = <Port where Redis runs in master node>
+   gitlab_rails['redis_password'] = <Password to connect to Redis master>
+   ```
 
-    NOTE: **Note**: In the above configuration, when a failover happens after the
-    master node fails, gitlab-monitor will still be probing the original master
-    node, since it is specified in `gitlab.rb`. Users will have to manually update
-    gitlab.rb to point it to the new master node.
+   NOTE: **Note**: In the above configuration, when a failover happens after the
+   master node fails, gitlab-monitor will still be probing the original master
+   node, since it is specified in `gitlab.rb`. Users will have to manually update
+   gitlab.rb to point it to the new master node.
 
 1. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
    the unicorn processes have been restarted. The restart is done automatically

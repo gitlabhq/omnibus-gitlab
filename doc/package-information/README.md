@@ -51,8 +51,8 @@ To view a diff between your configuration file and the latest version, run:
 
 ```
 sudo gitlab-ctl diff-config
-
 ```
+
 _**Note:** This command is available from GitLab 8.17_
 
 **Important:** If you are copy-pasting the output of this command into your
