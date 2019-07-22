@@ -1,5 +1,0 @@
----
-title: Auto-enable Let's Encrypt for certificate renewal
-merge_request: 3342
-author:
-type: fixed

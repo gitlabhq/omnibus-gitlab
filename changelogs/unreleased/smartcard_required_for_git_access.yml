@@ -1,5 +1,0 @@
----
-title: Add smartcard_required_for_git_access to gitlab.rb
-merge_request: 3415
-author:
-type: added

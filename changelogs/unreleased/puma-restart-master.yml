@@ -1,5 +1,0 @@
----
-title: Run before_fork only once on boot for Unicorn.
-merge_request:
-author:
-type: changed

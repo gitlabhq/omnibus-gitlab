@@ -1,5 +1,0 @@
----
-title: Enable specifying --path in bundle install on Ruby docker images
-merge_request: 3432
-author:
-type: fixed
