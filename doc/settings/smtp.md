@@ -29,7 +29,9 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
 ## Example configurations
+
 ### SMTP on localhost
+
 This configuration, which simply enables SMTP and otherwise uses the default settings, can be used for an MTA running on localhost that does not provide a `sendmail` interface or that provides a `sendmail` interface that is incompatible with GitLab, such as Exim.
 
 ```ruby
@@ -37,6 +39,7 @@ gitlab_rails['smtp_enable'] = true
 ```
 
 ### SMTP without SSL
+
 By default SSL is enabled for SMTP. If your SMTP server do not support communication over SSL use following settings:
 
 ```ruby
@@ -340,7 +343,7 @@ gitlab_rails['smtp_domain'] = "mail.example.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
- 
+
 ### Strato.de
 
 ```ruby
@@ -403,6 +406,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
+
 ### GoDaddy (No TLS)
 
 ```ruby
@@ -561,6 +565,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 gitlab_rails['gitlab_email_from'] = "example@example.com"
 ```
+
 ### Snel.com
 
 ```ruby

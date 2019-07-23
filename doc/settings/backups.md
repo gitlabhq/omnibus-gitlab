@@ -36,7 +36,6 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 
 ```
 15 04 * * 2-6  umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab
-
 ```
 
 [cron is rather particular](http://www.pantz.org/software/cron/croninfo.html)
@@ -132,5 +131,6 @@ To disable backup directory management, in `/etc/gitlab/gitlab.rb` set:
 ```ruby
 gitlab_rails['manage_backup_path'] = false
 ```
+
 *Warning* If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
 which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.

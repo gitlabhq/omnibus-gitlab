@@ -25,11 +25,11 @@ Administrators can enable secure http using any method supported by a GitLab ser
 > **Note**: Introduced in GitLab version ***10.5*** and disabled by default.
 > Enabled by default in GitLab version ***10.7*** and later if `external_url` is set with the *https* protocol
 > and no certificates are configured.
-
+>
 > NOTE: **Note**: In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
 > need to be accessible to the Let's Encrypt servers that run the validation. Also note that the validation
 > currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3580).
-
+>
 > CAUTION: **Caution:**
 > Administrators installing or upgrading to GitLab version ***10.7*** or later and do not plan on using
 > **Let's Encrypt** should set the following in `/etc/gitlab/gitlab.rb` to disable:
@@ -43,7 +43,7 @@ support for the primary domain:
 
 ```ruby
 letsencrypt['enable'] = true                      # GitLab 10.5 and 10.6 require this option
-external_url "https://gitlab.example.com"	  # Must use https protocol
+external_url "https://gitlab.example.com"         # Must use https protocol
 letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
@@ -79,7 +79,7 @@ mattermost_external_url "https://mattermost.example.com" # mattermost, must use 
 #### Automatic Let's Encrypt Renewal
 
 > **Note**: [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) ***10.7***.
-
+>
 > CAUTION: **Caution:**
 > Administrators installing or upgrading to GitLab version ***12.1*** or later and plan on using
 > their own **Let's Encrypt** certificate should set the following in `/etc/gitlab/gitlab.rb` to
@@ -115,6 +115,7 @@ Renew **Let's Encrypt** certificates manually using ***one*** of the following c
 ```sh
 # gitlab-ctl reconfigure
 ```
+
 ```sh
 # gitlab-ctl renew-le-certs
 ```
@@ -128,7 +129,7 @@ Renew **Let's Encrypt** certificates manually using ***one*** of the following c
 > ```ruby
 > letsencrypt['enable'] = false
 > ```
-
+>
 > TIP: **Tip**
 >
 > The above commands require root privileges and only generate a renewal if the certificate is close to expiration.
@@ -153,7 +154,7 @@ self-signed certificates.
 > NOTE: **Compatibility Note**
 >
 > Custom certificates were introduced in GitLab version **8.9**.
-
+>
 > TIP: **Further Reading**
 >
 > For installations that use self-signed certificates, Omnibus-GitLab

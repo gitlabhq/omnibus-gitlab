@@ -232,72 +232,72 @@ will have to perform the following steps:
 
 1. **Disable bundled Nginx**
 
-    In `/etc/gitlab/gitlab.rb` set:
+   In `/etc/gitlab/gitlab.rb` set:
 
-    ```ruby
-    nginx['enable'] = false
-    ```
+   ```ruby
+   nginx['enable'] = false
+   ```
 
 1. **Set the username of the non-bundled web-server user**
 
-    By default, omnibus-gitlab has no default setting for the external webserver
-    user, you have to specify it in the configuration. For Debian/Ubuntu the
-    default user is `www-data` for both Apache/Nginx whereas for RHEL/CentOS
-    the Nginx user is `nginx`.
+   By default, omnibus-gitlab has no default setting for the external webserver
+   user, you have to specify it in the configuration. For Debian/Ubuntu the
+   default user is `www-data` for both Apache/Nginx whereas for RHEL/CentOS
+   the Nginx user is `nginx`.
 
-    *Note: Make sure you have first installed Apache/Nginx so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
+   *Note: Make sure you have first installed Apache/Nginx so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
 
-    Let's say for example that the webserver user is `www-data`.
-    In `/etc/gitlab/gitlab.rb` set:
+   Let's say for example that the webserver user is `www-data`.
+   In `/etc/gitlab/gitlab.rb` set:
 
-    ```ruby
-    web_server['external_users'] = ['www-data']
-    ```
+   ```ruby
+   web_server['external_users'] = ['www-data']
+   ```
 
-    *Note: This setting is an array so you can specify more than one user to be added to gitlab-www group.*
+   *Note: This setting is an array so you can specify more than one user to be added to gitlab-www group.*
 
-    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+   Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-    *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
+   *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
 
-    *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
+   *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
 
 1. **Add the non-bundled web-server to the list of trusted proxies**
 
-    Normally, omnibus-gitlab defaults the list of trusted proxies to what was
-    configured in the `real_ip` module for the bundled NGINX.
+   Normally, omnibus-gitlab defaults the list of trusted proxies to what was
+   configured in the `real_ip` module for the bundled NGINX.
 
-    For non-bundled web-servers the list needs to be configured directly, and should
-    include the IP address of your web-server if it is not on the same machine as GitLab.
-    Otherwise, users will be shown as being signed in from your web-server's IP address.
+   For non-bundled web-servers the list needs to be configured directly, and should
+   include the IP address of your web-server if it is not on the same machine as GitLab.
+   Otherwise, users will be shown as being signed in from your web-server's IP address.
 
-    ```ruby
-    gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
-    ```
+   ```ruby
+   gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
+   ```
 
 1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
 
-    *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
+   *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
 
-    Apache cannot connect to a UNIX socket but instead needs to connect to a
-    TCP Port. To allow gitlab-workhorse to listen on TCP (by default port 8181)
-    edit `/etc/gitlab/gitlab.rb`:
+   Apache cannot connect to a UNIX socket but instead needs to connect to a
+   TCP Port. To allow gitlab-workhorse to listen on TCP (by default port 8181)
+   edit `/etc/gitlab/gitlab.rb`:
 
-    ```
-    gitlab_workhorse['listen_network'] = "tcp"
-    gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
-    ```
+   ```
+   gitlab_workhorse['listen_network'] = "tcp"
+   gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
+   ```
 
-    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+   Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 1. **Download the right web server configs**
 
-    Go to [GitLab recipes repository][recipes-web] and look for the omnibus
-    configs in the webserver directory of your choice. Make sure you pick the
-    right configuration file depending whether you choose to serve GitLab with
-    SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
-    your own FQDN and if you use SSL, the location where your SSL keys currently
-    reside. You also might need to change the location of your log files.
+   Go to [GitLab recipes repository][recipes-web] and look for the omnibus
+   configs in the webserver directory of your choice. Make sure you pick the
+   right configuration file depending whether you choose to serve GitLab with
+   SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
+   your own FQDN and if you use SSL, the location where your SSL keys currently
+   reside. You also might need to change the location of your log files.
 
 ## Setting the NGINX listen address or addresses
 
@@ -468,16 +468,16 @@ This inserts the defined string into the end of the `server` block of
 
 - If you're adding a new location, you might need to include
 
-    ```conf
-    proxy_cache off;
-    proxy_pass http://gitlab-workhorse;
-    ```
+  ```conf
+  proxy_cache off;
+  proxy_pass http://gitlab-workhorse;
+  ```
 
-    in the string or in the included nginx config. Without these, any sub-location
-    will return a 404. See
-    [gitlab-ce#30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
+  in the string or in the included nginx config. Without these, any sub-location
+  will return a 404. See
+  [gitlab-ce#30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
 - You cannot add the root `/` location or the `/assets` location as those already
-    exist in `gitlab-http.conf`.
+  exist in `gitlab-http.conf`.
 
 ## Inserting custom settings into the NGINX config
 
@@ -682,6 +682,7 @@ server {
   error_page 502 /502.html;
 }
 ```
+
 Don't forget to update 'git.example.com' in the above example to be your server url.
 
 **Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in /etc/nginx/nginx.conf, to do so simply uncomment:
@@ -689,6 +690,7 @@ Don't forget to update 'git.example.com' in the above example to be your server 
 ```
 # include /etc/nginx/passenger.conf;
 ```
+
 then, 'sudo service nginx reload'
 
 ## Enabling/Disabling nginx_status

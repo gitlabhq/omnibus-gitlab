@@ -57,34 +57,34 @@ recommend 4GB RAM, and 4 or 8 CPU cores.
 
 Follow the steps below to enable relative URL in GitLab:
 
-1.  (Optional) If you run short on resources, you can temporarily free up some
-    memory by shutting down Unicorn and Sidekiq with the following command:
+1. (Optional) If you run short on resources, you can temporarily free up some
+   memory by shutting down Unicorn and Sidekiq with the following command:
 
-    ```shell
-    sudo gitlab-ctl stop unicorn
-    sudo gitlab-ctl stop sidekiq
-    ```
+   ```shell
+   sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop sidekiq
+   ```
 
-1.  Set the `external_url` in `/etc/gitlab/gitlab.rb`:
+1. Set the `external_url` in `/etc/gitlab/gitlab.rb`:
 
-    ```ruby
-    external_url "https://example.com/gitlab"
-    ```
+   ```ruby
+   external_url "https://example.com/gitlab"
+   ```
 
-    In this example, the relative URL under which GitLab will be served will be
-    `/gitlab`. Change it to your liking.
+   In this example, the relative URL under which GitLab will be served will be
+   `/gitlab`. Change it to your liking.
 
-1.  Reconfigure GitLab for the changes to take effect:
+1. Reconfigure GitLab for the changes to take effect:
 
-    ```shell
-    sudo gitlab-ctl reconfigure
-    ```
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
 
-1.  Restart the services so that Unicorn and Sidekiq picks up the changes
+1. Restart the services so that Unicorn and Sidekiq picks up the changes
 
-    ```shell
-    sudo gitlab-ctl restart
-    ```
+   ```shell
+   sudo gitlab-ctl restart
+   ```
 
 If you stumble upon any issues, see the [troubleshooting section](#relative-url-troubleshooting).
 
@@ -252,7 +252,6 @@ manage_accounts['enable'] = false
 
 By default, omnibus-gitlab package expects that following users exist:
 
-
 ```bash
 # GitLab user (required)
 git
@@ -400,7 +399,6 @@ In order to move an existing home directory, GitLab services will need to be sto
    gitlab-ctl reconfigure
    ```
 
-
 If the runnit service is not stopped and the home directories are not manually
 moved for the user, GitLab will encounter an error while reconfiguring:
 
@@ -466,8 +464,6 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/gitlab-rails/shared/pages` | 0750 | git:gitlab-www | Holds user pages |
 | `/var/opt/gitlab/gitlab-ci/builds` | 0700 | git:root | Holds CI build logs |
 | `/var/opt/gitlab/.ssh` | 0700 | git:git | Holds authorized keys |
-
-
 
 ## Only start Omnibus-GitLab services after a given filesystem is mounted
 
@@ -578,8 +574,8 @@ interpolated by rails(ex. `#{API::API.version}`)
 then you need to escape curly brackets or use single quoted string.
 For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
 
-
 ### Setting up throttling for 'paths to be protected'
+
 Use next options to control throttling 'limit' and 'period':
 
 ```ruby
