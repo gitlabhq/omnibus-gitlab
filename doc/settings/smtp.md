@@ -747,6 +747,22 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
+### Mittwald CM Service (mittwald.de)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.agenturserver.de"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@example.com"
+gitlab_rails['smtp_password'] = "password_you_set"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+
+gitlab_rails['gitlab_email_from'] = "username@example.com"
+gitlab_rails['gitlab_email_reply_to'] = "username@example.com"
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
