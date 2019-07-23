@@ -119,6 +119,7 @@ GitLab includes support for running with separate redis instances for different 
    **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
 
    Where:
+
    - PASSWORD is the plaintext password for the Redis instance
    - REDIS_HOST is the hostname or IP address of the host
    - REDIS_PORT is the port Redis is listening on, the default is 6379
