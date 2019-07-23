@@ -152,4 +152,5 @@ registry['log_formatter'] = 'text'
 sidekiq['log_format'] = 'default'
 gitlab_pages['log_format'] = 'text'
 ```
+
 [ee]: https://about.gitlab.com/gitlab-ee/

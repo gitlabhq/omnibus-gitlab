@@ -6,19 +6,21 @@ Prometheus supports reading and writing to remote services.
 
 To configure a remote remote read or write service, you can include the following in `gitlab.rb`.
 
-    prometheus['remote_write'] = [
-      {
-        url: 'https://some-remote-write-service.example.com',
-        basic_auth: {
-          password: 'remote write secret password'
-        }
-      }
-    ]
-    prometheus['remote_read'] = [
-      {
-        url: 'https://some-remote-write-service.example.com'
-      }
-    ]
+```
+prometheus['remote_write'] = [
+  {
+    url: 'https://some-remote-write-service.example.com',
+    basic_auth: {
+      password: 'remote write secret password'
+    }
+  }
+]
+prometheus['remote_read'] = [
+  {
+    url: 'https://some-remote-write-service.example.com'
+  }
+]
+```
 
 For more documentation on the options available, see the [remote write] and [remote read] sections of the official documentation.
 
@@ -36,11 +38,15 @@ To override the default rules, you can change the default list in `gitlab.rb.`.
 
 No rules:
 
-    prometheus['rules_files'] = []
+```
+prometheus['rules_files'] = []
+```
 
 Custom list:
 
-    prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
+```
+prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
+```
 
 ## node_exporter
 
@@ -50,9 +56,11 @@ Additional metrics collectors are enabled by default. For example, `mountstats` 
 
 To disable the `mountstats` collector, adjust gitlab.rb with the following setting and run `gitlab-ctl reconfigure`:
 
-    node_exporter['flags'] = {
-      'collector.mountstats' => false,
-    }
+```
+node_exporter['flags'] = {
+  'collector.mountstats' => false,
+}
+```
 
 For more information on available collectors, see the [upstream documentation](https://github.com/prometheus/node_exporter#collectors).
 
@@ -65,4 +73,3 @@ See [the embedded Grafana documentation](grafana.md) for more information.
 
 [alerting]: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 [recording]: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
-

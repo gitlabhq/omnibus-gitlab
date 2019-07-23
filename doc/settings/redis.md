@@ -44,9 +44,9 @@ If you'd like to setup a separate Redis server (e.g. in the case of scaling
 issues) for use with GitLab you can do so using GitLab Omnibus.
 
 > **Note:** Redis does not require authentication by default. See
-  [Redis Security](http://redis.io/topics/security) documentation for more
-  information. We recommend using a combination of a Redis password and tight
-  firewall rules to secure your Redis service.
+> [Redis Security](http://redis.io/topics/security) documentation for more
+> information. We recommend using a combination of a Redis password and tight
+> firewall rules to secure your Redis service.
 
 1. Download/install GitLab Omnibus using **steps 1 and 2** from
    [GitLab downloads](https://about.gitlab.com/downloads). Do not complete other
@@ -55,28 +55,28 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
    Be sure to change the `external_url` to match your eventual GitLab front-end
    URL:
 
-    ```ruby
-    external_url 'https://gitlab.example.com'
+   ```ruby
+   external_url 'https://gitlab.example.com'
 
-    # Disable all services except Redis
-    redis_master_role['enable'] = true
+   # Disable all services except Redis
+   redis_master_role['enable'] = true
 
-    # Redis configuration
-    redis['port'] = 6379
-    redis['bind'] = '0.0.0.0'
+   # Redis configuration
+   redis['port'] = 6379
+   redis['bind'] = '0.0.0.0'
 
-    # If you wish to use Redis authentication (recommended)
-    redis['password'] = 'Redis Password'
-    gitlab_rails['redis_password'] = 'Redis Password'
+   # If you wish to use Redis authentication (recommended)
+   redis['password'] = 'Redis Password'
+   gitlab_rails['redis_password'] = 'Redis Password'
 
-    # Disable automatic database migrations
-    #   Only the primary GitLab application server should handle migrations
-    gitlab_rails['auto_migrate'] = false
-    ```
+   # Disable automatic database migrations
+   #   Only the primary GitLab application server should handle migrations
+   gitlab_rails['auto_migrate'] = false
+   ```
 
-    > **Note:** The `redis_master_role['enable']` option is only available as of
-    GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
-    to understand which services are automatically disabled via that option.
+   > **Note:** The `redis_master_role['enable']` option is only available as of
+   > GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
+   > to understand which services are automatically disabled via that option.
 
 1. Run `sudo gitlab-ctl reconfigure` to install and configure Redis.
 
@@ -110,17 +110,18 @@ GitLab includes support for running with separate redis instances for different 
 1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
 
-    ```ruby
-    gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
-    gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
-    gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
-    ```
+   ```ruby
+   gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
+   gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
+   gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
+   ```
 
-    **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
-    Where
-    * PASSWORD is the plaintext password for the Redis instance
-    * REDIS_HOST is the hostname or IP address of the host
-    * REDIS_PORT is the port Redis is listening on, the default is 6379
+   **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
+
+   Where:
+   - PASSWORD is the plaintext password for the Redis instance
+   - REDIS_HOST is the hostname or IP address of the host
+   - REDIS_PORT is the port Redis is listening on, the default is 6379
 
 1. Run `gitlab-ctl reconfigure`
 
@@ -172,9 +173,9 @@ To activate GitLab client support for SSL, do the following:
 
 1. Add the following line to `/etc/gitlab/gitlab.rb`:
 
-    ```ruby
-    gitlab_rails['redis_ssl'] = true
-    ```
+   ```ruby
+   gitlab_rails['redis_ssl'] = true
+   ```
 
 1. Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
@@ -195,14 +196,14 @@ check whether this is an issue:
 
 1. If you see messages that look like:
 
-    ```
-    2018-11-14_05:52:16.71123 time="2018-11-14T05:52:16Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
-    2018-11-14_05:52:16.74397 time="2018-11-14T05:52:16Z" level=error msg="unknown error" error="keywatcher: x509: certificate signed by unknown authority"
-    ```
+   ```
+   2018-11-14_05:52:16.71123 time="2018-11-14T05:52:16Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
+   2018-11-14_05:52:16.74397 time="2018-11-14T05:52:16Z" level=error msg="unknown error" error="keywatcher: x509: certificate signed by unknown authority"
+   ```
 
-    The first line should show `rediss` as the scheme with the address
-    of the Redis server. The second line indicates the certificate is
-    not properly trusted on this server. See the [previous section](#ssl-certificates).
+   The first line should show `rediss` as the scheme with the address
+   of the Redis server. The second line indicates the certificate is
+   not properly trusted on this server. See the [previous section](#ssl-certificates).
 
 1. Verify that the SSL certificate is working via [these troubleshooting
    steps](ssl.md#custom-certificates-missing-or-skipped).
@@ -218,22 +219,22 @@ troubleshoot this error:
 
 1. If you see messages that look like:
 
-    ```
-    2018-11-14_06:18:43.81636 time="2018-11-14T06:18:43Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
-    2018-11-14_06:18:43.86929 time="2018-11-14T06:18:43Z" level=error msg="unknown error" error="keywatcher: pubsub receive: NOAUTH Authentication required."
-    ```
+   ```
+   2018-11-14_06:18:43.81636 time="2018-11-14T06:18:43Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
+   2018-11-14_06:18:43.86929 time="2018-11-14T06:18:43Z" level=error msg="unknown error" error="keywatcher: pubsub receive: NOAUTH Authentication required."
+   ```
 
 1. Check that the Redis client password specified in `/etc/gitlab/gitlab.rb` is correct:
 
-    ```ruby
-    gitlab_rails['redis_password'] = 'your-password-here'
-    ```
+   ```ruby
+   gitlab_rails['redis_password'] = 'your-password-here'
+   ```
 
 1. If you are using the Omnibus-provided Redis server, check that the server has the same password:
 
-    ```ruby
-    redis['password'] = 'your-password-here'
-    ```
+   ```ruby
+   redis['password'] = 'your-password-here'
+   ```
 
 ### Redis connection reset (ECONNRESET)
 
@@ -245,17 +246,17 @@ configured to use it.
 1. Check that the server is actually listening to the port via SSL.
    For example:
 
-    ```sh
-    /opt/gitlab/embedded/bin/openssl s_client -connect redis-server:6379
-    ```
+   ```sh
+   /opt/gitlab/embedded/bin/openssl s_client -connect redis-server:6379
+   ```
 
 1. Check `/var/opt/gitlab/gitlab-rails/etc/resque.yml`. You
    should see something like:
 
-    ```yaml
-    production:
-      url: rediss://:mypassword@redis-server:6379/
-    ```
+   ```yaml
+   production:
+     url: rediss://:mypassword@redis-server:6379/
+   ```
 
 1. If `redis://` is present instead of `rediss://`, the `redis_ssl`
    parameter may not have been configured properly, or the reconfigure
