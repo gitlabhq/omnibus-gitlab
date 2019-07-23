@@ -10,11 +10,11 @@ GitLab compliant out of the box with the PCI DSS 3.1 standard.
 
 ## Clients supporting TLS v1.2
 
-- **Git-Credential-Manager** - support since **1.14.0***
-- **git on Red Hat Enterprise Linux 6** - support since ***6.8***
-- **git on Red Hat Enteprirse Linux 7** - support since ***7.2***
-- **JGit / Java** - support since ***JDK 7***
-- **Visual Studio** - support since version ***2017***
+- **Git-Credential-Manager** - support since **1.14.0**
+- **git on Red Hat Enterprise Linux 6** - support since **6.8**
+- **git on Red Hat Enteprirse Linux 7** - support since **7.2**
+- **JGit / Java** - support since **JDK 7**
+- **Visual Studio** - support since version **2017**
 
 Modify or add these entries to `gitlab.rb` and run `gitlab-ctl reconfigure` to disable TLS v1.1 immediately:
 
