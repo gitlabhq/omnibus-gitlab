@@ -56,3 +56,29 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 
 Further details and procedures for upgrading a GitLab HA cluster can be
 found in the [Database Settings notes](../settings/database.md#upgrade-packaged-postgresql-server).
+
+### 12.1
+
+#### Monitoring related node attributes moved to be under `monitoring` key
+
+If you were using monitoring related node attributes like
+`node['gitlab']['prometheus']` or `node['gitlab']['alertmanager']` in your
+`gitlab.rb` file for configuring other settings, they are now under `monitoring`
+key and should be renamed. The replacements are as follows
+
+```
+# Existing usage in gitlab.rb => Replacement
+
+* node['gitlab']['prometheus'] => node['monitoring']['prometheus']
+* node['gitlab']['alertmanager'] => node['monitoring']['alertmanager']
+* node['gitlab']['redis-exporter'] => node['monitoring']['redis-exporter']
+* node['gitlab']['node-exporter'] => node['monitoring']['node-exporter']
+* node['gitlab']['redis-exporter'] => node['monitoring']['redis-exporter']
+* node['gitlab']['postgres-exporter'] => node['monitoring']['postgres-exporter']
+* node['gitlab']['gitlab-monitor'] => node['monitoring']['gitlab-monitor']
+* node['gitlab']['grafana'] => node['monitoring']['grafana']
+```
+
+Also, it is recommended to use the actual values in `gitlab.rb` instead of
+referring node values to avoid breakage when these attributes are moved in the
+backend.

@@ -1451,9 +1451,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Custom Prometheus flags
 #
 # prometheus['flags'] = {
-#   'storage.tsdb.path' => "#{node['gitlab']['prometheus']['home']}/data",
+#   'storage.tsdb.path' => "/var/opt/gitlab/prometheus/data",
 #   'storage.tsdb.retention.time' => "15d",
-#   'config.file' => "#{node['gitlab']['prometheus']['home']}/prometheus.yml"
+#   'config.file' => "/var/opt/gitlab/prometheus/prometheus.yml"
 # }
 
 ##! Advanced settings. Should be changed only if absolutely needed.
@@ -1468,9 +1468,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # alertmanager['log_directory'] = '/var/log/gitlab/alertmanager'
 # alertmanager['admin_email'] = 'admin@example.com'
 # alertmanager['flags'] = {
-#   'web.listen-address' => "#{node['gitlab']['alertmanager']['listen_address']}"
-#   'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data"
-#   'config.file' => "#{node['gitlab']['alertmanager']['home']}/alertmanager.yml"
+#   'web.listen-address' => "localhost:9093"
+#   'storage.path' => "/var/opt/gitlab/alertmanager/data"
+#   'config.file' => "/var/opt/gitlab/alertmanager/alertmanager.yml"
 # }
 # alertmanager['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
 # alertmanager['env'] = {
@@ -1489,7 +1489,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['home'] = '/var/opt/gitlab/node-exporter'
 # node_exporter['log_directory'] = '/var/log/gitlab/node-exporter'
 # node_exporter['flags'] = {
-#   'collector.textfile.directory' => "#{node['gitlab']['node-exporter']['home']}/textfile_collector"
+#   'collector.textfile.directory' => "/var/opt/gitlab/node-exporter/textfile_collector"
 # }
 # node_exporter['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
 # node_exporter['env'] = {
@@ -1507,7 +1507,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis_exporter['enable'] = true
 # redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
 # redis_exporter['flags'] = {
-#   'redis.addr' => "unix://#{node['gitlab']['gitlab-rails']['redis_socket']}",
+#   'redis.addr' => "unix:///var/opt/gitlab/redis/redis.socket",
 # }
 # redis_exporter['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
 # redis_exporter['env'] = {
