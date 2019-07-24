@@ -132,7 +132,7 @@ docs-lint:
     # Lint Markdown
     # https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
     - bundle exec mdl content/omnibus/**/*.md --rules \
-        MD001,MD029,MD032,MD034
+        MD001,MD003,MD011,MD023,MD029,MD032,MD034,MD037
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
