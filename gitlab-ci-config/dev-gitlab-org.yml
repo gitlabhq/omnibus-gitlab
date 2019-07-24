@@ -201,6 +201,9 @@ Debian-8-branch:
 Debian-9.1-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Debian-10-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -370,6 +373,9 @@ Debian-8:
 Debian-9.1:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Debian-10:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -441,6 +447,11 @@ Debian-9.1-staging:
     - Debian-9.1
     - Debian-9.1-branch
   <<: *staging_upload
+Debian-10-staging:
+  dependencies:
+    - Debian-10
+    - Debian-10-branch
+  <<: *staging_upload
 CentOS-6-staging:
   dependencies:
     - CentOS-6
@@ -486,6 +497,10 @@ Debian-8-release:
 Debian-9.1-release:
   dependencies:
     - Debian-9.1
+  <<: *production_release
+Debian-10-release:
+  dependencies:
+    - Debian-10
   <<: *production_release
 CentOS-6-release:
   dependencies:
