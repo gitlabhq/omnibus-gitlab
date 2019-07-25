@@ -647,7 +647,6 @@ Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
   <<: *raspbian_release
-  <<: *except-auto-deploy-tag
 
 AWS-Marketplace-release:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
