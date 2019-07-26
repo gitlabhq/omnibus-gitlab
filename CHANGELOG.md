@@ -7,6 +7,10 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 12.1.2
+
+- No changes.
+
 ## 12.1.1
 
 - No changes.
