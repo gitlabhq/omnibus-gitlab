@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.2
+
+- No changes.
+
+## 12.1.2
+
+- No changes.
+
 ## 12.1.1
 
 - No changes.
@@ -154,6 +162,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.11.0. (Harrison Healey)
 - Stop printing certificate skipped messages, instead list which certs were copied.
 
+
+## 11.11.7
+
+- No changes.
 
 ## 11.11.5 (2019-06-27)
 
