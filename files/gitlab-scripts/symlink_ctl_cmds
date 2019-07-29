@@ -9,6 +9,7 @@ usr_bin_symlinks=(
   "${DEST_DIR}/bin/gitlab-rails"
   "${DEST_DIR}/bin/gitlab-psql"
   "${DEST_DIR}/bin/gitlab-geo-psql"
+  "${DEST_DIR}/bin/gitlab-backup"
 )
 
 error_exit()

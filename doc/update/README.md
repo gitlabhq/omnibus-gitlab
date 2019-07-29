@@ -507,9 +507,9 @@ Steps:
 
 1. Restore your backup:
 
-   ```sh
-   sudo gitlab-rake gitlab:backup:restore BACKUP=12345 # where 12345 is your backup timestamp
-   ```
+    ```sh
+    sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
+    ```
 
 1. Start GitLab:
 
