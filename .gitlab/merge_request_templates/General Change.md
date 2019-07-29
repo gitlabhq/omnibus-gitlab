@@ -1,6 +1,10 @@
 ## What does this MR do?
 
-(briefly describe what this MR is about)
+<!-- Briefly describe what this MR is about. -->
+
+## Related issues
+
+<!-- Link related issues below. Insert the issue link or reference after the word "Closes" if merging this should automatically close it. -->
 
 ## Checklist
 
@@ -20,5 +24,3 @@ See [Definition of done](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/maste
 In addition to above, reviewer must:
 
 - [ ] Pipeline is green on dev.gitlab.org if the change is not touching documentation or internal cookbooks
-
-## References
