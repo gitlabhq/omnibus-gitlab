@@ -8,9 +8,10 @@ This merge request _must not_ close the corresponding security issue _unless_ it
 targets master.
 
 -->
+
 ## Related issues
 
-<!-- Mention the issue(s) this MR is related to -->
+<!-- Link related issues below. Insert the issue link or reference after the word "Closes" if merging this should automatically close it. -->
 
 ## Developer checklist
 
