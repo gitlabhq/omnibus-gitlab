@@ -72,15 +72,6 @@ omnibus-gitlab repository.
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
 
-
-## 12.0.3 (2019-06-27)
-
-- No changes.
-
-## 12.0.3 (2019-07-01)
-
-- No changes.
-
 ## 12.0.3 (2019-07-01)
 
 - No changes.
@@ -180,33 +171,10 @@ omnibus-gitlab repository.
 
 ## 11.11.3 (2019-06-10)
 
-- No changes.
-
-## 11.11.3 (2019-06-10)
-
 ### Fixed (2 changes)
 
 - Fix bug in pg-upgrade HA detection. !3287
 - Pass cron directory to crond run file. !3327
-
-
-## 11.11.3 (2019-06-10)
-
-### Fixed (2 changes)
-
-- Fix bug in pg-upgrade HA detection. !3287
-- Pass cron directory to crond run file. !3327
-
-
-## 11.11.2 (2019-06-04)
-
-- No changes.
-
-## 11.11.2 (2019-06-04)
-
-### Fixed (1 change, 1 of them is from the community)
-
-- Update Mattermost to 5.10.1 (GitLab 11.11). (Harrison Healey)
 
 
 ## 11.11.2 (2019-06-04)
@@ -222,10 +190,6 @@ omnibus-gitlab repository.
 
 ## 11.11.0 (2019-05-22)
 
-- No changes.
-
-## 11.11.0 (2019-05-22)
-
 ### Security (1 change)
 
 - Upgrade RubyGems to 2.7.9. !3082
@@ -281,70 +245,6 @@ omnibus-gitlab repository.
 - Rename library methods to make their function explicit. !3222
 - Update Mattermost to 5.10.0. (Harrison Healey)
 - Stop raspberry pi builds during nightlies. (John T Skarbek)
-
-
-## 11.11.0 (2019-05-22)
-
-### Security (1 change)
-
-- Upgrade RubyGems to 2.7.9. !3082
-
-### Removed (1 change)
-
-- Remove postgres auto-upgrade from Docker images for 11.11.0 release.
-
-### Fixed (4 changes)
-
-- Run pg_upgrade with configured postgres username. !3162
-- Fix Grafana GitLab Authentication. !3195
-- Run repmgr's psql commands as the specified user. !3224
-- Remove timestamp prefix from JSON formatted registry logs.
-
-### Deprecated (1 change)
-
-- Stop building Ubuntu 14.04 packages. !3192
-
-### Changed (4 changes)
-
-- Patch bundle install in CentOS 6 to install sassc gem using newer GCC. !3112
-- Enable additional node metrics. !3207
-- geo_log_cursor is located in ee/bin/ now. !3223
-- Bump Grafana Dashboards. !3241
-
-### Performance (2 changes)
-
-- Use AuthorizedKeysCommand in Docker builds. !3191
-- Remove smaps metrics from gitlab-monitor. !3279
-
-### Added (12 changes, 2 of them are from the community)
-
-- Bundle PostgreSQL 10 with the package. !3142
-- Docker: attempt to cleanup stale pids on restart. !3200
-- Decouple Geo node identity from external_url. !3201
-- Add configuration support for dependency proxy feature. !3206
-- add option to define Sentry settings. !3214 (Roger Meier)
-- Support gitlab-shell feature flags through gitlab.rb. !3215
-- Upgrade Git to 2.21. !3220
-- Add HA support for pg-upgrade command. !3240
-- Add pages domain removal cron configuration. !3246
-- Allow Sentry client-side DSN to be passed on gitlab.yml. !3249
-- add option to define Sentry environment for gitaly. !3253 (Roger Meier)
-- Add option to provide license during initial installation. !3265
-
-### Other (7 changes, 2 of them are from the community)
-
-- Bump Prometheus components to the latest. !3182
-- Update liblzma to 5.2.4. !3197
-- Update libtool to 2.4.6. !3210
-- Move sidekiq-cluster to ee/bin. !3216
-- Rename library methods to make their function explicit. !3222
-- Update Mattermost to 5.10.0. (Harrison Healey)
-- Stop raspberry pi builds during nightlies. (John T Skarbek)
-
-
-## 11.10.8 (2019-06-27)
-
-- No changes.
 
 ## 11.10.8 (2019-07-01)
 
@@ -354,16 +254,6 @@ omnibus-gitlab repository.
 
 - No changes.
 
-## 11.10.6 (2019-06-04)
-
-- No changes.
-
-## 11.10.6 (2019-06-04)
-
-### Fixed (1 change)
-
-- Pin procfs version used for building redis-exporter. !3319
-
 
 ## 11.10.6 (2019-06-04)
 
@@ -374,43 +264,9 @@ omnibus-gitlab repository.
 
 ## 11.10.4 (2019-05-01)
 
-- No changes.
-
-## 11.10.4 (2019-05-01)
-
 ### Security (1 change, 1 of them is from the community)
 
 - Update Mattermost to 5.9.1 (GitLab 11.10). (Harrison Healey)
-
-
-## 11.10.4 (2019-05-01)
-
-### Security (1 change, 1 of them is from the community)
-
-- Update Mattermost to 5.9.1 (GitLab 11.10). (Harrison Healey)
-
-
-## 11.10.4 (2019-05-02)
-
-- No changes.
-
-## 11.10.4 (2019-05-02)
-
-- No changes.
-
-## 11.10.4 (2019-05-02)
-
-- No changes.
-
-## 11.10.3 (2019-04-30)
-
-- No changes.
-
-## 11.10.3 (2019-04-30)
-
-### Fixed (1 change)
-
-- Update exclusion of gem cache to match ruby 2.5. !3243
 
 
 ## 11.10.3 (2019-04-30)
@@ -419,15 +275,6 @@ omnibus-gitlab repository.
 
 - Update exclusion of gem cache to match ruby 2.5. !3243
 
-
-## 11.10.2 (2019-04-25)
-
-- No changes.
-
-## 11.10.2 (2019-04-25)
-
-- No changes.
-
 ## 11.10.2 (2019-04-25)
 
 - No changes.
@@ -435,58 +282,6 @@ omnibus-gitlab repository.
 ## 11.10.1 (2019-04-23)
 
 - No changes.
-
-## 11.10.1 (2019-04-23)
-
-- No changes.
-
-## 11.10.1 (2019-04-23)
-
-- No changes.
-
-## 11.10.0 (2019-04-22)
-
-- No changes.
-
-## 11.10.0 (2019-04-22)
-
-### Security (1 change)
-
-- Bundle exiftool as a dependency.
-
-### Fixed (3 changes)
-
-- Use a fixed git abbrev parameter when we fetch a git revision. !3143
-- Fix bug where passing -w to pg-upgrade aborted the process. !3164
-- Update WorkhorseHighErrorRate alert. !3183
-
-### Changed (3 changes)
-
-- Remove gitlab-markup custom patches. !3115
-- Add grafana-dashboards to auto-provisioning. !3141
-- Set the default LANG variable in docker to support UTF-8. !3159
-
-### Added (7 changes, 2 of them are from the community)
-
-- Refactor Prometheus rails scrape config. !3046 (Ben Kochie <bjk@gitlab.com>)
-- Support conditional external diffs. !3059
-- Support for registry-garbage-collect command. !3097
-- Add sub_module to bundled nginx. !3100 (Rafael Gomez)
-- Add gitaly graceful restart wrapper. !3116
-- Add optional db_name to "gitlab-ctl replicate-geo-database". !3124
-- Add default Referrer-Policy header. !3138
-
-### Other (9 changes, 2 of them are from the community)
-
-- Upgrade jemalloc to 5.1.0. !2957
-- Update CA Certificates to 2019-01-23. !3095
-- Add gitlab_shell.authorized_keys_file to gitlab.yml. !3096
-- Update to latest krb5 version 1.17. !3114
-- Update to latest libxml2. !3156
-- Update bundler to 1.17.3. !3157 (Takuya Noguchi)
-- Share AWS AMIs with the Marketplace account. !3190
-- Move software built from git to omnibus-mirror. !3228
-- Update Mattermost to 5.9.0 (GitLab 11.10). (Harrison Healey)
 
 
 ## 11.10.0 (2019-04-22)
@@ -528,15 +323,6 @@ omnibus-gitlab repository.
 - Share AWS AMIs with the Marketplace account. !3190
 - Move software built from git to omnibus-mirror. !3228
 - Update Mattermost to 5.9.0 (GitLab 11.10). (Harrison Healey)
-
-
-## 11.9.12 (2019-05-30)
-
-- No changes.
-
-## 11.9.12 (2019-05-30)
-
-- No changes.
 
 ## 11.9.12 (2019-05-30)
 
@@ -544,15 +330,6 @@ omnibus-gitlab repository.
 
 - Update Mattermost to 5.8.2 (GitLab 11.9). (Harrison Healey)
 
-
-## 11.9.11 (2019-04-30)
-
-- No changes.
-
-## 11.9.11 (2019-04-30)
-
-- No changes.
-
 ## 11.9.11 (2019-04-30)
 
 - No changes.
@@ -560,24 +337,6 @@ omnibus-gitlab repository.
 ## 11.9.10 (2019-04-26)
 
 - No changes.
-
-## 11.9.10 (2019-04-26)
-
-- No changes.
-
-## 11.9.10 (2019-04-26)
-
-- No changes.
-
-## 11.9.9 (2019-04-23)
-
-- No changes.
-
-## 11.9.9 (2019-04-23)
-
-### Other (1 change)
-
-- Move software built from git to omnibus-mirror. !3228
 
 
 ## 11.9.9 (2019-04-23)
@@ -586,32 +345,11 @@ omnibus-gitlab repository.
 
 - Move software built from git to omnibus-mirror. !3228
 
-
-## 11.9.8 (2019-04-11)
-
-- No changes.
-
-## 11.9.8 (2019-04-11)
-
-- No changes.
-
 ## 11.9.8 (2019-04-11)
 
 - No changes.
 
 ## 11.9.7 (2019-04-09)
-
-- No changes.
-
-## 11.9.7 (2019-04-09)
-
-- No changes.
-
-## 11.9.7 (2019-04-09)
-
-- No changes.
-
-## 11.9.6 (2019-04-04)
 
 - No changes.
 
@@ -620,18 +358,6 @@ omnibus-gitlab repository.
 ### Fixed (1 change)
 
 - Fix Grafana auth URLs. !3139
-
-
-## 11.9.6 (2019-04-04)
-
-### Fixed (1 change)
-
-- Fix Grafana auth URLs. !3139
-
-
-## 11.9.5 (2019-04-03)
-
-- No changes.
 
 ## 11.9.5 (2019-04-03)
 
@@ -643,40 +369,9 @@ omnibus-gitlab repository.
 
 - Fix typo in Prometheus v2 rules. !3145
 
-
-## 11.9.5 (2019-04-03)
-
-### Security (1 change, 1 of them is from the community)
-
-- Update Mattermost to 5.8.1. (Harrison Healey)
-
-### Fixed (1 change)
-
-- Fix typo in Prometheus v2 rules. !3145
-
-
 ## 11.9.3 (2019-03-27)
 
 - No changes.
-
-## 11.9.3 (2019-03-27)
-
-- No changes.
-
-## 11.9.3 (2019-03-27)
-
-- No changes.
-
-## 11.9.2 (2019-03-26)
-
-- No changes.
-
-## 11.9.2 (2019-03-26)
-
-### Security (1 change)
-
-- Bundle exiftool as a dependency.
-
 
 ## 11.9.2 (2019-03-26)
 
@@ -688,59 +383,6 @@ omnibus-gitlab repository.
 ## 11.9.1 (2019-03-25)
 
 - No changes.
-
-## 11.9.1 (2019-03-25)
-
-- No changes.
-
-## 11.9.1 (2019-03-25)
-
-- No changes.
-
-## 11.9.0 (2019-03-22)
-
-- No changes.
-
-## 11.9.0 (2019-03-22)
-
-### Security (2 changes)
-
-- Delete build artifacts from AMIs before publishing. !3044
-- Upgrade to OpenSSL 1.0.2r. !3066
-
-### Fixed (6 changes, 2 of them are from the community)
-
-- Fix permissions of repositories directory in update-permissions script. !3029 (Matthias Lohr <mail@mlohr.com>)
-- Fix issue with sshd failing in docker with user remap and privileged. !3047
-- Allow Geo tracking DB user password to be set. !3058
-- Restore docker registry compatibility with old clients using manifest v2 schema1. !3061 (Julien Pervillé)
-- Automatically configure Prometheus alertmanager. !3071
-- Ensure gitaly is setup before migrations are run.
-
-### Deprecated (1 change)
-
-- Update nginx to version 1.14.2. !3065
-
-### Changed (1 change)
-
-- Upgrade gitlab-monitor to 3.1.0. !3052
-
-### Added (5 changes)
-
-- Add Prometheus support to Docker Registry. !2884
-- Add option to disable init detection. !3028
-- Add Grafana service. !3057
-- Support Google Cloud Memorystore by disabling Redis CLIENT. !3072
-- Support Google Cloud Memorystore in gitlab-monitor. !3084
-
-### Other (6 changes, 4 of them are from the community)
-
-- Update mixlib-log from 1.7.1 to 3.0.1. !2951
-- Stop building packages for Raspbian Jessie. !3004
-- Update python to 3.4.9. !3040 (Takuya Noguchi)
-- Update docutils to 0.13.1. !3042 (Takuya Noguchi)
-- Replace deprecated "--no-ri --no-rdoc" in rubygems. !3050 (Takuya Noguchi)
-- Update Mattermost to 5.8. !3070 (Harrison Healey)
 
 
 ## 11.9.0 (2019-03-22)
@@ -784,32 +426,11 @@ omnibus-gitlab repository.
 - Replace deprecated "--no-ri --no-rdoc" in rubygems. !3050 (Takuya Noguchi)
 - Update Mattermost to 5.8. !3070 (Harrison Healey)
 
-
-## 11.8.10 (2019-04-30)
-
-- No changes.
-
 ## 11.8.10 (2019-04-30)
 
 - No changes.
 
 ## 11.8.9 (2019-04-25)
-
-- No changes.
-
-## 11.8.9 (2019-04-25)
-
-- No changes.
-
-## 11.8.9 (2019-04-25)
-
-- No changes.
-
-## 11.8.8 (2019-04-23)
-
-- No changes.
-
-## 11.8.8 (2019-04-23)
 
 - No changes.
 
@@ -819,24 +440,7 @@ omnibus-gitlab repository.
 
 - Upgrade Mattermost to 5.7.3 (GitLab 11.8). !3137 (Harrison Healey)
 
-
 ## 11.8.7 (2019-04-09)
-
-- No changes.
-
-## 11.8.7 (2019-04-09)
-
-- No changes.
-
-## 11.8.7 (2019-04-09)
-
-- No changes.
-
-## 11.8.6 (2019-03-28)
-
-- No changes.
-
-## 11.8.6 (2019-03-28)
 
 - No changes.
 
@@ -847,24 +451,6 @@ omnibus-gitlab repository.
 ## 11.8.5 (2019-03-27)
 
 - No changes.
-
-## 11.8.5 (2019-03-27)
-
-- No changes.
-
-## 11.8.5 (2019-03-27)
-
-- No changes.
-
-## 11.8.4 (2019-03-26)
-
-- No changes.
-
-## 11.8.4 (2019-03-26)
-
-### Security (1 change)
-
-- Bundle exiftool as a dependency.
 
 
 ## 11.8.4 (2019-03-26)
@@ -873,30 +459,9 @@ omnibus-gitlab repository.
 
 - Bundle exiftool as a dependency.
 
-
 ## 11.8.3 (2019-03-19)
 
 - No changes.
-
-## 11.8.3 (2019-03-19)
-
-- No changes.
-
-## 11.8.3 (2019-03-19)
-
-- No changes.
-
-## 11.8.2 (2019-03-13)
-
-- No changes.
-
-## 11.8.2 (2019-03-13)
-
-### Fixed (2 changes, 1 of them is from the community)
-
-- Restore docker registry compatibility with old clients using manifest v2 schema1. !3061 (Julien Pervillé)
-- Ensure gitaly is setup before migrations are run.
-
 
 ## 11.8.2 (2019-03-13)
 
@@ -908,22 +473,6 @@ omnibus-gitlab repository.
 ### Other (1 change, 1 of them is from the community)
 
 - Update Mattermost to 5.7.2. !3080 (Harrison Healey)
-
-
-## 11.8.1 (2019-02-28)
-
-- No changes.
-
-## 11.8.1 (2019-02-28)
-
-### Fixed (1 change)
-
-- Add support for restart_command in runit cookbook. !3062
-
-### Added (1 change, 1 of them is from the community)
-
-- Adding scripts/changelog. !3009 (Ian Baum)
-
 
 ## 11.8.1 (2019-02-28)
 
@@ -966,31 +515,7 @@ omnibus-gitlab repository.
 
 - No changes.
 
-## 11.7.12 (2019-04-23)
-
-- No changes.
-
-## 11.7.12 (2019-04-23)
-
-- No changes.
-
 ## 11.7.11 (2019-04-09)
-
-- No changes.
-
-## 11.7.11 (2019-04-09)
-
-- No changes.
-
-## 11.7.11 (2019-04-09)
-
-- No changes.
-
-## 11.7.10 (2019-03-28)
-
-- No changes.
-
-## 11.7.10 (2019-03-28)
 
 - No changes.
 
@@ -1002,31 +527,12 @@ omnibus-gitlab repository.
 
 - No changes.
 
-## 11.7.8 (2019-03-26)
-
-- No changes.
 
 ## 11.7.8 (2019-03-26)
 
 ### Security (1 change)
 
 - Bundle exiftool as a dependency.
-
-
-## 11.7.8 (2019-03-26)
-
-### Security (1 change)
-
-- Bundle exiftool as a dependency.
-
-
-## 11.7.7 (2019-03-19)
-
-- No changes.
-
-## 11.7.7 (2019-03-19)
-
-- No changes.
 
 ## 11.7.7 (2019-03-19)
 
@@ -1045,22 +551,6 @@ omnibus-gitlab repository.
 - Support TLS communication with gitaly
 
 ## 11.6.11 (2019-04-23)
-
-- No changes.
-
-## 11.6.11 (2019-04-23)
-
-- No changes.
-
-## 11.6.11 (2019-04-23)
-
-- No changes.
-
-## 11.6.10 (2019-02-28)
-
-- No changes.
-
-## 11.6.10 (2019-02-28)
 
 - No changes.
 
@@ -1096,14 +586,6 @@ omnibus-gitlab repository.
 - Update runit version to 2.1.2 !2897
 - Update Prometheus components !2891
 - Add smartcard configuration to gitlab.rb !2894
-
-## 11.5.11 (2019-04-23)
-
-- No changes.
-
-## 11.5.11 (2019-04-23)
-
-- No changes.
 
 ## 11.5.11 (2019-04-23)
 
