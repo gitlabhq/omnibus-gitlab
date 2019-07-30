@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.3
+
+### Other (1 change)
+
+- Fix bzip2 location. !3448
+
+
 ## 12.1.2
 
 - No changes.
