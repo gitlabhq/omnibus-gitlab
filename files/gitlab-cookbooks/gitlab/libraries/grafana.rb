@@ -19,6 +19,7 @@ module Grafana
   class << self
     def parse_secrets
       Gitlab['grafana']['secret_key'] ||= SecretsHelper.generate_hex(16)
+      Gitlab['grafana']['admin_password'] ||= SecretsHelper.generate_hex(16)
     end
 
     def parse_variables
