@@ -9,20 +9,24 @@ monitoring system.
 Starting with GitLab 12.0, Grafana is enabled by default and SSO with GitLab is
 automatically configured. Grafana will be available on `https://gitlab.example.com/-/grafana`.
 
+## Enable login using username and password
+
+Logging in to Grafana using username/password combo is disabled , and only
+GitLab SSO is available by default. However, to access the admin account, you
+need to enable login using username/password. For that, add the following line
+to `/etc/gitlab/gitlab.rb` file and [reconfigure]:
+
+```
+grafana['disable_login_form'] = false
+```
+
 ## Specifying an admin password
-
-Default admin credentials for Grafana is `admin` as both username and password.
-It is recommended that you change this admin password. After logging in
-initially using these credentials, Grafana will present you with a screen to
-change the password.
-
-You can also set the admin password in `/etc/gitlab/gitlab.rb` file, to do this
-without using the UI.
 
 NOTE: **Note:**
 The admin password must be specified before the first reconfigure after
 installation. After this, the `admin_password` setting doesn't have any effect,
 and you'll have to [reset the password manually](#resetting-the-admin-password).
+Also, to access the admin account, you have to [enable login using username and password](#enable-login-using-username-and-password).
 
 To specify an admin password, add the following line to `/etc/gitlab/gitlab.rb`
 file and [reconfigure]:
@@ -30,6 +34,11 @@ file and [reconfigure]:
 ```
 grafana['admin_password'] = 'foobar'
 ```
+
+If no admin password is provided, omnibus-gitlab will automatically generate a
+random password for the admin user as a security measure. However, in that case
+you will have to [reset the password manually](#resetting-the-admin-password)
+to access the admin user.
 
 ## Disabling Grafana
 
@@ -97,15 +106,10 @@ GitLab users are created with read-only Viewer privilege by default. The admin a
 After the first startup, the admin password is stored in the Grafana datastore
 and you cannot change it via `gitlab.rb`.
 
-To update it, you must follow a reset procedure:
+To update it, you can use the following command:
 
 ```sh
-gitlab-ctl stop grafana
-
-/opt/gitlab/embedded/bin/grafana-cli admin reset-admin-password \
-  --homepath /var/opt/gitlab/grafana <NewPassword>
-
-gitlab-ctl start grafana
+gitlab-ctl set-grafana-password
 ```
 
 See the [Grafana CLI documentation](http://docs.grafana.org/administration/cli/#reset-admin-password)
