@@ -227,9 +227,12 @@ end
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab-rails']["redis_#{instance}_instance"]
   sentinels = node['gitlab']['gitlab-rails']["redis_#{instance}_sentinels"]
+  from_filename = File.join(gitlab_rails_source_dir, "config/#{filename}")
+  to_filename = File.join(gitlab_rails_etc_dir, filename)
+
   templatesymlink "Create a #{filename} and create a symlink to Rails root" do
-    link_from File.join(gitlab_rails_source_dir, "config/#{filename}")
-    link_to File.join(gitlab_rails_etc_dir, filename)
+    link_from from_filename
+    link_to to_filename
     source 'resque.yml.erb'
     owner 'root'
     group 'root'
@@ -237,6 +240,13 @@ end
     variables(redis_url: url, redis_sentinels: sentinels)
     dependent_services.each { |svc| notifies :restart, svc }
     not_if { url.nil? }
+  end
+
+  [from_filename, to_filename].each do |filename|
+    file filename do
+      action :delete
+      only_if { url.nil? }
+    end
   end
 end
 

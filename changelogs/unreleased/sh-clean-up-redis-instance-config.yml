@@ -1,0 +1,5 @@
+---
+title: Clean up stale Redis instance config files
+merge_request: 3464
+author:
+type: fixed

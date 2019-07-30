@@ -169,6 +169,13 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).not_to render_file("#{config_dir}redis.#{instance}.yml")
         end
       end
+
+      it 'deletes the separate instance config files' do
+        redis_instances.each do |instance|
+          expect(chef_run).to delete_file("/opt/gitlab/embedded/service/gitlab-rails/config/redis.#{instance}.yml")
+          expect(chef_run).to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+        end
+      end
     end
 
     context 'and custom configuration' do
@@ -229,6 +236,7 @@ describe 'gitlab::gitlab-rails' do
             redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
             redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }]
           )
+          expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
         end
       end
 
