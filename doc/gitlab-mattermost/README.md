@@ -235,33 +235,10 @@ For help and support around your GitLab Mattermost deployment please see:
 
 > Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).
 
-Below is a list of Mattermost versions for GitLab 9.0 and later:
+Below is a list of Mattermost versions for GitLab 11.10 and later:
 
 | GitLab Version  | Mattermost Version |
 | :------------ |:----------------|
-| 9.0, 9.1 | 3.7 |
-| 9.2 | 3.9 |
-| 9.3 | 3.10 |
-| 9.4 | 4.0 |
-| 9.5 | 4.1 |
-| 10.0, 10.1 | 4.2 |
-| 10.2 | 4.3 |
-| 10.3 | 4.4 |
-| 10.4 | 4.5 |
-| 10.5 | 4.6 |
-| 10.6 | 4.7 |
-| 10.7 | 4.8 |
-| 10.8 | 4.9 |
-| 11.0 | 4.10 |
-| 11.1 | 5.0 |
-| 11.2 | 5.1 |
-| 11.3 | 5.2 |
-| 11.4 | 5.3 |
-| 11.5 | 5.4 |
-| 11.6 | 5.5 |
-| 11.7 | 5.6 |
-| 11.8 | 5.7 |
-| 11.9 | 5.8 |
 | 11.10 | 5.9 |
 | 11.11 | 5.10 |
 | 12.0 | 5.11 |
