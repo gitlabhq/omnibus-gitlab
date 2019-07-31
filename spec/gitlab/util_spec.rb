@@ -20,12 +20,12 @@ describe Gitlab::Util do
   describe :set_env do
     it 'strips value before setting env variable' do
       Gitlab::Util.set_env('foo', '  blahblah ')
-      expect(ENV['foo']).to eq('blahblah')
+      expect(Gitlab::Util.get_env('foo')).to eq('blahblah')
     end
 
     it 'does not fail if value is nil' do
       expect { Gitlab::Util.set_env('foo', nil) }.not_to raise_error
-      expect(ENV['foo']).to eq(nil)
+      expect(Gitlab::Util.get_env('foo')).to eq(nil)
     end
   end
 
@@ -34,17 +34,17 @@ describe Gitlab::Util do
       allow(ENV).to receive(:[]).with('foo').and_return('lorem')
 
       Gitlab::Util.set_env_if_missing('foo', 'ipsum')
-      expect(ENV['foo']).to eq('lorem')
+      expect(Gitlab::Util.get_env('foo')).to eq('lorem')
     end
 
     it 'sets value if env variable is mising' do
       Gitlab::Util.set_env_if_missing('foo', 'ipsum')
-      expect(ENV['foo']).to eq('ipsum')
+      expect(Gitlab::Util.get_env('foo')).to eq('ipsum')
     end
 
     it 'does not fail if value is nil' do
       expect { Gitlab::Util.set_env_if_missing('bar', nil) }.not_to raise_error
-      expect(ENV['bar']).to eq(nil)
+      expect(Gitlab::Util.get_env('bar')).to eq(nil)
     end
   end
 end

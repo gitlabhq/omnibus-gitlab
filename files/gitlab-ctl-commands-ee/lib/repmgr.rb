@@ -14,9 +14,8 @@ rescue LoadError
 end
 
 class Repmgr
-  class MasterError < StandardError; end
-
-  class EventError < StandardError; end
+  MasterError = Class.new(StandardError)
+  EventError = Class.new(StandardError)
 
   attr_accessor :command, :subcommand, :args
 

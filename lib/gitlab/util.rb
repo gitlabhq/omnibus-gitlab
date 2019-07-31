@@ -6,7 +6,7 @@ module Gitlab
       end
 
       def set_env(key, value)
-        ENV[key] = value&.strip
+        Gitlab::Util.set_env(key, value&.strip)
       end
 
       def set_env_if_missing(key, value)

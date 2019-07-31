@@ -31,8 +31,8 @@ module GitlabCtl
     def prepare_directories
       # Directory to store data in v2 format
       FileUtils.mkdir_p(@v2_path)
-      system("chown --reference=#{@v1_path} #{@v2_path}")
-      system("chmod --reference=#{@v1_path} #{@v2_path}")
+      system(*%W[chown --reference=#{@v1_path} #{@v2_path}])
+      system(*%W[chmod --reference=#{@v1_path} #{@v2_path}])
     end
 
     def backup_data
