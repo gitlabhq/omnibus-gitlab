@@ -113,7 +113,7 @@ witness_repl_nodes_sync_interval_secs=15
       it 'creates pg_hba.conf with custom entries and repmgr entries' do
         stub_gitlab_rb(
           postgresql: {
-            custom_pg_hba_entries:  {
+            custom_pg_hba_entries: {
               postgres: [
                 {
                   type: 'host',

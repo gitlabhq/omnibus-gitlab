@@ -4,8 +4,8 @@ require 'base64'
 describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
-  HEX_KEY = /\h{128}/
-  RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m
+  HEX_KEY = /\h{128}/.freeze
+  RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
 
   def stub_gitlab_secrets_json(secrets)
     allow(File).to receive(:read).with('/etc/gitlab/gitlab-secrets.json').and_return(JSON.generate(secrets))

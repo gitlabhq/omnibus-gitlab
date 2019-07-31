@@ -3,7 +3,7 @@ require_relative "../util.rb"
 
 module Build
   class Check
-    AUTO_DEPLOY_TAG_REGEX = /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+    AUTO_DEPLOY_TAG_REGEX = /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/.freeze
     class << self
       def is_ee?
         Gitlab::Util.get_env('ee') == 'true' || \

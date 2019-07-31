@@ -170,6 +170,7 @@ module Prometheus
 
     def parse_alertmanager_config
       return unless Services.enabled?('alertmanager')
+
       user_config = Gitlab['alertmanager']
       rails_config = Gitlab['gitlab_rails']
 
@@ -221,6 +222,7 @@ module Prometheus
     def parse_scrape_configs
       # Don't parse if prometheus is explicitly disabled
       return unless Services.enabled?('prometheus')
+
       gitaly_scrape_config
       gitlab_monitor_scrape_configs
       registry_scrape_config

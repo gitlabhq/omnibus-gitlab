@@ -34,9 +34,7 @@ build do
 
   update_config_guess
 
-  if version == '1.7.10.1' && (ppc64? || ppc64le?)
-    patch source: 'v1.7.10.1.ppc64le-configure.patch', plevel: 1
-  end
+  patch source: 'v1.7.10.1.ppc64le-configure.patch', plevel: 1 if version == '1.7.10.1' && (ppc64? || ppc64le?)
 
   # --disable-nls => Disable localization support.
   command './configure' \

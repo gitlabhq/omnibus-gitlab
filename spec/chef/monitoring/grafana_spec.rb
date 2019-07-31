@@ -151,9 +151,9 @@ describe 'monitoring::grafana' do
           gitlab_application_id: 'appid',
           gitlab_secret: 'secret',
           gitlab_auth_sign_up: false,
-          allowed_groups: [
-            'allowed',
-            'also-allowed',
+          allowed_groups: %w[
+            allowed
+            also-allowed
           ],
           env: {
             'USER_SETTING' => 'asdf1234'

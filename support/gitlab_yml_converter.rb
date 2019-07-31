@@ -18,6 +18,7 @@ module GitlabYamlConverter
       Enumerator.new do |yielder|
         hash.each do |key, value|
           raise "Bad key: #{key.inspect}" unless key.is_a?(String)
+
           key = [prefix, key].join(@separator) if prefix
 
           if value.is_a?(Hash)

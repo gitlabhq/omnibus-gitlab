@@ -30,7 +30,7 @@ default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
   block do
-    open("#{install_dir}/embedded/bin/gitlab-pg-ctl", 'w') do |file|
+    File.open("#{install_dir}/embedded/bin/gitlab-pg-ctl", 'w') do |file|
       file.print <<-EOH
 #!/bin/sh
 

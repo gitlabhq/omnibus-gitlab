@@ -31,7 +31,7 @@ build do
   command "mkdir -p #{install_dir}/bin/"
 
   block do
-    open("#{install_dir}/bin/gitlab-ctl", 'w') do |file|
+    File.open("#{install_dir}/bin/gitlab-ctl", 'w') do |file|
       file.print <<-EOH
 #!/bin/bash
 #
@@ -69,7 +69,7 @@ done
 export SVWAIT=30
 
 #{install_dir}/embedded/bin/omnibus-ctl #{File.basename(install_dir)} '#{install_dir}/embedded/service/omnibus-ctl*' "$@"
-       EOH
+      EOH
     end
   end
 

@@ -46,7 +46,7 @@ class RepmgrHelper < BaseHelper
                 else
                   node['fqdn']
                 end
-    Digest::MD5.hexdigest(seed_data).unpack('L').first
+    Digest::MD5.hexdigest(seed_data).unpack1('L')
   end
 
   def public_attributes

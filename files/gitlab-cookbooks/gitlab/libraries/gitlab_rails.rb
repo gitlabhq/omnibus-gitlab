@@ -77,9 +77,8 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
       uri = URI(Gitlab['external_url'].to_s)
 
-      unless uri.host
-        raise "GitLab external URL must include a schema and FQDN, e.g. http://gitlab.example.com/"
-      end
+      raise "GitLab external URL must include a schema and FQDN, e.g. http://gitlab.example.com/" unless uri.host
+
       Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
       Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"
@@ -184,6 +183,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def parse_repository_storage
       return if Gitlab['gitlab_rails']['repositories_storages']
+
       gitaly_address = Gitaly.gitaly_address
 
       Gitlab['gitlab_rails']['repositories_storages'] ||= {
@@ -210,6 +210,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
       # append urls to the list but without relative_url
       return unless Gitlab['gitlab_rails']['gitlab_relative_url']
+
       paths_without_relative_url = []
       Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path|
         if path.start_with?(Gitlab['gitlab_rails']['gitlab_relative_url'] + '/')

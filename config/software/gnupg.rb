@@ -41,9 +41,7 @@ build do
   config_flags = ""
   # CentOS 6 doesn't have inotify, which will raise an error
   # IN_EXCL_UNLINK undeclared. Hence disabling it explicitly.
-  if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
-    config_flags = "ac_cv_func_inotify_init=no"
-  end
+  config_flags = "ac_cv_func_inotify_init=no" if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
 
   command './configure ' \
     "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr #{config_flags}", env: env

@@ -170,9 +170,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
         #  AND
         #  The current service was requested to be set, or ALL_SERVICES was
         #  requested, so we are setting them all
-        if !exceptions.include?(name) && (services.include?(ALL_SERVICES) || services.include?(name))
-          service_status(name, enable)
-        end
+        service_status(name, enable) if !exceptions.include?(name) && (services.include?(ALL_SERVICES) || services.include?(name))
       end
     end
 
@@ -188,9 +186,7 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
         #  AND
         #  The current service has matching groups that were requested to be set,
         #  or ALL_GROUPS was requested, so we are setting them all
-        if matching_exceptions.empty? && (groups.include?(ALL_GROUPS) || !matching_groups.empty?)
-          service_status(name, enable)
-        end
+        service_status(name, enable) if matching_exceptions.empty? && (groups.include?(ALL_GROUPS) || !matching_groups.empty?)
       end
     end
   end

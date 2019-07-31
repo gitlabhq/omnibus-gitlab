@@ -31,6 +31,7 @@ class PrometheusHelper
         config << "--no-#{flag_key}"
       else
         next if flag_value.empty?
+
         config << "--#{flag_key}=#{flag_value}"
       end
     end
@@ -43,6 +44,7 @@ class PrometheusHelper
 
     node_service(service)['flags'].each do |flag_key, flag_value|
       next if flag_value.empty?
+
       config << "--#{flag_key}=#{flag_value}"
     end
 

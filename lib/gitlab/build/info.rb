@@ -148,7 +148,7 @@ module Build
 
       def fetch_artifact_url(project_id, pipeline_id)
         output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
-        output.map { |job| job['id'] if job['name'] == 'Trigger:package' }.compact.sort.last
+        output.map { |job| job['id'] if job['name'] == 'Trigger:package' }.compact.max
       end
 
       def fetch_pipeline_jobs(project_id, pipeline_id, token)

@@ -27,9 +27,7 @@ module RolesHelper
       invalid_roles = active - valid_roles
 
       # Ensure all active roles exist as valid role names
-      unless invalid_roles.empty?
-        raise "The following invalid roles have been set in 'roles': #{invalid_roles.join(', ')}"
-      end
+      raise "The following invalid roles have been set in 'roles': #{invalid_roles.join(', ')}" unless invalid_roles.empty?
 
       active.each { |role_name| Gitlab[role_name]['enable'] = true }
     end

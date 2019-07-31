@@ -60,7 +60,7 @@ describe Gitlab::Deprecations do
         note: "Use nginx['listen_addresses'] instead."
       }
       conf2 = {
-        config_keys: ["gitlab", "gitlab-rails", "stuck_ci_builds_worker_cron"],
+        config_keys: %w[gitlab gitlab-rails stuck_ci_builds_worker_cron],
         deprecation: "9.0",
         removal: "12.0",
         note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."

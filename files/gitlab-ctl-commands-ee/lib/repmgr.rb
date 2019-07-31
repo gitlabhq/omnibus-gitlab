@@ -119,11 +119,12 @@ class Repmgr
         rescue Mixlib::ShellOut::CommandTimeout
           $stderr.puts "Timeout running command: #{results.command}"
           raise
-        rescue StandardError => se
-          puts "Unknown Error: #{se}"
+        rescue StandardError => e
+          puts "Unknown Error: #{e}"
         end
         # repmgr logs most output to stderr by default
         return results.stdout unless results.stdout.empty?
+
         results.stderr
       end
 
@@ -162,6 +163,7 @@ class Repmgr
 
       def unregister(args)
         return repmgr_cmd(args, "standby unregister --node=#{args[:node]}") unless args[:node].nil?
+
         repmgr_cmd(args, "standby unregister")
       end
 
@@ -223,7 +225,7 @@ class Repmgr
         elsif args.key?(:node_id)
           query << "id='#{args[:node_id]}'"
         end
-        user = args[:user] ? args[:user] : nil
+        user = args[:user] || nil
         execute_psql(database: 'gitlab_repmgr', query: query, host: '127.0.0.1', port: 5432, user: user)
       end
     end
@@ -269,6 +271,7 @@ class Repmgr
 
       def repmgrd_failover_promote(node_id, success, timestamp, details)
         raise Repmgr::EventError, "We tried to failover at #{timestamp}, but failed with: #{details}" unless success.eql?('1')
+
         old_master = details.match(/old master (\d+) marked as failed/)[1]
         Consul::Kv.put("gitlab/ha/postgresql/failed_masters/#{old_master}")
       end

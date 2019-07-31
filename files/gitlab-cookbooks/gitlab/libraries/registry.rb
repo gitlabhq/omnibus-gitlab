@@ -40,9 +40,7 @@ module Registry
 
       uri = URI(Gitlab['registry_external_url'].to_s)
 
-      unless uri.host
-        raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/"
-      end
+      raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/" unless uri.host
 
       Gitlab['registry']['enable'] = true if Gitlab['registry']['enable'].nil?
       Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
@@ -76,9 +74,7 @@ module Registry
         raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
 
-      unless ["", "/"].include?(uri.path)
-        raise "Unsupported GitLab Registry external URL path: #{uri.path}"
-      end
+      raise "Unsupported GitLab Registry external URL path: #{uri.path}" unless ["", "/"].include?(uri.path)
 
       # Docker versions before 1.13 will fail to authenticate/push with the
       # registry if Registry URL contained :80 or :443. So, we don't set the

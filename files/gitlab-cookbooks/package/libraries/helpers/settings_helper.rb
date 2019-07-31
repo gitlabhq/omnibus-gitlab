@@ -45,6 +45,7 @@ module SettingsHelper
   #   This will convert Gitlab['some_attribute'] to node['example']['some-attribute']
   def attribute_block(root = nil)
     return unless block_given?
+
     begin
       @_default_parent = root
       yield
@@ -100,7 +101,7 @@ module SettingsHelper
     Gitlab::ConfigMash.auto_vivify { super }
   end
 
-  def method_missing(method_name, *arguments) # rubocop:disable Style/MethodMissing
+  def method_missing(method_name, *arguments) # rubocop:disable Style/MissingRespondToMissing
     # Give better message for NilClass errors
     # If there are no arguments passed, this is a 'GET' call, and if
     # there is no matching key in the configuration, then it has not been set (not even to nil)
@@ -122,6 +123,7 @@ module SettingsHelper
     # Add the settings to the results
     sorted_settings.each do |key, value|
       raise "Attribute parent value invalid for key: #{key} (#{value})" if value[:parent] && !results.key?(value[:parent])
+
       target = value[:parent] ? results[value[:parent]] : results
 
       rkey = key.tr('_', '-')

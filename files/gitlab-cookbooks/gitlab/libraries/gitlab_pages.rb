@@ -39,9 +39,7 @@ module GitlabPages
 
       uri = URI(Gitlab['pages_external_url'].to_s)
 
-      unless uri.host
-        raise "GitLab Pages external URL must include a schema and FQDN, e.g. http://pages.example.com/"
-      end
+      raise "GitLab Pages external URL must include a schema and FQDN, e.g. http://pages.example.com/" unless uri.host
 
       Gitlab['gitlab_rails']['pages_host'] = uri.host
       Gitlab['gitlab_rails']['pages_port'] = uri.port
@@ -59,9 +57,7 @@ module GitlabPages
         raise "Unsupported GitLab Pages external URL scheme: #{uri.scheme}"
       end
 
-      unless ["", "/"].include?(uri.path)
-        raise "Unsupported GitLab Pages external URL path: #{uri.path}"
-      end
+      raise "Unsupported GitLab Pages external URL path: #{uri.path}" unless ["", "/"].include?(uri.path)
 
       # FQDN are prepared to be used as regexp: the dot is escaped
       Gitlab['pages_nginx']['fqdn_regex'] = uri.host.gsub('.', '\.')

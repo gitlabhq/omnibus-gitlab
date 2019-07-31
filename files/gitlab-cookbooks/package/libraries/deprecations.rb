@@ -72,6 +72,7 @@ module Gitlab
         # 6. note: General note regarding removal
         matching_config = existing_config.dig(*config_keys)
         return [] unless matching_config
+
         deprecated_config = matching_config.select { |config| !allowed_keys.include?(config) }
         deprecated_config.keys.map do |key|
           {

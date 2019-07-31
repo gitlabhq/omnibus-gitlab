@@ -27,6 +27,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     # need to check both.
     return node['gitlab'][service_name]['enable'] if node['gitlab'].key?(service_name)
     return node['monitoring'][service_name]['enable'] if node['monitoring'].key?(service_name)
+
     node[service_name]['enable']
   end
 
@@ -87,6 +88,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     matching_list = deprecated_os.keys.select { |x| os_string =~ Regexp.new(x) }
 
     return if matching_list.empty?
+
     message = <<~EOS
       Your OS, #{os_string}, will be deprecated soon.
       Staring with #{deprecated_os[matching_list.first]}, packages will not be built for it.
@@ -97,6 +99,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
   def self.parse_current_version
     return unless File.exist?("/opt/gitlab/version-manifest.json")
+
     version_manifest = JSON.parse(File.read("/opt/gitlab/version-manifest.json"))
     version_components = version_manifest['build_version'].split(".")
     version_components[0, 2].join(".")

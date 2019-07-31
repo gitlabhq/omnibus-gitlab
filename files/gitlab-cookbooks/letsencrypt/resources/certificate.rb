@@ -8,11 +8,11 @@ property :crt, [String, nil], default: lazy { node['letsencrypt']['crt'] }
 property :group, [String, nil], default: lazy { node['letsencrypt']['group'] }
 
 property :chain, [String, nil],
-  deprecated: 'chain has been deprecated since crt now returns the full certificate by default',
-  default: lazy { node['letsencrypt']['chain'] }
+         deprecated: 'chain has been deprecated since crt now returns the full certificate by default',
+         default: lazy { node['letsencrypt']['chain'] }
 
 deprecated_property_alias :fullchain, :crt,
-  'The fullchain property has been deprecated in favor of crt, and will be removed in GitLab 13.0'
+                          'The fullchain property has been deprecated in favor of crt, and will be removed in GitLab 13.0'
 
 action :create do
   # Attempt to fetch a certificate from Let's Encrypt staging instance

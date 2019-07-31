@@ -65,7 +65,6 @@ end
 add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            2 do |_cmd_name|
-
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
@@ -122,9 +121,9 @@ add_command_under_category 'pg-upgrade', 'database',
 
     begin
       @db_worker.start
-    rescue Mixlib::ShellOut::ShellCommandFailed => scf
+    rescue Mixlib::ShellOut::ShellCommandFailed => e
       log "Error starting the database. Please fix the error before continuing"
-      log scf.message
+      log e.message
       Kernel.exit 1
     end
   end
@@ -256,11 +255,11 @@ def get_locale_encoding
     locale = @db_worker.fetch_lc_ctype
     collate = @db_worker.fetch_lc_collate
     encoding = @db_worker.fetch_server_encoding
-  rescue GitlabCtl::Errors::ExecutionError => ee
+  rescue GitlabCtl::Errors::ExecutionError => e
     log 'There wasn an error fetching locale and encoding information from the database'
     log 'Please ensure the database is running and functional before running pg-upgrade'
-    log "STDOUT: #{ee.stdout}"
-    log "STDERR: #{ee.stderr}"
+    log "STDOUT: #{e.stdout}"
+    log "STDERR: #{e.stderr}"
   end
 
   [locale, collate, encoding]
@@ -272,10 +271,10 @@ def create_temp_data_dir
       @db_worker.run_pg_command(
         "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
       )
-    rescue GitlabCtl::Errors::ExecutionError => ee
+    rescue GitlabCtl::Errors::ExecutionError => e
       log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
-      log "STDOUT: #{ee.stdout}"
-      log "STDERR: #{ee.stderr}"
+      log "STDOUT: #{e.stdout}"
+      log "STDERR: #{e.stderr}"
       false
     else
       true
@@ -296,10 +295,10 @@ def initialize_new_db(locale, collate, encoding)
         " --lc-collate=#{collate} " \
         "--lc-ctype=#{locale}"
       )
-    rescue GitlabCtl::Errors::ExecutionError => ee
+    rescue GitlabCtl::Errors::ExecutionError => e
       log "Error initializing database for #{upgrade_version}"
-      log "STDOUT: #{ee.stdout}"
-      log "STDERR: #{ee.stderr}"
+      log "STDOUT: #{e.stdout}"
+      log "STDERR: #{e.stderr}"
       GitlabCtl::PgUpgrade.die 'Please check the output and try again'
     end
   end
@@ -340,10 +339,10 @@ def analyze_cluster
   )
   begin
     @db_worker.run_pg_command("/bin/sh #{analyze_script}")
-  rescue GitlabCtl::Errors::ExecutionError => ee
+  rescue GitlabCtl::Errors::ExecutionError => e
     log 'Error running analyze_new_cluster.sh'
-    log "STDOUT: #{ee.stdout}"
-    log "STDERR: #{ee.stderr}"
+    log "STDOUT: #{e.stdout}"
+    log "STDERR: #{e.stderr}"
     log 'Please check the output, and rerun the command if needed:'
     log "/bin/sh #{analyze_script}"
     log 'If the error persists, please open an issue at: '
@@ -352,12 +351,9 @@ def analyze_cluster
 end
 
 def version_from_manifest(software)
-  if @versions.nil?
-    @versions = JSON.parse(File.read("#{base_path}/version-manifest.json"))
-  end
-  if @versions['software'].key?(software)
-    return @versions['software'][software]['described_version']
-  end
+  @versions = JSON.parse(File.read("#{base_path}/version-manifest.json")) if @versions.nil?
+  return @versions['software'][software]['described_version'] if @versions['software'].key?(software)
+
   nil
 end
 

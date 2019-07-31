@@ -19,8 +19,6 @@ Gitlab[:node] = node
 
 Services.add_services('gitlab', Services::BaseServices.list)
 
-if File.exist?('/etc/gitlab/gitlab.rb')
-  Gitlab.from_file('/etc/gitlab/gitlab.rb')
-end
+Gitlab.from_file('/etc/gitlab/gitlab.rb') if File.exist?('/etc/gitlab/gitlab.rb')
 
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))

@@ -25,7 +25,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
                   {
                     primary: repmgr_primary,
                     user: repmgr_options[:user] || node_attributes['repmgr']['user'],
-                    database:  node_attributes['repmgr']['database'],
+                    database: node_attributes['repmgr']['database'],
                     directory: postgresql_directory,
                     verbose: repmgr_options[:verbose],
                     wait: repmgr_options[:wait],
@@ -42,13 +42,11 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   rescue Mixlib::ShellOut::ShellCommandFailed
     exit 1
   rescue NoMethodError
-    if repmgr_command
-      $stderr.puts "The repmgr command #{repmgr_command} does not support #{repmgr_subcommand}"
-    end
+    $stderr.puts "The repmgr command #{repmgr_command} does not support #{repmgr_subcommand}" if repmgr_command
     puts repmgr_help
     exit 1
-  rescue NameError => ne
-    puts ne
+  rescue NameError => e
+    puts e
     $stderr.puts "There is no repmgr command #{repmgr_command}"
     puts repmgr_help
     exit 1
@@ -64,8 +62,8 @@ add_command_under_category('repmgr-check-master', 'database', 'Check if the curr
     else
       Kernel.exit 1
     end
-  rescue Repmgr::MasterError => se
-    $stderr.puts "Error checking for master: #{se}"
+  rescue Repmgr::MasterError => e
+    $stderr.puts "Error checking for master: #{e}"
     Kernel.exit 3
   end
 end

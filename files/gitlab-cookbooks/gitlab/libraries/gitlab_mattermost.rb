@@ -39,9 +39,7 @@ module GitlabMattermost
 
       uri = URI(Gitlab['mattermost_external_url'].to_s)
 
-      unless uri.host
-        raise "GitLab Mattermost external URL must include a schema and FQDN, e.g. http://mattermost.example.com/"
-      end
+      raise "GitLab Mattermost external URL must include a schema and FQDN, e.g. http://mattermost.example.com/" unless uri.host
 
       Gitlab['mattermost']['host'] = uri.host
       Gitlab['mattermost']['service_site_url'] ||= Gitlab['mattermost_external_url']
@@ -82,9 +80,7 @@ module GitlabMattermost
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end
 
-      unless ["", "/"].include?(uri.path)
-        raise "Unsupported CI external URL path: #{uri.path}"
-      end
+      raise "Unsupported CI external URL path: #{uri.path}" unless ["", "/"].include?(uri.path)
 
       Gitlab['mattermost']['port'] = uri.port
     end

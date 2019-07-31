@@ -9,7 +9,7 @@ module GitlabCtl
 
     # Sample output of prometheus --version is
     # prometheus, version 1.8.2 (branch: master, revision: 6aa68e74cdc25a7d95f3f120ccc8eddd46e3c07b)
-    VERSION_REGEX = %r{.*?version (?<version>.*?) .*?}
+    VERSION_REGEX = %r{.*?version (?<version>.*?) .*?}.freeze
 
     def initialize(base_path, home_dir)
       @base_path = base_path

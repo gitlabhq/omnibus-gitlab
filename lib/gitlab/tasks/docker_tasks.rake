@@ -32,23 +32,17 @@ namespace :docker do
 
     # Special tags
     task :nightly do
-      if Build::Check.is_nightly?
-        Build::GitlabImage.tag_and_push_to_dockerhub('nightly')
-      end
+      Build::GitlabImage.tag_and_push_to_dockerhub('nightly') if Build::Check.is_nightly?
     end
 
     # push as :rc tag, the :rc is always the latest tagged release
     task :rc do
-      if Build::Check.is_latest_tag?
-        Build::GitlabImage.tag_and_push_to_dockerhub('rc')
-      end
+      Build::GitlabImage.tag_and_push_to_dockerhub('rc') if Build::Check.is_latest_tag?
     end
 
     # push as :latest tag, the :latest is always the latest stable release
     task :latest do
-      if Build::Check.is_latest_stable_tag?
-        Build::GitlabImage.tag_and_push_to_dockerhub('latest')
-      end
+      Build::GitlabImage.tag_and_push_to_dockerhub('latest') if Build::Check.is_latest_stable_tag?
     end
 
     desc "Push triggered Docker Image to GitLab Registry"

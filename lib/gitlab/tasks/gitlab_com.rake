@@ -27,6 +27,7 @@ namespace :gitlab_com do
     # directly to production from the omnibus pipeline, this check is here
     # for safety
     raise NotImplementedError, "Environment #{deploy_env} is not supported" if deploy_env == 'gprd'
+
     deployer_helper = DeployerHelper.new(trigger_token, deploy_env, trigger_ref)
     url = deployer_helper.trigger_deploy
     puts "Deployer build triggered at #{url} on #{trigger_ref} for the #{deploy_env} environment"

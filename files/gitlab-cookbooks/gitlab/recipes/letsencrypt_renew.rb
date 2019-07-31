@@ -16,6 +16,4 @@
 
 include_recipe 'gitlab::config'
 
-if node['gitlab']['nginx']['enable'] && node['letsencrypt']['enable']
-  include_recipe 'letsencrypt::enable'
-end
+include_recipe 'letsencrypt::enable' if node['gitlab']['nginx']['enable'] && node['letsencrypt']['enable']

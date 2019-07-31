@@ -65,9 +65,8 @@ module Pgbouncer
 
     def data_path=(path)
       full_path = "#{path}/pgbouncer"
-      unless Dir.exist?(full_path)
-        raise "The directory #{full_path} does not exist. Please ensure pgbouncer is configured on this node"
-      end
+      raise "The directory #{full_path} does not exist. Please ensure pgbouncer is configured on this node" unless Dir.exist?(full_path)
+
       @data_path = full_path
     end
 
@@ -95,9 +94,9 @@ module Pgbouncer
         "#{build_command_line} -c '#{command}'",
         options['host_user']
       )
-    rescue GitlabCtl::Errors::ExecutionError => results
-      $stderr.puts "Error running command: #{results}"
-      $stderr.puts "ERROR: #{results.stderr}"
+    rescue GitlabCtl::Errors::ExecutionError => e
+      $stderr.puts "Error running command: #{e}"
+      $stderr.puts "ERROR: #{e.stderr}"
       raise
     end
 
@@ -150,6 +149,7 @@ module Pgbouncer
     def notify
       # If we haven't written databases.json yet, don't do anything
       return if databases.nil?
+
       write
       resume_if_paused
       begin

@@ -93,7 +93,7 @@ module Build
 
       def append_to_sheet(version, duration)
         # Append duration to Google Sheets where a chart will be generated
-        service_account_file = File.expand_path("../../../../service_account.json", __FILE__)
+        service_account_file = File.expand_path('../../../service_account.json', __dir__)
         session = GoogleDrive::Session.from_service_account_key(service_account_file)
         spreadsheet = session.spreadsheet_by_title("GitLab EE Upgrade Metrics")
         worksheet = spreadsheet.worksheets.first

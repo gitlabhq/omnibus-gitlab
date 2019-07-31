@@ -1,4 +1,5 @@
 require:
+  - rubocop-performance
   - rubocop-rspec
   - ./lib/rubocop/rubocop
 
@@ -26,10 +27,6 @@ AllCops:
 
 Style/NumericLiteralPrefix:
   Enabled: false
-Metrics/BlockLength:
-  Enabled: false
-Metrics/LineLength:
-  Enabled: false
 
 # Gems in consecutive lines should be alphabetically sorted
 Bundler/OrderedGems:
@@ -54,6 +51,10 @@ Layout/AlignHash:
 Layout/AlignParameters:
   Enabled: false
 
+# Align block ends correctly.
+Layout/BlockAlignment:
+  Enabled: true
+
 # Put end statement of multiline block on its own line.
 Layout/BlockEndNewline:
   Enabled: true
@@ -64,6 +65,14 @@ Layout/CaseIndentation:
 
 # Indentation of comments.
 Layout/CommentIndentation:
+  Enabled: true
+
+# Checks for condition placed in a confusing position relative to the keyword.
+Layout/ConditionPosition:
+  Enabled: true
+
+# Align ends corresponding to defs correctly.
+Layout/DefEndAlignment:
   Enabled: true
 
 # Align elses and elsifs correctly.
@@ -100,6 +109,10 @@ Layout/EmptyLinesAroundMethodBody:
 
 # Keeps track of empty lines around module bodies.
 Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+
+# Align ends correctly.
+Layout/EndAlignment:
   Enabled: true
 
 # Use Unix-style line endings.
@@ -407,10 +420,6 @@ Style/EvalWithLocation:
 Style/EvenOdd:
   Enabled: true
 
-# Checks for flip flops.
-Style/FlipFlop:
-  Enabled: true
-
 # Checks use of for or each in multiline loops.
 Style/For:
   Enabled: true
@@ -537,6 +546,10 @@ Style/RedundantException:
 Style/RedundantParentheses:
   Enabled: true
 
+# Use `sort` instead of `sort_by { |x| x }`.
+Style/RedundantSortBy:
+  Enabled: true
+
 Style/RegexpLiteral:
   Enabled: false
 
@@ -574,12 +587,18 @@ Style/StringMethods:
     intern: to_sym
   Enabled: true
 
+# Use `strip` instead of `lstrip.rstrip`.
+Style/Strip:
+  Enabled: true
+
 # Use %i or %I for arrays of symbols.
 Style/SymbolArray:
   Enabled: false
 
-# This cop checks for trailing comma in array and hash literals.
-Style/TrailingCommaInLiteral:
+# These cops check for trailing comma in array and hash literals.
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
   Enabled: false
 
 # Checks for %W when interpolation is not needed.
@@ -685,25 +704,13 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Enabled: false
 
-# Align block ends correctly.
-Lint/BlockAlignment:
-  Enabled: true
-
 # Default values in optional keyword arguments and optional ordinal arguments
 # should not refer back to the name of the argument.
 Lint/CircularArgumentReference:
   Enabled: true
 
-# Checks for condition placed in a confusing position relative to the keyword.
-Lint/ConditionPosition:
-  Enabled: true
-
 # Check for debugger calls.
 Lint/Debugger:
-  Enabled: true
-
-# Align ends corresponding to defs correctly.
-Lint/DefEndAlignment:
   Enabled: true
 
 # Check for deprecated class method calls.
@@ -730,16 +737,16 @@ Lint/EmptyEnsure:
 Lint/EmptyWhen:
   Enabled: true
 
-# Align ends correctly.
-Lint/EndAlignment:
-  Enabled: true
-
 # END blocks should not be placed inside method definitions.
 Lint/EndInMethod:
   Enabled: true
 
 # Do not use return in an ensure block.
 Lint/EnsureReturn:
+  Enabled: true
+
+# Checks for flip flops.
+Lint/FlipFlop:
   Enabled: true
 
 # Catches floating-point literals too large or small for Ruby to represent.
@@ -829,7 +836,7 @@ Lint/UnifiedInteger:
 # Checks for rubocop:disable comments that can be removed.
 # Note: this cop is not disabled when disabling all cops.
 # It must be explicitly disabled.
-Lint/UnneededDisable:
+Lint/UnneededCopDisableDirective:
   Enabled: false
 
 # This cop checks for unneeded usages of splat expansion
@@ -883,15 +890,6 @@ Performance/Casecmp:
 Performance/DoubleStartEndWith:
   Enabled: true
 
-# Use `Hash#each_key` and `Hash#each_value` instead of
-# `Hash#keys.each` and `Hash#values.each`.
-Performance/HashEachMethods:
-  Enabled: false
-
-# Use `strip` instead of `lstrip.rstrip`.
-Performance/LstripRstrip:
-  Enabled: true
-
 # Use `Range#cover?` instead of `Range#include?`.
 Performance/RangeInclude:
   Enabled: true
@@ -911,10 +909,6 @@ Performance/RedundantMatch:
 Performance/RedundantMerge:
   Enabled: true
   MaxKeyValuePairs: 1
-
-# Use `sort` instead of `sort_by { |x| x }`.
-Performance/RedundantSortBy:
-  Enabled: true
 
 # Use `match?` instead of `Regexp#match`, `String#match`, `Symbol#match` or `=~` when `MatchData` is not used.
 Performance/RegexpMatch:

@@ -75,7 +75,7 @@ server {
   access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
   error_log   /var/log/gitlab/nginx/gitlab_error.log;
 }
-   EOF
+    EOF
   end
 
   before do

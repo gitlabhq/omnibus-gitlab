@@ -12,11 +12,7 @@ class PackageRepository
     return Gitlab::Util.get_env('RASPBERRY_REPO') if Gitlab::Util.get_env('RASPBERRY_REPO') && !Gitlab::Util.get_env('RASPBERRY_REPO').empty?
 
     rc_repository = repository_for_rc
-    if rc_repository
-      rc_repository
-    else
-      Build::Info.package
-    end
+    rc_repository || Build::Info.package
   end
 
   def repository_for_rc
@@ -44,9 +40,7 @@ class PackageRepository
     # For CentOS 6 and 7 we will upload the same package to Scientific and Oracle Linux
     # For all other OSs, we only upload one package.
     upload_list = package_list(repository)
-    if upload_list.empty?
-      raise "No packages found for upload. Are artifacts available?"
-    end
+    raise "No packages found for upload. Are artifacts available?" if upload_list.empty?
 
     validate(dry_run)
 
@@ -62,6 +56,7 @@ class PackageRepository
 
         if $CHILD_STATUS.exitstatus == 1
           raise "Upload to package server failed!." unless /filename: has already been taken/.match?(result)
+
           puts "Package #{pkg} has already been uploaded, skipping.\n"
         end
       end

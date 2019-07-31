@@ -26,7 +26,7 @@ module Build
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
-          'variables[QA_IMAGE]' =>  qa_image,
+          'variables[QA_IMAGE]' => qa_image,
           'variables[OMNIBUS_JOB_ID]' => ee_package_job_id
         }
       end

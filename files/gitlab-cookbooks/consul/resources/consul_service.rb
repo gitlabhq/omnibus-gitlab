@@ -22,9 +22,9 @@ action :create do
 
   content = {
     'service' => {
-      'name'    => service_name,
+      'name' => service_name,
       'address' => ip_address,
-      'port'    => port.to_i
+      'port' => port.to_i
     }
   }
 

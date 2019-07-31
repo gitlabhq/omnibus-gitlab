@@ -1,5 +1,5 @@
 class SentinelHelper
-  MYID_PATTERN ||= /^[0-9a-f]{40}$/
+  MYID_PATTERN ||= /^[0-9a-f]{40}$/.freeze
   JSON_FILE ||= '/etc/gitlab/gitlab-sentinel.json'.freeze
 
   def initialize(node)
@@ -18,9 +18,7 @@ class SentinelHelper
 
   # Restore from node definition (gitlab.rb)
   def restore_from_node
-    unless MYID_PATTERN.match?(sentinel['myid'])
-      raise 'Sentinel myid must be exactly 40 hex-characters lowercase'
-    end
+    raise 'Sentinel myid must be exactly 40 hex-characters lowercase' unless MYID_PATTERN.match?(sentinel['myid'])
 
     sentinel['myid']
   end
@@ -50,6 +48,7 @@ class SentinelHelper
   # Save to local JSON file
   def save_to_file(data)
     return unless File.directory?('/etc/gitlab')
+
     File.open(JSON_FILE, 'w', 0600) do |f|
       f.puts(Chef::JSONCompat.to_json_pretty(data))
       f.chmod(0600) # update existing file

@@ -71,6 +71,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     SERVICE_WAIT.times do
       status = run_sv_command_for_service('status', sv_name)
       break if status.zero?
+
       sleep 1
     end
 
@@ -128,9 +129,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
-    if /^run: #{sv_name}:/.match?(service_statuses)
-      run_sv_command_for_service('start', sv_name)
-    end
+    run_sv_command_for_service('start', sv_name) if /^run: #{sv_name}:/.match?(service_statuses)
   end
 
   print_upgrade_and_exit
@@ -143,6 +142,7 @@ def stale_files_check
   #  file is always the file to keep, and it's name is excluded from the output to the user.
   sprocket_files = Dir.glob("#{base_path}/embedded/service/gitlab-rails/public/assets/.sprockets-manifest*").sort_by { |f| File.ctime(f) }
   return unless sprocket_files.size > 1
+
   puts "WARNING:"
   puts "GitLab discovered stale file(s) from a previous install that need to be cleaned up."
   puts "The following files need to be removed:"

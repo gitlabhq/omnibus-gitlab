@@ -27,6 +27,7 @@ module Geo
 
     def check_gitlab_active?
       return unless gitlab_is_active?
+
       if @options[:force]
         puts "Found data inside the #{db_name} database! Proceeding because --force was supplied".color(:yellow)
       else
@@ -37,12 +38,14 @@ module Geo
 
     def check_service_enabled?
       return if ctl.service_enabled?('postgresql')
+
       puts 'There is no PostgreSQL instance enabled in omnibus, exiting...'.color(:red)
       Kernel.exit 1
     end
 
     def confirm_replication
       return if @options[:now]
+
       puts '*** Are you sure you want to continue (replicate/no)? ***'.color(:yellow)
 
       loop do
@@ -50,6 +53,7 @@ module Geo
         answer = STDIN.gets.to_s.strip
 
         break if answer == 'replicate'
+
         exit 0 if answer == 'no'
 
         puts "*** You entered `#{answer}` instead of `replicate` or `no`.".color(:red)

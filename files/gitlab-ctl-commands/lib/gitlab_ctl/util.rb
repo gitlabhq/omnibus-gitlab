@@ -45,12 +45,12 @@ module GitlabCtl
           data = JSON.parse(File.read(file))
         rescue JSON::ParserError
           raise GitlabCtl::Errors::NodeError,
-            "Error reading #{file}, has reconfigure been run yet?"
+                "Error reading #{file}, has reconfigure been run yet?"
         end
 
         if file.start_with?('/opt/gitlab/embedded/nodes') && !data.key?('normal')
           raise GitlabCtl::Errors::NodeError,
-            "Attributes not found in #{file}, has reconfigure been run yet?"
+                "Attributes not found in #{file}, has reconfigure been run yet?"
         end
         data
       end
