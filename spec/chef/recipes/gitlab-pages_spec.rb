@@ -125,7 +125,8 @@ describe 'gitlab::gitlab-pages' do
           tls_max_version: "tls1.2",
           sentry_enabled: true,
           sentry_dsn: 'https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40',
-          sentry_environment: 'production'
+          sentry_environment: 'production',
+          headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
         }
       )
     end
@@ -171,6 +172,9 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version="tls1.2"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-dsn="https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-environment="production"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-XSS-Protection: 1; mode=block"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-Content-Type-Options: nosniff"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="Test: Header"})
     end
 
     it 'correctly renders the pages log run file' do
