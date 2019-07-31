@@ -10,29 +10,21 @@ describe 'redis' do
   context 'by default' do
     it 'creates redis config with default values' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/client-output-buffer-limit normal 0 0 0/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/client-output-buffer-limit slave 256mb 64mb 60/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/client-output-buffer-limit pubsub 32mb 8mb 60/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^hz 10/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^save 900 1/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^save 300 10/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^save 60 10000/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^maxmemory 0/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^maxmemory-policy noeviction/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^maxmemory-samples 5/)
-      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^tcp-backlog 511/)
-      expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
-        .with_content(/^slaveof/)
+        .with_content { |content|
+          expect(content).to match(/client-output-buffer-limit normal 0 0 0/)
+          expect(content).to match(/client-output-buffer-limit slave 256mb 64mb 60/)
+          expect(content).to match(/client-output-buffer-limit pubsub 32mb 8mb 60/)
+          expect(content).to match(/^hz 10/)
+          expect(content).to match(/^save 900 1/)
+          expect(content).to match(/^save 300 10/)
+          expect(content).to match(/^save 60 10000/)
+          expect(content).to match(/^maxmemory 0/)
+          expect(content).to match(/^maxmemory-policy noeviction/)
+          expect(content).to match(/^maxmemory-samples 5/)
+          expect(content).to match(/^tcp-backlog 511/)
+          expect(content).to match(/^rename-command KEYS ""$/)
+          expect(content).not_to match(/^slaveof/)
+        }
     end
 
     it 'creates redis user and group' do
@@ -56,7 +48,11 @@ describe 'redis' do
           tcp_backlog: 1024,
           hz: 100,
           username: 'foo',
-          group: 'bar'
+          group: 'bar',
+          rename_commands: {
+            "FAKE_COMMAND" => "RENAMED_FAKE_COMMAND",
+            "DISABLED_FAKE_COMMAND" => ""
+          }
         }
       )
     end
@@ -80,6 +76,15 @@ describe 'redis' do
         .with_content(/^tcp-backlog 1024/)
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^hz 100/)
+    end
+
+    it 'does not include the default renamed keys in redis.conf' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).not_to match(/^rename-command KEYS ""$/)
+          expect(content).to match(/^rename-command FAKE_COMMAND "RENAMED_FAKE_COMMAND"$/)
+          expect(content).to match(/^rename-command DISABLED_FAKE_COMMAND ""$/)
+        }
     end
 
     it 'creates redis user and group' do
@@ -166,6 +171,23 @@ describe 'redis' do
     it 'omits slaveof' do
       expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof/)
+    end
+  end
+
+  context 'with rename_commands disabled' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          rename_commands: {}
+        }
+      )
+    end
+
+    it 'should not rename any commands' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).not_to match(/^rename-command/)
+        }
     end
   end
 

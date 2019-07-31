@@ -1,0 +1,5 @@
+---
+title: Rename unused redis commands by default
+merge_request: 3436
+author:
+type: security

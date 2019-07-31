@@ -34,6 +34,8 @@ default['redis']['client_output_buffer_limit_slave'] = "256mb 64mb 60"
 default['redis']['client_output_buffer_limit_pubsub'] = "32mb 8mb 60"
 default['redis']['save'] = ['900 1', '300 10', '60 10000']
 
+default['redis']['rename_commands'] = nil
+
 ####
 # Redis Settings for EE
 # They are no-op in CE

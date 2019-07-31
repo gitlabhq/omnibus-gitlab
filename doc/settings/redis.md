@@ -157,6 +157,28 @@ Redis v3.2.x does NOT support SSL out of the box. However, you can encrypt a
 Redis connection using [stunnel](https://redislabs.com/blog/stunnel-secure-redis-ssl/).
 AWS ElasticCache also supports Redis over SSL.
 
+## Renamed commands
+
+By default, the `KEYS` command is disabled as a security measure.
+
+If you'd like to obfuscate or disable this command, or other commands, edit the `redis['rename_commands']` setting in `/etc/gitlab/gitlab.rb` to look like:
+```ruby
+redis['rename_commands'] = {
+  'KEYS': '',
+  'OTHER_COMMAND': 'VALUE'
+}
+```
+
+* `OTHER_COMMAND` is the command you want to modify
+* `VALUE` should be one of:
+  1. A new command name.
+  1. '', which completely disables the command
+
+To disable this functionality:
+
+1. Set `redis['rename_commands'] = {}` in your `/etc/gitlab/gitlab.rb` file
+1. Run `sudo gitlab-ctl reconfigure`
+
 ### Limitations
 
 - GitLab does NOT ship with stunnel or other tools to provide encryption
