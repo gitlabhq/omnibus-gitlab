@@ -34,6 +34,10 @@ AllCops:
 Rails:
   Enabled: false
 
+# TODO re-enable and start updating rspec tests
+RSpec:
+  Enabled: false
+
 # We use git repos in our gemfile, but only our own repos
 # TODO: Update the cop to allow us to enable it and whitelist our groups
 Cop/GemFetcher:
