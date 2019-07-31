@@ -509,7 +509,11 @@ slave-priority 100
 #
 # Please note that changing the name of commands that are logged into the
 # AOF file or transmitted to slaves may cause problems.
-
+<% if @rename_commands %>
+  <% @rename_commands.each_pair do |command, newname| %>
+rename-command <%= command %> "<%= newname %>"
+  <% end %>
+<% end %>
 ################################### LIMITS ####################################
 
 # Set the max number of connected clients at the same time. By default

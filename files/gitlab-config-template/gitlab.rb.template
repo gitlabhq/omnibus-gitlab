@@ -929,6 +929,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['uid'] = nil
 # redis['gid'] = nil
 
+### Disable or obfuscate unnecessary redis command names
+### Uncomment and edit this block to add or remove entries.
+### See https://docs.gitlab.com/omnibus/settings/redis.html#renamed-commands
+### for detailed usage
+###  
+# redis['rename_commands'] = {
+#   'KEYS': ''
+#}
+#
+
 ###! **To enable only Redis service in this machine, uncomment
 ###!   one of the lines below (choose master or slave instance types).**
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html

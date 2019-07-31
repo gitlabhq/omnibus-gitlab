@@ -46,6 +46,10 @@ module Redis
         Gitlab['redis']['master_password'] ||= Gitlab['redis']['password']
       end
 
+      Gitlab['redis']['rename_commands'] ||= {
+        'KEYS' => ''
+      }
+
       return unless RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_slave?
 
       raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
