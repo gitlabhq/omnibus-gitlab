@@ -16,14 +16,14 @@ class GitlabGeoHelper # rubocop:disable Style/MultilineIfModifier (disabled so w
   end
 
   def db_migrate_status_file
-    @migrate_status_file ||= begin
+    @db_migrate_status_file ||= begin
       upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'upgrade-status')
       ::File.join(upgrade_status_dir, "geo-db-migrate-#{connection_digest}-#{revision}")
     end
   end
 
   def fdw_sync_status_file
-    @sync_status_file ||= begin
+    @fdw_sync_status_file ||= begin
       upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'upgrade-status')
       ::File.join(upgrade_status_dir, "geo-fdw-sync-#{connection_digest}-#{revision}")
     end

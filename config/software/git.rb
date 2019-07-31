@@ -51,7 +51,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   block do
-    open(File.join(project_dir, 'config.mak'), 'a') do |file|
+    File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
 # Added by Omnibus git software definition git.rb
 CURLDIR=#{install_dir}/embedded

@@ -38,7 +38,9 @@ gem 'google_drive'
 gem 'http'
 
 group :rubocop do
-  gem 'rubocop'
+  gem 'rubocop', '0.69.0'
+  gem 'rubocop-performance', '~> 1.3.0'
+  # gem 'rubocop-rails'
   gem 'rubocop-rspec'
 end
 

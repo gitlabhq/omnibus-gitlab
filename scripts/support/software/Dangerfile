@@ -1,5 +1,3 @@
-# rubocop:disable Style/SignalException
-
 QA_LABELS = %w[backstage QA test].freeze
 
 MESSAGE = <<~MSG.freeze
@@ -41,8 +39,4 @@ all_files = git.added_files + git.modified_files
 has_config_changes = !library_paths_requiring_review(all_files).empty?
 manual_check_needed = (gitlab.mr_labels & QA_LABELS).empty?
 
-if has_config_changes && !manual_check_needed
-  warn format(MESSAGE, labels: qa_labels)
-end
-
-# rubocop:enable Style/SignalException
+warn format(MESSAGE, labels: qa_labels) if has_config_changes && !manual_check_needed

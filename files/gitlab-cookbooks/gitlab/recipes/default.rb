@@ -34,9 +34,7 @@ directory "/etc/gitlab" do
   only_if { node['gitlab']['manage-storage-directories']['manage_etc'] }
 end.run_action(:create)
 
-if File.exist?("/var/opt/gitlab/bootstrapped")
-  node.default['gitlab']['bootstrap']['enable'] = false
-end
+node.default['gitlab']['bootstrap']['enable'] = false if File.exist?("/var/opt/gitlab/bootstrapped")
 
 directory "Create /var/opt/gitlab" do
   path "/var/opt/gitlab"
@@ -108,27 +106,25 @@ include_recipe "package::runit"
   end
 end
 
-if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
-  include_recipe "gitlab::database_migrations"
-end
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
 
 # Always create logrotate folders and configs, even if the service is not enabled.
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
 include_recipe "gitlab::logrotate_folders_and_configs"
 
 # Configure Services
-[
-  "unicorn",
-  "puma",
-  "sidekiq",
-  "gitlab-workhorse",
-  "mailroom",
-  "nginx",
-  "remote-syslog",
-  "logrotate",
-  "bootstrap",
-  "gitlab-pages",
-  "storage-check"
+%w[
+  unicorn
+  puma
+  sidekiq
+  gitlab-workhorse
+  mailroom
+  nginx
+  remote-syslog
+  logrotate
+  bootstrap
+  gitlab-pages
+  storage-check
 ].each do |service|
   if node["gitlab"][service]["enable"]
     include_recipe "gitlab::#{service}"

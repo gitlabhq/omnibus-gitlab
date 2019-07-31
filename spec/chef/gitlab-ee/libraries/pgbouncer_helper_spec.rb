@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe PgbouncerHelper do
-  let(:chef_run) { converge_config(ee: true) }
+  let(:chef_run) { converge_config(is_ee: true) }
   subject { described_class.new(chef_run.node) }
 
   before do

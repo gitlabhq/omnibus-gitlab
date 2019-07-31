@@ -21,7 +21,7 @@ class PGVersion < String
     \A(?<part1>\d+)
     (\.(?<part2>\d+))?
     (\.(?<part3>\d+))?\z
-  }x
+  }x.freeze
 
   def initialize(version_string)
     super(version_string)

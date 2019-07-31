@@ -12,7 +12,7 @@ cookbooks.each do |cookbook|
 end
 
 def deep_clone(obj)
-  Marshal.load(Marshal.dump(obj)) # rubocop:disable Security/MarshalLoad
+  Marshal.load(Marshal.dump(obj))
 end
 
 # Save the empty state of the Gitlab config singleton

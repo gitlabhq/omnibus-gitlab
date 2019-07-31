@@ -35,9 +35,7 @@ class SecretsHelper
   def self.load_gitlab_secrets
     existing_secrets = {}
 
-    if File.exist?("/etc/gitlab/gitlab-secrets.json")
-      existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json"))
-    end
+    existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json")) if File.exist?("/etc/gitlab/gitlab-secrets.json")
 
     existing_secrets
   end
@@ -58,7 +56,7 @@ class SecretsHelper
     end
   end
 
-  def self.gather_gitlab_secrets # rubocop:disable Metrics/AbcSize
+  def self.gather_gitlab_secrets
     secret_tokens = {
       'gitlab_workhorse' => {
         'secret_token' => Gitlab['gitlab_workhorse']['secret_token'],

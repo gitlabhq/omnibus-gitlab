@@ -7,11 +7,7 @@ module Gitlab
     def initialize(software_name, version = nil)
       @software = software_name
 
-      @read_version = if version
-                        version
-                      else
-                        get_software_version
-                      end
+      @read_version = version || get_software_version
       @project_root = File.join(File.dirname(__dir__), '../')
       @software_sources = Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? "alternative" : "remote"
     end
@@ -71,9 +67,7 @@ module Gitlab
         # If it satisfy both, it is probably a branch name or a SHA
         # commit of one of our own component so it doesn't need `v` prepended
         if components_files.key?(@software)
-          unless /^\d+\.\d+\.\d+(-rc\d+)?(-ee)?$/.match?(@read_version)
-            return @read_version
-          end
+          return @read_version unless /^\d+\.\d+\.\d+(-rc\d+)?(-ee)?$/.match?(@read_version)
         end
         v = "v" if prepend_version
         [

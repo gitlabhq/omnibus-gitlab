@@ -137,8 +137,8 @@ end
 def get_client
   begin
     pgb = Pgbouncer::Databases.new(get_pg_options, base_path, data_path)
-  rescue RuntimeError => rte
-    log rte.message
+  rescue RuntimeError => e
+    log e.message
     exit 1
   end
   pgb

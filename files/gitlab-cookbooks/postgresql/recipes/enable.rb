@@ -56,7 +56,7 @@ file File.join(node['postgresql']['home'], ".profile") do
   mode "0600"
   content <<-EOH
 PATH=#{node['postgresql']['user_path']}
-EOH
+  EOH
 end
 
 gitlab_sysctl "kernel.shmmax" do

@@ -47,9 +47,7 @@ class PostgreSQL
           node_attributes.dig('postgresql', 'sql_replication_user')).to_s
 
       configured_user.tap do |user|
-        if user.strip.empty?
-          raise ArgumentError, 'Replication user not defined in `sql_replication_user`!'
-        end
+        raise ArgumentError, 'Replication user not defined in `sql_replication_user`!' if user.strip.empty?
       end
     end
 

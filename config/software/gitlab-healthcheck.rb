@@ -28,7 +28,7 @@ default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
   block do
-    open("#{install_dir}/bin/gitlab-healthcheck", 'w') do |file|
+    File.open("#{install_dir}/bin/gitlab-healthcheck", 'w') do |file|
       file.print <<-EOH
 #!/bin/sh
 
@@ -47,7 +47,7 @@ fi
 . ${gitlab_healthcheck_rc}
 
 exec /opt/gitlab/embedded/bin/curl $@ ${flags} ${url}
-       EOH
+      EOH
     end
   end
 

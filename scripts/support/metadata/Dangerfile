@@ -6,15 +6,11 @@ fail "Please add labels to this merge request." if gitlab.mr_labels.empty?
 
 warn "You may want to add ~Distribution label to this MR for gitlab-insights" unless gitlab.mr_labels.include?("Distribution")
 
-unless gitlab.mr_json["assignee"]
-  warn "This merge request does not have any assignee yet. Setting an assignee clarifies who needs to take action on the merge request at any given time."
-end
+warn "This merge request does not have any assignee yet. Setting an assignee clarifies who needs to take action on the merge request at any given time." unless gitlab.mr_json["assignee"]
 
 has_milestone = !gitlab.mr_json["milestone"].nil?
 
-unless has_milestone
-  warn "This merge request does not refer to an existing milestone.", sticky: false
-end
+warn "This merge request does not refer to an existing milestone.", sticky: false unless has_milestone
 
 has_pick_into_stable_label = gitlab.mr_labels.find { |label| label.start_with?('Pick into') }
 

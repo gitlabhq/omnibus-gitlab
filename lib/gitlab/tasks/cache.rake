@@ -35,8 +35,6 @@ namespace :cache do
   desc "Restore cache bundle"
   task :restore do
     platform_dir = OhaiHelper.platform_dir
-    if File.exist?("cache/#{platform_dir}") && File.file?("cache/#{platform_dir}")
-      system(*%W[git clone --mirror cache/#{platform_dir} /var/cache/omnibus/cache/git_cache/opt/gitlab])
-    end
+    system(*%W[git clone --mirror cache/#{platform_dir} /var/cache/omnibus/cache/git_cache/opt/gitlab]) if File.exist?("cache/#{platform_dir}") && File.file?("cache/#{platform_dir}")
   end
 end

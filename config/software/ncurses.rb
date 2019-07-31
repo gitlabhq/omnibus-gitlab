@@ -90,9 +90,7 @@ build do
 
   patch source: 'patch-ncurses_tinfo_lib__baudrate.c', plevel: 0 if openbsd?
 
-  if version == '5.9' && ppc64le?
-    patch source: 'v5.9.ppc64le-configure.patch', plevel: 1
-  end
+  patch source: 'v5.9.ppc64le-configure.patch', plevel: 1 if version == '5.9' && ppc64le?
 
   configure_command = [
     './configure',
@@ -153,9 +151,7 @@ build do
   make "-j #{workers} install", env: env
 
   # Ensure embedded ncurses wins in the LD search path
-  if smartos?
-    link "#{install_dir}/embedded/lib/libcurses.so", "#{install_dir}/embedded/lib/libcurses.so.1"
-  end
+  link "#{install_dir}/embedded/lib/libcurses.so", "#{install_dir}/embedded/lib/libcurses.so.1" if smartos?
 end
 
 project.exclude "embedded/bin/ncurses5-config"

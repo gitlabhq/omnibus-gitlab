@@ -38,9 +38,7 @@ build do
 
   # Append the 1024bit Verisign certs so that S3 continues to work
   block do
-    unless File.foreach("#{project_dir}/cacert-#{version.tr('.', '-')}.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
-      File.open("#{project_dir}/cacert-#{version.tr('.', '-')}.pem", 'a') { |fd| fd.write(VERISIGN_CERTS) }
-    end
+    File.open("#{project_dir}/cacert-#{version.tr('.', '-')}.pem", 'a') { |fd| fd.write(VERISIGN_CERTS) } unless File.foreach("#{project_dir}/cacert-#{version.tr('.', '-')}.pem").grep(/^Verisign Class 3 Public Primary Certification Authority$/).any?
   end
 
   copy "#{project_dir}/cacert-#{version.tr('.', '-')}.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"

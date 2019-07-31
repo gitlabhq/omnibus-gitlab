@@ -36,6 +36,7 @@ module GitlabCtl
 
     def tmp_data_dir
       return @tmp_data_dir if @tmp_data_dir
+
       @tmp_data_dir = @tmp_dir ? "#{@tmp_dir}/data" : data_dir
     end
 
@@ -101,10 +102,10 @@ module GitlabCtl
             "--new-datadir=#{tmp_data_dir}.#{upgrade_version.major}  " \
             "-B #{base_path}/embedded/bin"
           )
-        rescue GitlabCtl::Errors::ExecutionError => ee
+        rescue GitlabCtl::Errors::ExecutionError => e
           $stderr.puts "Error upgrading the data to version #{upgrade_version}"
-          $stderr.puts "STDOUT: #{ee.stdout}"
-          $stderr.puts "STDERR: #{ee.stderr}"
+          $stderr.puts "STDOUT: #{e.stdout}"
+          $stderr.puts "STDERR: #{e.stderr}"
           false
         end
       end

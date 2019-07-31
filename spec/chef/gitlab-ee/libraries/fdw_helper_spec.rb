@@ -2,7 +2,7 @@ require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/fdw_hel
 require 'chef_helper'
 
 describe FdwHelper do
-  let(:chef_run) { converge_config(ee: true) }
+  let(:chef_run) { converge_config(is_ee: true) }
   subject { described_class.new(chef_run.node) }
 
   before do

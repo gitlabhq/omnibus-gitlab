@@ -3,7 +3,7 @@ require_relative 'build/info.rb'
 require_relative 'util.rb'
 
 class AWSHelper
-  VERSION_REGEX = /\A(?<version>\d+\.\d+\.\d+)-?(?<type>(ee|ce))?\z/
+  VERSION_REGEX = /\A(?<version>\d+\.\d+\.\d+)-?(?<type>(ee|ce))?\z/.freeze
 
   def initialize(version, type)
     # version specifies the GitLab version being processed
@@ -11,9 +11,7 @@ class AWSHelper
 
     @version = version
     @type = type || 'ce'
-    if @type == 'ee' && Gitlab::Util.get_env("EE_ULTIMATE_AMI") == "true"
-      @type = 'ee-ultimate'
-    end
+    @type = 'ee-ultimate' if @type == 'ee' && Gitlab::Util.get_env("EE_ULTIMATE_AMI") == "true"
     @clients = {}
     @download_url = Build::Info.package_download_url
   end
@@ -71,6 +69,7 @@ class AWSHelper
     images = list_images(region)
     images.each do |image|
       next unless Gem::Version.new(image_version(image)) < Gem::Version.new(@version)
+
       puts "\t#{image.image_id} - #{image.name} - #{image_version(image)}"
 
       # Commenting out actual deregister code temporarily for first few releases

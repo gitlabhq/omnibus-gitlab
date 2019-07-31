@@ -30,7 +30,7 @@ default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
   block do
-    open("#{install_dir}/bin/gitlab-geo-psql", 'w') do |file|
+    File.open("#{install_dir}/bin/gitlab-geo-psql", 'w') do |file|
       file.print <<-EOH
 #!/bin/sh
 
@@ -58,7 +58,7 @@ else
 fi
 
 cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} -U ${psql_user} /usr/bin/env PGSSLCOMPRESSION=0 /opt/gitlab/embedded/bin/psql -p ${psql_port} -h ${psql_host} -d ${psql_dbname} "$@"
-       EOH
+      EOH
     end
   end
 

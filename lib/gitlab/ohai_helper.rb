@@ -20,9 +20,7 @@ class OhaiHelper
       os = os_platform
       version = os_platform_version
 
-      if (os == :unknown) || (version == :unknown)
-        abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}"
-      end
+      abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}" if (os == :unknown) || (version == :unknown)
 
       [os, version]
     end

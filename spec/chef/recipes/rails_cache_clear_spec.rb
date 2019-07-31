@@ -16,7 +16,7 @@ describe 'gitlab::rails-cache-clear' do
     let(:clear_cache_exec) { chef_run.execute('clear the gitlab-rails cache') }
     let(:gilab_yml_temp) do
       chef_run.find_resource(:templatesymlink,
-         'Create a gitlab.yml and create a symlink to Rails root')
+                             'Create a gitlab.yml and create a symlink to Rails root')
     end
 
     it 'check rake_cache_clear default attribute value set to true' do

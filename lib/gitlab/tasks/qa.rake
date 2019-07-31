@@ -36,23 +36,17 @@ namespace :qa do
 
     desc "Push rc version of gitlab-{ce,ee}-qa to Docker Hub"
     task :rc do
-      if Build::Check.is_latest_tag?
-        Build::QAImage.tag_and_push_to_dockerhub('rc', initial_tag: 'latest')
-      end
+      Build::QAImage.tag_and_push_to_dockerhub('rc', initial_tag: 'latest') if Build::Check.is_latest_tag?
     end
 
     desc "Push nightly version of gitlab-{ce,ee}-qa to Docker Hub"
     task :nightly do
-      if Build::Check.is_nightly?
-        Build::QAImage.tag_and_push_to_dockerhub('nightly', initial_tag: 'latest')
-      end
+      Build::QAImage.tag_and_push_to_dockerhub('nightly', initial_tag: 'latest') if Build::Check.is_nightly?
     end
 
     desc "Push latest version of gitlab-{ce,ee}-qa to Docker Hub"
     task :latest do
-      if Build::Check.is_latest_stable_tag?
-        Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest')
-      end
+      Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest') if Build::Check.is_latest_stable_tag?
     end
 
     desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"

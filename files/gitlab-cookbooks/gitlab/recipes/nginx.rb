@@ -195,16 +195,14 @@ template gitlab_pages_http_conf do
                 pages_path: node['gitlab']['gitlab-rails']['pages_path'],
                 pages_listen_proxy: node['gitlab']['gitlab-pages']['listen_proxy']
               }
-  ))
+            ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_pages_enabled ? :create : :delete
 end
 
 registry_nginx_vars = node['gitlab']['registry-nginx'].to_hash
 
-unless registry_nginx_vars['listen_https'].nil?
-  registry_nginx_vars['https'] = registry_nginx_vars['listen_https']
-end
+registry_nginx_vars['https'] = registry_nginx_vars['listen_https'] unless registry_nginx_vars['listen_https'].nil?
 
 template gitlab_registry_http_conf do
   source "nginx-gitlab-registry-http.conf.erb"
@@ -220,7 +218,7 @@ template gitlab_registry_http_conf do
                 letsencrypt_enable: node['letsencrypt']['enable'],
                 redirect_http_to_https: node['gitlab']['registry-nginx']['redirect_http_to_https']
               }
-  ))
+            ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_registry_enabled ? :create : :delete
 end
@@ -247,7 +245,7 @@ template gitlab_mattermost_http_conf do
                 letsencrypt_enable: node['letsencrypt']['enable'],
                 redirect_http_to_https: node['gitlab']['mattermost-nginx']['redirect_http_to_https']
               }
-  ))
+            ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_mattermost_enabled ? :create : :delete
 end

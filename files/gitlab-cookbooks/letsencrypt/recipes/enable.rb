@@ -50,9 +50,7 @@ end
 
 ruby_block 'display_le_message' do
   block do
-    unless node['letsencrypt']['auto_renew']
-      LoggingHelper.warning("Let's Encrypt integration does not setup any automatic renewal. Please see https://docs.gitlab.com/omnibus/settings/ssl.html#lets-encrypt-integration for more information")
-    end
+    LoggingHelper.warning("Let's Encrypt integration does not setup any automatic renewal. Please see https://docs.gitlab.com/omnibus/settings/ssl.html#lets-encrypt-integration for more information") unless node['letsencrypt']['auto_renew']
   end
   action :nothing
 end

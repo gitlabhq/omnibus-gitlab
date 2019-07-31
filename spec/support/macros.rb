@@ -52,10 +52,10 @@ module GitlabSpec
       stub_is_ee_env(value)
     end
 
-    def converge_config(*recipes, ee: false)
+    def converge_config(*recipes, is_ee: false)
       Gitlab[:node] = nil
-      Services.add_services('gitlab-ee', Services::EEServices.list) if ee
-      config_recipe = ee ? 'gitlab-ee::config' : 'gitlab::config'
+      Services.add_services('gitlab-ee', Services::EEServices.list) if is_ee
+      config_recipe = is_ee ? 'gitlab-ee::config' : 'gitlab::config'
       ChefSpec::SoloRunner.converge(config_recipe, *recipes)
     end
   end

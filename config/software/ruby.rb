@@ -115,9 +115,7 @@ build do
   # wrlinux7/ios_xr build boxes from Cisco include libssp and there is no way to
   # disable ruby from linking against it, but Cisco switches will not have the
   # library.  Disabling it as we do for Solaris.
-  if ios_xr? && version.satisfies?('>= 2.1')
-    patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: patch_env
-  end
+  patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: patch_env if ios_xr? && version.satisfies?('>= 2.1')
 
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
@@ -217,6 +215,7 @@ build do
       arch_suffix = windows_arch_i386? ? '32' : '64'
       windows_path = "C:/msys2/mingw#{arch_suffix}/bin/#{dll}.dll"
       raise "Cannot find required DLL needed for dynamic linking: #{windows_path}" unless File.exist?(windows_path)
+
       copy windows_path, "#{install_dir}/embedded/bin/#{dll}.dll"
     end
   end

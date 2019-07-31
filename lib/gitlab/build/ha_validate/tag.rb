@@ -22,7 +22,7 @@ module Build
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
-          'variables[QA_IMAGE]' =>  qa_image,
+          'variables[QA_IMAGE]' => qa_image,
           'variables[PACKAGE_URL]' => package_url
         }
       end
