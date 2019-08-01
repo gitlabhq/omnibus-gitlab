@@ -6,7 +6,8 @@ Prometheus 1.x was deprecated in GitLab 11.4, and
 Prometheus 2.8.1 was installed by default on new installations. Users updating
 from older versions of GitLab could manually upgrade Prometheus data using the
 [`gitlab-ctl prometheus-upgrade`](https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114)
-command provided.
+command provided. You can view current Prometheus version in use from the 
+instances Prometheus `/status` page.
 
 With GitLab 12.0, support for Prometheus 1.x is completely removed, and as part
 of the upgrade process, Prometheus binaries will be updated to version 2.8.1.
