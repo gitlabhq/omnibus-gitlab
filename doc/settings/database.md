@@ -444,7 +444,7 @@ sudo gitlab-ctl pg-upgrade
 This command performs the following steps:
 
 1. Checks to ensure the database is in a known good state
-1. Shuts down the existing database, any unnecessary services, and enables the gitlab deploy page.
+1. Shuts down the existing database, any unnecessary services, and enables the GitLab deploy page.
 1. Changes the symlinks in `/opt/gitlab/embedded/bin/` for PostgreSQL to point to the newer version of the database
 1. Creates a new directory containing a new, empty database with a locale matching the existing database
 1. Uses the `pg_upgrade` tool to copy the data from the old database to the new database
