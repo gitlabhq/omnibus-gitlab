@@ -59,3 +59,14 @@ Style/GlobalVars:
   Exclude:
     - 'lib/backup/**/*'
     - 'lib/tasks/**/*'
+
+# This is only useful for our build scripts, used in CI
+# Exlude most other locations
+Cop/AvoidUsingEnv:
+  Enabled: true
+  Exclude:
+    - omnibus.rb
+    - files/**/*
+    - docker/**/*
+    - lib/gitlab/util.rb
+    - spec/gitlab/util_spec.rb

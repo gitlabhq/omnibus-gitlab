@@ -21,7 +21,7 @@ require 'openssl'
 # Default location of install-dir is /opt/gitlab/. This path is set during build time.
 # DO NOT change this value unless you are building your own GitLab packages
 install_dir = node['package']['install-dir']
-Gitlab::Util.set_env('PATH', "#{install_dir}/bin:#{install_dir}/embedded/bin:#{Gitlab::Util.get_env('PATH')}")
+ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
 include_recipe 'gitlab::config'
 

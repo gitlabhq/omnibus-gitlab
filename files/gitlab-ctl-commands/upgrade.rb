@@ -202,7 +202,7 @@ def print_welcome_and_exit
   print_tanuki_art
   print_gitlab_art
 
-  external_url = Gitlab::Util.get_env('EXTERNAL_URL')
+  external_url = ENV['EXTERNAL_URL']
   puts "Thank you for installing GitLab!"
   if external_url == "http://gitlab.example.com"
     puts "GitLab was unable to detect a valid hostname for your instance."
@@ -211,7 +211,7 @@ def print_welcome_and_exit
     puts "Then, you can start your GitLab instance by running the following command:"
     puts "  sudo gitlab-ctl reconfigure"
   else
-    puts "GitLab should be available at #{Gitlab::Util.get_env('EXTERNAL_URL')}"
+    puts "GitLab should be available at #{ENV['EXTERNAL_URL']}"
   end
 
   puts "\nFor a comprehensive list of configuration options please see the Omnibus GitLab readme"
@@ -234,5 +234,5 @@ end
 
 # Check if user already provided URL where GitLab should run
 def external_url_unset?
-  Gitlab::Util.get_env('EXTERNAL_URL').nil? || Gitlab::Util.get_env('EXTERNAL_URL').empty? || Gitlab::Util.get_env('EXTERNAL_URL') == "http://gitlab.example.com"
+  ENV['EXTERNAL_URL'].nil? || ENV['EXTERNAL_URL'].empty? || ENV['EXTERNAL_URL'] == "http://gitlab.example.com"
 end

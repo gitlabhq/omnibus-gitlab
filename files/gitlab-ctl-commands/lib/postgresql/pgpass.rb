@@ -43,7 +43,7 @@ module GitlabCtl
       end
 
       def host_user
-        @host_user || Gitlab::Util.get_env('USER')
+        @host_user || ENV['USER']
       end
 
       def filename
