@@ -79,7 +79,7 @@ class AccountHelper
   end
 
   def consul_user
-    node['consul']['user']
+    node['consul']['username']
   end
 
   def consul_group

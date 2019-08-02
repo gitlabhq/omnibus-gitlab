@@ -99,7 +99,7 @@ describe 'consul' do
           consul: {
             enable: true,
             node_name: 'fakenodename',
-            user: 'foo',
+            username: 'foo',
             group: 'bar',
           }
         )

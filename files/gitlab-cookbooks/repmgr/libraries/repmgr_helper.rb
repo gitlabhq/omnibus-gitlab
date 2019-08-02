@@ -3,7 +3,7 @@ class RepmgrHelper < BaseHelper
 
   def pg_hba_entries
     results = []
-    replication_user = node['repmgr']['user']
+    replication_user = node['repmgr']['username']
     %W(replication #{node['repmgr']['database']}).each do |db|
       results.push(
         *[
@@ -52,7 +52,7 @@ class RepmgrHelper < BaseHelper
   def public_attributes
     {
       'repmgr' => node['repmgr'].select do |key, value|
-                    %w(user database node_name).include?(key)
+                    %w(username database node_name).include?(key)
                   end
     }
   end

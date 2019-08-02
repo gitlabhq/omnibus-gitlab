@@ -24,7 +24,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   repmgr_args = begin
                   {
                     primary: repmgr_primary,
-                    user: repmgr_options[:user] || node_attributes['repmgr']['user'],
+                    user: repmgr_options[:user] || node_attributes['repmgr']['username'],
                     database: node_attributes['repmgr']['database'],
                     directory: postgresql_directory,
                     verbose: repmgr_options[:verbose],
