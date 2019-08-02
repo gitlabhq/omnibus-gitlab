@@ -58,15 +58,6 @@ repositories_storages.each do |_name, repositories_storage|
   end
 end
 
-# Explicitly try to create directory holding the logs to make sure
-# that the directory is created with correct permissions and not fallback
-# on umask of the process
-directory File.dirname(gitlab_rails_log_dir) do
-  owner gitlab_user
-  mode '0755'
-  recursive true
-end
-
 # We create shared_path with 751 allowing other users to enter into the directories
 # It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
 storage_directory node['gitlab']['gitlab-rails']['shared_path'] do
