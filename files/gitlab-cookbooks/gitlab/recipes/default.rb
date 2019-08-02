@@ -47,6 +47,15 @@ directory "Create /var/opt/gitlab" do
   action :create
 end
 
+directory "Create /var/log/gitlab" do
+  path "/var/log/gitlab"
+  owner "root"
+  group "root"
+  mode "0755"
+  recursive true
+  action :create
+end
+
 directory "#{install_dir}/embedded/etc" do
   owner "root"
   group "root"
