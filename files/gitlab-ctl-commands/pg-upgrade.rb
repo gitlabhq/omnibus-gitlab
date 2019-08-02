@@ -415,7 +415,7 @@ end
 def goodbye_message
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
-  log "rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
+  log "sudo rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
   log ""
 
   case @instance_type
