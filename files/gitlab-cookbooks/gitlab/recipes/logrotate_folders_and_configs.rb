@@ -18,6 +18,7 @@
 logrotate_dir = node['gitlab']['logrotate']['dir']
 logrotate_log_dir = node['gitlab']['logrotate']['log_directory']
 logrotate_d_dir = File.join(logrotate_dir, 'logrotate.d')
+account_helper = AccountHelper.new(node)
 
 [
   logrotate_dir,
@@ -38,6 +39,8 @@ node['gitlab']['logrotate']['services'].each do |svc|
   template File.join(logrotate_d_dir, svc) do
     source 'logrotate-service.erb'
     variables(
+      username: account_helper.logdir_owner(svc),
+      groupname: account_helper.logdir_group(svc),
       log_directory: node['gitlab'][svc]['log_directory'],
       options: node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
     )

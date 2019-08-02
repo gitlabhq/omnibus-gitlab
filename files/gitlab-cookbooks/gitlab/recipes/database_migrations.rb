@@ -17,6 +17,7 @@
 require 'digest'
 
 omnibus_helper = OmnibusHelper.new(node)
+account_helper = AccountHelper.new(node)
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
@@ -57,6 +58,7 @@ bash "migrate gitlab-rails database" do
     umask 077
     /opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file}
     STATUS=${PIPESTATUS[0]}
+    chown #{account_helper.gitlab_user}:#{account_helper.gitlab_group} ${log_file}
     echo $STATUS > #{db_migrate_status_file}
     exit $STATUS
   EOH
@@ -67,4 +69,15 @@ bash "migrate gitlab-rails database" do
   end
   not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
   only_if { node['gitlab']['gitlab-rails']['auto_migrate'] }
+end
+
+# TODO: Remove in GitLab 13.0. By then, all the log files should have correct
+# permissions.
+log_files_list = Dir.glob("#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate*log")
+
+bash "set ownership of old migration log files" do
+  code <<-EOH
+    chown #{account_helper.gitlab_user}:#{account_helper.gitlab_group} #{log_files_list.join(' ')}
+  EOH
+  not_if { log_files_list.empty? }
 end
