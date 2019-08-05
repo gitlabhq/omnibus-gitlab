@@ -2,7 +2,7 @@ require "http"
 require "json"
 require_relative "util.rb"
 
-class PipelineTriggerFailure < StandardError; end
+PipelineTriggerFailure = Class.new(StandardError)
 class DeployerHelper
   TRIGGER_RETRY_INTERVAL = 5
   TRIGGER_RETRIES = 3

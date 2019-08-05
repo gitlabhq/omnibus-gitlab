@@ -3,7 +3,7 @@ require 'mixlib/shellout'
 require_relative 'repmgr'
 
 class Consul
-  class WatcherError < StandardError; end
+  WatcherError = Class.new(StandardError)
 
   attr_accessor :command, :subcommand, :input
 
