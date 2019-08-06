@@ -8,13 +8,14 @@ require 'English'
 module Build
   class QA
     def self.repo_path
-      "/tmp/gitlab"
+      File.absolute_path("/tmp/gitlab")
     end
 
     def self.get_gitlab_repo
       clone_gitlab_rails
       checkout_gitlab_rails
-      File.absolute_path("#{repo_path}/qa")
+
+      repo_path
     end
 
     def self.clone_gitlab_rails
