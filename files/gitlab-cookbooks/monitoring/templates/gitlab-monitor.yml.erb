@@ -50,11 +50,10 @@ probes:
 <% if @probe_sidekiq %>
   sidekiq: &sidekiq
     methods:
+      - probe_stats
       - probe_queues
-      - probe_jobs
       - probe_workers
       - probe_retries
-      - probe_dead
     opts:
       redis_url: "<%= @redis_url %>"
       redis_enable_client: <%= @redis_enable_client %>

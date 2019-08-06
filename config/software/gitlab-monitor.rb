@@ -14,11 +14,8 @@
 # limitations under the License.
 #
 
-version = Gitlab::Version.new('gitlab-monitor', '3.2.0')
-
-default_version version.print
-
 name 'gitlab-monitor'
+default_version '4.2.0'
 license 'MIT'
 license_file 'LICENSE'
 
@@ -28,13 +25,7 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'postgresql'
 
-source git: version.remote
-
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
-  gem 'build gitlab-monitor.gemspec', env: env
-  gem 'install gitlab-monitor' \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
+  gem "install gitlab-monitor --version #{version}", env: env
 end
