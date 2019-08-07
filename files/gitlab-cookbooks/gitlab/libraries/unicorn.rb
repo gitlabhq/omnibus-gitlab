@@ -39,9 +39,11 @@ module Unicorn
       ].max # max because we need at least 2 workers
     end
 
-    # Number of cpus to use for a worker.  Cores + 1 gives good CPU utilization.
+    # Number of cpus to use for a worker.
     def worker_cpus
-      Gitlab['node']['cpu']['total'].to_i + 1
+      cpus = Gitlab['node']['cpu']['total'].to_i
+      # Oversubscribe CPUs by 50% based on typical performance.
+      (cpus * 1.5 + 1).to_i
     end
 
     # See how many worker processes fit in (total RAM - 1.5GB).

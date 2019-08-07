@@ -34,6 +34,7 @@ describe 'gitlab::unicorn' do
         expect(content).to match(/^before_exec/)
         expect(content).to match(/^before_fork/)
         expect(content).to match(/^after_fork/)
+        expect(content).to match(/^worker_processes 2/)
       }
     end
   end
@@ -114,6 +115,29 @@ describe 'gitlab::unicorn' do
           expect(content).to match(/export prometheus_run_dir=\'\/dev\/shm\/gitlab\/unicorn\'/)
           expect(content).to match(/mkdir -p \/dev\/shm\/gitlab\/unicorn/)
         }
+    end
+  end
+end
+
+describe 'gitlab::unicorn' do
+  let(:chef_run) do
+    runner = ChefSpec::SoloRunner.new(
+      step_into: %w(runit_service),
+      path: 'spec/fixtures/fauxhai/ubuntu/16.04-more-cpus.json'
+    )
+    runner.converge('gitlab::default')
+  end
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when unicorn is enabled' do
+    it 'renders the unicorn.rb file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/unicorn.rb').with_content { |content|
+        expect(content).to match(/^require_relative \"\/opt\/gitlab\/embedded\/service\/gitlab-rails\/lib\/gitlab\/cluster\/lifecycle_events\"/)
+        expect(content).to match(/^worker_processes 25/)
+      }
     end
   end
 end
