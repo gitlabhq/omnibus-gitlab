@@ -80,38 +80,10 @@ default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
-
-# Content Security Policy
-# See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-default['gitlab']['gitlab-rails']['content_security_policy'] = {
-  'enabled' => false,
-  'report_only' => false,
-  # Each directive is a String (e.g. "'self'").
-  'directives' => {
-    'base_uri' => nil,
-    'child_src' => nil,
-    'connect_src' => nil,
-    'default_src' => nil,
-    'font_src' => nil,
-    'form_action' => nil,
-    'frame_ancestors' => nil,
-    'frame_src' => nil,
-    'img_src' => nil,
-    'manifest_src' => nil,
-    'media_src' => nil,
-    'object_src' => nil,
-    'script_src' => nil,
-    'style_src' => nil,
-    'worker_src' => nil,
-    'report_uri' => nil,
-  }
-}
-
 default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['auto_migrate'] = true
 default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
-
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
