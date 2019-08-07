@@ -609,6 +609,37 @@ The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environment
 can be used to track errors and issues across several deployed GitLab
 environments, e.g. lab, development, staging, production.
 
+## Content Security Policy
+
+Setting a Content Security Policy (CSP) can help thwart JavaScript
+cross-site scripting (XSS) attacks. See [the Mozilla documentation on
+CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more
+details.
+
+GitLab 12.2 added support for [CSP and nonces with inline
+JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
+It is [not configured on by default
+yet](https://gitlab.com/gitlab-org/gitlab-ce/issues/65675).  An example
+configuration that will work for most installations of GitLab is below:
+
+```ruby
+gitlab_rails['content_security_policy'] = {
+    enabled: true,
+    report_only: false,
+    directives: {
+      default_src: "'self'",
+      script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
+      frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com",
+      img_src: "* data: blob",
+      style_src: "'self' 'unsafe-inline'"
+    }
+}
+```
+
+Improperly configuring the CSP rules could prevent GitLab from working
+properly. Before rolling out a policy, you may also want to change
+`report_only` to `true` to fully vet the configuration.
+
 ## Setting up LDAP sign-in
 
 See [doc/settings/ldap.md](ldap.md).
