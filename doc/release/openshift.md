@@ -9,7 +9,7 @@ New GitLab templates for OpenShift are prepared as part of our our [cloud image 
 
 ## Update the template to latest GitLab release
 
-Within the template we reference our Docker image. Go to <https://hub.docker.com/community/images/gitlab/gitlab-ce/tags>
+Within the template we reference our Docker image. Go to <https://hub.docker.com/r/gitlab/gitlab-ce/tags>
 and find the newest descriptive tag. e.g. `8.13.3-ce.0`
 
 Then update the image stream in the template with the name and tag:
