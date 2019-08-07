@@ -1,0 +1,5 @@
+---
+title: Typo in initial_license in gitlab.rb
+merge_request: 3497
+author:
+type: fixed
