@@ -1,16 +1,16 @@
 # Manually Downloading and Installing a GitLab Package
 
-If you do not want to use the official GitLab [package repository](https://about.gitlab.com/install), you can download and install a Omnibus Gitlab package manually.
+If you do not want to use the official GitLab [package repository](https://about.gitlab.com/install/), you can download and install a Omnibus Gitlab package manually.
 
 ## Downloading a GitLab Package
 
 All GitLab packages are posted to our [package server](https://packages.gitlab.com/gitlab/) and can be downloaded. We maintain five repos:
 
-* [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee): for official Enterprise Edition releases
-* [GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce): for official Community Edition releases
-* [Unstable](https://packages.gitlab.com/gitlab/unstable): for release candidates and other unstable versions
-* [Nighty Builds](https://packages.gitlab.com/gitlab/nightly-builds): for nightly builds
-* [Raspberry Pi 2](https://packages.gitlab.com/gitlab/raspberry-pi2): for [Raspberry Pi 2](https://www.raspberrypi.org) packages
+- [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee): for official Enterprise Edition releases
+- [GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce): for official Community Edition releases
+- [Unstable](https://packages.gitlab.com/gitlab/unstable): for release candidates and other unstable versions
+- [Nighty Builds](https://packages.gitlab.com/gitlab/nightly-builds): for nightly builds
+- [Raspberry Pi 2](https://packages.gitlab.com/gitlab/raspberry-pi2): for [Raspberry Pi 2](https://www.raspberrypi.org) packages
 
 Browse to the repository for the type of package you would like, in order to see the list of packages that are available. There are multiple packages for a single version, one for each supported distribution type. Next to the filename is a label indicating the distribution, as the file names may be the same.
 
@@ -22,8 +22,8 @@ Locate the desired package for the version and distribution you want to use, and
 
 With the desired package downloaded, use your systems package management tool to install it. For example:
 
-* DEB based (Ubuntu, Debian, Raspberry Pi): `sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab-ee-9.5.2-ee.0_amd64.deb`
-* RPM based (CentOS, RHEL, Oracle, Scientific, openSUSE, SLES): `sudo EXTERNAL_URL="http://gitlab.example.com" rpm -i gitlab-ee-9.5.2-ee.0.el7.x86_64.rpm`
+- DEB based (Ubuntu, Debian, Raspberry Pi): `sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab-ee-9.5.2-ee.0_amd64.deb`
+- RPM based (CentOS, RHEL, Oracle, Scientific, openSUSE, SLES): `sudo EXTERNAL_URL="http://gitlab.example.com" rpm -i gitlab-ee-9.5.2-ee.0.el7.x86_64.rpm`
 
 Change `http://gitlab.example.com` to the URL at which you want to access your GitLab instance. Installation will automatically configure and start GitLab at that URL.
 
