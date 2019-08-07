@@ -638,7 +638,7 @@ gitlab_rails['content_security_policy'] = {
 
 Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
-`report_only` to `true` to fully vet the configuration.
+`report_only` to `true` to test the configuration.
 
 ## Setting up LDAP sign-in
 
