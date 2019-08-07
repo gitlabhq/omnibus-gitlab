@@ -148,7 +148,7 @@ at the bottom of this page.
 #### Install Custom Public Certificates:
 
 NOTE: **Note:**
-A perl interpreter is required for c_hash dependency to properly symlink the certificates.
+A perl interpreter is required for `c_rehash` dependency to properly symlink the certificates.
 [Perl is currently not bundled in Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2275).
 
 1. Generate the ***PEM*** or ***DER*** encoded public certificate from your private key certificate.
@@ -206,7 +206,7 @@ means there may be one of three issues:
 
 1. The file in `/etc/gitlab/ssl/trusted-certs/` is a symlink
 1. The file is not a valid PEM or DER-encoded certificate
-1. Perl is not installed on the operating system which is needed for c_hash to properly symlink certificates.
+1. Perl is not installed on the operating system which is needed for c_rehash to properly symlink certificates.
 
 Test the certificate's validity using the commands below:
 
@@ -222,7 +222,7 @@ unable to load certificate
 140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
 ```
 
-To test if `c_hash` is not symlinking the certificate due to a missing perl interpreter:
+To test if `c_rehash` is not symlinking the certificate due to a missing perl interpreter:
 
 ```
 /opt/gitlab/embedded/bin/c_rehash /etc/gitlab/trusted-certs
