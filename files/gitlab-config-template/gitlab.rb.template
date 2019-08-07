@@ -449,7 +449,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Set path to an initial license to be used while bootstrapping GitLab.
 ####! **Only applicable on initial setup, future license updations need to be done via UI.
 ####! Updating the file specified in this path won't yield any change after the first reconfigure run.
-# gitlab_rails['iniitial_license_file'] = '/etc/gitlab/company.gitlab-license'
+# gitlab_rails['initial_license_file'] = '/etc/gitlab/company.gitlab-license'
 
 #### Enable or disable automatic database migrations
 # gitlab_rails['auto_migrate'] = true
@@ -934,7 +934,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Uncomment and edit this block to add or remove entries.
 ### See https://docs.gitlab.com/omnibus/settings/redis.html#renamed-commands
 ### for detailed usage
-###  
+###
 # redis['rename_commands'] = {
 #   'KEYS': ''
 #}
