@@ -82,3 +82,7 @@ key and should be renamed. The replacements are as follows
 Also, it is recommended to use the actual values in `gitlab.rb` instead of
 referring node values to avoid breakage when these attributes are moved in the
 backend.
+
+### 12.2
+
+The default formula for calculating the number of unicorn worker processes has been updated to increase the number of workers by 50% per CPU. This will increase the CPU and memory utilization slightly. This has been done to improve performance by reducing the amount of request queuing.
