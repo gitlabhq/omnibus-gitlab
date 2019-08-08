@@ -214,6 +214,12 @@ build do
       mode: 0755,
       vars: { command: 'rails "$@"', install_dir: install_dir }
 
+  # Create a wrapper for the rake command for backup and restore
+  erb dest: "#{install_dir}/bin/gitlab-backup",
+      source: 'rake_backup_wrapper.erb',
+      mode: 0755,
+      vars: { install_dir: install_dir }
+
   # Generate the combined license file for all gems GitLab is using
   erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
       source: 'gem_license_generator.erb',

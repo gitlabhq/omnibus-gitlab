@@ -95,7 +95,7 @@ Backups can be scheduled on the host by prepending `docker exec -t <your contain
 Backup application:
 
 ```shell
-docker exec -t <your container name> gitlab-rake gitlab:backup:create
+docker exec -t <your container name> gitlab-backup
 ```
 
 Backup configuration and secrets:

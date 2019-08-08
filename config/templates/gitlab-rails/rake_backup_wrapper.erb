@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+
+VERBOSE=1
+
+##
+## usage [SUBCOMMAND]
+##
+##   Prints out SUBCOMMAND usage and exits with code `0`. Prints the general
+##   usage when SUBCOMMAND is missing.
+##
+usage() {
+  case "${1}" in
+    create)
+      echo 'Usage: gitlab-backup create [OPTIONS]'
+      echo
+      echo "  Create a new backup. Wrapper for \`gitlab-rake gitlab:backup:create\`."
+      echo
+      echo 'OPTIONS:'
+      echo
+      echo '  -h, --help    Display this help message and exits,'
+      echo
+      echo '  Additional OPTIONS are passed to the underlying command.'
+      ;;
+    restore)
+      echo 'Usage: gitlab-backup restore [OPTIONS]'
+      echo
+      echo "  Restore from a backup. Wrapper for \`gitlab-rake gitlab:backup:restore\`."
+      echo
+      echo '  Automatically changes the ownership of registry directory (when enabled)'
+      echo '  to ensure filesytem permissions are correct.'
+      echo
+      echo 'OPTIONS:'
+      echo
+      echo '  -h, --help    Display this help message and exits.'
+      echo
+      echo '  Additional OPTIONS passed to the underlying command.'
+      ;;
+    *)
+      echo 'Usage: gitlab-backup COMMAND [OPTIONS]'
+      echo
+      echo 'OPTIONS:'
+      echo
+      echo "  -h, --help    Display this help message and exits. Use \`COMMAND --help\`"
+      echo '                for more information on a command.'
+      echo
+      echo 'COMMANDS:'
+      echo '  create        Creates a new backup.'
+      echo '  restore       Restores from a backup.'
+      ;;
+  esac
+  exit 0
+}
+
+##
+## chown_registry USER
+##
+##   Transfers ownership of registry directory to USER.
+##
+chown_registry() {
+  [ ${VERBOSE} -gt 0 ] && printf 'Transfering ownership of %s to %s\n' "${registry_dir}" "${1}"
+  chown -R "${1}" "${registry_dir}"
+}
+
+##
+## backup_create ARGS 
+##
+##   Calls `gitlab-rake gitlab:backup:create` and passess ARGS to it.
+##
+backup_create() {
+
+  # Print usage if help flag is present.
+  case "${1}" in
+    -h|--help)
+      shift
+      usage 'create'
+      ;;
+    *)
+      ;;
+  esac
+
+  <%= install_dir %>/bin/gitlab-rake gitlab:backup:create ${@}
+}
+
+##
+## backup_restore ARGS 
+##
+##   Calls `gitlab-rake gitlab:backup:restore` and passess ARGS to it. Also,
+##   registers hooks to change ownership of registry directory before and 
+##   after restore.
+##
+backup_restore() {
+
+  # Print usage if help flag is present.
+  case "${1}" in
+    -h|--help)
+      shift
+      usage 'restore'
+      ;;
+    *)
+      ;;
+  esac
+
+  if [ -n "${registry_dir}" ]; then
+    # Transfer ownership to git user to ensure that recovery won't fail on 
+    # the existing registry
+    chown_registry ${gitlab_user}:${gitlab_group}
+
+    # Transfer ownership back to registry user when restore task is finished.
+    trap "chown_registry ${registry_user}:${registry_group}" EXIT
+  fi
+
+  <%= install_dir %>/bin/gitlab-rake gitlab:backup:restore ${@}
+}
+
+# Load gitlab-rails-rc
+gitlab_rails_rc='<%= install_dir %>/etc/gitlab-rails/gitlab-rails-rc'
+if ! [ -f ${gitlab_rails_rc} ] ; then
+  >&2 echo "${0} error: could not load ${gitlab_rails_rc}"
+  >&2 echo 'Either you are not allowed to read the file, or it does not exist yet.'
+  >&2 echo "You can generate it with \`sudo gitlab-ctl reconfigure\`"
+  exit 2
+fi
+
+. ${gitlab_rails_rc}
+
+# Parse general options and sub-command.
+while (( "${#}" )); do
+  case "${1}" in
+    -h|--help)
+      shift
+      usage
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*|--*)
+      >&2 echo "Unsupported option: ${1}"
+      exit 1
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+subcommand=${1:-create}
+shift
+
+# Run subcommand
+case "${subcommand}" in
+  create)
+    backup_create ${@}
+    ;;
+  restore)
+    backup_restore ${@}
+    ;;
+  *)
+    >&2 echo "Unknown command: ${subcommand}"
+    exit 1
+    ;;
+esac
