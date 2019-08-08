@@ -28,7 +28,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/system_check/app/git_version_check.rb
 # - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
-default_version '2.21.0'
+default_version '2.22.0'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -43,7 +43,7 @@ dependency 'pcre2'
 dependency 'libiconv'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '85eca51c7404da75e353eba587f87fea9481ba41e162206a6f70ad8118147bee'
+       sha256: 'a4b7e4365bee43caa12a38d646d2c93743d755d1cea5eab448ffb40906c9da0b'
 
 relative_path "git-#{version}"
 
