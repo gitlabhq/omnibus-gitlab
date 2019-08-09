@@ -89,9 +89,9 @@ before_script:
   # ALTERNATIVE_SOURCES is used.
   - if [ -n "$ALTERNATIVE_SOURCES" ]; then
         git config --global user.email "packages@gitlab.com"
-        && git config --global user.name "GitLab Inc."
-        && git add Gemfile.lock
-        && git commit -m "Updating Gemfile.lock";
+        && git config --global user.name "GitLab Inc.";
+        git add Gemfile.lock || true ;
+        git commit -m "Updating Gemfile.lock" || true;
     fi
   - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; fi
 
