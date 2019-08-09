@@ -266,7 +266,8 @@ allowed_groups = <%= @allowed_groups.join(' ') %>
 
 #################################### Basic Auth ##########################
 [auth.basic]
-;enabled = true
+enabled = <%= @basic_auth_enabled %>
+disable_login_form = <%= @disable_login_form %>
 
 #################################### Auth LDAP ##########################
 [auth.ldap]
