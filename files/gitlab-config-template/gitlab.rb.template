@@ -934,6 +934,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # See https://www.postgresql.org/docs/9.6/static/auth-pg-hba-conf.html for an explanation
 # of the values
 
+### Version settings
+# Set this if you have disabled the bundled PostgreSQL but still want to use the backup rake tasks
+# postgresq['version'] = 10
 
 ################################################################################
 ## GitLab Redis

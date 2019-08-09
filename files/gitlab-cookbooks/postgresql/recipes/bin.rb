@@ -36,7 +36,7 @@ end
 
 ruby_block "Link postgresql bin files to the correct version" do
   block do
-    db_version = pg_helper.database_version
+    db_version = pg_helper.database_version || node['postgresql']['version']
     db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
 
     # Fallback to the psql version if needed
@@ -49,7 +49,7 @@ ruby_block "Link postgresql bin files to the correct version" do
     end
   end
   only_if do
-    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
+    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/ || !node['postgresql']['version'].nil?
   end
   notifies :restart, 'service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['service[postgresql]']
 end

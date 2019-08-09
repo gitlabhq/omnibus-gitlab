@@ -106,6 +106,9 @@ include_recipe "package::runit"
   end
 end
 
+# Always run the postgresql::bin recipe
+include_recipe 'postgresql::bin'
+
 include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
 
 # Always create logrotate folders and configs, even if the service is not enabled.
