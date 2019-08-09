@@ -84,7 +84,6 @@ default['gitlab']['gitlab-rails']['rate_limit_requests_per_period'] = 10
 default['gitlab']['gitlab-rails']['rate_limit_period'] = 60
 default['gitlab']['gitlab-rails']['auto_migrate'] = true
 default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
-
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
@@ -374,6 +373,7 @@ default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['gitlab-rails']['initial_license_file'] = nil
 default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
 default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
+default['gitlab']['gitlab-rails']['content_security_policy'] = nil
 
 # List of ips and subnets that are allowed to access Gitlab monitoring endpoints
 default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']

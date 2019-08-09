@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-rails' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
@@ -259,6 +259,8 @@ describe 'gitlab::gitlab-rails' do
         'aws_secret_access_key' => 'secret123'
       }
     end
+
+    it_behaves_like 'renders a valid YAML file', gitlab_yml_path
 
     shared_examples 'sets the connection in YAML' do
       it do
@@ -689,6 +691,67 @@ describe 'gitlab::gitlab-rails' do
             }
           )
         )
+      end
+    end
+
+    context 'Content Security Policy' do
+      context 'with default settings' do
+        it 'does not include CSP config' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            expect(content).not_to match(%r(content_security_policy))
+          }
+        end
+      end
+
+      context 'with settings' do
+        before do
+          stub_gitlab_rb(csp_config)
+        end
+
+        shared_examples 'renders CSP settings' do
+          it 'gitlab.yml renders CSP settings' do
+            expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+              yaml_data = YAML.safe_load(content, [], [], true)
+              expect(yaml_data['production']['gitlab']['content_security_policy'])
+                .to eq(csp_config[:gitlab_rails][:content_security_policy])
+            }
+          end
+        end
+
+        context 'CSP is disabled' do
+          let(:csp_config) do
+            {
+              gitlab_rails: {
+                content_security_policy: {
+                  'enabled' => true,
+                  'report_only' => false,
+                }
+              }
+            }
+          end
+
+          it_behaves_like 'renders CSP settings'
+        end
+
+        context 'CSP is enabled' do
+          let(:csp_config) do
+            {
+              gitlab_rails: {
+                content_security_policy: {
+                  'enabled' => true,
+                  'report_only' => false,
+                  'directives' => {
+                    'default_src' => "'self'",
+                    'script_src' => "'self' http://recaptcha.net",
+                    'worker_src' => "'self'"
+                  }
+                }
+              }
+            }
+          end
+
+          it_behaves_like 'renders CSP settings'
+        end
       end
     end
 

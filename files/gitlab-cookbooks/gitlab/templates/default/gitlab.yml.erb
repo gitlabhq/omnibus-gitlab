@@ -31,6 +31,14 @@ production: &base
       - <%= proxy %>
 <% end %>
 
+    <%- if @content_security_policy -%>
+    # Content Security Policy
+    # See:
+    # * https://guides.rubyonrails.org/security.html#content-security-policy
+    # * https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+    content_security_policy: <%= @content_security_policy.to_json %>
+    <%- end -%>
+
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     user: <%= node['gitlab']['user']['username'] %>
 
