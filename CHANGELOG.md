@@ -3,6 +3,87 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.4
+
+- No changes.
+
+## 12.1.3
+
+### Other (1 change)
+
+- Fix bzip2 location. !3448
+
+
+## 12.1.2
+
+- No changes.
+
+## 12.1.2
+
+- No changes.
+
+## 12.1.1
+
+- No changes.
+
+## 12.1.0
+
+### Security (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.11.1 (GitLab 12.0). (Harrison Healey)
+
+### Fixed (15 changes, 2 of them are from the community)
+
+- Auto-enable Let's Encrypt for certificate renewal. !3342
+- Use PostgreSQL username from node attribute file in gitlab-ctl command. !3352
+- gitaly: prometheus not working with tls enabled. !3353 (Roger Meier)
+- Support pg-upgrade on dbs with collate and ctype values that differ from each other. !3371
+- Properly check whether postgres is enabled when doing pg-ugprade. !3381
+- Bring back the option to use the authorized keyfile in docker. !3388
+- Get prometheus home directory from node attributes. !3395
+- Create the uploads_storage_path directory. !3396
+- Fix upgrade time calculation metric. !3397
+- Fix GitLab upgrades crashing when LetsEncrypt cert needs renewal. !3402
+- Set ALTERNATIVE_SOURCES for tests. !3412
+- Fix error with repmgr and PostgreSQL 9. !3417
+- Make Roles respect user specified configuration. !3423
+- Enable specifying --path in bundle install on Ruby docker images. !3432
+- Update Mattermost to 5.12.4. (Harrison Healey)
+
+### Deprecated (1 change)
+
+- Remove bundled MySQL client and related docs. !3382
+
+### Changed (5 changes)
+
+- Ensure we only grab the last line of stdout from rails runner. !3406
+- Set INSTALLATION_TYPE of Marketplace AMI to gitlab-aws-marketplace-ami. !3414
+- Add support for ACME v2. !3420
+- Run before_fork only once on boot for Unicorn.
+- Update redis_exporter to 1.0.3.
+
+### Added (8 changes, 1 of them is from the community)
+
+- Add recording rules for SLIs. !3335
+- Build packages for openSUSE 15.0. !3343
+- Add worker configuration for pages domain ssl renewal through Let's Encrypt. !3355
+- Add prometheus settings to gitlab.yml. !3383
+- Add a role for monitoring. !3404
+- Add smartcard_required_for_git_access to gitlab.rb. !3415
+- Add ability to set 'maxsize' for logrotate configs. !3419
+- add option to enable sentry and to define dsn/environment for pages. !3424 (Roger Meier)
+
+### Other (7 changes, 2 of them are from the community)
+
+- Upgrade to OpenSSL 1.1.1c. !3069
+- Add GEO support to pg-upgrade. !3316
+- Use Go module vendoring for builds. !3337
+- Bump Chef related libraries to 14.x. !3344
+- Use Postgresql 10.7 instead of 10.7.0. !3387 (Takuya Noguchi)
+- Enable frame pointer in Redis compile options. !3421
+- Update Mattermost to 5.12.2. (Harrison Healey)
+
+
 ## 12.0.3 (2019-06-27)
 
 - No changes.

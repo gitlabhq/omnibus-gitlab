@@ -1,5 +1,0 @@
----
-title: Add worker configuration for pages domain ssl renewal through Let's Encrypt
-merge_request: 3355
-author:
-type: added
