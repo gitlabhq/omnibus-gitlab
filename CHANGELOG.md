@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.5
+
+### Security (1 change)
+
+- Automatically set an admin password for Grafana and disable basic authentication.
+
+
 ## 12.1.4
 
 - No changes.
