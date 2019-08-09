@@ -1,5 +1,0 @@
----
-title: Remove TLSv1.1 support in nginx
-merge_request: 3307
-author:
-type: removed

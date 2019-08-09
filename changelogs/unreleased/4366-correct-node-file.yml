@@ -1,5 +1,0 @@
----
-title: Get node attribute file from directory contents if hostname is empty
-merge_request: 3309
-author:
-type: fixed

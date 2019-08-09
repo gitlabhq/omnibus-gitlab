@@ -1,5 +1,0 @@
----
-title: Don't fail on public attribute file on missing 'normal' key
-merge_request: 3358
-author:
-type: fixed

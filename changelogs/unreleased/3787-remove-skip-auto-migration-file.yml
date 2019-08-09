@@ -1,5 +1,0 @@
----
-title: Remove support for skip-auto-migrations file
-merge_request: 3306
-author:
-type: removed
