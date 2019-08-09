@@ -73,7 +73,7 @@ end
 
 # TODO: Remove in GitLab 13.0. By then, all the log files should have correct
 # permissions.
-log_files_list = Dir.glob("#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate*log")
+log_files_list = Dir.glob("#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate*log*")
 
 bash "set ownership of old migration log files" do
   code <<-EOH
