@@ -179,6 +179,13 @@ omnibus-gitlab repository.
 - Stop printing certificate skipped messages, instead list which certs were copied.
 
 
+## 11.11.8
+
+### Security (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.10.2 (GitLab 11.11). (Harrison Healey)
+
+
 ## 11.11.7
 
 - No changes.
