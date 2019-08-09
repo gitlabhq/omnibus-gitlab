@@ -2119,4 +2119,23 @@ describe 'gitlab::gitlab-rails' do
       end
     end
   end
+
+  describe 'logrotate settings' do
+    context 'default values' do
+      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
+    end
+
+    context 'specified username and group' do
+      before do
+        stub_gitlab_rb(
+          user: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
+    end
+  end
 end
