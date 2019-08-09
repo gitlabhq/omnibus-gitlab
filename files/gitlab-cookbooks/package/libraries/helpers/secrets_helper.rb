@@ -81,7 +81,8 @@ class SecretsHelper
       'grafana' => {
         'secret_key' => Gitlab['grafana']['secret_key'],
         'gitlab_secret' => Gitlab['grafana']['gitlab_secret'],
-        'gitlab_application_id' => Gitlab['grafana']['gitlab_application_id']
+        'gitlab_application_id' => Gitlab['grafana']['gitlab_application_id'],
+        'admin_password' => Gitlab['grafana']['admin_password']
       },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
