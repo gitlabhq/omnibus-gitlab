@@ -25,11 +25,17 @@ unicorn_service 'unicorn' do
   group account_helper.gitlab_group
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'rails' do
-    ip_address node['gitlab']['unicorn']['listen']
-    port node['gitlab']['unicorn']['port']
-  end
+rails_consul_action = if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+                        :create
+                      else
+                        :delete
+                      end
+
+consul_service 'rails' do
+  action rails_consul_action
+  ip_address node['gitlab']['unicorn']['listen']
+  port node['gitlab']['unicorn']['port']
+  reload_service false unless node['consul']['enable']
 end
 
 gitlab_sysctl "net.core.somaxconn" do

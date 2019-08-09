@@ -3,6 +3,7 @@ resource_name :consul_service
 property :service_name, String, name_property: true
 property :ip_address, [String, nil], default: nil
 property :port, [Integer, nil], default: nil
+property :reload_service, [TrueClass, FalseClass], default: true
 
 # Combined address plus port - 0.0.0.0:1234
 property :socket_address, [String, nil], default: nil
@@ -35,7 +36,7 @@ action :create do
 
   file "#{node['consul']['config_dir']}/#{service_name}-service.json" do
     content content.to_json
-    notifies :run, 'execute[reload consul]'
+    notifies :run, 'execute[reload consul]' if new_resource.reload_service
   end
 end
 
@@ -44,7 +45,7 @@ action :delete do
 
   file "#{node['consul']['config_dir']}/#{service_name}-service.json" do
     action :delete
-    notifies :run, 'execute[reload consul]'
+    notifies :run, 'execute[reload consul]' if new_resource.reload_service
   end
 end
 

@@ -99,8 +99,14 @@ file File.join(working_dir, "VERSION") do
   notifies :hup, "runit_service[gitaly]"
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'gitaly' do
-    socket_address node['gitaly']['prometheus_listen_addr']
-  end
+gitaly_consul_action = if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+                         :create
+                       else
+                         :delete
+                       end
+
+consul_service 'gitaly' do
+  action gitaly_consul_action
+  socket_address node['gitaly']['prometheus_listen_addr']
+  reload_service false unless node['consul']['enable']
 end
