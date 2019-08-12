@@ -90,6 +90,13 @@ omnibus-gitlab repository.
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
 
+## 12.0.6
+
+### Security (1 change)
+
+- Rename Grafana directory as part of upgrade.
+
+
 ## 12.0.5
 
 ### Security (1 change)
