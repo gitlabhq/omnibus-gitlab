@@ -221,7 +221,7 @@ To see all available tags check:
 - [GitLab-EE tags](https://hub.docker.com/r/gitlab/gitlab-ee/tags/)
 
 To use a specific tagged version, replace `gitlab/gitlab-ce:latest` with
-the GitLab version you want to run, for example `gitlab/gitlab-ce:8.4.3`.
+the GitLab version you want to run, for example `gitlab/gitlab-ce:12.1.3-ce.0`.
 
 ### Run GitLab CE on public IP address
 
