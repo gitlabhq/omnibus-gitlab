@@ -32,6 +32,10 @@ add_command 'reset-grafana', 'Reset Grafana instance to initial state', 1 do |_c
   backup_path = File.join(home_dir, "data.bak.#{Date.today}")
   status_file = File.join(home_dir, 'CVE_reset_status')
 
+  # In postinst (which is where upgrade script runs), we have no clue from
+  # which version user is upgrading. This gitlab-ctl command gets called
+  # from upgrade script and we need it to not be run if the resetting was
+  # already done on a previous upgrade. So we depend on a status file for this.
   if File.exist?(status_file) && File.read(status_file).strip == '0'
     log "\nGrafana was reset during a previous upgrade. Skipping."
     Kernel.exit 0
