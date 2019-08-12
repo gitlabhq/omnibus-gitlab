@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.6
+
+### Security (1 change)
+
+- Rename Grafana directory as part of upgrade.
+
+
 ## 12.1.5
 
 ### Security (1 change)
