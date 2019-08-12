@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.5
+
+### Security (1 change)
+
+- Automatically set an admin password for Grafana and disable basic authentication.
+
+
 ## 12.1.4
 
 - No changes.
@@ -82,6 +89,20 @@ omnibus-gitlab repository.
 - Use Postgresql 10.7 instead of 10.7.0. !3387 (Takuya Noguchi)
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
+
+## 12.0.6
+
+### Security (1 change)
+
+- Rename Grafana directory as part of upgrade.
+
+
+## 12.0.5
+
+### Security (1 change)
+
+- Automatically set an admin password for Grafana and disable basic authentication.
+
 
 ## 12.0.3 (2019-07-01)
 
@@ -163,6 +184,13 @@ omnibus-gitlab repository.
 - Specify Ruby 2.6.3 for development. !3345
 - Update Mattermost to 5.11.0. (Harrison Healey)
 - Stop printing certificate skipped messages, instead list which certs were copied.
+
+
+## 11.11.8
+
+### Security (1 change, 1 of them is from the community)
+
+- Update Mattermost to 5.10.2 (GitLab 11.11). (Harrison Healey)
 
 
 ## 11.11.7
