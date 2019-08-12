@@ -41,7 +41,7 @@ ruby_block 'check_postgresql_version' do
   block do
     LoggingHelper.warning("We do not ship client binaries for PostgreSQL #{db_version}, defaulting to #{pg_helper.version.major}")
   end
-  not_if { node['postgresql']['version'].nil? || db_path}
+  not_if { node['postgresql']['version'].nil? || db_path }
 end
 
 ruby_block "Link postgresql bin files to the correct version" do
