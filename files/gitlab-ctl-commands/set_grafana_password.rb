@@ -23,7 +23,7 @@ add_command 'set-grafana-password', 'Reset admin password for Grafana', 2 do |cm
     Kernel.exit 0
   end
 
-  home_dir = GitlabCtl::Util.get_node_attributes['gitlab']['grafana']['home']
+  home_dir = GitlabCtl::Util.get_node_attributes(base_path)['gitlab']['grafana']['home']
 
   begin
     password = GitlabCtl::Util.get_password

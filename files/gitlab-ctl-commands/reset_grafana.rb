@@ -25,7 +25,7 @@ add_command 'reset-grafana', 'Reset Grafana instance to initial state', 1 do |_c
     Kernel.exit 0
   end
 
-  node_attributes = GitlabCtl::Util.get_node_attributes
+  node_attributes = GitlabCtl::Util.get_node_attributes(base_path)
   home_dir = node_attributes['gitlab']['grafana']['home']
 
   data_dir = File.join(home_dir, 'data')
