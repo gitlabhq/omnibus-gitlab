@@ -114,6 +114,9 @@ GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
+echo "Checking if Grafana needs to be reset"
+gitlab-ctl reset-grafana
+
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   echo "Running Post Reconfigure Script..."
   eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
