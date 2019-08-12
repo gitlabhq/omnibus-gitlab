@@ -781,6 +781,10 @@ describe 'postgresql::bin' do
         )
       end
 
+      it "doesn't print a warning with a valid postgresql version" do
+        expect(chef_run).to_not run_ruby_block('check_postgresql_version')
+      end
+
       it 'links the specified version' do
         allow(FileUtils).to receive(:ln_sf).and_return(true)
         %w(foo_one foo_two foo_three).each do |pg_bin|
@@ -790,6 +794,23 @@ describe 'postgresql::bin' do
           )
         end
         chef_run.ruby_block('Link postgresql bin files to the correct version').block.call
+      end
+    end
+
+    context "with an invalid version in postgresql['version']" do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            enable: false,
+            version: '888'
+          }
+        )
+        allow(Dir).to receive(:glob).and_call_original
+        allow(Dir).to receive(:glob).with('/opt/gitlab/embedded/postgresql/888*').and_return([])
+      end
+
+      it 'should print a warning' do
+        expect(chef_run).to run_ruby_block('check_postgresql_version')
       end
     end
   end

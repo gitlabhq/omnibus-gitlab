@@ -34,11 +34,18 @@ resource_exists = proc do |name|
   end
 end
 
+db_version = pg_helper.database_version || node['postgresql']['version']
+db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
+
+ruby_block 'check_postgresql_version' do
+  block do
+    LoggingHelper.warning("We do not ship client binaries for PostgreSQL #{db_version}, defaulting to #{pg_helper.version.major}")
+  end
+  not_if { node['postgresql']['version'].nil? || db_path}
+end
+
 ruby_block "Link postgresql bin files to the correct version" do
   block do
-    db_version = pg_helper.database_version || node['postgresql']['version']
-    db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
-
     # Fallback to the psql version if needed
     pg_path = db_path || Dir.glob("#{postgresql_install_dir}/#{pg_helper.version.major}*").min
 
