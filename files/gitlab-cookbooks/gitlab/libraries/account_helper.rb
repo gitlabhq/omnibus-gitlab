@@ -90,6 +90,7 @@ class AccountHelper
     # TODO: Make log directory creation in all service recipes use this method
     # instead of directly using `node` values. This will ensure we don't miss
     # to add a service here.
+    # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4606
     {
       'alertmanager' => { username: prometheus_user, group: 'root' },
       'consul' => { username: consul_user, group: consul_group },
@@ -128,13 +129,19 @@ class AccountHelper
   end
 
   def logdir_owner(service)
-    return 'root' unless logdir_ownership.key?(service)
+    unless logdir_ownership.key?(service)
+      Chef::Log.warn("#{service} does not have an owner user defined for its log directory. Hence using root.")
+      return 'root'
+    end
 
     logdir_ownership[service][:username] || 'root'
   end
 
   def logdir_group(service)
-    return 'root' unless logdir_ownership.key?(service)
+    unless logdir_ownership.key?(service)
+      Chef::Log.warn("#{service} does not have an owner group defined for it log directory. Hence using root.")
+      return 'root'
+    end
 
     logdir_ownership[service][:group] || 'root'
   end
