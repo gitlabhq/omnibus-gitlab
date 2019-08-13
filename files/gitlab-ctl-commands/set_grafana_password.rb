@@ -28,7 +28,7 @@ add_command 'set-grafana-password', 'Reset admin password for Grafana', 2 do |cm
   begin
     password = GitlabCtl::Util.get_password
   rescue GitlabCtl::Errors::PasswordMismatch
-    $stderr.puts "Passwords do not match."
+    warn "Passwords do not match."
     Kernel.exit 1
   end
 
@@ -43,7 +43,7 @@ add_command 'set-grafana-password', 'Reset admin password for Grafana', 2 do |cm
   if status.error?
     log "Failed to update password."
     $stdout.puts status.stdout
-    $stderr.puts status.stderr
+    warn status.stderr
     Kernel.exit 1
   else
     log "Password updated successfully."
