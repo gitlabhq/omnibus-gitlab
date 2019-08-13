@@ -154,7 +154,7 @@ describe Build::Info do
 
       it 'returns public mirror for GitLab CE' do
         allow(Build::Info).to receive(:package).and_return("gitlab-ce")
-        expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-ce.git")
+        expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-foss.git")
       end
       it 'returns public mirror for GitLab EE' do
         allow(Build::Info).to receive(:package).and_return("gitlab-ee")

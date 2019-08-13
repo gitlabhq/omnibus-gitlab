@@ -21,12 +21,12 @@ name 'git'
 # When updating the git version here, but sure to also update the following:
 # - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md#installation
 # - https://gitlab.com/gitlab-org/gitaly/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md
+# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/doc/install/installation.md
 # - https://gitlab.com/gitlab-org/gitlab-recipes/blob/master/install/centos/README.md
 # - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
 # - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/system_check/app/git_version_check.rb
+# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/.gitlab-ci.yml
+# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/system_check/app/git_version_check.rb
 # - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
 default_version '2.22.0'
 
