@@ -8,7 +8,7 @@ function sigterm_handler() {
 }
 
 function failed_pg_upgrade() {
-    echo 'Upgrading the existing database to 9.6 failed and was reverted.'
+    echo 'Upgrading the existing database to 10 failed and was reverted.'
     echo 'Please check the output, and open an issue at:'
     echo 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
     echo 'If you would like to restart the instance without attempting to'
@@ -113,6 +113,12 @@ GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
+
+# Make sure PostgreSQL is at the latest version.
+# If it fails, print a message with a workaround and exit
+if [ "${GITLAB_SKIP_PG_UPGRADE}" != true ]; then
+    gitlab-ctl pg-upgrade -w || failed_pg_upgrade
+fi
 
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   echo "Running Post Reconfigure Script..."
