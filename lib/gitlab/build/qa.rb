@@ -8,7 +8,7 @@ require 'English'
 module Build
   class QA
     def self.repo_path
-      "/tmp/gitlab.#{$PROCESS_ID}"
+      "/tmp/gitlab"
     end
 
     def self.get_gitlab_repo
@@ -18,16 +18,14 @@ module Build
     end
 
     def self.clone_gitlab_rails
-      # PROCESS_ID is appended to ensure randomness in the directory name
-      # to avoid possible conflicts that may arise if the clone's destination
-      # directory already exists.
+      system(*%W[rm -rf #{repo_path}])
       system(*%W[git clone #{Build::Info.gitlab_rails_repo} #{repo_path}])
     end
 
     def self.get_gitlab_rails_sha
       # Finding out which commit was the package built from
       begin
-        version_manifest = JSON.parse(File.read("pkg/ubuntu-xenial/version-manifest.json"))
+        version_manifest = JSON.parse(File.read("pkg/ubuntu-xenial/#{Build::Info.package}_#{Build::Info.release_version}.version-manifest.json"))
         version = version_manifest['software']['gitlab-rails']['locked_version']
       rescue Errno::ENOENT, JSON::ParserError
         puts "Failed to get commit from version-manifest file"
