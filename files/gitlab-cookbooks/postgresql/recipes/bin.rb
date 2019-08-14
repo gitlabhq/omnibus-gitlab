@@ -34,7 +34,7 @@ resource_exists = proc do |name|
   end
 end
 
-db_version = pg_helper.database_version || node['postgresql']['version']
+db_version = node['postgresql']['version'] || pg_helper.database_version
 db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
 
 ruby_block 'check_postgresql_version' do
