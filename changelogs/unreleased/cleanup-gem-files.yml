@@ -1,0 +1,5 @@
+---
+title: Cleanup unnecessary gem files in gitlab package
+merge_request: 3471
+author:
+type: changed
