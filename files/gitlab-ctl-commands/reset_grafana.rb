@@ -19,7 +19,7 @@ require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/util"
 require 'fileutils'
 require 'date'
 
-add_command 'reset-grafana', 'Reset Grafana instance to initial state', 1 do |_cmd_name|
+add_command 'reset-grafana', 'Reset Grafana instance to its initial state by removing the data directory', 1 do |_cmd_name|
   unless service_enabled?('grafana')
     log "\nGrafana is not enabled. Skipping."
     Kernel.exit 0
