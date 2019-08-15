@@ -141,9 +141,52 @@ exclude 'embedded/share/info'
 exclude 'embedded/share/man'
 
 # exclude rubygems build cache
-# Revisit this path as part of
-# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3414
-exclude 'embedded/lib/ruby/gems/2.6.0/cache'
+exclude 'embedded/lib/ruby/gems/*/cache'
+
+# exclude test and vendor folders
+exclude 'embedded/lib/ruby/gems/*/gems/*/spec'
+exclude 'embedded/lib/ruby/gems/*/gems/*/test'
+exclude 'embedded/lib/ruby/gems/*/gems/*/tests'
+exclude 'embedded/lib/ruby/gems/*/gems/*/vendor'
+
+# exclude gem build logs
+exclude 'embedded/lib/ruby/gems/*/extensions/*/*/*/mkmf.log'
+exclude 'embedded/lib/ruby/gems/*/extensions/*/*/*/gem_make.out'
+
+# # exclude C sources
+exclude 'embedded/lib/ruby/gems/*/gems/*/ext/*.c'
+exclude 'embedded/lib/ruby/gems/*/gems/*/ext/*/*.c'
+exclude 'embedded/lib/ruby/gems/*/gems/*/ext/*.o'
+exclude 'embedded/lib/ruby/gems/*/gems/*/ext/*/*.o'
+
+# # exclude other gem files
+exclude 'embedded/lib/ruby/gems/*/gems/*/*.gemspec'
+exclude 'embedded/lib/ruby/gems/*/gems/*/*.md'
+exclude 'embedded/lib/ruby/gems/*/gems/*/*.rdoc'
+exclude 'embedded/lib/ruby/gems/*/gems/*/*.sh'
+exclude 'embedded/lib/ruby/gems/*/gems/*/*.txt'
+exclude 'embedded/lib/ruby/gems/*/gems/*/*LICENSE*'
+exclude 'embedded/lib/ruby/gems/*/gems/*/CHANGES*'
+exclude 'embedded/lib/ruby/gems/*/gems/*/Gemfile'
+exclude 'embedded/lib/ruby/gems/*/gems/*/Guardfile'
+exclude 'embedded/lib/ruby/gems/*/gems/*/README*'
+exclude 'embedded/lib/ruby/gems/*/gems/*/Rakefile'
+exclude 'embedded/lib/ruby/gems/*/gems/*/run_tests.rb'
+
+exclude 'embedded/lib/ruby/gems/*/gems/*/Documentation'
+exclude 'embedded/lib/ruby/gems/*/gems/*/bench'
+exclude 'embedded/lib/ruby/gems/*/gems/*/contrib'
+exclude 'embedded/lib/ruby/gems/*/gems/*/doc'
+exclude 'embedded/lib/ruby/gems/*/gems/*/doc-api'
+exclude 'embedded/lib/ruby/gems/*/gems/*/examples'
+exclude 'embedded/lib/ruby/gems/*/gems/*/fixtures'
+exclude 'embedded/lib/ruby/gems/*/gems/*/gemfiles'
+exclude 'embedded/lib/ruby/gems/*/gems/*/libtest'
+exclude 'embedded/lib/ruby/gems/*/gems/*/man'
+exclude 'embedded/lib/ruby/gems/*/gems/*/sample_documents'
+exclude 'embedded/lib/ruby/gems/*/gems/*/samples'
+exclude 'embedded/lib/ruby/gems/*/gems/*/script'
+exclude 'embedded/lib/ruby/gems/*/gems/*/t'
 
 # Enable signing packages
 package :rpm do
