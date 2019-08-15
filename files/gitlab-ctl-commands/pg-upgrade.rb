@@ -117,7 +117,7 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   unless GitlabCtl::Util.progress_message(
-      "Checking if postgresql['version'] is set"
+    "Checking if postgresql['version'] is set"
   ) do
     @attributes['postgresql']['version'].nil?
   end
