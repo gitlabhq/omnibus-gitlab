@@ -936,7 +936,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Version settings
 # Set this if you have disabled the bundled PostgreSQL but still want to use the backup rake tasks
-# postgresq['version'] = 10
+# postgresql['version'] = 10
 
 ################################################################################
 ## GitLab Redis
