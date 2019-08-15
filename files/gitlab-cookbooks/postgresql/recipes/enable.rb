@@ -161,13 +161,6 @@ runit_service "postgresql" do
   log_options node['gitlab']['logging'].to_hash.merge(node['postgresql'].to_hash)
 end
 
-# This recipe must be ran BEFORE any calls to the binaries are made
-# and AFTER the service has been defined
-# to ensure the correct running version of PostgreSQL
-# Only exception to this rule is "initdb" call few lines up because this should
-# run only on new installation at which point we expect to have correct binaries.
-include_recipe 'postgresql::bin'
-
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start postgresql" do
     retries 20

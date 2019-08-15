@@ -109,3 +109,6 @@ default['postgresql']['hot_standby_feedback'] = 'off'
 default['postgresql']['archive_mode'] = "off"
 default['postgresql']['archive_command'] = nil
 default['postgresql']['archive_timeout'] = "0"
+
+# Version setting for linking binaries when bundled postgresql is not being used
+default['postgresql']['version'] = nil

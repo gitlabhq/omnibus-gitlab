@@ -76,6 +76,7 @@ add_command_under_category 'pg-upgrade', 'database',
   )
   @instance_type = :single_node
   @roles = GitlabCtl::Util.roles(base_path)
+  @attributes = GitlabCtl::Util.get_node_attributes(base_path)
 
   running_version = @db_worker.fetch_running_version
 
@@ -112,6 +113,15 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
     log "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
+    Kernel.exit 1
+  end
+
+  unless GitlabCtl::Util.progress_message(
+    "Checking if postgresql['version'] is set"
+  ) do
+    @attributes['postgresql']['version'].nil?
+  end
+    log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Please remove this and run gitlab-ctl reconfigure before proceeding "
     Kernel.exit 1
   end
 

@@ -66,6 +66,7 @@ describe 'gitlab::database-migrations' do
 
     context 'initial license file' do
       it 'detects license file from /etc/gitlab' do
+        allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
         expect(chef_run).to run_bash('migrate gitlab-rails database').with(
           environment: {
@@ -75,6 +76,7 @@ describe 'gitlab::database-migrations' do
       end
 
       it 'license file specified in gitlab.rb gets priority' do
+        allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
         stub_gitlab_rb(
           gitlab_rails: { initial_license_file: '/mnt/random.gitlab-license' }
@@ -87,6 +89,7 @@ describe 'gitlab::database-migrations' do
       end
 
       it 'Does not fail if no license file found in /etc/gitlab' do
+        allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return([])
         expect(chef_run).to run_bash('migrate gitlab-rails database').with(
           environment: nil

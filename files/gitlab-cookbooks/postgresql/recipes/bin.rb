@@ -34,11 +34,18 @@ resource_exists = proc do |name|
   end
 end
 
+db_version = node['postgresql']['version'] || pg_helper.database_version
+db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
+
+ruby_block 'check_postgresql_version' do
+  block do
+    LoggingHelper.warning("We do not ship client binaries for PostgreSQL #{db_version}, defaulting to #{pg_helper.version.major}")
+  end
+  not_if { node['postgresql']['version'].nil? || db_path }
+end
+
 ruby_block "Link postgresql bin files to the correct version" do
   block do
-    db_version = pg_helper.database_version
-    db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
-
     # Fallback to the psql version if needed
     pg_path = db_path || Dir.glob("#{postgresql_install_dir}/#{pg_helper.version.major}*").min
 
@@ -49,7 +56,7 @@ ruby_block "Link postgresql bin files to the correct version" do
     end
   end
   only_if do
-    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/
+    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/ || !node['postgresql']['version'].nil?
   end
   notifies :restart, 'service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['service[postgresql]']
 end

@@ -91,6 +91,10 @@ end
 # Install our runit instance
 include_recipe "package::runit"
 
+# Always run the postgresql::bin recipe
+# Run before we enable postgresql for postgresql['version'] to take effect
+include_recipe 'postgresql::bin'
+
 # Configure Pre-migration services
 # Postgresql depends on Redis because of `rake db:seed_fu`
 # Gitaly must be available before migrations

@@ -1,0 +1,5 @@
+---
+title: Support manually setting the db version for psql bin
+merge_request: 3485
+author:
+type: changed
