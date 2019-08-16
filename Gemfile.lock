@@ -1,22 +1,4 @@
 GIT
-  remote: git@dev.gitlab.org:omnibus-mirror/ohai.git
-  revision: 60db53ef823748434efad64e2ffbd99ba760c453
-  branch: 14-8-13-gitlab
-  specs:
-    ohai (14.8.13)
-      chef-config (>= 12.8, < 15)
-      ffi (~> 1.9)
-      ffi-yajl (~> 2.2)
-      ipaddress
-      mixlib-cli (>= 1.7.0)
-      mixlib-config (>= 2.0, < 4.0)
-      mixlib-log (>= 2.0.1, < 4.0)
-      mixlib-shellout (>= 2.0, < 4.0)
-      plist (~> 3.1)
-      systemu (~> 2.6.4)
-      wmi-lite (~> 1.0)
-
-GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
   revision: cc7d78000b1d67fbd58f9d6e308179128086984a
   tag: v5.6.12.01
@@ -909,6 +891,18 @@ GEM
     netrc (0.11.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    ohai (14.14.0)
+      chef-config (>= 12.8, < 15)
+      ffi (~> 1.9)
+      ffi-yajl (~> 2.2)
+      ipaddress
+      mixlib-cli (>= 1.7.0)
+      mixlib-config (>= 2.0, < 4.0)
+      mixlib-log (>= 2.0.1, < 4.0)
+      mixlib-shellout (>= 2.0, < 4.0)
+      plist (~> 3.1)
+      systemu (~> 2.6.4)
+      wmi-lite (~> 1.0)
     omnibus-ctl (0.3.6)
     os (0.9.6)
     package_cloud (0.3.04)
@@ -1025,7 +1019,7 @@ DEPENDENCIES
   http
   json
   knapsack
-  ohai!
+  ohai (~> 14.14)
   omnibus!
   omnibus-ctl (= 0.3.6)
   package_cloud
