@@ -14,30 +14,6 @@ module Gitlab
         # nginx['listen_addresses'], which is what we use in /etc/gitlab/gitlab.rb
         deprecations = [
           {
-            config_keys: %w(gitlab nginx listen_address),
-            deprecation: '8.10',
-            removal: '11.0',
-            note: "Use nginx['listen_addresses'] instead."
-          },
-          {
-            config_keys: %w(gitlab gitlab-rails stuck_ci_builds_worker_cron),
-            deprecation: '9.0',
-            removal: '11.0',
-            note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
-          },
-          {
-            config_keys: %w(gitlab gitlab-shell git_data_directories),
-            deprecation: '8.10',
-            removal: '11.0',
-            note: "Use git_data_dirs instead."
-          },
-          {
-            config_keys: %w(gitlab git-data-dir),
-            deprecation: '8.10',
-            removal: '11.0',
-            note: "Use git_data_dirs instead."
-          },
-          {
             config_keys: %w(gitlab postgresql data_dir),
             deprecation: '11.6',
             removal: '14.0',
@@ -51,7 +27,6 @@ module Gitlab
           }
         ]
 
-        deprecations += identify_deprecated_config(existing_config, ['mattermost'], mattermost_supported_keys, "10.2", "11.0") if existing_config
         deprecations
       end
 
@@ -82,44 +57,6 @@ module Gitlab
             note: note
           }
         end
-      end
-
-      def mattermost_supported_keys
-        %w(enable
-           username
-           group
-           uid
-           gid
-           home
-           database_name
-           env
-           host
-           port
-           svlogd_prefix
-           service_site_url
-           service_address
-           service_port
-           service_use_ssl
-           service_allowed_untrusted_internal_connections
-           service_enable_api_team_deletion
-           team_site_name
-           sql_driver_name
-           sql_data_source
-           sql_data_source_replicas
-           sql_at_rest_encrypt_key
-           log_file_directory
-           file_directory
-           gitlab_enable
-           gitlab_secret
-           gitlab_id
-           gitlab_scope
-           gitlab_auth_endpoint
-           gitlab_token_endpoint
-           gitlab_user_api_endpoint
-           email_invite_salt
-           file_public_link_salt
-           plugin_directory
-           plugin_client_directory)
       end
 
       def next_major_version
