@@ -13,7 +13,7 @@ describe Build::QA do
       allow(Build::QA).to receive(:clone_gitlab_rails).and_return(true)
       allow(Build::QA).to receive(:checkout_gitlab_rails).and_return(true)
 
-      expect(described_class.get_gitlab_repo).to eq("/tmp/gitlab/qa")
+      expect(described_class.get_gitlab_repo).to eq("/tmp/gitlab")
     end
   end
 

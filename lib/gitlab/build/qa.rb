@@ -8,7 +8,7 @@ require 'English'
 module Build
   class QA
     def self.repo_path
-      "/tmp/gitlab"
+      File.absolute_path("/tmp/gitlab")
     end
 
     def self.get_gitlab_repo
