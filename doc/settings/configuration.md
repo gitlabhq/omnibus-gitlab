@@ -653,11 +653,11 @@ Smartcard authentication is documented in
 
 See [doc/settings/nginx.md](nginx.md#enable-https).
 
-### Redirect `HTTP` requests to `HTTPS`.
+### Redirect `HTTP` requests to `HTTPS`
 
 See [doc/settings/nginx.md](nginx.md#redirect-http-requests-to-https).
 
-### Change the default port and the ssl certificate locations.
+### Change the default port and the ssl certificate locations
 
 See
 [doc/settings/nginx.md](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).

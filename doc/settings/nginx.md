@@ -478,7 +478,7 @@ NGINX.
 This inserts the defined string into the end of the `server` block of
 `/var/opt/gitlab/nginx/conf/gitlab-http.conf`.
 
-### Notes:
+### Notes
 
 - If you're adding a new location, you might need to include
 
@@ -711,7 +711,7 @@ then, 'sudo service nginx reload'
 
 By default you will have an nginx health-check endpoint configured at 127.0.0.1:8060/nginx_status to monitor your Nginx server status.
 
-### The following information will be displayed:
+### The following information will be displayed
 
 ```
 Active connections: 1
