@@ -1766,6 +1766,8 @@ describe 'gitlab::gitlab-rails' do
               'db_load_balancing' => { 'hosts' => [] },
               'db_prepared_statements' => false,
               'db_sslcompression' => 0,
+              'db_sslcert' => nil,
+              'db_sslkey' => nil,
               'db_fdw' => nil
             )
           )
@@ -1899,6 +1901,26 @@ describe 'gitlab::gitlab-rails' do
             expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
               hash_including(
                 'db_fdw' => true
+              )
+            )
+          end
+        end
+
+        context 'when SSL certificate and key for DB is specified' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                db_sslcert: '/etc/certs/db.cer',
+                db_sslkey: '/etc/certs/db.key'
+              }
+            )
+          end
+
+          it 'uses specified value in database.yml' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_sslcert' => '/etc/certs/db.cer',
+                'db_sslkey' => '/etc/certs/db.key'
               )
             )
           end
