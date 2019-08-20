@@ -684,5 +684,9 @@ module Prometheus
     def service_discovery
       Services.enabled?('consul') && Gitlab['consul']['monitoring_service_discovery']
     end
+
+    def service_discovery_action
+      service_discovery ? :create : :delete
+    end
   end
 end

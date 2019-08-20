@@ -54,14 +54,8 @@ runit_service 'gitlab-workhorse' do
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
 
-workhorse_consul_action = if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-                            :create
-                          else
-                            :delete
-                          end
-
 consul_service 'workhorse' do
-  action workhorse_consul_action
+  action Prometheus.service_discovery_action
   socket_address node['gitlab']['gitlab-workhorse']['prometheus_listen_addr']
   reload_service false unless node['consul']['enable']
 end

@@ -66,14 +66,8 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-node_exporter_consul_action = if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-                                :create
-                              else
-                                :delete
-                              end
-
 consul_service 'node-exporter' do
-  action node_exporter_consul_action
+  action Prometheus.service_discovery_action
   socket_address node['monitoring']['node-exporter']['listen_address']
   reload_service false unless node['consul']['enable']
 end

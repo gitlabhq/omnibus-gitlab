@@ -266,7 +266,7 @@ template nginx_status_conf do
   action nginx_status_enabled ? :create : :delete
 end
 
-nginx_consul_action = if nginx_status_enabled && node['consul']['enable'] && node['consul']['monitoring_service_discovery']
+nginx_consul_action = if nginx_status_enabled && node['consul']['enable'] && Prometheus.service_discovery
                         :create
                       else
                         :delete
