@@ -424,7 +424,7 @@ If you are using an older version of GitLab Omnibus, enable incoming webhooks fr
 mattermost['service_enable_incoming_webhooks'] = true
 ```
 
-#### Setting up Mattermost as a service integration:
+#### Setting up Mattermost as a service integration
 
 You can use the Mattermost notifications project integration option to set up Mattermost integration:
 

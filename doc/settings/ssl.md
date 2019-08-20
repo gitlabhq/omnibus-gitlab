@@ -145,7 +145,7 @@ provides a way to manage these certificates. For more technical details how
 this works, see the [details](#details-on-how-gitlab-and-ssl-work)
 at the bottom of this page.
 
-#### Install Custom Public Certificates:
+#### Install Custom Public Certificates
 
 NOTE: **Note:**
 A perl interpreter is required for `c_rehash` dependency to properly symlink the certificates.

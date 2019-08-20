@@ -170,10 +170,10 @@ redis['rename_commands'] = {
 }
 ```
 
-* `OTHER_COMMAND` is the command you want to modify
-* `VALUE` should be one of:
-   1. A new command name.
-   1. '', which completely disables the command
+- `OTHER_COMMAND` is the command you want to modify
+- `VALUE` should be one of:
+  1. A new command name.
+  1. '', which completely disables the command
 
 To disable this functionality:
 
