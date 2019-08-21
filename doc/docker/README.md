@@ -254,16 +254,13 @@ inside the container.
 If you want to use a different host port than `80` (HTTP) or `443` (HTTPS),
 you need to add a separate `--publish` directive to the `docker run` command.
 
-Do NOT use any of the above ports to replace the defaults `80` or `443` **inside**
-the container, otherwise there will be conflicts.
-
 For example, to expose the web interface on port `8929`, and the SSH service on
 port `2289`, use the following `docker run` command:
 
 ```bash
 sudo docker run --detach \
   --hostname gitlab.example.com \
-  --publish 8929:80 --publish 2289:22 \
+  --publish 8929:8929 --publish 2289:22 \
   --name gitlab \
   --restart always \
   --volume /srv/gitlab/config:/etc/gitlab \
@@ -290,6 +287,8 @@ You then need to appropriately configure `gitlab.rb`:
    external_url "https://gitlab.example.com:8929"
    ```
 
+   The port specified in this URL must match the port published to the host by Docker.
+   Additionally, note that, unless the NGINX listen port is explicitly set in `nginx['listen_port']`, it will be pulled from this URL.
    For more information see the [NGINX documentation](../settings/nginx.md).
 
 1. Set `gitlab_shell_ssh_port`:
