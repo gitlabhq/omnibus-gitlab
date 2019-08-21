@@ -1,5 +1,0 @@
----
-title: Validate runit can set ownership of config files
-merge_request: 3332
-author:
-type: fixed

@@ -1,5 +1,0 @@
----
-title: Enable TLS v1.3 by default in NGINX
-merge_request: 3458
-author:
-type: changed

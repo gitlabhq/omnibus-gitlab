@@ -1,5 +1,0 @@
----
-title: Rename Grafana directory as part of upgrade to invalidate user sessions
-merge_request:
-author:
-type: security
