@@ -14,6 +14,7 @@ module Build
     def self.get_gitlab_repo
       clone_gitlab_rails
       checkout_gitlab_rails
+      cleanup_directories
 
       repo_path
     end
@@ -48,6 +49,10 @@ module Build
       puts "Building from #{Build::Info.package} commit #{version}"
 
       system(*%W[git --git-dir=#{repo_path}/.git --work-tree=#{repo_path} checkout --quiet #{version}])
+    end
+
+    def self.cleanup_directories
+      system(*%W[rm -rf #{repo_path}/ee/changelogs/unreleased])
     end
   end
 end
