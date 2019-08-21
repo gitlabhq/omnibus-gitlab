@@ -1,6 +1,0 @@
----
-title: A new wrapper for backup and restore to change ownership of registry directory
-  automatically
-merge_request: 3447
-author:
-type: fixed

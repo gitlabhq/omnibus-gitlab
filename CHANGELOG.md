@@ -3,6 +3,57 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.0
+
+### Security (5 changes, 1 of them is from the community)
+
+- Rename unused redis commands by default. !3436
+- Update PostgreSQL to 9.6.14 and 10.9. !3492
+- Update GraphicsMagick to 1.3.33. !3494 (Takuya Noguchi)
+- Update nginx to 1.16.1. !3525
+- Rename Grafana directory as part of upgrade to invalidate user sessions.
+
+### Removed (1 change)
+
+- Stop building packages for openSUSE 42.3. !3469
+
+### Fixed (5 changes)
+
+- Validate runit can set ownership of config files. !3332
+- Use armv7 build of Grafana in RPi package. !3401
+- A new wrapper for backup and restore to change ownership of registry directory automatically. !3447
+- Clean up stale Redis instance config files. !3464
+- Typo in initial_license in gitlab.rb. !3497
+
+### Changed (5 changes, 1 of them is from the community)
+
+- Update nginx to version 1.16.0. !3442
+- Enable TLS v1.3 by default in NGINX. !3458
+- Cleanup unnecessary gem files in gitlab package. !3471
+- Support manually setting the db version for psql bin. !3485
+- Add default support of ECDSA https certificates in nginx. !3511 (ptymatt)
+
+### Performance (1 change)
+
+- Adjust unicorn worker CPU formula. !3473
+
+### Added (4 changes, 1 of them is from the community)
+
+- Build packages for Debian Buster. !3426
+- add option to define custom page headers. !3465 (Max Wittig)
+- Add support for Content Security Type. !3499
+- Bump the Git version to 2.22. !3502
+
+### Other (6 changes, 1 of them is from the community)
+
+- Upgrade rubocop to 0.69.0. !3473
+- Upgrade gitlab-monitor to 4.2.0. !3483
+- Attempt to upgrade the database in the docker image. !3515
+- Bump ohai version to 14.14.0. !3523
+- Update Mattermost to 5.13.2. (Harrison Healey)
+- Add perl dependency to SSL troubleshooting steps.
+
+
 ## 12.1.5
 
 ### Security (1 change)

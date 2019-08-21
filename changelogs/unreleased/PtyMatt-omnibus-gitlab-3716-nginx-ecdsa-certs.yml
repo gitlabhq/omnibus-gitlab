@@ -1,5 +1,0 @@
----
-title: Add default support of ECDSA https certificates in nginx
-merge_request: 3511
-author: ptymatt
-type: changed
