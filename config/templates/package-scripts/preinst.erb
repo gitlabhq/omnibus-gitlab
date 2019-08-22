@@ -40,12 +40,9 @@ upgrade_check() {
     # (ii) if existing version is less than required minimum version
     if test ${OLD_MAJOR_VERSION} -lt ${NEW_MAJOR_VERSION}; then
       if ! greater_version $OLD_MINOR_VERSION $MIN_VERSION; then
-        notify "It seems you are upgrading from ${OLD_MAJOR_VERSION}.x version series"
-        notify "to ${NEW_MAJOR_VERSION}.x series. It is recommended to upgrade"
-        notify "to the last minor version in a major version series first before"
-        notify "jumping to the next major version."
+        notify "It seems you are upgrading from major version ${OLD_MAJOR_VERSION} to major version ${NEW_MAJOR_VERSION}."
+        notify "It is required to upgrade to the latest ${MIN_VERSION} version first before jumping to the next major version."
         notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
-        notify "and upgrade to ${MIN_VERSION} first."
         exit 1
       fi
     fi
