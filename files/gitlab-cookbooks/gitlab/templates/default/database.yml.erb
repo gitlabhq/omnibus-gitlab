@@ -17,6 +17,10 @@ production:
   sslcompression: <%= @db_sslcompression %>
   sslrootcert: <%= quote(@db_sslrootcert) || quote(@db_sslca) %>
   sslca: <%= quote(@db_sslca) || quote(@db_sslrootcert) %>
+  <% if !@db_sslcert.nil? && !@db_sslkey.nil? %>
+  sslcert: <%= quote(@db_sslcert) %>
+  sslkey: <%= quote(@db_sslkey) %>
+  <% end %>
   load_balancing: <%= @db_load_balancing.to_json %>
   prepared_statements: <%= @db_prepared_statements %>
   statements_limit: <%= @db_statements_limit %>
