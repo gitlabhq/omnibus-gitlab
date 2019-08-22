@@ -129,8 +129,8 @@ exclude "\.git*"
 exclude "bundler\/git"
 
 # don't ship static libraries or header files
-exclude 'embedded/lib/*.a'
-exclude 'embedded/lib/*.la'
+exclude 'embedded/lib/**/*.a'
+exclude 'embedded/lib/**/*.la'
 exclude 'embedded/include'
 
 # exclude manpages and documentation
