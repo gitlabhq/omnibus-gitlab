@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.1
+
+### Security (1 change)
+
+- Update nginx to 1.16.1. !3525
+
+### Fixed (1 change)
+
+- Fix Error 500s when loading repositories with license files. !3542
+
+
 ## 12.2.0
 
 ### Security (5 changes, 1 of them is from the community)

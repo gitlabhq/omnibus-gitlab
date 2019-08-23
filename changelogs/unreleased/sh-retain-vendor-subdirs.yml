@@ -1,5 +1,0 @@
----
-title: Fix Error 500s when loading repositories with license files
-merge_request: 3542
-author:
-type: fixed
