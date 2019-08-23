@@ -152,7 +152,7 @@ exclude 'embedded/lib/ruby/gems/*/gems/*/tests'
 # there's a better way to whitelist directories.
 exclude 'embedded/lib/ruby/gems/*/gems/rugged*/vendor'
 exclude 'embedded/lib/ruby/gems/*/gems/ace-rails*/vendor'
-exclude 'embedded/lib/ruby/gems/*/gems/libyajl2*/vendor'
+exclude 'embedded/lib/ruby/gems/*/gems/libyajl2*/**/vendor'
 
 # exclude gem build logs
 exclude 'embedded/lib/ruby/gems/*/extensions/*/*/*/mkmf.log'
