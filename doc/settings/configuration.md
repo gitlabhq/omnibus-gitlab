@@ -629,6 +629,7 @@ gitlab_rails['content_security_policy'] = {
     directives: {
       default_src: "'self'",
       script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
+      frame_ancestor: "'self'",
       frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com",
       img_src: "* data: blob",
       style_src: "'self' 'unsafe-inline'"
