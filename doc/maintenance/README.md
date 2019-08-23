@@ -164,9 +164,12 @@ built-in command:
   specify its path.
 - After the garbage collection is done, the registry should start up automatically.
 
-CAUTION: **Warning:**
+DANGER: **Danger:**
 By running the built-in garbage collection command, it will cause downtime to
-the Container Registry. To avoid that, you can [use another method](#performing-garbage-collection-without-downtime).
+the Container Registry. Running this command on an instance in an HA environment
+while one of your other instances is still writing to the Registry storage,
+will remove referenced manifests. To avoid that, make sure Registry is set to
+[read-only mode](#performing-garbage-collection-without-downtime) before proceeding.
 
 If you did not change the default location of the configuration file, run:
 
