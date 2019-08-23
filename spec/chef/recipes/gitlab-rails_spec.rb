@@ -2069,4 +2069,54 @@ describe 'gitlab::gitlab-rails' do
       end
     end
   end
+
+  context 'SMIME email settings' do
+    context 'SMIME is enabled' do
+      it 'exposes the default SMIME email file path settings' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            gitlab_email_smime_enabled: true
+          }
+        )
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'gitlab_email_smime_enabled' => true,
+            'gitlab_email_smime_key_file' => '/etc/gitlab/ssl/gitlab_smime.key',
+            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/gitlab_smime.crt'
+          )
+        )
+      end
+
+      it 'exposes the customized SMIME email settings' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            gitlab_email_smime_enabled: true,
+            gitlab_email_smime_key_file: '/etc/gitlab/ssl/custom_gitlab_smime.key',
+            gitlab_email_smime_cert_file: '/etc/gitlab/ssl/custom_gitlab_smime.crt'
+          }
+        )
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'gitlab_email_smime_enabled' => true,
+            'gitlab_email_smime_key_file' => '/etc/gitlab/ssl/custom_gitlab_smime.key',
+            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/custom_gitlab_smime.crt'
+          )
+        )
+      end
+    end
+
+    context 'SMIME is disabled' do
+      context 'SMIME email is not configured' do
+        it 'does not enable SMIME signing' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'gitlab_email_smime_enabled' => false
+            )
+          )
+        end
+      end
+    end
+  end
 end
