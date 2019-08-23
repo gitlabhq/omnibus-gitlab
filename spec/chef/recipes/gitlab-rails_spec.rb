@@ -1103,6 +1103,35 @@ describe 'gitlab::gitlab-rails' do
         end
       end
 
+      context 'bypass two factor for providers is configured ' do
+        it 'bypass_two_factor configured as true' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: true })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_bypass_two_factor' => true
+            )
+          )
+        end
+
+        it 'bypass_two_factor configured as false' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: false })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_bypass_two_factor' => false
+            )
+          )
+        end
+
+        it 'bypass_two_factor configured as [\'foo\']' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: ['foo'] })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_bypass_two_factor' => ['foo']
+            )
+          )
+        end
+      end
+
       context 'sync profile attributes is configured to true' do
         it 'sets the sync profile attributes to true' do
           stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: true })
