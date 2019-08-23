@@ -17,3 +17,7 @@
 runit_service 'prometheus' do
   action :disable
 end
+
+consul_service 'prometheus' do
+  action :delete
+end

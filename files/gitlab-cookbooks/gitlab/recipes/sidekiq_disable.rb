@@ -19,3 +19,7 @@
 runit_service "sidekiq" do
   action :disable
 end
+
+consul_service 'sidekiq' do
+  action :delete
+end

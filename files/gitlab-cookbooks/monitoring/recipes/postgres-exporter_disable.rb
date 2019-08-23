@@ -19,3 +19,7 @@
 runit_service "postgres-exporter" do
   action :disable
 end
+
+consul_service 'postgres-exporter' do
+  action :delete
+end

@@ -19,3 +19,7 @@
 runit_service "node-exporter" do
   action :disable
 end
+
+consul_service 'node-exporter' do
+  action :delete
+end

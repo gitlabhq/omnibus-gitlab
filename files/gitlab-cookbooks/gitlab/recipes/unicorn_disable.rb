@@ -19,3 +19,7 @@
 runit_service "unicorn" do
   action :disable
 end
+
+consul_service 'rails' do
+  action :delete
+end

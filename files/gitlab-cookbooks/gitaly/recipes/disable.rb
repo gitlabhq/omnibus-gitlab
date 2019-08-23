@@ -18,3 +18,7 @@
 runit_service "gitaly" do
   action :disable
 end
+
+consul_service 'gitaly' do
+  action :delete
+end
