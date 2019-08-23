@@ -147,7 +147,6 @@ exclude 'embedded/lib/ruby/gems/*/cache'
 exclude 'embedded/lib/ruby/gems/*/gems/*/spec'
 exclude 'embedded/lib/ruby/gems/*/gems/*/test'
 exclude 'embedded/lib/ruby/gems/*/gems/*/tests'
-exclude 'embedded/lib/ruby/gems/*/gems/*/vendor'
 
 # exclude gem build logs
 exclude 'embedded/lib/ruby/gems/*/extensions/*/*/*/mkmf.log'
