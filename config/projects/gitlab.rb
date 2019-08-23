@@ -143,11 +143,16 @@ exclude 'embedded/share/man'
 # exclude rubygems build cache
 exclude 'embedded/lib/ruby/gems/*/cache'
 
-# exclude test and vendor folders
+# exclude test and some vendor folders
 exclude 'embedded/lib/ruby/gems/*/gems/*/spec'
 exclude 'embedded/lib/ruby/gems/*/gems/*/test'
 exclude 'embedded/lib/ruby/gems/*/gems/*/tests'
-exclude 'embedded/lib/ruby/gems/*/gems/*/vendor'
+# Some vendor folders (e.g. licensee) are needed by GitLab.
+# For now, exclude the most space-consuming gems until
+# there's a better way to whitelist directories.
+exclude 'embedded/lib/ruby/gems/*/gems/rugged*/vendor'
+exclude 'embedded/lib/ruby/gems/*/gems/ace-rails*/vendor'
+exclude 'embedded/lib/ruby/gems/*/gems/libyajl2*/**/vendor'
 
 # exclude gem build logs
 exclude 'embedded/lib/ruby/gems/*/extensions/*/*/*/mkmf.log'
