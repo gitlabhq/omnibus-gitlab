@@ -144,6 +144,8 @@ describe 'registry recipe' do
         .with_content(/-----BEGIN RSA PRIVATE KEY-----/)
     end
 
+    it_behaves_like 'renders a valid YAML file', '/var/opt/gitlab/registry/config.yml'
+
     it 'creates registry config.yml template' do
       expect(chef_run).to create_template('/var/opt/gitlab/registry/config.yml').with(
         owner: 'registry',
