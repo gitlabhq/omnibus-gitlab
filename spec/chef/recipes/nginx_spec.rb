@@ -534,6 +534,25 @@ describe 'nginx' do
     end
   end
 
+  describe 'logrotate settings' do
+    context 'default values' do
+      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'gitlab-www'
+    end
+
+    context 'specified username and group' do
+      before do
+        stub_gitlab_rb(
+          web_server: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'bar'
+    end
+  end
+
   def nginx_headers(additional_headers)
     basic_nginx_headers.merge(additional_headers)
   end
