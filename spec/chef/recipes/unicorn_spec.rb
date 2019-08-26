@@ -16,6 +16,25 @@ describe 'gitlab::unicorn' do
   context 'when unicorn is enabled' do
     it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
 
+    describe 'logrotate settings' do
+      context 'default values' do
+        it_behaves_like 'configured logrotate service', 'unicorn', 'git', 'git'
+      end
+
+      context 'specified username and group' do
+        before do
+          stub_gitlab_rb(
+            user: {
+              username: 'foo',
+              group: 'bar'
+            }
+          )
+        end
+
+        it_behaves_like 'configured logrotate service', 'unicorn', 'foo', 'bar'
+      end
+    end
+
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
         .with_content { |content|
