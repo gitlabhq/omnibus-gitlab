@@ -20,4 +20,5 @@ end
 
 consul_service 'prometheus' do
   action :delete
+  reload_service false unless node['consul']['enable']
 end

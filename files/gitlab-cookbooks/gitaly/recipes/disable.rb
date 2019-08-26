@@ -21,4 +21,5 @@ end
 
 consul_service 'gitaly' do
   action :delete
+  reload_service false unless node['consul']['enable']
 end

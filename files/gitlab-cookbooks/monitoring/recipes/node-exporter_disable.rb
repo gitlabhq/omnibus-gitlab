@@ -22,4 +22,5 @@ end
 
 consul_service 'node-exporter' do
   action :delete
+  reload_service false unless node['consul']['enable']
 end

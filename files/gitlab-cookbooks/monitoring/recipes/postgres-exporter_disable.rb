@@ -22,4 +22,5 @@ end
 
 consul_service 'postgres-exporter' do
   action :delete
+  reload_service false unless node['consul']['enable']
 end

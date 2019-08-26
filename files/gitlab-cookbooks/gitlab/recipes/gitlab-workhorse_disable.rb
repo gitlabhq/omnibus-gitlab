@@ -21,4 +21,5 @@ end
 
 consul_service 'workhorse' do
   action :delete
+  reload_service false unless node['consul']['enable']
 end
