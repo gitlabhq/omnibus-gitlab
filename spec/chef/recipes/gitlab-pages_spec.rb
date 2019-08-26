@@ -244,4 +244,23 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy="http://example:8080"})
     end
   end
+
+  describe 'logrotate settings' do
+    context 'default values' do
+      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
+    end
+
+    context 'specified username and group' do
+      before do
+        stub_gitlab_rb(
+          user: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
+    end
+  end
 end

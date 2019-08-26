@@ -2,6 +2,7 @@
 # Modifications will be overwritten!
 
 <%= @log_directory %>/*.log {
+  su <%= @username %> <%= @groupname %>
   <%= @options['logrotate_frequency'] %>
   <%= "size #{@options['logrotate_size']}" if @options['logrotate_size'] %>
   rotate <%= @options['logrotate_rotate'] %>

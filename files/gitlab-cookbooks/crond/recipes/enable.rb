@@ -4,6 +4,7 @@ node.default['crond']['enable'] = true
 
 directory node['crond']['log_directory'] do
   owner "root"
+  mode "0750"
 end
 
 directory node["crond"]["cron_d"] do
