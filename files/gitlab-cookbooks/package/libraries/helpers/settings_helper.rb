@@ -102,6 +102,22 @@ module SettingsHelper
     Gitlab::ConfigMash.auto_vivify { super }
   end
 
+  def internal_set(symbol, value)
+    if configuration.key?(symbol)
+      configuration[symbol] = value
+    else
+      super
+    end
+  end
+
+  def internal_get(symbol)
+    if configuration.key?(symbol)
+      configuration[symbol]
+    else
+      super
+    end
+  end
+
   def method_missing(method_name, *arguments) # rubocop:disable Style/MissingRespondToMissing
     # Give better message for NilClass errors
     # If there are no arguments passed, this is a 'GET' call, and if
