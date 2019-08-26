@@ -1,5 +1,6 @@
 # Configuring omnibus settings
 
+- [Asset proxy server](asset_proxy.md)
 - [Configuration options](configuration.md)
 - [SMTP](smtp.md)
 - [NGINX](nginx.md)
