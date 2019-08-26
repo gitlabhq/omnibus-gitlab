@@ -97,6 +97,7 @@ module SettingsHelper
   end
 
   def from_file(_file_path)
+    config_strict_mode true
     # Allow auto mash creation during from_file call
     Gitlab::ConfigMash.auto_vivify { super }
   end
