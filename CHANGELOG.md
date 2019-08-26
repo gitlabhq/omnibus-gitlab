@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.0.6
+
+### Security (1 change)
+
+- Rename Grafana directory as part of upgrade.
+
+
+## 12.0.5
+
+### Security (1 change)
+
+- Automatically set an admin password for Grafana and disable basic authentication.
+
+
 ## 12.0.4
 
 - No changes.
