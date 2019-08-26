@@ -5,10 +5,6 @@ omnibus-gitlab repository.
 
 ## 12.2.1
 
-### Security (1 change)
-
-- Update nginx to 1.16.1. !3525
-
 ### Fixed (1 change)
 
 - Fix Error 500s when loading repositories with license files. !3542
@@ -18,6 +14,7 @@ omnibus-gitlab repository.
 
 ### Security (5 changes, 1 of them is from the community)
 
+- Update nginx to 1.16.1. !3525
 - Rename unused redis commands by default. !3436
 - Update PostgreSQL to 9.6.14 and 10.9. !3492
 - Update GraphicsMagick to 1.3.33. !3494 (Takuya Noguchi)
