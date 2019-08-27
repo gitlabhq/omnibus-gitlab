@@ -160,6 +160,14 @@ omnibus-gitlab repository.
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
 
+## 12.0.7
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
+
+
 ## 12.0.6
 
 ### Security (1 change)
