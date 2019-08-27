@@ -19,3 +19,9 @@
 runit_service "unicorn" do
   action :disable
 end
+
+consul_service 'rails' do
+  not_if { node["gitlab"]["puma"]["enable"] }
+  action :delete
+  reload_service false unless node['consul']['enable']
+end

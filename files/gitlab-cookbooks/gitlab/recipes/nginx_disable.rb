@@ -18,3 +18,8 @@
 runit_service "nginx" do
   action :disable
 end
+
+consul_service 'nginx' do
+  action :delete
+  reload_service false unless node['consul']['enable']
+end

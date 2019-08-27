@@ -67,8 +67,8 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'postgres-exporter' do
-    socket_address node['monitoring']['postgres-exporter']['listen_address']
-  end
+consul_service 'postgres-exporter' do
+  action Prometheus.service_discovery_action
+  socket_address node['monitoring']['postgres-exporter']['listen_address']
+  reload_service false unless node['consul']['enable']
 end

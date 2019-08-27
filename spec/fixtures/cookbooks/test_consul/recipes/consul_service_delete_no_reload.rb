@@ -1,6 +1,6 @@
 include_recipe 'test_consul::reload_consul'
 
-consul_service 'node-exporter' do
-  socket_address '0.0.0.0:5678'
+consul_service 'delete_no_reload' do
+  action :delete
   reload_service false
 end

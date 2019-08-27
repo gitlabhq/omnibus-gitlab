@@ -19,3 +19,8 @@
 runit_service "sidekiq" do
   action :disable
 end
+
+consul_service 'sidekiq' do
+  action :delete
+  reload_service false unless node['consul']['enable']
+end

@@ -9,7 +9,7 @@ describe 'gitlab::nginx' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab::nginx')
+    chef_runner.converge('gitlab::config', 'gitlab::nginx')
   end
 
   let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }

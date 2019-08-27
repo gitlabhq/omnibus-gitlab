@@ -94,10 +94,10 @@ runit_service 'prometheus' do
   )
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'prometheus' do
-    socket_address node['monitoring']['prometheus']['listen_address']
-  end
+consul_service 'prometheus' do
+  action Prometheus.service_discovery_action
+  socket_address node['monitoring']['prometheus']['listen_address']
+  reload_service false unless node['consul']['enable']
 end
 
 if node['gitlab']['bootstrap']['enable']

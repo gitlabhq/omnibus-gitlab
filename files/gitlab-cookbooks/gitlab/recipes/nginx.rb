@@ -266,11 +266,17 @@ template nginx_status_conf do
   action nginx_status_enabled ? :create : :delete
 end
 
-if nginx_status_enabled && node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'nginx' do
-    ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
-    port node['gitlab']['nginx']['status']['port']
-  end
+nginx_consul_action = if nginx_status_enabled && Prometheus.service_discovery
+                        :create
+                      else
+                        :delete
+                      end
+
+consul_service 'nginx' do
+  action nginx_consul_action
+  ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
+  port node['gitlab']['nginx']['status']['port']
+  reload_service false unless node['consul']['enable']
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']

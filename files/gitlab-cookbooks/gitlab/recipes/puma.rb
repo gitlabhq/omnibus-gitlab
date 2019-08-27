@@ -100,9 +100,9 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'rails' do
-    ip_address node['gitlab']['puma']['listen']
-    port node['gitlab']['puma']['port']
-  end
+consul_service 'rails' do
+  action Prometheus.service_discovery_action
+  ip_address node['gitlab']['puma']['listen']
+  port node['gitlab']['puma']['port']
+  reload_service false unless node['consul']['enable']
 end

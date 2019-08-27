@@ -23,9 +23,9 @@ sidekiq_service 'sidekiq' do
   group account_helper.gitlab_group
 end
 
-if node['consul']['enable'] && node['consul']['monitoring_service_discovery']
-  consul_service 'sidekiq' do
-    ip_address node['gitlab']['sidekiq']['listen_address']
-    port node['gitlab']['sidekiq']['listen_port']
-  end
+consul_service 'sidekiq' do
+  action Prometheus.service_discovery_action
+  ip_address node['gitlab']['sidekiq']['listen_address']
+  port node['gitlab']['sidekiq']['listen_port']
+  reload_service false unless node['consul']['enable']
 end
