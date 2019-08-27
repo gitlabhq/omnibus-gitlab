@@ -229,6 +229,7 @@ production: &base
     path: <%= @registry_path %>
     key: <%= @registry_key_path %>
     issuer: <%= @registry_issuer %>
+    notification_secret: <%= @registry_notification_secret %>
 
   ## Error Reporting and Logging with Sentry
   sentry:
@@ -393,6 +394,10 @@ production: &base
     #
     # If it is blank, it defaults to external_url.
     node_name: <%= @geo_node_name %>
+
+    registry_replication:
+      enabled: <%= @geo_registry_replication_enabled %>
+      primary_api_url: <%= @geo_registry_replication_primary_api_url %> # internal address to the primary registry, will be used by GitLab to directly communicate with primary registry API
 
   #
   # 2. GitLab CI settings

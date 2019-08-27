@@ -117,6 +117,10 @@ module Registry
 
         # And merge the default headers with the ones specific to this endpoint
         endpoint['headers'] = user_configuration['default_notifications_headers'].merge(endpoint['headers'] || {})
+
+        # As we set notification secret in gitlab.rb for registry we don't have to make user
+        # fill it in separately for GitLab application
+        Gitlab['gitlab_rails']['registry_notification_secret'] ||= endpoint['headers']['Authorization'].last if endpoint['name'] == 'geo_event'
       end
     end
 

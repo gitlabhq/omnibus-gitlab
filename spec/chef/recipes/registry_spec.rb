@@ -322,6 +322,34 @@ describe 'registry' do
       end
     end
 
+    context 'when notification is configured for Geo replication' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              {
+                'name' => 'geo_event',
+                'url' => 'https://registry.example.com/notify',
+                'timeout' => '500ms',
+                'threshold' => 5,
+                'backoff' => '1s',
+                'headers' => {
+                  "Authorization" => ["mysecret"]
+                }
+              }
+            ]
+          }
+        )
+      end
+
+      it 'assigns registry_notification_secret variable automatically' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"Authorization":\["mysecret"\]/)
+        expect(chef_run.node['gitlab']['gitlab-rails']['registry_notification_secret'])
+          .to eql('mysecret')
+      end
+    end
+
     context 'when registry notification endpoint is configured with the minimum required' do
       before do
         stub_gitlab_rb(

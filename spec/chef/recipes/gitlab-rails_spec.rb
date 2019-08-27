@@ -1659,6 +1659,22 @@ describe 'gitlab::gitlab-rails' do
           )
         )
       end
+
+      it 'sets the geo_registry_replication_enabled variable' do
+        stub_gitlab_rb(gitlab_rails: { geo_registry_replication_enabled: true })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including('geo_registry_replication_enabled' => true)
+        )
+      end
+
+      it 'sets the geo_registry_replication_primary_api_url variable' do
+        stub_gitlab_rb(gitlab_rails: { geo_registry_replication_primary_api_url: true })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including('geo_registry_replication_primary_api_url' => true)
+        )
+      end
     end
 
     context 'Prometheus self-monitoring' do
