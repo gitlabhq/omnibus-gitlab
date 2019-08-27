@@ -5,13 +5,13 @@
 An all-in-one install of OpenShift will require at least 5Gb of free RAM on your
 computer in order to test GitLab.
 
- - We are currently compatible with OpenShift Origin 1.3.x. Anything lower will not work.
- - For the Minishift based setup you need either:
-   - Linux: KVM 0.7.0
-   - Mac OSX: xhyve 0.3.1
- - For the Docker based setup you need Docker >= 1.10 and < 17.00
- - For the Ansible based setup you need to be on a RHEL compatible host
-   - RHEL/CentOS/Fedora/Atomic
+- We are currently compatible with OpenShift Origin 1.3.x. Anything lower will not work.
+- For the Minishift based setup you need either:
+  - Linux: KVM 0.7.0
+  - Mac OSX: xhyve 0.3.1
+- For the Docker based setup you need Docker >= 1.10 and < 17.00
+- For the Ansible based setup you need to be on a RHEL compatible host
+  - RHEL/CentOS/Fedora/Atomic
 
 ## Setup OpenShift Origin
 
