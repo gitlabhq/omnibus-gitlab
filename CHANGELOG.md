@@ -14,6 +14,14 @@ omnibus-gitlab repository.
 - Fix Error 500s when loading repositories with license files. !3542
 
 
+## 12.2.1
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
+
+
 ## 12.2.0
 
 ### Security (5 changes, 1 of them is from the community)
