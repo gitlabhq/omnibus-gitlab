@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 ## 12.2.2
 
-- No changes.
+- Unreleased due to QA failure.
 
 ## 12.2.1
 
