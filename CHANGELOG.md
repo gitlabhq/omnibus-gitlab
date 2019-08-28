@@ -5,11 +5,7 @@ omnibus-gitlab repository.
 
 ## 12.1.7
 
-### Security (2 changes)
-
-- Add documentation for configuring an asset proxy server.
-- Make logrotate perform operations not as root user.
-
+- Unreleased due to QA failure.
 
 ## 12.1.6
 

@@ -1,0 +1,5 @@
+---
+title: Make logrotate perform operations not as root user
+merge_request:
+author:
+type: security
