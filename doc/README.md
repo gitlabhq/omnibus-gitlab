@@ -91,6 +91,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Pages](https://docs.gitlab.com/ce/pages/administration.html)
 - [SSL](settings/ssl.md)
 - [GitLab and Registry](architecture/registry/README.md)
+- [Configuring an asset proxy server](settings/asset_proxy.md)
 
 ## Updating
 
