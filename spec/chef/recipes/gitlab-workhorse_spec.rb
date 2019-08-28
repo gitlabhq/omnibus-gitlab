@@ -17,6 +17,7 @@ describe 'gitlab::gitlab-workhorse' do
   context 'user and group' do
     context 'default values' do
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root", "git", "git"
+      it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'git', 'git'
     end
 
     context 'custom values' do
@@ -30,6 +31,7 @@ describe 'gitlab::gitlab-workhorse' do
       end
 
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root", "foo", "bar"
+      it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'foo', 'bar'
     end
   end
 
