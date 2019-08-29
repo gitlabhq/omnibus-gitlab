@@ -7,6 +7,25 @@ describe 'gitlab::gitlab-shell' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  describe 'logrotate settings' do
+    context 'default values' do
+      it_behaves_like 'configured logrotate service', 'gitlab-shell', 'git', 'git'
+    end
+
+    context 'specified username and group' do
+      before do
+        stub_gitlab_rb(
+          user: {
+            username: 'foo',
+            group: 'bar'
+          }
+        )
+      end
+
+      it_behaves_like 'configured logrotate service', 'gitlab-shell', 'foo', 'bar'
+    end
+  end
+
   it 'calls into check permissions to create and validate the authorized_keys' do
     expect(chef_run).to run_execute('/opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-keys check-permissions')
   end

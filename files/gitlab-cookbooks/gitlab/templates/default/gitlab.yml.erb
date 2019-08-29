@@ -53,6 +53,11 @@ production: &base
     email_display_name: <%= @gitlab_email_display_name %>
     email_reply_to: <%= @gitlab_email_reply_to %>
     email_subject_suffix: <%= @gitlab_email_subject_suffix %>
+    # Email SMIME signing settings
+    email_smime:
+      enabled: <%= @gitlab_email_smime_enabled %>
+      key_file: <%= @gitlab_email_smime_key_file %>
+      cert_file: <%= @gitlab_email_smime_cert_file %>
 
     # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
 
