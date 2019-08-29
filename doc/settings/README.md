@@ -1,5 +1,6 @@
 # Configuring omnibus settings
 
+- [Asset proxy server](asset_proxy.md)
 - [Backups](backups.md)
 - [Configuration options](configuration.md)
 - [Database](database.md)

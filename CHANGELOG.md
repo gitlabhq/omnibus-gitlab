@@ -3,11 +3,27 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.3
+
+- No changes.
+
+## 12.2.2
+
+- No changes.
+
 ## 12.2.1
 
 ### Fixed (1 change)
 
 - Fix Error 500s when loading repositories with license files. !3542
+
+
+## 12.2.1
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
 
 
 ## 12.2.0
@@ -148,6 +164,22 @@ omnibus-gitlab repository.
 - Use Postgresql 10.7 instead of 10.7.0. !3387 (Takuya Noguchi)
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
+
+## 12.0.8
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
+
+
+## 12.0.7
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
+
 
 ## 12.0.6
 
