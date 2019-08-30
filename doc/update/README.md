@@ -333,8 +333,6 @@ node throughout the process.
 
 On the Primary node, executing the following:
 
-1. Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
-
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
@@ -359,23 +357,17 @@ On the Primary node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Run non post-deployment database migrations
+1. Hot reload `unicorn` and `sidekiq` services
 
    ```sh
-   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake db:migrate
+   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup sidekiq
    ```
 
 1. Run post-deployment database migrations
 
    ```sh
    sudo gitlab-rake db:migrate
-   ```
-
-1. Hot reload `unicorn` and `sidekiq` services
-
-   ```sh
-   sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl hup sidekiq
    ```
 
 1. Verify Geo configuration and dependencies
@@ -391,8 +383,6 @@ Only proceed if you have successfully completed all steps on the Primary node.
 
 On all Secondary nodes, executing the following:
 
-1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
-
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
@@ -417,18 +407,18 @@ On all Secondary nodes, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Run post-deployment database migrations, specific to the Geo database
-
-   ```sh
-   sudo gitlab-rake geo:db:migrate
-   ```
-
 1. Hot reload `unicorn`, `sidekiq` and restart `geo-logcursor` services
 
    ```sh
    sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl hup sidekiq
    sudo gitlab-ctl restart geo-logcursor
+   ```
+
+1. Run post-deployment database migrations, specific to the Geo database
+
+   ```sh
+   sudo gitlab-rake geo:db:migrate
    ```
 
 1. Verify Geo configuration and dependencies
