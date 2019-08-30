@@ -24,7 +24,6 @@ gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
 log_directory = node['gitlab']['gitlab-shell']['log_directory']
-gitlab_shell_keys_check = File.join(gitlab_shell_dir, 'bin/gitlab-keys')
 gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
@@ -83,9 +82,11 @@ link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
   to "/opt/gitlab/embedded/service/gitlab-rails/.gitlab_shell_secret"
 end
 
-execute "#{gitlab_shell_keys_check} check-permissions" do
-  user git_user
+file authorized_keys do
+  owner git_user
   group git_group
+  mode '600'
+  action :create_if_missing
 end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
