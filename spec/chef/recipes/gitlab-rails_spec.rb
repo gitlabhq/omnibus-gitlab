@@ -1671,6 +1671,7 @@ describe 'gitlab::gitlab-rails' do
             )
           )
         )
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: true\s+listen_address: "localhost:9090"/)
       end
 
       it 'allows the values to be changed' do
@@ -1684,6 +1685,21 @@ describe 'gitlab::gitlab-rails' do
             )
           )
         )
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: false\s+listen_address: "192.168.1.1:8080"/)
+      end
+
+      it 'handles symbols' do
+        stub_gitlab_rb(prometheus: { enable: false, listen_address: :':8080' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            prometheus: hash_including(
+              enable: false,
+              listen_address: :':8080'
+            )
+          )
+        )
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: false\s+listen_address: ":8080"/)
       end
     end
   end
