@@ -655,7 +655,7 @@ production: &base
   # https://docs.gitlab.com/ee/administration/monitoring/prometheus/
   prometheus:
     enable: <%= @prometheus['enable'] %>
-    listen_address: <%= @prometheus['listen_address'] %>
+    listen_address: "<%= @prometheus['listen_address'] %>"
 
   #
   # 5. Extra customization
