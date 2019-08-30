@@ -1,5 +1,5 @@
 ---
 title: Update Mattermost to 5.11.1
-merge_request: 3556
+merge_request:
 author: Marc Schwede
-type: other
+type: security
