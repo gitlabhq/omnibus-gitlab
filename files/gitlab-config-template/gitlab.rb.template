@@ -396,6 +396,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
+###! Skip parts of the backup. Comma separated. 
+###! Docs: https://docs.gitlab.com/ee/raketasks/backup_restore.html#excluding-specific-directories-from-the-backup
+#gitlab_rails['env'] = {
+#    "SKIP" => "db,uploads,repositories,builds,artifacts,lfs,registry,pages"
+#}
 
 ### Pseudonymizer Settings
 # gitlab_rails['pseudonymizer_manifest'] = 'config/pseudonymizer.yml'
