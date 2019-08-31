@@ -24,17 +24,27 @@ describe 'gitlab::config' do
   end
 
   it 'ignores unsupported top level variables' do
-    Gitlab.instance_eval('abc="top-level"')
+    allow(IO).to receive(:read).and_call_original
+    allow(IO).to receive(:read).with('config-test.rb').and_return('abc="top-level"')
+    Gitlab.from_file('config-test.rb')
 
     expect(node['gitlab']['abc']).to be_nil
   end
 
-  it 'errors on unsupported nested variables' do
+  it 'errors on unsupported top level methods' do
+    allow(IO).to receive(:read).and_call_original
+    allow(IO).to receive(:read).with('config-test.rb').and_return('abc "top-level"')
     expect do
-      Gitlab.instance_eval('abc["def"]["hij"] = "top-level"')
-    end.to raise_error(NoMethodError).and(
-      output(/ERROR: Encountered unsupported config key/).to_stdout
-    )
+      Gitlab.from_file('config-test.rb')
+    end.to raise_error(Mixlib::Config::UnknownConfigOptionError)
+  end
+
+  it 'errors on unsupported nested variables' do
+    allow(IO).to receive(:read).and_call_original
+    allow(IO).to receive(:read).with('config-test.rb').and_return('abc["def"]["hij"] = "top-level"')
+    expect do
+      Gitlab.from_file('config-test.rb')
+    end.to raise_error(Mixlib::Config::UnknownConfigOptionError)
   end
 
   context 'when gitlab-rails is disabled' do
