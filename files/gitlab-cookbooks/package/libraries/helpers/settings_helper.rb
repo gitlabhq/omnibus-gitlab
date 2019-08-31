@@ -101,6 +101,8 @@ module SettingsHelper
     config_strict_mode true
     # Allow auto mash creation during from_file call
     Gitlab::ConfigMash.auto_vivify { super }
+  ensure
+    config_strict_mode false
   end
 
   # Enhance set so strict mode errors aren't thrown as long as the setting is witin our defined config
