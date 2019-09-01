@@ -40,6 +40,8 @@ module Gitlab
       container = Docker::Container.create(
         'Image' => image_reference,
         'detach' => true,
+        # update monitoring_whitelist to allow 'http://docker/-/readiness' access
+        'Env' => ["GITLAB_OMNIBUS_CONFIG=gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0'];"],
         'HostConfig' => {
           'PortBindings' => {
             '80/tcp' => [{ 'HostPort' => '80' }],
@@ -51,12 +53,6 @@ module Gitlab
       abort "container create failed: #{image_reference}" unless container
 
       container.start
-
-      # update monitoring_whitelist to allow 'http://docker/-/readiness' access
-      command = ["bash", "-c", "echo \"gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0']\" >> /etc/gitlab/gitlab.rb"]
-      container_exec_command(container, command, container_log_file)
-
-      container.restart
 
       # wait until Gitlab started
       gitlab_started = false
