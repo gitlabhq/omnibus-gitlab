@@ -8,6 +8,10 @@ exec 2>&1
 
 cd <%= @options[:working_dir] %>
 
+<% if @options[:open_files_ulimit] %>
+ulimit -n <%= @options[:open_files_ulimit] %>
+<% end %>
+
 exec chpst -e <%= @options[:env_dir] %> -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
