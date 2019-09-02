@@ -26,6 +26,7 @@ describe 'gitaly' do
   let(:ruby_restart_delay) { '10m' }
   let(:ruby_num_workers) { 5 }
   let(:git_catfile_cache_size) { 50 }
+  let(:open_files_ulimit) { 10000 }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -104,6 +105,11 @@ describe 'gitaly' do
         .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/var/opt/gitlab/git-data/repositories'})
     end
 
+    it 'renders the runit run script with defaults' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run')
+        .with_content(%r{ulimit -n 15000})
+    end
+
     it 'does not append timestamp in logs if logging format is json' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/exec svlogd \/var\/log\/gitlab\/gitaly/)
@@ -134,6 +140,7 @@ describe 'gitaly' do
           ruby_restart_delay: ruby_restart_delay,
           ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
+          open_files_ulimit: open_files_ulimit,
         },
         user: {
           username: 'foo',
@@ -191,6 +198,11 @@ describe 'gitaly' do
 
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[git\]\s+catfile_cache_size = 50})
+    end
+
+    it 'renders the runit run script with custom values' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run')
+        .with_content(%r{ulimit -n #{open_files_ulimit}})
     end
 
     it 'populates sv related log files' do
