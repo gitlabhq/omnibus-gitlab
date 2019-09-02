@@ -1,6 +1,8 @@
 module Gitlab
   class Deprecations
     class << self
+      ATTRIBUTE_BLOCKS = %w[gitlab monitoring].freeze
+
       def list(existing_config = nil)
         # List of deprecations. Remember to convert underscores to hyphens for
         # the first level configurations (eg: gitlab_rails => gitlab-rails)
@@ -87,7 +89,7 @@ module Gitlab
         deprecated_config = applicable_deprecations(incoming_version, existing_config, type)
         deprecated_config.each do |deprecation|
           config_keys = deprecation[:config_keys].dup
-          config_keys.shift if config_keys[0] == 'gitlab'
+          config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
           key = if config_keys.length == 1
                   config_keys[0].tr("-", "_")
                 else

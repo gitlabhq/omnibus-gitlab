@@ -102,10 +102,12 @@ describe Gitlab::Deprecations do
     it 'detects deprecated configuration for specified version and ignores not yet deprecated ones' do
       message_1 = "* nginx['listen_address'] has been deprecated since 8.10 and was removed in 11.0. Use nginx['listen_addresses'] instead."
       message_2 = "* gitlab_rails['stuck_ci_builds_worker_cron'] has been deprecated since 9.0 and was removed in 12.0. Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
+      message_3 = "* gitlab_monitor['enable'] has been deprecated since 12.0 and will be removed in 13.0. Use gitlab_exporter['enable'] instead."
 
       expect(described_class.check_config("11.0", invalid_config)).to include(message_1)
       expect(described_class.check_config("11.0", invalid_config)).not_to include(message_2)
       expect(described_class.check_config("12.0", invalid_config)).to include(message_2)
+      expect(described_class.check_config("12.0", invalid_config, :deprecation)).to include(message_3)
     end
   end
 

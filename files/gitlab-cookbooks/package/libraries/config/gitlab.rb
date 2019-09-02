@@ -52,6 +52,10 @@ module Gitlab
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
 
+  # If a new attribute block is added, add it also to the class handling
+  # deprecation messages at
+  # files/gitlab-cookbooks/package/libraries/deprecations.rb
+
   # Attributes under node['monitoring']
   attribute_block 'monitoring' do
     attribute('prometheus',        priority: 20).use { Prometheus }
