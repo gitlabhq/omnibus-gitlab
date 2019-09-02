@@ -24,6 +24,7 @@ gitaly_path = node['gitaly']['bin_path']
 wrapper_path = "#{gitaly_path}-wrapper"
 pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node['gitaly']['logging_format'].eql?('json')
+open_files_ulimit = node['gitaly']['open_files_ulimit']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -83,7 +84,8 @@ runit_service 'gitaly' do
     wrapper_path: wrapper_path,
     config_path: config_path,
     log_directory: log_directory,
-    json_logging: json_logging
+    json_logging: json_logging,
+    open_files_ulimit: open_files_ulimit
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitaly'].to_hash)
 end
