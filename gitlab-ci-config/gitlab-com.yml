@@ -127,10 +127,11 @@ docs-lint:
   before_script: []
   <<: *dedicated-runner
   script:
+    # Lint Markdown
+    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    # Prepare docs for build
     - mv doc/ /tmp/gitlab-docs/content/omnibus
     - cd /tmp/gitlab-docs
-    # Lint Markdown
-    - markdownlint --config $CI_PROJECT_DIR/.markdownlint.json content/omnibus/**/*.md
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
