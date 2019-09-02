@@ -79,7 +79,7 @@ module Gitlab
         # Getting settings from gitlab.rb that are in deprecations list and
         # has been removed in incoming or a previous version.
         current_deprecations = list(existing_config).select { |deprecation| version >= Gem::Version.new(deprecation[type]) }
-        current_deprecations.select { |deprecation| existing_config.dig(*deprecation[:config_keys]) }
+        current_deprecations.select { |deprecation| !existing_config.dig(*deprecation[:config_keys]).nil? }
       end
 
       def check_config(incoming_version, existing_config, type = :removal)
@@ -95,7 +95,7 @@ module Gitlab
                 end
 
           if type == :deprecation
-            message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and will be removed in #{deprecation[:removal]}"
+            message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and will be removed in #{deprecation[:removal]}."
           elsif type == :removal
             message = "* #{key} has been deprecated since #{deprecation[:deprecation]} and was removed in #{deprecation[:removal]}."
           end
