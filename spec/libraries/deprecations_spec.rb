@@ -16,30 +16,57 @@ describe Gitlab::Deprecations do
       "mattermost" => {
         "system_read_timeout" => 50,
         "log_file_directory" => "/my/random/path"
+      },
+      "monitoring" => {
+        "gitlab-monitor" => {
+          "enable" => false
+        }
       }
+    }
+  end
+
+  let(:conf1) do
+    {
+      config_keys: %w(gitlab nginx listen_address),
+      deprecation: '8.10',
+      removal: '11.0',
+      note: "Use nginx['listen_addresses'] instead."
+    }
+  end
+
+  let(:conf2) do
+    {
+      config_keys: %w(gitlab gitlab-rails stuck_ci_builds_worker_cron),
+      deprecation: '9.0',
+      removal: '12.0',
+      note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
+    }
+  end
+
+  let(:conf3) do
+    {
+      config_keys: %w(gitlab gitlab-shell git_data_directories),
+      deprecation: '8.10',
+      removal: '11.0',
+      note: "Use git_data_dirs instead."
+    }
+  end
+
+  let(:conf4) do
+    {
+      config_keys: %w(monitoring gitlab-monitor enable),
+      deprecation: '12.0',
+      removal: '13.0',
+      note: "Use gitlab_exporter['enable'] instead."
     }
   end
 
   let(:deprecation_list) do
     [
-      {
-        config_keys: %w(gitlab nginx listen_address),
-        deprecation: '8.10',
-        removal: '11.0',
-        note: "Use nginx['listen_addresses'] instead."
-      },
-      {
-        config_keys: %w(gitlab gitlab-rails stuck_ci_builds_worker_cron),
-        deprecation: '9.0',
-        removal: '12.0',
-        note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
-      },
-      {
-        config_keys: %w(gitlab gitlab-shell git_data_directories),
-        deprecation: '8.10',
-        removal: '11.0',
-        note: "Use git_data_dirs instead."
-      },
+      conf1,
+      conf2,
+      conf3,
+      conf4,
     ]
   end
 
@@ -53,19 +80,6 @@ describe Gitlab::Deprecations do
     end
 
     it 'distinguishes from deprecated and removed configuration' do
-      conf1 = {
-        config_keys: %w[gitlab nginx listen_address],
-        deprecation: "8.10",
-        removal: "11.0",
-        note: "Use nginx['listen_addresses'] instead."
-      }
-      conf2 = {
-        config_keys: %w[gitlab gitlab-rails stuck_ci_builds_worker_cron],
-        deprecation: "9.0",
-        removal: "12.0",
-        note: "Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
-      }
-
       expect(described_class.applicable_deprecations("11.0", invalid_config, :deprecation)).to include(conf1)
       expect(described_class.applicable_deprecations("11.0", invalid_config, :deprecation)).to include(conf2)
       expect(described_class.applicable_deprecations("12.0", invalid_config, :deprecation)).to include(conf1)
@@ -73,6 +87,10 @@ describe Gitlab::Deprecations do
 
       expect(described_class.applicable_deprecations("11.0", invalid_config, :removal)).not_to include(conf2)
       expect(described_class.applicable_deprecations("12.0", invalid_config, :removal)).to include(conf2)
+    end
+
+    it 'also detects deprecated falsey values' do
+      expect(described_class.applicable_deprecations("12.0", invalid_config, :deprecation)).to include(conf4)
     end
   end
 
