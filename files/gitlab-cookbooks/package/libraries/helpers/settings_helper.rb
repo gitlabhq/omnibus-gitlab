@@ -97,24 +97,30 @@ module SettingsHelper
   end
 
   def from_file(_file_path)
+    # Throw errors for unrecognized top level calls (usually spelling mistakes)
+    config_strict_mode true
     # Allow auto mash creation during from_file call
     Gitlab::ConfigMash.auto_vivify { super }
+  ensure
+    config_strict_mode false
   end
 
-  def method_missing(method_name, *arguments) # rubocop:disable Style/MissingRespondToMissing
-    # Give better message for NilClass errors
-    # If there are no arguments passed, this is a 'GET' call, and if
-    # there is no matching key in the configuration, then it has not been set (not even to nil)
-    # and we will output a nicer error above the exception
-    if arguments.length.zero? && !configuration.key?(method_name)
-      breaktxt = '=' * 80
-      message = "Encountered unsupported config key '#{method_name}' in /etc/gitlab/gitlab.rb."
-      puts "\n#{breaktxt}\n  ERROR: #{message}\n#{breaktxt}\n"
-      Chef::Log.error(message)
+  # Enhance set so strict mode errors aren't thrown as long as the setting is witin our defined config
+  def internal_set(symbol, value)
+    if configuration.key?(symbol)
+      configuration[symbol] = value
+    else
+      super
     end
+  end
 
-    # Parent method_missing takes care of setting values for missing methods
-    super
+  # Enhance get so strict mode errors aren't thrown as long as the setting is witin our defined config
+  def internal_get(symbol)
+    if configuration.key?(symbol)
+      configuration[symbol]
+    else
+      super
+    end
   end
 
   def hyphenate_config_keys
