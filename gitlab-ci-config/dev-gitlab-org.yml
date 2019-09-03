@@ -232,6 +232,16 @@ Docker-branch:
   dependencies: []
   retry: 1
 
+Docker-branch-measure-memory:
+  extends: .measure_memory_script_artifacts
+  stage: metrics
+  only:
+    - schedules@gitlab/omnibus-gitlab
+  tags:
+  - docker-builder
+  cache: *branch-cache
+  dependencies: []
+
 QA-Master:
   extends: .docker_job
   stage: package-and-image
@@ -424,6 +434,16 @@ Docker:
   cache: *tag-cache
   dependencies: []
   retry: 1
+
+Docker-measure-memory:
+  extends: .measure_memory_script_artifacts
+  stage: metrics
+  <<: *dev-tag-only
+  when: manual
+  tags:
+  - docker-builder
+  cache: *tag-cache
+  dependencies: []
 
 ### Staging uploads
 Ubuntu-18.04-staging:
