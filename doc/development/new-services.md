@@ -41,7 +41,7 @@ default['gitlab']['best-service']['log_directory'] = '/var/log/gitlab/best-servi
 - `['best-service']` is the name of your service, at this level we use hyphens to separate words.
 - `enable`, `dir`, and `log_directory` are our config settings, and we use underscores to separate words at this and deeper levels.
 - `/var/opt/gitlab` is where the working directory and config files for the services are placed.
-- `/var/log/gitlab` is where logs are written to for the gitlab package.
+- `/var/log/gitlab` is where logs are written to for the GitLab package.
 
 Define all your settings that you want configurable in the package here. Default
 them to `nil` if you need to calculate their defaults based on other settings for
@@ -55,7 +55,7 @@ you will need to add a top level Mash for the service.
 In `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` you will find the list of
 `attribute` methods.
 
-If your service exists within the attributes for the gitlab cookbook, you should
+If your service exists within the attributes for the GitLab cookbook, you should
 add it within the `attribute_block('gitlab')` block.  Otherwise, if your service
 has its own cookbook, add it above.
 
@@ -120,7 +120,7 @@ Some examples of existing groups you may want to use:
 
 - If the service is enabled in omnibus be default, it should add the `DEFAULT_GROUP` group.
 - If the service should really not be disabled in almost any scenario, add the `SYSTEM_GROUP`.
-- If the service relies on gitlab-rails having been configured, add the `rails` group.
+- If the service relies on GitLab Rails having been configured, add the `rails` group.
 - If the service is a new prometheus exporter, add the `prometheus` group.
 
 ## Create enable and disable recipes for the service
@@ -136,7 +136,7 @@ for your service. You will want to ensure the system user that runs your service
 is created. Render any configuration files needed for your service into your working
 directory.
 
-Near the end of the recipe you will want to make a call to the Runit service definition
+Near the end of the recipe you will want to make a call to the runit service definition
 to define your recipe. In order for this work work you will need to have created
 a run file in the cookbooks `templates/default` directory. These filenames start
 with `sv-` followed by the service name, followed by the runit action name.
@@ -225,7 +225,7 @@ module BestService
 end
 ```
 
-We then need to have the gitlab config call your parse_variables method.
+We then need to have the GitLab config call your parse_variables method.
 
 Go into `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` and update
 your attribute to use the library.

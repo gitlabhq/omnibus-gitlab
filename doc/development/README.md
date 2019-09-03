@@ -9,7 +9,7 @@
 - [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
 - [Adding deprecation messages](adding-deprecation-messages.md)
 - [Adding an attribute to public_attributes.json](public-attributes.md)
-- [Adding a gitlab-ctl command](gitlab-ctl-commands.md)
+- [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
 - [Managing PostgreSQL versions](managing-postgresql-versions.md)
 
 ## Setting up development environment
@@ -58,7 +58,7 @@ their applicability:
 1. Code for implementing feature/bugfix
 1. Tests, as explained in [Writing Tests](#writing-tests)
 1. Documentation explaining the change
-1. If Merge Request introduces change in user facing configuration, update to [gitlab.rb template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
 
 **`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
@@ -73,7 +73,7 @@ their applicability:
 
 It can be useful to only build one piece of software, rather than rebuild the whole package each time. For instance,
 when adding a new software definition. Using this method, you can quickly rebuild an omnibus package containing only
-the software and its dependencies. Once you've confirmed the software builds on its own, you can add it to the omnibus-gitlab
+the software and its dependencies. Once you've confirmed the software builds on its own, you can add it to the Omnibus GitLab
 build and confirm it there. To use this:
 
 1. [Setup your development environment](setup.md)

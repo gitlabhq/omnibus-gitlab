@@ -1,6 +1,6 @@
-# Adding new gitlab-ctl commands
+# Adding new `gitlab-ctl` commands
 
-New gitlab-ctl commands can be added to two directory : `files/gitlab-ctl-commands` and `files/gitlab-ctl-commands-ee`. Chef stores gitlab-ctl commands in `/opt/gitlab/embedded/service/omnibus-ctl`
+New `gitlab-ctl` commands can be added to two directory : `files/gitlab-ctl-commands` and `files/gitlab-ctl-commands-ee`. Chef stores `gitlab-ctl` commands in `/opt/gitlab/embedded/service/omnibus-ctl`.
 
 There are two main functions you will use to add commands (<https://github.com/chef/omnibus-ctl>):
 

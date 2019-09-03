@@ -1,10 +1,10 @@
 # Common installation problems
 
-Below you can find the most common issues users encounter when installing omnibus-gitlab packages.
+Below you can find the most common issues users encounter when installing Omnibus GitLab packages.
 
 ## Hash Sum mismatch when downloading packages
 
-apt-get install outputs something like:
+`apt-get install` outputs something like:
 
 ```
 E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trusty/main/g/gitlab-ce/gitlab-ce_8.1.0-ce.0_amd64.deb  Hash Sum mismatch
@@ -20,7 +20,7 @@ sudo apt-get clean
 
 See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) and [his blog article](http://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
 
-Another workaround is to download the package manually by selecting the correct package from [packages.gitlab.com CE](https://packages.gitlab.com/gitlab/gitlab-ce) [or EE repository](https://packages.gitlab.com/gitlab/gitlab-ee):
+Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
 ```
 curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download
@@ -75,7 +75,7 @@ This error is thrown when `/etc/gitlab/gitlab.rb` configuration file contains
 configuration that is invalid or unsupported. Double check that there are no
 typos or that the configuration file does not contain obsolete configuration.
 
-You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 ## GitLab is unreachable in my browser
 
@@ -148,24 +148,24 @@ To troubleshoot this error:
    $ systemctl restart gitlab-runsvdir.service
    ```
 
-*Note* This should be resolved starting from 7.13 omnibus-gitlab packages.
+*Note* This should be resolved starting from 7.13 Omnibus GitLab packages.
 
-During the first `gitlab-ctl reconfigure` run, omnibus-gitlab needs to figure
+During the first `gitlab-ctl reconfigure` run, Omnibus GitLab needs to figure
 out if your Linux server is using SysV Init, Upstart or Systemd so that it can
 install and activate the `gitlab-runsvdir` service. If `gitlab-ctl reconfigure`
 makes the wrong decision, it will later hang at
 `ruby_block[supervise_redis_sleep] action run`.
 
-The choice of init system is currently made in [the embedded Runit
+The choice of init system is currently made in [the embedded runit
 cookbook][runit-cookbook]  by essentially
 looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
 can make the wrong decision in situations such as:
 
 - your OS release looks like 'Debian 7' but it is really some variant which
   uses Upstart instead of SysV Init;
-- your OS release is unknown to the Runit cookbook (e.g. ClearOS 6.5).
+- your OS release is unknown to the runit cookbook (e.g. ClearOS 6.5).
 
-Solving problems like this would require changes to the embedded Runit
+Solving problems like this would require changes to the embedded runit
 cookbook; Merge Requests are welcome. Until this problem is fixed, you can work
 around it by manually performing the appropriate installation steps for your
 particular init system. For instance, to manually set up `gitlab-runsvdir` with
@@ -191,13 +191,13 @@ postgresql['port'] = 2345
 unicorn['port'] = 3456
 ```
 
-For Nginx port changes please see [settings/nginx.md](../settings/nginx.md).
+For Nginx port changes please see [`settings/nginx.md`](../settings/nginx.md).
 
 ## Git user does not have SSH access
 
 ### SELinux-enabled systems
 
-On SELinux-enabled systems the git user's `.ssh` directory or its contents can
+On SELinux-enabled systems the Git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which will set the `ssh_home_t` security context on
 `/var/opt/gitlab/.ssh`.
@@ -209,17 +209,17 @@ command is available.
 
 ### All systems
 
-The git user is created, by default, with a locked password, shown by `'!'` in
+The Git user is created, by default, with a locked password, shown by `'!'` in
 /etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon will prevent the
-git user from authenticating even with ssh keys. An alternative secure solution
-is to unlock the password by replacing `'!'` with `'*'` in `/etc/shadow`. The git
+Git user from authenticating even with ssh keys. An alternative secure solution
+is to unlock the password by replacing `'!'` with `'*'` in `/etc/shadow`. The Git
 user will still be unable to change the password because it runs in a restricted
 shell and the `passwd` command for non-superusers requires entering the current
 password prior to a new password. The user cannot enter a password that will
 match `'*'` and therefore the account remains password-less.
 
-Keep in mind that the git user must have access to the system so please review
-your security settings at `/etc/security/access.conf` and make sure the git user
+Keep in mind that the Git user must have access to the system so please review
+your security settings at `/etc/security/access.conf` and make sure the Git user
 is not blocked.
 
 ## Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
@@ -249,7 +249,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 By default, Postgres will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
-To fix this, you can disable postgresql's shared memory detection. Set the
+To fix this, you can disable PostgreSQL's shared memory detection. Set the
 following value in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
@@ -268,15 +268,15 @@ $ gitlab-ctl reconfigure
 
 This can happen if the omnibus package you installed was built for a different
 OS release than the one on your server. Double-check that you downloaded and
-installed the correct omnibus-gitlab package for your operating system.
+installed the correct Omnibus GitLab package for your operating system.
 
-## Reconfigure fails to create the git user
+## Reconfigure fails to create the Git user
 
-This can happen if you run `sudo gitlab-ctl reconfigure` as the git user.
+This can happen if you run `sudo gitlab-ctl reconfigure` as the Git user.
 Switch to another user.
 
-More importantly: do not give sudo rights to the git user or to any of the
-other users used by omnibus-gitlab. Bestowing unnecessary privileges on a
+More importantly: do not give sudo rights to the Git user or to any of the
+other users used by Omnibus GitLab. Bestowing unnecessary privileges on a
 system user weakens the security of your system.
 
 ## Failed to modify kernel parameters with sysctl
@@ -348,7 +348,7 @@ Tip: You may find it easier to look at the line in the Chef output than to find 
   +kernel.shmall = 4194304
 ```
 
-## I am unable to install omnibus-gitlab without root access
+## I am unable to install Omnibus GitLab without root access
 
 Occasionally people ask if they can install GitLab without root access.
 This is problematic for several reasons.
@@ -356,47 +356,47 @@ This is problematic for several reasons.
 ### Installing the .deb or .rpm
 
 To our knowledge there is no clean way to install Debian or RPM
-packages as a non-privileged user. You cannot install omnibus-gitlab
+packages as a non-privileged user. You cannot install Omnibus GitLab
 RPM's because the Omnibus build process does not create source RPM's.
 
 ### Hassle-free hosting on port 80 and 443
 
 The most common way to deploy GitLab is to have a web server
-(NGINX/Apache) running on the same server as GitLab, with the web
+(Nginx/Apache) running on the same server as GitLab, with the web
 server listening on a privileged (below-1024) TCP port. In
-omnibus-gitlab we provide this convenience by bundling an
-automatically configured NGINX service that needs to run its master
+Omnibus GitLab we provide this convenience by bundling an
+automatically configured Nginx service that needs to run its master
 process as root to open ports 80 and 443.
 
 If this is problematic, administrators installing GitLab can disable
-the bundled NGINX service, but this puts the burden on them to keep
-the NGINX configuration in tune with GitLab during application
+the bundled Nginx service, but this puts the burden on them to keep
+the Nginx configuration in tune with GitLab during application
 updates.
 
 ### Isolation between Omnibus services
 
-Bundled services in omnibus-gitlab (GitLab itself, NGINX, Postgres,
+Bundled services in Omnibus GitLab (GitLab itself, Nginx, Postgres,
 Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
-access. By default, omnibus-gitlab will create the required Unix
-accounts during 'gitlab-ctl reconfigure' but that behavior can be
+access. By default, Omnibus GitLab will create the required Unix
+accounts during `gitlab-ctl reconfigure` but that behavior can be
 [disabled](../settings/configuration.html#disable-user-and-group-account-management).
 
-In principle omnibus-gitlab could do with only 2 user accounts (one
+In principle Omnibus GitLab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
-Runit (runsvdir), Postgres and Redis process. But this would be a
-major change in the 'gitlab-ctl reconfigure' Chef code and it would
-probably create major upgrade pain for all existing omnibus-gitlab
+runit (runsvdir), Postgres and Redis process. But this would be a
+major change in the `gitlab-ctl reconfigure` Chef code and it would
+probably create major upgrade pain for all existing Omnibus GitLab
 installations. (We would probably have to rearrange the directory
-structure under /var/opt/gitlab.)
+structure under `/var/opt/gitlab`.)
 
 ### Tweaking the operating system for better performance
 
-During 'gitlab-ctl reconfigure' we set and install several sysctl
+During `gitlab-ctl reconfigure` we set and install several sysctl
 tweaks to improve Postgres performance and increase connection limits.
 This can only be done with root access.
 
-## gitlab-rake assets:precompile fails with 'Permission denied'
+## `gitlab-rake assets:precompile` fails with 'Permission denied'
 
 Some users report that running `gitlab-rake assets:precompile` does not work
 with the omnibus packages. The short answer to this is: do not run that
@@ -443,7 +443,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ## 'Short read or OOM loading DB' error
 
-Try cleaning the old redis session by following the [documentation here.](https://docs.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
+Try cleaning the old Redis session by following the [documentation here.](https://docs.gitlab.com/ce/operations/cleaning_up_redis_sessions.html)
 
 ## Apt error 'The requested URL returned error: 403'
 
@@ -471,16 +471,16 @@ If you are installing GitLab in an isolated network with custom certificate auth
 Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed)
 ```
 
-when GitLab tries to connect with the internal services like gitlab-shell.
+when GitLab tries to connect with the internal services like GitLab Shell.
 
 To fix these errors, see the [Custom SSL settings](../settings/ssl.md) section.
 
 ## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
-Starting with version 8.3, gitlab-workorse is the default router for any requests
+Starting with version 8.3, GitLab Workorse is the default router for any requests
 going to GitLab.
 
-If gitlab-workhorse doesn't receive an answer from
+If GitLab Workhorse doesn't receive an answer from
 GitLab within 1 minute (default), it will serve a 502 page.
 
 There are various reasons why the request might timeout, perhaps user
@@ -500,7 +500,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of nginx doc][] for details on
+See [Change the default proxy headers section of Nginx doc][] for details on
 how to override the default headers.
 
 ## Can't verify CSRF token authenticity Completed 422 Unprocessable
@@ -509,18 +509,18 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of nginx doc][] for details on
+See [Change the default proxy headers section of Nginx doc][] for details on
 how to override the default headers.
 
 ## Extension missing pg_trgm
 
 Starting from GitLab 8.6, [GitLab requires](https://docs.gitlab.com/ce/install/requirements.html#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
-If you are using omnibus-gitlab package with the bundled database, the extension
+If you are using Omnibus GitLab package with the bundled database, the extension
 should be automatically enabled when you upgrade.
 
 If you however, are using an external (non-packaged) database, you will need to
-enable the extension manually. The reason for this is that omnibus-gitlab
+enable the extension manually. The reason for this is that Omnibus GitLab
 package with external database has no way of confirming if the extension exists,
 and it also doesn't have a way of enabling the extension.
 
@@ -581,10 +581,10 @@ If GitLab runs fine when not upgrading or running a backup, then adding more swa
 should solve your problem. If you see the server using swap during normal usage,
 you can add more RAM to improve performance.
 
-## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
+## Nginx error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
 
 If your external url for GitLab is longer than the default bucket size (64 bytes),
-NGINX may stop working and show this error in the the logs. To allow larger server
+Nginx may stop working and show this error in the the logs. To allow larger server
 names, double the bucket size in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
@@ -613,11 +613,11 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 [disable storage directory management](../settings/configuration.md#disable-storage-directories-management)
  and manage the permissions yourself.
 
-## gitlab-runsvdir not starting
+## `gitlab-runsvdir` not starting
 
 This applies to operating systems using systemd (e.g. Ubuntu 16.04+, CentOS, etc.).
 
-Since GitLab 11.2, the gitlab-runsvdir starts during the `multi-user.target`
+Since GitLab 11.2, the `gitlab-runsvdir` starts during the `multi-user.target`
 instead of `basic.target`.  If you are having trouble starting this service
 after upgrading GitLab, you may need to check that your system has properly
 booted all the required services for `multi-user.target` via the command:

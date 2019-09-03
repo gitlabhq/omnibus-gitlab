@@ -6,10 +6,8 @@ Usually, we are shipping two versions of PostgreSQL. We need to support running 
 
 The software definitions are in:
 
-```
-config/software/postgresql.rb
-config/software/postgresql_new.rb
-```
+- `config/software/postgresql.rb`
+- `config/software/postgresql_new.rb`
 
 ## Default version
 
@@ -17,7 +15,7 @@ The version that should be installed by default is controlled by using the 'link
 
 ## Upgrading
 
-The [pg-upgrade gitlab-ctl command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server)
+The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server)
 
 ## Removing an older version
 

@@ -19,7 +19,8 @@ The main components of this project definition file are:
 1. Dependency list - List of external tools and softwares which are required to build/run GitLab and sometimes their metadata.
 1. Global configuration variables used for installation of GitLab - Installation directory, system user, system group, etc.
 
-`**Note:` Project definition may be found at [config/projects/gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb).
+NOTE: **Note:**
+Project definition may be found at [`config/projects/gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb).
 
 ### Individual software definitions
 
@@ -47,7 +48,7 @@ For more extensive changes it may be more convenient to track the changes requir
 Omnibus-GitLab ships with it a single configuration file that can be used to configure each and every part of the GitLab instance, which will be installed to the user's machine. This configuration file acts as the canonical source of all configuration settings that will be applied to the GitLab instance. It lists the general settings for a GitLab instance as well as various options for different components. The common structure of this file consist of configurations specified in the format `<component>['<setting>'] = <value>`. All the available options are listed in the template, but all except the ones necessary for basic working of GitLab are commented out by default. Users may uncomment them and specify corresponding values, if necessary.
 
 NOTE: **Note:**
-Global configuration template may be found at [files/gitlab-config-template/gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+Global configuration template may be found at [`files/gitlab-config-template/gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 ## GitLab Cookbook
 
@@ -58,28 +59,28 @@ Omnibus-GitLab, as described earlier, uses many of the Chef components like cook
 Default attributes, as the name suggests, specifies the default values to different settings provided in the configuration file. These values act as fail-safe and get used if the user doesn't provide a value to a setting, and thus ensure a working GitLab instance with minimum user tweaking being necessary.
 
 NOTE: **Note:**
-Default attributes are defined at [files/gitlab-cookbooks/gitlab/attributes/default.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb).
+Default attributes are defined at [`files/gitlab-cookbooks/gitlab/attributes/default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb).
 
 ### Recipes
 
 Recipes do most of the heavy-lifting while installing GitLab using omnibus package as they are responsible for setting up each component of the GitLab ecosystem in a user's machine. They create necessary files, directories and links in their corresponding locations, set their permissions and owners, configure, start and stop necessary services, notify these services when files corresponding to them change, etc. A master recipe, named `default` acts as the entry point and it invokes all other necessary recipes for various components and services.
 
 NOTE: **Note:**
-Recipes may be found inside [files/gitlab-cookbooks/gitlab/recipes](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/recipes) folder in the repository.
+Recipes may be found inside [`files/gitlab-cookbooks/gitlab/recipes`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/recipes) folder in the repository.
 
 ### Definitions
 
 Definitions can be considered as global-level macros that are available across recipes. Some common uses for definitions are defining the ports used for common services, listing important directories that may be used by different recipes, etc. They define resources that may be reused by different recipes.
 
 NOTE: **Note:**
-Definitions may be found inside [files/gitlab-cookbooks/gitlab/definitions](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/definitions) folder in the repository.
+Definitions may be found inside [`files/gitlab-cookbooks/gitlab/definitions`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/definitions) folder in the repository.
 
 ### Templates for configuration of components
 
 As mentioned earlier, Omnibus-GitLab provides a single configuration file to tweak all components of a GitLab instance. However, architectural design of different components may require them to have individual configuration files residing at specific locations. These configuration files have to be generated from either the values specified by the user in general configuration file or from the default values specified. Hence, Omnibus-GitLab ships with it templates of such configuration files with placeholders which may be filled by default values or values from user. The recipes do the job of completing these templates, by filling them and placing them at necessary locations.
 
 NOTE: **Note:**
-Software configuration templates may be found inside [files/gitlab-cookbooks/gitlab/templates](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates) folder in the repository.
+Software configuration templates may be found inside [`files/gitlab-cookbooks/gitlab/templates`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates) folder in the repository.
 
 ### General library methods
 
@@ -88,23 +89,23 @@ Omnibus-GitLab also ships some library methods that primarily does the purpose o
 Of all the libraries used in Omnibus-GitLab, there are some special ones: the primary GitLab module and all the component-specific libraries that it invokes. The component specific libraries contains methods that do the job of parsing the configuration file for settings defined for their corresponding components. The primary GitLab module contains methods that co-ordinate this. It is responsible for identifying default values, invoking component-specific libraries, merging the default values and user specified values, validating them, generating additional configurations based on their initial values, etc. Every top level component that is shipped by Omnibus-GitLab package gets added to this module, so that they can be mentioned in configuration file and default attributes and get parsed correctly.
 
 NOTE: **Note:**
-Libraries may be found inside [files/gitlab-cookbooks/gitlab/libraries](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/libraries) folder in the repository.
+Libraries may be found inside [`files/gitlab-cookbooks/gitlab/libraries`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/libraries) folder in the repository.
 
-### Runit
+### runit
 
-GitLab uses [runit](http://smarden.org/runit/) recipes for the purpose of service management and supervision. Runit recipes do the job of identifying the init system used by the OS and perform basic service management tasks like creating necessary service files for GitLab, service enabling, service reloading, etc. Runit provides `runit_service` definitions that can be used by other recipes to interact with services.
-(/files/gitlab-cookbook/runit)
+GitLab uses [runit](http://smarden.org/runit/) recipes for the purpose of service management and supervision. runit recipes do the job of identifying the init system used by the OS and perform basic service management tasks like creating necessary service files for GitLab, service enabling, service reloading, etc. runit provides `runit_service` definitions that can be used by other recipes to interact with services.
+(`/files/gitlab-cookbook/runit`)
 
 ### Services
 
-Services are software processes that we run using the Runit process init/supervisor. You are able to check their status, start, stop, and restart them using the gitlab-ctl commands. Recipes may also disable or enable these services based on their process group and the settings/roles that have been configured for the instance of gitlab. The list of services and the service groups associated with them can be found in [files/gitlab-cookbooks/package/libraries/config/services.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/config/services.rb).
+Services are software processes that we run using the runit process init/supervisor. You are able to check their status, start, stop, and restart them using the `gitlab-ctl` commands. Recipes may also disable or enable these services based on their process group and the settings/roles that have been configured for the instance of GitLab. The list of services and the service groups associated with them can be found in [`files/gitlab-cookbooks/package/libraries/config/services.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/config/services.rb).
 
-## Additional gitlab-ctl commands
+## Additional `gitlab-ctl` commands
 
 Omnibus, by default, provides some wrapper commands like `gitlab-ctl reconfigure`, `gitlab-ctl restart`, etc.to manage the GitLab instance. There are some additional wrapper commands that targets some specific use-cases defined in the Omnibus-GitLab repository. These commands get used with the general `gitlab-ctl` command to perform certain actions like running database migrations or removing dormant accounts and similar not-so-common tasks.
 
 NOTE: **Note:**
-Additional wrapper commands may be found inside [files/gitlab-ctl-commands](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-ctl-commands) folder in the repository.
+Additional wrapper commands may be found inside [`files/gitlab-ctl-commands`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-ctl-commands) folder in the repository.
 
 ## Tests
 
@@ -113,7 +114,7 @@ Omnibus-GitLab repository uses ChefSpec to test the cookbooks and recipes it shi
 NOTE: **Note:**
 Tests may be found inside [spec](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/spec/) folder in the repository.
 
-So, of the components described above, some (software definitions, project metadata, tests, etc.) find use during the package building, in a build environment, and some (Chef cookbooks and recipes, GitLab configuration file, Runit, gitlab-ctl commands, etc.) are used to configure the user's installed instance.
+So, of the components described above, some (software definitions, project metadata, tests, etc.) find use during the package building, in a build environment, and some (Chef cookbooks and recipes, GitLab configuration file, runit, `gitlab-ctl` commands, etc.) are used to configure the user's installed instance.
 
 ## Work life cycle of Omnibus-GitLab
 
@@ -128,10 +129,10 @@ The type of packages being built depends on the OS the build process is run. If 
    1. Setting up necessary environment variables and flags.
    1. Applying patches, if applicable.
    1. Performing the build and installation of the component, which involves installing it to appropriate location (inside `/opt/gitlab`).
-1. Generating license information of all bundled components - including external softwares, Ruby gems, JS modules etc. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by gitlab-rails)
+1. Generating license information of all bundled components - including external softwares, Ruby gems, JS modules etc. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by GitLab Rails)
 1. Checking license of the components to make sure we are not shipping a component with a non-compatible license
 1. Running a health check on the package to make sure the binaries are linked against available libraries. For bundled libraries, the binaries should link against them and not the one available globally.
-1. Building the package with contents of `/opt/gitlab`. This makes use of the metadata given inside [gitlab.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb) file. This includes package name, version, maintainer, homepage, information regarding conflicts with other packages etc.
+1. Building the package with contents of `/opt/gitlab`. This makes use of the metadata given inside [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb) file. This includes package name, version, maintainer, homepage, information regarding conflicts with other packages etc.
 
 #### Caching
 
@@ -143,7 +144,7 @@ Software artifact cache uses an Amazon S3 bucket to store the sources of the dep
 
 ##### Build cache
 
-A second type of cache that plays an important role in our build process is the build cache. Build cache can be described in simple words as snapshots of the project tree (where the project actually gets built - `/opt/gitlab`) after each dependent software is built. To understand it easily, consider a project with 5 dependent softwares - A, B, C, D and E, built in that order. For simplicity, we are not considering the dependencies of these individual softwares. Build cache makes use of git tags to make snapshots. After each software is built, a git tag is computed and committed. Now, consider we made some change to the definition of software D. A, B, C and E remains the same. When we try to build again, omnibus can reuse the snapshot that was made before D was built in the previous build. Thus, the time taken to build A, B and C can be saved as it can simply checkout the snapshot that was made after C was built. Omnibus uses the snapshot just before the software which "dirtied" the cache (dirtying can happen either by a change in the software definition, a change in name/version of a previous component, or a change in version of the current component) was built. Similarly, if in a build there is a change in definition of software A, it will dirty the cache and hence A and all the following dependencies get built from scratch. If C dirties the cache, A and B gets reused and C, D and E gets built again from scratch.
+A second type of cache that plays an important role in our build process is the build cache. Build cache can be described in simple words as snapshots of the project tree (where the project actually gets built - `/opt/gitlab`) after each dependent software is built. To understand it easily, consider a project with 5 dependent softwares - A, B, C, D and E, built in that order. For simplicity, we are not considering the dependencies of these individual softwares. Build cache makes use of Git tags to make snapshots. After each software is built, a Git tag is computed and committed. Now, consider we made some change to the definition of software D. A, B, C and E remains the same. When we try to build again, omnibus can reuse the snapshot that was made before D was built in the previous build. Thus, the time taken to build A, B and C can be saved as it can simply checkout the snapshot that was made after C was built. Omnibus uses the snapshot just before the software which "dirtied" the cache (dirtying can happen either by a change in the software definition, a change in name/version of a previous component, or a change in version of the current component) was built. Similarly, if in a build there is a change in definition of software A, it will dirty the cache and hence A and all the following dependencies get built from scratch. If C dirties the cache, A and B gets reused and C, D and E gets built again from scratch.
 
 This cache makes sense only if it is retained across builds. For that, we use the caching mechanism of GitLab CI. We have a dedicated runner which is configured to store its internal cache in an Amazon bucket. Before each build, we pull in this cache (`restore_cache_bundle` target in out Makefile), move it to appropriate location and start the build. It gets used by the omnibus until the point of dirtying. After the build, we pack the new cache and tells CI to back it up to the Amazon bucket (`pack_cache_bundle` in our Makefile).
 
