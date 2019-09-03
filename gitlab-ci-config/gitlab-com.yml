@@ -11,6 +11,7 @@
       - /./@gitlab/omnibus-gitlab
       - triggers
       - /^dependencies_io/
+      - /(^docs[\/-].*|.*-docs$)/
 
 .com-trigger-only: &com-trigger-only
   only:
@@ -93,6 +94,7 @@
     refs:
       - triggers
       - /^dependencies_io/
+      - /(^docs[\/-].*|.*-docs$)/
 
 ###########################
 #     Branch pipeline     #
@@ -138,7 +140,11 @@ docs-lint:
     - bundle exec nanoc check internal_links
     # Check the internal anchor links
     - bundle exec nanoc check internal_anchors
-  <<: *com-except-triggers
+  except:
+    refs:
+      - /./@gitlab/omnibus-gitlab
+      - triggers
+      - /^dependencies_io/
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
