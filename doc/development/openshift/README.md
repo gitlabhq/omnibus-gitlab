@@ -147,7 +147,7 @@ And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up step
 Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required):
 
 - `oc login -u system:admin` for the docker cluster up
-- From the root of your omnibus-gitlab repo, `oc create -f docker/openshift-template.json -n openshift`
+- From the root of your Omnibus GitLab repo, `oc create -f docker/openshift-template.json -n openshift`
 
 ## Install GitLab
 

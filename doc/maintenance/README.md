@@ -20,7 +20,7 @@ See [settings/logs.md.](../settings/logs.md)
 
 ## Starting and stopping
 
-After omnibus-gitlab is installed and configured, your server will have a Runit
+After Omnibus GitLab is installed and configured, your server will have a runit
 service directory (`runsvdir`) process running that gets started at boot via
 `/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource. You
 should not have to deal with the `runsvdir` process directly; you can use the
@@ -66,7 +66,7 @@ To invoke a GitLab Rake task, use `gitlab-rake`. For example:
 sudo gitlab-rake gitlab:check
 ```
 
-Leave out 'sudo' if you are the 'git' user.
+Leave out `sudo` if you are the `git` user.
 
 Contrary to with a traditional GitLab installation, there is no need to change
 the user or the `RAILS_ENV` environment variable; this is taken care of by the

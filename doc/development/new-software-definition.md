@@ -12,7 +12,7 @@ can be found in `/config/software`, specify where omnibus should fetch the
 software, how to compile it and install it to the required folder. This part of
 the project is run when we build the Omnibus package for GitLab.
 
-When adding a component that should be fetched from git the clone address of the
+When adding a component that should be fetched from Git the clone address of the
 repositories of the local mirror and upstream should be added to
 `/.custom_sources.yml`.
 
@@ -40,7 +40,7 @@ at a directory path with the naming convention
 
 ## Add a dependency for the software definition to another component
 
-Add a `dependency` statement to the definition of the gitlab project found in
+Add a `dependency` statement to the definition of the GitLab project found in
 `/config/projects/gitlab.rb`, unless there is a more specific component it makes
 sense to be a dependency of (eg `config/software/gitlab-rails.rb` for a
 component only needed by `gitlab-rails`)

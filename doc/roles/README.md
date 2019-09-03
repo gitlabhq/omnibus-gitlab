@@ -54,14 +54,16 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis H
   Enables the sentinel service on the machine,
 
   *By default, enables no other services.*
+
 - **redis_master_role**
 
-  Enables the redis service and monitoring, and allows configuring the master password
+  Enables the Redis service and monitoring, and allows configuring the master password
 
   *By default, enables no other services.*
+
 - **redis_slave_role**
 
-  Enables the redis service and monitoring
+  Enables the Redis service and monitoring
 
   *By default, enables no other services.*
 
@@ -76,6 +78,7 @@ for configuration steps.
   Prepares the database for replication and configures the application as a Geo Primary.
 
   *By default, enables all of GitLab's standard single node services. (Nginx, Unicorn, Redis, Sidekiq, etc)*
+
 - **geo_secondary_role**
 
   Configures the secondary database for incoming replication and flags the
@@ -99,14 +102,16 @@ Documentation on the usage of the Postgres Roles can be found in [Configuring Po
 
 - **postgres_role**
 
-  Enables the postgresql, repmgr, and consul services on the machine
+  Enables the PostgreSQL, repmgr, and consul services on the machine
 
   *By default, enables no other services.*
+
 - **pgbouncer_role**
 
   Enables the pgbouncer and consul services on the machine
 
   *By default, enables no other services.*
+  
 - **consul_role**
 
   Enables the consul service on the machine

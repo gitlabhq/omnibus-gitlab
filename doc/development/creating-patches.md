@@ -30,7 +30,7 @@ config/patches/gitlab-rails
 
 There are two easy ways to create a patch file. You can use the `diff` command
 and compare a original with a modified file (i.e. `target.rb` with
-`target.rb.original`) or you can use git to output a patch based one or more
+`target.rb.original`) or you can use Git to output a patch based one or more
 commits.
 
 ### Diff command
@@ -44,7 +44,7 @@ diff -Naur target.rb.original target.rb > my_awesome_change.patch
 
 ### Git command
 
-To create a patch file based on git commits, you must get the hash from both
+To create a patch file based on Git commits, you must get the hash from both
 (or just the earliest one if you are comparing with base HEAD).
 
 ```bash

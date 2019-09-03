@@ -19,7 +19,7 @@ follows
    them to build a package for it. For example, to prepare a build environment
    for Debian Stretch, you have to pull its image. The revision of the image to
    be used is specified in `BUILDER_IMAGE_REVISION` variable in
-   [.gitlab-ci.yml](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.gitlab-ci.yml)
+   [`.gitlab-ci.yml`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.gitlab-ci.yml)
    file. Make sure you substitute that value to `${BUILDER_IMAGE_REVISION}`
    in the following commands.
 
@@ -41,7 +41,7 @@ follows
    ```
 
 1. Omnibus GitLab is optimized to use the internal repositories from
-   dev.gitlab.org. These repositories are specified in the `.custom_sources.yml`
+   <https://dev.gitlab.org>. These repositories are specified in the `.custom_sources.yml`
    file (specified by `remote` key) in the root of the source tree and will be
    used by default. Since these repositories are not publicly usable, for
    personal builds you have to use public alternatives of these repos. The

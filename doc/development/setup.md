@@ -5,12 +5,13 @@ from [Downloads page](https://about.gitlab.com/install/). To know how to setup
 a build environment to build these packages and use them, please read [Setting
 up a Build Environment](../build/prepare-build-environment.md).
 
-1. Set up a Container
+1. Set up a container
 
    To provide isolation and to prevent rebuilding of the package for each and
    every change, it is preferred to use a Container for development. The
    following example uses docker on a Debian host with a Debian Jessie image.
    The steps are similar for other OSs; only the commands differ.
+
    1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/install/).
 
    1. Pulling a Debian Jessie image
@@ -42,8 +43,8 @@ up a Build Environment](../build/prepare-build-environment.md).
    Get the latest GitLab CE nightly package (of the OS you are using) from
    [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
    and install it using the instructions given on that page. Once you configure
-   and start gitlab. Check if you can access it from your host browser on
-   \<ip address of host>
+   and start GitLab. Check if you can access it from your host browser on
+   `<ip address of host>`.
 
    **`Note`**: Nightly packages versioning is incorrect which can cause a
    confusion. This [issue is reported in #864](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/864).

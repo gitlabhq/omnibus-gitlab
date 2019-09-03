@@ -22,9 +22,9 @@ end
 
 The file is generated as part of the [GitLabHander](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/handers/gitlab.rb#L36).
 
-## Reading an entry from public_attributes.json from a gitlab-ctl command
+## Reading an entry from public_attributes.json from a `gitlab-ctl` command
 
-In order to access the public nodes, you should use the provided [GitlabCtl::Util.get_public_node_attributes method](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb#L60)
+In order to access the public nodes, you should use the provided [`GitlabCtl::Util.get_public_node_attributes` method](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb#L60)
 
 ```ruby
 attributes = GitlabCtl::Util.get_public_node_attributes

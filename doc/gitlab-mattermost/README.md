@@ -13,7 +13,7 @@ GitLab Mattermost expects to run on its own virtual host. In your DNS you would 
 have two entries pointing to the same machine, e.g. `gitlab.example.com` and
 `mattermost.example.com`.
 
-GitLab Mattermost is disabled by default, to enable it just tell omnibus-gitlab what
+GitLab Mattermost is disabled by default, to enable it just tell Omnibus GitLab what
 the external URL for Mattermost server is:
 
 ```ruby
@@ -24,7 +24,7 @@ mattermost_external_url 'http://mattermost.example.com'
 After you run `sudo gitlab-ctl reconfigure`, your GitLab Mattermost should
 now be reachable at `http://mattermost.example.com` and authorized to connect to GitLab. Authorising Mattermost with GitLab will allow users to use GitLab as SSO provider.
 
-Omnibus-gitlab package will attempt to automatically authorise GitLab Mattermost with GitLab if applications are running on the same server.
+Omnibus GitLab package will attempt to automatically authorise GitLab Mattermost with GitLab if applications are running on the same server.
 This is because automatic authorisation requires access to GitLab database.
 If GitLab database is not available you will need to manually authorise GitLab Mattermost for access to GitLab.
 
@@ -454,7 +454,7 @@ The source code can be modified to support not only GitLab, but any in-house app
 
 ### Specify numeric user and group identifiers
 
-omnibus-gitlab creates a user and group mattermost. You can specify the
+Omnibus GitLab creates a user and group mattermost. You can specify the
 numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as follows.
 
 ```ruby
