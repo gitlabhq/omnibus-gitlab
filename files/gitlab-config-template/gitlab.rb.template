@@ -396,7 +396,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
-###! Skip parts of the backup. Comma separated. 
+###! Skip parts of the backup. Comma separated.
 ###! Docs: https://docs.gitlab.com/ee/raketasks/backup_restore.html#excluding-specific-directories-from-the-backup
 #gitlab_rails['env'] = {
 #    "SKIP" => "db,uploads,repositories,builds,artifacts,lfs,registry,pages"
@@ -584,6 +584,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['registry_host'] = "registry.gitlab.example.com"
 # gitlab_rails['registry_port'] = "5005"
 # gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
+
+# Notification secret, it's used to authenticate notification requests to GitLab application
+# You only need to change this when you use external Registry service, otherwise
+# it will be taken directly from notification settings of your Registry
+# gitlab_rails['registry_notification_secret'] = nil
 
 ###! **Do not change the following 3 settings unless you know what you are
 ###!   doing**
@@ -1963,6 +1968,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # If it is blank, it defaults to external_url.
 # gitlab_rails['geo_node_name'] = nil
+
+# gitlab_rails['geo_registry_replication_enabled'] = true
+# gitlab_rails['geo_registry_replication_primary_api_url'] = 'https://example.com:5000'
+
 
 ################################################################################
 ## GitLab Geo Secondary (EE only)

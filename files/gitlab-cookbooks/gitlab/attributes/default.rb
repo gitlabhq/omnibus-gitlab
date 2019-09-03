@@ -216,6 +216,7 @@ default['gitlab']['gitlab-rails']['registry_api_url'] = nil
 default['gitlab']['gitlab-rails']['registry_key_path'] = nil
 default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
+default['gitlab']['gitlab-rails']['registry_notification_secret'] = nil
 default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
 default['gitlab']['gitlab-rails']['sentry_enabled'] = false
 default['gitlab']['gitlab-rails']['sentry_dsn'] = nil
