@@ -26,10 +26,6 @@ describe 'gitlab::gitlab-shell' do
     end
   end
 
-  it 'calls into check permissions to create and validate the authorized_keys' do
-    expect(chef_run).to run_execute('/opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-keys check-permissions')
-  end
-
   it 'defaults the auth_file to be within the user\'s home directory' do
     stub_gitlab_rb(user: { home: '/tmp/user' })
     expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
@@ -38,6 +34,11 @@ describe 'gitlab::gitlab-shell' do
   it 'uses custom auth_files set in gitlab.rb' do
     stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
     expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
+  end
+
+  it 'creates authorized_keys file if missing' do
+    stub_gitlab_rb(gitlab_shell: { auth_file: '/tmp/authorized_keys' })
+    expect(chef_run).to create_file_if_missing('/tmp/authorized_keys')
   end
 
   context 'when NOT running on selinux' do
