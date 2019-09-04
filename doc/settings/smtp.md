@@ -763,6 +763,23 @@ gitlab_rails['gitlab_email_from'] = "username@example.com"
 gitlab_rails['gitlab_email_reply_to'] = "username@example.com"
 ```
 
+### Unitymedia (.de)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "submit.unitybox.de"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@unitybox.de"
+gitlab_rails['smtp_password'] = "yourPassword"
+gitlab_rails['smtp_domain'] = "submit.unitybox.de"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
