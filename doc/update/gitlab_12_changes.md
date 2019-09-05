@@ -74,7 +74,6 @@ key and should be renamed. The replacements are as follows
 * node['gitlab']['alertmanager'] => node['monitoring']['alertmanager']
 * node['gitlab']['redis-exporter'] => node['monitoring']['redis-exporter']
 * node['gitlab']['node-exporter'] => node['monitoring']['node-exporter']
-* node['gitlab']['redis-exporter'] => node['monitoring']['redis-exporter']
 * node['gitlab']['postgres-exporter'] => node['monitoring']['postgres-exporter']
 * node['gitlab']['gitlab-monitor'] => node['monitoring']['gitlab-monitor']
 * node['gitlab']['grafana'] => node['monitoring']['grafana']
