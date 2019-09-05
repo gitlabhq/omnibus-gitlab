@@ -27,5 +27,5 @@ dependency 'postgresql'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  gem "install gitlab-monitor --version #{version}", env: env
+  gem "install gitlab-monitor --no-document --version #{version}", env: env
 end
