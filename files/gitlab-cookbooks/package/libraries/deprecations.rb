@@ -122,15 +122,26 @@ module Gitlab
 
       def method_missing(method_name, *args, &block)
         deprecated_msg(caller[0..3])
-        (@target.respond_to?(method_name) && @target.send(method_name, *args, &block)) || super
+        current_target = target
+        (current_target.respond_to?(method_name, true) && current_target.send(method_name, *args, &block)) || super
       end
 
       def respond_to_missing?(method_name, include_private = false)
-        @target.send(:respond_to_missing?, method_name, include_private) || super
+        target.send(:respond_to_missing?, method_name, include_private) || super
+      end
+
+      def nil?
+        target.nil?
       end
 
       def inspect
-        @target.inspect
+        target.inspect
+      end
+
+      def target
+        return @target.call if @target.respond_to?(:call)
+
+        @target
       end
 
       private

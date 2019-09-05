@@ -126,4 +126,4 @@ default['monitoring']['grafana']['env'] = {
 }
 
 # TODO: Remove Dreprecation in GitLab 13
-default['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(default['monitoring'], "node['prometheus']", "node['monitoring']")
+default['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring'] }, "node['prometheus']", "node['monitoring']")
