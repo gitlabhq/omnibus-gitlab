@@ -25,7 +25,13 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
-dependency 'gitlab-cookbooks'
+# Skip the gitlab-cookbook dependency if already loaded by the project. This improves build-ordering,
+# due to how omnibus orders the components. Components that are dependencies of other components
+# get moved in front of ones that are only defined in the project. Without this gate, gitlab-cookbooks
+# ends up in front of components that change less frequently.
+# Omnibus Build order: https://github.com/chef/omnibus/blob/c872e61c30d2b3f88ead03bd1254ff96d37059a3/lib/omnibus/library.rb#L64
+dependency 'gitlab-cookbooks' unless project.dependencies.include?('gitlab-cookbooks')
+
 dependency 'acme-client'
 dependency 'compat_resource'
 
