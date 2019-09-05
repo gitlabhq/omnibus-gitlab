@@ -1,5 +1,5 @@
 ---
 title: Deprecate node['prometheus'] rather than have it completely removed
-merge_request: 3582
+merge_request: 3583
 author:
 type: bug
