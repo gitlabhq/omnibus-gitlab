@@ -1,5 +1,7 @@
 require 'chef/mixin/deprecation'
 
+require_relative 'helpers/logging_helper'
+
 module Gitlab
   class Deprecations
     class << self
@@ -135,8 +137,8 @@ module Gitlab
 
       def deprecated_msg(*called_from)
         called_from = called_from.flatten
-        msg = "Accessing  node[#{@var_name}] is deprecated. Support will be removed in a future release." \
-              "Please update your cookbooks to use node[#{@new_var_name}] in place of node[#{@var_name}]. Accessed from:"
+        msg = "Accessing #{@var_name} is deprecated. Support will be removed in a future release." \
+              "Please update your cookbooks to use #{@new_var_name} in place of #{@var_name}. Accessed from:"
         called_from.each { |l| msg << l }
         LoggingHelper.deprecation(msg)
       end

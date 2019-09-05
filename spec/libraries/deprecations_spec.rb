@@ -125,4 +125,14 @@ describe Gitlab::Deprecations do
       expect(described_class.identify_deprecated_config(invalid_config, ["mattermost"], mattermost_supported_keys, "10.2", "11.0")).to eq(output)
     end
   end
+
+  describe 'NodeAttribute' do
+    it 'Logs deprecations for passed variables' do
+      config = { 'monitoring' => { 'test' => 'test-value' } }
+      config['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(config['monitoring'], "config['prometheus']", "config['monitoring']")
+
+      expect(LoggingHelper).to receive(:deprecation).with(/Accessing config\['prometheus'\] is deprecated/)
+      expect(config['prometheus']['test']).to eq('test-value')
+    end
+  end
 end
