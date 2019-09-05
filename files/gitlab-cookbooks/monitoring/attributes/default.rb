@@ -124,3 +124,5 @@ default['monitoring']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env
 default['monitoring']['grafana']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+
+default['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(default['monitoring'], "node['prometheus']")

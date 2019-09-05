@@ -1,3 +1,5 @@
+require 'chef/mixin/deprecation'
+
 module Gitlab
   class Deprecations
     class << self
@@ -105,6 +107,38 @@ module Gitlab
           messages << message
         end
         messages
+      end
+    end
+
+    # Inspired by DeprecatedInstanceVariable in https://github.com/chef/chef/blob/master/lib/chef/mixin/deprecation.rb
+    class NodeAttribute < ::Chef::Mixin::Deprecation::DeprecatedObjectProxyBase
+      def initialize(target, var_name, new_var_name)
+        @target = target
+        @var_name = var_name
+        @new_var_name = new_var_name
+      end
+
+      def method_missing(method_name, *args, &block)
+        deprecated_msg(caller[0..3])
+        (@target.respond_to?(method_name) && @target.send(method_name, *args, &block)) || super
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        @target.send(:respond_to_missing?, method_name, include_private) || super
+      end
+
+      def inspect
+        @target.inspect
+      end
+
+      private
+
+      def deprecated_msg(*called_from)
+        called_from = called_from.flatten
+        msg = "Accessing  node[#{@var_name}] is deprecated. Support will be removed in a future release." \
+              "Please update your cookbooks to use node[#{@new_var_name}] in place of node[#{@var_name}]. Accessed from:"
+        called_from.each { |l| msg << l }
+        LoggingHelper.deprecation(msg)
       end
     end
   end
