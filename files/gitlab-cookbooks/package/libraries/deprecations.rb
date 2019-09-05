@@ -1,7 +1,7 @@
 module Gitlab
   class Deprecations
     class << self
-      ATTRIBUTE_BLOCKS = %w[gitlab monitoring].freeze
+      ATTRIBUTE_BLOCKS ||= %w[gitlab monitoring].freeze
 
       def list(existing_config = nil)
         # List of deprecations. Remember to convert underscores to hyphens for
