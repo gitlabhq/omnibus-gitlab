@@ -144,9 +144,8 @@ describe OmnibusHelper do
     it 'detects deprecated OS correctly' do
       allow_any_instance_of(Ohai::System).to receive(:data).and_return({ "platform" => "raspbian", "platform_version" => "8.0" })
 
-      # expect(LoggingHelper).to receive(:deprecation).with(/Your OS, raspbian-8.0, will be deprecated soon/)
+      expect(LoggingHelper).to receive(:deprecation).with(/Your OS, raspbian-8.0, will be deprecated soon/)
       OmnibusHelper.is_deprecated_os?
-      puts node['prometheus']['grafana']['enable'].inspect
     end
 
     it 'does not detects valid OS as deprecated' do

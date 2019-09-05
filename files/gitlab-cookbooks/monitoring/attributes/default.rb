@@ -125,4 +125,5 @@ default['monitoring']['grafana']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
+# TODO: Remove Dreprecation in GitLab 13
 default['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(default['monitoring'], "node['prometheus']", "node['monitoring']")
