@@ -738,7 +738,6 @@ default['gitlab']['storage-check']['enable'] = false
 default['gitlab']['storage-check']['target'] = nil
 default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
 
-
 # TODO: Remove Monitoring Dreprecations in GitLab 13
 default['gitlab']['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['prometheus'] }, "node['gitlab']['prometheus']", "node['monitoring']['prometheus']")
 default['gitlab']['alertmanager'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['alertmanager'] }, "node['gitlab']['alertmanager']", "node['monitoring']['alertmanager']")
