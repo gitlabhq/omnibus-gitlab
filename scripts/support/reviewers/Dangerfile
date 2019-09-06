@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+# Each Hash should have a key of the GitLab.com handle, and a value of their display name, and role (reviewer, maintainer, or emergency reviewer)
+# i.e.
+# {
+#   handle: "jdoe",
+#   name: "John Doe",
+#   role: "reviewer"
+# }
+#
+MAINTAINERS = [
+  {
+    handle: 'twk3',
+    name: "David 'DJ' Mountney",
+    role: 'maintainer'
+  },
+  {
+    handle: 'ibaum',
+    name: 'Ian Baum',
+    role: 'maintainer'
+  },
+  {
+    handle: 'balu',
+    name: "Balasankar 'Balu' C",
+    role: 'maintainer'
+  },
+  {
+    handle: 'marin',
+    name: 'Marin Jankovski',
+    role: 'emergency maintainer'
+  },
+  {
+    handle: 'brodock',
+    name: 'Gabriel Mazetto',
+    role: 'emergency maintainer'
+  }
+].freeze
+
+MESSAGE = <<REV_EOF
+
+## Available reviewers
+
+The following people are available to review this merge request. If this is a high priority merge request, and no maintainers from the Distribution team are available, please check with one of Emergency maintainers
+
+| Name | GitLab Handle | Role |
+| ---- | ------------- | ---- |
+REV_EOF
+
+# Returns the table values for the list of available reviewers, ordered by role
+def message_reviewers(reviewers)
+  reviewers.sort_by { |reviewer| reviewer[:role] }.reverse.map do |reviewer|
+    "| `@#{reviewer[:handle]}` | #{reviewer[:name]} | #{reviewer[:role].capitalize} |"
+  end.join("\n")
+end
+
+# Print maintainers message
+message(MESSAGE + message_reviewers(MAINTAINERS))
