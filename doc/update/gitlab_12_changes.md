@@ -28,7 +28,7 @@ reconfigures your GitLab instance, and will cause database migrations to run.
 So, if you are on an HA instance, run this command only as the last step, after
 performing all database related actions.
 
-## Removal of support for /etc/gitlab/skip-auto-migrations file
+## Removal of support for `/etc/gitlab/skip-auto-migrations` file
 
 Before GitLab 10.6, the file `/etc/gitlab/skip-auto-migrations` was used to
 prevent automatic reconfigure (and thus automatic database migrations) as part
@@ -86,4 +86,4 @@ backend.
 
 ### 12.2
 
-The default formula for calculating the number of unicorn worker processes has been updated to increase the number of workers by 50% per CPU. This will increase the CPU and memory utilization slightly. This has been done to improve performance by reducing the amount of request queuing.
+The default formula for calculating the number of Unicorn worker processes has been updated to increase the number of workers by 50% per CPU. This will increase the CPU and memory utilization slightly. This has been done to improve performance by reducing the amount of request queuing.

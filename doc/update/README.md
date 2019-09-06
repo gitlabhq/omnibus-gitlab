@@ -320,7 +320,7 @@ node throughout the process.
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run unicorn or sidekiq**
+**For nodes that run Unicorn or sidekiq**
 
 - Hot reload `unicorn` and `sidekiq` services
 

@@ -14,7 +14,7 @@ and find the newest descriptive tag. e.g. `8.13.3-ce.0`
 
 Then update the image stream in the template with the name and tag:
 
-```
+```json
 {
   "kind": "ImageStream",
   "apiVersion": "v1",
@@ -40,7 +40,7 @@ Then update the image stream in the template with the name and tag:
 
 And then also update the GitLab Deployment config to use the new tag in it's ImageChange trigger:
 
-```
+```json
 {
   "type": "ImageChange",
   "imageChangeParams": {
@@ -59,7 +59,7 @@ And then also update the GitLab Deployment config to use the new tag in it's Ima
 ## Test
 
 For setting up a OpenShift Origin development environment for testing see
-[doc/development/openshift/README.md.](../development/openshift/README.md)
+[`doc/development/openshift/README.md`](../development/openshift/README.md).
 
 Set up a new GitLab install using the updated template. Smoke test the install:
 
@@ -74,5 +74,5 @@ Push your updated template into a New Merge request on GitLab.com against the ma
 
 ## Notify
 
-Once the Merge Request has been accepted, alert the #gitlab-openshift slack channel that a new
+Once the Merge Request has been accepted, alert the `#gitlab-openshift` slack channel that a new
 version has been pushed to master. Effectively handing off the template to OpenShift for inclusion in the all-in-one.

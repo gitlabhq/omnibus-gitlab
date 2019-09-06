@@ -43,7 +43,7 @@ package to your GitLab server.
 1. First, download the latest package from <https://about.gitlab.com/install/>
    to your GitLab server.
 
-1. Stop unicorn and Sidekiq so we can do database migrations:
+1. Stop Unicorn and Sidekiq so we can do database migrations:
 
    ```sh
    sudo gitlab-ctl stop unicorn
