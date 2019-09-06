@@ -111,7 +111,6 @@ module Gitlab
       end
     end
 
-    # Inspired by DeprecatedInstanceVariable in https://github.com/chef/chef/blob/master/lib/chef/mixin/deprecation.rb
     class NodeAttribute < ObjectProxy
       def self.log_deprecations?
         @log_deprecations || false
