@@ -99,10 +99,13 @@ module SettingsHelper
   def from_file(_file_path)
     # Throw errors for unrecognized top level calls (usually spelling mistakes)
     config_strict_mode true
+    # Turn on node deprecation messages
+    Gitlab::Deprecations::NodeAttribute.log_deprecations = true
     # Allow auto mash creation during from_file call
     Gitlab::ConfigMash.auto_vivify { super }
   ensure
     config_strict_mode false
+    Gitlab::Deprecations::NodeAttribute.log_deprecations = false
   end
 
   # Enhance set so strict mode errors aren't thrown as long as the setting is witin our defined config

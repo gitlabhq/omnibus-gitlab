@@ -127,6 +127,14 @@ describe Gitlab::Deprecations do
   end
 
   describe 'NodeAttribute' do
+    before do
+      Gitlab::Deprecations::NodeAttribute.log_deprecations = true
+    end
+
+    after do
+      Gitlab::Deprecations::NodeAttribute.log_deprecations = false
+    end
+
     it 'Logs deprecations for passed variables and proxies to new object' do
       config = { 'monitoring' => { 'test' => 'test-value' } }
       config['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(config['monitoring'], "config['prometheus']", "config['monitoring']")

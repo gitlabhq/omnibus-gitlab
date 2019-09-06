@@ -114,6 +114,14 @@ module Gitlab
 
     # Inspired by DeprecatedInstanceVariable in https://github.com/chef/chef/blob/master/lib/chef/mixin/deprecation.rb
     class NodeAttribute < ::Chef::Mixin::Deprecation::DeprecatedObjectProxyBase
+      def self.log_deprecations?
+        @log_deprecations || false
+      end
+
+      def self.log_deprecations=(value = true)
+        @log_deprecations = !!value
+      end
+
       def initialize(target, var_name, new_var_name)
         @target = target
         @var_name = var_name
@@ -121,7 +129,7 @@ module Gitlab
       end
 
       def method_missing(method_name, *args, &block)
-        deprecated_msg(caller[0..2])
+        deprecated_msg(caller[0..2]) if NodeAttribute.log_deprecations?
         current_target = target
         (current_target.respond_to?(method_name, true) && current_target.send(method_name, *args, &block)) || super
       end
@@ -130,19 +138,14 @@ module Gitlab
         target.send(:respond_to_missing?, method_name, include_private) || super
       end
 
-      def nil?
-        target.nil?
-      end
-
-      def dup
-        target&.dup
-      end
-
-      def inspect
-        target&.inspect
+      [:nil?, :inspect].each do |method_name|
+        define_method(method_name) do |*args, &block|
+          target.send(method_name, *args, &block)
+        end
       end
 
       def target
+        # Support for defered procs/lambdas
         return @target.call if @target.respond_to?(:call)
 
         @target
