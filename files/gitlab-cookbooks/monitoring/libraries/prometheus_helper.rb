@@ -58,6 +58,6 @@ class PrometheusHelper
   private
 
   def node_service(service)
-    node['gitlab'][service] || node['monitoring'][service]
+    node['monitoring'][service] || node['gitlab'][service]
   end
 end

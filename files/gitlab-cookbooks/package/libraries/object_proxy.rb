@@ -26,11 +26,16 @@ module Gitlab
 
     def method_missing(method_name, *args, &block)
       current_target = target
-      (current_target.respond_to?(method_name, true) && current_target.send(method_name, *args, &block)) || super
+      current_target.send(method_name, *args, &block) if current_target.respond_to?(method_name, true)
+      super
     end
 
     def respond_to_missing?(method_name, include_private = false)
       target.send(:respond_to_missing?, method_name, include_private) || super
+    end
+
+    def dup
+      ::Object.instance_method(:dup).bind(self).call
     end
 
     [:nil?, :inspect].each do |method_name|
