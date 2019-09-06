@@ -69,11 +69,11 @@ to work best with the available resources. Check out the [documentation](setting
 ## Configuring
 
 - [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
-- [Configuring a relative URL for Gitlab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
-- [Storing git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
-- [Changing the name of the git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
+- [Configuring a relative URL for GitLab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
+- [Storing Git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
+- [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
-- [Only start omnibus-gitlab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
+- [Only start Omnibus GitLab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
 - [Disable user and group account management](settings/configuration.html#disable-user-and-group-account-management)
 - [Disable storage directory management](settings/configuration.html#disable-storage-directories-management)
 - [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
@@ -86,7 +86,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Database](settings/database.md)
 - [Reply by email](https://docs.gitlab.com/ce/incoming_email/README.html)
 - [Environment variables](settings/environment-variables.md)
-- [gitlab.yml](settings/gitlab.yml.md)
+- [`gitlab.yml`](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
 - [Pages](https://docs.gitlab.com/ce/pages/administration.html)
 - [SSL](settings/ssl.md)
@@ -109,23 +109,23 @@ to work best with the available resources. Check out the [documentation](setting
 ## Troubleshooting
 
 - [Hash Sum mismatch when downloading packages](common_installation_problems/README.md#hash-sum-mismatch-when-downloading-packages)
-- [Apt error: 'The requested URL returned error: 403'](common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
+- [Apt error: `The requested URL returned error: 403`](common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
 - [GitLab is unreachable in my browser](common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
 - [Emails are not being delivered](common_installation_problems/README.md#emails-are-not-being-delivered).
 - [Reconfigure freezes at ruby_block[supervise_redis_sleep] action run](common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 - [TCP ports for GitLab services are already taken](common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
 - [Git SSH access stops working on SELinux-enabled systems](common_installation_problems/README.md#selinux-enabled-systems).
-- [Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'](common_installation_problems/README.md#postgres-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
+- [Postgres error `FATAL:  could not create shared memory segment: Cannot allocate memory`](common_installation_problems/README.md#postgres-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
 - [Reconfigure complains about the GLIBC version](common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
-- [Reconfigure fails to create the git user](common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
+- [Reconfigure fails to create the Git user](common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 - [Failed to modify kernel parameters with sysctl](common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
-- [I am unable to install omnibus-gitlab without root access](common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
-- [gitlab-rake assets:precompile fails with 'Permission denied'](common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
-- ['Short read or OOM loading DB' error](common_installation_problems/README.md#short-read-or-oom-loading-db-error).
-- ['pg_dump: aborting because of server version mismatch'](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
-- ['Errno::ENOMEM: Cannot allocate memory' during backup or upgrade](common_installation_problems/README.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)
-- [NGINX error: 'could not build server_names_hash'](common_installation_problems/README.md#nginx-error-could-not-build-server_names_hash-you-should-increase-server_names_hash_bucket_size)
-- [Reconfigure fails due to "'root' cannot chown" with NFS root_squash](common_installation_problems/README.md#reconfigure-fails-due-to-root-cannot-chown-with-nfs-root_squash)
+- [I am unable to install Omnibus GitLab without root access](common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
+- [`gitlab-rake assets:precompile` fails with `Permission denied`](common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
+- [`Short read or OOM loading DB` error](common_installation_problems/README.md#short-read-or-oom-loading-db-error).
+- [`pg_dump: aborting because of server version mismatch`](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
+- [`Errno::ENOMEM: Cannot allocate memory` during backup or upgrade](common_installation_problems/README.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)
+- [NGINX error: `could not build server_names_hash`](common_installation_problems/README.md#nginx-error-could-not-build-server_names_hash-you-should-increase-server_names_hash_bucket_size)
+- [Reconfigure fails due to `'root' cannot chown` with NFS root_squash](common_installation_problems/README.md#reconfigure-fails-due-to-root-cannot-chown-with-nfs-root_squash)
 
 ## Omnibus GitLab developer documentation
 

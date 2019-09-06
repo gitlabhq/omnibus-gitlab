@@ -20,8 +20,8 @@ After upgrading make sure that you run the check task:
 sudo gitlab-rake gitlab:check
 ```
 
-If you receive an error similar to "No such file or directory @ realpath_rec - /home/git",
-run this one liner to fix the git hooks path:
+If you receive an error similar to `No such file or directory @ realpath_rec - /home/git`,
+run this one liner to fix the Git hooks path:
 
 ```sh
 find . -lname /home/git/gitlab-shell/hooks -exec sh -c 'ln -snf /opt/gitlab/embedded/service/gitlab-shell/hooks $0' {} \;
@@ -31,13 +31,13 @@ This assumes that `gitlab-shell` is located in `/home/git`.
 
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place
 
-It is also possible to upgrade a source GitLab installation to omnibus-gitlab
+It is also possible to upgrade a source GitLab installation to Omnibus GitLab
 in-place.  Below we assume you are using PostgreSQL on Ubuntu, and that you
-have an omnibus-gitlab package matching your current GitLab version.  We also
+have an Omnibus GitLab package matching your current GitLab version.  We also
 assume that your source installation of GitLab uses all the default paths and
 users.
 
-First, stop and disable GitLab, Redis and Nginx.
+First, stop and disable GitLab, Redis and NGINX.
 
 ```sh
 # Ubuntu
@@ -53,7 +53,7 @@ sudo update-rc.d redis-server disable
 
 If you are using a configuration management system to manage GitLab on your
 server, remember to also disable GitLab and its related services there. Also
-note that in the following steps, the existing home directory of the git user
+note that in the following steps, the existing home directory of the Git user
 (`/home/git`) will be changed to `/var/opt/gitlab`.
 
 Next, create a `gitlab.rb` file for your new setup:
@@ -84,7 +84,7 @@ sudo gitlab-ctl reconfigure
 ```
 
 You are not done yet! The `gitlab-ctl reconfigure` run has changed the home
-directory of the git user, so OpenSSH can no longer find its authorized_keys
+directory of the Git user, so OpenSSH can no longer find its authorized_keys
 file. Rebuild the keys file with the following command:
 
 ```sh
@@ -95,7 +95,7 @@ You should now have HTTP and SSH access to your GitLab server with the
 repositories and users that were there before.
 
 If you can log into the GitLab web interface, the next step is to reboot your
-server to make sure none of the old services interferes with omnibus-gitlab.
+server to make sure none of the old services interferes with Omnibus GitLab.
 
 If you are using special features such as LDAP you will have to put your
 settings in `gitlab.rb`, see the [settings docs](../settings/README.md).

@@ -11,8 +11,8 @@ GitLab compliant out of the box with the PCI DSS 3.1 standard.
 ## Clients supporting TLS v1.2
 
 - **Git-Credential-Manager** - support since **1.14.0**
-- **git on Red Hat Enterprise Linux 6** - support since **6.8**
-- **git on Red Hat Enteprirse Linux 7** - support since **7.2**
+- **Git on Red Hat Enterprise Linux 6** - support since **6.8**
+- **Git on Red Hat Enteprirse Linux 7** - support since **7.2**
 - **JGit / Java** - support since **JDK 7**
 - **Visual Studio** - support since version **2017**
 
@@ -35,7 +35,7 @@ requirements:
 
 If either of the above requirements are not satisfied, upgrade process will
 abort without making changes to user's existing installation. This is to ensure
-that users does not end up with a broken Gitlab due to these unsupported
+that users does not end up with a broken GitLab due to these unsupported
 configurations.
 
 ## Removed configurations
@@ -103,7 +103,7 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
 
 ### 11.6
 
-1. [Sidekiq probe of gitlab-monitor](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_monitor_exporter.html)
+1. [Sidekiq probe of GitLab Monitor](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_monitor_exporter.html)
    will be disabled by default if GitLab is configured in [Redis HA mode](https://docs.gitlab.com/ee/administration/high_availability/redis.html).
    To manually enable it, users can set `gitlab_monitor['probe_sidekiq'] = true`
    in `/etc/gitlab/gitlab.rb` file. However, when manually enabling it in Redis
@@ -120,15 +120,15 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    ```
 
    NOTE: **Note**: In the above configuration, when a failover happens after the
-   master node fails, gitlab-monitor will still be probing the original master
+   master node fails, GitLab Monitor will still be probing the original master
    node, since it is specified in `gitlab.rb`. Users will have to manually update
-   gitlab.rb to point it to the new master node.
+   `gitlab.rb` to point it to the new master node.
 
 1. Ruby has been updated to 2.5.3. GitLab will be down during the upgrade until
-   the unicorn processes have been restarted. The restart is done automatically
+   the Unicorn processes have been restarted. The restart is done automatically
    at the end of `gitlab-ctl reconfigure`, which is run by default on upgrade.
 
-   NOTE: **Note**: the application will throw 500 http errors until the unicorn
+   NOTE: **Note**: the application will throw 500 http errors until the Unicorn
    restart is completed.
 
 ### 11.8
