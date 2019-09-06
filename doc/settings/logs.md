@@ -32,9 +32,9 @@ registry['log_directory'] = "/var/log/gitlab/registry"
 
 Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings.
 
-## Runit logs
+## runit logs
 
-The [Runit-managed](../architecture/README.md#runit) services in omnibus-gitlab generate log data using
+The [runit-managed](../architecture/README.md#runit) services in Omnibus GitLab generate log data using
 svlogd. See the [svlogd documentation](http://smarden.org/runit/svlogd.8.html) for more information
 about the files it generates.
 
@@ -55,9 +55,9 @@ nginx['svlogd_prefix'] = "nginx"
 
 ## Logrotate
 
-Starting with omnibus-gitlab 7.4 there is a built-in logrotate service in
-omnibus-gitlab. This service will rotate, compress and eventually delete the
-log data that is not captured by Runit, such as `gitlab-rails/production.log`
+Starting with Omnibus GitLab 7.4 there is a built-in logrotate service in
+Omnibus GitLab. This service will rotate, compress and eventually delete the
+log data that is not captured by runit, such as `gitlab-rails/production.log`
 and `nginx/gitlab_access.log`. You can configure logrotate via
 `/etc/gitlab/gitlab.rb`.
 

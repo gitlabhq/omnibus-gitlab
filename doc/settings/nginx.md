@@ -3,15 +3,15 @@
 ## Service-specific NGINX settings
 
 Users can configure NGINX settings differently for different services via
-`gitlab.rb`. Settings for the GitLab rails application can be configured using the
+`gitlab.rb`. Settings for the GitLab Rails application can be configured using the
 `nginx['<some setting>']` keys. There are similar keys for other services like
 `pages_nginx`, `mattermost_nginx` and `registry_nginx`. All the configurations
 available for `nginx` are also available for these `<service_nginx>` settings and
 share the same default values as GitLab NGINX.
 
-If modifying via `gitlab.rb`, users have to configure nginx setting for each
+If modifying via `gitlab.rb`, users have to configure NGINX setting for each
 service separately. Settings given via `nginx['foo']` WILL NOT be replicated to
-service specific nginx configuration (as `registry_nginx['foo']` or
+service specific NGINX configuration (as `registry_nginx['foo']` or
 `mattermost_nginx['foo']`, etc.). For example, to configure HTTP to HTTPS
 redirection for GitLab, Mattermost and Registry, the following settings should
 be added to `gitlab.rb`
@@ -27,22 +27,22 @@ or incompatible configuration may yield to unavailability of service.
 
 ## Enable HTTPS
 
-By default, omnibus-gitlab does not use HTTPS. If you want to enable HTTPS for
-gitlab.example.com, there are two options:
+By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
+`gitlab.example.com`, there are two options:
 
 1. [Free and automated HTTPS with Let's Encrypt](ssl.md#lets-encrypt-integration)
 1. [Manually configuring HTTPS with your own certificates](#manually-configuring-https)
 
 ### Warning
 
-The Nginx config will tell browsers and clients to only communicate with your
+The NGINX config will tell browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 24 months. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
 
 ## Manually configuring HTTPS
 
-By default, Omnibus Gitlab does not use HTTPS.
+By default, Omnibus GitLab does not use HTTPS.
 
 To enable HTTPS for the domain `gitlab.example.com`:
 
@@ -61,16 +61,16 @@ To enable HTTPS for the domain `gitlab.example.com`:
    sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
    ```
 
-   Because the hostname in our example is 'gitlab.example.com', Omnibus GitLab
+   Because the hostname in our example is `gitlab.example.com`, Omnibus GitLab
    will look for private key and public certificate files called
-`/etc/gitlab/ssl/gitlab.example.com.key` and
-`/etc/gitlab/ssl/gitlab.example.com.crt`, respectively.
+   `/etc/gitlab/ssl/gitlab.example.com.key` and `/etc/gitlab/ssl/gitlab.example.com.crt`,
+   respectively.
 
    Make sure you use the full certificate chain in order to prevent SSL errors when
    clients connect. The full certificate chain order should consist of the server certificate first,
    followed by all intermediate certificates, with the root CA last.
 
-   If the `certificate.key` file is password protected, Nginx will not ask for
+   If the `certificate.key` file is password protected, NGINX will not ask for
    the password when you reconfigure GitLab. In that case, Omnibus GitLab will
    fail silently with no error messages. To remove the password from the key, run:
 
@@ -103,7 +103,7 @@ sudo systemctl reload firewalld
 
 ## Redirect `HTTP` requests to `HTTPS`
 
-By default, when you specify an external_url starting with 'https', Nginx will
+By default, when you specify an external_url starting with 'https', NGINX will
 no longer listen for unencrypted HTTP traffic on port 80. If you want to
 redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
 setting.
@@ -144,10 +144,10 @@ gracefully.
 
 ## Change the default proxy headers
 
-By default, when you specify `external_url` omnibus-gitlab will set a few
+By default, when you specify `external_url` Omnibus GitLab will set a few
 NGINX proxy headers that are assumed to be sane in most environments.
 
-For example, omnibus-gitlab will set:
+For example, Omnibus GitLab will set:
 
 ```
   "X-Forwarded-Proto" => "https",
@@ -198,7 +198,7 @@ Description of the options:
 
 - <http://nginx.org/en/docs/http/ngx_http_realip_module.html>
 
-By default, omnibus-gitlab will use the IP addresses in `real_ip_trusted_addresses`
+By default, Omnibus GitLab will use the IP addresses in `real_ip_trusted_addresses`
 as GitLab's trusted proxies, which will keep users from being listed as signed
 in from those IPs.
 
@@ -207,11 +207,11 @@ for the changes to take effect.
 
 ## Configuring HTTP2 protocol
 
-By default, when you specify that your Gitlab instance should be reachable
+By default, when you specify that your GitLab instance should be reachable
 through HTTPS by specifying `external_url "https://gitlab.example.com"`,
 [http2 protocol] is also enabled.
 
-The omnibus-gitlab package sets required ssl_ciphers that are compatible with
+The Omnibus GitLab package sets required ssl_ciphers that are compatible with
 http2 protocol.
 
 If you are specifying custom ssl_ciphers in your configuration and a cipher is
@@ -236,15 +236,15 @@ for the changes to take effect.
 
 ## Using a non-bundled web-server
 
-By default, omnibus-gitlab installs GitLab with bundled Nginx.
-Omnibus-gitlab allows webserver access through the `gitlab-www` user, which resides
+By default, Omnibus GitLab installs GitLab with bundled NGINX.
+Omnibus GitLab allows webserver access through the `gitlab-www` user, which resides
 in the group with the same name. To allow an external webserver access to
 GitLab, the external webserver user needs to be added to the `gitlab-www` group.
 
-To use another web server like Apache or an existing Nginx installation you
+To use another web server like Apache or an existing NGINX installation you
 will have to perform the following steps:
 
-1. **Disable bundled Nginx**
+1. **Disable bundled NGINX**
 
    In `/etc/gitlab/gitlab.rb` set:
 
@@ -254,12 +254,12 @@ will have to perform the following steps:
 
 1. **Set the username of the non-bundled web-server user**
 
-   By default, omnibus-gitlab has no default setting for the external webserver
+   By default, Omnibus GitLab has no default setting for the external webserver
    user, you have to specify it in the configuration. For Debian/Ubuntu the
-   default user is `www-data` for both Apache/Nginx whereas for RHEL/CentOS
-   the Nginx user is `nginx`.
+   default user is `www-data` for both Apache/NGINX whereas for RHEL/CentOS
+   the NGINX user is `nginx`.
 
-   *Note: Make sure you have first installed Apache/Nginx so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
+   *Note: Make sure you have first installed Apache/NGINX so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
 
    Let's say for example that the webserver user is `www-data`.
    In `/etc/gitlab/gitlab.rb` set:
@@ -268,7 +268,7 @@ will have to perform the following steps:
    web_server['external_users'] = ['www-data']
    ```
 
-   *Note: This setting is an array so you can specify more than one user to be added to gitlab-www group.*
+   *Note: This setting is an array so you can specify more than one user to be added to `gitlab-www` group.*
 
    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
@@ -278,7 +278,7 @@ will have to perform the following steps:
 
 1. **Add the non-bundled web-server to the list of trusted proxies**
 
-   Normally, omnibus-gitlab defaults the list of trusted proxies to what was
+   Normally, Omnibus GitLab defaults the list of trusted proxies to what was
    configured in the `real_ip` module for the bundled NGINX.
 
    For non-bundled web-servers the list needs to be configured directly, and should
@@ -289,12 +289,12 @@ will have to perform the following steps:
    gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
    ```
 
-1. **(Optional) Set the right gitlab-workhorse settings if using Apache**
+1. **(Optional) Set the right GitLab Workhorse settings if using Apache**
 
    *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
 
    Apache cannot connect to a UNIX socket but instead needs to connect to a
-   TCP Port. To allow gitlab-workhorse to listen on TCP (by default port 8181)
+   TCP Port. To allow GitLab Workhorse to listen on TCP (by default port 8181)
    edit `/etc/gitlab/gitlab.rb`:
 
    ```
@@ -420,7 +420,7 @@ nginx['gzip_enabled'] = false
 
 ## Using custom SSL ciphers
 
-By default GitLab is using SSL ciphers that are combination of testing on gitlab.com and various best practices contributed by the GitLab community.
+By default GitLab is using SSL ciphers that are combination of testing on <https://gitlab.com> and various best practices contributed by the GitLab community.
 
 However, you can change the ssl ciphers by adding to `gitlab.rb`:
 
@@ -487,9 +487,9 @@ This inserts the defined string into the end of the `server` block of
   proxy_pass http://gitlab-workhorse;
   ```
 
-  in the string or in the included nginx config. Without these, any sub-location
+  in the string or in the included NGINX config. Without these, any sub-location
   will return a 404. See
-  [gitlab-ce#30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
+  [GitLab CE Issue #30619](https://gitlab.com/gitlab-org/gitlab-ce/issues/30619).
 - You cannot add the root `/` location or the `/assets` location as those already
   exist in `gitlab-http.conf`.
 
@@ -533,16 +533,16 @@ This would result in the 404 error page below.
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
-## Using an existing Passenger/Nginx installation
+## Using an existing Passenger/NGINX installation
 
-In some cases you may want to host GitLab using an existing Passenger/Nginx
+In some cases you may want to host GitLab using an existing Passenger/NGINX
 installation but still have the convenience of updating and installing using
 the omnibus packages.
 
 ### Configuration
 
 First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
-Nginx and Unicorn:
+NGINX and Unicorn:
 
 ```ruby
 # Define the external url
@@ -564,12 +564,12 @@ web_server['external_users'] = ['www-data']
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 **Note:** If you are running a version older than 8.16.0, you will have to
-manually remove the unicorn service file (`/opt/gitlab/service/unicorn`), if
+manually remove the Unicorn service file (`/opt/gitlab/service/unicorn`), if
 exists, for reconfigure to succeed.
 
 ### Vhost (server block)
 
-Then, in your custom Passenger/Nginx installation, create the following site
+Then, in your custom Passenger/NGINX installation, create the following site
 configuration file:
 
 ```
@@ -697,19 +697,19 @@ server {
 }
 ```
 
-Don't forget to update 'git.example.com' in the above example to be your server url.
+Don't forget to update `git.example.com` in the above example to be your server url.
 
-**Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in /etc/nginx/nginx.conf, to do so simply uncomment:
+**Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in `/etc/nginx/nginx.conf`, to do so simply uncomment:
 
 ```
 # include /etc/nginx/passenger.conf;
 ```
 
-then, 'sudo service nginx reload'
+then, `sudo service nginx reload`
 
 ## Enabling/Disabling nginx_status
 
-By default you will have an nginx health-check endpoint configured at 127.0.0.1:8060/nginx_status to monitor your Nginx server status.
+By default you will have an NGINX health-check endpoint configured at `127.0.0.1:8060/nginx_status` to monitor your NGINX server status.
 
 ### The following information will be displayed
 
@@ -725,8 +725,8 @@ Reading: 0 Writing: 1 Waiting: 0
   - All accepted connections.
   - All handled connections.
   - Total number of handled requests.
-- Reading: Nginx reads request headers
-- Writing: Nginx reads request bodies, processes requests, or writes responses to a client
+- Reading: NGINX reads request headers
+- Writing: NGINX reads request bodies, processes requests, or writes responses to a client
 - Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
 
 ### Configuration options
@@ -755,11 +755,11 @@ nginx['status'] = {
 }
 ```
 
-Make sure you run sudo gitlab-ctl reconfigure for the changes to take effect.
+Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 #### Warning
 
-To ensure that user uploads are accessible your Nginx user (usually `www-data`)
+To ensure that user uploads are accessible your NGINX user (usually `www-data`)
 should be added to the `gitlab-www` group. This can be done using the following command:
 
 ```shell
@@ -771,9 +771,9 @@ sudo usermod -aG gitlab-www www-data
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to :
 
-- [bundled Gitlab Nginx configuration][nginx-cookbook]
+- [bundled GitLab NGINX configuration][nginx-cookbook]
 
-Don't forget to restart Nginx to load the new configuration (on Debian-based
+Don't forget to restart NGINX to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
 
 ## Troubleshooting
@@ -786,7 +786,7 @@ Make sure you don't have the `proxy_set_header` configuration in
 
 ### javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
 
-Starting with GitLab 10, the omnibus-gitlab package no longer supports TLSv1 protocol by default.
+Starting with GitLab 10, the Omnibus GitLab package no longer supports TLSv1 protocol by default.
 This can cause connection issues with some older Java based IDE clients when interacting with
 your GitLab instance.
 We strongly urge you to upgrade ciphers on your server, similar to what was mentioned

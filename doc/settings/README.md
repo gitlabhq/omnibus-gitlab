@@ -5,7 +5,7 @@
 - [Configuration options](configuration.md)
 - [Database](database.md)
 - [Environment variables](environment-variables.md).
-- [gitlab.yml](gitlab.yml.md)
+- [`gitlab.yml`](gitlab.yml.md)
 - [Grafana](grafana.md)
 - [LDAP](ldap.md)
 - [Logs](logs.md)
