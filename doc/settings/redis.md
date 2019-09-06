@@ -31,7 +31,7 @@ gitlab_rails['redis_enable_client'] = false
 ## Making a bundled Redis instance reachable via TCP
 
 Use the following settings if you want to make one of the Redis instances
-managed by omnibus-gitlab reachable via TCP.
+managed by Omnibus GitLab reachable via TCP.
 
 ```ruby
 redis['port'] = 6379
@@ -105,7 +105,7 @@ redis['tcp_keepalive'] = "300"
 
 ## Running with multiple Redis instances
 
-GitLab includes support for running with separate redis instances for different persistence classes, currently: cache, queues, and shared_state.
+GitLab includes support for running with separate Redis instances for different persistence classes, currently: cache, queues, and shared_state.
 
 1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
@@ -116,7 +116,7 @@ GitLab includes support for running with separate redis instances for different 
    gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
    ```
 
-   **Note**: Redis URLs should be in the format: "redis://:PASSWORD@REDIS_HOST:PORT/2"
+   **Note**: Redis URLs should be in the format: `redis://:PASSWORD@REDIS_HOST:PORT/2`
 
    Where:
 

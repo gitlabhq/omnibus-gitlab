@@ -54,7 +54,7 @@ The node_exporter provides system level metrics.
 
 Additional metrics collectors are enabled by default. For example, `mountstats` is used to collect metrics about NFS mounts.
 
-To disable the `mountstats` collector, adjust gitlab.rb with the following setting and run `gitlab-ctl reconfigure`:
+To disable the `mountstats` collector, adjust `gitlab.rb` with the following setting and run `gitlab-ctl reconfigure`:
 
 ```
 node_exporter['flags'] = {

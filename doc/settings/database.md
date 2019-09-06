@@ -205,7 +205,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
    - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
      plain-text passwords.
-   - Postgresql allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/runtime-config-connection.html)
+   - PostgreSQL allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/runtime-config-connection.html)
 
      If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
 
@@ -261,7 +261,7 @@ with the caveat that some non-critical scripts expect UNIX sockets and may misbe
 In order to configure the use of TCP/IP for the database service, changes will
 need to be made to both `postgresql` and `gitlab_rails` sections of `gitlab.rb`.
 
-### Configure postgresql block
+### Configure PostgreSQL block
 
 The following settings are affected in the `postgresql` block:
 
@@ -292,7 +292,7 @@ Any client or GitLab service which will connect over the network will need to
 provide the values of `sql_user` for the username, and password provided to the
 configuration when connecting to the PostgreSQL server. They must also be within the network block provided to `md5_auth_cidr_addresses`
 
-### Configure gitlab-rails block
+### Configure GitLab Rails block
 
 To configure the `gitlab-rails` application to connect to the PostgreSQL database
 over the network, several settings must be configured.
@@ -418,7 +418,7 @@ If you want to manually upgrade without upgrading GitLab, you can follow these i
 - Please fully read this section before running any commands.
 - Please plan ahead as upgrade involves downtime.
 - If you encounter any problems during upgrade, please raise an issue
-  with a full description at [omnibus-gitlab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
+  with a full description at the [Omnibus GitLab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
 
 Before upgrading, please check the following:
 
@@ -502,7 +502,7 @@ If at some point, the bundled PostgreSQL had been running on a node before upgra
 
 ### Upgrading a Geo instance
 
-As of Gitlab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your GEO servers.
+As of GitLab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your GEO servers.
 
 NOTE: **Note:**
 Due to how PostgreSQL replication works, this cannot be done without the need to resynchronize your secondary database server. Therefore, this upgrade cannot be done without downtime.
@@ -521,9 +521,9 @@ To upgrade a GEO cluster, you will need a name for the replication slot, and the
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
-1. Upgrade the gitlab-ee package on the primary server
+1. Upgrade the `gitlab-ee` package on the primary server
 
-1. Upgrade the gitlab-ee package on the secondary server
+1. Upgrade the `gitlab-ee` package on the secondary server
 
 1. Re-initialize the database on the secondary server using the command
 

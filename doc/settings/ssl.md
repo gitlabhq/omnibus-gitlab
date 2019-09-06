@@ -133,7 +133,7 @@ certificate authenticity.
 
 ### Other Certificate Authorities
 
-Omnibus-Gitlab supports connections to external services with
+Omnibus GitLab supports connections to external services with
 self-signed certificates.
 
 NOTE: **Compatibility Note**
@@ -157,7 +157,7 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 
 ## Troubleshooting
 
-### git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
+### Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
 NOTE: **Note:**
 In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701).

@@ -12,7 +12,7 @@ and 'secure variables' stored in GitLab CI will be lost.
 It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
-All configuration for omnibus-gitlab is stored in `/etc/gitlab`. To backup your
+All configuration for Omnibus GitLab is stored in `/etc/gitlab`. To backup your
 configuration, just backup this directory.
 
 ```shell
@@ -122,7 +122,7 @@ For details check [backup restore document of GitLab CE](https://docs.gitlab.com
 
 ## Manually manage backup directory
 
-Omnibus-gitlab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
+Omnibus GitLab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
 That directory will hold backup archives and they contain sensitive information.
 In some organizations permissions need to be different because of, for example, shipping the backup archives offsite.
 

@@ -3,7 +3,7 @@
 GitLab is configured by setting the relevant options in
 `/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md)
 for a list of default settings and visit the
-[gitlab.rb.template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 for a complete list of available options.
 New installations starting from GitLab 7.6, will have
 all the options of the template as of installation listed in
@@ -26,7 +26,7 @@ NOTE: **Note:**
 After you change the external URL, it is recommended that you also
 [invalidate the Markdown cache](https://docs.gitlab.com/ce/administration/invalidate_markdown_cache.html).
 
-## Configuring a relative URL for Gitlab
+## Configuring a relative URL for GitLab
 
 NOTE: **Note:**
 Relative URL support in Omnibus GitLab is **experimental** and was
@@ -102,7 +102,7 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 
 ### Relative URL troubleshooting
 
-If you notice any issues with gitlab assets appearing broken after moving to a
+If you notice any issues with GitLab assets appearing broken after moving to a
 relative url configuration (like missing images or unresponsive components)
 please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce)
 with the `Frontend` label.
@@ -125,7 +125,7 @@ username and group.
 
 ## Loading external configuration file from non-root user
 
-Omnibus-gitlab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
+Omnibus GitLab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
 This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
 and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by the `root` user during `gitlab-ctl reconfigure`. This means
 that users who have write access to `/etc/gitlab/gitlab.rb` can add configuration that will be executed as code by `root`.
@@ -143,7 +143,7 @@ Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is in
 
 ## Storing Git data in an alternative directory
 
-By default, omnibus-gitlab stores the Git repository data under
+By default, Omnibus GitLab stores the Git repository data under
 `/var/opt/gitlab/git-data`. The repositories are stored in a subfolder
 `repositories`. You can change the location of
 the `git-data` parent directory by adding the following line to
@@ -153,7 +153,7 @@ the `git-data` parent directory by adding the following line to
 git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
 ```
 
-You can also add more than one git data directory by
+You can also add more than one Git data directory by
 adding the following lines to `/etc/gitlab/gitlab.rb` instead.
 
 ```ruby
@@ -164,7 +164,7 @@ git_data_dirs({
 ```
 
 If you're running Gitaly on its own server remember to also include the
-`gitaly_address` for each git data directory. See [the documentation on
+`gitaly_address` for each Git data directory. See [the documentation on
 configuring Gitaly](https://docs.gitlab.com/ee/administration/gitaly/#gitaly-server-configuration).
 
 Note that the target directories and any of its subpaths must not be a symlink.
@@ -197,7 +197,7 @@ sudo gitlab-ctl start
 
 ## Changing the name of the Git user / group
 
-By default, omnibus-gitLab uses the user name `git` for Git gitlab-shell login,
+By default, Omnibus GitLab uses the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
 Similarly, `git` group is used for group ownership of the Git data.
 
@@ -216,7 +216,7 @@ Note that if you are changing the username of an existing installation, the reco
 
 ## Specify numeric user and group identifiers
 
-omnibus-gitlab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
+Omnibus GitLab creates users for GitLab, PostgreSQL, Redis and NGINX. You can
 specify the numeric identifiers for these users in `/etc/gitlab/gitlab.rb` as
 follows.
 
@@ -235,7 +235,7 @@ Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
 ## Disable user and group account management
 
-By default, omnibus-gitlab takes care of creating system user and group accounts
+By default, Omnibus GitLab takes care of creating system user and group accounts
 as well as keeping the information updated.
 These system accounts run various components of the package.
 Most users do not need to change this behaviour.
@@ -248,9 +248,9 @@ In order to disable user and group accounts management, in `/etc/gitlab/gitlab.r
 manage_accounts['enable'] = false
 ```
 
-**Warning** Omnibus-gitlab still expects users and groups to exist on the system where omnibus-gitlab package is installed.
+**Warning** Omnibus GitLab still expects users and groups to exist on the system where Omnibus GitLab package is installed.
 
-By default, omnibus-gitlab package expects that following users exist:
+By default, Omnibus GitLab package expects that following users exist:
 
 ```bash
 # GitLab user (required)
@@ -278,7 +278,7 @@ registry
 gitlab-consul
 ```
 
-By default, omnibus-gitlab package expects that following groups exist:
+By default, Omnibus GitLab package expects that following groups exist:
 
 ```bash
 # GitLab group (required)
@@ -344,8 +344,8 @@ redis['home'] = "/var/opt/redis-gitlab"
 NOTE: **Note:**
 For the GitLab user, it is recommended that the home directory
 is set in local disk (ie not NFS) for better performance. When setting it in
-NFS, git requests will need to make another network request to read the git
-configuration and will increase latency in git operations.
+NFS, Git requests will need to make another network request to read the Git
+configuration and will increase latency in Git operations.
 
 In order to move an existing home directory, GitLab services will need to be stopped and some downtime is required.
 
@@ -417,7 +417,7 @@ issue.
 
 ## Disable storage directories management
 
-The omnibus-gitlab package takes care of creating all the necessary directories
+The Omnibus GitLab package takes care of creating all the necessary directories
 with the correct ownership and permissions, as well as keeping this updated.
 
 Some of these directories will hold large amount of data so in certain setups,
@@ -425,7 +425,7 @@ these directories will most likely be mounted on a NFS (or some other) share.
 
 Some types of mounts won't allow automatic creation of directories by root user
  (default user for initial setup), eg. NFS with `root_squash` enabled on the
-share. To work around this the omnibus-gitlab package will attempt to create
+share. To work around this the Omnibus GitLab package will attempt to create
 these directories using the directory's owner user.
 
 If you have the `/etc/gitlab` directory mounted, you can turn off management of
@@ -447,27 +447,27 @@ in `/etc/gitlab/gitlab.rb` set:
 manage_storage_directories['enable'] = false
 ```
 
-**Warning** The omnibus-gitlab package still expects these directories to exist
+**Warning** The Omnibus GitLab package still expects these directories to exist
 on the filesystem. It is up to the administrator to create and set correct
 permissions if this setting is set.
 
 Enabling this setting will prevent the creation of the following directories:
 
-| Default location | Permissions | Ownership | Purpose |
-| ---------------- | ----------- | --------- | ------- |
-| `/var/opt/gitlab/git-data`   | 0700 | git:root | Holds repositories directory |
-| `/var/opt/gitlab/git-data/repositories` | 2770 | git:git | Holds git repositories |
-| `/var/opt/gitlab/gitlab-rails/shared` | 0751 | git:gitlab-www | Holds large object directories |
-| `/var/opt/gitlab/gitlab-rails/shared/artifacts` | 0700 | git:root | Holds CI artifacts |
-| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects` | 0700 | git:root | Holds LFS objects |
-| `/var/opt/gitlab/gitlab-rails/uploads` | 0700 | git:root | Holds user attachments |
-| `/var/opt/gitlab/gitlab-rails/shared/pages` | 0750 | git:gitlab-www | Holds user pages |
-| `/var/opt/gitlab/gitlab-ci/builds` | 0700 | git:root | Holds CI build logs |
-| `/var/opt/gitlab/.ssh` | 0700 | git:git | Holds authorized keys |
+| Default location                                  | Permissions | Ownership        | Purpose |
+|---------------------------------------------------|-------------|------------------|---------|
+| `/var/opt/gitlab/git-data`                        | 0700        | `git:root`       | Holds repositories directory |
+| `/var/opt/gitlab/git-data/repositories`           | 2770        | `git:git`        | Holds Git repositories |
+| `/var/opt/gitlab/gitlab-rails/shared`             | 0751        | `git:gitlab-www` | Holds large object directories |
+| `/var/opt/gitlab/gitlab-rails/shared/artifacts`   | 0700        | `git:root`       | Holds CI artifacts |
+| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects` | 0700        | `git:root`       | Holds LFS objects |
+| `/var/opt/gitlab/gitlab-rails/uploads`            | 0700        | `git:root`       | Holds user attachments |
+| `/var/opt/gitlab/gitlab-rails/shared/pages`       | 0750        | `git:gitlab-www` | Holds user pages |
+| `/var/opt/gitlab/gitlab-ci/builds`                | 0700        | `git:root`       | Holds CI build logs |
+| `/var/opt/gitlab/.ssh`                            | 0700        | `git:git`        | Holds authorized keys |
 
-## Only start Omnibus-GitLab services after a given filesystem is mounted
+## Only start Omnibus GitLab services after a given filesystem is mounted
 
-If you want to prevent omnibus-gitlab services (NGINX, Redis, Unicorn etc.)
+If you want to prevent Omnibus GitLab services (NGINX, Redis, Unicorn etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -485,7 +485,7 @@ of each Unicorn process (Rails metrics). Every Unicorn process will need to writ
 a metrics file to a temporary location for each controller request.
 Prometheus will then collect all these files and process their values.
 
-In order to avoid creating disk I/O, the omnibus-gitlab package will use a
+In order to avoid creating disk I/O, the Omnibus GitLab package will use a
 runtime directory.
 
 During `reconfigure`, package will check if `/run` is a `tmpfs` mount.
@@ -516,7 +516,7 @@ for more information.
 
 ## Disabling automatic cache cleaning during installation
 
-If you have large gitlab installation, you might not want to run `rake cache:clean` task.
+If you have large GitLab installation, you might not want to run `rake cache:clean` task.
 As it can take long time to finish. By default, cache clear task will run automatically
 during reconfigure.
 
@@ -551,7 +551,7 @@ If you want to change default protected paths
 set `gitlab_rails['rack_attack_protected_paths']` in config file.
 
 **Warning** This action will overwrite
-list provided by omnibus-gitlab:
+list provided by Omnibus GitLab:
 
 ```ruby
 gitlab_rails['rack_attack_protected_paths'] = [
@@ -567,7 +567,7 @@ gitlab_rails['rack_attack_protected_paths'] = [
 ```
 
 NOTE: **Note:**
-All paths are relative to the gitlab url. Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
+All paths are relative to the GitLab url. Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
 
 **Warning** If path contains variables which need to be
 interpolated by rails(ex. `#{API::API.version}`)
@@ -588,7 +588,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 ## Disable impersonation
 
 Disabling impersonation is documented in
-[docs.gitlab.com](https://docs.gitlab.com/ee/api/README.html#disable-impersonation).
+[the API docs](https://docs.gitlab.com/ee/api/README.html#disable-impersonation).
 
 ## Error Reporting and Logging with Sentry
 
@@ -647,25 +647,24 @@ See [doc/settings/ldap.md](ldap.md).
 
 ## Smartcard authentication
 
-Smartcard authentication is documented in
-[docs.gitlab.com](https://docs.gitlab.com/ee/administration/auth/smartcard.html).
+See [Smartcard documentation](https://docs.gitlab.com/ee/administration/auth/smartcard.html).
 
 ## Enable HTTPS
 
-See [doc/settings/nginx.md](nginx.md#enable-https).
+See [NGINX documentation](nginx.md#enable-https).
 
 ### Redirect `HTTP` requests to `HTTPS`
 
-See [doc/settings/nginx.md](nginx.md#redirect-http-requests-to-https).
+See [NGINX documentation](nginx.md#redirect-http-requests-to-https).
 
 ### Change the default port and the ssl certificate locations
 
 See
-[doc/settings/nginx.md](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+[NGINX documentation](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 
 ## Use non-packaged web-server
 
-For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](nginx.md#using-a-non-bundled-web-server).
+For using an existing NGINX, Passenger, or Apache webserver see [NGINX documentation](nginx.md#using-a-non-bundled-web-server).
 
 ## Using a non-packaged PostgreSQL database management server
 
@@ -673,7 +672,7 @@ To connect to an external PostgreSQL DBMS see [doc/settings/database.md](databas
 
 ## Using a non-packaged Redis instance
 
-See [doc/settings/redis.md](redis.md).
+See [Redis documentation](redis.md).
 
 ## Adding ENV Vars to the GitLab Runtime Environment
 
@@ -682,7 +681,7 @@ See
 
 ## Changing GitLab.yml settings
 
-See [doc/settings/gitlab.yml.md](gitlab.yml.md).
+See [`gitlab.yml` documentation](gitlab.yml.md).
 
 ## Sending application email via SMTP
 
@@ -690,30 +689,28 @@ See [doc/settings/smtp.md](smtp.md).
 
 ## Omniauth (Google, Twitter, GitHub login)
 
-Omniauth configuration is documented in
-[docs.gitlab.com](https://docs.gitlab.com/ce/integration/omniauth.html).
+See [Omniauth documentation](https://docs.gitlab.com/ce/integration/omniauth.html).
 
 ## Adjusting Unicorn settings
 
-See [doc/settings/unicorn.md](unicorn.md).
+See [Unicorn documentation](unicorn.md).
 
 ## Setting the NGINX listen address or addresses
 
-See [doc/settings/nginx.md](nginx.md).
+See [NGINX documentation](nginx.md).
 
 ## Inserting custom NGINX settings into the GitLab server block
 
-See [doc/settings/nginx.md](nginx.md).
+See [NGINX documentation](nginx.md).
 
 ## Inserting custom settings into the NGINX config
 
-See [doc/settings/nginx.md](nginx.md).
+See [NGINX documentation](nginx.md).
 
 ## Enable nginx_status
 
-See [doc/settings/nginx.md](nginx.md).
+See [NGINX documentation](nginx.md).
 
 ## Pseudonymizer settings
 
-Pseudonymizer configuration is documented in
-[docs.gitlab.com](https://docs.gitlab.com/ee/administration/pseudonymizer.html).
+See [Pseudonymizer documentation](https://docs.gitlab.com/ee/administration/pseudonymizer.html).
