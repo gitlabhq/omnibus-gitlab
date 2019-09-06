@@ -121,7 +121,7 @@ module Gitlab
       end
 
       def method_missing(method_name, *args, &block)
-        deprecated_msg(caller[0..3])
+        deprecated_msg(caller[0..2])
         current_target = target
         (current_target.respond_to?(method_name, true) && current_target.send(method_name, *args, &block)) || super
       end
@@ -134,8 +134,12 @@ module Gitlab
         target.nil?
       end
 
+      def dup
+        target&.dup
+      end
+
       def inspect
-        target.inspect
+        target&.inspect
       end
 
       def target
@@ -148,9 +152,9 @@ module Gitlab
 
       def deprecated_msg(*called_from)
         called_from = called_from.flatten
-        msg = "Accessing #{@var_name} is deprecated. Support will be removed in a future release." \
-              "Please update your cookbooks to use #{@new_var_name} in place of #{@var_name}. Accessed from:"
-        called_from.each { |l| msg << l }
+        msg = "Accessing #{@var_name} is deprecated. Support will be removed in a future release. \n" \
+              "Please update your cookbooks to use #{@new_var_name} in place of #{@var_name}. Accessed from: \n"
+        called_from.each { |l| msg << "#{l}\n" }
         LoggingHelper.deprecation(msg)
       end
     end
