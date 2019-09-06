@@ -23,7 +23,12 @@ module Gitlab
       end
     end
 
+    def authenticate
+      Docker.authenticate!(username: 'gitlab-ci-token', password: Gitlab::Util.get_env('CI_JOB_TOKEN'), serveraddress: Gitlab::Util.get_env('CI_REGISTRY'))
+    end
+
     def measure
+      authenticate
       container = start_docker_container
       pid_command_hash_array, smem_result_hash_array = container_memory_usage_raw_data(container)
 
