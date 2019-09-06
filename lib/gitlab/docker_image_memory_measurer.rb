@@ -157,11 +157,11 @@ module Gitlab
       [pid_command_hash_array, smem_result_hash_array]
     end
 
-    def container_exec_command(container, command, log_file)
+    def container_exec_command(container, command, log_file, timeout = 120)
       # make sure the folder exists
       FileUtils.mkdir_p debug_output_dir unless debug_output_dir.nil?
 
-      stdout, stderr, code = container.exec(command)
+      stdout, stderr, code = container.exec(command, wait: timeout)
       stdout = stdout.join('')
       stderr = stderr.join('')
 
