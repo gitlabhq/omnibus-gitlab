@@ -15,27 +15,27 @@
 # limitations under the License.
 #
 
-require 'chef/mixin/deprecation'
-
 module Gitlab
   # Inspired by DeprecatedInstanceVariable in https://github.com/chef/chef/blob/master/lib/chef/mixin/deprecation.rb
-  class ObjectProxy < ::Chef::Mixin::Deprecation::DeprecatedObjectProxyBase
+  class ObjectProxyBase
+    KEEPERS ||= %w{__id__ __send__ instance_eval == equal? initialize object_id dup is_a? freeze}.freeze
+    instance_methods.each { |method_name| undef_method(method_name) unless KEEPERS.include?(method_name.to_s) }
+  end
+
+  class ObjectProxy < ObjectProxyBase
     def initialize(target)
       @target = target
     end
 
     def method_missing(method_name, *args, &block)
       current_target = target
-      current_target.send(method_name, *args, &block) if current_target.respond_to?(method_name, true)
+      return current_target.send(method_name, *args, &block) if current_target.respond_to?(method_name, true)
+
       super
     end
 
     def respond_to_missing?(method_name, include_private = false)
       target.send(:respond_to_missing?, method_name, include_private) || super
-    end
-
-    def dup
-      ::Object.instance_method(:dup).bind(self).call
     end
 
     [:nil?, :inspect].each do |method_name|
