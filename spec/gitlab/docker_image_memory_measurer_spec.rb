@@ -159,16 +159,16 @@ describe Gitlab::DockerImageMemoryMeasurer do
 
     context 'command succeed' do
       it 'return the stdout result' do
-        expect(container).to receive(:exec).with(command).and_return([%w[success message], [], 0])
-        command_ret = measurer.container_exec_command(container, command, log_file)
+        expect(container).to receive(:exec).with(command, wait: 120).and_return([%w[success message], [], 0])
+        command_ret = measurer.container_exec_command(container, command, log_file, 120)
         expect(command_ret).to eq('successmessage')
       end
     end
 
     context 'command fail' do
       it 'should raise error' do
-        expect(container).to receive(:exec).with(command).and_return([[], %w[error message], 1])
-        expect { measurer.container_exec_command(container, command, log_file) }.to raise_error(SystemExit, 'errormessage')
+        expect(container).to receive(:exec).with(command, wait: 120).and_return([[], %w[error message], 1])
+        expect { measurer.container_exec_command(container, command, log_file, 120) }.to raise_error(SystemExit, 'errormessage')
       end
     end
   end
