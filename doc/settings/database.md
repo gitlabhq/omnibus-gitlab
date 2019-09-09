@@ -403,9 +403,9 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 **As of GitLab 11.11, PostgreSQL 9.6.X and 10.7 are shipped with Omnibus GitLab.**
 
-You can follow the instructions for manually upgrading PostgreSQL to 10.7.
+You can follow the instructions for manually upgrading PostgreSQL to 10.x.
 
-For GitLab 12.0, we will be automatically upgrading the database to 10.7 unless specifically opted out. To opt out, run
+For GitLab 12.0 or later, we will be automatically upgrading the database to 10.x unless specifically opted out. To opt out, run
 
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
