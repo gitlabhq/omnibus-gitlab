@@ -109,26 +109,26 @@ The `debsig-verify` package has a [slew of dependencies](https://packages.debian
 
 1. Download and import the package signing public key
 
-   ```
-   $ curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
-   $ gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+   ```sh
+   curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+   gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Extract the signature file (`_gpgorigin`)
 
-   ```
-   $ ar x gitlab-ce-xxx.deb _gpgorigin
+   ```sh
+   ar x gitlab-ce-xxx.deb _gpgorigin
    ```
 
 1. Verify the signature matches the content
 
-   ```
-   $ ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
+   ```sh
+   ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
    ```
 
 The output of the final command should appear as such:
 
-```
+```sh
 $ ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
 gpg: Signature made Tue Aug 01 22:21:11 2017 UTC
 gpg:                using RSA key DBEF89774DDB9EB37D9FC3A03CFCF9BAF27EAB47

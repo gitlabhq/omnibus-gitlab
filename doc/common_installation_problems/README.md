@@ -12,7 +12,7 @@ E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trus
 
 Please run the following to fix this:
 
-```
+```sh
 sudo rm -rf /var/lib/apt/lists/partial/*
 sudo apt-get update
 sudo apt-get clean
@@ -22,7 +22,7 @@ See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnib
 
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
-```
+```sh
 curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
@@ -105,7 +105,7 @@ not used in your GitLab instance yet.
 If necessary, you can modify the 'From' field of the emails sent by GitLab with
 the following setting in `/etc/gitlab/gitlab.rb`:
 
-```
+```rb
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 ```
 
@@ -120,7 +120,7 @@ To troubleshoot this error:
 1. First check that the runit directory exists:
 
    ```sh
-   $ ls -al /opt/gitlab/sv/redis/supervise
+   ls -al /opt/gitlab/sv/redis/supervise
    ```
 
 1. If you see the message, continue to the next step:
@@ -132,20 +132,20 @@ To troubleshoot this error:
 1. Restart the runit server.
    Using systemctl (Debian => 9 - Stretch):
 
-   ```
-   $ sudo systemctl restart gitlab-runsvdir
+   ```sh
+   sudo systemctl restart gitlab-runsvdir
    ```
 
    Using upstart (Ubuntu <= 14.04):
 
-   ```
-   $ sudo initctl restart gitlab-runsvdir
+   ```sh
+   sudo initctl restart gitlab-runsvdir
    ```
 
    Using systemd (CentOS, Ubuntu >= 16.04):
 
-   ```
-   $ systemctl restart gitlab-runsvdir.service
+   ```sh
+   systemctl restart gitlab-runsvdir.service
    ```
 
 *Note* This should be resolved starting from 7.13 Omnibus GitLab packages.
