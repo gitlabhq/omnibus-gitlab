@@ -35,7 +35,7 @@ writing specs can be skipped. However, an issue to implement the tests
 
 To run tests, execute the following command (you may have to run `bundle install` before running it)
 
-```
+```sh
 bundle exec rspec
 ```
 
@@ -61,9 +61,7 @@ their applicability:
 1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
 
-**`Note:`** Ensure shared runners are enabled for your fork in order for our automated tests to run.[^1]
-
-[^1]:
+**Note:** Ensure shared runners are enabled for your fork in order for our automated tests to run:
 
 1. Go to Settings -> CI/CD
 1. Expand Runners settings
@@ -80,12 +78,12 @@ build and confirm it there. To use this:
 1. Copy the [simple.rb](examples/simple.rb) file into your projects
 
    ```shell
-   $ cp doc/development/examples/simple.rb config/projects/
+   cp doc/development/examples/simple.rb config/projects/
    ```
 
 1. Change the `dependency` in `config/projects/simple.rb` to match the software you are testing
 1. Build the simple project by running
 
    ```shell
-   $ bundle exec omnibus build simple
+   bundle exec omnibus build simple
    ```

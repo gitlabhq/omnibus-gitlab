@@ -10,7 +10,7 @@ for instructions on how to prepare build environment using Docker.
 You create a platform-specific package using the `build` command:
 
 ```shell
-$ bin/omnibus build gitlab
+bin/omnibus build gitlab
 ```
 
 The platform/architecture type of the package created will match the platform
@@ -24,7 +24,7 @@ You can clean up all temporary files generated during the build process with
 the `clean` command:
 
 ```shell
-$ bin/omnibus clean
+bin/omnibus clean
 ```
 
 Adding the `--purge` purge option removes __ALL__ files generated during the
@@ -32,7 +32,7 @@ build including the project install directory (`/opt/gitlab`) and
 the package cache directory (`/var/cache/omnibus/pkg`):
 
 ```shell
-$ bin/omnibus clean --purge
+bin/omnibus clean --purge
 ```
 
 ### Help
@@ -41,7 +41,7 @@ Full help for the Omnibus command line interface can be accessed with the
 `help` command:
 
 ```shell
-$ bin/omnibus help
+bin/omnibus help
 ```
 
 ## Build Docker image

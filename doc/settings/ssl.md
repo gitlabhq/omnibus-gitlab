@@ -211,8 +211,8 @@ means there may be one of three issues:
 Test the certificate's validity using the commands below:
 
 ```sh
-$ /opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
-$ /opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
+/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
+/opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
 ```
 
 Invalid certificate files produce the following output:
@@ -224,8 +224,8 @@ unable to load certificate
 
 To test if `c_rehash` is not symlinking the certificate due to a missing perl interpreter:
 
-```
-/opt/gitlab/embedded/bin/c_rehash /etc/gitlab/trusted-certs
+```sh
+$ /opt/gitlab/embedded/bin/c_rehash /etc/gitlab/trusted-certs
 bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such file or directory
 ```
 

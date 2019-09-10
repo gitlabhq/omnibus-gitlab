@@ -277,7 +277,7 @@ You then need to appropriately configure `gitlab.rb`:
 
 1. Set `external_url`:
 
-   ```
+   ```rb
    # For HTTP
    external_url "http://gitlab.example.com:8929"
 
@@ -293,7 +293,7 @@ You then need to appropriately configure `gitlab.rb`:
 
 1. Set `gitlab_shell_ssh_port`:
 
-   ```
+   ```rb
    gitlab_rails['gitlab_shell_ssh_port'] = 2289
    ```
 
@@ -444,7 +444,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 
 1. Create a `root_password.txt` file:
 
-   ```
+   ```text
    MySuperSecretAndSecurePass0rd!
    ```
 
@@ -527,7 +527,7 @@ default:other::r-x
 If these are not correct, set them with:
 
 ```bash
-$ sudo setfacl -mR default:group:docker:rwx /srv/gitlab
+sudo setfacl -mR default:group:docker:rwx /srv/gitlab
 ```
 
 [^1]: `docker` is the default group, if you've changed this, update your commands accordingly.
