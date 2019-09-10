@@ -176,6 +176,14 @@ omnibus-gitlab repository.
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
 
+## 12.0.9
+
+### Security (2 changes, 1 of them is from the community)
+
+- Patch nginx 1.14.2 for CVE-2019-9511, CVE-2019-9513, CVE-2019-9516.
+- Update Mattermost to 5.11.1. (Marc Schwede)
+
+
 ## 12.0.8
 
 ### Security (2 changes)
