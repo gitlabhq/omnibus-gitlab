@@ -1,0 +1,5 @@
+---
+title: Removed non-gzipped files for sourcemaps to save on package size
+merge_request: 3592
+author:
+type: changed
