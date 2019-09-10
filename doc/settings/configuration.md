@@ -11,6 +11,13 @@ all the options of the template as of installation listed in
 
 ## Configuring the external URL for GitLab
 
+NOTE: **Note:**
+Before you change the external URL, you should check if you have
+previously defined a custom **Home page URL** or **After sign out path** under
+**Admin Area > Settings > General > Sign-in restrictions**. If URLs have been
+defined, either update them or remove them completely. Both of these settings
+might cause unintentional redirecting after configuring a new external URL.
+
 In order for GitLab to display correct repository clone links to your users
 it needs to know the URL under which it is reached by your users, e.g.
 `http://gitlab.example.com`. Add or edit the following line in
