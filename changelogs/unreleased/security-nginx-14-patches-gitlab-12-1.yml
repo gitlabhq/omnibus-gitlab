@@ -1,5 +1,0 @@
----
-title: Patch nginx 1.14.2 for CVE-2019-9511, CVE-2019-9513, CVE-2019-9516
-merge_request:
-author:
-type: security
