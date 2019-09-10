@@ -42,6 +42,11 @@ source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 relative_path "nginx-#{version}"
 
 build do
+  # Backported secuirty patches
+  patch source: 'CVE-2019-9511.patch', plevel: 1
+  patch source: 'CVE-2019-9513.patch', plevel: 1
+  patch source: 'CVE-2019-9516.patch', plevel: 1
+
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--with-http_ssl_module',
