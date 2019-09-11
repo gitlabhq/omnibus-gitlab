@@ -1,10 +1,10 @@
-# Configuring omnibus settings
+# Configuring Omnibus GitLab
 
-- [Asset proxy server](asset_proxy.md)
+- [Asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
 - [Backups](backups.md)
 - [Configuration options](configuration.md)
 - [Database](database.md)
-- [Environment variables](environment-variables.md).
+- [Environment variables](environment-variables.md)
 - [`gitlab.yml`](gitlab.yml.md)
 - [Grafana](grafana.md)
 - [LDAP](ldap.md)
