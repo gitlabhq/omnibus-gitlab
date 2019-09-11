@@ -236,10 +236,10 @@ If you see this message, you will need to install perl with your distribution's 
 If after running `gitlab-ctl reconfigure`:
 
 1. no symlinks are created in `/opt/gitlab/embedded/ssl/certs/`;
-1. you have placed custom certificates in `/etc/gitlab/trusted-certs/`; and 
+1. you have placed custom certificates in `/etc/gitlab/trusted-certs/`; and
 1. you do not see any skipped or symlinked custom certificate messages
-   
-You may be encountering an issue where Gitlab-Omnibus thinks that the custom 
+
+You may be encountering an issue where Gitlab-Omnibus thinks that the custom
 certificates have already been added.
 
 To resolve, delete the trusted certificates directory hash:
