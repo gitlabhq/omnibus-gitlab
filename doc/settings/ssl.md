@@ -193,7 +193,7 @@ Broken symlinks in `/opt/gitlab/embedded/ssl/certs/` will be automatically remov
 Files other than `cacert.pem` and `README.md` stored in
 `/opt/gitlab/embedded/ssl/certs/` will be moved into the `/etc/gitlab/trusted-certs/`.
 
-### Custom Certificates Skipped
+### Custom Certificates Missing or Skipped
 
 GitLab versions ***8.9.0***, ***8.9.1***, and ***8.9.2*** all mistakenly used the
 `/etc/gitlab/ssl/trusted-certs/` directory. This directory is safe to remove if it
@@ -231,7 +231,7 @@ bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such
 
 If you see this message, you will need to install perl with your distribution's package manager.
 
-### Custom certificates missing
+### Custom certificates not detected
 
 If after running `gitlab-ctl reconfigure`:
 
