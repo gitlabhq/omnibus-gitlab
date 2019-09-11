@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.5
+
+- No changes.
+
 ## 12.2.4
 
 ### Security (1 change, 1 of them is from the community)
@@ -171,6 +175,14 @@ omnibus-gitlab repository.
 - Use Postgresql 10.7 instead of 10.7.0. !3387 (Takuya Noguchi)
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
+
+## 12.0.9
+
+### Security (2 changes, 1 of them is from the community)
+
+- Patch nginx 1.14.2 for CVE-2019-9511, CVE-2019-9513, CVE-2019-9516.
+- Update Mattermost to 5.11.1. (Marc Schwede)
+
 
 ## 12.0.8
 
