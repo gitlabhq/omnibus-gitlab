@@ -1,3 +1,6 @@
+require_relative 'object_proxy'
+require_relative 'helpers/logging_helper'
+
 module Gitlab
   class Deprecations
     class << self
@@ -141,6 +144,37 @@ module Gitlab
           messages << message
         end
         messages
+      end
+    end
+
+    class NodeAttribute < ObjectProxy
+      def self.log_deprecations?
+        @log_deprecations || false
+      end
+
+      def self.log_deprecations=(value = true)
+        @log_deprecations = !!value
+      end
+
+      def initialize(target, var_name, new_var_name)
+        @target = target
+        @var_name = var_name
+        @new_var_name = new_var_name
+      end
+
+      def method_missing(method_name, *args, &block) # rubocop:disable Style/MissingRespondToMissing
+        deprecated_msg(caller[0..2]) if NodeAttribute.log_deprecations?
+        super
+      end
+
+      private
+
+      def deprecated_msg(*called_from)
+        called_from = called_from.flatten
+        msg = "Accessing #{@var_name} is deprecated. Support will be removed in a future release. \n" \
+              "Please update your cookbooks to use #{@new_var_name} in place of #{@var_name}. Accessed from: \n"
+        called_from.each { |l| msg << "#{l}\n" }
+        LoggingHelper.deprecation(msg)
       end
     end
   end

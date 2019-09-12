@@ -147,10 +147,10 @@ module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can 
     def service_status(service, value = nil)
       rservice = service.tr('_', '-')
 
-      service_path = if Gitlab[:node].attribute?(rservice)
-                       [rservice]
-                     elsif Gitlab[:node]['monitoring']&.attribute?(rservice)
+      service_path = if Gitlab[:node]['monitoring']&.attribute?(rservice)
                        ['monitoring', rservice]
+                     elsif Gitlab[:node].attribute?(rservice)
+                       [rservice]
                      else
                        ['gitlab', rservice]
                      end
