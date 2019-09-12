@@ -64,7 +64,8 @@ module Gitlab
     attribute('node_exporter',     priority: 30)
     attribute('redis_exporter',    priority: 30)
     attribute('postgres_exporter', priority: 30)
-    attribute('gitlab_monitor',    priority: 30).use { GitlabMonitor }
+    attribute('gitlab_exporter',   priority: 30).use { GitlabExporter }
+    attribute('gitlab_monitor',    priority: 30) # legacy, remove in 13.0
   end
 
   ## Attributes under node['gitlab']

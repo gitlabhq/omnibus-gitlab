@@ -17,19 +17,30 @@
 require_relative 'redis_uri.rb'
 require_relative 'redis_helper.rb'
 
-module GitlabMonitor
+module GitlabExporter
   class << self
     def parse_variables
-      parse_gitlab_monitor_settings
+      convert_legacy_settings
+      parse_gitlab_exporter_settings
     end
 
-    def parse_gitlab_monitor_settings
-      # By default, disable sidekiq probe of gitlab-monitor if Redis sentinels
+    # The `gitlab_monitor` settings entry is deprecated and will be removed in Gitlab 13.0
+    # Remove this method when preparing this release
+    def convert_legacy_settings
+      return unless Gitlab.key?('gitlab_monitor')
+
+      Gitlab['gitlab_monitor'].keys.each do |key|
+        Gitlab['gitlab_exporter'][key] = Gitlab['gitlab_monitor'][key] unless Gitlab['gitlab_exporter'].key?(key)
+      end
+    end
+
+    def parse_gitlab_exporter_settings
+      # By default, disable sidekiq probe of gitlab-exporter if Redis sentinels
       # are found. If user has explicitly specified something in gitlab.rb, use
       # that.
-      return if Gitlab['gitlab_monitor'].key?('probe_sidekiq') && !Gitlab['gitlab_monitor']['probe_sidekiq'].nil?
+      return if Gitlab['gitlab_exporter'].key?('probe_sidekiq') && !Gitlab['gitlab_exporter']['probe_sidekiq'].nil?
 
-      Gitlab['gitlab_monitor']['probe_sidekiq'] = !RedisHelper::Checks.has_sentinels?
+      Gitlab['gitlab_exporter']['probe_sidekiq'] = !RedisHelper::Checks.has_sentinels?
     end
   end
 end

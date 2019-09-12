@@ -224,7 +224,7 @@ module Prometheus
       return unless Services.enabled?('prometheus')
 
       gitaly_scrape_config
-      gitlab_monitor_scrape_configs
+      gitlab_exporter_scrape_configs
       registry_scrape_config
       sidekiq_scrape_config
       rails_scrape_configs
@@ -266,34 +266,34 @@ module Prometheus
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
-    def gitlab_monitor_scrape_configs
-      # Don't parse if gitlab_monitor is explicitly disabled
-      return unless Services.enabled?('gitlab_monitor')
+    def gitlab_exporter_scrape_configs
+      # Don't parse if gitlab_exporter is explicitly disabled
+      return unless Services.enabled?('gitlab_exporter')
 
-      default_config = Gitlab['node']['monitoring']['gitlab-monitor'].to_hash
-      user_config = Gitlab['gitlab_monitor']
+      default_config = Gitlab['node']['monitoring']['gitlab-exporter'].to_hash
+      user_config = Gitlab['gitlab_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
       listen_port = user_config['listen_port'] || default_config['listen_port']
       prometheus_target = [listen_address, listen_port].join(':')
 
-      # Include gitlab-monitor defaults scrape config.
+      # Include gitlab-exporter defaults scrape config.
       database = {
-        'job_name' => 'gitlab_monitor_database',
+        'job_name' => 'gitlab_exporter_database',
         'metrics_path' => '/database',
         'static_configs' => [
           'targets' => [prometheus_target],
         ]
       }
       sidekiq = {
-        'job_name' => 'gitlab_monitor_sidekiq',
+        'job_name' => 'gitlab_exporter_sidekiq',
         'metrics_path' => '/sidekiq',
         'static_configs' => [
           'targets' => [prometheus_target],
         ]
       }
       process = {
-        'job_name' => 'gitlab_monitor_process',
+        'job_name' => 'gitlab_exporter_process',
         'metrics_path' => '/process',
         'static_configs' => [
           'targets' => [prometheus_target],

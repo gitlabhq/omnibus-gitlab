@@ -24,7 +24,7 @@ module Services
     service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'monitoring', 'monitoring_role']
     service 'unicorn',            groups: [DEFAULT_GROUP, 'rails']
     service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq']
-    service 'gitlab_monitor',     groups: [DEFAULT_GROUP, 'rails', 'monitoring']
+    service 'gitlab_exporter',    groups: [DEFAULT_GROUP, 'rails', 'monitoring']
     service 'gitlab_workhorse',   groups: [DEFAULT_GROUP, 'rails']
     service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']

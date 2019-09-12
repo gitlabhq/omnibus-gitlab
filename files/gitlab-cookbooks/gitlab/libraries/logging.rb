@@ -43,7 +43,7 @@ module Logging
         gitlab-pages
         gitlab-shell
         gitlab-workhorse
-        gitlab-monitor
+        gitlab-exporter
         grafana
         logrotate
         mailroom

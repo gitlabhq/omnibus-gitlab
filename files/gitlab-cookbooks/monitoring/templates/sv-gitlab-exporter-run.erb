@@ -5,5 +5,5 @@ umask 077
 exec chpst -P \
   -U <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   -u <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
-  /opt/gitlab/embedded/bin/gitlab-mon web \
-    -c <%= node['monitoring']['gitlab-monitor']['home'] %>/gitlab-monitor.yml
+  /opt/gitlab/embedded/bin/gitlab-exporter web \
+    -c <%= node['monitoring']['gitlab-exporter']['home'] %>/gitlab-exporter.yml

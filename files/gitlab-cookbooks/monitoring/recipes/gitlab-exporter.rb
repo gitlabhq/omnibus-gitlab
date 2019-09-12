@@ -18,16 +18,27 @@
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
 gitlab_user = account_helper.gitlab_user
-gitlab_monitor_dir = node['monitoring']['gitlab-monitor']['home']
-gitlab_monitor_log_dir = node['monitoring']['gitlab-monitor']['log_directory']
+gitlab_exporter_dir = node['monitoring']['gitlab-exporter']['home']
+gitlab_exporter_log_dir = node['monitoring']['gitlab-exporter']['log_directory']
 
-directory gitlab_monitor_dir do
+directory gitlab_exporter_dir do
   owner gitlab_user
   mode "0755"
   recursive true
 end
 
-directory gitlab_monitor_log_dir do
+# This runit service was made obsolete in 12.3
+runit_service "gitlab-monitor" do
+  action :disable
+end
+
+# This legacy directory was made obsolete in 12.3
+directory '/var/opt/gitlab/gitlab-monitor' do
+  action :delete
+  recursive true
+end
+
+directory gitlab_exporter_log_dir do
   owner gitlab_user
   mode "0700"
   recursive true
@@ -43,34 +54,34 @@ connection_string += if node['postgresql']['enabled']
 
 redis_url = redis_helper.redis_url(support_sentinel_groupname: false)
 
-template "#{gitlab_monitor_dir}/gitlab-monitor.yml" do
-  source "gitlab-monitor.yml.erb"
+template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
+  source "gitlab-exporter.yml.erb"
   owner gitlab_user
   mode "0600"
-  notifies :restart, "service[gitlab-monitor]"
+  notifies :restart, "service[gitlab-exporter]"
   variables(
-    probe_sidekiq: node['monitoring']['gitlab-monitor']['probe_sidekiq'],
+    probe_sidekiq: node['monitoring']['gitlab-exporter']['probe_sidekiq'],
     redis_url: redis_url,
     connection_string: connection_string,
     redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
   )
 end
 
-# If a version of ruby changes restart gitlab-monitor
-file File.join(gitlab_monitor_dir, 'RUBY_VERSION') do
+# If a version of ruby changes restart gitlab-exporter
+file File.join(gitlab_exporter_dir, 'RUBY_VERSION') do
   content VersionHelper.version('/opt/gitlab/embedded/bin/ruby --version')
-  notifies :restart, 'service[gitlab-monitor]'
+  notifies :restart, 'service[gitlab-exporter]'
 end
 
-runit_service "gitlab-monitor" do
+runit_service "gitlab-exporter" do
   options({
-    log_directory: gitlab_monitor_log_dir
+    log_directory: gitlab_exporter_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab-monitor'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab-exporter'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start gitlab-monitor" do
+  execute "/opt/gitlab/bin/gitlab-ctl start gitlab-exporter" do
     retries 20
   end
 end

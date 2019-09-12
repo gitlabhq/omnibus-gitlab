@@ -26,6 +26,42 @@ module Gitlab
             deprecation: '12.0',
             removal: '13.0',
             note: "Use gitlab_server instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor enable),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['enable'] instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor log_directory),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['log_directory'] instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor home),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['home'] instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor listen_address),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['listen_address'] instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor listen_port),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['listen_port'] instead."
+          },
+          {
+            config_keys: %w(monitoring gitlab-monitor probe_sidekiq),
+            deprecation: '12.3',
+            removal: '13.0',
+            note: "Use gitlab_exporter['probe_sidekiq'] instead."
           }
         ]
 

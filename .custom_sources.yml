@@ -13,9 +13,9 @@ gitlab-workhorse:
 gitlab-pages:
   remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-pages.git"
-gitlab-monitor:
+gitlab-exporter:
   remote: "git@dev.gitlab.org:gitlab-org/gitlab-monitor.git"
-  alternative: "https://gitlab.com/gitlab-org/gitlab-monitor.git"
+  alternative: "https://gitlab.com/gitlab-org/gitlab-exporter.git"
 docker-distribution-pruner:
   remote: "git@dev.gitlab.org:gitlab/docker-distribution-pruner.git"
   alternative: "https://gitlab.com/gitlab-org/docker-distribution-pruner.git"

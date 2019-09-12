@@ -487,7 +487,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Configuring runtime directory
 
-When Prometheus monitoring is enabled, GitLab-monitor will conduct measurements
+When Prometheus monitoring is enabled, gitlab-exporter will conduct measurements
 of each Unicorn process (Rails metrics). Every Unicorn process will need to write
 a metrics file to a temporary location for each controller request.
 Prometheus will then collect all these files and process their values.

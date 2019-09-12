@@ -1608,22 +1608,22 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ################################################################################
-## Prometheus Gitlab monitor
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_monitor_exporter.html
+## Prometheus Gitlab exporter
+##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_exporter.html
 ################################################################################
 
 
-# gitlab_monitor['enable'] = true
-# gitlab_monitor['log_directory'] = "/var/log/gitlab/gitlab-monitor"
-# gitlab_monitor['home'] = "/var/opt/gitlab/gitlab-monitor"
+# gitlab_exporter['enable'] = true
+# gitlab_exporter['log_directory'] = "/var/log/gitlab/gitlab-exporter"
+# gitlab_exporter['home'] = "/var/opt/gitlab/gitlab-exporter"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
-# gitlab_monitor['listen_address'] = 'localhost'
-# gitlab_monitor['listen_port'] = '9168'
+# gitlab_exporter['listen_address'] = 'localhost'
+# gitlab_exporter['listen_port'] = '9168'
 
-##! Manage gitlab-monitor sidekiq probes. false by default when Sentinels are
+##! Manage gitlab-exporter sidekiq probes. false by default when Sentinels are
 ##! found.
-# gitlab_monitor['probe_sidekiq'] = true
+# gitlab_exporter['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true

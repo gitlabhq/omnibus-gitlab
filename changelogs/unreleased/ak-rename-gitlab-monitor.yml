@@ -1,0 +1,5 @@
+---
+title: Rename gitlab-monitor to gitlab-exporter. Service name, log directory, prometheus job names and more have been updated
+merge_request: 3517
+author:
+type: other

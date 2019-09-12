@@ -11,7 +11,7 @@ describe Prometheus do
                                                  node-exporter
                                                  redis-exporter
                                                  postgres-exporter
-                                                 gitlab-monitor
+                                                 gitlab-exporter
                                                ))
   end
 end
