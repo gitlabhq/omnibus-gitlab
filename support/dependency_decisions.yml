@@ -277,3 +277,451 @@
     :why: https://github.com/stretchr/testify/blob/master/LICENSE
     :versions: []
     :when: 2019-06-03 14:59:56.182545151 Z
+- - :license
+  - cloud.google.com/go/compute
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://code.googlesource.com/gocloud/+/refs/heads/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:22.194735000 Z
+- - :license
+  - github.com/circonus-labs/circonus-gometrics
+  - BSD-3-Clause
+  - :who: Robert Marshall
+    :why: https://github.com/circonus-labs/circonus-gometrics/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:28.823831000 Z
+- - :license
+  - github.com/circonus-labs/circonusllhist
+  - BSD-3-Clause
+  - :who: Robert Marshall
+    :why: https://github.com/circonus-labs/circonusllhist/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:32.796574000 Z
+- - :license
+  - github.com/go-ini/ini
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/go-ini/ini/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:37.037116000 Z
+- - :license
+  - github.com/golang/glog
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/golang/glog/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:41.088722000 Z
+- - :license
+  - github.com/gregjones/httpcache
+  - MIT
+  - :who: Robert Marshall
+    :why: https://github.com/gregjones/httpcache/blob/master/LICENSE.txt
+    :versions: []
+    :when: 2019-08-10 01:27:45.703475000 Z
+- - :license
+  - github.com/jmespath/go-jmespath
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/jmespath/go-jmespath/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:50.261004000 Z
+- - :license
+  - github.com/pmezard/go-difflib
+  - BSD-3-Clause
+  - :who: Robert Marshall
+    :why: https://github.com/pmezard/go-difflib/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:54.359220000 Z
+- - :license
+  - google.golang.org/api/gensupport
+  - BSD-3-Clause
+  - :who: Robert Marshall
+    :why: https://code.googlesource.com/google-api-go-client/+/refs/heads/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:27:58.454970000 Z
+- - :license
+  - google.golang.org/grpc/balancer
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:02.043609000 Z
+- - :license
+  - google.golang.org/grpc/binarylog
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:05.359865000 Z
+- - :license
+  - google.golang.org/grpc/connectivity
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:09.514953000 Z
+- - :license
+  - google.golang.org/grpc/internal
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:13.143496000 Z
+- - :license
+  - google.golang.org/grpc/keepalive
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:17.318844000 Z
+- - :license
+  - google.golang.org/grpc/naming
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:20.905393000 Z
+- - :license
+  - google.golang.org/grpc/peer
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:24.725628000 Z
+- - :license
+  - google.golang.org/grpc/stats
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:28.631003000 Z
+- - :license
+  - google.golang.org/grpc/tap
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:32.111321000 Z
+- - :license
+  - k8s.io/api/admissionregistration
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:35.766527000 Z
+- - :license
+  - k8s.io/api/apps
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:40.168485000 Z
+- - :license
+  - k8s.io/api/authentication
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:44.162807000 Z
+- - :license
+  - k8s.io/api/authorization
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:47.779729000 Z
+- - :license
+  - k8s.io/api/autoscaling
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:55.240445000 Z
+- - :license
+  - k8s.io/api/batch
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:28:59.995503000 Z
+- - :license
+  - k8s.io/api/certificates
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:29:06.978753000 Z
+- - :license
+  - k8s.io/api/events
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:12.343709000 Z
+- - :license
+  - k8s.io/api/networking
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:16.384452000 Z
+- - :license
+  - k8s.io/api/policy
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:23.113867000 Z
+- - :license
+  - k8s.io/api/rbac
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:30.138585000 Z
+- - :license
+  - k8s.io/api/scheduling
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:38.050939000 Z
+- - :license
+  - k8s.io/api/settings
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:45.303334000 Z
+- - :license
+  - k8s.io/api/storage
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/api/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:44:53.920822000 Z
+- - :license
+  - k8s.io/client-go/discovery
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:45:01.830939000 Z
+- - :license
+  - k8s.io/client-go/third_party
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:45:08.307777000 Z
+- - :license
+  - k8s.io/client-go/transport
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/kubernetes/client-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-08-10 01:45:16.209486000 Z
+- - :license
+  - github.com/julienschmidt/httprouter
+  - BSD-3-Clause
+  - :who: Ben Kochie
+    :why: https://github.com/julienschmidt/httprouter/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 10:53:36.581323246 Z
+- - :license
+  - go.mongodb.org/mongo-driver/bson
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/mongodb/mongo-go-driver/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:00.787335939 Z
+- - :license
+  - go.mongodb.org/mongo-driver/x
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/mongodb/mongo-go-driver/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:03.532695440 Z
+- - :license
+  - go.opencensus.io/internal
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:11.133041444 Z
+- - :license
+  - go.opencensus.io/internal/tagencoding
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:11.475444149 Z
+- - :license
+  - go.opencensus.io/metric/metricdata
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:11.817723451 Z
+- - :license
+  - go.opencensus.io/metric/metricproducer
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:12.180549745 Z
+- - :license
+  - go.opencensus.io/resource
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:12.515113194 Z
+- - :license
+  - go.opencensus.io/stats
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:12.855494842 Z
+- - :license
+  - go.opencensus.io/stats/internal
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:13.206211663 Z
+- - :license
+  - go.opencensus.io/stats/view
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:13.543514072 Z
+- - :license
+  - go.opencensus.io/tag
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:13.883230026 Z
+- - :license
+  - go.opencensus.io/trace
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:14.217258562 Z
+- - :license
+  - go.opencensus.io/trace/internal
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:14.553825031 Z
+- - :license
+  - go.opencensus.io/trace/propagation
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:14.902423214 Z
+- - :license
+  - go.opencensus.io/trace/tracestate
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/census-instrumentation/opencensus-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:19:15.248821480 Z
+- - :license
+  - google.golang.org/api/internal
+  - BSD-3-Clause
+  - :who: Ben Kochie
+    :why: https://github.com/google/google-api-go-client/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:25:50.167276940 Z
+- - :license
+  - google.golang.org/api/option
+  - BSD-3-Clause
+  - :who: Ben Kochie
+    :why: https://github.com/google/google-api-go-client/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:25:50.504922932 Z
+- - :license
+  - google.golang.org/api/support
+  - BSD-3-Clause
+  - :who: Ben Kochie
+    :why: https://github.com/google/google-api-go-client/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:25:50.880904460 Z
+- - :license
+  - google.golang.org/api/transport
+  - BSD-3-Clause
+  - :who: Ben Kochie
+    :why: https://github.com/google/google-api-go-client/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:25:51.233896949 Z
+- - :license
+  - google.golang.org/genproto/protobuf
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/googleapis/go-genproto/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:26:45.807873242 Z
+- - :license
+  - google.golang.org/grpc/serviceconfig
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/grpc/grpc-go/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:27:50.990155160 Z
+- - :license
+  - k8s.io/api/auditregistration
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:23.148726753 Z
+- - :license
+  - k8s.io/api/coordination
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:23.497176192 Z
+- - :license
+  - k8s.io/api/node
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:23.850272175 Z
+- - :license
+  - k8s.io/utils/buffer
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:24.200543899 Z
+- - :license
+  - k8s.io/utils/integer
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:24.546149364 Z
+- - :license
+  - k8s.io/utils/trace
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/kubernetes/kubernetes/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:24.895377055 Z
+- - :license
+  - github.com/shurcooL/httpfs
+  - Apache-2.0
+  - :who: Ben Kochie
+    :why: https://github.com/shurcooL/httpfs/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-05 12:30:45.324383443 Z
