@@ -464,6 +464,9 @@ production: &base
     # Browser session with smartcard sign-in is required for Git access
     required_for_git_access: <%= @smartcard_required_for_git_access %>
 
+    # SAN extensions to match users with certificates
+    san_extensions: <%= @smartcard_san_extensions %>
+
   ## Kerberos settings
   kerberos:
     # Allow the HTTP Negotiate authentication method for Git clients

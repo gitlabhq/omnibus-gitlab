@@ -989,6 +989,26 @@ describe 'gitlab::gitlab-rails' do
             )
           end
         end
+
+        context 'smartcard_san_extensions' do
+          it 'sets smartcard_san_extensions based on config' do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                smartcard_enabled: true,
+                smartcard_san_extensions: true
+              }
+            )
+
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'smartcard_enabled' => true,
+                'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_port' => 3444,
+                'smartcard_san_extensions' => true
+              )
+            )
+          end
+        end
       end
 
       context 'smartcard authentication is disabled' do
