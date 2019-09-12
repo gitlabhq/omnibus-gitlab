@@ -1,0 +1,5 @@
+---
+title: Add smartcard_san_extentions to gitlab.rb
+merge_request: 3566
+author:
+type: added
