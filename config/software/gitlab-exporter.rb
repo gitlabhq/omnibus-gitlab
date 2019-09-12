@@ -1,7 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2016 GitLab Inc.
-# License:: Apache License, Version 2.0
+# Copyright 2016 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +14,18 @@
 # limitations under the License.
 #
 
-runit_service "gitlab-monitor" do
-  action :disable
+name 'gitlab-exporter'
+default_version '5.0.0'
+license 'MIT'
+license_file 'LICENSE'
+
+skip_transitive_dependency_licensing true
+
+dependency 'ruby'
+dependency 'rubygems'
+dependency 'postgresql'
+
+build do
+  env = with_standard_compiler_flags(with_embedded_path)
+  gem "install gitlab-exporter --no-document --version #{version}", env: env
 end

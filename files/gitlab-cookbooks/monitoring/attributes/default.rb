@@ -78,14 +78,14 @@ default['monitoring']['postgres-exporter']['env'] = {
 }
 
 ####
-# Gitlab monitor
+# Gitlab exporter
 ###
-default['monitoring']['gitlab-monitor']['enable'] = false
-default['monitoring']['gitlab-monitor']['log_directory'] = "/var/log/gitlab/gitlab-monitor"
-default['monitoring']['gitlab-monitor']['home'] = "/var/opt/gitlab/gitlab-monitor"
-default['monitoring']['gitlab-monitor']['listen_address'] = 'localhost'
-default['monitoring']['gitlab-monitor']['listen_port'] = '9168'
-default['monitoring']['gitlab-monitor']['probe_sidekiq'] = true
+default['monitoring']['gitlab-exporter']['enable'] = false
+default['monitoring']['gitlab-exporter']['log_directory'] = "/var/log/gitlab/gitlab-exporter"
+default['monitoring']['gitlab-exporter']['home'] = "/var/opt/gitlab/gitlab-exporter"
+default['monitoring']['gitlab-exporter']['listen_address'] = 'localhost'
+default['monitoring']['gitlab-exporter']['listen_port'] = '9168'
+default['monitoring']['gitlab-exporter']['probe_sidekiq'] = true
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true

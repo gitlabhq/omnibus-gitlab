@@ -187,7 +187,7 @@ module Gitlab
         'gitaly' => /(^\/opt\/gitlab\/embedded\/bin\/gitaly)|(^ruby \/opt\/gitlab\/embedded\/service\/gitaly-ruby\/bin\/gitaly-ruby)/,
         'prometheus' => /^\/opt\/gitlab\/embedded\/bin\/prometheus/,
         'postgres' => /(^\/opt\/gitlab\/embedded\/bin\/postgres)|(^postgres:)/,
-        'gitlab-mon' => /^\[gitlab-monitor\]/,
+        'gitlab-exporter' => /^\[gitlab-exporter\]/,
         'workhorse' => /^\/opt\/gitlab\/embedded\/bin\/gitlab-workhorse/,
         'redis' => /^\/opt\/gitlab\/embedded\/bin\/redis_exporter/
       }

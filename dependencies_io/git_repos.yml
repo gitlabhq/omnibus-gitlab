@@ -156,8 +156,8 @@ repos:
   replace_in_files:
     config/software/exiftool.rb: version = Gitlab::Version.new('exiftool', '{version_clean}')
 
-# gitlab-monitor
-- url: https://gitlab.com/gitlab-org/gitlab-monitor.git
+# gitlab-exporter
+- url: https://gitlab.com/gitlab-org/gitlab-exporter.git
   installed: v3.2.0
   replace_in_files:
-    config/software/gitlab-monitor.rb: version = Gitlab::Version.new('gitlab-monitor', '{version_clean}')
+    config/software/gitlab-exporter.rb: version = Gitlab::Version.new('gitlab-exporter', '{version_clean}')

@@ -59,17 +59,17 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:5001
-  - job_name: gitlab_monitor_database
+  - job_name: gitlab_exporter_database
     metrics_path: "/database"
     static_configs:
     - targets:
       - localhost:9168
-  - job_name: gitlab_monitor_sidekiq
+  - job_name: gitlab_exporter_sidekiq
     metrics_path: "/sidekiq"
     static_configs:
     - targets:
       - localhost:9168
-  - job_name: gitlab_monitor_process
+  - job_name: gitlab_exporter_process
     metrics_path: "/process"
     static_configs:
     - targets:
@@ -200,7 +200,7 @@ describe 'monitoring::prometheus' do
         prometheus: {
           enable: true
         },
-        gitlab_monitor: {
+        gitlab_exporter: {
           enable: true
         },
         registry: {
