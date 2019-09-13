@@ -246,13 +246,23 @@ Where HOSTNAME is the hostname of the certificate.
 
 ### **Let's Encrypt** fails on reconfigure
 
-Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
+There are two common scenarios under which Let's Encrypt may fail on reconfigure:
 
-```
+1. Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
+
+```sh
 letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
 ```
 
 If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](#lets-encrypt-integration).
+
+1. Your domain's Certification Authority Authorization (CAA) record does not allow Let's Encrypt to issue a certificate for your domain. Look for the following error in the reconfigure output:
+
+```sh
+letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
+```
+
+You can test your domain using [Let's Debug](https://letsdebug.net/), a diagnostic tool to help you figure out why you can't issue a Let's Encrypt certificate.
 
 ## Details on how GitLab and SSL work
 
