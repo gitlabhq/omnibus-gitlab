@@ -20,7 +20,7 @@ MAINTAINERS = [
     role: 'maintainer'
   },
   {
-    handle: 'balu',
+    handle: 'balasankarc',
     name: "Balasankar 'Balu' C",
     role: 'maintainer'
   },
