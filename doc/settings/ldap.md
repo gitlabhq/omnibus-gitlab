@@ -8,7 +8,7 @@ For GitLab Community Edition:
 
 ```ruby
 # These settings are documented in more detail at
-# https://gitlab.com/gitlab-org/gitlab-ce/blob/a0a826ebdcb783c660dd40d8cb217db28a9d4998/config/gitlab.yml.example#L136
+# https://gitlab.com/gitlab-org/gitlab-foss/blob/a0a826ebdcb783c660dd40d8cb217db28a9d4998/config/gitlab.yml.example#L136
 # Be careful not to break the identation in the ldap_servers block. It is in
 # yaml format and the spaces must be retained. Using tabs will not work.
 

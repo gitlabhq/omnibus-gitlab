@@ -1,7 +1,7 @@
 # Changing `gitlab.yml` and application.yml settings
 
 Some of GitLab's features can be customized through
-[`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example). If you want to change a `gitlab.yml` setting
+[`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example). If you want to change a `gitlab.yml` setting
 with Omnibus GitLab, you need to do so via `/etc/gitlab/gitlab.rb`. The
 translation works as follows. For a complete list of available options, visit the
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
@@ -41,5 +41,5 @@ Don't forget to update the following 3 files when adding a new setting:
   file to expose the setting to the end user via `/etc/gitlab/gitlab.rb`.
 - the [`default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb)
   file to provide a sane default for the new setting.
-- the [`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example)
+- the [`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example)
   file to actually use the setting's value from `gitlab.rb`.

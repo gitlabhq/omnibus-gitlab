@@ -98,10 +98,10 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 
    Then, from any machine that can reach your development instance:
 
-1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab-ee) repository
+1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab) repository
 
    ```sh
-   git clone git@gitlab.com:gitlab-org/gitlab-ee.git
+   git clone git@gitlab.com:gitlab-org/gitlab.git
    ```
 
 1. Change to the `qa` directory
