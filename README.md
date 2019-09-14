@@ -232,7 +232,7 @@ If you are using non-packaged database see [documentation on using non-packaged 
 
 ### Upload backups to remote (cloud) storage
 
-For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-foss/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
 
 ## Invoking Rake tasks
 
@@ -324,9 +324,9 @@ This omnibus installer project is based on the awesome work done by Chef in
 [omnibus-chef-server][omnibus-chef-server].
 
 [downloads]: https://about.gitlab.com/downloads/
-[CE README]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
+[CE README]: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/README.md
 [omnibus-chef-server]: https://github.com/opscode/omnibus-chef-server
-[database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/database.yml.mysql
+[database.yml.mysql]: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/database.yml.mysql
 [svlogd]: http://smarden.org/runit/svlogd.8.html
 [installation]: https://about.gitlab.com/installation/
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
