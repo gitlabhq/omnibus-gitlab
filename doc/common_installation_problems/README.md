@@ -404,7 +404,7 @@ command, it is only for GitLab installations from source.
 
 The GitLab web interface uses CSS and JavaScript files, called 'assets' in Ruby
 on Rails-speak. In the [upstream GitLab
-repository](https://gitlab.com/gitlab-org/gitlab-ce/tree/master/app/assets)
+repository](https://gitlab.com/gitlab-org/gitlab-foss/tree/master/app/assets)
 these files are stored in a developer-friendly way: easy to read and edit. When
 you are a normal user of GitLab, you do not want these files to be in the
 developer friendly format however because that makes GitLab slow. This is why
