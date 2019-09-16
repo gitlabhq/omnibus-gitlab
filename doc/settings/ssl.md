@@ -231,6 +231,26 @@ bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such
 
 If you see this message, you will need to install perl with your distribution's package manager.
 
+### Custom certificates not detected
+
+If after running `gitlab-ctl reconfigure`:
+
+1. no symlinks are created in `/opt/gitlab/embedded/ssl/certs/`;
+1. you have placed custom certificates in `/etc/gitlab/trusted-certs/`; and
+1. you do not see any skipped or symlinked custom certificate messages
+
+You may be encountering an issue where Gitlab-Omnibus thinks that the custom
+certificates have already been added.
+
+To resolve, delete the trusted certificates directory hash:
+
+```sh
+rm /var/opt/gitlab/trusted-certs-directory-hash
+```
+
+Then run `gitlab-ctl reconfigure` again. The reconfigure should now detect and symlink
+your custom certificates.
+
 ### **Let's Encrypt** Certificate signed by unknown authority
 
 The initial implementation of **Let's Encrypt** integration only used the certificate, not the full certificate chain.
