@@ -109,7 +109,7 @@ module GitlabCtl
           false
         end
       end
-        die 'Error upgrading the database'
+        GitlabCtl::PgUpgrade.die 'Error upgrading the database'
       end
     end
 
