@@ -241,7 +241,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 1. To get the regular migrations in place, run
 
    ```sh
-   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
 1. Once the node is updated and reconfigure finished successfully, complete the migrations with
@@ -293,7 +293,7 @@ node throughout the process.
 - To get the regular database migrations in place, run
 
   ```sh
-  SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+  sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
   ```
 
 **All other nodes (not the Deploy node)**
@@ -358,13 +358,13 @@ On the Primary node, executing the following:
 1. To get the database migrations in place, run
 
    ```sh
-   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
 1. Run non post-deployment database migrations
 
    ```sh
-   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-rake db:migrate
+   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake db:migrate
    ```
 
 1. Run post-deployment database migrations
@@ -416,7 +416,7 @@ On all Secondary nodes, executing the following:
 1. To get the database migrations in place, run
 
    ```sh
-   SKIP_POST_DEPLOYMENT_MIGRATIONS=true sudo gitlab-ctl reconfigure
+   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
 1. Run post-deployment database migrations, specific to the Geo database
