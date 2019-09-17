@@ -15,7 +15,6 @@
 #
 
 account_helper = AccountHelper.new(node)
-omnibus_helper = OmnibusHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
 pgbouncer_static_etc_dir = node['gitlab']['pgbouncer']['env_directory']
 
@@ -90,17 +89,20 @@ execute 'generate databases.ini' do
     EOF
   }
   action :nothing
-  not_if { node['consul']['watchers'].include?('postgresql') }
+  not_if do
+    node['consul']['watchers'].include?('postgresql') &&
+      File.exist?(node['gitlab']['pgbouncer']['databases_ini'])
+  end
 end
 
 execute 'reload pgbouncer' do
   command '/opt/gitlab/bin/gitlab-ctl hup pgbouncer'
   action :nothing
-  only_if { omnibus_helper.service_up?('pgbouncer') }
+  only_if { pgb_helper.running? }
 end
 
 execute 'start pgbouncer' do
   command '/opt//gitlab/bin/gitlab-ctl start pgbouncer'
   action :nothing
-  not_if { omnibus_helper.service_up?('pgbouncer') }
+  not_if { pgb_helper.running? }
 end

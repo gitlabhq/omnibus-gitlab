@@ -199,6 +199,12 @@ describe 'gitlab-ee::pgbouncer' do
         expect(json_resource).to notify('execute[generate databases.ini]').to(:run).immediately
       end
 
+      it 'does not run pgb-notify when databases.ini exists' do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/pgbouncer/databases.ini').and_return(true)
+        expect(chef_run).not_to run_execute('generate databases.ini')
+      end
+
       it 'stores in a different location when attribute is set' do
         stub_gitlab_rb(
           pgbouncer: {
