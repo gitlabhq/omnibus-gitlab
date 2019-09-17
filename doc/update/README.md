@@ -42,6 +42,10 @@ at `/etc/gitlab/skip-auto-backup`:
 sudo touch /etc/gitlab/skip-auto-backup
 ```
 
+NOTE: **Note:**
+For safety reasons, you should maintain an up-to-date backup on your own if you
+plan to use this flag.
+
 ### Updating using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/install/?version=ce)
