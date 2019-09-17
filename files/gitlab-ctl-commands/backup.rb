@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,24 +15,9 @@
 # limitations under the License.
 #
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/prometheus_upgrade'
-require_relative 'gitlab_ctl/backup'
-require_relative 'gitlab_ctl/util'
+require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/backup"
 
-module GitlabCtl
-  class Errors
-    class ExecutionError < StandardError
-      attr_accessor :command, :stdout, :stderr
-
-      def initialize(command, stdout, stderr)
-        @command = command
-        @stdout = stdout
-        @stderr = stderr
-      end
-    end
-
-    NodeError = Class.new(StandardError)
-    PasswordMismatch = Class.new(StandardError)
-  end
+add_command_under_category('backup-etc', 'backup',
+                           'Backup GitLab configuration [accepts directory path]', 2) do |cmd_name, backup_dir_path|
+  GitlabCtl::Backup.perform backup_dir_path
 end

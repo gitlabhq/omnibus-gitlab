@@ -85,15 +85,18 @@ main() {
   if [ -d ${DEST_DIR}/service/unicorn ] ; then
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages ; then
-      notify
-      notify "Backup failed! If you want to skip this backup, run the following command and"
-      notify "try again:"
-      notify
-      notify "  sudo touch ${skip_reconfigure_file}"
-      notify
-      exit 1
+      backup_failed "Database"
     fi
   fi
+}
+
+backup_failed() {
+  notify
+  notify "$1 backup failed! If you want to skip this backup, run the following command and try again:"
+  notify
+  notify " sudo touch ${skip_reconfigure_file}"
+  notify
+  exit 1
 }
 
 notify() {
