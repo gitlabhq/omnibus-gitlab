@@ -13,14 +13,13 @@ It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
 All configuration for Omnibus GitLab is stored in `/etc/gitlab`. To backup your
-configuration, just backup this directory.
+configuration, just run `sudo gitlab-ctl backup-etc`. It will create a tar
+archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
+readable only to root.
 
-```shell
-# Example backup command for /etc/gitlab:
-# Create a time-stamped .tar file in the current directory.
-# The .tar file will be readable only to root.
-sudo sh -c 'umask 0077; tar -cf $(date "+etc-gitlab-%s.tar") -C / etc/gitlab'
-```
+NOTE: **Note**: Running `sudo gitlab-ctl backup-etc <DIRECTORY>` will place
+the backup in the specified directory. The directory will be created if it
+does not exist. Absolute paths are recommended.
 
 To create a daily application backup, edit the cron table for user root:
 
@@ -35,7 +34,7 @@ Enter the command to create a compressed tar file containing the contents of
 weekday, Tuesday (day 2) through Saturday (day 6):
 
 ```
-15 04 * * 2-6  umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab
+15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
 
 [cron is rather particular](http://www.pantz.org/software/cron/croninfo.html)
@@ -50,7 +49,7 @@ You can extract the .tar file as follows.
 # Rename the existing /etc/gitlab, if any
 sudo mv /etc/gitlab /etc/gitlab.$(date +%s)
 # Change the example timestamp below for your configuration backup
-sudo tar -xf etc-gitlab-1399948539.tar -C /
+sudo tar -xf gitlab_config_1487687824_2017_02_21.tar -C /
 ```
 
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
