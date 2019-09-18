@@ -101,8 +101,6 @@ The steps can be summed up to:
    the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
    value down.
 
-   ---
-
    **For CentOS/RHEL**
 
    ```sh
@@ -126,8 +124,6 @@ The steps can be summed up to:
    ```sh
    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
    ```
-
-   ---
 
    The above command will find your OS version and automatically set up the
    repository. If you are not comfortable installing the repository through a
@@ -179,8 +175,6 @@ The steps can be summed up to:
    ```sh
    sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
    ```
-
-   ---
 
    **For CentOS/RHEL**
 
