@@ -104,7 +104,13 @@ module Pgbouncer
       pgbouncer_command('SHOW DATABASES')
     end
 
+    def running?
+      GitlabCtl::Util.run_command('gitlab-ctl status pgbouncer').error?
+    end
+
     def database_paused?
+      return false unless running?
+
       databases = show_databases
 
       # In `show databases` output, column 10 gives paused status of database
