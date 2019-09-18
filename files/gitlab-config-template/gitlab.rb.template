@@ -1541,6 +1541,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # alertmanager['listen_address'] = 'localhost:9093'
+# alertmanager['global'] = {}
 
 ################################################################################
 ## Prometheus Node Exporter

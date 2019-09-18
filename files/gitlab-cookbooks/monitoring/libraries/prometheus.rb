@@ -175,7 +175,6 @@ module Prometheus
       rails_config = Gitlab['gitlab_rails']
 
       global = {}
-
       if rails_config['smtp_enable']
         global['smtp_from'] = rails_config['gitlab_email_from'] || 'unconfigured'
         global['smtp_smarthost'] = "#{rails_config['smtp_address'] || 'unconfigured'}:#{rails_config['smtp_port'] || '25'}"
@@ -184,6 +183,7 @@ module Prometheus
           global['smtp_auth_password'] = rails_config['smtp_password']
         end
       end
+      global.merge!(user_config['global']) if user_config.key?('global')
 
       default_email_receiver = {
         'name' => 'default-receiver',

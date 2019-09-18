@@ -102,12 +102,16 @@ describe 'monitoring::alertmanager' do
           enable: true,
           env: {
             'USER_SETTING' => 'asdf1234'
+          },
+          global: {
+            'smtp_from' => 'override_value'
           }
         },
         gitlab_rails: {
           smtp_enable: true,
           smtp_address: 'other-testhost',
           smtp_port: 465,
+          smtp_from: 'default_value'
         }
       )
     end
@@ -125,6 +129,11 @@ describe 'monitoring::alertmanager' do
     it 'renders alertmanager.yml with the non-default value' do
       expect(chef_run).to render_file('/var/opt/gitlab/alertmanager/alertmanager.yml')
         .with_content(/smtp_smarthost: other-testhost:465/)
+    end
+
+    it 'renders alertmanager.yml with the user override value' do
+      expect(chef_run).to render_file('/var/opt/gitlab/alertmanager/alertmanager.yml')
+        .with_content(/smtp_from: override_value/)
     end
 
     it 'creates necessary env variable files' do
