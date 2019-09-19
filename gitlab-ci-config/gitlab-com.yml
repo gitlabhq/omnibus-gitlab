@@ -54,6 +54,8 @@
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
+    # Temporarily workaround issue with chef-sugar only being available in mirrors
+    - bundle config https://gitlab.com/gitlab-org/build/omnibus-mirror/chef-sugar.git gitlab-ci-token:${CI_JOB_TOKEN}
     - bundle install -j $(nproc) --binstubs --path gems
   script:
     - JOB_NAME=( $CI_JOB_NAME )
@@ -110,6 +112,8 @@ rubocop:
   <<: *dedicated-runner
   image: ruby:2.4
   before_script:
+    # Temporarily workaround issue with chef-sugar only being available in mirrors
+    - bundle config https://gitlab.com/gitlab-org/build/omnibus-mirror/chef-sugar.git gitlab-ci-token:${CI_JOB_TOKEN}
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
     - bundle exec rubocop --parallel

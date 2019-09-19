@@ -25,6 +25,9 @@ config_guess:
 omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
   alternative: "https://gitlab.com/gitlab-org/omnibus.git"
+chef-sugar:
+  remote: "https://dev.gitlab.org/omnibus-mirror/chef-sugar.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/chef-sugar.git"
 registry:
   remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/distribution.git"
