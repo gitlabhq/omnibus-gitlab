@@ -471,6 +471,15 @@ skipped, but must be running the same GitLab version as the database nodes.
 Follow the steps below to upgrade the database nodes
 
 1. Secondary nodes must be upgraded before the primary node.
+   1. On the secondary nodes, edit `/etc/gitlab/gitlab.rb` to include the following:
+   
+   ```bash
+   # Replace X with value of number of db nodes + 1
+   postgresql['max_replication_slots'] = X
+    ```
+    
+   1. Run `gitlab-ctl reconfigure` to update the configureation.
+   1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On running `pg-upgrade` on a PG secondary node, the node will be removed
       from the cluster.
    1. Once all the secondary nodes are upgraded using `pg-upgrade`, the user
@@ -480,6 +489,15 @@ Follow the steps below to upgrade the database nodes
       primary node. It will, however move the existing data to a backup
       location.
 1. Once all secondary nodes are upgraded, run `pg-upgrade` on primary node.
+   1. On the secondary nodes, edit `/etc/gitlab/gitlab.rb` to include the following:
+   
+   ```bash
+   # Replace X with value of number of db nodes + 1
+   postgresql['max_replication_slots'] = X
+    ```
+    
+   1. Run `gitlab-ctl reconfigure` to update the configureation.
+   1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On a primary node, `pg-upgrade` will update the existing data to match
       the new PG version.
 1. Recreate the secondary nodes by running the following command on each of them
@@ -499,6 +517,14 @@ Follow the steps below to upgrade the database nodes
 If at some point, the bundled PostgreSQL had been running on a node before upgrading to an HA setup, the old data directory may remain. This will cause `gitlab-ctl reconfigure` to downgrade the version of the PostgreSQL utilities it uses on that node. Move (or remove) the directory to prevent this:
 
 - `mv /var/opt/gitlab/postgresql/data/ /var/opt/gitlab/postgresql/data.$(date +%s)`
+
+If you encounter the following error when recreating the secondary nodes with `gitlab-ctl repmgr standby setup MASTER_NODE_NAME`, ensure that you have `postgresql['max_replication_slots'] = X`, replacing `X` with value of number of db nodes + 1, is included in `/etc/gitlab/gitlab.rb`:
+
+```bash
+pg_basebackup: could not create temporary replication slot "pg_basebackup_12345": ERROR:  all replication slots are in use
+HINT:  Free one or increase max_replication_slots.
+
+```
 
 ### Upgrading a Geo instance
 
