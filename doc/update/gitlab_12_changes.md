@@ -86,3 +86,16 @@ backend.
 ### 12.2
 
 The default formula for calculating the number of Unicorn worker processes has been updated to increase the number of workers by 50% per CPU. This will increase the CPU and memory utilization slightly. This has been done to improve performance by reducing the amount of request queuing.
+
+### 12.3
+
+1. To prevent confusion with the broader GitLab Monitor feature set, the
+   gitlab-monitor tool has been renamed to gitlab-exporter. As a result, usage
+   of `gitlab_monitor[*]` keys in `gitlab.rb` file has been deprecated in favor
+   of `gitlab_exporter[*]` ones.
+
+   The deprecated settings will be removed in GitLab 13.0. They will continue to
+   work till then, but warnings will be displayed at the end of reconfigure run.
+   Since upgrades to 13.0 will be prevented if removed settings are found in
+   `gitlab.rb`, users who are currently using those settings are advised to
+   switch to `gitlab_exporter[*]` ones at the earliest.
