@@ -489,7 +489,7 @@ Follow the steps below to upgrade the database nodes
       primary node. It will, however move the existing data to a backup
       location.
 1. Once all secondary nodes are upgraded, run `pg-upgrade` on primary node.
-   1. On the secondary nodes, edit `/etc/gitlab/gitlab.rb` to include the following:
+   1. On the primary node, edit `/etc/gitlab/gitlab.rb` to include the following:
    
    ```bash
    # Replace X with value of number of db nodes + 1
