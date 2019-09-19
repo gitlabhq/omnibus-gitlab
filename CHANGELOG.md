@@ -89,6 +89,10 @@ omnibus-gitlab repository.
 - Add perl dependency to SSL troubleshooting steps.
 
 
+## 12.1.11
+
+- No changes.
+
 ## 12.1.10
 
 - No changes.
