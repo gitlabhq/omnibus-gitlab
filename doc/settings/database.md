@@ -472,12 +472,12 @@ Follow the steps below to upgrade the database nodes
 
 1. Secondary nodes must be upgraded before the primary node.
    1. On the secondary nodes, edit `/etc/gitlab/gitlab.rb` to include the following:
-   
+
    ```bash
    # Replace X with value of number of db nodes + 1
    postgresql['max_replication_slots'] = X
     ```
-    
+
    1. Run `gitlab-ctl reconfigure` to update the configureation.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On running `pg-upgrade` on a PG secondary node, the node will be removed
@@ -495,7 +495,7 @@ Follow the steps below to upgrade the database nodes
    # Replace X with value of number of db nodes + 1
    postgresql['max_replication_slots'] = X
     ```
-    
+
    1. Run `gitlab-ctl reconfigure` to update the configureation.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On a primary node, `pg-upgrade` will update the existing data to match
