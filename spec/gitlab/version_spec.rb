@@ -39,7 +39,7 @@ describe Gitlab::Version do
       it 'returns "alternative" link from custom_sources yml' do
         allow(ENV).to receive(:[]).and_call_original
         allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
-        expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab-ee.git')
+        expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab.git')
       end
     end
   end

@@ -120,8 +120,8 @@ describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('QA_TRIGGER_TOKEN').and_return("1234")
       allow(ENV).to receive(:[]).with('TRIGGERED_USER').and_return("John Doe")
       allow(ENV).to receive(:[]).with('CI_JOB_URL').and_return("https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345")
-      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("https://gitlab.com/gitlab-org/gitlab-ce")
-      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_JOB').and_return("https://gitlab.com/gitlab-org/gitlab-ce/-/jobs/67890")
+      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("https://gitlab.com/gitlab-org/gitlab-foss")
+      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_JOB').and_return("https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_SHA').and_return("abc123")
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
@@ -140,8 +140,8 @@ describe 'qa', type: :rake do
         "variables[RELEASE]" => "registry.gitlab.com/gitlab-ce:latest",
         "variables[TRIGGERED_USER]" => "John Doe",
         "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345",
-        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "https://gitlab.com/gitlab-org/gitlab-ce",
-        "variables[TOP_UPSTREAM_SOURCE_JOB]" => "https://gitlab.com/gitlab-org/gitlab-ce/-/jobs/67890",
+        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "https://gitlab.com/gitlab-org/gitlab-foss",
+        "variables[TOP_UPSTREAM_SOURCE_JOB]" => "https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890",
         "variables[TOP_UPSTREAM_SOURCE_SHA]" => "abc123"
       }
       allow_any_instance_of(Build::QATrigger).to receive(:invoke!).and_call_original

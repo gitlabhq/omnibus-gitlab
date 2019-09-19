@@ -104,7 +104,7 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 
 If you notice any issues with gitlab assets appearing broken after moving to a
 relative url configuration (like missing images or unresponsive components)
-please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce)
+please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-foss)
 with the `Frontend` label.
 
 If you are running a version _prior to 8.17_ and for some reason the asset
@@ -612,6 +612,38 @@ gitlab_rails['sentry_environment'] = 'production'
 The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environments/)
 can be used to track errors and issues across several deployed GitLab
 environments, e.g. lab, development, staging, production.
+
+## Content Security Policy
+
+Setting a Content Security Policy (CSP) can help thwart JavaScript
+cross-site scripting (XSS) attacks. See [the Mozilla documentation on
+CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more
+details.
+
+GitLab 12.2 added support for [CSP and nonces with inline
+JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
+It is [not configured on by default
+yet](https://gitlab.com/gitlab-org/gitlab-foss/issues/65675).  An example
+configuration that will work for most installations of GitLab is below:
+
+```ruby
+gitlab_rails['content_security_policy'] = {
+    enabled: true,
+    report_only: false,
+    directives: {
+      default_src: "'self'",
+      script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
+      frame_ancestor: "'self'",
+      frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com",
+      img_src: "* data: blob:",
+      style_src: "'self' 'unsafe-inline'"
+    }
+}
+```
+
+Improperly configuring the CSP rules could prevent GitLab from working
+properly. Before rolling out a policy, you may also want to change
+`report_only` to `true` to test the configuration.
 
 ## Setting up LDAP sign-in
 

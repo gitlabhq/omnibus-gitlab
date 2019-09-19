@@ -175,7 +175,7 @@ groups:
       )
       /
       2 / sum(rate(grpc_server_handling_seconds_count{job="gitaly",grpc_type="unary",grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m]))
-  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-ce/issues/56752
+  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-foss/issues/56752
   # - record: gitlab_sli:gitlab_component_apdex:ratio
   #   labels:
   #     job: gitlab-sidekiq
@@ -234,7 +234,7 @@ groups:
       sum(
         rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5.."}[1m])
       )
-  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-ce/issues/56752
+  # Sidekiq TODO: https://gitlab.com/gitlab-org/gitlab-foss/issues/56752
   # - record: gitlab_sli:gitlab_component_ops:rate
   #   labels:
   #     job: gitlab-sidekiq
