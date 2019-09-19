@@ -137,7 +137,7 @@ successful builds.
 
 ### Updating cloud images
 
-The cloud image release process is documented here: <https://about.gitlab.com/cloud-images/>.
+The cloud image release process is documented here: <https://about.gitlab.com/handbook/alliances/cloud-images/>.
 
 New image are released when:
 

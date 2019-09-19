@@ -292,7 +292,7 @@ compiled to look for certificates in `/opt/gitlab/embedded/ssl/certs`.
 
 GitLab-Omnibus manages custom certificates by symlinking any certificate that
 gets added to `/etc/gitlab/trusted-certs/` to `/opt/gitlab/embedded/ssl/certs`
-using the [c_rehash](https://www.openssl.org/docs/man1.1.0/apps/c_rehash.html)
+using the [c_rehash](https://www.openssl.org/docs/man1.1.0/man1/c_rehash.html)
 tool. For example, let's suppose we add `customcacert.pem` to
 `/etc/gitlab/trusted-certs/`:
 

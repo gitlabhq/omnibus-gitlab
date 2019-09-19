@@ -18,7 +18,7 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) and [his blog article](http://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
+See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
 
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
@@ -299,7 +299,7 @@ Expected process to exit with [0], but received '255'
 This is unlikely to happen with non virtualized machines but on a VPS with virtualization like openVZ, container might not have the required module enabled
 or container doesn't have access to kernel parameters.
 
-Try enabling the module on which sysctl errored out, on how to enable the module see example [here](http://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
+Try enabling the module on which sysctl errored out, on how to enable the module see example [here](https://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
@@ -461,7 +461,7 @@ Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
 ```
 
-Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](http://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
+Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](https://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
 
 ## Using self signed certificate or custom certificate authorities
 
@@ -715,4 +715,4 @@ If using this configuration, runit service must be started before running
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [Change the default proxy headers section of nginx doc]: ../settings/nginx.md
 [reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
-[runit-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/runit/recipes/default.rb
+[runit-cookbook]: https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb

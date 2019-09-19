@@ -45,7 +45,7 @@ If the file does not exist, you don't have the repository installed. If the file
 
 ### Enable Automatic Verification
 
-The `rpm` tool and related package managers (`yum`,`zypper`) directly support the automatic verification of packages without intervention. If you used the automated repository configuration script after signed packages became available, then you will have no additional steps required. If you installed prior to the release of signed packages, you can either make the necessary changes, or re-run the automatic repository configuration script as found on the [Installation][install] page.
+The `rpm` tool and related package managers (`yum`,`zypper`) directly support the automatic verification of packages without intervention. If you used the automated repository configuration script after signed packages became available, then you will have no additional steps required. If you installed prior to the release of signed packages, you can either make the necessary changes, or re-run the automatic repository configuration script as found on the [Installation](https://about.gitlab.com/install/) page.
 
 #### Yum (RedHat, CentOS)
 
@@ -155,5 +155,3 @@ sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 To make use of `debsig-verify`, perform the steps in [Configuring debsigs](#configuring-debsigs) and install the `debsig-verify` package.
 
 `debsig-verify gitlab-xxx.deb`
-
-[install]: https://about.gitlab.com/installation/

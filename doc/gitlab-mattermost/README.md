@@ -226,14 +226,14 @@ For additional configuration settings, see the [Mattermost documentation](https:
 
 For help and support around your GitLab Mattermost deployment please see:
 
-- [Troubleshooting Forum](https://forum.mattermost.org/t/about-the-trouble-shooting-category/150/1) for configuration questions and issues
-- [Troubleshooting FAQ](http://docs.mattermost.com/install/troubleshooting.html)
+- [Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150) for configuration questions and issues
+- [Troubleshooting FAQ](https://docs.mattermost.com/install/troubleshooting.html)
 - [Mattermost GitLab Issues Support Handbook](https://docs.mattermost.com/process/support.html?highlight=omnibus#gitlab-issues)
 - [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps
 
 ## Upgrading GitLab Mattermost
 
-> Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc//gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-89).
+> Note: These upgrade instructions are for GitLab Version 8.9 (Mattermost v3.1.0) and above. For upgrading versions prior to GitLab 8.9, [additional steps are required](#upgrading-gitlab-mattermost-from-versions-prior-to-89).
 
 Below is a list of Mattermost versions for GitLab 11.10 and later:
 
@@ -404,11 +404,11 @@ For any questions, please [visit the GitLab Mattermost troubleshooting forum](ht
 
 ### Migrating Mattermost outside of GitLab
 
-Follow the [Mattermost Migration Guide](http://docs.mattermost.com/administration/migrating.html) to move your Mattermost configuration settings and data to another directory or server independent from GitLab omnibus.
+Follow the [Mattermost Migration Guide](https://docs.mattermost.com/administration/migrating.html) to move your Mattermost configuration settings and data to another directory or server independent from GitLab omnibus.
 
 ### Upgrading GitLab Mattermost outside of GitLab
 
-If you choose to upgrade Mattermost outside of GitLab's omnibus automation, please [follow this guide](http://docs.mattermost.com/administration/upgrade-guide.html).
+If you choose to upgrade Mattermost outside of GitLab's omnibus automation, please [follow this guide](https://docs.mattermost.com/administration/upgrade.html).
 
 ## Administering GitLab Mattermost
 
@@ -447,7 +447,7 @@ This integration lets you completely control how notifications are formatted and
 
 The source code can be modified to support not only GitLab, but any in-house applications you may have that support webhooks. Also see:
 
-- [Mattermost incoming webhook documentation](http://docs.mattermost.com/developer/webhooks-incoming.html)
+- [Mattermost incoming webhook documentation](https://docs.mattermost.com/developer/webhooks-incoming.html)
 - [GitLab webhook documentation](https://docs.gitlab.com/ce/web_hooks/web_hooks.html)
 
 ![webhooks](https://gitlab.com/gitlab-org/omnibus-gitlab/uploads/677b0aa055693c4dcabad0ee580c61b8/730_gitlab_feature_request.png)
