@@ -27,13 +27,13 @@ using docker for the master, and your own machine as the slave using `oc cluster
 
 ### Minishift
 
-Installation instructions for Minishift can be found at <https://docs.openshift.org/latest/minishift/getting-started/installing.html>
+Installation instructions for Minishift can be found at <https://docs.okd.io/latest/minishift/getting-started/installing.html>
 
 1. Before installing Minishift you need to install the proper docker machine driver.
-   - For Linux, install the [kvm driver](https://minishift.io/docs/docker-machine-drivers.html#kvm-driver)
-   - For Mac OSX, install the [xhyve driver](https://minishift.io/docs/docker-machine-drivers.html#xhyve-driver)
+   - For Linux, install the [kvm driver](https://docs.okd.io/latest/minishift/getting-started/setting-up-virtualization-environment.html#setting-up-kvm-driver)
+   - For Mac OSX, install the [xhyve driver](https://docs.okd.io/latest/minishift/getting-started/setting-up-virtualization-environment.html#setting-up-xhyve-driver)
 
-1. Install Minishift, following the [instruction for your platform](https://docs.openshift.org/latest/minishift/getting-started/installing.html)
+1. Install Minishift, following the [instruction for your platform](https://docs.okd.io/latest/minishift/getting-started/installing.html)
 
 1. Start Minishift with enough cpu/memory to run GitLab: `minishift start --cpus 4 --memory 6144`
    - When it is finished starting, the command will output the location of the web console.
@@ -45,7 +45,11 @@ Installation instructions for Minishift can be found at <https://docs.openshift.
 
 ### Docker oc cluster up
 
-If you have Docker installed, you can setup OpenShift Origin on your local machine: <https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md>
+NOTE: **Note:**
+The information listed below may be out of date. See <https://docs.okd.io/latest/getting_started/administrators.html>
+for more recent information regarding cluster setup.
+
+If you have Docker installed, you can setup OpenShift Origin on your local machine: <https://github.com/openshift/origin/blob/77bf0a926c045142570bb50a9a83086a370506a8/docs/cluster_up_down.md>
 
 `**Note:`this currently does not start if you are using docker-ce/ee with the new version scheme (17.xx)
 
@@ -127,11 +131,11 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 ### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to setup OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.org/latest/install_config/install/advanced_install.html).
+You can use OpenShift's Ansible installer to set up OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
 
 You can find the Ansible playbooks at: <https://github.com/openshift/openshift-ansible>
 
-After setting it all up, you will need to make sure you deploy the registry and router mentioned in the [what's next section](https://docs.openshift.org/latest/install_config/install/advanced_install.html#what-s-next)
+After setting it all up, you will need to make sure you deploy the registry and router mentioned in the [what's next section](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html#whats-next)
 
 In order to finish setting up the cluster, you need to create a project and allow your project's service account to run as anyuid.
 

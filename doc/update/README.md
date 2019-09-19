@@ -36,8 +36,8 @@ There are two ways to update Omnibus GitLab:
 
 ### Updating using the official repositories
 
-If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/installation/?version=ce#)
-or [Enterprise Edition](https://about.gitlab.com/installation), then the
+If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/install/?version=ce)
+or [Enterprise Edition](https://about.gitlab.com/install/), then the
 official GitLab repository should have already been set up for you.
 
 To update to a newer GitLab version, all you have to do is:
@@ -459,7 +459,7 @@ These steps consist of:
 
 See example below:
 
-First download a GitLab 6.x.x [CE](https://about.gitlab.com/downloads/archives/) or
+First download a GitLab 6.x.x [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
 

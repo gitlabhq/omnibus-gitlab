@@ -20,7 +20,7 @@ class TestHelper < BaseHelper
 end
 ```
 
-The file is generated as part of the [GitLabHander](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/handers/gitlab.rb#L36).
+The file is generated as part of the [GitLabHandler](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/handlers/gitlab.rb#L36).
 
 ## Reading an entry from public_attributes.json from a `gitlab-ctl` command
 

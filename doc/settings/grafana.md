@@ -112,7 +112,7 @@ To update it, you can use the following command:
 gitlab-ctl set-grafana-password
 ```
 
-See the [Grafana CLI documentation](http://docs.grafana.org/administration/cli/#reset-admin-password)
+See the [Grafana CLI documentation](https://grafana.com/docs/administration/cli/#reset-admin-password)
 for more information.
 
 ## Dashboards

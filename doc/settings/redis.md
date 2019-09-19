@@ -44,12 +44,12 @@ If you'd like to setup a separate Redis server (e.g. in the case of scaling
 issues) for use with GitLab you can do so using GitLab Omnibus.
 
 > **Note:** Redis does not require authentication by default. See
-> [Redis Security](http://redis.io/topics/security) documentation for more
+> [Redis Security](https://redis.io/topics/security) documentation for more
 > information. We recommend using a combination of a Redis password and tight
 > firewall rules to secure your Redis service.
 
 1. Download/install GitLab Omnibus using **steps 1 and 2** from
-   [GitLab downloads](https://about.gitlab.com/downloads). Do not complete other
+   [GitLab downloads](https://about.gitlab.com/install/). Do not complete other
    steps on the download page.
 1. Create/edit `/etc/gitlab/gitlab.rb` and use the following configuration.
    Be sure to change the `external_url` to match your eventual GitLab front-end

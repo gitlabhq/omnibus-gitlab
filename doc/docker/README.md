@@ -161,8 +161,8 @@ _not_ preserved between subsequent runs.
 
 ## After starting a container
 
-After starting a container you can visit <http://localhost/> or
-<http://192.168.59.103> if you use boot2docker. It might take a while before
+After starting a container you can visit `http://localhost/` or
+`http://192.168.59.103` if you use boot2docker. It might take a while before
 the Docker container starts to respond to queries.
 
 NOTE: **Note:**

@@ -431,7 +431,7 @@ Please note:
 **This upgrade requires downtime as the database must be down while the upgrade is being performed.
 The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](http://www.slony.info/).
-Please see our [guide](http://docs.gitlab.com/ce/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
+Please see our [guide](https://docs.gitlab.com/ce/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
 
 Once you have confirmed that the the above checklist is satisfied,
 you can proceed.
