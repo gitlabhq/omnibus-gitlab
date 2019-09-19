@@ -16,6 +16,13 @@ GIT
       ruby-progressbar (~> 1.7)
       thor (~> 0.18)
 
+GIT
+  remote: https://dev.gitlab.org/omnibus-mirror/chef-sugar.git
+  revision: 956f1d70a89cfab31bf02d838bbd2e087868edf5
+  tag: v3.6.0
+  specs:
+    chef-sugar (3.6.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -767,7 +774,6 @@ GEM
       mixlib-config (>= 2.2.12, < 4.0)
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
-    chef-sugar (3.6.0)
     chef-zero (14.0.12)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 4.0)
@@ -1011,6 +1017,7 @@ DEPENDENCIES
   aws-sdk
   byebug
   chef (~> 14.13)
+  chef-sugar!
   chefspec
   docker-api
   fantaskspec
