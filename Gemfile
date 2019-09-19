@@ -21,7 +21,7 @@ omnibus_gem_version = Gitlab::Version.new('omnibus', "v5.6.12.01")
 # 4. Check that the changes to Gemfile.lock are propogated to the software
 #    definitions in `config/software`.  You can find them quickly with:
 #      grep "gem 'install " config/software/*
-gem 'chef-sugar',  git: chef_sugar_version.remote, tag: chef_sugar_version.print(false)
+gem 'chef-sugar', git: chef_sugar_version.remote, tag: chef_sugar_version.print(false)
 gem 'omnibus', git: omnibus_gem_version.remote, tag: omnibus_gem_version.print(false)
 gem 'chef', '~> 14.13'
 gem 'ohai', '~> 14.14'
