@@ -490,7 +490,7 @@ Follow the steps below to upgrade the database nodes
       location.
 1. Once all secondary nodes are upgraded, run `pg-upgrade` on primary node.
    1. On the primary node, edit `/etc/gitlab/gitlab.rb` to include the following:
-   
+
    ```bash
    # Replace X with value of number of db nodes + 1
    postgresql['max_replication_slots'] = X
