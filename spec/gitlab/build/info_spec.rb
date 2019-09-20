@@ -194,97 +194,55 @@ describe Build::Info do
   describe '.image_reference' do
     before do
       allow(ENV).to receive(:[]).and_call_original
-    end
-
-    it 'return pipeline image_reference' do
-      allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('true')
-      allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('trigger')
-      allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('abcd1234')
+      allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('foo')
       allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-
-      expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:abcd1234")
+      allow(Build::Info).to receive(:docker_tag).and_return('bar')
     end
 
-    it 'return nightly image_reference' do
-      allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('false')
-      allow(Build::Check).to receive(:is_nightly?).and_return(true)
-      allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-      allow(Build::Info).to receive(:docker_tag).and_return('gitlab-ce')
-
-      expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:gitlab-ce")
-    end
-
-    it 'return tag image_reference' do
-      allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('false')
-      allow(Build::Check).to receive(:is_nightly?).and_return(false)
-      allow(Build::Check).to receive(:on_tag?).and_return(true)
-      allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-      allow(Build::Info).to receive(:docker_tag).and_return('gitlab-ee')
-
-      expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:gitlab-ee")
-    end
-
-    shared_examples 'none of triggered/nightly/tag pipeline' do
-      it 'abort with error message' do
-        expect { described_class.image_reference }.to raise_error(SystemExit, /unknown pipeline type: only support triggered\/nightly\/tag pipeline/)
-      end
-    end
-
-    context 'nothing is set' do
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
-    end
-
-    context 'CI_PIPELINE_TRIGGERED not set and Build::Check return nil' do
-      before do
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('trigger')
-        allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('abcd1234')
-        allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-      end
-
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
-    end
-
-    context 'CI_PIPELINE_SOURCE not set and Build::Check return nil' do
+    context 'On a triggered pipeline' do
       before do
         allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('true')
-        allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('abcd1234')
-        allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-      end
-
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
-    end
-
-    context 'CI_PIPELINE_TRIGGERED set to false and Build::Check return nil' do
-      before do
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('false')
         allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('trigger')
-        allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('abcd1234')
-        allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
       end
 
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
+      it 'returns image reference correctly' do
+        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:foo")
+      end
     end
 
-    context 'CI_PIPELINE_SOURCE set to invalid value and Build::Check return nil' do
+    context 'On a nightly pipeline' do
       before do
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('true')
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('not-trigger')
-        allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('abcd1234')
-        allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
+        allow(Build::Check).to receive(:is_nightly?).and_return(true)
       end
 
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
+      it 'returns image reference correctly' do
+        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:bar")
+      end
     end
 
-    context 'ENV not set and not nightly/tag' do
+    context 'On a tag pipeline' do
       before do
         allow(Build::Check).to receive(:is_nightly?).and_return(false)
-        allow(Build::Check).to receive(:on_tag?).and_return(false)
-        allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-        allow(Build::Info).to receive(:docker_tag).and_return('gitlab-ee')
+        allow(Build::Check).to receive(:on_tag?).and_return(true)
       end
 
-      it_behaves_like 'none of triggered/nightly/tag pipeline'
+      it 'returns image reference correctly' do
+        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:bar")
+      end
+    end
+
+    context 'On a regular pipeline' do
+      before do
+        allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('false')
+        allow(Build::Check).to receive(:is_nightly?).and_return(false)
+        allow(Build::Check).to receive(:on_tag?).and_return(false)
+      end
+
+      it 'raises error' do
+        expect { described_class.image_reference }
+          .to raise_error(SystemExit,
+                          /unknown pipeline type: only support triggered\/nightly\/tag pipeline/)
+      end
     end
   end
 end
