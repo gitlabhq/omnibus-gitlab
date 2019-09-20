@@ -155,6 +155,9 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
 1. Run `gitlab-ctl reconfigure`.
 
+CAUTION: **Caution:**
+If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs`.
+
 ## Troubleshooting
 
 ### Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
