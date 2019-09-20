@@ -3,6 +3,52 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.3.0
+
+### Security (2 changes)
+
+- Make logrotate perform operations not as root user.
+- Add documentation for configuring an asset proxy server.
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- Wrap prometheus.listen_address value in quotes in the config/gitlab.yml file. !3561
+- Show errors when misspelled top-level config is used. !3563
+- Change download mirror for unzip software. !3602
+- Invoke die method from proper scope. !3604
+- Update Mattermost to 5.14.2. (Harrison Healey)
+
+### Changed (3 changes)
+
+- Clean up disabled services for service discovery for prometheus. !3506
+- Use file resource instead of using gitlab-keys. !3558
+- Removed non-gzipped files for sourcemaps to save on package size. !3592
+
+### Performance (1 change)
+
+- Fix slow fetches for repositories using object deduplication. !3559
+
+### Added (6 changes, 2 of them are from the community)
+
+- Add SMIME email notification settings. !3514 (Diego Louzán)
+- Add settings to specify SSL cert and key for DB server. !3529
+- Add option to allow some provider bypass two factor. !3543 (Dodocat)
+- [Geo]Configuration for Docker Registry Replication. !3549
+- Make gitaly open files ulimit configurable. !3560
+- Add smartcard_san_extentions to gitlab.rb. !3566
+
+### Other (8 changes, 1 of them is from the community)
+
+- Rename gitlab-monitor to gitlab-exporter. Service name, log directory, prometheus job names and more have been updated. !3517
+- Add backup of /etc/gitlab to upgrade process. !3518
+- Cleanup deprecated settings list. !3527
+- Update monitoring components. !3550
+- Regenerate database.ini if missing. !3555
+- Deprecate node['gitlab'] monitoring attributes instead of removal. !3583
+- Update gitlab-elasticsearch-indexer to v1.3.0. !3587
+- Update Mattermost to 5.14. (Harrison Healey)
+
+
 ## 12.2.5
 
 - No changes.

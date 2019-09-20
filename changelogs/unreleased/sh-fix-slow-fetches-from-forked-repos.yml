@@ -1,5 +1,0 @@
----
-title: Fix slow fetches for repositories using object deduplication
-merge_request: 3559
-author:
-type: performance

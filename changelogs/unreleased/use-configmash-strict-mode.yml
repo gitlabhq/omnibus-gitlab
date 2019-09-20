@@ -1,5 +1,0 @@
----
-title: Show errors when misspelled top-level config is used
-merge_request: 3563
-author:
-type: fixed

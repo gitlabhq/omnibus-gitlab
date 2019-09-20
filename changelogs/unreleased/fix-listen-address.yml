@@ -1,5 +1,0 @@
----
-title: Wrap prometheus.listen_address value in quotes in the config/gitlab.yml file
-merge_request: 3561
-author:
-type: fixed

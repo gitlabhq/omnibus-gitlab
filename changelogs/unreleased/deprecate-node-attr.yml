@@ -1,5 +1,0 @@
----
-title: Deprecate node['gitlab'] monitoring attributes instead of removal
-merge_request: 3583
-author:
-type: bug
