@@ -194,7 +194,7 @@ step to find the current GitLab version and then follow the steps in
 ## Zero downtime updates
 
 DANGER: **Danger:**
-Zero downtime updates **do not work** when updating from 12.0.x to any 12.1 release prior to `12.1.10`.
+Zero downtime updates **do not work** when updating from 12.0.x to any 12.1 release prior to `12.1.11`.
 If you depend on zero downtime updates and have any concerns, please [contact support](https://about.gitlab.com/support/).
 
 NOTE: **Note:**
