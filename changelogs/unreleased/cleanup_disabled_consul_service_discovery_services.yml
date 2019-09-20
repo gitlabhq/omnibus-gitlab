@@ -1,5 +1,0 @@
----
-title: Clean up disabled services for service discovery for prometheus
-merge_request: 3506
-author:
-type: changed

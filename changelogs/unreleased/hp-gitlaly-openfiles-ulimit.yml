@@ -1,5 +1,0 @@
----
-title: Make gitaly open files ulimit configurable
-merge_request: 3560
-author:
-type: added
