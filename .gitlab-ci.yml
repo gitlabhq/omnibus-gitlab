@@ -92,9 +92,6 @@ before_script:
       cp support/known_hosts ~/.ssh/known_hosts;
       chmod -R 0600 ~/.ssh/;
     fi
-  # Temporarily workaround issue with chef-sugar only being available in mirrors
-  - bundle config https://dev.gitlab.org/omnibus-mirror/chef-sugar.git gitlab-ci-token:${CI_JOB_TOKEN}
-  - bundle config https://gitlab.com/gitlab-org/build/omnibus-mirror/chef-sugar.git gitlab-ci-token:${CI_JOB_TOKEN}
   - bundle install -j $(nproc) --binstubs --path gems --without rubocop
   # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
   # This will alter Gemfile.lock file. As part of the build pipeline, we are
