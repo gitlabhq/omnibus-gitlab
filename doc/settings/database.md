@@ -528,6 +528,10 @@ HINT:  Free one or increase max_replication_slots.
 
 ### Upgrading a Geo instance
 
+DANGER: **Danger:**
+We discovered [an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that affects the automatic upgrade of PostgreSQL from version 9.6.x to 10.x and can lead to an unsuccessful upgrade of a secondary server.
+If you are using PostgreSQL 9.6.x and are updating to any version of GitLab 12.1 or newer, please disable the automatic upgrade temporarily. If you have any questions or concerns, please [contact support](https://about.gitlab.com/support/).
+
 As of GitLab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your GEO servers.
 
 NOTE: **Note:**
