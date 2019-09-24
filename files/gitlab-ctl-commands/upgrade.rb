@@ -238,7 +238,11 @@ def print_upgrade_and_exit
   puts "before anything else."
 
   auto_backup_skip_file = "#{etc_path}/skip-auto-backup"
-  unless File.exist?(auto_backup_skip_file)
+  if File.exist?(auto_backup_skip_file)
+    puts "The automatic database backup was skipped as requested."
+    puts "You may enable it again anytime by running the following command:"
+    puts "  sudo rm #{auto_backup_skip_file}"
+  else
     puts "If you need to roll back to the previous version you can use the database"
     puts "backup made during the upgrade (scroll up for the filename)."
   end
