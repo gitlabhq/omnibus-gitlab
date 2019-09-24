@@ -163,7 +163,7 @@ danger-review:
 Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Debian 8 knapsack: *prepare_knapsack
-Debian 9.1 knapsack: *prepare_knapsack
+Debian 9 knapsack: *prepare_knapsack
 Debian 10 knapsack: *prepare_knapsack
 OpenSUSE 15.0 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
@@ -187,12 +187,12 @@ Debian 8 specs :
   parallel: 6
   dependencies:
   - Debian 8 knapsack
-Debian 9.1 specs :
+Debian 9 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   extends: .spec_template
   parallel: 6
   dependencies:
-  - Debian 9.1 knapsack
+  - Debian 9 knapsack
 Debian 10 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
   extends: .spec_template
