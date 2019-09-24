@@ -10,8 +10,12 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     @node = node
   end
 
+  def enabled?(service_name)
+    File.symlink?("/opt/gitlab/service/#{service_name}")
+  end
+
   def should_notify?(service_name)
-    File.symlink?("/opt/gitlab/service/#{service_name}") && service_up?(service_name) && service_enabled?(service_name)
+     enabled?(service_name) && service_up?(service_name) && service_enabled?(service_name)
   end
 
   def not_listening?(service_name)
