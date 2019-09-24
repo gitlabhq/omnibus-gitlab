@@ -198,7 +198,7 @@ Ubuntu-18.04-branch:
 Debian-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-Debian-9.1-branch:
+Debian-9-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-10-branch:
@@ -377,7 +377,7 @@ Ubuntu-18.04-upload-deploy:
 Debian-8:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-Debian-9.1:
+Debian-9:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-10:
@@ -456,10 +456,10 @@ Debian-8-staging:
     - Debian-8
     - Debian-8-branch
   <<: *staging_upload
-Debian-9.1-staging:
+Debian-9-staging:
   dependencies:
-    - Debian-9.1
-    - Debian-9.1-branch
+    - Debian-9
+    - Debian-9-branch
   <<: *staging_upload
 Debian-10-staging:
   dependencies:
@@ -503,9 +503,9 @@ Debian-8-release:
   dependencies:
     - Debian-8
   <<: *production_release
-Debian-9.1-release:
+Debian-9-release:
   dependencies:
-    - Debian-9.1
+    - Debian-9
   <<: *production_release
 Debian-10-release:
   dependencies:
