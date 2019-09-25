@@ -1,0 +1,5 @@
+---
+title: Add skip-auto-backup flag to skip backup during upgrade
+merge_request: 3245
+author: Dany Jupille
+type: added

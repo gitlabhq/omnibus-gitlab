@@ -7,6 +7,7 @@ NEW_MINOR_VERSION=<%= build_version.split(".")[0,2].join(".") %>
 
 mkdir -p /var/log/gitlab/reconfigure
 
+skip_backup_file=/etc/gitlab/skip-auto-backup
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
 
 greater_version()
@@ -82,7 +83,7 @@ main() {
     return
   fi
 
-  if [ -d ${DEST_DIR}/service/unicorn ] ; then
+  if [ -d ${DEST_DIR}/service/unicorn ] && [ ! -e "${skip_backup_file}" ] ; then
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages ; then
       backup_failed "Database"
@@ -94,7 +95,7 @@ backup_failed() {
   notify
   notify "$1 backup failed! If you want to skip this backup, run the following command and try again:"
   notify
-  notify " sudo touch ${skip_reconfigure_file}"
+  notify " sudo touch ${skip_backup_file}"
   notify
   exit 1
 }
