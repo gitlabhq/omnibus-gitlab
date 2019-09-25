@@ -796,7 +796,7 @@ If it is not possible to make this server change, you can default back to the ol
 behavior by changing the values in your `/etc/gitlab/gitlab.rb`:
 
 ```
-nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2"
+nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
 ```
 
 [recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
