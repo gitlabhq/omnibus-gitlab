@@ -331,9 +331,9 @@ node throughout the process.
 
 NOTE: **Note:**
 The order of steps is important. While following these steps, make
-sure you follow them in the right order, on the right machine.
+sure you follow them in the right order, on the correct node.
 
-**(primary)** Log in to your **primary** node, executing the following:
+Log in to your **primary** node, executing the following:
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -366,7 +366,7 @@ sure you follow them in the right order, on the right machine.
    sudo gitlab-ctl hup sidekiq
    ```
 
-**(secondary)** On each **secondary** node, executing the following:
+On each **secondary** node, executing the following:
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -406,7 +406,7 @@ sure you follow them in the right order, on the right machine.
    sudo gitlab-rake geo:db:migrate
    ```
 
-**(primary)** When all Secondary nodes are updated, finalize
+After all **secondary** nodes are updated, finalize
 the update on the **primary** node:
 
 - Run post-deployment database migrations
@@ -415,7 +415,7 @@ the update on the **primary** node:
    sudo gitlab-rake db:migrate
    ```
 
-**(primary)** & **(secondary)** After updating all nodes, check their status:
+After updating all nodes (both **primary** and all **secondaries**), check their status:
 
 - Verify Geo configuration and dependencies
 
