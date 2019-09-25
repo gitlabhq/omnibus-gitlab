@@ -329,11 +329,11 @@ node throughout the process.
 
 ### Geo deployment
 
-**Primary node**
+NOTE: **Note:**
+The order of steps is important. While following these steps, make
+sure you follow them in the right order, on the correct node.
 
-On the Primary node, executing the following:
-
-1. Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+Log in to your **primary** node, executing the following:
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -357,18 +357,6 @@ On the Primary node, executing the following:
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
-   ```
-
-1. Run non post-deployment database migrations
-
-   ```sh
-   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake db:migrate
-   ```
-
-1. Run post-deployment database migrations
-
-   ```sh
-   sudo gitlab-rake db:migrate
    ```
 
 1. Hot reload `unicorn` and `sidekiq` services
@@ -378,20 +366,7 @@ On the Primary node, executing the following:
    sudo gitlab-ctl hup sidekiq
    ```
 
-1. Verify Geo configuration and dependencies
-
-   ```sh
-   sudo gitlab-rake gitlab:geo:check
-   ```
-
-**Secondary node(s)**
-
-NOTE: **Note:**
-Only proceed if you have successfully completed all steps on the Primary node.
-
-On all Secondary nodes, executing the following:
-
-1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+On each **secondary** node, executing the following:
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -415,12 +390,6 @@ On all Secondary nodes, executing the following:
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
-   ```
-
-1. Run post-deployment database migrations, specific to the Geo database
-
-   ```sh
-   sudo gitlab-rake geo:db:migrate
    ```
 
 1. Hot reload `unicorn`, `sidekiq` and restart `geo-logcursor` services
@@ -431,16 +400,27 @@ On all Secondary nodes, executing the following:
    sudo gitlab-ctl restart geo-logcursor
    ```
 
-1. Verify Geo configuration and dependencies
+1. Run post-deployment database migrations, specific to the Geo database
+
+   ```sh
+   sudo gitlab-rake geo:db:migrate
+   ```
+
+After all **secondary** nodes are updated, finalize
+the update on the **primary** node:
+
+- Run post-deployment database migrations
+
+   ```sh
+   sudo gitlab-rake db:migrate
+   ```
+
+After updating all nodes (both **primary** and all **secondaries**), check their status:
+
+- Verify Geo configuration and dependencies
 
    ```sh
    sudo gitlab-rake gitlab:geo:check
-   ```
-
-1. Verify Geo status
-
-   ```sh
-   sudo gitlab-rake geo:status
    ```
 
 ## Downgrading
