@@ -39,5 +39,5 @@ bash 'migrate gitlab-geo tracking database' do
     notifies :restart, svc, :immediately
   end
   not_if { gitlab_geo_helper.migrated? }
-  only_if { node['gitlab']['geo-secondary']['auto_migrate'] && node['gitlab']['geo-postgresql']['enable'] }
+  only_if { node['gitlab']['geo-secondary']['auto_migrate'] }
 end

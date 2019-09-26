@@ -118,8 +118,18 @@ describe 'gitlab-ee::geo-secondary' do
     describe 'migrations' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
-      it 'does not run the migrations' do
-        expect(chef_run).not_to run_bash('migrate gitlab-geo tracking database')
+      context 'when geo_secondary["auto_migrate"] is false' do
+        it 'does not run the migrations' do
+          stub_gitlab_rb(geo_secondary: { auto_migrate: false })
+
+          expect(chef_run).not_to run_bash('migrate gitlab-geo tracking database')
+        end
+      end
+
+      context 'when geo_secondary["auto_migrate"] is true' do
+        it 'runs the migrations' do
+          expect(chef_run).to run_bash('migrate gitlab-geo tracking database')
+        end
       end
     end
 
