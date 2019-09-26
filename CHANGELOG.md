@@ -11,6 +11,13 @@ omnibus-gitlab repository.
 
 - No changes.
 
+## 12.1.10
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
+
+
 ## 12.1.9
 
 ### Security (2 changes, 1 of them is from the community)
