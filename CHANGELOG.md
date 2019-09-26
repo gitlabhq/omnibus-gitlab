@@ -60,6 +60,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.14. (Harrison Healey)
 
 
+## 12.2.6
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
+
+
 ## 12.2.5
 
 - No changes.
