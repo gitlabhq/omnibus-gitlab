@@ -1,0 +1,71 @@
+#!/bin/sh
+
+set -e
+
+PROG="${0}"
+DIR=$(dirname "${PROG}")
+
+usage() {
+    >&2 echo "Usage: ${PROG} -s SOURCE_DEB -d DEST_DEB"
+    >&2 echo "Repacks SOURCE_DEB with relevant content from current branch into DEST_DEB"
+    >&2 echo "Copies in config/package/templates, files/gitlabt-ctl-commands* and files/gitlab-cookbooks"
+}
+
+while getopts :s:d: opt
+do
+    case "${opt}" in
+        s)
+            source_deb="${OPTARG}"
+            ;;
+        d)
+            dest_deb="${OPTARG}"
+            ;;
+        *)
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+if [ -z "${source_deb}" ] || [ -z "${dest_deb}" ]
+then
+    usage
+    exit 1
+fi
+
+for prog in dpkg-deb erb
+do
+    if ! type "${prog}" >/dev/null
+    then
+        >&2 echo "${prog} is required, please install"
+        exit 1
+    fi
+done
+
+work_dir=$(mktemp -d)
+trap 'rm -rf "${work_dir}"' EXIT
+
+dpkg-deb -R "${source_deb}" "${work_dir}"
+
+project_dir="${DIR}/.."
+source_info=$(dpkg-deb -I "${source_deb}")
+
+# config/templates/package-scripts
+template_dir="${project_dir}/config/templates/package-scripts"
+external_url_script=$(cat "${project_dir}/config/templates/package-scripts/external_url.sh")
+build_version=$(echo "${source_info}" | awk '/Version/ {print $NF}')
+for script in postinst postrm posttrans preinst
+do
+    erb install_dir="/opt/gitlab" external_url_script="${external_url_script}" build_version="${build_version}" "${template_dir}/${script}.erb" > "${work_dir}/DEBIAN/${script}"
+done
+
+# files/gitlab-ctl-commands
+rsync -axSH --delete files/gitlab-ctl-commands/ "${work_dir}/opt/gitlab/embedded/service/omnibus-ctl/"
+
+# files/gitlab-ctl-commands-ee
+rsync -axSH --delete files/gitlab-ctl-commands-ee/ "${work_dir}/opt/gitlab/embedded/service/omnibus-ctl-ee/"
+
+# files/gitlab-cookbooks
+rsync -axSH files/gitlab-cookbooks/ "${work_dir}/opt/gitlab/embedded/cookbooks/"
+
+dpkg-deb -b "${work_dir}" "${dest_deb}"
