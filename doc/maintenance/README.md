@@ -56,7 +56,37 @@ Unicorn supports zero-downtime reloads. These can be triggered as follows:
 sudo gitlab-ctl hup unicorn
 ```
 
-Note that you cannot use a Unicorn reload to update the Ruby runtime.
+If you are using Puma, Puma does support almost zero-downtime reloads.
+These can be triggered as follows:
+
+```shell
+sudo gitlab-ctl usr2 puma
+```
+
+Note that you cannot use a Unicorn/Puma reload to update the Ruby runtime.
+
+Puma and Unicorn have different signals to control application behavior:
+
+| Signal | Unicorn | Puma |
+|--------|---------|------|
+| `HUP` | reloads config file and gracefully restart all workers | reopen log files defined, or stop the process to force restart |
+| `USR1` | reopen all logs owned by the master and all workers | restart workers in phases, a rolling restart, without config reload |
+| `USR2` | reexecute the running binary | restart workers and reload config |
+| `QUIT` | exit the main process | exit the main process |
+
+The behavior of graceful restart (`gitlab-ctl hup unicorn` and `gitlab-ctl usr2 puma`) is defined as follow:
+
+1. `Unicorn`: a sequence of `SIGUSR2` and `SIGQUIT` signals are sent to Unicorn,
+1. `Puma`: a single `SIGUSR2` signal is sent to Puma.
+
+There are structural differences in handling of graceful restart (`gitlab-ctl restart`) between `Unicorn` and `Puma`:
+
+1. `Unicorn` starts a new process, but continues processing requests
+   on old master, it stops accepting connections once `SIGQUIT` is received,
+1. `Puma` stops accepting new connections as soon as `SIGUSR2` is received.
+   It finishes all running requests. It re-execs itself to restart the service.
+   It starts accepting new connections. During that period the connections
+   are waiting on the socket.
 
 ## Invoking Rake tasks
 
