@@ -106,47 +106,12 @@ file ssl_key_file do
   only_if { node['postgresql']['ssl'] == 'on' }
 end
 
-postgresql_config = File.join(node['postgresql']['data_dir'], "postgresql.conf")
-postgresql_runtime_config = File.join(node['postgresql']['data_dir'], 'runtime.conf')
 should_notify = omnibus_helper.should_notify?("postgresql")
 
-template postgresql_config do
-  source 'postgresql.conf.erb'
-  owner postgresql_username
-  mode '0644'
-  helper(:pg_helper) { pg_helper }
-  variables(node['postgresql'].to_hash)
+postgresql_config 'gitlab' do
+  pg_helper pg_helper
   notifies :run, 'execute[reload postgresql]', :immediately if should_notify
-  notifies :run, 'execute[start postgresql]', :immediately if should_notify
-end
-
-template postgresql_runtime_config do
-  source 'postgresql-runtime.conf.erb'
-  owner postgresql_username
-  mode '0644'
-  helper(:pg_helper) { pg_helper }
-  variables(node['postgresql'].to_hash)
-  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
-  notifies :run, 'execute[start postgresql]', :immediately if should_notify
-end
-
-pg_hba_config = File.join(node['postgresql']['data_dir'], "pg_hba.conf")
-
-template pg_hba_config do
-  source 'pg_hba.conf.erb'
-  owner postgresql_username
-  mode "0644"
-  variables(lazy { node['postgresql'].to_hash })
-  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
-  notifies :run, 'execute[start postgresql]', :immediately if should_notify
-end
-
-template File.join(node['postgresql']['data_dir'], 'pg_ident.conf') do
-  owner postgresql_username
-  mode "0644"
-  variables(node['postgresql'].to_hash)
-  notifies :run, 'execute[reload postgresql]', :immediately if should_notify
-  notifies :run, 'execute[start postgresql]', :immediately if should_notify
+  notifies :run, 'execute[start postgresql]' if omnibus_helper.enabled?('postgresql')
 end
 
 runit_service "postgresql" do

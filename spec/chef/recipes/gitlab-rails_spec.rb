@@ -1874,7 +1874,6 @@ describe 'gitlab::gitlab-rails' do
                 'db_host' => '127.0.0.1'
               )
             )
-            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1,1.1.1.1'/)
           end
         end
 
@@ -1885,7 +1884,6 @@ describe 'gitlab::gitlab-rails' do
                 'db_host' => '/var/opt/gitlab/postgresql'
               )
             )
-            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = ''/)
           end
         end
 
@@ -1904,7 +1902,6 @@ describe 'gitlab::gitlab-rails' do
                 'db_host' => '127.0.0.1'
               )
             )
-            expect(chef_run).to render_file('/var/opt/gitlab/postgresql/data/postgresql.conf').with_content(/listen_addresses = '127.0.0.1'/)
           end
 
           it 'template triggers notifications' do
