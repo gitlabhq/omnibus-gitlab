@@ -1,0 +1,21 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+location /error.txt {
+  # return code here is ignored by the error_page directive
+  return 500 'nginx returned $status when communicating with gitlab-workhorse\n';
+}
+
+location /error.json  {
+  # return code here is ignored by the error_page directive
+  return 500 '{"error":"nginx returned $status when communicating with gitlab-workhorse","status":$status}\n';
+}
+
+<% @monitoring_addresses.each do |address| %>
+location = <%= File.join(@path, address[:url]) %> {
+  proxy_cache off;
+  proxy_pass  http://gitlab-workhorse;
+  error_page 404 500 502 /error.<%= address[:format] %>;
+}
+<% end %>
