@@ -31,8 +31,10 @@ For more details, see the [Puma documentation](https://github.com/puma/puma#conf
 
 By default, the [Puma Worker
 Killer](https://github.com/schneems/puma_worker_killer) will restart a
-worker if it exceeds a 650 MB in RAM usage. To change this setting:
+worker if it exceeds a [memory limit][mem-limit] To change this setting:
 
 ```ruby
-puma['per_worker_max_memory_mb'] = 650
+puma['per_worker_max_memory_mb'] = 850
 ```
+
+[mem-limit]: https://gitlab.com/gitlab-org/gitlab/blob/master/lib%2Fgitlab%2Fcluster%2Fpuma_worker_killer_initializer.rb

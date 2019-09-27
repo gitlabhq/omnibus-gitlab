@@ -23,8 +23,18 @@ describe 'puma_config' do
         expect(content).to match(%r(^directory '/var/opt/gitlab/gitlab-rails/working'))
         expect(content).to match(%r(^require_relative "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"$))
         expect(content).to match(/^options = { workers: 2 }$/)
-        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 650\)))
+        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options\)))
         expect(content).to match(/^preload_app!$/)
+      }
+    end
+  end
+
+  context 'create with custom Puma settings' do
+    let(:chef_run) { runner.converge('test_gitlab::puma_config_custom') }
+
+    it 'renders puma.rb file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 1000\)))
       }
     end
   end

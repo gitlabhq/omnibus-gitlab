@@ -7,7 +7,7 @@ property :listen_socket, [String, nil], default: nil
 property :listen_tcp, [String, nil], default: nil
 property :working_directory, [String, nil], default: nil
 property :worker_timeout, Integer, default: 60
-property :per_worker_max_memory_mb, Integer, default: 650
+property :per_worker_max_memory_mb, [Integer, nil], default: nil
 property :worker_processes, Integer, default: 2
 property :min_threads, Integer, default: 1
 property :max_threads, Integer, default: 16

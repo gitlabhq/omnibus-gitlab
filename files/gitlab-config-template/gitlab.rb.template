@@ -781,7 +781,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### **Only change these settings if you understand well what they mean**
 ###! Docs: https://github.com/schneems/puma_worker_killer
-# puma['per_worker_max_memory_mb'] = 650
+# puma['per_worker_max_memory_mb'] = 850
 
 ################################################################################
 ## GitLab Sidekiq
