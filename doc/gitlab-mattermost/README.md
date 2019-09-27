@@ -184,6 +184,84 @@ cd /opt/gitlab/embedded/service/mattermost
 sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
 ```
 
+As of version 11.0, majority of the Mattermost settings are now configured via environmental variables. You might run into an error below in simple Mattermost setups:
+
+```shell
+sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
+{"level":"info","ts":1569608544.7545035,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
+2019-09-27 20:22:24.754616729 +0200 SAST m=+0.223724252 write error: can't open new logfile: open mattermost.log: permission denied
+{"level":"info","ts":1569608544.75481,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}
+2019-09-27 20:22:24.754861387 +0200 SAST m=+0.223968947 write error: can't open new logfile: open mattermost.log: permission denied
+{"level":"info","ts":1569608544.7581847,"caller":"sqlstore/supplier.go:223","msg":"Pinging SQL master database"}
+2019-09-27 20:22:24.758231517 +0200 SAST m=+0.227339052 write error: can't open new logfile: open mattermost.log: permission denied
+{"level":"error","ts":1569608544.8116143,"caller":"sqlstore/supplier.go:235","msg":"Failed to ping DB retrying in 10 seconds err=dial tcp: lookup dockerhost: no such host"}
+2019-09-27 20:22:24.811681821 +0200 SAST m=+0.280789354 write error: can't open new logfile: open mattermost.log: permission denied
+```
+
+This is mainly due to the database connection string being commented out in `gitlab.rb` and the database connection settings being set in environmental variables. Additionally, the connection string in the `gitlab.rb` is for MySQL which is no longer supported as of 12.1. You can run the following instead:
+
+```shell
+sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
+```
+
+You might also get the following error in some cases:
+
+```
+panic: Unable to find i18n directory
+
+goroutine 1 [running]:
+github.com/mattermost/mattermost-server/cmd/mattermost/commands.InitDBCommandContextCobra(0x25008e0, 0xc000231d58, 0x0, 0x0)
+	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/init.go:21 +0x152
+github.com/mattermost/mattermost-server/cmd/mattermost/commands.versionCmdF(0x25008e0, 0xc00026cbb0, 0x0, 0x1, 0x0, 0x0)
+	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/version.go:25 +0x2b
+github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).execute(0x25008e0, 0xc00026cb80, 0x1, 0x1, 0x25008e0, 0xc00026cb80)
+	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:762 +0x465
+github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).ExecuteC(0x24fbf40, 0x125cb04, 0xc000231f88, 0xc0000a6058)
+	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:852 +0x2c0
+github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).Execute(...)
+	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:800
+github.com/mattermost/mattermost-server/cmd/mattermost/commands.Run(...)
+	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/root.go:15
+main.main()
+	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/main.go:30 +0x89
+```
+
+To workaround this, you can change to `/opt/gitlab/embedded/service/mattermost/i18n` then issue the previous command.
+
+This is quite of bit typing and hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file
+
+```shell
+alias mattermost-cli="cd /opt/gitlab/embedded/service/mattermost/i18n && sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json $1"
+```
+
+Then source `~/.zshrc` or `~/.bashrc` with `source ~/.zshrc` or `source ~/.bashrc`.
+
+If successful, you can now run any Mattermost CLI command with your new shell alias `mattermost-cli`:
+
+```
+mattermost-cli version
+[sudo] password for username: 
+{"level":"info","ts":1569614421.9058893,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
+{"level":"info","ts":1569614421.9062793,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}
+{"level":"info","ts":1569614421.90976,"caller":"sqlstore/supplier.go:223","msg":"Pinging SQL master database"}
+{"level":"info","ts":1569614422.0515099,"caller":"mlog/log.go:165","msg":"Starting up plugins"}
+{"level":"info","ts":1569614422.0515954,"caller":"app/plugin.go:193","msg":"Syncing plugins from the file store"}
+{"level":"info","ts":1569614422.086005,"caller":"app/plugin.go:228","msg":"Found no files in plugins file store"}
+{"level":"info","ts":1569614423.9337213,"caller":"sqlstore/post_store.go:1301","msg":"Post.Message supports at most 16383 characters (65535 bytes)"}
+{"level":"error","ts":1569614425.6317747,"caller":"go-plugin/stream.go:15","msg":" call to OnConfigurationChange failed, error: Must have a GitLab oauth client id","plugin_id":"com.github.manland.mattermost-plugin-gitlab","source":"plugin_stderr"}
+{"level":"info","ts":1569614425.6875598,"caller":"mlog/sugar.go:19","msg":"Ensuring Surveybot exists","plugin_id":"com.mattermost.nps"}
+{"level":"info","ts":1569614425.6953356,"caller":"app/server.go:216","msg":"Current version is 5.14.0 (5.14.2/Fri Aug 30 20:20:48 UTC 2019/817ee89711bf26d33f840ce7f59fba14da1ed168/none)"}
+{"level":"info","ts":1569614425.6953766,"caller":"app/server.go:217","msg":"Enterprise Enabled: false"}
+{"level":"info","ts":1569614425.6954057,"caller":"app/server.go:219","msg":"Current working directory is /opt/gitlab/embedded/service/mattermost/i18n"}
+{"level":"info","ts":1569614425.6954265,"caller":"app/server.go:220","msg":"Loaded config","source":"file:///var/opt/gitlab/mattermost/config.json"}
+Version: 5.14.0
+Build Number: 5.14.2
+Build Date: Fri Aug 30 20:20:48 UTC 2019
+Build Hash: 817ee89711bf26d33f840ce7f59fba14da1ed168
+Build Enterprise Ready: false
+DB Version: 5.14.0
+```
+
 For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
 
 ## Configuring GitLab and Mattermost integrations
