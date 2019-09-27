@@ -1,0 +1,5 @@
+---
+title: Nginx responds to health checks with correct content types
+merge_request: 3594
+author:
+type: fixed

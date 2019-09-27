@@ -44,6 +44,7 @@ nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
 gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
 gitlab_rails_smartcard_http_conf = File.join(nginx_conf_dir, "gitlab-smartcard-http.conf")
+gitlab_rails_health_conf = File.join(nginx_conf_dir, "gitlab-health.conf")
 gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
 gitlab_registry_http_conf = File.join(nginx_conf_dir, "gitlab-registry.conf")
 gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
@@ -92,6 +93,11 @@ nginx_vars = nginx_vars.to_hash.merge!({
                                          gitlab_smartcard_http_config: gitlab_rails_smartcard_enabled ? gitlab_rails_smartcard_http_conf : nil
                                        })
 
+# Include the config file for gitlab-health in nginx.conf later
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         gitlab_health_conf: gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? gitlab_rails_health_conf : nil
+                                       })
+
 # Include the config file for gitlab mattermost in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
                                          gitlab_mattermost_http_config: gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
@@ -119,11 +125,15 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
 nginx_gitlab_http_vars = nginx_vars.merge(
   fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
   port: node['gitlab']['gitlab-rails']['gitlab_port'],
-  relative_url: node['gitlab']['gitlab-rails']['gitlab_relative_url'],
+  path: node['gitlab']['gitlab-rails']['gitlab_relative_url'] || '/',
   registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
   letsencrypt_enable: node['letsencrypt']['enable'],
   # These addresses will be allowed through plain http, even if `redirect_http_to_https` is enabled
-  monitoring_addresses: %w(/-/health /-/readiness /-/liveness)
+  monitoring_addresses: [
+    { url: '/-/health', format: 'txt' },
+    { url: '/-/readiness', format: 'json' },
+    { url: '/-/liveness', format: 'json' },
+  ]
 )
 
 template gitlab_rails_http_conf do
@@ -175,6 +185,18 @@ template gitlab_rails_smartcard_http_conf do
   )
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_rails_smartcard_enabled ? :create : :delete
+end
+
+template gitlab_rails_health_conf do
+  source "nginx-gitlab-health.conf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    nginx_gitlab_http_vars
+  )
+  notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
+  action(gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? :create : :delete)
 end
 
 pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash

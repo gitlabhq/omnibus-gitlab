@@ -50,13 +50,9 @@ server {
     return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
   }
 
-  <% @monitoring_addresses.each do |monitoring_address| %>
-  location <%= monitoring_address %> {
-    proxy_cache off;
-    proxy_pass  http://gitlab-workhorse;
-  }
+  # health checks configuration
+  include <%= @gitlab_health_conf %>;
 
-  <% end %>
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_error.log;
 }
@@ -172,19 +168,22 @@ server {
     proxy_request_buffering off;
   }
 
-  <% path = @relative_url ? @relative_url : "/" %>
   <% if node['monitoring']['grafana']['enable'] -%>
-  location <%= File.join(path, '-/grafana/') %> {
+  location <%= File.join(@path, '-/grafana/') %> {
     proxy_pass http://<%= node['monitoring']['grafana']['http_addr'] %>:<%= node['monitoring']['grafana']['http_port'] %>/;
   }
 
   <% end -%>
-  location <%= path %> {
+
+  # health checks configuration
+  include <%= @gitlab_health_conf %>;
+
+  location <%= @path %> {
     proxy_cache off;
     proxy_pass  http://gitlab-workhorse;
   }
 
-  location <%= File.join(path, 'assets') %> {
+  location <%= File.join(@path, 'assets') %> {
     proxy_cache <%= @proxy_cache %>;
     proxy_pass  http://gitlab-workhorse;
   }
