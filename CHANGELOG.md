@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.3.2
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
+
+
 ## 12.3.1
 
 - No changes.
@@ -51,6 +58,13 @@ omnibus-gitlab repository.
 - Deprecate node['gitlab'] monitoring attributes instead of removal. !3583
 - Update gitlab-elasticsearch-indexer to v1.3.0. !3587
 - Update Mattermost to 5.14. (Harrison Healey)
+
+
+## 12.2.6
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
 
 
 ## 12.2.5
@@ -139,6 +153,10 @@ omnibus-gitlab repository.
 - Add perl dependency to SSL troubleshooting steps.
 
 
+## 12.1.12
+
+- No changes.
+
 ## 12.1.11
 
 - No changes.
@@ -146,6 +164,13 @@ omnibus-gitlab repository.
 ## 12.1.10
 
 - No changes.
+
+## 12.1.10
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
+
 
 ## 12.1.5
 
