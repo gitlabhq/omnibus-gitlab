@@ -267,6 +267,11 @@ If you meet all the requirements above, follow these instructions in order. Ther
    sudo gitlab-ctl hup sidekiq
    ```
 
+NOTE: **Note:**
+If you do not want to run zero downtime upgrades in the future, make
+sure you remove `/etc/gitlab/skip-auto-reconfigure` after
+you've completed these steps.
+
 ### Multi-node / HA deployment
 
 Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
@@ -338,6 +343,12 @@ node throughout the process.
   sudo gitlab-ctl hup unicorn
   sudo gitlab-ctl hup sidekiq
   ```
+
+NOTE: **Note:**
+If you do not want to run zero downtime upgrades in the future, make
+sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
+setting `gitlab_rails['auto_migrate'] = false` in
+`/etc/gitlab/gitlab.rb` after you've completed these steps.
 
 ### Geo deployment
 
@@ -434,6 +445,12 @@ After updating all nodes (both **primary** and all **secondaries**), check their
    ```sh
    sudo gitlab-rake gitlab:geo:check
    ```
+
+NOTE: **Note:**
+If you do not want to run zero downtime upgrades in the future, make
+sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
+setting `gitlab_rails['auto_migrate'] = false` in
+`/etc/gitlab/gitlab.rb` after you've completed these steps.
 
 ## Downgrading
 
