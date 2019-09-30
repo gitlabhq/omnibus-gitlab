@@ -40,8 +40,10 @@ build do
     delete "#{install_dir}/embedded/cookbooks/gitlab-ee"
   end
 
-  erb dest: "#{install_dir}/embedded/cookbooks/dna.json",
-      source: 'dna.json.erb',
-      mode: 0644,
-      vars: { master_cookbook: cookbook_name }
+  %w(dna postgresql-bin).each do |config|
+    erb dest: "#{install_dir}/embedded/cookbooks/#{config}.json",
+        source: "#{config}.json.erb",
+        mode: 0644,
+        vars: { master_cookbook: cookbook_name }
+  end
 end
