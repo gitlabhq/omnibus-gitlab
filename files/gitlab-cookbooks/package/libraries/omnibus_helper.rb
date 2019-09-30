@@ -15,7 +15,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   end
 
   def should_notify?(service_name)
-     enabled?(service_name) && service_up?(service_name) && service_enabled?(service_name)
+    enabled?(service_name) && service_up?(service_name) && service_enabled?(service_name)
   end
 
   def not_listening?(service_name)
