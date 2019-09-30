@@ -41,6 +41,7 @@ default['monitoring']['alertmanager']['inhibit_rules'] = []
 default['monitoring']['alertmanager']['receivers'] = []
 default['monitoring']['alertmanager']['routes'] = []
 default['monitoring']['alertmanager']['templates'] = []
+default['monitoring']['alertmanager']['global'] = {}
 
 ####
 # Prometheus Node Exporter
