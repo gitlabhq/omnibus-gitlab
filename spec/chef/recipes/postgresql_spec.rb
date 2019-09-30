@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'postgresql 9.2' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
   let(:postgresql_data_dir) { '/var/opt/gitlab/postgresql/data' }
   let(:postgresql_ssl_cert) { File.join(postgresql_data_dir, 'server.crt') }
   let(:postgresql_ssl_key) { File.join(postgresql_data_dir, 'server.key') }
@@ -21,6 +21,7 @@ psql_port='5432'
     allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
     allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('9.2.18'))
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
+    # allow_any_instance_of(OmnibusHelper).to receive(:enabled?).and_return(true)
   end
 
   it 'includes the postgresql::bin recipe' do
@@ -320,7 +321,7 @@ psql_port='5432'
 end
 
 describe 'postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 
@@ -523,7 +524,10 @@ describe 'postgresql 9.6' do
     it 'notifies reload postgresql when postgresql.conf changes' do
       allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
       allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('postgresql').and_return(true)
-      postgresql_config = chef_run.template(postgresql_conf)
+      allow_any_instance_of(OmnibusHelper).to receive(:enabled?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:enabled?).with('postgresql').and_return(true)
+      expect(chef_run).to create_postgresql_config('gitlab')
+      postgresql_config = chef_run.postgresql_config('gitlab')
       expect(postgresql_config).to notify('execute[reload postgresql]').to(:run).immediately
       expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
@@ -715,9 +719,11 @@ describe 'postgresql 9.6' do
     it 'notifies postgresql reload' do
       allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
       allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('postgresql').and_return(true)
-      hba_resource = chef_run.template(pg_hba_conf)
-      expect(hba_resource).to notify('execute[reload postgresql]').to(:run).immediately
-      expect(hba_resource).to notify('execute[start postgresql]').to(:run).immediately
+      allow_any_instance_of(OmnibusHelper).to receive(:enabled?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:enabled?).with('postgresql').and_return(true)
+      postgresql_config = chef_run.postgresql_config('gitlab')
+      expect(postgresql_config).to notify('execute[reload postgresql]').to(:run).immediately
+      expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
   end
 
