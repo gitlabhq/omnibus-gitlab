@@ -3,9 +3,12 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 [user]
-        name = <%= node['gitlab']['user']['git_user_name'] %>
-        email = <%= node['gitlab']['user']['git_user_email'] %>
+        name = <%= @user_options['git_user_name'] %>
+        email = <%= @user_options['git_user_email'] %>
 [core]
         autocrlf = input
+<% if @system_core_options %>
+        <%= @system_core_options.join("\n        ") %>
+<% end %>
 [gc]
         auto = 0

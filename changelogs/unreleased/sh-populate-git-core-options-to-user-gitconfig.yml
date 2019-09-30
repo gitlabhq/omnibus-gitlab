@@ -1,0 +1,5 @@
+---
+title: Ensure user's gitconfig contains system's core options
+merge_request: 3648
+author:
+type: fixed
