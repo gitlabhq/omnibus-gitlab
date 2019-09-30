@@ -60,8 +60,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
         listen_socket: '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket',
         listen_tcp: '127.0.0.1:8080',
         working_directory: '/var/opt/gitlab/gitlab-rails/working',
-        worker_processes: 2,
-        per_worker_max_memory_mb: 650
+        worker_processes: 2
       )
     end
   end
