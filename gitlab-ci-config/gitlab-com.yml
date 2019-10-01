@@ -12,6 +12,7 @@
       - triggers
       - /^dependencies_io/
       - /(^docs[\/-].*|.*-docs$)/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
 
 .com-trigger-only: &com-trigger-only
   only:
@@ -145,6 +146,7 @@ docs-lint:
       - /./@gitlab/omnibus-gitlab
       - triggers
       - /^dependencies_io/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
