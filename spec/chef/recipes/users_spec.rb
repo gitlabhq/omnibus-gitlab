@@ -28,6 +28,11 @@ describe 'gitlab::users' do
       }
 
       expect(chef_run).to create_template('/var/opt/gitlab/.gitconfig').with(template_params)
+      expect(chef_run).to render_file('/var/opt/gitlab/.gitconfig').with_content { |content|
+        expect(content).to match(/name = GitLab/)
+        expect(content).to match(/email = gitlab@fauxhai.local/)
+        expect(content).to match(/fsyncObjectFiles = true/)
+      }
     end
 
     it 'creates .bundle directory' do
