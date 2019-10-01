@@ -1,0 +1,2 @@
+#!/bin/sh
+exec svlogd <% unless @options[:json_logging] %>-tt <% end %><%= @options[:log_directory] %>

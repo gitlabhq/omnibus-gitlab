@@ -113,6 +113,7 @@ class AccountHelper
       'pgbouncer-exporter' => { username: postgresql_user, group: postgresql_group },
       'postgres-exporter' => { username: postgresql_user, group: postgresql_group },
       'postgresql' => { username: postgresql_user, group: postgresql_group },
+      'praefect' => { username: gitlab_user, group: gitlab_group },
       'prometheus' => { username: prometheus_user, group: prometheus_group },
       'puma' => { username: gitlab_user, group: gitlab_group },
       'redis' => { username: redis_user, group: redis_group },

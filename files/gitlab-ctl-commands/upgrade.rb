@@ -60,7 +60,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   end
 
   log 'Shutting down all GitLab services except those needed for migrations'
-  MIGRATION_SERVICES = %w(postgresql redis geo-postgresql gitaly).freeze
+  MIGRATION_SERVICES = %w(postgresql redis geo-postgresql gitaly praefect).freeze
   (get_all_services - MIGRATION_SERVICES).each do |sv_name|
     run_sv_command_for_service('stop', sv_name)
   end

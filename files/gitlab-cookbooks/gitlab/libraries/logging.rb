@@ -40,6 +40,7 @@ module Logging
         geo-logcursor
         geo-postgresql
         gitaly
+        praefect
         gitlab-pages
         gitlab-shell
         gitlab-workhorse
