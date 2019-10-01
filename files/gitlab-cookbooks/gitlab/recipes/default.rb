@@ -106,10 +106,11 @@ include_recipe 'postgresql::bin'
 
 # Configure Pre-migration services
 # Postgresql depends on Redis because of `rake db:seed_fu`
-# Gitaly must be available before migrations
+# Gitaly and/or Praefect must be available before migrations
 %w(
   redis
   gitaly
+  praefect
   postgresql
 ).each do |service|
   if node[service]['enable']

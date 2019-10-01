@@ -1,0 +1,36 @@
+# Gitaly configuration file
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run:
+# sudo gitlab-ctl reconfigure
+
+<% if @listen_addr %>
+# TCP address to listen on
+listen_addr = '<%= @listen_addr %>'
+<% end %>
+
+<% if @socket_path %>
+# # Praefect can listen on a socket when placed on the same machine as all clients
+socket_path = '<%= @socket_path %>'
+<% end %>
+
+<% if @prometheus_listen_addr %>
+# Optional: export metrics via Prometheus
+prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
+<% end %>
+
+
+[logging]
+<% if @logging_level %>
+level = '<%= @logging_level %>'
+<% end %>
+<% if @logging_format %>
+format = '<%= @logging_format %>'
+<% end %>
+
+<% @storage_nodes.each do |node| %>
+[[node]]
+storage = '<%= node['storage'] %>'
+address = '<%= node['address'] %>'
+primary = <%= [true, 'true'].include?(node['primary']) %>
+<% end %>

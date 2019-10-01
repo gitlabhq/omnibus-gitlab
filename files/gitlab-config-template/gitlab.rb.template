@@ -1747,6 +1747,27 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ]
 
 ################################################################################
+## Praefect
+##! Docs: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
+################################################################################
+
+# praefect['enable'] = false
+# praefect['listen_addr'] = "localhost:2305"
+# praefect['prometheus_listen_addr'] = "localhost:9652"
+# praefect['logging_level'] = "warn"
+# praefect['logging_format'] = "json"
+# praefect['storage_nodes'] = [
+#   {
+#     'storage' => 'praefect',
+#     'address' => 'tcp://12:23:56:78'
+#   },
+#   {
+#     'storoge' => 'praefect-2',
+#     'address' => 'tcp://praefect2.internal'
+#   }
+# ]
+
+################################################################################
 # Storage check
 ################################################################################
 # storage_check['enable'] = false

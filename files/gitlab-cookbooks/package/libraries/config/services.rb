@@ -42,6 +42,7 @@ module Services
     service 'storage_check'
     service 'crond'
     service 'puma'
+    service 'praefect'
   end
 
   # Define the services included in the EE edition of GitLab
