@@ -175,63 +175,17 @@ sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/po
 
 ### Mattermost Command Line Tools (CLI)
 
-To use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html),
-you must be logged in as the `mattermost` user. Ensure you are in the `/opt/gitlab/embedded/service/mattermost` directory when you run the CLI commands
-and that you specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
+To use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html), ensure that you are in the `/opt/gitlab/embedded/service/mattermost` directory when you run the CLI commands and that you specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
 
 ```
 cd /opt/gitlab/embedded/service/mattermost
-sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
-```
 
-As of version 11.0, majority of the Mattermost settings are now configured via environmental variables. You might run into an error below in simple Mattermost setups:
-
-```shell
-sudo -u mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
-{"level":"info","ts":1569608544.7545035,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
-2019-09-27 20:22:24.754616729 +0200 SAST m=+0.223724252 write error: can't open new logfile: open mattermost.log: permission denied
-{"level":"info","ts":1569608544.75481,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}
-2019-09-27 20:22:24.754861387 +0200 SAST m=+0.223968947 write error: can't open new logfile: open mattermost.log: permission denied
-{"level":"info","ts":1569608544.7581847,"caller":"sqlstore/supplier.go:223","msg":"Pinging SQL master database"}
-2019-09-27 20:22:24.758231517 +0200 SAST m=+0.227339052 write error: can't open new logfile: open mattermost.log: permission denied
-{"level":"error","ts":1569608544.8116143,"caller":"sqlstore/supplier.go:235","msg":"Failed to ping DB retrying in 10 seconds err=dial tcp: lookup dockerhost: no such host"}
-2019-09-27 20:22:24.811681821 +0200 SAST m=+0.280789354 write error: can't open new logfile: open mattermost.log: permission denied
-```
-
-This is mainly due to the database connection string being commented out in `gitlab.rb` and the database connection settings being set in environmental variables. Additionally, the connection string in the `gitlab.rb` is for MySQL which is no longer supported as of 12.1. You can run the following instead:
-
-```shell
 sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
 ```
 
-You might also get the following error in some cases:
-
-```
-panic: Unable to find i18n directory
-
-goroutine 1 [running]:
-github.com/mattermost/mattermost-server/cmd/mattermost/commands.InitDBCommandContextCobra(0x25008e0, 0xc000231d58, 0x0, 0x0)
-	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/init.go:21 +0x152
-github.com/mattermost/mattermost-server/cmd/mattermost/commands.versionCmdF(0x25008e0, 0xc00026cbb0, 0x0, 0x1, 0x0, 0x0)
-	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/version.go:25 +0x2b
-github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).execute(0x25008e0, 0xc00026cb80, 0x1, 0x1, 0x25008e0, 0xc00026cb80)
-	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:762 +0x465
-github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).ExecuteC(0x24fbf40, 0x125cb04, 0xc000231f88, 0xc0000a6058)
-	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:852 +0x2c0
-github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra.(*Command).Execute(...)
-	/go/src/github.com/mattermost/mattermost-server/vendor/github.com/spf13/cobra/command.go:800
-github.com/mattermost/mattermost-server/cmd/mattermost/commands.Run(...)
-	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/commands/root.go:15
-main.main()
-	/go/src/github.com/mattermost/mattermost-server/cmd/mattermost/main.go:30 +0x89
-```
-
-To workaround this, you can change to `/opt/gitlab/embedded/service/mattermost/i18n` then issue the previous command.
-
-This is quite of bit typing and hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file
-
+Until [#4745](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4745) has been implemented, the command requires quite of bit typing and is hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file:
 ```shell
-alias mattermost-cli="cd /opt/gitlab/embedded/service/mattermost/i18n && sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json $1"
+alias mattermost-cli="cd /opt/gitlab/embedded/service/mattermost && sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json $1"
 ```
 
 Then source `~/.zshrc` or `~/.bashrc` with `source ~/.zshrc` or `source ~/.bashrc`.
@@ -262,7 +216,7 @@ Build Enterprise Ready: false
 DB Version: 5.14.0
 ```
 
-For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html).
+For more details see [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html) and the [Troubleshooting Mattermost CLI](#troubleshooting-the-mattermost-cli) below.
 
 ## Configuring GitLab and Mattermost integrations
 
@@ -431,6 +385,18 @@ provider for Mattermost. You can use this to troubleshoot errors
 in getting the integration to work:
 
 ![sequence diagram](img/gitlab-mattermost.png)
+
+## Troubleshooting the Mattermost CLI
+
+### Failed to ping DB retrying in 10 seconds err=dial tcp: lookup dockerhost: no such host
+
+As of version 11.0, majority of the Mattermost settings are now configured via environmental variables. The error is mainly due to the database connection string being commented out in `gitlab.rb` and the database connection settings being set in environmental variables. Additionally, the connection string in the `gitlab.rb` is for MySQL which is no longer supported as of 12.1. 
+
+You can fix this by setting up a `mattermost-cli` [shell alias](#mattermost-command-line-tools-cli). 
+
+### panic: Unable to find i18n directory
+
+If you run into this error when executing the [shell alias](#mattermost-command-line-tools-cli) `mattermost-cli`, instead of using `/opt/gitlab/embedded/service/mattermost` change it to `/opt/gitlab/embedded/service/mattermost/i18n`, source your `.bashrc` or `.zhsrc` file again and re-run `mattermost-cli`.
 
 ## Community support resources
 
