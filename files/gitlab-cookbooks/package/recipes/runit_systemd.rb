@@ -17,13 +17,18 @@
 # limitations under the License.
 #
 
+require_relative '../libraries/helpers/systemd_helper.rb'
+
 directory '/usr/lib/systemd/system' do
   recursive true
 end
 
-cookbook_file "/usr/lib/systemd/system/gitlab-runsvdir.service" do
+tasks_max = SystemdHelper.get_tasks_max_value
+
+template "/usr/lib/systemd/system/gitlab-runsvdir.service" do
   mode "0644"
-  source "gitlab-runsvdir.service"
+  source "gitlab-runsvdir.service.erb"
+  variables(tasks_max: tasks_max)
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
   notifies :run, 'execute[systemctl enable gitlab-runsvdir]', :immediately
   notifies :run, 'execute[systemctl start gitlab-runsvdir]', :immediately
