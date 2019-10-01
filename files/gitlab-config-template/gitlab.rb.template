@@ -458,17 +458,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'bantime' => 3600
 # }
 
-# gitlab_rails['rack_attack_protected_paths'] = [
-#   '/users/password',
-#   '/users/sign_in',
-#   '/api/#{API::API.version}/session.json',
-#   '/api/#{API::API.version}/session',
-#   '/users',
-#   '/users/confirmation',
-#   '/unsubscribes/',
-#   '/import/github/personal_access_token'
-# ]
-
 ###! **We do not recommend changing these directories.**
 # gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
