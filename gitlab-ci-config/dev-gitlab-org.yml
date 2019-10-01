@@ -683,11 +683,6 @@ AWS-CE-Release:
     refs:
       - /.*ce\.\d/@gitlab/omnibus-gitlab
 
-AWS-EE-Unlicensed-Release:
-  variables:
-    AWS_LISTING_NAME: "GitLab"
-  extends: .aws_marketplace_release
-
 AWS-EE-Ultimate-Release:
   variables:
     AWS_LISTING_NAME: "GitLab Ultimate - 5 User Pack"
