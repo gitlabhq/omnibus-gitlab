@@ -554,6 +554,10 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 
 ### Setting up paths to be protected by Rack Attack
 
+NOTE: **Note:**
+Omnibus protected paths throttle is deprecated and is scheduled for removal in
+GitLab 13.0. Please refer to [Migrating settings from GitLab 12.3 and ealier](https://docs.gitlab.com/ee/user/admin_area/settings/protected_paths.html#migrate-settings-from-gitlab-123-and-earlier) guideline.
+
 If you want to change default protected paths
 set `gitlab_rails['rack_attack_protected_paths']` in config file.
 

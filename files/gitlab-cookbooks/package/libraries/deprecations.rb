@@ -65,6 +65,12 @@ module Gitlab
             deprecation: '12.3',
             removal: '13.0',
             note: "Use gitlab_exporter['probe_sidekiq'] instead."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails rack_attack_protected_paths),
+            deprecation: '12.4',
+            removal: '13.0',
+            note: 'It is now configured via the admin area. Please see https://docs.gitlab.com/ee/user/admin_area/settings/protected_paths.html for details.'
           }
         ]
 
