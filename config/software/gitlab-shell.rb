@@ -33,7 +33,7 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
-  command 'bin/compile', env: env
+  command 'make build', env: env
   sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.git', '.gitignore', 'go', 'go_build']
 
   block do

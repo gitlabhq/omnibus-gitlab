@@ -1,0 +1,5 @@
+---
+title: 'gitlab-shell: use make build instead of bin/compile'
+merge_request: 3653
+author:
+type: other
