@@ -1,5 +1,0 @@
----
-title: Update postgresql-bin.json to be generated from a template
-merge_request: 3643
-author:
-type: fixed
