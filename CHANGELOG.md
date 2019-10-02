@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.3.4
+
+### Fixed (1 change)
+
+- Update postgresql-bin.json to be generated from a template. !3643
+
+
 ## 12.3.3
 
 - No changes.
