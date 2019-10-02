@@ -394,10 +394,6 @@ As of version 11.0, majority of the Mattermost settings are now configured via e
 
 You can fix this by setting up a `mattermost-cli` [shell alias](#mattermost-command-line-tools-cli). 
 
-### panic: Unable to find i18n directory
-
-If you run into this error when executing the [shell alias](#mattermost-command-line-tools-cli) `mattermost-cli`, instead of using `/opt/gitlab/embedded/service/mattermost` change it to `/opt/gitlab/embedded/service/mattermost/i18n`, source your `.bashrc` or `.zhsrc` file again and re-run `mattermost-cli`.
-
 ## Community support resources
 
 For help and support around your GitLab Mattermost deployment please see:
