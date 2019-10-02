@@ -1,0 +1,5 @@
+---
+title: Use postgresql_config resource for postgresql configuration files
+merge_request: 3647
+author:
+type: other

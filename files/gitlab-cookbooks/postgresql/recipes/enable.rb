@@ -111,7 +111,7 @@ should_notify = omnibus_helper.should_notify?("postgresql")
 postgresql_config 'gitlab' do
   pg_helper pg_helper
   notifies :run, 'execute[reload postgresql]', :immediately if should_notify
-  notifies :run, 'execute[start postgresql]', :immediately if omnibus_helper.enabled?('postgresql')
+  notifies :run, 'execute[start postgresql]', :immediately if omnibus_helper.service_dir_enabled?('postgresql')
 end
 
 runit_service "postgresql" do
