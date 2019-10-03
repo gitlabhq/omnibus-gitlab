@@ -184,6 +184,7 @@ sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U matt
 ```
 
 Until [#4745](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4745) has been implemented, the command requires quite of bit typing and is hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file:
+
 ```shell
 alias mattermost-cli="cd /opt/gitlab/embedded/service/mattermost && sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json $1"
 ```
@@ -194,7 +195,7 @@ If successful, you can now run any Mattermost CLI command with your new shell al
 
 ```
 mattermost-cli version
-[sudo] password for username: 
+[sudo] password for username:
 {"level":"info","ts":1569614421.9058893,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
 {"level":"info","ts":1569614421.9062793,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}
 {"level":"info","ts":1569614421.90976,"caller":"sqlstore/supplier.go:223","msg":"Pinging SQL master database"}
@@ -390,9 +391,9 @@ in getting the integration to work:
 
 ### Failed to ping DB retrying in 10 seconds err=dial tcp: lookup dockerhost: no such host
 
-As of version 11.0, majority of the Mattermost settings are now configured via environmental variables. The error is mainly due to the database connection string being commented out in `gitlab.rb` and the database connection settings being set in environmental variables. Additionally, the connection string in the `gitlab.rb` is for MySQL which is no longer supported as of 12.1. 
+As of version 11.0, majority of the Mattermost settings are now configured via environmental variables. The error is mainly due to the database connection string being commented out in `gitlab.rb` and the database connection settings being set in environmental variables. Additionally, the connection string in the `gitlab.rb` is for MySQL which is no longer supported as of 12.1.
 
-You can fix this by setting up a `mattermost-cli` [shell alias](#mattermost-command-line-tools-cli). 
+You can fix this by setting up a `mattermost-cli` [shell alias](#mattermost-command-line-tools-cli).
 
 ## Community support resources
 
