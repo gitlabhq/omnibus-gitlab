@@ -53,7 +53,7 @@ require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/c
 
 on_restart do
   # Signal application hooks that we're about to restart
-  Gitlab::Cluster::LifecycleEvents.do_master_restart
+  Gitlab::Cluster::LifecycleEvents.do_before_master_restart
 end
 
 options = { workers: <%= @worker_processes %> }
