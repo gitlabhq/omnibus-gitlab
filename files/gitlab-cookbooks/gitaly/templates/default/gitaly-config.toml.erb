@@ -89,6 +89,9 @@ restart_delay = '<%= @ruby_restart_delay %>'
 <% if @ruby_num_workers %>
 num_workers = <%= @ruby_num_workers %>
 <% end %>
+<% if @ruby_rugged_git_config_search_path %>
+rugged_git_config_search_path = "<%= @ruby_rugged_git_config_search_path %>"
+<% end %>
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"

@@ -1,0 +1,5 @@
+---
+title: Add Rugged search path to Gitaly config
+merge_request: 3656
+author:
+type: fixed
