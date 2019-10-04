@@ -131,4 +131,8 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
       LoggingHelper.deprecation(msg)
     end
   end
+
+  def self.check_environment
+    ENV['LD_LIBRARY_PATH'] && LoggingHelper.warning('LD_LIBRARY_PATH was found in the env variables, this may cause issues with linking against the included libraries.')
+  end
 end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
