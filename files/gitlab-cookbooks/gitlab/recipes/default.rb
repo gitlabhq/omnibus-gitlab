@@ -26,6 +26,7 @@ ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 include_recipe 'gitlab::config'
 
 OmnibusHelper.check_deprecations
+OmnibusHelper.check_environment
 
 directory "/etc/gitlab" do
   owner "root"
