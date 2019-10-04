@@ -38,6 +38,12 @@ build do
     'BUILDTAGS' => 'include_gcs include_oss'
   }
 
+  # Patch to enable MD5 checksums for Google Cloud Storage driver:
+  # https://github.com/docker/distribution/issues/3018
+  #
+  # This is to help prevent 0-byte manifest files that cause 500 Errors:
+  # https://gitlab.com/gitlab-org/gitlab/issues/32907
+  patch source: 'gcs-md5.patch', plevel: 1
   make "build", env: env, cwd: cwd
   make "binaries", env: env, cwd: cwd
   move "#{cwd}/bin/*", "#{install_dir}/embedded/bin", force: true

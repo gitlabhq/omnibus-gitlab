@@ -1,0 +1,54 @@
+diff --git a/registry/storage/driver/gcs/gcs.go b/registry/storage/driver/gcs/gcs.go
+index 86dc87f1..ed46088e 100644
+--- a/registry/storage/driver/gcs/gcs.go
++++ b/registry/storage/driver/gcs/gcs.go
+@@ -17,6 +17,7 @@ package gcs
+ import (
+ 	"bytes"
+ 	"context"
++	"crypto/md5"
+ 	"encoding/json"
+ 	"fmt"
+ 	"io"
+@@ -275,6 +276,9 @@ func (d *driver) PutContent(context context.Context, path string, contents []byt
+ 	return retry(func() error {
+ 		wc := storage.NewWriter(d.context(context), d.bucket, d.pathToKey(path))
+ 		wc.ContentType = "application/octet-stream"
++		h := md5.New()
++		h.Write(contents)
++		wc.MD5 = h.Sum(nil)
+ 		return putContentsClose(wc, contents)
+ 	})
+ }
+diff --git a/vendor/google.golang.org/cloud/storage/types.go b/vendor/google.golang.org/cloud/storage/types.go
+index 060deb6a..99c023c6 100644
+--- a/vendor/google.golang.org/cloud/storage/types.go
++++ b/vendor/google.golang.org/cloud/storage/types.go
+@@ -113,6 +113,11 @@ type ObjectAttrs struct {
+ 	// Optional. If nil or empty, existing ACL rules are preserved.
+ 	ACL []ACLRule
+ 
++	// MD5 is the MD5 hash of the object's content. This field is read-only,
++	// except when used from a Writer. If set on a Writer, the uploaded
++	// data is rejected if its MD5 hash does not match this field.
++	MD5 []byte
++
+ 	// Metadata represents user-provided metadata, in key/value pairs.
+ 	// It can be nil if the current metadata values needs to preserved.
+ 	Metadata map[string]string
+@@ -364,8 +369,14 @@ func (w *Writer) open() {
+ 	w.opened = true
+ 
+ 	go func() {
++		rawObj := attrs.toRawObject(w.bucket)
++
++		if w.MD5 != nil {
++			rawObj.Md5Hash = base64.StdEncoding.EncodeToString(w.MD5)
++		}
++
+ 		resp, err := rawService(w.ctx).Objects.Insert(
+-			w.bucket, attrs.toRawObject(w.bucket)).Media(w.r).Projection("full").Context(w.ctx).Do()
++			w.bucket, rawObj).Media(w.r).Projection("full").Context(w.ctx).Do()
+ 		w.err = err
+ 		if err == nil {
+ 			w.obj = newObject(resp)
