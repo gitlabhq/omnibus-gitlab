@@ -23,7 +23,7 @@ directory '/usr/lib/systemd/system' do
   recursive true
 end
 
-tasks_max = SystemdHelper.get_tasks_max_value
+tasks_max = node['package']['systemd_tasks_max'] if SystemdHelper.systemd_version >= 227
 
 template "/usr/lib/systemd/system/gitlab-runsvdir.service" do
   mode "0644"

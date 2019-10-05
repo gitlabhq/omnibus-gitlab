@@ -32,26 +32,4 @@ describe SystemdHelper do
       end
     end
   end
-
-  describe '#get_tasks_max_value' do
-    context 'when systemd_version greater than 227' do
-      before do
-        allow(described_class).to receive(:systemd_version).and_return(242)
-      end
-
-      it 'returns correct value for TasksMax setting' do
-        expect(described_class.get_tasks_max_value). to eq(5000)
-      end
-    end
-
-    context 'when systemd_version less than 227' do
-      before do
-        allow(described_class).to receive(:systemd_version).and_return(219)
-      end
-
-      it 'returns correct value for TasksMax setting' do
-        expect(described_class.get_tasks_max_value). to be_nil
-      end
-    end
-  end
 end

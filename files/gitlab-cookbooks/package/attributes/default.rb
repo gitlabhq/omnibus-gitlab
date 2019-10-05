@@ -20,6 +20,7 @@
 # DO NOT change this value unless you are building your own GitLab packages
 default['package']['install-dir'] = '/opt/gitlab'
 default['package']['detect_init'] = true
+default['package']['systemd_tasks_max'] = 4915
 
 # Setting runit defaults here so that they can be made available automatically
 # to cookbooks of individual services via depends in metadata.rb

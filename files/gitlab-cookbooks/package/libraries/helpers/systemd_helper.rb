@@ -10,9 +10,5 @@ class SystemdHelper
       # Return a negative value so the greater-than check never succeeds
       -999
     end
-
-    def get_tasks_max_value
-      4915 if SystemdHelper.systemd_version >= 227
-    end
   end
 end
