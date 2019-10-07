@@ -34,7 +34,7 @@ describe Build::HA::ValidateTrigger do
         {
           'ref' => 'master',
           'token' => 'faketoken',
-          'variables[QA_IMAGE]' => 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ee-qa:omnibus-11111111111111111',
+          'variables[QA_IMAGE]' => 'registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee-qa:omnibus-11111111111111111',
           'variables[OMNIBUS_JOB_ID]' => 3
         }
       )

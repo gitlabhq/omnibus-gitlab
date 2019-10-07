@@ -12,10 +12,12 @@
       - triggers
       - /^dependencies_io/
       - /(^docs[\/-].*|.*-docs$)/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
 
 .com-trigger-only: &com-trigger-only
   only:
-    - triggers@gitlab-org/omnibus-gitlab
+    - triggers@gitlab-org/build/omnibus-gitlab-mirror
+    - pipelines@gitlab-org/build/omnibus-gitlab-mirror
 
 .dedicated-runner: &dedicated-runner
   tags:
@@ -145,6 +147,7 @@ docs-lint:
       - /./@gitlab/omnibus-gitlab
       - triggers
       - /^dependencies_io/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -246,9 +249,7 @@ Trigger:package:
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
-  only:
-    refs:
-      - triggers@gitlab-org/omnibus-gitlab
+  <<: *com-trigger-only
   artifacts:
     expire_in: 3 days
     when: always

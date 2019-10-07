@@ -5,16 +5,16 @@ module Build
   class OmnibusTrigger
     extend Trigger
 
-    OMNIBUS_PROJECT_PATH = 'gitlab-org/omnibus-gitlab'.freeze
+    OMNIBUS_PROJECT_MIRROR_PATH = 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
 
     def self.get_project_path
-      OMNIBUS_PROJECT_PATH
+      OMNIBUS_PROJECT_MIRROR_PATH
     end
 
     def self.get_params(image: nil)
       {
         "ref" => Gitlab::Util.get_env("CI_COMMIT_REF_NAME"),
-        "token" => Gitlab::Util.get_env("BUILD_TRIGGER_TOKEN"),
+        "token" => Gitlab::Util.get_env("CI_JOB_TOKEN"),
         "variables[ALTERNATIVE_SOURCES]" => true,
         "variables[BUILDER_IMAGE_REVISION]" => Gitlab::Util.get_env('BUILDER_IMAGE_REVISION'),
         "variables[BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY'),
