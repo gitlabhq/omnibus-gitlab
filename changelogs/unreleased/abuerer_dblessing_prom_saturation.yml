@@ -1,0 +1,5 @@
+---
+title: Add saturation recording rules to Prometheus
+merge_request: 3665
+author:
+type: changed
