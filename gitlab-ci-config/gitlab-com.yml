@@ -17,6 +17,7 @@
 .com-trigger-only: &com-trigger-only
   only:
     - triggers@gitlab-org/build/omnibus-gitlab-mirror
+    - pipelines@gitlab-org/build/omnibus-gitlab-mirror
 
 .dedicated-runner: &dedicated-runner
   tags:
