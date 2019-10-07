@@ -71,6 +71,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.14. (Harrison Healey)
 
 
+## 12.2.8
+
+- No changes.
+
 ## 12.2.6
 
 ### Security (1 change)
@@ -163,6 +167,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.13.2. (Harrison Healey)
 - Add perl dependency to SSL troubleshooting steps.
 
+
+## 12.1.14
+
+- No changes.
 
 ## 12.1.13
 
