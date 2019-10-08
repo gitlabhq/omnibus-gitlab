@@ -120,7 +120,7 @@ describe 'qa', type: :rake do
       Rake::Task['qa:test'].reenable
 
       allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('QA_TRIGGER_TOKEN').and_return("1234")
+      allow(ENV).to receive(:[]).with('CI_JOB_TOKEN').and_return("1234")
       allow(ENV).to receive(:[]).with('TRIGGERED_USER').and_return("John Doe")
       allow(ENV).to receive(:[]).with('CI_JOB_URL').and_return("https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("https://gitlab.com/gitlab-org/gitlab-foss")
