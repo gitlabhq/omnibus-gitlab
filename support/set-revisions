@@ -5,6 +5,7 @@ main() {
   gitlab_shell_ref=$2
   gitlab_workhorse_ref=$3
   gitaly_ref=$4
+  indexer_ref=$5
 
   if [[ "$gitlab_rails_ref" == *"-ee"* ]] ; then
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlab-ee.git
@@ -14,6 +15,7 @@ main() {
   gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
   gitlab_workhorse_repo=git@dev.gitlab.org:gitlab/gitlab-workhorse.git
   gitaly_repo=git@dev.gitlab.org:gitlab/gitaly.git
+  indexer_repo=git@dev.gitlab.org:gitlab/gitlab-elasticsearch-indexer.git
 
   gitlab_rails_ref_id=$(check_remote_ref gitlab_rails)
   assert_non_empty gitlab_rails_ref_id
@@ -24,10 +26,14 @@ main() {
   gitaly_ref_id=$(check_remote_ref gitaly)
   assert_non_empty gitaly_ref_id
 
+  indexer_ref_id=$(check_remote_ref gitlab-elasticsearch-indexer)
+  assert_non_empty indexer_ref_id
+
   set_source_and_version $gitlab_rails_ref VERSION
   set_source_and_version $gitlab_shell_ref GITLAB_SHELL_VERSION
   set_source_and_version $gitlab_workhorse_ref GITLAB_WORKHORSE_VERSION
   set_source_and_version $gitaly_ref GITALY_SERVER_VERSION
+  set_source_and_version $indexer_ref GITLAB_ELASTICSEARCH_INDEXER_VERSION
 }
 
 # set_source_and_version foo_ref file
@@ -81,8 +87,8 @@ if [ "$1" = "--ee" ] ; then
 fi
 
 
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
-  warn "Usage: $0 GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF"
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -n "$6" ]; then
+  warn "Usage: $0 GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF GITLAB_ELASTICSEARCH_INDEXER_REF"
   exit 1
 fi
 
