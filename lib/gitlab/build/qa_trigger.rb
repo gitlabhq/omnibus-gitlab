@@ -5,10 +5,10 @@ module Build
   class QATrigger
     extend Trigger
 
-    QA_PROJECT_PATH = 'gitlab-org/gitlab-qa'.freeze
+    QA_PROJECT_MIRROR_PATH = 'gitlab-org/gitlab-qa-mirror'.freeze
 
     def self.get_project_path
-      QA_PROJECT_PATH
+      QA_PROJECT_MIRROR_PATH
     end
 
     def self.get_params(image: nil)

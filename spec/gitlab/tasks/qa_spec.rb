@@ -111,7 +111,7 @@ describe 'qa', type: :rake do
     end
 
     let(:qatrigger) { Build::QATrigger.new }
-    let(:qapipeline) { Build::Trigger::Pipeline.new(1, "gitlab-org/gitlab-qa", "asdf12345") }
+    let(:qapipeline) { Build::Trigger::Pipeline.new(1, "gitlab-org/gitlab-qa-mirror", "asdf12345") }
     let(:qaresponse) { FakeResponse.new }
 
     before do
@@ -138,8 +138,8 @@ describe 'qa', type: :rake do
       allow_any_instance_of(Build::Trigger::Pipeline).to receive(:timeout?).and_return(false)
     end
 
-    it 'triggers QA pipeline correcty' do
-      api_uri = URI("https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-qa/trigger/pipeline")
+    it 'triggers QA pipeline correctly' do
+      api_uri = URI("https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-qa-mirror/trigger/pipeline")
       api_params = {
         "ref" => "master",
         "token" => "1234",
