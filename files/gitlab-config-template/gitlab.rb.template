@@ -1750,6 +1750,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # praefect['enable'] = false
+# praefect['virtual_storage_name'] = "praefect"
+# praefect['auth_token'] = ""
+# praefect['auth_transitioning'] = false 
 # praefect['listen_addr'] = "localhost:2305"
 # praefect['prometheus_listen_addr'] = "localhost:9652"
 # praefect['logging_level'] = "warn"
@@ -1757,11 +1760,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['storage_nodes'] = [
 #   {
 #     'storage' => 'praefect',
-#     'address' => 'tcp://12:23:56:78'
+#     'address' => 'tcp://12:23:56:78',
+#     'token' => 'abc123'
 #   },
 #   {
 #     'storoge' => 'praefect-2',
-#     'address' => 'tcp://praefect2.internal'
+#     'address' => 'tcp://praefect2.internal',
+#     'token' => 'xyz456'
 #   }
 # ]
 
