@@ -19,7 +19,6 @@ account_helper = AccountHelper.new(node)
 working_dir = node['gitlab']['gitlab-pages']['dir']
 log_directory = node['gitlab']['gitlab-pages']['log_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
-admin_secret_path = File.join(working_dir, "admin.secret")
 
 [
   working_dir,
@@ -54,13 +53,9 @@ file File.join(working_dir, "VERSION") do
   notifies :restart, "service[gitlab-pages]"
 end
 
-template admin_secret_path do
-  source "secret_token.erb"
-  owner 'root'
-  group account_helper.gitlab_group
-  mode "0640"
-  variables(secret_token: node['gitlab']['gitlab-pages']['admin_secret_token'])
-  notifies :restart, "service[gitlab-pages]"
+# Delete old admin.secret file
+file File.join(working_dir, "admin.secret") do
+  action :delete
 end
 
 runit_service 'gitlab-pages' do
