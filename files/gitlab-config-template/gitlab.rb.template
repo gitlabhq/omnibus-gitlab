@@ -1791,6 +1791,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! non-docker containers. Recommended not to change.
 # package['detect_init'] = true
 
+##! Specify maximum number of tasks that can be created by the systemd unit
+##! Will be populated as TasksMax value to the unit file if user is on a systemd
+##! version that supports it (>= 227). Will be a no-op if user is not on systemd.
+# package['systemd_tasks_max'] = 4915
+
 ################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##
