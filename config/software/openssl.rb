@@ -27,7 +27,7 @@ dependency 'cacerts'
 dependency 'makedepend' unless aix?
 dependency 'patch' if solaris2?
 
-version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1c')
+version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1d')
 
 default_version version.print(false)
 
