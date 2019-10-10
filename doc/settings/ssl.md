@@ -205,11 +205,12 @@ and run `gitlab-ctl reconfigure`.
 
 If no symlinks are created in `/opt/gitlab/embedded/ssl/certs/` and you see
 the message "Skipping `cert.pem`" after running `gitlab-ctl reconfigure`, that
-means there may be one of three issues:
+means there may be one of four issues:
 
 1. The file in `/etc/gitlab/ssl/trusted-certs/` is a symlink
 1. The file is not a valid PEM or DER-encoded certificate
 1. Perl is not installed on the operating system which is needed for c_rehash to properly symlink certificates.
+1. The certificate contains the string `TRUSTED`
 
 Test the certificate's validity using the commands below:
 
@@ -233,6 +234,16 @@ bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such
 ```
 
 If you see this message, you will need to install perl with your distribution's package manager.
+
+If you inspect the certificate itself, then look for the string `TRUSTED`:
+
+```
+-----BEGIN TRUSTED CERTIFICATE-----
+...
+-----END TRUSTED CERTIFICATE-----
+```
+
+If it does, like the example above, then try removing the string `TRUSTED` and running `gitlab-ctl reconfigure` again.
 
 ### Custom certificates not detected
 
