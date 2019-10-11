@@ -1,4 +1,7 @@
 default['praefect']['enable'] = false
+default['praefect']['virtual_storage_name'] = "praefect"
+default['praefect']['auth_token'] = nil
+default['praefect']['auth_transitioning'] = false
 default['praefect']['dir'] = "/var/opt/gitlab/praefect"
 default['praefect']['log_directory'] = "/var/log/gitlab/praefect"
 default['praefect']['listen_addr'] = "localhost:2305"
