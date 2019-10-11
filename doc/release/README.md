@@ -84,13 +84,13 @@ the build type package will be pushed to packages.gitlab.com or to a temporary
   release:
 
     ```sh
-    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF
+    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF GITLAB_ELASTICSEARCH_INDEXER_REF
 
     # For GitLab CE:
-    support/set-revisions v1.2.3 v1.2.3 1.2.3 1.2.3
+    support/set-revisions v1.2.3 v1.2.3 1.2.3 1.2.3 1.2.3
 
     # For GitLab EE:
-    support/set-revisions --ee v1.2.3-ee v1.2.3 1.2.3 1.2.3
+    support/set-revisions --ee v1.2.3-ee v1.2.3 1.2.3 1.2.3 1.2.3
     ```
 
 1. Commit the new version to the release branch:
