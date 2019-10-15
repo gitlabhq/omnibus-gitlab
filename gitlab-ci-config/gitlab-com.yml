@@ -286,6 +286,7 @@ Trigger:measure-memory:
   extends: .measure_memory_script_artifacts
   dependencies: []
   stage: metrics
+  when: manual
   <<: *com-trigger-only
 
 Trigger:qa-docker:
