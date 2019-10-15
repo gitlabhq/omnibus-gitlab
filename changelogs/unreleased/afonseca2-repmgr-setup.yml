@@ -1,0 +1,5 @@
+---
+title: Fix database replication bootstrap with `gitlab-ctl repmgr standby setup`
+merge_request: 3636
+author:
+type: fixed
