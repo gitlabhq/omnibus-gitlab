@@ -180,6 +180,8 @@ class Repmgr
         cmd("rm -rf #{postgresql_data_dir}")
         $stdout.puts "Cloning the data"
         clone(args)
+        $stdout.puts "Running reconfigure"
+        cmd("gitlab-ctl reconfigure")
         $stdout.puts "Starting the database"
         cmd("gitlab-ctl start postgresql")
         # Wait until postgresql is responding to queries before proceeding
