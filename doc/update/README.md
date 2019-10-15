@@ -260,10 +260,11 @@ If you meet all the requirements above, follow these instructions in order. Ther
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `unicorn` and `sidekiq` services
+1. Hot reload `unicorn`, `puma` and `sidekiq` services
 
    ```sh
    sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl usr2 puma
    sudo gitlab-ctl hup sidekiq
    ```
 
@@ -335,12 +336,13 @@ node throughout the process.
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run Unicorn or sidekiq**
+**For nodes that run Unicorn, Puma or Sidekiq**
 
-- Hot reload `unicorn` and `sidekiq` services
+- Hot reload `unicorn`, `puma` and `sidekiq` services
 
   ```sh
   sudo gitlab-ctl hup unicorn
+  sudo gitlab-ctl usr2 puma
   sudo gitlab-ctl hup sidekiq
   ```
 
@@ -389,10 +391,11 @@ point, you can check out the
 [Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
 to resolve this.
 
-1. Hot reload `unicorn` and `sidekiq` services
+1. Hot reload `unicorn`, `puma` and `sidekiq` services
 
    ```sh
    sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl usr2 puma
    sudo gitlab-ctl hup sidekiq
    ```
 
@@ -422,10 +425,11 @@ On each **secondary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Hot reload `unicorn`, `sidekiq` and restart `geo-logcursor` services
+1. Hot reload `unicorn`, `puma`, `sidekiq` and restart `geo-logcursor` services
 
    ```sh
    sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl usr2 puma
    sudo gitlab-ctl hup sidekiq
    sudo gitlab-ctl restart geo-logcursor
    ```
