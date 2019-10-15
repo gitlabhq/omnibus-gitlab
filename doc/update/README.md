@@ -382,6 +382,13 @@ Log in to your **primary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
+NOTE: **Note:**
+After this step you can get an outdated FDW remote schema on your
+secondary nodes. While it is not important to worry about at this
+point, you can check out the
+[Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
+to resolve this.
+
 1. Hot reload `unicorn` and `sidekiq` services
 
    ```sh
