@@ -655,6 +655,13 @@ production: &base
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
+    # Web exporter is webserver built in to Unicorn/Puma to expose Prometheus metrics
+    web_exporter:
+      enabled: <%= @puma['enable'] ? @puma['exporter_enabled'] : @unicorn['exporter_enabled']  %>
+      address: <%= @puma['enable'] ? @puma['exporter_address'] : @unicorn['exporter_address']  %>
+      port: <%= @puma['enable'] ? @puma['exporter_port'] : @unicorn['exporter_port']  %>
+      blackout_seconds: <%= @puma['enable'] ? @puma['exporter_blackout_seconds'] : @unicorn['exporter_blackout_seconds']  %>
+
   ## Prometheus settings
   # Do not modify these settings here. They should be modified in /etc/gitlab/gitlab.rb
   # if you installed GitLab via Omnibus.

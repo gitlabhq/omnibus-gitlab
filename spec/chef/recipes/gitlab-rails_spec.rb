@@ -1442,6 +1442,31 @@ describe 'gitlab::gitlab-rails' do
           )
         end
       end
+
+      context 'Web exporter settings' do
+        it 'disabled by default' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['monitoring']['web_exporter']).to include('enabled' => false)
+          }
+        end
+
+        it 'enabled for puma' do
+          stub_gitlab_rb(puma: { enable: true, exporter_enabled: true })
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['monitoring']['web_exporter']).to include('enabled' => true)
+          }
+        end
+
+        it 'enabled for unicorn' do
+          stub_gitlab_rb(unicorn: { enable: true, exporter_enabled: true })
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['monitoring']['web_exporter']).to include('enabled' => true)
+          }
+        end
+      end
     end
 
     context 'Gitaly settings' do
