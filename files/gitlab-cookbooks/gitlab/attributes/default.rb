@@ -410,6 +410,10 @@ default['gitlab']['unicorn']['worker_timeout'] = 60
 default['gitlab']['unicorn']['worker_memory_limit_min'] = "400 * 1 << 20"
 default['gitlab']['unicorn']['worker_memory_limit_max'] = "650 * 1 << 20"
 default['gitlab']['unicorn']['worker_processes'] = nil
+default['gitlab']['unicorn']['exporter_enabled'] = false
+default['gitlab']['unicorn']['exporter_address'] = "127.0.0.1"
+default['gitlab']['unicorn']['exporter_port'] = 8083
+default['gitlab']['unicorn']['exporter_blackout_seconds'] = 10
 
 ####
 # Puma
@@ -429,6 +433,10 @@ default['gitlab']['puma']['per_worker_max_memory_mb'] = nil
 default['gitlab']['puma']['worker_processes'] = 2
 default['gitlab']['puma']['min_threads'] = 1
 default['gitlab']['puma']['max_threads'] = 16
+default['gitlab']['puma']['exporter_enabled'] = false
+default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
+default['gitlab']['puma']['exporter_port'] = 8083
+default['gitlab']['puma']['exporter_blackout_seconds'] = 10
 
 ####
 # Sidekiq

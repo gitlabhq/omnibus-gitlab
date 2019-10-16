@@ -753,6 +753,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # unicorn['worker_memory_limit_min'] = "400 * 1 << 20"
 # unicorn['worker_memory_limit_max'] = "650 * 1 << 20"
 
+# unicorn['exporter_enabled'] = false
+# unicorn['exporter_address'] = "127.0.0.1"
+# unicorn['exporter_port'] = 8083
+# unicorn['exporter_blackout_seconds'] = 10
+
 ################################################################################
 ## GitLab Puma
 ##! Tweak puma settings. You should only use Unicorn or Puma, not both.
@@ -779,6 +784,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### **Only change these settings if you understand well what they mean**
 ###! Docs: https://github.com/schneems/puma_worker_killer
 # puma['per_worker_max_memory_mb'] = 850
+
+# puma['exporter_enabled'] = false
+# puma['exporter_address'] = "127.0.0.1"
+# puma['exporter_port'] = 8083
+# puma['exporter_blackout_seconds'] = 10
 
 ################################################################################
 ## GitLab Sidekiq
