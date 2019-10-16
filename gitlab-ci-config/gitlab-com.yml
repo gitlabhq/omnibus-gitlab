@@ -128,7 +128,8 @@ docs-lint:
   stage: check
   cache: {}
   dependencies: []
-  before_script: []
+  before_script:
+    - exit 1
   <<: *dedicated-runner
   script:
     # Lint Markdown
