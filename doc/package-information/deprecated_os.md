@@ -35,6 +35,7 @@ The following lists the currently supported OSs and their possible EOL dates.
 | Debian 8         | GitLab CE / GitLab EE 7.10.1   | June 2020     | <https://wiki.debian.org/DebianReleases#Production_Releases> |
 | Debian 9         | GitLab CE / GitLab EE 9.3.0    | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
 | OpenSUSE 15.0    | GitLab CE / GitLab EE 12.1.0   | Nov 2019      | <https://en.opensuse.org/Lifetime>                           |
+| OpenSUSE 15.1    | GitLab CE / GitLab EE 12.4.0   | Nov 2020      | <https://en.opensuse.org/Lifetime>                           |
 | SLES 12          | GitLab EE 9.0.0                | Oct 2027      | <https://www.suse.com/lifecycle/>                            |
 | Ubuntu 16.04     | GitLab CE / GitLab EE 8.7.1    | April 2021    | <https://wiki.ubuntu.com/Releases>                           |
 | Ubuntu 18.04     | GitLab CE / GitLab EE 10.7.0   | April 2023    | <https://wiki.ubuntu.com/Releases>                           |
