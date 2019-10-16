@@ -65,6 +65,7 @@ variables:
       - ${OUTPUT_DIR}
 
 before_script:
+  - exit 1
   - export CE_ONLY=(Raspberry)
   - export EE_ONLY=(SLES HA-Validate)
   - for job in "${CE_ONLY[@]}"; do
