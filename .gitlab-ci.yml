@@ -112,6 +112,7 @@ fetch-assets:
   extends: .docker_job
   stage: prepare-assets
   script:
+    - exit 1
     - export VERSION=${GITLAB_REF_SLUG-$(bundle exec rake build:version)}
     - support/fetch_assets "${VERSION}"
   artifacts:
