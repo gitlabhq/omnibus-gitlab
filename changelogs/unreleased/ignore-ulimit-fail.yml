@@ -1,0 +1,5 @@
+---
+title: Don't fail gitaly startup if setting ulimit fails
+merge_request: 3684
+author:
+type: fixed
