@@ -294,6 +294,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   in yaml format and the spaces must be retained. Using tabs will not work.**
 
 # gitlab_rails['ldap_enabled'] = false
+# gitlab_rails['prevent_ldap_sign_in'] = false
 
 ###! **remember to close this block with 'EOS' below**
 # gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'

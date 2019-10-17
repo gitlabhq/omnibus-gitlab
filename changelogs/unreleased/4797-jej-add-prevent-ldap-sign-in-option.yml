@@ -1,0 +1,5 @@
+---
+title: Add prevent_ldap_sign_in option to gitlab.rb
+merge_request: 3692
+author:
+type: other

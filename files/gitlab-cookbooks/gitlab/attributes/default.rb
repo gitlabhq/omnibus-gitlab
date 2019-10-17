@@ -203,6 +203,7 @@ default['gitlab']['gitlab-rails']['dependency_proxy_object_store_proxy_download'
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_remote_directory'] = 'dependency_proxy'
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
+default['gitlab']['gitlab-rails']['prevent_ldap_sign_in'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
 default['gitlab']['gitlab-rails']['pages_enabled'] = false
 default['gitlab']['gitlab-rails']['pages_host'] = nil
