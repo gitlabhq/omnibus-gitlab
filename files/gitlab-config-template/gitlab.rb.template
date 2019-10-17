@@ -1217,6 +1217,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! You can disable built in logrotate feature.
 ################################################################################
 # logrotate['enable'] = true
+# logrotate['log_directory'] = "/var/log/gitlab/logrotate"
 
 ################################################################################
 ## Users and groups accounts
