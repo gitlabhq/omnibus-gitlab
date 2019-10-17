@@ -1,0 +1,5 @@
+---
+title: Mark openSUSE 15.0 to be warned about during reconfigure
+merge_request: 3687
+author:
+type: deprecated

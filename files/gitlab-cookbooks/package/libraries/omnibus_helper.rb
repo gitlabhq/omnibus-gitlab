@@ -74,7 +74,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def self.deprecated_os_list
     # This hash follows the format `'ohai-slug' => 'EOL version'
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
-    {}
+    { 'opensuseleap-15.0' => 'GitLab 12.6' }
   end
 
   def self.is_deprecated_os?
