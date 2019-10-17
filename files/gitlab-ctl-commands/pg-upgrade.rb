@@ -191,11 +191,7 @@ end
 def common_post_upgrade(disable_maintenance = true)
   cleanup_data_dir
 
-  log 'Upgrade is complete, doing post configuration steps'
-  log 'Running reconfigure to re-generate PG configuration'
-  run_reconfigure
-
-  start_database
+  configure_postgresql
 
   log 'Running reconfigure to re-generate any dependent service configuration'
   run_reconfigure
@@ -213,6 +209,8 @@ def common_post_upgrade(disable_maintenance = true)
 end
 
 def ha_secondary_upgrade(options)
+  promote_database
+  restart_database
   if options[:skip_unregister]
     log "Not attempting to unregister secondary node due to --skip-unregister flag"
   else
@@ -226,37 +224,83 @@ end
 
 def general_upgrade
   common_pre_upgrade
-  @db_worker.run_pg_upgrade
+  begin
+    @db_worker.run_pg_upgrade
+  rescue GitlabCtl::Errors::ExecutionError
+    die "Error running pg_upgrade, please check logs"
+  end
   common_post_upgrade
 end
 
-def start_database
-  GitlabCtl::Util.progress_message('Starting the database') do
-    run_sv_command_for_service('start', 'postgresql')
+def configure_postgresql
+  log 'Configuring PostgreSQL'
+  status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-config.json')
+  $stdout.puts status.stdout
+  if status.error?
+    $stderr.puts '===STDERR==='
+    $stderr.puts status.stderr
+    $stderr.puts '======'
+    die 'Error updating PostgreSQL configuration. Please check the output'
   end
+
+  restart_database
+end
+
+def start_database
+  sv_progress('start', 'postgresql')
 end
 
 def stop_database
-  GitlabCtl::Util.progress_message('Stopping the database') do
-    run_sv_command_for_service('stop', 'postgresql')
+  sv_progress('stop', 'postgresql')
+end
+
+def restart_database
+  sv_progress('restart', 'postgresql')
+end
+
+def sv_progress(action, service)
+  GitlabCtl::Util.progress_message("Running #{action} on #{service}") do
+    run_sv_command_for_service(action, service)
   end
+end
+
+def promote_database
+  log 'Promoting the database'
+  @db_worker.run_pg_command(
+    "#{base_path}/embedded/bin/pg_ctl -D #{@db_worker.data_dir} promote"
+  )
 end
 
 def geo_secondary_upgrade(tmp_dir, timeout)
   # Secondary nodes have a replica db under /var/opt/gitlab/postgresql that needs
   # the bin files updated and the geo tracking db under /var/opt/gitlab/geo-postgresl that needs data updated
-  node = GitlabCtl::Util.get_node_attributes(base_path)
-  data_dir = node['gitlab']['geo-postgresql']['data_dir']
+  data_dir = @attributes['gitlab']['geo-postgresql']['data_dir']
   # Run the first time to link the primary postgresql instance
   log('Upgrading the postgresql database')
+  begin
+    promote_database
+  rescue GitlabCtl::Errors::ExecutionError
+    die "There was an error promoting the database. Please check the logs"
+  end
+
+  # Restart the database after promotion, and wait for it to be ready
+  restart_database
+  GitlabCtl::PostgreSQL.wait_for_postgresql(600)
+
   common_pre_upgrade
   common_post_upgrade(false)
   # Update the location to handle the geo-postgresql instance
   log('Upgrading the geo-postgresql database')
   @db_worker.data_dir = data_dir
   @db_worker.tmp_data_dir = data_dir if @db_worker.tmp_dir.nil?
+  @db_worker.psql_command = 'gitlab-geo-psql'
   common_pre_upgrade
-  @db_worker.run_pg_upgrade
+  sv_progress('stop', 'geo-postgresql')
+  begin
+    @db_worker.run_pg_upgrade
+  rescue GitlabCtl::Errors::ExecutionError
+    die "Error running pg_upgrade on secondary, please check logs"
+  end
   common_post_upgrade
 end
 
@@ -266,10 +310,11 @@ def get_locale_encoding
     collate = @db_worker.fetch_lc_collate
     encoding = @db_worker.fetch_server_encoding
   rescue GitlabCtl::Errors::ExecutionError => e
-    log 'There wasn an error fetching locale and encoding information from the database'
+    log 'There was an error fetching locale and encoding information from the database'
     log 'Please ensure the database is running and functional before running pg-upgrade'
     log "STDOUT: #{e.stdout}"
     log "STDERR: #{e.stderr}"
+    die 'Please check error logs'
   end
 
   [locale, collate, encoding]
@@ -290,7 +335,7 @@ def create_temp_data_dir
       true
     end
   end
-    GitlabCtl::PgUpgrade.die 'Please check the output'
+    die 'Please check the output'
   end
 end
 
@@ -298,7 +343,7 @@ def initialize_new_db(locale, collate, encoding)
   unless GitlabCtl::Util.progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
-        "#{base_path}/embedded/bin/initdb " \
+        "#{@db_worker.upgrade_version_path}/bin/initdb " \
         "-D #{@db_worker.tmp_data_dir}.#{upgrade_version.major} " \
         "--locale #{locale} " \
         "--encoding #{encoding} " \
@@ -309,10 +354,10 @@ def initialize_new_db(locale, collate, encoding)
       log "Error initializing database for #{upgrade_version}"
       log "STDOUT: #{e.stdout}"
       log "STDERR: #{e.stderr}"
-      GitlabCtl::PgUpgrade.die 'Please check the output and try again'
+      die 'Please check the output and try again'
     end
   end
-    GitlabCtl::PgUpgrade.die 'Error initializing new database'
+    die 'Error initializing new database'
   end
 end
 
@@ -322,7 +367,7 @@ def cleanup_data_dir
       "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version.major}"
     )
   end
-    GitlabCtl::PgUpgrade.die 'Error moving data for older version, '
+    die 'Error moving data for older version, '
   end
 
   unless GitlabCtl::Util.progress_message('Rename the new data directory') do
@@ -330,7 +375,7 @@ def cleanup_data_dir
       "mv #{@db_worker.tmp_data_dir}.#{upgrade_version.major} #{@db_worker.data_dir}"
     )
   end
-    GitlabCtl::PgUpgrade.die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version.major} to #{@db_worker.data_dir}"
+    die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version.major} to #{@db_worker.data_dir}"
   end
 end
 
@@ -338,7 +383,7 @@ def run_reconfigure
   unless GitlabCtl::Util.progress_message('Running reconfigure') do
     run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
   end
-    GitlabCtl::PgUpgrade.die 'Something went wrong during final reconfiguration, please check the output'
+    die 'Something went wrong during final reconfiguration, please check the output'
   end
 end
 
@@ -402,7 +447,7 @@ def maintenance_mode(command)
   # In order for the deploy page to work, we need nginx, unicorn, redis, and
   # gitlab-workhorse running
   # We'll manage postgresql during the upgrade process
-  omit_services = %w(postgresql nginx unicorn redis gitlab-workhorse)
+  omit_services = %w(postgresql geo-postgresql nginx unicorn redis gitlab-workhorse)
   if command.eql?('enable')
     dp_cmd = 'up'
     sv_cmd = 'stop'
@@ -420,6 +465,15 @@ def maintenance_mode(command)
       run_sv_command_for_service(sv_cmd, svc)
     end
   end
+end
+
+def die(message)
+  $stderr.puts '== Fatal error =='
+  $stderr.puts message
+  revert
+  $stderr.puts "== Reverted to #{default_version}. Please check output for what went wrong =="
+  maintenance_mode('disable')
+  exit 1
 end
 
 def goodbye_message

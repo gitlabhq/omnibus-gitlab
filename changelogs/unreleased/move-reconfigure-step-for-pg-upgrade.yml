@@ -1,0 +1,5 @@
+---
+title: Fix pg-upgrade handling of secondary database nodes
+merge_request: 3631
+author:
+type: fixed

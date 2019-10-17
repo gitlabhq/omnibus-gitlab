@@ -19,10 +19,6 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 gitlab_geo_helper = GitlabGeoHelper.new(node)
 
-node.default['gitlab']['geo-postgresql']['unix_socket_directory'] ||= node['gitlab']['geo-postgresql']['dir']
-node.default['gitlab']['geo-postgresql']['data_dir'] ||= "#{node['gitlab']['geo-postgresql']['dir']}/data"
-node.default['gitlab']['geo-postgresql']['home'] ||= node['gitlab']['geo-postgresql']['dir']
-
 postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 

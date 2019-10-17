@@ -59,6 +59,28 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_upgrade_and_exit
   end
 
+  if File.exist?('/etc/gitlab/disable-postgresql-upgrade')
+    log ''
+    log '==='
+    log 'Skipping automatic PostgreSQL upgrade'
+    log 'Please see https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+    log 'for details on how to manually upgrade the PostgreSQL server'
+    log '==='
+    log ''
+  else
+    unless GitlabCtl::Util.progress_message('Ensuring PostgreSQL is updated') do
+      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
+      status = run_command(command.join(' '))
+      status.success?
+    end
+      log 'Error ensuring PostgreSQL is updated. Please check the logs'
+      Kernel.exit 1
+    end
+  end
+
+  # Refresh service_statuses to ensure we pick up any new services
+  service_statuses = `#{base_path}/bin/gitlab-ctl status`
+
   log 'Shutting down all GitLab services except those needed for migrations'
   MIGRATION_SERVICES = %w(postgresql redis geo-postgresql gitaly praefect).freeze
   (get_all_services - MIGRATION_SERVICES).each do |sv_name|
@@ -116,27 +138,8 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   local_mode_cache_path = "#{base_path}/embedded/cookbooks/local-mode-cache"
   run_command("rm -rf #{local_mode_cache_path}")
 
-  log 'Reconfiguring GitLab to apply migrations'
-  reconfigure(false) # sending 'false' means "don't quit afterwards"
-
-  if File.exist?('/etc/gitlab/disable-postgresql-upgrade')
-    log ''
-    log '==='
-    log 'Skipping automatic PostgreSQL upgrade'
-    log 'Please see https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
-    log 'for details on how to manually upgrade the PostgreSQL server'
-    log '==='
-    log ''
-  else
-    unless GitlabCtl::Util.progress_message('Ensuring PostgreSQL is updated') do
-      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
-      status = run_command(command.join(' '))
-      status.success?
-    end
-      log 'Error ensuring PostgreSQL is updated. Please check the logs'
-      Kernel.exit 1
-    end
-  end
+  log 'Reconfigure GitLab to apply migrations'
+  reconfigure(false) # sending 'false' mans "don't quit afterwards"
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
