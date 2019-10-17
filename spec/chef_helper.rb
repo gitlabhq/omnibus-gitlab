@@ -78,6 +78,9 @@ RSpec.configure do |config|
       Gitlab[k] = deep_clone(v)
     end
 
+    # BUG: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4780
+    Gitlab['geo_postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
+
     # Clear services list before each test
     Services.reset_list
   end

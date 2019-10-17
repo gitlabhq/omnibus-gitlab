@@ -40,7 +40,7 @@ build do
     delete "#{install_dir}/embedded/cookbooks/gitlab-ee"
   end
 
-  %w(dna postgresql-bin).each do |config|
+  %w(dna postgresql-bin postgresql-config).each do |config|
     erb dest: "#{install_dir}/embedded/cookbooks/#{config}.json",
         source: "#{config}.json.erb",
         mode: 0644,

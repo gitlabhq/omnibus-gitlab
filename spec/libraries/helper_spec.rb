@@ -1,11 +1,11 @@
 require 'chef_helper'
 
-shared_examples 'Postgres helpers' do |service_name, service_cmd|
+shared_examples 'Postgres helpers' do |service_name, service_cmd, edition|
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
       node.normal['gitlab'][service_name]['data_dir'] = '/fakedir'
       node.normal['package']['install-dir'] = '/fake/install/dir'
-    end.converge('gitlab::config')
+    end.converge("#{edition}::config")
   end
 
   let(:node) { chef_run.node }
@@ -66,11 +66,20 @@ shared_examples 'Postgres helpers' do |service_name, service_cmd|
 end
 
 describe PgHelper do
-  include_examples 'Postgres helpers', 'postgresql', 'gitlab-psql'
+  include_examples 'Postgres helpers', 'postgresql', 'gitlab-psql', 'gitlab'
 end
 
 describe GeoPgHelper do
-  include_examples 'Postgres helpers', 'geo-postgresql', 'gitlab-geo-psql'
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      'geo_postgresql' => {
+        'data_dir' => '/fakedir'
+      }
+    )
+  end
+
+  include_examples 'Postgres helpers', 'geo-postgresql', 'gitlab-geo-psql', 'gitlab-ee'
 end
 
 describe OmnibusHelper do

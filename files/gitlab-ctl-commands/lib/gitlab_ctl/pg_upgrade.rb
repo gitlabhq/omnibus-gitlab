@@ -12,16 +12,17 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version, :psql_command
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, default_version, upgrade_version, tmp_dir = nil, timeout = nil)
+    def initialize(base_path, data_path, default_version, upgrade_version, tmp_dir = nil, timeout = nil, psql_command = nil)
       @base_path = base_path
       @data_path = data_path
       @tmp_dir = tmp_dir
       @timeout = timeout
       @default_version = default_version
       @upgrade_version = upgrade_version
+      @psql_command ||= "gitlab-psql"
     end
 
     def default_data_dir
@@ -58,7 +59,7 @@ module GitlabCtl
 
     def run_query(query)
       GitlabCtl::Util.get_command_output(
-        "#{@base_path}/bin/gitlab-psql -d postgres -c '#{query}' -q -t",
+        "#{@psql_command} -d postgres -c '#{query}' -q -t",
         nil, # user
         @timeout
       ).strip
@@ -92,15 +93,27 @@ module GitlabCtl
       @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
     end
 
+    def base_postgresql_path
+      "#{base_path}/embedded/postgresql"
+    end
+
+    def upgrade_version_path
+      "#{base_postgresql_path}/#{upgrade_version.major}"
+    end
+
+    def default_version_path
+      "#{base_postgresql_path}/#{default_version.major}"
+    end
+
     def run_pg_upgrade
       unless GitlabCtl::Util.progress_message('Upgrading the data') do
         begin
           run_pg_command(
-            "#{base_path}/embedded/bin/pg_upgrade " \
-            "-b #{base_path}/embedded/postgresql/#{default_version.major}/bin " \
+            "#{upgrade_version_path}/bin/pg_upgrade " \
+            "-b #{default_version_path}/bin " \
             "--old-datadir=#{data_dir}  " \
             "--new-datadir=#{tmp_data_dir}.#{upgrade_version.major}  " \
-            "-B #{base_path}/embedded/bin"
+            "-B #{upgrade_version_path}/bin"
           )
         rescue GitlabCtl::Errors::ExecutionError => e
           $stderr.puts "Error upgrading the data to version #{upgrade_version}"
@@ -109,7 +122,7 @@ module GitlabCtl
           false
         end
       end
-        GitlabCtl::PgUpgrade.die 'Error upgrading the database'
+        raise GitlabCtl::Errors::ExecutionError 'Error upgrading the database'
       end
     end
 
@@ -142,15 +155,6 @@ module GitlabCtl
         end.parse!(args)
 
         options
-      end
-
-      def die(message)
-        $stderr.puts '== Fatal error =='
-        $stderr.puts message
-        revert
-        $stderr.puts "== Reverted to #{default_version}. Please check output for what went wrong =="
-        maintenance_mode('disable')
-        exit 1
       end
     end
   end

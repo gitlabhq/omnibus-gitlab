@@ -244,12 +244,22 @@ class Repmgr
       query = "SELECT name FROM repmgr_gitlab_cluster.repl_nodes WHERE type='master' AND active != 'f'"
       host = attributes['postgresql']['unix_socket_directory']
       port = attributes['postgresql']['port']
-      master = Repmgr::Base.execute_psql(database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul')
-      show_count = Repmgr::Base.cmd(
-        %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),
-        Etc.getpwuid.name
-      ).chomp
-      if master.length != 1 || show_count != '1'
+      begin
+        master = Repmgr::Base.execute_psql(
+          database: 'gitlab_repmgr', query: query, host: host, port: port, user: 'gitlab-consul'
+        )
+        show_count = Repmgr::Base.cmd(
+          %(gitlab-ctl repmgr cluster show | awk 'BEGIN { count=0 } $2=="master" {count+=1} END { print count }'),
+          Etc.getpwuid.name
+        ).chomp
+      rescue Mixlib::ShellOut::ShellCommandFailed => e
+        # A functioning primary node will not be in recovery mode
+        # A functioning standby node will be in recovery mode
+        return false if e.message.match?(/the database system is in recovery mode/)
+
+        raise
+      end
+      if master.length != 1 || show_count > '1'
         node_type = master.include?(hostname) ? "MasterNode" : "StandbyNode"
         raise MasterError, "#{node_type}: Multiple masters found: #{master} #{show_count}"
       end
