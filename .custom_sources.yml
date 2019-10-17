@@ -26,8 +26,8 @@ omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
   alternative: "https://gitlab.com/gitlab-org/omnibus.git"
 registry:
-  remote: "git@dev.gitlab.org:omnibus-mirror/distribution.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/distribution.git"
+  remote: "git@dev.gitlab.org:gitlab/container-registry.git"
+  alternative: "https://gitlab.com/gitlab-org/container-registry.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/rb-readline.git"
