@@ -1326,16 +1326,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Specifies the maximum SSL/TLS version ("ssl3", "tls1.0", "tls1.1" or "tls1.2")
 # gitlab_pages['tls_max_version'] = "tls1.2"
 
-##! Configure the pages admin API
-# gitlab_pages['admin_secret_token'] = 'custom secret'
-# gitlab_pages['admin_https_listener'] = '0.0.0.0:5678'
-# gitlab_pages['admin_https_cert'] = '/etc/gitlab/pages-admin.crt'
-# gitlab_pages['admin_https_key'] = '/etc/gitlab/pages-admin.key'
-
-##! Client side configuration for gitlab-pages admin API, in case pages runs on a different host
-# gitlab_rails['pages_admin_address'] = 'pages.gitlab.example.com:5678'
-# gitlab_rails['pages_admin_certificate'] = '/etc/gitlab/pages-admin.crt'
-
 ##! Pages access control
 # gitlab_pages['access_control'] = false
 # gitlab_pages['gitlab_id'] = nil # Automatically generated if not present
