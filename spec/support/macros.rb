@@ -50,6 +50,14 @@ module GitlabSpec
     def stub_is_ee(value)
       stub_is_ee_version(value)
       stub_is_ee_env(value)
+      # Auto-deploys can not be non-EE. So, stubbing it to false for CE builds.
+      # However, since not all EE builds need to be auto-deploys, stubbing it
+      # to true needs to be done in a case-by-case manner.
+      stub_is_auto_deploy(value) unless value
+    end
+
+    def stub_is_auto_deploy(value)
+      allow(Build::Check).to receive(:is_auto_deploy?).and_return(value)
     end
 
     def converge_config(*recipes, is_ee: false)

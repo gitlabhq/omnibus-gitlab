@@ -85,6 +85,7 @@ describe 'qa', type: :rake do
       end
 
       it 'pushes staging images correctly' do
+        stub_is_auto_deploy(false)
         expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
 
         Rake::Task['qa:push:staging'].invoke
