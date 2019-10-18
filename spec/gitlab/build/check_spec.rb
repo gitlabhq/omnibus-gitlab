@@ -139,8 +139,11 @@ describe Build::Check do
       allow(Build::Info).to receive(:current_git_tag).and_return('11.10.12345+5159f2949cb.59c9fa631')
       expect(described_class.is_auto_deploy?).to be_truthy
     end
+
     it 'returns false if it does not look like an auto-deploy tag' do
       # This not be the case if ag is eg. 9.3.0+ce.0
+      allow(Gitlab::Util).to receive(:get_env).with('CI_COMMIT_REF_NAME').and_return('a-random-branch')
+
       allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
       expect(described_class.is_auto_deploy?).to be_falsey
     end

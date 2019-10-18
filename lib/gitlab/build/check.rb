@@ -25,7 +25,7 @@ module Build
       end
 
       def is_auto_deploy_branch?
-        Gitlab::Util.get_env('CI_COMMIT_REF_NAME').include?('-auto-deploy')
+        Gitlab::Util.get_env('CI_COMMIT_REF_NAME').include?('-auto-deploy-')
       end
 
       def is_patch_release?
