@@ -38,7 +38,7 @@ This section describes the commonly used configuration settings. Check
 - [Enabling notification emails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
 - [Enabling replying via email](https://docs.gitlab.com/ce/administration/reply_by_email.html#set-it-up)
   - [Installing and configuring postfix](https://docs.gitlab.com/ce/administration/reply_by_email_postfix_setup.html)
-- [Enabling container registry on GitLab](https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-domain-configuration)
+- [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration)
   - You will require SSL certificates for the domain used for container registry
 - [Enabling GitLab Pages](https://docs.gitlab.com/ce/administration/pages/)
   - If you want HTTPS enabled, you will have to get wildcard certificates
