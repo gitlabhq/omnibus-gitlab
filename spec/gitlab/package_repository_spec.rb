@@ -91,6 +91,7 @@ describe PackageRepository do
 
       context 'when CE' do
         before do
+          stub_is_ee(false)
           allow(File).to receive(:read).with('VERSION').and_return("1.2.3\n")
         end
 
