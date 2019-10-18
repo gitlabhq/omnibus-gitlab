@@ -399,7 +399,7 @@ You can fix this by setting up a `mattermost-cli` [shell alias](#mattermost-comm
 
 For help and support around your GitLab Mattermost deployment please see:
 
-- [Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-trouble-shooting-forum/150/1) for configuration questions and issues.
+- [Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150) for configuration questions and issues.
 - [Troubleshooting FAQ](https://docs.mattermost.com/install/troubleshooting.html).
 - [Mattermost GitLab Issues Support Handbook](https://docs.mattermost.com/process/support.html?highlight=omnibus#gitlab-issues).
 - [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps.

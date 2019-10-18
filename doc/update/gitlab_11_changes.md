@@ -6,7 +6,7 @@ Beginning with GitLab 12.0, TLS v1.1 will be disabled by default to improve secu
 
 This mitigates numerous issues including, but not limited to, Heartbleed and makes
 GitLab compliant out of the box with the PCI DSS 3.1 standard.
-[Learn more about why TLS v1.1 is being deprecated in our blog.](https://about.gitlab.com/2018/10/15/gitlab-to-deprecate-older-tls/)
+[Learn more about why TLS v1.1 is being deprecated in our blog.](https://about.gitlab.com/blog/2018/10/15/gitlab-to-deprecate-older-tls/)
 
 ## Clients supporting TLS v1.2
 
