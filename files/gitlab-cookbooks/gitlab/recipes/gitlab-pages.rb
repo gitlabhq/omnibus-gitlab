@@ -58,6 +58,15 @@ file File.join(working_dir, "admin.secret") do
   action :delete
 end
 
+template File.join(working_dir, ".gitlab_pages_secret") do
+  source "secret_token.erb"
+  owner 'root'
+  group account_helper.gitlab_group
+  mode "0640"
+  variables(secret_token: node['gitlab']['gitlab-pages']['api_secret_key'])
+  notifies :restart, "service[gitlab-pages]"
+end
+
 runit_service 'gitlab-pages' do
   options({
     log_directory: log_directory

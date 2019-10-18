@@ -56,7 +56,7 @@ class SecretsHelper
     end
   end
 
-  def self.gather_gitlab_secrets
+  def self.gather_gitlab_secrets # rubocop:disable Metrics/AbcSize
     secret_tokens = {
       'gitlab_workhorse' => {
         'secret_token' => Gitlab['gitlab_workhorse']['secret_token'],
@@ -73,7 +73,8 @@ class SecretsHelper
       'gitlab_pages' => {
         'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],
         'gitlab_id' => Gitlab['gitlab_pages']['gitlab_id'],
-        'auth_secret' => Gitlab['gitlab_pages']['auth_secret']
+        'auth_secret' => Gitlab['gitlab_pages']['auth_secret'],
+        'api_secret_key' => Gitlab['gitlab_pages']['api_secret_key']
       },
       'grafana' => {
         'secret_key' => Gitlab['grafana']['secret_key'],

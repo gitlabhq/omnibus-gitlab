@@ -70,6 +70,8 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     \
     -gitlab-server="<%= node['gitlab']['gitlab-pages']['gitlab_server'] %>" \
     \
+    -api-secret-key="<%= node['gitlab']['gitlab-pages']['dir'] %>/.gitlab_pages_secret" \
+    \
     <% if node['gitlab']['gitlab-pages']['access_control'] %>
     -auth-client-id=<%= node['gitlab']['gitlab-pages']['gitlab_id'] %> \
     -auth-client-secret=<%= node['gitlab']['gitlab-pages']['gitlab_secret'] %> \
