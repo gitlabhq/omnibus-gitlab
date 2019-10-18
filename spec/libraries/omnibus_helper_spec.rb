@@ -154,4 +154,45 @@ describe OmnibusHelper do
       OmnibusHelper.is_deprecated_os?
     end
   end
+
+  describe '#is_deprecated_praefect_config?' do
+    before do
+      chef_run.node.normal['praefect'] = config
+    end
+
+    context 'deprecated config' do
+      let(:config) do
+        {
+          storage_nodes: [
+            { storage: 'praefect1', address: 'tcp://node1.internal' },
+            { storage: 'praefect2', address: 'tcp://node2.internal' }
+          ]
+        }
+      end
+
+      it 'detects deprecated config correctly' do
+        expect(LoggingHelper).to receive(:deprecation)
+          .with(/Specifying Praefect storage nodes as an array is deprecated/)
+
+        subject.is_deprecated_praefect_config?
+      end
+    end
+
+    context 'valid config' do
+      let(:config) do
+        {
+          storage_nodes: {
+            'praefect1' => { address: 'tcp://node1.internal' },
+            'praefect2' => { address: 'tcp://node2.internal' }
+          }
+        }
+      end
+
+      it 'does not detect a valid config as deprecated' do
+        expect(LoggingHelper).not_to receive(:deprecation)
+
+        subject.is_deprecated_praefect_config?
+      end
+    end
+  end
 end

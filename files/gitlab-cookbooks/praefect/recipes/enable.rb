@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['praefect']['dir']
 log_directory = node['praefect']['log_directory']
@@ -33,6 +34,8 @@ directory log_directory do
   mode '0700'
   recursive true
 end
+
+omnibus_helper.is_deprecated_praefect_config?
 
 template "Create praefect config.toml" do
   path config_path
