@@ -25,6 +25,7 @@ describe Build::Check do
 
         it 'when env variable is not set' do
           stub_is_ee_version(false)
+          stub_is_auto_deploy(false)
           expect(described_class.is_ee?).to be_falsy
         end
       end
@@ -37,6 +38,7 @@ describe Build::Check do
 
         it 'when GITLAB_VERSION does not end with -ee' do
           stub_env_var('GITLAB_VERSION', 'foo')
+          stub_is_auto_deploy(false)
           expect(described_class.is_ee?).to be_falsy
         end
 
