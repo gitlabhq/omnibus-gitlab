@@ -17,7 +17,15 @@ module Build
       end
 
       def is_auto_deploy?
+        is_auto_deploy_tag? || is_auto_deploy_branch?
+      end
+
+      def is_auto_deploy_tag?
         AUTO_DEPLOY_TAG_REGEX.match?(Build::Info.current_git_tag)
+      end
+
+      def is_auto_deploy_branch?
+        Gitlab::Util.get_env('CI_COMMIT_REF_NAME').include?('-auto-deploy-')
       end
 
       def is_patch_release?
