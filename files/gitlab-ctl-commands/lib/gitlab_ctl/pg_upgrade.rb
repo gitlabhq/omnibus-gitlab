@@ -26,7 +26,14 @@ module GitlabCtl
     end
 
     def default_data_dir
-      "#{@data_path}/postgresql/data"
+      # We still need to support legacy attributes starting with `gitlab`, as
+      # they might exists before running configure on an existing installation
+      pg_base_dir = node_attributes.dig(:gitlab, :postgresql, :dir) || node_attributes.dig(:postgresql, :dir) || File.join(@data_path, "postgresql")
+
+      # If an explicit data_dir exists, that trumps everything, at least until
+      # 13.0 when it will be removed. If there isn't one for any reason, we
+      # default to computing the data_dir from the info we have.
+      node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
     end
 
     def data_dir
