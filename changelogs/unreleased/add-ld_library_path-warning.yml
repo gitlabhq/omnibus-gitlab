@@ -1,5 +1,0 @@
----
-title: Warn when LD_LIBRARY_PATH env var is set
-merge_request: 3652
-author:
-type: fixed
