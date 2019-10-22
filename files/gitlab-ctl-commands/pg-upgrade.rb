@@ -389,7 +389,7 @@ end
 
 def analyze_cluster
   analyze_script = File.join(
-    File.dirname(@db_worker.default_data_dir),
+    File.dirname(@db_worker.data_dir),
     'analyze_new_cluster.sh'
   )
   begin

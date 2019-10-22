@@ -58,7 +58,7 @@ describe GitlabCtl::PgUpgrade do
   end
 
   context 'when an explicit data directory is specified' do
-    it 'should use it as default_data_dir' do
+    it 'should use it as data_dir' do
       allow(GitlabCtl::Util).to receive(:parse_json_file).and_return(
         {
           'default' => {
@@ -71,12 +71,12 @@ describe GitlabCtl::PgUpgrade do
         })
       allow(File).to receive(:realpath).with('randomdir').and_return('randomdir')
 
-      expect(@dbw.default_data_dir).to eq('randomdir')
+      expect(@dbw.data_dir).to eq('randomdir')
     end
   end
 
   context 'when an explicit data directory is not specified' do
-    it 'should use find default_data_dir using dir/data' do
+    it 'should use find data_dir using dir/data' do
       allow(GitlabCtl::Util).to receive(:parse_json_file).and_return(
         {
           'default' => {
@@ -89,7 +89,7 @@ describe GitlabCtl::PgUpgrade do
         })
       allow(File).to receive(:realpath).with('parentdir/data').and_return('parentdir/data')
 
-      expect(@dbw.default_data_dir).to eq('parentdir/data')
+      expect(@dbw.data_dir).to eq('parentdir/data')
     end
   end
 end
