@@ -1,0 +1,5 @@
+---
+title: Build from Docker Distribution fork and update to v2.7.4-gitlab
+merge_request: 3686
+author:
+type: fixed

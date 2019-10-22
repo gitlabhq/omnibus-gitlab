@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'registry'
-version = Gitlab::Version.new('registry', 'v2.7.1')
+version = Gitlab::Version.new('registry', 'v2.7.4-gitlab')
 
 default_version version.print(false)
 
@@ -32,18 +32,12 @@ relative_path 'src/github.com/docker/distribution'
 
 build do
   registry_source_dir = "#{Omnibus::Config.source_dir}/registry"
-  cwd = "#{registry_source_dir}/src/github.com/docker/distribution"
+  cwd = "#{registry_source_dir}/#{relative_path}"
   env = {
     'GOPATH' => registry_source_dir,
     'BUILDTAGS' => 'include_gcs include_oss'
   }
 
-  # Patch to enable MD5 checksums for Google Cloud Storage driver:
-  # https://github.com/docker/distribution/issues/3018
-  #
-  # This is to help prevent 0-byte manifest files that cause 500 Errors:
-  # https://gitlab.com/gitlab-org/gitlab/issues/32907
-  patch source: 'gcs-md5.patch', plevel: 1
   make "build", env: env, cwd: cwd
   make "binaries", env: env, cwd: cwd
   move "#{cwd}/bin/*", "#{install_dir}/embedded/bin", force: true
