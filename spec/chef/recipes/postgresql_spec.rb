@@ -820,3 +820,31 @@ describe 'postgresql::bin' do
     end
   end
 end
+
+describe 'postgresql dir and homedir' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when using default values for directories' do
+    it 'creates necessary directories' do
+      expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+    end
+  end
+
+  context 'when using custom values for directories' do
+    before do
+      stub_gitlab_rb(postgresql: {
+                       dir: '/mypgdir',
+                       home: '/mypghomedir'
+                     })
+    end
+
+    it 'creates necessary directories' do
+      expect(chef_run).to create_directory('/mypgdir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+      expect(chef_run).to create_directory('/mypghomedir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+    end
+  end
+end
