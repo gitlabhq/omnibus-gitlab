@@ -563,6 +563,12 @@ To upgrade a GEO cluster, you will need a name for the replication slot, and the
 
    You will be prompted for the password of the primary server.
 
+1. Refresh the foreign tables on the secondary server using the command
+
+   ```shell
+   sudo gitlab-rake geo:db:refresh_foreign_tables
+   ```
+
 1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy
 
 [added with GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4309)
