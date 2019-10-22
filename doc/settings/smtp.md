@@ -800,6 +800,22 @@ gitlab_rails['gitlab_email_display_name'] = 'GitLab - my company'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
+### IONOS by 1&1 (ionos.de)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.ionos.de"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "your-user@your-domain.de"
+gitlab_rails['smtp_password'] = "Y0uR_Pass_H3r3"
+gitlab_rails['smtp_domain'] = "your-domain.de"
+gitlab_rails['smtp_authentication'] = 'login'
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+gitlab_rails['gitlab_email_from'] = 'your-user@your-domain.de'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
