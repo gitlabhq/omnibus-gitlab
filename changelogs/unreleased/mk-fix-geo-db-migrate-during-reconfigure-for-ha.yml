@@ -1,6 +1,0 @@
----
-title: Resolve "Reconfigure skips Geo DB migrations if Geo DB is not running on the
-  same machine"
-merge_request: 3635
-author:
-type: fixed

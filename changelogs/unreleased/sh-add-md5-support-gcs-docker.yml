@@ -1,5 +1,0 @@
----
-title: Use MD5 checksums in the registry's Google storage driver
-merge_request: 3660
-author:
-type: fixed

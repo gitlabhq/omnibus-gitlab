@@ -3,6 +3,56 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.4.0
+
+### Security (2 changes)
+
+- Update openssl to 1.1.1d. !3674
+- Update Grafana version to 6.3.5.
+
+### Fixed (11 changes)
+
+- Nginx responds to health checks with correct content types. !3594
+- Fix pg-upgrade handling of secondary database nodes. !3631
+- Do not cleanup old gitlab-monitor directory if explicitely using it. !3634
+- Resolve "Reconfigure skips Geo DB migrations if Geo DB is not running on the same machine". !3635
+- Fix database replication bootstrap with `gitlab-ctl repmgr standby setup`. !3636
+- Ensure user's gitconfig contains system's core options. !3648
+- Warn when LD_LIBRARY_PATH env var is set. !3652
+- Add Rugged search path to Gitaly config. !3656
+- Use MD5 checksums in the registry's Google storage driver. !3660
+- Don't fail gitaly startup if setting ulimit fails. !3684
+- Upgrade PgBouncer to v1.12.0. !3691
+
+### Deprecated (2 changes)
+
+- Deprecates Protected Paths setting. !3597
+- Mark openSUSE 15.0 to be warned about during reconfigure. !3687
+
+### Changed (3 changes)
+
+- Update Geo zero downtime instructions. !3562
+- Add saturation recording rules to Prometheus. !3665
+- Add virtual_storage_name, auth to praefect. !3672
+
+### Added (6 changes, 2 of them are from the community)
+
+- Add skip-auto-backup flag to skip backup during upgrade. !3245 (Dany Jupille)
+- Add Praefect as a GitLab service. !3580
+- Allow setting of alertmanager global config. !3611
+- Update grafana-dashboards to v1.2.0. !3627 (Takuya Noguchi)
+- Add TasksMax setting to systemd unit file. !3649
+- Build packages for openSUSE 15.1. !3683
+
+### Other (5 changes)
+
+- Consult the gitlab-elasticsearch-indexer version from GitLab. !3276
+- Add core.fsyncObjectFiles as default git config. !3632
+- Use postgresql_config resource for postgresql configuration files. !3647
+- gitlab-shell: use make build instead of bin/compile. !3653
+- Update Mattermost to 5.15.
+
+
 ## 12.3.4
 
 ### Fixed (1 change)

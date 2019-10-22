@@ -1,5 +1,0 @@
----
-title: Do not cleanup old gitlab-monitor directory if explicitely using it
-merge_request: 3634
-author:
-type: fixed
