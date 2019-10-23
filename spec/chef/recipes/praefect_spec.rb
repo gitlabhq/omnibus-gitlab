@@ -73,16 +73,16 @@ describe 'praefect' do
       let(:prom_addr) { 'localhost:1234' }
       let(:log_level) { 'debug' }
       let(:log_format) { 'text' }
-      let(:nodes) do
-        [
-          { storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" },
-          { storage: 'praefect2', address: 'tcp://node2.internal', primary: 'true', token: "praefect2-token" },
-          { storage: 'praefect3', address: 'tcp://node3.internal', primary: false, token: "praefect3-token" },
-          { storage: 'praefect4', address: 'tcp://node4.internal', primary: 'false', token: "praefect4-token" },
-          { storage: 'praefect5', address: 'tcp://node5.internal', token: "praefect5-token" }
-        ]
-      end
       let(:primaries) { %w[praefect1 praefect2] }
+      let(:nodes) do
+        {
+          'praefect1' => { address: 'tcp://node1.internal', primary: true, token: "praefect1-token" },
+          'praefect2' => { address: 'tcp://node2.internal', primary: 'true', token: "praefect2-token" },
+          'praefect3' => { address: 'tcp://node3.internal', primary: false, token: "praefect3-token" },
+          'praefect4' => { address: 'tcp://node4.internal', primary: 'false', token: "praefect4-token" },
+          'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
+        }
+      end
 
       it 'renders the config.toml' do
         expect(chef_run).to render_file(config_path)
@@ -99,11 +99,32 @@ describe 'praefect' do
         expect(chef_run).to render_file(config_path)
           .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})
 
-        nodes.each do |node|
-          expect_primary = primaries.include?(node[:storage])
+        nodes.each do |storage, node|
+          expect_primary = primaries.include?(storage)
 
           expect(chef_run).to render_file(config_path)
-            .with_content(%r{^\[\[node\]\]\nstorage = '#{node[:storage]}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
+            .with_content(%r{^\[\[node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
+        end
+      end
+
+      context 'with storage nodes specified as an array' do
+        let(:nodes) do
+          [
+            { storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" },
+            { storage: 'praefect2', address: 'tcp://node2.internal', primary: 'true', token: "praefect2-token" },
+            { storage: 'praefect3', address: 'tcp://node3.internal', primary: false, token: "praefect3-token" },
+            { storage: 'praefect4', address: 'tcp://node4.internal', primary: 'false', token: "praefect4-token" },
+            { storage: 'praefect5', address: 'tcp://node5.internal', token: "praefect5-token" }
+          ]
+        end
+
+        it 'renders the storage nodes in the config.toml file' do
+          nodes.each do |node|
+            expect_primary = primaries.include?(node[:storage])
+
+            expect(chef_run).to render_file(config_path)
+              .with_content(%r{^\[\[node\]\]\nstorage = '#{node[:storage]}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
+          end
         end
       end
     end

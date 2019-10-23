@@ -67,6 +67,18 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     expected_user?(file, user) && expected_group?(file, group)
   end
 
+  def is_deprecated_praefect_config?
+    return unless node['praefect']['storage_nodes'].is_a?(Array)
+
+    msg = <<~EOS
+      Specifying Praefect storage nodes as an array is deprecated. Support will be removed in a future release.
+      Check the latest gitlab.rb.template for the current format.
+      https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+    EOS
+
+    LoggingHelper.deprecation(msg)
+  end
+
   def self.on_exit
     LoggingHelper.report
   end
