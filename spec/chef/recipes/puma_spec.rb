@@ -11,7 +11,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(puma: { enable: true })
+    stub_gitlab_rb(puma: { enable: true }, unicorn: { enable: false })
     stub_default_should_notify?(true)
     stub_should_notify?('puma', true)
   end
@@ -67,19 +67,23 @@ describe 'gitlab::puma with Ubuntu 16.04' do
 
   context 'with custom Puma settings' do
     before do
-      stub_gitlab_rb(puma: {
-                       enable: true,
-                       worker_timeout: 120,
-                       worker_processes: 4,
-                       min_threads: 5,
-                       max_threads: 10,
-                       listen: '10.0.0.1',
-                       port: 9000,
-                       socket: '/tmp/puma.socket',
-                       state_path: '/tmp/puma.state',
-                       per_worker_max_memory_mb: 1000
-                     }
-                    )
+      stub_gitlab_rb(
+        puma: {
+          enable: true,
+          worker_timeout: 120,
+          worker_processes: 4,
+          min_threads: 5,
+          max_threads: 10,
+          listen: '10.0.0.1',
+          port: 9000,
+          socket: '/tmp/puma.socket',
+          state_path: '/tmp/puma.state',
+          per_worker_max_memory_mb: 1000
+        },
+        unicorn: {
+          enable: false
+        }
+      )
     end
 
     it 'renders the puma.rb file' do
@@ -98,7 +102,12 @@ describe 'gitlab::puma with Ubuntu 16.04' do
   context 'with custom user and group' do
     before do
       stub_gitlab_rb(
-        puma: { enable: true },
+        puma: {
+          enable: true
+        },
+        unicorn: {
+          enable: false
+        },
         user: {
           username: 'foo',
           group: 'bar'
@@ -111,8 +120,15 @@ describe 'gitlab::puma with Ubuntu 16.04' do
 
   context 'with custom runtime_dir' do
     before do
-      stub_gitlab_rb(runtime_dir: '/tmp/test-dir',
-                     puma: { enable: true })
+      stub_gitlab_rb(
+        runtime_dir: '/tmp/test-dir',
+        puma: {
+          enable: true
+        },
+        unicorn: {
+          enable: false
+        }
+      )
     end
 
     it 'uses the user-specific runtime_dir' do
@@ -136,7 +152,7 @@ describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(puma: { enable: true })
+    stub_gitlab_rb(puma: { enable: true }, unicorn: { enable: false })
   end
 
   context 'when puma is enabled on a node with no /run or /dev/shm tmpfs' do
@@ -163,7 +179,14 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(puma: { enable: true })
+    stub_gitlab_rb(
+      puma: {
+        enable: true
+      },
+      unicorn: {
+        enable: false
+      }
+    )
   end
 
   context 'when puma is enabled on a node with a /dev/shm tmpfs' do

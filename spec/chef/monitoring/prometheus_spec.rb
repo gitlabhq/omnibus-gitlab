@@ -261,10 +261,10 @@ describe 'monitoring::prometheus' do
       before do
         stub_gitlab_rb(
           puma: {
-            enable: 'true'
+            enable: true
           },
           unicorn: {
-            enable: 'false'
+            enable: false
           }
         )
       end

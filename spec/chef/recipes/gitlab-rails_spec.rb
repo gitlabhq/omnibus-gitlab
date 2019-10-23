@@ -1451,20 +1451,65 @@ describe 'gitlab::gitlab-rails' do
           }
         end
 
-        it 'enabled for puma' do
-          stub_gitlab_rb(puma: { enable: true, exporter_enabled: true })
+        it 'enabled for Puma' do
+          stub_gitlab_rb(
+            puma: { enable: true, exporter_enabled: true },
+            unicorn: { enable: false }
+          )
+
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
             yaml_data = YAML.safe_load(content, [], [], true)
             expect(yaml_data['production']['monitoring']['web_exporter']).to include('enabled' => true)
           }
         end
 
-        it 'enabled for unicorn' do
+        it 'enabled for Unicorn' do
           stub_gitlab_rb(unicorn: { enable: true, exporter_enabled: true })
+
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
             yaml_data = YAML.safe_load(content, [], [], true)
             expect(yaml_data['production']['monitoring']['web_exporter']).to include('enabled' => true)
           }
+        end
+      end
+    end
+
+    context 'Web-server settings' do
+      context 'when Puma is enabled' do
+        before do
+          stub_gitlab_rb(
+            puma: { enable: true }
+          )
+        end
+
+        it 'raises an exception' do
+          expect { chef_run }.to raise_error("Only one web server (Puma or Unicorn) can be enabled at the same time!")
+        end
+      end
+
+      context 'when Puma and Unicorn are enabled' do
+        before do
+          stub_gitlab_rb(
+            puma: { enable: true },
+            unicorn: { enable: true }
+          )
+        end
+
+        it 'raises an exception' do
+          expect { chef_run }.to raise_error("Only one web server (Puma or Unicorn) can be enabled at the same time!")
+        end
+      end
+
+      context 'when Puma is enabled and Unicorn explicitly disabled' do
+        before do
+          stub_gitlab_rb(
+            puma: { enable: true },
+            unicorn: { enable: false }
+          )
+        end
+
+        it 'raises an exception' do
+          expect { chef_run }.not_to raise_error
         end
       end
     end
