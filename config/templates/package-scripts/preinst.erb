@@ -10,6 +10,18 @@ mkdir -p /var/log/gitlab/reconfigure
 skip_backup_file=/etc/gitlab/skip-auto-backup
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
 
+# environment may contain these - clear them out
+OLD_VERSION_STRING=""
+OLD_MAJOR_VERSION=""
+OLD_MINOR_VERSION=""
+if [ -e "${DEST_DIR}/version-manifest.json" ] ; then
+  OLD_VERSION_STRING=$(grep -i "build_version" ${DEST_DIR}/version-manifest.json | awk -F ': ' '{print $2}' | tr -d '",')
+
+  # Getting the Major and Major.Minor format of existing version string
+  OLD_MAJOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1}')
+  OLD_MINOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1"."$2}')
+fi
+
 greater_version()
 {
   test "$(printf '%s\n' "$@" | sort -V | tail -n 1)" = "$1";
@@ -25,13 +37,7 @@ fi
 }
 
 upgrade_check() {
-  if [ -e "${DEST_DIR}/version-manifest.json" ] ; then
-    OLD_VERSION_STRING=$(grep -i "build_version" ${DEST_DIR}/version-manifest.json | awk -F ': ' '{print $2}' | tr -d '",')
-
-    # Getting the Major and Major.Minor format of existing version string
-    OLD_MAJOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1}')
-    OLD_MINOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1"."$2}')
-
+  if [ -n "${OLD_VERSION_STRING}" ] ; then
     # Minimum version from which jumps are permitted to current version. This
     # points to the last minor version from previous series.
     MIN_VERSION=11.11
@@ -87,6 +93,14 @@ main() {
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages ; then
       backup_failed "Database"
+    fi
+
+    BACKUP_ETC_ADDED_VERSION=12.3
+    if greater_version $OLD_MINOR_VERSION $BACKUP_ETC_ADDED_VERSION; then
+      notify "Automatically backing up /etc/gitlab"
+      if ! ${DEST_DIR}/bin/gitlab-ctl backup-etc ; then
+        notify "Configuration backup failed - check permissions for /etc/gitlab/config_backup/ [is it nfs root_squash?]"
+      fi
     fi
   fi
 }
