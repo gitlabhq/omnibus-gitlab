@@ -99,6 +99,8 @@ define :unicorn_service, rails_app: nil, user: nil do
       clean_metrics_dir: false
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
+
+    notifies :stop, 'service[puma]', :before
   end
 
   if node['gitlab']['bootstrap']['enable']

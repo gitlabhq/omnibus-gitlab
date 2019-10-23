@@ -92,6 +92,8 @@ runit_service svc do
     clean_metrics_dir: false
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
+
+  notifies :stop, 'service[unicorn]', :before
 end
 
 if node['gitlab']['bootstrap']['enable']

@@ -52,7 +52,7 @@ module GitlabMattermost
         Gitlab['mattermost']['gitlab_user_api_endpoint'] ||= "#{gitlab_url}/api/v4/user"
 
         # If mattermost is running on the same box as unicorn, allow it to communicate locally
-        if Services.enabled?('unicorn')
+        if Services.enabled?('unicorn') || Services.enabled?('puma')
           Gitlab['mattermost']['service_allowed_untrusted_internal_connections'] ||= ''
           Gitlab['mattermost']['service_allowed_untrusted_internal_connections'] << " #{URI(gitlab_url.to_s).host}"
         end
