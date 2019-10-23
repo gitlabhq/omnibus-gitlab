@@ -388,10 +388,8 @@ def run_reconfigure
 end
 
 def analyze_cluster
-  analyze_script = File.join(
-    File.dirname(@db_worker.default_data_dir),
-    'analyze_new_cluster.sh'
-  )
+  user_home = @attributes.dig(:gitlab, :postgresql, :home) || @attributes.dig(:postgresql, :home)
+  analyze_script = File.join(File.realpath(user_home), 'analyze_new_cluster.sh')
   begin
     @db_worker.run_pg_command("/bin/sh #{analyze_script}")
   rescue GitlabCtl::Errors::ExecutionError => e

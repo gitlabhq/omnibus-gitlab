@@ -29,10 +29,15 @@ pg_helper = PgHelper.new(node)
 
 include_recipe 'postgresql::user'
 
-directory node['postgresql']['dir'] do
-  owner postgresql_username
-  mode "0755"
-  recursive true
+[
+  node['postgresql']['dir'],
+  node['postgresql']['home']
+].each do |dir|
+  directory dir do
+    owner postgresql_username
+    mode "0755"
+    recursive true
+  end
 end
 
 [
