@@ -1,0 +1,5 @@
+---
+title: Add logging directory default for gitlab shell in gitaly config.toml
+merge_request: 3680
+author:
+type: other
