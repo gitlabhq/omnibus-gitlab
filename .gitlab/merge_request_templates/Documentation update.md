@@ -23,4 +23,4 @@
 - [ ] Make sure the old link is not removed and has its contents replaced with a link to the new location.
 - [ ] Make sure internal links pointing to the document in question are not broken.
 
-/label ~Documentation
+/label ~documentation
