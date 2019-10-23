@@ -306,6 +306,27 @@ node throughout the process.
 
   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
+- If you're using PgBouncer:
+
+  You'll need to bypass PgBouncer and connect directly to the database master
+  before running migrations.
+  
+  Rails uses an advisory lock when attempting to run a migration to prevent
+  concurrent migrations from running on the same database. These locks are
+  not shared across transactions, resulting in `ActiveRecord::ConcurrentMigrationError`
+  and other issues when running database migrations using PgBouncer in transaction
+  pooling mode.
+  
+  To find the master node, run the following on a database node:
+
+  ```sh
+  sudo gitlab-ctl repmgr cluster show
+  ```
+
+  Then, in your `gitlab.rb` file on the deploy node, update
+  `gitlab_rails['db_host']` and `gitlab_rails['db_port']` with the database
+  master's host and port.
+
 - To get the regular database migrations in place, run
 
   ```sh
@@ -334,6 +355,14 @@ node throughout the process.
 
   ```sh
   sudo gitlab-rake db:migrate
+  ```
+
+- If you're using PgBouncer:
+
+  Change your `gitlab.rb` to point back to PgBouncer and run:
+
+  ```sh
+  sudo gitlab-ctl reconfigure
   ```
 
 **For nodes that run Unicorn, Puma or Sidekiq**
