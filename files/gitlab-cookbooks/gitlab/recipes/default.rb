@@ -27,6 +27,7 @@ include_recipe 'gitlab::config'
 
 OmnibusHelper.check_deprecations
 OmnibusHelper.check_environment
+OmnibusHelper.check_locale
 
 directory "/etc/gitlab" do
   owner "root"

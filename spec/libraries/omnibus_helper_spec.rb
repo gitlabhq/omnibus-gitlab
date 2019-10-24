@@ -195,4 +195,112 @@ describe OmnibusHelper do
       end
     end
   end
+
+  describe '#check_locale' do
+    let(:error_message) { "Identified encoding is not UTF-8. GitLab requires UTF-8 encoding to function properly. Please check your locale settings." }
+
+    describe 'using LC_ALL variable' do
+      it 'does not raise a warning when set to a UTF-8 locale even if others are not' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('LC_ALL').and_return('en_US.UTF-8')
+        allow(ENV).to receive(:[]).with('LC_COLLATE').and_return('en_SG ISO-8859-1')
+        allow(ENV).to receive(:[]).with('LC_CTYPE').and_return('en_SG ISO-8859-1')
+        allow(ENV).to receive(:[]).with('LANG').and_return('en_SG ISO-8859-1')
+
+        expect(LoggingHelper).not_to receive(:warning).with("Environment variable .* specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+        described_class.check_locale
+      end
+
+      it 'raises warning when LC_ALL is non-UTF-8' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('LC_ALL').and_return('en_SG ISO-8859-1')
+
+        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_ALL specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+        described_class.check_locale
+      end
+    end
+
+    describe 'using LC_CTYPE variable' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('LC_ALL').and_return(nil)
+      end
+
+      it 'raises warning when LC_CTYPE is non-UTF-8' do
+        allow(ENV).to receive(:[]).with('LC_CTYPE').and_return('en_SG ISO-8859-1')
+
+        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_CTYPE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+        described_class.check_locale
+      end
+    end
+
+    describe 'using LC_COLLATE variable' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('LC_ALL').and_return(nil)
+        allow(ENV).to receive(:[]).with('LC_CTYPE').and_return(nil)
+      end
+
+      it 'raises warning when LC_COLLATE is non-UTF-8' do
+        allow(ENV).to receive(:[]).with('LC_COLLATE').and_return('en_SG ISO-8859-1')
+
+        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_COLLATE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+        described_class.check_locale
+      end
+    end
+
+    describe 'using LANG variable' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('LC_ALL').and_return(nil)
+      end
+
+      context 'without LC_CTYPE and LC_COLLATE' do
+        before do
+          allow(ENV).to receive(:[]).with('LC_CTYPE').and_return(nil)
+          allow(ENV).to receive(:[]).with('LC_COLLATE').and_return(nil)
+        end
+
+        it 'raises warning when LANG is non-UTF-8' do
+          allow(ENV).to receive(:[]).with('LANG').and_return('en_SG ISO-8859-1')
+
+          expect(LoggingHelper).to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+          described_class.check_locale
+        end
+      end
+
+      context 'with only LC_CTYPE set to UTF-8' do
+        before do
+          allow(ENV).to receive(:[]).with('LC_CTYPE').and_return('en_US.UTF-8')
+          allow(ENV).to receive(:[]).with('LC_COLLATE').and_return(nil)
+        end
+
+        it 'raises warning when LANG is non-UTF-8' do
+          allow(ENV).to receive(:[]).with('LANG').and_return('en_SG ISO-8859-1')
+
+          expect(LoggingHelper).to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+          described_class.check_locale
+        end
+      end
+
+      context 'with both LC_CTYPE and LC_COLLATE set to UTF-8' do
+        before do
+          allow(ENV).to receive(:[]).with('LC_CTYPE').and_return('en_US.UTF-8')
+          allow(ENV).to receive(:[]).with('LC_COLLATE').and_return('en_US.UTF-8')
+        end
+
+        it 'does not raise a warning even if LANG is not UTF-8' do
+          expect(LoggingHelper).not_to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
+
+          described_class.check_locale
+        end
+      end
+    end
+  end
 end
