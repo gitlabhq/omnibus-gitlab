@@ -124,3 +124,28 @@ For earlier versions of GitLab, you can manually import the
 that are tailored for Omnibus installations.
 
 [reconfigure]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
+
+## Grafana metrics
+
+Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/administration/metrics/).
+
+By default, the metrics API is disabled in the bundled Grafana instance.
+
+### Enabling Grafana's metrics API
+
+To enable Grafana's metrics API with basic authentication:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add/edit the following lines:
+
+   ```ruby
+   grafana['metrics_enabled'] = true
+   grafana['metrics_basic_auth_username'] = 'grafana_metrics'
+   grafana['metrics_basic_auth_password'] = 'please_set_a_unique_password'
+   ```
+
+1. Save the file and [reconfigure] GitLab for the changes to take effect.
+
+1. The metrics will be available at `https://gitlab.example.com/-/grafana/metrics`
+   with basic authentication. The username and password for basic authentication
+   will be the `metrics_basic_auth_username` and `metrics_basic_auth_password`
+   that was set in `/etc/gitlab/gitlab.rb`.

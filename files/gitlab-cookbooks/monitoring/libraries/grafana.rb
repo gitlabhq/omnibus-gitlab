@@ -20,6 +20,8 @@ module Grafana
     def parse_secrets
       Gitlab['grafana']['secret_key'] ||= SecretsHelper.generate_hex(16)
       Gitlab['grafana']['admin_password'] ||= SecretsHelper.generate_hex(16)
+
+      Gitlab['grafana']['metrics_basic_auth_password'] ||= SecretsHelper.generate_hex(16) if Gitlab['grafana']['metrics_enabled']
     end
 
     def parse_variables
