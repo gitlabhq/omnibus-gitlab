@@ -326,10 +326,18 @@ enabled = false
 # Metrics available at HTTP API Url /metrics
 [metrics]
 # Disable / Enable internal metrics
-;enabled           = true
+enabled = <%= @metrics_enabled %>
 
 # Publish interval
 ;interval_seconds  = 10
+
+<% unless @metrics_basic_auth_username.nil? %>
+basic_auth_username = """<%= @metrics_basic_auth_username %>"""
+<% end -%>
+
+<% unless @metrics_basic_auth_password.nil? %>
+basic_auth_password = """<%= @metrics_basic_auth_password %>"""
+<% end -%>
 
 # Send internal metrics to Graphite
 [metrics.graphite]
