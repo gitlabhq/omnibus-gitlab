@@ -9,14 +9,13 @@ module Build
       extend Trigger
 
       PROJECT_PATH = 'gitlab-org/distribution/gitlab-provisioner'.freeze
-      OMNIBUS_PROJECT_MIRROR_PATH = 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
 
       def self.get_project_path
         PROJECT_PATH
       end
 
       def self.omnibus_gitlab_path
-        CGI.escape(OMNIBUS_PROJECT_MIRROR_PATH)
+        CGI.escape(Build::Info::OMNIBUS_PROJECT_MIRROR_PATH)
       end
 
       def self.ee_package_job_id
@@ -28,7 +27,7 @@ module Build
       end
 
       def self.get_params(image: nil)
-        qa_image = image || "registry.gitlab.com/#{OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:omnibus-#{Gitlab::Util.get_env('CI_COMMIT_SHA')}"
+        qa_image = image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:omnibus-#{Gitlab::Util.get_env('CI_COMMIT_SHA')}"
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
