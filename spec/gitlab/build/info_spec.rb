@@ -201,7 +201,7 @@ describe Build::Info do
 
     context 'On a triggered pipeline' do
       before do
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('true')
+        allow(ENV).to receive(:[]).with('CI_PROJECT_PATH').and_return('gitlab-org/build/omnibus-gitlab-mirror')
         allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('trigger')
       end
 
@@ -233,7 +233,6 @@ describe Build::Info do
 
     context 'On a regular pipeline' do
       before do
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_TRIGGERED').and_return('false')
         allow(Build::Check).to receive(:is_nightly?).and_return(false)
         allow(Build::Check).to receive(:on_tag?).and_return(false)
       end

@@ -1,14 +1,13 @@
 require_relative 'trigger'
+require_relative 'info'
 require_relative "../util.rb"
 
 module Build
   class OmnibusTrigger
     extend Trigger
 
-    OMNIBUS_PROJECT_MIRROR_PATH = 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
-
     def self.get_project_path
-      OMNIBUS_PROJECT_MIRROR_PATH
+      Build::Info::OMNIBUS_PROJECT_MIRROR_PATH
     end
 
     def self.get_params(image: nil)

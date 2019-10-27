@@ -9,6 +9,8 @@ require_relative 'image'
 
 module Build
   class Info
+    OMNIBUS_PROJECT_MIRROR_PATH ||= 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
+
     class << self
       def package
         return "gitlab-ee" if Check.is_ee?
@@ -191,7 +193,7 @@ module Build
       end
 
       def image_reference
-        if Gitlab::Util.get_env('CI_PIPELINE_TRIGGERED') == 'true' && Gitlab::Util.get_env('CI_PIPELINE_SOURCE') == 'trigger'
+        if Gitlab::Util.get_env('CI_PROJECT_PATH') == OMNIBUS_PROJECT_MIRROR_PATH && %w[trigger pipeline].include?(Gitlab::Util.get_env('CI_PIPELINE_SOURCE'))
           "#{Build::GitlabImage.gitlab_registry_image_address}:#{Gitlab::Util.get_env('IMAGE_TAG')}"
         elsif Build::Check.is_nightly? || Build::Check.on_tag?
           # We push nightly images to both dockerhub and gitlab registry
