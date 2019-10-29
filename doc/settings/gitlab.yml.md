@@ -35,11 +35,15 @@ since it will be overwritten on the next `gitlab-ctl reconfigure` run.
 
 ## Adding a new setting to `gitlab.yml`
 
-Don't forget to update the following 3 files when adding a new setting:
+Don't forget to update the following 5 files when adding a new setting:
 
 - the [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
   file to expose the setting to the end user via `/etc/gitlab/gitlab.rb`.
 - the [`default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb)
   file to provide a sane default for the new setting.
-- the [`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example)
+- the [`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab/blob/master/config/gitlab.yml.example)
   file to actually use the setting's value from `gitlab.rb`.
+- the [`gitlab.yml.erb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)
+  file
+- the [`gitlab-rails_spec.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/spec/chef/recipes/gitlab-rails_spec.rb)
+  file
