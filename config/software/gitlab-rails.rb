@@ -155,7 +155,7 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
   move "#{Omnibus::Config.source_dir}/gitlab-rails/.yarn-cache", Omnibus::Config.project_root.to_s
 
-  command "#{embedded_bin('bundle')} exec license_finder report --decisions-file=config/dependency_decisions.yml --format=csv --save=licenses.csv", env: env
+  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=csv --save=licenses.csv", env: env
   copy 'licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
 
   # Tear down now that gitlab:assets:compile is done.
