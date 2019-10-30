@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.9
+
+### Other (1 change)
+
+- Consult the gitlab-elasticsearch-indexer version from GitLab. !3662
+
+
 ## 12.2.8
 
 - No changes.
