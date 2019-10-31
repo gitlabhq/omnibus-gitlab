@@ -664,15 +664,15 @@ sudo gitlab-ctl restart geo-logcursor
 
 1. Run post-deployment database migrations, specific to the Geo database:
 
-  ```sh
-  sudo gitlab-rake geo:db:migrate
-  ```
+   ```sh
+   sudo gitlab-rake geo:db:migrate
+   ```
 
 1. Refresh Foreign Data Wrapper tables
 
-  ```sh
+   ```sh
    sudo gitlab-rake geo:db:refresh_foreign_tables
-  ```
+   ```
 
 1. Verify Geo configuration and dependencies
 
