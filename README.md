@@ -34,7 +34,7 @@ Please follow the steps on the [downloads page][downloads].
 
 ### After installation
 
-Your GitLab instance should reachable over HTTP at the IP or hostname of your
+Your GitLab instance should be reachable over HTTP at the IP or hostname of your
 server. You can login as an admin user with username `root` and password `5iveL!fe`.
 
 See [doc/maintenance/README.md](doc/maintenance/README.md) for useful commands
