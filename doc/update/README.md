@@ -501,10 +501,10 @@ This section describes the steps to upgrade a multi-node / HA deployment where:
 - One multi-node deployment is used as the **primary** node.
 - A second multi-node deployment is used as the **secondary** node.
 
-The **primary** multi-node deployment will be updated first, followed by the
-**secondary** multi-node deployment.
+The **primary** multi-node deployment will be updated first (step 1), followed by the
+**secondary** multi-node deployment (step 2). Finally, we run post-deployment migrations and checks (step 3).
 
-#### Updating the Geo primary multi-node deployment
+#### Step 1: Updating the Geo primary multi-node deployment
 
 Select a node from the **primary** multi-node deployment to be the "deploy node".  It
 can be any node, but it must be the same node throughout the process.
@@ -574,7 +574,7 @@ sudo gitlab-ctl hup unicorn
 sudo gitlab-ctl hup sidekiq
 ```
 
-#### Updating the Geo secondary multi-node deployment
+#### Step 2: Updating the Geo secondary multi-node deployment
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Primary node.
@@ -648,7 +648,7 @@ sudo gitlab-ctl hup sidekiq
 sudo gitlab-ctl restart geo-logcursor
 ```
 
-#### Run post-deployment migrations and checks
+#### Step 3: Run post-deployment migrations and checks
 
 **Deploy node (on the primary cluster)**
 
