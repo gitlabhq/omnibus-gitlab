@@ -532,7 +532,7 @@ DANGER: **Danger:**
 If you are using PostgreSQL 9.6.x and are updating to any version of GitLab 12.1 or newer, please disable the automatic upgrade temporarily. If you have any questions or concerns, please [contact support](https://about.gitlab.com/support/).
 This is because we discovered [an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that affects the automatic upgrade of PostgreSQL from version 9.6.x to 10.x and can lead to an unsuccessful upgrade of a secondary server.
 
-As of GitLab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your GEO servers.
+As of GitLab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your Geo servers.
 
 NOTE: **Note:**
 Due to how PostgreSQL replication works, this cannot be done without the need to resynchronize your secondary database server. Therefore, this upgrade cannot be done without downtime.
@@ -543,19 +543,29 @@ If you want to skip the automatic upgrade, before you install 12.1 or newer, run
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-To upgrade a GEO cluster, you will need a name for the replication slot, and the password to connect to the primary server.
+To upgrade a Geo cluster, you will need a name for the replication slot, and the password to connect to the primary server.
 
-1. To find the existing name of the replication slot name on the primary node, run:
+1. Find the existing name of the replication slot name on the primary node, run:
 
    ```shell
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
-1. Upgrade the `gitlab-ee` package on the primary server
+1. Upgrade the `gitlab-ee` package on the Geo primary server.
+   Or to manually upgrade PostgreSQL, run:
 
-1. Upgrade the `gitlab-ee` package on the secondary server
+   ```shell
+   sudo gitlab-ctl pg-upgrade
+   ```
 
-1. Re-initialize the database on the secondary server using the command
+1. Upgrade the `gitlab-ee` package on the Geo secondary server.
+   Or to manually upgrade PostgreSQL, run:
+
+   ```shell
+   sudo gitlab-ctl pg-upgrade
+   ```
+
+1. Re-initialize the database on the Geo secondary server using the command
 
    ```shell
    sudo gitlab-ctl replicate-geo-database --slot-name=SECONDARY_SLOT_NAME --host=PRIMARY_HOST_NAME
@@ -563,10 +573,18 @@ To upgrade a GEO cluster, you will need a name for the replication slot, and the
 
    You will be prompted for the password of the primary server.
 
-1. Refresh the foreign tables on the secondary server using the command
+1. Refresh the foreign tables on the Geo secondary server using the command
 
    ```shell
    sudo gitlab-rake geo:db:refresh_foreign_tables
+   ```
+
+1. Restart `unicorn`, `sidekiq`, and `geo-logcursor`.
+
+   ```shell
+   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart geo-logcursor
    ```
 
 1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy
