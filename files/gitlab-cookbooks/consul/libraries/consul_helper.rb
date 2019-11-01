@@ -23,10 +23,14 @@ class ConsulHelper
         {
           type: 'service',
           service: watcher,
-          handler: "#{node['consul']['script_directory']}/#{node['consul']['watcher_config'][watcher]['handler']}"
+          args: ["#{node['consul']['script_directory']}/#{watcher_handler(watcher)}"]
         }
       ]
     }
+  end
+
+  def watcher_handler(watcher)
+    node['consul']['watcher_config'][watcher]['handler']
   end
 
   def configuration

@@ -15,7 +15,7 @@
 #
 
 name 'consul'
-version = Gitlab::Version.new('consul', 'v0.9.0')
+version = Gitlab::Version.new('consul', 'v1.6.1')
 default_version version.print(false)
 
 license 'MPL-2.0'
@@ -32,6 +32,7 @@ build do
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/consul"
   env['PATH'] = "#{Gitlab::Util.get_env('PATH')}:#{env['GOPATH']}/bin"
   command 'make dev', env: env
+  mkdir "#{install_dir}/embedded/bin"
   copy 'bin/consul', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"

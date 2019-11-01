@@ -5,18 +5,18 @@ default['consul']['service_config'] = {
       'name' => "postgresql",
       'address' => '',
       'port' => 5432,
-      'checks' => [
-        {
-          'script' => '/opt/gitlab/bin/gitlab-ctl repmgr-check-master',
-          'interval' => "10s"
-        }
-      ]
+      'check' => {
+        'id': 'service:postgresql',
+        'args' => ['/opt/gitlab/bin/gitlab-ctl', 'repmgr-check-master'],
+        'interval' => "10s",
+        'status': 'failing'
+      }
     },
     'watches': [
       {
         'type': 'keyprefix',
         'prefix': 'gitlab/ha/postgresql/failed_masters/',
-        'handler': '/opt/gitlab/bin/gitlab-ctl consul watchers handle-failed-master'
+        'args': ['/opt/gitlab/bin/gitlab-ctl', 'consul', 'watchers', 'handle-failed-master']
       }
     ]
   }

@@ -25,7 +25,7 @@ node['consul']['watchers'].each do |watcher|
   end
 
   config[:watches].each do |watch|
-    template watch[:handler] do
+    template "#{node['consul']['script_directory']}/#{consul_helper.watcher_handler(watch[:service])}" do
       source "watcher_scripts/#{node['consul']['watcher_config'][watch[:service]][:handler]}.erb"
       variables node['consul'].to_hash
       mode 0555
