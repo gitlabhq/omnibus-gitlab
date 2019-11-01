@@ -76,7 +76,7 @@ can skip this section.
 To use GitLab as an OAuth provider so that users of your GitLab instance
 have access to Grafana:
 
-1. First, [create an application ID and secret](https://docs.gitlab.com/ce/integration/oauth_provider.html).
+1. First, [create an application ID and secret](https://docs.gitlab.com/ee/integration/oauth_provider.html).
 
 1. Set the callback URL based on your `external_url`. For example `https://gitlab.example.com/-/grafana/login/gitlab`.
 

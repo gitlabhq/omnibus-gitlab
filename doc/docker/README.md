@@ -458,7 +458,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 
 The GitLab Docker images can also be deployed to various container scheduling platforms.
 
-- Kubernetes using the [GitLab Helm Charts](https://docs.gitlab.com/ce/install/kubernetes/).
+- Kubernetes using the [GitLab Helm Charts](https://docs.gitlab.com/ee/install/kubernetes/).
 - Mesosphere DC/OS using the [DC/OS Package](https://github.com/dcos/examples/tree/master/gitlab/1.8).
 - Docker Cloud using the [docker-compose config](#install-gitlab-using-docker-compose).
 

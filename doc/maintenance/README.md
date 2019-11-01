@@ -152,7 +152,7 @@ of removing unused tags. Currently, this is exposed using the API, but in the fu
 these controls will be migrated to the GitLab interface.
 
 Project maintainers can
-[delete Container Registry tags in bulk](https://docs.gitlab.com/ce/api/container_registry.html#delete-repository-tags-in-bulk)
+[delete Container Registry tags in bulk](https://docs.gitlab.com/ee/api/container_registry.html#delete-repository-tags-in-bulk)
 periodically based on their own criteria.
 
 However, this alone does not recycle data, it only unlinks tags from manifests

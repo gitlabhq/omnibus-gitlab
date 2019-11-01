@@ -31,14 +31,14 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 NOTE: **Note:**
 After you change the external URL, it is recommended that you also
-[invalidate the Markdown cache](https://docs.gitlab.com/ce/administration/invalidate_markdown_cache.html).
+[invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
 
 ## Configuring a relative URL for GitLab
 
 NOTE: **Note:**
 Relative URL support in Omnibus GitLab is **experimental** and was
 [introduced][590] in version 8.5. For source installations there is a
-[separate document](https://docs.gitlab.com/ce/install/relative_url.html).
+[separate document](https://docs.gitlab.com/ee/install/relative_url.html).
 
 ---
 
@@ -700,7 +700,7 @@ See [doc/settings/smtp.md](smtp.md).
 
 ## Omniauth (Google, Twitter, GitHub login)
 
-See [Omniauth documentation](https://docs.gitlab.com/ce/integration/omniauth.html).
+See [Omniauth documentation](https://docs.gitlab.com/ee/integration/omniauth.html).
 
 ## Adjusting Unicorn settings
 

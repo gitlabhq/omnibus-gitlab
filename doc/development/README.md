@@ -59,7 +59,7 @@ their applicability:
 1. Tests, as explained in [Writing Tests](#writing-tests)
 1. Documentation explaining the change
 1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
-1. [Changelog entry](https://docs.gitlab.com/ce/development/changelog.html) to inform about the change, if necessary.
+1. [Changelog entry](https://docs.gitlab.com/ee/development/changelog.html) to inform about the change, if necessary.
 
 **Note:** Ensure shared runners are enabled for your fork in order for our automated tests to run:
 

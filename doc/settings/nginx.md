@@ -171,7 +171,7 @@ in `/etc/gitlab/gitlab.rb`:
  }
 ```
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
@@ -202,7 +202,7 @@ By default, Omnibus GitLab will use the IP addresses in `real_ip_trusted_address
 as GitLab's trusted proxies, which will keep users from being listed as signed
 in from those IPs.
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 ## Configuring HTTP2 protocol
@@ -231,7 +231,7 @@ specifying in `/etc/gitlab/gitlab.rb`:
 nginx['http2_enabled'] = false
 ```
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
 ## Using a non-bundled web-server

@@ -1,1 +1,1 @@
-Documentation moved to <https://docs.gitlab.com/ce/pages/administration.html>.
+Documentation moved to <https://docs.gitlab.com/ee/pages/administration.html>.

@@ -129,7 +129,7 @@ GitLab includes support for running with separate Redis instances for different 
 ## Redis Sentinel
 
 For details on configuring Redis Sentinel, see
-<https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
+<https://docs.gitlab.com/ee/administration/high_availability/redis.html>.
 
 ## Setting the Redis Cache instance as an LRU
 
@@ -149,7 +149,7 @@ redis['maxmemory_samples'] = 5
 
 ## Using a Redis HA setup
 
-See <https://docs.gitlab.com/ce/administration/high_availability/redis.html>.
+See <https://docs.gitlab.com/ee/administration/high_availability/redis.html>.
 
 ## Using Secure Sockets Layer (SSL)
 
