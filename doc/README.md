@@ -20,7 +20,7 @@ Omnibus GitLab is a way to package different services and tools required to run 
 
 ### Prerequisites
 
-- [Installation Requirements](https://docs.gitlab.com/ce/install/requirements.html)
+- [Installation Requirements](https://docs.gitlab.com/ee/install/requirements.html)
 - If you want to access your GitLab instance via a domain name, like mygitlabinstance.com, make sure the domain correctly points to the IP of the server where GitLab is being installed. You can check this using the command `host mygitlabinstance.com`
 - If you want to use HTTPS on your GitLab instance, make sure you have the SSL certificates for the domain ready. (Note that certain components like Container Registry which can have their own subdomains requires certificates for those subdomains also)
 - If you want to send notification emails, install and configure a mail server (MTA) like sendmail. Alternatively, you can use other third party SMTP servers, which is described below.
@@ -36,15 +36,15 @@ This section describes the commonly used configuration settings. Check
 - [Setting up a domain name/URL](https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab) for the GitLab Instance so that it can be accessed easily
 - [Enabling HTTPS](https://docs.gitlab.com/omnibus/settings/nginx.html#enable-https)
 - [Enabling notification emails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
-- [Enabling replying via email](https://docs.gitlab.com/ce/administration/reply_by_email.html#set-it-up)
-  - [Installing and configuring postfix](https://docs.gitlab.com/ce/administration/reply_by_email_postfix_setup.html)
+- [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up)
+  - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html)
 - [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration)
   - You will require SSL certificates for the domain used for container registry
-- [Enabling GitLab Pages](https://docs.gitlab.com/ce/administration/pages/)
+- [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/)
   - If you want HTTPS enabled, you will have to get wildcard certificates
 - [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html)
 - [GitLab Mattermost](gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
-- [GitLab Prometheus](https://docs.gitlab.com/ce/administration/monitoring/performance/prometheus.html) Set up the Prometheus
+- [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/performance/prometheus.html) Set up the Prometheus
   monitoring included in the Omnibus GitLab package.
 - [GitLab High Availability Roles](roles/README.md)
 
@@ -84,11 +84,11 @@ to work best with the available resources. Check out the [documentation](setting
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)
-- [Reply by email](https://docs.gitlab.com/ce/incoming_email/README.html)
+- [Reply by email](https://docs.gitlab.com/ee/incoming_email/README.html)
 - [Environment variables](settings/environment-variables.md)
 - [`gitlab.yml`](settings/gitlab.yml.md)
 - [Backups](settings/backups.md)
-- [Pages](https://docs.gitlab.com/ce/pages/administration.html)
+- [Pages](https://docs.gitlab.com/ee/pages/administration.html)
 - [SSL](settings/ssl.md)
 - [GitLab and Registry](architecture/registry/README.md)
 - [Configuring an asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)

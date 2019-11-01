@@ -109,6 +109,6 @@ to 12.1.
 
 To convert to PostgreSQL and use the built-in server, follow the steps:
 
-- [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+- [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
 - [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html#converting-a-gitlab-backup-file-from-mysql-to-postgres)
-- [Restore this in the Omnibus installation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-for-omnibus-installations)
+- [Restore this in the Omnibus installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-installations)

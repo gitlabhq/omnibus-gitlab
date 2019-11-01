@@ -77,7 +77,7 @@ lost/leaked/stolen together with the keys needed to decrypt it.
 ## Creating an application backup
 
 To create a backup of your repositories and GitLab metadata, follow the
-[backup create documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system).
+[backup create documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
@@ -111,7 +111,7 @@ in order to have these backups persisted outside the container.
 
 ## Restoring an application backup
 
-See [backup restore documentation](https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-for-omnibus-installations).
+See [backup restore documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-installations).
 
 ## Backup and restore using non-packaged database
 
@@ -119,7 +119,7 @@ If you are using non-packaged database see [documentation on using non-packaged 
 
 ## Upload backups to remote (cloud) storage
 
-For details check [backup restore document of GitLab CE](https://docs.gitlab.com/ce/raketasks/backup_restore.html#uploading-backups-to-a-remote-cloud-storage).
+For details check [backup restore document of GitLab CE](https://docs.gitlab.com/ee/raketasks/backup_restore.html#uploading-backups-to-a-remote-cloud-storage).
 
 ## Manually manage backup directory
 

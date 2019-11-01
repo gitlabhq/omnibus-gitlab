@@ -82,7 +82,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_container_registry'] = true
 
 ### Automatic issue closing
-###! See https://docs.gitlab.com/ce/customization/issue_closing.html for more
+###! See https://docs.gitlab.com/ee/customization/issue_closing.html for more
 ###! information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "\b((?:[Cc]los(?:e[sd]?|ing)|\b[Ff]ix(?:e[sd]|ing)?|\b[Rr]esolv(?:e[sd]?|ing)|\b[Ii]mplement(?:s|ed|ing)?)(:?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?)|([A-Z][A-Z0-9_]+-\d+))+)"
 
@@ -100,7 +100,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Periodically executed jobs, to self-heal Gitlab, do external
 ###! synchronizations, etc.
 ###! Docs: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
-###!       https://docs.gitlab.com/ce/ci/yaml/README.html#artifacts:expire_in
+###!       https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts:expire_in
 # gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 # gitlab_rails['pipeline_schedule_worker_cron'] = "19 * * * *"
@@ -162,7 +162,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Reply by email
 ###! Allow users to comment on issues and merge requests by replying to
 ###! notification emails.
-###! Docs: https://docs.gitlab.com/ce/administration/reply_by_email.html
+###! Docs: https://docs.gitlab.com/ee/administration/reply_by_email.html
 # gitlab_rails['incoming_email_enabled'] = true
 
 #### Incoming Email Address
@@ -349,7 +349,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smartcard_san_extensions'] = false
 
 ### OmniAuth Settings
-###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
+###! Docs: https://docs.gitlab.com/ee/integration/omniauth.html
 # gitlab_rails['omniauth_enabled'] = nil
 # gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
 # gitlab_rails['omniauth_sync_email_from_provider'] = 'saml'
@@ -376,7 +376,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
 
-###! Docs: https://docs.gitlab.com/ce/raketasks/backup_restore.html#backup-archive-permissions
+###! Docs: https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_archive_permissions'] = 0644
 
 # gitlab_rails['backup_pg_schema'] = 'public'
@@ -436,7 +436,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitaly_token'] = 'secret token'
 
 ### For storing GitLab application uploads, eg. LFS objects, build artifacts
-###! Docs: https://docs.gitlab.com/ce/development/shared_files.html
+###! Docs: https://docs.gitlab.com/ee/development/shared_files.html
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
 ### Wait for file system to be mounted
@@ -572,7 +572,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Container Registry settings
-##! Docs: https://docs.gitlab.com/ce/administration/container_registry.html
+##! Docs: https://docs.gitlab.com/ee/administration/container_registry.html
 ################################################################################
 
 # registry_external_url 'https://registry.example.com'
@@ -618,7 +618,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['compatibility_schema1_enabled'] = false
 
 ### Registry backend storage
-###! Docs: https://docs.gitlab.com/ce/administration/container_registry.html#container-registry-storage-driver
+###! Docs: https://docs.gitlab.com/ee/administration/container_registry.html#container-registry-storage-driver
 # registry['storage'] = {
 #   's3' => {
 #     'accesskey' => 'AKIAKIAKI',
@@ -998,7 +998,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **To enable only Redis service in this machine, uncomment
 ###!   one of the lines below (choose master or slave instance types).**
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html
-###!       https://docs.gitlab.com/ce/administration/high_availability/redis.html
+###!       https://docs.gitlab.com/ee/administration/high_availability/redis.html
 # redis_master_role['enable'] = true
 # redis_slave_role['enable'] = true
 
@@ -1011,7 +1011,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **You need a master slave Redis replication to be able to do failover**
 ###! **Please read the documentation before enabling it to understand the
 ###!   caveats:**
-###! Docs: https://docs.gitlab.com/ce/administration/high_availability/redis.html
+###! Docs: https://docs.gitlab.com/ee/administration/high_availability/redis.html
 
 ### Replication support
 #### Slave Redis instance
@@ -1264,7 +1264,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab Pages
-##! Docs: https://docs.gitlab.com/ce/pages/administration.html
+##! Docs: https://docs.gitlab.com/ee/pages/administration.html
 ################################################################################
 
 ##! Define to enable GitLab Pages
@@ -1354,7 +1354,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab CI
-##! Docs: https://docs.gitlab.com/ce/ci/quick_start/README.html
+##! Docs: https://docs.gitlab.com/ee/ci/quick_start/README.html
 ################################################################################
 
 # gitlab_ci['gitlab_ci_all_broken_builds'] = true
@@ -1447,12 +1447,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/
 ################################################################################
 
 ###! **To enable only Monitoring service in this machine, uncomment
 ###!   the line below.**
-###! Docs: https://docs.gitlab.com/ce/administration/high_availability
+###! Docs: https://docs.gitlab.com/ee/administration/high_availability
 # monitoring_role['enable'] = true
 
 # prometheus['enable'] = true
@@ -1543,7 +1543,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Node Exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/node_exporter.html
 ################################################################################
 
 # node_exporter['enable'] = true
@@ -1562,7 +1562,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Redis exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/redis_exporter.html
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/redis_exporter.html
 ################################################################################
 
 # redis_exporter['enable'] = true
@@ -1580,7 +1580,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Postgres exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/postgres_exporter.html
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/postgres_exporter.html
 ################################################################################
 
 # postgres_exporter['enable'] = true
@@ -1608,7 +1608,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Prometheus Gitlab exporter
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/gitlab_exporter.html
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_exporter.html
 ################################################################################
 
 
@@ -1629,7 +1629,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Grafana Dashboards
-##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/#prometheus-as-a-grafana-data-source
+##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/#prometheus-as-a-grafana-data-source
 ################################################################################
 
 # grafana['enable'] = true
@@ -1892,7 +1892,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! To enable Sentinel and disable all other services in this machine,
 ##! uncomment the line below (if you've enabled Redis role, it will keep it).
-##! Docs: https://docs.gitlab.com/ce/administration/high_availability/redis.html
+##! Docs: https://docs.gitlab.com/ee/administration/high_availability/redis.html
 # redis_sentinel_role['enable'] = true
 
 # sentinel['enable'] = true

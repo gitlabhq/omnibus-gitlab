@@ -431,7 +431,7 @@ Please note:
 **This upgrade requires downtime as the database must be down while the upgrade is being performed.
 The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](http://www.slony.info/).
-Please see our [guide](https://docs.gitlab.com/ce/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
+Please see our [guide](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
 
 Once you have confirmed that the the above checklist is satisfied,
 you can proceed.
@@ -615,7 +615,7 @@ or as a Postgres superuser:
 sudo gitlab-psql -d gitlabhq_production
 ```
 
-[rake-backup]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
-[Reconfigure GitLab]: https://docs.gitlab.com/ce/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
-[rake-restore]: https://docs.gitlab.com/ce/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
-[database requirements document]: https://docs.gitlab.com/ce/install/requirements.html#database
+[rake-backup]: https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
+[Reconfigure GitLab]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"
+[rake-restore]: https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-a-previously-created-backup "Restore raketask documentation"
+[database requirements document]: https://docs.gitlab.com/ee/install/requirements.html#database
