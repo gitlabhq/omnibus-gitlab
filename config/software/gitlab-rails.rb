@@ -155,6 +155,9 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
   move "#{Omnibus::Config.source_dir}/gitlab-rails/.yarn-cache", Omnibus::Config.project_root.to_s
 
+  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=csv --save=licenses.csv", env: env
+  copy 'licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
+
   # Tear down now that gitlab:assets:compile is done.
   delete 'node_modules'
   delete 'config/gitlab.yml'
@@ -198,12 +201,6 @@ build do
     vendor/assets
     ee/app/assets
   )
-
-  # This directory will be deleted after all the licenses copied to it are
-  # handled by the DependencyInformation task of omnibus. It won't be part
-  # of the final package, thus causing a redundancy.
-  # TODO: Instead of relying on upstream provided file, run license_finder here
-  copy 'vendor/licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
 
   # Create a wrapper for the rake tasks of the Rails app
   erb dest: "#{install_dir}/bin/gitlab-rake",
