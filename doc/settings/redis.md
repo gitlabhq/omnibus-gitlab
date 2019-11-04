@@ -1,34 +1,29 @@
-# Redis settings
+# Configuring Redis
 
-## Using a non-packaged Redis instance
+## Running Redis on the application server
 
-If you want to use your own Redis instance instead of the bundled Redis, you
-can use the `gitlab.rb` settings below. Run `gitlab-ctl reconfigure` for the
-settings to take effect.
+### Using an alternate local Redis Instance
+
+Omnibus GitLab provides an instance of Redis by default. Administrators who
+wish to point the GitLab application at their own ***locally*** running Redis
+instance should make the following changes in `gitlab.rb`. Run
+`gitlab-ctl reconfigure` for the changes to take effect.
 
 ```ruby
 redis['enable'] = false
 
 # Redis via TCP
-gitlab_rails['redis_host'] = 'redis.example.com'
-gitlab_rails['redis_port'] = 6380
+gitlab_rails['redis_host'] = '127.0.0.1'
+gitlab_rails['redis_port'] = 6379
 
 # OR Redis via Unix domain sockets
 gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
+
+# Password to Authenticate to alternate local Redis if required
+gitlab_rails['redis_password'] = 'Redis Password'
 ```
 
-## Using Google Cloud Memorystore
-
-Google Cloud Memorystore [does not support the Redis `CLIENT`
-command.](https://cloud.google.com/memorystore/docs/reference/redis-configs#blocked)
-By default Sidekiq will attempt to set the `CLIENT` for debugging
-purposes. This can be disabled via this config setting:
-
-```ruby
-gitlab_rails['redis_enable_client'] = false
-```
-
-## Making a bundled Redis instance reachable via TCP
+### Making a bundled Redis instance reachable via TCP
 
 Use the following settings if you want to make one of the Redis instances
 managed by Omnibus GitLab reachable via TCP.
@@ -43,6 +38,8 @@ redis['bind'] = '127.0.0.1'
 If you'd like to setup a separate Redis server (e.g. in the case of scaling
 issues) for use with GitLab you can do so using GitLab Omnibus.
 
+### Setting up the Redis Node
+
 > **Note:** Redis does not require authentication by default. See
 > [Redis Security](https://redis.io/topics/security) documentation for more
 > information. We recommend using a combination of a Redis password and tight
@@ -52,12 +49,8 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
    [GitLab downloads](https://about.gitlab.com/install/). Do not complete other
    steps on the download page.
 1. Create/edit `/etc/gitlab/gitlab.rb` and use the following configuration.
-   Be sure to change the `external_url` to match your eventual GitLab front-end
-   URL:
 
    ```ruby
-   external_url 'https://gitlab.example.com'
-
    # Disable all services except Redis
    redis_master_role['enable'] = true
 
@@ -67,7 +60,6 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
 
    # If you wish to use Redis authentication (recommended)
    redis['password'] = 'Redis Password'
-   gitlab_rails['redis_password'] = 'Redis Password'
 
    # Disable automatic database migrations
    #   Only the primary GitLab application server should handle migrations
@@ -79,6 +71,35 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
    > to understand which services are automatically disabled via that option.
 
 1. Run `sudo gitlab-ctl reconfigure` to install and configure Redis.
+
+### Configuring the GitLab Application Node
+
+1. The following settings point the GitLab application at the external Redis
+   service:
+
+   ```ruby
+   redis['enable'] = false
+
+   gitlab_rails['redis_host'] = 'redis.example.com'
+   gitlab_rails['redis_port'] = 6379
+
+   # Required if Redis authentication is configured on the Redis node
+   gitlab_rails['redis_password'] = 'Redis Password'
+   ```
+
+1. Run `sudo gitlab-ctl reconfigure` to configure the application to use the
+   external Redis node.
+
+### Using Google Cloud Memorystore
+
+Google Cloud Memorystore [does not support the Redis `CLIENT`
+command.](https://cloud.google.com/memorystore/docs/reference/redis-configs#blocked)
+By default Sidekiq will attempt to set the `CLIENT` for debugging
+purposes. This can be disabled via this config setting:
+
+```ruby
+gitlab_rails['redis_enable_client'] = false
+```
 
 ## Increasing the number of Redis connections beyond the default
 

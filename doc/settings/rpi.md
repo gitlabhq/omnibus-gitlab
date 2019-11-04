@@ -35,4 +35,4 @@ GitLab will perform best if you mount `/var/opt/gitlab` and the swapfile from a 
 
 ### Use external services
 
-You can improve the GitLab performance on the Pi by connecting GitLab to external [database](database.md#using-a-non-packaged-postgresql-database-management-server) and [Redis](redis.md#using-a-non-packaged-redis-instance) instances.
+You can improve the GitLab performance on the Pi by connecting GitLab to external [database](database.md#using-a-non-packaged-postgresql-database-management-server) and [Redis](redis.md#setting-up-a-redis-only-server) instances.
