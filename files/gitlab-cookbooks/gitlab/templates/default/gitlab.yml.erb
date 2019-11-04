@@ -422,6 +422,7 @@ production: &base
   ldap:
     enabled: <%= @ldap_enabled %>
     sync_time: <%= @ldap_sync_time %>
+    prevent_ldap_sign_in: <%= @prevent_ldap_sign_in %>
   <% if @ldap_servers.any? %>
     servers:
     <% @ldap_servers.each do |provider_id, settings| %>

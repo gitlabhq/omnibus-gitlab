@@ -13,6 +13,7 @@ For GitLab Community Edition:
 # yaml format and the spaces must be retained. Using tabs will not work.
 
 gitlab_rails['ldap_enabled'] = true
+gitlab_rails['prevent_ldap_sign_in'] = false
 gitlab_rails['ldap_servers'] = YAML.load <<-EOS # remember to close this block with 'EOS' below
 main: # 'main' is the GitLab 'provider ID' of this LDAP server
   ## label
@@ -75,6 +76,7 @@ If you are installing GitLab Enterprise edition package you can use multiple LDA
 
 ```ruby
 gitlab_rails['ldap_enabled'] = true
+gitlab_rails['prevent_ldap_sign_in'] = false
 gitlab_rails['ldap_servers'] = YAML.load <<-EOS # remember to close this block with 'EOS' below
 main: # 'main' is the GitLab 'provider ID' of this LDAP server
   label: 'LDAP'
@@ -121,8 +123,9 @@ EOS
 
 Run `sudo gitlab-ctl reconfigure` for the LDAP settings to take effect.
 
-For more information on LDAP Integration, check
-[GitLab CE LDAP Documentation](https://docs.gitlab.com/ee/integration/ldap.html) or
-[GitLab EE LDAP Documentation](https://docs.gitlab.com/ee/integration/ldap.html)
+For more information on LDAP Integration, check:
+
+- [LDAP documentation](https://docs.gitlab.com/ee/administration/auth/ldap.html).
+- [EE-specific](https://docs.gitlab.com/ee/administration/auth/ldap-ee.html) LDAP documentation.
 
 *Note*: If you are using pre GitLab 7.4 [configuration syntax like described in the old version README LDAP section](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/e65f026839594d54ad46a31a672d735b9caa16f0/README.md#setting-up-ldap-sign-in) be advised that it is deprecated.

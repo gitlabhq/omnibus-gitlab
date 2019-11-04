@@ -1,5 +1,13 @@
 require 'chef_helper'
 
+RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
+  match do |chef_run|
+    expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+      expected_variables
+    )
+  end
+end
+
 describe 'gitlab::gitlab-rails' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
@@ -249,6 +257,8 @@ describe 'gitlab::gitlab-rails' do
   context 'creating gitlab.yml' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
     let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
+    let(:gitlab_yml_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml).content }
+    let(:generated_yml_content) { YAML.safe_load(gitlab_yml_content, [], [], true) }
     let(:gitlab_yml_templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
 
     let(:aws_connection_hash) do
@@ -1619,6 +1629,18 @@ describe 'gitlab::gitlab-rails' do
             )
           )
         end
+      end
+
+      it 'sets prevent_ldap_sign_in by default' do
+        expect(chef_run).to configure_gitlab_yml_using(hash_including({ 'prevent_ldap_sign_in' => false }))
+        expect(generated_yml_content['production']['ldap']).to include({ 'prevent_ldap_sign_in' => false })
+      end
+
+      it 'allows prevent_ldap_sign_in to be configured' do
+        stub_gitlab_rb(gitlab_rails: { prevent_ldap_sign_in: true })
+
+        expect(chef_run).to configure_gitlab_yml_using(hash_including({ 'prevent_ldap_sign_in' => true }))
+        expect(generated_yml_content['production']['ldap']).to include({ 'prevent_ldap_sign_in' => true })
       end
     end
 
