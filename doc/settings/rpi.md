@@ -1,7 +1,7 @@
 # Running on a Raspberry Pi
 
-In order to run GitLab on a Raspberry Pi, you need either a Pi 2 or a Pi 3. We
-recommend using a Pi 3 for best results. The Pi 1 and Pi Zero do not have enough
+In order to run GitLab on a Raspberry Pi, you need a Pi 2 or newer. We
+recommend using a Pi 4 for best results. The Pi 1 and Pi Zero do not have enough
 RAM to make running GitLab feasible.
 
 ## Configure Swap
