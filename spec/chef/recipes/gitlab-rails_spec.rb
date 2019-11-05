@@ -1524,6 +1524,30 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Shutdown settings' do
+      context 'Blackout setting' do
+        it 'default setting' do
+          stub_gitlab_rb({})
+
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 10)
+          }
+        end
+
+        it 'custom setting' do
+          stub_gitlab_rb(
+            gitlab_rails: { shutdown_blackout_seconds: 20 }
+          )
+
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 20)
+          }
+        end
+      end
+    end
+
     context 'Gitaly settings' do
       context 'when a global token is set' do
         let(:token) { '123secret456gitaly' }
