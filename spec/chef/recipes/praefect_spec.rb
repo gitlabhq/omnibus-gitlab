@@ -51,17 +51,17 @@ describe 'praefect' do
     end
 
     it 'renders the config.toml' do
-      expect(chef_run).to render_file(config_path)
-        .with_content("listen_addr = 'localhost:2305'")
-      expect(chef_run).to render_file(config_path)
-        .with_content("prometheus_listen_addr = 'localhost:9652'")
-      expect(chef_run).not_to render_file(config_path)
-        .with_content('level =')
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[logging\]\s+format = 'json'\n})
+      rendered = {
+        'auth' => { 'token' => '', 'transitioning' => false },
+        'listen_addr' => 'localhost:2305',
+        'logging' => { 'format' => 'json' },
+        'prometheus_listen_addr' => 'localhost:9652',
+        'virtual_storage_name' => 'praefect',
+      }
 
-      expect(chef_run).not_to render_file(config_path)
-        .with_content('[[node]]')
+      expect(chef_run).to render_file(config_path).with_content { |content|
+        expect(Tomlrb.parse(content)).to eq(rendered)
+      }
     end
 
     context 'with custom settings' do

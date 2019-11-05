@@ -17,15 +17,14 @@ listen_addr = '<%= @listen_addr %>'
 socket_path = '<%= @socket_path %>'
 <% end %>
 
-[auth]
-token = '<%= @auth_token %>'
-transitioning = <%= @auth_transitioning %>
-
 <% if @prometheus_listen_addr %>
 # Optional: export metrics via Prometheus
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
+[auth]
+token = '<%= @auth_token %>'
+transitioning = <%= @auth_transitioning %>
 
 [logging]
 <% if @logging_level %>
