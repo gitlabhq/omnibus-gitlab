@@ -1,0 +1,5 @@
+---
+title: Add internal_socket_dir to gitaly config
+merge_request: 3711
+author:
+type: changed

@@ -25,6 +25,7 @@ wrapper_path = "#{gitaly_path}-wrapper"
 pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node['gitaly']['logging_format'].eql?('json')
 open_files_ulimit = node['gitaly']['open_files_ulimit']
+internal_socket_directory = node['gitaly']['internal_socket_dir']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -33,6 +34,12 @@ directory working_dir do
 end
 
 directory log_directory do
+  owner account_helper.gitlab_user
+  mode '0700'
+  recursive true
+end
+
+directory internal_socket_directory do
   owner account_helper.gitlab_user
   mode '0700'
   recursive true

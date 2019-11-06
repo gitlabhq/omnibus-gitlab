@@ -4,6 +4,7 @@ describe 'gitaly' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
+  let(:internal_socket_dir) { '/var/opt/gitlab/gitaly/user_defined/internal_sockets' }
   let(:socket_path) { '/tmp/gitaly.socket' }
   let(:listen_addr) { 'localhost:7777' }
   let(:tls_listen_addr) { 'localhost:8888' }
@@ -63,6 +64,7 @@ describe 'gitaly' do
     it 'populates gitaly config.toml with defaults' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
+        expect(content).to include("internal_socket_dir = '/var/opt/gitlab/gitaly/internal_sockets'")
         expect(content).to include("bin_dir = '/opt/gitlab/embedded/bin'")
         expect(content).to include(%(rugged_git_config_search_path = "/opt/gitlab/embedded/etc"))
       }
@@ -124,6 +126,7 @@ describe 'gitaly' do
       stub_gitlab_rb(
         gitaly: {
           socket_path: socket_path,
+          internal_socket_dir: internal_socket_dir,
           listen_addr: listen_addr,
           tls_listen_addr: tls_listen_addr,
           certificate_path: certificate_path,
@@ -155,9 +158,15 @@ describe 'gitaly' do
 
     it_behaves_like "enabled runit service", "gitaly", "root", "root", "foo", "bar"
 
+    it 'creates expected directories with correct permissions' do
+      expect(chef_run).to create_directory(internal_socket_dir).with(user: 'foo', mode: '0700')
+    end
+
     it 'populates gitaly config.toml with custom values' do
       expect(chef_run).to render_file(config_path)
         .with_content("socket_path = '#{socket_path}'")
+      expect(chef_run).to render_file(config_path)
+        .with_content("internal_socket_dir = '#{internal_socket_dir}'")
       expect(chef_run).to render_file(config_path)
         .with_content("bin_dir = '/opt/gitlab/embedded/bin'")
       expect(chef_run).to render_file(config_path)

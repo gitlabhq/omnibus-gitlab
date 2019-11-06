@@ -1704,6 +1704,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
 #  'HOME' => '/var/opt/gitlab'
 # }
+
+##! internal_socket_dir is the directory that will contain internal gitaly sockets,
+##! separate from socket_path which is the socket that external clients listen on
+
+# gitaly['internal_socket_dir'] = "/var/opt/gitlab/gitaly"
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['tls_listen_addr] = "localhost:9075"
