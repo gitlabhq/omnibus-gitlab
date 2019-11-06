@@ -392,6 +392,14 @@ default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 # Default dependent services to restart in the event that files-of-interest change
 default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn puma sidekiq sidekiq-cluster}
 
+###
+# Unleash
+###
+default['gitlab']['gitlab-rails']['feature_flags_unleash_enabled'] = false
+default['gitlab']['gitlab-rails']['feature_flags_unleash_url'] = nil
+default['gitlab']['gitlab-rails']['feature_flags_unleash_app_name'] = nil
+default['gitlab']['gitlab-rails']['feature_flags_unleash_instance_id'] = nil
+
 ####
 # Unicorn
 ####

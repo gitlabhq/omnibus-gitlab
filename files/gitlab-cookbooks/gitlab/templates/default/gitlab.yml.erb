@@ -396,6 +396,14 @@ production: &base
       enabled: <%= @geo_registry_replication_enabled %>
       primary_api_url: <%= @geo_registry_replication_primary_api_url %> # internal address to the primary registry, will be used by GitLab to directly communicate with primary registry API
 
+  ## Feature Flag https://docs.gitlab.com/ee/user/project/operations/feature_flags.html
+  feature_flags:
+    unleash:
+      enabled: <%= @feature_flags_unleash_enabled %>
+      url: <%= @feature_flags_unleash_url %>
+      app_name: <%= @feature_flags_unleash_app_name %> # Environment name of your GitLab instance
+      instance_id: <%= @feature_flags_unleash_instance_id %>
+
   #
   # 2. GitLab CI settings
   # ==========================
