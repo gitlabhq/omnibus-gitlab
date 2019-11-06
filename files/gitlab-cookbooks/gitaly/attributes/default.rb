@@ -1,6 +1,7 @@
 default['gitaly']['enable'] = false
 default['gitaly']['ha'] = false
 default['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
+default['gitaly']['internal_socket_dir'] = "#{node['gitaly']['dir']}/internal_sockets"
 default['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
 default['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly/env"
 default['gitaly']['graceful_restart_timeout'] = nil

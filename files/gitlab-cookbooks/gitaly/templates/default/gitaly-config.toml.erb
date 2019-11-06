@@ -5,6 +5,8 @@
 # sudo gitlab-ctl reconfigure
 
 socket_path = '<%= @socket_path %>'
+
+internal_socket_dir = '<%= @internal_socket_dir %>'
 bin_dir = '/opt/gitlab/embedded/bin'
 <% if @graceful_restart_timeout %>
 graceful_restart_timeout = '<%= @graceful_restart_timeout %>'
