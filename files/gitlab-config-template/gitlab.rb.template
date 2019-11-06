@@ -2043,6 +2043,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
 
 ################################################################################
+## Unleash
+##! Docs: https://docs.gitlab.com/ee/user/project/operations/feature_flags.html
+################################################################################
+# gitlab_rails['feature_flags_unleash_enabled'] = false
+# gitlab_rails['feature_flags_unleash_url'] = nil
+# gitlab_rails['feature_flags_unleash_app_name'] = nil
+# gitlab_rails['feature_flags_unleash_instance_id'] = nil
+
+################################################################################
 # Pgbouncer (EE only)
 # See [GitLab PgBouncer documentation](http://docs.gitlab.com/omnibus/settings/database.html#enabling-pgbouncer-ee-only)
 # See the [PgBouncer page](https://pgbouncer.github.io/config.html) for details
