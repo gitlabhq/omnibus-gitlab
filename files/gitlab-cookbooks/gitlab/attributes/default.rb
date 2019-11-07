@@ -388,7 +388,7 @@ default['gitlab']['gitlab-rails']['content_security_policy'] = nil
 # List of ips and subnets that are allowed to access Gitlab monitoring endpoints
 default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
-
+default['gitlab']['gitlab-rails']['shutdown_blackout_seconds'] = 10
 # Default dependent services to restart in the event that files-of-interest change
 default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn puma sidekiq sidekiq-cluster}
 
@@ -422,7 +422,6 @@ default['gitlab']['unicorn']['worker_processes'] = nil
 default['gitlab']['unicorn']['exporter_enabled'] = false
 default['gitlab']['unicorn']['exporter_address'] = "127.0.0.1"
 default['gitlab']['unicorn']['exporter_port'] = 8083
-default['gitlab']['unicorn']['exporter_blackout_seconds'] = 10
 
 ####
 # Puma
@@ -445,7 +444,6 @@ default['gitlab']['puma']['max_threads'] = 16
 default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
-default['gitlab']['puma']['exporter_blackout_seconds'] = 10
 
 ####
 # Sidekiq

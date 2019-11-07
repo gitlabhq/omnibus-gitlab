@@ -159,6 +159,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Time between sampling of unicorn socket metrics, in seconds
 # gitlab_rails['monitoring_unicorn_sampler_interval'] = 10
 
+### Shutdown settings
+###! Defines an interval to block healthcheck,
+###! but continue accepting application requests.
+# gitlab_rails['shutdown_blackout_seconds'] = 10
+
 ### Reply by email
 ###! Allow users to comment on issues and merge requests by replying to
 ###! notification emails.
@@ -757,7 +762,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # unicorn['exporter_enabled'] = false
 # unicorn['exporter_address'] = "127.0.0.1"
 # unicorn['exporter_port'] = 8083
-# unicorn['exporter_blackout_seconds'] = 10
 
 ################################################################################
 ## GitLab Puma
@@ -789,7 +793,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['exporter_enabled'] = false
 # puma['exporter_address'] = "127.0.0.1"
 # puma['exporter_port'] = 8083
-# puma['exporter_blackout_seconds'] = 10
 
 ################################################################################
 ## GitLab Sidekiq
