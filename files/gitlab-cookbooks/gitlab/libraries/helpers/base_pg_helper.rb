@@ -104,6 +104,21 @@ class BasePgHelper < BaseHelper
               "| grep -x #{owner}"])
   end
 
+  # Used to compare schema with foreign schema, to determine if foreign tables
+  # need to be refreshed
+  def retrieve_schema_tables(schema_name, db_name)
+    sql = <<~SQL
+        SELECT table_name, column_name, data_type
+          FROM information_schema.columns
+         WHERE table_catalog = '#{db_name}'
+           AND table_schema = '#{schema_name}'
+           AND table_name NOT LIKE 'pg_%'
+      ORDER BY table_name, column_name, data_type
+    SQL
+
+    psql_query(db_name, sql)
+  end
+
   def fdw_server_exists?(server_name, db_name)
     psql_cmd(["-d '#{db_name}'",
               "-c 'select srvname from pg_foreign_server' -tA",

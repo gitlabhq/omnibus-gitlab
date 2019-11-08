@@ -17,7 +17,6 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-gitlab_geo_helper = GitlabGeoHelper.new(node)
 
 postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
@@ -184,16 +183,9 @@ if node['gitlab']['geo-postgresql']['enable']
     only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
   end
 
-  bash 'refresh foreign table definition' do
-    code <<-EOF
-      umask 077
-      function safeRun() {
-        /opt/gitlab/bin/gitlab-rake geo:db:refresh_foreign_tables
-        STATUS=$?
-        echo $STATUS > #{gitlab_geo_helper.fdw_sync_status_file}
-      }
-      safeRun # we always return 0 so we don't block reconfigure flow
-    EOF
+  execute 'refresh foreign table definition' do
+    command '/opt/gitlab/bin/gitlab-rake geo:db:refresh_foreign_tables'
+    returns [0, 1]
 
     only_if { fdw_helper.fdw_can_refresh? }
   end
