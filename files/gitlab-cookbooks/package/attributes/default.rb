@@ -22,6 +22,13 @@ default['package']['install-dir'] = '/opt/gitlab'
 default['package']['detect_init'] = true
 default['package']['systemd_tasks_max'] = 4915
 
+default['package']['systemd_wanted_by'] = 'multi-user.target'
+# Default value for systemd_after is specified in the recipe runit::systemd
+# since we want it to be what user has specified for systemd_wanted_by. Do note
+# that user setting it explicitly in gitlab.rb will still override the default
+# value.
+default['package']['systemd_after'] = nil
+
 # Setting runit defaults here so that they can be made available automatically
 # to cookbooks of individual services via depends in metadata.rb
 default['runit']['sv_bin'] = '/opt/gitlab/embedded/bin/sv'
