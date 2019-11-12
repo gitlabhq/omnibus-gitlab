@@ -176,4 +176,4 @@ In case you want to upload a new version of it:
 
 ## Releasing a New Version
 
-See [release/openshift.md.](../../release/openshift.md)
+See the [OpenShift Omnibus GitLab release process](../../release/openshift.md).

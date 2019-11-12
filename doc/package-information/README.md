@@ -27,7 +27,7 @@ If you don't have the package installed, you can always check the Omnibus GitLab
 
 For example, if you take a look at the `8-6-stable` branch, you can conclude that
 8.6 packages were running [ruby 2.1.8]. Or, that 8.5 packages were bundled
-with [Nginx 1.9.0].
+with [NGINX 1.9.0].
 
 ## Signatures of GitLab, Inc. provided packages
 

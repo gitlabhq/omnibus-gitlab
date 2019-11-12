@@ -29,7 +29,7 @@ request goes out, a new short-living (10 minutes) namespace limited token is gen
 and signed with the private key.
 The Registry then verifies that the signature matches the registry certificate
 specified in its configuration and allows the operation.
-GitLab background jobs processing (through sidekiq) also interacts with Registry.
+GitLab background jobs processing (through Sidekiq) also interacts with Registry.
 These jobs talk directly to Registry in order to handle image deletion.
 
 ## Configuring GitLab and Registry to run on separate nodes

@@ -346,7 +346,7 @@ node throughout the process.
   sudo gitlab-ctl reconfigure
   ```
 
-**For nodes that run Unicorn or sidekiq**
+**For nodes that run Unicorn or Sidekiq**
 
 - Hot reload `unicorn` and `sidekiq` services
 
@@ -564,7 +564,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For nodes that run unicorn or sidekiq**
+**For nodes that run Unicorn or Sidekiq**
 
 Hot reload `unicorn` and `sidekiq` services:
 
@@ -637,7 +637,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For nodes that run unicorn, sidekiq or the geo-logcursor**
+**For nodes that run Unicorn, Sidekiq or the geo-logcursor**
 
 Hot reload `unicorn`, `sidekiq` and ``geo-logcursor`` services:
 

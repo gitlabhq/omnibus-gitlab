@@ -487,7 +487,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Configuring runtime directory
 
-When Prometheus monitoring is enabled, gitlab-exporter will conduct measurements
+When Prometheus monitoring is enabled, GitLab Exporter will conduct measurements
 of each Unicorn process (Rails metrics). Every Unicorn process will need to write
 a metrics file to a temporary location for each controller request.
 Prometheus will then collect all these files and process their values.
@@ -654,7 +654,7 @@ properly. Before rolling out a policy, you may also want to change
 
 ## Setting up LDAP sign-in
 
-See [doc/settings/ldap.md](ldap.md).
+See [LDAP setup documentation](ldap.md).
 
 ## Smartcard authentication
 
@@ -696,11 +696,11 @@ See [`gitlab.yml` documentation](gitlab.yml.md).
 
 ## Sending application email via SMTP
 
-See [doc/settings/smtp.md](smtp.md).
+See [SMTP configuration documentation](smtp.md).
 
-## Omniauth (Google, Twitter, GitHub login)
+## OmniAuth (Google, Twitter, GitHub login)
 
-See [Omniauth documentation](https://docs.gitlab.com/ee/integration/omniauth.html).
+See [OmniAuth documentation](https://docs.gitlab.com/ee/integration/omniauth.html).
 
 ## Adjusting Unicorn settings
 

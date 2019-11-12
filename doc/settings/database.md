@@ -470,7 +470,7 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 
 #### Set `default_transaction_isolation` into `read committed`
 
-If you see errors similar to the following in your production/sidekiq log:
+If you see errors similar to the following in your `production/sidekiq` log:
 
 ```
 ActiveRecord::StatementInvalid PG::TRSerializationFailure: ERROR:  could not serialize access due to concurrent update

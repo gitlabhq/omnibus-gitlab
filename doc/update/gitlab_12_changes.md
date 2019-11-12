@@ -94,7 +94,7 @@ The default formula for calculating the number of Unicorn worker processes has b
 ### 12.3
 
 1. To prevent confusion with the broader GitLab Monitor feature set, the
-   gitlab-monitor tool has been renamed to gitlab-exporter. As a result, usage
+   GitLab Monitor tool has been renamed to GitLab Exporter. As a result, usage
    of `gitlab_monitor[*]` keys in `gitlab.rb` file has been deprecated in favor
    of `gitlab_exporter[*]` ones.
 

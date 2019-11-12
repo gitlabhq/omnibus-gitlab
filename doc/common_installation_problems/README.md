@@ -179,7 +179,7 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 
 ## TCP ports for GitLab services are already taken
 
-By default, Unicorn listens at TCP address 127.0.0.1:8080. Nginx
+By default, Unicorn listens at TCP address 127.0.0.1:8080. NGINX
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
 The ports for Redis, PostgreSQL and Unicorn can be overridden in
@@ -191,7 +191,7 @@ postgresql['port'] = 2345
 unicorn['port'] = 3456
 ```
 
-For Nginx port changes please see [`settings/nginx.md`](../settings/nginx.md).
+For NGINX port changes please see [`settings/nginx.md`](../settings/nginx.md).
 
 ## Git user does not have SSH access
 
@@ -211,7 +211,7 @@ command is available.
 
 The Git user is created, by default, with a locked password, shown by `'!'` in
 /etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon will prevent the
-Git user from authenticating even with ssh keys. An alternative secure solution
+Git user from authenticating even with SSH keys. An alternative secure solution
 is to unlock the password by replacing `'!'` with `'*'` in `/etc/shadow`. The Git
 user will still be unable to change the password because it runs in a restricted
 shell and the `passwd` command for non-superusers requires entering the current
@@ -362,20 +362,20 @@ RPM's because the Omnibus build process does not create source RPM's.
 ### Hassle-free hosting on port 80 and 443
 
 The most common way to deploy GitLab is to have a web server
-(Nginx/Apache) running on the same server as GitLab, with the web
+(NGINX/Apache) running on the same server as GitLab, with the web
 server listening on a privileged (below-1024) TCP port. In
 Omnibus GitLab we provide this convenience by bundling an
-automatically configured Nginx service that needs to run its master
+automatically configured NGINX service that needs to run its master
 process as root to open ports 80 and 443.
 
 If this is problematic, administrators installing GitLab can disable
-the bundled Nginx service, but this puts the burden on them to keep
-the Nginx configuration in tune with GitLab during application
+the bundled NGINX service, but this puts the burden on them to keep
+the NGINX configuration in tune with GitLab during application
 updates.
 
 ### Isolation between Omnibus services
 
-Bundled services in Omnibus GitLab (GitLab itself, Nginx, Postgres,
+Bundled services in Omnibus GitLab (GitLab itself, NGINX, Postgres,
 Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, Omnibus GitLab will create the required Unix
@@ -500,7 +500,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of Nginx doc][] for details on
+See [Change the default proxy headers section of NGINX doc][] for details on
 how to override the default headers.
 
 ## Can't verify CSRF token authenticity Completed 422 Unprocessable
@@ -509,7 +509,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of Nginx doc][] for details on
+See [Change the default proxy headers section of NGINX doc][] for details on
 how to override the default headers.
 
 ## Extension missing pg_trgm
@@ -581,10 +581,10 @@ If GitLab runs fine when not upgrading or running a backup, then adding more swa
 should solve your problem. If you see the server using swap during normal usage,
 you can add more RAM to improve performance.
 
-## Nginx error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
+## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
 
 If your external url for GitLab is longer than the default bucket size (64 bytes),
-Nginx may stop working and show this error in the the logs. To allow larger server
+NGINX may stop working and show this error in the the logs. To allow larger server
 names, double the bucket size in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
