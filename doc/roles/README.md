@@ -17,7 +17,7 @@ have enabled.
 
 When you don't configure GitLab with any roles, GitLab enables the default services for
 a single node install. These include things like PostgreSQL, Redis, Unicorn, Sidekiq,
-Gitaly, GitLab Workhorse, Nginx, etc.
+Gitaly, GitLab Workhorse, NGINX, etc.
 
 These can still be individually enable/disabled by the settings in your `/etc/gitlab/gitlab.rb`.
 
@@ -77,14 +77,14 @@ for configuration steps.
 
   Prepares the database for replication and configures the application as a Geo Primary.
 
-  *By default, enables all of GitLab's standard single node services. (Nginx, Unicorn, Redis, Sidekiq, etc)*
+  *By default, enables all of GitLab's standard single node services. (NGINX, Unicorn, Redis, Sidekiq, etc)*
 
 - **geo_secondary_role**
 
   Configures the secondary database for incoming replication and flags the
   application as a Geo Secondary
 
-  *By default, enables all of GitLab's default single node services. (Nginx, Unicorn, Redis, Sidekiq, etc)*
+  *By default, enables all of GitLab's default single node services. (NGINX, Unicorn, Redis, Sidekiq, etc)*
 
 ### Monitoring Roles
 
@@ -102,18 +102,18 @@ Documentation on the usage of the Postgres Roles can be found in [Configuring Po
 
 - **postgres_role**
 
-  Enables the PostgreSQL, repmgr, and consul services on the machine
+  Enables the PostgreSQL, repmgr, and Consul services on the machine
 
   *By default, enables no other services.*
 
 - **pgbouncer_role**
 
-  Enables the pgbouncer and consul services on the machine
+  Enables the PgBouncer and Consul services on the machine
 
   *By default, enables no other services.*
   
 - **consul_role**
 
-  Enables the consul service on the machine
+  Enables the Consul service on the machine
 
   *By default, enables no other services.*

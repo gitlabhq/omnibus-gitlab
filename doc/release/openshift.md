@@ -74,5 +74,5 @@ Push your updated template into a New Merge request on GitLab.com against the ma
 
 ## Notify
 
-Once the Merge Request has been accepted, alert the `#gitlab-openshift` slack channel that a new
+Once the Merge Request has been accepted, alert the `#gitlab-openshift` Slack channel that a new
 version has been pushed to master. Effectively handing off the template to OpenShift for inclusion in the all-in-one.

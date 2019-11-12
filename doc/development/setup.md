@@ -122,6 +122,6 @@ This ensures that your new work is behaving as expected, and not breaking anythi
    GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
    ```
 
-## Openshift GitLab Development Setup
+## OpenShift GitLab Development Setup
 
-See [openshift/README.md.](openshift/README.md)
+See Omnibus GitLab [development setup](openshift/README.md) documentation.

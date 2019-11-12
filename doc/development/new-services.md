@@ -121,7 +121,7 @@ Some examples of existing groups you may want to use:
 - If the service is enabled in omnibus be default, it should add the `DEFAULT_GROUP` group.
 - If the service should really not be disabled in almost any scenario, add the `SYSTEM_GROUP`.
 - If the service relies on GitLab Rails having been configured, add the `rails` group.
-- If the service is a new prometheus exporter, add the `prometheus` group.
+- If the service is a new Prometheus exporter, add the `prometheus` group.
 
 ## Create enable and disable recipes for the service
 

@@ -90,9 +90,9 @@ build and confirm it there. To use this:
 
 ## Testing changes during install/upgrade
 
-If you are working on changes to the install/upgrade process, and not the reconfigure process itself, you can use the [scripts/repack-deb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/scripts/repack-deb) tool to quickly repack an existing gitlab deb with changes from your local branch. It will repack the existing deb file into a new deb containing the local content from
+If you are working on changes to the install/upgrade process, and not the reconfigure process itself, you can use the [scripts/repack-deb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/scripts/repack-deb) tool to quickly repack an existing GitLab deb with changes from your local branch. It will repack the existing deb file into a new deb containing the local content from
 
-- config/templates/package-scripts
-- files/gitlab-cookbook/
-- files/gitlab-ctl-commands
-- files/gitlab-ctl-commands-ee
+- `config/templates/package-scripts`
+- `files/gitlab-cookbook/`
+- `files/gitlab-ctl-commands`
+- `files/gitlab-ctl-commands-ee`

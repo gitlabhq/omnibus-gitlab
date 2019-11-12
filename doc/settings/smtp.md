@@ -75,7 +75,7 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer' # Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert', see http://api.rubyonrails.org/classes/ActionMailer/Base.html
 ```
 
-_Don't forget to change my.email@gmail.com to your email address and my-gmail-password to your own password._
+_Don't forget to change `my.email@gmail.com` to your email address and `my-gmail-password` to your own password._
 
 _If you encounter authentication errors, ensure you have [allowed less secure apps to access the account](https://support.google.com/accounts/answer/6010255)
  or try [turning on 2-step validation](https://support.google.com/accounts/answer/185839)
