@@ -307,13 +307,13 @@ node throughout the process.
 
   You'll need to bypass PgBouncer and connect directly to the database master
   before running migrations.
-  
+
   Rails uses an advisory lock when attempting to run a migration to prevent
   concurrent migrations from running on the same database. These locks are
   not shared across transactions, resulting in `ActiveRecord::ConcurrentMigrationError`
   and other issues when running database migrations using PgBouncer in transaction
   pooling mode.
-  
+
   To find the master node, run the following on a database node:
 
   ```sh
@@ -476,6 +476,19 @@ the update on the **primary** node:
    sudo gitlab-rake db:migrate
    ```
 
+On each **secondary**, ensure the FDW tables are up-to-date.
+
+1. Wait for the **primary** migrations to finish.
+
+1. Wait for the **primary** migrations to replicate. You can find "Data
+   replication lag" for each node listed on `Admin Area > Geo`.
+
+1. Refresh Foreign Data Wrapper tables
+
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
+
 After updating all nodes (both **primary** and all **secondaries**), check their status:
 
 - Verify Geo configuration and dependencies
@@ -573,7 +586,7 @@ sudo gitlab-ctl hup unicorn
 sudo gitlab-ctl hup sidekiq
 ```
 
-#### Step 2: Updating the Geo secondary multi-node deployment
+#### Step 2: Updating each Geo secondary multi-node deployment
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Primary node.
@@ -663,7 +676,7 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake gitlab:geo:check
    ```
 
-**Deploy node (on the secondary cluster)**
+**Deploy node (on each secondary cluster)**
 
 1. Run post-deployment database migrations, specific to the Geo database:
 
@@ -671,10 +684,16 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake geo:db:migrate
    ```
 
+1. Wait for the **primary** migrations to finish.
+
+1. Wait for the **primary** migrations to replicate. You can find "Data
+   replication lag" for each node listed on `Admin Area > Geo`. These wait steps
+   help ensure the FDW tables are up-to-date.
+
 1. Refresh Foreign Data Wrapper tables
 
    ```sh
-   sudo gitlab-rake geo:db:refresh_foreign_tables
+   sudo gitlab-ctl reconfigure
    ```
 
 1. Verify Geo configuration and dependencies
