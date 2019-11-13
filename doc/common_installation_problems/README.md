@@ -722,11 +722,12 @@ own unit ordering, which is used by AWS Cloudformation.
 
 To fix this, users can make use of `package['systemd_wanted_by']` and
 `package['systemd_after']` settings in gitlab.rb to specify values needed for
-proper ordering.
+proper ordering and run `sudo gitlab-ctl reconfigure`. After reconfigure has
+completed, restart `gitlab-runsvdir` service for changes to take effect.
 
-NOTE: **Note:**
-This should be done before first reconfigure done (that is, before the unit
-files are populated and runsvdir is started).
+```
+sudo systemctl restart gitlab-runsvdir
+```
 
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new

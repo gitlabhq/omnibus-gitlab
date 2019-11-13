@@ -40,7 +40,7 @@ module Gitlab
   role('consul').use { ConsulRole }
 
   ## Attributes directly on the node
-  attribute('package')
+  attribute('package').use { Package }
   attribute('registry',    priority: 20).use { Registry }
   attribute('redis',       priority: 20).use { Redis }
   attribute('postgresql',  priority: 20).use { Postgresql }
