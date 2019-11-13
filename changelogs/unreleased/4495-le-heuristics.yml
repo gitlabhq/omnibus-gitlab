@@ -1,0 +1,5 @@
+---
+title: Refactor LetsEncrypt auto-enabling logic
+merge_request: 3712
+author:
+type: other
