@@ -79,6 +79,14 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     LoggingHelper.deprecation(msg)
   end
 
+  def self.utf8_variable?(var)
+    ENV[var]&.downcase&.include?('utf-8') || ENV[var]&.downcase&.include?('utf8')
+  end
+
+  def self.valid_variable?(var)
+    !ENV[var].nil? && !ENV[var].empty?
+  end
+
   def self.on_exit
     LoggingHelper.report
   end
@@ -146,5 +154,36 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
   def self.check_environment
     ENV['LD_LIBRARY_PATH'] && LoggingHelper.warning('LD_LIBRARY_PATH was found in the env variables, this may cause issues with linking against the included libraries.')
+  end
+
+  def self.check_locale
+    error_message = "Environment variable %{variable} specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings."
+    relevant_vars = %w[LC_CTYPE LC_COLLATE]
+
+    # LC_ALL variable trumps everything. If it specify a locale, we  can make
+    # a decision based on that and need not check more.
+    if valid_variable?('LC_ALL')
+      LoggingHelper.warning(format(error_message, variable: 'LC_ALL')) unless utf8_variable?('LC_ALL')
+      return
+    end
+
+    # We know LC_COLLATE and LC_CTYPE variables being non-UTF8 will definitely
+    # break stuff. So we check for them.
+    individually_set_vars = relevant_vars.select { |var| valid_variable?(var) }
+    individually_set_vars.each do |var|
+      LoggingHelper.warning(format(error_message, variable: var)) unless utf8_variable?(var)
+    end
+
+    # If both LC_COLLATE and LC_CTYPE are UTF-8, initdb won't break. However,
+    # if one of them is set and the other is empty, we defer to LANG.
+    return if individually_set_vars == relevant_vars
+
+    # Instead of setting LC_COLLATE and LC_CTYPE individually, users may have
+    # also just set LANG variable. Next, we check for that. For example where
+    # LC_CTYPE is UTF-8, but LANG is not (and thus LC_COLLATE is not).
+    # This scenario can break initdb.
+    return unless valid_variable?('LANG')
+
+    LoggingHelper.warning(format(error_message, variable: 'LANG')) unless utf8_variable?('LANG')
   end
 end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922

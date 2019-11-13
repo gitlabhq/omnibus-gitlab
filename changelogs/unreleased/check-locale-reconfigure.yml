@@ -1,0 +1,5 @@
+---
+title: Check for non-UTF8 locale during reconfigure
+merge_request: 3708
+author:
+type: added
