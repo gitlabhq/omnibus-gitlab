@@ -22,10 +22,39 @@ module Registry
     def parse_variables
       # first registry_external_url
       parse_registry_external_url
+      # Enable the registry automatically if appropriate
+      auto_enable
       # before this gitlab_rails[registry_path] needs to be parsed
       parse_registry
       # parsing the registry notifications
       parse_registry_notifications
+    end
+
+    ##
+    # If registry_external_url is not set, we're using Let's Encrypt integration,
+    # and the registry isn't explicitly disabled, we automatically enable the registry
+    def auto_enable
+      # If this is not nil, then it has been explicitly set and we should honor that
+      return unless Gitlab['registry']['enable'].nil?
+
+      # If registry_external_url is not nil, it has been explicitly set, and we should honor that
+      return unless Gitlab['registry_external_url'].nil?
+
+      # If Let's Encrypt is not enabled, we don't want to run
+      return unless Gitlab['letsencrypt']['enable']
+
+      uri = URI(Gitlab['external_url'].to_s)
+
+      # Don't auto enable for relative urls
+      return unless Gitlab['gitlab_rails']['gitlab_relative_url'].nil?
+
+      Gitlab['registry']['enable'] = true
+      Gitlab['registry_nginx']['listen_port'] ||= '5050'
+      Gitlab['registry_nginx']['redirect_http_to_https'] = false
+      Gitlab['registry_nginx']['fqdn'] = uri.host
+      Gitlab['gitlab_rails']['registry_port'] ||= Gitlab['registry_nginx']['listen_port']
+      set_ssl(uri.to_s)
+      parse_defaults(uri)
     end
 
     def parse_secrets
@@ -43,20 +72,24 @@ module Registry
       raise "GitLab Container Registry external URL must include a schema and FQDN, e.g. https://registry.example.com/" unless uri.host
 
       Gitlab['registry']['enable'] = true if Gitlab['registry']['enable'].nil?
-      Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
+      parse_defaults(uri)
 
-      Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
-      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/, '')
-      Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
-      Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
-      Gitlab['gitlab_rails']['registry_host'] = uri.host
-      Gitlab['registry_nginx']['listen_port'] ||= uri.port
-
-      set_ssl
+      set_ssl(uri.to_s)
+      LetsEncryptHelper.add_service_alt_name("registry")
     end
 
-    def set_ssl
-      uri = URI(Gitlab['registry_external_url'].to_s)
+    def parse_defaults(uri)
+      Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
+      Gitlab['gitlab_rails']['registry_host'] = uri.host
+      Gitlab['registry_nginx']['listen_port'] ||= uri.port
+      Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
+      Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/, '')
+      Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
+      Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
+    end
+
+    def set_ssl(url)
+      uri = URI(url)
 
       case uri.scheme
       when "http"
@@ -66,8 +99,6 @@ module Registry
         Gitlab['registry_nginx']['https'] ||= true
         Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
-
-        LetsEncryptHelper.add_service_alt_name("registry")
 
         Nginx.parse_proxy_headers('registry_nginx', true)
       else

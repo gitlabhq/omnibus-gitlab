@@ -31,7 +31,7 @@ by default:
 | <a name="incoming-email"></a>      Incoming email     | No            | Port             | X           | 143                                    |
 | <a name="elasticsearch"></a>       Elastic search     | No            | Port             | X           | 9200                                   |
 | <a name="gitlab-pages"></a>        GitLab Pages       | No            | Port             | X           | 80 or 443                              |
-| <a name="gitlab-registry-web"></a> GitLab Registry    | No            | Port             | X           | 80 or 443                              |
+| <a name="gitlab-registry-web"></a> GitLab Registry    | No*            | Port             | X           | 80, 443 or 5050                        |
 | <a name="gitlab-registry"></a>     GitLab Registry    | No            | Port             | X           | 5000                                   |
 | <a name="ldap"></a>                LDAP               | No            | Port             | X           | Depends on the component configuration |
 | <a name="kerberos"></a>            Kerberos           | No            | Port             | X           | 8443 or 8088                           |
@@ -57,3 +57,5 @@ and various other files.
 Note that if you are using NFS (Network File System), files will be carried
 over a network which will require, based on implementation, ports `111` and
 `2049` to be open.
+
+*: NOTE: **NOTE:** In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details
