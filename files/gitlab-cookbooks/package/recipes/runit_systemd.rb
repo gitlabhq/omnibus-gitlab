@@ -28,7 +28,11 @@ tasks_max = node['package']['systemd_tasks_max'] if SystemdHelper.systemd_versio
 template "/usr/lib/systemd/system/gitlab-runsvdir.service" do
   mode "0644"
   source "gitlab-runsvdir.service.erb"
-  variables(tasks_max: tasks_max)
+  variables(
+    tasks_max: tasks_max,
+    systemd_after: node['package']['systemd_after'],
+    systemd_wanted_by: node['package']['systemd_wanted_by']
+  )
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
   notifies :run, 'execute[systemctl enable gitlab-runsvdir]', :immediately
   notifies :run, 'execute[systemctl start gitlab-runsvdir]', :immediately

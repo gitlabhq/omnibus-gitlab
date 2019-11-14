@@ -1809,6 +1809,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! version that supports it (>= 227). Will be a no-op if user is not on systemd.
 # package['systemd_tasks_max'] = 4915
 
+##! Settings to configure order of GitLab's systemd unit.
+##! Note: We do not recommend changing these values unless absolutely necessary
+# package['systemd_after'] = 'multi-user.target'
+# package['systemd_wanted_by'] = 'multi-user.target'
 ################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##

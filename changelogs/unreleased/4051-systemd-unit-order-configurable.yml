@@ -1,0 +1,5 @@
+---
+title: Make systemd unit ordering configurable
+merge_request: 3743
+author:
+type: added

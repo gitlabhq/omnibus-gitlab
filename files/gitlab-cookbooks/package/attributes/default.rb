@@ -22,6 +22,9 @@ default['package']['install-dir'] = '/opt/gitlab'
 default['package']['detect_init'] = true
 default['package']['systemd_tasks_max'] = 4915
 
+default['package']['systemd_wanted_by'] = 'multi-user.target'
+default['package']['systemd_after'] = 'multi-user.target'
+
 # Setting runit defaults here so that they can be made available automatically
 # to cookbooks of individual services via depends in metadata.rb
 default['runit']['sv_bin'] = '/opt/gitlab/embedded/bin/sv'

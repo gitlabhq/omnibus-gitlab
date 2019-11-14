@@ -711,6 +711,24 @@ If using this configuration, runit service must be started before running
 /opt/gitlab/embedded/bin/runsvdir-start &
 ```
 
+## gitlab-ctl reconfigure hangs while using AWS Cloudformation
+
+GitLab's systemd unit file by default uses `multi-user.target` for both `After`
+and `WantedBy` fields. This is done to ensure service runs after `remote-fs` and
+`network` targets, and thus GitLab will function properly.
+
+However, this interacts poorly with [cloud-init](https://cloudinit.readthedocs.io/en/latest/)'s
+own unit ordering, which is used by AWS Cloudformation.
+
+To fix this, users can make use of `package['systemd_wanted_by']` and
+`package['systemd_after']` settings in gitlab.rb to specify values needed for
+proper ordering and run `sudo gitlab-ctl reconfigure`. After reconfigure has
+completed, restart `gitlab-runsvdir` service for changes to take effect.
+
+```
+sudo systemctl restart gitlab-runsvdir
+```
+
 [certificate link shell script]: https://gitlab.com/snippets/6285
 [script source]: https://www.madboa.com/geek/openssl/#verify-new
 [Change the default proxy headers section of nginx doc]: ../settings/nginx.md
