@@ -1449,6 +1449,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "X-Forwarded-Ssl" => "on"
 # }
 
+# When the registry is automatically enabled using the same domain as `external_url`,
+# it listens on this port
+# registry_nginx['listen_port'] = 5050
+
 ################################################################################
 ## Prometheus
 ##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/
