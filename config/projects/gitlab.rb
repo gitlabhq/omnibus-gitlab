@@ -20,6 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
 require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -67,7 +68,14 @@ else
   runtime_dependency 'openssh-server'
 end
 
-runtime_dependency 'policycoreutils-python' if rhel?
+if rhel?
+  case OhaiHelper.get_centos_version
+  when '6', '7'
+    runtime_dependency 'policycoreutils-python'
+  when '8'
+    runtime_dependency 'policycoreutils-python-utils'
+  end
+end
 
 dependency 'git'
 dependency 'jemalloc'
