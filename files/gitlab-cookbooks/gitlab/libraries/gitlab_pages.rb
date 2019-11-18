@@ -99,6 +99,15 @@ module GitlabPages
 
     def parse_secrets
       Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64)
+
+      # Pages and GitLab expects exactly 32 bytes, encoded with base64
+      if Gitlab['gitlab_pages']['api_secret_key']
+        bytes = Base64.strict_decode64(Gitlab['gitlab_pages']['api_secret_key'])
+        raise "gitlab_pages['api_secret_key'] should be exactly 32 bytes" if bytes.length != 32
+      else
+        bytes = SecureRandom.random_bytes(32)
+        Gitlab['gitlab_pages']['api_secret_key'] = Base64.strict_encode64(bytes)
+      end
     end
   end
 end

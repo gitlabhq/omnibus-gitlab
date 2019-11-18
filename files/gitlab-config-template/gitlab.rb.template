@@ -1341,6 +1341,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Define custom gitlab-pages HTTP headers for the whole instance
 # gitlab_pages['headers'] = []
 
+##! Shared secret used for authentication between Pages and GitLab
+# gitlab_pages['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################

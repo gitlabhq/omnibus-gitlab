@@ -2225,6 +2225,73 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'gitlab_pages_secret' do
+      let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root') }
+
+      context 'by default' do
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com'
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'with specific gitlab_pages_secret' do
+        let(:api_secret_key) { SecureRandom.base64(32) }
+
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_pages: { api_secret_key: api_secret_key },
+              external_url: 'http://gitlab.example.com',
+              pages_external_url: 'http://pages.example.com'
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'renders the correct node attribute' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with_variables(
+            secret_token: api_secret_key
+          )
+        end
+
+        it 'uses the correct owner and permissions' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+        end
+      end
+    end
   end
 
   context 'gitlab registry' do
