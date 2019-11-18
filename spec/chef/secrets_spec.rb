@@ -80,7 +80,7 @@ describe 'secrets' do
       it 'fails when provided gitlab_pages.shared_secret is not 32 bytes' do
         stub_gitlab_rb(gitlab_pages: { api_secret_key: SecureRandom.base64(16) })
 
-        expect { chef_run }.to raise_error(RuntimeError, /gitlab_pages.api_secret_key should be exactly 32 bytes/)
+        expect { chef_run }.to raise_error(RuntimeError, /gitlab_pages\['api_secret_key'\] should be exactly 32 bytes/)
       end
 
       it 'accepts provided gitlab_pages.api_secret_key when it is 32 bytes' do
