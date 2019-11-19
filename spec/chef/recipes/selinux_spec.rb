@@ -16,7 +16,14 @@ describe 'gitlab::gitlab-selinux' do
   end
 
   context 'when running on selinux' do
-    before { stub_command('id -Z').and_return('') }
+    before do
+      stub_command('id -Z').and_return('')
+      allow(File).to receive(:exist?).and_call_original
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh').and_return(true)
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh/authorized_keys').and_return(true)
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
+    end
 
     let(:bash_block) { chef_run.bash('Set proper security context on ssh files for selinux') }
 
@@ -38,8 +45,23 @@ describe 'gitlab::gitlab-selinux' do
 
       expect(lines).to include(*managed_files)
       expect(lines).to include("restorecon -R -v '/var/opt/gitlab/.ssh'")
-      expect(lines).to include("restorecon -v '/var/opt/gitlab/.ssh/authorized_keys' '/var/opt/gitlab/gitlab-shell/config.yml'")
+      expect(lines).to include("restorecon -v '/var/opt/gitlab/.ssh/authorized_keys'")
+      expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-shell/config.yml'")
       expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret'")
+    end
+
+    context 'when gitlab-rails is disabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            enable: false
+          }
+        )
+      end
+
+      it 'should not attempt to set security context' do
+        expect(chef_run).not_to run_bash('Set proper security context on ssh files for selinux')
+      end
     end
   end
 end
