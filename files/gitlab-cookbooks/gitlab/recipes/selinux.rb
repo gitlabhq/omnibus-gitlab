@@ -28,3 +28,11 @@ if RedhatHelper.system_is_rhel7?
     not_if "semodule -l | grep '^#{authorized_keys_module}\\s'"
   end
 end
+
+# If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
+# git_user is valid.
+bash "Set proper security context on ssh files for selinux" do
+  code SELinuxHelper.commands(node)
+  only_if "id -Z"
+  not_if { !node['gitlab']['gitlab-rails']['enable'] }
+end
