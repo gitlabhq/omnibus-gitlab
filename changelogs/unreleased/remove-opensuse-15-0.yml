@@ -1,0 +1,5 @@
+---
+title: Stop building packages for openSUSE 15.0
+merge_request: 3753
+author:
+type: removed
