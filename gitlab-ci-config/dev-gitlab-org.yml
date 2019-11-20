@@ -215,7 +215,9 @@ Ubuntu-16.04-branch:
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  stage: gitlab_com:package
+  extends: .branch_template
+
 Debian-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -323,6 +325,11 @@ Ubuntu-16.04:
   except:
     variables: []
 
+Ubuntu-18.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .tag_template
+
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -375,10 +382,15 @@ Ubuntu-16.04-upload-deploy:
   except:
     variables: []
 
+Ubuntu-18.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-18.04
+    - Ubuntu-18.04-branch
+  <<: *dev-except-branches
+
 ### Package builds
-Ubuntu-18.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
 Debian-8:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -454,11 +466,6 @@ Docker-measure-memory:
   dependencies: []
 
 ### Staging uploads
-Ubuntu-18.04-staging:
-  dependencies:
-    - Ubuntu-18.04
-    - Ubuntu-18.04-branch
-  <<: *staging_upload
 Debian-8-staging:
   dependencies:
     - Debian-8
