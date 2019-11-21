@@ -202,6 +202,7 @@ gitlab_rails['smtp_domain'] = "yourdomain.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+gitlab_rails['gitlab_email_from'] = 'username@yourdomain.com'
 ```
 
 ### Online.net
