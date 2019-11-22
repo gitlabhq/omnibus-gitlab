@@ -118,3 +118,6 @@ consul:
 ohai:
   remote: "git@dev.gitlab.org:omnibus-mirror/ohai.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ohai.git"
+redis:
+  remote: "git@dev.gitlab.org:omnibus-mirror/redis.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/redis.git"

@@ -22,12 +22,10 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-default_version '3.2.12'
+version = Gitlab::Version.new('redis', '3.2.12')
+default_version version.print(false)
 
-source url: "http://download.redis.io/releases/redis-#{version}.tar.gz",
-       md5: 'b005ef8161ee1e9f67d10af5bab28093'
-
-relative_path "redis-#{version}"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
