@@ -156,7 +156,7 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 1. Run `gitlab-ctl reconfigure`.
 
 CAUTION: **Caution:**
-If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs`.
+If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1425).
 
 ## Troubleshooting
 
