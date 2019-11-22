@@ -1,0 +1,5 @@
+---
+title: Grafana login should not require local PostgreSQL
+merge_request: 3761
+author:
+type: fixed
