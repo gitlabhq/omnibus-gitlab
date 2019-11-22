@@ -1,5 +1,0 @@
----
-title: Allow to specify `shutdown_blackout_seconds`
-merge_request: 3734
-author:
-type: changed

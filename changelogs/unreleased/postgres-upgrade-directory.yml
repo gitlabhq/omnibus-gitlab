@@ -1,5 +1,0 @@
----
-title: Support alternative PG directories in pg-upgrade
-merge_request: 3701
-author:
-type: fixed
