@@ -3,6 +3,45 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.5.0
+
+### Security (1 change)
+
+- Update Mattermost to 5.15.2.
+
+### Fixed (4 changes)
+
+- Build from Docker Distribution fork and update to v2.7.4-gitlab. !3686
+- Support alternative PG directories in pg-upgrade. !3701
+- Geo: Fix refresh foreign tables on reconfigure. !3728
+- Fix praefect prometheus configuration. !3731
+
+### Changed (4 changes)
+
+- Add new format for praefect storage node configuration. !3699
+- Make Puma/Unicorn exclusive. !3703
+- Add internal_socket_dir to gitaly config. !3711
+- Allow to specify `shutdown_blackout_seconds`. !3734
+
+### Added (6 changes)
+
+- Add settings for feature flags unleash client. !3681
+- Add gitlab-etc backup to pre-install. !3682
+- Add support for GitLab Pages authentication secret. !3705
+- Check for non-UTF8 locale during reconfigure. !3708
+- Make systemd unit ordering configurable. !3743
+- Enable registry using external_url when https is auto enabled. !3747
+
+### Other (6 changes)
+
+- Update Consul Version. !3400
+- Add logging directory default for gitlab shell in gitaly config.toml. !3680
+- Add prevent_ldap_sign_in option to gitlab.rb. !3692
+- Update instructions for adding setting to gitlab.yml. !3710
+- Refactor LetsEncrypt auto-enabling logic. !3712
+- Update Mattermost to 5.16.2.
+
+
 ## 12.4.3
 
 ### Security (1 change)

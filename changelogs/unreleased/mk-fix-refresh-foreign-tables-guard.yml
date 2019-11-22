@@ -1,5 +1,0 @@
----
-title: 'Geo: Fix refresh foreign tables on reconfigure'
-merge_request: 3728
-author:
-type: fixed
