@@ -256,6 +256,7 @@ Trigger:package:
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
+    - bundle exec rake build:component_shas
   <<: *com-trigger-only
   artifacts:
     expire_in: 3 days
