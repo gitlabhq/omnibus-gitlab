@@ -56,6 +56,7 @@
     - bundle exec rake cache:restore
     - bundle exec rake build:project build:package:sync
     - bundle exec rake cache:bundle
+    - bundle exec rake build:component_shas
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
   tags:
   - docker-builder
@@ -106,6 +107,7 @@
     - bundle exec rake cache:restore
     - bundle exec rake release:package
     - bundle exec rake cache:bundle
+    - bundle exec rake build:component_shas
   tags:
   - docker-builder
   <<: *dev-tag-only

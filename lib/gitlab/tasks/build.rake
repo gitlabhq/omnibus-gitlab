@@ -76,4 +76,16 @@ namespace :build do
     # We don't differentiate between CE and EE here since they use the same version file
     puts Gitlab::Version.new('gitlab-rails').print
   end
+
+  desc 'Print SHAs of GitLab components'
+  task :component_shas do
+    version_manifest_file = Dir.glob('pkg/**/*version-manifest.json').first
+    return unless version_manifest_file
+
+    puts "#### SHAs of GitLab Components"
+    json_content = JSON.parse(File.read(version_manifest_file))
+    %w[gitlab-rails gitaly gitlab-pages gitlab-shell gitlab-workhorse].each do |component|
+      puts "#{component} : #{json_content['software'][component]['locked_version']}"
+    end
+  end
 end
