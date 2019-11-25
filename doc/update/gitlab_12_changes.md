@@ -47,9 +47,8 @@ DSS 3.1 standard.
 
 ## Upgrade to Postgres 10
 
-DANGER: **Danger:**
-If you are running a GEO installation using PostgreSQL 9.6.x and are updating to any version of GitLab 12.1 or newer, please disable the automatic upgrade temporarily. If you have any questions or concerns, please [contact support](https://about.gitlab.com/support/).
-This is because we discovered [an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that affects the automatic upgrade of PostgreSQL from version 9.6.x to 10.x and can lead to an unsuccessful upgrade of a secondary server.
+CAUTION: **Caution:**
+If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. This issue is now fixed.
 
 Postgres will automatically be upgraded to 10.x unless specifically opted
 out during the upgrade. To opt out you must execute the following before
