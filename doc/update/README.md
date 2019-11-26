@@ -832,7 +832,9 @@ sudo rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 
 ### Package obsoleted by installed package
 
-We mark the CE and EE packages as obsoleting and replacing each other so that both aren't installed and running at the same time. If you are using local RPM files to switch from CE to EE or vice versa, then you'll want to use `rpm` for installing the package rather than `yum`. If you try to use yum, then you may get an error like this:
+CE and EE packages are marked as obsoleting and replacing each other so that both aren't installed and running at the same time.
+
+If you are using local RPM files to switch from CE to EE or vice versa, use `rpm` for installing the package rather than `yum`. If you try to use yum, then you may get an error like this:
 
 ```text
 Cannot install package gitlab-ee-11.8.3-ee.0.el6.x86_64. It is obsoleted by installed package gitlab-ce-11.8.3-ce.0.el6.x86_64
