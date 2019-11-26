@@ -92,6 +92,8 @@ if !node['monitoring']['grafana']['gitlab_secret'] && !node['monitoring']['grafa
     block do
       GrafanaHelper.authorize_with_gitlab(external_url)
     end
+    # Try connecting to GitLab only if it is enabled and on this node
+    only_if { node['gitlab']['gitlab-rails']['enable'] }
   end
 end
 
