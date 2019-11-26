@@ -841,4 +841,7 @@ Cannot install package gitlab-ee-11.8.3-ee.0.el6.x86_64. It is obsoleted by inst
 ```
 
 
-For a successful install, you can use the same instructions that we provide in the [Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package) section. Alternatively, you can temporarily disable obsoletion checking in yum by adding `--setopt=obsoletes=0` to the options given to the command.
+To avoid this issue, either:
+
+- Use the same instructions provided in the [Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package) section. 
+- Temporarily disable obsoletion checking in yum by adding `--setopt=obsoletes=0` to the options given to the command.
