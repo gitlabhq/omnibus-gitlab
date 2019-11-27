@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.5.2
+
+### Security (1 change)
+
+- Disable grafana metrics api by default and add option to enable it.
+
+
 ## 12.5.1
 
 - No changes.
