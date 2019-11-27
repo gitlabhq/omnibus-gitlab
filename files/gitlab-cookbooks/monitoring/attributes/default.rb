@@ -124,3 +124,6 @@ default['monitoring']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env
 default['monitoring']['grafana']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+default['monitoring']['grafana']['metrics_enabled'] = false
+default['monitoring']['grafana']['metrics_basic_auth_username'] = nil
+default['monitoring']['grafana']['metrics_basic_auth_password'] = nil
