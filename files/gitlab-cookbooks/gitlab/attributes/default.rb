@@ -721,6 +721,7 @@ default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
   "Upgrade" => "$http_upgrade",
   "Connection" => "$connection_upgrade"
 }
+default['gitlab']['mattermost-nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
 
 ####
 # GitLab Pages NGINX

@@ -73,6 +73,10 @@ server {
   set_real_ip_from <%= trusted_address %>;
   <% end %>
 
+  <% if @referrer_policy %>
+  add_header Referrer-Policy <%= @referrer_policy %>;
+  <% end %>
+
   access_log  <%= @log_directory %>/gitlab_mattermost_access.log gitlab_mattermost_access;
   error_log   <%= @log_directory %>/gitlab_mattermost_error.log;
 
