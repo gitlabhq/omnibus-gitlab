@@ -1,0 +1,5 @@
+---
+title: "Set Referrer-Policy for Mattermost to strict-origin-when-cross-origin, allow customization"
+merge_request: 3763
+author: Florian Kaiser
+type: fixed
