@@ -195,6 +195,57 @@ describe 'monitoring::grafana' do
           expect(content).to match(/token_url = https:\/\/trailingslash.example.com\/oauth\/token/)
           expect(content).to match(/api_url = https:\/\/trailingslash.example.com\/api\/v4/)
           expect(content).to match(/allowed_groups = allowed also-allowed/)
+          expect(content).to match(/\[metrics\]\n#.+\nenabled = false/)
+          expect(content).not_to match(/basic_auth_username/)
+          expect(content).not_to match(/basic_auth_password/)
+        }
+    end
+
+    it 'generates grafana metrics basic auth password when enabled' do
+      stub_gitlab_rb(
+        grafana: {
+          metrics_enabled: true
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
+        .with_content { |content|
+          expect(content).to match(/\[metrics\]\n#.+\nenabled = true/)
+          expect(content).not_to match(/basic_auth_username/)
+          expect(content).to match(/basic_auth_password = """\S+"""/)
+        }
+    end
+
+    it 'adds metrics basic_auth_username when set' do
+      stub_gitlab_rb(
+        grafana: {
+          metrics_enabled: true,
+          metrics_basic_auth_username: 'user'
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
+        .with_content { |content|
+          expect(content).to match(/\[metrics\]\n#.+\nenabled = true/)
+          expect(content).to match(/basic_auth_username = """user"""/)
+          expect(content).to match(/basic_auth_password = """\S+"""/)
+        }
+    end
+
+    it 'can use special chars in metrics basic auth username and password' do
+      stub_gitlab_rb(
+        grafana: {
+          metrics_enabled: true,
+          metrics_basic_auth_username: '#user;@',
+          metrics_basic_auth_password: 'password_#;@'
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
+        .with_content { |content|
+          expect(content).to match(/\[metrics\]\n#.+\nenabled = true/)
+          expect(content).to match(/basic_auth_username = """#user;@"""/)
+          expect(content).to match(/basic_auth_password = """password_#;@"""/)
         }
     end
 
