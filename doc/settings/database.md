@@ -79,6 +79,25 @@ With these files in hand, enable SSL:
    If PostgreSQL fails to start, check the logs
    (e.g. `/var/log/gitlab/postgresql/current`) for more details.
 
+#### Require SSL
+
+1. Add the following to `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    postgresql['db_sslmode'] = 'require'
+    ```
+
+1. [Reconfigure GitLab][] to apply the configuration changes.
+
+1. Restart PostgreSQL for the changes to take effect:
+
+   ```sh
+   gitlab-ctl restart postgresql
+   ```
+
+   If PostgreSQL fails to start, check the logs
+   (e.g. `/var/log/gitlab/postgresql/current`) for more details.
+
 #### Disabling SSL
 
 1. Add the following to `/etc/gitlab/gitlab.rb`:
@@ -395,6 +414,27 @@ sure that PostgreSQL is set up according to the [database requirements document]
 1. [Reconfigure GitLab][] for the changes to take effect.
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
+
+### Configuring SSL
+
+#### Require SSL
+
+1. Add the following to `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    postgresql['db_sslmode'] = 'require'
+    ```
+
+1. [Reconfigure GitLab][] to apply the configuration changes.
+
+1. Restart PostgreSQL for the changes to take effect:
+
+   ```sh
+   gitlab-ctl restart postgresql
+   ```
+
+   If PostgreSQL fails to start, check the logs
+   (e.g. `/var/log/gitlab/postgresql/current`) for more details.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
