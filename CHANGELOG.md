@@ -122,6 +122,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.15.
 
 
+## 12.3.8
+
+### Security (2 changes)
+
+- Update Mattermost to 5.14.5 (GitLab 12.3).
+- Disable grafana metrics api by default and add option to enable it.
+
+
 ## 12.3.7
 
 - No changes.
