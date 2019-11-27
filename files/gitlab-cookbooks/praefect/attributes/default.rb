@@ -7,4 +7,6 @@ default['praefect']['listen_addr'] = "localhost:2305"
 default['praefect']['prometheus_listen_addr'] = "localhost:9652"
 default['praefect']['logging_level'] = nil
 default['praefect']['logging_format'] = 'json'
+default['praefect']['sentry_dsn'] = nil
+default['praefect']['sentry_environment'] = nil
 default['praefect']['virtual_storages'] = {}

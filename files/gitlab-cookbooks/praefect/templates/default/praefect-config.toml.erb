@@ -19,6 +19,15 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
+[sentry]
+<% if @sentry_dsn %>
+# Optional: emit errors to Sentry
+sentry_dsn = '<%= @sentry_dsn %>'
+<% end %>
+<% if @sentry_environment %>
+sentry_environment = '<%= @sentry_environment %>'
+<% end %>
+
 [auth]
 token = '<%= @auth_token %>'
 transitioning = <%= @auth_transitioning %>

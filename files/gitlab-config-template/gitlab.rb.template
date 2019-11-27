@@ -1799,6 +1799,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     }
 #   }
 # }
+# praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
+# praefect['sentry_environment'] = "production"
+
 ################################################################################
 # Storage check
 ################################################################################

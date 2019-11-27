@@ -15,6 +15,8 @@ describe 'praefect' do
     let(:socket_path) { nil }
     let(:auth_token) { nil }
     let(:auth_transitioning) { false }
+    let(:sentry_dsn) { nil }
+    let(:sentry_environment) { nil }
     let(:listen_addr) { nil }
     let(:prom_addr) { nil }
     let(:log_level) { nil }
@@ -27,6 +29,8 @@ describe 'praefect' do
                        socket_path: socket_path,
                        auth_token: auth_token,
                        auth_transitioning: auth_transitioning,
+                       sentry_dsn: sentry_dsn,
+                       sentry_environment: sentry_environment,
                        listen_addr: listen_addr,
                        prometheus_listen_addr: prom_addr,
                        logging_level: log_level,
@@ -52,6 +56,7 @@ describe 'praefect' do
         'listen_addr' => 'localhost:2305',
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
+        'sentry' => {},
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -63,6 +68,8 @@ describe 'praefect' do
       let(:socket_path) { '/var/opt/gitlab/praefect/praefect.socket' }
       let(:auth_token) { 'secrettoken123' }
       let(:auth_transitioning) { false }
+      let(:sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
+      let(:sentry_environment) { 'production' }
       let(:listen_addr) { 'localhost:4444' }
       let(:prom_addr) { 'localhost:1234' }
       let(:log_level) { 'debug' }
@@ -91,6 +98,10 @@ describe 'praefect' do
           .with_content("level = '#{log_level}'")
         expect(chef_run).to render_file(config_path)
           .with_content("format = '#{log_format}'")
+        expect(chef_run).to render_file(config_path)
+          .with_content("sentry_dsn = '#{sentry_dsn}'")
+        expect(chef_run).to render_file(config_path)
+          .with_content("sentry_environment = '#{sentry_environment}'")
 
         expect(chef_run).to render_file(config_path)
           .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})
