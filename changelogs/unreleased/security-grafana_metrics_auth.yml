@@ -1,5 +1,0 @@
----
-title: Disable grafana metrics api by default and add option to enable it
-merge_request:
-author:
-type: security
