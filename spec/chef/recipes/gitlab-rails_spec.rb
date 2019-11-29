@@ -2229,6 +2229,30 @@ describe 'gitlab::gitlab-rails' do
     describe 'gitlab_pages_secret' do
       let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root') }
 
+      context 'with pages disabled' do
+        let(:api_secret_key) { SecureRandom.base64(32) }
+
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              pages_enabled: false,
+              gitlab_pages: { api_secret_key: api_secret_key, enable: false },
+              pages_external_url: 'http://pages.example.com'
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+      end
+
       context 'by default' do
         cached(:chef_run) do
           RSpec::Mocks.with_temporary_scope do
