@@ -336,7 +336,7 @@ templatesymlink "Create a gitlab_pages_secret and create a symlink to Rails root
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-pages']['api_secret_key'])
   gitlab_pages_services.each { |svc| notifies :restart, svc }
-  only_if { node['gitlab']['gitlab-pages']['enable'] }
+  only_if { node['gitlab']['gitlab-pages']['api_secret_key'] }
 end
 
 rails_env = {
