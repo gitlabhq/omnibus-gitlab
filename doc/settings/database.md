@@ -436,6 +436,40 @@ sure that PostgreSQL is set up according to the [database requirements document]
    If PostgreSQL fails to start, check the logs
    (e.g. `/var/log/gitlab/postgresql/current`) for more details.
 
+#### Require SSL and verify server certificate against CA bundle
+
+PostgreSQL can be configured to require SSL and verify the server certificate
+against a CA bundle in order to prevent spoofing.
+
+NOTE: **Note:**
+The CA bundle that is specified in `gitlab_rails['db_sslrootcert']` must contain
+both the root and intermediate certificates.
+
+1. Add the following to `/etc/gitlab/gitlab.rb`:
+
+    ```ruby
+    gitlab_rails['db_sslmode'] = "verify-full"
+    gitlab_rails['db_sslrootcert'] = "your-full-ca-bundle.pem"
+    ```
+
+    NOTE: **Note:**
+    If you are using Amazon RDS for your PostgreSQL server, please ensure you
+    download and use the [combined CA bundle](https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem)
+    for `gitlab_rails['db_sslrootcert']`. More information on this can be found
+    in the [using SSL/TLS to Encrypt a Connection to a DB Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html)
+    article on AWS.
+
+1. [Reconfigure GitLab][] to apply the configuration changes.
+
+1. Restart PostgreSQL for the changes to take effect:
+
+   ```sh
+   gitlab-ctl restart postgresql
+   ```
+
+   If PostgreSQL fails to start, check the logs
+   (e.g. `/var/log/gitlab/postgresql/current`) for more details.
+
 ### Backup and restore a non-packaged PostgreSQL database
 
 When using the [rake backup create and restore task][rake-backup], GitLab will
