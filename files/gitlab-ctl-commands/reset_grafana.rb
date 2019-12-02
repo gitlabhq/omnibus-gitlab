@@ -37,7 +37,7 @@ add_command 'reset-grafana', 'Reset Grafana instance to its initial state by rem
   # from upgrade script and we need it to not be run if the resetting was
   # already done on a previous upgrade. So we depend on a status file for this.
   if File.exist?(status_file) && File.read(status_file).strip == '0'
-    log "\nGrafana was reset during a previous upgrade. Skipping."
+    log "\nStatus file found. Grafana is not vulnerable. Skipping reset."
     Kernel.exit 0
   end
 
