@@ -320,6 +320,7 @@ default['gitlab']['gitlab-rails']['rack_attack_protected_paths'] = [
   '/unsubscribes/',
   '/import/github/personal_access_token'
 ]
+default['gitlab']['gitlab-rails']['rack_attack_admin_area_protected_paths_enabled'] = nil
 
 default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
