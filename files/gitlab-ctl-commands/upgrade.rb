@@ -42,9 +42,8 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log 'Could not update PostgreSQL executables.'
   end
 
-  # TODO: Remove once security release is out and find a proper solution.
-  # Otherwise, this will run on every upgrade after this.
-  # Issue: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4599
+  # TODO: Remove in 13.0, by which everyone would've reset their Grafana.
+  # Issue: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4891
   unless GitlabCtl::Util.progress_message('Checking if Grafana needs to be reset') do
     command = %W(#{base_path}/bin/gitlab-ctl reset-grafana)
     status = run_command(command.join(' '))

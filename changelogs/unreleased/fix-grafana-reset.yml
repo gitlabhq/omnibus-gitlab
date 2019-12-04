@@ -1,0 +1,5 @@
+---
+title: Fix unwanted Grafana resets during upgrades
+merge_request: 3772
+author:
+type: fixed
