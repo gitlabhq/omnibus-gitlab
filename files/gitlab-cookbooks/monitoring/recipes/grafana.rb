@@ -73,6 +73,10 @@ directory grafana_provisioning_notifiers_dir do
   recursive true
 end
 
+file File.join(grafana_dir, 'CVE_reset_status') do
+  content '0'
+end
+
 link File.join(grafana_dir, 'conf') do
   to File.join(grafana_assets_dir, 'conf')
 end
