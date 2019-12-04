@@ -1,0 +1,5 @@
+---
+title: Add rack_attack_admin_area_protected_paths_enabled setting
+merge_request: 3773
+author:
+type: fixed
