@@ -99,6 +99,8 @@
       - triggers
       - /^deps/
       - /(^docs[\/-].*|.*-docs$)/
+    variables:
+      - $DEPS_PIPELINE
 
 ###########################
 #     Branch pipeline     #
@@ -150,6 +152,8 @@ docs-lint:
       - triggers
       - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $DEPS_PIPELINE
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -161,7 +165,10 @@ danger-review:
     refs:
       - branches@gitlab-org/omnibus-gitlab
   except:
-    - schedules@gitlab-org/omnibus-gitlab
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+    variables:
+      - $DEPS_PIPELINE
   script:
     - danger --fail-on-errors=true
 
@@ -329,6 +336,7 @@ Trigger:ha-validate:
 dependency_update:
   image: "${RUBY_IMAGE}"
   stage: prepare
+  before_script: []
   script:
     - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
     - $HOME/bin/deps ci
