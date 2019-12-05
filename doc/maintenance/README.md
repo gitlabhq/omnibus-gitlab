@@ -145,7 +145,7 @@ sudo gitlab-geo-psql -d gitlabhq_geo_production
 ## Container Registry garbage collection
 
 Container Registry can use considerable amounts of disk space. To clear up
-some unused layers, registry includes a garbage collect command.
+unused layers, the registry includes a garbage collect command.
 
 GitLab offers a set of APIs to manipulate the Container Registry and aid the process
 of removing unused tags. Currently, this is exposed using the API, but in the future,
@@ -230,10 +230,10 @@ This is a destructive operation.
 
 The GitLab Container Registry follows the same default workflow as Docker Distribution:
 retain all layers, even ones that are unreferenced directly to allow all content
-to be accessed using context addressable identifiers.
+to be accessed using content-addressable identifiers.
 
 However, in most workflows, you don't care about old layers if they are not directly
-referenced by the registry tag. The `registry-garbage-collect` command supports the
+referenced by a registry tag. The `registry-garbage-collect` command supports the
 `-m` switch to allow you to remove all unreferenced manifests and layers that are
 not directly accessible via `tag`:
 
