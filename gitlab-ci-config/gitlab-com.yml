@@ -352,7 +352,7 @@ dependencies_io_check:
     - bundle exec rake build:trigger
   only:
     refs:
-      - /^deps/
+      - /^deps.*/@gitlab-org/omnibus-gitlab
   except:
     refs:
       - triggers
