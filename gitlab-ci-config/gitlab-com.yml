@@ -10,9 +10,11 @@
     refs:
       - /./@gitlab/omnibus-gitlab
       - triggers
-      - /^dependencies_io/
+      - /^deps/
       - /(^docs[\/-].*|.*-docs$)/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $DEPS_PIPELINE
 
 .com-trigger-only: &com-trigger-only
   only:
@@ -95,7 +97,7 @@
   except:
     refs:
       - triggers
-      - /^dependencies_io/
+      - /^deps/
       - /(^docs[\/-].*|.*-docs$)/
 
 ###########################
@@ -146,7 +148,7 @@ docs-lint:
     refs:
       - /./@gitlab/omnibus-gitlab
       - triggers
-      - /^dependencies_io/
+      - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
 
 danger-review:
@@ -324,6 +326,16 @@ Trigger:ha-validate:
   dependencies:
     - Trigger:ee-package
 
+dependency_update:
+  image: "${RUBY_IMAGE}"
+  stage: prepare
+  script:
+    - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
+    - $HOME/bin/deps ci
+  only:
+    variables:
+      - $DEPS_PIPELINE
+
 dependencies_io_check:
   image: "${RUBY_IMAGE}"
   stage: trigger-package
@@ -332,7 +344,7 @@ dependencies_io_check:
     - bundle exec rake build:trigger
   only:
     refs:
-      - /^dependencies_io/
+      - /^deps/
   except:
     refs:
       - triggers
