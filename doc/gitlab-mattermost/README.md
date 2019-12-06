@@ -260,6 +260,7 @@ Below is a list of Mattermost versions for GitLab 11.10 and later:
 | 12.3 | 5.14 |
 | 12.4 | 5.15 |
 | 12.5 | 5.16 |
+| 12.6 | 5.17 |
 
 Starting with GitLab 11.0, GitLab Mattermost can be upgraded through the regular Omnibus GitLab update process. When upgrading previous versions of
 GitLab that process can only be used if Mattermost configuration settings have not been changed outside of GitLab (i.e., no changes to Mattermost's `config.json`
