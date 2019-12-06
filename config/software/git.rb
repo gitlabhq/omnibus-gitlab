@@ -28,7 +28,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/system_check/app/git_version_check.rb
 # - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
-default_version '2.21.0'
+default_version 'v2.21.1'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -42,10 +42,7 @@ dependency 'curl'
 dependency 'pcre2'
 dependency 'libiconv'
 
-source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: '85eca51c7404da75e353eba587f87fea9481ba41e162206a6f70ad8118147bee'
-
-relative_path "git-#{version}"
+source git: 'git@dev.gitlab.org:security/cabal.git'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
