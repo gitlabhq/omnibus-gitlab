@@ -126,6 +126,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.15.
 
 
+## 12.3.9
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
+
+
 ## 12.3.8
 
 ### Security (2 changes)
