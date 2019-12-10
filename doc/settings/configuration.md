@@ -104,7 +104,7 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 
 If you notice any issues with gitlab assets appearing broken after moving to a
 relative url configuration (like missing images or unresponsive components)
-please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-ce)
+please raise an issue in [GitLab CE](https://gitlab.com/gitlab-org/gitlab-foss)
 with the `Frontend` label.
 
 If you are running a version _prior to 8.17_ and for some reason the asset

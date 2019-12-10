@@ -2,18 +2,20 @@
 
 curdir=$(dirname $0)
 
-ce_project="gitlab-ce"
+ce_project="gitlab-foss"
+ee_project="gitlab"
 group_name="gitlab-org"
 
 if [ "${ASSET_REGISTRY}" = "dev.gitlab.org:5005" ]
 then
   group_name="gitlab"
   ce_project="gitlabhq"
+  ee_project="gitlab-ee"
 fi
 
 if ${curdir}/is_gitlab_ee.sh
 then
-  assets_image="${group_name}/gitlab-ee/gitlab-assets-ee"
+  assets_image="${group_name}/${ee_project}/gitlab-assets-ee"
 else
   assets_image="${group_name}/${ce_project}/gitlab-assets-ce"
 fi
