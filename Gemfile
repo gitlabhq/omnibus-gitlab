@@ -4,7 +4,6 @@ require_relative "lib/gitlab/version"
 
 omnibus_gem_version = Gitlab::Version.new('omnibus', "gitlab-omnibus-v5.6.12")
 ohai_gem_version = Gitlab::Version.new('ohai', '14-8-13-gitlab')
-chef_sugar_version = Gitlab::Version.new('chef-sugar', 'v3.6.0')
 
 # Note that omnibus is from a fork with additional gitlab changes.  You can
 # check what they are with the following comparison link:
@@ -24,7 +23,6 @@ chef_sugar_version = Gitlab::Version.new('chef-sugar', 'v3.6.0')
 #      grep "gem 'install " config/software/*
 
 gem 'omnibus', git: omnibus_gem_version.remote, branch: omnibus_gem_version.print(false)
-gem 'chef-sugar', git: chef_sugar_version.remote, tag: chef_sugar_version.print(false)
 gem 'chef', '~> 14.13'
 gem 'ohai', git: ohai_gem_version.remote, branch: ohai_gem_version.print(false)
 gem 'package_cloud'
