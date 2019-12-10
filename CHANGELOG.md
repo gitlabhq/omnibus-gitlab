@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.5.4
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
+
+
 ## 12.5.3
 
 - No changes.
@@ -55,6 +62,13 @@ omnibus-gitlab repository.
 - Update instructions for adding setting to gitlab.yml. !3710
 - Refactor LetsEncrypt auto-enabling logic. !3712
 - Update Mattermost to 5.16.2.
+
+
+## 12.4.6
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
 
 
 ## 12.4.4
@@ -124,6 +138,13 @@ omnibus-gitlab repository.
 - Use postgresql_config resource for postgresql configuration files. !3647
 - gitlab-shell: use make build instead of bin/compile. !3653
 - Update Mattermost to 5.15.
+
+
+## 12.3.9
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
 
 
 ## 12.3.8
