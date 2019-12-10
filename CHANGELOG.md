@@ -3,6 +3,22 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.0.9
+
+### Security (2 changes, 1 of them is from the community)
+
+- Patch nginx 1.14.2 for CVE-2019-9511, CVE-2019-9513, CVE-2019-9516.
+- Update Mattermost to 5.11.1. (Marc Schwede)
+
+
+## 12.0.8
+
+### Security (2 changes)
+
+- Add documentation for configuring an asset proxy server.
+- Make logrotate perform operations not as root user.
+
+
 ## 12.0.7
 
 - Unreleased due to QA failure.

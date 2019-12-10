@@ -23,7 +23,7 @@ _This notice should stay as the first item in the CONTRIBUTING.md file._
 
 ## Definition of done
 
-The omnibus-gitlab project uses the [definition of done as noted in GitLab Community Edition (and Enterprise Edition)](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/contributing/merge_request_workflow.md#definition-of-done).
+The omnibus-gitlab project uses the [definition of done as noted in GitLab Community Edition (and Enterprise Edition)](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/doc/development/contributing/merge_request_workflow.md#definition-of-done).
 
 As this project is a wrapper around GitLab CE/EE, some additions to the definition apply:
 
