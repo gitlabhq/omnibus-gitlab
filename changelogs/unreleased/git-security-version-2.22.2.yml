@@ -1,0 +1,5 @@
+---
+title: Upgrade git to security patch 2.22.2
+merge_request:
+author: Marin Jankovski
+type: security
