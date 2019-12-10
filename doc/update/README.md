@@ -707,6 +707,12 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake geo:status
    ```
 
+## Upgrading Gitaly servers
+
+Gitaly servers must be upgraded to the newer version prior to upgrading the application server.
+This prevents the GRPC client on the application server from sending RPCs that the old Gitaly version
+does not support.
+
 ## Downgrading
 
 This section contains general information on how to revert to an earlier version
