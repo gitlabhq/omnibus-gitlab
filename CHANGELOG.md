@@ -3,9 +3,32 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.1.14
+
+- No changes.
+
+## 12.1.13
+
+- No changes.
+
+## 12.1.12
+
+- No changes.
+
+## 12.1.11
+
+- No changes.
+
 ## 12.1.10
 
 - No changes.
+
+## 12.1.10
+
+### Security (1 change)
+
+- Update Grafana version to 6.3.5.
+
 
 ## 12.1.9
 
