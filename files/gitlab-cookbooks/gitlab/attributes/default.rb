@@ -21,6 +21,7 @@
 ####
 default['gitlab']['bootstrap']['enable'] = true
 default['gitlab']['omnibus-gitconfig']['system'] = {
+  "core" => [%(alternateRefsPrefixes = "refs/alternates/public")],
   "pack" => ["threads = 1"],
   "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
   "repack" => ["writeBitmaps = true"],
@@ -67,7 +68,7 @@ default['gitlab']['gitlab-rails']['env'] = {
   # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
-  # See https://gitlab.com/gitlab-org/gitlab-ce/issues/17415#note_13868167
+  # See https://gitlab.com/gitlab-org/gitlab-foss/issues/17415#note_13868167
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
   'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.7/site-packages",
   # Prevent ExecJS from complaining that Node is not installed in production
@@ -142,7 +143,7 @@ default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['artifacts_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['artifacts_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['artifacts_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['artifacts_object_store_remote_directory'] = 'artifacts'
@@ -153,7 +154,7 @@ default['gitlab']['gitlab-rails']['external_diffs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['external_diffs_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['external_diffs_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['external_diffs_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['external_diffs_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['external_diffs_object_store_remote_directory'] = 'external-diffs'
@@ -163,7 +164,7 @@ default['gitlab']['gitlab-rails']['lfs_storage_path'] = nil
 default['gitlab']['gitlab-rails']['lfs_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['lfs_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['lfs_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['lfs_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['lfs_object_store_remote_directory'] = 'lfs-objects'
@@ -173,7 +174,7 @@ default['gitlab']['gitlab-rails']['uploads_base_dir'] = nil
 default['gitlab']['gitlab-rails']['uploads_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['uploads_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['uploads_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['uploads_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['uploads_object_store_remote_directory'] = 'uploads'
@@ -183,7 +184,7 @@ default['gitlab']['gitlab-rails']['packages_storage_path'] = nil
 default['gitlab']['gitlab-rails']['packages_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['packages_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['packages_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['packages_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['packages_object_store_remote_directory'] = 'packages'
@@ -193,7 +194,7 @@ default['gitlab']['gitlab-rails']['dependency_proxy_storage_path'] = nil
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_direct_upload'] = false
 # TODO: Deprecate once direct upload is implemented
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/57372
+# https://gitlab.com/gitlab-org/gitlab-foss/issues/57372
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_background_upload'] = true
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_remote_directory'] = 'dependency_proxy'

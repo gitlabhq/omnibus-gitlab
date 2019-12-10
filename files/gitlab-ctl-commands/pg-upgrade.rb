@@ -68,7 +68,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless progress_message(
     'Checking for an omnibus managed postgresql') do
       !running_version.nil? && \
-          get_all_services.member?('postgresql')
+          service_enabled?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     Kernel.exit 0
@@ -157,13 +157,13 @@ end
 def common_pre_upgrade
   maintenance_mode('enable')
 
-  locale, encoding = get_locale_encoding
+  locale, collate, encoding = get_locale_encoding
   @db_worker.tmp_data_dir
 
   stop_database
   create_links(upgrade_version)
   create_temp_data_dir
-  initialize_new_db(locale, encoding)
+  initialize_new_db(locale, collate, encoding)
 end
 
 def common_post_upgrade
@@ -223,7 +223,8 @@ end
 
 def get_locale_encoding
   begin
-    locale = @db_worker.fetch_lc_collate
+    locale = @db_worker.fetch_lc_ctype
+    collate = @db_worker.fetch_lc_collate
     encoding = @db_worker.fetch_server_encoding
   rescue GitlabCtl::Errors::ExecutionError => ee
     log 'There wasn an error fetching locale and encoding information from the database'
@@ -232,7 +233,7 @@ def get_locale_encoding
     log "STDERR: #{ee.stderr}"
   end
 
-  [locale, encoding]
+  [locale, collate, encoding]
 end
 
 def create_temp_data_dir
@@ -254,7 +255,7 @@ def create_temp_data_dir
   end
 end
 
-def initialize_new_db(locale, encoding)
+def initialize_new_db(locale, collate, encoding)
   unless progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
@@ -262,7 +263,7 @@ def initialize_new_db(locale, encoding)
         "-D #{@db_worker.tmp_data_dir}.#{upgrade_version.major} " \
         "--locale #{locale} " \
         "--encoding #{encoding} " \
-        " --lc-collate=#{locale} " \
+        " --lc-collate=#{collate} " \
         "--lc-ctype=#{locale}"
       )
     rescue GitlabCtl::Errors::ExecutionError => ee
