@@ -96,16 +96,14 @@ module Build
         # For normal builds, QA build happens from the gitlab repositories in dev.
         # For triggered builds, they are not available and their gitlab.com mirrors
         # have to be used.
+        # CE repo - In com it is gitlab-foss, in dev it is gitlabhq
+        # EE repo - In com it is gitlab, in dev it is gitlab-ee
 
         if Gitlab::Util.get_env('ALTERNATIVE_SOURCES').to_s == "true"
           domain = "https://gitlab.com/gitlab-org"
-          project = package
+          project = package == "gitlab-ce" ? "gitlab-foss" : "gitlab"
         else
           domain = "git@dev.gitlab.org:gitlab"
-
-          # GitLab CE repo in dev.gitlab.org is named gitlabhq. So we need to
-          # identify gitlabhq from gitlab-ce. Fortunately gitlab-ee does not have
-          # this problem.
           project = package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
         end
 

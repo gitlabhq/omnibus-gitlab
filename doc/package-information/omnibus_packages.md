@@ -109,6 +109,6 @@ what was noted above:
 This method is useful for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation. This method is a great introduction, and will work well for smaller organizations.
 
 [GitLab Architecture Overview]: https://docs.gitlab.com/ce/development/architecture.html#gitlab-architecture-overview
-[rubygems]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/Gemfile.lock
+[rubygems]: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/Gemfile.lock
 [non-bundled PG database]: https://docs.gitlab.com/omnibus/settings/database.html#using-a-non-packaged-postgresql-database-management-server
 [GitLab Docker image]: https://docs.gitlab.com/omnibus/docker/README.html#gitlab-docker-images
