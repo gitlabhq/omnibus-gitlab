@@ -25,6 +25,7 @@ describe 'puma_config' do
         expect(content).to match(/^options = { workers: 2 }$/)
         expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options\)))
         expect(content).to match(/^preload_app!$/)
+        expect(content).to match(%r(^require_relative "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"$))
       }
     end
   end
