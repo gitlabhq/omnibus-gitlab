@@ -331,6 +331,17 @@ omnibus-gitlab repository.
 - Add perl dependency to SSL troubleshooting steps.
 
 
+## 12.1.15
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.21.1. (Marin Jankovski)
+
+### Other (1 change)
+
+- Consult the gitlab-elasticsearch-indexer version from GitLab. !3663
+
+
 ## 12.1.14
 
 - No changes.
