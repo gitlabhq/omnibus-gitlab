@@ -21,6 +21,7 @@ define :redis_service, socket_group: nil do
   redis_user = AccountHelper.new(node).redis_user
   redis_group = AccountHelper.new(node).redis_group
   omnibus_helper = OmnibusHelper.new(node)
+  redis_helper = RedisHelper.new(node)
 
   account 'user and group for redis' do
     username redis_user
@@ -76,5 +77,18 @@ define :redis_service, socket_group: nil do
     execute "/opt/gitlab/bin/gitlab-ctl start redis" do
       retries 20
     end
+  end
+
+  ruby_block 'warn pending redis restart' do
+    block do
+      message = <<~MESSAGE
+        The version of the running redis service is different than what is installed.
+        Please restart redis to start the new version.
+
+        sudo gitlab-ctl restart redis
+      MESSAGE
+      LoggingHelper.warning(message)
+    end
+    only_if { redis_helper.running_version != redis_helper.installed_version }
   end
 end
