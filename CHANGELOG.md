@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.10
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
+
+
 ## 12.2.9
 
 ### Other (1 change)
