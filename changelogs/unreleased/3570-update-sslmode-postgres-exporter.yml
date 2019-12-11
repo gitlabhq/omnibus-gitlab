@@ -1,0 +1,5 @@
+---
+title: Use valid sslmode setting in postgres-exporter
+merge_request: 3777
+author:
+type: fixed

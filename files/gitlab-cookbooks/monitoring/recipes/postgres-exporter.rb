@@ -20,10 +20,12 @@ postgresql_user = account_helper.postgresql_user
 postgres_exporter_log_dir = node['monitoring']['postgres-exporter']['log_directory']
 postgres_exporter_env_dir = node['monitoring']['postgres-exporter']['env_directory']
 postgres_exporter_dir = node['monitoring']['postgres-exporter']['home']
+postgres_exporter_sslmode = " sslmode=#{node['monitoring']['postgres-exporter']['sslmode']}" \
+  unless node['monitoring']['postgres-exporter']['sslmode'].nil?
 
 node.default['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "user=#{node['postgresql']['username']} " \
                                                                          "host=#{node['gitlab']['gitlab-rails']['db_host']} " \
-                                                                         "database=postgres sslmode=allow"
+                                                                         "database=postgres#{postgres_exporter_sslmode}"
 
 include_recipe 'postgresql::user'
 
