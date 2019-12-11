@@ -77,6 +77,7 @@ default['monitoring']['postgres-exporter']['env_directory'] = '/opt/gitlab/etc/p
 default['monitoring']['postgres-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+default['monitoring']['postgres-exporter']['sslmode'] = nil
 
 ####
 # Gitlab exporter

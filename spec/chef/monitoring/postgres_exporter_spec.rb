@@ -5,7 +5,7 @@ describe 'monitoring::postgres-exporter' do
   let(:node) { chef_run.node }
   let(:default_vars) do
     {
-      'DATA_SOURCE_NAME' => 'user=gitlab-psql host=/var/opt/gitlab/postgresql database=postgres sslmode=allow',
+      'DATA_SOURCE_NAME' => 'user=gitlab-psql host=/var/opt/gitlab/postgresql database=postgres',
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
     }
   end
@@ -118,6 +118,7 @@ describe 'monitoring::postgres-exporter' do
           },
           listen_address: 'localhost:9700',
           enable: true,
+          sslmode: 'require',
           env: {
             'USER_SETTING' => 'asdf1234'
           }
@@ -136,6 +137,7 @@ describe 'monitoring::postgres-exporter' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/postgres-exporter/env').with_variables(
         default_vars.merge(
           {
+            'DATA_SOURCE_NAME' => 'user=gitlab-psql host=/var/opt/gitlab/postgresql database=postgres sslmode=require',
             'USER_SETTING' => 'asdf1234'
           }
         )
