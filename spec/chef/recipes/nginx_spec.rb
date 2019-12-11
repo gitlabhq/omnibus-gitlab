@@ -175,12 +175,29 @@ describe 'nginx' do
     end
 
     it 'supports overriding default nginx headers' do
-      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp", "X-Forwarded-Ssl" => "on" })
+      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp", "X-Forwarded-Ssl" => "on", 'Connection' => 'close' })
+      set_headers = { "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp", 'Connection' => 'close' }
       stub_gitlab_rb(
-        "nginx" => { proxy_set_headers: { "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp" } },
-        "mattermost_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp" } },
-        "registry_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp" } },
-        "pages_nginx" => { proxy_set_headers: { "Host" => "nohost.example.com", "X-Forwarded-Proto" => "ftp" } }
+        "nginx" => { proxy_set_headers: set_headers },
+        "mattermost_nginx" => { proxy_set_headers: set_headers },
+        "registry_nginx" => { proxy_set_headers: set_headers },
+        "pages_nginx" => { proxy_set_headers: set_headers }
+      )
+
+      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to include(expect_headers)
+    end
+
+    it 'disables Connection header' do
+      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on", "Connection" => nil })
+      set_headers = { "Host" => "nohost.example.com", "Connection" => nil }
+      stub_gitlab_rb(
+        "nginx" => { proxy_set_headers: set_headers },
+        "mattermost_nginx" => { proxy_set_headers: set_headers },
+        "registry_nginx" => { proxy_set_headers: set_headers },
+        "pages_nginx" => { proxy_set_headers: set_headers }
       )
 
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
