@@ -1,0 +1,5 @@
+---
+title: Fix admin_email_worker_cron rendering in gitlab.yml
+merge_request: 3790
+author:
+type: fixed
