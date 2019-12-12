@@ -227,6 +227,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.14. (Harrison Healey)
 
 
+## 12.2.10
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.22.2. (Marin Jankovski)
+
+
 ## 12.2.8
 
 - No changes.
@@ -322,6 +329,17 @@ omnibus-gitlab repository.
 - Bump ohai version to 14.14.0. !3523
 - Update Mattermost to 5.13.2. (Harrison Healey)
 - Add perl dependency to SSL troubleshooting steps.
+
+
+## 12.1.15
+
+### Security (1 change, 1 of them is from the community)
+
+- Upgrade git to security patch 2.21.1. (Marin Jankovski)
+
+### Other (1 change)
+
+- Consult the gitlab-elasticsearch-indexer version from GitLab. !3663
 
 
 ## 12.1.14
@@ -437,6 +455,30 @@ omnibus-gitlab repository.
 - Use Postgresql 10.7 instead of 10.7.0. !3387 (Takuya Noguchi)
 - Enable frame pointer in Redis compile options. !3421
 - Update Mattermost to 5.12.2. (Harrison Healey)
+
+## 12.0.10
+
+### Security (2 changes, 2 of them are from the community)
+
+- Update Mattermost to 5.11.1 (GitLab 12.0). (Harrison Healey)
+- Upgrade git to security patch 2.21.1. (Marin Jankovski)
+
+### Fixed (5 changes)
+
+- Support pg-upgrade on dbs with collate and ctype values that differ from each other. !3371
+- Properly check whether postgres is enabled when doing pg-ugprade. !3381
+- Use armv7 build of Grafana in RPi package. !3401
+- Fix error with repmgr and PostgreSQL 9. !3417
+- Enable specifying --path in bundle install on Ruby docker images. !3432
+
+### Performance (1 change)
+
+- Fix slow pushes for repositories using object deduplication. !3364
+
+### Other (1 change)
+
+- Fix bzip2 location. !3448
+
 
 ## 12.0.9
 
