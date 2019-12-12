@@ -346,6 +346,14 @@ node throughout the process.
   sudo gitlab-ctl reconfigure
   ```
 
+**Deploy node**
+
+- Run post-deployment database migrations on deploy node to complete the migrations with
+
+  ```sh
+  sudo gitlab-rake db:migrate
+  ```
+
 **For nodes that run Unicorn or Sidekiq**
 
 - Hot reload `unicorn` and `sidekiq` services
