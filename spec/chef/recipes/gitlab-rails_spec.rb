@@ -1223,6 +1223,34 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'personal access token expiring worker settings' do
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
+      end
+
+      context 'when worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { personal_access_tokens_expiring_worker_cron: '0 1 2 3 4' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expiring_worker_cron' => '0 1 2 3 4'
+            )
+          )
+        end
+      end
+
+      context 'when worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expiring_worker_cron' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'GitLab Geo settings' do
       let(:chef_run) do
         ChefSpec::SoloRunner.new.converge('gitlab-ee::default')

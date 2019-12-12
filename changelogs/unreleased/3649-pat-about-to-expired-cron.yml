@@ -1,0 +1,5 @@
+---
+title: Add personal_access_tokens_expiring_worker configuration to gitlab.rb
+merge_request: 3679
+author:
+type: added

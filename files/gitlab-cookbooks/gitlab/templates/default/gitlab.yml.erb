@@ -285,7 +285,9 @@ production: &base
     # Send admin emails once a week
     admin_email_worker:
       cron:<% if @admin_email_worker %> "<%= @admin_email_worker_cron %>"<% end %>
-
+    # Send emails about personal tokens about to expired
+    personal_access_tokens_expiring_worker:
+      cron:<% if @personal_access_tokens_expiring_worker_cron %> "<%= @personal_access_tokens_expiring_worker_cron %>"<% end %>
     # Remove outdated repository archives
     repository_archive_cache_worker:
       cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
