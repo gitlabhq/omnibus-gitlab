@@ -1,5 +1,5 @@
 ---
 title: Disable Grafana Reporting & Update Check
-merge_request:
+merge_request: 3793
 author: Stefan Schlesi
 type: changed
