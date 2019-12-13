@@ -32,6 +32,30 @@ describe 'redis' do
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+
+    describe 'pending restart check' do
+      context 'when running version is same as installed version' do
+        before do
+          allow_any_instance_of(RedisHelper).to receive(:running_version).and_return('3.2.12')
+          allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('3.2.12')
+        end
+
+        it 'does not raise a warning' do
+          expect(chef_run).not_to run_ruby_block('warn pending redis restart')
+        end
+      end
+
+      context 'when running version is different than installed version' do
+        before do
+          allow_any_instance_of(RedisHelper).to receive(:running_version).and_return('3.2.12')
+          allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('5.0.7')
+        end
+
+        it 'raises a warning' do
+          expect(chef_run).to run_ruby_block('warn pending redis restart')
+        end
+      end
+    end
   end
 
   context 'with user specified values' do

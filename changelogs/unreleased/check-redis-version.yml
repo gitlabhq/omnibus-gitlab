@@ -1,0 +1,6 @@
+---
+title: Show warning during reconfigure if version of running Redis instance is different
+  than the installed one
+merge_request: 3787
+author:
+type: added

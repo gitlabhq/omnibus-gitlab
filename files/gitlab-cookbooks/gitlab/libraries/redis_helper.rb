@@ -44,6 +44,31 @@ class RedisHelper
     uri
   end
 
+  def running_version
+    return unless OmnibusHelper.new(@node).service_up?('redis')
+
+    command = ['/opt/gitlab/embedded/bin/redis-cli']
+
+    command << if RedisHelper::Checks.is_redis_tcp?
+                 "-h #{Gitlab['redis']['bind']} -p #{Gitlab['redis']['port']}"
+               else
+                 "-s #{@node['redis']['unixsocket']}"
+               end
+
+    command << "INFO"
+
+    command_output = VersionHelper.version(command.join(" "))
+    command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
+  end
+
+  def installed_version
+    return unless OmnibusHelper.new(@node).service_up?('redis')
+
+    command = '/opt/gitlab/embedded/bin/redis-server --version'
+    command_output = VersionHelper.version(command)
+    command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
+  end
+
   class Checks
     class << self
       def is_redis_tcp?
