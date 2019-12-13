@@ -334,7 +334,7 @@ Trigger:ha-validate:
     - Trigger:ee-package
 
 dependency_update:
-  image: "${RUBY_IMAGE}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   stage: prepare
   before_script: []
   script:
