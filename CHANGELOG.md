@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.2.11
+
+- Unreleased due to build failures.
+
 ## 12.2.10
 
 - Unreleased due to build failures.
