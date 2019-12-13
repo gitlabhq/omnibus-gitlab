@@ -1,6 +1,0 @@
----
-title: Support pg-upgrade on dbs with collate and ctype values that differ from each
-  other
-merge_request: 3371
-author:
-type: fixed
