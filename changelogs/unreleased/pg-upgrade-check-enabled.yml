@@ -1,0 +1,5 @@
+---
+title: Properly check whether postgres is enabled when doing pg-ugprade
+merge_request: 3381
+author:
+type: fixed
