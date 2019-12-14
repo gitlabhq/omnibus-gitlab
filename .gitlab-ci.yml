@@ -127,6 +127,7 @@ fetch-assets:
   except:
     variables:
       - $COMPILE_ASSETS == "true"
+      - $DEPS_PIPELINE
       # Format of the auto-deploy tag
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
 
