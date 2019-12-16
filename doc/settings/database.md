@@ -704,7 +704,7 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
 
    ```shell
    sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart sidekiq
    sudo gitlab-ctl restart geo-logcursor
    ```
 
