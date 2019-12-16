@@ -55,6 +55,8 @@ class RedisHelper
                  "-s #{@node['redis']['unixsocket']}"
                end
 
+    command << "-a #{Gitlab['redis']['password']}" if Gitlab['redis']['password']
+
     command << "INFO"
 
     command_output = VersionHelper.version(command.join(" "))
