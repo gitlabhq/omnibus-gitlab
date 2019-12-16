@@ -262,7 +262,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
    ```sh
    sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl usr2 puma
-   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart sidekiq
    ```
 
 NOTE: **Note:**
@@ -360,7 +360,7 @@ node throughout the process.
 
   ```sh
   sudo gitlab-ctl hup unicorn
-  sudo gitlab-ctl hup sidekiq
+  sudo gitlab-ctl restart sidekiq
   ```
 
 - If you're using PgBouncer:
@@ -378,7 +378,7 @@ node throughout the process.
   ```sh
   sudo gitlab-ctl hup unicorn
   sudo gitlab-ctl usr2 puma
-  sudo gitlab-ctl hup sidekiq
+  sudo gitlab-ctl restart sidekiq
   ```
 
 NOTE: **Note:**
@@ -431,7 +431,7 @@ to resolve this.
    ```sh
    sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl usr2 puma
-   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart sidekiq
    ```
 
 On each **secondary** node, executing the following:
@@ -465,7 +465,7 @@ On each **secondary** node, executing the following:
    ```sh
    sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl usr2 puma
-   sudo gitlab-ctl hup sidekiq
+   sudo gitlab-ctl restart sidekiq
    sudo gitlab-ctl restart geo-logcursor
    ```
 
@@ -593,7 +593,7 @@ Hot reload `unicorn` and `sidekiq` services:
 
 ```sh
 sudo gitlab-ctl hup unicorn
-sudo gitlab-ctl hup sidekiq
+sudo gitlab-ctl restart sidekiq
 ```
 
 #### Step 2: Updating each Geo secondary multi-node deployment
@@ -663,7 +663,7 @@ Hot reload `unicorn`, `sidekiq` and ``geo-logcursor`` services:
 
 ```sh
 sudo gitlab-ctl hup unicorn
-sudo gitlab-ctl hup sidekiq
+sudo gitlab-ctl restart sidekiq
 sudo gitlab-ctl restart geo-logcursor
 ```
 
