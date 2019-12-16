@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.5.5
+
+### Fixed (2 changes)
+
+- Fix unwanted Grafana resets during upgrades. !3772
+- Bump acme-client version to 2.0.5. !3782
+
+
 ## 12.5.4
 
 ### Security (1 change, 1 of them is from the community)
