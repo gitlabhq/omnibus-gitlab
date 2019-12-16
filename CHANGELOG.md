@@ -11,6 +11,10 @@ omnibus-gitlab repository.
 - Bump acme-client version to 2.0.5. !3782
 
 
+## 12.5.5
+
+- No changes.
+
 ## 12.5.4
 
 ### Security (1 change, 1 of them is from the community)
