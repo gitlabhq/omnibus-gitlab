@@ -386,3 +386,6 @@ pages:
       - public
   only:
     - schedules@gitlab-org/omnibus-gitlab
+  except:
+    variables:
+      - $DEPS_PIPELINE
