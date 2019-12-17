@@ -57,6 +57,7 @@ describe 'praefect' do
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
+        'database' => {},
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -85,6 +86,40 @@ describe 'praefect' do
             'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
           }
         }
+      end
+      let(:database_host) { 'pg.internal' }
+      let(:database_port) { 1234 }
+      let(:database_user) { 'praefect-pg' }
+      let(:database_password) { 'praefect-pg-pass' }
+      let(:database_dbname) { 'praefect_production' }
+      let(:database_sslmode) { 'require' }
+      let(:database_sslcert) { '/path/to/client-cert' }
+      let(:database_sslkey) { '/path/to/client-key' }
+      let(:database_sslrootcert) { '/path/to/rootcert' }
+
+      before do
+        stub_gitlab_rb(praefect: {
+                         enable: true,
+                         socket_path: socket_path,
+                         auth_token: auth_token,
+                         auth_transitioning: auth_transitioning,
+                         sentry_dsn: sentry_dsn,
+                         sentry_environment: sentry_environment,
+                         listen_addr: listen_addr,
+                         prometheus_listen_addr: prom_addr,
+                         logging_level: log_level,
+                         logging_format: log_format,
+                         virtual_storages: virtual_storages,
+                         database_host: database_host,
+                         database_port: database_port,
+                         database_user: database_user,
+                         database_password: database_password,
+                         database_dbname: database_dbname,
+                         database_sslmode: database_sslmode,
+                         database_sslcert: database_sslcert,
+                         database_sslkey: database_sslkey,
+                         database_sslrootcert: database_sslrootcert,
+                       })
       end
 
       it 'renders the config.toml' do
@@ -115,6 +150,21 @@ describe 'praefect' do
               .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
           end
         end
+
+        database_section = Regexp.new([
+          %r{\[database\]},
+          %r{host = '#{database_host}'},
+          %r{port = #{database_port}},
+          %r{user = '#{database_user}'},
+          %r{password = '#{database_password}'},
+          %r{dbname = '#{database_dbname}'},
+          %r{sslmode = '#{database_sslmode}'},
+          %r{sslcert = '#{database_sslcert}'},
+          %r{sslkey = '#{database_sslkey}'},
+          %r{sslrootcert = '#{database_sslrootcert}'},
+        ].map(&:to_s).join('\n'))
+
+        expect(chef_run).to render_file(config_path).with_content(database_section)
       end
 
       context 'with virtual_storages as an array' do

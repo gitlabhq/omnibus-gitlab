@@ -1812,6 +1812,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # praefect['sentry_environment'] = "production"
+# praefect['database_host'] = 'postgres.internal'
+# praefect['database_port'] = 5432
+# praefect['database_user'] = 'praefect'
+# praefect['database_password'] = 'secret'
+# praefect['database_dbname'] = 'praefect_production'
+# praefect['database_sslmode'] = 'disable'
+# praefect['database_sslcert'] = '/path/to/client-cert'
+# praefect['database_sslkey'] = '/path/to/client-key'
+# praefect['database_sslrootcert'] = '/path/to/rootcert'
 
 ################################################################################
 # Storage check

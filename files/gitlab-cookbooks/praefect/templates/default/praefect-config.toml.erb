@@ -52,3 +52,13 @@ primary = <%= [true, 'true'].include?(node['primary']) %>
 <% end %>
 <% end %>
 
+[database]
+<%= "host = '#{@database_host}'" if @database_host %>
+<%= "port = #{@database_port}" if @database_port %>
+<%= "user = '#{@database_user}'" if @database_user %>
+<%= "password = '#{@database_password}'" if @database_password %>
+<%= "dbname = '#{@database_dbname}'" if @database_dbname %>
+<%= "sslmode = '#{@database_sslmode}'" if @database_sslmode %>
+<%= "sslcert = '#{@database_sslcert}'" if @database_sslcert %>
+<%= "sslkey = '#{@database_sslkey}'" if @database_sslkey %>
+<%= "sslrootcert = '#{@database_sslrootcert}'" if @database_sslrootcert %>
