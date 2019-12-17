@@ -29,6 +29,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_directories
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
+      parse_mailroom_logfile
     end
 
     def parse_directories
@@ -219,6 +220,13 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
         end
       end
       Gitlab['gitlab_rails']['rack_attack_protected_paths'].concat(paths_without_relative_url)
+    end
+
+    def parse_mailroom_logfile
+      log_directory = Gitlab['mailroom']['log_directory']
+      return unless log_directory
+
+      Gitlab['gitlab_rails']['incoming_email_log_file'] ||= File.join(log_directory, 'mail_room_json.log')
     end
 
     def public_path
