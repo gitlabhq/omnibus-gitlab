@@ -15,7 +15,7 @@
 #
 
 name 'logrotate'
-version = Gitlab::Version.new(name, 'r3-8-5')
+version = Gitlab::Version.new(name, '3.15.1')
 default_version version.print(false)
 
 license 'GPL-2.0'
