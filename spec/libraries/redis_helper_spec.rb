@@ -154,7 +154,7 @@ describe RedisHelper do
 
     before do
       # Un-doing the stub added in chef_helper
-      allow(subject).to receive(:running_version).and_call_original
+      allow_any_instance_of(described_class).to receive(:running_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
       allow(VersionHelper).to receive(:version).with(/redis-cli.*INFO/, an_instance_of(Hash)).and_return(redis_cli_output)
     end
@@ -225,7 +225,7 @@ describe RedisHelper do
 
     before do
       # Un-doing the stub added in chef_helper
-      allow(subject).to receive(:installed_version).and_call_original
+      allow_any_instance_of(described_class).to receive(:installed_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
       allow(VersionHelper).to receive(:version).with(/redis-server --version/).and_return(redis_server_output)
     end
