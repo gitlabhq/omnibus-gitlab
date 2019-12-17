@@ -8,9 +8,9 @@ require 'socket'
 module GitlabCtl
   module Util
     class <<self
-      def get_command_output(command, user = nil, timeout = nil, env: {})
+      def get_command_output(command, user = nil, timeout = nil)
         begin
-          shell_out = run_command(command, live: false, user: user, timeout: timeout, env: env)
+          shell_out = run_command(command, live: false, user: user, timeout: timeout)
           shell_out.error!
         rescue Mixlib::ShellOut::ShellCommandFailed
           raise GitlabCtl::Errors::ExecutionError.new(
@@ -25,9 +25,9 @@ module GitlabCtl
         shell_out.stdout
       end
 
-      def run_command(command, live: false, user: nil, timeout: nil, env: {})
+      def run_command(command, live: false, user: nil, timeout: nil)
         timeout = Mixlib::ShellOut::DEFAULT_READ_TIMEOUT if timeout.nil?
-        shell_out = Mixlib::ShellOut.new(command, timeout: timeout, environment: env)
+        shell_out = Mixlib::ShellOut.new(command, timeout: timeout)
         shell_out.user = user unless user.nil?
         shell_out.live_stdout = $stdout if live
         shell_out.live_stderr = $stderr if live

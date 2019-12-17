@@ -21,7 +21,6 @@ add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |
   node_attributes = GitlabCtl::Util.get_node_attributes
   redis_sentinels = node_attributes['gitlab']['gitlab-rails']['redis_sentinels']
   redis_master_name = node_attributes['redis']['master_name']
-  redis_master_password = node_attributes['redis']['master_password']
 
   master_host = nil
   master_port = nil
@@ -36,15 +35,13 @@ add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |
     Kernel.exit 0
   end
 
-  env = redis_master_password ? { 'REDISCLI_AUTH' => redis_master_password } : {}
-
   # Attempt to cycle through each sentinel and get the master information.
   # Break out of the loop on first positive hit.
   redis_sentinels.each do |sentinel|
     host = sentinel['host']
     port = sentinel['port']
     command = "/opt/gitlab/embedded/bin/redis-cli -h #{host} -p #{port} SENTINEL get-master-addr-by-name #{redis_master_name}"
-    output = GitlabCtl::Util.get_command_output(command, env: env).strip
+    output = GitlabCtl::Util.get_command_output(command).strip
     master_host, master_port = output.split("\n")
     break
   rescue GitlabCtl::Errors::ExecutionError
