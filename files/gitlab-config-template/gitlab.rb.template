@@ -193,11 +193,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['incoming_email_ssl'] = true
 # gitlab_rails['incoming_email_start_tls'] = false
 
-#### Incoming Mailbox Settings
+#### Incoming Mailbox Settings (via `mail_room`)
 ####! The mailbox where incoming mail will end up. Usually "inbox".
 # gitlab_rails['incoming_email_mailbox_name'] = "inbox"
 ####! The IDLE command timeout.
 # gitlab_rails['incoming_email_idle_timeout'] = 60
+####! The file name for internal `mail_room`JSON logfile
+# gitlab_rails['incoming_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log"
 
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true

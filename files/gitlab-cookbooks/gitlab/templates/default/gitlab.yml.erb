@@ -133,6 +133,8 @@ production: &base
     mailbox: <%= quote(@incoming_email_mailbox_name) %>
     # The IDLE command timeout.
     idle_timeout: <%= @incoming_email_idle_timeout %>
+    # file path of internal `mail_room`JSON logs
+    log_path: <%= @incoming_email_log_file %>
 
   ## Build Artifacts
   artifacts:
