@@ -5,6 +5,9 @@ class VersionHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
   def self.version(cmd, env: {})
     result = do_shell_out(cmd, env: env)
-    result.stdout if result.exitstatus.zero?
+
+    raise "Execution of the command `#{cmd}` failed with a non-zero exit code (#{result.exitstatus})" unless result.exitstatus.zero?
+
+    result.stdout
   end
 end unless defined?(VersionHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
