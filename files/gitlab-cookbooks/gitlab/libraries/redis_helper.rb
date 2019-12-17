@@ -55,11 +55,11 @@ class RedisHelper
                  "-s #{@node['redis']['unixsocket']}"
                end
 
-    command << "-a #{Gitlab['redis']['password']}" if Gitlab['redis']['password']
+    env = Gitlab['redis']['password'] ? { 'REDISCLI_AUTH' => Gitlab['redis']['password'] } : {}
 
     command << "INFO"
 
-    command_output = VersionHelper.version(command.join(" "))
+    command_output = VersionHelper.version(command.join(" "), env: env)
     command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
   end
 
