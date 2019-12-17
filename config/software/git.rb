@@ -50,6 +50,8 @@ relative_path "git-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  patch source: 'output-reused-pack.patch'
+
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
