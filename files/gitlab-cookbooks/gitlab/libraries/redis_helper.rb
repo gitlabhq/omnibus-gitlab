@@ -50,7 +50,7 @@ class RedisHelper
     command = ['/opt/gitlab/embedded/bin/redis-cli']
 
     command << if RedisHelper::Checks.is_redis_tcp?
-                 "-h #{Gitlab['redis']['bind']} -p #{Gitlab['redis']['port']}"
+                 "-h #{@node['redis']['bind']} -p #{@node['redis']['port']}"
                else
                  "-s #{@node['redis']['unixsocket']}"
                end
