@@ -6,7 +6,15 @@ class VersionHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def self.version(cmd, env: {})
     result = do_shell_out(cmd, env: env)
 
-    raise "Execution of the command `#{cmd}` failed with a non-zero exit code (#{result.exitstatus})" unless result.exitstatus.zero?
+    unless result.exitstatus.zero?
+      warning = <<~MSG
+        Execution of the command `#{cmd}` failed with a non-zero exit code (#{result.exitstatus})
+        stdout: #{result.stdout}
+        stderr: #{result.stderr}
+      MSG
+
+      raise warning
+    end
 
     result.stdout
   end
