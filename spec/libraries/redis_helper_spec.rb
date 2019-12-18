@@ -154,9 +154,9 @@ describe RedisHelper do
 
     before do
       # Un-doing the stub added in chef_helper
-      allow(subject).to receive(:running_version).and_call_original
+      allow_any_instance_of(described_class).to receive(:running_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
-      allow(VersionHelper).to receive(:version).with(/redis-cli.*INFO/).and_return(redis_cli_output)
+      allow(VersionHelper).to receive(:version).with(/redis-cli.*INFO/, an_instance_of(Hash)).and_return(redis_cli_output)
     end
 
     context 'when redis is not running' do
@@ -173,7 +173,7 @@ describe RedisHelper do
       end
       context 'over socket' do
         it 'calls VersionHelper.version with correct arguments' do
-          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO')
+          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO', env: {})
 
           subject.running_version
         end
@@ -190,9 +190,27 @@ describe RedisHelper do
         end
 
         it 'calls VersionHelper.version with correct arguments' do
-          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO')
+          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO', env: {})
 
           subject.running_version
+        end
+
+        context 'with a Redis password specified' do
+          before do
+            stub_gitlab_rb(
+              redis: {
+                bind: '0.0.0.0',
+                port: 6379,
+                password: 'toomanysecrets'
+              }
+            )
+          end
+
+          it 'passes correct environment variable' do
+            expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO', env: { 'REDISCLI_AUTH' => 'toomanysecrets' })
+
+            subject.running_version
+          end
         end
       end
 
@@ -207,7 +225,7 @@ describe RedisHelper do
 
     before do
       # Un-doing the stub added in chef_helper
-      allow(subject).to receive(:installed_version).and_call_original
+      allow_any_instance_of(described_class).to receive(:installed_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
       allow(VersionHelper).to receive(:version).with(/redis-server --version/).and_return(redis_server_output)
     end
