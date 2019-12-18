@@ -12,30 +12,12 @@ describe 'praefect' do
 
   context 'when praefect is enabled' do
     let(:config_path) { '/var/opt/gitlab/praefect/config.toml' }
-    let(:socket_path) { nil }
-    let(:auth_token) { nil }
     let(:auth_transitioning) { false }
-    let(:sentry_dsn) { nil }
-    let(:sentry_environment) { nil }
-    let(:listen_addr) { nil }
-    let(:prom_addr) { nil }
-    let(:log_level) { nil }
-    let(:log_format) { nil }
-    let(:virtual_storages) { nil }
 
     before do
       stub_gitlab_rb(praefect: {
                        enable: true,
-                       socket_path: socket_path,
-                       auth_token: auth_token,
                        auth_transitioning: auth_transitioning,
-                       sentry_dsn: sentry_dsn,
-                       sentry_environment: sentry_environment,
-                       listen_addr: listen_addr,
-                       prometheus_listen_addr: prom_addr,
-                       logging_level: log_level,
-                       logging_format: log_format,
-                       virtual_storages: virtual_storages,
                      })
     end
 
