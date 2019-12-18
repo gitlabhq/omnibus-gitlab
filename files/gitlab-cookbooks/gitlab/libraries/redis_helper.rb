@@ -60,6 +60,9 @@ class RedisHelper
     command << "INFO"
 
     command_output = VersionHelper.version(command.join(" "), env: env)
+
+    raise "Execution of the command `#{command}` failed" unless command_output
+
     command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
   end
 
@@ -68,6 +71,9 @@ class RedisHelper
 
     command = '/opt/gitlab/embedded/bin/redis-server --version'
     command_output = VersionHelper.version(command)
+
+    raise "Execution of the command `#{command}` failed" unless command_output
+
     command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
   end
 
