@@ -47,34 +47,40 @@ class RedisHelper
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('redis')
 
-    command = ['/opt/gitlab/embedded/bin/redis-cli']
+    commands = ['/opt/gitlab/embedded/bin/redis-cli']
 
-    command << if RedisHelper::Checks.is_redis_tcp?
-                 "-h #{@node['redis']['bind']} -p #{@node['redis']['port']}"
-               else
-                 "-s #{@node['redis']['unixsocket']}"
-               end
+    commands << if RedisHelper::Checks.is_redis_tcp?
+                  "-h #{@node['redis']['bind']} -p #{@node['redis']['port']}"
+                else
+                  "-s #{@node['redis']['unixsocket']}"
+                end
 
     env = Gitlab['redis']['password'] ? { 'REDISCLI_AUTH' => Gitlab['redis']['password'] } : {}
 
-    command << "INFO"
+    commands << "INFO"
+    command = commands.join(" ")
 
-    command_output = VersionHelper.version(command.join(" "), env: env)
-
+    command_output = VersionHelper.version(command, env: env)
     raise "Execution of the command `#{command}` failed" unless command_output
 
-    command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
+    version_match = command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)
+    raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
+
+    version_match['redis_version']
   end
 
   def installed_version
     return unless OmnibusHelper.new(@node).service_up?('redis')
 
     command = '/opt/gitlab/embedded/bin/redis-server --version'
-    command_output = VersionHelper.version(command)
 
+    command_output = VersionHelper.version(command)
     raise "Execution of the command `#{command}` failed" unless command_output
 
-    command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)['redis_version']
+    version_match = command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+    raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
+
+    version_match['redis_version']
   end
 
   class Checks
