@@ -1,8 +1,8 @@
 require 'mixlib/shellout'
 
 module ShellOutHelper
-  def do_shell_out(cmd, user = nil, cwd = nil)
-    o = Mixlib::ShellOut.new(cmd, user: user, cwd: cwd)
+  def do_shell_out(cmd, user = nil, cwd = nil, env: {})
+    o = Mixlib::ShellOut.new(cmd, user: user, cwd: cwd, environment: env)
     o.run_command
     o
   rescue Errno::EACCES

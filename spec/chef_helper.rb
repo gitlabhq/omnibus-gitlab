@@ -49,6 +49,8 @@ RSpec.configure do |config|
     stub_command('/opt/gitlab/embedded/bin/psql --version').and_return("fake_version")
     allow(VersionHelper).to receive(:version).and_call_original
     allow(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/psql --version').and_return('fake_psql_version')
+    allow(VersionHelper).to receive(:version).with('cat /opt/gitlab/embedded/service/mattermost/VERSION').and_return('foobar')
+    allow(VersionHelper).to receive(:version).with(/-[-]?version/).and_return('foobar')
     allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('3.2.12')
     allow_any_instance_of(RedisHelper).to receive(:running_version).and_return('3.2.12')
     stub_command('/sbin/init --version | grep upstart')
