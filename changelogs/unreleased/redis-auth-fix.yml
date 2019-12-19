@@ -1,0 +1,5 @@
+---
+title: Revert to passing Redis password as command line argument
+merge_request: 3816
+author:
+type: fixed

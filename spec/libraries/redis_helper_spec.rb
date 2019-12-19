@@ -156,7 +156,7 @@ describe RedisHelper do
       # Un-doing the stub added in chef_helper
       allow_any_instance_of(described_class).to receive(:running_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
-      allow(VersionHelper).to receive(:version).with(/redis-cli.*INFO/, an_instance_of(Hash)).and_return(redis_cli_output)
+      allow(VersionHelper).to receive(:version).with(/redis-cli.*INFO/).and_return(redis_cli_output)
     end
 
     context 'when redis is not running' do
@@ -173,7 +173,7 @@ describe RedisHelper do
       end
       context 'over socket' do
         it 'calls VersionHelper.version with correct arguments' do
-          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO', env: {})
+          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO')
 
           subject.running_version
         end
@@ -190,7 +190,7 @@ describe RedisHelper do
         end
 
         it 'calls VersionHelper.version with correct arguments' do
-          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO', env: {})
+          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO')
 
           subject.running_version
         end
@@ -206,8 +206,8 @@ describe RedisHelper do
             )
           end
 
-          it 'passes correct environment variable' do
-            expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO', env: { 'REDISCLI_AUTH' => 'toomanysecrets' })
+          it 'it passes password to the command' do
+            expect(VersionHelper).to receive(:version).with("/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 -a 'toomanysecrets' INFO")
 
             subject.running_version
           end
