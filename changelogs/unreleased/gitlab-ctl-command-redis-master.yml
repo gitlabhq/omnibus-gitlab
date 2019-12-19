@@ -1,0 +1,5 @@
+---
+title: Add gitlab-ctl command to fetch Redis master connection details
+merge_request: 3811
+author:
+type: added
