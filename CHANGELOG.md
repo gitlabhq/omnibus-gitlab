@@ -3,6 +3,44 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.0
+
+### Removed (1 change)
+
+- Stop building packages for openSUSE 15.0. !3753
+
+### Fixed (10 changes, 2 of them are from the community)
+
+- Fix SELinux installation failures on CentOS 8. !3752
+- Grafana login should not require local PostgreSQL. !3761
+- Set Referrer-Policy for Mattermost to strict-origin-when-cross-origin, allow customization. !3763 (Florian Kaiser)
+- write pages template, when api_secret_key is defined. !3770 (Max Wittig)
+- Add rack_attack_admin_area_protected_paths_enabled setting. !3773
+- Use valid sslmode setting in postgres-exporter. !3777
+- Fix inability to disable Connection and Upgrade NGINX headers. !3781
+- Fix admin_email_worker_cron rendering in gitlab.yml. !3790
+- Use password if provided to detect running Redis version. !3796
+- Revert to passing Redis password as command line argument. !3816
+
+### Changed (1 change)
+
+- Allow multiple virtual storages in praefect config. !3754
+
+### Added (5 changes)
+
+- Add personal_access_tokens_expiring_worker configuration to gitlab.rb. !3679
+- Add incoming_email_log_file config. !3719
+- Add Praefect sentry configs. !3759
+- Show warning during reconfigure if version of running Redis instance is different than the installed one. !3787
+- Praefect: render database section in config.toml. !3791
+
+### Other (3 changes)
+
+- Upgrade to Git 2.24. !3768
+- Change Puma log format to JSON. !3785
+- Update Mattermost to 5.17.1.
+
+
 ## 12.5.5
 
 ### Fixed (2 changes)

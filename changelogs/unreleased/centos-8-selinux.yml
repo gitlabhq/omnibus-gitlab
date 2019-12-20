@@ -1,5 +1,0 @@
----
-title: Fix SELinux installation failures on CentOS 8
-merge_request: 3752
-author:
-type: fixed

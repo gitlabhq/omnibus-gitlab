@@ -1,5 +1,0 @@
----
-title: Use password if provided to detect running Redis version
-merge_request: 3796
-author:
-type: fixed
