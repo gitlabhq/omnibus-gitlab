@@ -21,8 +21,8 @@ change to take effect.
 ```ruby
 puma['worker_processes'] = 3
 puma['worker_timeout'] = 60
-puma['min_threads'] = 1
-puma['max_threads'] = 16
+puma['min_threads'] = 4
+puma['max_threads'] = 4
 ```
 
 For more details, see the [Puma documentation](https://github.com/puma/puma#configuration).
