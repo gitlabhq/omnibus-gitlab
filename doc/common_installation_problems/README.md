@@ -458,7 +458,7 @@ check if there is a repository cacher in front of your server, like for example 
 Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
 
 ```bash
-PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com)
+PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
 Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](https://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
