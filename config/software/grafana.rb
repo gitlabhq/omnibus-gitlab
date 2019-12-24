@@ -22,6 +22,7 @@ default_version version.print(false)
 
 license 'APACHE-2.0'
 license_file 'LICENSE'
+license_file 'NOTICE.md'
 
 skip_transitive_dependency_licensing true
 

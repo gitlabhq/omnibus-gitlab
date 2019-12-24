@@ -1,0 +1,34 @@
+diff --git a/NOTICE b/NOTICE
+new file mode 100644
+index 000000000..d5ba52299
+--- /dev/null
++++ b/NOTICE
+@@ -0,0 +1,28 @@
++============
++Mixin::Log Notices
++============
++
++Developed at Chef (http://www.chef.io).
++
++
++ * Copyright 2009-2016, Chef Software, Inc. <legal@chef.io>
++
++Mixin::Log incorporates code from Chef.  The Chef notice file follows:
++
++============
++Chef Notices
++============
++
++Developed at Chef (http://www.chef.io).
++
++Contributors and Copyright holders:
++
++ * Copyright 2008, Adam Jacob <adam@chef.io>
++ * Copyright 2008, Arjuna Christensen <aj@hjksolutions.com>
++ * Copyright 2008, Bryan McLellan <btm@loftninjas.org>
++ * Copyright 2008, Ezra Zygmuntowicz <ezra@engineyard.com>
++ * Copyright 2009, Sean Cribbs <seancribbs@gmail.com>
++ * Copyright 2009, Christopher Brown <cb@chef.io>
++ * Copyright 2009, Thom May <thom@clearairturbulence.org>
++
++Chef incorporates code modified from Open4 (http://www.codeforpeople.com/lib/ruby/open4/), which was written by Ara T. Howard.
