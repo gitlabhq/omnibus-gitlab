@@ -29,8 +29,8 @@ dependency 'ruby'
 dependency 'rubygems'
 
 build do
-  patch source: "license/#{version}/add-license-file.patch"
-  patch source: "license/#{version}/add-notice-file.patch"
+  patch source: "license/add-license-file.patch"
+  patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install mixlib-log' \
