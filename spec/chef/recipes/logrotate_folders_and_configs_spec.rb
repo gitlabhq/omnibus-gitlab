@@ -71,6 +71,8 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/copytruncate/)
       expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
+        .with_content(/notifempty/)
+      expect(chef_run).to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/postrotate/)
       expect(chef_run).not_to render_file('/var/opt/gitlab/logrotate/logrotate.d/nginx')
         .with_content(/size/)
