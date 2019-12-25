@@ -731,10 +731,10 @@ GEM
       aws-eventstream (~> 1.0, >= 1.0.2)
     builder (3.2.3)
     byebug (9.0.5)
-    chef (14.13.11)
+    chef (14.14.29)
       addressable
       bundler (>= 1.10)
-      chef-config (= 14.13.11)
+      chef-config (= 14.14.29)
       chef-zero (>= 13.0)
       diff-lcs (~> 1.2, >= 1.2.4)
       erubis (~> 2.7)
@@ -761,14 +761,14 @@ GEM
       specinfra (~> 2.10)
       syslog-logger (~> 1.6)
       uuidtools (~> 2.1.5)
-    chef-config (14.13.11)
+    chef-config (14.14.29)
       addressable
       fuzzyurl
       mixlib-config (>= 2.2.12, < 4.0)
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
     chef-sugar (3.6.0)
-    chef-zero (14.0.12)
+    chef-zero (14.0.13)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 4.0)
       mixlib-log (>= 2.0, < 4.0)
@@ -927,7 +927,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.1.0)
-    rack (2.0.7)
+    rack (2.0.8)
     rainbow (2.2.2)
       rake
     rake (10.5.0)
@@ -973,7 +973,7 @@ GEM
     rubocop-rspec (1.34.1)
       rubocop (>= 0.60.0)
     ruby-progressbar (1.10.1)
-    serverspec (2.41.4)
+    serverspec (2.41.5)
       multi_json
       rspec (~> 3.0)
       rspec-its
@@ -984,7 +984,7 @@ GEM
       faraday (~> 0.9)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    specinfra (2.78.0)
+    specinfra (2.82.4)
       net-scp
       net-ssh (>= 2.7)
       net-telnet (= 0.1.1)
@@ -1010,7 +1010,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk
   byebug
-  chef (~> 14.13)
+  chef (~> 14.14)
   chefspec
   docker-api
   fantaskspec
