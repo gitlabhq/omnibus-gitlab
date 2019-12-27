@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.1
+
+### Fixed (1 change)
+
+- Revert to passing Redis password as command line argument. !3816
+
+
 ## 12.6.0
 
 ### Removed (1 change)
