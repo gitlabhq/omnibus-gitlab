@@ -70,9 +70,6 @@ grafana-dashboards:
 zlib:
   remote: "git@dev.gitlab.org:omnibus-mirror/zlib.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/zlib.git"
-util-macros:
-  remote: "git@dev.gitlab.org:omnibus-mirror/util-macros.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/util-macros.git"
 openssl:
   remote: "git@dev.gitlab.org:omnibus-mirror/openssl.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/openssl.git"
