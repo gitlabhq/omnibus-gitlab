@@ -29,6 +29,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
   redis_group = AccountHelper.new(node).redis_group
 
   omnibus_helper = OmnibusHelper.new(node)
+  sentinel_helper = SentinelHelper.new(node)
 
   account 'user and group for sentinel' do
     username redis_user
@@ -81,6 +82,19 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
       )
       notifies :restart, 'service[sentinel]', :immediately if omnibus_helper.should_notify?('redis')
       only_if { config_path }
+    end
+
+    ruby_block 'warn pending sentinel restart' do
+      block do
+        message = <<~MESSAGE
+          The version of the running sentinel service is different than what is installed.
+          Please restart sentinel to start the new version.
+
+          sudo gitlab-ctl restart sentinel
+        MESSAGE
+        LoggingHelper.warning(message)
+      end
+      only_if { sentinel_helper.running_version != sentinel_helper.installed_version }
     end
 
   when :disable

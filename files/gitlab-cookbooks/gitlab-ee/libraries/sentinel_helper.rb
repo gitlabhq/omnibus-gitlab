@@ -14,6 +14,34 @@ class SentinelHelper
     end
   end
 
+  def running_version
+    return unless OmnibusHelper.new(@node).service_up?('sentinel')
+
+    command = "/opt/gitlab/embedded/bin/redis-cli -h #{sentinel['bind']} -p #{sentinel['port']} INFO"
+
+    command_output = VersionHelper.version(command)
+    raise "Execution of the command `#{command}` failed" unless command_output
+
+    version_match = command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)
+    raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
+
+    version_match['redis_version']
+  end
+
+  def installed_version
+    return unless OmnibusHelper.new(@node).service_up?('sentinel')
+
+    command = '/opt/gitlab/embedded/bin/redis-sentinel --version'
+
+    command_output = VersionHelper.version(command)
+    raise "Execution of the command `#{command}` failed" unless command_output
+
+    version_match = command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+    raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
+
+    version_match['redis_version']
+  end
+
   private
 
   # Restore from node definition (gitlab.rb)
