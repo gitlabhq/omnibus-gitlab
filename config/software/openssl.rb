@@ -99,8 +99,6 @@ build do
                 env
               end
 
-  patch source: "openssl-1.1.1c-do-not-install-docs.patch", env: patch_env
-
   if windows?
     # Patch Makefile.org to update the compiler flags/options table for mingw.
     patch source: 'openssl-1.0.1q-fix-compiler-flags-table-for-msys.patch', env: env
@@ -115,6 +113,7 @@ build do
   command configure_command, env: env, in_msys_bash: true
 
   patch source: 'openssl-1.0.1j-windows-relocate-dll.patch', env: env if windows?
+  patch source: "openssl-1.1.1c-do-not-install-docs.patch", env: patch_env
 
   make 'depend', env: env
   # make -j N on openssl is not reliable
