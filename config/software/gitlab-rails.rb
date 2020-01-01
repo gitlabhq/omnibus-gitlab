@@ -33,6 +33,7 @@ license 'MIT'
 license_file 'LICENSE'
 license_file combined_licenses_file
 
+dependency 'pkg-config-lite'
 dependency 'ruby'
 dependency 'bundler'
 dependency 'libxml2'
