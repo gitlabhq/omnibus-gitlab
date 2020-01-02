@@ -1,0 +1,5 @@
+---
+title: Use value provided as EXTERNAL_URL during installation/upgrade in gitlab.rb
+merge_request: 3828
+author:
+type: changed
