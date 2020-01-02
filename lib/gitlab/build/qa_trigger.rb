@@ -20,7 +20,8 @@ module Build
         "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB'),
-        "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA')
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA'),
+        'variables[TOP_UPSTREAM_SOURCE_REF]' => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF')
       }
     end
 

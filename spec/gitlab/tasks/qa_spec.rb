@@ -126,6 +126,7 @@ describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("https://gitlab.com/gitlab-org/gitlab-foss")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_JOB').and_return("https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_SHA').and_return("abc123")
+      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_REF').and_return("master")
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
       allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return("registry.gitlab.com/gitlab-ce:latest")
@@ -145,7 +146,8 @@ describe 'qa', type: :rake do
         "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345",
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "https://gitlab.com/gitlab-org/gitlab-foss",
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => "https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890",
-        "variables[TOP_UPSTREAM_SOURCE_SHA]" => "abc123"
+        "variables[TOP_UPSTREAM_SOURCE_SHA]" => "abc123",
+        "variables[TOP_UPSTREAM_SOURCE_REF]" => "master"
       }
       allow_any_instance_of(Build::QATrigger).to receive(:invoke!).and_call_original
       allow_any_instance_of(Build::QATrigger).to receive(:get_projct_path).and_return("gitlab-org/gitlab-qa")
