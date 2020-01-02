@@ -26,6 +26,7 @@ module Build
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB'),
         "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA'),
+        "variables[TOP_UPSTREAM_SOURCE_REF]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF'),
         "variables[QA_BRANCH]" => Gitlab::Util.get_env('QA_BRANCH') || 'master'
       }
     end

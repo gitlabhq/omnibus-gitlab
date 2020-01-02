@@ -67,6 +67,7 @@ namespace :build do
     Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_PROJECT', Gitlab::Util.get_env('CI_PROJECT_PATH'))
     Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_JOB', Gitlab::Util.get_env('CI_JOB_URL'))
     Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_SHA', Gitlab::Util.get_env('CI_COMMIT_SHA'))
+    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_REF', Gitlab::Util.get_env('CI_COMMIT_REF_NAME'))
 
     Build::OmnibusTrigger.invoke!(post_comment: true).wait!
   end
