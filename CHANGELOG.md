@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.2
+
+- No changes.
+
 ## 12.6.1
 
 ### Fixed (1 change)
@@ -120,6 +124,10 @@ omnibus-gitlab repository.
 - Refactor LetsEncrypt auto-enabling logic. !3712
 - Update Mattermost to 5.16.2.
 
+
+## 12.4.7
+
+- No changes.
 
 ## 12.4.6
 
