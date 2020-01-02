@@ -30,6 +30,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_gitlab_trusted_proxies
       parse_rack_attack_protected_paths
       parse_mailroom_logfile
+      parse_maximum_request_duration
     end
 
     def parse_directories
@@ -229,8 +230,23 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       Gitlab['gitlab_rails']['incoming_email_log_file'] ||= File.join(log_directory, 'mail_room_json.log')
     end
 
+    def parse_maximum_request_duration
+      Gitlab['gitlab_rails']['max_request_duration'] ||= (worker_timeout * 0.95).ceil
+
+      return if Gitlab['gitlab_rails']['max_request_duration'] < worker_timeout
+
+      raise "The maximum request duration needs to be smaller than the worker timeout (#{worker_timeout}s)"
+    end
+
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
+    end
+
+    def worker_timeout
+      service = Services.enabled?('puma') ? 'puma' : 'unicorn'
+      user_config = Gitlab[service]
+      service_config = Gitlab['node']['gitlab'][service]
+      user_config['worker_timeout'] || service_config['worker_timeout']
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
