@@ -135,11 +135,15 @@ include:
   - '/gitlab-ci-config/gitlab-com.yml'
   - '/gitlab-ci-config/dev-gitlab-org.yml'
 
-notify:slack-fail:
+.notify:
   before_script:
     - apk update && apk add git curl bash
   image: "alpine"
   stage: notification_fail
+
+notify:slack-fail:
+  extends:
+    - .notify
   script:
     - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
   when: on_failure
@@ -151,3 +155,15 @@ notify:slack-fail:
   tags:
   - promotion
   dependencies: []
+
+notify:slack-fail:scheduled-master:
+  extends:
+    - .notify
+  script:
+    - ./support/notify_slack.sh "#qa-master" "☠️ Scheduled omnibus-build against master failed! ☠️ See $CI_PIPELINE_URL (triggered from $TOP_UPSTREAM_SOURCE_JOB)"
+  only:
+    refs:
+      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $TOP_UPSTREAM_SOURCE_JOB && $TOP_UPSTREAM_SOURCE_REF == 'master'
+  when: on_failure
