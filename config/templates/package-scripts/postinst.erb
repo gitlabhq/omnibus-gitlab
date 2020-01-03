@@ -9,6 +9,18 @@ notify()
 {
   echo "gitlab: $1"
 }
+
+update_external_url()
+{
+  EXISTING_EXTERNAL_URL=$(awk '/^external_url/ { print $2 }' /etc/gitlab/gitlab.rb | tr -d "'\"")
+
+  if [ "$EXTERNAL_URL" = "http://gitlab.example.com" ]; then
+    EXTERNAL_URL=$EXISTING_EXTERNAL_URL
+  elif [ "$EXTERNAL_URL" != "$EXISTING_EXTERNAL_URL" ]; then
+    sed -i 's!^external_url .*!external_url "'$EXTERNAL_URL'"!g' /etc/gitlab/gitlab.rb
+  fi
+}
+
 create_config_template()
 {
   # Create a minimal gitlab.rb template if /etc/gitlab/gitlab.rb does not exist.
@@ -18,7 +30,7 @@ create_config_template()
     sed -i 's!GENERATED_EXTERNAL_URL!'$EXTERNAL_URL'!g' /etc/gitlab/gitlab.rb
     chmod 600 /etc/gitlab/gitlab.rb
   else
-    EXTERNAL_URL=$(awk '/^external_url/ { print $2 }' /etc/gitlab/gitlab.rb | tr -d "'\"")
+    update_external_url
   fi
 }
 
