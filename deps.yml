@@ -130,12 +130,6 @@ dependencies:
         - filename: config/software/rubygems.rb
           pattern: "default_version '(\\S+)'"
           range: '<= 2.x'
-      # util-macros
-      https://github.com/freedesktop/xorg-macros.git:
-        replace_in_files:
-        - filename: config/software/util-macros.rb
-          pattern: "Gitlab::Version.new\\('util-macros', 'util-macros-(\\S+)'\\)"
-          tag_prefix: 'util-macros-'
       # zlib
       https://github.com/madler/zlib.git:
         replace_in_files:
