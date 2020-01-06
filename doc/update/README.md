@@ -354,12 +354,13 @@ node throughout the process.
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run Unicorn or Sidekiq**
+**For nodes that run Unicorn, Puma or Sidekiq**
 
-- Hot reload `unicorn` and `sidekiq` services
+- Hot reload `unicorn`, `puma` and `sidekiq` services
 
   ```sh
   sudo gitlab-ctl hup unicorn
+  sudo gitlab-ctl usr2 puma
   sudo gitlab-ctl restart sidekiq
   ```
 
@@ -369,16 +370,6 @@ node throughout the process.
 
   ```sh
   sudo gitlab-ctl reconfigure
-  ```
-
-**For nodes that run Unicorn, Puma or Sidekiq**
-
-- Hot reload `unicorn`, `puma` and `sidekiq` services
-
-  ```sh
-  sudo gitlab-ctl hup unicorn
-  sudo gitlab-ctl usr2 puma
-  sudo gitlab-ctl restart sidekiq
   ```
 
 NOTE: **Note:**
