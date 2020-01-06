@@ -57,7 +57,7 @@ To enable HTTPS for the domain `gitlab.example.com`:
 
    ```sh
    sudo mkdir -p /etc/gitlab/ssl
-   sudo chmod 700 /etc/gitlab/ssl
+   sudo chmod 755 /etc/gitlab/ssl
    sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
    ```
 
