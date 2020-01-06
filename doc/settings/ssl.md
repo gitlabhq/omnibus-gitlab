@@ -103,11 +103,11 @@ letsencrypt['auto_renew'] = false
 Renew **Let's Encrypt** certificates manually using ***one*** of the following commands:
 
 ```sh
-# gitlab-ctl reconfigure
+sudo gitlab-ctl reconfigure
 ```
 
 ```sh
-# gitlab-ctl renew-le-certs
+sudo gitlab-ctl renew-le-certs
 ```
 
 CAUTION: **Caution:**
