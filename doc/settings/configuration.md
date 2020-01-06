@@ -33,6 +33,26 @@ NOTE: **Note:**
 After you change the external URL, it is recommended that you also
 [invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
 
+### Specifying the external URL at the time of installation
+
+To make it easier to get a GitLab instance up and running with minimum number of
+commands, `omnibus-gitlab` supports the use of an environment variable
+`EXTERNAL_URL` during the package installation. On detecting presence of this
+environment variable, its value will be written as `external_url` in the
+`gitlab.rb` file as part of package installation (or upgrade).
+
+NOTE: **Note:**
+`EXTERNAL_URL` environment variable only has effect during installation/upgrade
+of packages. For regular `sudo gitlab-ctl reconfigure` runs, the value present
+in `/etc/gitlab/gitlab.rb` will be used.
+
+NOTE: **Note:**
+As part of package updates, if you have `EXTERNAL_URL` variable set
+inadvertently, it will replace the existing value in `/etc/gitlab/gitlab.rb`
+without any warning. So, it is recommended not to set the variable globally, but
+pass it specifically to the installation command as
+`sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee`
+
 ## Configuring a relative URL for GitLab
 
 NOTE: **Note:**
