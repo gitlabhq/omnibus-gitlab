@@ -52,7 +52,7 @@ Place the SSL certificate and SSL certificate key inside `/etc/gitlab/ssl`. If t
 
 ```bash
 sudo mkdir -p /etc/gitlab/ssl
-sudo chmod 700 /etc/gitlab/ssl
+sudo chmod 755 /etc/gitlab/ssl
 sudo cp mattermost.gitlab.example.key mattermost.gitlab.example.crt /etc/gitlab/ssl/
 ```
 
