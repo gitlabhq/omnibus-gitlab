@@ -593,7 +593,13 @@ AWS: *aws_ami_build
 
 AWS-Ultimate:
   variables:
-    EE_ULTIMATE_AMI: "true"
+    AWS_RELEASE_TYPE: "ultimate"
+  <<: *aws_ami_build
+  <<: *dev-ee-tag-only
+
+AWS-Premium:
+  variables:
+    AWS_RELEASE_TYPE: "premium"
   <<: *aws_ami_build
   <<: *dev-ee-tag-only
 
@@ -679,4 +685,9 @@ AWS-CE-Release:
 AWS-EE-Ultimate-Release:
   variables:
     AWS_LISTING_NAME: "GitLab Ultimate - 5 User Pack"
+  extends: .aws_marketplace_release
+
+AWS-EE-Premium-Release:
+  variables:
+    AWS_LISTING_NAME: "GitLab Premium"
   extends: .aws_marketplace_release
