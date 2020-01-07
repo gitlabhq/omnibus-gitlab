@@ -295,7 +295,7 @@ gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 gitlab_rails['smtp_domain'] = "smtp.ym.163.com"
 ````
 
-### Sendgrid
+### SendGrid with username/password authentication
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -308,6 +308,25 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 ````
+
+### SendGrid with API Key authentication
+
+If you don't want to supply a username/password, you can use an [API key](https://sendgrid.com/docs/API_Reference/SMTP_API/integrating_with_the_smtp_api.html#-Integrating-with-Sendgrid):
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.sendgrid.net"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "apikey"
+gitlab_rails['smtp_password'] = "the_api_key_you_created"
+gitlab_rails['smtp_domain'] = "smtp.sendgrid.net"
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+````
+
+Note that `smtp_user_name` must literally be set to `"apikey"`.
+The API Key you created must be entered in `smtp_password`.
 
 ### Yandex
 
