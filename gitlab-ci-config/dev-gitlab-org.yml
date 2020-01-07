@@ -17,6 +17,12 @@
     - tags@gitlab/omnibus-gitlab
   <<: *except-auto-deploy-tag
 
+.dev-ee-tag-only: &dev-ee-tag-only
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+  <<: *except-auto-deploy-tag
+
 .dev-except-branches: &dev-except-branches
    only:
     - tags@gitlab/omnibus-gitlab
@@ -179,6 +185,22 @@
       # Format of the auto-deploy tag for auto-deploy builds.
       # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+
+.aws_ami_build: &aws_ami_build
+  stage: package-and-image-release
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
+  script:
+  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
+  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
+  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
+  - bundle exec rake aws:process
+  tags:
+  - docker-builder
+  when: manual
+  <<: *dev-tag-only
+  cache: *tag-cache
+  dependencies: []
+  retry: 1
 
 .aws_marketplace_release: &aws_marketplace_release
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
@@ -567,46 +589,13 @@ Docker-Release:
   dependencies: []
   when: manual
 
-AWS:
-  stage: package-and-image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
-  script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - bundle exec rake aws:process
-  tags:
-  - docker-builder
-  when: manual
-  <<: *dev-tag-only
-  cache: *tag-cache
-  dependencies: []
-  retry: 1
+AWS: *aws_ami_build
 
 AWS-Ultimate:
-  stage: package-and-image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
   variables:
     EE_ULTIMATE_AMI: "true"
-  script:
-  # aws-sdk gem gives priority to environment variables over config file. So, using correct values for those variables.
-  - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
-  - bundle exec rake aws:process
-  tags:
-  - docker-builder
-  when: manual
-  only:
-    refs:
-      - /.*ee\.\d/@gitlab/omnibus-gitlab
-  except:
-    variables:
-      # Format of the auto-deploy tag for auto-deploy builds.
-      # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
-  cache: *tag-cache
-  dependencies: []
-  retry: 1
+  <<: *aws_ami_build
+  <<: *dev-ee-tag-only
 
 QA-Tag:
   extends: .docker_job
