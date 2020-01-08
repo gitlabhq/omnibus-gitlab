@@ -280,7 +280,7 @@ Where HOSTNAME is the hostname of the certificate.
 
 ### **Let's Encrypt** fails on reconfigure
 
-There are two common scenarios under which Let's Encrypt may fail on reconfigure:
+When you reconfigure, there are common scenarios under which Let's Encrypt may fail:
 
 1. Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
 
@@ -296,7 +296,9 @@ There are two common scenarios under which Let's Encrypt may fail on reconfigure
     letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging]   (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
     ```
 
-You can test your domain using [Let's Debug](https://letsdebug.net/), a diagnostic tool to help you figure out why you can't issue a Let's Encrypt certificate.
+1. If you're using a test domain such as `gitlab.example.com`, without a certificate, you'll see the `unable to request certificate` error shown above. In that case, disable Let's Encrypt by setting `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb`.
+
+You can test your domain using the [Let's Debug](https://letsdebug.net/) diagnostic tool. It can help you figure out why you can't issue a Let's Encrypt certificate.
 
 ## Details on how GitLab and SSL work
 
