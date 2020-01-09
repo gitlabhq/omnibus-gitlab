@@ -62,3 +62,10 @@ primary = <%= [true, 'true'].include?(node['primary']) %>
 <%= "sslcert = '#{@database_sslcert}'" if @database_sslcert %>
 <%= "sslkey = '#{@database_sslkey}'" if @database_sslkey %>
 <%= "sslrootcert = '#{@database_sslrootcert}'" if @database_sslrootcert %>
+
+
+<% if @prometheus_grpc_latency_buckets %>
+# # You can optionally configure Gitaly to record histogram latencies on GRPC method calls
+[prometheus]
+grpc_latency_buckets = <%= @prometheus_grpc_latency_buckets %>
+<% end %>
