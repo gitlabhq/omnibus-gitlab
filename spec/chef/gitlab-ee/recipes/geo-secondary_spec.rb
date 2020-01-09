@@ -260,7 +260,7 @@ describe 'gitlab-ee::geo-secondary' do
     it 'reduces the number of unicorn workers on secondary node' do
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
-      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 14
+      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 9
     end
 
     it 'uses the specified number of unicorn workers' do
@@ -273,7 +273,7 @@ describe 'gitlab-ee::geo-secondary' do
     it 'does not reduce the number of unicorn workers on primary node' do
       stub_gitlab_rb(geo_primary_role: { enable: true })
 
-      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 17
+      expect(chef_run.node['gitlab']['unicorn']['worker_processes']).to eq 11
     end
   end
 end

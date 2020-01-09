@@ -46,13 +46,10 @@ module Unicorn
       (cpus * 1.5 + 1).to_i
     end
 
-    # See how many worker processes fit in (total RAM - 1.5GB).
-    # Using the formula: (t - 1.5GB + (n/2)) / n
-    # t - total ram
-    # n - per worker ram. Use a value based on worker_memory_limit_min
-    # We add (n/2) in the numerator to get rounding instead of integer truncation.
-    def worker_memory(total_memory)
-      (total_memory - 1572864 + 204800) / 409600
+    # See how many worker processes fit in the system.
+    # Currently, Unicorn boots at 500-600 MB per process at startup.
+    def worker_memory(total_memory, retained_memory = 1572864, per_worker_ram = 614400)
+      (total_memory - retained_memory) / per_worker_ram
     end
   end
 end
