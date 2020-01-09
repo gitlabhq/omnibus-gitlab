@@ -190,8 +190,12 @@ exclude 'embedded/lib/ruby/gems/*/gems/*/libtest'
 exclude 'embedded/lib/ruby/gems/*/gems/*/man'
 exclude 'embedded/lib/ruby/gems/*/gems/*/sample_documents'
 exclude 'embedded/lib/ruby/gems/*/gems/*/samples'
+exclude 'embedded/lib/ruby/gems/*/gems/*/sample'
 exclude 'embedded/lib/ruby/gems/*/gems/*/script'
 exclude 'embedded/lib/ruby/gems/*/gems/*/t'
+
+# Exclude additional test files from specific gems
+exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/ruby/spec'
 
 # Enable signing packages
 package :rpm do
