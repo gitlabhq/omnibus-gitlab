@@ -1,0 +1,5 @@
+---
+title: Update Redis to 5.0.7 and redis-exporter to 1.3.4
+merge_request: 3392
+author:
+type: performance
