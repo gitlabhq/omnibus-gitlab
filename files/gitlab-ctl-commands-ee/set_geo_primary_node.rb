@@ -16,10 +16,13 @@
 #
 
 add_command_under_category 'set-geo-primary-node', 'gitlab-geo', 'Make this node the Geo primary', 2 do |cmd_name|
-  service_name = 'unicorn'
+  service_names = %w[unicorn puma]
+  service_enabled = service_names.any? do |service_name|
+    service_enabled?(service_name)
+  end
 
-  unless service_enabled?(service_name)
-    log 'unicorn is not enabled, exiting...'
+  unless service_enabled
+    log "#{service_names.join(' or ')} not enabled, exiting..."
     Kernel.exit 1
   end
 
