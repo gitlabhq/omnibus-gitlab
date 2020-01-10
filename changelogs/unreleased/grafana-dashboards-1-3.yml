@@ -1,0 +1,5 @@
+---
+title: Add Service Platform Metrics Grafana dashboard by updating grafana-dashboards to v1.3.0
+merge_request: 3843
+author: Ben Bodenmiller
+type: added
