@@ -216,12 +216,13 @@ Verify that you can upgrade with no downtime by checking the
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
 
-| Deployment type                              | Description                    |
-| -------------------------------------------- | ------------------------------ |
-| [Single](#single-deployment)                 | GitLab CE/EE on a single node  |
-| [Multi-node / HA](#multi-node--ha-deployment)| GitLab CE/EE on multiple nodes |
-| [Geo](#geo-deployment)                       | GitLab EE with Geo enabled     |
-| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo)| GitLab CE/EE on multiple nodes |
+| Deployment type                                                 | Description                                       |
+| --------------------------------------------------------------- | ------------------------------------------------  |
+| [Single](#single-deployment)                                    | GitLab CE/EE on a single node                     |
+| [Multi-node / PG HA](#using-postgresql-ha)                      | GitLab CE/EE using HA architecture for PostgreSQL |
+| [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
+| [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
+| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
 ### Single deployment
 
@@ -271,6 +272,8 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` after
 you've completed these steps.
 
 ### Multi-node / HA deployment
+
+#### Using PostgreSQL HA
 
 Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
 node throughout the process.
@@ -377,6 +380,103 @@ If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
+
+#### Using Redis HA (using Sentinel)
+
+Package upgrades may involve version updates to the bundled Redis service. On
+instances using [Redis HA](https://docs.gitlab.com/ee/administration/high_availability/redis.html),
+upgrades must follow a proper order to ensure minimum downtime, as specified
+below. This doc assumes the official guides are being followed to setup Redis
+HA.
+
+##### In the application node
+
+According to [official Redis docs](https://redis.io/topics/admin#upgrading-or-restarting-a-redis-instance-without-downtime),
+the easiest way to update an HA instance using Sentinel is to upgrade the
+secondaries one after the other, performa a manual failover from current
+primary (running old version) to a recently upgraded secondary (running a new
+version), and then upgrade the original primary. For this, we need to know
+the address of the current Redis primary.
+
+- If your application node is running GitLab 12.7.0 or later, you can use the
+following command to get address of current Redis primary
+
+  ```
+  sudo gitlab-ctl get-redis-master
+  ```
+
+- If your application node is running a version older than GitLab 12.7.0, you
+  will have to run the underlying `redis-cli` command (which `get-redis-master`
+  command uses) to fetch information about the primary.
+
+    1. Get the address of one of the sentinel nodes specified as
+       `gitlab_rails['redis_sentinels']` in `/etc/gitlab/gitlab.rb`
+
+    1. Get the Redis master name specified as `redis['master_name']` in
+       `/etc/gitlab/gitlab.rb`
+
+    1. Run the following command
+
+        ```
+        sudo /opt/gitlab/embedded/bin/redis-cli -h <sentinel host> -p <sentinel port> SENTINEL get-master-addr-by-name <redis master name>
+        ```
+
+##### In the Redis secondary nodes
+
+1. Install package for new version.
+
+1. Run `sudo gitlab-ctl reconfigure`, if a reconfigure is not run as part of
+   installation (due to `/etc/gitlab/skip-auto-reconfigure` file being present).
+
+1. If reconfigure warns about a pending Redis/Sentinel restart, restart the
+   corresponding service
+
+   ```
+   sudo gitlab-ctl restart redis
+   sudo gitlab-ctl restart sentinel
+   ```
+
+##### In the Redis primary node
+
+Before upgrading the Redis primary node, we need to perform a failover so that
+one of the recently upgraded secondary nodes becomes the new primary. Once the
+failover is complete, we can go ahead and upgrade the original primary node.
+
+1. Stop Redis service in Redis primary node so that it fails over to a secondary
+   node
+
+   ```
+   sudo gitlab-ctl stop redis
+   ```
+
+1. Wait for failover to be complete. You can verify it by periodically checking
+   details of the current Redis primary node (as mentioned above). If it starts
+   reporting a new IP, failover is complete.
+
+1. Start Redis again in that node, so that it starts following the current
+   primary node.
+
+   ```
+   sudo gitlab-ctl start redis
+   ```
+
+1. Install package corresponding to new version.
+
+1. Run `sudo gitlab-ctl reconfigure`, if a reconfigure is not run as part of
+   installation (due to `/etc/gitlab/skip-auto-reconfigure` file being present).
+
+1. If reconfigure warns about a pending Redis/Sentinel restart, restart the
+   corresponding service
+
+   ```
+   sudo gitlab-ctl restart redis
+   sudo gitlab-ctl restart sentinel
+   ```
+
+##### Update the application node
+
+Install the package for new version and follow regular package upgrade
+procedure.
 
 ### Geo deployment
 
