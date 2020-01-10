@@ -1,0 +1,5 @@
+---
+title: Check for puma when setting Geo primary
+merge_request: 3855
+author:
+type: fixed
