@@ -1,6 +1,9 @@
 require 'chef_helper'
 describe 'praefect' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:prometheus_grpc_latency_buckets) do
+    '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -45,6 +48,8 @@ describe 'praefect' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(Tomlrb.parse(content)).to eq(rendered)
       }
+      expect(chef_run).not_to render_file(config_path)
+      .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
     end
 
     context 'with custom settings' do
@@ -89,6 +94,7 @@ describe 'praefect' do
                          sentry_environment: sentry_environment,
                          listen_addr: listen_addr,
                          prometheus_listen_addr: prom_addr,
+                         prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
                          logging_level: log_level,
                          logging_format: log_format,
                          virtual_storages: virtual_storages,
@@ -119,6 +125,8 @@ describe 'praefect' do
           .with_content("sentry_dsn = '#{sentry_dsn}'")
         expect(chef_run).to render_file(config_path)
           .with_content("sentry_environment = '#{sentry_environment}'")
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
 
         expect(chef_run).to render_file(config_path)
           .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})

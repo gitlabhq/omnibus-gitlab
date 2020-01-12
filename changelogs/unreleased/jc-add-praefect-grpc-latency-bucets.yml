@@ -1,0 +1,5 @@
+---
+title: Add grpc_latency_bucket config to praefect
+merge_request: 3854
+author:
+type: changed
