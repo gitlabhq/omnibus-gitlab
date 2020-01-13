@@ -1,5 +1,8 @@
 # GitLab 12 specific changes
 
+NOTE: **Note**
+When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
+
 ## Prometheus 1.x Removal
 
 Prometheus 1.x was deprecated in GitLab 11.4, and
