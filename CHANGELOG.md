@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.4
+
+- No changes.
+
 ## 12.6.3
 
 - No changes.
@@ -55,6 +59,10 @@ omnibus-gitlab repository.
 - Change Puma log format to JSON. !3785
 - Update Mattermost to 5.17.1.
 
+
+## 12.5.7
+
+- No changes.
 
 ## 12.5.5
 
@@ -128,6 +136,10 @@ omnibus-gitlab repository.
 - Refactor LetsEncrypt auto-enabling logic. !3712
 - Update Mattermost to 5.16.2.
 
+
+## 12.4.8
+
+- No changes.
 
 ## 12.4.7
 
