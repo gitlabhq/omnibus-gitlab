@@ -80,6 +80,6 @@ build do
     # Installing direct from rubygems:
     # If there is no version, this will get latest.
     gem "update --system #{version}", env: env
-    patch source: "license/#{version}/add-license-file.patch"
+    patch source: "license/add-license-file.patch"
   end
 end
