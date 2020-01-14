@@ -294,7 +294,7 @@ node throughout the process.
   sudo touch /etc/gitlab/skip-auto-reconfigure
   ```
 
-**All other nodes (not the Deploy node)**
+**All nodes (including the Deploy node)**
 
 - Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
