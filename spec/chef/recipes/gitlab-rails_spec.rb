@@ -1965,6 +1965,47 @@ describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'maximum request duration' do
+      using RSpec::Parameterized::TableSyntax
+
+      where(:web_worker, :configured_timeout, :expected_duration) do
+        :unicorn | nil | 57
+        :unicorn | 30  | 29
+        :puma    | nil | 57
+        :puma    | 120 | 114
+      end
+
+      with_them do
+        before do
+          stub_gitlab_rb(
+            unicorn: { enable: web_worker == :unicorn, worker_timeout: configured_timeout },
+            puma: { enable: web_worker == :puma, worker_timeout: configured_timeout }
+          )
+        end
+
+        it 'includes the expected max duration' do
+          expected_hash = { 'max_request_duration' => expected_duration }
+
+          configure_gitlab_yml_using(hash_including(expected_hash))
+          expect(generated_yml_content['production']['gitlab']).to include(expected_hash)
+        end
+      end
+
+      it 'includes the configured value when one is set' do
+        expected_hash = { 'max_request_duration' => 12 }
+        stub_gitlab_rb(gitlab_rails: { max_request_duration: 12 })
+
+        configure_gitlab_yml_using(hash_including(expected_hash))
+        expect(generated_yml_content['production']['gitlab']).to include(expected_hash)
+      end
+
+      it 'raises an error when trying to configure a duration bigger than the worker timeout' do
+        stub_gitlab_rb(gitlab_rails: { max_request_duration: 9000 })
+
+        expect { chef_run }.to raise_error(/maximum request duration needs to be smaller than the worker timeout/)
+      end
+    end
   end
 
   context 'with environment variables' do

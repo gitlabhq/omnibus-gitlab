@@ -4,6 +4,7 @@
 require 'fantaskspec'
 require 'knapsack'
 require 'gitlab/util'
+require 'rspec-parameterized'
 
 # Load support libraries to provide common convenience methods for our tests
 Dir[File.join(__dir__, 'support/*.rb')].each { |f| require f }
