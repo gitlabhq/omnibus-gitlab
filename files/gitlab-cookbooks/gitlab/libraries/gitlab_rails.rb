@@ -231,9 +231,9 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     end
 
     def parse_maximum_request_duration
-      Gitlab['gitlab_rails']['max_request_duration'] ||= (worker_timeout * 0.95).ceil
+      Gitlab['gitlab_rails']['max_request_duration_seconds'] ||= (worker_timeout * 0.95).ceil
 
-      return if Gitlab['gitlab_rails']['max_request_duration'] < worker_timeout
+      return if Gitlab['gitlab_rails']['max_request_duration_seconds'] < worker_timeout
 
       raise "The maximum request duration needs to be smaller than the worker timeout (#{worker_timeout}s)"
     end

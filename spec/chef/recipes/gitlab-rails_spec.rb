@@ -1985,7 +1985,7 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'includes the expected max duration' do
-          expected_hash = { 'max_request_duration' => expected_duration }
+          expected_hash = { 'max_request_duration_seconds' => expected_duration }
 
           configure_gitlab_yml_using(hash_including(expected_hash))
           expect(generated_yml_content['production']['gitlab']).to include(expected_hash)
@@ -1993,15 +1993,15 @@ describe 'gitlab::gitlab-rails' do
       end
 
       it 'includes the configured value when one is set' do
-        expected_hash = { 'max_request_duration' => 12 }
-        stub_gitlab_rb(gitlab_rails: { max_request_duration: 12 })
+        expected_hash = { 'max_request_duration_seconds' => 12 }
+        stub_gitlab_rb(gitlab_rails: { max_request_duration_seconds: 12 })
 
         configure_gitlab_yml_using(hash_including(expected_hash))
         expect(generated_yml_content['production']['gitlab']).to include(expected_hash)
       end
 
       it 'raises an error when trying to configure a duration bigger than the worker timeout' do
-        stub_gitlab_rb(gitlab_rails: { max_request_duration: 9000 })
+        stub_gitlab_rb(gitlab_rails: { max_request_duration_seconds: 9000 })
 
         expect { chef_run }.to raise_error(/maximum request duration needs to be smaller than the worker timeout/)
       end

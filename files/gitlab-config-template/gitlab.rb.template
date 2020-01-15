@@ -66,7 +66,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Tells the rails application how long it has to complete a request
 ###! This value needs to be lower than the worker timeout set in unicorn/puma.
 ###! By default, we'll allow 95% of the the worker timeout
-# gitlab_rails['max_request_duration'] = 57
+# gitlab_rails['max_request_duration_seconds'] = 57
 
 ### Email Settings
 # gitlab_rails['gitlab_email_enabled'] = true
