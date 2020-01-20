@@ -122,6 +122,23 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
   end
 
+  context 'with min_concurrency set' do
+    before do
+      stub_gitlab_rb(sidekiq_cluster: {
+                       enable: true,
+                       min_concurrency: 50,
+                       queue_groups: ['process_commit,post_receive', 'gitlab_shell']
+                     })
+    end
+
+    it 'correctly renders out the sidekiq-cluster service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
+        .with_content { |content|
+          expect(content).to match(/--min-concurrency 50/)
+        }
+    end
+  end
+
   describe 'when specifying sidekiq.log_format' do
     before do
       stub_gitlab_rb(
