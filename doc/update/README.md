@@ -884,6 +884,9 @@ Steps:
     sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
     ```
 
+    NOTE: **Note**
+    For GitLab 12.1 and earlier, use `gitlab-rake gitlab:backup:restore`.
+
 1. Start GitLab:
 
    ```sh
